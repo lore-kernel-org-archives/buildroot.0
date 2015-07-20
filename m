@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 15:31:09 +0200
-Subject: [Buildroot] [PATCHv2] core/pkg-generic: host variants inherits
- target's override-srcdir
-In-Reply-To: <1437311728-31289-1-git-send-email-yann.morin.1998@free.fr>
-References: <1437311728-31289-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150720153109.2b1677bd@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 20 Jul 2015 14:54:47 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-07-19
+In-Reply-To: <20150720151044.1b5cd445@free-electrons.com>
+References: <20150720063017.2400B101C74@stock.ovh.net>
+ <CA+BsyQ4=X7ZA0LTiHNo4SAC2FotUJGL+3xb1LgjNjFUQCUBk+g@mail.gmail.com>
+ <20150720124408.GM13027@tarshish>
+ <CA+BsyQ7zi_ni7qV4X5m07YYJ=eF3YdmQghX+GBcZcZAUtdeUGA@mail.gmail.com>
+ <20150720151044.1b5cd445@free-electrons.com>
+Message-ID: <CA+BsyQ6AXSg1ZBPu4CmTPh9LL0ASZr5SharKMr4TN7yCdz7txg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+[oops, sent privately instead of to the list]
 
-On Sun, 19 Jul 2015 15:15:28 +0200, Yann E. MORIN wrote:
-> When a package has both a target and a host variants, and there is an
-> override-srcdir set for the target variant, the host variant should
-> inherit the target's override-srcdir, unless explicitly set, like we do
-> for all other target-variant properties.
-> 
-> However, do not override it if expressly set to empty (i.e. when the
-> user wants to override only the target variant).
-> 
-> Also, as we do for the other variables, the target variant never
-> inherits from the host variant.
-> 
-> Reported-by: Mike <mikez@OpenPlayer.org>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> ---
-> Changes v1 -> v2:
->   - really do not override the host variant if expressly set to empty
->     (Arnout)
-> ---
->  package/pkg-generic.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+Yes, generally speaking identifying all our packages that are still
+> hosted on SourceForge or Google Code, and finding if there is an
+> alternate download location would be very good. Patches going in this
+> direction are welcome. However, beware that the new location should be
+> somewhat "official": we don't want to use some random Github fork as a
+> replacement for a Sourceforge / Google Code download.
+>
 
-Applied, thanks.
+Understood, it makes no sense at all to use Joe Bloggs' zlib fork :) I
+think we should use whatever the project owner's website specifies as the
+authoritative sources (in a few of the cases I checked, though, this is
+still sourceforge - nothing we can do in those circumstances).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I'll take a look into this as well as looking at some of the build bugs.
+
+regards
+
+Brendan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150720/fa2b011b/attachment.html>
