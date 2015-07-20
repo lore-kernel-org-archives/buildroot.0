@@ -1,91 +1,81 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 20 Jul 2015 23:15:13 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libtirpc: bump to version 0.3.2
-Message-ID: <1437426915-4608-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Mon, 20 Jul 2015 23:15:15 +0200
+Subject: [Buildroot] [PATCH 3/3] package/libtirpc: Do not build unsupported
+	API files
+In-Reply-To: <1437426915-4608-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1437426915-4608-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1437426915-4608-3-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version, update hash and update patch.
+Version 0.3.2 re-enables some APIs for backward compatibility with
+glibc's SunRPC:
+  - key_prot
+  - netname
+  - rtime
+
+Unfortunalty, this breaks building libtirpc with uClibc and musl:
+  getpublickey.c:41:28: fatal error: rpcsvc/yp_prot.h: No such file or directory
+
+We disable those API files again to support building libtirpc with these two
+libc's.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...sable-parts-of-TIRPC-requiring-NIS-support.patch | 21 +++++++++++++--------
- package/libtirpc/libtirpc.hash                      |  4 ++--
- package/libtirpc/libtirpc.mk                        |  2 +-
- 3 files changed, 16 insertions(+), 11 deletions(-)
+ .../0007-Do-not-build-unsupported-API-files.patch  | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/libtirpc/0007-Do-not-build-unsupported-API-files.patch
 
-diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-index 2835ee1..12771f3 100644
---- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-+++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-@@ -1,28 +1,33 @@
--From 9ab72f908af734b5a940fb459394072cfa9fc3a8 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 23 Jun 2012 21:57:39 +0200
--Subject: [PATCH] Disable parts of TIRPC requiring NIS support
-+From fc53290b7f2be918856883cd174cf18f06a085cf Mon Sep 17 00:00:00 2001
+diff --git a/package/libtirpc/0007-Do-not-build-unsupported-API-files.patch b/package/libtirpc/0007-Do-not-build-unsupported-API-files.patch
+new file mode 100644
+index 0000000..c0beb29
+--- /dev/null
++++ b/package/libtirpc/0007-Do-not-build-unsupported-API-files.patch
+@@ -0,0 +1,42 @@
++From 1c074c8aa9dec92586bf01fb8bdbc59f828ca3d4 Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 20 Jul 2015 20:30:11 +0200
-+Subject: [PATCH 1/1] Disable parts of TIRPC requiring NIS support
++Date: Mon, 20 Jul 2015 22:49:41 +0200
++Subject: [PATCH 7/7] Remove unsupported API files
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [yann.morin.1998 at free.fr: update for 0.3.1]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+[joerg.krause at embedded.rocks: update for 0.3.2]
++
++Version 0.3.2 re-enables some APIs for backward compatibility with
++glibc's SunRPC:
++  - key_prot
++  - netname
++  - rtime
++
++Unfortunalty, this breaks building libtirpc with uClibc and musl:
++  getpublickey.c:41:28: fatal error: rpcsvc/yp_prot.h: No such file or directory
++
++We disable those API files to support building libtirpc with these two libc's.
++
 +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- ---
-  src/Makefile.am | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/src/Makefile.am b/src/Makefile.am
--index 75bd4bf..7428e92 100644
-+index 6cc567a..cf8a8ca 100644
- --- a/src/Makefile.am
- +++ b/src/Makefile.am
--@@ -52,7 +52,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
-+@@ -51,7 +51,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
-          rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
-          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
-          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
---        auth_time.c debug.c
-+-        auth_time.c auth_des.c authdes_prot.c debug.c
- +        debug.c
-  
-  ## XDR
-  libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
- -- 
--1.9.1
++---
++ src/Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index cf8a8ca..2b26a29 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -68,8 +68,8 @@ if GSS
++     libtirpc_la_CFLAGS = -DHAVE_RPCSEC_GSS $(GSSAPI_CFLAGS)
++ endif
++ 
++-libtirpc_la_SOURCES += key_call.c key_prot_xdr.c getpublickey.c
++-libtirpc_la_SOURCES += netname.c netnamer.c rtime.c
+++#libtirpc_la_SOURCES += key_call.c key_prot_xdr.c getpublickey.c
+++#libtirpc_la_SOURCES += netname.c netnamer.c rtime.c
++ 
++ CLEANFILES	       = cscope.* *~
++ DISTCLEANFILES	       = Makefile.in
++-- 
 +2.4.6
- 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 0a1cc98..f171870 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,4 +1,4 @@
- # From sourceforge's info on download page:
--sha1   0e0ef9123cf28cd0940148fabd23952476a8fcd6  libtirpc-0.3.1.tar.bz2
-+sha1   af9b74d0c4d1499a7b1a43e396e5b7d62180ea65  libtirpc-0.3.2.tar.bz2
- # Locally computed
--sha256 a8838fe180deb8a6f6e491ee665325a28dee4100ec6b1f0b86d611dbfe3a2bb8  libtirpc-0.3.1.tar.bz2
-+sha256 2008a379f37f2c5d5a87a568b06707422cc3e4f5da305f7fb71f3f4c6d473ffc  libtirpc-0.3.2.tar.bz2
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 494650c..8f49356 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTIRPC_VERSION = 0.3.1
-+LIBTIRPC_VERSION = 0.3.2
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3c
++
 -- 
 2.4.6
