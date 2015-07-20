@@ -1,42 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 16:07:10 +0200
-Subject: [Buildroot] [PATCH 1/2] openssl: use git formatted patches
-In-Reply-To: <1431803078-27629-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1431803078-27629-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150720160710.4707d820@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 20 Jul 2015 16:22:14 +0200
+Subject: [Buildroot] [PATCH 1/1] angularjs: new package.
+In-Reply-To: <20150720130018.GA7128@zenon.in.qult.net>
+References: <1437129876-5158-1-git-send-email-ignacy.gawedzki@green-communications.fr>
+ <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
+ <20150720130018.GA7128@zenon.in.qult.net>
+Message-ID: <CAGduivxNOLi6OodtvJj-jrfhm6K9Ek6UZ2Dx1G+8+gGn0b2Dug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Hi Ignacy, all
 
-On Sat, 16 May 2015 21:04:37 +0200, Thomas Petazzoni wrote:
-> Using Git formatted patches makes it easier to adjust the patches when
-> needed.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Mon, Jul 20, 2015 at 3:00 PM, Ignacy Gaw?dzki
+<ignacy.gawedzki@green-communications.fr> wrote:
+> On Sat, Jul 18, 2015 at 05:58:48PM +0200, thus spake Maxime Hadjinlian:
+>> > +ANGULARJS_VERSION = 1.4.2
+>> It seems there's already a newer version on their website.
+>
+> You're right, I'm updating that.
+>
+>> > +ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+>> > +ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)/
+>> You are missing the LICENSE and LICENSE_FILES information here.
+>
+> Okay, the license is MIT, but there's no license file included in the
+> archive.  Should I specify angular.js as the LICENSE_FILES instead?
+Yes I think it's the way to go, that's what we do in other packages.
+>
+> If so, I have a small problem.  It appears that I need to specify a
+> file path relative to $(@D), in that case it is simply "angular.js".
+> Then the file is included as such in legal-info/license.txt during
+> make angularjs-legal-info.  Meanwhile, the legal-info/manifest.csv
+> file is indicating that the license file is "angular.js" to be found
+> at the root of the zip archive, which is not right, since that file is
+> in the angular-$(ANGULARJS_VERSION)/ subdirectory.
+>
+> What is the best way to go?  I'm thinking about not moving files to
+> $(@D) in ANGULARJS_EXTRACT_CMDS, but that would make me use a
+> subdirectory instead of $(@D) everywhere else.
+I would opt for having the subdirectory everywhere.
 
-Since you are the de-facto maintainer of the OpenSSL package, could you
-give your opinion about the two patches in this series. I believe PATCH
-1/2 is OK, but what do you think about PATCH 2/2 ?
-
-Back in November 2014, Bernd also submitted some patches to enable
-parallel build of OpenSSL, see
-http://lists.busybox.net/pipermail/buildroot/2014-November/112183.html.
-Peter and I rejected them because they were a bit big. My proposal
-relies on downloading Gentoo patches instead, but I don't now if it's
-really any better, since those patches may cause some problems in the
-future to bump OpenSSL.
-
-What do you think? Should we simply wait for OpenSSL upstream to see
-the light and support parallel build?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+And also, I don't know what the community think about that, but
+FOO_SUBDIR could be generalized to pkg-generic instead of only
+pkg-autotools ?
+>
+> Thanks for your help.
+>
+> Ignacy
+>
+> --
+> Ignacy Gaw?dzki
+> R&D Engineer
+> Green Communications
