@@ -1,43 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 20 Jul 2015 15:10:44 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-07-19
-In-Reply-To: <CA+BsyQ7zi_ni7qV4X5m07YYJ=eF3YdmQghX+GBcZcZAUtdeUGA@mail.gmail.com>
-References: <20150720063017.2400B101C74@stock.ovh.net>
- <CA+BsyQ4=X7ZA0LTiHNo4SAC2FotUJGL+3xb1LgjNjFUQCUBk+g@mail.gmail.com>
- <20150720124408.GM13027@tarshish>
- <CA+BsyQ7zi_ni7qV4X5m07YYJ=eF3YdmQghX+GBcZcZAUtdeUGA@mail.gmail.com>
-Message-ID: <20150720151044.1b5cd445@free-electrons.com>
+Date: Mon, 20 Jul 2015 15:11:38 +0200
+Subject: [Buildroot] [git commit] Revert "busybox: added linux-pam support"
+Message-ID: <20150720132825.D75248193A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=c32bd82941dcd8e2d3d4512b2fcf69bdd154c989
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Jul 2015 13:49:14 +0100, Brendan Heading wrote:
+This reverts commit 083aeac94e19cde6abd4b29cf29db589327d8c49.
 
-> I noticed there are around 200 packages that download from sourceforge. I
-> didn't do an exhaustive investigation but noticed that zlib is fetched from
-> there. Might it be better to fetch this (and other packages) from their
-> authoritative site, where one exists ? (in zlib's case,
-> http://zlib.net/zlib-1.2.8.tar.gz ?)
-> 
-> [sourceforge has been in the news for other reasons lately .. I get the
-> general feeling that it is a resource that is not long for this world .. ]
+Commit f21b2558a097 (busybox: added linux-pam support, 2015-06-02) added
+linux-pam support already, no need to do this again. Commit 083aeac94e19
+(busybox: added linux-pam support, 2015-07-14) also effectively annulled the
+build failure fix from commit 98e1848db11e (busybox: PAM support needs thread
+support, 2015-07-04). Revert it.
 
-Yes, generally speaking identifying all our packages that are still
-hosted on SourceForge or Google Code, and finding if there is an
-alternate download location would be very good. Patches going in this
-direction are welcome. However, beware that the new location should be
-somewhat "official": we don't want to use some random Github fork as a
-replacement for a Sourceforge / Google Code download.
+Fixes:
+http://autobuild.buildroot.net/results/8df/8df14bde19a41b78aa6422a1649a570914f747ee/
+http://autobuild.buildroot.net/results/30d/30dd11b576b590de513031fce5e034353f2f5544/
+http://autobuild.buildroot.net/results/de6/de628d84b0ed49be8f5d021c789357b2e66f2b02/
 
-Thanks!
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/busybox.mk |    7 -------
+ 1 files changed, 0 insertions(+), 7 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ce6652b..65ce7ef 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -141,13 +141,6 @@ define BUSYBOX_SET_INIT
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+-define BUSYBOX_LINUX_PAM
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-BUSYBOX_DEPENDENCIES += linux-pam
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
+ BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
+ define BUSYBOX_SET_SELINUX
