@@ -1,48 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 20 Jul 2015 15:57:55 +0300
-Subject: [Buildroot] [PATCH] Revert "busybox: added linux-pam support"
-Message-ID: <5ab7928dcb3c3e35267eab5aaf1af4fc794faaf6.1437397075.git.baruch@tkos.co.il>
+From: Ignacy =?iso-8859-2?Q?Gaw=EAdzki?= <ignacy.gawedzki@green-communications.fr>
+Date: Mon, 20 Jul 2015 15:00:18 +0200
+Subject: [Buildroot] [PATCH 1/1] angularjs: new package.
+In-Reply-To: <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
+References: <1437129876-5158-1-git-send-email-ignacy.gawedzki@green-communications.fr>
+ <CAGduivxBdvS75bNaHo_AmWaZZZ4x0qqbr27kVPbLrvjay05uJQ@mail.gmail.com>
+Message-ID: <20150720130018.GA7128@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 083aeac94e19cde6abd4b29cf29db589327d8c49.
+On Sat, Jul 18, 2015 at 05:58:48PM +0200, thus spake Maxime Hadjinlian:
+> > +ANGULARJS_VERSION = 1.4.2
+> It seems there's already a newer version on their website.
 
-Commit f21b2558a097 (busybox: added linux-pam support, 2015-06-02) added
-linux-pam support already, no need to do this again. Commit 083aeac94e19
-(busybox: added linux-pam support, 2015-07-14) also effectively annulled the
-build failure fix from commit 98e1848db11e (busybox: PAM support needs thread
-support, 2015-07-04). Revert it.
+You're right, I'm updating that.
 
-Fixes:
-http://autobuild.buildroot.net/results/8df/8df14bde19a41b78aa6422a1649a570914f747ee/
-http://autobuild.buildroot.net/results/30d/30dd11b576b590de513031fce5e034353f2f5544/
-http://autobuild.buildroot.net/results/de6/de628d84b0ed49be8f5d021c789357b2e66f2b02/
+> > +ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+> > +ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)/
+> You are missing the LICENSE and LICENSE_FILES information here.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/busybox/busybox.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Okay, the license is MIT, but there's no license file included in the
+archive.  Should I specify angular.js as the LICENSE_FILES instead?
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index ce6652b017d7..65ce7efe95e1 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -141,13 +141,6 @@ define BUSYBOX_SET_INIT
- endef
- endif
- 
--ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
--define BUSYBOX_LINUX_PAM
--	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
--endef
--BUSYBOX_DEPENDENCIES += linux-pam
--endif
--
- ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
- BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
- define BUSYBOX_SET_SELINUX
+If so, I have a small problem.  It appears that I need to specify a
+file path relative to $(@D), in that case it is simply "angular.js".
+Then the file is included as such in legal-info/license.txt during
+make angularjs-legal-info.  Meanwhile, the legal-info/manifest.csv
+file is indicating that the license file is "angular.js" to be found
+at the root of the zip archive, which is not right, since that file is
+in the angular-$(ANGULARJS_VERSION)/ subdirectory.
+
+What is the best way to go?  I'm thinking about not moving files to
+$(@D) in ANGULARJS_EXTRACT_CMDS, but that would make me use a
+subdirectory instead of $(@D) everywhere else.
+
+Thanks for your help.
+
+Ignacy
+
 -- 
-2.1.4
+Ignacy Gaw?dzki
+R&D Engineer
+Green Communications
