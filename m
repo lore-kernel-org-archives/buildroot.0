@@ -1,83 +1,45 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 21 Jul 2015 15:27:14 +0100
-Subject: [Buildroot] [PATCH 2/5] package/redis: Add redis system user
-In-Reply-To: <20150721152756.1448370d@free-electrons.com>
-References: <1437483774-30291-1-git-send-email-martin@barkynet.com>
- <1437483774-30291-2-git-send-email-martin@barkynet.com>
- <20150721152756.1448370d@free-electrons.com>
-Message-ID: <CAFGQKxdb1X6=DuTMNiu5m=A+vGK3CxFDg2SRUdPTqnoViTGiLQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Jul 2015 17:36:07 +0200
+Subject: [Buildroot] [PATCH] fs: build host-mkpasswd when
+	BR2_ROOTFS_USERS_TABLES is used
+Message-ID: <1437492967-6594-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+The code in fs/common.mk properly triggers the build of host-mkpasswd
+when at least one package specifies a <pkg>_USERS variable. However,
+when no selected package specifies a <pkg>_USERS variable but the user
+uses a custom users table through BR2_ROOTFS_USERS_TABLES, then we
+forget to build host-mkpasswd, leading to build failures if you don't
+have mkpasswd installed in your machine.
 
-On 21 July 2015 at 14:27, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Martin Bark,
->
-> On Tue, 21 Jul 2015 14:02:51 +0100, Martin Bark wrote:
->> Add a redis system user and set the home directory to /var/lib/redis
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->> ---
->>  package/redis/redis.mk | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
->> index 51c1f9c..633d411 100644
->> --- a/package/redis/redis.mk
->> +++ b/package/redis/redis.mk
->> @@ -9,6 +9,10 @@ REDIS_SITE = http://download.redis.io/releases
->>  REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
->>  REDIS_LICENSE_FILES = COPYING
->>
->> +define REDIS_USERS
->> +     redis -1 redis -1 * /var/lib/redis /bin/sh - Redis Server
->
-> Does it really need to have a login shell?
->
+This commit fixes that by taking into account both the package users
+table and the custom users table when deciding to depend or not on
+host-mkpasswd.
 
-It's because in the sysv script S50redis i shutdown redis using this command
+Reported-by: Auke Willem Oosterhoff <oosterhoff@baopt.nl>
+Cc: Auke Willem Oosterhoff <oosterhoff@baopt.nl>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    su - redis -c '/usr/bin/redis-cli shutdown'
-
-I copied this idea from the postgresql package.  I guess i could just do
-
-  /usr/bin/redis-cli shutdown
-
-and run the command as root.  I'll investigate changing the login
-shell to /bin/false
-
->> +endef
->> +
->>  # Redis doesn't support DESTDIR (yet, see
->>  # https://github.com/antirez/redis/pull/609).  We set PREFIX
->>  # instead.
->> @@ -22,6 +26,7 @@ endef
->>  define REDIS_INSTALL_TARGET_CMDS
->>       $(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
->>               LDCONFIG=true install
->> +     $(INSTALL) -d -m 0700 $(TARGET_DIR)/var/lib/redis
->
-> I don't think this line is needed, unless you want to install specific
-> things to /var/lib/redis, since specifying /var/lib/redis for the
-> REDIS_USERS is sufficient to get this directory created and chown-ed to
-> the right user.
-
-Yes good point.  I'll remove that line and resubmit.
-
-Thanks
-
-Martin
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/fs/common.mk b/fs/common.mk
+index 4387d06..ad1bcf3 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -41,7 +41,7 @@ define ROOTFS_TARGET_INTERNAL
+ 
+ # extra deps
+ ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+-	$$(if $$(PACKAGES_USERS),host-mkpasswd)
++	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+-- 
+2.4.6
