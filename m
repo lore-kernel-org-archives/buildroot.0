@@ -1,52 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 21 Jul 2015 10:05:14 -0300
-Subject: [Buildroot] [PATCH 1/2] openssl: use git formatted patches
-In-Reply-To: <20150720160710.4707d820@free-electrons.com>
-References: <1431803078-27629-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150720160710.4707d820@free-electrons.com>
-Message-ID: <55AE438A.1030908@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Jul 2015 15:27:56 +0200
+Subject: [Buildroot] [PATCH 2/5] package/redis: Add redis system user
+In-Reply-To: <1437483774-30291-2-git-send-email-martin@barkynet.com>
+References: <1437483774-30291-1-git-send-email-martin@barkynet.com>
+ <1437483774-30291-2-git-send-email-martin@barkynet.com>
+Message-ID: <20150721152756.1448370d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/07/15 11:07, Thomas Petazzoni wrote:
+Dear Martin Bark,
 
-Hi Thomas.
+On Tue, 21 Jul 2015 14:02:51 +0100, Martin Bark wrote:
+> Add a redis system user and set the home directory to /var/lib/redis
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/redis/redis.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+> index 51c1f9c..633d411 100644
+> --- a/package/redis/redis.mk
+> +++ b/package/redis/redis.mk
+> @@ -9,6 +9,10 @@ REDIS_SITE = http://download.redis.io/releases
+>  REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+>  REDIS_LICENSE_FILES = COPYING
+>  
+> +define REDIS_USERS
+> +	redis -1 redis -1 * /var/lib/redis /bin/sh - Redis Server
 
-> Since you are the de-facto maintainer of the OpenSSL package, could you
-> give your opinion about the two patches in this series. I believe PATCH
-> 1/2 is OK, but what do you think about PATCH 2/2 ?
+Does it really need to have a login shell?
 
-It looks fine, however it needs a small refresh (c_rehash was fixed 
-upstream, hence gone).
+> +endef
+> +
+>  # Redis doesn't support DESTDIR (yet, see
+>  # https://github.com/antirez/redis/pull/609).  We set PREFIX
+>  # instead.
+> @@ -22,6 +26,7 @@ endef
+>  define REDIS_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
+>  		LDCONFIG=true install
+> +	$(INSTALL) -d -m 0700 $(TARGET_DIR)/var/lib/redis
 
-> Back in November 2014, Bernd also submitted some patches to enable
-> parallel build of OpenSSL, see
-> http://lists.busybox.net/pipermail/buildroot/2014-November/112183.html.
-> Peter and I rejected them because they were a bit big. My proposal
-> relies on downloading Gentoo patches instead, but I don't now if it's
-> really any better, since those patches may cause some problems in the
-> future to bump OpenSSL.
->
-> What do you think? Should we simply wait for OpenSSL upstream to see
-> the light and support parallel build?
+I don't think this line is needed, unless you want to install specific
+things to /var/lib/redis, since specifying /var/lib/redis for the
+REDIS_USERS is sufficient to get this directory created and chown-ed to
+the right user.
 
-I don't expect build patches to change much among what are usually 
-security bumps, and also gentoo has a history of being fast updating 
-openssl.
-I wouldn't hold my breath expecting openssl upstream to fix anything 
-soon, example patch we have:
-http://rt.openssl.org/Ticket/Display.html?id=2770&user=guest&pass=guest
-And my personal history with sending patches to them (c_rehash being one 
-of the cases BTW) vouches for that. If you send it to the RT it may get 
-"lost" for whatever reason, if you send the patch to the openssl-dev 
-mailing list it gets ignored.
+Best regards,
 
-So +1 from me, openssl is one of those builds you see building and yawn 
-about.
-If it becomes an obstacle to a security bump we can just roll back to 
-$(MAKE1) until a new patchset arrives.
-
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
