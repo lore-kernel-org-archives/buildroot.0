@@ -1,56 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 15:27:56 +0200
-Subject: [Buildroot] [PATCH 2/5] package/redis: Add redis system user
-In-Reply-To: <1437483774-30291-2-git-send-email-martin@barkynet.com>
-References: <1437483774-30291-1-git-send-email-martin@barkynet.com>
- <1437483774-30291-2-git-send-email-martin@barkynet.com>
-Message-ID: <20150721152756.1448370d@free-electrons.com>
+Date: Tue, 21 Jul 2015 16:05:18 +0200
+Subject: [Buildroot] [PATCH] openipmi: new package
+In-Reply-To: <6a0b19385e58f845152f7bad579fcb89ee11de64.1437473500.git.baruch@tkos.co.il>
+References: <6a0b19385e58f845152f7bad579fcb89ee11de64.1437473500.git.baruch@tkos.co.il>
+Message-ID: <20150721160518.4ec76d65@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Dear Baruch Siach,
 
-On Tue, 21 Jul 2015 14:02:51 +0100, Martin Bark wrote:
-> Add a redis system user and set the home directory to /var/lib/redis
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/redis/redis.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-> index 51c1f9c..633d411 100644
-> --- a/package/redis/redis.mk
-> +++ b/package/redis/redis.mk
-> @@ -9,6 +9,10 @@ REDIS_SITE = http://download.redis.io/releases
->  REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
->  REDIS_LICENSE_FILES = COPYING
->  
-> +define REDIS_USERS
-> +	redis -1 redis -1 * /var/lib/redis /bin/sh - Redis Server
+On Tue, 21 Jul 2015 13:11:40 +0300, Baruch Siach wrote:
 
-Does it really need to have a login shell?
+> +OPENIPMI_VERSION = 2.0.21
+> +OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
+> +OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
+> +OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+> +OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
+> +OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
+> +OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
+> +OPENIPMI_CONF_OPTS = \
+> +		--with-glib=no \
+> +		--with-glib12=no \
+> +		--with-tcl=no \
+> +		--with-perl=no \
+> +		--with-python=no \
+> +		--with-swig=no
 
-> +endef
-> +
->  # Redis doesn't support DESTDIR (yet, see
->  # https://github.com/antirez/redis/pull/609).  We set PREFIX
->  # instead.
-> @@ -22,6 +26,7 @@ endef
->  define REDIS_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
->  		LDCONFIG=true install
-> +	$(INSTALL) -d -m 0700 $(TARGET_DIR)/var/lib/redis
-
-I don't think this line is needed, unless you want to install specific
-things to /var/lib/redis, since specifying /var/lib/redis for the
-REDIS_USERS is sufficient to get this directory created and chown-ed to
-the right user.
-
-Best regards,
+Indentation was wrong here, it should be only one tab. I've fixed that
+up, and applied your patch. Thanks!
 
 Thomas
 -- 
