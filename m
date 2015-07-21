@@ -1,45 +1,63 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue, 21 Jul 2015 13:15:25 +0100
-Subject: [Buildroot] [PATCH] autobuild - acpid does not build against
-	musl
-In-Reply-To: <20150721092627.0fa306db@free-electrons.com>
-References: <1437417346-18621-1-git-send-email-brendanheading@gmail.com>
- <20150720224152.11d13fa5@free-electrons.com>
- <CA+BsyQ7vZTqjt9OKgj_tcBTx=rC9zHCxzmN4wSPJ=20TD=MRwA@mail.gmail.com>
- <20150721092627.0fa306db@free-electrons.com>
-Message-ID: <CA+BsyQ5zp_91uJ2hFX6LuxTwxfOa=TPFU2+jYxXVw8EVGWMidA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Jul 2015 14:23:41 +0200
+Subject: [Buildroot] [PATCH/RFC v3 00/50] package/kodi: bump version to
+ 15.0 rc2 Isengard
+In-Reply-To: <XnsA4DE5385A8A24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150719212605.3a908e3f@free-electrons.com>
+ <XnsA4DE5385A8A24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20150721142341.4b294467@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> The absence of TEMP_FAILURE_RETRY will break more than one package so
->> in retrospect it's probably more cleaner to try to fix it properly
->> rather than add patches to every package where it shows up. The only
->> downside is that acpid will be broken until it's resolved.
->
-> But that's still the only reasonable solution. The idea being that
-> those patches should be contributed to the upstream acpid project, so
-> that we can drop them from Buildroot the next time acpid makes an
-> official release.
+Bernd,
 
-I've raised a ticket on acpid2 and asked to submit my patch there.
+On Tue, 21 Jul 2015 08:12:38 +0200, Bernd Kuhls wrote:
 
-RE some other issues you highlighted, such as duplicating the macro in
-several places. There is no single header file which is included by
-all sources; further, acpid2 has copies of the same header file in two
-different directories, so I followed what you had already done for a
-previous case (if you look in the package directory you can see your
-patch which solves a similar problem in the same way).
+> patch 1: ffmpeg bump
+> Please do _not_ commit it yet, because removing 0014-fix-ff-thread-get-
+> format.patch will break Kodi 14.2, currently part of buildroot.
 
-I could add another header just for this macro and include it from
-both places but that seems untidy and not consistent with what they
-currently do.
+Next time, can you make this more clearly indicated somewhere? Well, I
+agree your entire series was RFC, but it's good to be clear about what
+can be committed now and what cannot. I generally want to be helpful
+and merge early what is ready today, so that contributors don't have to
+carry more and more patches in their own branches.
 
-I can submit a new patch here or get a steer from upstream first -
-which is your preference ?
+> I saw that you committed it already; when Kodi 15.0 hits buildroot the 
+> error will go away, until then let_s get ffmpeg 2.7.x tested by the 
+> autobuilders, mips* has problems with msa.h for example ;) Btw, I will send 
+> another bump to 2.7.2 today fixing interlaced h264.
 
-regards
+Ok. I hope Kodi 15.0 will arrive soon so that we can merge all of it,
+and have a working setup again.
 
-Brendan
+> patch 2 & 3: no problem, they do not raise compatibility issues
+
+Ok.
+
+> patch 4: please do _not_ commit, libcec3 is incompatible with Kodi 14.
+
+Ok, thanks.
+
+> > Maybe you could push the whole thing to a public Git branch so that
+> > others can quickly test?
+> 
+> Ok, but I have to set this up first. I already have a github account and I 
+> think I can handle that task.
+> Can I fork from https://github.com/buildroot/buildroot ?
+
+Yes, sure. This repository is updated every 10 minutes or so from the
+official Buildroot repo. The only thing that isn't synced up
+automatically are tags, I'll have to address that in the future.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
