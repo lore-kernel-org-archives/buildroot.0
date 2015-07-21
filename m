@@ -1,71 +1,241 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 21 Jul 2015 22:55:26 +0000
-Subject: [Buildroot] ncurses build failing
-In-Reply-To: <CA+h8R2p0R+zg3wk6ewYDgCzvRev-cQe3H_WQ0hfF14Z6O1CWqA@mail.gmail.com>
-References: <CA+h8R2p0R+zg3wk6ewYDgCzvRev-cQe3H_WQ0hfF14Z6O1CWqA@mail.gmail.com>
-Message-ID: <CA+h8R2qDpcW8Voux-6RON40-kFn6qcU-GUw4h2k6qK+Qe__g=A@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 22 Jul 2015 00:57:34 +0200
+Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
+In-Reply-To: <20150703223340.GK3652@free.fr>
+References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
+ <20150703223340.GK3652@free.fr>
+Message-ID: <20150721225733.GB1183@t61>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+> Petr, All,
 
-This bug with ncurses was introduced with the update to GCC 5.2.x on July
-17th in c516971.
+[--SNIP--]
+> Has this patch been pushed upstream?
+Patch is taken from upstream git
+(e9dadfe5f446c9b2b1563ad50daf3a50b4497726), but it wasn't released for
+backports 4.0.1. I'll create new patch (v8) where I address some of these
+issues. It'll be based on backports 4.1.1, which includes this patch (so
+removed from buildroot).
 
-There was a commit on May 27th, 4297e7298, that claimed to fix a similar
-bug with 5.x. The update to 5.2 seems to have broken this fix.
 
-Christian
+> [--SNIP--]
+> > diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
+> > new file mode 100644
+> > index 0000000..4d793b2
+> > --- /dev/null
+> > +++ b/package/linux-backports/Config.in
+> > @@ -0,0 +1,48 @@
+> > +comment "linux-backports needs a Linux kernel to be built"
+> > +	depends on !BR2_LINUX_KERNEL
+> > +
+> > +config BR2_PACKAGE_LINUX_BACKPORTS
+> > +	bool "linux-backports"
+> > +	depends on BR2_LINUX_KERNEL
+> > +	help
+> > +          The linux-backports package includes many Linux drivers from
+> > +          recent kernels, backported to older ones.
+> > +
+> > +          This version of linux-backports supports kernels starting from 3.0.
+> > +
+> > +	  https://backports.wiki.kernel.org
+> > +
+> > +if BR2_PACKAGE_LINUX_BACKPORTS
+> > +
+> > +choice
+> > +	prompt "Linux kernel driver backports configuration"
+> > +	default BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
+> > +
+> > +config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
+> > +	bool "Using a defconfig"
+> > +
+> > +config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
+> > +	bool "Using a custom config file"
 
-On Tue, Jul 21, 2015 at 3:44 PM Christian Stewart <christian@paral.in>
-wrote:
+> I'm a bit confused. Do you meant to differentiate between a defconfig
+> that is bundled in linux-backports, vs. a full .config that is providd
+> by the user? Is that all that is supported?
 
-> I'm getting the following build error on the latest Buildroot master
-> version:
->
->  [7m>>> ncurses 5.9 Building [27m
-> /usr/bin/make -j1 -C /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/build/ncurses-5.9 DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot sources
-> cd include && /usr/bin/make - --no-print-directory -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" sources
-> make[3]: Nothing to be done for `sources'.
-> cd ncurses && /usr/bin/make - --no-print-directory -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" sources
-> make[3]: Nothing to be done for `sources'.
-> cd panel && /usr/bin/make - --no-print-directory -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" sources
-> make[3]: Nothing to be done for `sources'.
-> cd menu && /usr/bin/make - --no-print-directory -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" sources
-> make[3]: Nothing to be done for `sources'.
-> cd form && /usr/bin/make - --no-print-directory -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" sources
-> make[3]: Nothing to be done for `sources'.
-> cd misc && /usr/bin/make - --no-print-directory -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" sources
-> /bin/sh ./gen-pkgconfig
-> touch pc-files
-> rm -rf /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/build/ncurses-5.9/misc/pc-files
-> /usr/bin/make -j5 -C /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/build/ncurses-5.9 DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot
-> cd include && /usr/bin/make - --no-print-directory - --jobserver-fds=3,4 -j -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" all
-> make[3]: Nothing to be done for `all'.
-> cd ncurses && /usr/bin/make - --no-print-directory - --jobserver-fds=3,4 -j -- DESTDIR=/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot DESTDIR="/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot" all
-> /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/ccache /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc -DHAVE_CONFIG_H -I../ncurses -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -O2   --param max-inline-insns-single=1200 -fPIC -c ../ncurses/lib_gen.c -o ../obj_s/lib_gen.o
-> /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/ccache /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc -DHAVE_CONFIG_H -I../ncurses -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -O2   --param max-inline-insns-single=1200 -fPIC -c ../ncurses/./base/lib_redrawln.c -o ../obj_s/lib_redrawln.o
-> /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/ccache /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc -DHAVE_CONFIG_H -I../ncurses -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -O2   --param max-inline-insns-single=1200 -fPIC -c ../ncurses/./base/lib_refresh.c -o ../obj_s/lib_refresh.o
-> /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/ccache /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc -DHAVE_CONFIG_H -I../ncurses -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -O2   --param max-inline-insns-single=1200 -fPIC -c ../ncurses/./base/lib_restart.c -o ../obj_s/lib_restart.o
-> /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/ccache /home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/host/usr/bin/arm-buildroot-linux-gnueabihf-gcc -DHAVE_CONFIG_H -I../ncurses -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -DNDEBUG -I. -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -O2   --param max-inline-insns-single=1200 -fPIC -c ../ncurses/./base/lib_scanw.c -o ../obj_s/lib_scanw.o
-> _16821.c:835:22: Fehler: expected ?)? before ?int?
-> make[3]: *** [../obj_s/lib_gen.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> make[2]: *** [all] Error 2
-> make[1]: *** [/home/brommer/Dokumente/project_data/steward_stuff/buildroot/output/build/ncurses-5.9/.stamp_built] Error 2
-> make: *** [_all] Error 2
->
->
-> Expected ) before int in _16821.c:835:22
->
-> Any idea what would be causing this? I believe it was introduced recently.
->
-> Thanks,
-> Christian
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/179f5bc2/attachment.html>
+> I would have expected that the user may either:
+>   - use a bundled defconfig (or even full .config), or
+>   - provide his own defconfig (or full .config),
+
+> like we do for other kconfig packages.
+
+> So, the prompts would be:
+
+>     choice
+>         bool "Linux backports configuration"
+
+>     config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
+>         bool "Using an in-tree defconfig file"
+
+>     config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
+>         bool "Using a custom (def)config file"
+
+>     endchoice
+
+> Note: this is similar to the variable names in linux/Config.in which are
+> probably a bit mis-named, but that's historical. What is important is
+> how we use them.
+
+> > +endchoice
+> > +
+> > +config BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES
+> > +	string "Additional linux-backports configuration fragment files"
+> > +	help
+> > +	  A space-separated list of configuration fragment files,
+> > +	  that will be merged to the main linux-backports configuration file.
+
+> Please, put the option for the fragments list after the base files,
+> below:
+
+> > +config BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG
+> > +	string "Defconfig name"
+> > +	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
+> > +	help
+> > +          Name of the backports defconfig file to use. The defconfig is
+> > +          located in defconfigs/ directory in the backports tree.
+> > +
+> > +config BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE
+> > +	string "Configuration file path"
+> > +	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
+> > +	help
+> > +	  Path to the backports configuration file
+
+> ... here.
+
+> > +endif
+
+> [--SNIP--]
+> > diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+> > new file mode 100644
+> > index 0000000..d45166a
+> > --- /dev/null
+> > +++ b/package/linux-backports/linux-backports.mk
+> > @@ -0,0 +1,64 @@
+> > +################################################################################
+> > +#
+> > +# linux-backports
+> > +#
+> > +################################################################################
+> > +
+> > +LINUX_BACKPORTS_VERSION_MAJOR = 4.0.1
+> > +LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
+> > +LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
+> > +LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
+> > +
+> > +LINUX_BACKPORTS_DEPENDENCIES = linux
+> > +# FIXME: does linux extracting, patching, but we need also linux to be configured.
+> > +LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
+
+> You can drop the 'FIXME:' and just state:
+
+>     # We need linux to be extracted and patch first before we are patched,
+>     # but we also need it to be built before we are configured, hence we do
+>     # need both dependencies:
+>     LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
+>     LINUX_BACKPORTS_DEPENDENCIES = linux
+
+> > +LINUX_BACKPORTS_MAKE_OPTS = \
+> > +	$(LINUX_MAKE_FLAGS) \
+> > +	KLIB_BUILD=$(LINUX_DIR) \
+> > +	KLIB=$(TARGET_DIR)
+> > +
+> > +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+> > +LINUX_BACKPORTS_SOURCE_CONFIG = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+
+> Do not use $(LINUX_BACKPORTS_DIR) but use $(@D) instead.
+
+> > +else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+> > +LINUX_BACKPORTS_SOURCE_CONFIG = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
+
+> You need to qstrip that one as well.
+
+> > +endif
+> > +
+> > +# backports configure needs a configured kernel
+> > +# FIXME: not used as we'd need to assign LINUX_BACKPORTS_SOURCE_CONFIG with :=,
+> > +# but then we don't get $(LINUX_BACKPORTS_DIR) evaluated.
+
+> Would using $(@D) like I suggest above solve this issue?
+
+> > +$(LINUX_BACKPORTS_SOURCE_CONFIG): linux
+> > +
+> > +define LINUX_BACKPORTS_BUILD_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
+
+> Would it work if you were to write (note the added trailing 'modules'):
+
+>     $(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+>         -C $(@D) modules
+
+> I ask, because I have a pending series that provides an infra for
+> building kernel modules:
+>     http://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/kernel-modules
+
+> and it looks like that would probably help you quite a lot here...
+
+> Also, you probably want to use $(LINUX_MAKE_ENV) instead of just
+> $(TARGET_MAKE_ENV).
+
+> > +endef
+> > +
+> > +define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+
+> Ditto $(LINUX_MAKE_ENV).
+
+> > +		-C $(LINUX_DIR) M=$(@D) \
+> > +		INSTALL_MOD_DIR=backports \
+> > +		modules_install
+> > +endef
+> > +
+> > +LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_SOURCE_CONFIG)
+
+> Why don't you directly assign to LINUX_BACKPORTS_KCONFIG_FILE without
+> using the intermediate LINUX_BACKPORTS_SOURCE_CONFIG ?
+
+> > +LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
+> > +LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+> > +LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+> > +
+> > +$(eval $(kconfig-package))
+> > +
+> > +# Checks to give errors that the user can understand
+> > +ifeq ($(filter source,$(MAKECMDGOALS)),)
+
+> We now have a variable that explicitly states whether we are building or
+> not:
+
+>     ifeq ($(BR_BUILDING),y)
+
+> > +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+> > +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
+> > +$(error No linux-backports defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
+> > +endif
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+> > +ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
+> > +$(error No linux-backports configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
+> > +endif
+> > +endif
+> > +
+> > +endif
+
+> When nesting ifeq-blocks, we like having the endif statements remind to
+> which ifeq they apply, like so:
+
+>     endif # BR_BUILDING
+
+> so the file stays readable.
+
+> Regards,
+> Yann E. MORIN.
+
+Kind regards,
+Petr
