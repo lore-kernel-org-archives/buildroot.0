@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 23:42:44 +0200
-Subject: [Buildroot] [PATCH 1/1] perl: only run finalize hook when
- necessary
-In-Reply-To: <1437443964-1988-1-git-send-email-danomimanchego123@gmail.com>
-References: <1437443964-1988-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20150721234244.6b861e3e@free-electrons.com>
+Date: Wed, 22 Jul 2015 00:00:16 +0200
+Subject: [Buildroot] [git commit] package/debianutils: improve help text
+Message-ID: <20150721220028.358DD801F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+commit: http://git.buildroot.net/buildroot/commit/?id=02084cdf948ce1a0781a9a54c51b7705454ee3a3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 20 Jul 2015 21:59:24 -0400, Danomi Manchego wrote:
-> The PERL_FINALIZE_TARGET always runs, even if perl is not installed.
-> This results in errors from the find command when it fails to find
-> anything, even when doing "make -s":
-> 
-> >>>   Finalizing target directory
-> find: `...../output/target/usr/lib/perl5/': No such file or directory
-> find: `...../output/target/usr/lib/perl5/': No such file or directory
-> find: `...../output/target/usr/lib/perl5/': No such file or directory
-> 
-> This is not helpful for projects that do not select Perl.  Silence this
-> by making the hook conditional on package selection.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  package/perl/perl.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Add a note about the installed utilities.
 
-Applied, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/debianutils/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/debianutils/Config.in b/package/debianutils/Config.in
+index f865868..c4f2fcf 100644
+--- a/package/debianutils/Config.in
++++ b/package/debianutils/Config.in
+@@ -4,4 +4,7 @@ config BR2_PACKAGE_DEBIANUTILS
+ 	help
+ 	  Miscellaneous utilities specific to Debian.
+ 
++	  The specific utilities included are: add-shell installkernel
++	  ischroot remove-shell run-parts savelog tempfile which.
++
+ 	  https://tracker.debian.org/pkg/debianutils
