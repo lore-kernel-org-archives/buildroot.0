@@ -1,39 +1,64 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 21 Jul 2015 21:28:37 +0200
-Subject: [Buildroot] [PATCH 1/1] connman: bump to version 1.29
-Message-ID: <1437506917-6599-1-git-send-email-petr.vorel@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Jul 2015 21:38:35 +0200
+Subject: [Buildroot] [PATCH 3/4] core/pkg-kconfig: run the kconfig
+ fixups after exiting configurators
+In-Reply-To: <557C5969.7020703@mind.be>
+References: <cover.1433591404.git.yann.morin.1998@free.fr>
+ <c011926dc0817e5b5685bc5519ae5cbd57b21888.1433591404.git.yann.morin.1998@free.fr>
+ <20150612233618.56f1e4dd@free-electrons.com>
+ <557C5969.7020703@mind.be>
+Message-ID: <20150721193834.GB4831@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Arnout, All,
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 35654ec..3f266f5 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256	b1d5e7dd2652725906e220a8b0206477e97080e835272971e3b2fd10943c5c94    connman-1.28.tar.xz
-+sha256	2a5a69693566f7fd59b2e677fa89356ada6d709998aa665caef8707b1e7a8594  connman-1.29.tar.xz
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 016eff7..5250c20 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.28
-+CONNMAN_VERSION = 1.29
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+On 2015-06-13 18:25 +0200, Arnout Vandecappelle spake thusly:
+> On 06/12/15 23:36, Thomas Petazzoni wrote:
+> > On Sat,  6 Jun 2015 13:54:25 +0200, Yann E. MORIN wrote:
+> >> +# Because commands in $(1)_FIXUP_KCONFIG are probably using $(@D), we
+> >> +# fake it for the configurators (otherwise it is set to just '.', i.e.
+> >> +# the current directory where make is run, which happens to be in
+> >> +# $(TOPDIR), because the target of the rule is not an actual file, so
+> >> +# does not have any path component).
+> >> +#
+> >> +$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
+> >>  $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> >>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> >>  		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
+> >>  	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+> >>  	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+> >> +	$$(call $(1)_FIXUP_KCONFIG)
+[--SNIP--]
+> How about:
+> 
+> $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/%
+> 
+> $$($(2)_DIR)/%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>         $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+>                 $$($(2)_KCONFIG_OPTS) $$*
+> 	...
+> 
+> Note that there's no need to actually create $$($(2)_DIR)/%, so it should
+> probably be declared PHONY too:
+> 
+> .PHONY: $$(addprefix $$($(2)_DIR)/,$$($(2)_KCONFIG_EDITORS))
+
+In the end, I stumbled upon a hard-to-debug issue caused by overriding
+@D, so I'll switch the code to using your proposal, since that would fix
+my issue (mor eon that one later! ;-) ), the alternate solution being
+even uglier...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
