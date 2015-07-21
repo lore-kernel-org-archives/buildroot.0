@@ -1,121 +1,51 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue, 21 Jul 2015 22:42:14 +0100
-Subject: [Buildroot] Packages hosted on SourceForge
-Message-ID: <CA+BsyQ7yogCrmc9aNitEYKfzjegz+9cqH=sXDRkqBeeM=n9NnA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 21 Jul 2015 23:42:36 +0200
+Subject: [Buildroot] [git commit] perl: only run finalize hook when necessary
+Message-ID: <20150721214242.23B5C81DF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+commit: http://git.buildroot.net/buildroot/commit/?id=c30dd5de91404744bbe2a5ffece0d00ce68f1f64
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I spent a few hours walking down all of the packages (~200 in all, out of
-~1630 total) hosted on a sourceforge download site which could be fetched
-from a more authoritative download location.
+The PERL_FINALIZE_TARGET always runs, even if perl is not installed.
+This results in errors from the find command when it fails to find
+anything, even when doing "make -s":
 
-It turns out to be rather slim pickings; the vast majority of
-these packages are hosted principally on sourceforge with no
-alternative download location. Quite a few use github for hosting
-the repositories, but still use sourceforge to host the official
-releases. In one or two cases the project websites had a more
-authoritative download location, but requested that the sourceforge site be
-used due to its superior global reach and load capacity.
+>>>   Finalizing target directory
+find: `...../output/target/usr/lib/perl5/': No such file or directory
+find: `...../output/target/usr/lib/perl5/': No such file or directory
+find: `...../output/target/usr/lib/perl5/': No such file or directory
 
-The simple candidates for having their upstream URL updated are as follows.
-In some cases we'll need to rework the version number variables slightly.
+This is not helpful for projects that do not select Perl.  Silence this
+by making the hook conditional on package selection.
 
-=========================
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/perl.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-arptables
-old :
-http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
-new : ftp://ftp.netfilter.org/pub/arptables/
-
-ebtables
-old :
-http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst
-.,-,$(EBTABLES_VERSION))
-new : ftp://ftp.netfilter.org/pub/ebtables/
-
-freetype
-old :
-http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
-new : http://download.savannah.gnu.org/releases/freetype/
-
-iperf
-old : http://downloads.sourceforge.net/project/iperf
-new : https://iperf.fr/download/iperf_$(IPERF_VERSION)/
-
-logsurfer
-old :
-http://downloads.sourceforge.net/project/logsurfer/logsurfer/logsurfer-$(LOGSURFER_VERSION)
-new : http://www.crypt.gen.nz/logsurfer/logsurfer-1.8.tar.gz
-
-msgpack
-old : http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
-new :
-https://github.com/msgpack/msgpack-c/releases/download/cpp-$(MSGPACK_VERSION)/
-
-mutt
-old : http://downloads.sourceforge.net/project/mutt/mutt
-new : ftp://ftp.mutt.org/mutt
-
-poco
-old :
-http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
-new : http://pocoproject.org/releases/poco-$(POCO_VERSION_MAJOR)/
-
-wine -
-old : http://downloads.sourceforge.net/project/wine/Source/
-new: http://ftp.winehq.org/pub/wine/source/$(WINE_VERSION)/
-
-zlib
-old : http://downloads.sourceforge.net/project/libpng/zlib/$(ZLIB_VERSION)
-new : http://zlib.net/
-
-=========================
-
-I will prepare a patch to fix the above.
-
-Some packages appear at first glance to have authoritative releases hosted
-outside of sourceforge, but closer examination suggests that we should not
-update these yet.
-
-procps_ng - project moved to gitlab, however no downloads appear to
-be hosted there
-old : http://downloads.sourceforge.net/project/procps-ng/Production
-new :
-
-tcl - project website provides local FTP link, but appears to
-prefer sourceforge.
-old : http://downloads.sourceforge.net/project/
-new :
-
-tcllib - canonical download site requires a login. Sourceforge is being
-maintained.
-old :
-http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
-new :
-
-openjpeg -migrated to github, but the new 1.5.2 archive does not match the
-old one - files are missing.
-old :
-http://downloads.sourceforge.net/project/openjpeg.mirror/$(OPENJPEG_VERSION)
-new :
-
-libmad - don't fix. Site appears to move older versions into an "archive"
-directory which could cause buildroot builds to fail later.
-old : http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
-new : ftp://ftp.mars.org/pub/mpeg/
-
-madplay - don't fix. Site appears to move older versions into an "archive"
-directory which could cause buildroot builds to fail later.
-old :
-http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
-new : ftp://ftp.mars.org/pub/mpeg/
-
-=========================
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/2c55055f/attachment-0001.html>
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 091c032..1e6a054 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -115,6 +115,7 @@ endef
+ $(eval $(generic-package))
+ $(eval $(host-generic-package))
+ 
++ifeq ($(BR2_PACKAGE_PERL),y)
+ define PERL_FINALIZE_TARGET
+ 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+ 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
+@@ -122,6 +123,5 @@ define PERL_FINALIZE_TARGET
+ 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
+ endef
+-
+ TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
+-
++endif
