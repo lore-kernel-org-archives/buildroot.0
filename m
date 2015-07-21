@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 21:52:30 +0200
-Subject: [Buildroot] [PATCH 1/1] Toolchain - Add option to enable Ada
- language.
-In-Reply-To: <55AE8452.4030507@noffke.me>
-References: <1459893.m3stRD3lTI@noffke.mortara.com>
- <20150720233935.37e53e86@free-electrons.com>
- <55AE8452.4030507@noffke.me>
-Message-ID: <20150721215230.174cea25@free-electrons.com>
+Date: Tue, 21 Jul 2015 21:54:38 +0200
+Subject: [Buildroot] [PATCH] snmppp: extract license text from source
+ files
+In-Reply-To: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
+References: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20150721215438.19389da8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick,
+Dear Luca Ceresoli,
 
-On Tue, 21 Jul 2015 12:41:38 -0500, Patrick Noffke wrote:
-> Hi Thomas,
+On Tue, 21 Jul 2015 18:29:44 +0200, Luca Ceresoli wrote:
+> There is no proper license file in the SNMP++ tarballs, so let's
+> extract it from a source file instead of copying it entirely.
 > 
-> On 07/20/2015 04:39 PM, Thomas Petazzoni wrote:
-> > Dear Patrick Noffke,
-> >
-> > Sorry for the long response time. However, unless I missed it, you
-> > never resent your patch with git send-email. Can you do this? Also, see
-> > some comments below.
-> 
-> I did resend it from another PC on 08 April 2015 at 11:05 a.m. my time.  
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  package/snmppp/snmppp.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-For some reason it apparently never made it to the list. See the
-archives at
-http://lists.busybox.net/pipermail/buildroot/2015-April/thread.html.
+In many other packages we are using a complete source file as the
+license text. Should we switch to the solution you're proposing instead?
+Another possibility is to do:
 
-> But it did not address all of your below comments.  I will resend again.
+<pkg>_LICENSE_FILES = src/v3.cpp:1:50
 
-Excellent, thanks a lot!
+To tell the package infra to extract the text from lines 1 to 50. But
+we would never notice when the lines no longer match.
+
+I'd like to have a general agreement on this before going further with
+your patch.
+
+Best regards,
 
 Thomas
 -- 
