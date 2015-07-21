@@ -1,66 +1,44 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 21 Jul 2015 18:26:48 +0200
-Subject: [Buildroot] [PATCH 2/2] rtl8188eu: new package
-In-Reply-To: <20150718233012.5293b49f@free-electrons.com>
-References: <1436188175-7912-1-git-send-email-luca@lucaceresoli.net>
- <1436188175-7912-2-git-send-email-luca@lucaceresoli.net>
- <20150718233012.5293b49f@free-electrons.com>
-Message-ID: <55AE72C8.10405@lucaceresoli.net>
+Date: Tue, 21 Jul 2015 18:29:44 +0200
+Subject: [Buildroot] [PATCH] snmppp: extract license text from source files
+Message-ID: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+There is no proper license file in the SNMP++ tarballs, so let's
+extract it from a source file instead of copying it entirely.
 
-Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
->
-> On Mon,  6 Jul 2015 15:09:35 +0200, Luca Ceresoli wrote:
->
->> diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
->> new file mode 100644
->> index 0000000..843d9b0
->> --- /dev/null
->> +++ b/package/rtl8188eu/rtl8188eu.mk
->> @@ -0,0 +1,22 @@
->> +################################################################################
->> +#
->> +# rtl8188eu
->> +#
->> +################################################################################
->> +
->> +RTL8188EU_VERSION = 3091828c8f4b4a01cbec6025128bf77e6e7b9f97
->> +RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
->> +RTL8188EU_DEPENDENCIES = linux
->> +RTL8188EU_LICENSE = GPLv2
->> +RTL8188EU_LICENSE_FILES = COPYING
->> +
->> +define RTL8188EU_BUILD_CMDS
->> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KSRC=$(LINUX_DIR)
->> +endef
->> +
->> +define RTL8188EU_INSTALL_TARGET_CMDS
->> +	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KSRC=$(LINUX_DIR) \
->> +		modules_install firmware_install
->> +endef
->> +
->> +$(eval $(generic-package))
->
-> In addition to the previous discussion, this package should also
-> probably be using the new kernel-module infrastructure.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/snmppp/snmppp.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Yes, I guess so.
-
->
-> Can you respin a new version? In the mean time, I'll mark this one as
-> "Changes Requested" in patchwork.
-
-It's on my todo list.
-
-However, I still haven't understood your opinion about using mdev
-without devtmpfs (it's for firmware loading in this case)...
-
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 026fe6e..1b73eba 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -11,7 +11,7 @@ SNMPPP_DEPENDENCIES = host-pkgconf
+ SNMPPP_INSTALL_STAGING = YES
+ SNMPPP_CONF_OPTS = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-logging)
+ SNMPPP_LICENSE = SNMP++
+-SNMPPP_LICENSE_FILES = src/v3.cpp
++SNMPPP_LICENSE_FILES = license.txt
+ 
+ ifeq ($(BR2_PACKAGE_SNMPPP_SNMPV3),y)
+ SNMPPP_CONF_OPTS += --enable-snmpv3
+@@ -20,4 +20,10 @@ else
+ SNMPPP_CONF_OPTS += --disable-snmpv3
+ endif
+ 
++define SNMPPP_EXTRACT_LICENSE
++	grep '_##' $(@D)/src/v3.cpp >$(@D)/license.txt
++endef
++
++SNMPPP_POST_EXTRACT_HOOKS += SNMPPP_EXTRACT_LICENSE
++
+ $(eval $(autotools-package))
 -- 
-Luca
+1.9.1
