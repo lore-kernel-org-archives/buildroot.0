@@ -1,36 +1,57 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue, 21 Jul 2015 01:16:16 +0100
-Subject: [Buildroot] [PATCH] autobuild - acpid does not build against
-	musl
-In-Reply-To: <20150720224152.11d13fa5@free-electrons.com>
-References: <1437417346-18621-1-git-send-email-brendanheading@gmail.com>
- <20150720224152.11d13fa5@free-electrons.com>
-Message-ID: <CA+BsyQ7vZTqjt9OKgj_tcBTx=rC9zHCxzmN4wSPJ=20TD=MRwA@mail.gmail.com>
+From: FanChengPing <vancepym@outlook.com>
+Date: Tue, 21 Jul 2015 09:19:18 +0800
+Subject: [Buildroot] [PATCH 1/4] freerdp: Add support for tz package
+Message-ID: <BLU436-SMTP472EF27D5E879E3FFB5134C7840@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20 July 2015 at 21:41, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Brendan Heading,
->
-> The commit title should be:
->
->         acpid: fix build against musl
+Fixes error message while freerdp connected the remote desktop:
+Unable to detect time zone
 
-Hi Thomas,
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ .../freerdp/0004-add-support-for-tz-package.patch  | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/freerdp/0004-add-support-for-tz-package.patch
 
-I think the best course with this problem is to have a chat with the
-upstream musl guys (first choice) or patch the buildroot musl
-toolchain (second choice).
-
-The absence of TEMP_FAILURE_RETRY will break more than one package so
-in retrospect it's probably more cleaner to try to fix it properly
-rather than add patches to every package where it shows up. The only
-downside is that acpid will be broken until it's resolved.
-
-regards
-
-Brendan
+diff --git a/package/freerdp/0004-add-support-for-tz-package.patch b/package/freerdp/0004-add-support-for-tz-package.patch
+new file mode 100644
+index 0000000..93e4afd
+--- /dev/null
++++ b/package/freerdp/0004-add-support-for-tz-package.patch
+@@ -0,0 +1,30 @@
++From 605d0a85183d2f9d5b0da5629cbadf01173bbb2f Mon Sep 17 00:00:00 2001
++From: Scott Fan <fancp2007@gmail.com>
++Date: Mon, 13 Jul 2015 15:01:17 +0800
++Subject: [PATCH] Add support for tz package
++
++Fixes error message while freerdp connected the remote desktop:
++Unable to detect time zone
++
++Signed-off-by: Scott Fan <fancp2007@gmail.com>
++---
++ libfreerdp/locale/timezone.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/libfreerdp/locale/timezone.c b/libfreerdp/locale/timezone.c
++index 3070f1f..4a06786 100644
++--- a/libfreerdp/locale/timezone.c
+++++ b/libfreerdp/locale/timezone.c
++@@ -1539,7 +1539,8 @@ char* freerdp_get_unix_timezone_identifier()
++ 	 * America/Montreal for example.
++ 	 */
++ 	
++-	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1)
+++	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1 ||
+++	    (len = readlink("/etc/TZ", buf, sizeof(buf) - 1)) != -1)
++ 	{
++ 		int num = 0;
++ 		int pos = len;
++-- 
++2.4.5
++
+-- 
+2.4.6
