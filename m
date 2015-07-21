@@ -1,38 +1,86 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Jul 2015 11:47:13 +0300
-Subject: [Buildroot] [PATCH] netsnmp: fix static build
-Message-ID: <d83c0f02c2d855f666b1bdd307723e339431d74c.1437468433.git.baruch@tkos.co.il>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Tue, 21 Jul 2015 10:51:27 +0200
+Subject: [Buildroot] [PATCH v4 0/4] qt5 bump to 5.5.0
+In-Reply-To: <1436538022-18924-1-git-send-email-corjon.j@ecagroup.com>
+References: <1436538022-18924-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1437468691-364-1-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Exclude the ucd-snmp/dlmod MIB module when building statically.
+This series aim to bump Qt to the 5.5.0 version.
 
-Fixes:
-http://autobuild.buildroot.net/results/782/7829e74f83c3c4a1f45e049ec9f9d6b00e002c1c/
-http://autobuild.buildroot.net/results/5df/5df28482dfa3d7c54d1e4ae3e1d373bd8e9a2265/
-http://autobuild.buildroot.net/results/4b7/4b7f3c15a4f4c4f4457e78767f5526c044d6dc1d/
+QtWebkit, QtScript & QtQuick modules as been tagged as deprecated by Qt [1]
+but these modules are still released in Qt-5.5.0 so they are tagged as 'legacy
+compatibility' in menuconfig.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/netsnmp/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Qt5WebChannel is a rebase of my previous patch[2] on top of Qt-5.5.0
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index 47a53d7ead2f..57cc6b93fd25 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -31,7 +31,8 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 
- config BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES
- 	string "Build with these MIB modules"
--	default "host ucd-snmp/dlmod agentx"
-+	default "host ucd-snmp/dlmod agentx" if !BR2_STATIC_LIBS
-+	default "host agentx" if BR2_STATIC_LIBS
- 	help
- 	  Specify which MIB modules to include.
- 
+[1] https://wiki.qt.io/New_Features_in_Qt_5.5#Deprecated_Functionality
+[2] http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/118411
+
+Julien Corjon (4):
+  qt5: bump version to 5.5.0
+  qt/qt5base: reorder patches
+  qt/qt5quick1, qt/qt5script, qt/qt5webkit: tag as legacy compatibility
+  qt/qt5webchannel: new package
+
+ package/qt5/Config.in                              |  10 +-
+ package/qt5/qt5.mk                                 |   4 +-
+ ...ing-Check-if-uClibc-has-backtrace-support.patch |  48 ----
+ ...kspecs-files.patch => 0002-mkspecs-files.patch} |   0
+ ...cb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} |   9 +-
+ .../0004-no-gold-linker-for-host-build.patch       |  41 ++++
+ .../0005-forkd-disable-eventfd-for-uclibc.patch    |  19 ++
+ .../0005-no-gold-linker-for-host-build.patch       |  27 ---
+ ...nfigure-fix-gold-linker-support-detection.patch |  36 ---
+ .../0006-eglfs-rasp-pi-header-inclusion.patch      |  45 ++++
+ .../0007-configure-add-psql_config-option.patch    |  61 -----
+ package/qt5/qt5base/qt5base.hash                   |   8 +-
+ package/qt5/qt5base/qt5base.mk                     |   8 +-
+ .../0001-Fix-build-with-no-c-11.patch              | 267 ---------------------
+ ...z_data_p.h-Add-missing-include-byteswap.h.patch |  46 ----
+ package/qt5/qt5connectivity/qt5connectivity.hash   |   8 +-
+ package/qt5/qt5declarative/qt5declarative.hash     |   8 +-
+ package/qt5/qt5enginio/qt5enginio.hash             |   8 +-
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |   8 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash   |   8 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash       |   8 +-
+ package/qt5/qt5quick1/Config.in                    |   4 +
+ package/qt5/qt5quick1/qt5quick1.hash               |   8 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |   8 +-
+ package/qt5/qt5script/Config.in                    |   4 +
+ package/qt5/qt5script/qt5script.hash               |   8 +-
+ package/qt5/qt5sensors/qt5sensors.hash             |   8 +-
+ package/qt5/qt5serialport/qt5serialport.hash       |   8 +-
+ package/qt5/qt5svg/qt5svg.hash                     |   8 +-
+ package/qt5/qt5webchannel/Config.in                |  11 +
+ package/qt5/qt5webchannel/qt5webchannel.hash       |   4 +
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  61 +++++
+ package/qt5/qt5webkit-examples/Config.in           |   4 +
+ .../qt5/qt5webkit-examples/qt5webkit-examples.hash |   8 +-
+ package/qt5/qt5webkit/Config.in                    |   4 +
+ package/qt5/qt5webkit/qt5webkit.hash               |   8 +-
+ package/qt5/qt5websockets/qt5websockets.hash       |   8 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash         |   8 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |   8 +-
+ 39 files changed, 285 insertions(+), 572 deletions(-)
+ delete mode 100644 package/qt5/qt5base/0002-logging-Check-if-uClibc-has-backtrace-support.patch
+ rename package/qt5/qt5base/{0003-mkspecs-files.patch => 0002-mkspecs-files.patch} (100%)
+ rename package/qt5/qt5base/{0004-xcb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} (88%)
+ create mode 100644 package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
+ create mode 100644 package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
+ delete mode 100644 package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
+ delete mode 100644 package/qt5/qt5base/0006-configure-fix-gold-linker-support-detection.patch
+ create mode 100644 package/qt5/qt5base/0006-eglfs-rasp-pi-header-inclusion.patch
+ delete mode 100644 package/qt5/qt5base/0007-configure-add-psql_config-option.patch
+ delete mode 100644 package/qt5/qt5connectivity/0001-Fix-build-with-no-c-11.patch
+ delete mode 100644 package/qt5/qt5connectivity/0002-bluez_data_p.h-Add-missing-include-byteswap.h.patch
+ create mode 100644 package/qt5/qt5webchannel/Config.in
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.mk
+
 -- 
-2.1.4
+2.1.0
