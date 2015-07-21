@@ -1,11 +1,10 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Tue, 21 Jul 2015 13:30:16 +0200
-Subject: [Buildroot] [PATCH v5 3/4] qt/qt5quick1, qt/qt5script,
-	qt/qt5webkit: tag as legacy compatibility
+Date: Tue, 21 Jul 2015 13:30:17 +0200
+Subject: [Buildroot] [PATCH v5 4/4] qt/qt5webchannel: new package
 In-Reply-To: <1437478217-19091-1-git-send-email-corjon.j@ecagroup.com>
 References: <1437468691-364-1-git-send-email-corjon.j@ecagroup.com>
  <1437478217-19091-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <1437478217-19091-4-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1437478217-19091-5-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,100 +16,126 @@ Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 v4 -> v5
   - Nothing
 v3 -> v4
-  - Ammend commit log with qt/qt5*
-v2 -> v3
   - Nothing
-v1 -> v2 :
-  - Rename "deprecated" with "legacy compatibility" (except in help messages)
-     (Suggested by Thomas and confirmed by Arnout)
-  - Remove "(deprecated)" from package name
-     (Suggested by Thomas and confirmed by Arnout)
+v2 -> v3
+  - Adding this patch 
+v1 -> v2
+  - No qt5webchannel
 
- package/qt5/Config.in                    | 9 +++++----
- package/qt5/qt5quick1/Config.in          | 4 ++++
- package/qt5/qt5script/Config.in          | 4 ++++
- package/qt5/qt5webkit-examples/Config.in | 4 ++++
- package/qt5/qt5webkit/Config.in          | 4 ++++
- 5 files changed, 21 insertions(+), 4 deletions(-)
+ package/qt5/Config.in                        |  1 +
+ package/qt5/qt5webchannel/Config.in          | 11 +++++
+ package/qt5/qt5webchannel/qt5webchannel.hash |  4 ++
+ package/qt5/qt5webchannel/qt5webchannel.mk   | 61 ++++++++++++++++++++++++++++
+ 4 files changed, 77 insertions(+)
+ create mode 100644 package/qt5/qt5webchannel/Config.in
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.mk
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index e8ec7d9..737a789 100644
+index 737a789..3fb65f7 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -36,15 +36,16 @@ source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
--source "package/qt5/qt5quick1/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
--source "package/qt5/qt5script/Config.in"
+@@ -40,6 +40,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
  source "package/qt5/qt5sensors/Config.in"
  source "package/qt5/qt5serialport/Config.in"
  source "package/qt5/qt5svg/Config.in"
--source "package/qt5/qt5webkit/Config.in"
--source "package/qt5/qt5webkit-examples/Config.in"
++source "package/qt5/qt5webchannel/Config.in"
  source "package/qt5/qt5websockets/Config.in"
  source "package/qt5/qt5x11extras/Config.in"
  source "package/qt5/qt5xmlpatterns/Config.in"
-+comment "legacy compatibility"
-+source "package/qt5/qt5quick1/Config.in"
-+source "package/qt5/qt5script/Config.in"
-+source "package/qt5/qt5webkit/Config.in"
-+source "package/qt5/qt5webkit-examples/Config.in"
- endif
-diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
-index 16076eb..345ffae 100644
---- a/package/qt5/qt5quick1/Config.in
-+++ b/package/qt5/qt5quick1/Config.in
-@@ -15,6 +15,10 @@ config BR2_PACKAGE_QT5QUICK1
- 
- 	  This package corresponds to the qt5quick1 module.
- 
-+	  This package has been tagged as deprecated since version
-+	  5.5.0 and should be replaced by Qt Quick module in new
-+	  design.
+diff --git a/package/qt5/qt5webchannel/Config.in b/package/qt5/qt5webchannel/Config.in
+new file mode 100644
+index 0000000..218629a
+--- /dev/null
++++ b/package/qt5/qt5webchannel/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QT5WEBCHANNEL
++	bool "qt5webchannel"
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5WEBSOCKETS
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
- 	  http://qt.io
- 
- comment "qt5quick1 needs a toolchain w/ dynamic library"
-diff --git a/package/qt5/qt5script/Config.in b/package/qt5/qt5script/Config.in
-index 5313e90..0d15ef2 100644
---- a/package/qt5/qt5script/Config.in
-+++ b/package/qt5/qt5script/Config.in
-@@ -8,4 +8,8 @@ config BR2_PACKAGE_QT5SCRIPT
- 
- 	  This package corresponds to the qt5script module.
- 
-+	  This package has been tagged as deprecated since version
-+	  5.5.0 and should be replaced by Qt QML module in new
-+	  design.
++	  This package corresponds to the qt5webchannel module.
 +
- 	  http://qt.io
-diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
-index e7610c2..3f9c243 100644
---- a/package/qt5/qt5webkit-examples/Config.in
-+++ b/package/qt5/qt5webkit-examples/Config.in
-@@ -7,4 +7,8 @@ config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
- 
- 	  This package contains examples for the qt5webkit module.
- 
-+	  This package has been tagged as deprecated since version
-+	  5.5.0 and should be replaced by Qt WebEngine module in
-+	  new design.
++	  http://qt.io
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+new file mode 100644
+index 0000000..b96aebb
+--- /dev/null
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
+@@ -0,0 +1,4 @@
++# Hashes from: http://download.qt.io/official_releases/qt/5.5/5.5.0/submodules/qtwebchannel-opensource-src-5.5.0.tar.xz.mirrorlist
++sha256 94f88604ff0b29a30f1a1b13601d4bce9af5c0a96c43869705aee1596aeb2d8d qtwebchannel-opensource-src-5.5.0.tar.xz
++sha1   7c45ecb9c4226207f184b5cf25d1a18d650075da                         qtwebchannel-opensource-src-5.5.0.tar.xz
++md5    c20146286108477cdab60c67d2d87dc7                                 qtwebchannel-opensource-src-5.5.0.tar.xz
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+new file mode 100644
+index 0000000..cfb6da9
+--- /dev/null
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -0,0 +1,61 @@
++################################################################################
++#
++# qt5webchannel
++#
++################################################################################
 +
- 	  http://qt.io
-diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
-index 3507a9d..eee82e8 100644
---- a/package/qt5/qt5webkit/Config.in
-+++ b/package/qt5/qt5webkit/Config.in
-@@ -17,4 +17,8 @@ config BR2_PACKAGE_QT5WEBKIT
- 
- 	  This package corresponds to the qt5webkit module.
- 
-+	  This package has been tagged as deprecated since version
-+	  5.5.0 and should be replaced by Qt WebEngine module in
-+	  new design.
++QT5WEBCHANNEL_VERSION = $(QT5_VERSION)
++QT5WEBCHANNEL_SITE = $(QT5_SITE)
++QT5WEBCHANNEL_SOURCE = qtwebchannel-opensource-src-$(QT5WEBCHANNEL_VERSION).tar.xz
++QT5WEBCHANNEL_DEPENDENCIES = qt5base qt5websockets
++QT5WEBCHANNEL_INSTALL_STAGING = YES
 +
- 	  http://qt.io
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5WEBCHANNEL_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
++QT5WEBCHANNEL_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LGPL_EXCEPTION.txt LICENSE.GPLv2
++else
++QT5WEBCHANNEL_LICENSE = Commercial license
++QT5WEBCHANNEL_REDISTRIBUTE = NO
++endif
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
++QT5WEBCHANNEL_DEPENDENCIES += qt5declarative
++endif
++
++define QT5WEBCHANNEL_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5WEBCHANNEL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5WEBCHANNEL_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++define QT5WEBCHANNEL_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebChannel $(TARGET_DIR)/usr/qml/
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5WEBCHANNEL_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webchannel $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
++ifneq ($(BR2_STATIC_LIBS),y)
++define QT5WEBCHANNEL_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebChannel.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++define QT5WEBCHANNEL_INSTALL_TARGET_CMDS
++	$(QT5WEBCHANNEL_INSTALL_TARGET_LIBS)
++	$(QT5WEBCHANNEL_INSTALL_TARGET_QMLS)
++endef
++
++$(eval $(generic-package))
 -- 
 2.1.0
