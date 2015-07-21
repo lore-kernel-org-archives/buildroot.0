@@ -1,91 +1,91 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Tue, 21 Jul 2015 14:02:52 +0100
-Subject: [Buildroot] [PATCH 3/5] package/redis: Install /etc/redis.conf to
-	target
-In-Reply-To: <1437483774-30291-1-git-send-email-martin@barkynet.com>
-References: <1437483774-30291-1-git-send-email-martin@barkynet.com>
-Message-ID: <1437483774-30291-3-git-send-email-martin@barkynet.com>
+Date: Tue, 21 Jul 2015 14:02:50 +0100
+Subject: [Buildroot] [PATCH 1/5] package/redis: Bump version to 3.0.3
+Message-ID: <1437483774-30291-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Copy redis.conf from the redis release package but adjust some values to
-sensible defaults using 0003-redis.conf-sane-defaults.patch
-
-The file 0003-redis.conf-sane-defaults.patch originates from the redis
-package in Arch Linux.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-
----
-0003-redis.conf-sane-defaults.patch is a copy of the file
-redis.conf-sane-defaults.patch from the Arch Linux redis package.  See
-https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=b4907d2344855caeadf6c69bc01c403a95f8a4f3
-
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/redis/0003-redis.conf-sane-defaults.patch | 37 +++++++++++++++++++++++
- package/redis/redis.mk                            |  2 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/redis/0003-redis.conf-sane-defaults.patch
+ package/redis/0001-uclibc.patch | 32 +++++---------------------------
+ package/redis/redis.hash        |  4 ++--
+ package/redis/redis.mk          |  2 +-
+ 3 files changed, 8 insertions(+), 30 deletions(-)
 
-diff --git a/package/redis/0003-redis.conf-sane-defaults.patch b/package/redis/0003-redis.conf-sane-defaults.patch
-new file mode 100644
-index 0000000..6ee3f21
---- /dev/null
-+++ b/package/redis/0003-redis.conf-sane-defaults.patch
-@@ -0,0 +1,37 @@
-+Taken from archlinux redis package
-+See https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=5b2491ea61b746f289acebd12bc66e337d7e5b88
-+
+diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
+index 01657d0..a0534d5 100644
+--- a/package/redis/0001-uclibc.patch
++++ b/package/redis/0001-uclibc.patch
+@@ -6,40 +6,18 @@ against uclibc.  Patch originates from:
+   Mike Steinert, mike.steinert at gmail.com
+ 
+ Signed-off-by: Daniel Price <daniel.price@gmail.com>
++[Martin: adapt to 3.0.3]
 +Signed-off-by: Martin Bark <martin@barkynet.com>
-+
-+=========================================================================
-+diff --git a/redis.conf b/redis.conf
-+index 6efb6ac..344e021 100644
-+--- a/redis.conf
-++++ b/redis.conf
-+@@ -61,7 +61,7 @@ tcp-backlog 511
-+ # Examples:
-+ #
-+ # bind 192.168.1.100 10.0.0.1
-+-# bind 127.0.0.1
-++bind 127.0.0.1
-+ 
-+ # Specify the path for the Unix socket that will be used to listen for
-+ # incoming connections. There is no default, so Redis will not listen
-+@@ -87,7 +87,7 @@ timeout 0
-+ # On other kernels the period depends on the kernel configuration.
-+ #
-+ # A reasonable value for this option is 60 seconds.
-+-tcp-keepalive 0
-++tcp-keepalive 60
-+ 
-+ # Specify the server verbosity level.
-+ # This can be one of:
-+@@ -184,7 +184,7 @@ dbfilename dump.rdb
-+ # The Append Only File will also be created inside this directory.
-+ # 
-+ # Note that you must specify a directory here, not a file name.
-+-dir ./
-++dir /var/lib/redis/
-+ 
-+ ################################# REPLICATION #################################
-+ 
+ 
+ =========================================================================
+ diff -ur old/src/config.h new/src/config.h
+ --- old/src/config.h	2012-10-26 07:20:24.000000000 -0700
+ +++ new/src/config.h	2012-10-31 13:41:51.206309564 -0700
+-@@ -1,6 +1,10 @@
+- #ifndef __CONFIG_H
+- #define __CONFIG_H
+- 
+-+#if defined(__unix) || defined(__linux__)
+-+#include <features.h>
+-+#endif
+-+
+- #ifdef __APPLE__
+- #include <AvailabilityMacros.h>
+- #endif
+-@@ -25,7 +29,7 @@
++@@ -62,7 +62,7 @@
+  #endif
+  
+  /* Test for backtrace() */
+--#if defined(__APPLE__) || defined(__linux__)
+-+#if (defined(__APPLE__) || defined(__linux__) && !defined(__UCLIBC__))
++-#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__))
+++#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__))
+  #define HAVE_BACKTRACE 1
+  #endif
+- 
+-diff -ur old/src/Makefile new/src/Makefile
+---- old/src/Makefile	2012-10-26 07:20:24.000000000 -0700
+-+++ new/src/Makefile	2012-10-31 13:40:39.224728830 -0700
+-@@ -135,7 +135,7 @@
+- 	echo REDIS_LDFLAGS=$(REDIS_LDFLAGS) >> .make-settings
+- 	echo PREV_FINAL_CFLAGS=$(FINAL_CFLAGS) >> .make-settings
+- 	echo PREV_FINAL_LDFLAGS=$(FINAL_LDFLAGS) >> .make-settings
+--	-(cd ../deps && $(MAKE) $(DEPENDENCY_TARGETS))
+-+	-(cd ../deps && $(MAKE) CC="$(CC)" $(DEPENDENCY_TARGETS))
+- 
+- .PHONY: persist-settings
+- 
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 5f91766..9afa94f 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	29bb08abfc3d392b2f0c3e7f48ec46dd09ab1023f9a5575fc2a93546f4ca5145	redis-2.8.19.tar.gz
++# From https://github.com/antirez/redis-hashes/blob/master/README
++sha1	0e2d7707327986ae652df717059354b358b83358 	redis-3.0.3.tar.gz
 diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 633d411..aa985b6 100644
+index 4cad061..51c1f9c 100644
 --- a/package/redis/redis.mk
 +++ b/package/redis/redis.mk
-@@ -27,6 +27,8 @@ define REDIS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
- 		LDCONFIG=true install
- 	$(INSTALL) -d -m 0700 $(TARGET_DIR)/var/lib/redis
-+	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
-+		$(TARGET_DIR)/etc/redis.conf
- endef
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(generic-package))
+-REDIS_VERSION = 2.8.19
++REDIS_VERSION = 3.0.3
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
 2.1.4
