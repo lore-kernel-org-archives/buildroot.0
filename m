@@ -1,111 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 14:54:32 +0200
-Subject: [Buildroot] [git commit] openipmi: new package
-Message-ID: <20150721125458.90F9B81D82@busybox.osuosl.org>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 21 Jul 2015 14:02:54 +0100
+Subject: [Buildroot] [PATCH 5/5] package/redis: Add systemd service
+In-Reply-To: <1437483774-30291-1-git-send-email-martin@barkynet.com>
+References: <1437483774-30291-1-git-send-email-martin@barkynet.com>
+Message-ID: <1437483774-30291-5-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d84e1cc4aa7c552e310f3d44f7a557bc5fe8f8f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+redis.service originates from the redis package in Arch Linux.
 
-OpenIPMI provides libraries and command line tools for interacting with IPMI
-enabled devices.
+Signed-off-by: Martin Bark <martin@barkynet.com>
 
-[Thomas: fix indentation.]
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/openipmi/Config.in     |   16 ++++++++++++++++
- package/openipmi/openipmi.hash |    2 ++
- package/openipmi/openipmi.mk   |   36 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 55 insertions(+), 0 deletions(-)
+redis.service is copied from the Arch Linux redis package.  See
+https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.service?h=packages/redis&id=b4907d2344855caeadf6c69bc01c403a95f8a4f3
 
-diff --git a/package/Config.in b/package/Config.in
-index 20ecd38..9942e3a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -390,6 +390,7 @@ endif
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-+	source "package/openipmi/Config.in"
- 	source "package/openocd/Config.in"
- 	source "package/openpowerlink/Config.in"
- 	source "package/owl-linux/Config.in"
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/redis/redis.mk      |  8 ++++++++
+ package/redis/redis.service | 22 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/redis/redis.service
+
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index fdc4bf5..18e9ae3 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -36,4 +36,12 @@ define REDIS_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50redis
+ endef
+ 
++define REDIS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/redis/redis.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/redis.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/redis.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/redis.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/redis/redis.service b/package/redis/redis.service
 new file mode 100644
-index 0000000..667efa7
+index 0000000..0a8162b
 --- /dev/null
-+++ b/package/openipmi/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_OPENIPMI
-+	bool "openipmi"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  IPMI allows remote monitoring and remote management of
-+	  devices. OpenIPMI provides a library and command line tools
-+	  to interact with IPMI enabled devices. OpenIPMI also provides
-+	  an IPMI BMC simulator.
++++ b/package/redis/redis.service
+@@ -0,0 +1,22 @@
++[Unit]
++Description=Advanced key-value store
++After=network.target
 +
-+comment "openipmi needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-new file mode 100644
-index 0000000..3a40f60
---- /dev/null
-+++ b/package/openipmi/openipmi.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
-+sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-new file mode 100644
-index 0000000..b6abf0f
---- /dev/null
-+++ b/package/openipmi/openipmi.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# openipmi
-+#
-+################################################################################
++[Service]
++Type=simple
++User=redis
++Group=redis
++ExecStart=/usr/bin/redis-server /etc/redis.conf
++ExecStop=/usr/bin/redis-cli shutdown
++CapabilityBoundingSet=
++PrivateTmp=true
++PrivateDevices=true
++ProtectSystem=full
++ProtectHome=true
++NoNewPrivileges=true
++RuntimeDirectory=redis
++RuntimeDirectoryMode=755
++LimitNOFILE=10032
 +
-+OPENIPMI_VERSION = 2.0.21
-+OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
-+OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-+OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
-+OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
-+OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
-+OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
-+OPENIPMI_CONF_OPTS = \
-+	--with-glib=no \
-+	--with-glib12=no \
-+	--with-tcl=no \
-+	--with-perl=no \
-+	--with-python=no \
-+	--with-swig=no
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPENIPMI_DEPENDENCIES += openssl
-+OPENIPMI_CONF_OPTS += --with-openssl=yes
-+else
-+OPENIPMI_CONF_OPTS += --with-openssl=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+OPENIPMI_DEPENDENCIES += netsnmp
-+OPENIPMI_CONF_OPTS += --with-ucdsnmp=yes
-+else
-+OPENIPMI_CONF_OPTS += --with-ucdsnmp=no
-+endif
-+
-+$(eval $(autotools-package))
++[Install]
++WantedBy=multi-user.target
+-- 
+2.1.4
