@@ -1,61 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 11:13:04 +0200
-Subject: [Buildroot] [PATCH v4 1/4] qt5: bump version to 5.5.0
-In-Reply-To: <1437468691-364-2-git-send-email-corjon.j@ecagroup.com>
-References: <1436538022-18924-1-git-send-email-corjon.j@ecagroup.com>
- <1437468691-364-1-git-send-email-corjon.j@ecagroup.com>
- <1437468691-364-2-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150721111304.28196bd2@free-electrons.com>
+From: Bamvor Zhang Jian <bamvor.zhangjian@linaro.org>
+Date: Tue, 21 Jul 2015 17:14:27 +0800
+Subject: [Buildroot] [PATCH V3 0/5] Add ILP32 support in aarch64
+Message-ID: <1437470072-23782-1-git-send-email-bamvor.zhangjian@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien Corjon,
+From: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
 
-On Tue, 21 Jul 2015 10:51:28 +0200, Julien Corjon wrote:
+This is third version of my patches. This previous version is
+here[1][2]. The previous discussion, Gustavo agree that only external
+toolchain is in consideration at this time. I will try to work on the
+buildroot toolchain after current series patch is upstreamed.
 
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -123,12 +123,10 @@ QT5BASE_CONFIGURE_OPTS += -eglfs
->  QT5BASE_DEPENDENCIES   += libegl
->  ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
->  QT5BASE_EXTRA_CFLAGS = -DENABLE_MX6_WORKAROUND
+ILP32 is very useful when the user want to migrate from arm 32bit to
+64bit with minimal risk. There is almost no code changes after
+migration. ILP32 could get the better performance compare with arm
+32bit (use 64bit register and instruction instead of 32bit one) and
+aarch64 LP64 (aarch64 default ABI).
 
-So here we use this QT5BASE_EXTRA_CFLAGS mechanism.
+Our test show that the performance of ILP32 is roughly 10% better than
+arm64 LP64 while the footprint is 86% of LP64. Because of these, It is
+useful for both embedded and enterprise system.
 
-> -QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
-> -	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
->  endif
->  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> -QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
-> -	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
-> +QT5BASE_CONFIGURE_OPTS += -I$(STAGING_DIR)/usr/include/interface/vcos/pthreads
-> +QT5BASE_CONFIGURE_OPTS += -I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux
+Here is the details definition of ILP32:
+ILP32 is elf32 with aarch64 assembly and is compiled by 64bit compiler.
+Refer the following table:
 
-And here we pass -I directly to the configure script.
+  \-            |  arm 32bit  | arm64 ILP32 | arm64 LP64
+----------------|-------------|-------------|-------------
+instruction set |   armv7-a   |   armv8-a   |   armv8-a
+int             |   32bit     |   32bit     |   32bit
+long            |   32bit     | **32bit**   |   64bit
+pointer         |   32bit     | **32bit**   |   64bit
 
-I'm wondering if there isn't some room for factorization here. Maybe
-the -DENABLE_MX6_WORKAROUND could be passed as a configure option as
-well:
+LP64 is the default ABI on arm64(Implies -mabi=lp64 while compiling),
+and the kernel remains in LP64 no matter ILP32 enables or not.
 
-$ ./configure --help
+These series patches introduce the big endian support in aarch64 and
+then add ILP32 special filename and menuconfig step by step.
 
-    -D <string> ........ Add an explicit define to the preprocessor.
-    -I <string> ........ Add an explicit include path.
-    -L <string> ........ Add an explicit library path.
+The test of build is based on linaro kernel[3] and toolchain built by
+linaro ABE environment[4], anyone could built this toolchain through
+the simpile abe script.
 
-Or we could pass the -I for the RaspberryPi stuff in
-QT5BASE_EXTRA_CFLAGS.
+This is my first time I try to contribute the buildroot, feedback is
+very appreciated. Sorry if there are some coding style issues.
 
-But oh well, we probably need to get this some autobuilder testing, and
-see what happens.
+changes since v2
+1.  rebase on the patch have been .
+    "827ba46 aarch64: add big endian(aarch64_be) support"
+2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5 according to
+    the suggestion from Thomas.
+3.  Improve the ifeq in patch 2/5 according to Gustavo.
+4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to Gustavo.
 
-Thanks!
+changes since v1
+1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
+2.  Change default libc, toolchain for ilp32 build.
+3.  Others changes suggested by Gustavo.
 
-Thomas
+[1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
+[2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
+[3] https://git.linaro.org/kernel/linux-linaro-tracking.git
+[4] https://wiki.linaro.org/ABE
+
+
+Bamvor Jian Zhang (5):
+  aarch64: align aarch64_be config with aarch64s'
+  aarch64: ilp32: handle special file name
+  aarch64: ilp32: add ilp32 compiler and linker flags
+  aarch64: ilp32: add ilp32 build config
+  aarch64: ilp32 defconfig examples
+
+ Makefile                                           |  6 +++
+ arch/Config.in.aarch64                             | 36 ++++++++++++++++++
+ configs/aarch64_be_defconfig                       |  2 +
+ configs/aarch64_be_ilp32_defconfig                 |  8 ++++
+ configs/aarch64_ilp32_defconfig                    |  8 ++++
+ package/Makefile.in                                | 13 ++++++-
+ package/binutils/Config.in                         |  4 +-
+ package/binutils/Config.in.host                    |  5 ++-
+ package/dropwatch/Config.in                        |  5 ++-
+ package/gcc/Config.in.host                         | 11 +++---
+ package/gdb/Config.in.host                         |  2 +-
+ package/gpsd/Config.in                             |  2 +-
+ package/lightning/Config.in                        |  5 ++-
+ package/nginx/Config.in                            |  3 +-
+ package/oprofile/Config.in                         |  6 ++-
+ toolchain/Config.in                                |  2 +
+ toolchain/helpers.mk                               |  5 ++-
+ toolchain/toolchain-buildroot/Config.in            |  7 ++--
+ toolchain/toolchain-external/Config.in             | 22 +++++++++++
+ toolchain/toolchain-external/toolchain-external.mk | 44 +++++++++++++++++++++-
+ 20 files changed, 169 insertions(+), 27 deletions(-)
+ create mode 100644 configs/aarch64_be_defconfig
+ create mode 100644 configs/aarch64_be_ilp32_defconfig
+ create mode 100644 configs/aarch64_ilp32_defconfig
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
