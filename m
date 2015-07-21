@@ -1,63 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 14:23:41 +0200
-Subject: [Buildroot] [PATCH/RFC v3 00/50] package/kodi: bump version to
- 15.0 rc2 Isengard
-In-Reply-To: <XnsA4DE5385A8A24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
- <20150719212605.3a908e3f@free-electrons.com>
- <XnsA4DE5385A8A24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20150721142341.4b294467@free-electrons.com>
+Date: Tue, 21 Jul 2015 14:31:54 +0200
+Subject: [Buildroot] [git commit] netsnmp: fix static build
+Message-ID: <20150721123200.644BD81E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: http://git.buildroot.net/buildroot/commit/?id=3c59cfaf291f22ec96531ec1595d339c9b4aa9bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 21 Jul 2015 08:12:38 +0200, Bernd Kuhls wrote:
+Exclude the ucd-snmp/dlmod MIB module when building statically.
 
-> patch 1: ffmpeg bump
-> Please do _not_ commit it yet, because removing 0014-fix-ff-thread-get-
-> format.patch will break Kodi 14.2, currently part of buildroot.
+Fixes:
+http://autobuild.buildroot.net/results/782/7829e74f83c3c4a1f45e049ec9f9d6b00e002c1c/
+http://autobuild.buildroot.net/results/5df/5df28482dfa3d7c54d1e4ae3e1d373bd8e9a2265/
+http://autobuild.buildroot.net/results/4b7/4b7f3c15a4f4c4f4457e78767f5526c044d6dc1d/
 
-Next time, can you make this more clearly indicated somewhere? Well, I
-agree your entire series was RFC, but it's good to be clear about what
-can be committed now and what cannot. I generally want to be helpful
-and merge early what is ready today, so that contributors don't have to
-carry more and more patches in their own branches.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/netsnmp/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-> I saw that you committed it already; when Kodi 15.0 hits buildroot the 
-> error will go away, until then let_s get ffmpeg 2.7.x tested by the 
-> autobuilders, mips* has problems with msa.h for example ;) Btw, I will send 
-> another bump to 2.7.2 today fixing interlaced h264.
-
-Ok. I hope Kodi 15.0 will arrive soon so that we can merge all of it,
-and have a working setup again.
-
-> patch 2 & 3: no problem, they do not raise compatibility issues
-
-Ok.
-
-> patch 4: please do _not_ commit, libcec3 is incompatible with Kodi 14.
-
-Ok, thanks.
-
-> > Maybe you could push the whole thing to a public Git branch so that
-> > others can quickly test?
-> 
-> Ok, but I have to set this up first. I already have a github account and I 
-> think I can handle that task.
-> Can I fork from https://github.com/buildroot/buildroot ?
-
-Yes, sure. This repository is updated every 10 minutes or so from the
-official Buildroot repo. The only thing that isn't synced up
-automatically are tags, I'll have to address that in the future.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 47a53d7..57cc6b9 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -31,7 +31,8 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+ 
+ config BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES
+ 	string "Build with these MIB modules"
+-	default "host ucd-snmp/dlmod agentx"
++	default "host ucd-snmp/dlmod agentx" if !BR2_STATIC_LIBS
++	default "host agentx" if BR2_STATIC_LIBS
+ 	help
+ 	  Specify which MIB modules to include.
+ 
