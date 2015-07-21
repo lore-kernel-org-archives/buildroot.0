@@ -1,91 +1,52 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 21 Jul 2015 14:02:50 +0100
-Subject: [Buildroot] [PATCH 1/5] package/redis: Bump version to 3.0.3
-Message-ID: <1437483774-30291-1-git-send-email-martin@barkynet.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Jul 2015 10:05:14 -0300
+Subject: [Buildroot] [PATCH 1/2] openssl: use git formatted patches
+In-Reply-To: <20150720160710.4707d820@free-electrons.com>
+References: <1431803078-27629-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150720160710.4707d820@free-electrons.com>
+Message-ID: <55AE438A.1030908@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/redis/0001-uclibc.patch | 32 +++++---------------------------
- package/redis/redis.hash        |  4 ++--
- package/redis/redis.mk          |  2 +-
- 3 files changed, 8 insertions(+), 30 deletions(-)
+On 20/07/15 11:07, Thomas Petazzoni wrote:
 
-diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
-index 01657d0..a0534d5 100644
---- a/package/redis/0001-uclibc.patch
-+++ b/package/redis/0001-uclibc.patch
-@@ -6,40 +6,18 @@ against uclibc.  Patch originates from:
-   Mike Steinert, mike.steinert at gmail.com
- 
- Signed-off-by: Daniel Price <daniel.price@gmail.com>
-+[Martin: adapt to 3.0.3]
-+Signed-off-by: Martin Bark <martin@barkynet.com>
- 
- =========================================================================
- diff -ur old/src/config.h new/src/config.h
- --- old/src/config.h	2012-10-26 07:20:24.000000000 -0700
- +++ new/src/config.h	2012-10-31 13:41:51.206309564 -0700
--@@ -1,6 +1,10 @@
-- #ifndef __CONFIG_H
-- #define __CONFIG_H
-- 
--+#if defined(__unix) || defined(__linux__)
--+#include <features.h>
--+#endif
--+
-- #ifdef __APPLE__
-- #include <AvailabilityMacros.h>
-- #endif
--@@ -25,7 +29,7 @@
-+@@ -62,7 +62,7 @@
-  #endif
-  
-  /* Test for backtrace() */
---#if defined(__APPLE__) || defined(__linux__)
--+#if (defined(__APPLE__) || defined(__linux__) && !defined(__UCLIBC__))
-+-#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__))
-++#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__))
-  #define HAVE_BACKTRACE 1
-  #endif
-- 
--diff -ur old/src/Makefile new/src/Makefile
----- old/src/Makefile	2012-10-26 07:20:24.000000000 -0700
--+++ new/src/Makefile	2012-10-31 13:40:39.224728830 -0700
--@@ -135,7 +135,7 @@
-- 	echo REDIS_LDFLAGS=$(REDIS_LDFLAGS) >> .make-settings
-- 	echo PREV_FINAL_CFLAGS=$(FINAL_CFLAGS) >> .make-settings
-- 	echo PREV_FINAL_LDFLAGS=$(FINAL_LDFLAGS) >> .make-settings
---	-(cd ../deps && $(MAKE) $(DEPENDENCY_TARGETS))
--+	-(cd ../deps && $(MAKE) CC="$(CC)" $(DEPENDENCY_TARGETS))
-- 
-- .PHONY: persist-settings
-- 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 5f91766..9afa94f 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	29bb08abfc3d392b2f0c3e7f48ec46dd09ab1023f9a5575fc2a93546f4ca5145	redis-2.8.19.tar.gz
-+# From https://github.com/antirez/redis-hashes/blob/master/README
-+sha1	0e2d7707327986ae652df717059354b358b83358 	redis-3.0.3.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 4cad061..51c1f9c 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 2.8.19
-+REDIS_VERSION = 3.0.3
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
--- 
-2.1.4
+Hi Thomas.
+
+> Since you are the de-facto maintainer of the OpenSSL package, could you
+> give your opinion about the two patches in this series. I believe PATCH
+> 1/2 is OK, but what do you think about PATCH 2/2 ?
+
+It looks fine, however it needs a small refresh (c_rehash was fixed 
+upstream, hence gone).
+
+> Back in November 2014, Bernd also submitted some patches to enable
+> parallel build of OpenSSL, see
+> http://lists.busybox.net/pipermail/buildroot/2014-November/112183.html.
+> Peter and I rejected them because they were a bit big. My proposal
+> relies on downloading Gentoo patches instead, but I don't now if it's
+> really any better, since those patches may cause some problems in the
+> future to bump OpenSSL.
+>
+> What do you think? Should we simply wait for OpenSSL upstream to see
+> the light and support parallel build?
+
+I don't expect build patches to change much among what are usually 
+security bumps, and also gentoo has a history of being fast updating 
+openssl.
+I wouldn't hold my breath expecting openssl upstream to fix anything 
+soon, example patch we have:
+http://rt.openssl.org/Ticket/Display.html?id=2770&user=guest&pass=guest
+And my personal history with sending patches to them (c_rehash being one 
+of the cases BTW) vouches for that. If you send it to the RT it may get 
+"lost" for whatever reason, if you send the patch to the openssl-dev 
+mailing list it gets ignored.
+
+So +1 from me, openssl is one of those builds you see building and yawn 
+about.
+If it becomes an obstacle to a security bump we can just roll back to 
+$(MAKE1) until a new patchset arrives.
+
+Regards.
