@@ -1,44 +1,65 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 21 Jul 2015 18:29:44 +0200
-Subject: [Buildroot] [PATCH] snmppp: extract license text from source files
-Message-ID: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Jul 2015 18:45:57 +0200
+Subject: [Buildroot] [PATCH] fs: build host-mkpasswd when
+ BR2_ROOTFS_USERS_TABLES is used
+In-Reply-To: <1437492967-6594-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1437492967-6594-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150721164557.GA4831@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no proper license file in the SNMP++ tarballs, so let's
-extract it from a source file instead of copying it entirely.
+Thomas, All,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/snmppp/snmppp.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On 2015-07-21 17:36 +0200, Thomas Petazzoni spake thusly:
+> The code in fs/common.mk properly triggers the build of host-mkpasswd
+> when at least one package specifies a <pkg>_USERS variable. However,
+> when no selected package specifies a <pkg>_USERS variable but the user
+> uses a custom users table through BR2_ROOTFS_USERS_TABLES, then we
+> forget to build host-mkpasswd, leading to build failures if you don't
+> have mkpasswd installed in your machine.
+> 
+> This commit fixes that by taking into account both the package users
+> table and the custom users table when deciding to depend or not on
+> host-mkpasswd.
+> 
+> Reported-by: Auke Willem Oosterhoff <oosterhoff@baopt.nl>
+> Cc: Auke Willem Oosterhoff <oosterhoff@baopt.nl>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 026fe6e..1b73eba 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -11,7 +11,7 @@ SNMPPP_DEPENDENCIES = host-pkgconf
- SNMPPP_INSTALL_STAGING = YES
- SNMPPP_CONF_OPTS = $(if $(BR2_PACKAGE_SNMPPP_LOGGING),--enable-logging,--disable-logging)
- SNMPPP_LICENSE = SNMP++
--SNMPPP_LICENSE_FILES = src/v3.cpp
-+SNMPPP_LICENSE_FILES = license.txt
- 
- ifeq ($(BR2_PACKAGE_SNMPPP_SNMPV3),y)
- SNMPPP_CONF_OPTS += --enable-snmpv3
-@@ -20,4 +20,10 @@ else
- SNMPPP_CONF_OPTS += --disable-snmpv3
- endif
- 
-+define SNMPPP_EXTRACT_LICENSE
-+	grep '_##' $(@D)/src/v3.cpp >$(@D)/license.txt
-+endef
-+
-+SNMPPP_POST_EXTRACT_HOOKS += SNMPPP_EXTRACT_LICENSE
-+
- $(eval $(autotools-package))
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  fs/common.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 4387d06..ad1bcf3 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -41,7 +41,7 @@ define ROOTFS_TARGET_INTERNAL
+>  
+>  # extra deps
+>  ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
+> -	$$(if $$(PACKAGES_USERS),host-mkpasswd)
+> +	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
+>  
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+>  ROOTFS_$(2)_COMPRESS_EXT = .gz
+> -- 
+> 2.4.6
+> 
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
