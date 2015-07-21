@@ -1,216 +1,168 @@
 From: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
-Date: Tue, 21 Jul 2015 16:46:00 +0800
-Subject: [Buildroot] [PATCH V3 1/5] aarch64: align aarch64_be config with
-	aarch64s'
+Date: Tue, 21 Jul 2015 16:46:01 +0800
+Subject: [Buildroot] [PATCH V3 2/5] aarch64: ilp32: handle special file name
 In-Reply-To: <1437468364-19245-1-git-send-email-bamvor.zhangjian@huawei.com>
 References: <1437468364-19245-1-git-send-email-bamvor.zhangjian@huawei.com>
-Message-ID: <1437468364-19245-2-git-send-email-bamvor.zhangjian@huawei.com>
+Message-ID: <1437468364-19245-3-git-send-email-bamvor.zhangjian@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+In aarch64 ilp32, the directory of library is libilp32. And the linker
+is ld-linux-aarch64_ilp32.so.1 or ld-linux-aarch64_be_ilp32.so.1 which is
+linked to libilp32/ld-VERSION.so(ld-2.20.so in my system).
+
 Signed-off-by: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
 ---
- package/binutils/Config.in              | 4 ++--
- package/binutils/Config.in.host         | 5 +++--
- package/dropwatch/Config.in             | 5 +++--
- package/gcc/Config.in.host              | 8 ++++----
- package/gdb/Config.in.host              | 2 +-
- package/gpsd/Config.in                  | 2 +-
- package/lightning/Config.in             | 5 +++--
- package/nginx/Config.in                 | 3 +--
- package/oprofile/Config.in              | 6 ++++--
- toolchain/toolchain-buildroot/Config.in | 7 ++++---
- 10 files changed, 26 insertions(+), 21 deletions(-)
+ Makefile                                           |  6 +++
+ toolchain/helpers.mk                               |  5 ++-
+ toolchain/toolchain-external/toolchain-external.mk | 44 +++++++++++++++++++++-
+ 3 files changed, 51 insertions(+), 4 deletions(-)
 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 64d0a09..f9e0f16 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on BR2_USE_WCHAR
- 	help
- 	  Install binutils on the target
-@@ -22,5 +22,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+diff --git a/Makefile b/Makefile
+index 8b9c5d9..12e82d0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -451,6 +451,12 @@ LIB_SYMLINK = lib64
+ else
+ LIB_SYMLINK = lib32
+ endif
++ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
++# On X86_64, ilp32 library will be located in libx32 directory.
++ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
++LIB_SYMLINK = libilp32
++endif
++endif
+ 
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)/bin
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 895f3f1..c573654 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -38,7 +38,7 @@
+ #
+ # $1: arch specific sysroot directory
+ # $2: support libraries directory (can be empty)
+-# $3: library directory ('lib' or 'lib64') from which libraries must be copied
++# $3: library directory ('lib', 'lib64' or 'libilp32') from which libraries must be copied
+ # $4: library name
+ # $5: destination directory of the libary, relative to $(TARGET_DIR)
+ #
+@@ -141,7 +141,8 @@ copy_toolchain_sysroot = \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+ 			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
+ 				--exclude lib --exclude lib32 --exclude lib64 \
+-				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
++				--exclude libilp32 $${ARCH_SYSROOT_DIR}/$$i/ \
++				$(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 5ce4d33..cff8591 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -86,6 +86,10 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+ LIB_EXTERNAL_LIBS += libc.so libgcc_s.so.*
  endif
  
- comment "binutils needs a toolchain w/ wchar"
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 70253cc..751ff77 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -8,8 +8,9 @@ choice
- 	  Select the version of binutils you wish to use.
- 
- 	config BR2_BINUTILS_VERSION_2_23_2
--		depends on !BR2_aarch64 && !BR2_microblaze && \
--			   !BR2_powerpc64le && !BR2_nios2
-+		depends on !BR2_aarch64 && !BR2_aarch64_be && \
-+			   !BR2_microblaze && !BR2_powerpc64le && \
-+			   !BR2_nios2
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24
-diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
-index d331e5e..e109242 100644
---- a/package/dropwatch/Config.in
-+++ b/package/dropwatch/Config.in
-@@ -1,7 +1,8 @@
- config BR2_PACKAGE_DROPWATCH
- 	bool "dropwatch"
- 	select BR2_PACKAGE_BINUTILS
--	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	# binutils
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on BR2_USE_WCHAR # binutils
- 	select BR2_PACKAGE_READLINE
- 	select BR2_PACKAGE_LIBNL
-@@ -13,5 +14,5 @@ config BR2_PACKAGE_DROPWATCH
- 	  https://fedorahosted.org/dropwatch/
- 
- comment "dropwatch needs a toolchain w/ threads, wchar"
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 3d64b6f..7d2c999 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -17,8 +17,8 @@ choice
- 		bool "gcc 4.5.x"
- 		depends on BR2_DEPRECATED_SINCE_2015_05
- 		# Broken or unsupported architectures
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
--			&& !BR2_powerpc64le && !BR2_nios2
-+		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_aarch64_be && \
-+			   !BR2_arc && !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
- 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
-@@ -38,8 +38,8 @@ choice
- 	config BR2_GCC_VERSION_4_7_X
- 		bool "gcc 4.7.x"
- 		# Broken or unsupported architectures
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
--			&& !BR2_powerpc64le && !BR2_nios2
-+		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_aarch64_be && \
-+			   !BR2_arc && !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a12 && !BR2_pj4
- 		# Broken or unsupported PPC cores
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 3207794..d736f25 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_GDB
- 	# allow to build a cross-gdb, as the one of the external
- 	# toolchain should be used.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	help
- 	  Build a cross gdb that runs on the host machine and debugs
- 	  programs running on the target. It requires 'gdbserver'
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index fa8b8f6..36813ab 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -39,7 +39,7 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
- config BR2_PACKAGE_GPSD_PROFILING
- 	bool "profiling support"
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on !BR2_aarch64
-+	depends on !BR2_aarch64 && !BR2_aarch64_be
- 
- comment "profiling support not available with uClibc-based toolchain"
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/lightning/Config.in b/package/lightning/Config.in
-index 8caf39f..3ca477a 100644
---- a/package/lightning/Config.in
-+++ b/package/lightning/Config.in
-@@ -14,13 +14,14 @@ config BR2_PACKAGE_LIGHTNING_DISASSEMBLER
- 	bool "enable disassembler"
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_ZLIB
--	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	# binutils
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on BR2_USE_WCHAR # binutils
- 	help
- 	  Enable the GNU lightning disassembler.
- 
- comment "lightning disassembler needs a toolchain w/ wchar"
--	depends on !BR2_aarch64 && !BR2_nios2
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on !BR2_USE_WCHAR
- 
++ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
++LIB_EXTERNAL_LIBS += ld*.so
++endif
++
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
  endif
-diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index be445f4..ef0266e 100644
---- a/package/nginx/Config.in
-+++ b/package/nginx/Config.in
-@@ -15,8 +15,7 @@ config BR2_PACKAGE_NGINX_FILE_AIO
- 	# but it's available on neither AArch64 nor ARC where only
- 	# eventfd() is available. See
- 	# https://bugs.launchpad.net/linaro-aarch64/+bug/1160013
--	depends on !BR2_aarch64
--	depends on !BR2_arc
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_arc
+@@ -253,6 +257,19 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+ endef
  
- config BR2_PACKAGE_NGINX_HTTP
- 	bool "http server"
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 9cf5693..b5d0bb6 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -5,7 +5,8 @@ config BR2_PACKAGE_OPROFILE
- 	select BR2_PACKAGE_BINUTILS
- 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_aarch64 && !BR2_nios2 # binutils
-+	# binutils
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
- 	depends on BR2_USE_WCHAR # binutils
- 	depends on !BR2_xtensa
- 	# libpfm4 is needed on PowerPC, and requires thread support
-@@ -28,7 +29,8 @@ config BR2_PACKAGE_OPROFILE
++ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
++ifeq ($(BR2_ENDIAN), "LITTLE")
++define TOOLCHAIN_EXTERNAL_ILP32_SYMLINK
++	ln -sf ld*.so $(TARGET_DIR)/lib/ld-linux-aarch64_ilp32.so.1
++endef
++endif
++ifeq ($(BR2_ENDIAN), "BIG")
++define TOOLCHAIN_EXTERNAL_ILP32_SYMLINK
++	ln -sf ld*.so $(TARGET_DIR)/lib/ld-linux-aarch64_be_ilp32.so.1
++endef
++endif
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi
+ TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+@@ -394,6 +411,7 @@ TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+ TOOLCHAIN_EXTERNAL_SOURCE = $(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+ # We can't check hashes for custom downloaded toolchains
+ BR_NO_CHECK_HASH_FOR += $(TOOLCHAIN_EXTERNAL_SOURCE)
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_ILP32_SYMLINK
+ endif
  
- comment "oprofile needs a toolchain w/ C++, wchar"
- 	depends on BR2_USE_MMU
--	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
-+	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2 && \
-+		   !BR2_xtensa
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ # In fact, we don't need to download the toolchain, since it is already
+@@ -445,17 +463,18 @@ endef
+ #  - lib64/
+ #  - lib32-fp/ (Cavium toolchain)
+ #  - lib64-fp/ (Cavium toolchain)
++#  - libilp32/ (Aarch64/aarch64_be ilp32 library)
+ #  - usr/lib/<tuple>/ (Linaro toolchain)
+ #
+ # And variations on these.
+ define toolchain_find_sysroot
+-$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::')
++$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64|ilp32)?([^/]*)?/([^/]*/)?libc\.a::')
+ endef
  
- comment "oprofile needs a toolchain w/ NPTL on PPC"
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 13e2b15..0869243 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -85,9 +85,10 @@ comment "(e)glibc only available with shared lib support"
+ # Returns the lib subdirectory for the given compiler + flags (i.e
+ # typically lib32 or lib64 for some toolchains)
+ define toolchain_find_libdir
+-$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?([^/]*)?)/([^/]*/)?libc.a:\2:')
++$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64|ilp32)?([^/]*)?)/([^/]*/)?libc.a:\2:')
+ endef
  
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl (experimental)"
--	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
--		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
--		BR2_sh || BR2_x86_64
-+	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
-+		   BR2_aarch64_be  || BR2_i386       || BR2_microblaze || \
-+		   BR2_mips        || BR2_mipsel     || BR2_powerpc || \
-+		   BR2_sh          || BR2_x86_64
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
- 	select BR2_TOOLCHAIN_USES_MUSL
- 	help
+ # Checks for an already installed toolchain: check the toolchain
+@@ -735,10 +754,30 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
+ 	fi
+ endef
+ 
++ifeq ($(BR2_GCC_TARGET_ABI), "ilp32")
++ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
++ifeq ($(BR2_ENDIAN), "LITTLE")
++ILP32_SYM = ld-linux-aarch64_ilp32.so.1
++else
++ILP32_SYM = ld-linux-aarch64_be_ilp32.so.1
++endif
++define TOOLCHAIN_EXTERNAL_INSTALL_ILP32_LINK
++	LD_ILP32=`basename $(STAGING_DIR)/lib/ld*.so`; \
++	ln -sf $${LD_ILP32} $(STAGING_DIR)/lib/${ILP32_SYM}
++endef
++
++define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_ILP32_LINK
++	LD_ILP32=`basename $(TARGET_DIR)/lib/ld*.so`; \
++	ln -sf $${LD_ILP32} $(TARGET_DIR)/lib/${ILP32_SYM}
++endef
++endif
++endif
++
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_ILP32_LINK)
+ endef
+ 
+ # Even though we're installing things in both the staging, the host
+@@ -749,6 +788,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+ 	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_ILP32_LINK)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.1.4
