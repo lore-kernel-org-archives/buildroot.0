@@ -1,211 +1,222 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 22 Jul 2015 01:00:30 +0200
-Subject: [Buildroot] [PATCH v8 1/1] Added linux drivers backports project
-Message-ID: <1437519630-3674-1-git-send-email-petr.vorel@gmail.com>
+Date: Wed, 22 Jul 2015 01:08:35 +0200
+Subject: [Buildroot] [PATCH 1/1] network-manager: bump to version 1.0.4
+Message-ID: <1437520115-4127-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://backports.wiki.kernel.org
+Dropped unused patches, added upstream proposed patch to fix build
+error for kernels headers < 3.17.
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-TODO: still don't know how to handle dependency on linux .config for
-target linux-backports-menuconfig.
-TODO: use kernel-module? IMHO not suitable for linux-backports.
-
-Changes v7->v8:
-* Bump version to latest stable 4.1.1-1 (dropped upsteam patx to fix
-  build error - released in new version).
-* s/TARGET_MAKE_ENV/LINUX_MAKE_ENV (suggested by Yann E. MORIN)
-* Improve text in menuconfig (suggested by Yann E. MORIN)
-* Move fragments list after the base files in menuconfig (suggested by
-  Yann E. MORIN)
-* Add comments for nesting ifeq-blocks (suggested by Yann E. MORIN)
-* Fix indentation in Config.in
-
-Changes v6->v7:
-* Bump version to latest stable 4.0.1-1.
-* Update to current version of kconfig-package.
-* Add option to specify config fragments.
-* Include upstream patch to fix build error.
-
-Changes v5->v6:
-Added changes by Arnout Vandecappelle in Mon Apr 20 21:46:34 UTC 2015:
-* linux-backports.mk: $(LINUX_BACKPORTS_KCONFIG_FILE): linux
-  this doesn't help: we'd need to use:
-  LINUX_BACKPORTS_KCONFIG_FILE := $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
-  but then we don't get value for $(LINUX_BACKPORTS_DIR) nor $(@D).
-* linux-backports.mk: LINUX_BACKPORTS_PATCH_DEPENDENCIES = linux
-  This also does not help, it does linux extracting, patching, but we
-  need also configuring. We'd need something like
-  LINUX_BACKPORTS_CONFIGURE_DEPENDENCIES to be implemented.
-* Config.in: info about support from kernel 3.0.
-* Config.in: help text wrapped to 72 columns.
-
-Changes v4->v5:
-* Added changes made by Thomas Petazzoni in Sun, 19 Apr 2015 11:03:26 +0200.
-
-Changes v3->v4:
-* Define LINUX_BACKPORTS_MAKE_ENV instead of LINUX_BACKPORTS_MAKE_OPTS, remove TARGET_MAKE_ENV from it.
-* Add nconfig to LINUX_BACKPORTS_KCONFIG_EDITORS.
-* Clean formating of build commands.
 Signed-off-by: Petr Vorel <vorel@jablocom.com>
 ---
- package/Config.in                            |  1 +
- package/linux-backports/Config.in            | 46 ++++++++++++++++++++
- package/linux-backports/linux-backports.hash |  2 +
- package/linux-backports/linux-backports.mk   | 63 ++++++++++++++++++++++++++++
- 4 files changed, 112 insertions(+)
- create mode 100644 package/linux-backports/Config.in
- create mode 100644 package/linux-backports/linux-backports.hash
- create mode 100644 package/linux-backports/linux-backports.mk
+ ..._user_ipv6ll_enabled-to-nm-platform-linux.patch | 87 ++++++++++++++++++++++
+ ...anager-fix-build-with-Linux-3.2.0-headers.patch | 30 --------
+ ...d-dhcp-fix-build-with-Linux-3.2.0-headers.patch | 37 ---------
+ package/network-manager/network-manager.hash       |  4 +-
+ package/network-manager/network-manager.mk         |  2 +-
+ 5 files changed, 90 insertions(+), 70 deletions(-)
+ create mode 100644 package/network-manager/0001-platform-move-link_get_user_ipv6ll_enabled-to-nm-platform-linux.patch
+ delete mode 100644 package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+ delete mode 100644 package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 9942e3a..db84cd7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -372,6 +372,7 @@ endif
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
- 	source "package/libump/Config.in"
-+	source "package/linux-backports/Config.in"
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
- 	source "package/lshw/Config.in"
-diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
+diff --git a/package/network-manager/0001-platform-move-link_get_user_ipv6ll_enabled-to-nm-platform-linux.patch b/package/network-manager/0001-platform-move-link_get_user_ipv6ll_enabled-to-nm-platform-linux.patch
 new file mode 100644
-index 0000000..7140b38
+index 0000000..4aebaef
 --- /dev/null
-+++ b/package/linux-backports/Config.in
-@@ -0,0 +1,46 @@
-+comment "linux-backports needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
++++ b/package/network-manager/0001-platform-move-link_get_user_ipv6ll_enabled-to-nm-platform-linux.patch
+@@ -0,0 +1,87 @@
++From: Lubomir Rintel <lkundrak@v3.sk>
++Date: Mon, 20 Jul 2015 11:01:04 +0200
++Subject: [PATCH] platform: move link_get_user_ipv6ll_enabled() to	nm-platform-linux
++Source: https://mail.gnome.org/archives/networkmanager-list/2015-July/msg00028.html
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS
-+	bool "linux-backports"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  The linux-backports package includes many Linux drivers from recent
-+	  kernels, backported to older ones.
++This fixes build error kernels headers < 3.17.
 +
-+	  This version of linux-backports supports kernels starting from 3.0.
++Reported-by: Petr Vorel <petr.vorel@gmail.com>
++Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++ src/platform/nm-linux-platform.c | 16 ++++++++++++++++
++ src/platform/nm-platform.c       | 11 ++---------
++ src/platform/nm-platform.h       |  1 +
++ 3 files changed, 19 insertions(+), 9 deletions(-)
 +
-+	  https://backports.wiki.kernel.org
++diff --git a/src/platform/nm-linux-platform.c b/src/platform/nm-linux-platform.c
++index f3a9254..b6b8e33 100644
++--- a/src/platform/nm-linux-platform.c
+++++ b/src/platform/nm-linux-platform.c
++@@ -2987,6 +2987,21 @@ link_set_user_ipv6ll_enabled (NMPlatform *platform, int ifindex, gboolean enable
++ }
 +
-+if BR2_PACKAGE_LINUX_BACKPORTS
++ static gboolean
+++link_get_user_ipv6ll_enabled (NMPlatform *platform, int ifindex)
+++{
+++#if HAVE_LIBNL_INET6_ADDR_GEN_MODE
+++       {
+++               const NMPlatformLink *pllink;
+++
+++               pllink = nm_platform_link_get (platform, ifindex);
+++               if (pllink && pllink->inet6_addr_gen_mode_inv)
+++                       return _nm_platform_uint8_inv (pllink->inet6_addr_gen_mode_inv) == IN6_ADDR_GEN_MODE_NONE;
+++       }
+++#endif
+++       return FALSE;
+++}
+++
+++static gboolean
++ link_supports_carrier_detect (NMPlatform *platform, int ifindex)
++ {
++        const char *name = nm_platform_link_get_name (platform, ifindex);
++@@ -4968,6 +4968,7 @@
++	platform_class->link_get_udev_device = link_get_udev_device;
 +
-+choice
-+	bool "Linux backports configuration"
++	platform_class->link_set_user_ipv6ll_enabled = link_set_user_ipv6ll_enabled;
+++	platform_class->link_get_user_ipv6ll_enabled = link_get_user_ipv6ll_enabled;
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-+	bool "Using an in-tree defconfig file"
++	platform_class->link_set_address = link_set_address;
++	platform_class->link_get_permanent_address = link_get_permanent_address;
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-+	bool "Using a custom (def)config file"
-+endchoice
++diff --git a/src/platform/nm-platform.c b/src/platform/nm-platform.c
++index 8803377..ee4b1a1 100644
++--- a/src/platform/nm-platform.c
+++++ b/src/platform/nm-platform.c
++@@ -965,15 +965,8 @@
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG
-+	string "Defconfig name"
-+	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-+	help
-+	  Name of the backports defconfig file to use. The defconfig is
-+	  located in defconfigs/ directory in the backports tree.
++	g_return_val_if_fail (ifindex >= 0, FALSE);
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE
-+	string "Configuration file path"
-+	depends on BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-+	help
-+	  Path to the backports configuration file
++-#if HAVE_LIBNL_INET6_ADDR_GEN_MODE
++-	{
++-		const NMPlatformLink *pllink;
++-
++-		pllink = nm_platform_link_get (self, ifindex);
++-		if (pllink && pllink->inet6_addr_gen_mode_inv)
++-			return _nm_platform_uint8_inv (pllink->inet6_addr_gen_mode_inv) == IN6_ADDR_GEN_MODE_NONE;
++-	}
++-#endif
+++	if (klass->link_get_user_ipv6ll_enabled)
+++		return klass->link_get_user_ipv6ll_enabled (self, ifindex);
++	return FALSE;
++ }
 +
-+config BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES
-+	string "Additional linux-backports configuration fragment files"
-+	help
-+	  A space-separated list of configuration fragment files,
-+	  that will be merged to the main linux-backports configuration file.
++diff --git a/src/platform/nm-platform.h b/src/platform/nm-platform.h
++index 16eb351..9ef4080 100644
++--- a/src/platform/nm-platform.h
+++++ b/src/platform/nm-platform.h
++@@ -446,6 +446,7 @@
++	GObject *(*link_get_udev_device) (NMPlatform *self, int ifindex);
 +
-+endif
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-new file mode 100644
-index 0000000..0d41067
---- /dev/null
-+++ b/package/linux-backports/linux-backports.hash
-@@ -0,0 +1,2 @@
-+# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.1.1/sha256sums.asc
-+sha256 7fca160665b801796ce50def18f2fd6def1c4452290e93ec5332444fb2021bd6  backports-4.1.1-1.tar.xz
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-new file mode 100644
-index 0000000..840d6f9
---- /dev/null
-+++ b/package/linux-backports/linux-backports.mk
-@@ -0,0 +1,63 @@
-+################################################################################
-+#
-+# linux-backports
-+#
-+################################################################################
++	gboolean (*link_set_user_ipv6ll_enabled) (NMPlatform *, int ifindex, gboolean enabled);
+++	gboolean (*link_get_user_ipv6ll_enabled) (NMPlatform *, int ifindex);
 +
-+LINUX_BACKPORTS_VERSION_MAJOR = 4.1.1
-+LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
-+LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
-+LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
-+
-+# we need linux to be configured
-+LINUX_BACKPORTS_DEPENDENCIES = linux
-+
-+LINUX_BACKPORTS_MAKE_OPTS = \
-+	$(LINUX_MAKE_FLAGS) \
-+	KLIB_BUILD=$(LINUX_DIR) \
-+	KLIB=$(TARGET_DIR)
-+
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-+LINUX_BACKPORTS_SOURCE_CONFIG = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
-+else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-+LINUX_BACKPORTS_SOURCE_CONFIG = $(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)
-+endif
-+
-+# backports configure needs a configured kernel
-+# FIXME: not used as we'd need to assign LINUX_BACKPORTS_SOURCE_CONFIG with :=,
-+# but then we don't get $(LINUX_BACKPORTS_DIR) evaluated.
-+$(LINUX_BACKPORTS_SOURCE_CONFIG): linux
-+
-+define LINUX_BACKPORTS_BUILD_CMDS
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
-+endef
-+
-+define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-+		-C $(LINUX_DIR) M=$(@D) \
-+		INSTALL_MOD_DIR=backports \
-+		modules_install
-+endef
-+
-+LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_SOURCE_CONFIG)
-+LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
-+LINUX_BACKPORTS_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-+LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
-+
-+$(eval $(kconfig-package))
-+
-+# Checks to give errors that the user can understand
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG)),)
-+$(error No linux-backports defconfig name specified, check your BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG setting)
-+endif
-+endif # BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG
-+
-+ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE)),)
-+$(error No linux-backports configuration file specified, check your BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE setting)
-+endif
-+endif # BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG
-+
-+endif # MAKECMDGOALS
++	gboolean (*link_get_permanent_address) (NMPlatform *,
++	                                        int ifindex,
++--
++2.4.3
+diff --git a/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
+deleted file mode 100644
+index 49c1996..0000000
+--- a/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 22b99e3bbb2ca33963e839f12ab95314ab8d9ba9 Mon Sep 17 00:00:00 2001
+-From: Lubomir Rintel <lkundrak@v3.sk>
+-Date: Fri, 15 May 2015 16:37:20 +0200
+-Subject: [PATCH] ppp-manager: fix build with Linux 3.2.0 headers
+-
+-Fixes build with Ubuntu 12.04.
+-
+-In file included from ppp-manager/nm-ppp-manager.c:42:0:
+-/usr/include/linux/if_ppp.h:103:16: error: field 'b' has incomplete type
+-/usr/include/linux/if_ppp.h:108:21: error: field 'b' has incomplete type
+-
+-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+----
+- src/ppp-manager/nm-ppp-manager.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
+-index e27c82b..d410ebf 100644
+---- a/src/ppp-manager/nm-ppp-manager.c
+-+++ b/src/ppp-manager/nm-ppp-manager.c
+-@@ -39,6 +39,7 @@
+- #ifndef aligned_u64
+- #define aligned_u64 unsigned long long __attribute__((aligned(8)))
+- #endif
+-+#include <linux/if.h>
+- #include <linux/if_ppp.h>
+-
+- #include "NetworkManagerUtils.h"
+---
+-2.1.4
+diff --git a/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
+deleted file mode 100644
+index 01eefec..0000000
+--- a/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 7f84150e9f6aa7e900d70178e0fc0acc6cfba651 Mon Sep 17 00:00:00 2001
+-From: Lubomir Rintel <lkundrak@v3.sk>
+-Date: Fri, 15 May 2015 16:38:10 +0200
+-Subject: [PATCH] systemd-dhcp: fix build with Linux 3.2.0 headers
+-
+-Fixes build on Ubuntu 12.04.
+-
+-systemd/src/libsystemd-network/dhcp-network.c: In function '_bind_raw_socket':
+-systemd/src/libsystemd-network/dhcp-network.c:75:17: error: 'BPF_XOR' undeclared (first use in this function)
+-systemd/src/libsystemd-network/dhcp-network.c:75:17: note: each undeclared identifier is reported only once for each function it appears in
+-make[4]: *** [libsystemd_nm_la-dhcp-network.lo] Error 1
+-
+-(cherry picked from commit 3811a68389b9277533f2eee8372927ca6238653e)
+-
+-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+----
+- src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
+-index 6d500f4..f8856a1 100644
+---- a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
+-+++ b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
+-@@ -38,6 +38,11 @@
+-
+- #include "nm-logging.h"
+-
+-+/* Missing in Linux 3.2.0, in Ubuntu 12.04 */
+-+#ifndef BPF_XOR
+-+#define BPF_XOR 0xa0
+-+#endif
+-+
+- static inline guint32
+- _slog_level_to_nm (int slevel)
+- {
+---
+-2.1.4
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index f47e053..c22fb94 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.2.sha256sum
+-sha256  359385707494bedbb48cfe0992ccfbcc4ac147dae1f7a47055c71e96439508ff  NetworkManager-1.0.2.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.4.sha256sum
++sha256  e4099fa2f4f4b8d95d0ad9fdd03ec20960845085fa500bf79aecbf54cee018c9  NetworkManager-1.0.4.tar.xz
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index c118a92..25ad2a2 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETWORK_MANAGER_VERSION_MAJOR = 1.0
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).4
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
 1.8.0
