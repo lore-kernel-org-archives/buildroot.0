@@ -1,49 +1,124 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 23:28:48 +0200
-Subject: [Buildroot] [PATCH 1/4] freerdp: Add support for tz package
-In-Reply-To: <BLU436-SMTP472EF27D5E879E3FFB5134C7840@phx.gbl>
-References: <BLU436-SMTP472EF27D5E879E3FFB5134C7840@phx.gbl>
-Message-ID: <20150721232848.489afa47@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue, 21 Jul 2015 22:36:06 +0100
+Subject: [Buildroot] Packages hosted on SourceForge
+Message-ID: <CA+BsyQ7tckxz3bPv9nhug77stx39yi9ZZAqfa+YTomA-+GEkqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear FanChengPing,
+Hi all,
 
-Could you fix your setup so that the From: and Signed-off-by: are
-matching, and are the same for every patch?
+I spent a few hours walking down all of the packages (~200 in all, out of
+~1630 total) hosted on a SourceForge download site to see if I could
+identify any which could be fetched from a more authoritative download
+location.
 
-In this current version you posted, the first two patches have:
+It turns out to be rather slim pickings; the vast majority of
+these packages are hosted with SF as the canonical download site. Quite a
+few use github for hosting the repositories, but still use sourceforge to
+host the official release tarballs. In one or two cases the project
+websites had a more authoritative download location, but requested that the
+sourceforge site be used for load-handling reasons.
 
-From: FanChengPing <vancepym@outlook.com>
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+The simple candidates for having their upstream URL updated are as follows.
+In some cases we'll need to rework the version number variables/download
+paths slightly.
 
-(which is not good)
+=========================
 
-and the last two patches have:
+arptables
+old :
+http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
+new : ftp://ftp.netfilter.org/pub/arptables/
 
-From: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+ebtables
+old :
+http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst
+.,-,$(EBTABLES_VERSION))
+new : ftp://ftp.netfilter.org/pub/ebtables/
 
-which is good.
+freetype
+old :
+http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+new : http://download.savannah.gnu.org/releases/freetype/
 
-Also, when posting new version, please add a version number to your
-patches, by using:
+iperf
+old : http://downloads.sourceforge.net/project/iperf
+new : https://iperf.fr/download/iperf_$(IPERF_VERSION)/
 
-	git format-patch --subject-prefix="PATCH v2"
+logsurfer
+old :
+http://downloads.sourceforge.net/project/logsurfer/logsurfer/logsurfer-$(LOGSURFER_VERSION)
+new : http://www.crypt.gen.nz/logsurfer/logsurfer-1.8.tar.gz
 
-as well as a changelog between the versions, either in a cover letter
-e-mail (--cover argument of git format-patch) or in the individual
-patches. See
-http://buildroot.org/downloads/manual/manual.html#submitting-patches
-for more details.
+msgpack
+old : http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
+new :
+https://github.com/msgpack/msgpack-c/releases/download/cpp-$(MSGPACK_VERSION)/
 
-Thanks,
+mutt
+old : http://downloads.sourceforge.net/project/mutt/mutt
+new : ftp://ftp.mutt.org/mutt
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+poco
+old :
+http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
+new : http://pocoproject.org/releases/poco-$(POCO_VERSION_MAJOR)/
+
+wine -
+old : http://downloads.sourceforge.net/project/wine/Source/
+new: http://ftp.winehq.org/pub/wine/source/$(WINE_VERSION)/
+
+zlib
+old : http://downloads.sourceforge.net/project/libpng/zlib/$(ZLIB_VERSION)
+new : http://zlib.net/
+
+=========================
+
+I will prepare a patch to fix the above.
+
+Some packages appear at first glance to have authoritative releases hosted
+outside of sourceforge, but closer examination suggests that we should not
+update these yet.
+
+=========================
+
+procps_ng - project moved to gitlab, however no downloads appear to
+be hosted there
+old : http://downloads.sourceforge.net/project/procps-ng/Production
+new :
+
+tcl - project website provides local FTP link, but appears to
+prefer sourceforge.
+old : http://downloads.sourceforge.net/project/
+new :
+
+tcllib - canonical download site requires a login. Sourceforge is being
+maintained.
+old :
+http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
+new :
+
+openjpeg -migrated to github, but the new 1.5.2 archive does not match the
+old one - files are missing.
+old :
+http://downloads.sourceforge.net/project/openjpeg.mirror/$(OPENJPEG_VERSION)
+new :
+
+libmad - don't fix. Site appears to move older versions into an "archive"
+directory which could cause buildroot builds to fail later.
+old : http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
+new : ftp://ftp.mars.org/pub/mpeg/
+
+madplay - don't fix. Site appears to move older versions into an "archive"
+directory which could cause buildroot builds to fail later.
+old :
+http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
+new : ftp://ftp.mars.org/pub/mpeg/
+
+=========================
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/dfa4cb73/attachment.html>
