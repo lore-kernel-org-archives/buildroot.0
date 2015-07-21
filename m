@@ -1,49 +1,56 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 20 Jul 2015 21:59:24 -0400
-Subject: [Buildroot] [PATCH 1/1] perl: only run finalize hook when necessary
-Message-ID: <1437443964-1988-1-git-send-email-danomimanchego123@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Jul 2015 08:12:38 +0200
+Subject: [Buildroot] [PATCH/RFC v3 00/50] package/kodi: bump version to
+	15.0 rc2 Isengard
+References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150719212605.3a908e3f@free-electrons.com>
+Message-ID: <XnsA4DE5385A8A24berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The PERL_FINALIZE_TARGET always runs, even if perl is not installed.
-This results in errors from the find command when it fails to find
-anything, even when doing "make -s":
+Hi,
 
->>>   Finalizing target directory
-find: `...../output/target/usr/lib/perl5/': No such file or directory
-find: `...../output/target/usr/lib/perl5/': No such file or directory
-find: `...../output/target/usr/lib/perl5/': No such file or directory
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20150719212605.3a908e3f at free-
+electrons.com:
 
-This is not helpful for projects that do not select Perl.  Silence this
-by making the hook conditional on package selection.
+> Bernd,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/perl/perl.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+sorry for answering late, but I was busy yesterday preparing some eventfd-
+compatibility code for Kodi 15.0 Isengard: 
+https://github.com/xbmc/xbmc/pull/7551
+> 
+> On Sun, 19 Jul 2015 21:05:05 +0200, Bernd Kuhls wrote:
+>> this series is a RFC and not meant for committing to buildroot.
+> 
+> What about the first 4 patches? Maybe we could start merging them?
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 091c032..1e6a054 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -115,6 +115,7 @@ endef
- $(eval $(generic-package))
- $(eval $(host-generic-package))
- 
-+ifeq ($(BR2_PACKAGE_PERL),y)
- define PERL_FINALIZE_TARGET
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
-@@ -122,6 +123,5 @@ define PERL_FINALIZE_TARGET
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
- endef
--
- TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
--
-+endif
--- 
-1.7.9.5
+patch 1: ffmpeg bump
+Please do _not_ commit it yet, because removing 0014-fix-ff-thread-get-
+format.patch will break Kodi 14.2, currently part of buildroot.
+I saw that you committed it already; when Kodi 15.0 hits buildroot the 
+error will go away, until then let?s get ffmpeg 2.7.x tested by the 
+autobuilders, mips* has problems with msa.h for example ;) Btw, I will send 
+another bump to 2.7.2 today fixing interlaced h264.
+
+patch 2 & 3: no problem, they do not raise compatibility issues
+
+patch 4: please do _not_ commit, libcec3 is incompatible with Kodi 14.
+
+> For the other 46 patches, if they are indeed RFC not meant to be
+> committed right now, I'd suggest to mark them as just on Patchwork, if
+> you agree.
+
+No problem.
+
+> Maybe you could push the whole thing to a public Git branch so that
+> others can quickly test?
+
+Ok, but I have to set this up first. I already have a github account and I 
+think I can handle that task.
+Can I fork from https://github.com/buildroot/buildroot ?
+
+Regards, Bernd
