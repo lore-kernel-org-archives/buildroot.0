@@ -1,70 +1,121 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Jul 2015 23:41:44 +0200
-Subject: [Buildroot] [PATCH v5 0/4] qt5 bump to 5.5.0
-In-Reply-To: <1437478217-19091-1-git-send-email-corjon.j@ecagroup.com>
-References: <1437468691-364-1-git-send-email-corjon.j@ecagroup.com>
- <1437478217-19091-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150721234144.17d3b68c@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue, 21 Jul 2015 22:42:14 +0100
+Subject: [Buildroot] Packages hosted on SourceForge
+Message-ID: <CA+BsyQ7yogCrmc9aNitEYKfzjegz+9cqH=sXDRkqBeeM=n9NnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien,
+Hi all,
 
-On Tue, 21 Jul 2015 13:30:13 +0200, Julien Corjon wrote:
+I spent a few hours walking down all of the packages (~200 in all, out of
+~1630 total) hosted on a sourceforge download site which could be fetched
+from a more authoritative download location.
 
-> Julien Corjon (4):
->   qt5: bump version to 5.5.0
->   qt/qt5base: reorder patches
->   qt/qt5quick1, qt/qt5script, qt/qt5webkit: tag as legacy compatibility
+It turns out to be rather slim pickings; the vast majority of
+these packages are hosted principally on sourceforge with no
+alternative download location. Quite a few use github for hosting
+the repositories, but still use sourceforge to host the official
+releases. In one or two cases the project websites had a more
+authoritative download location, but requested that the sourceforge site be
+used due to its superior global reach and load capacity.
 
-I've applied these three patches, thanks!
+The simple candidates for having their upstream URL updated are as follows.
+In some cases we'll need to rework the version number variables slightly.
 
->   qt/qt5webchannel: new package
+=========================
 
-However, while this one looked good, it doesn't build for me. With the
-following defconfig:
+arptables
+old :
+http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
+new : ftp://ftp.netfilter.org/pub/arptables/
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-496-g85945aa.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-BR2_PACKAGE_QT5WEBCHANNEL=y
-# BR2_TARGET_ROOTFS_TAR is not set
+ebtables
+old :
+http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst
+.,-,$(EBTABLES_VERSION))
+new : ftp://ftp.netfilter.org/pub/ebtables/
 
-I get:
+freetype
+old :
+http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+new : http://download.savannah.gnu.org/releases/freetype/
 
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-g++ -c -pipe [...] -I/home/thomas/projets/buildroot/output/host/usr/mkspecs/devices/linux-buildroot-g++ -o .obj/moc_qmetaobjectpublisher_p.o .moc/moc_qmetaobjectpublisher_p.cpp
-qmetaobjectpublisher.cpp:44:20: fatal error: QJSValue: No such file or directory
- #include <QJSValue>
-                    ^
-compilation terminated.
-Makefile:408: recipe for target '.obj/qmetaobjectpublisher.o' failed
-make[4]: *** [.obj/qmetaobjectpublisher.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-Makefile:42: recipe for target 'sub-webchannel-make_first' failed
-make[3]: *** [sub-webchannel-make_first] Error 2
-Makefile:44: recipe for target 'sub-src-make_first' failed
-make[2]: *** [sub-src-make_first] Error 2
-package/pkg-generic.mk:156: recipe for target '/home/thomas/projets/buildroot/output/build/qt5webchannel-5.5.0/.stamp_built' failed
+iperf
+old : http://downloads.sourceforge.net/project/iperf
+new : https://iperf.fr/download/iperf_$(IPERF_VERSION)/
 
-Thanks!
+logsurfer
+old :
+http://downloads.sourceforge.net/project/logsurfer/logsurfer/logsurfer-$(LOGSURFER_VERSION)
+new : http://www.crypt.gen.nz/logsurfer/logsurfer-1.8.tar.gz
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+msgpack
+old : http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
+new :
+https://github.com/msgpack/msgpack-c/releases/download/cpp-$(MSGPACK_VERSION)/
+
+mutt
+old : http://downloads.sourceforge.net/project/mutt/mutt
+new : ftp://ftp.mutt.org/mutt
+
+poco
+old :
+http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
+new : http://pocoproject.org/releases/poco-$(POCO_VERSION_MAJOR)/
+
+wine -
+old : http://downloads.sourceforge.net/project/wine/Source/
+new: http://ftp.winehq.org/pub/wine/source/$(WINE_VERSION)/
+
+zlib
+old : http://downloads.sourceforge.net/project/libpng/zlib/$(ZLIB_VERSION)
+new : http://zlib.net/
+
+=========================
+
+I will prepare a patch to fix the above.
+
+Some packages appear at first glance to have authoritative releases hosted
+outside of sourceforge, but closer examination suggests that we should not
+update these yet.
+
+procps_ng - project moved to gitlab, however no downloads appear to
+be hosted there
+old : http://downloads.sourceforge.net/project/procps-ng/Production
+new :
+
+tcl - project website provides local FTP link, but appears to
+prefer sourceforge.
+old : http://downloads.sourceforge.net/project/
+new :
+
+tcllib - canonical download site requires a login. Sourceforge is being
+maintained.
+old :
+http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
+new :
+
+openjpeg -migrated to github, but the new 1.5.2 archive does not match the
+old one - files are missing.
+old :
+http://downloads.sourceforge.net/project/openjpeg.mirror/$(OPENJPEG_VERSION)
+new :
+
+libmad - don't fix. Site appears to move older versions into an "archive"
+directory which could cause buildroot builds to fail later.
+old : http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
+new : ftp://ftp.mars.org/pub/mpeg/
+
+madplay - don't fix. Site appears to move older versions into an "archive"
+directory which could cause buildroot builds to fail later.
+old :
+http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
+new : ftp://ftp.mars.org/pub/mpeg/
+
+=========================
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/2c55055f/attachment-0001.html>
