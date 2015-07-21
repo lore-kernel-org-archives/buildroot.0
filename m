@@ -1,110 +1,86 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 21 Jul 2015 13:11:40 +0300
-Subject: [Buildroot] [PATCH] openipmi: new package
-Message-ID: <6a0b19385e58f845152f7bad579fcb89ee11de64.1437473500.git.baruch@tkos.co.il>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Tue, 21 Jul 2015 13:30:13 +0200
+Subject: [Buildroot] [PATCH v5 0/4] qt5 bump to 5.5.0
+In-Reply-To: <1437468691-364-1-git-send-email-corjon.j@ecagroup.com>
+References: <1437468691-364-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1437478217-19091-1-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenIPMI provides libraries and command line tools for interacting with IPMI
-enabled devices.
+This series aim to bump Qt to the 5.5.0 version.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/Config.in              |  1 +
- package/openipmi/Config.in     | 16 ++++++++++++++++
- package/openipmi/openipmi.hash |  2 ++
- package/openipmi/openipmi.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 55 insertions(+)
- create mode 100644 package/openipmi/Config.in
- create mode 100644 package/openipmi/openipmi.hash
- create mode 100644 package/openipmi/openipmi.mk
+QtWebkit, QtScript & QtQuick modules as been tagged as deprecated by Qt [1]
+but these modules are still released in Qt-5.5.0 so they are tagged as 'legacy
+compatibility' in menuconfig.
 
-diff --git a/package/Config.in b/package/Config.in
-index 20ecd38534b2..9942e3a77285 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -390,6 +390,7 @@ endif
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-+	source "package/openipmi/Config.in"
- 	source "package/openocd/Config.in"
- 	source "package/openpowerlink/Config.in"
- 	source "package/owl-linux/Config.in"
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
-new file mode 100644
-index 000000000000..667efa74a863
---- /dev/null
-+++ b/package/openipmi/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_OPENIPMI
-+	bool "openipmi"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  IPMI allows remote monitoring and remote management of
-+	  devices. OpenIPMI provides a library and command line tools
-+	  to interact with IPMI enabled devices. OpenIPMI also provides
-+	  an IPMI BMC simulator.
-+
-+comment "openipmi needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-new file mode 100644
-index 000000000000..3a40f6068f60
---- /dev/null
-+++ b/package/openipmi/openipmi.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
-+sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-new file mode 100644
-index 000000000000..1d8960ee3107
---- /dev/null
-+++ b/package/openipmi/openipmi.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# openipmi
-+#
-+################################################################################
-+
-+OPENIPMI_VERSION = 2.0.21
-+OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
-+OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-+OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
-+OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
-+OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
-+OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
-+OPENIPMI_CONF_OPTS = \
-+		--with-glib=no \
-+		--with-glib12=no \
-+		--with-tcl=no \
-+		--with-perl=no \
-+		--with-python=no \
-+		--with-swig=no
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPENIPMI_DEPENDENCIES += openssl
-+OPENIPMI_CONF_OPTS += --with-openssl=yes
-+else
-+OPENIPMI_CONF_OPTS += --with-openssl=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+OPENIPMI_DEPENDENCIES += netsnmp
-+OPENIPMI_CONF_OPTS += --with-ucdsnmp=yes
-+else
-+OPENIPMI_CONF_OPTS += --with-ucdsnmp=no
-+endif
-+
-+$(eval $(autotools-package))
+Qt5WebChannel is a rebase of my previous patch[2] on top of Qt-5.5.0
+
+[1] https://wiki.qt.io/New_Features_in_Qt_5.5#Deprecated_Functionality
+[2] http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/118411
+
+Julien Corjon (4):
+  qt5: bump version to 5.5.0
+  qt/qt5base: reorder patches
+  qt/qt5quick1, qt/qt5script, qt/qt5webkit: tag as legacy compatibility
+  qt/qt5webchannel: new package
+
+ package/qt5/Config.in                              |  10 +-
+ package/qt5/qt5.mk                                 |   4 +-
+ ...ing-Check-if-uClibc-has-backtrace-support.patch |  48 ----
+ ...kspecs-files.patch => 0002-mkspecs-files.patch} |   0
+ ...cb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} |   9 +-
+ .../0004-no-gold-linker-for-host-build.patch       |  41 ++++
+ .../0005-forkd-disable-eventfd-for-uclibc.patch    |  32 +++
+ .../0005-no-gold-linker-for-host-build.patch       |  27 ---
+ ...nfigure-fix-gold-linker-support-detection.patch |  36 ---
+ .../0006-eglfs-rasp-pi-header-inclusion.patch      |  45 ++++
+ .../0007-configure-add-psql_config-option.patch    |  61 -----
+ package/qt5/qt5base/qt5base.hash                   |   8 +-
+ package/qt5/qt5base/qt5base.mk                     |   8 +-
+ .../0001-Fix-build-with-no-c-11.patch              | 267 ---------------------
+ ...z_data_p.h-Add-missing-include-byteswap.h.patch |  46 ----
+ package/qt5/qt5connectivity/qt5connectivity.hash   |   8 +-
+ package/qt5/qt5declarative/qt5declarative.hash     |   8 +-
+ package/qt5/qt5enginio/qt5enginio.hash             |   8 +-
+ .../qt5graphicaleffects/qt5graphicaleffects.hash   |   8 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash   |   8 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash       |   8 +-
+ package/qt5/qt5quick1/Config.in                    |   4 +
+ package/qt5/qt5quick1/qt5quick1.hash               |   8 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash |   8 +-
+ package/qt5/qt5script/Config.in                    |   4 +
+ package/qt5/qt5script/qt5script.hash               |   8 +-
+ package/qt5/qt5sensors/qt5sensors.hash             |   8 +-
+ package/qt5/qt5serialport/qt5serialport.hash       |   8 +-
+ package/qt5/qt5svg/qt5svg.hash                     |   8 +-
+ package/qt5/qt5webchannel/Config.in                |  11 +
+ package/qt5/qt5webchannel/qt5webchannel.hash       |   4 +
+ package/qt5/qt5webchannel/qt5webchannel.mk         |  61 +++++
+ package/qt5/qt5webkit-examples/Config.in           |   4 +
+ .../qt5/qt5webkit-examples/qt5webkit-examples.hash |   8 +-
+ package/qt5/qt5webkit/Config.in                    |   4 +
+ package/qt5/qt5webkit/qt5webkit.hash               |   8 +-
+ package/qt5/qt5websockets/qt5websockets.hash       |   8 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash         |   8 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |   8 +-
+ 39 files changed, 296 insertions(+), 574 deletions(-)
+ delete mode 100644 package/qt5/qt5base/0002-logging-Check-if-uClibc-has-backtrace-support.patch
+ rename package/qt5/qt5base/{0003-mkspecs-files.patch => 0002-mkspecs-files.patch} (100%)
+ rename package/qt5/qt5base/{0004-xcb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} (88%)
+ create mode 100644 package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
+ create mode 100644 package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
+ delete mode 100644 package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
+ delete mode 100644 package/qt5/qt5base/0006-configure-fix-gold-linker-support-detection.patch
+ create mode 100644 package/qt5/qt5base/0006-eglfs-rasp-pi-header-inclusion.patch
+ delete mode 100644 package/qt5/qt5base/0007-configure-add-psql_config-option.patch
+ delete mode 100644 package/qt5/qt5connectivity/0001-Fix-build-with-no-c-11.patch
+ delete mode 100644 package/qt5/qt5connectivity/0002-bluez_data_p.h-Add-missing-include-byteswap.h.patch
+ create mode 100644 package/qt5/qt5webchannel/Config.in
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.hash
+ create mode 100644 package/qt5/qt5webchannel/qt5webchannel.mk
+
 -- 
-2.1.4
+2.1.0
