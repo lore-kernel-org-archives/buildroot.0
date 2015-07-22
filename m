@@ -1,47 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 17:18:35 +0200
-Subject: [Buildroot] [PATCH 1/2] audit: version bump
-In-Reply-To: <1437576676-16816-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-References: <1437576676-16816-1-git-send-email-clayton.shotwell@rockwellcollins.com>
-Message-ID: <20150722171835.352e4219@free-electrons.com>
+Date: Wed, 22 Jul 2015 17:19:26 +0200
+Subject: [Buildroot] [PATCH] boost: fix build for sparc
+In-Reply-To: <1437575676-4310-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1437575676-4310-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150722171926.3f7fc601@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Clayton Shotwell,
+Dear Gustavo Zacarias,
 
-On Wed, 22 Jul 2015 09:51:15 -0500, Clayton Shotwell wrote:
-> Bumping from version 2.4.1 to 2.4.3 to drop patches that have been
-> picked up by the mainline.
+On Wed, 22 Jul 2015 11:34:36 -0300, Gustavo Zacarias wrote:
+> Using upstream patch, fixes:
+> http://autobuild.buildroot.net/results/dd0/dd032aa7b387f3ba5b25bffcaf833ba0ea9ba199/
 > 
-> Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/audit/0001-Enable-cross-compiling.patch    | 686 ---------------------
->  .../0002-Make-zos-remote-plugin-optional.patch     |  56 --
->  ...03-Default-ADDR_NO_RANDOMIZE-if-not-found.patch |  44 --
->  ...o-not-call-posix_fallocate-if-unavailable.patch |  47 --
->  ...Fix-header-detection-when-cross-compiling.patch |  46 --
->  package/audit/audit.hash                           |   2 +-
->  package/audit/audit.mk                             |   4 +-
->  7 files changed, 3 insertions(+), 882 deletions(-)
->  delete mode 100644 package/audit/0001-Enable-cross-compiling.patch
->  delete mode 100644 package/audit/0002-Make-zos-remote-plugin-optional.patch
->  delete mode 100644 package/audit/0003-Default-ADDR_NO_RANDOMIZE-if-not-found.patch
->  delete mode 100644 package/audit/0004-Do-not-call-posix_fallocate-if-unavailable.patch
->  delete mode 100644 package/audit/0005-Fix-header-detection-when-cross-compiling.patch
+>  ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
 
-Both patches applied. It's really great to see your patches being
-merged upstream. Definitely gives confidence in your SELinux
-involvement, and therefore in applying the remaining patches.
-
-It is a bit sad that your second patch essentially re-adds something
-pretty much as large as the "Enable cross compiling" patch that you're
-removing in this first patch. But it's heading in the right
-direction :-)
-
-Thanks!
+Applied, thanks. Please don't forget to send the patch upstream!
 
 Thomas
 -- 
