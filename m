@@ -1,59 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 11:04:01 +0200
-Subject: [Buildroot] [git commit] qt/qt5base: Fix big endian image conversion
-Message-ID: <20150722090404.A3CEE8192C@busybox.osuosl.org>
+Date: Wed, 22 Jul 2015 11:04:11 +0200
+Subject: [Buildroot] [PATCH 2/2] qt/qt5base: Fix big endian image
+ conversion
+In-Reply-To: <1437554012-25241-2-git-send-email-corjon.j@ecagroup.com>
+References: <1437554012-25241-1-git-send-email-corjon.j@ecagroup.com>
+ <1437554012-25241-2-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <20150722110411.7cd9f6ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ffbcceea9148afe835d41435e4df7a7e2b2e35e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Julien Corjon,
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../qt5base/0007-big_endian-fix_destformat.patch   |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+On Wed, 22 Jul 2015 10:33:32 +0200, Julien Corjon wrote:
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  .../qt5base/0007-big_endian-fix_destformat.patch   | 34 ++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0007-big_endian-fix_destformat.patch
 
-diff --git a/package/qt5/qt5base/0007-big_endian-fix_destformat.patch b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
-new file mode 100644
-index 0000000..b30d220
---- /dev/null
-+++ b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
-@@ -0,0 +1,34 @@
-+From 02ab210ea9bc5ee53fa4f1db2f068ce24272a6cd Mon Sep 17 00:00:00 2001
-+From: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
-+Date: Fri, 3 Jul 2015 14:19:02 +0200
-+Subject: [PATCH] Fix compile error on big endian
-+
-+DestFormat is not defined here but should be Format_RGBX8888
-+
-+Change-Id: Ie33989a6fc31650434281a6b7b0f4806524268af
-+Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
-+Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
-+Reviewed-by: Simon Hausmann <simon.hausmann@theqtcompany.com>
-+
-+Upstream-Status: https://codereview.qt-project.org/#/c/120654/
-+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-+---
-+ src/gui/image/qimage_conversions.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
-+index e0ca2c5..02f32aa 100644
-+--- a/src/gui/image/qimage_conversions.cpp
-++++ b/src/gui/image/qimage_conversions.cpp
-+@@ -1103,7 +1103,7 @@ static bool mask_alpha_converter_rgbx_inplace(QImageData *data, Qt::ImageConvers
-+         }
-+         rgb_data += pad;
-+     }
-+-    data->format = DestFormat;
-++    data->format = QImage::Format_RGBX8888;
-+     return true;
-+ #endif
-+ }
-+-- 
-+2.1.0
-+
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
