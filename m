@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:55 +0200
-Subject: [Buildroot] [PATCH 33/47] package/kodi-audiodecoder-snesapu: new
+Date: Wed, 22 Jul 2015 22:31:05 +0200
+Subject: [Buildroot] [PATCH 43/47] package/kodi-screensaver-stars: new
 	package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-34-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-44-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-snesapu/Config.in           |    7 +++++++
- .../kodi-audiodecoder-snesapu.mk                      |   17 +++++++++++++++++
+ package/kodi-screensaver-stars/Config.in              |    6 ++++++
+ .../kodi-screensaver-stars/kodi-screensaver-stars.mk  |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-snesapu/Config.in
- create mode 100644 package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-screensaver-stars/Config.in
+ create mode 100644 package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 
-diff --git a/package/kodi-audiodecoder-snesapu/Config.in b/package/kodi-audiodecoder-snesapu/Config.in
+diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
 new file mode 100644
-index 0000000..0cb572f
+index 0000000..e8f7862
 --- /dev/null
-+++ b/package/kodi-audiodecoder-snesapu/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU
-+	bool "kodi-audiodecoder-snesapu"
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-screensaver-stars/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_STARS
++	bool "kodi-screensaver-stars"
 +	help
-+	  SPC decoder addon for Kodi
++	  Starfield screensaver for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.snesapu
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++	  https://github.com/notspiff/screensaver.stars
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 new file mode 100644
-index 0000000..6d433d7
+index 0000000..bc86bd9
 --- /dev/null
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-snesapu
++# kodi-screensaver-stars
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_SNESAPU_VERSION = 399d1d3f32fe6f62f5657b8ce67c30229629cb51
-+KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
-+KODI_AUDIODECODER_SNESAPU_LICENSE = GPLv2+
-+KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
++KODI_SCREENSAVER_STARS_VERSION = 91b59f687ceb52488763aca4ba67d50a92f01731
++KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
++KODI_SCREENSAVER_STARS_LICENSE = GPLv2+
++KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
 +
-+KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi-platform
++KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
 +
-+KODI_AUDIODECODER_SNESAPU_CONF_OPTS += \
++KODI_SCREENSAVER_STARS_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 790be0d..91d9783 100644
+index e574517..2cf6940 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -275,6 +275,7 @@ menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
- 	source "package/kodi-audiodecoder-nosefart/Config.in"
- 	source "package/kodi-audiodecoder-sidplay/Config.in"
-+	source "package/kodi-audiodecoder-snesapu/Config.in"
+@@ -295,6 +295,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
++	source "package/kodi-screensaver-stars/Config.in"
  endmenu
  
- menu "Audio encoder addons"
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
