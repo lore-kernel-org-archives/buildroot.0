@@ -1,101 +1,55 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 22 Jul 2015 22:33:59 +0000
-Subject: [Buildroot] [PATCH v5 1/1] rtl8821au: new package
-Message-ID: <CA+h8R2oBiYA+FCbRW=Bg2Y-ift9XprGy=DVAnB9Fm9Wk86U6Jg@mail.gmail.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 23 Jul 2015 00:35:17 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-07-21
+In-Reply-To: <20150722063018.99E6B101957@stock.ovh.net>
+References: <20150722063018.99E6B101957@stock.ovh.net>
+Message-ID: <CA+BsyQ5EOK1tceNu17UHmehbKVOQam=-qy6XwJJko-7MNf2AJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding a kernel module based USB wifi driver. There is no official
-version of this driver that works properly on ARM and with newer USB
-WiFi cards. This driver version builds module 8821au and is based on a
-kernel module release from ASUS with various fixes integrated in.
+Some more.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
 
-[Thomas, Yann, Luca:
-  - Using the new kernel-module setup
-  - Compacted endian flag define to one line
-  - Fixed strnicmp undefined error
-  - Removed useless debugging line
-  - New version has i386 platform set to n on default]
+>          arm |              exfat-utils-1.1.1 | NOK |
+> http://autobuild.buildroot.net/results/c60d0f9a93c90d41c3c86c78b0a07ddfed22c56d/
 
- package/Config.in                |  1 +
- package/rtl8821au/Config.in      | 10 ++++++++++
- package/rtl8821au/rtl8821au.hash |  1 +
- package/rtl8821au/rtl8821au.mk   | 17 +++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/rtl8821au/Config.in
- create mode 100644 package/rtl8821au/rtl8821au.hash
- create mode 100644 package/rtl8821au/rtl8821au.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 9942e3a..04f2136 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -404,6 +404,7 @@ endif
-        source "package/read-edid/Config.in"
-        source "package/rng-tools/Config.in"
-        source "package/rpi-userland/Config.in"
-+       source "package/rtl8821au/Config.in"
-        source "package/sane-backends/Config.in"
-        source "package/sdparm/Config.in"
-        source "package/setserial/Config.in"
-diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
-new file mode 100644
-index 0000000..9827ad5
---- /dev/null
-+++ b/package/rtl8821au/Config.in
-@@ -0,0 +1,10 @@
-+comment "rtl8821au needs a Linux kernel to be built"
-+       depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_RTL8821AU
-+       bool "rtl8821au"
-+       depends on BR2_LINUX_KERNEL
-+       help
-+         rtl8821au wifi driver
-+
-+         https://github.com/paralin/rtl8821au
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.
-hash
-new file mode 100644
-index 0000000..58f1581
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -0,0 +1 @@
-+sha256 5bfbedde1db2314b26be0e06292906aabf52c4e072e6487d872f81aa99ad265b
-rtl8821au-4.3.15.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-new file mode 100644
-index 0000000..1613440
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -0,0 +1,17 @@
-+###########################################################
-#####################
-+#
-+# rtl8821au
-+#
-+###########################################################
-#####################
-+
-+RTL8821AU_VERSION = 4.3.15
-+RTL8821AU_SITE = $(call github,paralin,rtl8821au,v$(RTL8821AU_VERSION))
-+RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-+
-+RTL8821AU_MODULE_MAKE_OPTS = \
-+       CONFIG_RTL8821AU=m \
-+       KVER=$(LINUX_VERSION_PROBED) \
-+       USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
---
-2.1.4
+exfat-utils looks like it is broken for any architecture when using musl.
+Again I think we will have to take it up with upstream.
+
+It's not straightforward as they don't use autotools; they have an #if
+(GLIBC) #elif (APPLE) #elif (OpenBSD) #else #error #endif thing going on,
+which they're using to decide which byteswap functions to use. musl by
+design refuses to identify itself at compile time, so this will have to be
+reworked. My best idea - changing it to use the glibc case as the default
+fallback, as musl's byteswap functions appear to be the same as glibcs -
+isn't very appealing.
+
+      x86_64 |                   libftdi-0.20 | NOK |
+> http://autobuild.buildroot.net/results/4d0009cf6f5b294d2246286e1383f663a4215648/
+
+
+This is a more forgiveable musl issue, but again it probably needs to go
+upstream.
+
+libftdi includes usb.h from libusb-compat. usb.h uses some typedefs (eg
+u_int8_t and friends) which, in musl's stricter world, I suspect are only
+enabled when _GNU_SOURCE or _BSD_SOURCE is defined.
+
+I tried to test this theory but, strangely, libftdi seemed to resist my
+attempts to add -D_GNU_SOURCE into the LIBFTDI_CONF_ENV variable. Maybe it
+will behave in the morning ..
+
+I am not sure whether the patch should be directed at libusb-compat or
+libftdi. To fix it in libusb-compat we'll have to #define _GNU_SOURCE in
+the same header file which sounds slightly off; then again the library has
+been written from the outset to assume glibc.
+
+Brendan
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150722/a7e82d2b/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150723/3808f6da/attachment.html>
