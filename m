@@ -1,54 +1,35 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 22 Jul 2015 11:41:58 +0200
-Subject: [Buildroot] [PATCH v2 1/1] rtl8821au: new package
-In-Reply-To: <1437431538-1528-1-git-send-email-christian@paral.in>
-References: <1437431538-1528-1-git-send-email-christian@paral.in>
-Message-ID: <55AF6566.60702@lucaceresoli.net>
+From: Nicolas =?utf-8?B?TcOpbsOpZ2FsZQ==?= <nicolas.menegale@openwide.fr>
+Date: Wed, 22 Jul 2015 12:04:34 +0200 (CEST)
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150722094349.424e7a3e@free-electrons.com>
+Message-ID: <1530706203.3889145.1437559474733.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christian,
+Hi Thomas,
 
-Christian Stewart wrote:
-> Adding a kernel module based USB wifi driver. There is no official
-> version of this driver that works properly on ARM and with newer USB
-> WiFi cards. This driver version builds module 8821au and is based on a
-> kernel module release from ASUS with various fixes integrated in.
->
-> [Thomas, Yann:
->    - Using the new kernel-module setup]
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
+> >          arm |                   cppcms-1.0.4 | NOK |
+> >          http://autobuild.buildroot.net/results/58d3d2605337fe1ce49d333cb712941711276100/
+> 
+> Weird C++ problem:
+> 
+>   error: 'template<class T, class A> std::size_t
+>   cppcms_boost::hash_value' conflicts with a previous declaration
+> 
+> Nicolas, you are the original submitter of cppcms, can you have a
+> look?
+> 
 
-[...]
+I just reproduced the problem but I have a different compilation error on my workstation:
+error: ?converter_to_utf? was not declared in this scope
+error: ?converter_between? was not declared in this scope
 
-> --- /dev/null
-> +++ b/package/rtl8821au/rtl8821au.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# rtl8821au
-> +#
-> +################################################################################
-> +
-> +RTL8821AU_VERSION = 4.3.14
-> +RTL8821AU_SITE = $(call github,paralin,rtl8821au,v$(RTL8821AU_VERSION))
-> +ifeq ($(call qstrip,$(BR2_ENDAIN)),BIG)
-> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_BIG_ENDIAN
-> +else
-> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_LITTLE_ENDIAN
-> +endif
+I added in CC Lucile which added the support of uCLibc, in the case she would have an idea of what is going on.
 
-s/ENDAIN/ENDIAN/
+I continue to investigate on this problem. 
 
-Besides, since BR2_ENDIAN is an uppercase string, why not replacing
-these 5 lines with (untested):
-
-   RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-
--- 
-Luca
+Thanks a lot,
+Nicolas.
