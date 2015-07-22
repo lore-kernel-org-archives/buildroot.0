@@ -1,41 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 22:52:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nfs-utils: fix unmet direct
- dependency
-In-Reply-To: <1437428858-31045-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1437428858-31045-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150722225235.5bf6cac4@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Jul 2015 23:01:08 +0200
+Subject: [Buildroot] [PATCH] snmppp: extract license text from source
+ files
+In-Reply-To: <20150721215438.19389da8@free-electrons.com>
+References: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
+ <20150721215438.19389da8@free-electrons.com>
+Message-ID: <20150722210108.GB3777@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Thomas, Luca, All,
 
-On Mon, 20 Jul 2015 23:47:38 +0200, J?rg Krause wrote:
-> Commit 182520a8af734c735c4dbdff29dc07af1d615a0a adds rpcbind as a dependency
-> without properly caring for the thread dependency.
+On 2015-07-21 21:54 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 21 Jul 2015 18:29:44 +0200, Luca Ceresoli wrote:
+> > There is no proper license file in the SNMP++ tarballs, so let's
+> > extract it from a source file instead of copying it entirely.
+> > 
+> > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> > ---
+> >  package/snmppp/snmppp.mk | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> rpcbind adds libtirpc as a dependendency which fails:
->   fatal error: pthread.h: No such file or directory
+> In many other packages we are using a complete source file as the
+> license text. Should we switch to the solution you're proposing instead?
+> Another possibility is to do:
 > 
-> Since we probably don't care much about using nfs-utils in a non-threaded
-> scenario, we simply disable nfs-utils for toolchains without thread support.
+> <pkg>_LICENSE_FILES = src/v3.cpp:1:50
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/803/80321de8d4c6c0a00439b07289a5818962128b43/
+> To tell the package infra to extract the text from lines 1 to 50. But
+> we would never notice when the lines no longer match.
 > 
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/nfs-utils/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> I'd like to have a general agreement on this before going further with
+> your patch.
 
-Applied, thanks.
+My point of view in the case there is no license file in the package:
 
-Thomas
+ 1) we should not regenerate a file, neither manually nor automatically:
+    - the automatic part (i.e. in the infra) can be easily foiled when a
+      package is updated,
+    - the manual part (like suggested by Luca) can also, but to a lower
+      extent, be broken on updates;
+
+ 2) if we refer to a file, it should be an existing file like a source
+    file.
+
+But all-in-all, I believe we should not refer to a license file if
+there's none in the package.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
