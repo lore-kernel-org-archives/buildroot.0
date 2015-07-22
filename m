@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:53 +0200
-Subject: [Buildroot] [PATCH 31/47] package/kodi-audiodecoder-nosefart: new
+Date: Wed, 22 Jul 2015 22:31:03 +0200
+Subject: [Buildroot] [PATCH 41/47] package/kodi-screensaver-pingpong: new
 	package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-32-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-42-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-nosefart/Config.in          |    7 +++++++
- .../kodi-audiodecoder-nosefart.mk                     |   17 +++++++++++++++++
+ package/kodi-screensaver-pingpong/Config.in           |    6 ++++++
+ .../kodi-screensaver-pingpong.mk                      |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-nosefart/Config.in
- create mode 100644 package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-screensaver-pingpong/Config.in
+ create mode 100644 package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 
-diff --git a/package/kodi-audiodecoder-nosefart/Config.in b/package/kodi-audiodecoder-nosefart/Config.in
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
 new file mode 100644
-index 0000000..96591aa
+index 0000000..916b8c2
 --- /dev/null
-+++ b/package/kodi-audiodecoder-nosefart/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART
-+	bool "kodi-audiodecoder-nosefart"
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
++	bool "kodi-screensaver-pingpong"
 +	help
-+	  Nosefart decoder addon for Kodi
++	  Ping-pong screensaver for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.nosefart
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++	  https://github.com/notspiff/screensaver.pingpong
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 new file mode 100644
-index 0000000..b849e76
+index 0000000..57bcc92
 --- /dev/null
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-nosefart
++# kodi-screensaver-pingpong
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_NOSEFART_VERSION = 936313f2be5c4936af8a643876363dcea76a8ebe
-+KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
-+KODI_AUDIODECODER_NOSEFART_LICENSE = GPLv2+
-+KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
++KODI_SCREENSAVER_PINGPONG_VERSION = 00fd2a7c70d581ada1bc89829c6870530b4c65b9
++KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
++KODI_SCREENSAVER_PINGPONG_LICENSE = GPLv2+
++KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
 +
-+KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
++KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
 +
-+KODI_AUDIODECODER_NOSEFART_CONF_OPTS += \
++KODI_SCREENSAVER_PINGPONG_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f7041c3..94a3624 100644
+index 56a378e..67be56c 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -273,6 +273,7 @@ endmenu
- 
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
-+	source "package/kodi-audiodecoder-nosefart/Config.in"
+@@ -293,6 +293,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
++	source "package/kodi-screensaver-pingpong/Config.in"
  endmenu
  
- menu "Audio encoder addons"
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
