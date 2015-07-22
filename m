@@ -1,40 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 17:25:25 +0200
-Subject: [Buildroot] [git commit] package/linux: trash stderr in
-	LINUX_VERSION_PROBED
-Message-ID: <20150722152531.A3CDE7FEC2@busybox.osuosl.org>
+Date: Wed, 22 Jul 2015 17:25:11 +0200
+Subject: [Buildroot] [git commit] core/pkg-kconfig: do not override @D
+Message-ID: <20150722152531.8DFC681E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c95dc64c294614c1d9bebb0931301b30abaaca26
+commit: http://git.buildroot.net/buildroot/commit/?id=273031ca02459efa430bf2b8ff3ca0dd9232d99a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Linux buildsystem tries to run the compiler even just for
-'kernelrelease' (which we store in LINUX_VERSION_PROBED) and we
-sometimes need to use it before the toolchain is available; thus
-we get spurious errors on stderr.
+Currently, we override @D for the kconfig configurators, so the fixup
+commands can use $(@D); otherwise @D would be simply '.' because it is
+not a real file in the package build dir.
 
-Consign stderr to oblivion when computing the 'kernelrelease'.
+However, this breaks the soon-to-be-introduced linux-backports package,
+which needs to have a dependency on the linux package to be configured.
 
+The underlying reason is that @D is an automatic variable that is always
+set by make to the directory part of the target of the rule. However,
+automatic variables loose their "automatic" property when they are
+manually set.
+
+Furthermore, a variable that is defined for a rule is inherited by all
+dependencies of that rule, so our manually-set @D is inherited all the
+way down the dependency chain of linux-backports, down to the linux' own
+.config rule, which is thus run with @D pointing to linux-backports'
+build dir, not linux'.
+
+Fix that by using a "static pattern rule", redirecting the configurators
+to an intermediate stamp-like file which path is in the package build
+dir, so we get a valid @D from the onset, without having to manually
+fiddle with it.
+
+Thanks to Arnout for suggesting that in the first place. Sorry I did
+reject it as "too complex" when it was in fact the best solution.
+
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pkg-kconfig.mk |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 375a9e1..d91dbb2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -76,7 +76,7 @@ LINUX_MAKE_ENV = \
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 3e17a70..375607f 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -104,15 +104,16 @@ endif
+ # that is clean wrt. our requirements.
+ #
+ # Because commands in $(1)_FIXUP_KCONFIG are probably using $(@D), we
+-# fake it for the configurators (otherwise it is set to just '.', i.e.
+-# the current directory where make is run, which happens to be in
+-# $(TOPDIR), because the target of the rule is not an actual file, so
+-# does not have any path component).
++# need to have a valid @D set. But, because the configurators rules are
++# not real files and do not contain the path to the package build dir,
++# @D would be just '.' in this case. So, we use an intermediate rule
++# with a stamp-like file which path is in the package build dir, so we
++# end up having a valid @D.
+ #
+-$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
+-$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
++$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
++$$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
++		$$($(2)_KCONFIG_OPTS) $$(*)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+ 	$$(call $(2)_FIXUP_DOT_CONFIG)
+@@ -169,6 +170,7 @@ endif # package enabled
+ 	$(1)-update-defconfig \
+ 	$(1)-savedefconfig \
+ 	$(1)-check-configuration-done \
++	$$($(2)_DIR)/.kconfig_editor_% \
+ 	$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS))
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
--LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease`
-+LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
- KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+ endef # inner-kconfig-package
