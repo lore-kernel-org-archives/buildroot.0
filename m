@@ -1,52 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 22 Jul 2015 10:59:50 -0300
-Subject: [Buildroot] [PATCH] netperf: bump to version 2.7.0
-Message-ID: <1437573590-11966-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 22 Jul 2015 11:00:40 -0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.8.20
+Message-ID: <1437573640-12144-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hash file.
-And work around gcc 5+ defaulting to gnu99, fixes:
-
-http://autobuild.buildroot.net/results/077/077714a0ee67057abcff680b244228a409243bbf/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/netperf/netperf.hash | 2 ++
- package/netperf/netperf.mk   | 8 ++++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
- create mode 100644 package/netperf/netperf.hash
+ package/dbus/dbus.hash | 2 +-
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netperf/netperf.hash b/package/netperf/netperf.hash
-new file mode 100644
-index 0000000..f972740
---- /dev/null
-+++ b/package/netperf/netperf.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	842af17655835c8be7203808c3393e6cb327a8067f3ed1f1053eb78b4e40375a	netperf-2.7.0.tar.bz2
-diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
-index 13d44fe..8b22808 100644
---- a/package/netperf/netperf.mk
-+++ b/package/netperf/netperf.mk
-@@ -4,9 +4,13 @@
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 19113a6..5df22ef 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7f795268efd343ff0498786acb35097564390d40b1b6158daf1b4f742b522b07  dbus-1.8.16.tar.gz
++sha256	5c4fbf4c64621c96e871da91d2b729a5b00536e116d3c4612a469d924b1b703a  dbus-1.8.20.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index e9c9aaf..a76f24a 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETPERF_VERSION = 2.6.0
-+NETPERF_VERSION = 2.7.0
- NETPERF_SITE = ftp://ftp.netperf.org/netperf
--NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
-+NETPERF_SOURCE = netperf-$(NETPERF_VERSION).tar.bz2
-+# gcc 5+ defaults to gnu99 which breaks netperf
-+NETPERF_CONF_ENV = \
-+	ac_cv_func_setpgrp_void=set \
-+	CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
- NETPERF_CONF_OPTS = --enable-demo=yes
- NETPERF_LICENSE = netperf license
- NETPERF_LICENSE_FILES = COPYING
+-DBUS_VERSION = 1.8.16
++DBUS_VERSION = 1.8.20
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
 -- 
 2.3.6
