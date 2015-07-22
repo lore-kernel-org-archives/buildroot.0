@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:31 +0200
-Subject: [Buildroot] [PATCH 09/47] package/kodi-audioencoder-vorbis: bump
+Date: Wed, 22 Jul 2015 22:30:32 +0200
+Subject: [Buildroot] [PATCH 10/47] package/kodi-audioencoder-wav: bump
 	version
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk |    2 +-
+ package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index 493fcbf..6bf2933 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+index 06803f2..9cd5117 100644
+--- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_VORBIS_VERSION = d556a6872e59806526f208e8d0af5f886a6c67bb
-+KODI_AUDIOENCODER_VORBIS_VERSION = 15d619dae4411ecebadf2ec2996d611600ad0bee
- KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
- KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
+-KODI_AUDIOENCODER_WAV_VERSION = 40aaedfa1cd9c75749c82f6e1bd7c42ef61fdb38
++KODI_AUDIOENCODER_WAV_VERSION = 797c990eea7851889cd44a597c0392deba9c51c0
+ KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
+ KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
 -- 
 1.7.10.4
