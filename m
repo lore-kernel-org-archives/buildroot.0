@@ -1,71 +1,84 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:24 +0200
-Subject: [Buildroot] [PATCH 02/47] package/libplatform: new package
+Date: Wed, 22 Jul 2015 22:30:43 +0200
+Subject: [Buildroot] [PATCH 21/47] package/kodi-pvr-mythtv: new package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed by libcec 3.x
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                  |    1 +
- package/libplatform/Config.in      |    6 ++++++
- package/libplatform/libplatform.mk |   16 ++++++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/libplatform/Config.in
- create mode 100644 package/libplatform/libplatform.mk
+ Config.in.legacy                           |    1 +
+ package/kodi-pvr-mythtv/Config.in          |    7 +++++++
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                     |    1 +
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-pvr-mythtv/Config.in
+ create mode 100644 package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index f4213b1..16915c0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1064,6 +1064,7 @@ menu "Other"
- 	source "package/liblinear/Config.in"
- 	source "package/libnspr/Config.in"
- 	source "package/libpfm4/Config.in"
-+	source "package/libplatform/Config.in"
- 	source "package/libplist/Config.in"
- 	source "package/libpthread-stubs/Config.in"
- 	source "package/libpthsem/Config.in"
-diff --git a/package/libplatform/Config.in b/package/libplatform/Config.in
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d121301..48fcf4a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -117,6 +117,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_HTS
+ 	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+ 	select BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
++	select BR2_PACKAGE_KODI_PVR_MYTHTV
+ 	help
+ 	  Kodi PVR addon was split into seperate modules
+ 
+diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
 new file mode 100644
-index 0000000..7d275b1
+index 0000000..798ff3e
 --- /dev/null
-+++ b/package/libplatform/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBPLATFORM
-+	bool
++++ b/package/kodi-pvr-mythtv/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PVR_MYTHTV
++	bool "kodi-pvr-mythtv"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Platform support library used by libCEC and binary add-ons for Kodi
++	  MythTV PVR for Kodi
 +
-+	  https://github.com/Pulse-Eight/platform
-diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
++	  https://github.com/kodi-pvr/pvr.mythtv
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 new file mode 100644
-index 0000000..77fbcec
+index 0000000..c90eeeb
 --- /dev/null
-+++ b/package/libplatform/libplatform.mk
-@@ -0,0 +1,16 @@
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# libplatform
++# kodi-pvr-mythtv
 +#
 +################################################################################
 +
-+LIBPLATFORM_VERSION = 1.0.10
-+LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
-+LIBPLATFORM_LICENSE = GPLv3+
-+LIBPLATFORM_LICENSE_FILES = COPYING
-+LIBPLATFORM_INSTALL_STAGING = YES
++KODI_PVR_MYTHTV_VERSION = 75fee97e2e690b0ee6d2b1540218b61586683e20
++KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
++KODI_PVR_MYTHTV_LICENSE = GPLv2+
++KODI_PVR_MYTHTV_LICENSE_FILES = src/client.cpp
 +
-+LIBPLATFORM_CONF_OPTS += \
++KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
++
++KODI_PVR_MYTHTV_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ad1d23e..80ffe3a 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -260,6 +260,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-hts/Config.in"
+ 	source "package/kodi-pvr-iptvsimple/Config.in"
+ 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
++	source "package/kodi-pvr-mythtv/Config.in"
+ endmenu
+ 
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
