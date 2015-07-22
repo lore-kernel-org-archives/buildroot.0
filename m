@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 23:21:32 +0200
-Subject: [Buildroot] [git commit] audit: disable python3 support
-Message-ID: <20150722212206.F0EE781E6C@busybox.osuosl.org>
+Date: Wed, 22 Jul 2015 23:26:13 +0200
+Subject: [Buildroot] [PATCH] snmppp: extract license text from source
+ files
+In-Reply-To: <20150722210108.GB3777@free.fr>
+References: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
+ <20150721215438.19389da8@free-electrons.com>
+ <20150722210108.GB3777@free.fr>
+Message-ID: <20150722232613.149d5890@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a8951273a567a6bdf11f77ba40f99acf28d3bfa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann, Luca,
 
-With the version bump to 2.4.3, python3 support was added for
-libaudit. With host machines that have python3 installed, this will
-cause build issues such as:
+On Wed, 22 Jul 2015 23:01:08 +0200, Yann E. MORIN wrote:
 
-  make[5]: Entering directory `/tmp/ryan/buildroot/output/build/audit-2.4.3/bindings/swig/python3'
-  swig -o audit_wrap.c -python -py3 -modern -I. -I../../.. -I../../../lib -I/usr/include/python3.4m -I/usr/include/python3.4m ./../src/auditswig.i
-  make[5]: swig: Command not found
+> My point of view in the case there is no license file in the package:
+> 
+>  1) we should not regenerate a file, neither manually nor automatically:
+>     - the automatic part (i.e. in the infra) can be easily foiled when a
+>       package is updated,
+>     - the manual part (like suggested by Luca) can also, but to a lower
+>       extent, be broken on updates;
+> 
+>  2) if we refer to a file, it should be an existing file like a source
+>     file.
+> 
+> But all-in-all, I believe we should not refer to a license file if
+> there's none in the package.
 
-Solution is to disable python3 support such as we do with python2.7.
+The v3.cpp file is only 428 lines long, and weights 10260 bytes.
+Comparatively, the GPLv2 text is 339 lines long for 18092 bytes, and
+the GPLv3 text is 647 lines lon for 35147 bytes.
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/audit/audit.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+If you're really concerned about the file size used for the license of
+snmppp, we could switch to use src/gauge.cpp instead of src/v3.cpp.
+gauge.cpp is only 75 lines long, for 2804 bytes, and I'd say two thirds
+of the file contents are license stuff.
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 806bd97..61e876b 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -14,7 +14,7 @@ AUDIT_INSTALL_STAGING = YES
- # Patching Makefile.am
- AUDIT_AUTORECONF = YES
- 
--AUDIT_CONF_OPTS = --without-python --disable-zos-remote
-+AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
- 
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- AUDIT_DEPENDENCIES += libcap-ng
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
