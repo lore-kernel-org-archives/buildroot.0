@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:59 +0200
-Subject: [Buildroot] [PATCH 37/47] package/kodi-screensaver-asteroids: new
+Date: Wed, 22 Jul 2015 22:31:00 +0200
+Subject: [Buildroot] [PATCH 38/47] package/kodi-screensaver-biogenesis: new
 	package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-38-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-39-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-asteroids/Config.in          |    6 ++++++
- .../kodi-screensaver-asteroids.mk                     |   17 +++++++++++++++++
- package/kodi/Config.in                                |    4 ++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/kodi-screensaver-asteroids/Config.in
- create mode 100644 package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+ package/kodi-screensaver-biogenesis/Config.in         |    6 ++++++
+ .../kodi-screensaver-biogenesis.mk                    |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-screensaver-biogenesis/Config.in
+ create mode 100644 package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
 
-diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
 new file mode 100644
-index 0000000..b1a1d20
+index 0000000..31e1017
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/Config.in
++++ b/package/kodi-screensaver-biogenesis/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
-+	bool "kodi-screensaver-asteroids"
++config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
++	bool "kodi-screensaver-biogenesis"
 +	help
-+	  Asteroids screensaver for Kodi
++	  BioGenesis screensaver for Kodi
 +
-+	  https://github.com/notspiff/screensaver.asteroids
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++	  https://github.com/notspiff/screensaver.biogenesis
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
 new file mode 100644
-index 0000000..cc25e40
+index 0000000..3639198
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-asteroids
++# kodi-screensaver-biogenesis
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = d4c2e3b499544ef55be364b34e5569d9c31c9615
-+KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
++KODI_SCREENSAVER_BIOGENESIS_VERSION = 2eccbd4e46320de03fde6731c560660659fd34d7
++KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
++KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPLv2+
++KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
 +
-+KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
++KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
 +
-+KODI_SCREENSAVER_ASTEROIDS_CONF_OPTS += \
++KODI_SCREENSAVER_BIOGENESIS_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 63c3564..60e0e15 100644
+index 60e0e15..9598c53 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -288,4 +288,8 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
+@@ -290,6 +290,7 @@ endmenu
+ 
+ menu "Screensavers"
+ 	source "package/kodi-screensaver-asteroids/Config.in"
++	source "package/kodi-screensaver-biogenesis/Config.in"
  endmenu
  
-+menu "Screensavers"
-+	source "package/kodi-screensaver-asteroids/Config.in"
-+endmenu
-+
  endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
