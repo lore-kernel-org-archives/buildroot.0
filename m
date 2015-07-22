@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:57 +0200
-Subject: [Buildroot] [PATCH 35/47] package/kodi-audiodecoder-timidity: new
-	package
+Date: Wed, 22 Jul 2015 22:30:30 +0200
+Subject: [Buildroot] [PATCH 08/47] package/kodi-audioencoder-lame: bump
+	version
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-36-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-timidity/Config.in          |    7 +++++++
- .../kodi-audiodecoder-timidity.mk                     |   17 +++++++++++++++++
- package/kodi/Config.in                                |    1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-audiodecoder-timidity/Config.in
- create mode 100644 package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+ package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
-new file mode 100644
-index 0000000..8f604ad
---- /dev/null
-+++ b/package/kodi-audiodecoder-timidity/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
-+	bool "kodi-audiodecoder-timidity"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  Timidity decoder addon for Kodi
-+
-+	  https://github.com/notspiff/audiodecoder.timidity
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-new file mode 100644
-index 0000000..70672c4
---- /dev/null
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-audiodecoder-timidity
-+#
-+################################################################################
-+
-+KODI_AUDIODECODER_TIMIDITY_VERSION = da5eb9ac6557fc1ea0f48cc044cfd16f4f2a1e0b
-+KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
-+KODI_AUDIODECODER_TIMIDITY_LICENSE = GPLv2+
-+KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
-+
-+KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi-platform
-+
-+KODI_AUDIODECODER_TIMIDITY_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 8bf3ee1..bf937ad 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -277,6 +277,7 @@ menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-sidplay/Config.in"
- 	source "package/kodi-audiodecoder-snesapu/Config.in"
- 	source "package/kodi-audiodecoder-stsound/Config.in"
-+	source "package/kodi-audiodecoder-timidity/Config.in"
- endmenu
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+index 8a4a28c..78a2d71 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- menu "Audio encoder addons"
+-KODI_AUDIOENCODER_LAME_VERSION = 3eb59de951996659c143faaabacc5f34ee9a0b81
++KODI_AUDIOENCODER_LAME_VERSION = b283cd50cd2f89b7fd7b903c957a6a993e3756d2
+ KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
+ KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
 -- 
 1.7.10.4
