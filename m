@@ -1,254 +1,2658 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 22 Jul 2015 08:30:02 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-07-21
-In-Reply-To: <20150722063018.99E6B101957@stock.ovh.net>
-References: <20150722063018.99E6B101957@stock.ovh.net>
-Message-ID: <CAGm1_ku+num-ZG48rzCpcCSDfEpgM=edbjCtmujqko384WWvAQ@mail.gmail.com>
+From: Daniel Smolik <marvin@mydatex.cz>
+Date: Wed, 22 Jul 2015 08:29:27 +0200
+Subject: [Buildroot] buildroot for SAMA5D3 illegal instruction
+Message-ID: <55AF3847.503@mydatex.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 22, 2015 at 8:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2015-07-21
-> ===============================
->
->         success : 208
->        failures : 146
->        timeouts : 3
->           TOTAL : 357
->
-> Classification of failures by reason
-> ====================================
->
->                   ffmpeg-2.7.1 | 18
->                   fan-ctrl-1.3 | 15
->                openipmi-2.0.21 | 7
->              expect-2014-05-02 | 6
->           usb_modeswitch-2.2.5 | 5
-> libsigrok-fe473123ba836445d... | 4
->              qpid-proton-0.9.1 | 4
->                     bwm-ng-0.6 | 4
->                 libtirpc-0.3.1 | 4
->                   boost-1.58.0 | 4
->                    audit-2.4.1 | 4
->              libselinux-2.1.13 | 4
->           c-icap-modules-0.3.2 | 3
->                libglib2-2.44.1 | 3
->                  qt5base-5.4.1 | 3
->                  setools-3.3.8 | 3
->        host-erlang-rebar-2.5.1 | 3
->            host-heimdal-1.6rc2 | 3
->                   cc-tool-0.26 | 2
->                qt5webkit-5.4.1 | 2
->                 busybox-1.23.2 | 2
->                   mono-4.0.2.5 | 2
->                audiofile-0.3.6 | 2
->                  empty-0.6.19b | 2
->                  libepoxy-v1.2 | 2
->                   ltris-1.0.19 | 2
->                   opencv-3.0.0 | 2
->              exfat-utils-1.1.1 | 1
->                linux-pam-1.1.8 | 1
->                harfbuzz-0.9.41 | 1
->                   cppcms-1.0.4 | 1
->                   bcusdk-0.0.5 | 1
->               lirc-tools-0.9.2 | 1
->            libfreeimage-3.17.0 | 1
->                   weston-1.8.0 | 1
->                  netperf-2.6.0 | 1
->                alsa-lib-1.0.29 | 1
->                     ustr-1.0.4 | 1
->                  webkit-1.11.5 | 1
->                   acpid-2.0.22 | 1
-> filemq-482797b8aa30fcc9ea13... | 1
->                  openssh-6.9p1 | 1
->                     libiio-0.5 | 1
->                   libftdi-0.20 | 1
->                     cramfs-1.1 | 1
->                 libedje-1.7.10 | 1
->                 iproute2-4.1.1 | 1
->                   zeromq-4.0.5 | 1
->              armadillo-5.100.2 | 1
->                       atf-0.21 | 1
->                 grantlee-0.5.1 | 1
->   toolchain-external-undefined | 1
->                   snmppp-3.3.5 | 1
->                mongrel2-v1.9.1 | 1
->                  cdrkit-1.1.11 | 1
->             host-nodejs-0.12.7 | 1
-> socketcand-8339e62a6bf60be5... | 1
->             c-periphery-v1.0.3 | 1
->                kodi-14.2-Helix | 1
->                 minidlna-1.1.4 | 1
-> x264-c8a773ebfca148ef04f5a6... | 1
->
-> Detail of failures
-> ===================
->
->       x86_64 |                   acpid-2.0.22 | NOK | http://autobuild.buildroot.net/results/83f9b5216aab22d2f3de69328457590b40d27fd4/
->          arc |                alsa-lib-1.0.29 | NOK | http://autobuild.buildroot.net/results/b704016acfa38e7998739a2c70bcf6020c59bda8/
->          arc |              armadillo-5.100.2 | NOK | http://autobuild.buildroot.net/results/47f176ed06540b896a7d96ebea4cbf5bf92e42b7/
->          arc |                       atf-0.21 | NOK | http://autobuild.buildroot.net/results/bc2dc2752caadfe85f02c9d708ba44a152f2127e/
->          arc |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/5360fdeb211a46dada1aac2bd242834fb615879f/
->          arc |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/d74589bc1f582c7304c86b3435b613419ee9966d/
->      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/3e85c2253f6bd4cfe6ac1dde947eb6d5afc78cfe/
->      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/d0f0f7e7462d68331d4a2f87b1df05cc9a6fecfd/
->      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/114de2422c56071141284fb2eb8044ffa48e77f4/
->      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/0862cf008e7e4b52c46c40257adeda954afee394/
->          arm |                   bcusdk-0.0.5 | NOK | http://autobuild.buildroot.net/results/d963117fd6b5c59935035166b7cc32d53c008c2b/
->        sparc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/dd032aa7b387f3ba5b25bffcaf833ba0ea9ba199/
->      powerpc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/49f5c0521fc90fbd4673ad233ff679be007d2953/
->      powerpc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/2ae4a83a22a1c172ec4778574b5c027d2c65540e/
->        sparc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/1183ea468797b6b70a56b75066445b811704d211/
->        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/16b2aaad834bc19b3e35604e9bbcab7b6c060307/
->        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/98bbb53c0fa8bedf52e8f4507e4b00e631470c25/
->          arm |                     bwm-ng-0.6 | NOK | http://autobuild.buildroot.net/results/d8302a0e1f8a6cac9d91d7bff339cc901b31d46e/
->          arm |                     bwm-ng-0.6 | NOK | http://autobuild.buildroot.net/results/3eb488068c167f3f1c009036c659b6ee6a9535ed/
->          arm |                     bwm-ng-0.6 | NOK | http://autobuild.buildroot.net/results/e27ad662a2ca1f0482151d5136695105bd5b9e7d/
->          arm |                     bwm-ng-0.6 | NOK | http://autobuild.buildroot.net/results/c78b6bc6c4a57046eeb87ab4d75ec7fb9c1a7f5e/
->         i686 |           c-icap-modules-0.3.2 | NOK | http://autobuild.buildroot.net/results/2a07d48d638f20b9fb58923c37f7c44d4e4b72d5/
->      powerpc |           c-icap-modules-0.3.2 | NOK | http://autobuild.buildroot.net/results/f66f128a05e80c5f4d072d019569b849615d94e6/
->          arm |           c-icap-modules-0.3.2 | NOK | http://autobuild.buildroot.net/results/aa8988bb5f36491ce58681a52a11441353eb4dad/
->          arm |             c-periphery-v1.0.3 | NOK | http://autobuild.buildroot.net/results/d659568db814cec9f21e591c49cfb64f73796748/
->          arm |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/51dfa189ed674418c44acc601a200558bb58926f/
->          arc |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/b00dfcbeab9cbf68bda5069a28d7ed000fbceebb/
->         i686 |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/182424bd2fea36af95eea31f7dd53f0399433616/
->          arm |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/58d3d2605337fe1ce49d333cb712941711276100/
->       x86_64 |                     cramfs-1.1 | NOK | http://autobuild.buildroot.net/results/e89e2582a426e1838808e9469d043c969396dbf2/
->          arm |                  empty-0.6.19b | NOK | http://autobuild.buildroot.net/results/4f543f140261d294fa641be0aa9174fd5334c17c/
->          arm |                  empty-0.6.19b | NOK | http://autobuild.buildroot.net/results/25127b72321c3cdf778afda1f4e99fc622281705/
->          arm |              exfat-utils-1.1.1 | NOK | http://autobuild.buildroot.net/results/c60d0f9a93c90d41c3c86c78b0a07ddfed22c56d/
->     mips64el |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/69cb66c6c4ff832b66437ab80cd6de3f60485ea1/
->       x86_64 |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/06321f6baddfa0461285fd22511b64c8503d2ed0/
->        nios2 |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/b96d2aa7829acab2a186e4840d25b7e9e50769f5/
->          arm |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/de29c661333c8c7a225b46aab999424beb59894a/
->       xtensa |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/903704fa469dcea5f59a62bbf3c7f838dd2a749c/
->     mips64el |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/74f59a99a00fba119f31c1687a0e78f430767d2a/
->      aarch64 |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/9ad5bbc1c5b1d172e531f05dade9cc56f59bb352/
->     mips64el |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/dad954767a4baa358c01613616bc4f599c03dac3/
->         sh4a |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/8539102de9c70cf685f85c3d073858c3115c7eab/
->          arm |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/a79ccae103414336adff2f20a240e5e63d4e1cec/
->          arm |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/422dbe84d1c7021e7c8b8e61592fe69329a2769e/
->          arm |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/53719b9197532ceafba6da0502523895d687e993/
->       xtensa |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/7f266945274b0fbc39c9a97c0de4cc1e5fd00e61/
->          arm |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/10cefc8c3725350ea1ba0d40391488cfeb839e5d/
->      aarch64 |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/3f983bb0eacc2453b123b06241ddfe2b8ab29f03/
->       xtensa |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/428336d214fefb633ef187824181a5c7b0238971/
->      powerpc |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/0e16204e8e91a7a0e3cfc55a1d7f7ab6e28efdb2/
->          arm |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/bc99b0121562b2a5f4bcd9902820e6b976af54f1/
->     mips64el |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/a96ca16911fc3f53fcfd9bfa1d90a5a3c45531c3/
-> microblazeel |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/3289b1b460664af5f10ce1c2b5d398b4514fe6d7/
->       xtensa |                   fan-ctrl-1.3 | NOK | http://autobuild.buildroot.net/results/ed7bdbf9b9eed593900df7b8fd0df66edcb08bdf/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/0de880719c243d49b05705aceae7ec0007d0193c/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/62811726f4a1a993c84ea6787a150f6a35ad305a/
->       mipsel |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/525659097f8517e14ced5878c8820459bd25ccf7/
->         mips |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/da03fb5741fb2235aadb021ab919f08abb118b17/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/09f669cb892d55256c38c6da5fd79dd8972e36dd/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/5903d6dbd0e0b64b5ef879445f552229f3c2d263/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/ba604b7543c654003dd04b40f0de768d2480c68f/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/6460a7c4a19f71684f50ad66d7cd57561fe963db/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/bdebcecc4de764afdb22f34f1a31490608a0492d/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/dae417dc1d585b1386effd87c9a71f460633177c/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/2e3594f6ce2ce722e7c4330656fddd8094d52a51/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/9e164507ffb4282b7b3e79a2bd8e8a1fa4350679/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/c7bc81ecd1fc125eb741b2e15c5a4db862c2a976/
->       mipsel |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/bda2df7a0466ec2769e22d6913b9a4af51139088/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/b9107d34fd8d5d15018f5f7316737cc047f70bb4/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/da87b7fa8689a18798a229a988c4cd9268c7c54c/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/12286b94d9f90297da46e6f2a9744d4e7279e500/
->     mips64el |                   ffmpeg-2.7.1 | NOK | http://autobuild.buildroot.net/results/7c80764d1e1004022bd02953a47cc1b391b35ffd/
->          arm | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/ba8e353e23c693eb7e2f7a2263e320d882840425/
->       x86_64 |                 grantlee-0.5.1 | NOK | http://autobuild.buildroot.net/results/4b1dac8443511a27678729e067c1dec3966820b6/
->          arm |                harfbuzz-0.9.41 | NOK | http://autobuild.buildroot.net/results/d81fe547227ffcbd270f2a00beb572755ab668f6/
->          arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/d475f6d7960d8eb774d35d238c46bf1a7128c791/
->          arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/d4ae8c5e824de02801337bd856fa62a308456ef3/
->      powerpc |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/8617c4791b4c8b29423dc2fe0067c4751069a748/
->      powerpc |            host-heimdal-1.6rc2 | NOK | http://autobuild.buildroot.net/results/a07198b3f7f8029d80863a998814877ec9994c60/
->      powerpc |            host-heimdal-1.6rc2 | NOK | http://autobuild.buildroot.net/results/a6d22f80938fa19933940a19664c2354e01a871f/
->      aarch64 |            host-heimdal-1.6rc2 | NOK | http://autobuild.buildroot.net/results/cd15555cf90dddacdbf9599313e6e0a118049b38/
->       x86_64 |             host-nodejs-0.12.7 | NOK | http://autobuild.buildroot.net/results/2ee123ec8773bbcc6ef7ecd3f0b8050547a3340e/
->      powerpc |                 iproute2-4.1.1 | NOK | http://autobuild.buildroot.net/results/5c15e180973425a742629e9e8d0a56e1913d8c03/
+Hi all,
+I have compiled latest stable buildroot for SAMA5D3 (config attached) I booted to new root and sshd and some programs 
+crash in illegal instruction opcode.
 
-I've tried to compile iproute2 against musl (ARM am335x) and got lots
-of redefine errors (see my post to the netdev list:
-http://marc.info/?l=linux-netdev&m=143751125805494&w=2). Any idea?
+[b6d65cbc] close(3)                     = 0 
 
->          arm |                kodi-14.2-Helix | NOK | http://autobuild.buildroot.net/results/1eefd8e23d8e1b4374c79201b4c631603372d431/
->       x86_64 |                 libedje-1.7.10 | NOK | http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
->      aarch64 |                  libepoxy-v1.2 | NOK | http://autobuild.buildroot.net/results/4b91baf853bd5d5aa416e9dc11fda2ce27723d12/
->     mips64el |                  libepoxy-v1.2 | NOK | http://autobuild.buildroot.net/results/ef338817d476802b585d6272cf15c8a96d9614a6/
->      powerpc |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/4d8c76b1fcd9e4267d202a6c62358fc641761228/
->       x86_64 |                   libftdi-0.20 | NOK | http://autobuild.buildroot.net/results/4d0009cf6f5b294d2246286e1383f663a4215648/
->        sparc |                libglib2-2.44.1 | NOK | http://autobuild.buildroot.net/results/530bd5b0c9a46c9d4aea249bb308b116806c43a4/
->        sparc |                libglib2-2.44.1 | NOK | http://autobuild.buildroot.net/results/20f10276ee40cac4dda38904f784e72f479a5264/
->        sparc |                libglib2-2.44.1 | NOK | http://autobuild.buildroot.net/results/908f7cd2434bc4235683c8cce079b839b783764a/
->          arm |                     libiio-0.5 | NOK | http://autobuild.buildroot.net/results/5b0d02aa3bdb4cddb0d316c99fada2e7ba9f9c1d/
->          arc |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/f08644d1ff3e769a86c4f8a3b60e40abb5f0a64e/
->          arc |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/4848ead8ccf4fb7b0ff582c0fac94ce9b00fd341/
->          arc |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/196b28f2ecf12a03390c806b5f4e9f34577998b7/
->          arc |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/71ee8b5b2dce1d9f096c3667cd59eaf4a3b9af2b/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/f02e721e1812d03b5990884aa8f8ff09dd88272c/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/bf17b998dcdb81f37776765ca200e0e5c344bada/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/1b38f55602c7aff2afae6f2588e0a8f04b80b09d/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/b7d703cf97345463af373217fb90e076bb3dbeb6/
->          arm |                 libtirpc-0.3.1 | NOK | http://autobuild.buildroot.net/results/9bdd9a8514a297a07bfef341b4545080e7798201/
->          arm |                 libtirpc-0.3.1 | NOK | http://autobuild.buildroot.net/results/55223f7c75e3ab21bb43af18594a5d28f02b7d30/
->       x86_64 |                 libtirpc-0.3.1 | NOK | http://autobuild.buildroot.net/results/7420ea57d0659ec308c0f102d496f02ed0e4d640/
->          arm |                 libtirpc-0.3.1 | NOK | http://autobuild.buildroot.net/results/aa6eecb7d86c63bf79c795a2d121f300ecb05baf/
->          arm |                linux-pam-1.1.8 | NOK | http://autobuild.buildroot.net/results/848f6223e1634921f36056c1d468a1d5faf5777b/
->          arm |               lirc-tools-0.9.2 | NOK | http://autobuild.buildroot.net/results/96ce76ea8952958ac233d904a33413dc3ddff156/
->          arm |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/4422287dfd556546eca59096391baf99084f98d4/
->          arm |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/2e6bfa64b356e4e9170398bc360d989f647b25e6/
->          arm |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/25536df514477f3210caf4af27f2f107683f7fb2/
->          arm |                mongrel2-v1.9.1 | NOK | http://autobuild.buildroot.net/results/29a3c06653c95cf238fe5abc051270a6b6c4bd5b/
->          arm |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/5e11117048d965bc1fc44c738bb51f11164304af/
->      powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/aa008f6ea8efede4d760fe86b8b91a55471eaa37/
->          arm |                  netperf-2.6.0 | NOK | http://autobuild.buildroot.net/results/077714a0ee67057abcff680b244228a409243bbf/
->          sh4 |                   opencv-3.0.0 | NOK | http://autobuild.buildroot.net/results/f89a80c90b4e8bbd910aebc1a1495a9e55b243dc/
->       xtensa |                   opencv-3.0.0 | NOK | http://autobuild.buildroot.net/results/dd384fe0ef02a4205bea66a4a16ca2062afe53b4/
->       x86_64 |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/0a9e2c887c91197089d53754b3ca6726adebe68b/
->         i686 |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/5b1f72208acf79dfe4164df25f039027e3556671/
->          arm |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/ee4d7c54c4b1bd08d11b1c5eb10d5fa759e9c9c1/
->      powerpc |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/4347eed5c460df0771b581d70f0067b72cb42fd3/
->         i686 |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/6b6a7d8e45ee7f0ae4682567b3983590aea9ee10/
->          arm |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/b2ec60e783345419c4cc688af1cdcc5270debc57/
->       xtensa |                openipmi-2.0.21 | NOK | http://autobuild.buildroot.net/results/aba106a1b74161c8e9c741180e79ecf437702371/
->         i686 |                  openssh-6.9p1 | NOK | http://autobuild.buildroot.net/results/dce0202e039f4636d68532c4aab8738938b76650/
->       xtensa |              qpid-proton-0.9.1 | NOK | http://autobuild.buildroot.net/results/a15c8b5cf90935e42d4605f7f95ff1814c94254c/
->      powerpc |              qpid-proton-0.9.1 | NOK | http://autobuild.buildroot.net/results/f444ab04da5423db032bc12824da5f577156e957/
->         bfin |              qpid-proton-0.9.1 | NOK | http://autobuild.buildroot.net/results/bf6b9bcc0cead87c8fb12ec4c7f5ff73e6d61d3f/
->         bfin |              qpid-proton-0.9.1 | NOK | http://autobuild.buildroot.net/results/881f1e09ad3ba0c62f04349764446d4436a28781/
->     mips64el |                  qt5base-5.4.1 | NOK | http://autobuild.buildroot.net/results/cddcc7413680a8e9ec5c1862eb0bbac431bc5961/
->     mips64el |                  qt5base-5.4.1 | NOK | http://autobuild.buildroot.net/results/272b4acf7dea6de07d24dda4e23e41b412ffc8c6/
->     mips64el |                  qt5base-5.4.1 | NOK | http://autobuild.buildroot.net/results/a605608b723993352016d2aa6ae0e1b4aa03c0dd/
->         i686 |                qt5webkit-5.4.1 | NOK | http://autobuild.buildroot.net/results/06ca186eb9be52b455806d9e965a95c1f6197790/
->         i686 |                qt5webkit-5.4.1 | NOK | http://autobuild.buildroot.net/results/87e378800a2045f2768a912db28e630088da6f56/
->        nios2 |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/e67ef47ea9ff4cbb012d374b3b290fb7bddf7ef3/
->         bfin |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/2ee84c0dc027912e059ca4ae518d6f11fd8317a7/
->         bfin |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/401e4c48f4d865b2722f284f1038e25c5d420f43/
->          arc |                   snmppp-3.3.5 | NOK | http://autobuild.buildroot.net/results/ff7cbcbb32dc46bfd008241da4113f79cf440e97/
->          arm | socketcand-8339e62a6bf60be5... | NOK | http://autobuild.buildroot.net/results/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
->          arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/5c310f4d8ffebca048074660de6707a8fc598778/
->         bfin |           usb_modeswitch-2.2.5 | NOK | http://autobuild.buildroot.net/results/7417400bf7ce37d2c37e36b5ed31b2dc3e6cf382/
->         bfin |           usb_modeswitch-2.2.5 | NOK | http://autobuild.buildroot.net/results/05c9e0504af6a6630890f0cff8fdb0033f8b41ff/
->         bfin |           usb_modeswitch-2.2.5 | NOK | http://autobuild.buildroot.net/results/1f1daec5e7547fd7a1739ce43269110ccf2a5224/
->         bfin |           usb_modeswitch-2.2.5 | NOK | http://autobuild.buildroot.net/results/3103c9028269a20aa6c53159a48f198e81c90303/
->          arm |           usb_modeswitch-2.2.5 | NOK | http://autobuild.buildroot.net/results/55beb7af1392cd2bedddee01edde83ce1bbcac6a/
->          arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/0e114a9b6289cbced6be94a218383fb012284853/
->          arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/c7fc621245351eb31afab1b96d3f1f2e6ad0bfad/
->       x86_64 |                   weston-1.8.0 | NOK | http://autobuild.buildroot.net/results/77501a806fb5f147912e70935b53c9c0a4cb1e74/
->      aarch64 | x264-c8a773ebfca148ef04f5a6... | NOK | http://autobuild.buildroot.net/results/474aabb69017c2283daf5cdd83cbd050c1b5023f/
->          arc |                   zeromq-4.0.5 | NOK | http://autobuild.buildroot.net/results/9ba4de85136e9ac4a68dcb7ee4285e03168d4a15/
->
->
-> --
-> http://autobuild.buildroot.net
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[b6d33584] getuid32()                   = 0 
+
+[b6d36c7c] open("/dev/urandom", O_RDONLY|O_NOCTTY|O_NONBLOCK|O_LARGEFILE) = 3 
+
+[b6d36a0c] fstat64(3, {st_mode=S_IFCHR|0666, st_rdev=makedev(1, 9), ...}) = 0 
+
+[b6d32d58] poll([{fd=3, events=POLLIN}], 1, 10) = 1 ([{fd=3, revents=POLLIN}]) 
+
+[b6d65e6c] read(3, "\364>\236\35\312LB\236\262\310_\333\322\267\204)\354\233\252\254\273~f\304Q\vx$\354\365\325\35", 32) 
+= 32
+[b6d65cbc] close(3)                     = 0 
+
+[b6e9097c] --- SIGILL {si_signo=SIGILL, si_code=ILL_ILLOPC, si_addr=0xb6e9097c} --- 
+
+[????????] +++ killed by SIGILL +++ 
+
+Illegal instruction
+
+
+strace of sshd running. There is my config. I tried  compile with gcc 4.7,4.8 define and undefine THUMB2 disable NEON. 
+But nothing helps. Can anybody give me small advice ?
+
+Regards
+		Dan
+
+
+
+
+-- 
+Mydatex s r.o.
+http://www.mydatex.cz
+email: smolik at mydatex.cz
+mob: 604200362
+tel: 226210085
+-------------- next part --------------
+#
+# Automatically generated file; DO NOT EDIT.
+# Buildroot 2015.05 Configuration
+#
+BR2_HAVE_DOT_CONFIG=y
+
+#
+# Target options
+#
+# BR2_arcle is not set
+# BR2_arceb is not set
+BR2_arm=y
+# BR2_armeb is not set
+# BR2_aarch64 is not set
+# BR2_bfin is not set
+# BR2_i386 is not set
+# BR2_microblazeel is not set
+# BR2_microblazebe is not set
+# BR2_mips is not set
+# BR2_mipsel is not set
+# BR2_mips64 is not set
+# BR2_mips64el is not set
+# BR2_nios2 is not set
+# BR2_powerpc is not set
+# BR2_powerpc64 is not set
+# BR2_powerpc64le is not set
+# BR2_sh is not set
+# BR2_sparc is not set
+# BR2_x86_64 is not set
+# BR2_xtensa is not set
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ABI="aapcs-linux"
+BR2_GCC_TARGET_CPU="cortex-a5"
+BR2_GCC_TARGET_FPU="vfpv4-d16"
+BR2_GCC_TARGET_FLOAT_ABI="hard"
+BR2_GCC_TARGET_MODE="arm"
+BR2_ARCH_HAS_ATOMICS=y
+BR2_BINFMT_SUPPORTS_SHARED=y
+BR2_BINFMT_ELF=y
+BR2_ARM_CPU_MAYBE_HAS_NEON=y
+BR2_ARM_CPU_MAYBE_HAS_VFPV2=y
+BR2_ARM_CPU_MAYBE_HAS_VFPV3=y
+BR2_ARM_CPU_MAYBE_HAS_VFPV4=y
+BR2_ARM_CPU_HAS_ARM=y
+BR2_ARM_CPU_HAS_THUMB2=y
+BR2_ARM_CPU_ARMV7A=y
+# BR2_arm920t is not set
+# BR2_arm922t is not set
+# BR2_arm926t is not set
+# BR2_arm1136jf_s is not set
+# BR2_arm1176jz_s is not set
+# BR2_arm1176jzf_s is not set
+BR2_cortex_a5=y
+# BR2_cortex_a7 is not set
+# BR2_cortex_a8 is not set
+# BR2_cortex_a9 is not set
+# BR2_cortex_a12 is not set
+# BR2_cortex_a15 is not set
+# BR2_fa526 is not set
+# BR2_pj4 is not set
+# BR2_strongarm is not set
+# BR2_xscale is not set
+# BR2_iwmmxt is not set
+# BR2_ARM_EABI is not set
+BR2_ARM_EABIHF=y
+# BR2_ARM_ENABLE_NEON is not set
+# BR2_ARM_FPU_VFPV2 is not set
+# BR2_ARM_FPU_VFPV3 is not set
+# BR2_ARM_FPU_VFPV3D16 is not set
+# BR2_ARM_FPU_VFPV4 is not set
+BR2_ARM_FPU_VFPV4D16=y
+BR2_ARM_INSTRUCTIONS_ARM=y
+# BR2_ARM_INSTRUCTIONS_THUMB2 is not set
+
+#
+# Build options
+#
+
+#
+# Commands
+#
+BR2_WGET="wget --passive-ftp -nd -t 3"
+BR2_SVN="svn"
+BR2_BZR="bzr"
+BR2_GIT="git"
+BR2_CVS="cvs"
+BR2_LOCALFILES="cp"
+BR2_SCP="scp"
+BR2_SSH="ssh"
+BR2_HG="hg"
+BR2_ZCAT="gzip -d -c"
+BR2_BZCAT="bzcat"
+BR2_XZCAT="xzcat"
+BR2_TAR_OPTIONS=""
+BR2_DEFCONFIG="$(CONFIG_DIR)/defconfig"
+BR2_DL_DIR="$(TOPDIR)/dl"
+BR2_HOST_DIR="$(BASE_DIR)/host"
+
+#
+# Mirrors and Download locations
+#
+BR2_PRIMARY_SITE=""
+BR2_BACKUP_SITE="http://sources.buildroot.net"
+BR2_KERNEL_MIRROR="https://www.kernel.org/pub"
+BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
+BR2_LUAROCKS_MIRROR="http://rocks.moonscript.org"
+BR2_CPAN_MIRROR="http://cpan.metacpan.org"
+BR2_JLEVEL=0
+# BR2_CCACHE is not set
+# BR2_DEPRECATED is not set
+# BR2_ENABLE_DEBUG is not set
+BR2_STRIP_strip=y
+# BR2_STRIP_none is not set
+BR2_STRIP_EXCLUDE_FILES=""
+BR2_STRIP_EXCLUDE_DIRS=""
+# BR2_OPTIMIZE_0 is not set
+# BR2_OPTIMIZE_1 is not set
+# BR2_OPTIMIZE_2 is not set
+# BR2_OPTIMIZE_3 is not set
+BR2_OPTIMIZE_S=y
+
+#
+# enabling Stack Smashing Protection requires support in the toolchain
+#
+# BR2_STATIC_LIBS is not set
+BR2_SHARED_LIBS=y
+# BR2_SHARED_STATIC_LIBS is not set
+BR2_PACKAGE_OVERRIDE_FILE="$(CONFIG_DIR)/local.mk"
+BR2_GLOBAL_PATCH_DIR=""
+
+#
+# Advanced
+#
+# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
+
+#
+# Toolchain
+#
+BR2_TOOLCHAIN=y
+BR2_TOOLCHAIN_USES_UCLIBC=y
+BR2_TOOLCHAIN_BUILDROOT=y
+# BR2_TOOLCHAIN_EXTERNAL is not set
+BR2_TOOLCHAIN_BUILDROOT_VENDOR="buildroot"
+
+#
+# Kernel Header Options
+#
+# BR2_KERNEL_HEADERS_3_2 is not set
+# BR2_KERNEL_HEADERS_3_4 is not set
+# BR2_KERNEL_HEADERS_3_10 is not set
+# BR2_KERNEL_HEADERS_3_12 is not set
+# BR2_KERNEL_HEADERS_3_14 is not set
+# BR2_KERNEL_HEADERS_3_18 is not set
+# BR2_KERNEL_HEADERS_3_19 is not set
+BR2_KERNEL_HEADERS_4_0=y
+# BR2_KERNEL_HEADERS_VERSION is not set
+BR2_DEFAULT_KERNEL_HEADERS="4.0.4"
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+# BR2_TOOLCHAIN_BUILDROOT_EGLIBC is not set
+# BR2_TOOLCHAIN_BUILDROOT_GLIBC is not set
+# BR2_TOOLCHAIN_BUILDROOT_MUSL is not set
+BR2_TOOLCHAIN_BUILDROOT_LIBC="uclibc"
+BR2_PACKAGE_UCLIBC=y
+
+#
+# uClibc Options
+#
+BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS=y
+BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD=y
+BR2_UCLIBC_VERSION_SUPPORTS_NPTL=y
+BR2_UCLIBC_VERSION_0_9_33=y
+# BR2_UCLIBC_VERSION_NG is not set
+# BR2_UCLIBC_VERSION_SNAPSHOT is not set
+BR2_UCLIBC_VERSION_STRING="0.9.33.2"
+BR2_UCLIBC_CONFIG="package/uclibc/uClibc-0.9.33.config"
+# BR2_TOOLCHAIN_BUILDROOT_INET_RPC is not set
+# BR2_TOOLCHAIN_BUILDROOT_WCHAR is not set
+# BR2_TOOLCHAIN_BUILDROOT_LOCALE is not set
+# BR2_PTHREADS_NONE is not set
+# BR2_PTHREADS is not set
+# BR2_PTHREADS_OLD is not set
+BR2_PTHREADS_NATIVE=y
+# BR2_PTHREAD_DEBUG is not set
+# BR2_TOOLCHAIN_BUILDROOT_USE_SSP is not set
+BR2_UCLIBC_INSTALL_UTILS=y
+# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
+BR2_UCLIBC_TARGET_ARCH="arm"
+BR2_UCLIBC_ARM_BX=y
+
+#
+# Binutils Options
+#
+# BR2_BINUTILS_VERSION_2_22 is not set
+# BR2_BINUTILS_VERSION_2_23_2 is not set
+BR2_BINUTILS_VERSION_2_24=y
+# BR2_BINUTILS_VERSION_2_25 is not set
+BR2_BINUTILS_VERSION="2.24"
+BR2_BINUTILS_EXTRA_CONFIG_OPTIONS=""
+
+#
+# GCC Options
+#
+BR2_GCC_NEEDS_MPC=y
+BR2_GCC_SUPPORTS_GRAPHITE=y
+# BR2_GCC_VERSION_4_7_X is not set
+BR2_GCC_VERSION_4_8_X=y
+# BR2_GCC_VERSION_4_9_X is not set
+BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
+BR2_GCC_VERSION="4.8.4"
+BR2_EXTRA_GCC_CONFIG_OPTIONS=""
+# BR2_TOOLCHAIN_BUILDROOT_CXX is not set
+BR2_GCC_ENABLE_TLS=y
+# BR2_GCC_ENABLE_LTO is not set
+# BR2_GCC_ENABLE_OPENMP is not set
+# BR2_GCC_ENABLE_LIBMUDFLAP is not set
+# BR2_GCC_ENABLE_GRAPHITE is not set
+# BR2_PACKAGE_HOST_GDB is not set
+BR2_TOOLCHAIN_HAS_THREADS=y
+BR2_TOOLCHAIN_HAS_THREADS_NPTL=y
+BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS=y
+# BR2_ENABLE_LOCALE_PURGE is not set
+BR2_NEEDS_GETTEXT=y
+BR2_USE_MMU=y
+BR2_TARGET_OPTIMIZATION=""
+BR2_TARGET_LDFLAGS=""
+# BR2_ECLIPSE_REGISTER is not set
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST="4.0"
+
+#
+# System configuration
+#
+BR2_TARGET_GENERIC_HOSTNAME="buildroot"
+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot"
+BR2_TARGET_GENERIC_PASSWD_MD5=y
+# BR2_TARGET_GENERIC_PASSWD_SHA256 is not set
+# BR2_TARGET_GENERIC_PASSWD_SHA512 is not set
+BR2_TARGET_GENERIC_PASSWD_METHOD="md5"
+BR2_INIT_BUSYBOX=y
+# BR2_INIT_SYSV is not set
+
+#
+# systemd needs an (e)glibc toolchain, headers >= 3.10
+#
+# BR2_INIT_NONE is not set
+# BR2_ROOTFS_DEVICE_CREATION_STATIC is not set
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is not set
+
+#
+# eudev needs a toolchain w/ wchar, dynamic library
+#
+BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt"
+BR2_ROOTFS_SKELETON_DEFAULT=y
+# BR2_ROOTFS_SKELETON_CUSTOM is not set
+BR2_TARGET_GENERIC_ROOT_PASSWD="dasoft"
+BR2_SYSTEM_BIN_SH_BUSYBOX=y
+
+#
+# bash, dash, zsh need BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+#
+# BR2_SYSTEM_BIN_SH_NONE is not set
+BR2_SYSTEM_BIN_SH="/bin/busybox"
+BR2_TARGET_GENERIC_GETTY=y
+
+#
+# getty options
+#
+BR2_TARGET_GENERIC_GETTY_PORT="console"
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP=y
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600 is not set
+# BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200 is not set
+BR2_TARGET_GENERIC_GETTY_BAUDRATE="0"
+BR2_TARGET_GENERIC_GETTY_TERM="vt100"
+BR2_TARGET_GENERIC_GETTY_OPTIONS=""
+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
+BR2_SYSTEM_DHCP=""
+# BR2_TARGET_TZ_INFO is not set
+BR2_ROOTFS_USERS_TABLES=""
+BR2_ROOTFS_OVERLAY=""
+BR2_ROOTFS_POST_BUILD_SCRIPT=""
+BR2_ROOTFS_POST_IMAGE_SCRIPT=""
+
+#
+# Kernel
+#
+# BR2_LINUX_KERNEL is not set
+
+#
+# Target packages
+#
+BR2_PACKAGE_BUSYBOX=y
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox.config"
+# BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is not set
+BR2_PACKAGE_BUSYBOX_WATCHDOG=y
+BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD="5"
+
+#
+# Audio and video applications
+#
+# BR2_PACKAGE_ALSA_UTILS is not set
+# BR2_PACKAGE_AUMIX is not set
+
+#
+# bellagio needs a toolchain w/ C++, threads, dynamic library
+#
+# BR2_PACKAGE_DVDAUTHOR is not set
+
+#
+# dvdrw-tools needs a toolchain w/ threads, C++, wchar
+#
+
+#
+# espeak needs a toolchain w/ C++, wchar, threads, dynamic library
+#
+# BR2_PACKAGE_FAAD2 is not set
+# BR2_PACKAGE_FFMPEG is not set
+
+#
+# flac needs a toolchain w/ wchar
+#
+
+#
+# flite needs a toolchain w/ wchar
+#
+
+#
+# gstreamer 0.10 needs a toolchain w/ wchar, threads
+#
+
+#
+# gstreamer 1.x needs a toolchain w/ wchar, threads
+#
+
+#
+# jack2 needs a toolchain w/ threads, C++, dynamic library
+#
+BR2_PACKAGE_KODI_ARCH_SUPPORTS=y
+
+#
+# kodi needs a toolchain w/ C++, threads, wchar
+#
+
+#
+# kodi requires an OpenGL ES and EGL backend
+#
+# BR2_PACKAGE_LAME is not set
+# BR2_PACKAGE_LIBVPX is not set
+# BR2_PACKAGE_MADPLAY is not set
+
+#
+# mjpegtools needs a toolchain w/ C++, threads
+#
+
+#
+# modplugtools needs a toolchain w/ C++
+#
+
+#
+# mpd needs a toolchain w/ C++, threads, wchar
+#
+# BR2_PACKAGE_MPD_MPC is not set
+# BR2_PACKAGE_MPG123 is not set
+BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS=y
+# BR2_PACKAGE_MPLAYER is not set
+# BR2_PACKAGE_MUSEPACK is not set
+
+#
+# ncmpc needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_OPUS_TOOLS is not set
+
+#
+# pulseaudio needs a toolchain w/ wchar, threads, dynamic library
+#
+# BR2_PACKAGE_SOX is not set
+
+#
+# tovid needs a toolchain w/ threads, C++, wchar
+#
+
+#
+# tovid depends on python or python3
+#
+# BR2_PACKAGE_TSTOOLS is not set
+# BR2_PACKAGE_TWOLAME is not set
+
+#
+# upmpdcli needs a toolchain w/ C++, threads
+#
+
+#
+# vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7
+#
+# BR2_PACKAGE_VORBIS_TOOLS is not set
+# BR2_PACKAGE_WAVPACK is not set
+# BR2_PACKAGE_YAVTA is not set
+# BR2_PACKAGE_YMPD is not set
+
+#
+# Compressors and decompressors
+#
+BR2_PACKAGE_BZIP2=y
+# BR2_PACKAGE_INFOZIP is not set
+# BR2_PACKAGE_LZ4 is not set
+
+#
+# lzip needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LZOP is not set
+# BR2_PACKAGE_XZ is not set
+
+#
+# Debugging, profiling and benchmark
+#
+
+#
+# blktrace needs a (e)glibc or musl toolchain
+#
+
+#
+# bonnie++ needs a toolchain w/ C++
+#
+# BR2_PACKAGE_CACHE_CALIBRATOR is not set
+# BR2_PACKAGE_DHRYSTONE is not set
+# BR2_PACKAGE_DMALLOC is not set
+
+#
+# dropwatch needs a toolchain w/ threads, wchar
+#
+
+#
+# dstat needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# duma needs a toolchain w/ C++, threads, dynamic library
+#
+# BR2_PACKAGE_FIO is not set
+
+#
+# gdb/gdbserver needs a toolchain w/ threads, threads debug
+#
+BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS=y
+
+#
+# google-breakpad requires an (e)glibc toolchain w/ C++ enabled
+#
+# BR2_PACKAGE_IOZONE is not set
+# BR2_PACKAGE_KEXEC is not set
+
+#
+# ktap needs a Linux kernel to be built
+#
+
+#
+# latencytop needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LMBENCH is not set
+
+#
+# ltp-testsuite needs a toolchain w/ RPC, threads
+#
+
+#
+# ltrace needs toolchain w/ wchar, dynamic library
+#
+
+#
+# lttng-babeltrace needs a uclibc snapshot or (e)glib toolchain w/ wchar, threads
+#
+
+#
+# lttng-modules needs a Linux kernel to be built
+#
+
+#
+# lttng-tools needs a toolchain w/ threads, wchar
+#
+# BR2_PACKAGE_MEMSTAT is not set
+# BR2_PACKAGE_NETPERF is not set
+
+#
+# oprofile needs a toolchain w/ C++, wchar
+#
+# BR2_PACKAGE_PAX_UTILS is not set
+
+#
+# perf needs a Linux kernel to be built
+#
+# BR2_PACKAGE_PV is not set
+# BR2_PACKAGE_RAMSMP is not set
+# BR2_PACKAGE_RAMSPEED is not set
+# BR2_PACKAGE_RT_TESTS is not set
+# BR2_PACKAGE_SPIDEV_TEST is not set
+BR2_PACKAGE_STRACE=y
+# BR2_PACKAGE_STRESS is not set
+
+#
+# sysdig needs a toolchain w/ C++ and a Linux kernel to be built
+#
+# BR2_PACKAGE_TINYMEMBENCH is not set
+# BR2_PACKAGE_TRACE_CMD is not set
+# BR2_PACKAGE_TRINITY is not set
+# BR2_PACKAGE_VALGRIND is not set
+# BR2_PACKAGE_WHETSTONE is not set
+
+#
+# Development tools
+#
+
+#
+# binutils needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_BSDIFF is not set
+BR2_PACKAGE_CMAKE_ARCH_SUPPORTS=y
+
+#
+# ctest needs a toolchain w/ C++, wchar, dynamic library
+#
+
+#
+# cppunit needs a toolchain w/ C++, dynamic library
+#
+
+#
+# cvs needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_FLEX is not set
+
+#
+# gettext needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_GIT is not set
+
+#
+# gperf needs a toolchain w/ C++
+#
+# BR2_PACKAGE_JQ is not set
+BR2_PACKAGE_LIBTOOL=y
+# BR2_PACKAGE_MAKE is not set
+# BR2_PACKAGE_PKGCONF is not set
+# BR2_PACKAGE_SSTRIP is not set
+# BR2_PACKAGE_SUBVERSION is not set
+
+#
+# tree needs a toolchain w/ wchar
+#
+
+#
+# Filesystem and flash utilities
+#
+
+#
+# btrfs-progs needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_CIFS_UTILS is not set
+BR2_PACKAGE_CRAMFS=y
+
+#
+# curlftpfs needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# dosfstools needs a toolchain w/ wchar
+#
+
+#
+# e2fsprogs needs a toolchain w/ wchar
+#
+
+#
+# e2tools needs a toolchain w/ threads, wchar
+#
+
+#
+# ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library
+#
+
+#
+# exfat needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# exfat-utils needs a toolchain w/ wchar
+#
+
+#
+# f2fs-tools needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_FLASHBENCH is not set
+BR2_PACKAGE_GENEXT2FS=y
+# BR2_PACKAGE_GENPART is not set
+# BR2_PACKAGE_GENROMFS is not set
+# BR2_PACKAGE_KOBS_NG is not set
+# BR2_PACKAGE_MAKEDEVS is not set
+# BR2_PACKAGE_MMC_UTILS is not set
+BR2_PACKAGE_MTD=y
+
+#
+# MTD tools selection
+#
+# BR2_PACKAGE_MTD_DOCFDISK is not set
+# BR2_PACKAGE_MTD_DOC_LOADBIOS is not set
+BR2_PACKAGE_MTD_FLASHCP=y
+BR2_PACKAGE_MTD_FLASH_ERASE=y
+BR2_PACKAGE_MTD_FLASH_LOCK=y
+# BR2_PACKAGE_MTD_FLASH_OTP_DUMP is not set
+# BR2_PACKAGE_MTD_FLASH_OTP_INFO is not set
+# BR2_PACKAGE_MTD_FLASH_OTP_LOCK is not set
+# BR2_PACKAGE_MTD_FLASH_OTP_WRITE is not set
+BR2_PACKAGE_MTD_FLASH_UNLOCK=y
+# BR2_PACKAGE_MTD_FTL_CHECK is not set
+BR2_PACKAGE_MTD_FTL_FORMAT=y
+BR2_PACKAGE_MTD_JFFS2DUMP=y
+BR2_PACKAGE_MTD_MKFSJFFS2=y
+
+#
+# mkfs.ubifs needs a toolchain w/ wchar
+#
+BR2_PACKAGE_MTD_MTD_DEBUG=y
+BR2_PACKAGE_MTD_NANDDUMP=y
+BR2_PACKAGE_MTD_NANDTEST=y
+BR2_PACKAGE_MTD_NANDWRITE=y
+# BR2_PACKAGE_MTD_NFTLDUMP is not set
+# BR2_PACKAGE_MTD_NFTL_FORMAT is not set
+# BR2_PACKAGE_MTD_RECV_IMAGE is not set
+# BR2_PACKAGE_MTD_RFDDUMP is not set
+# BR2_PACKAGE_MTD_RFDFORMAT is not set
+# BR2_PACKAGE_MTD_SERVE_IMAGE is not set
+# BR2_PACKAGE_MTD_SUMTOOL is not set
+BR2_PACKAGE_MTD_MTDINFO=y
+BR2_PACKAGE_MTD_UBIATTACH=y
+BR2_PACKAGE_MTD_UBICRC32=y
+BR2_PACKAGE_MTD_UBIDETACH=y
+BR2_PACKAGE_MTD_UBIFORMAT=y
+BR2_PACKAGE_MTD_UBIMKVOL=y
+BR2_PACKAGE_MTD_UBINFO=y
+BR2_PACKAGE_MTD_UBINIZE=y
+BR2_PACKAGE_MTD_UBIRENAME=y
+BR2_PACKAGE_MTD_UBIRMVOL=y
+BR2_PACKAGE_MTD_UBIRSVOL=y
+BR2_PACKAGE_MTD_UBIUPDATEVOL=y
+BR2_PACKAGE_MTD_UBIBLOCK=y
+
+#
+# mtools needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_NFS_UTILS is not set
+
+#
+# ntfs-3g needs a toolchain w/ wchar, threads
+#
+
+#
+# simicsfs needs a Linux kernel to be built
+#
+BR2_PACKAGE_SQUASHFS=y
+BR2_PACKAGE_SQUASHFS_GZIP=y
+# BR2_PACKAGE_SQUASHFS_LZ4 is not set
+# BR2_PACKAGE_SQUASHFS_LZMA is not set
+# BR2_PACKAGE_SQUASHFS_LZO is not set
+# BR2_PACKAGE_SQUASHFS_XZ is not set
+
+#
+# sshfs needs a toolchain w/ wchar, threads, dynamic library
+#
+# BR2_PACKAGE_SUNXI_TOOLS is not set
+# BR2_PACKAGE_UNIONFS is not set
+
+#
+# xfsprogs needs a toolchain w/ wchar
+#
+
+#
+# Fonts, icons, sounds and themes
+#
+
+#
+# Fonts
+#
+# BR2_PACKAGE_BITSTREAM_VERA is not set
+# BR2_PACKAGE_DEJAVU is not set
+# BR2_PACKAGE_GHOSTSCRIPT_FONTS is not set
+# BR2_PACKAGE_INCONSOLATA is not set
+# BR2_PACKAGE_LIBERATION is not set
+
+#
+# Icons
+#
+# BR2_PACKAGE_HICOLOR_ICON_THEME is not set
+
+#
+# Sounds
+#
+# BR2_PACKAGE_SOUND_THEME_BOREALIS is not set
+# BR2_PACKAGE_SOUND_THEME_FREEDESKTOP is not set
+
+#
+# Themes
+#
+
+#
+# Games
+#
+
+#
+# gnuchess needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_LBREAKOUT2 is not set
+# BR2_PACKAGE_LTRIS is not set
+# BR2_PACKAGE_OPENTYRIAN is not set
+# BR2_PACKAGE_PRBOOM is not set
+# BR2_PACKAGE_SL is not set
+
+#
+# Graphic libraries and applications (graphic/text)
+#
+
+#
+# Graphic applications
+#
+# BR2_PACKAGE_FSWEBCAM is not set
+
+#
+# glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d
+#
+
+#
+# glmark2 needs udev /dev management and a toolchain w/ C++, NPTL
+#
+# BR2_PACKAGE_GNUPLOT is not set
+
+#
+# jhead needs a toolchain w/ wchar
+#
+
+#
+# rrdtool needs a toolchain w/ wchar
+#
+
+#
+# Graphic libraries
+#
+
+#
+# cegui06 needs a toolchain w/ C++, threads, dynamic library
+#
+
+#
+# directfb needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_FBDUMP is not set
+# BR2_PACKAGE_FBGRAB is not set
+# BR2_PACKAGE_FB_TEST_APP is not set
+
+#
+# fbterm needs a toolchain w/ C++, wchar, locale
+#
+# BR2_PACKAGE_FBV is not set
+
+#
+# freerdp needs a toolchain w/ wchar, dynamic library, threads
+#
+# BR2_PACKAGE_IMAGEMAGICK is not set
+
+#
+# linux-fusion needs a Linux kernel to be built
+#
+
+#
+# mesa3d needs udev /dev management and a toolchain w/ C++, NPTL
+#
+
+#
+# ocrad needs a toolchain w/ C++
+#
+
+#
+# psplash needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_SDL is not set
+
+#
+# Other GUIs
+#
+
+#
+# EFL needs a toolchain w/ wchar
+#
+
+#
+# qt needs a toolchain w/ C++, threads
+#
+BR2_PACKAGE_QT5_JSCORE_AVAILABLE=y
+
+#
+# Qt5 needs a toolchain w/ wchar, NPTL, C++
+#
+
+#
+# weston needs udev and a toolchain w/ threads, dynamic library, headers >= 3.0
+#
+
+#
+# X.org needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# X applications
+#
+
+#
+# midori needs libgtk2 and a toolchain w/ C++, wchar, threads
+#
+
+#
+# X libraries and helper libraries
+#
+# BR2_PACKAGE_XKEYBOARD_CONFIG is not set
+
+#
+# X window managers
+#
+
+#
+# Hardware handling
+#
+
+#
+# Firmware
+#
+# BR2_PACKAGE_AM33X_CM3 is not set
+# BR2_PACKAGE_B43_FIRMWARE is not set
+# BR2_PACKAGE_LINUX_FIRMWARE is not set
+# BR2_PACKAGE_RPI_FIRMWARE is not set
+# BR2_PACKAGE_SUNXI_BOARDS is not set
+# BR2_PACKAGE_UX500_FIRMWARE is not set
+# BR2_PACKAGE_ZD1211_FIRMWARE is not set
+
+#
+# a10disp needs a Linux kernel to be built
+#
+# BR2_PACKAGE_AM335X_PRU_PACKAGE is not set
+
+#
+# avrdude needs a toolchain w/ threads, wchar, dynamic library
+#
+
+#
+# bcache-tools needs udev /dev management and a toolchain w/ wchar
+#
+
+#
+# cc-tool needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_CDRKIT is not set
+
+#
+# cryptsetup needs a toolchain w/ wchar, threads, dynamic library
+#
+# BR2_PACKAGE_DBUS is not set
+# BR2_PACKAGE_DMRAID is not set
+# BR2_PACKAGE_DTV_SCAN_TABLES is not set
+# BR2_PACKAGE_DVB_APPS is not set
+# BR2_PACKAGE_DVBSNOOP is not set
+BR2_PACKAGE_EEPROG=y
+
+#
+# eudev needs eudev /dev management
+#
+
+#
+# eudev needs a toolchain w/ wchar, dynamic library
+#
+# BR2_PACKAGE_EVEMU is not set
+# BR2_PACKAGE_EVTEST is not set
+# BR2_PACKAGE_FAN_CTRL is not set
+# BR2_PACKAGE_FCONFIG is not set
+# BR2_PACKAGE_FIS is not set
+# BR2_PACKAGE_FMTOOLS is not set
+# BR2_PACKAGE_FREESCALE_IMX is not set
+# BR2_PACKAGE_FXLOAD is not set
+# BR2_PACKAGE_GADGETFS_TEST is not set
+# BR2_PACKAGE_GPM is not set
+# BR2_PACKAGE_GPSD is not set
+
+#
+# gptfdisk needs a toolchain w/ wchar, C++
+#
+
+#
+# gvfs needs a toolchain w/ wchar, threads
+#
+BR2_PACKAGE_HWDATA=y
+# BR2_PACKAGE_HWLOC is not set
+BR2_PACKAGE_I2C_TOOLS=y
+# BR2_PACKAGE_INPUT_EVENT_DAEMON is not set
+# BR2_PACKAGE_INPUT_TOOLS is not set
+# BR2_PACKAGE_IOSTAT is not set
+# BR2_PACKAGE_IPMITOOL is not set
+# BR2_PACKAGE_IRDA_UTILS is not set
+# BR2_PACKAGE_KBD is not set
+# BR2_PACKAGE_LCDPROC is not set
+# BR2_PACKAGE_LIRC_TOOLS is not set
+BR2_PACKAGE_LM_SENSORS=y
+
+#
+# lm-sensors tools
+#
+BR2_PACKAGE_LM_SENSORS_SENSORS=y
+BR2_PACKAGE_LM_SENSORS_FANCONTROL=y
+# BR2_PACKAGE_LM_SENSORS_ISADUMP is not set
+# BR2_PACKAGE_LM_SENSORS_ISASET is not set
+BR2_PACKAGE_LM_SENSORS_PWMCONFIG=y
+
+#
+# sensors-detect needs perl
+#
+
+#
+# lshw needs a toolchain w/ C++, wchar
+#
+# BR2_PACKAGE_LSUIO is not set
+# BR2_PACKAGE_LVM2 is not set
+# BR2_PACKAGE_MDADM is not set
+# BR2_PACKAGE_MEDIA_CTL is not set
+# BR2_PACKAGE_MEMTESTER is not set
+
+#
+# minicom needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_NANOCOM is not set
+
+#
+# neard needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# ofono needs a toolchain w/ wchar, threads
+#
+
+#
+# ola needs a toolchain w/ C++, threads, wchar
+#
+# BR2_PACKAGE_OPEN2300 is not set
+# BR2_PACKAGE_OPENOCD is not set
+
+#
+# owl-linux needs a Linux kernel to be built
+#
+
+#
+# owl-linux is only supported on ARM9 architecture
+#
+
+#
+# parted needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_PCIUTILS is not set
+BR2_PACKAGE_PICOCOM=y
+# BR2_PACKAGE_PIFMRDS is not set
+
+#
+# powertop needs a toolchain w/ C++, threads, wchar
+#
+# BR2_PACKAGE_PPS_TOOLS is not set
+# BR2_PACKAGE_READ_EDID is not set
+# BR2_PACKAGE_RNG_TOOLS is not set
+
+#
+# rpi-userland needs a toolchain w/ C++, threads, dynamic library
+#
+# BR2_PACKAGE_SANE_BACKENDS is not set
+# BR2_PACKAGE_SDPARM is not set
+# BR2_PACKAGE_SETSERIAL is not set
+# BR2_PACKAGE_SG3_UTILS is not set
+
+#
+# sigrok-cli needs a toolchain w/ wchar, threads
+#
+
+#
+# sispmctl needs a toolchain w/ threads, wchar
+#
+
+#
+# smartmontools needs a toolchain w/ C++
+#
+
+#
+# smstools3 needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_SNOWBALL_HDMISERVICE is not set
+# BR2_PACKAGE_SREDIRD is not set
+# BR2_PACKAGE_STATSERIAL is not set
+
+#
+# sunxi-cedarx needs an (e)glibc toolchain
+#
+
+#
+# sunxi-mali needs an (e)glibc toolchain
+#
+# BR2_PACKAGE_SYSSTAT is not set
+
+#
+# targetcli-fb depends on Python
+#
+
+#
+# ti-gfx needs an (e)glibc toolchain and a Linux kernel to be built
+#
+# BR2_PACKAGE_TI_UIM is not set
+# BR2_PACKAGE_TI_UTILS is not set
+# BR2_PACKAGE_TRIGGERHAPPY is not set
+BR2_PACKAGE_UBOOT_TOOLS=y
+BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE=y
+# BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT is not set
+# BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE is not set
+BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV=y
+
+#
+# udisks needs udev /dev management
+#
+
+#
+# udisks needs a toolchain w/ wchar, threads, dynamic library
+#
+BR2_PACKAGE_USB_MODESWITCH=y
+BR2_PACKAGE_USB_MODESWITCH_DATA=y
+
+#
+# usbmount requires udev to be enabled
+#
+
+#
+# usbutils needs udev /dev management and toolchain w/ threads
+#
+# BR2_PACKAGE_W_SCAN is not set
+# BR2_PACKAGE_WIPE is not set
+
+#
+# xorriso needs a toolchain w/ wchar, threads
+#
+
+#
+# Interpreter languages and scripting
+#
+# BR2_PACKAGE_ENSCRIPT is not set
+# BR2_PACKAGE_ERLANG is not set
+
+#
+# guile needs a toolchain w/ threads, wchar
+#
+BR2_PACKAGE_HASERL=y
+# BR2_PACKAGE_HASERL_WITH_LUA is not set
+# BR2_PACKAGE_JAMVM is not set
+# BR2_PACKAGE_JIMTCL is not set
+# BR2_PACKAGE_LUA is not set
+BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS=y
+# BR2_PACKAGE_LUAJIT is not set
+BR2_PACKAGE_MONO_ARCH_SUPPORTS=y
+# BR2_PACKAGE_MONO is not set
+
+#
+# nodejs needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_PERL is not set
+# BR2_PACKAGE_PHP is not set
+
+#
+# python needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# python3 needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# ruby needs a toolchain w/ wchar, threads, dynamic library
+#
+# BR2_PACKAGE_TCL is not set
+
+#
+# Libraries
+#
+
+#
+# Audio/Sound
+#
+# BR2_PACKAGE_ALSA_LIB is not set
+
+#
+# audiofile needs a toolchain w/ C++
+#
+# BR2_PACKAGE_CELT051 is not set
+
+#
+# fdk-aac needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LIBAO is not set
+# BR2_PACKAGE_LIBCDAUDIO is not set
+# BR2_PACKAGE_LIBCDIO is not set
+# BR2_PACKAGE_LIBCUE is not set
+# BR2_PACKAGE_LIBCUEFILE is not set
+# BR2_PACKAGE_LIBID3TAG is not set
+# BR2_PACKAGE_LIBLO is not set
+# BR2_PACKAGE_LIBMAD is not set
+
+#
+# libmodplug needs a toolchain w/ C++
+#
+
+#
+# libmpd needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBMPDCLIENT is not set
+# BR2_PACKAGE_LIBREPLAYGAIN is not set
+# BR2_PACKAGE_LIBSAMPLERATE is not set
+
+#
+# libsidplay2 needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LIBSNDFILE is not set
+# BR2_PACKAGE_LIBSOXR is not set
+# BR2_PACKAGE_LIBVORBIS is not set
+
+#
+# mp4v2 needs a toolchain w/ C++
+#
+
+#
+# opencore-amr needs a toolchain w/ C++
+#
+# BR2_PACKAGE_OPUS is not set
+# BR2_PACKAGE_OPUSFILE is not set
+# BR2_PACKAGE_PORTAUDIO is not set
+# BR2_PACKAGE_SPEEX is not set
+
+#
+# taglib needs a toolchain w/ C++, wchar
+#
+# BR2_PACKAGE_TINYALSA is not set
+# BR2_PACKAGE_TREMOR is not set
+# BR2_PACKAGE_VO_AACENC is not set
+
+#
+# webrtc-audio-processing needs a toolchain w/ C++, threads
+#
+
+#
+# Compression and decompression
+#
+
+#
+# libarchive needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_LIBZIP is not set
+BR2_PACKAGE_LZO=y
+
+#
+# snappy needs a toolchain w/ C++
+#
+# BR2_PACKAGE_SZIP is not set
+BR2_PACKAGE_ZLIB=y
+
+#
+# Crypto
+#
+# BR2_PACKAGE_BEECRYPT is not set
+BR2_PACKAGE_BOTAN_ARCH_SUPPORTS=y
+
+#
+# botan needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_CA_CERTIFICATES is not set
+
+#
+# cryptodev needs a Linux kernel to be built
+#
+
+#
+# gnutls needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_LIBASSUAN is not set
+# BR2_PACKAGE_LIBGCRYPT is not set
+# BR2_PACKAGE_LIBGPG_ERROR is not set
+# BR2_PACKAGE_LIBGPGME is not set
+# BR2_PACKAGE_LIBKSBA is not set
+# BR2_PACKAGE_LIBMCRYPT is not set
+# BR2_PACKAGE_LIBMHASH is not set
+# BR2_PACKAGE_LIBNSS is not set
+
+#
+# libsecret needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBSHA1 is not set
+# BR2_PACKAGE_LIBSSH2 is not set
+# BR2_PACKAGE_NETTLE is not set
+BR2_PACKAGE_OPENSSL=y
+# BR2_PACKAGE_OPENSSL_BIN is not set
+# BR2_PACKAGE_OPENSSL_ENGINES is not set
+# BR2_PACKAGE_POLARSSL is not set
+
+#
+# Database
+#
+# BR2_PACKAGE_BERKELEYDB is not set
+# BR2_PACKAGE_GDBM is not set
+
+#
+# leveldb needs a toolchain w/ C++, threads
+#
+
+#
+# MySQL needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_POSTGRESQL is not set
+# BR2_PACKAGE_REDIS is not set
+# BR2_PACKAGE_SQLCIPHER is not set
+# BR2_PACKAGE_SQLITE is not set
+# BR2_PACKAGE_UNIXODBC is not set
+
+#
+# Filesystem
+#
+
+#
+# gamin needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBCONFIG is not set
+# BR2_PACKAGE_LIBCONFUSE is not set
+# BR2_PACKAGE_LIBFUSE is not set
+# BR2_PACKAGE_LIBLOCKFILE is not set
+
+#
+# libnfs needs a toolchain w/ RPC
+#
+# BR2_PACKAGE_LIBSYSFS is not set
+# BR2_PACKAGE_LOCKDEV is not set
+
+#
+# Graphics
+#
+
+#
+# atk needs a toolchain w/ wchar, threads
+#
+
+#
+# bullet needs a toolchain w/ C++
+#
+# BR2_PACKAGE_CAIRO is not set
+
+#
+# exiv2 needs a toolchain w/ C++, dynamic library
+#
+# BR2_PACKAGE_FONTCONFIG is not set
+# BR2_PACKAGE_FREETYPE is not set
+# BR2_PACKAGE_GD is not set
+
+#
+# gdk-pixbuf needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_GIFLIB is not set
+
+#
+# harfbuzz needs a toolchain w/ C++
+#
+# BR2_PACKAGE_IJS is not set
+# BR2_PACKAGE_IMLIB2 is not set
+# BR2_PACKAGE_JASPER is not set
+# BR2_PACKAGE_JPEG is not set
+# BR2_PACKAGE_LCMS2 is not set
+# BR2_PACKAGE_LIBART is not set
+# BR2_PACKAGE_LIBDMTX is not set
+# BR2_PACKAGE_LIBDRM is not set
+# BR2_PACKAGE_LIBEXIF is not set
+
+#
+# libfreeimage needs a toolchain w/ C++, dynamic library
+#
+# BR2_PACKAGE_LIBGEOTIFF is not set
+
+#
+# libglew depends on X.org and needs an OpenGL backend
+#
+
+#
+# libglu needs an OpenGL backend
+#
+
+#
+# libgtk3 needs a toolchain w/ wchar, threads, C++
+#
+# BR2_PACKAGE_LIBPNG is not set
+# BR2_PACKAGE_LIBQRENCODE is not set
+
+#
+# libraw needs a toolchain w/ C++
+#
+
+#
+# librsvg needs a toolchain w/ wchar, threads, C++
+#
+# BR2_PACKAGE_LIBSVG is not set
+# BR2_PACKAGE_LIBSVG_CAIRO is not set
+# BR2_PACKAGE_LIBSVGTINY is not set
+# BR2_PACKAGE_LIBVA is not set
+
+#
+# libvips needs a toolchain w/ wchar, threads, C++
+#
+
+#
+# opencv needs a toolchain w/ C++, NPTL, wchar
+#
+# BR2_PACKAGE_OPENJPEG is not set
+
+#
+# pango needs a toolchain w/ wchar, threads, C++
+#
+# BR2_PACKAGE_PIXMAN is not set
+
+#
+# poppler needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_TIFF is not set
+# BR2_PACKAGE_WAYLAND is not set
+BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS=y
+
+#
+# webkit needs libgtk2 and a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_WEBP is not set
+
+#
+# zxing needs a toolchain w/ C++
+#
+
+#
+# Hardware handling
+#
+# BR2_PACKAGE_C_PERIPHERY is not set
+# BR2_PACKAGE_CCID is not set
+# BR2_PACKAGE_DTC is not set
+
+#
+# lcdapi needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_LIBAIO is not set
+
+#
+# libatasmart requires udev to be enabled
+#
+
+#
+# libcec needs a toolchain w/ C++, wchar, threads, dynamic library
+#
+# BR2_PACKAGE_LIBFREEFARE is not set
+# BR2_PACKAGE_LIBFTDI is not set
+# BR2_PACKAGE_LIBFTDI1 is not set
+# BR2_PACKAGE_LIBHID is not set
+# BR2_PACKAGE_LIBIIO is not set
+
+#
+# libinput needs udev /dev management
+#
+# BR2_PACKAGE_LIBIQRF is not set
+# BR2_PACKAGE_LIBLLCP is not set
+
+#
+# libmbim needs udev /dev management and a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBNFC is not set
+# BR2_PACKAGE_LIBPCIACCESS is not set
+# BR2_PACKAGE_LIBPHIDGET is not set
+
+#
+# libqmi needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBRAW1394 is not set
+# BR2_PACKAGE_LIBRTLSDR is not set
+
+#
+# libserial needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LIBSERIALPORT is not set
+
+#
+# libsigrok needs a toolchain w/ wchar, threads
+#
+
+#
+# libsigrokecode needs a toolchain w/ wchar, threads, dynamic library
+#
+# BR2_PACKAGE_LIBSOC is not set
+BR2_PACKAGE_LIBUSB=y
+BR2_PACKAGE_LIBUSB_COMPAT=y
+
+#
+# libv4l needs a toolchain w/ threads and C++, headers >= 3.0
+#
+# BR2_PACKAGE_LIBXKBCOMMON is not set
+# BR2_PACKAGE_MTDEV is not set
+
+#
+# ne10 needs a toolchain w/ neon
+#
+
+#
+# neardal needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_PCSC_LITE is not set
+# BR2_PACKAGE_TSLIB is not set
+
+#
+# urg needs a toolchain w/ C++
+#
+
+#
+# Javascript
+#
+# BR2_PACKAGE_BOOTSTRAP is not set
+# BR2_PACKAGE_EXPLORERCANVAS is not set
+# BR2_PACKAGE_FLOT is not set
+# BR2_PACKAGE_JQUERY is not set
+# BR2_PACKAGE_JQUERY_KEYBOARD is not set
+# BR2_PACKAGE_JQUERY_MOBILE is not set
+# BR2_PACKAGE_JQUERY_SPARKLINE is not set
+# BR2_PACKAGE_JQUERY_UI is not set
+# BR2_PACKAGE_JQUERY_VALIDATION is not set
+# BR2_PACKAGE_JSMIN is not set
+# BR2_PACKAGE_JSON_JAVASCRIPT is not set
+
+#
+# JSON/XML
+#
+
+#
+# benejson needs a toolchain w/ C++
+#
+# BR2_PACKAGE_CJSON is not set
+# BR2_PACKAGE_EXPAT is not set
+# BR2_PACKAGE_EZXML is not set
+# BR2_PACKAGE_JANSSON is not set
+# BR2_PACKAGE_JSON_C is not set
+
+#
+# json-glib needs a toolchain w/ wchar, threads
+#
+
+#
+# jsoncpp needs a toolchain w/ C++
+#
+
+#
+# libjson needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LIBROXML is not set
+# BR2_PACKAGE_LIBXML2 is not set
+
+#
+# libxml++ needs a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_LIBXMLRPC is not set
+# BR2_PACKAGE_LIBXSLT is not set
+# BR2_PACKAGE_LIBYAML is not set
+# BR2_PACKAGE_MXML is not set
+# BR2_PACKAGE_RAPIDJSON is not set
+
+#
+# tinyxml needs a toolchain w/ C++
+#
+
+#
+# tinyxml2 needs a toolchain w/ C++
+#
+
+#
+# xerces-c++ needs a toolchain w/ C++, wchar
+#
+# BR2_PACKAGE_YAJL is not set
+
+#
+# yaml-cpp needs a toolchain w/ C++, threads
+#
+
+#
+# Logging
+#
+# BR2_PACKAGE_LIBLOG4C_LOCALTIME is not set
+# BR2_PACKAGE_LIBLOGGING is not set
+
+#
+# log4cplus needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# log4cxx needs a toolchain w/ C++, threads, dynamic library
+#
+# BR2_PACKAGE_ZLOG is not set
+
+#
+# Multimedia
+#
+# BR2_PACKAGE_LIBASS is not set
+# BR2_PACKAGE_LIBBLURAY is not set
+# BR2_PACKAGE_LIBDCADEC is not set
+# BR2_PACKAGE_LIBDVBCSA is not set
+
+#
+# libdvbsi++ needs a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_LIBDVDNAV is not set
+# BR2_PACKAGE_LIBDVDREAD is not set
+
+#
+# libebml needs a toolchain w/ C++
+#
+
+#
+# libfslcodec needs an (e)glibc toolchain
+#
+# BR2_PACKAGE_LIBFSLPARSER is not set
+
+#
+# libfslvpuwrap needs an imx-specific Linux kernel to be built
+#
+
+#
+# libmatroska needs a toolchain w/ C++
+#
+
+#
+# libmms needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBMPEG2 is not set
+# BR2_PACKAGE_LIBOGG is not set
+# BR2_PACKAGE_LIBPLAYER is not set
+# BR2_PACKAGE_LIBTHEORA is not set
+
+#
+# live555 needs a toolchain w/ C++
+#
+
+#
+# mediastreamer needs a toolchain w/ threads, C++
+#
+# BR2_PACKAGE_X264 is not set
+
+#
+# Networking
+#
+
+#
+# agent++ needs a toolchain w/ threads, C++, dynamic library
+#
+# BR2_PACKAGE_C_ARES is not set
+BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS=y
+# BR2_PACKAGE_CANFESTIVAL is not set
+# BR2_PACKAGE_CGIC is not set
+
+#
+# cppzmq needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# czmq needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# filemq needs a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_FLICKCURL is not set
+# BR2_PACKAGE_FREERADIUS_CLIENT is not set
+# BR2_PACKAGE_GEOIP is not set
+
+#
+# glib-networking needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBCGI is not set
+
+#
+# libcgicc needs a toolchain w/ C++
+#
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_CURL=y
+# BR2_PACKAGE_LIBDNET is not set
+# BR2_PACKAGE_LIBEXOSIP2 is not set
+# BR2_PACKAGE_LIBFCGI is not set
+# BR2_PACKAGE_LIBGSASL is not set
+# BR2_PACKAGE_LIBIDN is not set
+# BR2_PACKAGE_LIBISCSI is not set
+# BR2_PACKAGE_LIBMBUS is not set
+
+#
+# libmemcached needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_LIBMICROHTTPD is not set
+# BR2_PACKAGE_LIBMNL is not set
+# BR2_PACKAGE_LIBMODBUS is not set
+# BR2_PACKAGE_LIBNDP is not set
+
+#
+# libnice needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBNETFILTER_ACCT is not set
+# BR2_PACKAGE_LIBNETFILTER_CONNTRACK is not set
+# BR2_PACKAGE_LIBNETFILTER_CTHELPER is not set
+# BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT is not set
+# BR2_PACKAGE_LIBNETFILTER_LOG is not set
+# BR2_PACKAGE_LIBNETFILTER_QUEUE is not set
+# BR2_PACKAGE_LIBNFNETLINK is not set
+# BR2_PACKAGE_LIBNFTNL is not set
+BR2_PACKAGE_LIBNL=y
+# BR2_PACKAGE_LIBNL_TOOLS is not set
+# BR2_PACKAGE_LIBOAUTH is not set
+# BR2_PACKAGE_LIBOPING is not set
+# BR2_PACKAGE_LIBOSIP2 is not set
+BR2_PACKAGE_LIBPCAP=y
+# BR2_PACKAGE_LIBRSYNC is not set
+# BR2_PACKAGE_LIBSHAIRPLAY is not set
+# BR2_PACKAGE_LIBSHOUT is not set
+# BR2_PACKAGE_LIBSOCKETCAN is not set
+
+#
+# libsoup needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_LIBSRTP is not set
+# BR2_PACKAGE_LIBSTROPHE is not set
+# BR2_PACKAGE_LIBTIRPC is not set
+
+#
+# libtorrent needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_LIBUPNP is not set
+
+#
+# libupnpp needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_LIBURIPARSER is not set
+# BR2_PACKAGE_LIBVNCSERVER is not set
+# BR2_PACKAGE_LIBWEBSOCK is not set
+# BR2_PACKAGE_LIBWEBSOCKETS is not set
+# BR2_PACKAGE_NEON is not set
+
+#
+# omniORB needs a toolchain w/ C++, threads
+#
+
+#
+# openldap needs a toolchain w/ wchar
+#
+
+#
+# openpgm needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_ORTP is not set
+# BR2_PACKAGE_QDECODER is not set
+# BR2_PACKAGE_RTMPDUMP is not set
+# BR2_PACKAGE_SLIRP is not set
+
+#
+# snmp++ needs a toolchain w/ threads, C++, dynamic library
+#
+# BR2_PACKAGE_SOFIA_SIP is not set
+
+#
+# thrift needs a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_USBREDIR is not set
+
+#
+# wvstreams needs a toolchain w/ C++, dynamic library
+#
+
+#
+# zeromq needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# zmqpp needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# zyre needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# Other
+#
+# BR2_PACKAGE_APR is not set
+# BR2_PACKAGE_APR_UTIL is not set
+# BR2_PACKAGE_ARGP_STANDALONE is not set
+
+#
+# armadillo needs a toolchain w/ C++
+#
+# BR2_PACKAGE_BDWGC is not set
+
+#
+# boost needs a toolchain w/ C++, threads
+#
+BR2_PACKAGE_BOOST_ARCH_SUPPORTS=y
+# BR2_PACKAGE_CLAPACK is not set
+
+#
+# cppcms needs a toolchain w/ C++, NPTL, wchar, dynamic library
+#
+
+#
+# ding-libs needs a toolchain w/ wchar
+#
+
+#
+# eigen needs a toolchain w/ C++
+#
+
+#
+# elfutils needs a toolchain w/ wchar, dynamic library
+#
+# BR2_PACKAGE_FFTW is not set
+
+#
+# flann needs a toolchain w/ C++, dynamic library
+#
+
+#
+# glibmm needs a toolchain w/ C++, wchar, threads
+#
+
+#
+# glm needs a toolchain w/ C++
+#
+# BR2_PACKAGE_GMP is not set
+# BR2_PACKAGE_GSL is not set
+
+#
+# gtest needs a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_LIBARGTABLE2 is not set
+BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS=y
+# BR2_PACKAGE_LIBATOMIC_OPS is not set
+BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS=y
+
+#
+# libbsd needs an (e)glibc toolchain w/ threads
+#
+# BR2_PACKAGE_LIBCAP is not set
+# BR2_PACKAGE_LIBCAP_NG is not set
+
+#
+# libcgroup needs an (e)glibc toolchain w/ C++
+#
+# BR2_PACKAGE_LIBCOFI is not set
+# BR2_PACKAGE_LIBDAEMON is not set
+# BR2_PACKAGE_LIBEE is not set
+# BR2_PACKAGE_LIBEV is not set
+# BR2_PACKAGE_LIBEVDEV is not set
+# BR2_PACKAGE_LIBEVENT is not set
+# BR2_PACKAGE_LIBFFI is not set
+
+#
+# libglib2 needs a toolchain w/ wchar, threads
+#
+
+#
+# libical needs a toolchain w/ wchar
+#
+
+#
+# liblinear needs a toolchain w/ C++
+#
+BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT=y
+# BR2_PACKAGE_LIBNSPR is not set
+# BR2_PACKAGE_LIBPFM4 is not set
+
+#
+# libplist needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LIBPTHREAD_STUBS is not set
+# BR2_PACKAGE_LIBPTHSEM is not set
+
+#
+# libsigc++ needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LIBSIGSEGV is not set
+# BR2_PACKAGE_LIBTASN1 is not set
+# BR2_PACKAGE_LIBTPL is not set
+# BR2_PACKAGE_LIBUBOX is not set
+# BR2_PACKAGE_LIBUCI is not set
+
+#
+# libunwind needs a uclibc snapshot or (e)glibc toolchain w/ threads
+#
+# BR2_PACKAGE_LIBURCU is not set
+# BR2_PACKAGE_LIBUV is not set
+# BR2_PACKAGE_LIGHTNING is not set
+
+#
+# linux-pam needs a toolchain w/ wchar, locale, dynamic library
+#
+
+#
+# lttng-libust needs a toolchain w/ dynamic library, wchar, threads
+#
+# BR2_PACKAGE_MPC is not set
+# BR2_PACKAGE_MPDECIMAL is not set
+# BR2_PACKAGE_MPFR is not set
+
+#
+# msgpack needs a toolchain w/ C++
+#
+# BR2_PACKAGE_MTDEV2TUIO is not set
+# BR2_PACKAGE_ORC is not set
+# BR2_PACKAGE_P11_KIT is not set
+
+#
+# poco needs a toolchain w/ wchar, threads, C++
+#
+
+#
+# protobuf needs a toolchain w/ C++, threads
+#
+
+#
+# protobuf-c needs a toolchain w/ C++, threads
+#
+
+#
+# qlibc needs a toolchain w/ threads, wchar, dynamic library
+#
+
+#
+# Security
+#
+# BR2_PACKAGE_LIBSELINUX is not set
+# BR2_PACKAGE_LIBSEMANAGE is not set
+# BR2_PACKAGE_LIBSEPOL is not set
+
+#
+# Text and terminal handling
+#
+
+#
+# enchant needs a toolchain w/ C++, threads, wchar
+#
+
+#
+# icu needs a toolchain w/ C++, wchar, threads
+#
+# BR2_PACKAGE_LIBCLI is not set
+
+#
+# libedit needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_LIBENCA is not set
+# BR2_PACKAGE_LIBESTR is not set
+# BR2_PACKAGE_LIBFRIBIDI is not set
+# BR2_PACKAGE_LIBICONV is not set
+
+#
+# libunistring needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_LINENOISE is not set
+# BR2_PACKAGE_NCURSES is not set
+
+#
+# newt needs a toolchain w/ wchar, dynamic library
+#
+# BR2_PACKAGE_PCRE is not set
+BR2_PACKAGE_POPT=y
+# BR2_PACKAGE_READLINE is not set
+# BR2_PACKAGE_SLANG is not set
+
+#
+# tclap needs a toolchain w/ C++
+#
+# BR2_PACKAGE_USTR is not set
+
+#
+# Mail
+#
+# BR2_PACKAGE_DOVECOT is not set
+# BR2_PACKAGE_EXIM is not set
+# BR2_PACKAGE_FETCHMAIL is not set
+# BR2_PACKAGE_HEIRLOOM_MAILX is not set
+# BR2_PACKAGE_LIBESMTP is not set
+# BR2_PACKAGE_MSMTP is not set
+
+#
+# mutt needs a toolchain w/ wchar
+#
+
+#
+# Miscellaneous
+#
+# BR2_PACKAGE_AESPIPE is not set
+# BR2_PACKAGE_BC is not set
+# BR2_PACKAGE_CLAMAV is not set
+# BR2_PACKAGE_COLLECTD is not set
+# BR2_PACKAGE_EMPTY is not set
+
+#
+# gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library
+#
+# BR2_PACKAGE_GOOGLEFONTDIRECTORY is not set
+# BR2_PACKAGE_HAVEGED is not set
+# BR2_PACKAGE_MCRYPT is not set
+# BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO is not set
+
+#
+# qpdf needs a toolchain w/ C++
+#
+
+#
+# shared-mime-info needs a toolchain w/ wchar, threads
+#
+
+#
+# snowball-init needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# Networking applications
+#
+
+#
+# aiccu needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_AIRCRACK_NG is not set
+# BR2_PACKAGE_APACHE is not set
+# BR2_PACKAGE_ARGUS is not set
+# BR2_PACKAGE_ARPTABLES is not set
+# BR2_PACKAGE_ATFTP is not set
+# BR2_PACKAGE_AUTOSSH is not set
+# BR2_PACKAGE_AVAHI is not set
+# BR2_PACKAGE_AXEL is not set
+# BR2_PACKAGE_BANDWIDTHD is not set
+# BR2_PACKAGE_BATCTL is not set
+
+#
+# bcusdk needs a toolchain w/ C++
+#
+# BR2_PACKAGE_BIND is not set
+
+#
+# bluez-utils needs a toolchain w/ wchar, threads, dynamic library
+#
+
+#
+# bluez5-utils needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library
+#
+# BR2_PACKAGE_BMON is not set
+# BR2_PACKAGE_BOA is not set
+# BR2_PACKAGE_BRIDGE_UTILS is not set
+# BR2_PACKAGE_BWM_NG is not set
+# BR2_PACKAGE_CAN_UTILS is not set
+# BR2_PACKAGE_CHRONY is not set
+# BR2_PACKAGE_CIVETWEB is not set
+
+#
+# connman needs a toolchain w/ wchar, threads, resolver, dynamic library
+#
+# BR2_PACKAGE_CONNTRACK_TOOLS is not set
+# BR2_PACKAGE_CRDA is not set
+
+#
+# ctorrent needs a toolchain w/ C++
+#
+# BR2_PACKAGE_DHCPCD is not set
+# BR2_PACKAGE_DHCPDUMP is not set
+# BR2_PACKAGE_DNSMASQ is not set
+# BR2_PACKAGE_DRBD_UTILS is not set
+# BR2_PACKAGE_DROPBEAR is not set
+# BR2_PACKAGE_EBTABLES is not set
+
+#
+# ejabberd needs erlang
+#
+# BR2_PACKAGE_ETHTOOL is not set
+# BR2_PACKAGE_FAIFA is not set
+# BR2_PACKAGE_FPING is not set
+
+#
+# gesftpserver needs a toolchain w/ wchar, threads
+#
+
+#
+# hans needs a toolchain w/ C++
+#
+# BR2_PACKAGE_HIAWATHA is not set
+BR2_PACKAGE_HOSTAPD=y
+BR2_PACKAGE_HOSTAPD_EAP=y
+BR2_PACKAGE_HOSTAPD_WPS=y
+
+#
+# httping needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_IFTOP is not set
+
+#
+# igh-ethercat needs a Linux kernel to be built
+#
+
+#
+# igmpproxy needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_INADYN is not set
+# BR2_PACKAGE_IODINE is not set
+
+#
+# iperf needs a toolchain w/ C++
+#
+# BR2_PACKAGE_IPERF3 is not set
+# BR2_PACKAGE_IPROUTE2 is not set
+# BR2_PACKAGE_IPSEC_TOOLS is not set
+# BR2_PACKAGE_IPSET is not set
+# BR2_PACKAGE_IPTABLES is not set
+# BR2_PACKAGE_IPTRAF_NG is not set
+# BR2_PACKAGE_IPUTILS is not set
+BR2_PACKAGE_IW=y
+
+#
+# janus-gateway needs a toolchain w/ dynamic library, threads, wchar
+#
+
+#
+# kismet needs a toolchain w/ threads, C++
+#
+# BR2_PACKAGE_KNOCK is not set
+# BR2_PACKAGE_LEAFNODE2 is not set
+
+#
+# lftp requires a toolchain w/ C++, wchar
+#
+# BR2_PACKAGE_LIGHTTPD is not set
+
+#
+# linknx needs a toolchain w/ C++
+#
+# BR2_PACKAGE_LINKS is not set
+
+#
+# linphone needs a toolchain w/ threads, C++
+#
+# BR2_PACKAGE_LINUX_ZIGBEE is not set
+BR2_PACKAGE_LRZSZ=y
+# BR2_PACKAGE_MACCHANGER is not set
+# BR2_PACKAGE_MEMCACHED is not set
+BR2_PACKAGE_MII_DIAG=y
+
+#
+# minidlna needs a toolchain w/ threads, wchar
+#
+# BR2_PACKAGE_MJPG_STREAMER is not set
+
+#
+# modemmanager needs udev /dev management and a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_MONGOOSE is not set
+
+#
+# mongrel2 needs a toolchain w/ C++, threads, wchar
+#
+# BR2_PACKAGE_MOSQUITTO is not set
+# BR2_PACKAGE_MROUTED is not set
+# BR2_PACKAGE_MTR is not set
+
+#
+# nbd needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_NCFTP is not set
+# BR2_PACKAGE_NDISC6 is not set
+# BR2_PACKAGE_NETATALK is not set
+# BR2_PACKAGE_NETPLUG is not set
+# BR2_PACKAGE_NETSNMP is not set
+# BR2_PACKAGE_NETSTAT_NAT is not set
+
+#
+# NetworkManager needs udev /dev management and a (e)glibc toolchain w/ headers >= 3.7
+#
+# BR2_PACKAGE_NFACCT is not set
+
+#
+# nftables needs a toolchain w/ wchar, headers >= 3.4
+#
+# BR2_PACKAGE_NGINX is not set
+# BR2_PACKAGE_NGIRCD is not set
+# BR2_PACKAGE_NGREP is not set
+
+#
+# nmap needs a toolchain w/ C++, threads
+#
+# BR2_PACKAGE_NOIP is not set
+# BR2_PACKAGE_NTP is not set
+# BR2_PACKAGE_NUTTCP is not set
+# BR2_PACKAGE_ODHCP6C is not set
+# BR2_PACKAGE_ODHCPLOC is not set
+# BR2_PACKAGE_OLSR is not set
+# BR2_PACKAGE_OPEN_PLC_UTILS is not set
+# BR2_PACKAGE_OPENNTPD is not set
+# BR2_PACKAGE_OPENOBEX is not set
+BR2_PACKAGE_OPENSSH=y
+# BR2_PACKAGE_OPENSWAN is not set
+BR2_PACKAGE_OPENVPN=y
+BR2_PACKAGE_OPENVPN_LZO=y
+# BR2_PACKAGE_OPENVPN_SMALL is not set
+BR2_PACKAGE_OPENVPN_CRYPTO_OPENSSL=y
+# BR2_PACKAGE_OPENVPN_CRYPTO_POLARSSL is not set
+# BR2_PACKAGE_P910ND is not set
+# BR2_PACKAGE_PHIDGETWEBSERVICE is not set
+
+#
+# portmap needs a toolchain w/ RPC
+#
+BR2_PACKAGE_PPPD=y
+BR2_PACKAGE_PPPD_FILTER=y
+BR2_PACKAGE_PPPD_RADIUS=y
+BR2_PACKAGE_PPTP_LINUX=y
+# BR2_PACKAGE_PROFTPD is not set
+# BR2_PACKAGE_PROXYCHAINS_NG is not set
+# BR2_PACKAGE_PTPD is not set
+# BR2_PACKAGE_PTPD2 is not set
+# BR2_PACKAGE_PURE_FTPD is not set
+# BR2_PACKAGE_QUAGGA is not set
+# BR2_PACKAGE_RADVD is not set
+# BR2_PACKAGE_RP_PPPOE is not set
+# BR2_PACKAGE_RPCBIND is not set
+# BR2_PACKAGE_RSH_REDONE is not set
+# BR2_PACKAGE_RSYNC is not set
+
+#
+# rtorrent needs a toolchain w/ C++, threads, wchar
+#
+# BR2_PACKAGE_RTPTOOLS is not set
+
+#
+# samba4 needs an (e)glibc toolchain
+#
+
+#
+# sconeserver needs a toolchain w/ C++, NPTL
+#
+# BR2_PACKAGE_SER2NET is not set
+# BR2_PACKAGE_SHAIRPORT_SYNC is not set
+# BR2_PACKAGE_SMCROUTE is not set
+BR2_PACKAGE_SOCAT=y
+# BR2_PACKAGE_SOCKETCAND is not set
+
+#
+# softether needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_SPAWN_FCGI is not set
+
+#
+# spice server needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_SPICE_PROTOCOL is not set
+
+#
+# squid needs a toolchain w/ C++, headers >= 3.0
+#
+# BR2_PACKAGE_SSHPASS is not set
+# BR2_PACKAGE_STRONGSWAN is not set
+# BR2_PACKAGE_STUNNEL is not set
+# BR2_PACKAGE_TCPDUMP is not set
+# BR2_PACKAGE_TCPING is not set
+# BR2_PACKAGE_TCPREPLAY is not set
+# BR2_PACKAGE_THTTPD is not set
+# BR2_PACKAGE_TINC is not set
+# BR2_PACKAGE_TINYHTTPD is not set
+# BR2_PACKAGE_TN5250 is not set
+# BR2_PACKAGE_TOR is not set
+# BR2_PACKAGE_TRANSMISSION is not set
+# BR2_PACKAGE_TVHEADEND is not set
+# BR2_PACKAGE_UDPCAST is not set
+# BR2_PACKAGE_USHARE is not set
+
+#
+# ussp-push needs a toolchain w/ wchar, threads, dynamic library
+#
+# BR2_PACKAGE_VDE2 is not set
+# BR2_PACKAGE_VNSTAT is not set
+# BR2_PACKAGE_VPNC is not set
+# BR2_PACKAGE_VSFTPD is not set
+# BR2_PACKAGE_VTUN is not set
+BR2_PACKAGE_WIRELESS_REGDB=y
+BR2_PACKAGE_WIRELESS_TOOLS=y
+BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
+
+#
+# wireshark needs a toolchain w/ wchar, threads
+#
+BR2_PACKAGE_WPA_SUPPLICANT=y
+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
+BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT=y
+BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG=y
+BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+
+#
+# wvdial needs a toolchain w/ C++, dynamic library
+#
+# BR2_PACKAGE_XINETD is not set
+# BR2_PACKAGE_XL2TP is not set
+
+#
+# xtables-addons needs a Linux kernel to be built
+#
+
+#
+# znc needs a toolchain w/ C++
+#
+
+#
+# Package managers
+#
+# BR2_PACKAGE_IPKG is not set
+# BR2_PACKAGE_OPKG is not set
+
+#
+# Real-Time
+#
+# BR2_PACKAGE_XENOMAI is not set
+
+#
+# Shell and utilities
+#
+
+#
+# Shells
+#
+
+#
+# Utilities
+#
+# BR2_PACKAGE_AT is not set
+# BR2_PACKAGE_CCRYPT is not set
+# BR2_PACKAGE_DIALOG is not set
+# BR2_PACKAGE_DTACH is not set
+# BR2_PACKAGE_FILE is not set
+# BR2_PACKAGE_GNUPG is not set
+# BR2_PACKAGE_GNUPG2 is not set
+# BR2_PACKAGE_INOTIFY_TOOLS is not set
+# BR2_PACKAGE_LOCKFILE_PROGS is not set
+
+#
+# logrotate needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_LOGSURFER is not set
+# BR2_PACKAGE_PINENTRY is not set
+# BR2_PACKAGE_SCREEN is not set
+# BR2_PACKAGE_SUDO is not set
+# BR2_PACKAGE_TMUX is not set
+# BR2_PACKAGE_XMLSTARLET is not set
+
+#
+# System tools
+#
+# BR2_PACKAGE_ACL is not set
+# BR2_PACKAGE_ATTR is not set
+# BR2_PACKAGE_CPULOAD is not set
+# BR2_PACKAGE_FTOP is not set
+# BR2_PACKAGE_GETENT is not set
+# BR2_PACKAGE_HTOP is not set
+
+#
+# iotop depends on python or python3
+#
+# BR2_PACKAGE_IPRUTILS is not set
+# BR2_PACKAGE_IRQBALANCE is not set
+# BR2_PACKAGE_KEYUTILS is not set
+# BR2_PACKAGE_KMOD is not set
+# BR2_PACKAGE_LXC is not set
+# BR2_PACKAGE_MONIT is not set
+# BR2_PACKAGE_NCDU is not set
+
+#
+# nut needs a toolchain w/ C++
+#
+
+#
+# polkit needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_PWGEN is not set
+
+#
+# quota needs a toolchain w/ wchar, threads
+#
+# BR2_PACKAGE_SMACK is not set
+
+#
+# supervisor needs the python interpreter
+#
+BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS=y
+
+#
+# util-linux needs a toolchain w/ wchar
+#
+
+#
+# Text editors and viewers
+#
+# BR2_PACKAGE_ED is not set
+BR2_PACKAGE_JOE=y
+BR2_PACKAGE_JOE_FULL=y
+
+#
+# mc needs a toolchain w/ threads, wchar
+#
+
+#
+# nano needs a toolchain w/ wchar
+#
+# BR2_PACKAGE_UEMACS is not set
+
+#
+# Filesystem images
+#
+# BR2_TARGET_ROOTFS_CLOOP is not set
+# BR2_TARGET_ROOTFS_CPIO is not set
+# BR2_TARGET_ROOTFS_CRAMFS is not set
+# BR2_TARGET_ROOTFS_EXT2 is not set
+
+#
+# initramfs needs a Linux kernel to be built
+#
+# BR2_TARGET_ROOTFS_JFFS2 is not set
+# BR2_TARGET_ROOTFS_ROMFS is not set
+# BR2_TARGET_ROOTFS_SQUASHFS is not set
+BR2_TARGET_ROOTFS_TAR=y
+BR2_TARGET_ROOTFS_TAR_NONE=y
+# BR2_TARGET_ROOTFS_TAR_GZIP is not set
+# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
+# BR2_TARGET_ROOTFS_TAR_LZMA is not set
+# BR2_TARGET_ROOTFS_TAR_LZO is not set
+# BR2_TARGET_ROOTFS_TAR_XZ is not set
+BR2_TARGET_ROOTFS_TAR_OPTIONS=""
+# BR2_TARGET_ROOTFS_UBIFS is not set
+# BR2_TARGET_ROOTFS_YAFFS2 is not set
+
+#
+# Bootloaders
+#
+# BR2_TARGET_AT91BOOTSTRAP3 is not set
+# BR2_TARGET_BAREBOX is not set
+
+#
+# gummiboot needs a toolchain w/ wchar
+#
+# BR2_TARGET_MXS_BOOTLETS is not set
+# BR2_TARGET_UBOOT is not set
+
+#
+# Host utilities
+#
+# BR2_PACKAGE_HOST_CHECKPOLICY is not set
+# BR2_PACKAGE_HOST_CRAMFS is not set
+# BR2_PACKAGE_HOST_DFU_UTIL is not set
+# BR2_PACKAGE_HOST_DOS2UNIX is not set
+# BR2_PACKAGE_HOST_DOSFSTOOLS is not set
+# BR2_PACKAGE_HOST_E2FSPROGS is not set
+# BR2_PACKAGE_HOST_E2TOOLS is not set
+# BR2_PACKAGE_HOST_GENEXT2FS is not set
+# BR2_PACKAGE_HOST_GENIMAGE is not set
+# BR2_PACKAGE_HOST_GENPART is not set
+# BR2_PACKAGE_HOST_IMX_USB_LOADER is not set
+# BR2_PACKAGE_HOST_LPC3250LOADER is not set
+# BR2_PACKAGE_HOST_MKE2IMG is not set
+# BR2_PACKAGE_HOST_MTD is not set
+# BR2_PACKAGE_HOST_MTOOLS is not set
+# BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS is not set
+# BR2_PACKAGE_HOST_OPENOCD is not set
+# BR2_PACKAGE_HOST_PARTED is not set
+# BR2_PACKAGE_HOST_PATCHELF is not set
+# BR2_PACKAGE_HOST_PWGEN is not set
+# BR2_PACKAGE_HOST_QEMU is not set
+# BR2_PACKAGE_HOST_SAM_BA is not set
+# BR2_PACKAGE_HOST_SQUASHFS is not set
+# BR2_PACKAGE_HOST_SUNXI_TOOLS is not set
+# BR2_PACKAGE_HOST_UBOOT_TOOLS is not set
+# BR2_PACKAGE_HOST_UTIL_LINUX is not set
+
+#
+# Legacy config options
+#
+
+#
+# Legacy options removed in 2015.05
+#
+# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_512_16K is not set
+# BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_2K_128K is not set
+# BR2_PACKAGE_MONO_20 is not set
+# BR2_PACKAGE_MONO_40 is not set
+# BR2_PACKAGE_MONO_45 is not set
+# BR2_CIVETWEB_WITH_LUA is not set
+# BR2_PACKAGE_TIFF_TIFF2PDF is not set
+# BR2_PACKAGE_TIFF_TIFFCP is not set
+# BR2_LINUX_KERNEL_EXT_RTAI_PATCH is not set
+# BR2_TARGET_GENERIC_PASSWD_DES is not set
+# BR2_PACKAGE_GTK2_THEME_HICOLOR is not set
+# BR2_PACKAGE_VALGRIND_PTRCHECK is not set
+
+#
+# Legacy options removed in 2015.02
+#
+# BR2_PACKAGE_LIBGC is not set
+# BR2_PACKAGE_WDCTL is not set
+# BR2_PACKAGE_RPM_BZIP2_PAYLOADS is not set
+# BR2_PACKAGE_RPM_XZ_PAYLOADS is not set
+# BR2_PACKAGE_M4 is not set
+# BR2_PACKAGE_FLEX_BINARY is not set
+# BR2_PACKAGE_BISON is not set
+# BR2_PACKAGE_GOB2 is not set
+# BR2_PACKAGE_DISTCC is not set
+# BR2_PACKAGE_HASERL_VERSION_0_8_X is not set
+# BR2_PACKAGE_STRONGSWAN_TOOLS is not set
+# BR2_PACKAGE_XBMC_ADDON_XVDR is not set
+# BR2_PACKAGE_XBMC_PVR_ADDONS is not set
+# BR2_PACKAGE_XBMC is not set
+# BR2_PACKAGE_XBMC_ALSA_LIB is not set
+# BR2_PACKAGE_XBMC_AVAHI is not set
+# BR2_PACKAGE_XBMC_DBUS is not set
+# BR2_PACKAGE_XBMC_LIBBLURAY is not set
+# BR2_PACKAGE_XBMC_GOOM is not set
+# BR2_PACKAGE_XBMC_RSXS is not set
+# BR2_PACKAGE_XBMC_LIBCEC is not set
+# BR2_PACKAGE_XBMC_LIBMICROHTTPD is not set
+# BR2_PACKAGE_XBMC_LIBNFS is not set
+# BR2_PACKAGE_XBMC_RTMPDUMP is not set
+# BR2_PACKAGE_XBMC_LIBSHAIRPLAY is not set
+# BR2_PACKAGE_XBMC_LIBSMBCLIENT is not set
+# BR2_PACKAGE_XBMC_LIBTHEORA is not set
+# BR2_PACKAGE_XBMC_LIBUSB is not set
+# BR2_PACKAGE_XBMC_LIBVA is not set
+# BR2_PACKAGE_XBMC_WAVPACK is not set
+# BR2_PREFER_STATIC_LIB is not set
+
+#
+# Legacy options removed in 2014.11
+#
+# BR2_x86_generic is not set
+# BR2_GCC_VERSION_4_4_X is not set
+# BR2_sparc_sparchfleon is not set
+# BR2_sparc_sparchfleonv8 is not set
+# BR2_sparc_sparcsfleon is not set
+# BR2_sparc_sparcsfleonv8 is not set
+# BR2_PACKAGE_LINUX_FIRMWARE_XC5000 is not set
+# BR2_PACKAGE_LINUX_FIRMWARE_CXGB4 is not set
+# BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7 is not set
+# BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8 is not set
+
+#
+# Legacy options removed in 2014.08
+#
+# BR2_PACKAGE_LIBELF is not set
+# BR2_KERNEL_HEADERS_3_8 is not set
+# BR2_PACKAGE_GETTEXT_TOOLS is not set
+# BR2_PACKAGE_PROCPS is not set
+# BR2_BINUTILS_VERSION_2_20_1 is not set
+# BR2_BINUTILS_VERSION_2_21 is not set
+# BR2_BINUTILS_VERSION_2_23_1 is not set
+# BR2_UCLIBC_VERSION_0_9_32 is not set
+# BR2_GCC_VERSION_4_3_X is not set
+# BR2_GCC_VERSION_4_6_X is not set
+# BR2_GDB_VERSION_7_4 is not set
+# BR2_GDB_VERSION_7_5 is not set
+# BR2_BUSYBOX_VERSION_1_19_X is not set
+# BR2_BUSYBOX_VERSION_1_20_X is not set
+# BR2_BUSYBOX_VERSION_1_21_X is not set
+# BR2_PACKAGE_LIBV4L_DECODE_TM6000 is not set
+# BR2_PACKAGE_LIBV4L_IR_KEYTABLE is not set
+# BR2_PACKAGE_LIBV4L_V4L2_COMPLIANCE is not set
+# BR2_PACKAGE_LIBV4L_V4L2_CTL is not set
+# BR2_PACKAGE_LIBV4L_V4L2_DBG is not set
+
+#
+# Legacy options removed in 2014.05
+#
+# BR2_PACKAGE_EVTEST_CAPTURE is not set
+# BR2_KERNEL_HEADERS_3_6 is not set
+# BR2_KERNEL_HEADERS_3_7 is not set
+# BR2_PACKAGE_VALA is not set
+BR2_PACKAGE_TZDATA_ZONELIST=""
+# BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE is not set
+# BR2_PACKAGE_LUA_INTERPRETER_READLINE is not set
+# BR2_PACKAGE_LUA_INTERPRETER_LINENOISE is not set
+# BR2_PACKAGE_DVB_APPS_UTILS is not set
+# BR2_KERNEL_HEADERS_SNAP is not set
+# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is not set
+# BR2_PACKAGE_UDEV is not set
+# BR2_PACKAGE_UDEV_RULES_GEN is not set
+# BR2_PACKAGE_UDEV_ALL_EXTRAS is not set
+
+#
+# Legacy options removed in 2014.02
+#
+# BR2_sh2 is not set
+# BR2_sh3 is not set
+# BR2_sh3eb is not set
+# BR2_KERNEL_HEADERS_3_1 is not set
+# BR2_KERNEL_HEADERS_3_3 is not set
+# BR2_KERNEL_HEADERS_3_5 is not set
+# BR2_GDB_VERSION_7_2 is not set
+# BR2_GDB_VERSION_7_3 is not set
+# BR2_PACKAGE_CCACHE is not set
+# BR2_HAVE_DOCUMENTATION is not set
+# BR2_PACKAGE_AUTOMAKE is not set
+# BR2_PACKAGE_AUTOCONF is not set
+# BR2_PACKAGE_XSTROKE is not set
+# BR2_PACKAGE_LZMA is not set
+# BR2_PACKAGE_TTCP is not set
+# BR2_PACKAGE_LIBNFC_LLCP is not set
+# BR2_PACKAGE_MYSQL_CLIENT is not set
+# BR2_PACKAGE_SQUASHFS3 is not set
+# BR2_TARGET_ROOTFS_SQUASHFS3 is not set
+# BR2_PACKAGE_NETKITBASE is not set
+# BR2_PACKAGE_NETKITTELNET is not set
+# BR2_PACKAGE_LUASQL is not set
+# BR2_PACKAGE_LUACJSON is not set
+
+#
+# Legacy options removed in 2013.11
+#
+# BR2_PACKAGE_LVM2_DMSETUP_ONLY is not set
+# BR2_PACKAGE_QT_JAVASCRIPTCORE is not set
+# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL=""
+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION=""
+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL=""
+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION=""
+
+#
+# Legacy options removed in 2013.08
+#
+# BR2_ARM_OABI is not set
+# BR2_PACKAGE_DOSFSTOOLS_DOSFSCK is not set
+# BR2_PACKAGE_DOSFSTOOLS_DOSFSLABEL is not set
+# BR2_PACKAGE_DOSFSTOOLS_MKDOSFS is not set
+# BR2_ELF2FLT is not set
+# BR2_VFP_FLOAT is not set
+# BR2_PACKAGE_GCC_TARGET is not set
+# BR2_HAVE_DEVFILES is not set
+
+#
+# Legacy options removed in 2013.05
+#
+# BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192 is not set
+# BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712 is not set
+
+#
+# Legacy options removed in 2013.02
+#
+# BR2_sa110 is not set
+# BR2_sa1100 is not set
+# BR2_PACKAGE_GDISK is not set
+# BR2_PACKAGE_GDISK_GDISK is not set
+# BR2_PACKAGE_GDISK_SGDISK is not set
+# BR2_PACKAGE_GDB_HOST is not set
+# BR2_PACKAGE_DIRECTB_DITHER_RGB16 is not set
+# BR2_PACKAGE_DIRECTB_TESTS is not set
+
+#
+# Legacy options removed in 2012.11
+#
+# BR2_PACKAGE_CUSTOMIZE is not set
+# BR2_PACKAGE_XSERVER_xorg is not set
+# BR2_PACKAGE_XSERVER_tinyx is not set
+# BR2_PACKAGE_PTHREAD_STUBS is not set
+
+#
+# Legacy options removed in 2012.08
+#
+# BR2_PACKAGE_GETTEXT_STATIC is not set
+# BR2_PACKAGE_LIBINTL is not set
+# BR2_PACKAGE_INPUT_TOOLS_EVTEST is not set
+# BR2_BFIN_FDPIC is not set
+# BR2_BFIN_FLAT is not set
