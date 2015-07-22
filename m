@@ -1,133 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 23:20:13 +0200
-Subject: [Buildroot] [PATCH v3 1/1] rtl8821au: new package
-In-Reply-To: <1437583153-31359-1-git-send-email-christian@paral.in>
-References: <1437583153-31359-1-git-send-email-christian@paral.in>
-Message-ID: <20150722232013.52492a99@free-electrons.com>
+Date: Wed, 22 Jul 2015 23:20:50 +0200
+Subject: [Buildroot] [git commit] gcc: explicitly use C{XX}FLAGS_FOR_TARGET
+	instead of --enable-target-optspace
+Message-ID: <20150722212100.D699C7FB7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christian Stewart,
+commit: http://git.buildroot.net/buildroot/commit/?id=0fe633cdff66febadc50bab3e0af4b3be53811c8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jul 2015 09:39:13 -0700, Christian Stewart wrote:
-> Adding a kernel module based USB wifi driver. There is no official
-> version of this driver that works properly on ARM and with newer USB
-> WiFi cards. This driver version builds module 8821au and is based on a
-> kernel module release from ASUS with various fixes integrated in.
-> 
-> [Thomas, Yann, Luca:
->   - Using the new kernel-module setup
->   - Compacted endian flag define to one line]
+The gcc.mk file is passing --enable-target-optspace to gcc configure
+script, to ask for space-optimized (-Os) target libraries. However,
+passing this option has the effect of overriding any custom
+CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
 
-This last paragraph has nothing to do in the commit log itself. The
-changelog between the different versions of the patch should go...
+These are some situations when it is required to pass custom flags on
+buildong
+of libgcc:
+ * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
+(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
+ * Particular CPU requires specific instructions for HW support
+ * Deep optimizations
 
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc.mk |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
-here, i.e after the "---" line.
-
-
-> diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
-> new file mode 100644
-> index 0000000..0a8cd74
-> --- /dev/null
-> +++ b/package/rtl8821au/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_RTL8821AU
-> +	bool "rtl8821au"
-> +	depends on BR2_LINUX_KERNEL
-> +	help
-> +		rtl8821au wifi driver
-> +
-> +		https://github.com/paralin/rtl8821au
-
-Indentation for the help text is one tab + two spaces. Also, it is
-customary to add a comment like:
-
-comment "rtl8821au needs a Linux kernel to be built"
-	depends on !BR2_LINUX_KERNEL
-
-> diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-> new file mode 100644
-> index 0000000..9c3d286
-> --- /dev/null
-> +++ b/package/rtl8821au/rtl8821au.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# rtl8821au
-> +#
-> +################################################################################
-> +
-> +RTL8821AU_VERSION = 4.3.14
-> +RTL8821AU_SITE = $(call github,paralin,rtl8821au,v$(RTL8821AU_VERSION))
-> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-> +
-> +define RTL8821AU_CONFIGURE_CMDS
-> +	$(SED) "s/CONFIG_PLATFORM_I386_PC = y/CONFIG_PLATFORM_I386_PC = n/g" $(@D)/Makefile
-> +endef
-
-I think this $(SED) is probably unnecessary, you can probably just pass
-CONFIG_PLATFORM_I386_PC=n on the command line, i.e
-
-> +
-> +RTL8821AU_MODULE_MAKE_OPTS = \
-> +	CONFIG_RTL8821AU=m \
-> +	KVER=$(LINUX_VERSION_PROBED) \
-> +	USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
-
-	CONFIG_PLATFORM_I386_PC=n
-
-However, this driver doesn't build for me.
-
-First because the usage of __DATE__ and __TIME__ is triggering the
-following build error:
-
-/home/thomas/projets/buildroot/output/build/rtl8821au-4.3.14/./core/rtw_debug.c:70:64: error: macro "__DATE__" might prevent reproducible builds [-Werror=date-time]
-  DBG_871X_SEL_NL(sel, "build time: %s %s\n", __DATE__, __TIME__);
-                                                                ^
-Then, after patching the code to remove this useless debugging line,
-the build fails with:
-
-/home/thomas/projets/buildroot/output/build/rtl8821au-4.3.14/./os_dep/linux/rtw_android.c: In function ?rtw_android_cmdstr_to_num?:
-/home/thomas/projets/buildroot/output/build/rtl8821au-4.3.14/./os_dep/linux/rtw_android.c:346:3: error: implicit declaration of function ?strnicmp? [-Werror=implicit-function-declaration]
-   if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
-   ^
-
-Here is the defconfig to reproduce the problem:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-496-g85945aa.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
-BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-BR2_LINUX_KERNEL_ZIMAGE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_RTL8821AU=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Can you rework your patch to fix those issues?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index d1693d5..aaeba7f 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -100,16 +100,22 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ HOST_GCC_COMMON_CONF_ENV = \
+ 	MAKEINFO=missing
+ 
++GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
++GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
++
+ # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+ # Workaround until it's fixed in 4.5.4 or later
+ ifeq ($(ARCH),powerpc)
+ ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-HOST_GCC_COMMON_CONF_OPTS += --disable-target-optspace
++GCC_COMMON_TARGET_CFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
++GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
+ endif
+-else
+-HOST_GCC_COMMON_CONF_OPTS += --enable-target-optspace
+ endif
+ 
++# Propagate options used for target software building to GCC target libs
++HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
++HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
++
+ # libitm needs sparc V9+
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
