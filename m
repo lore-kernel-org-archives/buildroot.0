@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:31:02 +0200
-Subject: [Buildroot] [PATCH 40/47] package/kodi-screensaver-greynetic: new
+Date: Wed, 22 Jul 2015 22:30:56 +0200
+Subject: [Buildroot] [PATCH 34/47] package/kodi-audiodecoder-stsound: new
 	package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-41-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-35-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-greynetic/Config.in          |    6 ++++++
- .../kodi-screensaver-greynetic.mk                     |   17 +++++++++++++++++
+ package/kodi-audiodecoder-stsound/Config.in           |    7 +++++++
+ .../kodi-audiodecoder-stsound.mk                      |   17 +++++++++++++++++
  package/kodi/Config.in                                |    1 +
- 3 files changed, 24 insertions(+)
- create mode 100644 package/kodi-screensaver-greynetic/Config.in
- create mode 100644 package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-stsound/Config.in
+ create mode 100644 package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 
-diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+diff --git a/package/kodi-audiodecoder-stsound/Config.in b/package/kodi-audiodecoder-stsound/Config.in
 new file mode 100644
-index 0000000..fd83295
+index 0000000..6be216a
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
-+	bool "kodi-screensaver-greynetic"
++++ b/package/kodi-audiodecoder-stsound/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_STSOUND
++	bool "kodi-audiodecoder-stsound"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Greynetic screensaver for Kodi
++	  YM decoder addon for Kodi
 +
-+	  https://github.com/notspiff/screensaver.greynetic
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++	  https://github.com/notspiff/audiodecoder.stsound
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 new file mode 100644
-index 0000000..fb72b70
+index 0000000..2898311
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-screensaver-greynetic
++# kodi-audiodecoder-stsound
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_GREYNETIC_VERSION = 5f370b0f1a51e57719f605344e94824105316c17
-+KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
-+KODI_SCREENSAVER_GREYNETIC_LICENSE = GPLv2+
-+KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
++KODI_AUDIODECODER_STSOUND_VERSION = f6fbae94818fedd09e2f55c6cd1cb283bfdab6f4
++KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
++KODI_AUDIODECODER_STSOUND_LICENSE = GPLv2+
++KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
 +
-+KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
++KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
 +
-+KODI_SCREENSAVER_GREYNETIC_CONF_OPTS += \
++KODI_AUDIODECODER_STSOUND_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 87b3698..56a378e 100644
+index 91d9783..8bf3ee1 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -292,6 +292,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
- 	source "package/kodi-screensaver-crystalmorph/Config.in"
-+	source "package/kodi-screensaver-greynetic/Config.in"
+@@ -276,6 +276,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
++	source "package/kodi-audiodecoder-stsound/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
