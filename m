@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 23:21:05 +0200
-Subject: [Buildroot] [PATCH v5] gcc: explicitly use
- C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace
-In-Reply-To: <1427205315-13864-1-git-send-email-abrodkin@synopsys.com>
-References: <1427205315-13864-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150722232105.3daf086e@free-electrons.com>
+Date: Wed, 22 Jul 2015 23:21:39 +0200
+Subject: [Buildroot] [PATCH 1/1] audit: disable python3 support
+In-Reply-To: <1437599200-21453-1-git-send-email-ryan.barnett@rockwellcollins.com>
+References: <1437599200-21453-1-git-send-email-ryan.barnett@rockwellcollins.com>
+Message-ID: <20150722232139.785d8167@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Ryan Barnett,
 
-On Tue, 24 Mar 2015 16:55:15 +0300, Alexey Brodkin wrote:
-> The gcc.mk file is passing --enable-target-optspace to gcc configure
-> script, to ask for space-optimized (-Os) target libraries. However,
-> passing this option has the effect of overriding any custom
-> CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
+On Wed, 22 Jul 2015 16:06:40 -0500, Ryan Barnett wrote:
+> With the version bump to 2.4.3, python3 support was added for
+> libaudit. With host machines that have python3 installed, this will
+> cause build issues such as:
 > 
-> These are some situations when it is required to pass custom flags on
-> buildong
-> of libgcc:
->  * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
-> (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
->  * Particular CPU requires specific instructions for HW support
->  * Deep optimizations
+>   make[5]: Entering directory `/tmp/ryan/buildroot/output/build/audit-2.4.3/bindings/swig/python3'
+>   swig -o audit_wrap.c -python -py3 -modern -I. -I../../.. -I../../../lib -I/usr/include/python3.4m -I/usr/include/python3.4m ./../src/auditswig.i
+>   make[5]: swig: Command not found
 > 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Solution is to disable python3 support such as we do with python2.7.
+> 
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 > ---
-> Compared to v3 use "=" instead of ":=" which is not actually required here.
-> Compared to v4 simply rebased on top of today's master
-> ---
->  package/gcc/gcc.mk | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+>  package/audit/audit.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
