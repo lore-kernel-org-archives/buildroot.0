@@ -1,37 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 11:19:58 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAGm1_kuCvH2c+M0y+qCLzY6Dkkt46xP6yExQF1U1cMs78iTgyg@mail.gmail.com>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CAGm1_kuCvH2c+M0y+qCLzY6Dkkt46xP6yExQF1U1cMs78iTgyg@mail.gmail.com>
-Message-ID: <20150722111958.5e93b2af@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 22 Jul 2015 11:41:58 +0200
+Subject: [Buildroot] [PATCH v2 1/1] rtl8821au: new package
+In-Reply-To: <1437431538-1528-1-git-send-email-christian@paral.in>
+References: <1437431538-1528-1-git-send-email-christian@paral.in>
+Message-ID: <55AF6566.60702@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Christian,
 
-Please strip the quoted text when you reply to an e-mail, thanks!
+Christian Stewart wrote:
+> Adding a kernel module based USB wifi driver. There is no official
+> version of this driver that works properly on ARM and with newer USB
+> WiFi cards. This driver version builds module 8821au and is based on a
+> kernel module release from ASUS with various fixes integrated in.
+>
+> [Thomas, Yann:
+>    - Using the new kernel-module setup]
+>
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
 
-On Wed, 22 Jul 2015 11:07:46 +0200, Yegor Yefremov wrote:
+[...]
 
-> >>          arm | socketcand-8339e62a6bf60be5... | NOK | http://autobuild.buildroot.net/results/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
-> >
-> > GCC 5.x build issues. Yegor, can you have a look?
-> 
-> Sent patch upstream and awaiting reaction:
-> https://github.com/dschanoeh/socketcand/pull/12
+> --- /dev/null
+> +++ b/package/rtl8821au/rtl8821au.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# rtl8821au
+> +#
+> +################################################################################
+> +
+> +RTL8821AU_VERSION = 4.3.14
+> +RTL8821AU_SITE = $(call github,paralin,rtl8821au,v$(RTL8821AU_VERSION))
+> +ifeq ($(call qstrip,$(BR2_ENDAIN)),BIG)
+> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_BIG_ENDIAN
+> +else
+> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_LITTLE_ENDIAN
+> +endif
 
-The patch looks reasonable, maybe we can merge it in Buildroot in the
-mean time?
+s/ENDAIN/ENDIAN/
 
-Thanks,
+Besides, since BR2_ENDIAN is an uppercase string, why not replacing
+these 5 lines with (untested):
 
-Thomas
+   RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
