@@ -1,7 +1,9 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Wed, 22 Jul 2015 10:33:31 +0200
-Subject: [Buildroot] [PATCH 1/2] qt/qt5script: Remove the GPLv2 licence file
-Message-ID: <1437554012-25241-1-git-send-email-corjon.j@ecagroup.com>
+Date: Wed, 22 Jul 2015 10:33:32 +0200
+Subject: [Buildroot] [PATCH 2/2] qt/qt5base: Fix big endian image conversion
+In-Reply-To: <1437554012-25241-1-git-send-email-corjon.j@ecagroup.com>
+References: <1437554012-25241-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1437554012-25241-2-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/qt5script/qt5script.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../qt5base/0007-big_endian-fix_destformat.patch   | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/qt5/qt5base/0007-big_endian-fix_destformat.patch
 
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-index 7f0efbb..c654fe5 100644
---- a/package/qt5/qt5script/qt5script.mk
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -12,7 +12,7 @@ QT5SCRIPT_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT5SCRIPT_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5SCRIPT_LICENSE = Commercial license
- QT5SCRIPT_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5base/0007-big_endian-fix_destformat.patch b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
+new file mode 100644
+index 0000000..b30d220
+--- /dev/null
++++ b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
+@@ -0,0 +1,34 @@
++From 02ab210ea9bc5ee53fa4f1db2f068ce24272a6cd Mon Sep 17 00:00:00 2001
++From: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
++Date: Fri, 3 Jul 2015 14:19:02 +0200
++Subject: [PATCH] Fix compile error on big endian
++
++DestFormat is not defined here but should be Format_RGBX8888
++
++Change-Id: Ie33989a6fc31650434281a6b7b0f4806524268af
++Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
++Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
++Reviewed-by: Simon Hausmann <simon.hausmann@theqtcompany.com>
++
++Upstream-Status: https://codereview.qt-project.org/#/c/120654/
++Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
++---
++ src/gui/image/qimage_conversions.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
++index e0ca2c5..02f32aa 100644
++--- a/src/gui/image/qimage_conversions.cpp
+++++ b/src/gui/image/qimage_conversions.cpp
++@@ -1103,7 +1103,7 @@ static bool mask_alpha_converter_rgbx_inplace(QImageData *data, Qt::ImageConvers
++         }
++         rgb_data += pad;
++     }
++-    data->format = DestFormat;
+++    data->format = QImage::Format_RGBX8888;
++     return true;
++ #endif
++ }
++-- 
++2.1.0
++
 -- 
 2.1.0
