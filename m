@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:40 +0200
-Subject: [Buildroot] [PATCH 18/47] package/kodi-pvr-hts: new package
+Date: Wed, 22 Jul 2015 22:30:29 +0200
+Subject: [Buildroot] [PATCH 07/47] package/kodi-audioencoder-flac: bump
+	version
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-19-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                     |    1 +
- package/kodi-pvr-hts/Config.in       |    7 +++++++
- package/kodi-pvr-hts/kodi-pvr-hts.mk |   17 +++++++++++++++++
- package/kodi/Config.in               |    1 +
- 4 files changed, 26 insertions(+)
- create mode 100644 package/kodi-pvr-hts/Config.in
- create mode 100644 package/kodi-pvr-hts/kodi-pvr-hts.mk
+ package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 47dc3ee..9ee41cf 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -114,6 +114,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_DVBLINK
- 	select BR2_PACKAGE_KODI_PVR_DVBVIEWER
- 	select BR2_PACKAGE_KODI_PVR_FILMON
-+	select BR2_PACKAGE_KODI_PVR_HTS
- 	help
- 	  Kodi PVR addon was split into seperate modules
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+index 2ccc1b7..154e39c 100644
+--- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/kodi-pvr-hts/Config.in b/package/kodi-pvr-hts/Config.in
-new file mode 100644
-index 0000000..c4c4497
---- /dev/null
-+++ b/package/kodi-pvr-hts/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_HTS
-+	bool "kodi-pvr-hts"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  Tvheadend HTSP PVR client addon for Kodi
-+
-+	  https://github.com/kodi-pvr/pvr.hts
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-new file mode 100644
-index 0000000..abd8b6b
---- /dev/null
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-pvr-hts
-+#
-+################################################################################
-+
-+KODI_PVR_HTS_VERSION = 5c2244044a00ecd3320fc6ce15dd208c16578588
-+KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
-+KODI_PVR_HTS_LICENSE = GPLv2+
-+KODI_PVR_HTS_LICENSE_FILES = src/Tvheadend.cpp
-+
-+KODI_PVR_HTS_DEPENDENCIES = kodi-platform
-+
-+KODI_PVR_HTS_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 12d299c..9a20d83 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -257,6 +257,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-dvblink/Config.in"
- 	source "package/kodi-pvr-dvbviewer/Config.in"
- 	source "package/kodi-pvr-filmon/Config.in"
-+	source "package/kodi-pvr-hts/Config.in"
- endmenu
- 
- menu "Audio encoder addons"
+-KODI_AUDIOENCODER_FLAC_VERSION = 84acb14101b9114472cd20f6a0f8fdefbb376113
++KODI_AUDIOENCODER_FLAC_VERSION = a5e2d1262de3b2de567cf0a8207636ebaacb8775
+ KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
+ KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
 -- 
 1.7.10.4
