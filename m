@@ -1,41 +1,80 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 22 Jul 2015 11:18:40 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.1.3
-In-Reply-To: <1437574720-12784-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1437574720-12784-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1437574720-12784-2-git-send-email-gustavo@zacarias.com.ar>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 22 Jul 2015 15:23:30 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <55AF91B5.8050806@zacarias.com.ar>
+References: <20150722063018.99E6B101957@stock.ovh.net>
+ <20150722094349.424e7a3e@free-electrons.com>
+ <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
+ <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
+ <55AF8CF6.7080709@zacarias.com.ar>
+ <20150722144535.103766f3@free-electrons.com>
+ <55AF91B5.8050806@zacarias.com.ar>
+Message-ID: <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Gustavo, Thomas,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 097cde5..74af51d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.1.2"
-+	bool "4.1.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.1.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.1.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.3.6
+Thanks for the helpful explanation earlier.
+
+>> *Or*, maybe better, we fix those packages so that they do the right
+>> configure.ac test and automatically link with libatomic if needed.
+>> Probably this is what glib should do, for example. This reduces the
+>> crap in Buildroot, and allows to push the solution to the upstream
+>> projects. I don't think that many packages have atomic operations
+>> requirements, so it should not be a horrible effort.
+>>
+>> Thoughts?
+>
+>
+> The problem is that packages might have a valid reason for not doing so,
+like what glib explicitly says "lockless atomics", libatomic implements the
+fallback via locks.
+> One of the fallbacks is that performance will suffer possibly a lot
+(depending on usage), there may be other drawbacks that i'm not aware of.
+
+I have a compromise idea for libglib2. It involves asking the upstream to
+patch but avoids extra configure.ac magic. I think the same principle
+applies for all packages dealing with this problem.
+
+The problematic code in libglib2's gthread-posix.c can be traced back to
+this compile-time decision point :
+
+===================
+/* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
+#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
+#define USE_NATIVE_MUTEX
+#endif
+===================
+
+In other words, they're assuming (in essence) that if __ATOMIC_SEQ_CST is
+defined then the architecture must support atomic instructions. This
+assumption appears to be invalid.
+
+GCC defines macros which indicate the presence of the atomic compare and
+swap functions, see :
+https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html
+
+If we fix the above code to :
+
+===================
+/* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
+#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) &&
+defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
+#define USE_NATIVE_MUTEX
+#endif
+===================
+
+... the package compiles cleanly. This sounds like what they actually
+intended to do, as their atomic macros (gatomic.h) test the compare & swap
+macros.
+
+regards
+
+Brendan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150722/a771c329/attachment.html>
