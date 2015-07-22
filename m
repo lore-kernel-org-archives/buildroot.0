@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:49 +0200
-Subject: [Buildroot] [PATCH 27/47] package/kodi-pvr-vdr-vnsi: new package
+Date: Wed, 22 Jul 2015 22:30:42 +0200
+Subject: [Buildroot] [PATCH 20/47] package/kodi-pvr-mediaportal-tvserver:
+	new package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-28-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-21-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +13,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                               |    1 +
- package/kodi-pvr-vdr-vnsi/Config.in            |    7 +++++++
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk |   17 +++++++++++++++++
- package/kodi/Config.in                         |    1 +
+ Config.in.legacy                                      |    1 +
+ package/kodi-pvr-mediaportal-tvserver/Config.in       |    7 +++++++
+ .../kodi-pvr-mediaportal-tvserver.mk                  |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
  4 files changed, 26 insertions(+)
- create mode 100644 package/kodi-pvr-vdr-vnsi/Config.in
- create mode 100644 package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+ create mode 100644 package/kodi-pvr-mediaportal-tvserver/Config.in
+ create mode 100644 package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 75cb0d9..0802f17 100644
+index 8c82cc6..d121301 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -123,6 +123,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_PCTV
- 	select BR2_PACKAGE_KODI_PVR_STALKER
- 	select BR2_PACKAGE_KODI_PVR_VBOX
-+	select BR2_PACKAGE_KODI_PVR_VDR_VNSI
+@@ -116,6 +116,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_FILMON
+ 	select BR2_PACKAGE_KODI_PVR_HTS
+ 	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
++	select BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
  	help
  	  Kodi PVR addon was split into seperate modules
  
-diff --git a/package/kodi-pvr-vdr-vnsi/Config.in b/package/kodi-pvr-vdr-vnsi/Config.in
+diff --git a/package/kodi-pvr-mediaportal-tvserver/Config.in b/package/kodi-pvr-mediaportal-tvserver/Config.in
 new file mode 100644
-index 0000000..768dec8
+index 0000000..733ca88
 --- /dev/null
-+++ b/package/kodi-pvr-vdr-vnsi/Config.in
++++ b/package/kodi-pvr-mediaportal-tvserver/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_VDR_VNSI
-+	bool "kodi-pvr-vdr-vnsi"
++config BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
++	bool "kodi-pvr-mediaportal-tvserver"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Kodi PVR addon VNSI
++	  MediaPortal TVServer PVR client addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.vdr.vnsi
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++	  https://github.com/kodi-pvr/pvr.mediaportal.tvserver
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
 new file mode 100644
-index 0000000..bac61ab
+index 0000000..3509b28
 --- /dev/null
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-vdr-vnsi
++# kodi-pvr-mediaportal-tvserver
 +#
 +################################################################################
 +
-+KODI_PVR_VDR_VNSI_VERSION = 550a4a2e093b4418394cdbe6f72cd7c76f0327b7
-+KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
-+KODI_PVR_VDR_VNSI_LICENSE = GPLv2+
-+KODI_PVR_VDR_VNSI_LICENSE_FILES = src/VNSI_Admin.cpp
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 29809d10010a21b08b9e652e36bc51dac2171690
++KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
++KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPLv2+
++KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/README
 +
-+KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi-platform
++KODI_PVR_MEDIAPORTAL_TVSERVER_DEPENDENCIES = kodi-platform
 +
-+KODI_PVR_VDR_VNSI_CONF_OPTS += \
++KODI_PVR_MEDIAPORTAL_TVSERVER_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7b497fc..92f10df 100644
+index fe1d032..ad1d23e 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -266,6 +266,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-pctv/Config.in"
- 	source "package/kodi-pvr-stalker/Config.in"
- 	source "package/kodi-pvr-vbox/Config.in"
-+	source "package/kodi-pvr-vdr-vnsi/Config.in"
+@@ -259,6 +259,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-filmon/Config.in"
+ 	source "package/kodi-pvr-hts/Config.in"
+ 	source "package/kodi-pvr-iptvsimple/Config.in"
++	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
  endmenu
  
  menu "Audio encoder addons"
