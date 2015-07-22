@@ -1,60 +1,63 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Wed, 22 Jul 2015 10:33:32 +0200
-Subject: [Buildroot] [PATCH 2/2] qt/qt5base: Fix big endian image conversion
-In-Reply-To: <1437554012-25241-1-git-send-email-corjon.j@ecagroup.com>
-References: <1437554012-25241-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <1437554012-25241-2-git-send-email-corjon.j@ecagroup.com>
+From: Paul Cercueil <paul.cercueil@analog.com>
+Date: Wed, 22 Jul 2015 10:45:05 +0200
+Subject: [Buildroot] [PATCH] libiio: Add a patch from upstream to fix
+	building without a C++ compiler
+Message-ID: <1437554705-24757-1-git-send-email-paul.cercueil@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
- .../qt5base/0007-big_endian-fix_destformat.patch   | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/qt5/qt5base/0007-big_endian-fix_destformat.patch
+This fixes a build issue reported by the autobuilder.
 
-diff --git a/package/qt5/qt5base/0007-big_endian-fix_destformat.patch b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
+Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+---
+ ...ake-fix-build-on-unix-systems-without-cpp.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
+
+diff --git a/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch b/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
 new file mode 100644
-index 0000000..b30d220
+index 0000000..4839a39
 --- /dev/null
-+++ b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
-@@ -0,0 +1,34 @@
-+From 02ab210ea9bc5ee53fa4f1db2f068ce24272a6cd Mon Sep 17 00:00:00 2001
-+From: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
-+Date: Fri, 3 Jul 2015 14:19:02 +0200
-+Subject: [PATCH] Fix compile error on big endian
++++ b/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
+@@ -0,0 +1,36 @@
++From 2e6fa357ffbe755bfecaecad4fc82e3307fe2831 Mon Sep 17 00:00:00 2001
++From: Paul Cercueil <paul.cercueil@analog.com>
++Date: Wed, 22 Jul 2015 10:25:01 +0200
++Subject: [PATCH] CMake: Fix build on UNIX systems without a C++ compiler
 +
-+DestFormat is not defined here but should be Format_RGBX8888
-+
-+Change-Id: Ie33989a6fc31650434281a6b7b0f4806524268af
-+Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
-+Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
-+Reviewed-by: Simon Hausmann <simon.hausmann@theqtcompany.com>
-+
-+Upstream-Status: https://codereview.qt-project.org/#/c/120654/
-+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
++Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
 +---
-+ src/gui/image/qimage_conversions.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ bindings/csharp/CMakeLists.txt | 2 +-
++ bindings/python/CMakeLists.txt | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
-+index e0ca2c5..02f32aa 100644
-+--- a/src/gui/image/qimage_conversions.cpp
-++++ b/src/gui/image/qimage_conversions.cpp
-+@@ -1103,7 +1103,7 @@ static bool mask_alpha_converter_rgbx_inplace(QImageData *data, Qt::ImageConvers
-+         }
-+         rgb_data += pad;
-+     }
-+-    data->format = DestFormat;
-++    data->format = QImage::Format_RGBX8888;
-+     return true;
-+ #endif
-+ }
++diff --git a/bindings/csharp/CMakeLists.txt b/bindings/csharp/CMakeLists.txt
++index 8aafb8f..fceab88 100644
++--- a/bindings/csharp/CMakeLists.txt
+++++ b/bindings/csharp/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 2.8.7)
++-project(libiio-sharp)
+++project(libiio-sharp LANGUAGES NONE)
++ 
++ find_program(MCS_EXECUTABLE
++ 	NAMES mcs csc
++diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
++index 22ffdb4..76ceae8 100644
++--- a/bindings/python/CMakeLists.txt
+++++ b/bindings/python/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 2.8.7)
++-project(libiio-py)
+++project(libiio-py LANGUAGES NONE)
++ 
++ include(FindPythonInterp)
++ 
 +-- 
-+2.1.0
++2.1.4
 +
 -- 
-2.1.0
+2.1.4
