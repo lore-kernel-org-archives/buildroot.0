@@ -1,80 +1,69 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 22 Jul 2015 15:23:30 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <55AF91B5.8050806@zacarias.com.ar>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
- <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
- <55AF8CF6.7080709@zacarias.com.ar>
- <20150722144535.103766f3@free-electrons.com>
- <55AF91B5.8050806@zacarias.com.ar>
-Message-ID: <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 22 Jul 2015 11:34:36 -0300
+Subject: [Buildroot] [PATCH] boost: fix build for sparc
+Message-ID: <1437575676-4310-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, Thomas,
+Using upstream patch, fixes:
+http://autobuild.buildroot.net/results/dd0/dd032aa7b387f3ba5b25bffcaf833ba0ea9ba199/
 
-Thanks for the helpful explanation earlier.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
 
->> *Or*, maybe better, we fix those packages so that they do the right
->> configure.ac test and automatically link with libatomic if needed.
->> Probably this is what glib should do, for example. This reduces the
->> crap in Buildroot, and allows to push the solution to the upstream
->> projects. I don't think that many packages have atomic operations
->> requirements, so it should not be a horrible effort.
->>
->> Thoughts?
->
->
-> The problem is that packages might have a valid reason for not doing so,
-like what glib explicitly says "lockless atomics", libatomic implements the
-fallback via locks.
-> One of the fallbacks is that performance will suffer possibly a lot
-(depending on usage), there may be other drawbacks that i'm not aware of.
-
-I have a compromise idea for libglib2. It involves asking the upstream to
-patch but avoids extra configure.ac magic. I think the same principle
-applies for all packages dealing with this problem.
-
-The problematic code in libglib2's gthread-posix.c can be traced back to
-this compile-time decision point :
-
-===================
-/* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
-#define USE_NATIVE_MUTEX
-#endif
-===================
-
-In other words, they're assuming (in essence) that if __ATOMIC_SEQ_CST is
-defined then the architecture must support atomic instructions. This
-assumption appears to be invalid.
-
-GCC defines macros which indicate the presence of the atomic compare and
-swap functions, see :
-https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html
-
-If we fix the above code to :
-
-===================
-/* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) &&
-defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
-#define USE_NATIVE_MUTEX
-#endif
-===================
-
-... the package compiles cleanly. This sounds like what they actually
-intended to do, as their atomic macros (gatomic.h) test the compare & swap
-macros.
-
-regards
-
-Brendan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150722/a771c329/attachment.html>
+diff --git a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+new file mode 100644
+index 0000000..a4d39b3
+--- /dev/null
++++ b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+@@ -0,0 +1,42 @@
++From ec60c37295146bb80aa44a92cf416027b75b5ff7 Mon Sep 17 00:00:00 2001
++From: Vladimir Prus <vladimir@codesourcery.com>
++Date: Mon, 27 Apr 2015 19:12:54 +0300
++Subject: [PATCH] Remove bogus 'c3' cpu varant for SPARC.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/tools/gcc.jam | 3 +--
++ src/tools/gcc.py  | 3 +--
++ 2 files changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
++index eff95ae..128ab84 100644
++--- a/tools/build/src/tools/gcc.jam
+++++ b/tools/build/src/tools/gcc.jam
++@@ -1138,8 +1138,7 @@ cpu-flags gcc OPTIONS : x86 : c3-2 : -march=c3-2 ;
++ ##
++ cpu-flags gcc OPTIONS : x86 : atom : -march=atom ;
++ # Sparc
++-cpu-flags gcc OPTIONS : sparc : c3 : -mcpu=c3 : default ;
++-cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 ;
+++cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 : default ;
++ cpu-flags gcc OPTIONS : sparc : cypress : -mcpu=cypress ;
++ cpu-flags gcc OPTIONS : sparc : v8 : -mcpu=v8 ;
++ cpu-flags gcc OPTIONS : sparc : supersparc : -mcpu=supersparc ;
++diff --git a/src/tools/gcc.py b/src/tools/gcc.py
++index a13ce7a..d2d3294 100644
++--- a/tools/build/src/tools/gcc.py
+++++ b/tools/build/src/tools/gcc.py
++@@ -789,8 +789,7 @@ cpu_flags('gcc', 'OPTIONS', 'x86', 'atom', ['-march=atom'])
++ # Sparc
++ flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>32'], ['-m32'])
++ flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>64'], ['-m64'])
++-cpu_flags('gcc', 'OPTIONS', 'sparc', 'c3', ['-mcpu=c3'], default=True)
++-cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'])
+++cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'], default=True)
++ cpu_flags('gcc', 'OPTIONS', 'sparc', 'cypress', ['-mcpu=cypress'])
++ cpu_flags('gcc', 'OPTIONS', 'sparc', 'v8', ['-mcpu=v8'])
++ cpu_flags('gcc', 'OPTIONS', 'sparc', 'supersparc', ['-mcpu=supersparc'])
++-- 
++2.3.6
++
+-- 
+2.3.6
