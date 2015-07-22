@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:30 +0200
-Subject: [Buildroot] [PATCH 08/47] package/kodi-audioencoder-lame: bump
-	version
+Date: Wed, 22 Jul 2015 22:30:59 +0200
+Subject: [Buildroot] [PATCH 37/47] package/kodi-screensaver-asteroids: new
+	package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-38-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi-screensaver-asteroids/Config.in          |    6 ++++++
+ .../kodi-screensaver-asteroids.mk                     |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    4 ++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/kodi-screensaver-asteroids/Config.in
+ create mode 100644 package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-index 8a4a28c..78a2d71 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+new file mode 100644
+index 0000000..b1a1d20
+--- /dev/null
++++ b/package/kodi-screensaver-asteroids/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
++	bool "kodi-screensaver-asteroids"
++	help
++	  Asteroids screensaver for Kodi
++
++	  https://github.com/notspiff/screensaver.asteroids
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+new file mode 100644
+index 0000000..cc25e40
+--- /dev/null
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# kodi-screensaver-asteroids
++#
++################################################################################
++
++KODI_SCREENSAVER_ASTEROIDS_VERSION = d4c2e3b499544ef55be364b34e5569d9c31c9615
++KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
++KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
++KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
++
++KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
++
++KODI_SCREENSAVER_ASTEROIDS_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 63c3564..60e0e15 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -288,4 +288,8 @@ menu "Audio encoder addons"
+ 	source "package/kodi-audioencoder-wav/Config.in"
+ endmenu
  
--KODI_AUDIOENCODER_LAME_VERSION = 3eb59de951996659c143faaabacc5f34ee9a0b81
-+KODI_AUDIOENCODER_LAME_VERSION = b283cd50cd2f89b7fd7b903c957a6a993e3756d2
- KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
- KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
- KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
++menu "Screensavers"
++	source "package/kodi-screensaver-asteroids/Config.in"
++endmenu
++
+ endif # BR2_PACKAGE_KODI
 -- 
 1.7.10.4
