@@ -1,41 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 11:03:39 +0200
-Subject: [Buildroot] [PATCH] openipmi: don't search host library path
-In-Reply-To: <1a12fb9982cbe53f904c435e4fe565927e54f353.1437538857.git.baruch@tkos.co.il>
-References: <1a12fb9982cbe53f904c435e4fe565927e54f353.1437538857.git.baruch@tkos.co.il>
-Message-ID: <20150722110339.0aeb2ef1@free-electrons.com>
+Date: Wed, 22 Jul 2015 11:04:01 +0200
+Subject: [Buildroot] [git commit] qt/qt5base: Fix big endian image conversion
+Message-ID: <20150722090404.A3CEE8192C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=1ffbcceea9148afe835d41435e4df7a7e2b2e35e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jul 2015 07:20:57 +0300, Baruch Siach wrote:
-> Add a patch removing search of host library path.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/bb9/bb9a5d4f2058765a3630170a11ee087c9c289c3d/
-> http://autobuild.buildroot.net/results/0b3/0b37f7648bed99bcb1b5bf727171ccc83283d01e/
-> http://autobuild.buildroot.net/results/5f7/5f7e6b3279d0e78e3298cdfe7db595e5043ff685/
-> 
-> and many more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> As the OpenIPMI website is down at the moment due to sourceforge
-> infrastructure issues I haven't sent the patch upstream yet.
-> ---
->  .../0001-Avoid-searching-host-library-path.patch   | 52 ++++++++++++++++++++++
->  package/openipmi/openipmi.mk                       |  2 +
->  2 files changed, 54 insertions(+)
->  create mode 100644 package/openipmi/0001-Avoid-searching-host-library-path.patch
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../qt5base/0007-big_endian-fix_destformat.patch   |   34 ++++++++++++++++++++
+ 1 files changed, 34 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5base/0007-big_endian-fix_destformat.patch b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
+new file mode 100644
+index 0000000..b30d220
+--- /dev/null
++++ b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
+@@ -0,0 +1,34 @@
++From 02ab210ea9bc5ee53fa4f1db2f068ce24272a6cd Mon Sep 17 00:00:00 2001
++From: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
++Date: Fri, 3 Jul 2015 14:19:02 +0200
++Subject: [PATCH] Fix compile error on big endian
++
++DestFormat is not defined here but should be Format_RGBX8888
++
++Change-Id: Ie33989a6fc31650434281a6b7b0f4806524268af
++Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
++Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
++Reviewed-by: Simon Hausmann <simon.hausmann@theqtcompany.com>
++
++Upstream-Status: https://codereview.qt-project.org/#/c/120654/
++Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
++---
++ src/gui/image/qimage_conversions.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
++index e0ca2c5..02f32aa 100644
++--- a/src/gui/image/qimage_conversions.cpp
+++++ b/src/gui/image/qimage_conversions.cpp
++@@ -1103,7 +1103,7 @@ static bool mask_alpha_converter_rgbx_inplace(QImageData *data, Qt::ImageConvers
++         }
++         rgb_data += pad;
++     }
++-    data->format = DestFormat;
+++    data->format = QImage::Format_RGBX8888;
++     return true;
++ #endif
++ }
++-- 
++2.1.0
++
