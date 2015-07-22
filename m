@@ -1,40 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 11:22:27 +0200
-Subject: [Buildroot] [PATCH] qt/qt5webchannel: new package
-In-Reply-To: <55AF5F3F.3080307@ecagroup.com>
-References: <1437551725-24160-1-git-send-email-corjon.j@ecagroup.com>
- <20150722110713.6be3ca53@free-electrons.com>
- <55AF5F3F.3080307@ecagroup.com>
-Message-ID: <20150722112227.2094b734@free-electrons.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Wed, 22 Jul 2015 11:30:54 +0200
+Subject: [Buildroot] [PATCH] zedboard: Use default U-Boot after bump to
+	2015.07
+Message-ID: <20150722113054.1c0508f0@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The U-Boot v2015.07+ is required for successful out-of-the-box
+build for common Xilinx Zynq boards (including Zedboard).
+Such U-Boot is default since e13609ddf42a.
 
-Please don't reply to me directly, keep the Buildroot mailing list in
-Cc. Otherwise, it doesn't make much sense to go through the hassle of
-writing in English :-)
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+---
+ board/avnet/zedboard/readme.txt | 4 ++--
+ configs/zedboard_defconfig      | 3 ---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-On Wed, 22 Jul 2015 09:15:49 +0000, Julien CORJON wrote:
-
-> > I'm certainly not sure the patch to fix the !qml build issue is the
-> > right one, we'll see what upstream says. But other than that, the
-> > package looks good, so let's get some autobuilder coverage of it.
-> 
-> Patch is ugly but i'm not sure of the Qt QT_QML_LIB macro durability. 
-> That's why I've prefered create my own macro using CXX_FLAGS.
-> I've tested this patch both with and without qml module and it compile 
-> in both case.
-
-Ok, understood. We'll see what upstream says about this.
-
-Thanks,
-
-Thomas
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+index e0ce024..c62be79 100644
+--- a/board/avnet/zedboard/readme.txt
++++ b/board/avnet/zedboard/readme.txt
+@@ -15,14 +15,14 @@ Steps to create a working system for Zedboard:
+ 
+ The expected output:
+ 
+- U-Boot SPL 2015.07-rc2 (Jun 18 2015 - 16:42:58)
++ U-Boot SPL 2015.07 (Jul 22 2015 - 11:19:31)
+  mmc boot
+  reading system.dtb
+  spl_load_image_fat_os: error reading image system.dtb, err - -1
+  reading u-boot-dtb.img
+  reading u-boot-dtb.img
+ 
+- U-Boot 2015.07-rc2 (Jun 18 2015 - 16:42:58 +0200)
++ U-Boot 2015.07 (Jul 22 2015 - 11:19:31 +0200)
+ 
+  Model: Zynq ZED Board
+  I2C:   ready
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+index 99720db..5c3143a 100644
+--- a/configs/zedboard_defconfig
++++ b/configs/zedboard_defconfig
+@@ -18,9 +18,6 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
+ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
+ BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/zedboard/uboot"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.5
