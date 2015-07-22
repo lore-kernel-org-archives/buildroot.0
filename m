@@ -1,42 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jul 2015 07:35:01 +0200
-Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
-In-Reply-To: <20150721220108.GA1183@t61>
-References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
- <20150719132950.GC4020@free.fr> <20150721220108.GA1183@t61>
-Message-ID: <20150722053501.GB4041@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Jul 2015 08:16:51 +0200
+Subject: [Buildroot] snmpd
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD8BCB@svr-wa-exch1.atg.lc>
+References: <944894A3EB1D044A9003B2F944389BB20474AD8BCB@svr-wa-exch1.atg.lc>
+Message-ID: <20150722081651.50be78ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+Tommy,
 
-On 2015-07-22 00:01 +0200, Petr Vorel spake thusly:
-> > Since there's quite some work left to be done, and we would like to have
-> > this as part of the next release, I'm adopting this patch to fix the
-> > remaining issues that Arnout and I raised earlier.
-> 
-> I'm sorry, it took me a bit longer to reply, I was on holiday in the
-> mountains, without the internet.
+On Tue, 21 Jul 2015 17:20:40 -0700, Lee, Tommy wrote:
 
-Lucky you! :-)
+> I have a Marvell ARMADA A38x evaluation board (DB-88F6820-GP) running
+> the Buildroot 2012.11-00023-gae0d9a2-dirty release on it. I have
+> brought it up on an Ethernet segment. My next work is to enable an
+> SNMP agent which can response the SNMPv1 requests from an SNMP client
+> which is running in an Ububtu PC.
 
-> IMHO the main problem is linux-configure dependency - I wasn't able to
-> trigger it. The rest should be easy to fix. I'll write a quick note to the other posts.
+First and foremost, you should use a more recent Buildroot version.
+Buildroot 2012.11 is really old, and you won't get much support for
+this mailing list for a 3 years old Buildroot version, I'm afraid.
 
-Yup, I did solve the configury dependency. It was indeed not trivial,
-but most importantly, it uncovered an issue within the pkg-kconfig
-infra, that had to be fixed first (see my reply to your other mail).
+I guess you're using this Buildroot version specifically because it was
+given to you by Marvell. However, nothing forces you to use exactly the
+Buildroot provided by Marvell. You can use the official Buildroot with
+no problem. I do use the latest Buildroot to build a rootfs for my
+Armada 38x developments :)
 
-Regards,
-Yann E. MORIN.
+> I hope you would tell me how to create the agent and install it on
+> the Buildroot board. I will be very much appreciated.
 
+Well, just enable the netsnmp package, and that should be pretty much
+it. Maybe you'll need to adjust a few configuration files of snmpd.
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
