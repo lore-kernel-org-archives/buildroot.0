@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 17:05:39 +0200
-Subject: [Buildroot] [PATCH 4/4 v8] package/linux-backports: switch to
- using the kernel-module infra
-In-Reply-To: <200f17ef13ac12610b33139a1b1f8820fc0c85bd.1437576751.git.yann.morin.1998@free.fr>
-References: <cover.1437576751.git.yann.morin.1998@free.fr>
- <200f17ef13ac12610b33139a1b1f8820fc0c85bd.1437576751.git.yann.morin.1998@free.fr>
-Message-ID: <20150722170539.580d5638@free-electrons.com>
+Date: Wed, 22 Jul 2015 17:06:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] e2fsprogs: remove busybox tune2fs
+ when installing full version
+In-Reply-To: <1436392260-55786-1-git-send-email-ryan.barnett@rockwellcollins.com>
+References: <1436392260-55786-1-git-send-email-ryan.barnett@rockwellcollins.com>
+Message-ID: <20150722170648.0a5183e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Ryan Barnett,
 
-On Wed, 22 Jul 2015 16:58:55 +0200, Yann E. MORIN wrote:
+On Wed,  8 Jul 2015 16:51:00 -0500, Ryan Barnett wrote:
 
-> +LINUX_BACKPORTS_MAKE_OPTS = \
-> +	BACKPORT_DIR=$(@D) \
-> +	KLIB_BUILD=$(LINUX_DIR) \
-> +	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
-> +	`sed -r -e '/^\#/d;' $(@D)/.config`
+> +# Remove busybox tune2fs and e2label since that will take precedence full version
+>  define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+> +	$(if $(BR2_PACKAGE_BUSYBOX), \
+> +		rm -f $(TARGET_DIR)/sbin/tune2fs; \
+> +		rm -f $(TARGET_DIR)/sbin/e2label;)
+>  	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
+>  endef
 
-For sure this last line needs a comment.
+I really didn't like the hijacking of E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+for the purposes of Busybox related issues, so I've separated the
+Busybox related handling into a different post install target hook and
+committed.
 
-> +LINUX_BACKPORTS_MODULE_MAKE_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+Please check
+http://git.buildroot.net/buildroot/commit/?id=aa02829240b2927b2cb379eb904b6f40ff751237
 
-What is this useful for?
-
-> +define LINUX_BACKPORTS_AUTOCONF
-> +	$(MAKE) -C $(@D) $(LINUX_BACKPORTS_MAKE_OPTS) backport-include/backport/autoconf.h
-> +endef
-> +LINUX_BACKPORTS_POST_CONFIGURE_HOOKS += LINUX_BACKPORTS_AUTOCONF
-
-Also a comment above this would be good to have.
+Thanks!
 
 Thomas
 -- 
