@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 17:03:07 +0200
-Subject: [Buildroot] [PATCH 3/4 v8] package/linux-backports: new package
-In-Reply-To: <fc089d79e34b8b07a9e1e04c7a9cb0c179554ce7.1437576751.git.yann.morin.1998@free.fr>
-References: <cover.1437576751.git.yann.morin.1998@free.fr>
- <fc089d79e34b8b07a9e1e04c7a9cb0c179554ce7.1437576751.git.yann.morin.1998@free.fr>
-Message-ID: <20150722170307.5451a658@free-electrons.com>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Date: Wed, 22 Jul 2015 10:04:11 -0500
+Subject: [Buildroot] [PATCH] setools: Disable on Blackfin and NIOS II
+Message-ID: <1437577451-47533-1-git-send-email-clayton.shotwell@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+The setools package is not currently building on either the NIOS II or
+the Blackfin architectures. Disabling for now.
 
-On Wed, 22 Jul 2015 16:58:54 +0200, Yann E. MORIN wrote:
+Fixes:
+http://autobuild.buildroot.net/results/2ee84c0dc027912e059ca4ae518d6f11fd8317a7/
+http://autobuild.buildroot.net/results/401e4c48f4d865b2722f284f1038e25c5d420f43/
+http://autobuild.buildroot.net/results/e67ef47ea9ff4cbb012d374b3b290fb7bddf7ef3/
 
-> +linux-backports-check-kernel-version: $(BUILD_DIR)/linux-$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))/.config
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+---
+ package/setools/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Doesn't this fail really badly if:
-
-LINUX_OVERRIDE_SRCDIR = <some value>
-
- ?
-
-In this case, $(LINUX_DIR) is $(BUILD_DIR)/linux-custom/ and not
-$(BUILD_DIR)/linux-$(call qstrip,$(BR2_LINUX_KERNEL_VERSION)).
-
-Argh :-/
-
-Thomas
+diff --git a/package/setools/Config.in b/package/setools/Config.in
+index 7c85af6..2e69283 100644
+--- a/package/setools/Config.in
++++ b/package/setools/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_SETOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_nios2 && !BR2_bfin
+ 	help
+ 	  SETools is an open source project designed to facilitate
+ 	  SELinux policy analysis. The primary tools are:
+@@ -23,3 +24,4 @@ config BR2_PACKAGE_SETOOLS
+ comment "setools needs a toolchain w/ threads, C++, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+ 		|| !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_nios2 && !BR2_bfin
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
