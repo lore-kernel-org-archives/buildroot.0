@@ -1,75 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:35 +0200
-Subject: [Buildroot] [PATCH 13/47] package/kodi-platform: new package
+Date: Wed, 22 Jul 2015 22:30:31 +0200
+Subject: [Buildroot] [PATCH 09/47] package/kodi-audioencoder-vorbis: bump
+	version
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is used by the PVR addon packages and has no use by itself,
-therefore is does not show up in menuconfig.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-platform/Config.in        |    7 +++++++
- package/kodi-platform/kodi-platform.mk |   17 +++++++++++++++++
- package/kodi/Config.in                 |    2 ++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/kodi-platform/Config.in
- create mode 100644 package/kodi-platform/kodi-platform.mk
+ package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
-new file mode 100644
-index 0000000..cde1925
---- /dev/null
-+++ b/package/kodi-platform/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PLATFORM
-+	bool
-+	select BR2_PACKAGE_LIBPLATFORM
-+	help
-+	  Kodi add-on platform support library
-+
-+	  https://github.com/xbmc/kodi-platform
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-new file mode 100644
-index 0000000..22d7752
---- /dev/null
-+++ b/package/kodi-platform/kodi-platform.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# kodi-platform
-+#
-+################################################################################
-+
-+KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
-+KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
-+KODI_PLATFORM_LICENSE = GPLv3+
-+KODI_PLATFORM_LICENSE_FILES = COPYING
-+KODI_PLATFORM_INSTALL_STAGING = YES
-+KODI_PLATFORM_DEPENDENCIES = libplatform kodi
-+
-+KODI_PLATFORM_CONF_OPTS += \
-+	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 13638df..454f839 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -102,6 +102,8 @@ menuconfig BR2_PACKAGE_KODI
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index 493fcbf..6bf2933 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_KODI
- 
-+source "package/kodi-platform/Config.in"
-+
- config BR2_PACKAGE_KODI_ALSA_LIB
- 	bool "alsa"
- 	select BR2_PACKAGE_ALSA_LIB
+-KODI_AUDIOENCODER_VORBIS_VERSION = d556a6872e59806526f208e8d0af5f886a6c67bb
++KODI_AUDIOENCODER_VORBIS_VERSION = 15d619dae4411ecebadf2ec2996d611600ad0bee
+ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
 -- 
 1.7.10.4
