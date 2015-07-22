@@ -1,62 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jul 2015 23:01:08 +0200
-Subject: [Buildroot] [PATCH] snmppp: extract license text from source
- files
-In-Reply-To: <20150721215438.19389da8@free-electrons.com>
-References: <1437496184-26203-1-git-send-email-luca@lucaceresoli.net>
- <20150721215438.19389da8@free-electrons.com>
-Message-ID: <20150722210108.GB3777@free.fr>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 22 Jul 2015 22:03:57 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150722224607.190c7886@free-electrons.com>
+References: <20150722063018.99E6B101957@stock.ovh.net>
+ <20150722094349.424e7a3e@free-electrons.com>
+ <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
+ <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
+ <55AF8CF6.7080709@zacarias.com.ar>
+ <20150722144535.103766f3@free-electrons.com>
+ <55AF91B5.8050806@zacarias.com.ar>
+ <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
+ <20150722165405.217f4e4f@free-electrons.com>
+ <CA+BsyQ67ic88wTW173o4QWbZS8d=cnSRh_2RDp4Ffs8T2Lsyeg@mail.gmail.com>
+ <55AFB950.10603@zacarias.com.ar>
+ <20150722220606.58233cd0@free-electrons.com>
+ <CA+BsyQ7p+dtTmE41+DvuyZ8n0jLgn_6agGpi5MuD2aUOR+e1Dw@mail.gmail.com>
+ <20150722224607.190c7886@free-electrons.com>
+Message-ID: <CA+BsyQ5=nGz6W+a+QXPeZSKpyV8vfFfcwibrgC_WXHT0dXQK+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Luca, All,
+>
+> Which webkit did you look at? The one in package/webkitgtk/ which is
+> going to be deprecated and that we don't really care about? Or the
+> webkitgtk24 package submitted by Gustavo (only in patchwork for now,
+> not merged yet).
+>
 
-On 2015-07-21 21:54 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 21 Jul 2015 18:29:44 +0200, Luca Ceresoli wrote:
-> > There is no proper license file in the SNMP++ tarballs, so let's
-> > extract it from a source file instead of copying it entirely.
-> > 
-> > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> > ---
-> >  package/snmppp/snmppp.mk | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> In many other packages we are using a complete source file as the
-> license text. Should we switch to the solution you're proposing instead?
-> Another possibility is to do:
-> 
-> <pkg>_LICENSE_FILES = src/v3.cpp:1:50
-> 
-> To tell the package infra to extract the text from lines 1 to 50. But
-> we would never notice when the lines no longer match.
-> 
-> I'd like to have a general agreement on this before going further with
-> your patch.
+Ah, sorry about that. Should have checked first.
 
-My point of view in the case there is no license file in the package:
+The newer webkit being picked up by Gustavo's patch seems to check the
+feature macros so in principle it shouldn't have this problem.
 
- 1) we should not regenerate a file, neither manually nor automatically:
-    - the automatic part (i.e. in the infra) can be easily foiled when a
-      package is updated,
-    - the manual part (like suggested by Luca) can also, but to a lower
-      extent, be broken on updates;
+That makes me curious, though. Gustavo, you said in your comments you
+disabled MIPS support due to the absence of __sync_fetch_and_add_8 -
+however, webkit appears to provide its own substitute for this function in
+the event that it is undefined by the compiler ? (see
+Source/WTF/wtf/Atomics.cpp). At first glance I would have thought this
+should cover all the relevant cases, but no doubt you identified an issue.
 
- 2) if we refer to a file, it should be an existing file like a source
-    file.
+regards
 
-But all-in-all, I believe we should not refer to a license file if
-there's none in the package.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Brendan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150722/ac3f397d/attachment.html>
