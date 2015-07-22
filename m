@@ -1,35 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 14:52:42 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <55AF91B5.8050806@zacarias.com.ar>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
- <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
- <55AF8CF6.7080709@zacarias.com.ar>
- <20150722144535.103766f3@free-electrons.com>
- <55AF91B5.8050806@zacarias.com.ar>
-Message-ID: <20150722145242.3d302237@free-electrons.com>
+Date: Wed, 22 Jul 2015 14:55:03 +0200
+Subject: [Buildroot] [PATCH] c-icap: fix config script by adding
+ $(STAGING_DIR) prefix to link path. It fixes c-icap-modules build.
+In-Reply-To: <1437568841-20180-1-git-send-email-guillaume.gardet@oliseo.fr>
+References: <1437568841-20180-1-git-send-email-guillaume.gardet@oliseo.fr>
+Message-ID: <20150722145503.01f5bd26@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Guillaume,
 
-On Wed, 22 Jul 2015 09:51:01 -0300, Gustavo Zacarias wrote:
+Thanks for the patch!
 
-> The problem is that packages might have a valid reason for not doing so, 
-> like what glib explicitly says "lockless atomics", libatomic implements 
-> the fallback via locks.
-> One of the fallbacks is that performance will suffer possibly a lot 
-> (depending on usage), there may be other drawbacks that i'm not aware of.
+On Wed, 22 Jul 2015 14:40:41 +0200, Guillaume GARDET wrote:
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+> 
+> ---
+>  package/c-icap/c-icap.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+> index 0f42b6c..00a250b 100644
+> --- a/package/c-icap/c-icap.mk
+> +++ b/package/c-icap/c-icap.mk
+> @@ -57,6 +57,8 @@ define C_ICAP_TUNE_INSTALLATION
+>  		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+>  	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
+>  		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+> +	$(SED) 's%LIBS="-L%LIBS="-L$(STAGING_DIR)%' \
+> +		$(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
 
-Right, but then until someone implements the SPARC specific code in
-glib, using the fallback with locks is still better than nothing, no?
-Even if performance suffers, they are still correct from a semantic
-point of view.
+Ah, right, I missed this one! However, I think it's useless to keep
+this -L option, this $(STAGING_DIR)/usr/lib is already in the library
+search path for the cross-compiler.
+
+What about just:
+
+	$(SED) 's%-L$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
+
+Thanks,
 
 Thomas
 -- 
