@@ -1,55 +1,84 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:27 +0200
-Subject: [Buildroot] [PATCH 05/47] package/kodi: Add option for lirc support
+Date: Wed, 22 Jul 2015 22:30:38 +0200
+Subject: [Buildroot] [PATCH 16/47] package/kodi-pvr-dvbviewer: new package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/xbmc/xbmc/commit/b641e1eea54b4b9ab7f1b95092ab0a755abc63be
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in |    5 +++++
- package/kodi/kodi.mk   |    6 ++++++
- 2 files changed, 11 insertions(+)
+ Config.in.legacy                                 |    1 +
+ package/kodi-pvr-dvbviewer/Config.in             |    7 +++++++
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                           |    1 +
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-pvr-dvbviewer/Config.in
+ create mode 100644 package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 5c545f2..a5fed65 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -112,6 +112,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_LEGACY
+ 	select BR2_PACKAGE_KODI_PVR_ARGUSTV
+ 	select BR2_PACKAGE_KODI_PVR_DVBLINK
++	select BR2_PACKAGE_KODI_PVR_DVBVIEWER
+ 	help
+ 	  Kodi PVR addon was split into seperate modules
+ 
+diff --git a/package/kodi-pvr-dvbviewer/Config.in b/package/kodi-pvr-dvbviewer/Config.in
+new file mode 100644
+index 0000000..e7dd7b3
+--- /dev/null
++++ b/package/kodi-pvr-dvbviewer/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PVR_DVBVIEWER
++	bool "kodi-pvr-dvbviewer"
++	select BR2_PACKAGE_KODI_PLATFORM
++	help
++	  Kodi's DVBViewer client addon
++
++	  https://github.com/kodi-pvr/pvr.dvbviewer
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+new file mode 100644
+index 0000000..21e6372
+--- /dev/null
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# kodi-pvr-dvbviewer
++#
++################################################################################
++
++KODI_PVR_DVBVIEWER_VERSION = cbfd4552a4381d289bcfb8eda33699ecfd156bd7
++KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
++KODI_PVR_DVBVIEWER_LICENSE = GPLv2+
++KODI_PVR_DVBVIEWER_LICENSE_FILES = src/client.cpp
++
++KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
++
++KODI_PVR_DVBVIEWER_CONF_OPTS += \
++	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
++
++$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 62553d4..7d4b068 100644
+index b21530b..716f8e1 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -166,6 +166,11 @@ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic
- 	depends on !BR2_GCC_VERSION_4_5_X
- 	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
+@@ -255,6 +255,7 @@ menu "PVR addons"
+ 	source "package/kodi-addon-xvdr/Config.in"
+ 	source "package/kodi-pvr-argustv/Config.in"
+ 	source "package/kodi-pvr-dvblink/Config.in"
++	source "package/kodi-pvr-dvbviewer/Config.in"
+ endmenu
  
-+config BR2_PACKAGE_KODI_LIRC
-+	bool "lirc"
-+	help
-+	  Enable lirc support
-+
- config BR2_PACKAGE_KODI_LIBMICROHTTPD
- 	bool "web server"
- 	select BR2_PACKAGE_LIBMICROHTTPD
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 0ab3114..f62f1a5 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -185,6 +185,12 @@ else
- KODI_CONF_OPTS += --disable-libcec
- endif
- 
-+ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
-+KODI_CONF_OPTS += --enable-lirc
-+else
-+KODI_CONF_OPTS += --disable-lirc
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
- KODI_DEPENDENCIES += wavpack
- endif
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
