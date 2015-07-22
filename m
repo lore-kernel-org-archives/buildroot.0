@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Jul 2015 07:28:18 +0200
-Subject: [Buildroot] [PATCH v8 1/1] Added linux drivers backports project
-In-Reply-To: <1437519630-3674-1-git-send-email-petr.vorel@gmail.com>
-References: <1437519630-3674-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <20150722052818.GA4041@free.fr>
+Date: Wed, 22 Jul 2015 07:35:01 +0200
+Subject: [Buildroot] [PATCH v7 1/1] Added linux drivers backports project
+In-Reply-To: <20150721220108.GA1183@t61>
+References: <1435791533-25991-1-git-send-email-petr.vorel@gmail.com>
+ <20150719132950.GC4020@free.fr> <20150721220108.GA1183@t61>
+Message-ID: <20150722053501.GB4041@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +13,22 @@ To: buildroot@busybox.net
 
 Petr, All,
 
-On 2015-07-22 01:00 +0200, Petr Vorel spake thusly:
-> https://backports.wiki.kernel.org
+On 2015-07-22 00:01 +0200, Petr Vorel spake thusly:
+> > Since there's quite some work left to be done, and we would like to have
+> > this as part of the next release, I'm adopting this patch to fix the
+> > remaining issues that Arnout and I raised earlier.
 > 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
-> TODO: still don't know how to handle dependency on linux .config for
-> target linux-backports-menuconfig.
-> TODO: use kernel-module? IMHO not suitable for linux-backports.
+> I'm sorry, it took me a bit longer to reply, I was on holiday in the
+> mountains, without the internet.
 
-As I said in my previous mail, I have adopted this patch. It means I
-did some changes to it locally, notably bump to 4.1.1-1 and solve
-the configury dependency, see my branch:
-    http://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/linux-backports
+Lucky you! :-)
 
-I was about to send it yesterday evening/night, but I was really
-exhausted after a long working day, so I post-poned the respin to avoid
-mishaps due to tiredness. ;-) I'll probably send it this evening when
-I'm back home (UTC+2).
+> IMHO the main problem is linux-configure dependency - I wasn't able to
+> trigger it. The rest should be easy to fix. I'll write a quick note to the other posts.
 
-As for the configury stuff, it will need another patch to be applied
-first, to fix a breakage in the pkg-kconfig infra (my bad!), see:
-    https://patchwork.ozlabs.org/patch/498333/
-
-> Changes v7->v8:
-> * Bump version to latest stable 4.1.1-1 (dropped upsteam patx to fix
->   build error - released in new version).
-> * s/TARGET_MAKE_ENV/LINUX_MAKE_ENV (suggested by Yann E. MORIN)
-> * Improve text in menuconfig (suggested by Yann E. MORIN)
-> * Move fragments list after the base files in menuconfig (suggested by
->   Yann E. MORIN)
-> * Add comments for nesting ifeq-blocks (suggested by Yann E. MORIN)
-> * Fix indentation in Config.in
-
-I will see to include those changes from your v8 into my own branch (if
-I missed anything).
-
-Thanks! :-)
+Yup, I did solve the configury dependency. It was indeed not trivial,
+but most importantly, it uncovered an issue within the pkg-kconfig
+infra, that had to be fixed first (see my reply to your other mail).
 
 Regards,
 Yann E. MORIN.
