@@ -1,54 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 22:00:12 +0200
-Subject: [Buildroot] build libstdc++.so.6
-In-Reply-To: <1437584173498-106871.post@n4.nabble.com>
-References: <1436634230228-105322.post@n4.nabble.com>
- <20150712002830.018e4bc0@free-electrons.com>
- <1437584173498-106871.post@n4.nabble.com>
-Message-ID: <20150722220012.01206096@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 22 Jul 2015 15:06:01 +0000
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150722094349.424e7a3e@free-electrons.com>
+References: <20150722063018.99E6B101957@stock.ovh.net>
+ <20150722094349.424e7a3e@free-electrons.com>
+Message-ID: <1437577561.3396.13.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 22 Jul 2015 09:56:13 -0700 (PDT), glscantlen wrote:
-
-> I have no good reason for using that version of their toolchain.
-> I did find an earlier version of eglibc binary that contained stdc++.
-> sysroot-linaro-eglibc-gcc4.9-2014.11-arm-linux-gnueabihf.tar.xz
-> But I have not tried that ver. yet.
+On Wed, 2015-07-22 at 09:43 +0200, Thomas Petazzoni wrote:
 > 
-> My biggest  concern is having to rebuild any toolchain after a
-> ' make clean' in Buildroot. I am sure there are other methods to
-> over come a toolchain rebuild, I just have not found one I like.
-
-Just use the Linaro 14.09 toolchain that is pre-defined in Buildroot.
-Buildroot will automatically download it, extract it and set it up for
-you. I.e nothing to do or worry about.
-
-> I am currently using a hack, copy from an Ubuntu build for arm.
-> And I only need the shared stdc++ for libmali.so which was
-> also a copy from the same Ubuntu build. I would prefer to build
-> libmali.so using the provided static stdc++ BUT! libmali source
-> contains proprietary code provided thru ARM commercial licence
-> and I have not yet resolved THAT issue. See this site:
+> >          arc |                alsa-lib-1.0.29 | NOK | 
+> > http://autobuild.buildroot.net/results/b704016acfa38e7998739a2c70bcf6020c59bda8/
 > 
-> http://malideveloper.arm.com/develop-for-mali/drivers/open-source-mali-gpus-linux-exadri2-and-x11-display-drivers/
+> Static linking issue with uClibc. Alexey is working on it.
 
-Which HW platform are you working with? We already have some packages
-for the Mali GPU drivers for some platforms. And we could add more.
 
-Basically, it seems to me that you are trying to hack very complicated
-things while there are much simpler and better solutions that exist and
-that you don't know about.
+Looks like this is because a missing commit in uClibc - 
+Remember that discussion - http://lists.busybox.net/pipermail/uclibc/2014-September/048597.html?
+That was applied to uClibc-ng but not to uClibc which we closely following.
+Will ping Bernard once again because patch still applies perfectly fine.
 
-Best regards,
+Sent a not to Bernard asking to apply it to uClibc master.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> .tbss issue, Alexey is working on it.
+> 
+> >          arc |                       atf-0.21 | NOK | 
+> > http://autobuild.buildroot.net/results/bc2dc2752caadfe85f02c9d708ba44a152f2127e/
+> 
+> Same.
+> 
+> >          arc |                audiofile-0.3.6 | NOK | 
+> > http://autobuild.buildroot.net/results/5360fdeb211a46dada1aac2bd242834fb615879f/
+> >          arc |                audiofile-0.3.6 | NOK | 
+> > http://autobuild.buildroot.net/results/d74589bc1f582c7304c86b3435b613419ee9966d/
+> 
+> Same.
+
+Looks like we identified a root cause. Now it's time to fix it properly. 
+
+> >          arc |              libselinux-2.1.13 | NOK | 
+> > http://autobuild.buildroot.net/results/f08644d1ff3e769a86c4f8a3b60e40abb5f0a64e/
+> >          arc |              libselinux-2.1.13 | NOK | 
+> > http://autobuild.buildroot.net/results/4848ead8ccf4fb7b0ff582c0fac94ce9b00fd341/
+> >          arc |              libselinux-2.1.13 | NOK | 
+> > http://autobuild.buildroot.net/results/196b28f2ecf12a03390c806b5f4e9f34577998b7/
+> >          arc |              libselinux-2.1.13 | NOK | 
+> > http://autobuild.buildroot.net/results/71ee8b5b2dce1d9f096c3667cd59eaf4a3b9af2b/
+> 
+> /tmp/ccY5Q1ef.s: Assembler messages:
+> /tmp/ccY5Q1ef.s:475: Error: internal error: fixup not contained within frag
+> Makefile:138: recipe for target 'setrans_client.lo' failed
+> 
+> Alexey ?
+
+I bet this is a pre-built toolchain back from arc-2015.06-rc1 days.
+Please update it to something more up to date. At least I cannot reproduce this with
+newer toolchain.
+
+> >          arc |                   zeromq-4.0.5 | NOK | 
+> > http://autobuild.buildroot.net/results/9ba4de85136e9ac4a68dcb7ee4285e03168d4a15/
+> 
+> Toolchain problem:
+> 
+>   CXX      libzmq_la-sub.lo
+> socket_base.cpp: In member function 'void zmq::socket_base_t::event_connected(std::string&, int)':
+> socket_base.cpp:1157:1: error: Internal consistency failure: cfi row mismatch [-Werror]
+>  }
+>  ^
+
+This is a known thing in arc-2015.06 release.
+So please consider prebuilt toolchain update.
+
+-Alexey
