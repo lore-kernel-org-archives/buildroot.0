@@ -1,43 +1,57 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 22 Jul 2015 16:44:20 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <55AFB950.10603@zacarias.com.ar>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
- <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
- <55AF8CF6.7080709@zacarias.com.ar>
- <20150722144535.103766f3@free-electrons.com>
- <55AF91B5.8050806@zacarias.com.ar>
- <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
- <20150722165405.217f4e4f@free-electrons.com>
- <CA+BsyQ67ic88wTW173o4QWbZS8d=cnSRh_2RDp4Ffs8T2Lsyeg@mail.gmail.com>
- <55AFB950.10603@zacarias.com.ar>
-Message-ID: <CA+BsyQ56NZxr-PKNO4CJxt7Thh_FwEUqu-kq+pES8y-p4e6Fcg@mail.gmail.com>
+From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
+Date: Wed, 22 Jul 2015 15:30:54 +0200
+Subject: [Buildroot] [PATCH] c-icap: fix config script by adding
+ $(STAGING_DIR) prefix to link path. It fixes c-icap-modules build.
+In-Reply-To: <20150722145503.01f5bd26@free-electrons.com>
+References: <1437568841-20180-1-git-send-email-guillaume.gardet@oliseo.fr>
+ <20150722145503.01f5bd26@free-electrons.com>
+Message-ID: <55AF9B0E.8080803@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le 22/07/2015 14:55, Thomas Petazzoni a ?crit :
+> Guillaume,
 >
-> It's been a long time since i touched SPARC hardware, and even so i think
-> this looks like the right approach.
-> Though for other packages we'll still need to handle the libatomic
-> situation on a per-arch basis, but it will need to be finer-grained than
-> that since different ISA levels affect the availability of atomics as well.
-> Regards.
+> Thanks for the patch!
 >
+> On Wed, 22 Jul 2015 14:40:41 +0200, Guillaume GARDET wrote:
+>> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+>>
+>> ---
+>>   package/c-icap/c-icap.mk | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+>> index 0f42b6c..00a250b 100644
+>> --- a/package/c-icap/c-icap.mk
+>> +++ b/package/c-icap/c-icap.mk
+>> @@ -57,6 +57,8 @@ define C_ICAP_TUNE_INSTALLATION
+>>   		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+>>   	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
+>>   		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+>> +	$(SED) 's%LIBS="-L%LIBS="-L$(STAGING_DIR)%' \
+>> +		$(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
+> Ah, right, I missed this one! However, I think it's useless to keep
+> this -L option, this $(STAGING_DIR)/usr/lib is already in the library
+> search path for the cross-compiler.
+>
+> What about just:
+>
+> 	$(SED) 's%-L$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
 
-A similarly long time since I've touched SPARC hardware. Even longer since
-I've seen SPARC on an embedded box. I've seen telecom hardware with a SPARC
-CPU but that was some time ago.
+Ok, but $ sign must be escaped with another $:
+         $(SED) 's%-L$$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
 
-Do we use the 'D' word around here (deprecation) ?
+Do you want a I send a V2 with this solution?
 
-regards
 
-Brendan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150722/06d78341/attachment.html>
+Guillaume
+
+>
+> Thanks,
+>
+> Thomas
