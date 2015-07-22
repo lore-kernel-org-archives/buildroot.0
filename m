@@ -1,102 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 22 Jul 2015 07:20:57 +0300
-Subject: [Buildroot] [PATCH] openipmi: don't search host library path
-Message-ID: <1a12fb9982cbe53f904c435e4fe565927e54f353.1437538857.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Jul 2015 07:28:18 +0200
+Subject: [Buildroot] [PATCH v8 1/1] Added linux drivers backports project
+In-Reply-To: <1437519630-3674-1-git-send-email-petr.vorel@gmail.com>
+References: <1437519630-3674-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <20150722052818.GA4041@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch removing search of host library path.
+Petr, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/bb9/bb9a5d4f2058765a3630170a11ee087c9c289c3d/
-http://autobuild.buildroot.net/results/0b3/0b37f7648bed99bcb1b5bf727171ccc83283d01e/
-http://autobuild.buildroot.net/results/5f7/5f7e6b3279d0e78e3298cdfe7db595e5043ff685/
+On 2015-07-22 01:00 +0200, Petr Vorel spake thusly:
+> https://backports.wiki.kernel.org
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+> TODO: still don't know how to handle dependency on linux .config for
+> target linux-backports-menuconfig.
+> TODO: use kernel-module? IMHO not suitable for linux-backports.
 
-and many more.
+As I said in my previous mail, I have adopted this patch. It means I
+did some changes to it locally, notably bump to 4.1.1-1 and solve
+the configury dependency, see my branch:
+    http://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/linux-backports
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-As the OpenIPMI website is down at the moment due to sourceforge
-infrastructure issues I haven't sent the patch upstream yet.
----
- .../0001-Avoid-searching-host-library-path.patch   | 52 ++++++++++++++++++++++
- package/openipmi/openipmi.mk                       |  2 +
- 2 files changed, 54 insertions(+)
- create mode 100644 package/openipmi/0001-Avoid-searching-host-library-path.patch
+I was about to send it yesterday evening/night, but I was really
+exhausted after a long working day, so I post-poned the respin to avoid
+mishaps due to tiredness. ;-) I'll probably send it this evening when
+I'm back home (UTC+2).
 
-diff --git a/package/openipmi/0001-Avoid-searching-host-library-path.patch b/package/openipmi/0001-Avoid-searching-host-library-path.patch
-new file mode 100644
-index 000000000000..9a51d97e2796
---- /dev/null
-+++ b/package/openipmi/0001-Avoid-searching-host-library-path.patch
-@@ -0,0 +1,52 @@
-+From ca6e99d9fa4bf503a883407e964eaad5e18d51c7 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 22 Jul 2015 07:04:33 +0300
-+Subject: [PATCH] Avoid searching host library path
-+
-+The $(libdir) variable points to the location of the directory on the target
-+system, /usr/lib by default. When cross compiling this directory contains the
-+host libraries which may be different than target libraries. Don't use
-+$(libdir) in the library search path.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ cmdlang/Makefile.am | 2 +-
-+ unix/Makefile.am    | 4 ++--
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/cmdlang/Makefile.am b/cmdlang/Makefile.am
-+index e80090dd0c6f..b59ff244b9a8 100644
-+--- a/cmdlang/Makefile.am
-++++ b/cmdlang/Makefile.am
-+@@ -16,7 +16,7 @@ libOpenIPMIcmdlang_la_LIBADD = -lm \
-+ 	$(top_builddir)/utils/libOpenIPMIutils.la \
-+ 	$(top_builddir)/lib/libOpenIPMI.la
-+ libOpenIPMIcmdlang_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+-	-Wl,-Map -Wl,libOpenIPMIcmdlang.map -L$(libdir)
-++	-Wl,-Map -Wl,libOpenIPMIcmdlang.map
-+ 
-+ bin_PROGRAMS = openipmish
-+ 
-+diff --git a/unix/Makefile.am b/unix/Makefile.am
-+index a7921477e1c4..a108bc679c9a 100644
-+--- a/unix/Makefile.am
-++++ b/unix/Makefile.am
-+@@ -11,13 +11,13 @@ libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
-+ libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
-+ 	$(top_builddir)/utils/libOpenIPMIutils.la
-+ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+-	-Wl,-Map -Wl,libOpenIPMIpthread.map -L$(libdir)
-++	-Wl,-Map -Wl,libOpenIPMIpthread.map
-+ 
-+ libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
-+ libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
-+ 	$(GDBM_LIB)
-+ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+-	-Wl,-Map -Wl,libOpenIPMIposix.map -L$(libdir)
-++	-Wl,-Map -Wl,libOpenIPMIposix.map
-+ 
-+ noinst_HEADERS = heap.h
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index b6abf0f23b66..4a813ad26023 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -10,6 +10,8 @@ OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
- OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
- OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
- OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
-+# Patching Makefile.am
-+OPENIPMI_AUTORECONF = YES
- OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
- OPENIPMI_CONF_OPTS = \
- 	--with-glib=no \
+As for the configury stuff, it will need another patch to be applied
+first, to fix a breakage in the pkg-kconfig infra (my bad!), see:
+    https://patchwork.ozlabs.org/patch/498333/
+
+> Changes v7->v8:
+> * Bump version to latest stable 4.1.1-1 (dropped upsteam patx to fix
+>   build error - released in new version).
+> * s/TARGET_MAKE_ENV/LINUX_MAKE_ENV (suggested by Yann E. MORIN)
+> * Improve text in menuconfig (suggested by Yann E. MORIN)
+> * Move fragments list after the base files in menuconfig (suggested by
+>   Yann E. MORIN)
+> * Add comments for nesting ifeq-blocks (suggested by Yann E. MORIN)
+> * Fix indentation in Config.in
+
+I will see to include those changes from your v8 into my own branch (if
+I missed anything).
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
