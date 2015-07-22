@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:31:06 +0200
-Subject: [Buildroot] [PATCH 44/47] package/kodi-visualisation-shadertoy: new
+Date: Wed, 22 Jul 2015 22:30:58 +0200
+Subject: [Buildroot] [PATCH 36/47] package/kodi-audiodecoder-vgmstream: new
 	package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-45-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-37-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-shadertoy/Config.in        |    6 ++++++
- .../kodi-visualisation-shadertoy.mk                   |   17 +++++++++++++++++
- package/kodi/Config.in                                |    4 ++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/kodi-visualisation-shadertoy/Config.in
- create mode 100644 package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+ package/kodi-audiodecoder-vgmstream/Config.in         |    7 +++++++
+ .../kodi-audiodecoder-vgmstream.mk                    |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-vgmstream/Config.in
+ create mode 100644 package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+diff --git a/package/kodi-audiodecoder-vgmstream/Config.in b/package/kodi-audiodecoder-vgmstream/Config.in
 new file mode 100644
-index 0000000..10a6e55
+index 0000000..ebf83df
 --- /dev/null
-+++ b/package/kodi-visualisation-shadertoy/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
-+	bool "kodi-visualisation-shadertoy"
++++ b/package/kodi-audiodecoder-vgmstream/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM
++	bool "kodi-audiodecoder-vgmstream"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Shadertoy visualiser for Kodi
++	  VGM decoder addon for Kodi
 +
-+	  https://github.com/notspiff/visualization.shadertoy
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++	  https://github.com/notspiff/audiodecoder.vgmstream
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 new file mode 100644
-index 0000000..72493c1
+index 0000000..a888e9f
 --- /dev/null
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-visualisation-shadertoy
++# kodi-audiodecoder-vgmstream
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_SHADERTOY_VERSION = a4eaaad4ab7204a30224f2c6952f7a7035ca1c38
-+KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
-+KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
-+KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
++KODI_AUDIODECODER_VGMSTREAM_VERSION = 7723f9130957f4684eac5788ccbc2f45c39590ad
++KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
++KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPLv2+
++KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
 +
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi
++KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
 +
-+KODI_VISUALISATION_SHADERTOY_CONF_OPTS += \
++KODI_AUDIODECODER_VGMSTREAM_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2cf6940..e60815c 100644
+index bf937ad..63c3564 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -298,4 +298,8 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-stars/Config.in"
+@@ -278,6 +278,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
+ 	source "package/kodi-audiodecoder-timidity/Config.in"
++	source "package/kodi-audiodecoder-vgmstream/Config.in"
  endmenu
  
-+menu "Visualisations"
-+	source "package/kodi-visualisation-shadertoy/Config.in"
-+endmenu
-+
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
 -- 
 1.7.10.4
