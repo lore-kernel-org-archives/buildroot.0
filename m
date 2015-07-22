@@ -1,73 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 08:55:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: boost-filesystem needs
- wchar
-In-Reply-To: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150722085507.4f78d81f@free-electrons.com>
+Date: Wed, 22 Jul 2015 08:59:12 +0200
+Subject: [Buildroot] buildroot for SAMA5D3 illegal instruction
+In-Reply-To: <55AF3847.503@mydatex.cz>
+References: <55AF3847.503@mydatex.cz>
+Message-ID: <20150722085912.66ff27e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Daniel Smolik,
 
-On Fri, 17 Jul 2015 16:15:16 +0200, J?rg Krause wrote:
-> Also add reverse dependency for cc-tool.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
-> http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f017442c48244ffd8e/
-> http://autobuild.buildroot.net/results/0dd/0dd3ef96bbd034a41d908cdaa6552b27fda78132/
-> http://autobuild.buildroot.net/results/34b/34b55b2cd83fd5d87af4a9c15d05094b16ef3960/
-> 
-> and many more
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Thanks for your report!
 
-Apparently, this isn't sufficient to fix all problems:
+On Wed, 22 Jul 2015 08:29:27 +0200, Daniel Smolik wrote:
 
-  http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad233ff679be007d2953/build-end.log
+> I have compiled latest stable buildroot for SAMA5D3 (config attached) I booted to new root and sshd and some programs 
+> crash in illegal instruction opcode.
 
-BR2_PACKAGE_BOOST_ARCH_SUPPORTS=y
-BR2_PACKAGE_BOOST=y
-BR2_PACKAGE_BOOST_LAYOUT_SYSTEM=y
-# BR2_PACKAGE_BOOST_LAYOUT_TAGGED is not set
-# BR2_PACKAGE_BOOST_LAYOUT_VERSIONED is not set
-BR2_PACKAGE_BOOST_LAYOUT="system"
-# BR2_PACKAGE_BOOST_ATOMIC is not set
-BR2_PACKAGE_BOOST_CHRONO=y
-# BR2_PACKAGE_BOOST_CONTAINER is not set
-BR2_PACKAGE_BOOST_CONTEXT=y
-# BR2_PACKAGE_BOOST_DATE_TIME is not set
-# BR2_PACKAGE_BOOST_EXCEPTION is not set
+I don't immediately see anything wrong in your configuration. Which
+kernel are you using? Your Buildroot configuration builds a toolchain
+with kernel headers 4.0, are you using a kernel version >= 4.0 ?
 
-#
-# boost-filesystem needs a toolchain w/ wchar
-#
-# BR2_PACKAGE_BOOST_GRAPH is not set
-# BR2_PACKAGE_BOOST_GRAPH_PARALLEL is not set
-# BR2_PACKAGE_BOOST_IOSTREAMS is not set
+Could you run sshd under gdb and see which instruction is considered to
+be invalid? This would be the most helpful way to debug the problem.
 
-#
-# boost-locale needs a toolchain w/ wchar
-#
-# BR2_PACKAGE_BOOST_MATH is not set
-# BR2_PACKAGE_BOOST_MPI is not set
-# BR2_PACKAGE_BOOST_PROGRAM_OPTIONS is not set
-# BR2_PACKAGE_BOOST_RANDOM is not set
-# BR2_PACKAGE_BOOST_REGEX is not set
-BR2_PACKAGE_BOOST_SERIALIZATION=y
-# BR2_PACKAGE_BOOST_SIGNALS is not set
-# BR2_PACKAGE_BOOST_SYSTEM is not set
-# BR2_PACKAGE_BOOST_TEST is not set
-# BR2_PACKAGE_BOOST_THREAD is not set
-# BR2_PACKAGE_BOOST_TIMER is not set
-# BR2_PACKAGE_BOOST_WAVE is not set
-
-Maybe we should make the entire boost package depends on wchar and be
-done with it?
+Thanks,
 
 Thomas
 -- 
