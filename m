@@ -1,58 +1,47 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Wed, 22 Jul 2015 12:23:53 +0200
-Subject: [Buildroot] [PATCH v1] zedboard: Switch to U-Boot 2015.07
-Message-ID: <20150722122353.11c933fc@pcviktorin.fit.vutbr.cz>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 22 Jul 2015 12:29:24 +0200
+Subject: [Buildroot] [PATCH 01/11] package/ulogd: remove autoreconf
+In-Reply-To: <20150720225609.6644867c@free-electrons.com>
+References: <1437414479-16714-1-git-send-email-romain.naour@openwide.fr>
+ <20150720225609.6644867c@free-electrons.com>
+Message-ID: <55AF7084.9020601@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The U-Boot v2015.07 is required for successful out-of-the-box
-build for common Xilinx Zynq boards (including Zedboard).
+Hi Thomas,
 
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
----
- board/avnet/zedboard/readme.txt | 4 ++--
- configs/zedboard_defconfig      | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+Le 20/07/2015 22:56, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
+> 
+> On Mon, 20 Jul 2015 19:47:49 +0200, Romain Naour wrote:
+>> Autoreconf is not needed anymore since ulogd 2.0.4
+>> where logd-01-pthread-conditional.patch was removed.
+>>
+>> commit: 010745a955b6cf4c979588fafdb7506460038e0f
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/ulogd/ulogd.mk | 1 -
+>>  1 file changed, 1 deletion(-)
+> 
+> All 11 patches applied, thanks. I have not tested them, I trust you :)
+> The autobuilders will tell me if I was right or not! :-)
 
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index e0ce024..0f72d0d 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -15,14 +15,14 @@ Steps to create a working system for Zedboard:
- 
- The expected output:
- 
-- U-Boot SPL 2015.07-rc2 (Jun 18 2015 - 16:42:58)
-+ U-Boot SPL 2015.07 (Jul 22 2015 - 12:01:55)
-  mmc boot
-  reading system.dtb
-  spl_load_image_fat_os: error reading image system.dtb, err - -1
-  reading u-boot-dtb.img
-  reading u-boot-dtb.img
- 
-- U-Boot 2015.07-rc2 (Jun 18 2015 - 16:42:58 +0200)
-+ U-Boot 2015.07 (Jul 22 2015 - 12:01:55 +0200)
- 
-  Model: Zynq ZED Board
-  I2C:   ready
-diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
-index 99720db..761e32f 100644
---- a/configs/zedboard_defconfig
-+++ b/configs/zedboard_defconfig
-@@ -18,9 +18,8 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
- BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/zedboard/uboot"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- BR2_TARGET_UBOOT_SPL=y
--- 
-2.4.5
+I haven't see any build failure due to this series :)
+So, I guess you was right but maybe there are too many build failure in
+autobuilders to see something ;-)
+
+Seriously, I've tested each packages by selecting each of them in the config and
+build the entire config to see if all build fine.
+
+Thanks,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
