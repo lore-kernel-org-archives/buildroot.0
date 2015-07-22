@@ -1,40 +1,120 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 22 Jul 2015 21:41:58 +0300
-Subject: [Buildroot] buildroot for SAMA5D3 illegal instruction
-In-Reply-To: <20150722171602.766be19e@free-electrons.com>
-References: <55AF3847.503@mydatex.cz>
- <20150722085912.66ff27e0@free-electrons.com>
- <55AF3FF8.4020305@mydatex.cz> <55AFB25A.8040408@mydatex.cz>
- <20150722171602.766be19e@free-electrons.com>
-Message-ID: <20150722184158.GO13027@tarshish>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 22 Jul 2015 20:52:26 +0200
+Subject: [Buildroot] [PATCH] socketcand: resolve GCC5 related issue
+Message-ID: <1437591146-12969-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This patch removes inline keyword from header and source
+files.
 
-On Wed, Jul 22, 2015 at 05:16:02PM +0200, Thomas Petazzoni wrote:
-> On Wed, 22 Jul 2015 17:10:18 +0200, Daniel Smolik wrote:
-> 
-> > Many many thanks. Problem was in kernel headers. I run kernel 3.12.44
-> > and use wrong headers.
-> 
-> Glad to hear it solved the problem.
-> 
-> This makes me wonder if using always the latest and greatest kernel
-> headers by default in Buildroot is a good idea, because it clearly
-> won't match what most people will need.
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/8ea/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
 
-Maybe we should default to the highest BR2_TOOLCHAIN_HEADERS_AT_LEAST_* 
-requirement. Currently this is v3.12 for libseccomp. Or maybe refine the rule 
-to the oldest LTS kernel version that is not lower than highest 
-BR2_TOOLCHAIN_HEADERS_AT_LEAST_* (also v3.12 at the moment).
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ .../socketcand/0001-Remove-inline-keyword.patch    | 90 ++++++++++++++++++++++
+ 1 file changed, 90 insertions(+)
+ create mode 100644 package/socketcand/0001-Remove-inline-keyword.patch
 
-baruch
-
+diff --git a/package/socketcand/0001-Remove-inline-keyword.patch b/package/socketcand/0001-Remove-inline-keyword.patch
+new file mode 100644
+index 0000000..92e8737
+--- /dev/null
++++ b/package/socketcand/0001-Remove-inline-keyword.patch
+@@ -0,0 +1,90 @@
++From bdb3cd081a694f8f6924e399d944e32c1578235c Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 22 Jul 2015 11:03:27 +0200
++Subject: [PATCH] Remove inline keyword
++
++Fixes GCC5.x compilation issues related to C99 inline semantics.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ socketcand.h    | 8 ++++----
++ state_bcm.c     | 2 +-
++ state_control.c | 2 +-
++ state_isotp.c   | 2 +-
++ state_raw.c     | 2 +-
++ 5 files changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/socketcand.h b/socketcand.h
++index a287fe2..39eef83 100644
++--- a/socketcand.h
+++++ b/socketcand.h
++@@ -27,10 +27,10 @@
++ 
++ #undef DEBUG_RECEPTION
++ 
++-inline void state_bcm();
++-inline void state_raw();
++-inline void state_isotp();
++-inline void state_control();
+++void state_bcm();
+++void state_raw();
+++void state_isotp();
+++void state_control();
++ 
++ extern int client_socket;
++ extern char **interface_names;
++diff --git a/state_bcm.c b/state_bcm.c
++index c63a0a9..0c980fa 100644
++--- a/state_bcm.c
+++++ b/state_bcm.c
++@@ -28,7 +28,7 @@ int sc = -1;
++ fd_set readfds;
++ struct timeval tv;
++ 
++-inline void state_bcm() {
+++void state_bcm() {
++ 	int i, ret;
++ 	struct sockaddr_can caddr;
++ 	socklen_t caddrlen = sizeof(caddr);
++diff --git a/state_control.c b/state_control.c
++index 5f62b74..baa9df6 100644
++--- a/state_control.c
+++++ b/state_control.c
++@@ -17,7 +17,7 @@
++ #include <netinet/in.h>
++ #include <arpa/inet.h>
++ 
++-inline void state_control() {
+++void state_control() {
++ 	char buf[MAXLEN];
++ 	int i, items;
++ 
++diff --git a/state_isotp.c b/state_isotp.c
++index ae66035..4005f94 100644
++--- a/state_isotp.c
+++++ b/state_isotp.c
++@@ -24,7 +24,7 @@
++ int si = -1;
++ fd_set readfds;
++ 
++-inline void state_isotp() {
+++void state_isotp() {
++ 	int i, items, ret;
++ 
++ 	struct sockaddr_can addr;
++diff --git a/state_raw.c b/state_raw.c
++index 1bd2ece..99111ae 100644
++--- a/state_raw.c
+++++ b/state_raw.c
++@@ -31,7 +31,7 @@ char ctrlmsg[CMSG_SPACE(sizeof(struct timeval)) + CMSG_SPACE(sizeof(__u32))];
++ struct timeval tv;
++ struct cmsghdr *cmsg;
++ 
++-inline void state_raw() {
+++void state_raw() {
++ 	char buf[MAXLEN];
++ 	int i, ret, items;
++ 
++-- 
++2.1.4
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
