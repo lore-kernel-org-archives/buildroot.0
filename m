@@ -1,59 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 16:57:18 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: remove busybox tune2fs when
-	installing full version
-Message-ID: <20150722145957.EF10181E99@busybox.osuosl.org>
+Date: Wed, 22 Jul 2015 17:03:07 +0200
+Subject: [Buildroot] [PATCH 3/4 v8] package/linux-backports: new package
+In-Reply-To: <fc089d79e34b8b07a9e1e04c7a9cb0c179554ce7.1437576751.git.yann.morin.1998@free.fr>
+References: <cover.1437576751.git.yann.morin.1998@free.fr>
+ <fc089d79e34b8b07a9e1e04c7a9cb0c179554ce7.1437576751.git.yann.morin.1998@free.fr>
+Message-ID: <20150722170307.5451a658@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa02829240b2927b2cb379eb904b6f40ff751237
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Currently, busybox installs a version of tune2fs in /sbin/ while
-e2fsprogs installs at /usr/sbin/. This causes issues if a user is
-expecting the to use the full version from a prompt via 'tune2fs'
-since busybox's tune2fs will be found first from the default path
-search.
+On Wed, 22 Jul 2015 16:58:54 +0200, Yann E. MORIN wrote:
 
-Fix this by removing the busybox version of tune2fs when a user has
-selected the option to install tune2fs from e2fsprogs.
+> +linux-backports-check-kernel-version: $(BUILD_DIR)/linux-$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))/.config
 
-[Thomas: don't hijack E2FSPROGS_TARGET_TUNE2FS_SYMLINK for the removal
-and instead introduce a separate E2FSPROGS_REMOVE_BUSYBOX_APPLETS post
-install target hook, and do related code re-organization.]
+Doesn't this fail really badly if:
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/e2fsprogs/e2fsprogs.mk |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+LINUX_OVERRIDE_SRCDIR = <some value>
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0537521..ca54b70 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -102,6 +102,20 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
- E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
- endif
- 
-+# Remove busybox tune2fs and e2label, since we want the e2fsprogs full
-+# blown variants to take precedence, but they are not installed in the
-+# same location.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+E2FSPROGS_DEPENDENCIES += busybox
-+
-+define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
-+	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
-+	$(RM) -f $(TARGET_DIR)/sbin/e2label
-+
-+endef
-+E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
-+endif
-+
- define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
- 	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
- endef
+ ?
+
+In this case, $(LINUX_DIR) is $(BUILD_DIR)/linux-custom/ and not
+$(BUILD_DIR)/linux-$(call qstrip,$(BR2_LINUX_KERNEL_VERSION)).
+
+Argh :-/
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
