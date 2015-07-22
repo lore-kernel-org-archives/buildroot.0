@@ -1,45 +1,102 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Tue, 21 Jul 2015 17:20:40 -0700
-Subject: [Buildroot] snmpd
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD8BCB@svr-wa-exch1.atg.lc>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 22 Jul 2015 07:20:57 +0300
+Subject: [Buildroot] [PATCH] openipmi: don't search host library path
+Message-ID: <1a12fb9982cbe53f904c435e4fe565927e54f353.1437538857.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot,
+Add a patch removing search of host library path.
 
-I am glad to participate in the Buildroot mailing list.
+Fixes:
+http://autobuild.buildroot.net/results/bb9/bb9a5d4f2058765a3630170a11ee087c9c289c3d/
+http://autobuild.buildroot.net/results/0b3/0b37f7648bed99bcb1b5bf727171ccc83283d01e/
+http://autobuild.buildroot.net/results/5f7/5f7e6b3279d0e78e3298cdfe7db595e5043ff685/
 
-I have a Marvell ARMADA A38x evaluation board (DB-88F6820-GP) running the Buildroot 2012.11-00023-gae0d9a2-dirty release on it. I have brought it up on an Ethernet segment. My next work is to enable an SNMP agent which can response the SNMPv1 requests from an SNMP client which is running in an Ububtu PC.
+and many more.
 
-I hope you would tell me how to create the agent and install it on the Buildroot board. I will be very much appreciated.
-Tommy Lee
-Software Engineer
-Allied Telesis, Inc.  |  19800 North Creek Parkway, Suite 100  |  Bothell, Washington 98011 | USA
-+1 425 481 3760 (Direct)  |  +1 425 481 3895 (Fax)  |  +1 xxx xxx xxxx (Mobile)
-E-mail: tommy_lee at alliedtelesis.com<mailto:tommy_lee@alliedtelesis.com>  |  Web: alliedtelesis.com<http://alliedtelesis.com/>
-[cid:image002.png at 01D0C3D9.91630690]
-[cid:image004.jpg at 01D0C3D9.91630690]<http://www.linkedin.com/company/allied-telesis>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+As the OpenIPMI website is down at the moment due to sourceforge
+infrastructure issues I haven't sent the patch upstream yet.
+---
+ .../0001-Avoid-searching-host-library-path.patch   | 52 ++++++++++++++++++++++
+ package/openipmi/openipmi.mk                       |  2 +
+ 2 files changed, 54 insertions(+)
+ create mode 100644 package/openipmi/0001-Avoid-searching-host-library-path.patch
 
-
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/306d6bdb/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image002.png
-Type: image/png
-Size: 8663 bytes
-Desc: image002.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/306d6bdb/attachment.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image004.jpg
-Type: image/jpeg
-Size: 1497 bytes
-Desc: image004.jpg
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150721/306d6bdb/attachment.jpg>
+diff --git a/package/openipmi/0001-Avoid-searching-host-library-path.patch b/package/openipmi/0001-Avoid-searching-host-library-path.patch
+new file mode 100644
+index 000000000000..9a51d97e2796
+--- /dev/null
++++ b/package/openipmi/0001-Avoid-searching-host-library-path.patch
+@@ -0,0 +1,52 @@
++From ca6e99d9fa4bf503a883407e964eaad5e18d51c7 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 22 Jul 2015 07:04:33 +0300
++Subject: [PATCH] Avoid searching host library path
++
++The $(libdir) variable points to the location of the directory on the target
++system, /usr/lib by default. When cross compiling this directory contains the
++host libraries which may be different than target libraries. Don't use
++$(libdir) in the library search path.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ cmdlang/Makefile.am | 2 +-
++ unix/Makefile.am    | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/cmdlang/Makefile.am b/cmdlang/Makefile.am
++index e80090dd0c6f..b59ff244b9a8 100644
++--- a/cmdlang/Makefile.am
+++++ b/cmdlang/Makefile.am
++@@ -16,7 +16,7 @@ libOpenIPMIcmdlang_la_LIBADD = -lm \
++ 	$(top_builddir)/utils/libOpenIPMIutils.la \
++ 	$(top_builddir)/lib/libOpenIPMI.la
++ libOpenIPMIcmdlang_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++-	-Wl,-Map -Wl,libOpenIPMIcmdlang.map -L$(libdir)
+++	-Wl,-Map -Wl,libOpenIPMIcmdlang.map
++ 
++ bin_PROGRAMS = openipmish
++ 
++diff --git a/unix/Makefile.am b/unix/Makefile.am
++index a7921477e1c4..a108bc679c9a 100644
++--- a/unix/Makefile.am
+++++ b/unix/Makefile.am
++@@ -11,13 +11,13 @@ libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
++ libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
++ 	$(top_builddir)/utils/libOpenIPMIutils.la
++ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++-	-Wl,-Map -Wl,libOpenIPMIpthread.map -L$(libdir)
+++	-Wl,-Map -Wl,libOpenIPMIpthread.map
++ 
++ libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
++ libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
++ 	$(GDBM_LIB)
++ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++-	-Wl,-Map -Wl,libOpenIPMIposix.map -L$(libdir)
+++	-Wl,-Map -Wl,libOpenIPMIposix.map
++ 
++ noinst_HEADERS = heap.h
++ 
++-- 
++2.1.4
++
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+index b6abf0f23b66..4a813ad26023 100644
+--- a/package/openipmi/openipmi.mk
++++ b/package/openipmi/openipmi.mk
+@@ -10,6 +10,8 @@ OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
+ OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+ OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
+ OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
++# Patching Makefile.am
++OPENIPMI_AUTORECONF = YES
+ OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
+ OPENIPMI_CONF_OPTS = \
+ 	--with-glib=no \
+-- 
+2.1.4
