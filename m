@@ -1,70 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 22:50:34 +0200
-Subject: [Buildroot] [git commit] qt5: remove GPLv2 license from
-	qt5declarative, qt5script and qt5svg
-Message-ID: <20150722205132.CB1EA7F95F@busybox.osuosl.org>
+Date: Wed, 22 Jul 2015 22:52:06 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: fix unmet direct
+	dependency
+Message-ID: <20150722205211.B1AC481EA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bdd522f9213788d404540f5c016bdd431d9be04a
+commit: http://git.buildroot.net/buildroot/commit/?id=64c10ae691e230935473f23ef71ab997293adf8f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since Qt 5.5, those three modules have lost their GPLv2 licensing
-option. Remains the LGPLv2.1 with exception and LGPLv3 as the possible
-open-source licenses.
+Commit 182520a8af734c735c4dbdff29dc07af1d615a0a adds rpcbind as a dependency
+without properly caring for the thread dependency.
 
+rpcbind adds libtirpc as a dependendency which fails:
+  fatal error: pthread.h: No such file or directory
+
+Since we probably don't care much about using nfs-utils in a non-threaded
+scenario, we simply disable nfs-utils for toolchains without thread support.
+
+Fixes:
+http://autobuild.buildroot.net/results/803/80321de8d4c6c0a00439b07289a5818962128b43/
+
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5declarative/qt5declarative.mk |    4 ++--
- package/qt5/qt5script/qt5script.mk           |    4 ++--
- package/qt5/qt5svg/qt5svg.mk                 |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/nfs-utils/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-index 30c0813..296292b 100644
---- a/package/qt5/qt5declarative/qt5declarative.mk
-+++ b/package/qt5/qt5declarative/qt5declarative.mk
-@@ -11,8 +11,8 @@ QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns
- QT5DECLARATIVE_INSTALL_STAGING = YES
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index 2806551..1273092 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -1,10 +1,10 @@
+ comment "nfs-utils needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5DECLARATIVE_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5DECLARATIVE_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5DECLARATIVE_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5DECLARATIVE_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5DECLARATIVE_LICENSE = Commercial license
- QT5DECLARATIVE_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
-index 7f0efbb..250bdfd 100644
---- a/package/qt5/qt5script/qt5script.mk
-+++ b/package/qt5/qt5script/qt5script.mk
-@@ -11,8 +11,8 @@ QT5SCRIPT_DEPENDENCIES = qt5base
- QT5SCRIPT_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5SCRIPT_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5SCRIPT_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5SCRIPT_LICENSE = Commercial license
- QT5SCRIPT_REDISTRIBUTE = NO
-diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
-index 8aaa517..5942d01 100644
---- a/package/qt5/qt5svg/qt5svg.mk
-+++ b/package/qt5/qt5svg/qt5svg.mk
-@@ -11,8 +11,8 @@ QT5SVG_DEPENDENCIES = qt5base
- QT5SVG_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5SVG_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5SVG_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5SVG_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5SVG_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5SVG_LICENSE = Commercial license
- QT5SVG_REDISTRIBUTE = NO
+ config BR2_PACKAGE_NFS_UTILS
+ 	bool "nfs-utils"
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_RPCBIND # runtime
+ 	depends on BR2_USE_MMU # fork()
