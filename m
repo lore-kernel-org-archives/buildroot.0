@@ -1,108 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 14:45:35 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 22 Jul 2015 09:51:01 -0300
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <55AF8CF6.7080709@zacarias.com.ar>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
- <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
- <55AF8CF6.7080709@zacarias.com.ar>
-Message-ID: <20150722144535.103766f3@free-electrons.com>
+In-Reply-To: <20150722144535.103766f3@free-electrons.com>
+References: <20150722063018.99E6B101957@stock.ovh.net>	<20150722094349.424e7a3e@free-electrons.com>	<CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>	<CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>	<55AF8CF6.7080709@zacarias.com.ar>
+ <20150722144535.103766f3@free-electrons.com>
+Message-ID: <55AF91B5.8050806@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+On 22/07/15 09:45, Thomas Petazzoni wrote:
 
-On Wed, 22 Jul 2015 09:30:46 -0300, Gustavo Zacarias wrote:
+> Ok, thanks for the summary. If I summarize it another way:
+>
+>   * Some packages use atomic operations, operating on values of
+>     different sizes
+>
+>   * Some architectures implement all the atomic operations in a built-in
+>     way, but some architectures need libatomic to be linked in to
+>     provide the atomic operations on certain value sizes.
 
-> That's exactly the problem, though in your previous mail you had a 
-> slight conceptual slip, libatomic is provided by gcc itself.
-> libatomic is provided to provide (sic!) fallback atomic operations, 
-> usually implemented via a lock.
-> SPARC v8 doesn't provide lockless atomics, it needs stbar trickery.
-> v9+ does implement them via membar (TSO), see:
-> http://www.oracle.com/technetwork/server-storage/solaris10/index-142944.html
-> 
-> Long story short not every architecture provides the necessary atomics 
-> for all packages (sparc v8 being the "none"), since there are varying 
-> sizes (bits=8,16,32,64 normally).
-> 
-> A failure example would be building libglib2 for i386 which doesn't have 
-> them either, though glib captures this rather than failing later:
-> 
-> checking for lock-free atomic intrinsics... configure: error: GLib must 
-> be build with -march=i486 or later.
-> 
-> Another example is the trick i'm doing for the new webkit version and 
-> some arch combinations:
-> 
-> # Some 32-bit architectures need libatomic support for 64-bit ops
-> ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_sh),y)
-> WEBKITGTK24_CONF_ENV += LIBS="-latomic"
-> endif
-> 
-> So adding libatomic to LIBS normally "fixes" the problem, but enabling 
-> it on a global-scale doesn't look that great, and each package has a 
-> different set of requirements depending on the atomics size it uses.
-> (example: microblaze and strongswan = 8 bits).
 
-Ok, thanks for the summary. If I summarize it another way:
+Yup, that nails it.
 
- * Some packages use atomic operations, operating on values of
-   different sizes
+> *Or*, maybe better, we fix those packages so that they do the right
+> configure.ac test and automatically link with libatomic if needed.
+> Probably this is what glib should do, for example. This reduces the
+> crap in Buildroot, and allows to push the solution to the upstream
+> projects. I don't think that many packages have atomic operations
+> requirements, so it should not be a horrible effort.
+>
+> Thoughts?
 
- * Some architectures implement all the atomic operations in a built-in
-   way, but some architectures need libatomic to be linked in to
-   provide the atomic operations on certain value sizes.
-
-> We could "declare" each package atomics needs via selects and throw 
-> libatomic into some variable in the package infrastructure, that's the 
-> best i could think of so far - but it's some work, which sparc could 
-> help test because it generally needs it ;)
-
-I don't think packages should declare atomics needs via selects,
-because we certainly don't want to link all packages with libatomic if
-they don't need that.
-
-However, the architectures could declare through selects which atomic
-operations they have, and then packages needing operations of a given
-size could use those hidden options to decide whether they should link
-against libatomic or not. Like:
-
-config BR2_ARCH_HAS_1_BYTE_ATOMIC
-	bool
-
-config BR2_ARCH_HAS_2_BYTES_ATOMIC
-	bool
-
-config BR2_ARCH_HAS_4_BYTES_ATOMIC
-	bool
-
-config BR2_ARCH_HAS_8_BYTES_ATOMIC
-	bool
-
-and then in a package:
-
-ifeq ($(BR2_ARCH_HAS_8_BYTES_ATOMIC),)
-FOO_LIBS += -latomic
-endif
-
-FOO_CONF_ENV = LIBS="$(FOO_LIBS)"
-
-*Or*, maybe better, we fix those packages so that they do the right
-configure.ac test and automatically link with libatomic if needed.
-Probably this is what glib should do, for example. This reduces the
-crap in Buildroot, and allows to push the solution to the upstream
-projects. I don't think that many packages have atomic operations
-requirements, so it should not be a horrible effort.
-
-Thoughts?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+The problem is that packages might have a valid reason for not doing so, 
+like what glib explicitly says "lockless atomics", libatomic implements 
+the fallback via locks.
+One of the fallbacks is that performance will suffer possibly a lot 
+(depending on usage), there may be other drawbacks that i'm not aware of.
+Regards.
