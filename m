@@ -1,44 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 22:06:06 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <55AFB950.10603@zacarias.com.ar>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
- <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
- <55AF8CF6.7080709@zacarias.com.ar>
- <20150722144535.103766f3@free-electrons.com>
- <55AF91B5.8050806@zacarias.com.ar>
- <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
- <20150722165405.217f4e4f@free-electrons.com>
- <CA+BsyQ67ic88wTW173o4QWbZS8d=cnSRh_2RDp4Ffs8T2Lsyeg@mail.gmail.com>
- <55AFB950.10603@zacarias.com.ar>
-Message-ID: <20150722220606.58233cd0@free-electrons.com>
+Date: Wed, 22 Jul 2015 22:25:06 +0200
+Subject: [Buildroot] [git commit] socketcand: resolve GCC5 related issue
+Message-ID: <20150722202515.800567FFB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+commit: http://git.buildroot.net/buildroot/commit/?id=8e14c76a95778c859019cb650da5356285d3387b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jul 2015 12:40:00 -0300, Gustavo Zacarias wrote:
+This patch removes inline keyword from header and source
+files.
 
-> It's been a long time since i touched SPARC hardware, and even so i 
-> think this looks like the right approach.
-> Though for other packages we'll still need to handle the libatomic 
-> situation on a per-arch basis, but it will need to be finer-grained than 
-> that since different ISA levels affect the availability of atomics as well.
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/8ea/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
 
-Let's have a look at the issue on a per-package basis. For webkit, can
-it either avoid using atomic operations (like glib), or can we add a
-configure.ac test for the availability of the atomic operations, and if
-not available, attempt again with -latomic linked in?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../socketcand/0001-Remove-inline-keyword.patch    |   90 ++++++++++++++++++++
+ 1 files changed, 90 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/socketcand/0001-Remove-inline-keyword.patch b/package/socketcand/0001-Remove-inline-keyword.patch
+new file mode 100644
+index 0000000..92e8737
+--- /dev/null
++++ b/package/socketcand/0001-Remove-inline-keyword.patch
+@@ -0,0 +1,90 @@
++From bdb3cd081a694f8f6924e399d944e32c1578235c Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 22 Jul 2015 11:03:27 +0200
++Subject: [PATCH] Remove inline keyword
++
++Fixes GCC5.x compilation issues related to C99 inline semantics.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ socketcand.h    | 8 ++++----
++ state_bcm.c     | 2 +-
++ state_control.c | 2 +-
++ state_isotp.c   | 2 +-
++ state_raw.c     | 2 +-
++ 5 files changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/socketcand.h b/socketcand.h
++index a287fe2..39eef83 100644
++--- a/socketcand.h
+++++ b/socketcand.h
++@@ -27,10 +27,10 @@
++ 
++ #undef DEBUG_RECEPTION
++ 
++-inline void state_bcm();
++-inline void state_raw();
++-inline void state_isotp();
++-inline void state_control();
+++void state_bcm();
+++void state_raw();
+++void state_isotp();
+++void state_control();
++ 
++ extern int client_socket;
++ extern char **interface_names;
++diff --git a/state_bcm.c b/state_bcm.c
++index c63a0a9..0c980fa 100644
++--- a/state_bcm.c
+++++ b/state_bcm.c
++@@ -28,7 +28,7 @@ int sc = -1;
++ fd_set readfds;
++ struct timeval tv;
++ 
++-inline void state_bcm() {
+++void state_bcm() {
++ 	int i, ret;
++ 	struct sockaddr_can caddr;
++ 	socklen_t caddrlen = sizeof(caddr);
++diff --git a/state_control.c b/state_control.c
++index 5f62b74..baa9df6 100644
++--- a/state_control.c
+++++ b/state_control.c
++@@ -17,7 +17,7 @@
++ #include <netinet/in.h>
++ #include <arpa/inet.h>
++ 
++-inline void state_control() {
+++void state_control() {
++ 	char buf[MAXLEN];
++ 	int i, items;
++ 
++diff --git a/state_isotp.c b/state_isotp.c
++index ae66035..4005f94 100644
++--- a/state_isotp.c
+++++ b/state_isotp.c
++@@ -24,7 +24,7 @@
++ int si = -1;
++ fd_set readfds;
++ 
++-inline void state_isotp() {
+++void state_isotp() {
++ 	int i, items, ret;
++ 
++ 	struct sockaddr_can addr;
++diff --git a/state_raw.c b/state_raw.c
++index 1bd2ece..99111ae 100644
++--- a/state_raw.c
+++++ b/state_raw.c
++@@ -31,7 +31,7 @@ char ctrlmsg[CMSG_SPACE(sizeof(struct timeval)) + CMSG_SPACE(sizeof(__u32))];
++ struct timeval tv;
++ struct cmsghdr *cmsg;
++ 
++-inline void state_raw() {
+++void state_raw() {
++ 	char buf[MAXLEN];
++ 	int i, ret, items;
++ 
++-- 
++2.1.4
++
