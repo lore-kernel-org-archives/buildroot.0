@@ -1,58 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 16:54:05 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
- <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
- <55AF8CF6.7080709@zacarias.com.ar>
- <20150722144535.103766f3@free-electrons.com>
- <55AF91B5.8050806@zacarias.com.ar>
- <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
-Message-ID: <20150722165405.217f4e4f@free-electrons.com>
+Date: Wed, 22 Jul 2015 16:55:05 +0200
+Subject: [Buildroot] [PATCH] binutils: bump 2.25.x series to 2.25.1
+In-Reply-To: <55AFADB0.3060101@zacarias.com.ar>
+References: <1437573697-12191-1-git-send-email-gustavo@zacarias.com.ar>
+ <20150722164819.2b9474e8@free-electrons.com>
+ <55AFADB0.3060101@zacarias.com.ar>
+Message-ID: <20150722165505.682037d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Dear Gustavo Zacarias,
 
-On Wed, 22 Jul 2015 15:23:30 +0100, Brendan Heading wrote:
+On Wed, 22 Jul 2015 11:50:24 -0300, Gustavo Zacarias wrote:
 
-> ===================
-> /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-> #if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
-> #define USE_NATIVE_MUTEX
-> #endif
-> ===================
-> 
-> In other words, they're assuming (in essence) that if __ATOMIC_SEQ_CST is
-> defined then the architecture must support atomic instructions. This
-> assumption appears to be invalid.
-> 
-> GCC defines macros which indicate the presence of the atomic compare and
-> swap functions, see :
-> https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html
-> 
-> If we fix the above code to :
-> 
-> ===================
-> /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-> #if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) &&
-> defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
-> #define USE_NATIVE_MUTEX
-> #endif
-> ===================
-> 
-> ... the package compiles cleanly. This sounds like what they actually
-> intended to do, as their atomic macros (gatomic.h) test the compare & swap
-> macros.
+> Same dilemma here, though i preferred to skip the rename in the bump.
 
-My fairly uninformed opinion is that this indeed looks like a good
-approach. Though maybe Gustavo's more informed opinion might contradict
-me on this.
+Well, you did rename, but to 2_25_1.
+
+> I can send a follow up patch to do the renaming, it seems fit to match 
+> gcc i suppose.
+
+Yes, I agree.
 
 Thomas
 -- 
