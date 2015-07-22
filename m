@@ -1,120 +1,65 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 22 Jul 2015 20:52:26 +0200
-Subject: [Buildroot] [PATCH] socketcand: resolve GCC5 related issue
-Message-ID: <1437591146-12969-1-git-send-email-yegorslists@googlemail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 22 Jul 2015 21:16:23 +0200
+Subject: [Buildroot] [PATCH/RFC v3 02/50] package/libsquish: New package
+References: <1437332755-9764-1-git-send-email-bernd.kuhls@t-online.de>
+ <1437332755-9764-3-git-send-email-bernd.kuhls@t-online.de>
+ <20150719212445.3e77f88a@free-electrons.com>
+Message-ID: <XnsA4DFD866F8060berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch removes inline keyword from header and source
-files.
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20150719212445.3e77f88a at free-
+electrons.com:
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/8ea/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
+>> +# libsquish
+> Have you considered using the CMakeLists.txt provided in libsquish, and
+> therefore use the cmake-package infrastructure? It should properly
+> handle the shared vs. static library case, and reduce the amount of
+> manual stuff that you need to do in LIBSQUISH_INSTALL_STAGING_CMDS and
+> LIBSQUISH_INSTALL_TARGET_CMDS.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- .../socketcand/0001-Remove-inline-keyword.patch    | 90 ++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
- create mode 100644 package/socketcand/0001-Remove-inline-keyword.patch
+Hi,
 
-diff --git a/package/socketcand/0001-Remove-inline-keyword.patch b/package/socketcand/0001-Remove-inline-keyword.patch
-new file mode 100644
-index 0000000..92e8737
---- /dev/null
-+++ b/package/socketcand/0001-Remove-inline-keyword.patch
-@@ -0,0 +1,90 @@
-+From bdb3cd081a694f8f6924e399d944e32c1578235c Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 22 Jul 2015 11:03:27 +0200
-+Subject: [PATCH] Remove inline keyword
-+
-+Fixes GCC5.x compilation issues related to C99 inline semantics.
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ socketcand.h    | 8 ++++----
-+ state_bcm.c     | 2 +-
-+ state_control.c | 2 +-
-+ state_isotp.c   | 2 +-
-+ state_raw.c     | 2 +-
-+ 5 files changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/socketcand.h b/socketcand.h
-+index a287fe2..39eef83 100644
-+--- a/socketcand.h
-++++ b/socketcand.h
-+@@ -27,10 +27,10 @@
-+ 
-+ #undef DEBUG_RECEPTION
-+ 
-+-inline void state_bcm();
-+-inline void state_raw();
-+-inline void state_isotp();
-+-inline void state_control();
-++void state_bcm();
-++void state_raw();
-++void state_isotp();
-++void state_control();
-+ 
-+ extern int client_socket;
-+ extern char **interface_names;
-+diff --git a/state_bcm.c b/state_bcm.c
-+index c63a0a9..0c980fa 100644
-+--- a/state_bcm.c
-++++ b/state_bcm.c
-+@@ -28,7 +28,7 @@ int sc = -1;
-+ fd_set readfds;
-+ struct timeval tv;
-+ 
-+-inline void state_bcm() {
-++void state_bcm() {
-+ 	int i, ret;
-+ 	struct sockaddr_can caddr;
-+ 	socklen_t caddrlen = sizeof(caddr);
-+diff --git a/state_control.c b/state_control.c
-+index 5f62b74..baa9df6 100644
-+--- a/state_control.c
-++++ b/state_control.c
-+@@ -17,7 +17,7 @@
-+ #include <netinet/in.h>
-+ #include <arpa/inet.h>
-+ 
-+-inline void state_control() {
-++void state_control() {
-+ 	char buf[MAXLEN];
-+ 	int i, items;
-+ 
-+diff --git a/state_isotp.c b/state_isotp.c
-+index ae66035..4005f94 100644
-+--- a/state_isotp.c
-++++ b/state_isotp.c
-+@@ -24,7 +24,7 @@
-+ int si = -1;
-+ fd_set readfds;
-+ 
-+-inline void state_isotp() {
-++void state_isotp() {
-+ 	int i, items, ret;
-+ 
-+ 	struct sockaddr_can addr;
-+diff --git a/state_raw.c b/state_raw.c
-+index 1bd2ece..99111ae 100644
-+--- a/state_raw.c
-++++ b/state_raw.c
-+@@ -31,7 +31,7 @@ char ctrlmsg[CMSG_SPACE(sizeof(struct timeval)) + CMSG_SPACE(sizeof(__u32))];
-+ struct timeval tv;
-+ struct cmsghdr *cmsg;
-+ 
-+-inline void state_raw() {
-++void state_raw() {
-+ 	char buf[MAXLEN];
-+ 	int i, ret, items;
-+ 
-+-- 
-+2.1.4
-+
--- 
-2.1.4
+yes, I did, the result was that the target binary was compiled using the 
+host compiler, later on make install fails:
+
+make[1]: Entering directory `/home/fli4l/br8_kodi/output/build/libsquish-
+1.13'
+g++ -fPIC -I. -O2 -Wall -o alpha.o -c alpha.cpp
+g++ -fPIC -I. -O2 -Wall -o clusterfit.o -c clusterfit.cpp
+g++ -fPIC -I. -O2 -Wall -o colourblock.o -c colourblock.cpp
+g++ -fPIC -I. -O2 -Wall -o colourfit.o -c colourfit.cpp
+g++ -fPIC -I. -O2 -Wall -o colourset.o -c colourset.cpp
+g++ -fPIC -I. -O2 -Wall -o maths.o -c maths.cpp
+g++ -fPIC -I. -O2 -Wall -o rangefit.o -c rangefit.cpp
+g++ -fPIC -I. -O2 -Wall -o singlecolourfit.o -c singlecolourfit.cpp
+g++ -fPIC -I. -O2 -Wall -o squish.o -c squish.cpp
+g++ -shared -Wl,-soname,libsquish.so.0 -o libsquish.so.0.0 alpha.o 
+clusterfit.o colourblock.o colourfit.o colourset.o maths.o rangefit.o 
+singlecolourfit.o squish.o
+make[1]: Leaving directory `/home/fli4l/br8_kodi/output/build/libsquish-
+1.13'
+
+>>> libsquish 1.13 Installing to staging directory
+PATH="/home/fli4l/br8_kodi/output/host/bin:/home/fli4l/br8
+_kodi/output/host/sbin:/home/fli4l/br8
+_kodi/output/host/usr/bin:/home/fli4l/br8
+_kodi/output/host/usr/sbin:/home/fli4l/bin:/usr/local/bin:/usr/bin:/bin:/us
+r/local/games:/usr/games"  /usr/bin/make -j9  DESTDIR=/home/fli4l/br8
+_kodi/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot 
+install/fast -C /home/fli4l/br8_kodi/output/build/libsquish-1.13/
+make[1]: Entering directory `/home/fli4l/br8_kodi/output/build/libsquish-
+1.13'
+make[1]: *** No rule to make target `install/fast'.  Stop.
+make[1]: Leaving directory `/home/fli4l/br8_kodi/output/build/libsquish-
+1.13'
+make: *** [/home/fli4l/br8_kodi/output/build/libsquish-
+1.13/.stamp_staging_installed] Error 2
+
+So I created a generic package which works ;)
+
+Regards, Bernd
