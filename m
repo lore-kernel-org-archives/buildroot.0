@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:50 +0200
-Subject: [Buildroot] [PATCH 28/47] package/kodi-pvr-vuplus: new package
+Date: Wed, 22 Jul 2015 22:30:37 +0200
+Subject: [Buildroot] [PATCH 15/47] package/kodi-pvr-dvblink: new package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-29-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,72 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                           |    1 +
- package/kodi-pvr-vuplus/Config.in          |    7 +++++++
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk |   17 +++++++++++++++++
- package/kodi/Config.in                     |    1 +
- 4 files changed, 26 insertions(+)
- create mode 100644 package/kodi-pvr-vuplus/Config.in
- create mode 100644 package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+ Config.in.legacy                             |    1 +
+ package/kodi-pvr-dvblink/Config.in           |    8 ++++++++
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk |   17 +++++++++++++++++
+ package/kodi/Config.in                       |    1 +
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/kodi-pvr-dvblink/Config.in
+ create mode 100644 package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 0802f17..37ff81f 100644
+index 95d74c4..5c545f2 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -124,6 +124,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_STALKER
- 	select BR2_PACKAGE_KODI_PVR_VBOX
- 	select BR2_PACKAGE_KODI_PVR_VDR_VNSI
-+	select BR2_PACKAGE_KODI_PVR_VUPLUS
+@@ -111,6 +111,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	bool "Kodi PVR addon was split"
+ 	select BR2_LEGACY
+ 	select BR2_PACKAGE_KODI_PVR_ARGUSTV
++	select BR2_PACKAGE_KODI_PVR_DVBLINK
  	help
  	  Kodi PVR addon was split into seperate modules
  
-diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+diff --git a/package/kodi-pvr-dvblink/Config.in b/package/kodi-pvr-dvblink/Config.in
 new file mode 100644
-index 0000000..a56c4ed
+index 0000000..57f1127
 --- /dev/null
-+++ b/package/kodi-pvr-vuplus/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_VUPLUS
-+	bool "kodi-pvr-vuplus"
++++ b/package/kodi-pvr-dvblink/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_PVR_DVBLINK
++	bool "kodi-pvr-dvblink"
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML2
 +	help
-+	  VuPlus PVR client addon for Kodi
++	  Kodi's DVBLink client addon
 +
-+	  https://github.com/kodi-pvr/pvr.vuplus
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++	  https://github.com/kodi-pvr/pvr.dvblink
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
 new file mode 100644
-index 0000000..c44bdc4
+index 0000000..745f3cd
 --- /dev/null
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-vuplus
++# kodi-pvr-dvblink
 +#
 +################################################################################
 +
-+KODI_PVR_VUPLUS_VERSION = 96115e9b8898ed6bde36874b43b2fba531cfef5c
-+KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
-+KODI_PVR_VUPLUS_LICENSE = GPLv2+
-+KODI_PVR_VUPLUS_LICENSE_FILES = src/client.cpp
++KODI_PVR_DVBLINK_VERSION = cf756e9241c58d98c3b56dfcae89da9f35e4555f
++KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
++KODI_PVR_DVBLINK_LICENSE = GPLv2+
++KODI_PVR_DVBLINK_LICENSE_FILES = src/client.cpp
 +
-+KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
++KODI_PVR_DVBLINK_DEPENDENCIES = kodi-platform tinyxml2
 +
-+KODI_PVR_VUPLUS_CONF_OPTS += \
++KODI_PVR_DVBLINK_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 92f10df..f184db0 100644
+index bb9e3fc..b21530b 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -267,6 +267,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-stalker/Config.in"
- 	source "package/kodi-pvr-vbox/Config.in"
- 	source "package/kodi-pvr-vdr-vnsi/Config.in"
-+	source "package/kodi-pvr-vuplus/Config.in"
+@@ -254,6 +254,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ menu "PVR addons"
+ 	source "package/kodi-addon-xvdr/Config.in"
+ 	source "package/kodi-pvr-argustv/Config.in"
++	source "package/kodi-pvr-dvblink/Config.in"
  endmenu
  
  menu "Audio encoder addons"
