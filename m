@@ -1,31 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 14:32:11 +0200
-Subject: [Buildroot] [PATCH v1] zedboard: Switch to U-Boot 2015.07
-In-Reply-To: <20150722122353.11c933fc@pcviktorin.fit.vutbr.cz>
-References: <20150722122353.11c933fc@pcviktorin.fit.vutbr.cz>
-Message-ID: <20150722143211.2f58211b@free-electrons.com>
+From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Date: Wed, 22 Jul 2015 14:40:41 +0200
+Subject: [Buildroot] [PATCH] c-icap: fix config script by adding
+	$(STAGING_DIR) prefix to link path. It fixes c-icap-modules build.
+Message-ID: <1437568841-20180-1-git-send-email-guillaume.gardet@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jan Viktorin,
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
 
-On Wed, 22 Jul 2015 12:23:53 +0200, Jan Viktorin wrote:
-> The U-Boot v2015.07 is required for successful out-of-the-box
-> build for common Xilinx Zynq boards (including Zedboard).
-> 
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-> ---
->  board/avnet/zedboard/readme.txt | 4 ++--
->  configs/zedboard_defconfig      | 5 ++---
->  2 files changed, 4 insertions(+), 5 deletions(-)
+---
+ package/c-icap/c-icap.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 0f42b6c..00a250b 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -57,6 +57,8 @@ define C_ICAP_TUNE_INSTALLATION
+ 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+ 	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
+ 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
++	$(SED) 's%LIBS="-L%LIBS="-L$(STAGING_DIR)%' \
++		$(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
+ endef
+ 
+ C_ICAP_POST_INSTALL_TARGET_HOOKS += C_ICAP_TUNE_INSTALLATION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.4.5
