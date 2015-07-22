@@ -1,75 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Jul 2015 16:56:33 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CANn-YGQs3Sb6k3fyn7-Psfg11JtPbpXM-WM0pEuJ5mLaNtKZMQ@mail.gmail.com>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <CANn-YGQs3Sb6k3fyn7-Psfg11JtPbpXM-WM0pEuJ5mLaNtKZMQ@mail.gmail.com>
-Message-ID: <20150722165633.028abf30@free-electrons.com>
+Date: Wed, 22 Jul 2015 16:57:18 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: remove busybox tune2fs when
+	installing full version
+Message-ID: <20150722145957.EF10181E99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton,
+commit: http://git.buildroot.net/buildroot/commit/?id=aa02829240b2927b2cb379eb904b6f40ff751237
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jul 2015 09:49:06 -0500, Clayton Shotwell wrote:
+Currently, busybox installs a version of tune2fs in /sbin/ while
+e2fsprogs installs at /usr/sbin/. This causes issues if a user is
+expecting the to use the full version from a prompt via 'tune2fs'
+since busybox's tune2fs will be found first from the default path
+search.
 
-> >>      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/3e85c2253f6bd4cfe6ac1dde947eb6d5afc78cfe/
-> >>      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/d0f0f7e7462d68331d4a2f87b1df05cc9a6fecfd/
-> >>      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/114de2422c56071141284fb2eb8044ffa48e77f4/
-> >>      powerpc |                    audit-2.4.1 | NOK | http://autobuild.buildroot.net/results/0862cf008e7e4b52c46c40257adeda954afee394/
-> >
-> > This is an audit problem: it is building stuff for the host, but using
-> > CFLAGS for the target. Clayton, can you have a look?
-> 
-> I have a fix for it that I will be sending out shortly.
+Fix this by removing the busybox version of tune2fs when a user has
+selected the option to install tune2fs from e2fsprogs.
 
-Great, thanks.
+[Thomas: don't hijack E2FSPROGS_TARGET_TUNE2FS_SYMLINK for the removal
+and instead introduce a separate E2FSPROGS_REMOVE_BUSYBOX_APPLETS post
+install target hook, and do related code re-organization.]
 
-> 
-> >>        nios2 |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/e67ef47ea9ff4cbb012d374b3b290fb7bddf7ef3/
-> >
-> > /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.8.3/../../../../nios2-linux-gnu/bin/ld: indexcon: No symbol version section for versioned symbol `qpol_policy_rebuild@@VERS_1.3'
-> > /home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.8.3/../../../../nios2-linux-gnu/bin/ld: final link failed: Nonrepresentable section on output
-> > collect2: error: ld returned 1 exit status
-> > Makefile:599: recipe for target 'indexcon' failed
-> >
-> > Probably some toolchain issue. Easiest solution is to exclude setools
-> > from NIOS II. Clayton?
-> >
-> >>         bfin |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/2ee84c0dc027912e059ca4ae518d6f11fd8317a7/
-> >>         bfin |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/401e4c48f4d865b2722f284f1038e25c5d420f43/
-> >
-> > Probably the infamous _ prefix used in Blackfin symbols. Maybe we can
-> > also just exclude setools on Blackfin. Who would want SELinux on a
-> > Blackfin DSP with noMMU anyway?
-> 
-> I think that would be the most reasonable thing to do. Would we want
-> to disable just setools or all of SELinux for both NIOS II and
-> Blackfin?
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/e2fsprogs.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-Just setools IMO. There's no reason to blacklist packages that can
-actually be built, if someone ever wants to get SELinux working on
-those platforms.
-
-> >>          arm |                     ustr-1.0.4 | NOK | http://autobuild.buildroot.net/results/0e114a9b6289cbced6be94a218383fb012284853/
-> >
-> > ustr-cmp-code-so-dbg.o: In function `ustr_pool_make_subpool':
-> > ustr-cmp-dbg-code.c:(.text+0x0): multiple definition of `ustr_pool_make_subpool'
-> > ustr-b-code-so-dbg.o:ustr-b-dbg-code.c:(.text+0x0): first defined here
-> >
-> > Smells like a GCC 5.x issue.
-> >
-> > Clayton, this is for you :-)
-> 
-> I'll see what I can do.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 0537521..ca54b70 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -102,6 +102,20 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
+ E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
+ endif
+ 
++# Remove busybox tune2fs and e2label, since we want the e2fsprogs full
++# blown variants to take precedence, but they are not installed in the
++# same location.
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++E2FSPROGS_DEPENDENCIES += busybox
++
++define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
++	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
++	$(RM) -f $(TARGET_DIR)/sbin/e2label
++
++endef
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
++endif
++
+ define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+ 	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
+ endef
