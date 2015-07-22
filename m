@@ -1,84 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 22 Jul 2015 22:30:47 +0200
-Subject: [Buildroot] [PATCH 25/47] package/kodi-pvr-stalker: new package
+Date: Wed, 22 Jul 2015 22:31:09 +0200
+Subject: [Buildroot] [PATCH 47/47] package/kodi-visualisation-waveforhue:
+	new package
 In-Reply-To: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1437597069-6448-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1437597069-6448-48-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                             |    1 +
- package/kodi-pvr-stalker/Config.in           |    7 +++++++
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk |   17 +++++++++++++++++
- package/kodi/Config.in                       |    1 +
- 4 files changed, 26 insertions(+)
- create mode 100644 package/kodi-pvr-stalker/Config.in
- create mode 100644 package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+ package/kodi-visualisation-waveforhue/Config.in       |    6 ++++++
+ .../kodi-visualisation-waveforhue.mk                  |   17 +++++++++++++++++
+ package/kodi/Config.in                                |    1 +
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-visualisation-waveforhue/Config.in
+ create mode 100644 package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index f8c2001..0684c97 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -121,6 +121,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_NEXTPVR
- 	select BR2_PACKAGE_KODI_PVR_NJOY
- 	select BR2_PACKAGE_KODI_PVR_PCTV
-+	select BR2_PACKAGE_KODI_PVR_STALKER
- 	help
- 	  Kodi PVR addon was split into seperate modules
- 
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
+diff --git a/package/kodi-visualisation-waveforhue/Config.in b/package/kodi-visualisation-waveforhue/Config.in
 new file mode 100644
-index 0000000..b327fd8
+index 0000000..9694027
 --- /dev/null
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_STALKER
-+	bool "kodi-pvr-stalker"
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-visualisation-waveforhue/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE
++	bool "kodi-visualisation-waveforhue"
 +	help
-+	  A PVR Client that connects Kodi to Stalker Middleware
++	  WaveForHue visualiser for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.stalker
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++	  https://github.com/notspiff/visualization.waveforhue
+diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 new file mode 100644
-index 0000000..8e98425
+index 0000000..d278654
 --- /dev/null
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kodi-pvr-stalker
++# kodi-visualisation-waveforhue
 +#
 +################################################################################
 +
-+KODI_PVR_STALKER_VERSION = 5f6eb1992ffd45a075ebb7bc4253c4a88bf65c80
-+KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
-+KODI_PVR_STALKER_LICENSE = GPLv2+
-+KODI_PVR_STALKER_LICENSE_FILES = src/client.cpp
++KODI_VISUALISATION_WAVEFORHUE_VERSION = 330b5d0432a976993d8ea3e13f01ec9bd3d8b02e
++KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
++KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPLv2+
++KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
 +
-+KODI_PVR_STALKER_DEPENDENCIES = kodi-platform
++KODI_VISUALISATION_WAVEFORHUE_DEPENDENCIES = kodi
 +
-+KODI_PVR_STALKER_CONF_OPTS += \
++KODI_VISUALISATION_WAVEFORHUE_CONF_OPTS += \
 +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6aaf72f..3cbc9aa 100644
+index 6048818..946694b 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -264,6 +264,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-nextpvr/Config.in"
- 	source "package/kodi-pvr-njoy/Config.in"
- 	source "package/kodi-pvr-pctv/Config.in"
-+	source "package/kodi-pvr-stalker/Config.in"
+@@ -301,6 +301,7 @@ endmenu
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
++	source "package/kodi-visualisation-waveforhue/Config.in"
+ 	source "package/kodi-visualisation-waveform/Config.in"
  endmenu
  
- menu "Audio encoder addons"
 -- 
 1.7.10.4
