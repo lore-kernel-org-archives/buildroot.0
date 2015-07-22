@@ -1,74 +1,44 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 22 Jul 2015 19:53:05 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Jul 2015 22:06:06 +0200
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150722162715.GC6432@waldemar-brodkorb.de>
+In-Reply-To: <55AFB950.10603@zacarias.com.ar>
 References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com> <55AF6B19.7010702@openwide.fr>
- <20150722162715.GC6432@waldemar-brodkorb.de>
-Message-ID: <55AFD881.6050702@openwide.fr>
+ <20150722094349.424e7a3e@free-electrons.com>
+ <CA+BsyQ4knrWo+cA7_Og91Lg3_eq+qCRZij+N5bx6nccE+g91jg@mail.gmail.com>
+ <CA+BsyQ4EGBokRsDhTuzfPRzgQ99sEr75SG3B8UxLJfX64fmtNQ@mail.gmail.com>
+ <55AF8CF6.7080709@zacarias.com.ar>
+ <20150722144535.103766f3@free-electrons.com>
+ <55AF91B5.8050806@zacarias.com.ar>
+ <CA+BsyQ77MtQSbwE-XCyi3Q0=079pvd4Rx=OoVBr9X_7zx02NyQ@mail.gmail.com>
+ <20150722165405.217f4e4f@free-electrons.com>
+ <CA+BsyQ67ic88wTW173o4QWbZS8d=cnSRh_2RDp4Ffs8T2Lsyeg@mail.gmail.com>
+ <55AFB950.10603@zacarias.com.ar>
+Message-ID: <20150722220606.58233cd0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Gustavo,
 
-Le 22/07/2015 18:27, Waldemar Brodkorb a ?crit :
-> Hi Romain,
-> Romain Naour wrote,
-> 
->>>>       x86_64 |                 libedje-1.7.10 | NOK | http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
->>>
->>> Another uClibc static linking problem. Waldemar?
->>>
->>
->> Waldemar, I think you can skip this issue since I'm working on the efl bump to
->> the latest release and I had to disable the efl package for uClibc-ng.
->>
->> I had a link issue:
->> lib/eina/.libs/libeina.so: undefined reference to `mkstemps'
->> It turn out that mkstemps and mkostemps are not available in uClibc-ng.
-> 
-> Do you have a patch to test your bump and the issue with buildroot?
+On Wed, 22 Jul 2015 12:40:00 -0300, Gustavo Zacarias wrote:
 
-You can try with efl-1.14.2-v3 branch from my github repo:
+> It's been a long time since i touched SPARC hardware, and even so i 
+> think this looks like the right approach.
+> Though for other packages we'll still need to handle the libatomic 
+> situation on a per-arch basis, but it will need to be finer-grained than 
+> that since different ISA levels affect the availability of atomics as well.
 
-https://github.com/RomainNaour/buildroot/tree/efl-1.14.2-v3
+Let's have a look at the issue on a per-package basis. For webkit, can
+it either avoid using atomic operations (like glib), or can we add a
+configure.ac test for the availability of the atomic operations, and if
+not available, attempt again with -latomic linked in?
 
-With this config:
+Thanks,
 
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2015.05-496-g85945aa.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="i686-buildroot-linux-uclibc"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_2=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_EFL=y
-BR2_PACKAGE_EFL_JPEG=y
-BR2_PACKAGE_XORG7=y
-
-EFL libeina library use mkstemps from here:
-https://git.enlightenment.org/core/efl.git/tree/src/lib/eina/eina_file_common.c?h=efl-1.14#n941
-
-It seems that they really use the subfix at some place in the code.
-
-> May be efl developers could be convinced to use something more standard like?
-> mkstemps() seems very glibc specific.
-
-Indeed, man pages says that mkstemps() is unstandardized.
-
-Thanks for your help!
-
-Best regards,
-Romain
-
-> 
-> best regards
->  Waldemar
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
