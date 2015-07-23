@@ -1,32 +1,34 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Jul 2015 11:21:36 +0200
-Subject: [Buildroot] [PATCH 2/2] lua-ev: bump to version 1.4
-In-Reply-To: <1437643296-30113-1-git-send-email-francois.perrad@gadz.org>
-References: <1437643296-30113-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437643296-30113-2-git-send-email-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 23 Jul 2015 14:18:35 +0300
+Subject: [Buildroot] [PATCH 2/2] openipmi: add homepage URL
+In-Reply-To: <b1e61f493d8b5e488f8e2dcdd9f2c43baf70959d.1437650315.git.baruch@tkos.co.il>
+References: <b1e61f493d8b5e488f8e2dcdd9f2c43baf70959d.1437650315.git.baruch@tkos.co.il>
+Message-ID: <631f2a97dc28ca839d84490467975232cf4c8c51.1437650315.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua-ev/lua-ev.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The homepage is now back online.
 
-diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 745d6ed..68f7fc7 100644
---- a/package/lua-ev/lua-ev.mk
-+++ b/package/lua-ev/lua-ev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openipmi/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
+index 667efa74a863..da886578f835 100644
+--- a/package/openipmi/Config.in
++++ b/package/openipmi/Config.in
+@@ -11,6 +11,8 @@ config BR2_PACKAGE_OPENIPMI
+ 	  to interact with IPMI enabled devices. OpenIPMI also provides
+ 	  an IPMI BMC simulator.
  
--LUA_EV_VERSION = 458165bdfe0c6eadc788813925f11a0e6a823845
-+LUA_EV_VERSION = v1.4
- LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
- LUA_EV_DEPENDENCIES = luainterpreter libev
- LUA_EV_LICENSE = MIT
++	  http://openipmi.sourceforge.net
++
+ comment "openipmi needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.1.4
