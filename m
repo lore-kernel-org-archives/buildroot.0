@@ -1,157 +1,216 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 23 Jul 2015 15:00:04 -0700
-Subject: [Buildroot] [PATCH v4 1/1] mosh: new package
-Message-ID: <1437688804-26537-1-git-send-email-christian@paral.in>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 24 Jul 2015 00:08:46 +0200
+Subject: [Buildroot] [PATCH] zxing_cpp: New package
+Message-ID: <1437689326-23261-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding mosh, the mobile shell.
+ZXing was hosted on Google Code, which is a closing forges.
+The current link was already redirecting to the github repo.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+But upstream is no longer supporting the cpp bindings, it's now a Java
+library/application.
+
+A fork has been created from the latests cpp source of the original
+upstream.
+So this is a new package from an old one and a legacy option has been
+added.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/mosh/0001-remove-system-locale-calls.patch | 49 ++++++++++++++++++++++
- package/mosh/Config.in                             | 28 +++++++++++++
- package/mosh/mosh.hash                             |  1 +
- package/mosh/mosh.mk                               | 16 +++++++
- 5 files changed, 95 insertions(+)
- create mode 100644 package/mosh/0001-remove-system-locale-calls.patch
- create mode 100644 package/mosh/Config.in
- create mode 100644 package/mosh/mosh.hash
- create mode 100644 package/mosh/mosh.mk
+ Config.in.legacy                       |  8 +++++++
+ package/Config.in                      |  2 +-
+ package/{zxing => zxing-cpp}/Config.in | 10 ++++-----
+ package/zxing-cpp/zxing-cpp.mk         | 33 ++++++++++++++++++++++++++++
+ package/zxing/0001-makefile.patch      | 30 -------------------------
+ package/zxing/zxing.mk                 | 40 ----------------------------------
+ 6 files changed, 47 insertions(+), 76 deletions(-)
+ rename package/{zxing => zxing-cpp}/Config.in (52%)
+ create mode 100644 package/zxing-cpp/zxing-cpp.mk
+ delete mode 100644 package/zxing/0001-makefile.patch
+ delete mode 100644 package/zxing/zxing.mk
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4afeb83..c6cebcb 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,14 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.08"
+ 
++config BR2_PACKAGE_ZXING
++	bool "zxing option has been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_ZXING_CPP
++	help
++	  ZXing no longer provides the cpp bindings, it has been renamed to
++	  BR2_PACKAGE_ZXING_CPP which uses a new upstream.
++
+ config BR2_PACKAGE_PERF
+ 	bool "perf option has been renamed"
+ 	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index cfa7512..d1e6640 100644
+index 9942e3a..5a135ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1250,6 +1250,7 @@ endif
- 	source "package/mongoose/Config.in"
- 	source "package/mongrel2/Config.in"
- 	source "package/monkey/Config.in"
-+	source "package/mosh/Config.in"
- 	source "package/mosquitto/Config.in"
- 	source "package/mrouted/Config.in"
- 	source "package/mtr/Config.in"
-diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
+@@ -828,7 +828,7 @@ menu "Graphics"
+ 	source "package/wayland/Config.in"
+ 	source "package/webkit/Config.in"
+ 	source "package/webp/Config.in"
+-	source "package/zxing/Config.in"
++	source "package/zxing-cpp/Config.in"
+ endmenu
+ 
+ menu "Hardware handling"
+diff --git a/package/zxing/Config.in b/package/zxing-cpp/Config.in
+similarity index 52%
+rename from package/zxing/Config.in
+rename to package/zxing-cpp/Config.in
+index 1e04635..1695d27 100644
+--- a/package/zxing/Config.in
++++ b/package/zxing-cpp/Config.in
+@@ -1,13 +1,13 @@
+-comment "zxing needs a toolchain w/ C++"
++comment "zxing-cpp needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 
+-config BR2_PACKAGE_ZXING
+-	bool "zxing"
++config BR2_PACKAGE_ZXING_CPP
++	bool "zxing-cpp"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  ZXing (pronounced "zebra crossing") is an open-source,
++	  ZXing-cpp (pronounced "zebra crossing") is an open-source,
+ 	  multi-format 1D/2D barcode image processing library
+ 	  implemented in Java, with ports to other languages. This
+ 	  compiles the C++ port.
+ 
+-	  http://code.google.com/p/zxing/
++	  https://github.com/glassechidna/zxing-cpp
+diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
 new file mode 100644
-index 0000000..f44e166
+index 0000000..36ba0fe
 --- /dev/null
-+++ b/package/mosh/0001-remove-system-locale-calls.patch
-@@ -0,0 +1,49 @@
-+From b6075c578d2104b58d55e088dccb74370019dde9 Mon Sep 17 00:00:00 2001
-+From: Christian Stewart <christian@paral.in>
-+Date: Thu, 23 Jul 2015 13:52:35 -0700
-+Subject: [PATCH 1/1] Remove system("locale") calls.
-+
-+The locale command is not available on many systems. As this variable
-+is unused and appears to have been written with the intent of
-+displaying the locale settings to the user, it's not really necessary.
-+As this breaks Mosh on a lot of systems, it's best to remove the calls.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+---
-+ src/frontend/mosh-server.cc | 4 +++-
-+ src/frontend/stmclient.cc   | 4 +++-
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
-+index 76ed2ed..0d2f222 100644
-+--- a/src/frontend/mosh-server.cc
-++++ b/src/frontend/mosh-server.cc
-+@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
-+       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
-+       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
-+       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
-+-      int unused __attribute((unused)) = system( "locale" );
-++
-++      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
-++
-+       exit( 1 );
-+     }
-+   }
-+diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
-+index 9e4d916..06fac8b 100644
-+--- a/src/frontend/stmclient.cc
-++++ b/src/frontend/stmclient.cc
-+@@ -85,7 +85,9 @@ void STMClient::init( void )
-+ 
-+     fprintf( stderr, "mosh-client needs a UTF-8 native locale to run.\n\n" );
-+     fprintf( stderr, "Unfortunately, the client's environment (%s) specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(), native_charset.c_str() );
-+-    int unused __attribute((unused)) = system( "locale" );
-++
-++    fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
-++
-+     exit( 1 );
-+   }
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-new file mode 100644
-index 0000000..da5aa10
---- /dev/null
-+++ b/package/mosh/Config.in
-@@ -0,0 +1,28 @@
-+
-+comment "mosh needs openssh and openssl to be built"
-+	depends on !BR2_PACKAGE_OPENSSH || !BR2_PACKAGE_OPENSSL
-+
-+comment "mosh works on arm, i386, mipsel, or x64 architectures"
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+
-+comment "mosh needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "mosh needs a host architecture of x64 or x86"
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+
-+config BR2_PACKAGE_MOSH
-+	bool "mosh"
-+	depends on BR2_PACKAGE_OPENSSL
-+	depends on BR2_PACKAGE_OPENSSH
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_PACKAGE_PROTOBUF
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Remote terminal application that supports intermittent connectivity,
-+	  allows roaming, and provides speculative local echo and line editing
-+	  of user keystrokes.
-+
-+	  https://github.com/keithw/mosh
-diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
-new file mode 100644
-index 0000000..1dfc1ba
---- /dev/null
-+++ b/package/mosh/mosh.hash
-@@ -0,0 +1 @@
-+sha256 35025d412046ee5199ebaa8d876131fc683dccedde18b3945b3bc3662bc9f373  mosh-1.2.5.tar.gz
-diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-new file mode 100644
-index 0000000..1c58e05
---- /dev/null
-+++ b/package/mosh/mosh.mk
-@@ -0,0 +1,16 @@
++++ b/package/zxing-cpp/zxing-cpp.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# mosh
++# zxing-cpp
 +#
 +################################################################################
 +
-+MOSH_VERSION = 1.2.5
-+MOSH_SITE = $(call github,keithw,mosh,mosh-$(MOSH_VERSION))
-+MOSH_DEPENDENCIES = zlib ncurses protobuf openssl
-+MOSH_LICENSE = GPLv3+
-+MOSH_LICENSE_FILES = COPYING COPYING.iOS
++ZXING_CPP_VERSION = e7594421d240d8a79633a83c7ad3d26b670e038f
++ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
++ZXING_CPP_LICENSE = Apache-2.0
++ZXING_CPP_LICENSE_FILES = COPYING
++ZXING_CPP_INSTALL_STAGING = YES
++ZXING_CPP_SUPPORTS_IN_SOURCE_BUILD = NO
 +
-+# Necessary as we are pulling from Git.
-+MOSH_AUTORECONF = YES
++ifneq ($(BR2_ENABLE_LOCALE),y)
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++ZXING_CPP_DEPENDENCIES += libiconv
++endif
++endif
 +
-+$(eval $(autotools-package))
++define ZXING_CPP_INSTALL_STAGING_CMDS
++	for i in $$(find $(@D)/buildroot-build/core/src -iname *.h); do \
++		$(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/local/include; \
++	done
++endef
++
++define ZXING_CPP_INSTALL_TARGET_CMDS
++	for i in $$(find $(@D)/buildroot-build/ -iname *.so -o -iname *.a); do \
++		$(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/lib; \
++	done
++	$(INSTALL) -m 755 $(@D)/buildroot-build/zxing $(TARGET_DIR)/usr/sbin
++endef
++
++$(eval $(cmake-package))
+diff --git a/package/zxing/0001-makefile.patch b/package/zxing/0001-makefile.patch
+deleted file mode 100644
+index 66896bf..0000000
+--- a/package/zxing/0001-makefile.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-[PATCH] add Makefile
+-
+-The scons based build system doesn't handle cross compilation, special
+-compiler flags or (un)installation, so add a simple makefile instead
+-which does.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- cpp/core/src/Makefile |   14 ++++++++++++++
+- 1 file changed, 14 insertions(+)
+-
+-Index: zxing-2.0/cpp/core/src/Makefile
+-===================================================================
+---- /dev/null
+-+++ zxing-2.0/cpp/core/src/Makefile
+-@@ -0,0 +1,14 @@
+-+override CXXFLAGS += -I.
+-+SRCS := $(shell find -name '*.cpp')
+-+
+-+libzxing.a: $(SRCS:.cpp=.o)
+-+	$(AR) $(ARFLAGS) $@ $^
+-+
+-+install: libzxing.a
+-+	install -D -m 0644 $^ $(DESTDIR)/usr/lib/$^
+-+	find -name '*.h' -exec install -m 0644 -D "{}" \
+-+		"$(DESTDIR)/usr/include/{}" ";"
+-+
+-+uninstall:
+-+	rm -f $(DESTDIR)/usr/lib/libzxing.a
+-+	rm -rf $(DESTDIR)/usr/include/zxing
+diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
+deleted file mode 100644
+index 94e8b1f..0000000
+--- a/package/zxing/zxing.mk
++++ /dev/null
+@@ -1,40 +0,0 @@
+-################################################################################
+-#
+-# zxing
+-#
+-################################################################################
+-
+-ZXING_VERSION = 2.3.0
+-ZXING_SITE = http://zxing.googlecode.com/files
+-ZXING_SOURCE = ZXing-$(ZXING_VERSION).zip
+-ZXING_LICENSE = Apache-2.0
+-ZXING_LICENSE_FILES = COPYING
+-ZXING_INSTALL_STAGING = YES
+-
+-ifneq ($(BR2_ENABLE_LOCALE),y)
+-ifeq ($(BR2_PACKAGE_LIBICONV),y)
+-ZXING_DEPENDENCIES += libiconv
+-else
+-# There is no locale support in the toolchain and libiconv
+-# is not available so disable iconv support in zxing
+-ZING_MAKE_OPTS = CXXFLAGS+="-DNO_ICONV"
+-endif
+-endif
+-
+-define ZXING_EXTRACT_CMDS
+-	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(ZXING_SOURCE)
+-endef
+-
+-define ZXING_BUILD_CMDS
+-	$(MAKE) -C $(@D)/cpp/core/src $(TARGET_CONFIGURE_OPTS) $(ZING_MAKE_OPTS)
+-endef
+-
+-define ZXING_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D)/cpp/core/src DESTDIR=$(STAGING_DIR) install
+-endef
+-
+-define ZXING_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D)/cpp/core/src DESTDIR=$(TARGET_DIR) install
+-endef
+-
+-$(eval $(generic-package))
 -- 
 2.1.4
