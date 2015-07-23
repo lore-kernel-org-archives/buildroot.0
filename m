@@ -1,34 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 22:29:48 +0200
-Subject: [Buildroot] [PATCH] ltrace: fix patch name
-In-Reply-To: <1437651295-888-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1437651295-888-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150723222948.0cacc5ee@free-electrons.com>
+Date: Thu, 23 Jul 2015 22:33:35 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix ncurses gcc-5.0 compile issue (for
+ real)
+In-Reply-To: <1437679186-15114-1-git-send-email-bas@bmail.ru>
+References: <1437679186-15114-1-git-send-email-bas@bmail.ru>
+Message-ID: <20150723223335.60374492@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear kyak,
 
-On Thu, 23 Jul 2015 13:34:55 +0200, Vicente Olivert Riera wrote:
-> Rename 0002-Install-lib-types.conf to 0002-Install-lib-types-conf.patch
+On Thu, 23 Jul 2015 22:19:46 +0300, kyak wrote:
+> The previous patch didn't work in all cases. The new patch is taken from
+> upstream:
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../{0002-Install-lib-types.conf => 0002-Install-lib-types-conf.patch}    | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/ltrace/{0002-Install-lib-types.conf => 0002-Install-lib-types-conf.patch} (100%)
-> 
-> diff --git a/package/ltrace/0002-Install-lib-types.conf b/package/ltrace/0002-Install-lib-types-conf.patch
-> similarity index 100%
-> rename from package/ltrace/0002-Install-lib-types.conf
-> rename to package/ltrace/0002-Install-lib-types-conf.patch
+> http://ncurses.scripts.mit.edu/?p=ncurses.git;a=blobdiff;f=ncurses/base/MKlib_gen.sh;h=b91398c740a266f10edbbce19f19c52b9709556f;hp=d8cc3c9751faa157d0c8cb8e16fbe4217703966b;hb=97bb4678dc03e753290b39bbff30ba2825df9517;hpb=762520a7930d7f698d542628d3c04bc201f7dac2
+> Signed-off-by: kyak <bas@bmail.ru>
 
-Doh, how could I miss that :-/
+We need a real name for Signed-off-by / Author. Can you fix this?
 
-Thanks for spotting and fixing!
+Also:
+
+ * There should be one empty line before the Signed-off-by line.
+
+ * The title should be "<package>: <description>", so: "ncurses: fix
+   gcc 5 compile issue for real" (saying 5.0 is incorrect since there
+   has never really been a gcc 5.0, the first stable release was 5.1).
+
+ * Can you include the upstream patch reference in the patch
+   description itself, and Signed-off-by the patch itself as well? See
+   http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+   for more details.
+
+Thanks!
 
 Thomas
 -- 
