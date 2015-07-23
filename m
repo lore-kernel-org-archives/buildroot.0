@@ -1,43 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:11:20 +0200
-Subject: [Buildroot] [PATCH V2] c-icap: fix config script by adding
- $(STAGING_DIR) prefix to link path. It fixes c-icap-modules build.
-In-Reply-To: <1437641147-6894-1-git-send-email-guillaume.gardet@oliseo.fr>
-References: <20150722155117.46a0e983@free-electrons.com>
- <1437641147-6894-1-git-send-email-guillaume.gardet@oliseo.fr>
-Message-ID: <20150723231120.75b681e8@free-electrons.com>
+Date: Thu, 23 Jul 2015 23:13:31 +0200
+Subject: [Buildroot] [git commit] package/gcc: fix typo for CFLAGS_FOR_TARGET
+Message-ID: <20150723211355.ADE4081E50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume GARDET,
+commit: http://git.buildroot.net/buildroot/commit/?id=bc39b87e5ae9c3c167f7e2dac8e5259c4071d7f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Jul 2015 10:45:47 +0200, Guillaume GARDET wrote:
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CFLAGS_FOR_TARGET is initialized with GCC_COMMON_TARGET_CXXFLAGS.
 
-I applied, but quite a few things were still wrong with the patch:
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- * The commit title is too long. It should be less than 80 characters.
-   The commit title should only be a summary of the commit log itself.
-
- * The commit title is wrong: you're no longer adding $(STAGING_DIR) to
-   the link path
-
- * The commit log was missing a reference to the autobuilder failure
-   that this patch is fixing.
-
-I've fixed those problems and applied. See:
-
-  http://git.buildroot.net/buildroot/commit/?id=6c73215493335f1ede26cad2d3898ef543d871d6
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index aaeba7f..accb429 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -113,7 +113,7 @@ endif
+ endif
+ 
+ # Propagate options used for target software building to GCC target libs
+-HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
++HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+ 
+ # libitm needs sparc V9+
