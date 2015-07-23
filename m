@@ -1,39 +1,24 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 23 Jul 2015 12:20:26 +0100
-Subject: [Buildroot] [v2 1/4] package/redis: Add redis system user
-Message-ID: <1437650429-13748-1-git-send-email-martin@barkynet.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 23 Jul 2015 13:34:55 +0200
+Subject: [Buildroot] [PATCH] ltrace: fix patch name
+Message-ID: <1437651295-888-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a redis system user and set the home directory to /var/lib/redis
+Rename 0002-Install-lib-types.conf to 0002-Install-lib-types-conf.patch
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v1 -> v2
- - Set redis user shell to /bin/false (Suggested by Thomas Petazzoni)
- - Removed $(INSTALL) of /var/lib/redis (Suggested by Thomas Petazzoni)
----
- package/redis/redis.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../{0002-Install-lib-types.conf => 0002-Install-lib-types-conf.patch}    | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/ltrace/{0002-Install-lib-types.conf => 0002-Install-lib-types-conf.patch} (100%)
 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 51c1f9c..0135cf9 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -9,6 +9,10 @@ REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
- 
-+define REDIS_USERS
-+	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
-+endef
-+
- # Redis doesn't support DESTDIR (yet, see
- # https://github.com/antirez/redis/pull/609).  We set PREFIX
- # instead.
+diff --git a/package/ltrace/0002-Install-lib-types.conf b/package/ltrace/0002-Install-lib-types-conf.patch
+similarity index 100%
+rename from package/ltrace/0002-Install-lib-types.conf
+rename to package/ltrace/0002-Install-lib-types-conf.patch
 -- 
-2.1.4
+2.3.6
