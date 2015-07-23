@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:36:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/harfbuzz: fix test-unicode
- static linking issue
-In-Reply-To: <1437601623-3001-2-git-send-email-romain.naour@openwide.fr>
-References: <1437601623-3001-1-git-send-email-romain.naour@openwide.fr>
- <1437601623-3001-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150723233642.4923e1cc@free-electrons.com>
+Date: Thu, 23 Jul 2015 23:38:28 +0200
+Subject: [Buildroot] [git commit] fan-ctrl: mark as broken until SourceForge
+	is back up
+Message-ID: <20150723213928.CBB4081EAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=89d21ce29b5be996d130f7944095918b3e8dd613
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Jul 2015 23:47:03 +0200, Romain Naour wrote:
-> When linking test-unicode statically, it needs $(ICU_LIBS)
-> which contains all required flags.
-> Especially -lstdc++.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  .../0001-fix-static-linking-with-icu-uc.patch      | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
+SourceForge is down, so we can't download fan-ctrl.c anymore, and it's
+not on sources.buildroot.net nor anywhere else on the Internet
+apparently. So let's mark this not-so-important package as broken for
+now, until SourceForge goes back to life.
 
-Applied, thanks. Please also submit upstream.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fan-ctrl/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/fan-ctrl/Config.in b/package/fan-ctrl/Config.in
+index 8696316..fa23aed 100644
+--- a/package/fan-ctrl/Config.in
++++ b/package/fan-ctrl/Config.in
+@@ -1,6 +1,9 @@
+ config BR2_PACKAGE_FAN_CTRL
+ 	bool "fan-ctrl"
+ 	depends on BR2_USE_MMU # fork()
++	# SourceForge is down, not backup location, let's disable for
++	# now.
++	depends on BR2_BROKEN
+ 	help
+ 	  Fan-ctrl is a little daemon that controls the speed of one
+ 	  or more system or CPU fans. It does so by monitoring
