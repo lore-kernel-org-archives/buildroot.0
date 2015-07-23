@@ -1,52 +1,54 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 23 Jul 2015 09:18:13 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Jul 2015 09:31:09 +0200
 Subject: [Buildroot] [PATCH 1/1] package/boost: boost-filesystem needs
  wchar
-In-Reply-To: <20150722085507.4f78d81f@free-electrons.com>
+In-Reply-To: <1437635893.2784.4.camel@embedded.rocks>
 References: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
  <20150722085507.4f78d81f@free-electrons.com>
-Message-ID: <1437635893.2784.4.camel@embedded.rocks>
+ <1437635893.2784.4.camel@embedded.rocks>
+Message-ID: <20150723093109.38aa581e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear J?rg Krause,
 
-On Mi, 2015-07-22 at 08:55 +0200, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Fri, 17 Jul 2015 16:15:16 +0200, J?rg Krause wrote:
-> > Also add reverse dependency for cc-tool.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f0
-> > 17442c48244ffd8e/
-> > http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f0
-> > 17442c48244ffd8e/
-> > http://autobuild.buildroot.net/results/0dd/0dd3ef96bbd034a41d908cda
-> > a6552b27fda78132/
-> > http://autobuild.buildroot.net/results/34b/34b55b2cd83fd5d87af4a9c1
-> > 5d05094b16ef3960/
-> > 
-> > and many more
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> Apparently, this isn't sufficient to fix all problems:
-> 
->   http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad23
-> 3ff679be007d2953/build-end.log
-> 
-> Maybe we should make the entire boost package depends on wchar and be
-> done with it?
+On Thu, 23 Jul 2015 09:18:13 +0200, J?rg Krause wrote:
 
-There are a lot more then five boost modules needing wchar. If we make
-boost depending on wchar we add reverse dependencies to some packages
-which could be build without wchar before.
+> There are a lot more then five boost modules needing wchar. If we make
+> boost depending on wchar we add reverse dependencies to some packages
+> which could be build without wchar before.
+> 
+> What do you think?
 
-What do you think?
+ * cc-tool -> already depends on wchar
+ * gnuradio -> already depends on wchar
+ * kodi -> already depends on wchar
+ * libftdi1 -> does not depend on wchar yet, but only the C++ bindings
+   of libftdi1 need boost, so I think it's OK
+ * mpd -> already depends on wchar
+ * pulseview -> already depends on wchar
+ * python-libconfig -> already depends on wchar since it depends on
+   python or python3, and both depend on wchar
+ * thrift -> already depends on wchar
+ * yaml-cpp -> would add a wchar dependency
+ * zmpqq -> already depends on wchar
 
-Best regards
-J?rg Krause
+So the only affected packages are the C++ bindings of libftdi1 and
+yaml-cpp.
+
+Conclusion: I believe it's reasonable to add a wchar dependency
+globally to boost. It's a pain to keep track which sub-option of boost
+needs or does not need wchar, and boost is a "big" thing, so having an
+additional toolchain dependency that is nevertheless already very
+common, is not a big issue.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
