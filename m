@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 22:43:45 +0200
-Subject: [Buildroot] [PATCH 1/2] orbit: bump to version 2.2.3
-In-Reply-To: <1437643296-30113-1-git-send-email-francois.perrad@gadz.org>
-References: <1437643296-30113-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150723224345.16b797c8@free-electrons.com>
+Date: Thu, 23 Jul 2015 22:44:09 +0200
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: bump u-boot to
+	2015.07
+Message-ID: <20150723204425.5660181E8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=7185ac09d0c3eb38cc0d6bb719bdb31c9fa84a0f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Jul 2015 11:21:35 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/orbit/orbit.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/olimex_a20_olinuxino_lime_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Both patches applied, thanks. For the orbit package, you could add a
-orbit.hash file, since the source is downloaded over http as a regular
-file.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 33bc10e..b19b92f 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
