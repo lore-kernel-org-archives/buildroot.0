@@ -1,58 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 22:26:22 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/python-web2py: new package
-In-Reply-To: <1429023904-20194-3-git-send-email-angelo.compagnucci@gmail.com>
-References: <1429023904-20194-1-git-send-email-angelo.compagnucci@gmail.com>
- <1429023904-20194-3-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150723222622.53792f93@free-electrons.com>
+Date: Thu, 23 Jul 2015 22:21:44 +0200
+Subject: [Buildroot] [git commit] package/python-pydal: new package
+Message-ID: <20150723202718.CE42881EB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=84057b2eaddf093cfa97377c6f1aa01a3aa8cc4b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 Apr 2015 17:05:04 +0200, Angelo Compagnucci wrote:
-> This patch adds web2py package. web2py is a free open source
-> full-stack framework for rapid development of fast, scalable,
-> secure and portable database-driven web-based applications.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> Changelog:
->   
-> v2 -> v3:
->  * Fixed systemd service file installation path.
->  * Fixed dependencies in Config.mk
->  * Moved to the systemwide installed pydal.
->  * Moved installation path to /var/www/.
->   
-> v1 -> v2:
->  * Adding python2 dependency only (suggested by Yegor)
+This package adds the python-pydal python package.  pyDAL is a pure
+Python Database Abstraction Layer.
 
-Applied with some minor change:
+[Thomas:
+  - rewrap Config.in help text
+  - add upstream URL in Config.in help text.]
 
-[Thomas: fixup symbolic link to the systemd service file.]
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                    |    1 +
+ package/python-pydal/Config.in       |   16 ++++++++++++++++
+ package/python-pydal/python-pydal.mk |   14 ++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
-However, there are two things that I believe should be
-improved/investigated:
-
- * The installation of web2py on the target is huge: 20 MB. When I look
-   at it, it seems like there's a huge amount of example applications
-   and so on, which don't really make sense to install by default. Can
-   you look at trimming down the installation size to something closer
-   to what people would really need?
-
- * I setup an admin password, but I don't know what to do with. When I
-   connect to http://<myip>:8000, I can see web2py running. If I click
-   on "admin" in the box on the right hand side, it brings me to a
-   blank page that says "Admin is disabled because insecure channel".
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 9942e3a..a04a250 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -634,6 +634,7 @@ menu "external python modules"
+ 	source "package/python-psutil/Config.in"
+ 	source "package/python-pyasn/Config.in"
+ 	source "package/python-pycrypto/Config.in"
++	source "package/python-pydal/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pyinotify/Config.in"
+diff --git a/package/python-pydal/Config.in b/package/python-pydal/Config.in
+new file mode 100644
+index 0000000..9aa16f5
+--- /dev/null
++++ b/package/python-pydal/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PYTHON_PYDAL
++	bool python-pydal
++	help
++
++	  pyDAL is a pure Python Database Abstraction Layer.  It
++	  dynamically generates the SQL in real time using the
++	  specified dialect for the database back end, so that you do
++	  not have to write SQL code or learn different SQL dialects
++	  (the term SQL is used generically), and your code will be
++	  portable among different types of databases.
++
++	  pyDAL comes from the original web2py's DAL, with the aim of
++	  being wide-compatible.  pyDAL doesn't require web2py and can
++	  be used in any Python context.
++
++	  https://github.com/web2py/pydal
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+new file mode 100644
+index 0000000..a99b61e
+--- /dev/null
++++ b/package/python-pydal/python-pydal.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pydal
++#
++################################################################################
++
++PYTHON_PYDAL_VERSION = v15.03
++PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
++PYTHON_PYDAL_LICENSE = BSD-3c
++PYTHON_PYDAL_LICENSE_FILES = LICENSE
++PYTHON_PYDAL_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
