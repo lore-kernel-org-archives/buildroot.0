@@ -1,32 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 22:42:58 +0200
-Subject: [Buildroot] [git commit] lua-ev: bump to version 1.4
-Message-ID: <20150723204315.B99EC81E8C@busybox.osuosl.org>
+Date: Thu, 23 Jul 2015 22:43:45 +0200
+Subject: [Buildroot] [PATCH 1/2] orbit: bump to version 2.2.3
+In-Reply-To: <1437643296-30113-1-git-send-email-francois.perrad@gadz.org>
+References: <1437643296-30113-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150723224345.16b797c8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f31b93a85a0634472b64f9ab58c9caac72622bb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lua-ev/lua-ev.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Thu, 23 Jul 2015 11:21:35 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/orbit/orbit.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 745d6ed..68f7fc7 100644
---- a/package/lua-ev/lua-ev.mk
-+++ b/package/lua-ev/lua-ev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_EV_VERSION = 458165bdfe0c6eadc788813925f11a0e6a823845
-+LUA_EV_VERSION = v1.4
- LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
- LUA_EV_DEPENDENCIES = luainterpreter libev
- LUA_EV_LICENSE = MIT
+Both patches applied, thanks. For the orbit package, you could add a
+orbit.hash file, since the source is downloaded over http as a regular
+file.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
