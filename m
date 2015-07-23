@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Jul 2015 18:47:28 +0200
-Subject: [Buildroot] [PATCH 13/15] perl-uri: bump to version 1.68
+Date: Thu, 23 Jul 2015 18:47:29 +0200
+Subject: [Buildroot] [PATCH 14/15] perl-www-robotrules: fix dependencies
 In-Reply-To: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
 References: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437670050-27014-13-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1437670050-27014-14-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-www-robotrules/Config.in              | 2 +-
+ package/perl-www-robotrules/perl-www-robotrules.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index da33416..ea8de44 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    d0ef53b6c63bcc02ba55f405c30741e3 URI-1.67.tar.gz
--sha256 7088d43d5f4902becfa5e0627751f5e6d0e0bdd1637b2d39e70ce807068a274e URI-1.67.tar.gz
-+md5    4a954ab8d79f831616ca817ba4b26cb9 URI-1.68.tar.gz
-+sha256 c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358 URI-1.68.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 421a89f..f1aecb0 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/perl-www-robotrules/Config.in b/package/perl-www-robotrules/Config.in
+index 83dbcfb..e80f5a0 100644
+--- a/package/perl-www-robotrules/Config.in
++++ b/package/perl-www-robotrules/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PERL_WWW_ROBOTRULES
+ 	bool "perl-www-robotrules"
+-	select PERL_URI
++	select BR2_PACKAGE_PERL_URI
+ 	help
+ 	  This module provides functions that deal the date formats used by the
+ 	  HTTP protocol (and then some more)
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.mk b/package/perl-www-robotrules/perl-www-robotrules.mk
+index 0c68b98..e74baab 100644
+--- a/package/perl-www-robotrules/perl-www-robotrules.mk
++++ b/package/perl-www-robotrules/perl-www-robotrules.mk
+@@ -7,7 +7,7 @@
+ PERL_WWW_ROBOTRULES_VERSION = 6.02
+ PERL_WWW_ROBOTRULES_SOURCE = WWW-RobotRules-$(PERL_WWW_ROBOTRULES_VERSION).tar.gz
+ PERL_WWW_ROBOTRULES_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_WWW_ROBOTRULES_DEPENDENCIES = perl-uri
++PERL_WWW_ROBOTRULES_DEPENDENCIES = perl perl-uri
+ PERL_WWW_ROBOTRULES_LICENSE = Artistic or GPLv1+
+ PERL_WWW_ROBOTRULES_LICENSE_FILES = README
  
--PERL_URI_VERSION = 1.67
-+PERL_URI_VERSION = 1.68
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_DEPENDENCIES = perl
- PERL_URI_LICENSE = Artistic or GPLv1+
--PERL_URI_LICENSE_FILES = README
-+PERL_URI_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
 -- 
 2.1.4
