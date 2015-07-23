@@ -1,132 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Jul 2015 08:22:59 +0300
-Subject: [Buildroot] [PATCH v2 1/1] mosh: new package
-In-Reply-To: <1437611042-10847-1-git-send-email-christian@paral.in>
-References: <1437611042-10847-1-git-send-email-christian@paral.in>
-Message-ID: <20150723052259.GP13027@tarshish>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 23 Jul 2015 08:08:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: boost-filesystem needs
+ wchar
+In-Reply-To: <20150722085507.4f78d81f@free-electrons.com>
+References: <1437142516-12378-1-git-send-email-joerg.krause@embedded.rocks>
+ <20150722085507.4f78d81f@free-electrons.com>
+Message-ID: <1437631717.6881.4.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI Christian,
+Dear Thomas,
 
-On Wed, Jul 22, 2015 at 05:24:02PM -0700, Christian Stewart wrote:
-> Adding mosh, the mobile shell.
+On Mi, 2015-07-22 at 08:55 +0200, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> On Fri, 17 Jul 2015 16:15:16 +0200, J?rg Krause wrote:
+> > Also add reverse dependency for cc-tool.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f0
+> > 17442c48244ffd8e/
+> > http://autobuild.buildroot.net/results/2c7/2c7783b7f3cc28d54d15a7f0
+> > 17442c48244ffd8e/
+> > http://autobuild.buildroot.net/results/0dd/0dd3ef96bbd034a41d908cda
+> > a6552b27fda78132/
+> > http://autobuild.buildroot.net/results/34b/34b55b2cd83fd5d87af4a9c1
+> > 5d05094b16ef3960/
+> > 
+> > and many more
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> 
+> Apparently, this isn't sufficient to fix all problems:
+> 
+>   http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad23
+> 3ff679be007d2953/build-end.log
+> 
+> 
+> Maybe we should make the entire boost package depends on wchar and be
+> done with it?
 
-[snip]
+I will check a build with all boost modules enabled. If there are too
+many depending on wchar, let's say more then four or five, we can do it
+this way.
 
-> diff --git a/package/mosh/0001-use-version-from-buildroot.patch b/package/mosh/0001-use-version-from-buildroot.patch
-> new file mode 100644
-> index 0000000..2d79eb2
-> --- /dev/null
-> +++ b/package/mosh/0001-use-version-from-buildroot.patch
-> @@ -0,0 +1,23 @@
-> +Alter the Makefile to use Buildroot's VERSION string.
-
-Why is that needed?
-
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +
-> +diff -Nau mosh.orig/Makefile.am mosh/Makefile.am
-> +--- mosh.orig/Makefile.am.orig	2015-07-22 16:55:42.523086477 -0700
-> ++++ mosh/Makefile.am	2015-07-22 16:56:13.615085453 -0700
-> +@@ -8,14 +8,7 @@
-> + .PHONY:	VERSION
-> + 
-> + VERSION:
-> +-	@set -e; if [ ! -f VERSION ]; then echo @PACKAGE_STRING@ > VERSION; fi
-> +-	@set -e; if git status > /dev/null 2>&1; then \
-> +-		git describe --dirty > VERSION.new;  \
-> +-		if ! diff -q VERSION VERSION.new > /dev/null 2>&1; then \
-> +-			mv -f VERSION.new VERSION; \
-> +-		fi; \
-> +-	fi
-> +-	@rm -f VERSION.new
-> ++	@echo $(VERSION) > VERSION
-> + 
-> + version.h:	VERSION
-> + 	@printf '#define BUILD_VERSION "%s"\n' "$$(cat VERSION)" > version.h.new
-> diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-> new file mode 100644
-> index 0000000..53db04b
-> --- /dev/null
-> +++ b/package/mosh/Config.in
-> @@ -0,0 +1,13 @@
-> +comment "mosh needs openssh to be built"
-> +	depends on !BR2_PACKAGE_OPENSSH
-> +
-> +config BR2_PACKAGE_MOSH
-> +	bool "mosh"
-> +	depends on BR2_PACKAGE_OPENSSH
-
-Why? Please explain.
-
-> +	select BR2_PACKAGE_PROTOBUF
-
-Please copy here the dependencies of BR2_PACKAGE_PROTOBUF. Please see the 
-explanation under "Choosing depends on or select" in 
-http://nightly.buildroot.org/manual.html#_config_files.
-
-> +	help
-> +	  Remote terminal application that supports intermittent connectivity,
-> +	  allows roaming, and provides speculative local echo and line editing
-> +	  of user keystrokes.
-> +
-> +	  https://github.com/keithw/mosh
-> diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
-> new file mode 100644
-> index 0000000..4121d36
-> --- /dev/null
-> +++ b/package/mosh/mosh.hash
-> @@ -0,0 +1 @@
-> +sha256 56571fb1cb9c9714013ab0fc813863d58e0f5c7d320430aa05df952295e046a7  mosh-1.2.4.95rc2.tar.gz
-> diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-> new file mode 100644
-> index 0000000..8ad4da9
-> --- /dev/null
-> +++ b/package/mosh/mosh.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# mosh
-> +#
-> +################################################################################
-> +
-> +MOSH_VERSION = 1.2.4.95rc2
-
-Is there a reason not to use the latest version 1.2.5?
-
-> +MOSH_SITE = $(call github,keithw,mosh,mosh-$(MOSH_VERSION))
-> +MOSH_DEPENDENCIES = host-protobuf protobuf
-
-protobuf depends on host-protobuf already.
-
-> +MOSH_AUTORECONF = YES
-
-Please add a comment noting that autoreconf is needed because we are using the 
-git repo.
-
-> +MOSH_LICENSE = OCB
-
-It's GPLv3+ with openssl and iOS exceptions.
-
-> +MOSH_LICENSE_FILES = ocb-license.html
-
-Should be "COPYING COPYING.iOS", I guess. ocb-license.html is a patents grant. 
-But IANAL.
-
-> +MOSH_MAKE_ENV = VERSION="mosh-$(MOSH_VERSION)"
-> +
-> +$(eval $(autotools-package))
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards
+J?rg Krause
