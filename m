@@ -1,66 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:30:35 +0200
-Subject: [Buildroot] [git commit] package/icu: icu-uc: provide -lstdc++ flag
-	for static build
-Message-ID: <20150723213351.D735A7F97A@busybox.osuosl.org>
+Date: Thu, 23 Jul 2015 23:16:31 +0200
+Subject: [Buildroot] [git commit] package/redis: Add systemV init script
+Message-ID: <20150723213351.C258B7F97A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13dc887cdaeda79ae3bc4f981c09448efa5eb04f
+commit: http://git.buildroot.net/buildroot/commit/?id=b386fda5cb95f3a0ef1161f3ec55f632550ad34c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-icu-uc.pc must provide -lstdc++ for C application linked
-statically with libicuuc.a.
+start-stop-daemon is used to start redis-server as user redis in the
+background.  Once redis-server is running we use redis-cli to shutdown
+cleanly.
 
-Related to:
-http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../icu/0005-fix-static-linking-with-icu-uc.patch  |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+ package/redis/S50redis |   38 ++++++++++++++++++++++++++++++++++++++
+ package/redis/redis.mk |    5 +++++
+ 2 files changed, 43 insertions(+), 0 deletions(-)
 
-diff --git a/package/icu/0005-fix-static-linking-with-icu-uc.patch b/package/icu/0005-fix-static-linking-with-icu-uc.patch
+diff --git a/package/redis/S50redis b/package/redis/S50redis
 new file mode 100644
-index 0000000..965906b
+index 0000000..c5751d7
 --- /dev/null
-+++ b/package/icu/0005-fix-static-linking-with-icu-uc.patch
-@@ -0,0 +1,34 @@
-+From ffff12fd321c7a056e796e74cc508726b0626ae0 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Wed, 22 Jul 2015 22:43:25 +0200
-+Subject: [PATCH] fix static linking with icu-uc
++++ b/package/redis/S50redis
+@@ -0,0 +1,38 @@
++#!/bin/sh
++#
++# start redis
++#
 +
-+During static linking with a C application and libicuuc.a,
-+-lstdc++ is required.
++start() {
++	echo -n "Starting redis: "
++	umask 077
++	start-stop-daemon -S -q -c redis:redis -b \
++		--exec /usr/bin/redis-server -- /etc/redis.conf
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	echo -n "Stopping redis: "
++	/usr/bin/redis-cli shutdown
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
 +
-+Add -lstdc++ in Libs.private of icu-uc.pc.
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		restart
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
 +
-+Fixes:
-+http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
++exit $?
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 04c2d6a..8537fb2 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -30,4 +30,9 @@ define REDIS_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/etc/redis.conf
+ endef
+ 
++define REDIS_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/redis/S50redis \
++		$(TARGET_DIR)/etc/init.d/S50redis
++endef
 +
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ source/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/source/Makefile.in b/source/Makefile.in
-+index 9db6c52..ca48e16 100644
-+--- a/source/Makefile.in
-++++ b/source/Makefile.in
-+@@ -264,7 +264,7 @@ config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
-+ 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
-+ 	@echo "Name: $(PACKAGE)-uc" >> $@
-+ 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" >> $@
-+-	@echo "Libs.private:" '$${baselibs}' >> $@
-++	@echo "Libs.private:" '$${baselibs}' -lstdc++ >> $@
-+ 	@echo $@ updated.
-+ 
-+ config/icu-i18n.pc: config/icu.pc Makefile icudefs.mk
-+-- 
-+2.4.3
-+
+ $(eval $(generic-package))
