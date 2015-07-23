@@ -1,128 +1,41 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 23 Jul 2015 15:41:20 -0700
-Subject: [Buildroot] [PATCH v6 1/1] rtl8821au: new package
-Message-ID: <1437691280-23926-1-git-send-email-christian@paral.in>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 24 Jul 2015 01:06:55 +0200
+Subject: [Buildroot] [PATCH v2] Add support for MIPS Codescape MTI GNU
+	Linux toolchain
+In-Reply-To: <20150723221000.GB3530@free.fr>
+References: <1437675584-3604-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150723221000.GB3530@free.fr>
+Message-ID: <55B1738F.9080805@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding a kernel module based USB wifi driver. There is no official
-version of this driver that works properly on ARM and with newer USB
-WiFi cards. This driver version builds module 8821au and is based on a
-kernel module release from ASUS with various fixes integrated in.
+Hello Yann,
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
+On 24/07/15 00:10, Yann E. MORIN wrote:
+> Still, I ahve a question for Thomas...
+>
+>> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+>> index 5ce4d33..f762dbc 100644
+>> --- a/toolchain/toolchain-external/toolchain-external.mk
+>> +++ b/toolchain/toolchain-external/toolchain-external.mk
+>> @@ -144,6 +144,8 @@ endif
+>>   else
+>>   ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+>>   TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
+>> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
+>> +TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/2015.06-03/bin
+>
+> I wonder if we could not just use the _STRIP_COMPONENTS variable to get
+> rid of that extra level...
 
-I've switched to use ulli-kroll's branch of rtl8821au. While it's based
-on an older vendor version, it has binary firmware and around ~1800
-commits of work to improve the driver. I think this work is probably
-more valuable than the vendor's updates.
+That only work for regular packages living under $(TOPDIR)/package/.
 
- package/Config.in                                  |  1 +
- package/rtl8821au/0001-disable-default-debug.patch | 24 ++++++++++++++++++++++
- package/rtl8821au/Config.in                        | 10 +++++++++
- package/rtl8821au/rtl8821au.hash                   |  1 +
- package/rtl8821au/rtl8821au.mk                     | 21 +++++++++++++++++++
- 5 files changed, 57 insertions(+)
- create mode 100644 package/rtl8821au/0001-disable-default-debug.patch
- create mode 100644 package/rtl8821au/Config.in
- create mode 100644 package/rtl8821au/rtl8821au.hash
- create mode 100644 package/rtl8821au/rtl8821au.mk
+I will send a patch to add the _STRIP_COMPONENTS for external 
+toolchains, and then I will send a v3 of this one.
 
-diff --git a/package/Config.in b/package/Config.in
-index cfa7512..070ec6a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -404,6 +404,7 @@ endif
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rpi-userland/Config.in"
-+	source "package/rtl8821au/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/setserial/Config.in"
-diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
-new file mode 100644
-index 0000000..de6fc62
---- /dev/null
-+++ b/package/rtl8821au/0001-disable-default-debug.patch
-@@ -0,0 +1,24 @@
-+Comment out the hardcoded debug defines. If extra debug is needed, we can add it
-+as a define in the make flags.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+diff --git a/include/autoconf.h b/include/autoconf.h
-+--- a/include/autoconf.h
-++++ b/include/autoconf.h
-+@@ -130,12 +130,12 @@
-+ /*
-+  * Debug Related Config
-+  */
-+-#define DBG	1
-++//#define DBG	1
-+ 
-+-#define CONFIG_DEBUG /* DBG_871X, etc... */
-++//#define CONFIG_DEBUG /* DBG_871X, etc... */
-+ //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
-+ 
-+-#define CONFIG_PROC_DEBUG
-++//#define CONFIG_PROC_DEBUG
-+ 
-+ 
-+ //#define DBG_TX
-diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
-new file mode 100644
-index 0000000..9827ad5
---- /dev/null
-+++ b/package/rtl8821au/Config.in
-@@ -0,0 +1,10 @@
-+comment "rtl8821au needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_RTL8821AU
-+	bool "rtl8821au"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  rtl8821au wifi driver
-+
-+	  https://github.com/paralin/rtl8821au
-diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-new file mode 100644
-index 0000000..d54d3c3
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.hash
-@@ -0,0 +1 @@
-+sha256 93beaf608880ecbca03bbeb8251b91d16e17724b36158b0571d1cebb7b4e5914  rtl8821au-f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d.tar.gz
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-new file mode 100644
-index 0000000..42f4cdd
---- /dev/null
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# rtl8821au
-+#
-+################################################################################
-+
-+RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
-+RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
-+RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-+
-+RTL8821AU_MODULE_MAKE_OPTS = \
-+	CONFIG_RTL8812AU_8821AU=m \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
-+
-+define RTL8821AU_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
-+endef
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
--- 
-2.1.4
+Regards,
+
+Vincent.
