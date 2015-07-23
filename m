@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Jul 2015 18:47:24 +0200
-Subject: [Buildroot] [PATCH 09/15] perl-mojolicious: bump to version 6.14
+Date: Thu, 23 Jul 2015 18:47:25 +0200
+Subject: [Buildroot] [PATCH 10/15] perl-net-http: bump to version 6.09
 In-Reply-To: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
 References: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437670050-27014-9-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1437670050-27014-10-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-net-http/perl-net-http.hash | 4 ++--
+ package/perl-net-http/perl-net-http.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 2955ed6..d8114e2 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
+index 9f5f11b..79f43c5 100644
+--- a/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-net-http/perl-net-http.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    ab8d44864173583a5eae4f507420112f Mojolicious-6.08.tar.gz
--sha256 338c0310eb55c2be42dfee1173c4e3ee5bcd86f6be6f8035d1955c579767adb3 Mojolicious-6.08.tar.gz
-+md5    dd067c5791e27a104a07f2676edf1bf2 Mojolicious-6.14.tar.gz
-+sha256 9808871b24ee8c9709fc1bd0473a64a54d99fc8c4d6334f503256ae90130b05a Mojolicious-6.14.tar.gz
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 549805b..50a7f98 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -4,7 +4,7 @@
+-md5    b6da691523456089d7a812ac398bc77e Net-HTTP-6.07.tar.gz
+-sha256 9f31e0325a5a0930ad309fa019da9d208e57e236fb0598675ed883c820240364 Net-HTTP-6.07.tar.gz
++md5    3d84d17f64c7316d69e7eb7b4e292b9a Net-HTTP-6.09.tar.gz
++sha256 52762b939d84806908ba544581c5708375f7938c3c0e496c128ca3fbc425e58d Net-HTTP-6.09.tar.gz
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
+index a73dfec..dd2ad59 100644
+--- a/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-net-http/perl-net-http.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 6.08
-+PERL_MOJOLICIOUS_VERSION = 6.14
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_DEPENDENCIES = perl
+-PERL_NET_HTTP_VERSION = 6.07
++PERL_NET_HTTP_VERSION = 6.09
+ PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
+-PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MS/MSCHILLI
+-PERL_NET_HTTP_DEPENDENCIES = perl-uri
++PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_NET_HTTP_DEPENDENCIES = perl perl-uri
+ PERL_NET_HTTP_LICENSE = Artistic or GPLv1+
+ PERL_NET_HTTP_LICENSE_FILES = README
+ 
 -- 
 2.1.4
