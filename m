@@ -1,83 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:15:43 +0200
-Subject: [Buildroot] [git commit] package/redis: Install /etc/redis.conf to
-	target
-Message-ID: <20150723213351.B20217F97A@busybox.osuosl.org>
+Date: Thu, 23 Jul 2015 23:34:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/icu: icu-uc: provide -lstdc++
+ flag for static build
+In-Reply-To: <1437601623-3001-1-git-send-email-romain.naour@openwide.fr>
+References: <1437601623-3001-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150723233409.4586c3c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a26dd768366452283f749a2f1560b3be3b525dcb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Copy redis.conf from the redis release package but adjust some values to
-sensible defaults using 0003-redis.conf-sane-defaults.patch
+On Wed, 22 Jul 2015 23:47:02 +0200, Romain Naour wrote:
+> icu-uc.pc must provide -lstdc++ for C application linked
+> statically with libicuuc.a.
+> 
+> Related to:
+> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  .../icu/0005-fix-static-linking-with-icu-uc.patch  | 34 ++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/icu/0005-fix-static-linking-with-icu-uc.patch
 
-The file 0003-redis.conf-sane-defaults.patch originates from the redis
-package in Arch Linux.
+Applied, thanks. Please submit the patch upstream!
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/redis/0003-redis.conf-sane-defaults.patch |   37 +++++++++++++++++++++
- package/redis/redis.mk                            |    2 +
- 2 files changed, 39 insertions(+), 0 deletions(-)
+Thanks,
 
-diff --git a/package/redis/0003-redis.conf-sane-defaults.patch b/package/redis/0003-redis.conf-sane-defaults.patch
-new file mode 100644
-index 0000000..6ee3f21
---- /dev/null
-+++ b/package/redis/0003-redis.conf-sane-defaults.patch
-@@ -0,0 +1,37 @@
-+Taken from archlinux redis package
-+See https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=5b2491ea61b746f289acebd12bc66e337d7e5b88
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+
-+=========================================================================
-+diff --git a/redis.conf b/redis.conf
-+index 6efb6ac..344e021 100644
-+--- a/redis.conf
-++++ b/redis.conf
-+@@ -61,7 +61,7 @@ tcp-backlog 511
-+ # Examples:
-+ #
-+ # bind 192.168.1.100 10.0.0.1
-+-# bind 127.0.0.1
-++bind 127.0.0.1
-+ 
-+ # Specify the path for the Unix socket that will be used to listen for
-+ # incoming connections. There is no default, so Redis will not listen
-+@@ -87,7 +87,7 @@ timeout 0
-+ # On other kernels the period depends on the kernel configuration.
-+ #
-+ # A reasonable value for this option is 60 seconds.
-+-tcp-keepalive 0
-++tcp-keepalive 60
-+ 
-+ # Specify the server verbosity level.
-+ # This can be one of:
-+@@ -184,7 +184,7 @@ dbfilename dump.rdb
-+ # The Append Only File will also be created inside this directory.
-+ # 
-+ # Note that you must specify a directory here, not a file name.
-+-dir ./
-++dir /var/lib/redis/
-+ 
-+ ################################# REPLICATION #################################
-+ 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 0135cf9..04c2d6a 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -26,6 +26,8 @@ endef
- define REDIS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
- 		LDCONFIG=true install
-+	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
-+		$(TARGET_DIR)/etc/redis.conf
- endef
- 
- $(eval $(generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
