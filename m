@@ -1,46 +1,106 @@
-From: glscantlen <glscantlen@gmail.com>
-Date: Wed, 22 Jul 2015 16:34:47 -0700 (PDT)
-Subject: [Buildroot] build libstdc++.so.6
-In-Reply-To: <20150722220012.01206096@free-electrons.com>
-References: <1436634230228-105322.post@n4.nabble.com>
- <20150712002830.018e4bc0@free-electrons.com>
- <1437584173498-106871.post@n4.nabble.com>
- <20150722220012.01206096@free-electrons.com>
-Message-ID: <1437608087647-106967.post@n4.nabble.com>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 22 Jul 2015 17:01:34 -0700
+Subject: [Buildroot] [PATCH 1/1] mosh: new package
+Message-ID: <1437609694-25139-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas,
+Adding mosh, the mobile shell.
 
-I'll sure try Linaro 14.09 toolchain.
-As long as I can make clean without having to rebuild.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/Config.in                                  |  1 +
+ package/mosh/0001-use-version-from-buildroot.patch | 23 ++++++++++++++++++++++
+ package/mosh/Config.in                             | 13 ++++++++++++
+ package/mosh/mosh.mk                               | 15 ++++++++++++++
+ 4 files changed, 52 insertions(+)
+ create mode 100644 package/mosh/0001-use-version-from-buildroot.patch
+ create mode 100644 package/mosh/Config.in
+ create mode 100644 package/mosh/mosh.mk
 
-I am using the Odroid-XU3, Samsung 5422 SOC.
-I use the kernel and u-boot from the hardkernel repository.
-I then added the X11 armsoc driver into the buildroot build.
-
->Basically, it seems to me that you are trying to hack very complicated 
->things while there are much simpler and better solutions that exist and 
->that you don't know about. 
-
-No doubt about that !
-If you don't mind I would appreciate any assistance.
-I have a github where I am trying to assemble instructions for others
-to see what I've done. goto:
-https://github.com/glscantlen/instructions/blob/master/README
-https://github.com/glscantlen/instructions/blob/master/Buildroot_XU3_MPlayer/build_xu3_mplayer.ins
-
-Gary
-
-
-
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/build-libstdc-so-6-with-custom-toolchain-Linaro-4-9-tp105322p106967.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/Config.in b/package/Config.in
+index 9942e3a..91fb08a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1248,6 +1248,7 @@ endif
+ 	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
+ 	source "package/monkey/Config.in"
++	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+ 	source "package/mtr/Config.in"
+diff --git a/package/mosh/0001-use-version-from-buildroot.patch b/package/mosh/0001-use-version-from-buildroot.patch
+new file mode 100644
+index 0000000..2d79eb2
+--- /dev/null
++++ b/package/mosh/0001-use-version-from-buildroot.patch
+@@ -0,0 +1,23 @@
++Alter the Makefile to use Buildroot's VERSION string.
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++
++diff -Nau mosh.orig/Makefile.am mosh/Makefile.am
++--- mosh.orig/Makefile.am.orig	2015-07-22 16:55:42.523086477 -0700
+++++ mosh/Makefile.am	2015-07-22 16:56:13.615085453 -0700
++@@ -8,14 +8,7 @@
++ .PHONY:	VERSION
++ 
++ VERSION:
++-	@set -e; if [ ! -f VERSION ]; then echo @PACKAGE_STRING@ > VERSION; fi
++-	@set -e; if git status > /dev/null 2>&1; then \
++-		git describe --dirty > VERSION.new;  \
++-		if ! diff -q VERSION VERSION.new > /dev/null 2>&1; then \
++-			mv -f VERSION.new VERSION; \
++-		fi; \
++-	fi
++-	@rm -f VERSION.new
+++	@echo $(VERSION) > VERSION
++ 
++ version.h:	VERSION
++ 	@printf '#define BUILD_VERSION "%s"\n' "$$(cat VERSION)" > version.h.new
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+new file mode 100644
+index 0000000..53db04b
+--- /dev/null
++++ b/package/mosh/Config.in
+@@ -0,0 +1,13 @@
++comment "mosh needs openssh to be built"
++	depends on !BR2_PACKAGE_OPENSSH
++
++config BR2_PACKAGE_MOSH
++	bool "mosh"
++	depends on BR2_PACKAGE_OPENSSH
++	select BR2_PACKAGE_PROTOBUF
++	help
++	  Remote terminal application that supports intermittent connectivity,
++	  allows roaming, and provides speculative local echo and line editing
++	  of user keystrokes.
++
++	  https://github.com/keithw/mosh
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+new file mode 100644
+index 0000000..8ad4da9
+--- /dev/null
++++ b/package/mosh/mosh.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# mosh
++#
++################################################################################
++
++MOSH_VERSION = 1.2.4.95rc2
++MOSH_SITE = $(call github,keithw,mosh,mosh-$(MOSH_VERSION))
++MOSH_DEPENDENCIES = host-protobuf protobuf
++MOSH_AUTORECONF = YES
++MOSH_LICENSE = OCB
++MOSH_LICENSE_FILES = ocb-license.html
++MOSH_MAKE_ENV = VERSION="mosh-$(MOSH_VERSION)"
++
++$(eval $(autotools-package))
+-- 
+2.1.4
