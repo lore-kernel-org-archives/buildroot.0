@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:36:06 +0200
-Subject: [Buildroot] [git commit] harfbuzz: update why we are using
-	autoreconf
-Message-ID: <20150723213643.C52DD81E8B@busybox.osuosl.org>
+Date: Thu, 23 Jul 2015 23:36:42 +0200
+Subject: [Buildroot] [PATCH 2/2] package/harfbuzz: fix test-unicode
+ static linking issue
+In-Reply-To: <1437601623-3001-2-git-send-email-romain.naour@openwide.fr>
+References: <1437601623-3001-1-git-send-email-romain.naour@openwide.fr>
+ <1437601623-3001-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150723233642.4923e1cc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5cb8201023e194000f2b631053f85e80dba5551a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Following the addition of a patch touching Makefile.am, let's update
-the comment explaining why we use <pkg>_AUTORECONF = YES.
+On Wed, 22 Jul 2015 23:47:03 +0200, Romain Naour wrote:
+> When linking test-unicode statically, it needs $(ICU_LIBS)
+> which contains all required flags.
+> Especially -lstdc++.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  .../0001-fix-static-linking-with-icu-uc.patch      | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/harfbuzz/harfbuzz.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks. Please also submit upstream.
 
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 0adfb53..001405f 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -25,7 +25,7 @@ HOST_HARFBUZZ_CONF_OPTS = \
- 	--with-freetype=yes \
- 	--with-glib=yes
- 
--# beta libtool version
-+# beta libtool version and patching Makefile.am
- HARFBUZZ_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
