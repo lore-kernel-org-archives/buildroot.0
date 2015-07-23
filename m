@@ -1,92 +1,39 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Thu, 23 Jul 2015 12:20:27 +0100
-Subject: [Buildroot] [v2 2/4] package/redis: Install /etc/redis.conf to
-	target
-In-Reply-To: <1437650429-13748-1-git-send-email-martin@barkynet.com>
-References: <1437650429-13748-1-git-send-email-martin@barkynet.com>
-Message-ID: <1437650429-13748-2-git-send-email-martin@barkynet.com>
+Date: Thu, 23 Jul 2015 12:20:26 +0100
+Subject: [Buildroot] [v2 1/4] package/redis: Add redis system user
+Message-ID: <1437650429-13748-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Copy redis.conf from the redis release package but adjust some values to
-sensible defaults using 0003-redis.conf-sane-defaults.patch
-
-The file 0003-redis.conf-sane-defaults.patch originates from the redis
-package in Arch Linux.
+Add a redis system user and set the home directory to /var/lib/redis
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 
 ---
-0003-redis.conf-sane-defaults.patch is a copy of the file
-redis.conf-sane-defaults.patch from the Arch Linux redis package.  See
-https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=b4907d2344855caeadf6c69bc01c403a95f8a4f3
-
 Changes v1 -> v2
- - No changes
+ - Set redis user shell to /bin/false (Suggested by Thomas Petazzoni)
+ - Removed $(INSTALL) of /var/lib/redis (Suggested by Thomas Petazzoni)
 ---
- package/redis/0003-redis.conf-sane-defaults.patch | 37 +++++++++++++++++++++++
- package/redis/redis.mk                            |  2 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 package/redis/0003-redis.conf-sane-defaults.patch
+ package/redis/redis.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/redis/0003-redis.conf-sane-defaults.patch b/package/redis/0003-redis.conf-sane-defaults.patch
-new file mode 100644
-index 0000000..6ee3f21
---- /dev/null
-+++ b/package/redis/0003-redis.conf-sane-defaults.patch
-@@ -0,0 +1,37 @@
-+Taken from archlinux redis package
-+See https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=5b2491ea61b746f289acebd12bc66e337d7e5b88
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+
-+=========================================================================
-+diff --git a/redis.conf b/redis.conf
-+index 6efb6ac..344e021 100644
-+--- a/redis.conf
-++++ b/redis.conf
-+@@ -61,7 +61,7 @@ tcp-backlog 511
-+ # Examples:
-+ #
-+ # bind 192.168.1.100 10.0.0.1
-+-# bind 127.0.0.1
-++bind 127.0.0.1
-+ 
-+ # Specify the path for the Unix socket that will be used to listen for
-+ # incoming connections. There is no default, so Redis will not listen
-+@@ -87,7 +87,7 @@ timeout 0
-+ # On other kernels the period depends on the kernel configuration.
-+ #
-+ # A reasonable value for this option is 60 seconds.
-+-tcp-keepalive 0
-++tcp-keepalive 60
-+ 
-+ # Specify the server verbosity level.
-+ # This can be one of:
-+@@ -184,7 +184,7 @@ dbfilename dump.rdb
-+ # The Append Only File will also be created inside this directory.
-+ # 
-+ # Note that you must specify a directory here, not a file name.
-+-dir ./
-++dir /var/lib/redis/
-+ 
-+ ################################# REPLICATION #################################
-+ 
 diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 0135cf9..04c2d6a 100644
+index 51c1f9c..0135cf9 100644
 --- a/package/redis/redis.mk
 +++ b/package/redis/redis.mk
-@@ -26,6 +26,8 @@ endef
- define REDIS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
- 		LDCONFIG=true install
-+	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
-+		$(TARGET_DIR)/etc/redis.conf
- endef
+@@ -9,6 +9,10 @@ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
  
- $(eval $(generic-package))
++define REDIS_USERS
++	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
++endef
++
+ # Redis doesn't support DESTDIR (yet, see
+ # https://github.com/antirez/redis/pull/609).  We set PREFIX
+ # instead.
 -- 
 2.1.4
