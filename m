@@ -1,34 +1,87 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Jul 2015 14:18:35 +0300
-Subject: [Buildroot] [PATCH 2/2] openipmi: add homepage URL
-In-Reply-To: <b1e61f493d8b5e488f8e2dcdd9f2c43baf70959d.1437650315.git.baruch@tkos.co.il>
-References: <b1e61f493d8b5e488f8e2dcdd9f2c43baf70959d.1437650315.git.baruch@tkos.co.il>
-Message-ID: <631f2a97dc28ca839d84490467975232cf4c8c51.1437650315.git.baruch@tkos.co.il>
+Date: Thu, 23 Jul 2015 14:18:34 +0300
+Subject: [Buildroot] [PATCH 1/2] openipmi: fix missing -lrt for clock_gettime
+Message-ID: <b1e61f493d8b5e488f8e2dcdd9f2c43baf70959d.1437650315.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The homepage is now back online.
+Add a patch to detect when -lrt is needed. This fixes build with glibc < 2.17.
+
+Fixes:
+http://autobuild.buildroot.net/results/2b0/2b0eb7149c7bdd8ebd72c1070aeefb210379a889/
+http://autobuild.buildroot.net/results/49f/49fbd7e2dc72279c5b54d0f59a055e3e5e73f648/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/openipmi/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...c-detect-lrt-requirement-for-clock_gettim.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
 
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
-index 667efa74a863..da886578f835 100644
---- a/package/openipmi/Config.in
-+++ b/package/openipmi/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_OPENIPMI
- 	  to interact with IPMI enabled devices. OpenIPMI also provides
- 	  an IPMI BMC simulator.
- 
-+	  http://openipmi.sourceforge.net
+diff --git a/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+new file mode 100644
+index 000000000000..d58ffd7caf26
+--- /dev/null
++++ b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+@@ -0,0 +1,57 @@
++From d3be03464be7fa3844dfe0837a7e2c920c107836 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 23 Jul 2015 13:35:35 +0300
++Subject: [PATCH] configure.ac: detect -lrt requirement for clock_gettime
 +
- comment "openipmi needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++glibc versions before 2.17 require link with -lrt.
++
++Upstream status: sent, stuck in moderator's queue
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ configure.ac     | 8 ++++++++
++ unix/Makefile.am | 4 ++--
++ 2 files changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 18401f161d45..6b350a41a916 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -854,6 +854,14 @@ OPENIPMI_SWIG_SO="${PYTHON_POSIX_SO}:\$(top_builddir)/lib/.libs/libOpenIPMI.so:\
++ AC_SUBST(OPENIPMI_SWIG_LIBS)
++ AC_SUBST(OPENIPMI_SWIG_SO)
++ 
+++LIB_CLOCK_GETTIME=
+++clk_saved_libs=$LIBS
+++AC_SEARCH_LIBS([clock_gettime], [rt],
+++	       [test "$ac_cv_search_clock_gettime" = "none required" ||
+++		LIB_CLOCK_GETTIME=$ac_cv_search_clock_gettime])
+++AC_SUBST([LIB_CLOCK_GETTIME])
+++LIBS=$clk_saved_libs
+++
++ # Everything from here to AC_OUTPUT is for libedit
++ 
++ # AC_PROG_LIBTOOL runs AC_CANONICAL_HOST
++diff --git a/unix/Makefile.am b/unix/Makefile.am
++index a108bc679c9a..fb60242d5d3b 100644
++--- a/unix/Makefile.am
+++++ b/unix/Makefile.am
++@@ -9,13 +9,13 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
++ 
++ libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
++ libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
++-	$(top_builddir)/utils/libOpenIPMIutils.la
+++	$(top_builddir)/utils/libOpenIPMIutils.la $(LIB_CLOCK_GETTIME)
++ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++ 	-Wl,-Map -Wl,libOpenIPMIpthread.map
++ 
++ libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
++ libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
++-	$(GDBM_LIB)
+++	$(GDBM_LIB) $(LIB_CLOCK_GETTIME)
++ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++ 	-Wl,-Map -Wl,libOpenIPMIposix.map
++ 
++-- 
++2.1.4
++
 -- 
 2.1.4
