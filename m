@@ -1,58 +1,43 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Jul 2015 18:47:16 +0200
-Subject: [Buildroot] [PATCH 01/15] scancpan: adjust package name
-Message-ID: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
+Date: Thu, 23 Jul 2015 18:47:17 +0200
+Subject: [Buildroot] [PATCH 02/15] perl-encode-locale: bump to version 1.05
+In-Reply-To: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
+References: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1437670050-27014-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-underscore is not allowed in BR package name.
-this problem was found with the Perl module DB_File
-which must give the BR package perl-db-file.
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-db-file/Config.in       | 2 +-
- package/perl-db-file/perl-db-file.mk | 2 +-
- support/scripts/scancpan             | 1 +
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ package/perl-encode-locale/perl-encode-locale.hash | 4 ++--
+ package/perl-encode-locale/perl-encode-locale.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-db-file/Config.in b/package/perl-db-file/Config.in
-index 18daec3..37bc5da 100644
---- a/package/perl-db-file/Config.in
-+++ b/package/perl-db-file/Config.in
-@@ -8,5 +8,5 @@ config BR2_PACKAGE_PERL_DB_FILE
- 
- 	  https://metacpan.org/release/DB_File
- 
--comment "perl-db_file needs a toolchain w/ dynamic library"
-+comment "perl-db-file needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-db-file/perl-db-file.mk b/package/perl-db-file/perl-db-file.mk
-index 1501926..46b87ae 100644
---- a/package/perl-db-file/perl-db-file.mk
-+++ b/package/perl-db-file/perl-db-file.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# perl-db_file
-+# perl-db-file
+diff --git a/package/perl-encode-locale/perl-encode-locale.hash b/package/perl-encode-locale/perl-encode-locale.hash
+index d1abef5..1b6a6bc 100644
+--- a/package/perl-encode-locale/perl-encode-locale.hash
++++ b/package/perl-encode-locale/perl-encode-locale.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    0565984b048732e4fd1315212f21d462 Encode-Locale-1.04.tar.gz
+-sha256 33aca4aa35829bd5c8c5e64ebfde86d0a2e8cd59dac2c4de707ffe9dc10bfbd4 Encode-Locale-1.04.tar.gz
++md5    fcfdb8e4ee34bcf62aed429b4a23db27 Encode-Locale-1.05.tar.gz
++sha256 176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1 Encode-Locale-1.05.tar.gz
+diff --git a/package/perl-encode-locale/perl-encode-locale.mk b/package/perl-encode-locale/perl-encode-locale.mk
+index fd7148e..be18589 100644
+--- a/package/perl-encode-locale/perl-encode-locale.mk
++++ b/package/perl-encode-locale/perl-encode-locale.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index d2e0563..c7180c8 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -607,6 +607,7 @@ say scalar keys %dist, q{ packages fetched.} unless $quiet;
- # Buildroot package name: lowercase
- sub fsname {
-     my $name = shift;
-+    $name =~ s|_|-|g;
-     return q{perl-} . lc $name;
- }
- 
+-PERL_ENCODE_LOCALE_VERSION = 1.04
++PERL_ENCODE_LOCALE_VERSION = 1.05
+ PERL_ENCODE_LOCALE_SOURCE = Encode-Locale-$(PERL_ENCODE_LOCALE_VERSION).tar.gz
+ PERL_ENCODE_LOCALE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+ PERL_ENCODE_LOCALE_DEPENDENCIES = perl
 -- 
 2.1.4
