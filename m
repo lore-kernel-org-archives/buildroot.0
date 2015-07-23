@@ -1,74 +1,114 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Jul 2015 23:55:25 +0200
-Subject: [Buildroot] [PATCH 0/2 v9] linux-backports: new package (branch
-	yem/linux-backports)
-Message-ID: <cover.1437688336.git.yann.morin.1998@free.fr>
+Date: Thu, 23 Jul 2015 23:55:29 +0200
+Subject: [Buildroot] [PATCH 2/2 v9] package/linux-backports: switch to using
+	the kernel-module infra
+In-Reply-To: <cover.1437688336.git.yann.morin.1998@free.fr>
+References: <cover.1437688336.git.yann.morin.1998@free.fr>
+Message-ID: <be87567542fc8e3133115311bc25fd91df40ed38.1437688336.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+linux-backports manually generates its autoconf.h header, which needs a
+.config file.
 
-This series introduces linux-backports, which contains drivers from
-recent kernels, backported unto older kernels (down to 3.0).
+Using a pre- or post-configure hook does not really work, because
+generating that file touches the .config, and thus our .stamp files ar
+enot longer properly time-ordered and running a subsequent make would
+incorrectly believe it has to rebuild linux-backports.
 
-The first patch, linux-backports itself, uses a pure generic package,
-and does not make use of the kernel-module infra, while the second and
-last patch converts it over to the kernel-module infra.
+So, even though this is not a fixup proper, we generate that file from
+the _KCONFIG_FIXUP_CMDS to ensure the stampt file is created after we
+touch .config.
 
-I'm not sure using the kernel-module infra is worth it, because it does
-not gain us much in this case. Yet, it makes for a slightly more
-beautiful .mk (IMHO!).
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-In the end, using kernel-module or not is the same to me (with a very
-slight preference for using it, of course, but I won't mind either way).
-
-Thanks to Petr for doing the initial packaging of linux-backports. :-)
-
-
+---
 Changes v8 -> v9:
-  - better depend on linux' .config  (Thomas)
-  - comment the kernel-module conversion  (Thomas)
+  - comment tricky constructs  (Thomas)
+  - use _KCONFIG_FIXUP_CMDS instead of POST_CONFIGURE_HOOKS
+---
+ package/linux-backports/linux-backports.mk | 48 +++++++++++++++++++-----------
+ 1 file changed, 30 insertions(+), 18 deletions(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 89d21ce29b5be996d130f7944095918b3e8dd613:
-
-  fan-ctrl: mark as broken until SourceForge is back up (2015-07-23 23:38:28 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/linux-backports
-
-for you to fetch changes up to be87567542fc8e3133115311bc25fd91df40ed38:
-
-  package/linux-backports: switch to using the kernel-module infra (2015-07-23 23:45:43 +0200)
-
-----------------------------------------------------------------
-Petr Vorel (1):
-      package/linux-backports: new package
-
-Yann E. MORIN (1):
-      package/linux-backports: switch to using the kernel-module infra
-
- package/Config.in                            |  1 +
- package/linux-backports/Config.in            | 52 +++++++++++++++
- package/linux-backports/linux-backports.hash |  2 +
- package/linux-backports/linux-backports.mk   | 99 ++++++++++++++++++++++++++++
- 4 files changed, 154 insertions(+)
- create mode 100644 package/linux-backports/Config.in
- create mode 100644 package/linux-backports/linux-backports.hash
- create mode 100644 package/linux-backports/linux-backports.mk
-
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index e4ac9f4..44ac7e7 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -11,33 +11,44 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
+ LINUX_BACKPORTS_LICENSE = GPLv2
+ LINUX_BACKPORTS_LICENSE_FILES = COPYING
+ 
+-LINUX_BACKPORTS_DEPENDENCIES = linux
+-
+-LINUX_BACKPORTS_MAKE_OPTS = \
+-	$(LINUX_MAKE_FLAGS) \
+-	KLIB_BUILD=$(LINUX_DIR) \
+-	KLIB=$(TARGET_DIR)
+-
+ ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+ LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+ else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+ LINUX_BACKPORTS_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE))
+ endif
+ 
+-define LINUX_BACKPORTS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
+-endef
+-
+-define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+-		-C $(LINUX_DIR) M=$(@D) \
+-		INSTALL_MOD_DIR=backports \
+-		modules_install
+-endef
+-
+ LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
+ LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+ 
++# linux-backports' build system expects the config options to be present
++# in the environment, and it is so when using their custom buildsystem,
++# because they are set in the main Makefile, which then calls a second
++# Makefile.
++#
++# In our case, we do not use that first Makefile. So, we parse the
++# .config file, filter-out comment lines and put the rest as command
++# line variables.
++#
++# LINUX_BACKPORTS_MAKE_OPTS is used by the kconfig-package infra, while
++# LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
++#
++LINUX_BACKPORTS_MAKE_OPTS = \
++	BACKPORT_DIR=$(@D) \
++	KLIB_BUILD=$(LINUX_DIR) \
++	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
++	INSTALL_MOD_DIR=backports \
++	`sed -r -e '/^\#/d;' $(@D)/.config`
++
++LINUX_BACKPORTS_MODULE_MAKE_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
++
++# This file is not automatically generated by 'oldconfig' that we use in
++# the kconfig-package infrastructure. In the linux buildsystem, it is
++# generated by running silentoldconfig, but that's not the case for
++# linux-backports: it uses a hand-crafted rule to generate that file.
++define LINUX_BACKPORTS_KCONFIG_FIXUP_CMDS
++	$(MAKE) -C $(@D) $(LINUX_BACKPORTS_MAKE_OPTS) backport-include/backport/autoconf.h
++endef
++
+ # Checks to give errors that the user can understand
+ ifeq ($(BR_BUILDING),y)
+ 
+@@ -55,6 +66,7 @@ endif
+ 
+ endif # BR_BUILDING
+ 
++$(eval $(kernel-module))
+ $(eval $(kconfig-package))
+ 
+ # linux-backports' own .config file needs options from the kernel's own
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
