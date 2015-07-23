@@ -1,38 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:07:40 +0200
-Subject: [Buildroot] [git commit] c-icap: fix config script
-Message-ID: <20150723210953.3EDE181D68@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 23 Jul 2015 14:09:54 -0700
+Subject: [Buildroot] [PATCH v4 1/1] rtl8821au: new package
+Message-ID: <1437685794-18822-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c73215493335f1ede26cad2d3898ef543d871d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adding a kernel module based USB wifi driver. There is no official
+version of this driver that works properly on ARM and with newer USB
+WiFi cards. This driver version builds module 8821au and is based on a
+kernel module release from ASUS with various fixes integrated in.
 
-This commit adjusts the c-icap config script by removing a bogus
--L$LIBDIR which was expanded to -L/usr/lib, which is wrong for
-cross-compilation. It fixes the build of c-icap-modules:
+Signed-off-by: Christian Stewart <christian@paral.in>
 
-  http://autobuild.buildroot.org/results/b05/b05141a6d450c94669c6a0a5a0f5b799c2c248f2/
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/c-icap.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 0f42b6c..0e27cc4 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -57,6 +57,7 @@ define C_ICAP_TUNE_INSTALLATION
- 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
- 	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
- 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
-+	$(SED) 's%-L$$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
- endef
- 
- C_ICAP_POST_INSTALL_TARGET_HOOKS += C_ICAP_TUNE_INSTALLATION
+I've switched to use ulli-kroll's branch of rtl8821au. While it's based
+on an older vendor version, it has binary firmware and around ~1800
+commits of work to improve the driver. I think this work is probably
+more valuable than the vendor's updates.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/Config.in                                  |  1 +
+ package/rtl8821au/0001-disable-default-debug.patch | 24 ++++++++++++++++++++++
+ package/rtl8821au/Config.in                        | 10 +++++++++
+ package/rtl8821au/rtl8821au.hash                   |  1 +
+ package/rtl8821au/rtl8821au.mk                     | 21 +++++++++++++++++++
+ 5 files changed, 57 insertions(+)
+ create mode 100644 package/rtl8821au/0001-disable-default-debug.patch
+ create mode 100644 package/rtl8821au/Config.in
+ create mode 100644 package/rtl8821au/rtl8821au.hash
+ create mode 100644 package/rtl8821au/rtl8821au.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index cfa7512..070ec6a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -404,6 +404,7 @@ endif
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
++	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/setserial/Config.in"
+diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
+new file mode 100644
+index 0000000..de6fc62
+--- /dev/null
++++ b/package/rtl8821au/0001-disable-default-debug.patch
+@@ -0,0 +1,24 @@
++Comment out the hardcoded debug defines. If extra debug is needed, we can add it
++as a define in the make flags.
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++
++diff --git a/include/autoconf.h b/include/autoconf.h
++--- a/include/autoconf.h
+++++ b/include/autoconf.h
++@@ -130,12 +130,12 @@
++ /*
++  * Debug Related Config
++  */
++-#define DBG	1
+++//#define DBG	1
++ 
++-#define CONFIG_DEBUG /* DBG_871X, etc... */
+++//#define CONFIG_DEBUG /* DBG_871X, etc... */
++ //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
++ 
++-#define CONFIG_PROC_DEBUG
+++//#define CONFIG_PROC_DEBUG
++ 
++ 
++ //#define DBG_TX
+diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+new file mode 100644
+index 0000000..9827ad5
+--- /dev/null
++++ b/package/rtl8821au/Config.in
+@@ -0,0 +1,10 @@
++comment "rtl8821au needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_RTL8821AU
++	bool "rtl8821au"
++	depends on BR2_LINUX_KERNEL
++	help
++	  rtl8821au wifi driver
++
++	  https://github.com/paralin/rtl8821au
+diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+new file mode 100644
+index 0000000..d54d3c3
+--- /dev/null
++++ b/package/rtl8821au/rtl8821au.hash
+@@ -0,0 +1 @@
++sha256 93beaf608880ecbca03bbeb8251b91d16e17724b36158b0571d1cebb7b4e5914  rtl8821au-f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d.tar.gz
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+new file mode 100644
+index 0000000..42f4cdd
+--- /dev/null
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# rtl8821au
++#
++################################################################################
++
++RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
++RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
++RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
++
++RTL8821AU_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8812AU_8821AU=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
++
++define RTL8821AU_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
++endef
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
+-- 
+2.1.4
