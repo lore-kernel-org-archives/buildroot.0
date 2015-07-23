@@ -1,34 +1,38 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 23 Jul 2015 23:08:55 +0200
-Subject: [Buildroot] [PATCH] package/gcc: fix typo for CFLAGS_FOR_TARGET
-Message-ID: <1437685735-7281-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Jul 2015 23:07:40 +0200
+Subject: [Buildroot] [git commit] c-icap: fix config script
+Message-ID: <20150723210953.3EDE181D68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CFLAGS_FOR_TARGET is initialized with GCC_COMMON_TARGET_CXXFLAGS.
+commit: http://git.buildroot.net/buildroot/commit/?id=6c73215493335f1ede26cad2d3898ef543d871d6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This commit adjusts the c-icap config script by removing a bogus
+-L$LIBDIR which was expanded to -L/usr/lib, which is wrong for
+cross-compilation. It fixes the build of c-icap-modules:
+
+  http://autobuild.buildroot.org/results/b05/b05141a6d450c94669c6a0a5a0f5b799c2c248f2/
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/c-icap/c-icap.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index aaeba7f..accb429 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -113,7 +113,7 @@ endif
- endif
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 0f42b6c..0e27cc4 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -57,6 +57,7 @@ define C_ICAP_TUNE_INSTALLATION
+ 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+ 	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
+ 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
++	$(SED) 's%-L$$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
+ endef
  
- # Propagate options used for target software building to GCC target libs
--HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-+HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
- 
- # libitm needs sparc V9+
--- 
-2.4.3
+ C_ICAP_POST_INSTALL_TARGET_HOOKS += C_ICAP_TUNE_INSTALLATION
