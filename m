@@ -1,82 +1,163 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 22:21:44 +0200
-Subject: [Buildroot] [git commit] package/python-pydal: new package
-Message-ID: <20150723202718.CE42881EB8@busybox.osuosl.org>
+Date: Thu, 23 Jul 2015 22:21:52 +0200
+Subject: [Buildroot] [git commit] package/python-web2py: new package
+Message-ID: <20150723202718.D02D481D26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84057b2eaddf093cfa97377c6f1aa01a3aa8cc4b
+commit: http://git.buildroot.net/buildroot/commit/?id=7c0fab65aae632fc820edbe570c40f93c765dd64
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package adds the python-pydal python package.  pyDAL is a pure
-Python Database Abstraction Layer.
+This patch adds web2py package. web2py is a free open source
+full-stack framework for rapid development of fast, scalable, secure
+and portable database-driven web-based applications.
 
-[Thomas:
-  - rewrap Config.in help text
-  - add upstream URL in Config.in help text.]
+[Thomas: fixup symbolic link to the systemd service file.]
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |    1 +
- package/python-pydal/Config.in       |   16 ++++++++++++++++
- package/python-pydal/python-pydal.mk |   14 ++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+ package/Config.in                      |    1 +
+ package/python-web2py/Config.in        |   23 ++++++++++++++++++
+ package/python-web2py/S51web2py        |   25 ++++++++++++++++++++
+ package/python-web2py/python-web2py.mk |   39 ++++++++++++++++++++++++++++++++
+ package/python-web2py/web2py.service   |   11 +++++++++
+ 5 files changed, 99 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 9942e3a..a04a250 100644
+index a04a250..cfa7512 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -634,6 +634,7 @@ menu "external python modules"
- 	source "package/python-psutil/Config.in"
- 	source "package/python-pyasn/Config.in"
- 	source "package/python-pycrypto/Config.in"
-+	source "package/python-pydal/Config.in"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pyinotify/Config.in"
-diff --git a/package/python-pydal/Config.in b/package/python-pydal/Config.in
+@@ -663,6 +663,7 @@ menu "external python modules"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
++	source "package/python-web2py/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-werkzeug/Config.in"
+ 	source "package/python-ws4py/Config.in"
+diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
 new file mode 100644
-index 0000000..9aa16f5
+index 0000000..b10d3a4
 --- /dev/null
-+++ b/package/python-pydal/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PYTHON_PYDAL
-+	bool python-pydal
++++ b/package/python-web2py/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_PYTHON_WEB2PY
++	bool "python-web2py"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_PYDAL
++	select BR2_PACKAGE_PYTHON_ZLIB
++	select BR2_PACKAGE_PYTHON_PYEXPAT
++	select BR2_PACKAGE_PYTHON_SQLITE
 +	help
++	  web2py is a free open source full-stack framework for rapid
++	  development of fast, scalable, secure and portable
++	  database-driven web-based applications.
 +
-+	  pyDAL is a pure Python Database Abstraction Layer.  It
-+	  dynamically generates the SQL in real time using the
-+	  specified dialect for the database back end, so that you do
-+	  not have to write SQL code or learn different SQL dialects
-+	  (the term SQL is used generically), and your code will be
-+	  portable among different types of databases.
++	  http://web2py.com
 +
-+	  pyDAL comes from the original web2py's DAL, with the aim of
-+	  being wide-compatible.  pyDAL doesn't require web2py and can
-+	  be used in any Python context.
++if BR2_PACKAGE_PYTHON_WEB2PY
 +
-+	  https://github.com/web2py/pydal
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
++config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
++	string "admin panel password"
++	default web2py
++	help
++	  Set the admin panel password.
++
++endif
+diff --git a/package/python-web2py/S51web2py b/package/python-web2py/S51web2py
 new file mode 100644
-index 0000000..a99b61e
+index 0000000..1da9ef4
 --- /dev/null
-+++ b/package/python-pydal/python-pydal.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-web2py/S51web2py
+@@ -0,0 +1,25 @@
++#!/bin/sh
++
++case "$1" in
++	start)
++		echo -n "Starting web2py: "
++		start-stop-daemon -S -q -m -p /run/web2py.pid \
++			-c www-data \
++			-b -x /var/www/web2py/web2py.py \
++			-- --nogui -a '"<recycle>"' -i 0.0.0.0 -p 8000
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo -n "Stopping web2py: "
++		start-stop-daemon -K -q -p /run/web2py.pid
++		[ $? = 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart)
++		"$0" stop
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+new file mode 100644
+index 0000000..641d7ef
+--- /dev/null
++++ b/package/python-web2py/python-web2py.mk
+@@ -0,0 +1,39 @@
 +################################################################################
 +#
-+# python-pydal
++# python-web2py
 +#
 +################################################################################
 +
-+PYTHON_PYDAL_VERSION = v15.03
-+PYTHON_PYDAL_SITE = $(call github,web2py,pydal,$(PYTHON_PYDAL_VERSION))
-+PYTHON_PYDAL_LICENSE = BSD-3c
-+PYTHON_PYDAL_LICENSE_FILES = LICENSE
-+PYTHON_PYDAL_SETUP_TYPE = setuptools
++PYTHON_WEB2PY_VERSION = R-2.10.3
++PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
++PYTHON_WEB2PY_LICENSE = LGPLv3
++PYTHON_WEB2PY_LICENSE_FILES = LICENSE
++PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
 +
-+$(eval $(python-package))
-+$(eval $(host-python-package))
++define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
++	$(HOST_DIR)/usr/bin/python2 -c 'import os; \
++		os.chdir("$(@D)"); \
++		from gluon.main import save_password; \
++		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
++	mkdir -p $(TARGET_DIR)/var/www/web2py
++	cp -dpfr $(@D)/* $(TARGET_DIR)/var/www/web2py
++endef
++
++define PYTHON_WEB2PY_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/python-web2py/S51web2py \
++		$(TARGET_DIR)/etc/init.d/S51web2py
++endef
++
++define PYTHON_WEB2PY_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/python-web2py/web2py.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/web2py.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib//systemd/system/web2py.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/web2py.service
++endef
++
++define PYTHON_WEB2PY_PERMISSIONS
++	/var/www/web2py  r  750  www-data  www-data  -  -  -  -  -
++endef
++
++$(eval $(generic-package))
+diff --git a/package/python-web2py/web2py.service b/package/python-web2py/web2py.service
+new file mode 100644
+index 0000000..0274bd8
+--- /dev/null
++++ b/package/python-web2py/web2py.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=Web2py daemon
++After=network.target
++
++[Service]
++Type=simple
++ExecStart=/var/www/web2py/web2py.py --nogui -a '<recycle>' -i 0.0.0.0 -p 8000
++User=www-data
++
++[Install]
++WantedBy=multi-user.target
