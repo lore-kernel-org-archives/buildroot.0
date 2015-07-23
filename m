@@ -1,79 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 08:57:18 +0200
-Subject: [Buildroot] build libstdc++.so.6
-In-Reply-To: <1437608087647-106967.post@n4.nabble.com>
-References: <1436634230228-105322.post@n4.nabble.com>
- <20150712002830.018e4bc0@free-electrons.com>
- <1437584173498-106871.post@n4.nabble.com>
- <20150722220012.01206096@free-electrons.com>
- <1437608087647-106967.post@n4.nabble.com>
-Message-ID: <20150723085718.745044df@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 23 Jul 2015 09:58:35 +0300
+Subject: [Buildroot] [PATCH v3 1/1] mosh: new package
+In-Reply-To: <1437633426-23375-1-git-send-email-christian@paral.in>
+References: <1437633426-23375-1-git-send-email-christian@paral.in>
+Message-ID: <20150723065835.GR13027@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Christian,
 
-On Wed, 22 Jul 2015 16:34:47 -0700 (PDT), glscantlen wrote:
+On Wed, Jul 22, 2015 at 11:37:06PM -0700, Christian Stewart wrote:
+> diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+> new file mode 100644
+> index 0000000..4d6f0b3
+> --- /dev/null
+> +++ b/package/mosh/mosh.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# mosh
+> +#
+> +################################################################################
+> +
+> +MOSH_VERSION = 1.2.4.95rc2
+> +MOSH_SITE = $(call github,keithw,mosh,mosh-$(MOSH_VERSION))
+> +MOSH_DEPENDENCIES = protobuf
+> +MOSH_LICENSE = GPLv3
 
-> No doubt about that !
-> If you don't mind I would appreciate any assistance.
-> I have a github where I am trying to assemble instructions for others
-> to see what I've done. goto:
-> https://github.com/glscantlen/instructions/blob/master/README
-> https://github.com/glscantlen/instructions/blob/master/Buildroot_XU3_MPlayer/build_xu3_mplayer.ins
+Source files contain the "or any later version" language, so GPLv3+.
 
-As I suspected, this is *really* much more complicated than it needs to
-be, and some of the steps are clearly violating the best practices of
-Buildroot usage.
+I'd also add the exceptions, so something like:
 
-Some comments:
+MOSH_LICENSE = GPLv3+ with OpenSSL and iOS exceptions
 
- 1/ Don't download the Linaro toolchain manually, let Buildroot do it.
+> +MOSH_LICENSE_FILES = COPYING COPYING.iOS
+> +MOSH_MAKE_ENV = VERSION="mosh-$(MOSH_VERSION)"
+> +
+> +# Necessary as we are pulling from Git.
+> +MOSH_AUTORECONF = YES
+> +
+> +$(eval $(autotools-package))
 
- 2/ Don't download/build U-Boot manually, let Buildroot do it
+baruch
 
- 3/ You can try to use the genimage tool to generate the complete
-    filesystem image rather than doing all those manual dd commands and
-    fiddling with partprobe and al. See board/wandboard/genimage.cfg
-    for an example in Buildroot. In the end, your instructions should
-    be as simple as board/wandboard/readme.txt.
-
- 4/ Don't manually explain the addition of your X.org armsoc driver
-    package. Put your Buildroot Git tree somewhere, and use it.
-    Manually describing changes is completely unreliable and
-    inefficient. Also, please submit this package for integration in
-    the upstream Buildroot.
-
- 5/ Don't add anything to system/skeleton/, this is completely *ugly*.
-    For youtube-dl, create a Buildroot package. For other changes, use
-    a rootfs overlay (see the Buildroot manual for details). To
-    adjust /etc/network/interfaces for DHCP on eth0, just set the
-    option BR2_SYSTEM_DHCP.
-
- 6/ Don't download/build the Linux kernel manually, let Buildroot do
-    it.
-
- 7/ Don't put a view of what needs to be enabled in menuconfig, just
-    ship a defconfig for your configuration.
-
- 8/ Don't manually fiddle with the Mali driver, create a Buildroot
-    package for it.
-
-All in all, if your documentation is not just:
-
-	make <foobar>_defconfig
-	make
-	<some simple instructions to transfer the image to the SD card or using fastboot>
-
-Then you got something wrong.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
