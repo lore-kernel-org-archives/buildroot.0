@@ -1,87 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Jul 2015 14:18:34 +0300
-Subject: [Buildroot] [PATCH 1/2] openipmi: fix missing -lrt for clock_gettime
-Message-ID: <b1e61f493d8b5e488f8e2dcdd9f2c43baf70959d.1437650315.git.baruch@tkos.co.il>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 23 Jul 2015 12:20:29 +0100
+Subject: [Buildroot] [v2 4/4] package/redis: Add systemd service
+In-Reply-To: <1437650429-13748-1-git-send-email-martin@barkynet.com>
+References: <1437650429-13748-1-git-send-email-martin@barkynet.com>
+Message-ID: <1437650429-13748-4-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to detect when -lrt is needed. This fixes build with glibc < 2.17.
+redis.service originates from the redis package in Arch Linux.
 
-Fixes:
-http://autobuild.buildroot.net/results/2b0/2b0eb7149c7bdd8ebd72c1070aeefb210379a889/
-http://autobuild.buildroot.net/results/49f/49fbd7e2dc72279c5b54d0f59a055e3e5e73f648/
+Signed-off-by: Martin Bark <martin@barkynet.com>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...c-detect-lrt-requirement-for-clock_gettim.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+redis.service is copied from the Arch Linux redis package.  See
+https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.service?h=packages/redis&id=b4907d2344855caeadf6c69bc01c403a95f8a4f3
 
-diff --git a/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+Changes v1 -> v2
+ - No changes
+---
+ package/redis/redis.mk      |  8 ++++++++
+ package/redis/redis.service | 22 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/redis/redis.service
+
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 8537fb2..ef51972 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -35,4 +35,12 @@ define REDIS_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50redis
+ endef
+ 
++define REDIS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/redis/redis.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/redis.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/redis.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/redis.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/redis/redis.service b/package/redis/redis.service
 new file mode 100644
-index 000000000000..d58ffd7caf26
+index 0000000..0a8162b
 --- /dev/null
-+++ b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
-@@ -0,0 +1,57 @@
-+From d3be03464be7fa3844dfe0837a7e2c920c107836 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 23 Jul 2015 13:35:35 +0300
-+Subject: [PATCH] configure.ac: detect -lrt requirement for clock_gettime
++++ b/package/redis/redis.service
+@@ -0,0 +1,22 @@
++[Unit]
++Description=Advanced key-value store
++After=network.target
 +
-+glibc versions before 2.17 require link with -lrt.
++[Service]
++Type=simple
++User=redis
++Group=redis
++ExecStart=/usr/bin/redis-server /etc/redis.conf
++ExecStop=/usr/bin/redis-cli shutdown
++CapabilityBoundingSet=
++PrivateTmp=true
++PrivateDevices=true
++ProtectSystem=full
++ProtectHome=true
++NoNewPrivileges=true
++RuntimeDirectory=redis
++RuntimeDirectoryMode=755
++LimitNOFILE=10032
 +
-+Upstream status: sent, stuck in moderator's queue
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ configure.ac     | 8 ++++++++
-+ unix/Makefile.am | 4 ++--
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 18401f161d45..6b350a41a916 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -854,6 +854,14 @@ OPENIPMI_SWIG_SO="${PYTHON_POSIX_SO}:\$(top_builddir)/lib/.libs/libOpenIPMI.so:\
-+ AC_SUBST(OPENIPMI_SWIG_LIBS)
-+ AC_SUBST(OPENIPMI_SWIG_SO)
-+ 
-++LIB_CLOCK_GETTIME=
-++clk_saved_libs=$LIBS
-++AC_SEARCH_LIBS([clock_gettime], [rt],
-++	       [test "$ac_cv_search_clock_gettime" = "none required" ||
-++		LIB_CLOCK_GETTIME=$ac_cv_search_clock_gettime])
-++AC_SUBST([LIB_CLOCK_GETTIME])
-++LIBS=$clk_saved_libs
-++
-+ # Everything from here to AC_OUTPUT is for libedit
-+ 
-+ # AC_PROG_LIBTOOL runs AC_CANONICAL_HOST
-+diff --git a/unix/Makefile.am b/unix/Makefile.am
-+index a108bc679c9a..fb60242d5d3b 100644
-+--- a/unix/Makefile.am
-++++ b/unix/Makefile.am
-+@@ -9,13 +9,13 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
-+ 
-+ libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
-+ libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
-+-	$(top_builddir)/utils/libOpenIPMIutils.la
-++	$(top_builddir)/utils/libOpenIPMIutils.la $(LIB_CLOCK_GETTIME)
-+ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+ 	-Wl,-Map -Wl,libOpenIPMIpthread.map
-+ 
-+ libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
-+ libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
-+-	$(GDBM_LIB)
-++	$(GDBM_LIB) $(LIB_CLOCK_GETTIME)
-+ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+ 	-Wl,-Map -Wl,libOpenIPMIposix.map
-+ 
-+-- 
-+2.1.4
-+
++[Install]
++WantedBy=multi-user.target
 -- 
 2.1.4
