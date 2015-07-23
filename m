@@ -1,36 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 22:41:15 +0200
-Subject: [Buildroot] [PATCH 1/1] qt/qt5base: Fix INCLUDE_PATH when no
- JPEG/PNG/GIF support
-In-Reply-To: <1437655220-12168-1-git-send-email-corjon.j@ecagroup.com>
-References: <1437655220-12168-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150723224115.7308e3ae@free-electrons.com>
+Date: Thu, 23 Jul 2015 22:41:39 +0200
+Subject: [Buildroot] [git commit] openipmi: fix missing -lrt for
+	clock_gettime
+Message-ID: <20150723204145.72CDF81EAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien Corjon,
+commit: http://git.buildroot.net/buildroot/commit/?id=7ede17756f1880c607e5dfd3bcd6f8ce45bf8c39
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Jul 2015 14:40:20 +0200, Julien Corjon wrote:
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  ...008-QtGui-force-image-dir-in-include_path.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
-
-What is this fixing? An autobuilder issue? If so, we want the
-autobuilder reference in the commit log, like:
+Add a patch to detect when -lrt is needed. This fixes build with glibc < 2.17.
 
 Fixes:
+http://autobuild.buildroot.net/results/2b0/2b0eb7149c7bdd8ebd72c1070aeefb210379a889/
+http://autobuild.buildroot.net/results/49f/49fbd7e2dc72279c5b54d0f59a055e3e5e73f648/
 
-	http://autobuild.buildroot/...
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...c-detect-lrt-requirement-for-clock_gettim.patch |   57 ++++++++++++++++++++
+ 1 files changed, 57 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+new file mode 100644
+index 0000000..d58ffd7
+--- /dev/null
++++ b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+@@ -0,0 +1,57 @@
++From d3be03464be7fa3844dfe0837a7e2c920c107836 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 23 Jul 2015 13:35:35 +0300
++Subject: [PATCH] configure.ac: detect -lrt requirement for clock_gettime
++
++glibc versions before 2.17 require link with -lrt.
++
++Upstream status: sent, stuck in moderator's queue
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ configure.ac     | 8 ++++++++
++ unix/Makefile.am | 4 ++--
++ 2 files changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 18401f161d45..6b350a41a916 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -854,6 +854,14 @@ OPENIPMI_SWIG_SO="${PYTHON_POSIX_SO}:\$(top_builddir)/lib/.libs/libOpenIPMI.so:\
++ AC_SUBST(OPENIPMI_SWIG_LIBS)
++ AC_SUBST(OPENIPMI_SWIG_SO)
++ 
+++LIB_CLOCK_GETTIME=
+++clk_saved_libs=$LIBS
+++AC_SEARCH_LIBS([clock_gettime], [rt],
+++	       [test "$ac_cv_search_clock_gettime" = "none required" ||
+++		LIB_CLOCK_GETTIME=$ac_cv_search_clock_gettime])
+++AC_SUBST([LIB_CLOCK_GETTIME])
+++LIBS=$clk_saved_libs
+++
++ # Everything from here to AC_OUTPUT is for libedit
++ 
++ # AC_PROG_LIBTOOL runs AC_CANONICAL_HOST
++diff --git a/unix/Makefile.am b/unix/Makefile.am
++index a108bc679c9a..fb60242d5d3b 100644
++--- a/unix/Makefile.am
+++++ b/unix/Makefile.am
++@@ -9,13 +9,13 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
++ 
++ libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
++ libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
++-	$(top_builddir)/utils/libOpenIPMIutils.la
+++	$(top_builddir)/utils/libOpenIPMIutils.la $(LIB_CLOCK_GETTIME)
++ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++ 	-Wl,-Map -Wl,libOpenIPMIpthread.map
++ 
++ libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
++ libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
++-	$(GDBM_LIB)
+++	$(GDBM_LIB) $(LIB_CLOCK_GETTIME)
++ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
++ 	-Wl,-Map -Wl,libOpenIPMIposix.map
++ 
++-- 
++2.1.4
++
