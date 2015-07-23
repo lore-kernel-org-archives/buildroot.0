@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Jul 2015 18:47:17 +0200
-Subject: [Buildroot] [PATCH 02/15] perl-encode-locale: bump to version 1.05
+Date: Thu, 23 Jul 2015 18:47:18 +0200
+Subject: [Buildroot] [PATCH 03/15] perl-file-listing: fix dependencies
 In-Reply-To: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
 References: <1437670050-27014-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437670050-27014-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1437670050-27014-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-encode-locale/perl-encode-locale.hash | 4 ++--
- package/perl-encode-locale/perl-encode-locale.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-file-listing/perl-file-listing.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-encode-locale/perl-encode-locale.hash b/package/perl-encode-locale/perl-encode-locale.hash
-index d1abef5..1b6a6bc 100644
---- a/package/perl-encode-locale/perl-encode-locale.hash
-+++ b/package/perl-encode-locale/perl-encode-locale.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    0565984b048732e4fd1315212f21d462 Encode-Locale-1.04.tar.gz
--sha256 33aca4aa35829bd5c8c5e64ebfde86d0a2e8cd59dac2c4de707ffe9dc10bfbd4 Encode-Locale-1.04.tar.gz
-+md5    fcfdb8e4ee34bcf62aed429b4a23db27 Encode-Locale-1.05.tar.gz
-+sha256 176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1 Encode-Locale-1.05.tar.gz
-diff --git a/package/perl-encode-locale/perl-encode-locale.mk b/package/perl-encode-locale/perl-encode-locale.mk
-index fd7148e..be18589 100644
---- a/package/perl-encode-locale/perl-encode-locale.mk
-+++ b/package/perl-encode-locale/perl-encode-locale.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/perl-file-listing/perl-file-listing.mk b/package/perl-file-listing/perl-file-listing.mk
+index a9d8ced..c376c61 100644
+--- a/package/perl-file-listing/perl-file-listing.mk
++++ b/package/perl-file-listing/perl-file-listing.mk
+@@ -7,7 +7,7 @@
+ PERL_FILE_LISTING_VERSION = 6.04
+ PERL_FILE_LISTING_SOURCE = File-Listing-$(PERL_FILE_LISTING_VERSION).tar.gz
+ PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+-PERL_FILE_LISTING_DEPENDENCIES = perl-http-date
++PERL_FILE_LISTING_DEPENDENCIES = perl perl-http-date
+ PERL_FILE_LISTING_LICENSE = Artistic or GPLv1+
+ PERL_FILE_LISTING_LICENSE_FILES = README
  
--PERL_ENCODE_LOCALE_VERSION = 1.04
-+PERL_ENCODE_LOCALE_VERSION = 1.05
- PERL_ENCODE_LOCALE_SOURCE = Encode-Locale-$(PERL_ENCODE_LOCALE_VERSION).tar.gz
- PERL_ENCODE_LOCALE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
- PERL_ENCODE_LOCALE_DEPENDENCIES = perl
 -- 
 2.1.4
