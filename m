@@ -1,41 +1,48 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 24 Jul 2015 01:06:55 +0200
-Subject: [Buildroot] [PATCH v2] Add support for MIPS Codescape MTI GNU
-	Linux toolchain
-In-Reply-To: <20150723221000.GB3530@free.fr>
-References: <1437675584-3604-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150723221000.GB3530@free.fr>
-Message-ID: <55B1738F.9080805@imgtec.com>
+Date: Fri, 24 Jul 2015 01:10:06 +0200
+Subject: [Buildroot] [PATCH v3 1/2] Add TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS
+Message-ID: <1437693007-13320-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+...for toolchains with non-standard tarballs.
 
-On 24/07/15 00:10, Yann E. MORIN wrote:
-> Still, I ahve a question for Thomas...
->
->> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
->> index 5ce4d33..f762dbc 100644
->> --- a/toolchain/toolchain-external/toolchain-external.mk
->> +++ b/toolchain/toolchain-external/toolchain-external.mk
->> @@ -144,6 +144,8 @@ endif
->>   else
->>   ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
->>   TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
->> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
->> +TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/2015.06-03/bin
->
-> I wonder if we could not just use the _STRIP_COMPONENTS variable to get
-> rid of that extra level...
+Following the same logic as <PKG>_STRIP_COMPONENTS (commit 73b9a5e), we
+also allow the posibility to specify a --strip-components level for
+external toolchains by setting the TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS
+variable.
 
-That only work for regular packages living under $(TOPDIR)/package/.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-I will send a patch to add the _STRIP_COMPONENTS for external 
-toolchains, and then I will send a v3 of this one.
-
-Regards,
-
-Vincent.
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 5ce4d33..2254248 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -408,6 +408,10 @@ TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+ 
++ifeq ($(TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS),)
++TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 1
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
+ # Special handling for Blackfin toolchain, because of the split in two
+ # tarballs, and the organization of tarball contents. The tarballs
+@@ -426,7 +430,7 @@ else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
+ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+ 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+-		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
++		$(TAR) --strip-components=$(TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS) --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ 	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
+ endef
+ endif
+-- 
+2.3.6
