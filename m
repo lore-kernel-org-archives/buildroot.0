@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 23 Jul 2015 23:38:28 +0200
-Subject: [Buildroot] [git commit] fan-ctrl: mark as broken until SourceForge
-	is back up
-Message-ID: <20150723213928.CBB4081EAD@busybox.osuosl.org>
+Date: Thu, 23 Jul 2015 23:53:57 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-07-22
+In-Reply-To: <CAMo8BfJTvgvTPviYqiAhgMk+eEerLYU4m3cgGwC5XWmKp_gF7w@mail.gmail.com>
+References: <20150723063018.EA19A101D01@stock.ovh.net>
+ <55B12984.2090104@openwide.fr>
+ <20150723221133.51e59215@free-electrons.com>
+ <CAMo8BfJTvgvTPviYqiAhgMk+eEerLYU4m3cgGwC5XWmKp_gF7w@mail.gmail.com>
+Message-ID: <20150723235357.52cc7ec0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=89d21ce29b5be996d130f7944095918b3e8dd613
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-SourceForge is down, so we can't download fan-ctrl.c anymore, and it's
-not on sources.buildroot.net nor anywhere else on the Internet
-apparently. So let's mark this not-so-important package as broken for
-now, until SourceForge goes back to life.
+On Fri, 24 Jul 2015 00:30:44 +0300, Max Filippov wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fan-ctrl/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+> I looked at that patch a while ago and reported that it looks good but
+> doesn't work for xtensa, got no reply though:
+> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/116099
+> 
+> Most of libgcc issues are just missing .literal_position in assembly
+> functions, I'll post a patch that fixes them. But there's bigger issue
+> with literals emitted for .init and .fini sections, for which I don't have
+> a fix yet.
 
-diff --git a/package/fan-ctrl/Config.in b/package/fan-ctrl/Config.in
-index 8696316..fa23aed 100644
---- a/package/fan-ctrl/Config.in
-+++ b/package/fan-ctrl/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_FAN_CTRL
- 	bool "fan-ctrl"
- 	depends on BR2_USE_MMU # fork()
-+	# SourceForge is down, not backup location, let's disable for
-+	# now.
-+	depends on BR2_BROKEN
- 	help
- 	  Fan-ctrl is a little daemon that controls the speed of one
- 	  or more system or CPU fans. It does so by monitoring
+In the mean time, maybe we can just filter-out the
+-mtext-section-literals from CFLAGS for Xtensa in gcc.mk ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
