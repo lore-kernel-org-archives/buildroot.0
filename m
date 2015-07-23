@@ -1,7 +1,7 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 22 Jul 2015 17:01:34 -0700
-Subject: [Buildroot] [PATCH 1/1] mosh: new package
-Message-ID: <1437609694-25139-1-git-send-email-christian@paral.in>
+Date: Wed, 22 Jul 2015 17:24:02 -0700
+Subject: [Buildroot] [PATCH v2 1/1] mosh: new package
+Message-ID: <1437611042-10847-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,12 @@ Signed-off-by: Christian Stewart <christian@paral.in>
  package/Config.in                                  |  1 +
  package/mosh/0001-use-version-from-buildroot.patch | 23 ++++++++++++++++++++++
  package/mosh/Config.in                             | 13 ++++++++++++
+ package/mosh/mosh.hash                             |  1 +
  package/mosh/mosh.mk                               | 15 ++++++++++++++
- 4 files changed, 52 insertions(+)
+ 5 files changed, 53 insertions(+)
  create mode 100644 package/mosh/0001-use-version-from-buildroot.patch
  create mode 100644 package/mosh/Config.in
+ create mode 100644 package/mosh/mosh.hash
  create mode 100644 package/mosh/mosh.mk
 
 diff --git a/package/Config.in b/package/Config.in
@@ -81,6 +83,13 @@ index 0000000..53db04b
 +	  of user keystrokes.
 +
 +	  https://github.com/keithw/mosh
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+new file mode 100644
+index 0000000..4121d36
+--- /dev/null
++++ b/package/mosh/mosh.hash
+@@ -0,0 +1 @@
++sha256 56571fb1cb9c9714013ab0fc813863d58e0f5c7d320430aa05df952295e046a7  mosh-1.2.4.95rc2.tar.gz
 diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
 new file mode 100644
 index 0000000..8ad4da9
