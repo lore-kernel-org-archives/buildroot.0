@@ -1,35 +1,31 @@
-From: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Date: Thu, 23 Jul 2015 10:45:47 +0200
-Subject: [Buildroot] [PATCH V2] c-icap: fix config script by adding
-	$(STAGING_DIR) prefix to link path. It fixes c-icap-modules build.
-In-Reply-To: <20150722155117.46a0e983@free-electrons.com>
-References: <20150722155117.46a0e983@free-electrons.com>
-Message-ID: <1437641147-6894-1-git-send-email-guillaume.gardet@oliseo.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 23 Jul 2015 11:09:16 +0200
+Subject: [Buildroot] [PATCH 1/2] olimex_a20_olinuxino_lime: bump u-boot to
+	2015.07
+Message-ID: <1437642557-29540-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/c-icap/c-icap.mk | 1 +
- 1 file changed, 1 insertion(+)
+ configs/olimex_a20_olinuxino_lime_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
-index 0f42b6c..0e27cc4 100644
---- a/package/c-icap/c-icap.mk
-+++ b/package/c-icap/c-icap.mk
-@@ -57,6 +57,7 @@ define C_ICAP_TUNE_INSTALLATION
- 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
- 	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
- 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
-+	$(SED) 's%-L$$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
- endef
- 
- C_ICAP_POST_INSTALL_TARGET_HOOKS += C_ICAP_TUNE_INSTALLATION
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 33bc10e..b19b92f 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -36,7 +36,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
 -- 
-1.8.4.5
+2.1.4
