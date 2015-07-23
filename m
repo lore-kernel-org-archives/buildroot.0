@@ -1,28 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 23 Jul 2015 16:27:13 -0300
-Subject: [Buildroot] [PATCH 1/1] Fix ncurses gcc-5.0 compile issue (for
- real)
-In-Reply-To: <1437679186-15114-1-git-send-email-bas@bmail.ru>
-References: <1437679186-15114-1-git-send-email-bas@bmail.ru>
-Message-ID: <55B14011.7060800@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 23 Jul 2015 22:11:33 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-07-22
+In-Reply-To: <55B12984.2090104@openwide.fr>
+References: <20150723063018.EA19A101D01@stock.ovh.net>
+ <55B12984.2090104@openwide.fr>
+Message-ID: <20150723221133.51e59215@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/07/15 16:19, kyak wrote:
+Dear Romain Naour,
 
-> The previous patch didn't work in all cases. The new patch is taken from
-> upstream:
->
-> http://ncurses.scripts.mit.edu/?p=ncurses.git;a=blobdiff;f=ncurses/base/MKlib_gen.sh;h=b91398c740a266f10edbbce19f19c52b9709556f;hp=d8cc3c9751faa157d0c8cb8e16fbe4217703966b;hb=97bb4678dc03e753290b39bbff30ba2825df9517;hpb=762520a7930d7f698d542628d3c04bc201f7dac2
-> Signed-off-by: kyak <bas@bmail.ru>
+On Thu, 23 Jul 2015 19:51:00 +0200, Romain Naour wrote:
+> Hi Alexey,
+> 
+> Le 23/07/2015 08:30, Thomas Petazzoni a ?crit :
+> > Detail of failures
+> > ===================
+> 
+> >       xtensa |         host-gcc-initial-4.9.3 | NOK | http://autobuild.buildroot.net/results/56de85f9bc0ba44248003212b5dc4cb8dcde19c5/
+> 
+> I noticed a new build failure in autobuilders due to your gcc package patch:
+> http://patchwork.ozlabs.org/patch/453849/
 
-Thanks, i've just hit this issue minutes ago, nice timing.
+Did you notice xtensa or other platforms as well? Before applying
+Alexey's patch I tested an ARM toolchain build with -O2 and -Os and it
+built fine.
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Though it's indeed a problem if it causes a regression on other
+architectures. Alexey, Max, can you have a look at least for the Xtensa
+case? If there is no feedback soon, I'll revert Alexey's patch in the
+mean time.
 
-(x86_64 gcc 5.2.0 and blackfin 4.3.5)
-Regards.
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
