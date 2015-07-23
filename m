@@ -1,54 +1,177 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 23 Jul 2015 15:22:01 +0000
-Subject: [Buildroot] [PATCH v3 1/1] rtl8821au: new package
-In-Reply-To: <20150723084603.2dd7a7c0@free-electrons.com>
-References: <1437583153-31359-1-git-send-email-christian@paral.in>
- <20150722232013.52492a99@free-electrons.com>
- <CA+h8R2rC=Zb6qd0SNsgPce=d4wZEL+krDrr8Jau-iJOTmtscPw@mail.gmail.com>
- <20150723084603.2dd7a7c0@free-electrons.com>
-Message-ID: <CA+h8R2oFQYUtqve+-=eVhs6L=kBfEv26rEGE=Kp4XEE43Qwk7A@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 23 Jul 2015 18:19:39 +0200
+Subject: [Buildroot] [PATCH] Add support for MIPS Codescape MTI GNU Linux
+	toolchain
+Message-ID: <1437668379-29461-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas,
+- Add support for MIPS Codescape MTI GNU Linux toolchain
+- Add a hash value
+- Add logic to 'toolchain/helpers.mk' to allow the SYSROOT_DIR and
+  ARCH_SYSROOT_DIR sit side by side instead of nested.
+- Add logic for creating the side-by-side symlink as a post install
+  hook.
+- Add logic to allow Buildroot finding the toolchain binaries under
+  $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/2015.06-03/bin.
 
-I've respun it without the notes, looking forward to your comments. Sorry
-for the confusion and patch spam.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ toolchain/helpers.mk                               |  5 ++-
+ toolchain/toolchain-external/Config.in             | 50 ++++++++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 ++
+ toolchain/toolchain-external/toolchain-external.mk | 20 +++++++++
+ 4 files changed, 78 insertions(+), 1 deletion(-)
 
-Best,
-Christian
-
-On Wed, Jul 22, 2015, 11:46 PM Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Christian Stewart,
->
-> On Wed, 22 Jul 2015 22:27:54 +0000, Christian Stewart wrote:
->
-> > I've just realized I moved the differences comment below the Signed-off
-> > note, but not below the ---. I have seen these notes in the git history
-> > before so I assumed they were part of the commit message. Is this not the
-> > case? I'll fix it if so.
->
-> The notes that we keep in the commit message are the changes that we do
-> when applying the patch, if any, so that it is clear what was the
-> original thing done by the submitter and which things were changed by
-> the person applying the patch.
->
-> But for the changelog of changes done by the submitter, it is not
-> necessary to keep it part of the commit log.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150723/401a8b31/attachment.html>
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 895f3f1..42e1332 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -144,7 +144,10 @@ copy_toolchain_sysroot = \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
+-	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
++	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
++	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
++	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} \
++		-a $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+ 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 		fi ; \
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index e70989e..3ca73f5 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -188,6 +188,55 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 
+ 	  This toolchain uses software-floating point.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506
++	bool "Codescape MTI GNU Linux Toolchain 2015.06"
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	depends on BR2_HOSTARCH = "x86_64"
++	depends on !BR2_MIPS_SOFT_FLOAT
++	depends on BR2_mips_32r2 || BR2_mips_64r2
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	help
++	  Codescape MTI GNU Linux Toolchain 2015.06 for the MIPS
++	  architecture, from Imagination Technologies. It uses gcc
++	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
++	  headers 4.0. It has support for the following variants:
++	    - MIPS32r2 - Big-Endian, O32
++	      Select 'MIPS (big endian)' Target Architecture
++	      Select 'mips 32r6' Target Architecture Variant
++	    - MIPS32r2 - Little-Endian, O32
++	      Select 'MIPS (little endian)' Target Architecture
++	      Select 'mips 32r6' Target Architecture Variant
++	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
++	      Select 'MIPS (big endian)' Target Architecture
++	      Select 'mips 32r6' Target Architecture Variant
++	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
++	    - MIPS32r2 - Little-Endian, 2008 NaN, O32
++	      Select 'MIPS (little endian)' Target Architecture
++	      Select 'mips 32r6' Target Architecture Variant
++	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
++	    - MIPS32r2 - Little-Endian, 2008 NaN, O32, microMIPS
++	      Select 'MIPS (little endian)' Target Architecture
++	      Select 'mips 32r6' Target Architecture Variant
++	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008 -mmicromips'
++	    - MIPS64r2 - Big-Endian, N32
++	      Select 'MIPS64 (big endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n32' Target ABI
++	    - MIPS64r2 - Little-Endian, N32
++	      Select 'MIPS64 (little endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n32' Target ABI
++	    - MIPS64r2 - Big-Endian, N64
++	      Select 'MIPS64 (big endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n64' Target ABI
++	    - MIPS64r2 - Little-Endian, N64
++	      Select 'MIPS64 (little endian)' Target Architecture
++	      Select 'mips 64r2' Target Architecture Variant
++	      Select 'n64' Target ABI
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
+ 	bool "Sourcery CodeBench MIPS 2015.05"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+@@ -914,6 +963,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
++	default "mips-mti-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index 3980c62..7c79396 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -55,6 +55,10 @@ sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-lin
+ sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ 
++# Codescape toolchains from Imagination Technologies
++# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-03/
++md5 26b2d006766022e617d6eaeed163f894  Codescape.GNU.Tools.Package.2015.06-03.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
++
+ # Synopsys DesignWare ARC toolchains
+ sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
+ sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 5ce4d33..5b50a1c 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -145,9 +145,13 @@ else
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
+ else
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
++TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/2015.06-03/bin
++else
+ TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
+ endif
+ endif
++endif
+ 
+ TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc
+@@ -253,6 +257,18 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+ endef
+ 
++# The Codescape toolchain uses a sysroot layout that places them
++# side-by-side instead of nested like multilibs. A symlink is needed
++# much like for the nested sysroots which are handled in
++# copy_toolchain_sysroot but there is not enough information in there
++# to determine whether the sysroot layout was nested or side-by-side.
++# Add the symlink here for now.
++define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
++	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
++	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
++	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
++endef
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi
+ TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+@@ -284,6 +300,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
++TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-03
++TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.06-03.for.MIPS.MTI.Linux.CentOS-5.x86_64.tar.gz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-- 
+2.3.6
