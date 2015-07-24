@@ -1,31 +1,40 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Fri, 24 Jul 2015 15:05:58 +0200
-Subject: [Buildroot] [PATCH 1/1] ncurses: fix gcc 5 compile issue for
-	real
-In-Reply-To: <1437742843-26270-1-git-send-email-bas@bmail.ru>
-References: <1437742843-26270-1-git-send-email-bas@bmail.ru>
-Message-ID: <55B23836.8010107@jcz.nl>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 24 Jul 2015 15:24:32 +0200
+Subject: [Buildroot] [PATCH] package/kyua: add atf reverse dependency
+Message-ID: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/24/15 15:00, kyak wrote:
-> The previous patch didn't work in all cases. The new patch is taken from
-> upstream: http://ncurses.scripts.mit.edu/?p=ncurses.git;a=commit;h=97bb4678dc03e753290b39bbff30ba2825df9517
-> 
-> Fetch from: http://ncurses.scripts.mit.edu/?p=ncurses.git;a=blobdiff;f=ncurses/base/MKlib_gen.sh;h=b91398c740a266f10edbbce19f19c52b9709556f;hp=d8cc3c9751faa157d0c8cb8e16fbe4217703966b;hb=97bb4678dc03e753290b39bbff30ba2825df9517;hpb=762520a7930d7f698d542628d3c04bc201f7dac2
-> 
-> Signed-off-by: Thomas E. Dickey <dickey@invisible-island.net>
-> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+atf package depends on BR2_USE_MMU, therefore kyua must
+also depend on it.
 
-<snip>
+Fixes:
+http://autobuild.buildroot.net/results/929/9290a39d9b77e5a57e59912ce3d901149e9d6c11/
 
-Acked-by: Jaap Crezee <jaap@jcz.nl>
-Tested-by: Jaap Crezee <jaap@jcz.nl>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/kyua/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-regards,
-
-
-Jaap
+diff --git a/package/kyua/Config.in b/package/kyua/Config.in
+index e1bcd48..4f887b0 100644
+--- a/package/kyua/Config.in
++++ b/package/kyua/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_KYUA
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
+ 	depends on !BR2_PACKAGE_LUAJIT # lutok
++	depends on BR2_USE_MMU # atf
+ 	select BR2_PACKAGE_ATF
+ 	select BR2_PACKAGE_LUTOK
+ 	select BR2_PACKAGE_SQLITE
+@@ -18,3 +19,4 @@ config BR2_PACKAGE_KYUA
+ comment "kyua needs a toolchain w/ C++ and full Lua"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on BR2_USE_MMU
+-- 
+2.4.3
