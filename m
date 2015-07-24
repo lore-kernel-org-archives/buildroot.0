@@ -1,116 +1,75 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 24 Jul 2015 10:14:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: boost needs wchar
-Message-ID: <1437725693-21075-1-git-send-email-joerg.krause@embedded.rocks>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 24 Jul 2015 10:32:39 +0200
+Subject: [Buildroot] qt5base build issue
+In-Reply-To: <CAGm1_kv_JrjpKVJ50_APpNsfP1knqxkNcr8bN0bSacvxVsjq7A@mail.gmail.com>
+References: <CAGm1_kumsLYH8RmBn3WWr64_yN1mjhc5DGhiZfpqCSdc3jvPtQ@mail.gmail.com>
+ <55B0FEED.4070700@ecagroup.com>
+ <CAGm1_kv_JrjpKVJ50_APpNsfP1knqxkNcr8bN0bSacvxVsjq7A@mail.gmail.com>
+Message-ID: <CAGm1_ku+MGyBs_CkXtAjZVgqCkmNAPJ8mjW6yc05unKzyQRDhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The most modules of boost needs a toolchain with wchar. To ease maintenance
-we make the entire boost package depend on wchar.
+On Fri, Jul 24, 2015 at 8:33 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Thu, Jul 23, 2015 at 4:49 PM, Julien CORJON <corjon.j@ecagroup.com> wrote:
+>> Dear Yegor,
+>>
+>> Le 23/07/2015 15:45, Yegor Yefremov a ?crit :
+>>> Toolchain: Sourcery CodeBench ARM 2014.05
+>>>
+>>> BR2_PACKAGE_QT5_JSCORE_AVAILABLE=y
+>>> BR2_PACKAGE_QT5=y
+>>> BR2_PACKAGE_QT5BASE=y
+>>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>>> BR2_PACKAGE_QT5BASE_CONFIG_FILE=""
+>>> BR2_PACKAGE_QT5BASE_NETWORK=y
+>>> BR2_PACKAGE_QT5BASE_SQL=y
+>>> BR2_PACKAGE_QT5BASE_SQLITE_NONE=y
+>>> BR2_PACKAGE_QT5BASE_TEST=y
+>>> BR2_PACKAGE_QT5BASE_XML=y
+>>> BR2_PACKAGE_QT5BASE_GUI=y
+>>> BR2_PACKAGE_QT5BASE_WIDGETS=y
+>>> BR2_PACKAGE_QT5BASE_LINUXFB=y
+>>> BR2_PACKAGE_QT5BASE_DEFAULT_QPA=""
+>>> BR2_PACKAGE_QT5BASE_PRINTSUPPORT=y
+>>> BR2_PACKAGE_QT5SVG=y
+>>>
+>>
+>> Which buildroot version/commit# do you use?
+>
+> This was yesterdays git version.
+>
+>> Can you pastebin your .config file?
+>
+> I've activated only Qt5 and approve licence and it worked. Will be
+> investigating further.
+>
+>>> During compilation I get following error:
+>>>
+>>> Running configuration tests...
+>>> Failed to process makespec for platform 'devices/linux-buildroot-g++'
+>>> Project ERROR: Compiler
+>>> /home/user/MyProjects/oss/buildroot/prods1/host/usr/bin/ccache
+>>> /home/user/MyProjects/oss/buildroot/prods1/host/usr/bin/arm-none-linux-gnueabi-g++
+>>> not found. Check the value of CROSS_COMPILE -device-option
+>>> Could not read qmake configuration file
+>>> /home/user/MyProjects/oss/buildroot/prods1/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
+>>
+>> Is qmake file really missing or it cannot be readed?
+>>
+>>> Error processing project file: /dev/null
+>>> package/pkg-generic.mk:146: recipe for target
+>>> '/home/user/MyProjects/oss/buildroot/prods1/build/qt5base-5.5.0/.stamp_configured'
+>>> failed
+>>>
+>>> Any idea? I also tried uclibc-ng toolchain - same result.
 
-Also add a reverse dependency to libftdipp1 and yaml-cpp.
+I think I found the cause: ccache. To reproduce just enable toolchain,
+ccache and Qt5 base. That's all.
 
-Fixes:
-http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad233ff679be007d2953/
-http://autobuild.buildroot.net/results/12f/12f544c97e3451fb2a72025ebc62292957e47070/
-http://autobuild.buildroot.net/results/ef6/ef6c897ea7547e8ed5f019e8ce4473f0998f2c16/
-http://autobuild.buildroot.net/results/7a0/7a0ab069c505696a7887ba5c561b76b233ce59d5/
+How can one fix this?
 
-and more.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/boost/Config.in    | 13 +++----------
- package/libftdi1/Config.in |  5 +++--
- package/yaml-cpp/Config.in |  5 +++--
- 3 files changed, 9 insertions(+), 14 deletions(-)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 68004b6..ac70152 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -1,5 +1,5 @@
--comment "boost needs a toolchain w/ C++, threads"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "boost needs a toolchain w/ C++, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	bool
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_BOOST
- 	# that unfortunately doesn't work. Until someone fixes that,
- 	# let's depend on threads.
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
- 	help
- 	  A general purpose C++ library
- 
-@@ -77,10 +78,6 @@ config BR2_PACKAGE_BOOST_EXCEPTION
- 
- config BR2_PACKAGE_BOOST_FILESYSTEM
- 	bool "boost-filesystem"
--	depends on BR2_USE_WCHAR
--
--comment "boost-filesystem needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_BOOST_GRAPH
- 	bool "boost-graph"
-@@ -94,12 +91,8 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
- 	select BR2_PACKAGE_ZLIB
- 
- config BR2_PACKAGE_BOOST_LOCALE
--	depends on BR2_USE_WCHAR
- 	bool "boost-locale"
- 
--comment "boost-locale needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
--
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/libftdi1/Config.in b/package/libftdi1/Config.in
-index 4a490a5..61d4c1c 100644
---- a/package/libftdi1/Config.in
-+++ b/package/libftdi1/Config.in
-@@ -15,11 +15,12 @@ config BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # boost
- 	help
- 	  C++ bindings for libftdi
- 
--comment "libftdipp1 needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libftdipp1 needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS
-diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
-index 9e00b3d..3cfb955 100644
---- a/package/yaml-cpp/Config.in
-+++ b/package/yaml-cpp/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_YAML_CPP
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # boost
- 	select BR2_PACKAGE_BOOST
- 	help
- 	  yaml-cpp is a YAML parser and emitter in C++ matching
-@@ -10,6 +11,6 @@ config BR2_PACKAGE_YAML_CPP
- 
- 	  https://code.google.com/p/yaml-cpp/
- 
--comment "yaml-cpp needs a toolchain w/ C++, threads"
-+comment "yaml-cpp needs a toolchain w/ C++, threads, wchar"
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
--- 
-2.4.6
+Yegor
