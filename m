@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jul 2015 11:32:44 +0200
-Subject: [Buildroot] [PATCH] package/gcc: fix libgcc build for xtensa
-In-Reply-To: <1437730231-22278-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1437730231-22278-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20150724113244.61809b39@free-electrons.com>
+Date: Fri, 24 Jul 2015 11:32:39 +0200
+Subject: [Buildroot] [git commit] package/gcc: fix libgcc build for xtensa
+Message-ID: <20150724093246.A1425807F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+commit: http://git.buildroot.net/buildroot/commit/?id=c44cf2cc97df1729577263d2b0cb5263e8cdc4c1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Jul 2015 12:30:31 +0300, Max Filippov wrote:
-> xtensa libgcc can't be built with -mtext-section-literals flag, now
-> coming from TARGET_CFLAGS, because it needs to emit literals to
-> .init/.fini sections, which is not currently supported.
-> 
-> Filter -mtext-section-literals flag out of GCC_COMMON_TARGET_CFLAGS.
-> 
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  package/gcc/gcc.mk |    7 +++++++
->  1 files changed, 7 insertions(+), 0 deletions(-)
+xtensa libgcc can't be built with -mtext-section-literals flag, now
+coming from TARGET_CFLAGS, because it needs to emit literals to
+.init/.fini sections, which is not currently supported.
 
-Applied, thanks.
+Filter -mtext-section-literals flag out of GCC_COMMON_TARGET_CFLAGS.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index accb429..501fcea 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -112,6 +112,13 @@ GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
+ endif
+ endif
+ 
++# Xtensa libgcc can't be built with -mtext-section-literals
++# because of the trick used to generate .init/.fini sections.
++ifeq ($(BR2_xtensa),y)
++GCC_COMMON_TARGET_CFLAGS = $(filter-out -mtext-section-literals,$(TARGET_CFLAGS))
++GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mtext-section-literals,$(TARGET_CXXFLAGS))
++endif
++
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
