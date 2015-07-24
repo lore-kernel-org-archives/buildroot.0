@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jul 2015 16:38:48 +0200
-Subject: [Buildroot] [V2 3/6] perl-net-ssleay: bump to version 1.70
+Date: Fri, 24 Jul 2015 16:38:49 +0200
+Subject: [Buildroot] [V2 4/6] perl-path-tiny: bump to version 0.072
 In-Reply-To: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
 References: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437748731-31026-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1437748731-31026-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-ssleay/perl-net-ssleay.hash | 4 ++--
- package/perl-net-ssleay/perl-net-ssleay.mk   | 2 +-
+ package/perl-path-tiny/perl-path-tiny.hash | 4 ++--
+ package/perl-path-tiny/perl-path-tiny.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
-index 4a6bcaa..ca659c7 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.hash
-+++ b/package/perl-net-ssleay/perl-net-ssleay.hash
+diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
+index 91c1d1e..a62c165 100644
+--- a/package/perl-path-tiny/perl-path-tiny.hash
++++ b/package/perl-path-tiny/perl-path-tiny.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    2db2445eb072b6ecf8a1a79c9ed3e4de Net-SSLeay-1.68.tar.gz
--sha256 1701e24ec683529cb114e7b7877632f2e965a81381a70b696ee0692ee1e75cd4 Net-SSLeay-1.68.tar.gz
-+md5    511cc451a64b0c5051bd9167f37051a0 Net-SSLeay-1.70.tar.gz
-+sha256 05eaaa29b8f67778040eee53150ba702fc0ce49420ddd0f1ca68d082f4ee9f4a Net-SSLeay-1.70.tar.gz
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 0ee9566..8a40a29 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+-md5    76e99fd1bb615f56954025ae636c6233 Path-Tiny-0.068.tar.gz
+-sha256 a331fbd855a6216877c643c4cae4bf7edfdf7e13cd8142d2cb2d12eafdebaee0 Path-Tiny-0.068.tar.gz
++md5    840696b295230682c727297c87fe42d6 Path-Tiny-0.072.tar.gz
++sha256 d7507c7822d4f7f60a5329d26c8afce31022cd92d02b011e367cc6a1eeae6981 Path-Tiny-0.072.tar.gz
+diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
+index 534453b..71e2e43 100644
+--- a/package/perl-path-tiny/perl-path-tiny.mk
++++ b/package/perl-path-tiny/perl-path-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_SSLEAY_VERSION = 1.68
-+PERL_NET_SSLEAY_VERSION = 1.70
- PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
- PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
- PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
+-PERL_PATH_TINY_VERSION = 0.068
++PERL_PATH_TINY_VERSION = 0.072
+ PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
+ PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+ PERL_PATH_TINY_DEPENDENCIES = perl
 -- 
 2.1.4
