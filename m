@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jul 2015 16:38:50 +0200
-Subject: [Buildroot] [V2 5/6] perl-uri: bump to version 1.68
+Date: Fri, 24 Jul 2015 16:38:51 +0200
+Subject: [Buildroot] [V2 6/6] perl-xml-libxml: bump to version 2.0121
 In-Reply-To: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
 References: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437748731-31026-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1437748731-31026-6-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
+ package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index da33416..ea8de44 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
+index 37d8b3d..516aaef 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.hash
++++ b/package/perl-xml-libxml/perl-xml-libxml.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    d0ef53b6c63bcc02ba55f405c30741e3 URI-1.67.tar.gz
--sha256 7088d43d5f4902becfa5e0627751f5e6d0e0bdd1637b2d39e70ce807068a274e URI-1.67.tar.gz
-+md5    4a954ab8d79f831616ca817ba4b26cb9 URI-1.68.tar.gz
-+sha256 c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358 URI-1.68.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 421a89f..f1aecb0 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,11 +4,11 @@
+-md5    da8d61a5d0d1bfd8d46814e376d33f58 XML-LibXML-2.0118.tar.gz
+-sha256 cc64ae26ef5ebc0f64ba292c582f1cd70701c6513133a063e2d25c3257430c9c XML-LibXML-2.0118.tar.gz
++md5    1544ab9ac110f5da296015346561ce02 XML-LibXML-2.0121.tar.gz
++sha256 ec431011cb37a04640fd2316f64d0405a274eece2c6f3847f7fbd336eb1c0dc9 XML-LibXML-2.0121.tar.gz
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
+index e93623c..d58a1f3 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.mk
++++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 1.67
-+PERL_URI_VERSION = 1.68
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_DEPENDENCIES = perl
- PERL_URI_LICENSE = Artistic or GPLv1+
--PERL_URI_LICENSE_FILES = README
-+PERL_URI_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
+-PERL_XML_LIBXML_VERSION = 2.0118
++PERL_XML_LIBXML_VERSION = 2.0121
+ PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
+ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
+ PERL_XML_LIBXML_DEPENDENCIES = perl zlib libxml2 perl-xml-sax perl-xml-namespacesupport
 -- 
 2.1.4
