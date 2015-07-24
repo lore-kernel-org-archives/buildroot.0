@@ -1,35 +1,50 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 24 Jul 2015 21:04:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: fix undefined
- reference to _authdes_seccreate
-In-Reply-To: <1437751142-3532-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1437751142-3532-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <CAAXf6LVZAknB+fUb27OMG8JtWdyGMtj3auhCfvfMF_v6quTYFA@mail.gmail.com>
+Date: Fri, 24 Jul 2015 21:19:30 +0200
+Subject: [Buildroot] [PATCH RFC 1/1] ltp-testsuite: support building
+ with toolchains without native RPC
+In-Reply-To: <1437750198-21171-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1437750198-21171-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <CAAXf6LVG8ZtTDjzm2N56M2=2suOuibjOC1GswupboZ+Z0qHf0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 24, 2015 at 5:19 PM, J?rg Krause
-<joerg.krause@embedded.rocks> wrote:
-> Commit 1c4767fa9d8c19b52824b1c10e0e25f413111f2d disables the C files auth_des.c
-> and authdes_prot.c implementing DES authentification but forgets to remove
-> a function call to authdes_seccreate() in rpc_soc.c.
+On Fri, Jul 24, 2015 at 5:03 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
-> We add a seperate patch to disable the DES authentification (and not disable it
-> together with NIS). DES is not provided by uClibc and musl.
+> ltp-testsuite needs RPC, but this could also be provided by libtirpc.
 >
-> Fixes:
-> http://autobuild.buildroot.org/results/33f/33f1849c6d1441d8565835872281e33a980aba6f/
-> http://autobuild.buildroot.net/results/02e/02e9321b54d41b4b5c91d93c9942499a20d26919/
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  package/ltp-testsuite/Config.in        |  6 +++---
+>  package/ltp-testsuite/ltp-testsuite.mk | 14 ++++++++++++--
+>  2 files changed, 15 insertions(+), 5 deletions(-)
 >
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Important note: while this works fine on glibc toolchains, I tested with
+> http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-musl.config
+> and found that the compiler cannot correctly link an empty C program (as done
+> by the ltp-testsuite configure script) when -ltirpc is given, due to:
+>
+>     libtirpc.so: undefined reference to `authdes_seccreate'
+>
+> This method is part of file src/auth_des.c in libtirpc, but that file is not
+> compiled due to the patch:
+> 0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+>
+> It is unclear to me how this can work at all for non-RPC toolchains.
+> Any suggestions on how this should be handled are welcome...
 
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-I bumped into the same authdes_seccreate problem when adding libtirpc
-support to ltp-testsuite, which fails for musl toolchains. With this
-patch, the problem is solved.
+This problem has now been fixed by a patch on libtirpc by J?rg Krause.
 
-/Thomas
+After this patch, ltp-testsuite still doesn't build on musl
+toolchains, but I wonder if it makes sense to try and fix that now.
+Instead, we could disable the package on musl toolchains?
+
+What do you think?
+
+Thanks,
+Thomas
