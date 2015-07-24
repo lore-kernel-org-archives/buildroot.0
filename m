@@ -1,40 +1,62 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 24 Jul 2015 15:24:32 +0200
-Subject: [Buildroot] [PATCH] package/kyua: add atf reverse dependency
-Message-ID: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
+From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Date: Fri, 24 Jul 2015 15:50:30 +0200 (CEST)
+Subject: [Buildroot] [PATCH v6 1/1] rtl8821au: new package
+In-Reply-To: <1437691280-23926-1-git-send-email-christian@paral.in>
+References: <1437691280-23926-1-git-send-email-christian@paral.in>
+Message-ID: <alpine.LNX.2.00.1507241546220.30794@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-atf package depends on BR2_USE_MMU, therefore kyua must
-also depend on it.
+Hi all,  
 
-Fixes:
-http://autobuild.buildroot.net/results/929/9290a39d9b77e5a57e59912ce3d901149e9d6c11/
+Note : I'm new on the list, so I had insert this tread by hand !
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/kyua/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+I'm the one working on the RTL8821AU driver.
 
-diff --git a/package/kyua/Config.in b/package/kyua/Config.in
-index e1bcd48..4f887b0 100644
---- a/package/kyua/Config.in
-+++ b/package/kyua/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_KYUA
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
- 	depends on !BR2_PACKAGE_LUAJIT # lutok
-+	depends on BR2_USE_MMU # atf
- 	select BR2_PACKAGE_ATF
- 	select BR2_PACKAGE_LUTOK
- 	select BR2_PACKAGE_SQLITE
-@@ -18,3 +19,4 @@ config BR2_PACKAGE_KYUA
- comment "kyua needs a toolchain w/ C++ and full Lua"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
- 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on BR2_USE_MMU
--- 
-2.4.3
+On Thu, 23 Jul 2015, Christian Stewart wrote:
+
+> Adding a kernel module based USB wifi driver. There is no official
+> version of this driver that works properly on ARM and with newer USB
+> WiFi cards. This driver version builds module 8821au and is based on a
+> kernel module release from ASUS with various fixes integrated in.
+
+This message will be commited please change.
+
+The I think the difference between the version from ASUS and mine based
+the one Edimax are in the handling of the LED.
+Maybe there are more ...
+
+> I've switched to use ulli-kroll's branch of rtl8821au. While it's based
+> on an older vendor version, it has binary firmware and around ~1800
+> commits of work to improve the driver. I think this work is probably
+> more valuable than the vendor's updates.
+> 
+
+-> git send-email --compose
+Will add some message an intreductory message
+
+> --- /dev/null
+> +++ b/package/rtl8821au/0001-disable-default-debug.patch
+
+I do add some kind of "disable debug message"
+This will take some time, I'm currently working in the code.
+
+> +config BR2_PACKAGE_RTL8821AU
+> +     bool "rtl8821au"
+> +     depends on BR2_LINUX_KERNEL
+> +     help
+> +       rtl8821au wifi driver
+> +
+> +       https://github.com/paralin/rtl8821au
+
+Please fix this URL !
+
+Maybe add some line "out of tree driver"
+And the USB3 issue I found inthe HW as you can read in
+Readme.md
+
+Greetings from Cologne
+Hans Ulli Kroll
