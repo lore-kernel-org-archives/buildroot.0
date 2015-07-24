@@ -1,39 +1,116 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Fri, 24 Jul 2015 10:04:43 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5/qtwebsocket: remove GPLv2 license
-Message-ID: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 24 Jul 2015 10:14:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boost: boost needs wchar
+Message-ID: <1437725693-21075-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This module loose his GPLv2 licensing option. Remains the LGPLv2.1 with
-exception and LGPLv3 as the possible open-source licenses.
+The most modules of boost needs a toolchain with wchar. To ease maintenance
+we make the entire boost package depend on wchar.
+
+Also add a reverse dependency to libftdipp1 and yaml-cpp.
 
 Fixes:
-http://autobuild.buildroot.net/results/6c80ba0669a7fc8cc60baaa849044fd65a78ce87/
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
- package/qt5/qt5websockets/qt5websockets.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad233ff679be007d2953/
+http://autobuild.buildroot.net/results/12f/12f544c97e3451fb2a72025ebc62292957e47070/
+http://autobuild.buildroot.net/results/ef6/ef6c897ea7547e8ed5f019e8ce4473f0998f2c16/
+http://autobuild.buildroot.net/results/7a0/7a0ab069c505696a7887ba5c561b76b233ce59d5/
 
-diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
-index 2b257e1..1d7c1f1 100644
---- a/package/qt5/qt5websockets/qt5websockets.mk
-+++ b/package/qt5/qt5websockets/qt5websockets.mk
-@@ -11,10 +11,8 @@ QT5WEBSOCKETS_DEPENDENCIES = qt5base
- QT5WEBSOCKETS_INSTALL_STAGING = YES
+and more.
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/boost/Config.in    | 13 +++----------
+ package/libftdi1/Config.in |  5 +++--
+ package/yaml-cpp/Config.in |  5 +++--
+ 3 files changed, 9 insertions(+), 14 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 68004b6..ac70152 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -1,5 +1,5 @@
+-comment "boost needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "boost needs a toolchain w/ C++, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
  
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--# Source files contain references to LGPL_EXCEPTION.txt but it is not included
--# in the archive.
--QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
- else
- QT5WEBSOCKETS_LICENSE = Commercial license
- QT5WEBSOCKETS_REDISTRIBUTE = NO
+ config BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	bool
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_BOOST
+ 	# that unfortunately doesn't work. Until someone fixes that,
+ 	# let's depend on threads.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  A general purpose C++ library
+ 
+@@ -77,10 +78,6 @@ config BR2_PACKAGE_BOOST_EXCEPTION
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
+-	depends on BR2_USE_WCHAR
+-
+-comment "boost-filesystem needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_BOOST_GRAPH
+ 	bool "boost-graph"
+@@ -94,12 +91,8 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
+ 	select BR2_PACKAGE_ZLIB
+ 
+ config BR2_PACKAGE_BOOST_LOCALE
+-	depends on BR2_USE_WCHAR
+ 	bool "boost-locale"
+ 
+-comment "boost-locale needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
+-
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/libftdi1/Config.in b/package/libftdi1/Config.in
+index 4a490a5..61d4c1c 100644
+--- a/package/libftdi1/Config.in
++++ b/package/libftdi1/Config.in
+@@ -15,11 +15,12 @@ config BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # boost
+ 	help
+ 	  C++ bindings for libftdi
+ 
+-comment "libftdipp1 needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libftdipp1 needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS
+diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
+index 9e00b3d..3cfb955 100644
+--- a/package/yaml-cpp/Config.in
++++ b/package/yaml-cpp/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_YAML_CPP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # boost
+ 	select BR2_PACKAGE_BOOST
+ 	help
+ 	  yaml-cpp is a YAML parser and emitter in C++ matching
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_YAML_CPP
+ 
+ 	  https://code.google.com/p/yaml-cpp/
+ 
+-comment "yaml-cpp needs a toolchain w/ C++, threads"
++comment "yaml-cpp needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 -- 
-2.1.0
+2.4.6
