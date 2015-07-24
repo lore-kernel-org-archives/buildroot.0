@@ -1,25 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Jul 2015 09:07:32 +0200
-Subject: [Buildroot] [PATCH v4 1/1] mosh: new package
-In-Reply-To: <1437688804-26537-1-git-send-email-christian@paral.in>
-References: <1437688804-26537-1-git-send-email-christian@paral.in>
-Message-ID: <20150724090732.6c27c55a@free-electrons.com>
+Date: Fri, 24 Jul 2015 09:17:42 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/libtirpc: bump to version
+ 0.3.2
+In-Reply-To: <1437633506-3224-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1437633506-3224-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150724091742.669aaf4a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christian Stewart,
+Dear J?rg Krause,
 
-On Thu, 23 Jul 2015 15:00:04 -0700, Christian Stewart wrote:
+On Thu, 23 Jul 2015 08:38:24 +0200, J?rg Krause wrote:
+> Bump version, update hash and update patch.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-> +comment "mosh needs a host architecture of x64 or x86"
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+This patch series is causing a number of build failures, such as:
 
-Why ?
+  http://autobuild.buildroot.org/results/33f/33f1849c6d1441d8565835872281e33a980aba6f/build-end.log
 
-Thanks!
+/home/peko/autobuild/instance-2/output/host/usr/bfin-buildroot-linux-uclibc/sysroot/usr/lib/libtirpc.so: undefined reference to `_authdes_seccreate'
+
+Can you have a look?
 
 Thomas
 -- 
