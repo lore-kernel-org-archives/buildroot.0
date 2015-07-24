@@ -1,44 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 24 Jul 2015 20:38:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: Fix static compile
-Message-ID: <1437763107-19489-1-git-send-email-bernd.kuhls@t-online.de>
+From: Stanislav Vlasic <svlasic@gmail.com>
+Date: Fri, 24 Jul 2015 20:49:35 +0200
+Subject: [Buildroot] Isengard 15.0 python issue - solution
+Message-ID: <mou1bv$4au$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/aeb/aeb5481526497a01ada8ee9403f282a2374b0383/
-http://autobuild.buildroot.net/results/255/25536df514477f3210caf4af27f2f107683f7fb2/
-http://autobuild.buildroot.net/results/fa1/fa11cb360190b02d08e74997b0abc73079760dfa/
-and many others
+Hi,
 
-This is a follow-up for these patches:
-http://patchwork.ozlabs.org/patch/493360/
-http://patchwork.ozlabs.org/patch/416007/
+Problem was isolated and fixed by Corey Moyer. I will not submit patch 
+as I'm not original author of it, will just describe it:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/minidlna/minidlna.mk |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Python addons are crashing because of 
+https://github.com/xbmc/xbmc/blob/master/xbmc/interfaces/python/XBPython.cpp#L565
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index 3a9ad41..e0b5da1 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -17,8 +17,10 @@ MINIDLNA_DEPENDENCIES = \
- ifeq ($(BR2_STATIC_LIBS),y)
- # the configure script / Makefile forgets to link with some of the dependent
- # libraries breaking static linking, so help it along
--MINIDLNA_CONF_ENV = \
--	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
-+MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static libavcodec`
-+MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static libexif`
-+MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static libvorbis`
-+MINIDLNA_CONF_ENV += LIBS="$(MINIDLNA_STATIC_LIBS) $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
- else
- MINIDLNA_CONF_OPTS = \
- 	--disable-static
--- 
-1.7.10.4
+Patch would be to remove defined(TARGET_LINUX) from #if statement in 
+line above. I'm not sure if this issue affects all Linux builds (Kodi 
+15.0 works fine on my Linux Mint 17.1).
+
+This is tested on Buildroot 2015.02 and 2015.05, Python 2.7.8, 2.7.9 and 
+2.7.10.
+
+Regards,
+Stanislav Vlasic
