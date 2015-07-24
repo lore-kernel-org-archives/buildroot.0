@@ -1,33 +1,35 @@
-From: kyak <bas@bmail.ru>
-Date: Fri, 24 Jul 2015 17:54:14 +0300
-Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
-Message-ID: <1437749654-29431-1-git-send-email-bas@bmail.ru>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Jul 2015 16:55:57 +0200
+Subject: [Buildroot] [V2 1/6] perl-io-socket-ssl: bump to version 2.016
+In-Reply-To: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
+References: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150724165557.7152b222@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With some hosts, xterm configure script fails to detect presence of
-libICE. This results in error during xterm linking stage, because -lICE
-is not passed to linker. This patches forces configure script to detect
-libICE.
+Dear Francois Perrad,
 
-Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
----
- package/xterm/xterm.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, 24 Jul 2015 16:38:46 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+>  package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 56f692d..dd07e35 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -11,5 +11,6 @@ XTERM_DEPENDENCIES = ncurses xlib_libXaw
- XTERM_LICENSE = MIT
- XTERM_LICENSE_FILES = version.c
- XTERM_CONF_OPTS = --enable-256-color
-+XTERM_CONF_ENV = ac_cv_lib_ICE_IceConnectionNumber=yes
- 
- $(eval $(autotools-package))
+Thanks! Is this series replacing the previous one that contained Perl
+module bumps and dependency fixes?
+
+If so, how do you intend to fix the missing dependency of many Perl
+modules on the 'perl' package, as we discussed previously in another
+thread?
+
+Thanks!
+
+Thomas
 -- 
-2.4.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
