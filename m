@@ -1,48 +1,83 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 24 Jul 2015 11:21:35 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/libtirpc: bump to version
- 0.3.2
-In-Reply-To: <20150724091742.669aaf4a@free-electrons.com>
-References: <1437633506-3224-1-git-send-email-joerg.krause@embedded.rocks>
- <20150724091742.669aaf4a@free-electrons.com>
-Message-ID: <1437729695.20708.9.camel@embedded.rocks>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 24 Jul 2015 11:25:35 +0200
+Subject: [Buildroot] qt5base build issue
+In-Reply-To: <55B1FA0C.6000809@ecagroup.com>
+References: <CAGm1_kumsLYH8RmBn3WWr64_yN1mjhc5DGhiZfpqCSdc3jvPtQ@mail.gmail.com>
+ <55B0FEED.4070700@ecagroup.com>
+ <CAGm1_kv_JrjpKVJ50_APpNsfP1knqxkNcr8bN0bSacvxVsjq7A@mail.gmail.com>
+ <CAGm1_ku+MGyBs_CkXtAjZVgqCkmNAPJ8mjW6yc05unKzyQRDhA@mail.gmail.com>
+ <55B1FA0C.6000809@ecagroup.com>
+Message-ID: <CAGm1_kujy48mMmd4QMSJL+zbEXf3ooRWN8mKd+WF6e5Dg3LeQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fr, 2015-07-24 at 09:17 +0200, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Thu, 23 Jul 2015 08:38:24 +0200, J?rg Krause wrote:
-> > Bump version, update hash and update patch.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> 
-> This patch series is causing a number of build failures, such as:
-> 
->   http://autobuild.buildroot.org/results/33f/33f1849c6d1441d856583587
-> 2281e33a980aba6f/build-end.log
-> 
-> /home/peko/autobuild/instance-2/output/host/usr/bfin-buildroot-linux
-> -uclibc/sysroot/usr/lib/libtirpc.so: undefined reference to 
-> `_authdes_seccreate'
-> 
-> Can you have a look?
+On Fri, Jul 24, 2015 at 10:40 AM, Julien CORJON <corjon.j@ecagroup.com> wrote:
+> Dear Yegor,
+>
+> Le 24/07/2015 10:32, Yegor Yefremov a ?crit :
+>> On Fri, Jul 24, 2015 at 8:33 AM, Yegor Yefremov
+>> <yegorslists@googlemail.com> wrote:
+>>> On Thu, Jul 23, 2015 at 4:49 PM, Julien CORJON <corjon.j@ecagroup.com> wrote:
+>>>> Dear Yegor,
+>>>>
+>>>> Le 23/07/2015 15:45, Yegor Yefremov a ?crit :
+>>>>> Toolchain: Sourcery CodeBench ARM 2014.05
+>>>>>
+>>>>> BR2_PACKAGE_QT5_JSCORE_AVAILABLE=y
+>>>>> BR2_PACKAGE_QT5=y
+>>>>> BR2_PACKAGE_QT5BASE=y
+>>>>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
+>>>>> BR2_PACKAGE_QT5BASE_CONFIG_FILE=""
+>>>>> BR2_PACKAGE_QT5BASE_NETWORK=y
+>>>>> BR2_PACKAGE_QT5BASE_SQL=y
+>>>>> BR2_PACKAGE_QT5BASE_SQLITE_NONE=y
+>>>>> BR2_PACKAGE_QT5BASE_TEST=y
+>>>>> BR2_PACKAGE_QT5BASE_XML=y
+>>>>> BR2_PACKAGE_QT5BASE_GUI=y
+>>>>> BR2_PACKAGE_QT5BASE_WIDGETS=y
+>>>>> BR2_PACKAGE_QT5BASE_LINUXFB=y
+>>>>> BR2_PACKAGE_QT5BASE_DEFAULT_QPA=""
+>>>>> BR2_PACKAGE_QT5BASE_PRINTSUPPORT=y
+>>>>> BR2_PACKAGE_QT5SVG=y
+>>>>>
+>>>>
+>>>> Which buildroot version/commit# do you use?
+>>>
+>>> This was yesterdays git version.
+>>>
+>>>> Can you pastebin your .config file?
+>>>
+>>> I've activated only Qt5 and approve licence and it worked. Will be
+>>> investigating further.
+>>>
+>>>>> During compilation I get following error:
+>>>>>
+>>>>> Running configuration tests...
+>>>>> Failed to process makespec for platform 'devices/linux-buildroot-g++'
+>>>>> Project ERROR: Compiler
+>>>>> /home/user/MyProjects/oss/buildroot/prods1/host/usr/bin/ccache
+>>>>> /home/user/MyProjects/oss/buildroot/prods1/host/usr/bin/arm-none-linux-gnueabi-g++
+>>>>> not found. Check the value of CROSS_COMPILE -device-option
+>>>>> Could not read qmake configuration file
+>>>>> /home/user/MyProjects/oss/buildroot/prods1/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
+>>>>
+>>>> Is qmake file really missing or it cannot be readed?
+>>>>
+>>>>> Error processing project file: /dev/null
+>>>>> package/pkg-generic.mk:146: recipe for target
+>>>>> '/home/user/MyProjects/oss/buildroot/prods1/build/qt5base-5.5.0/.stamp_configured'
+>>>>> failed
+>>>>>
+>>>>> Any idea? I also tried uclibc-ng toolchain - same result.
+>>
+>> I think I found the cause: ccache. To reproduce just enable toolchain,
+>> ccache and Qt5 base. That's all.
+>
+> Have you tried to clear your cache (rm -rf ~/.buildroot-ccache)?
 
-Sure. The problem is that with version 0.3.0 it was possible to disable
-auth DES optionally [1]. This was reverted in version 0.3.2 for
-backward compatibility with older glibc's. With commit
-060b63865c58c716dc94c5987ab19b90899aa340 authdes_create() is defined by
-default in rpc_soc.c, which in return calls the undefined
-authdes_seccreate().
+This doesn't help :-(
 
-My suggestion would be to remove authdes_create() in rpc_soc.c.
-
-Best regards
-J?rg Krause
-
-
-[1] Add configure option to disable DES authentication
-http://www.spinics.net/lists/linux-nfs/msg48357.html
+Yegor
