@@ -1,43 +1,33 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 24 Jul 2015 16:38:51 +0200
-Subject: [Buildroot] [V2 6/6] perl-xml-libxml: bump to version 2.0121
-In-Reply-To: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
-References: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1437748731-31026-6-git-send-email-francois.perrad@gadz.org>
+From: kyak <bas@bmail.ru>
+Date: Fri, 24 Jul 2015 17:54:14 +0300
+Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
+Message-ID: <1437749654-29431-1-git-send-email-bas@bmail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-xml-libxml/perl-xml-libxml.hash | 4 ++--
- package/perl-xml-libxml/perl-xml-libxml.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+With some hosts, xterm configure script fails to detect presence of
+libICE. This results in error during xterm linking stage, because -lICE
+is not passed to linker. This patches forces configure script to detect
+libICE.
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
-index 37d8b3d..516aaef 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.hash
-+++ b/package/perl-xml-libxml/perl-xml-libxml.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    da8d61a5d0d1bfd8d46814e376d33f58 XML-LibXML-2.0118.tar.gz
--sha256 cc64ae26ef5ebc0f64ba292c582f1cd70701c6513133a063e2d25c3257430c9c XML-LibXML-2.0118.tar.gz
-+md5    1544ab9ac110f5da296015346561ce02 XML-LibXML-2.0121.tar.gz
-+sha256 ec431011cb37a04640fd2316f64d0405a274eece2c6f3847f7fbd336eb1c0dc9 XML-LibXML-2.0121.tar.gz
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index e93623c..d58a1f3 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+---
+ package/xterm/xterm.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index 56f692d..dd07e35 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -11,5 +11,6 @@ XTERM_DEPENDENCIES = ncurses xlib_libXaw
+ XTERM_LICENSE = MIT
+ XTERM_LICENSE_FILES = version.c
+ XTERM_CONF_OPTS = --enable-256-color
++XTERM_CONF_ENV = ac_cv_lib_ICE_IceConnectionNumber=yes
  
--PERL_XML_LIBXML_VERSION = 2.0118
-+PERL_XML_LIBXML_VERSION = 2.0121
- PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
- PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = perl zlib libxml2 perl-xml-sax perl-xml-namespacesupport
+ $(eval $(autotools-package))
 -- 
-2.1.4
+2.4.6
