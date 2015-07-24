@@ -1,185 +1,79 @@
 From: Christian Stewart <christian@paral.in>
-Date: Fri, 24 Jul 2015 22:26:46 +0000
-Subject: [Buildroot] [PATCH v5 1/1] mosh: new package
-In-Reply-To: <1437776690-23542-1-git-send-email-christian@paral.in>
-References: <1437776690-23542-1-git-send-email-christian@paral.in>
-Message-ID: <CA+h8R2rKMxefsLo73KQdr0fu60Afg2UAxvQG9HbooaXwF2qvyQ@mail.gmail.com>
+Date: Fri, 24 Jul 2015 22:29:39 +0000
+Subject: [Buildroot] [PATCH v6 1/1] rtl8821au: new package
+In-Reply-To: <alpine.LNX.2.00.1507241546220.30794@localhost>
+References: <1437691280-23926-1-git-send-email-christian@paral.in>
+ <alpine.LNX.2.00.1507241546220.30794@localhost>
+Message-ID: <CA+h8R2o7sa9ChHJxZOrJeUFAX7qUzCtp4Vnv_kdD9K4sVtMPvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hey Hans,
 
-I believe I've addressed the concerns in the previous emails. Hopefully
-this works!
+It's not unusual in Buildroot to have long commit messages when a package
+is first added.
 
-The file is now from the mosh website.
+I've addressed your concerns and respun the patch.
 
-Regards,
 Christian
 
-On Fri, Jul 24, 2015 at 3:25 PM Christian Stewart <christian@paral.in>
+On Fri, Jul 24, 2015 at 6:50 AM Hans Ulli Kroll <ulli.kroll@googlemail.com>
 wrote:
 
-> Adding mosh, the mobile shell.
+> Hi all,
 >
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in                                  |  1 +
->  package/mosh/0001-remove-system-locale-calls.patch | 49
-> ++++++++++++++++++++++
->  package/mosh/Config.in                             | 22 ++++++++++
->  package/mosh/mosh.hash                             |  1 +
->  package/mosh/mosh.mk                               | 13 ++++++
->  5 files changed, 86 insertions(+)
->  create mode 100644 package/mosh/0001-remove-system-locale-calls.patch
->  create mode 100644 package/mosh/Config.in
->  create mode 100644 package/mosh/mosh.hash
->  create mode 100644 package/mosh/mosh.mk
+> Note : I'm new on the list, so I had insert this tread by hand !
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index cfa7512..d1e6640 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1250,6 +1250,7 @@ endif
->         source "package/mongoose/Config.in"
->         source "package/mongrel2/Config.in"
->         source "package/monkey/Config.in"
-> +       source "package/mosh/Config.in"
->         source "package/mosquitto/Config.in"
->         source "package/mrouted/Config.in"
->         source "package/mtr/Config.in"
-> diff --git a/package/mosh/0001-remove-system-locale-calls.patch
-> b/package/mosh/0001-remove-system-locale-calls.patch
-> new file mode 100644
-> index 0000000..f44e166
-> --- /dev/null
-> +++ b/package/mosh/0001-remove-system-locale-calls.patch
-> @@ -0,0 +1,49 @@
-> +From b6075c578d2104b58d55e088dccb74370019dde9 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Thu, 23 Jul 2015 13:52:35 -0700
-> +Subject: [PATCH 1/1] Remove system("locale") calls.
-> +
-> +The locale command is not available on many systems. As this variable
-> +is unused and appears to have been written with the intent of
-> +displaying the locale settings to the user, it's not really necessary.
-> +As this breaks Mosh on a lot of systems, it's best to remove the calls.
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +---
-> + src/frontend/mosh-server.cc | 4 +++-
-> + src/frontend/stmclient.cc   | 4 +++-
-> + 2 files changed, 6 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
-> +index 76ed2ed..0d2f222 100644
-> +--- a/src/frontend/mosh-server.cc
-> ++++ b/src/frontend/mosh-server.cc
-> +@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
-> +       fprintf( stderr, "mosh-server needs a UTF-8 native locale to
-> run.\n\n" );
-> +       fprintf( stderr, "Unfortunately, the local environment (%s)
-> specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(),
-> native_charset.c_str() );
-> +       fprintf( stderr, "The client-supplied environment (%s)
-> specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(),
-> client_charset.c_str() );
-> +-      int unused __attribute((unused)) = system( "locale" );
-> ++
-> ++      fprintf( stderr, "This is a buildroot system, 'locale' debug
-> output has been removed." );
-> ++
-> +       exit( 1 );
-> +     }
-> +   }
-> +diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
-> +index 9e4d916..06fac8b 100644
-> +--- a/src/frontend/stmclient.cc
-> ++++ b/src/frontend/stmclient.cc
-> +@@ -85,7 +85,9 @@ void STMClient::init( void )
-> +
-> +     fprintf( stderr, "mosh-client needs a UTF-8 native locale to
-> run.\n\n" );
-> +     fprintf( stderr, "Unfortunately, the client's environment (%s)
-> specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(),
-> native_charset.c_str() );
-> +-    int unused __attribute((unused)) = system( "locale" );
-> ++
-> ++    fprintf( stderr, "This is a buildroot system, 'locale' debug output
-> has been removed." );
-> ++
-> +     exit( 1 );
-> +   }
-> +
-> +--
-> +2.1.4
-> +
-> diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-> new file mode 100644
-> index 0000000..4013f80
-> --- /dev/null
-> +++ b/package/mosh/Config.in
-> @@ -0,0 +1,22 @@
-> +comment "mosh needs a toolchain w/ threads"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +comment "mosh needs a host architecture of x64 or x86"
-> +       depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +       depends on !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
-> +
-> +config BR2_PACKAGE_MOSH
-> +       bool "mosh"
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> +       select BR2_PACKAGE_PROTOBUF
-> +       select BR2_PACKAGE_NCURSES
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_OPENSSH
-> +       help
-> +         Remote terminal application that supports intermittent
-> connectivity,
-> +         allows roaming, and provides speculative local echo and line
-> editing
-> +         of user keystrokes.
-> +
-> +         https://mosh.mit.edu
-> diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
-> new file mode 100644
-> index 0000000..a78cb33
-> --- /dev/null
-> +++ b/package/mosh/mosh.hash
-> @@ -0,0 +1 @@
-> +sha256 637adb7f67406447e9264d30468fe69a6d5e8f97518ef133d794cdc65483fa54
-> mosh-1.2.5.tar.gz
-> diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-> new file mode 100644
-> index 0000000..dcb12fc
-> --- /dev/null
-> +++ b/package/mosh/mosh.mk
-> @@ -0,0 +1,13 @@
+> I'm the one working on the RTL8821AU driver.
 >
-> +################################################################################
-> +#
-> +# mosh
-> +#
+> On Thu, 23 Jul 2015, Christian Stewart wrote:
 >
-> +################################################################################
-> +
-> +MOSH_VERSION = 1.2.5
-> +MOSH_SITE = https://mosh.mit.edu/mosh-$(MOSH_VERSION).tar.gz
-> +MOSH_DEPENDENCIES = zlib ncurses protobuf openssl
-> +MOSH_LICENSE = GPLv3+
-> +MOSH_LICENSE_FILES = COPYING COPYING.iOS
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.1.4
+> > Adding a kernel module based USB wifi driver. There is no official
+> > version of this driver that works properly on ARM and with newer USB
+> > WiFi cards. This driver version builds module 8821au and is based on a
+> > kernel module release from ASUS with various fixes integrated in.
 >
+> This message will be commited please change.
+>
+> The I think the difference between the version from ASUS and mine based
+> the one Edimax are in the handling of the LED.
+> Maybe there are more ...
+>
+> > I've switched to use ulli-kroll's branch of rtl8821au. While it's based
+> > on an older vendor version, it has binary firmware and around ~1800
+> > commits of work to improve the driver. I think this work is probably
+> > more valuable than the vendor's updates.
+> >
+>
+> -> git send-email --compose
+> Will add some message an intreductory message
+>
+> > --- /dev/null
+> > +++ b/package/rtl8821au/0001-disable-default-debug.patch
+>
+> I do add some kind of "disable debug message"
+> This will take some time, I'm currently working in the code.
+>
+> > +config BR2_PACKAGE_RTL8821AU
+> > +     bool "rtl8821au"
+> > +     depends on BR2_LINUX_KERNEL
+> > +     help
+> > +       rtl8821au wifi driver
+> > +
+> > +       https://github.com/paralin/rtl8821au
+>
+> Please fix this URL !
+>
+> Maybe add some line "out of tree driver"
+> And the USB3 issue I found inthe HW as you can read in
+> Readme.md
+>
+> Greetings from Cologne
+> Hans Ulli Kroll
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150724/53bd3705/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150724/be17f1a8/attachment.html>
