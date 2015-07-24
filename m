@@ -1,83 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 24 Jul 2015 11:25:35 +0200
-Subject: [Buildroot] qt5base build issue
-In-Reply-To: <55B1FA0C.6000809@ecagroup.com>
-References: <CAGm1_kumsLYH8RmBn3WWr64_yN1mjhc5DGhiZfpqCSdc3jvPtQ@mail.gmail.com>
- <55B0FEED.4070700@ecagroup.com>
- <CAGm1_kv_JrjpKVJ50_APpNsfP1knqxkNcr8bN0bSacvxVsjq7A@mail.gmail.com>
- <CAGm1_ku+MGyBs_CkXtAjZVgqCkmNAPJ8mjW6yc05unKzyQRDhA@mail.gmail.com>
- <55B1FA0C.6000809@ecagroup.com>
-Message-ID: <CAGm1_kujy48mMmd4QMSJL+zbEXf3ooRWN8mKd+WF6e5Dg3LeQA@mail.gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 24 Jul 2015 12:30:31 +0300
+Subject: [Buildroot] [PATCH] package/gcc: fix libgcc build for xtensa
+Message-ID: <1437730231-22278-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 24, 2015 at 10:40 AM, Julien CORJON <corjon.j@ecagroup.com> wrote:
-> Dear Yegor,
->
-> Le 24/07/2015 10:32, Yegor Yefremov a ?crit :
->> On Fri, Jul 24, 2015 at 8:33 AM, Yegor Yefremov
->> <yegorslists@googlemail.com> wrote:
->>> On Thu, Jul 23, 2015 at 4:49 PM, Julien CORJON <corjon.j@ecagroup.com> wrote:
->>>> Dear Yegor,
->>>>
->>>> Le 23/07/2015 15:45, Yegor Yefremov a ?crit :
->>>>> Toolchain: Sourcery CodeBench ARM 2014.05
->>>>>
->>>>> BR2_PACKAGE_QT5_JSCORE_AVAILABLE=y
->>>>> BR2_PACKAGE_QT5=y
->>>>> BR2_PACKAGE_QT5BASE=y
->>>>> BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
->>>>> BR2_PACKAGE_QT5BASE_CONFIG_FILE=""
->>>>> BR2_PACKAGE_QT5BASE_NETWORK=y
->>>>> BR2_PACKAGE_QT5BASE_SQL=y
->>>>> BR2_PACKAGE_QT5BASE_SQLITE_NONE=y
->>>>> BR2_PACKAGE_QT5BASE_TEST=y
->>>>> BR2_PACKAGE_QT5BASE_XML=y
->>>>> BR2_PACKAGE_QT5BASE_GUI=y
->>>>> BR2_PACKAGE_QT5BASE_WIDGETS=y
->>>>> BR2_PACKAGE_QT5BASE_LINUXFB=y
->>>>> BR2_PACKAGE_QT5BASE_DEFAULT_QPA=""
->>>>> BR2_PACKAGE_QT5BASE_PRINTSUPPORT=y
->>>>> BR2_PACKAGE_QT5SVG=y
->>>>>
->>>>
->>>> Which buildroot version/commit# do you use?
->>>
->>> This was yesterdays git version.
->>>
->>>> Can you pastebin your .config file?
->>>
->>> I've activated only Qt5 and approve licence and it worked. Will be
->>> investigating further.
->>>
->>>>> During compilation I get following error:
->>>>>
->>>>> Running configuration tests...
->>>>> Failed to process makespec for platform 'devices/linux-buildroot-g++'
->>>>> Project ERROR: Compiler
->>>>> /home/user/MyProjects/oss/buildroot/prods1/host/usr/bin/ccache
->>>>> /home/user/MyProjects/oss/buildroot/prods1/host/usr/bin/arm-none-linux-gnueabi-g++
->>>>> not found. Check the value of CROSS_COMPILE -device-option
->>>>> Could not read qmake configuration file
->>>>> /home/user/MyProjects/oss/buildroot/prods1/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
->>>>
->>>> Is qmake file really missing or it cannot be readed?
->>>>
->>>>> Error processing project file: /dev/null
->>>>> package/pkg-generic.mk:146: recipe for target
->>>>> '/home/user/MyProjects/oss/buildroot/prods1/build/qt5base-5.5.0/.stamp_configured'
->>>>> failed
->>>>>
->>>>> Any idea? I also tried uclibc-ng toolchain - same result.
->>
->> I think I found the cause: ccache. To reproduce just enable toolchain,
->> ccache and Qt5 base. That's all.
->
-> Have you tried to clear your cache (rm -rf ~/.buildroot-ccache)?
+xtensa libgcc can't be built with -mtext-section-literals flag, now
+coming from TARGET_CFLAGS, because it needs to emit literals to
+.init/.fini sections, which is not currently supported.
 
-This doesn't help :-(
+Filter -mtext-section-literals flag out of GCC_COMMON_TARGET_CFLAGS.
 
-Yegor
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/gcc/gcc.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index aaeba7f..77866e2 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -112,6 +112,13 @@ GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
+ endif
+ endif
+ 
++# Xtensa libgcc can't be built with -mtext-section-literals
++# because of the trick used to generate .init/.fini sections.
++ifeq ($(BR2_xtensa),y)
++GCC_COMMON_TARGET_CFLAGS = $(filter-out -mtext-section-literals,$(TARGET_CFLAGS))
++GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mtext-section-literals,$(TARGET_CXXFLAGS))
++endif
++
+ # Propagate options used for target software building to GCC target libs
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+-- 
+1.7.7.6
