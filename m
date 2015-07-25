@@ -1,303 +1,76 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 25 Jul 2015 17:48:24 +0200
-Subject: [Buildroot] [PATCH v2] rtl8188eu: new package
-Message-ID: <1437839304-26204-1-git-send-email-luca@lucaceresoli.net>
+Date: Sat, 25 Jul 2015 17:57:51 +0200
+Subject: [Buildroot] [PATCH v7 1/1] rtl8821au: new package
+In-Reply-To: <20150725143257.GH3662@free.fr>
+References: <1437777122-28383-1-git-send-email-christian@paral.in>
+ <20150725101601.GB3662@free.fr> <55B38D80.9070605@lucaceresoli.net>
+ <20150725143257.GH3662@free.fr>
+Message-ID: <55B3B1FF.6010602@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Dear Yann,
 
----
+Yann E. MORIN wrote:
+> Luca, All,
+>
+> On 2015-07-25 15:22 +0200, Luca Ceresoli spake thusly:
+>> Yann E. MORIN wrote:
+>>> Christian, Luca, All,
+>>>
+>>> Luca, a licensing question for you... ;-)
+>>>
+>>> On 2015-07-24 15:32 -0700, Christian Stewart spake thusly:
+>>>> This patch adds the rtl8821au wifi driver. The driver is sourced from
+>>>> ulli-kroll's work on GitHub, which includes various fixes and better LED
+>>>> handling. Currently USB3 support is broken in this driver - it will
+>>>> only connect to the EHCI controller in a USB3 port.
+>>>>
+>>>> Signed-off-by: Christian Stewart <christian@paral.in>
+>>> [--SNIP--]
+>> [...]
+>>>> --- /dev/null
+>>>> +++ b/package/rtl8821au/rtl8821au.mk
+>>>> @@ -0,0 +1,21 @@
+>>>> +################################################################################
+>>>> +#
+>>>> +# rtl8821au
+>>>> +#
+>>>> +################################################################################
+>>>> +
+>>>> +RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
+>>>> +RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
+>>>> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
+>>>
+>>> You forgot the licensing information:
+>>>
+>>>      RTL8821AU_LICENSE = GPLv2
+>>>      RTL8821AU_LICENSE_FILES = COPYING
+>>>
+>>> Luca:
+>>>
+>>> Also, two firmware blobs are installed, and we have no licensing info
+>>> for those two; usually it's a proprietary license.
+>>>
+>>> I wonder if/how we can reflect this in the licensing info above.
+>>
+>> I can't think of any option other than:
+>>
+>>    RTL8821AU_LICENSE = GPLv2, proprietary (firmware blobs)
+>
+> OK for me. Thanks!
+>
+> Christian, care to address those issues and respin, please?
+> Thanks!
 
-This standalone driver needs a few small patches to properly build and install
-within Buildroot.
-Pathces sent upstream: https://github.com/lwfinger/rtl8188eu/pull/128
+BTW, Yann, yours was a good reminder for me while respinning my patch
+for the rtl8188eu module the I just sent, thanks! And here's what I
+come up with:
 
-Changes v1 -> v2:
- - use the kernel-module infra;
- - mention binary blob in _LICENSE;
- - remove inappropriate BR2_ROOTFS_DEVICE_CREATION_ stuff;
- - mention the need to enable CONFIG_WIRELESS_EXT in the kernel.
----
- package/Config.in                                  |  1 +
- .../0001-Makefile-quote-CROSS_COMPILE.patch        | 33 ++++++++++++++++++
- ...002-Makefile-add-a-modules_install-target.patch | 34 +++++++++++++++++++
- ...03-Makefile-add-a-firmware_install-target.patch | 32 ++++++++++++++++++
- ...stall-use-firmware_install-to-copy-the-fi.patch | 39 ++++++++++++++++++++++
- ...stall-remove-double-firmware-installation.patch | 28 ++++++++++++++++
- package/rtl8188eu/Config.in                        | 19 +++++++++++
- package/rtl8188eu/rtl8188eu.mk                     | 21 ++++++++++++
- 8 files changed, 207 insertions(+)
- create mode 100644 package/rtl8188eu/0001-Makefile-quote-CROSS_COMPILE.patch
- create mode 100644 package/rtl8188eu/0002-Makefile-add-a-modules_install-target.patch
- create mode 100644 package/rtl8188eu/0003-Makefile-add-a-firmware_install-target.patch
- create mode 100644 package/rtl8188eu/0004-Makefile-install-use-firmware_install-to-copy-the-fi.patch
- create mode 100644 package/rtl8188eu/0005-Makefile-install-remove-double-firmware-installation.patch
- create mode 100644 package/rtl8188eu/Config.in
- create mode 100644 package/rtl8188eu/rtl8188eu.mk
+   RTL8188EU_LICENSE = GPLv2, proprietary (rtl8188eufw.bin firmware blob)
 
-diff --git a/package/Config.in b/package/Config.in
-index cfa75127ed05..a206b7ef0780 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -404,6 +404,7 @@ endif
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rpi-userland/Config.in"
-+	source "package/rtl8188eu/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/setserial/Config.in"
-diff --git a/package/rtl8188eu/0001-Makefile-quote-CROSS_COMPILE.patch b/package/rtl8188eu/0001-Makefile-quote-CROSS_COMPILE.patch
-new file mode 100644
-index 000000000000..9b375fe358a3
---- /dev/null
-+++ b/package/rtl8188eu/0001-Makefile-quote-CROSS_COMPILE.patch
-@@ -0,0 +1,33 @@
-+From 7b7d6b392a963b462c0240296daa38d6413f6246 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Fri, 3 Jul 2015 14:45:03 +0200
-+Subject: [PATCH 1/5] Makefile: quote CROSS_COMPILE
-+
-+When using a CROSS_COMPILE value that contains a whitespace, such as
-+"ccache arm-linux-", building fails because only the first word is passed down
-+to the kernel Makefile as CROSS_COMPILE. Successive words are interpreted as
-+targets.
-+
-+Fix by quoting CROSS_COMPILE.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index ea1b316..76db121 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -144,7 +144,7 @@ export CONFIG_RTL8188EU = m
-+ all: modules
-+ 
-+ modules:
-+-	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
-++	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" -C $(KSRC) M=$(shell pwd)  modules
-+ 
-+ strip:
-+ 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
-+-- 
-+1.9.1
-+
-diff --git a/package/rtl8188eu/0002-Makefile-add-a-modules_install-target.patch b/package/rtl8188eu/0002-Makefile-add-a-modules_install-target.patch
-new file mode 100644
-index 000000000000..fe0aa941e0ce
---- /dev/null
-+++ b/package/rtl8188eu/0002-Makefile-add-a-modules_install-target.patch
-@@ -0,0 +1,34 @@
-+From f7e5725ea2e848546830ac2da117d808b4c19d08 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Fri, 3 Jul 2015 15:51:38 +0200
-+Subject: [PATCH 2/5] Makefile: add a modules_install target
-+
-+Allows to cleanly install the module in the standard way, as suggested by
-+Documentation/kbuild/modules.txt in the kernel sources.
-+
-+This is needed when installing from within a build system (such as Buildroot)
-+that implement depmod on its own, and does not need the blacklist and other
-+fixups that are implemented by the 'install' target.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ Makefile | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/Makefile b/Makefile
-+index 76db121..63e0103 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -149,6 +149,9 @@ modules:
-+ strip:
-+ 	$(CROSS_COMPILE)strip 8188eu.ko --strip-unneeded
-+ 
-++modules_install:
-++	$(MAKE) -C $(KSRC) M=`pwd` modules_install
-++
-+ install:
-+ 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
-+ 	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
-+-- 
-+1.9.1
-+
-diff --git a/package/rtl8188eu/0003-Makefile-add-a-firmware_install-target.patch b/package/rtl8188eu/0003-Makefile-add-a-firmware_install-target.patch
-new file mode 100644
-index 000000000000..eebef3a38a33
---- /dev/null
-+++ b/package/rtl8188eu/0003-Makefile-add-a-firmware_install-target.patch
-@@ -0,0 +1,32 @@
-+From d8063ef657fd44e29ef2fffba07f0632d1e60a92 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Mon, 6 Jul 2015 09:59:46 +0200
-+Subject: [PATCH 3/5] Makefile: add a firmware_install target
-+
-+When installing using the modules_install target, the firmware is not
-+installed. Add an ad-hoc target that just installs the firmware into
-+$(INSTALL_MOD_PATH)/lib/firmware/rtlwifi/.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ Makefile | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/Makefile b/Makefile
-+index 63e0103..4012f9a 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -152,6 +152,10 @@ strip:
-+ modules_install:
-+ 	$(MAKE) -C $(KSRC) M=`pwd` modules_install
-+ 
-++firmware_install:
-++	install -D -m 644 rtl8188eufw.bin \
-++		$(INSTALL_MOD_PATH)/lib/firmware/rtlwifi/rtl8188eufw.bin
-++
-+ install:
-+ 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
-+ 	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
-+-- 
-+1.9.1
-+
-diff --git a/package/rtl8188eu/0004-Makefile-install-use-firmware_install-to-copy-the-fi.patch b/package/rtl8188eu/0004-Makefile-install-use-firmware_install-to-copy-the-fi.patch
-new file mode 100644
-index 000000000000..18e9eadd38bd
---- /dev/null
-+++ b/package/rtl8188eu/0004-Makefile-install-use-firmware_install-to-copy-the-fi.patch
-@@ -0,0 +1,39 @@
-+From c4d952d6184d82413c09f5ad668305ce37effbba Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Mon, 6 Jul 2015 10:03:11 +0200
-+Subject: [PATCH 4/5] Makefile: install: use firmware_install to copy the
-+ firmware
-+
-+Now there is a specific target to install the firmware, use it everywhere.
-+
-+Note: this does not change the behaviour if INSTALL_MOD_PATH is undefined.
-+Otherwise the firmware is now installed under the INSTALL_MOD_PATH prefix.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ Makefile | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 4012f9a..8faf484 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -156,14 +156,12 @@ firmware_install:
-+ 	install -D -m 644 rtl8188eufw.bin \
-+ 		$(INSTALL_MOD_PATH)/lib/firmware/rtlwifi/rtl8188eufw.bin
-+ 
-+-install:
-++install: firmware_install
-+ 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
-+ 	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
-+ 	@echo "blacklist r8188eu" > /etc/modprobe.d/50-8188eu.conf
-+ 	cp rtl8188eufw.bin /lib/firmware/.
-+ 	/sbin/depmod -a ${KVER}
-+-	mkdir -p /lib/firmware/rtlwifi
-+-	cp -n rtl8188eufw.bin /lib/firmware/rtlwifi/.
-+ 
-+ uninstall:
-+ 	rm -f $(MODDESTDIR)/8188eu.ko
-+-- 
-+1.9.1
-+
-diff --git a/package/rtl8188eu/0005-Makefile-install-remove-double-firmware-installation.patch b/package/rtl8188eu/0005-Makefile-install-remove-double-firmware-installation.patch
-new file mode 100644
-index 000000000000..8dac074899fa
---- /dev/null
-+++ b/package/rtl8188eu/0005-Makefile-install-remove-double-firmware-installation.patch
-@@ -0,0 +1,28 @@
-+From 7339528fdf72468fa1a0a0a28ccd5a5a966f0dd0 Mon Sep 17 00:00:00 2001
-+From: Luca Ceresoli <luca@lucaceresoli.net>
-+Date: Mon, 6 Jul 2015 10:05:00 +0200
-+Subject: [PATCH 5/5] Makefile: install: remove double firmware installation
-+
-+The firmware is already installed in /lib/firmware/rtlwifi, no need to
-+install it also in /lib/firmware.
-+
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ Makefile | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 8faf484..8bef18e 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -160,7 +160,6 @@ install: firmware_install
-+ 	install -p -m 644 8188eu.ko  $(MODDESTDIR)
-+ 	@if [ -a /lib/modules/$(KVER)/kernel/drivers/staging/rtl8188eu/r8188eu.ko ] ; then modprobe -r r8188eu; fi;
-+ 	@echo "blacklist r8188eu" > /etc/modprobe.d/50-8188eu.conf
-+-	cp rtl8188eufw.bin /lib/firmware/.
-+ 	/sbin/depmod -a ${KVER}
-+ 
-+ uninstall:
-+-- 
-+1.9.1
-+
-diff --git a/package/rtl8188eu/Config.in b/package/rtl8188eu/Config.in
-new file mode 100644
-index 000000000000..09cde24a0fe5
---- /dev/null
-+++ b/package/rtl8188eu/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_RTL8188EU
-+	bool "rtl8188eu"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  A standalone driver for the RTL8188EU USB Wi-Fi adapter.
-+	  This is needed only for Linux kernels before 3.12.
-+	  Since 3.12, there is a (staging) driver in mainline, with a similar
-+	  codebase.
-+
-+	  Make sure your target kernel has the CONFIG_WIRELESS_EXT config
-+	  option enabled.
-+
-+	  Note: this package needs a firmware loading mechanism to load the
-+	  binary blob for the chip to work.
-+
-+	  https://github.com/lwfinger/rtl8188eu
-+
-+comment "rtl8188eu needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-new file mode 100644
-index 000000000000..dec0900434d1
---- /dev/null
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# rtl8188eu
-+#
-+################################################################################
-+
-+RTL8188EU_VERSION = 3091828c8f4b4a01cbec6025128bf77e6e7b9f97
-+RTL8188EU_SITE = $(call github,lwfinger,rtl8188eu,$(RTL8188EU_VERSION))
-+RTL8188EU_DEPENDENCIES = linux
-+RTL8188EU_LICENSE = GPLv2, proprietary (rtl8188eufw.bin firmware blob)
-+RTL8188EU_LICENSE_FILES = COPYING
-+RTL8188EU_MODULE_MAKE_OPTS = CONFIG_RTL8188EU=m
-+
-+$(eval $(kernel-module))
-+
-+define RTL8188EU_INSTALL_FIRMWARE
-+	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) firmware_install
-+endef
-+RTL8188EU_POST_INSTALL_TARGET_HOOKS += RTL8188EU_INSTALL_FIRMWARE
-+
-+$(eval $(generic-package))
 -- 
-1.9.1
+Luca
