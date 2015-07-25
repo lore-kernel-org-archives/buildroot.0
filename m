@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 23:48:50 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5/qtwebsocket: remove GPLv2 license
-In-Reply-To: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
-References: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150725214850.GI1847@free.fr>
+Date: Sat, 25 Jul 2015 23:55:29 +0200
+Subject: [Buildroot] [PATCH v2] qt/qt5base: Fix INCLUDE_PATH when no
+ JPEG/PNG support
+In-Reply-To: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
+References: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <20150725215529.GJ1847@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,71 @@ To: buildroot@busybox.net
 
 Julien, All,
 
-On 2015-07-24 10:04 +0200, Julien Corjon spake thusly:
-> This module loose his GPLv2 licensing option. Remains the LGPLv2.1 with
-> exception and LGPLv3 as the possible open-source licenses.
-> 
+On 2015-07-24 07:51 +0200, Julien Corjon spake thusly:
 > Fixes:
-> http://autobuild.buildroot.net/results/6c80ba0669a7fc8cc60baaa849044fd65a78ce87/
+>   http://autobuild.buildroot.net/results/4be77432390c4cfb557c3f2cc52cf732de037949/
+>   http://autobuild.buildroot.net/results/255a77e01d8af4090e03acb82f9ad93b7c4dd212/
+>   http://autobuild.buildroot.net/results/7844e6a3eeecf67dc29277b73bfe714e4d8f0d85/
+>   http://autobuild.buildroot.net/results/b941f35b6c8e1cf3b2c4b046dfcce98700d8f408/
+>   http://autobuild.buildroot.net/results/c64b640a39285f59cde47cb8d06ab70a5ac97c8b/
+>   http://autobuild.buildroot.net/results/f6d24b50f58251c8051d39bc1d09b5b43f81f441/
+> 
 > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+> v1 -> v2 : 
+>   - Add autobuild references (suggested by thomas)
+> 
+>  ...008-QtGui-force-image-dir-in-include_path.patch | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+> 
+> diff --git a/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch b/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+> new file mode 100644
+> index 0000000..4e5068b
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+> @@ -0,0 +1,33 @@
+> +From 6065be41dbd04690236418098fca504140fc205c Mon Sep 17 00:00:00 2001
+> +From: Julien Corjon <corjon.j@ecagroup.com>
+> +Date: Thu, 23 Jul 2015 13:32:47 +0200
+> +Subject: [PATCH 1/1] QtGui: force image directory in INCLUDE_PATH
+> +
+> +If PNG/JPEG/GIF support is not set qplaformpixmap inclusion then
+> +image/qplatformpixmap.h cannot be found from painting/qbrush.cpp
+> +
+> +Change-Id: I165c888b2afc51de47267607883615d3aa3bae40
+> +
+> +Upstream-Status: https://bugreports.qt.io/browse/QTBUG-47400
+> +
+> +Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> +---
+> + src/gui/image/image.pri | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/src/gui/image/image.pri b/src/gui/image/image.pri
+> +index 8db944e..af6e0fa 100644
+> +--- a/src/gui/image/image.pri
+> ++++ b/src/gui/image/image.pri
+> +@@ -3,6 +3,8 @@
+> + 
+> + # Qt kernel module
+> + 
+> ++INCLUDEPATH *= $$PWD
+> ++
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+It seems like we should instead use the upstream patch that has been
+applied:
+    https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=commitdiff;h=7f282aa9f718389199b95b7f53ecd6401172fcc6;hp=954f0d93976362d29044439e4eaa11d2dff16624
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/qt5/qt5websockets/qt5websockets.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
-> index 2b257e1..1d7c1f1 100644
-> --- a/package/qt5/qt5websockets/qt5websockets.mk
-> +++ b/package/qt5/qt5websockets/qt5websockets.mk
-> @@ -11,10 +11,8 @@ QT5WEBSOCKETS_DEPENDENCIES = qt5base
->  QT5WEBSOCKETS_INSTALL_STAGING = YES
->  
->  ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> -QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> -# Source files contain references to LGPL_EXCEPTION.txt but it is not included
-> -# in the archive.
-> -QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
-> +QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3
-> +QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
->  else
->  QT5WEBSOCKETS_LICENSE = Commercial license
->  QT5WEBSOCKETS_REDISTRIBUTE = NO
+> + HEADERS += \
+> +         image/qbitmap.h \
+> +         image/qimage.h \
+> +-- 
+> +2.1.0
+> +
 > -- 
 > 2.1.0
 > 
