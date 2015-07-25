@@ -1,60 +1,69 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 25 Jul 2015 15:22:08 +0200
-Subject: [Buildroot] [PATCH v7 1/1] rtl8821au: new package
-In-Reply-To: <20150725101601.GB3662@free.fr>
-References: <1437777122-28383-1-git-send-email-christian@paral.in>
- <20150725101601.GB3662@free.fr>
-Message-ID: <55B38D80.9070605@lucaceresoli.net>
+Date: Sat, 25 Jul 2015 15:36:55 +0200
+Subject: [Buildroot] [PATCH] package/exim: Fix compilation error with musl
+Message-ID: <1437831415-6066-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Yann E. MORIN wrote:
-> Christian, Luca, All,
->
-> Luca, a licensing question for you... ;-)
->
-> On 2015-07-24 15:32 -0700, Christian Stewart spake thusly:
->> This patch adds the rtl8821au wifi driver. The driver is sourced from
->> ulli-kroll's work on GitHub, which includes various fixes and better LED
->> handling. Currently USB3 support is broken in this driver - it will
->> only connect to the EHCI controller in a USB3 port.
->>
->> Signed-off-by: Christian Stewart <christian@paral.in>
-> [--SNIP--]
-[...]
->> --- /dev/null
->> +++ b/package/rtl8821au/rtl8821au.mk
->> @@ -0,0 +1,21 @@
->> +################################################################################
->> +#
->> +# rtl8821au
->> +#
->> +################################################################################
->> +
->> +RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
->> +RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
->> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
->
-> You forgot the licensing information:
->
->      RTL8821AU_LICENSE = GPLv2
->      RTL8821AU_LICENSE_FILES = COPYING
->
-> Luca:
->
-> Also, two firmware blobs are installed, and we have no licensing info
-> for those two; usually it's a proprietary license.
->
-> I wonder if/how we can reflect this in the licensing info above.
+Fixes
+smtp_in.c: In function ?smtp_start_session?:
+smtp_in.c:1976:36: error: invalid application of ?sizeof? to incomplete type ?struct options?
+     EXIM_SOCKLEN_T optlen = sizeof(struct ip_options) + MAX_IPOPTLEN;
 
-I can't think of any option other than:
+smtp_in.c misdetects the needed style for ip_options, only OPTSTYLE == 2 works.
+Since musl does not provide any macro[1] to detect it we need to pretend to be
+darwin in order to fix the compile bug.
 
-   RTL8821AU_LICENSE = GPLv2, proprietary (firmware blobs)
+[1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Luca: simplify by using only one sed invocation]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+---
+
+I'm adopting this oldish patch (https://patchwork.ozlabs.org/patch/460496/)
+from Bernd. The bug it fixes is still there, and the fix is still valid. I
+just simplified it according to my comments to the original patch.
+
+Changes v1 -> v2:
+ - simplify by using only one sed invocation (Luca).
+---
+ package/exim/exim.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index ed6a30997215..002ffd294fd8 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -80,6 +80,15 @@ define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
+ endef
+ endif
+ 
++# musl does not provide struct ip_options nor struct ip_opts (but it is
++# available with both glibc and uClibc)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++define EXIM_FIX_IP_OPTIONS_FOR_MUSL
++	$(SED) 's/#define GLIBC_IP_OPTIONS/#define DARWIN_IP_OPTIONS/' \
++		$(@D)/OS/os.h-Linux
++endef
++endif
++
+ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,CC,$(TARGET_CC))
+ 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
+@@ -88,6 +97,7 @@ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,HOSTCC,$(HOSTCC))
+ 	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
+ 	$(EXIM_REMOVE_LIBNSL_FROM_MAKEFILE)
++	$(EXIM_FIX_IP_OPTIONS_FOR_MUSL)
+ endef
+ 
+ ifneq ($(call qstrip,$(BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE)),)
 -- 
-Luca
+1.9.1
