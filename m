@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 18:48:10 +0200
-Subject: [Buildroot] [PATCH 03/47] package/libcec: bump to version 3.0.1
-In-Reply-To: <20150725164358.GL3662@free.fr>
+Date: Sat, 25 Jul 2015 18:55:00 +0200
+Subject: [Buildroot] [PATCH 02/47] package/libplatform: new package
+In-Reply-To: <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-4-git-send-email-bernd.kuhls@t-online.de>
- <20150725164358.GL3662@free.fr>
-Message-ID: <20150725164810.GM3662@free.fr>
+ <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150725165500.GN3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +13,55 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2015-07-25 18:43 +0200, Yann E. MORIN spake thusly:
-> On 2015-07-22 22:30 +0200, Bernd Kuhls spake thusly:
-> > - reflect upstream changes of the build system by switching from
-> >   an autotools-package to cmake-package
-> > - package is broken with gcc 4.5.4
-> >   https://github.com/Pulse-Eight/libcec/issues/78#issuecomment-91578591
-> >   "4.6 is no longer supported. you need a C++ 11 compatible compiler,
-> >    so 4.7 or newer"
-> >   Since buildroot does not contain gcc 4.6 anymore, using
-> >   depends on !BR2_GCC_VERSION_4_5_X
-> >   is enough.
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 2015-07-22 22:30 +0200, Bernd Kuhls spake thusly:
+> Needed by libcec 3.x
 > 
-> This does not build with the toolchain Linaro ARM 2014.09 (gcc-4.9), with
-> a *lot* of error messages:
-> 
-> 
-> 1) at configure time, a git issue:
-> 
-> -- git found: fatal: Not a git repository (or any parent up to mount point /home)
-> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
-> \n
-> 
-> -- lib info: git revision: fatal: Not a git repository (or any parent up to mount point /home)
-> Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
-> \n, compiled on Sat Jul 25 16:13:04 UTC 2015 by ymorin at ns304657.ip-46-105-103.eu on
-> Linux 3.13.0-55-generic (x86_64), features: P8_USB, P8_detect, 'RPi'
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[--SNIP--]
+> diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+> new file mode 100644
+> index 0000000..77fbcec
+> --- /dev/null
+> +++ b/package/libplatform/libplatform.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# libplatform
+> +#
+> +################################################################################
+> +
+> +LIBPLATFORM_VERSION = 1.0.10
+> +LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+> +LIBPLATFORM_LICENSE = GPLv3+
 
-This one seems to have already been fixed upstream:
+I could only see references to GPLv2+, not v+
 
-    https://github.com/Pulse-Eight/libcec/issues/112
-    https://github.com/Pulse-Eight/libcec/commit/2f32a9debc1f148b5dfcfc463480f1432bb71725
+Also, a file is under the PHP-3.0.1 licences: src/util/fstrcmp.c
+
+> +LIBPLATFORM_LICENSE_FILES = COPYING
+
+There's no COPYING file. There's in fact no file with the licensing
+information.
+
+> +LIBPLATFORM_INSTALL_STAGING = YES
+> +
+> +LIBPLATFORM_CONF_OPTS += \
+> +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
+
+Why do you hard-code the path to the kodi directory? Can't libplatform
+be used for anything else?
 
 Regards,
 Yann E. MORIN.
+
+> +$(eval $(cmake-package))
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
