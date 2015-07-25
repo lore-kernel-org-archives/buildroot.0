@@ -1,76 +1,100 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 25 Jul 2015 17:57:51 +0200
-Subject: [Buildroot] [PATCH v7 1/1] rtl8821au: new package
-In-Reply-To: <20150725143257.GH3662@free.fr>
-References: <1437777122-28383-1-git-send-email-christian@paral.in>
- <20150725101601.GB3662@free.fr> <55B38D80.9070605@lucaceresoli.net>
- <20150725143257.GH3662@free.fr>
-Message-ID: <55B3B1FF.6010602@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jul 2015 18:13:34 +0200
+Subject: [Buildroot] [PATCH v6 1/1] rtl8821au: new package
+In-Reply-To: <alpine.LNX.2.00.1507241546220.30794@localhost>
+References: <1437691280-23926-1-git-send-email-christian@paral.in>
+ <alpine.LNX.2.00.1507241546220.30794@localhost>
+Message-ID: <20150725161334.GI3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Ulli, all,
 
-Yann E. MORIN wrote:
-> Luca, All,
->
-> On 2015-07-25 15:22 +0200, Luca Ceresoli spake thusly:
->> Yann E. MORIN wrote:
->>> Christian, Luca, All,
->>>
->>> Luca, a licensing question for you... ;-)
->>>
->>> On 2015-07-24 15:32 -0700, Christian Stewart spake thusly:
->>>> This patch adds the rtl8821au wifi driver. The driver is sourced from
->>>> ulli-kroll's work on GitHub, which includes various fixes and better LED
->>>> handling. Currently USB3 support is broken in this driver - it will
->>>> only connect to the EHCI controller in a USB3 port.
->>>>
->>>> Signed-off-by: Christian Stewart <christian@paral.in>
->>> [--SNIP--]
->> [...]
->>>> --- /dev/null
->>>> +++ b/package/rtl8821au/rtl8821au.mk
->>>> @@ -0,0 +1,21 @@
->>>> +################################################################################
->>>> +#
->>>> +# rtl8821au
->>>> +#
->>>> +################################################################################
->>>> +
->>>> +RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
->>>> +RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
->>>> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
->>>
->>> You forgot the licensing information:
->>>
->>>      RTL8821AU_LICENSE = GPLv2
->>>      RTL8821AU_LICENSE_FILES = COPYING
->>>
->>> Luca:
->>>
->>> Also, two firmware blobs are installed, and we have no licensing info
->>> for those two; usually it's a proprietary license.
->>>
->>> I wonder if/how we can reflect this in the licensing info above.
->>
->> I can't think of any option other than:
->>
->>    RTL8821AU_LICENSE = GPLv2, proprietary (firmware blobs)
->
-> OK for me. Thanks!
->
-> Christian, care to address those issues and respin, please?
-> Thanks!
+On 2015-07-24 15:50 +0200, Hans Ulli Kroll spake thusly:
+> Note : I'm new on the list, so I had insert this tread by hand !
 
-BTW, Yann, yours was a good reminder for me while respinning my patch
-for the rtl8188eu module the I just sent, thanks! And here's what I
-come up with:
+Welcome! :-)
 
-   RTL8188EU_LICENSE = GPLv2, proprietary (rtl8188eufw.bin firmware blob)
+> I'm the one working on the RTL8821AU driver.
+
+Yeah, great! I saw that Christian and I did some work on the same
+module, but based on diffferent code-dump by different vendors. It would
+be great if you two could synchronise your work on this, to avoid
+duplication and to get the best driver possible, with a ultimate goal of
+submitting it for inclusion in the mainline. ;-)
+
+> On Thu, 23 Jul 2015, Christian Stewart wrote:
+> > Adding a kernel module based USB wifi driver. There is no official
+> > version of this driver that works properly on ARM and with newer USB
+> > WiFi cards. This driver version builds module 8821au and is based on a
+> > kernel module release from ASUS with various fixes integrated in.
+> 
+> This message will be commited please change.
+
+No, that's OK to get some details when adding a new package.
+
+> The I think the difference between the version from ASUS and mine based
+> the one Edimax are in the handling of the LED.
+> Maybe there are more ...
+
+Well, if that's the only difference, we can consider that to be a minor
+issue that can be resolvdd by back-/forward-porting it from one code
+base to the other.
+
+> > I've switched to use ulli-kroll's branch of rtl8821au. While it's based
+> > on an older vendor version, it has binary firmware and around ~1800
+> > commits of work to improve the driver. I think this work is probably
+> > more valuable than the vendor's updates.
+> > 
+> 
+> -> git send-email --compose
+> Will add some message an intreductory message
+
+That's OK the way Christian did: that part isindeed not part of the
+commit message, as it lise below the '---' line, so git wil ignore it
+when the patch is applied.
+
+> > --- /dev/null
+> > +++ b/package/rtl8821au/0001-disable-default-debug.patch
+> 
+> I do add some kind of "disable debug message"
+> This will take some time, I'm currently working in the code.
+
+Great! :-)
+
+> > +config BR2_PACKAGE_RTL8821AU
+> > +     bool "rtl8821au"
+> > +     depends on BR2_LINUX_KERNEL
+> > +     help
+> > +       rtl8821au wifi driver
+> > +
+> > +       https://github.com/paralin/rtl8821au
+> 
+> Please fix this URL !
+> 
+> Maybe add some line "out of tree driver"
+
+Well, if it were an in-tree module, we would not have a package for it,
+as it would come with the Linux source tree. So, this is obviously an
+out-of-tree module. ;-)
+
+> And the USB3 issue I found inthe HW as you can read in
+> Readme.md
+
+I see that Christian added that in the new commit log and help text.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Luca
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
