@@ -1,109 +1,102 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 11:15:13 +0200
-Subject: [Buildroot] [PATCH] package/rpi-userland: add option to install
-	hello-pi examples
-Message-ID: <1437815713-15874-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 25 Jul 2015 11:24:40 +0200
+Subject: [Buildroot] [PATCH] ARC: update tools to arc-2015.06 release
+In-Reply-To: <20150718031758.GA21884@fox>
+References: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
+ <55A8EAF7.5060506@openwide.fr> <20150717222354.GE3637@free.fr>
+ <20150717225415.GF3637@free.fr> <20150718031758.GA21884@fox>
+Message-ID: <55B355D8.4070900@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rpi-userland comes with a set of demo programs that can be useful to
-understand how to program HW-accelerated video/3D/fft/... on the RPi.
+Hi Guido,
 
-They can also be used to validate that the hardware is working properly.
+Le 18/07/2015 05:17, Guido Mart?nez a ?crit :
+> Hi Yann, all,
+> 
+> On Sat, Jul 18, 2015 at 12:54:15AM +0200, Yann E. MORIN wrote:
+>> Romain, All,
+>>
+>> On 2015-07-18 00:23 +0200, Yann E. MORIN spake thusly:
+>>> On 2015-07-17 13:45 +0200, Romain Naour spake thusly:
+>>> [--SNIP--]
+>>>> Your patch looks good, but I have a build failure with uclibc:
+>>>>
+>>>> make O=test/arc/ toolchain 2>&1 | tee build-arc-toolchain.log
+>> [--SNIP--]
+>>> OK, I was able to reproduce the error. [...]
+>>
+>> Here's a patch that does fix the issue.
+>>
+>> Tested on-top of master, with:
+>>   - in-tree build
+>>   - out-of-tree build without makefile wrapper (Romain's use-case)
+>>   - out-of-tree build with makefile wrapper (my use-case)
+>>
+>> They all worked at least so far as to build uclibc (make uclibc);
+>> nothing more was attempted).
+>>
+>> The change is not unlike what we already had to test where O was coming
+>> from, but we just reverse the logic to keep only what we're interested
+>> in, and we forcibly unexport O.
+>>
+>> I'm not really happy with the patch to start with (hence I'm not
+>> officially pushing it):
+>>
+>>     diff --git a/Makefile b/Makefile
+>>     index 531ac5d..5abca65 100644
+>>     --- a/Makefile
+>>     +++ b/Makefile
+>>     @@ -29,11 +29,16 @@ UMASK=0022
+>>      ifneq ($(shell umask),$(UMASK))
+>>      .PHONY: all $(MAKECMDGOALS)
+>>      
+>>     +ifeq ($(origin O),command line)
+>>     +EXTRAMAKEARGS = O=$(O)
+>>     +endif
+>>     +unexport O
+>>     +
+>>      all:
+>>     -	@umask $(UMASK) && $(MAKE  ) --no-print-directory
+>>     +	@umask $(UMASK) && $(MAKE) $(EXTRAMAKEARGS) -- no-print-directory
+>>      
+>>      $(MAKECMDGOALS):
+>>     -	@umask $(UMASK) && $(MAKE) --n o-print-directory $@
+>>     +	@umask $(UMASK) && $(MAKE) $(EXTRAMAKEARGS) --no   -print-directory $@
+>>      
+>>      else # umask
+> 
+> This works OK. But I think something like:
+> 
+> 	diff --git a/Makefile b/Makefile
+> 	index afdf554..df52c85 100644
+> 	--- a/Makefile
+> 	+++ b/Makefile
+> 	@@ -329,6 +329,7 @@ unexport CONFIG_SITE
+> 	 unexport QMAKESPEC
+> 	 unexport TERMINFO
+> 	 unexport MACHINE
+> 	+unexport O
+> 
+> 	 GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+> 
+> does too. Maybe I'm missing something, but I don't think we would ever
+> want to export $(O) to any of the package Makefiles, the same way we
+> don't export $(CC).
+> 
+> Note that $(origin O) will still be "command line" in the sub-make after
+> setting the umask, since "O=..." will be set in $(MAKEFLAGS), thus there
+> shouldn't be a difference in the run.
+> 
+> I tested those 3 cases you mentioned and they work OK, but I'll run full
+> builds in a minute.
+> 
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- .../0005-disable-missing-all-apps.patch            | 30 ++++++++++++++++++++++
- package/rpi-userland/Config.in                     |  5 ++++
- package/rpi-userland/rpi-userland.mk               | 20 +++++++++++++++
- 3 files changed, 55 insertions(+)
- create mode 100644 package/rpi-userland/0005-disable-missing-all-apps.patch
+Can you send a proper patch to the list please?
+I'm using this change and it fixes the uClibc-ng build without regression so far.
 
-diff --git a/package/rpi-userland/0005-disable-missing-all-apps.patch b/package/rpi-userland/0005-disable-missing-all-apps.patch
-new file mode 100644
-index 0000000..520c7be
---- /dev/null
-+++ b/package/rpi-userland/0005-disable-missing-all-apps.patch
-@@ -0,0 +1,30 @@
-+From 249f6c8b44581083dfb16ebf66bfe94f7c9fb163 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Fri, 24 Jul 2015 20:20:33 +0200
-+Subject: [PATCH] host-applications: disable missing applications
-+
-+Those applications are missing from the public rpi-firmware package, so
-+do not even try to build them.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ host_applications/linux/CMakeLists.txt | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/host_applications/linux/CMakeLists.txt b/host_applications/linux/CMakeLists.txt
-+index ea4e016..4a87862 100644
-+--- a/host_applications/linux/CMakeLists.txt
-++++ b/host_applications/linux/CMakeLists.txt
-+@@ -10,9 +10,7 @@ add_subdirectory(apps/smem)
-+ add_subdirectory(libs/debug_sym)
-+ 
-+ if(ALL_APPS)
-+- add_subdirectory(apps/vcdbg)
-+  # add_subdirectory(apps/smct)
-+- add_subdirectory(apps/edid_parser)
-+  add_subdirectory(apps/hello_pi)
-+ endif()
-+ 
-+-- 
-+1.9.1
-+
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index 0e88908..9bb2bfc 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -38,6 +38,11 @@ config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
- 	  vcfiled is a daemon serving files to VideoCore from the host file
- 	  system.
- 
-+config BR2_PACKAGE_RPI_USERLAND_HELLO
-+	bool "hello_pi examples"
-+	help
-+	  Install the hello-pi examples to test the HW (GPU, camera...)
-+
- endif
- 
- comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index e2eadb2..3a31733 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -28,6 +28,26 @@ define RPI_USERLAND_INSTALL_INIT_SYSTEMD
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
-+
-+RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
-+
-+define RPI_USERLAND_EXTRA_LIBS_TARGET
-+	$(INSTALL) -m 0644 -D \
-+		$(@D)/build/lib/libilclient.so \
-+		$(TARGET_DIR)/usr/lib/libilcient.so
-+endef
-+RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_EXTRA_LIBS_TARGET
-+
-+define RPI_USERLAND_EXTRA_LIBS_STAGING
-+	$(INSTALL) -m 0644 -D \
-+		$(@D)/build/lib/libilclient.so \
-+		$(STAGING_DIR)/usr/lib/libilcient.so
-+endef
-+RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_EXTRA_LIBS_STAGING
-+
-+endif # BR2_PACKAGE_RPI_USERLAND_HELLO
-+
- define RPI_USERLAND_POST_TARGET_CLEANUP
- 	rm -f $(TARGET_DIR)/etc/init.d/vcfiled
- 	rm -f $(TARGET_DIR)/usr/share/install/vcfiled
--- 
-1.9.1
+Best regards,
+Romain Naour
