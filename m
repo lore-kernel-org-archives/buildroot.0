@@ -1,53 +1,98 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Jul 2015 16:19:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi: Fix linking with sunxi-mali
-Message-ID: <1437833993-1654-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jul 2015 16:32:14 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: support building with
+ toolchains without native RPC
+In-Reply-To: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150725143214.GG3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since
-http://git.buildroot.net/buildroot/commit/package/sunxi-mali?id=8906f272ab41e0373f392cc7a04cc97320dd8382
-sunxi-mali as egl/gles provider also depends on libump.
+Thomas, All,
 
-This dependency was unknown to Kodi leading to this error during
-configure:
+On 2015-07-24 22:08 +0200, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ltp-testsuite needs RPC, but this could also be provided by libtirpc.
+> 
+> Since musl toolchains never have RPC support, this change would now allow
+> building of ltp-testsuite on musl toolchains. Unfortunately, ltp-testsuite
+> does not build yet with musl, so a specific check on musl is added.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  package/ltp-testsuite/Config.in        |  7 ++++---
+>  package/ltp-testsuite/ltp-testsuite.mk | 14 ++++++++++++--
+>  2 files changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 52c02ce..91b09ce 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -6,7 +6,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  	bool "ltp-testsuite"
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
 
-configure:23127: /home/buildroot/build/instance-0/output/host/usr/bin/arm-none-linux-gnueabi-gcc -o conftest -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -g -D_DEBUG -Wall -mno-apcs-stack-check -mfpu=neon -mvectorize-with-neon-quad -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lEGL   -lpython2.7 -lpthread -ldl -lutil -lm >&5
-/home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.3/../../../../arm-none-linux-gnueabi/bin/ld: warning: libUMP.so.2, needed by /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/thumb2/usr/lib/libMali.so, not found (try using -rpath or -rpath-link)
-/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/thumb2/usr/lib/libEGL.so: undefined reference to `ump_close'
+libtirpc depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 so I
+wonder why you did not propagate this dependency here.
 
-This patch updates CXXFLAGS with the necessary libs to fix linking of
-the final kodi binary. The additional CFLAGS are needed because
-configure uses gcc to detect egl support.
+However, that is not necessary, since that toolchain does provide native
+RPC, so we would not be selecting libtirpc with that toolchain.
 
-Fixes
-http://autobuild.buildroot.net/results/ce3/ce35d25253410abcbdbf1c58a5c9fb90f4eea6cd/
-http://autobuild.buildroot.net/results/1ee/1eefd8e23d8e1b4374c79201b4c631603372d431/
-http://autobuild.buildroot.net/results/3d8/3d8314392c61d6d278fb900a028e3bfc4d1d4d2c/
-http://autobuild.buildroot.net/results/ee5/ee5e53ed9e2bbebab64122dd422d5da6abca3095/
-http://autobuild.buildroot.net/results/703/7033594221b4a75e7f8aea8c145c8b7d2db0637c/
+Maybe worth a comment?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi/kodi.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+>  	# does not build, cachectl.h issue
+>  	depends on !BR2_nios2
+>  	help
+> @@ -21,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  
+>  	  http://ltp.sourceforge.net/
+>  
+> -comment "ltp-testsuite needs a toolchain w/ RPC, threads"
+> +comment "ltp-testsuite needs a non-musl toolchain w/ threads"
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index ad61f0d..6052f15 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -112,7 +112,8 @@ else
- KODI_CONF_OPTS += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
- ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
- KODI_DEPENDENCIES += libegl libgles
--KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`"
-+KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
-+KODI_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
- KODI_CONF_OPTS += --enable-gles
- else
- KODI_CONF_OPTS += --disable-gles
+We usually use positive logic, like in samab4, libunwind or vlc:
+
+    comment "ltp-testsuite needs an (e)glibc or uClibc toolchain w/ threads"
+
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 2d4f286..05ffaf1 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -19,8 +19,18 @@ endif
+>  
+>  # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+>  # support.
+> +LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+> +LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
+> +
+> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> +LTP_TESTSUITE_DEPENDENCIES += libtirpc
+> +LTP_TESTSUITE_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+> +LTP_TESTSUITE_LDFLAGS += -ltirpc
+
+libtirpc install a .pc file, so why not use it, as in:
+
+    LTP_TESTSUITE_DEPENDENCIES += libtirpc host-pkgconf
+    LTP_TESTSUITE_CFLAGS += `$(HOST_PKG_CONFIG_BINARY) --cflags libtirpc`
+    LTP_TESTSUITE_LDFLAGS += `$(HOST_PKG_COFNIG_BINARY) --libs libtirpc`
+
+Shoehorn a --static when needed, too, for good measure.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
