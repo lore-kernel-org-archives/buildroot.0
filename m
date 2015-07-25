@@ -1,67 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Jul 2015 21:02:19 +0200
-Subject: [Buildroot] [PATCH 1/3] package/python-web2py: cleaning for
- space savings
-In-Reply-To: <1437768317-9283-2-git-send-email-angelo.compagnucci@gmail.com>
-References: <1437768317-9283-1-git-send-email-angelo.compagnucci@gmail.com>
- <1437768317-9283-2-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150725210219.2acba408@free-electrons.com>
+From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
+Date: Sat, 25 Jul 2015 16:07:39 -0300
+Subject: [Buildroot] [PATCH] Makefile: unexport O
+Message-ID: <1437851259-4539-1-git-send-email-guido@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+After bee5745ccc2 ("Makefile: don't depend on the umask"), any use
+of "make O=<dir>" would leak $O into the enviroment for submakes,
+and it's inherited by package makefiles. Some package makefiles have
+protections to make sure they don't use the value of $O if it comes from
+the enviroment (Linux), but some don't (uClibc).
 
-On Fri, 24 Jul 2015 22:05:15 +0200, Angelo Compagnucci wrote:
+This caused build failures when using a different output dir.
 
->  if BR2_PACKAGE_PYTHON_WEB2PY
->  
-> +if ! BR2_PACKAGE_PYTHON_WEB2PY_CLEAN_ADMIN
-> +
->  config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
->  	string "admin panel password"
->  	default web2py
-> @@ -21,3 +23,11 @@ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
->  	  Set the admin panel password.
->  
->  endif
+Fix this by unconditionally unexporting the O variable, since we never
+need to have it set in the environment for packages, it should be only
+internally used by BR.
 
-Then it's more logical for this option to be defined *after* the clean
-admin option.
+Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +
-> +config BR2_PACKAGE_PYTHON_WEB2PY_CLEAN_ADMIN
-> +	bool "clean admin panel application"
-
-Instead of clean, I think you should use "remove".
-
->  define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
-> -	$(HOST_DIR)/usr/bin/python2 -c 'import os; \
-> -		os.chdir("$(@D)"); \
-> -		from gluon.main import save_password; \
-> -		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
->  	mkdir -p $(TARGET_DIR)/var/www/web2py
->  	cp -dpfr $(@D)/* $(TARGET_DIR)/var/www/web2py
-> +	rm -rf $(TARGET_DIR)/var/www/web2py/welcome.w2p
-> +	rm -rf $(TARGET_DIR)/var/www/web2py/applications/examples
-> +	rm -rf $(TARGET_DIR)/var/www/web2py/applications/welcome
-> +	if test -n "$(BR2_PACKAGE_PYTHON_WEB2PY_CLEAN_ADMIN)" ; then\
-> +		rm -rf $(TARGET_DIR)/var/www/web2py/applications/admin;\
-> +	else\
-> +		$(HOST_DIR)/usr/bin/python2 -c 'import os; \
-> +		os.chdir("$(@D)"); \
-> +		from gluon.main import save_password; \
-> +		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)';\
-> +	fi
-
-Please use a make based conditional rather than a shell one.
-
-Thanks!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 8b9c5d9..9059884 100644
+--- a/Makefile
++++ b/Makefile
+@@ -329,6 +329,7 @@ unexport CONFIG_SITE
+ unexport QMAKESPEC
+ unexport TERMINFO
+ unexport MACHINE
++unexport O
+ 
+ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
