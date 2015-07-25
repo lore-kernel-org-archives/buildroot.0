@@ -1,53 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 16:15:44 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: support building with
- toolchains without native RPC
-In-Reply-To: <E2B4183D-A17C-4117-8FB4-879DC988B634@gmail.com>
-References: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
- <20150725121950.GD3662@free.fr>
- <E2B4183D-A17C-4117-8FB4-879DC988B634@gmail.com>
-Message-ID: <20150725141544.GF3662@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 25 Jul 2015 16:19:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Fix linking with sunxi-mali
+Message-ID: <1437833993-1654-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Since
+http://git.buildroot.net/buildroot/commit/package/sunxi-mali?id=8906f272ab41e0373f392cc7a04cc97320dd8382
+sunxi-mali as egl/gles provider also depends on libump.
 
-On 2015-07-25 15:12 +0200, Thomas De Schampheleire spake thusly:
-> On July 25, 2015 2:19:50 PM CEST, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> >On 2015-07-24 22:08 +0200, Thomas De Schampheleire spake thusly:
-[--SNIP--]
-> >> index 2d4f286..05ffaf1 100644
-> >> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> >> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> >> @@ -19,8 +19,18 @@ endif
-> >>  
-> >>  # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
-> >>  # support.
-> >> +LTP_TESTSUITE_CFLAGS = $(filter-out
-> >-D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-> >> +LTP_TESTSUITE_CPPFLAGS = $(filter-out
-> >-D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
-> >
-> >This hunk does not seem to have anything to do with the issue at hand,
-> >namely RPC and musl, nor is it explained in the commit log. Care to
-> >explain why filtering it out is needed (in the commit log and a comment
-> >in the code), please?
-> 
-> These lines were already in that file (see removes below); I left the comment clarifying it. 
-> I just introduced intermediate variables to cleanly handle the tirpc changes.
+This dependency was unknown to Kodi leading to this error during
+configure:
 
-Indeed, my bad.
+configure:23127: /home/buildroot/build/instance-0/output/host/usr/bin/arm-none-linux-gnueabi-gcc -o conftest -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -g -D_DEBUG -Wall -mno-apcs-stack-check -mfpu=neon -mvectorize-with-neon-quad -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -lEGL   -lpython2.7 -lpthread -ldl -lutil -lm >&5
+/home/buildroot/build/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.3/../../../../arm-none-linux-gnueabi/bin/ld: warning: libUMP.so.2, needed by /home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/thumb2/usr/lib/libMali.so, not found (try using -rpath or -rpath-link)
+/home/buildroot/build/instance-0/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/thumb2/usr/lib/libEGL.so: undefined reference to `ump_close'
 
-Regards,
-Yann E. MORIN.
+This patch updates CXXFLAGS with the necessary libs to fix linking of
+the final kodi binary. The additional CFLAGS are needed because
+configure uses gcc to detect egl support.
 
+Fixes
+http://autobuild.buildroot.net/results/ce3/ce35d25253410abcbdbf1c58a5c9fb90f4eea6cd/
+http://autobuild.buildroot.net/results/1ee/1eefd8e23d8e1b4374c79201b4c631603372d431/
+http://autobuild.buildroot.net/results/3d8/3d8314392c61d6d278fb900a028e3bfc4d1d4d2c/
+http://autobuild.buildroot.net/results/ee5/ee5e53ed9e2bbebab64122dd422d5da6abca3095/
+http://autobuild.buildroot.net/results/703/7033594221b4a75e7f8aea8c145c8b7d2db0637c/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/kodi.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index ad61f0d..6052f15 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -112,7 +112,8 @@ else
+ KODI_CONF_OPTS += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
+ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+-KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`"
++KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
++KODI_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
+ KODI_CONF_OPTS += --enable-gles
+ else
+ KODI_CONF_OPTS += --disable-gles
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.1.4
