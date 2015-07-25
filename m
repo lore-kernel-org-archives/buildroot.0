@@ -1,118 +1,109 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 25 Jul 2015 10:53:50 +0200
-Subject: [Buildroot] [PATCH] can-utils: bump version
-Message-ID: <1437814430-13677-1-git-send-email-yegorslists@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jul 2015 11:15:13 +0200
+Subject: [Buildroot] [PATCH] package/rpi-userland: add option to install
+	hello-pi examples
+Message-ID: <1437815713-15874-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstreamed patches.
+rpi-userland comes with a set of demo programs that can be useful to
+understand how to program HW-accelerated video/3D/fft/... on the RPi.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+They can also be used to validate that the hardware is working properly.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- .../0001-log2asc-include-sys-time.h.patch          | 28 ---------------
- ...Include-linux-sockios.h-to-fix-musl-build.patch | 42 ----------------------
- package/can-utils/can-utils.mk                     |  2 +-
- 3 files changed, 1 insertion(+), 71 deletions(-)
- delete mode 100644 package/can-utils/0001-log2asc-include-sys-time.h.patch
- delete mode 100644 package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
+ .../0005-disable-missing-all-apps.patch            | 30 ++++++++++++++++++++++
+ package/rpi-userland/Config.in                     |  5 ++++
+ package/rpi-userland/rpi-userland.mk               | 20 +++++++++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 package/rpi-userland/0005-disable-missing-all-apps.patch
 
-diff --git a/package/can-utils/0001-log2asc-include-sys-time.h.patch b/package/can-utils/0001-log2asc-include-sys-time.h.patch
-deleted file mode 100644
-index 30cf23b..0000000
---- a/package/can-utils/0001-log2asc-include-sys-time.h.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 50a71462a3291f7e08fa25f67b274792bb419211 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Tue, 14 Jul 2015 21:24:37 +0200
--Subject: [PATCH 1/2] log2asc: include sys/time.h
--
--Without this patch compilation against musl C library
--breaks, because struct timeval cannot be found.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- log2asc.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/log2asc.c b/log2asc.c
--index 29d13e8..8fb88a9 100644
----- a/log2asc.c
--+++ b/log2asc.c
--@@ -48,6 +48,7 @@
-- #include <unistd.h>
-- 
-- #include <net/if.h>
--+#include <sys/time.h>
-- #include <linux/can.h>
-- 
-- #include "lib.h"
---- 
--2.1.4
--
-diff --git a/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch b/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
-deleted file mode 100644
-index aca3eb4..0000000
---- a/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 204cfffefb2ee6058e5d22a4b65cff22e6cff5ee Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Thu, 16 Jul 2015 21:30:02 +0200
--Subject: [PATCH 2/2] Include linux/sockios.h to fix musl build
--
--Including <sys/ioctl.h> and <net/if.h> is not sufficient
--to musl to find SIOCSIFNAME, so <linux/sockios.h> must be
--included too.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- slcan_attach.c | 1 +
-- slcand.c       | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/slcan_attach.c b/slcan_attach.c
--index ab8ff0a..485cbe3 100644
----- a/slcan_attach.c
--+++ b/slcan_attach.c
--@@ -52,6 +52,7 @@
-- #include <net/if.h>
-- #include <termios.h>
-- #include <linux/tty.h>
--+#include <linux/sockios.h>
-- 
-- void print_usage(char *prg)
-- {
--diff --git a/slcand.c b/slcand.c
--index e5e4752..e8c70e0 100644
----- a/slcand.c
--+++ b/slcand.c
--@@ -38,6 +38,7 @@
-- #include <net/if.h>
-- #include <termios.h>
-- #include <linux/tty.h>
--+#include <linux/sockios.h>
-- 
-- /* Change this to whatever your daemon is called */
-- #define DAEMON_NAME "slcand"
---- 
--2.1.4
--
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 23649fe..8e8ed4e 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rpi-userland/0005-disable-missing-all-apps.patch b/package/rpi-userland/0005-disable-missing-all-apps.patch
+new file mode 100644
+index 0000000..520c7be
+--- /dev/null
++++ b/package/rpi-userland/0005-disable-missing-all-apps.patch
+@@ -0,0 +1,30 @@
++From 249f6c8b44581083dfb16ebf66bfe94f7c9fb163 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Fri, 24 Jul 2015 20:20:33 +0200
++Subject: [PATCH] host-applications: disable missing applications
++
++Those applications are missing from the public rpi-firmware package, so
++do not even try to build them.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ host_applications/linux/CMakeLists.txt | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/host_applications/linux/CMakeLists.txt b/host_applications/linux/CMakeLists.txt
++index ea4e016..4a87862 100644
++--- a/host_applications/linux/CMakeLists.txt
+++++ b/host_applications/linux/CMakeLists.txt
++@@ -10,9 +10,7 @@ add_subdirectory(apps/smem)
++ add_subdirectory(libs/debug_sym)
++ 
++ if(ALL_APPS)
++- add_subdirectory(apps/vcdbg)
++  # add_subdirectory(apps/smct)
++- add_subdirectory(apps/edid_parser)
++  add_subdirectory(apps/hello_pi)
++ endif()
++ 
++-- 
++1.9.1
++
+diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+index 0e88908..9bb2bfc 100644
+--- a/package/rpi-userland/Config.in
++++ b/package/rpi-userland/Config.in
+@@ -38,6 +38,11 @@ config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
+ 	  vcfiled is a daemon serving files to VideoCore from the host file
+ 	  system.
  
--CAN_UTILS_VERSION = 0eb1e3db2e20b0d895468363dbe6030cd8afa61c
-+CAN_UTILS_VERSION = f0abaaacb0a3f620f73dd6fd716d7daa3c36a8e3
- CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
- CAN_UTILS_AUTORECONF = YES
++config BR2_PACKAGE_RPI_USERLAND_HELLO
++	bool "hello_pi examples"
++	help
++	  Install the hello-pi examples to test the HW (GPU, camera...)
++
+ endif
  
+ comment "rpi-userland needs a toolchain w/ C++, threads, dynamic library"
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index e2eadb2..3a31733 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -28,6 +28,26 @@ define RPI_USERLAND_INSTALL_INIT_SYSTEMD
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
++
++RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
++
++define RPI_USERLAND_EXTRA_LIBS_TARGET
++	$(INSTALL) -m 0644 -D \
++		$(@D)/build/lib/libilclient.so \
++		$(TARGET_DIR)/usr/lib/libilcient.so
++endef
++RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_EXTRA_LIBS_TARGET
++
++define RPI_USERLAND_EXTRA_LIBS_STAGING
++	$(INSTALL) -m 0644 -D \
++		$(@D)/build/lib/libilclient.so \
++		$(STAGING_DIR)/usr/lib/libilcient.so
++endef
++RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_EXTRA_LIBS_STAGING
++
++endif # BR2_PACKAGE_RPI_USERLAND_HELLO
++
+ define RPI_USERLAND_POST_TARGET_CLEANUP
+ 	rm -f $(TARGET_DIR)/etc/init.d/vcfiled
+ 	rm -f $(TARGET_DIR)/usr/share/install/vcfiled
 -- 
-2.1.0
+1.9.1
