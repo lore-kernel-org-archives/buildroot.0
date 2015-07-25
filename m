@@ -1,51 +1,63 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 25 Jul 2015 23:48:01 +0200
-Subject: [Buildroot] [PATCH] Makefile: unexport O
-In-Reply-To: <1437851259-4539-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1437851259-4539-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <55B40411.4080403@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jul 2015 23:48:50 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5/qtwebsocket: remove GPLv2 license
+In-Reply-To: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
+References: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <20150725214850.GI1847@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guido,
+Julien, All,
 
-Le 25/07/2015 21:07, Guido Mart?nez a ?crit :
-> After bee5745ccc2 ("Makefile: don't depend on the umask"), any use
-> of "make O=<dir>" would leak $O into the enviroment for submakes,
-> and it's inherited by package makefiles. Some package makefiles have
-> protections to make sure they don't use the value of $O if it comes from
-> the enviroment (Linux), but some don't (uClibc).
+On 2015-07-24 10:04 +0200, Julien Corjon spake thusly:
+> This module loose his GPLv2 licensing option. Remains the LGPLv2.1 with
+> exception and LGPLv3 as the possible open-source licenses.
 > 
-> This caused build failures when using a different output dir.
-> 
-> Fix this by unconditionally unexporting the O variable, since we never
-> need to have it set in the environment for packages, it should be only
-> internally used by BR.
-> 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
+> Fixes:
+> http://autobuild.buildroot.net/results/6c80ba0669a7fc8cc60baaa849044fd65a78ce87/
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 
-Acked-by: Romain Naour <romain.naour@openwide.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Best regards,
-Romain Naour
+Regards,
+Yann E. MORIN.
 
 > ---
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
+>  package/qt5/qt5websockets/qt5websockets.mk | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 8b9c5d9..9059884 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -329,6 +329,7 @@ unexport CONFIG_SITE
->  unexport QMAKESPEC
->  unexport TERMINFO
->  unexport MACHINE
-> +unexport O
+> diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
+> index 2b257e1..1d7c1f1 100644
+> --- a/package/qt5/qt5websockets/qt5websockets.mk
+> +++ b/package/qt5/qt5websockets/qt5websockets.mk
+> @@ -11,10 +11,8 @@ QT5WEBSOCKETS_DEPENDENCIES = qt5base
+>  QT5WEBSOCKETS_INSTALL_STAGING = YES
 >  
->  GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
->  
+>  ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> -QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+> -# Source files contain references to LGPL_EXCEPTION.txt but it is not included
+> -# in the archive.
+> -QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
+> +QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3
+> +QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+>  else
+>  QT5WEBSOCKETS_LICENSE = Commercial license
+>  QT5WEBSOCKETS_REDISTRIBUTE = NO
+> -- 
+> 2.1.0
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
