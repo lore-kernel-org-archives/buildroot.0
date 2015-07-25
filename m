@@ -1,90 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 16:32:14 +0200
-Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: support building with
- toolchains without native RPC
-In-Reply-To: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150725143214.GG3662@free.fr>
+Date: Sat, 25 Jul 2015 16:32:57 +0200
+Subject: [Buildroot] [PATCH v7 1/1] rtl8821au: new package
+In-Reply-To: <55B38D80.9070605@lucaceresoli.net>
+References: <1437777122-28383-1-git-send-email-christian@paral.in>
+ <20150725101601.GB3662@free.fr> <55B38D80.9070605@lucaceresoli.net>
+Message-ID: <20150725143257.GH3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Luca, All,
 
-On 2015-07-24 22:08 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 2015-07-25 15:22 +0200, Luca Ceresoli spake thusly:
+> Yann E. MORIN wrote:
+> >Christian, Luca, All,
+> >
+> >Luca, a licensing question for you... ;-)
+> >
+> >On 2015-07-24 15:32 -0700, Christian Stewart spake thusly:
+> >>This patch adds the rtl8821au wifi driver. The driver is sourced from
+> >>ulli-kroll's work on GitHub, which includes various fixes and better LED
+> >>handling. Currently USB3 support is broken in this driver - it will
+> >>only connect to the EHCI controller in a USB3 port.
+> >>
+> >>Signed-off-by: Christian Stewart <christian@paral.in>
+> >[--SNIP--]
+> [...]
+> >>--- /dev/null
+> >>+++ b/package/rtl8821au/rtl8821au.mk
+> >>@@ -0,0 +1,21 @@
+> >>+################################################################################
+> >>+#
+> >>+# rtl8821au
+> >>+#
+> >>+################################################################################
+> >>+
+> >>+RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
+> >>+RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
+> >>+RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
+> >
+> >You forgot the licensing information:
+> >
+> >     RTL8821AU_LICENSE = GPLv2
+> >     RTL8821AU_LICENSE_FILES = COPYING
+> >
+> >Luca:
+> >
+> >Also, two firmware blobs are installed, and we have no licensing info
+> >for those two; usually it's a proprietary license.
+> >
+> >I wonder if/how we can reflect this in the licensing info above.
 > 
-> ltp-testsuite needs RPC, but this could also be provided by libtirpc.
+> I can't think of any option other than:
 > 
-> Since musl toolchains never have RPC support, this change would now allow
-> building of ltp-testsuite on musl toolchains. Unfortunately, ltp-testsuite
-> does not build yet with musl, so a specific check on musl is added.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  package/ltp-testsuite/Config.in        |  7 ++++---
->  package/ltp-testsuite/ltp-testsuite.mk | 14 ++++++++++++--
->  2 files changed, 16 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-> index 52c02ce..91b09ce 100644
-> --- a/package/ltp-testsuite/Config.in
-> +++ b/package/ltp-testsuite/Config.in
-> @@ -6,7 +6,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
->  	bool "ltp-testsuite"
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL
-> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>   RTL8821AU_LICENSE = GPLv2, proprietary (firmware blobs)
 
-libtirpc depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 so I
-wonder why you did not propagate this dependency here.
+OK for me. Thanks!
 
-However, that is not necessary, since that toolchain does provide native
-RPC, so we would not be selecting libtirpc with that toolchain.
-
-Maybe worth a comment?
-
->  	# does not build, cachectl.h issue
->  	depends on !BR2_nios2
->  	help
-> @@ -21,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
->  
->  	  http://ltp.sourceforge.net/
->  
-> -comment "ltp-testsuite needs a toolchain w/ RPC, threads"
-> +comment "ltp-testsuite needs a non-musl toolchain w/ threads"
-
-We usually use positive logic, like in samab4, libunwind or vlc:
-
-    comment "ltp-testsuite needs an (e)glibc or uClibc toolchain w/ threads"
-
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index 2d4f286..05ffaf1 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -19,8 +19,18 @@ endif
->  
->  # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
->  # support.
-> +LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
-> +LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
-> +
-> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> +LTP_TESTSUITE_DEPENDENCIES += libtirpc
-> +LTP_TESTSUITE_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-> +LTP_TESTSUITE_LDFLAGS += -ltirpc
-
-libtirpc install a .pc file, so why not use it, as in:
-
-    LTP_TESTSUITE_DEPENDENCIES += libtirpc host-pkgconf
-    LTP_TESTSUITE_CFLAGS += `$(HOST_PKG_CONFIG_BINARY) --cflags libtirpc`
-    LTP_TESTSUITE_LDFLAGS += `$(HOST_PKG_COFNIG_BINARY) --libs libtirpc`
-
-Shoehorn a --static when needed, too, for good measure.
+Christian, care to address those issues and respin, please?
+Thanks!
 
 Regards,
 Yann E. MORIN.
