@@ -1,55 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 19:13:11 +0200
-Subject: [Buildroot] [PATCH 13/47] package/kodi-platform: new package
-In-Reply-To: <1437597069-6448-14-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 25 Jul 2015 19:14:34 +0200
+Subject: [Buildroot] [PATCH 05/47] package/kodi: Add option for lirc
+ support
+In-Reply-To: <1437597069-6448-6-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-14-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150725171311.GQ3662@free.fr>
+ <1437597069-6448-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150725171433.GR3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brnd, All,
+Bernd, All,
 
 On 2015-07-22 22:30 +0200, Bernd Kuhls spake thusly:
-> This package is used by the PVR addon packages and has no use by itself,
-> therefore is does not show up in menuconfig.
+> https://github.com/xbmc/xbmc/commit/b641e1eea54b4b9ab7f1b95092ab0a755abc63be
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[--SNIP--]
-> diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-> new file mode 100644
-> index 0000000..22d7752
-> --- /dev/null
-> +++ b/package/kodi-platform/kodi-platform.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# kodi-platform
-> +#
-> +################################################################################
-> +
-> +KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
-> +KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
-> +KODI_PLATFORM_LICENSE = GPLv3+
-> +KODI_PLATFORM_LICENSE_FILES = COPYING
 
-First, the only two source files in there are GPLv2+, not v3+.
-
-Second, there's no COPYING file; there's even no licensing file at all.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +KODI_PLATFORM_INSTALL_STAGING = YES
-> +KODI_PLATFORM_DEPENDENCIES = libplatform kodi
+> ---
+>  package/kodi/Config.in |    5 +++++
+>  package/kodi/kodi.mk   |    6 ++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 62553d4..7d4b068 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -166,6 +166,11 @@ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic
+>  	depends on !BR2_GCC_VERSION_4_5_X
+>  	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
+>  
+> +config BR2_PACKAGE_KODI_LIRC
+> +	bool "lirc"
+> +	help
+> +	  Enable lirc support
 > +
-> +KODI_PLATFORM_CONF_OPTS += \
-> +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
+>  config BR2_PACKAGE_KODI_LIBMICROHTTPD
+>  	bool "web server"
+>  	select BR2_PACKAGE_LIBMICROHTTPD
+> diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+> index 0ab3114..f62f1a5 100644
+> --- a/package/kodi/kodi.mk
+> +++ b/package/kodi/kodi.mk
+> @@ -185,6 +185,12 @@ else
+>  KODI_CONF_OPTS += --disable-libcec
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
+> +KODI_CONF_OPTS += --enable-lirc
+> +else
+> +KODI_CONF_OPTS += --disable-lirc
+> +endif
 > +
-> +$(eval $(cmake-package))
+>  ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
+>  KODI_DEPENDENCIES += wavpack
+>  endif
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
