@@ -1,134 +1,92 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 14:15:31 +0200
-Subject: [Buildroot] [PATCH v5 1/1] mosh: new package
-In-Reply-To: <1437776690-23542-1-git-send-email-christian@paral.in>
-References: <1437776690-23542-1-git-send-email-christian@paral.in>
-Message-ID: <20150725121531.GC3662@free.fr>
+Date: Sat, 25 Jul 2015 14:19:50 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: support building with
+ toolchains without native RPC
+In-Reply-To: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20150725121950.GD3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+Thmoas, All,
 
-On 2015-07-24 15:24 -0700, Christian Stewart spake thusly:
-> Adding mosh, the mobile shell.
+On 2015-07-24 22:08 +0200, Thomas De Schampheleire spake thusly:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-[--SNIP--]
-> diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
-> new file mode 100644
-> index 0000000..f44e166
-> --- /dev/null
-> +++ b/package/mosh/0001-remove-system-locale-calls.patch
-> @@ -0,0 +1,49 @@
-> +From b6075c578d2104b58d55e088dccb74370019dde9 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Thu, 23 Jul 2015 13:52:35 -0700
-> +Subject: [PATCH 1/1] Remove system("locale") calls.
-> +
-> +The locale command is not available on many systems. As this variable
-> +is unused and appears to have been written with the intent of
-> +displaying the locale settings to the user, it's not really necessary.
-> +As this breaks Mosh on a lot of systems, it's best to remove the calls.
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
+> ltp-testsuite needs RPC, but this could also be provided by libtirpc.
+> 
+> Since musl toolchains never have RPC support, this change would now allow
+> building of ltp-testsuite on musl toolchains. Unfortunately, ltp-testsuite
+> does not build yet with musl, so a specific check on musl is added.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  package/ltp-testsuite/Config.in        |  7 ++++---
+>  package/ltp-testsuite/ltp-testsuite.mk | 14 ++++++++++++--
+>  2 files changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+> index 52c02ce..91b09ce 100644
+> --- a/package/ltp-testsuite/Config.in
+> +++ b/package/ltp-testsuite/Config.in
+> @@ -6,7 +6,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  	bool "ltp-testsuite"
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>  	# does not build, cachectl.h issue
+>  	depends on !BR2_nios2
+>  	help
+> @@ -21,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>  
+>  	  http://ltp.sourceforge.net/
+>  
+> -comment "ltp-testsuite needs a toolchain w/ RPC, threads"
+> +comment "ltp-testsuite needs a non-musl toolchain w/ threads"
+>  	depends on !BR2_nios2
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index 2d4f286..05ffaf1 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -19,8 +19,18 @@ endif
+>  
+>  # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+>  # support.
+> +LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+> +LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
 
-Maybe add that upstream does nt want this patch, like so:
-
-    Upstream status: refused, see:
-    https://github.com/keithw/mosh/issues/650
-
-[--SNIP--]
-> diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-> new file mode 100644
-> index 0000000..4013f80
-> --- /dev/null
-> +++ b/package/mosh/Config.in
-> @@ -0,0 +1,22 @@
-> +comment "mosh needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +comment "mosh needs a host architecture of x64 or x86"
-> +	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +	depends on !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
-> +
-> +config BR2_PACKAGE_MOSH
-> +	bool "mosh"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-
-In the previous iteration, Thomas asked why the host architecture had to
-be x86 or x86_64, which you still does not explain here.
-
-But looking at the dependencies of mosh, I see that it depends on
-protobuf, which has those dependencies, so here's how we usually note
-those inherited dependencies;
-
-    depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"  # protobuf
-
-so that reviewers understand why those dependencies exist. It is also
-usefull later on when maintaining the package; if protobuf were to ditch
-those dependencies, we can easily grep the tree for protobuf users and
-propagate the new dependencies.
-
-So, unless mosh itself needs a dependency, please add those comments at
-the end of the deps lines to explain where they are inherited from, like
-so:
-
-    depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
-
-> +	select BR2_PACKAGE_PROTOBUF
-> +	select BR2_PACKAGE_NCURSES
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_OPENSSH
-
-OpenSSH depends on MMU, which you forgot to propagate.
-
-However, we have another package, dropbear, that can provide an ssh
-client, so only want to conditionally select OpenSSH, like so;
-
-    select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
-
-[--SNIP--]
-> diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
-> new file mode 100644
-> index 0000000..dcb12fc
-> --- /dev/null
-> +++ b/package/mosh/mosh.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# mosh
-> +#
-> +################################################################################
-> +
-> +MOSH_VERSION = 1.2.5
-> +MOSH_SITE = https://mosh.mit.edu/mosh-$(MOSH_VERSION).tar.gz
-> +MOSH_DEPENDENCIES = zlib ncurses protobuf openssl
-
-Here, you build-depend on zlib, but you did not select it in Config.in.
-
-If mosh does need zlib, then you must also select it in the Config.in;
-otherwise do not add it here.
-
-> +MOSH_LICENSE = GPLv3+
-> +MOSH_LICENSE_FILES = COPYING COPYING.iOS
-
-The COPYING.iOS is adding an exception to the GPLv3, so I owuld change
-the licensing info to:
-
-    MOSH_LICENSE = GPLv3+ with exception
-    MOSH_LICENSE_FILES = COPYING COPYING.iOS
+This hunk does not seem to have anything to do with the issue at hand,
+namely RPC and musl, nor is it explained in the commit log. Care to
+explain why filtering it out is needed (in the commit log and a comment
+in the code), please?
 
 Regards,
 Yann E. MORIN.
 
-> +$(eval $(autotools-package))
+> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> +LTP_TESTSUITE_DEPENDENCIES += libtirpc
+> +LTP_TESTSUITE_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+> +LTP_TESTSUITE_LDFLAGS += -ltirpc
+> +endif
+> +
+>  LTP_TESTSUITE_CONF_ENV += \
+> -	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+> -	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+> +	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+> +	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+> +	LDFLAGS="$(LTP_TESTSUITE_LDFLAGS)"
+>  
+>  $(eval $(autotools-package))
 > -- 
-> 2.1.4
+> 1.8.5.1
 > 
 > _______________________________________________
 > buildroot mailing list
