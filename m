@@ -1,140 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 23:45:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: boost needs wchar
-In-Reply-To: <1437725693-21075-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1437725693-21075-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150725214528.GH1847@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 25 Jul 2015 23:48:01 +0200
+Subject: [Buildroot] [PATCH] Makefile: unexport O
+In-Reply-To: <1437851259-4539-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1437851259-4539-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <55B40411.4080403@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Hi Guido,
 
-On 2015-07-24 10:14 +0200, J?rg Krause spake thusly:
-> The most modules of boost needs a toolchain with wchar. To ease maintenance
-> we make the entire boost package depend on wchar.
+Le 25/07/2015 21:07, Guido Mart?nez a ?crit :
+> After bee5745ccc2 ("Makefile: don't depend on the umask"), any use
+> of "make O=<dir>" would leak $O into the enviroment for submakes,
+> and it's inherited by package makefiles. Some package makefiles have
+> protections to make sure they don't use the value of $O if it comes from
+> the enviroment (Linux), but some don't (uClibc).
 > 
-> Also add a reverse dependency to libftdipp1 and yaml-cpp.
+> This caused build failures when using a different output dir.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad233ff679be007d2953/
-> http://autobuild.buildroot.net/results/12f/12f544c97e3451fb2a72025ebc62292957e47070/
-> http://autobuild.buildroot.net/results/ef6/ef6c897ea7547e8ed5f019e8ce4473f0998f2c16/
-> http://autobuild.buildroot.net/results/7a0/7a0ab069c505696a7887ba5c561b76b233ce59d5/
+> Fix this by unconditionally unexporting the O variable, since we never
+> need to have it set in the environment for packages, it should be only
+> internally used by BR.
 > 
-> and more.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Romain Naour <romain.naour@openwide.fr>
 
-Regards,
-Yann E. MORIN.
+Best regards,
+Romain Naour
 
 > ---
->  package/boost/Config.in    | 13 +++----------
->  package/libftdi1/Config.in |  5 +++--
->  package/yaml-cpp/Config.in |  5 +++--
->  3 files changed, 9 insertions(+), 14 deletions(-)
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/boost/Config.in b/package/boost/Config.in
-> index 68004b6..ac70152 100644
-> --- a/package/boost/Config.in
-> +++ b/package/boost/Config.in
-> @@ -1,5 +1,5 @@
-> -comment "boost needs a toolchain w/ C++, threads"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +comment "boost needs a toolchain w/ C++, threads, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+> diff --git a/Makefile b/Makefile
+> index 8b9c5d9..9059884 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -329,6 +329,7 @@ unexport CONFIG_SITE
+>  unexport QMAKESPEC
+>  unexport TERMINFO
+>  unexport MACHINE
+> +unexport O
 >  
->  config BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  	bool
-> @@ -14,6 +14,7 @@ config BR2_PACKAGE_BOOST
->  	# that unfortunately doesn't work. Until someone fixes that,
->  	# let's depend on threads.
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_WCHAR
->  	help
->  	  A general purpose C++ library
+>  GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
 >  
-> @@ -77,10 +78,6 @@ config BR2_PACKAGE_BOOST_EXCEPTION
->  
->  config BR2_PACKAGE_BOOST_FILESYSTEM
->  	bool "boost-filesystem"
-> -	depends on BR2_USE_WCHAR
-> -
-> -comment "boost-filesystem needs a toolchain w/ wchar"
-> -	depends on !BR2_USE_WCHAR
->  
->  config BR2_PACKAGE_BOOST_GRAPH
->  	bool "boost-graph"
-> @@ -94,12 +91,8 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
->  	select BR2_PACKAGE_ZLIB
->  
->  config BR2_PACKAGE_BOOST_LOCALE
-> -	depends on BR2_USE_WCHAR
->  	bool "boost-locale"
->  
-> -comment "boost-locale needs a toolchain w/ wchar"
-> -	depends on !BR2_USE_WCHAR
-> -
->  config BR2_PACKAGE_BOOST_LOG
->  	bool "boost-log"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> diff --git a/package/libftdi1/Config.in b/package/libftdi1/Config.in
-> index 4a490a5..61d4c1c 100644
-> --- a/package/libftdi1/Config.in
-> +++ b/package/libftdi1/Config.in
-> @@ -15,11 +15,12 @@ config BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
->  	depends on BR2_INSTALL_LIBSTDCPP # boost
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +	depends on BR2_USE_WCHAR # boost
->  	help
->  	  C++ bindings for libftdi
->  
-> -comment "libftdipp1 needs a toolchain w/ C++"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +comment "libftdipp1 needs a toolchain w/ C++, wchar"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  
->  config BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS
-> diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
-> index 9e00b3d..3cfb955 100644
-> --- a/package/yaml-cpp/Config.in
-> +++ b/package/yaml-cpp/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_YAML_CPP
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> +	depends on BR2_USE_WCHAR # boost
->  	select BR2_PACKAGE_BOOST
->  	help
->  	  yaml-cpp is a YAML parser and emitter in C++ matching
-> @@ -10,6 +11,6 @@ config BR2_PACKAGE_YAML_CPP
->  
->  	  https://code.google.com/p/yaml-cpp/
->  
-> -comment "yaml-cpp needs a toolchain w/ C++, threads"
-> +comment "yaml-cpp needs a toolchain w/ C++, threads, wchar"
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-> -- 
-> 2.4.6
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
