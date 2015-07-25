@@ -1,134 +1,144 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 25 Jul 2015 12:13:59 +0200
-Subject: [Buildroot] [PATCH 2/2 v9] package/linux-backports: switch to
- using the kernel-module infra
-In-Reply-To: <be87567542fc8e3133115311bc25fd91df40ed38.1437688336.git.yann.morin.1998@free.fr>
-References: <cover.1437688336.git.yann.morin.1998@free.fr>
- <be87567542fc8e3133115311bc25fd91df40ed38.1437688336.git.yann.morin.1998@free.fr>
-Message-ID: <55B36167.7070707@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jul 2015 14:15:31 +0200
+Subject: [Buildroot] [PATCH v5 1/1] mosh: new package
+In-Reply-To: <1437776690-23542-1-git-send-email-christian@paral.in>
+References: <1437776690-23542-1-git-send-email-christian@paral.in>
+Message-ID: <20150725121531.GC3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
+Christian, All,
 
-Le 23/07/2015 23:55, Yann E. MORIN a ?crit :
-> linux-backports manually generates its autoconf.h header, which needs a
-> .config file.
+On 2015-07-24 15:24 -0700, Christian Stewart spake thusly:
+> Adding mosh, the mobile shell.
 > 
-> Using a pre- or post-configure hook does not really work, because
-> generating that file touches the .config, and thus our .stamp files ar
-> enot longer properly time-ordered and running a subsequent make would
-> incorrectly believe it has to rebuild linux-backports.
-> 
-> So, even though this is not a fixup proper, we generate that file from
-> the _KCONFIG_FIXUP_CMDS to ensure the stampt file is created after we
-> touch .config.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-Tested with a x86 3.2 kernel.
-Tested-by: Romain Naour <romain.naour@openwide.fr>
-
-> 
-> ---
-> Changes v8 -> v9:
->   - comment tricky constructs  (Thomas)
->   - use _KCONFIG_FIXUP_CMDS instead of POST_CONFIGURE_HOOKS
-> ---
->  package/linux-backports/linux-backports.mk | 48 +++++++++++++++++++-----------
->  1 file changed, 30 insertions(+), 18 deletions(-)
-> 
-> diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-> index e4ac9f4..44ac7e7 100644
-> --- a/package/linux-backports/linux-backports.mk
-> +++ b/package/linux-backports/linux-backports.mk
-> @@ -11,33 +11,44 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
->  LINUX_BACKPORTS_LICENSE = GPLv2
->  LINUX_BACKPORTS_LICENSE_FILES = COPYING
->  
-> -LINUX_BACKPORTS_DEPENDENCIES = linux
-> -
-> -LINUX_BACKPORTS_MAKE_OPTS = \
-> -	$(LINUX_MAKE_FLAGS) \
-> -	KLIB_BUILD=$(LINUX_DIR) \
-> -	KLIB=$(TARGET_DIR)
-> -
->  ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
->  LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
->  else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
->  LINUX_BACKPORTS_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE))
->  endif
->  
-> -define LINUX_BACKPORTS_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
-> -endef
-> -
-> -define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
-> -		-C $(LINUX_DIR) M=$(@D) \
-> -		INSTALL_MOD_DIR=backports \
-> -		modules_install
-> -endef
-> -
->  LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
->  LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
->  
-> +# linux-backports' build system expects the config options to be present
-> +# in the environment, and it is so when using their custom buildsystem,
-> +# because they are set in the main Makefile, which then calls a second
-> +# Makefile.
-> +#
-> +# In our case, we do not use that first Makefile. So, we parse the
-> +# .config file, filter-out comment lines and put the rest as command
-> +# line variables.
-> +#
-> +# LINUX_BACKPORTS_MAKE_OPTS is used by the kconfig-package infra, while
-> +# LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
-> +#
-> +LINUX_BACKPORTS_MAKE_OPTS = \
-> +	BACKPORT_DIR=$(@D) \
-> +	KLIB_BUILD=$(LINUX_DIR) \
-> +	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
-> +	INSTALL_MOD_DIR=backports \
-> +	`sed -r -e '/^\#/d;' $(@D)/.config`
-
-At first read, I was wondering why $(SED) wasn't used here, but since it
-contains -i option we can't use it here. So the .config is not modified.
-
-Thanks Yann for the explanation on IRC ;-)
-
-Thanks Petr for your initial work on this.
-
-Best regards,
-Romain
-
+> Signed-off-by: Christian Stewart <christian@paral.in>
+[--SNIP--]
+> diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
+> new file mode 100644
+> index 0000000..f44e166
+> --- /dev/null
+> +++ b/package/mosh/0001-remove-system-locale-calls.patch
+> @@ -0,0 +1,49 @@
+> +From b6075c578d2104b58d55e088dccb74370019dde9 Mon Sep 17 00:00:00 2001
+> +From: Christian Stewart <christian@paral.in>
+> +Date: Thu, 23 Jul 2015 13:52:35 -0700
+> +Subject: [PATCH 1/1] Remove system("locale") calls.
 > +
-> +LINUX_BACKPORTS_MODULE_MAKE_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+> +The locale command is not available on many systems. As this variable
+> +is unused and appears to have been written with the intent of
+> +displaying the locale settings to the user, it's not really necessary.
+> +As this breaks Mosh on a lot of systems, it's best to remove the calls.
 > +
-> +# This file is not automatically generated by 'oldconfig' that we use in
-> +# the kconfig-package infrastructure. In the linux buildsystem, it is
-> +# generated by running silentoldconfig, but that's not the case for
-> +# linux-backports: it uses a hand-crafted rule to generate that file.
-> +define LINUX_BACKPORTS_KCONFIG_FIXUP_CMDS
-> +	$(MAKE) -C $(@D) $(LINUX_BACKPORTS_MAKE_OPTS) backport-include/backport/autoconf.h
-> +endef
+> +Signed-off-by: Christian Stewart <christian@paral.in>
+
+Maybe add that upstream does nt want this patch, like so:
+
+    Upstream status: refused, see:
+    https://github.com/keithw/mosh/issues/650
+
+[--SNIP--]
+> diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+> new file mode 100644
+> index 0000000..4013f80
+> --- /dev/null
+> +++ b/package/mosh/Config.in
+> @@ -0,0 +1,22 @@
+> +comment "mosh needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 > +
->  # Checks to give errors that the user can understand
->  ifeq ($(BR_BUILDING),y)
->  
-> @@ -55,6 +66,7 @@ endif
->  
->  endif # BR_BUILDING
->  
-> +$(eval $(kernel-module))
->  $(eval $(kconfig-package))
->  
->  # linux-backports' own .config file needs options from the kernel's own
+> +comment "mosh needs a host architecture of x64 or x86"
+> +	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
+> +	depends on !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
+> +
+> +config BR2_PACKAGE_MOSH
+> +	bool "mosh"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+
+In the previous iteration, Thomas asked why the host architecture had to
+be x86 or x86_64, which you still does not explain here.
+
+But looking at the dependencies of mosh, I see that it depends on
+protobuf, which has those dependencies, so here's how we usually note
+those inherited dependencies;
+
+    depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"  # protobuf
+
+so that reviewers understand why those dependencies exist. It is also
+usefull later on when maintaining the package; if protobuf were to ditch
+those dependencies, we can easily grep the tree for protobuf users and
+propagate the new dependencies.
+
+So, unless mosh itself needs a dependency, please add those comments at
+the end of the deps lines to explain where they are inherited from, like
+so:
+
+    depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+
+> +	select BR2_PACKAGE_PROTOBUF
+> +	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_OPENSSH
+
+OpenSSH depends on MMU, which you forgot to propagate.
+
+However, we have another package, dropbear, that can provide an ssh
+client, so only want to conditionally select OpenSSH, like so;
+
+    select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
+
+[--SNIP--]
+> diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+> new file mode 100644
+> index 0000000..dcb12fc
+> --- /dev/null
+> +++ b/package/mosh/mosh.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# mosh
+> +#
+> +################################################################################
+> +
+> +MOSH_VERSION = 1.2.5
+> +MOSH_SITE = https://mosh.mit.edu/mosh-$(MOSH_VERSION).tar.gz
+> +MOSH_DEPENDENCIES = zlib ncurses protobuf openssl
+
+Here, you build-depend on zlib, but you did not select it in Config.in.
+
+If mosh does need zlib, then you must also select it in the Config.in;
+otherwise do not add it here.
+
+> +MOSH_LICENSE = GPLv3+
+> +MOSH_LICENSE_FILES = COPYING COPYING.iOS
+
+The COPYING.iOS is adding an exception to the GPLv3, so I owuld change
+the licensing info to:
+
+    MOSH_LICENSE = GPLv3+ with exception
+    MOSH_LICENSE_FILES = COPYING COPYING.iOS
+
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(autotools-package))
+> -- 
+> 2.1.4
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
