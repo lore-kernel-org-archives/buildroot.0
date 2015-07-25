@@ -1,54 +1,104 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 23:38:21 +0200
-Subject: [Buildroot] [PATCH] package/kyua: add atf reverse dependency
-In-Reply-To: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
-References: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150725213821.GF1847@free.fr>
+Date: Sat, 25 Jul 2015 23:42:14 +0200
+Subject: [Buildroot] [PATCH 1/1] ncurses: fix gcc 5 compile issue for
+	real
+In-Reply-To: <1437742843-26270-1-git-send-email-bas@bmail.ru>
+References: <1437742843-26270-1-git-send-email-bas@bmail.ru>
+Message-ID: <20150725214214.GG1847@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, all,
+Mikhail, All,
 
-On 2015-07-24 15:24 +0200, Romain Naour spake thusly:
-> atf package depends on BR2_USE_MMU, therefore kyua must
-> also depend on it.
+On 2015-07-24 16:00 +0300, kyak spake thusly:
+> The previous patch didn't work in all cases. The new patch is taken from
+> upstream: http://ncurses.scripts.mit.edu/?p=ncurses.git;a=commit;h=97bb4678dc03e753290b39bbff30ba2825df9517
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/929/9290a39d9b77e5a57e59912ce3d901149e9d6c11/
+> Fetch from: http://ncurses.scripts.mit.edu/?p=ncurses.git;a=blobdiff;f=ncurses/base/MKlib_gen.sh;h=b91398c740a266f10edbbce19f19c52b9709556f;hp=d8cc3c9751faa157d0c8cb8e16fbe4217703966b;hb=97bb4678dc03e753290b39bbff30ba2825df9517;hpb=762520a7930d7f698d542628d3c04bc201f7dac2
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Signed-off-by: Thomas E. Dickey <dickey@invisible-island.net>
+> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/kyua/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/ncurses/0002-gcc-5.x-MKlib_gen.patch | 60 +++++++++++++---------------
+>  1 file changed, 28 insertions(+), 32 deletions(-)
 > 
-> diff --git a/package/kyua/Config.in b/package/kyua/Config.in
-> index e1bcd48..4f887b0 100644
-> --- a/package/kyua/Config.in
-> +++ b/package/kyua/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_KYUA
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
->  	depends on !BR2_PACKAGE_LUAJIT # lutok
-> +	depends on BR2_USE_MMU # atf
->  	select BR2_PACKAGE_ATF
->  	select BR2_PACKAGE_LUTOK
->  	select BR2_PACKAGE_SQLITE
-> @@ -18,3 +19,4 @@ config BR2_PACKAGE_KYUA
->  comment "kyua needs a toolchain w/ C++ and full Lua"
->  	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
->  	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-> +	depends on BR2_USE_MMU
+> diff --git a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch b/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
+> index 0771208..fca7624 100644
+> --- a/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
+> +++ b/package/ncurses/0002-gcc-5.x-MKlib_gen.patch
+> @@ -1,33 +1,29 @@
+> -Fix GCC 5.x preprocessor failure
+> -
+> -Building ncurses 5.9 with GCC 5.x fails with a syntax error, caused by
+> -earlier preprocessing. This failure is more likely when building for
+> -host (e.g. host-ncurses) that recently updated to GCC 5.x.
+> -
+> -This patch is taken from the following link (more information is also
+> -available here):
+> -https://groups.google.com/forum/#!topic/sage-trac/U31shviuqzk
+> -
+> -Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> -
+> -Index: b/ncurses/base/MKlib_gen.sh
+> -===================================================================
+> ---- a/ncurses/base/MKlib_gen.sh
+> -+++ b/ncurses/base/MKlib_gen.sh
+> -@@ -62,7 +62,15 @@ if test "${LC_MESSAGES+set}" = set; then
+> - if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
+> - if test "${LC_COLLATE+set}"  = set; then LC_COLLATE=C;  export LC_COLLATE;  fi
+> - 
+> --preprocessor="$1 -DNCURSES_INTERNALS -I../include"
+> -+# Work around "unexpected" output of GCC 5.1.0's cpp w.r.t. #line directives
+> -+# by simply suppressing them:
+> -+case `$1 -dumpversion 2>/dev/null` in
+> -+	5.[01].*)  # assume a "broken" one
+> -+		preprocessor="$1 -P -DNCURSES_INTERNALS -I../include"
+> -+		;;
+> -+	*)
+> -+		preprocessor="$1 -DNCURSES_INTERNALS -I../include"
+> -+esac
+> - AWK="$2"
+> - USE="$3"
+> +--- a/ncurses/base/MKlib_gen.sh.orig	2015-07-23 21:52:32.239481505 +0300
+> ++++ b/ncurses/base/MKlib_gen.sh	2015-07-23 21:53:20.772966587 +0300
+> +@@ -437,11 +437,22 @@
+> + 	-e 's/gen_$//' \
+> + 	-e 's/  / /g' >>$TMP
+>   
+> ++cat >$ED1 <<EOF
+> ++s/  / /g
+> ++s/^ //
+> ++s/ $//
+> ++s/P_NCURSES_BOOL/NCURSES_BOOL/g
+> ++EOF
+> ++
+> ++# A patch discussed here:
+> ++#       https://gcc.gnu.org/ml/gcc-patches/2014-06/msg02185.html
+> ++# introduces spurious #line markers.  Work around that by ignoring the system's
+> ++# attempt to define "bool" and using our own symbol here.
+> ++sed -e 's/bool/P_NCURSES_BOOL/g' $TMP > $ED2
+> ++cat $ED2 >$TMP
+> ++
+> + $preprocessor $TMP 2>/dev/null \
+> +-| sed \
+> +-	-e 's/  / /g' \
+> +-	-e 's/^ //' \
+> +-	-e 's/_Bool/NCURSES_BOOL/g' \
+> ++| sed -f $ED1 \
+> + | $AWK -f $AW2 \
+> + | sed -f $ED3 \
+> + | sed \
 > -- 
-> 2.4.3
+> 2.4.6
 > 
 > _______________________________________________
 > buildroot mailing list
