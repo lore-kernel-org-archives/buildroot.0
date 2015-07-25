@@ -1,70 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 14:40:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: Fix static compile
-In-Reply-To: <1437763107-19489-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1437763107-19489-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150725124006.GE3662@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 25 Jul 2015 15:12:22 +0200
+Subject: [Buildroot] [PATCH 1/1] ltp-testsuite: support building with
+	toolchains without native RPC
+In-Reply-To: <20150725121950.GD3662@free.fr>
+References: <1437768487-27179-1-git-send-email-patrickdepinguin@gmail.com>
+ <20150725121950.GD3662@free.fr>
+Message-ID: <E2B4183D-A17C-4117-8FB4-879DC988B634@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, all,
+Hi Yann,
 
-On 2015-07-24 20:38 +0200, Bernd Kuhls spake thusly:
-> Fixes
-> http://autobuild.buildroot.net/results/aeb/aeb5481526497a01ada8ee9403f282a2374b0383/
-> http://autobuild.buildroot.net/results/255/25536df514477f3210caf4af27f2f107683f7fb2/
-> http://autobuild.buildroot.net/results/fa1/fa11cb360190b02d08e74997b0abc73079760dfa/
-> and many others
-> 
-> This is a follow-up for these patches:
-> http://patchwork.ozlabs.org/patch/493360/
-> http://patchwork.ozlabs.org/patch/416007/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On July 25, 2015 2:19:50 PM CEST, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>Thmoas, All,
+>
+>On 2015-07-24 22:08 +0200, Thomas De Schampheleire spake thusly:
+>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>> 
+>> ltp-testsuite needs RPC, but this could also be provided by libtirpc.
+>> 
+>> Since musl toolchains never have RPC support, this change would now
+>allow
+>> building of ltp-testsuite on musl toolchains. Unfortunately,
+>ltp-testsuite
+>> does not build yet with musl, so a specific check on musl is added.
+>> 
+>> Signed-off-by: Thomas De Schampheleire
+><thomas.de.schampheleire@gmail.com>
+>> ---
+>>  package/ltp-testsuite/Config.in        |  7 ++++---
+>>  package/ltp-testsuite/ltp-testsuite.mk | 14 ++++++++++++--
+>>  2 files changed, 16 insertions(+), 5 deletions(-)
+>> 
+>> diff --git a/package/ltp-testsuite/Config.in
+>b/package/ltp-testsuite/Config.in
+>> index 52c02ce..91b09ce 100644
+>> --- a/package/ltp-testsuite/Config.in
+>> +++ b/package/ltp-testsuite/Config.in
+>> @@ -6,7 +6,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>>  	bool "ltp-testsuite"
+>>  	depends on BR2_USE_MMU # fork()
+>>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+>> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>>  	# does not build, cachectl.h issue
+>>  	depends on !BR2_nios2
+>>  	help
+>> @@ -21,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+>>  
+>>  	  http://ltp.sourceforge.net/
+>>  
+>> -comment "ltp-testsuite needs a toolchain w/ RPC, threads"
+>> +comment "ltp-testsuite needs a non-musl toolchain w/ threads"
+>>  	depends on !BR2_nios2
+>>  	depends on BR2_USE_MMU
+>> -	depends on !BR2_TOOLCHAIN_HAS_THREADS ||
+>!BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+>> diff --git a/package/ltp-testsuite/ltp-testsuite.mk
+>b/package/ltp-testsuite/ltp-testsuite.mk
+>> index 2d4f286..05ffaf1 100644
+>> --- a/package/ltp-testsuite/ltp-testsuite.mk
+>> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+>> @@ -19,8 +19,18 @@ endif
+>>  
+>>  # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+>>  # support.
+>> +LTP_TESTSUITE_CFLAGS = $(filter-out
+>-D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
+>> +LTP_TESTSUITE_CPPFLAGS = $(filter-out
+>-D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
+>
+>This hunk does not seem to have anything to do with the issue at hand,
+>namely RPC and musl, nor is it explained in the commit log. Care to
+>explain why filtering it out is needed (in the commit log and a comment
+>in the code), please?
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested the first build failre]
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+These lines were already in that file (see removes below); I left the comment clarifying it. 
+I just introduced intermediate variables to cleanly handle the tirpc changes.
 
-Regards,
-Yann E. MORIN.
+>
+>> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+>> +LTP_TESTSUITE_DEPENDENCIES += libtirpc
+>> +LTP_TESTSUITE_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+>> +LTP_TESTSUITE_LDFLAGS += -ltirpc
+>> +endif
+>> +
+>>  LTP_TESTSUITE_CONF_ENV += \
+>> -	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+>> -	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
 
-> ---
->  package/minidlna/minidlna.mk |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-> index 3a9ad41..e0b5da1 100644
-> --- a/package/minidlna/minidlna.mk
-> +++ b/package/minidlna/minidlna.mk
-> @@ -17,8 +17,10 @@ MINIDLNA_DEPENDENCIES = \
->  ifeq ($(BR2_STATIC_LIBS),y)
->  # the configure script / Makefile forgets to link with some of the dependent
->  # libraries breaking static linking, so help it along
-> -MINIDLNA_CONF_ENV = \
-> -	LIBS='-lavformat -lavcodec -lavutil -logg -lz -lpthread -lm'
-> +MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static libavcodec`
-> +MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static libexif`
-> +MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static libvorbis`
-> +MINIDLNA_CONF_ENV += LIBS="$(MINIDLNA_STATIC_LIBS) $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
->  else
->  MINIDLNA_CONF_OPTS = \
->  	--disable-static
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+---------^
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>> +	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+>> +	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+>> +	LDFLAGS="$(LTP_TESTSUITE_LDFLAGS)"
+>>  
+>>  $(eval $(autotools-package))
+
+/Thomas
