@@ -1,52 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 23:22:16 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Fix mips compile
-In-Reply-To: <1437761628-4558-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1437761628-4558-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150725212216.GC1847@free.fr>
+Date: Sat, 25 Jul 2015 23:28:07 +0200
+Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
+In-Reply-To: <1437749654-29431-1-git-send-email-bas@bmail.ru>
+References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
+Message-ID: <20150725212807.GD1847@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Mikhail, All,
 
-On 2015-07-24 20:13 +0200, Bernd Kuhls spake thusly:
-> buildroot has no support for msa, CONFIG_CPU_HAS_MSA is not enabled in
-> kernel config.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/030/03055aa696e9e885baabb43fff613d751974a4b7//
-> http://autobuild.buildroot.net/results/6b5/6b5c13c949e8ae23f1b58c6da4002371130e9bb3//
-> http://autobuild.buildroot.net/results/1af/1af3c68bc21503438fb0066f5e51e82e35a5442b//
-> and many others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 2015-07-24 17:54 +0300, kyak spake thusly:
+> With some hosts, xterm configure script fails to detect presence of
+> libICE. This results in error during xterm linking stage, because -lICE
+> is not passed to linker. This patches forces configure script to detect
+> libICE.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Could you share the error message you get, with some mor einfo about
+your host that exhibit the issue, please?
+
+Also, a defconfig to reproduce the build would be helpful! ;-)
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
 > ---
->  package/ffmpeg/ffmpeg.mk |    1 +
+>  package/xterm/xterm.mk | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 0162db2..28c6012 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -41,6 +41,7 @@ FFMPEG_CONF_OPTS = \
->  	--enable-runtime-cpudetect \
->  	--disable-hardcoded-tables \
->  	--disable-memalign-hack \
-> +	--disable-msa \
->  	--enable-hwaccels \
->  	--disable-avisynth \
->  	--disable-frei0r \
+> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+> index 56f692d..dd07e35 100644
+> --- a/package/xterm/xterm.mk
+> +++ b/package/xterm/xterm.mk
+> @@ -11,5 +11,6 @@ XTERM_DEPENDENCIES = ncurses xlib_libXaw
+>  XTERM_LICENSE = MIT
+>  XTERM_LICENSE_FILES = version.c
+>  XTERM_CONF_OPTS = --enable-256-color
+> +XTERM_CONF_ENV = ac_cv_lib_ICE_IceConnectionNumber=yes
+>  
+>  $(eval $(autotools-package))
 > -- 
-> 1.7.10.4
+> 2.4.6
 > 
 > _______________________________________________
 > buildroot mailing list
