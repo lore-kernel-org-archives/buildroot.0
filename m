@@ -1,102 +1,104 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 25 Jul 2015 11:24:40 +0200
-Subject: [Buildroot] [PATCH] ARC: update tools to arc-2015.06 release
-In-Reply-To: <20150718031758.GA21884@fox>
-References: <1436964678-24352-1-git-send-email-abrodkin@synopsys.com>
- <55A8EAF7.5060506@openwide.fr> <20150717222354.GE3637@free.fr>
- <20150717225415.GF3637@free.fr> <20150718031758.GA21884@fox>
-Message-ID: <55B355D8.4070900@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Jul 2015 12:01:50 +0200
+Subject: [Buildroot] [PATCH v7 1/1] rtl8821au: new package
+In-Reply-To: <1437777122-28383-1-git-send-email-christian@paral.in>
+References: <1437777122-28383-1-git-send-email-christian@paral.in>
+Message-ID: <20150725100150.GA3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Guido,
+Christian, All,
 
-Le 18/07/2015 05:17, Guido Mart?nez a ?crit :
-> Hi Yann, all,
+On 2015-07-24 15:32 -0700, Christian Stewart spake thusly:
+> This patch adds the rtl8821au wifi driver. The driver is sourced from
+> ulli-kroll's work on GitHub, which includes various fixes and better LED
+> handling. Currently USB3 support is broken in this driver - it will
+> only connect to the EHCI controller in a USB3 port.
 > 
-> On Sat, Jul 18, 2015 at 12:54:15AM +0200, Yann E. MORIN wrote:
->> Romain, All,
->>
->> On 2015-07-18 00:23 +0200, Yann E. MORIN spake thusly:
->>> On 2015-07-17 13:45 +0200, Romain Naour spake thusly:
->>> [--SNIP--]
->>>> Your patch looks good, but I have a build failure with uclibc:
->>>>
->>>> make O=test/arc/ toolchain 2>&1 | tee build-arc-toolchain.log
->> [--SNIP--]
->>> OK, I was able to reproduce the error. [...]
->>
->> Here's a patch that does fix the issue.
->>
->> Tested on-top of master, with:
->>   - in-tree build
->>   - out-of-tree build without makefile wrapper (Romain's use-case)
->>   - out-of-tree build with makefile wrapper (my use-case)
->>
->> They all worked at least so far as to build uclibc (make uclibc);
->> nothing more was attempted).
->>
->> The change is not unlike what we already had to test where O was coming
->> from, but we just reverse the logic to keep only what we're interested
->> in, and we forcibly unexport O.
->>
->> I'm not really happy with the patch to start with (hence I'm not
->> officially pushing it):
->>
->>     diff --git a/Makefile b/Makefile
->>     index 531ac5d..5abca65 100644
->>     --- a/Makefile
->>     +++ b/Makefile
->>     @@ -29,11 +29,16 @@ UMASK=0022
->>      ifneq ($(shell umask),$(UMASK))
->>      .PHONY: all $(MAKECMDGOALS)
->>      
->>     +ifeq ($(origin O),command line)
->>     +EXTRAMAKEARGS = O=$(O)
->>     +endif
->>     +unexport O
->>     +
->>      all:
->>     -	@umask $(UMASK) && $(MAKE  ) --no-print-directory
->>     +	@umask $(UMASK) && $(MAKE) $(EXTRAMAKEARGS) -- no-print-directory
->>      
->>      $(MAKECMDGOALS):
->>     -	@umask $(UMASK) && $(MAKE) --n o-print-directory $@
->>     +	@umask $(UMASK) && $(MAKE) $(EXTRAMAKEARGS) --no   -print-directory $@
->>      
->>      else # umask
-> 
-> This works OK. But I think something like:
-> 
-> 	diff --git a/Makefile b/Makefile
-> 	index afdf554..df52c85 100644
-> 	--- a/Makefile
-> 	+++ b/Makefile
-> 	@@ -329,6 +329,7 @@ unexport CONFIG_SITE
-> 	 unexport QMAKESPEC
-> 	 unexport TERMINFO
-> 	 unexport MACHINE
-> 	+unexport O
-> 
-> 	 GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
-> 
-> does too. Maybe I'm missing something, but I don't think we would ever
-> want to export $(O) to any of the package Makefiles, the same way we
-> don't export $(CC).
-> 
-> Note that $(origin O) will still be "command line" in the sub-make after
-> setting the umask, since "O=..." will be set in $(MAKEFLAGS), thus there
-> shouldn't be a difference in the run.
-> 
-> I tested those 3 cases you mentioned and they work OK, but I'll run full
-> builds in a minute.
-> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+[--SNIP--]
+> index 0000000..de6fc62
+> --- /dev/null
+> +++ b/package/rtl8821au/0001-disable-default-debug.patch
+> @@ -0,0 +1,24 @@
+> +Comment out the hardcoded debug defines. If extra debug is needed, we can add it
+> +as a define in the make flags.
+> +
+> +Signed-off-by: Christian Stewart <christian@paral.in>
 
-Can you send a proper patch to the list please?
-I'm using this change and it fixes the uClibc-ng build without regression so far.
+I see that Ulli has already accepted to change that in his tree. Great
+that you guys can work together on this! :-)
 
-Best regards,
-Romain Naour
+> diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
+> new file mode 100644
+> index 0000000..d54d3c3
+> --- /dev/null
+> +++ b/package/rtl8821au/rtl8821au.hash
+> @@ -0,0 +1 @@
+> +sha256 93beaf608880ecbca03bbeb8251b91d16e17724b36158b0571d1cebb7b4e5914  rtl8821au-f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d.tar.gz
+
+No hash when using a git sha1, see:
+    http://buildroot.net/downloads/manual/manual.html#adding-packages-hash
+
+    Note. If libfoo is from GitHub (see Section 17.17.2, "How to add a
+    package from GitHub" for details), we can only accept a .hash file
+    if the package is a released (e.g. uploaded by the maintainer)
+    tarball. Otherwise, the automatically generated tarball may change
+    over time, and thus its hashes may be different each time it is
+    downloaded, causing a .hash mismatch for that tarball.
+
+> diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+> new file mode 100644
+> index 0000000..42f4cdd
+> --- /dev/null
+> +++ b/package/rtl8821au/rtl8821au.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# rtl8821au
+> +#
+> +################################################################################
+> +
+> +RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
+> +RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
+> +RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
+> +
+> +RTL8821AU_MODULE_MAKE_OPTS = \
+> +	CONFIG_RTL8812AU_8821AU=m \
+> +	KVER=$(LINUX_VERSION_PROBED) \
+> +	USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
+> +
+> +define RTL8821AU_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
+
+You must create the target directory first, otherwise you'd get an error
+like:
+
+    install: target '....lib/firmware/rtlwifi/' is not a directory: No
+    such file or directory
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+> +$(eval $(kernel-module))
+> +$(eval $(generic-package))
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
