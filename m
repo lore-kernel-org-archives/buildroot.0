@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 18:55:00 +0200
-Subject: [Buildroot] [PATCH 02/47] package/libplatform: new package
-In-Reply-To: <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 25 Jul 2015 19:01:25 +0200
+Subject: [Buildroot] [PATCH 01/47] package/libsquish: New package
+In-Reply-To: <1437597069-6448-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150725165500.GN3662@free.fr>
+ <1437597069-6448-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150725170125.GO3662@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +14,69 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2015-07-22 22:30 +0200, Bernd Kuhls spake thusly:
-> Needed by libcec 3.x
+> Kodi 15.0 contains an updated version of libsquish:
+> https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
+> 
+> The OpenElec project provides a separate tarball including the Kodi-
+> specific patches:
+> http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
+> 
+> This patch contains the relevant diff between upstream libsquish 1.13
+> and the OpenElec tarball.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 [--SNIP--]
-> diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+> diff --git a/package/libsquish/libsquish.mk b/package/libsquish/libsquish.mk
 > new file mode 100644
-> index 0000000..77fbcec
+> index 0000000..f6b93c8
 > --- /dev/null
-> +++ b/package/libplatform/libplatform.mk
-> @@ -0,0 +1,16 @@
+> +++ b/package/libsquish/libsquish.mk
+> @@ -0,0 +1,35 @@
 > +################################################################################
 > +#
-> +# libplatform
+> +# libsquish
 > +#
 > +################################################################################
 > +
-> +LIBPLATFORM_VERSION = 1.0.10
-> +LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
-> +LIBPLATFORM_LICENSE = GPLv3+
+> +LIBSQUISH_VERSION = 1.13
+> +LIBSQUISH_SOURCE = libsquish-$(LIBSQUISH_VERSION).tgz
+> +LIBSQUISH_SITE = http://downloads.sourceforge.net/project/libsquish
+> +LIBSQUISH_INSTALL_STAGING = YES
+> +LIBSQUISH_STRIP_COMPONENTS = 0
+> +LIBSQUISH_LICENSE = MIT
+> +LIBSQUISH_LICENSE_FILES = README
 
-I could only see references to GPLv2+, not v+
+There is a LICENSE file, too.
 
-Also, a file is under the PHP-3.0.1 licences: src/util/fstrcmp.c
-
-> +LIBPLATFORM_LICENSE_FILES = COPYING
-
-There's no COPYING file. There's in fact no file with the licensing
-information.
-
-> +LIBPLATFORM_INSTALL_STAGING = YES
+> +define LIBSQUISH_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
 > +
-> +LIBPLATFORM_CONF_OPTS += \
-> +	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
+> +define LIBSQUISH_INSTALL_STAGING_CMDS
+> +	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
+> +		PREFIX=/usr INSTALL_DIR=$(STAGING_DIR)/usr
+> +	$(INSTALL) -m 644 $(@D)/squish.pc $(STAGING_DIR)/usr/lib/pkgconfig
+> +	ln -sf libsquish.so.0.0 $(STAGING_DIR)/usr/lib/libsquish.so
+> +endef
+> +
+> +define LIBSQUISH_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/usr/include/
+> +	mkdir -p $(TARGET_DIR)/usr/lib/pkgconfig/
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
+> +		PREFIX=/usr INSTALL_DIR=$(TARGET_DIR)/usr
+> +	ln -sf libsquish.so.0.0 $(TARGET_DIR)/usr/lib/libsquish.so
 
-Why do you hard-code the path to the kodi directory? Can't libplatform
-be used for anything else?
+The .so symlink is not needed in the target, since it is only needed by
+ld at runtime.
+
+However, the library's SONAME is libsquish.so.0 so even with this
+symlink it would not be possible to fund the library at runtime.
+
+Either rename the library, or symlink it as libsquish.so.0
 
 Regards,
 Yann E. MORIN.
-
-> +$(eval $(cmake-package))
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
