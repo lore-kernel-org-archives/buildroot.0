@@ -1,86 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 23:36:10 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain-external wrapper: don't pass
- march/mcpu if mtune is on cmdline
-In-Reply-To: <1437747278-6331-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1437747278-6331-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150725213610.GE1847@free.fr>
+Date: Sat, 25 Jul 2015 23:38:21 +0200
+Subject: [Buildroot] [PATCH] package/kyua: add atf reverse dependency
+In-Reply-To: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
+References: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150725213821.GF1847@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Romain, all,
 
-On 2015-07-24 16:14 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 2015-07-24 15:24 +0200, Romain Naour spake thusly:
+> atf package depends on BR2_USE_MMU, therefore kyua must
+> also depend on it.
 > 
-> Before commit 5715d2dcf48a39c16a3f3e41c97109613fed121d, the external
-> toolchain wrapper would not pass its own march/mcpu/mtune flags to the real
-> compiler if at least one of them was passed on the wrapper command-line.
+> Fixes:
+> http://autobuild.buildroot.net/results/929/9290a39d9b77e5a57e59912ce3d901149e9d6c11/
 > 
-> The mentioned commit intended to remove the passing of an mtune parameter
-> coming from Buildroot, which was always empty after some other refactoring,
-> but the changes have the side-effect that march/mcpu is now also passed when
-> mtune is already given on the command-line. In that case, only mtune should
-> be passed to the real compiler.
-> 
-> Restore part of the original toolchain wrapper code to check the presence of
-> mtune on the command-line.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-I do agree on principle, yet...
-
-> ---
->  toolchain/toolchain-external/ext-toolchain-wrapper.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> index e2d01dc..f84b840 100644
-> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> @@ -35,9 +35,10 @@ static char sysroot[PATH_MAX];
->   * Currently, we have:
->   * 	-mfloat-abi=
->   * 	-march=
-> + * 	-mtune=
->   * 	-mcpu=
->   */
-> -#define EXCLUSIVE_ARGS	3
-> +#define EXCLUSIVE_ARGS	4
-
-We're never passing -mtune anymore, so why do you want to reserver space
-for it?
-
-As far as I understand, the code you resotred is only checking for an
-already-present -mtune, and if so, does not append -march/-mcpu. So we
-do not need to reseerve more space than for the three args we may
-append. Unless I mised something?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  static char *predef_args[] = {
->  	path,
-> @@ -177,11 +178,12 @@ int main(int argc, char **argv)
->  
->  #if defined(BR_ARCH) || \
->      defined(BR_CPU)
-> -	/* Add our -march/cpu/abi flags, but only if none are
-> -	 * already specified on the commandline
-> +	/* Add our -march/cpu flags, but only if none of
-> +	 * -march/mtune/mcpu are already specified on the commandline
->  	 */
->  	for (i = 1; i < argc; i++) {
->  		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
-> +		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
->  		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
->  			break;
->  	}
+> ---
+>  package/kyua/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/kyua/Config.in b/package/kyua/Config.in
+> index e1bcd48..4f887b0 100644
+> --- a/package/kyua/Config.in
+> +++ b/package/kyua/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_KYUA
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
+>  	depends on !BR2_PACKAGE_LUAJIT # lutok
+> +	depends on BR2_USE_MMU # atf
+>  	select BR2_PACKAGE_ATF
+>  	select BR2_PACKAGE_LUTOK
+>  	select BR2_PACKAGE_SQLITE
+> @@ -18,3 +19,4 @@ config BR2_PACKAGE_KYUA
+>  comment "kyua needs a toolchain w/ C++ and full Lua"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
+>  	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+> +	depends on BR2_USE_MMU
 > -- 
-> 1.8.5.1
+> 2.4.3
 > 
 > _______________________________________________
 > buildroot mailing list
