@@ -1,124 +1,156 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 25 Jul 2015 10:15:43 -0700
-Subject: [Buildroot] [PATCH v8 1/1] rtl8821au: new package
-Message-ID: <1437844543-5935-1-git-send-email-christian@paral.in>
+Date: Sat, 25 Jul 2015 10:22:52 -0700
+Subject: [Buildroot] [PATCH v6 1/1] mosh: new package
+Message-ID: <1437844972-11261-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the rtl8821au wifi driver. The driver is sourced from
-ulli-kroll's work on GitHub, which includes various fixes and better LED
-handling. Currently USB3 support is broken in this driver - it will
-only connect to the EHCI controller in a USB3 port.
+Adding mosh, the mobile shell. Mosh uses ssh or dropbear as an initial transport to
+start mosh-server which uses UDP to communicate with the client.
+Supports a predictive model to enhance performance on weak connections
+and compensate for general lag. Also supports disconnections and
+reconnections seamlessly.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
 
 [All:
-  - Fixed licensing information]
-  - Removed hash file]
-  - Altered firmware install to be a post-install hook]
+  - Fixed licensing issues
+  - Fixed dependencies
+  - Added note about upstream logging rejection]
 
  package/Config.in                                  |  1 +
- package/rtl8821au/0001-disable-default-debug.patch | 24 ++++++++++++++++++++
- package/rtl8821au/Config.in                        | 10 +++++++++
- package/rtl8821au/rtl8821au.mk                     | 26 ++++++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 package/rtl8821au/0001-disable-default-debug.patch
- create mode 100644 package/rtl8821au/Config.in
- create mode 100644 package/rtl8821au/rtl8821au.mk
+ package/mosh/0001-remove-system-locale-calls.patch | 46 ++++++++++++++++++++++
+ package/mosh/Config.in                             | 23 +++++++++++
+ package/mosh/mosh.hash                             |  1 +
+ package/mosh/mosh.mk                               | 13 ++++++
+ 5 files changed, 84 insertions(+)
+ create mode 100644 package/mosh/0001-remove-system-locale-calls.patch
+ create mode 100644 package/mosh/Config.in
+ create mode 100644 package/mosh/mosh.hash
+ create mode 100644 package/mosh/mosh.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cfa7512..070ec6a 100644
+index cfa7512..d1e6640 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -404,6 +404,7 @@ endif
- 	source "package/read-edid/Config.in"
- 	source "package/rng-tools/Config.in"
- 	source "package/rpi-userland/Config.in"
-+	source "package/rtl8821au/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/setserial/Config.in"
-diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
+@@ -1250,6 +1250,7 @@ endif
+ 	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
+ 	source "package/monkey/Config.in"
++	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+ 	source "package/mtr/Config.in"
+diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
 new file mode 100644
-index 0000000..de6fc62
+index 0000000..114e6ed
 --- /dev/null
-+++ b/package/rtl8821au/0001-disable-default-debug.patch
-@@ -0,0 +1,24 @@
-+Comment out the hardcoded debug defines. If extra debug is needed, we can add it
-+as a define in the make flags.
++++ b/package/mosh/0001-remove-system-locale-calls.patch
+@@ -0,0 +1,46 @@
++The locale command is not available on many systems. As this variable
++is unused and appears to have been written with the intent of
++displaying the locale settings to the user, it's not really necessary.
++As this breaks Mosh on a lot of systems, it's best to remove the calls.
++
++Upstream status: refused, see: https://github.com/keithw/mosh/issues/650
 +
 +Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ src/frontend/mosh-server.cc | 4 +++-
++ src/frontend/stmclient.cc   | 4 +++-
++ 2 files changed, 6 insertions(+), 2 deletions(-)
 +
-+diff --git a/include/autoconf.h b/include/autoconf.h
-+--- a/include/autoconf.h
-++++ b/include/autoconf.h
-+@@ -130,12 +130,12 @@
-+ /*
-+  * Debug Related Config
-+  */
-+-#define DBG	1
-++//#define DBG	1
++diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
++index 76ed2ed..0d2f222 100644
++--- a/src/frontend/mosh-server.cc
+++++ b/src/frontend/mosh-server.cc
++@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
++       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
++       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
++       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
++-      int unused __attribute((unused)) = system( "locale" );
+++
+++      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
+++
++       exit( 1 );
++     }
++   }
++diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
++index 9e4d916..06fac8b 100644
++--- a/src/frontend/stmclient.cc
+++++ b/src/frontend/stmclient.cc
++@@ -85,7 +85,9 @@ void STMClient::init( void )
 + 
-+-#define CONFIG_DEBUG /* DBG_871X, etc... */
-++//#define CONFIG_DEBUG /* DBG_871X, etc... */
-+ //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
++     fprintf( stderr, "mosh-client needs a UTF-8 native locale to run.\n\n" );
++     fprintf( stderr, "Unfortunately, the client's environment (%s) specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(), native_charset.c_str() );
++-    int unused __attribute((unused)) = system( "locale" );
+++
+++    fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
+++
++     exit( 1 );
++   }
 + 
-+-#define CONFIG_PROC_DEBUG
-++//#define CONFIG_PROC_DEBUG
-+ 
-+ 
-+ //#define DBG_TX
-diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
++-- 
++2.1.4
++
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
 new file mode 100644
-index 0000000..9827ad5
+index 0000000..632a190
 --- /dev/null
-+++ b/package/rtl8821au/Config.in
-@@ -0,0 +1,10 @@
-+comment "rtl8821au needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
++++ b/package/mosh/Config.in
+@@ -0,0 +1,23 @@
++comment "mosh needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 +
-+config BR2_PACKAGE_RTL8821AU
-+	bool "rtl8821au"
-+	depends on BR2_LINUX_KERNEL
++comment "mosh needs a host architecture of x64 or x86"
++	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
++	depends on !(BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86")
++
++config BR2_PACKAGE_MOSH
++	bool "mosh"
++	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS #protobuf
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  rtl8821au wifi driver
++	  Remote terminal application that supports intermittent connectivity,
++	  allows roaming, and provides speculative local echo and line editing
++	  of user keystrokes.
 +
-+	  https://github.com/paralin/rtl8821au
-diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
++	  https://mosh.mit.edu
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
 new file mode 100644
-index 0000000..509306b
+index 0000000..a78cb33
 --- /dev/null
-+++ b/package/rtl8821au/rtl8821au.mk
-@@ -0,0 +1,26 @@
++++ b/package/mosh/mosh.hash
+@@ -0,0 +1 @@
++sha256 637adb7f67406447e9264d30468fe69a6d5e8f97518ef133d794cdc65483fa54 mosh-1.2.5.tar.gz
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+new file mode 100644
+index 0000000..142e08e
+--- /dev/null
++++ b/package/mosh/mosh.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# rtl8821au
++# mosh
 +#
 +################################################################################
 +
-+RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
-+RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
-+RTL8821AU_CFLAGS_ENDIAN = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
-+RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
-+RTL8821AU_LICENSE_FILES = COPYING
++MOSH_VERSION = 1.2.5
++MOSH_SITE = https://mosh.mit.edu/mosh-$(MOSH_VERSION).tar.gz
++MOSH_DEPENDENCIES = zlib ncurses protobuf openssl
++MOSH_LICENSE = GPLv3+ with exception
++MOSH_LICENSE_FILES = COPYING COPYING.iOS
 +
-+RTL8821AU_MODULE_MAKE_OPTS = \
-+	CONFIG_RTL8812AU_8821AU=m \
-+	KVER=$(LINUX_VERSION_PROBED) \
-+	USER_EXTRA_CFLAGS=$(RTL8821AU_CFLAGS_ENDIAN)
-+
-+define RTL8821AU_FIRMWARE_INSTALL
-+	mkdir -p $(TARGET_DIR)/lib/firmware/rtlwifi/
-+	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
-+endef
-+
-+RTL8821AU_POST_INSTALL_TARGET_HOOKS += RTL8821AU_FIRMWARE_INSTALL
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 2.1.4
