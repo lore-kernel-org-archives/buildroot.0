@@ -1,23 +1,52 @@
-From: Fred Basset <fredbasset1000@gmail.com>
-Date: Fri, 24 Jul 2015 17:52:13 -0700
-Subject: [Buildroot] Want to add user,
-	but have to BR2_ROOTFS_USERS_TABLES option
-Message-ID: <CAE-zcqWKXXroEw0_khznnWP+8sXSOUYsea-cwZH0KYHyjseQ1A@mail.gmail.com>
+From: Stanislav Vlasic <svlasic@gmail.com>
+Date: Sat, 25 Jul 2015 03:46:19 +0200
+Subject: [Buildroot] Unable to login as root to new buildroot system
+In-Reply-To: <CAChFQ9R=5anPgo9mboKxCkppsadQkSzC_WhpevWoarwgKVhLQg@mail.gmail.com>
+References: <CAChFQ9R=5anPgo9mboKxCkppsadQkSzC_WhpevWoarwgKVhLQg@mail.gmail.com>
+Message-ID: <mouppb$le6$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I want to add a custom user as per
-http://buildroot.uclibc.org/downloads/manual/manual.html#customize-users,
-but my config. file doesn't have the BR2_ROOTFS_USERS_TABLES setting, so
-how do I achieve this?
+Hi,
 
-My BuildRoot is version 2012.11 from a chip vendor.
+On 07/25/2015 02:25 AM, Adam Baxter wrote:
+> I'm using the latest Git version of buildroot and the following config -
+> https://github.com/voltagex/serial-vm-buildroot
+>
+> It builds and boots with qemu just fine, but no matter what combination
+> of getty/no getty/shell/root password I use, I can't login. Even with a
+> blank root password I'm told that the password is incorrect, and I can't
+> work out how to make it boot straight to a root prompt.
+>
+> Can anyone help? The repo above should be able to be built with make
+> serial_defconfig, but if there's still hardcoded paths to a 'voltagex'
+> or 'ubuntu' user you'll have to let me know how to remove them.
+>
+> I've read
+> http://lists.busybox.net/pipermail/buildroot/2012-July/056177.html and
+> similar threads found by googling "buildroot root login"
+>
+> Regards,
+> Adam Baxter
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-Thank you,
-Fred
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150724/70faddd7/attachment.html>
+Try edit system/skeleton/etc/passwd file (or overlay one if you're using 
+overlays) and replace 1st line:
+
+root:x:0:0:root:/root:/bin/sh
+
+with:
+
+root::0:0:root:/root:/bin/sh
+
+Never had that problem on Buildroot, but did on Ubuntu Core rootfs and 
+this method fixed it.
