@@ -1,85 +1,160 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Jul 2015 23:55:29 +0200
-Subject: [Buildroot] [PATCH v2] qt/qt5base: Fix INCLUDE_PATH when no
- JPEG/PNG support
-In-Reply-To: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
-References: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150725215529.GJ1847@free.fr>
+Date: Sun, 26 Jul 2015 00:21:52 +0200
+Subject: [Buildroot] [PATCH] zxing_cpp: New package
+In-Reply-To: <1437689326-23261-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1437689326-23261-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150725222152.GK1847@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+Maxime, All,
 
-On 2015-07-24 07:51 +0200, Julien Corjon spake thusly:
-> Fixes:
->   http://autobuild.buildroot.net/results/4be77432390c4cfb557c3f2cc52cf732de037949/
->   http://autobuild.buildroot.net/results/255a77e01d8af4090e03acb82f9ad93b7c4dd212/
->   http://autobuild.buildroot.net/results/7844e6a3eeecf67dc29277b73bfe714e4d8f0d85/
->   http://autobuild.buildroot.net/results/b941f35b6c8e1cf3b2c4b046dfcce98700d8f408/
->   http://autobuild.buildroot.net/results/c64b640a39285f59cde47cb8d06ab70a5ac97c8b/
->   http://autobuild.buildroot.net/results/f6d24b50f58251c8051d39bc1d09b5b43f81f441/
+On 2015-07-24 00:08 +0200, Maxime Hadjinlian spake thusly:
+> ZXing was hosted on Google Code, which is a closing forges.
+> The current link was already redirecting to the github repo.
 > 
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
-> v1 -> v2 : 
->   - Add autobuild references (suggested by thomas)
+> But upstream is no longer supporting the cpp bindings, it's now a Java
+> library/application.
 > 
->  ...008-QtGui-force-image-dir-in-include_path.patch | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+> A fork has been created from the latests cpp source of the original
+> upstream.
+> So this is a new package from an old one and a legacy option has been
+> added.
 > 
-> diff --git a/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch b/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[--SNIP--]
+> diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
 > new file mode 100644
-> index 0000000..4e5068b
+> index 0000000..36ba0fe
 > --- /dev/null
-> +++ b/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+> +++ b/package/zxing-cpp/zxing-cpp.mk
 > @@ -0,0 +1,33 @@
-> +From 6065be41dbd04690236418098fca504140fc205c Mon Sep 17 00:00:00 2001
-> +From: Julien Corjon <corjon.j@ecagroup.com>
-> +Date: Thu, 23 Jul 2015 13:32:47 +0200
-> +Subject: [PATCH 1/1] QtGui: force image directory in INCLUDE_PATH
+> +################################################################################
+> +#
+> +# zxing-cpp
+> +#
+> +################################################################################
 > +
-> +If PNG/JPEG/GIF support is not set qplaformpixmap inclusion then
-> +image/qplatformpixmap.h cannot be found from painting/qbrush.cpp
+> +ZXING_CPP_VERSION = e7594421d240d8a79633a83c7ad3d26b670e038f
+> +ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
+> +ZXING_CPP_LICENSE = Apache-2.0
+> +ZXING_CPP_LICENSE_FILES = COPYING
+> +ZXING_CPP_INSTALL_STAGING = YES
+> +ZXING_CPP_SUPPORTS_IN_SOURCE_BUILD = NO
 > +
-> +Change-Id: I165c888b2afc51de47267607883615d3aa3bae40
+> +ifneq ($(BR2_ENABLE_LOCALE),y)
+> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> +ZXING_CPP_DEPENDENCIES += libiconv
+> +endif
+> +endif
 > +
-> +Upstream-Status: https://bugreports.qt.io/browse/QTBUG-47400
+> +define ZXING_CPP_INSTALL_STAGING_CMDS
+> +	for i in $$(find $(@D)/buildroot-build/core/src -iname *.h); do \
+> +		$(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/local/include; \
+> +	done
+> +endef
 > +
-> +Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> +---
-> + src/gui/image/image.pri | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/src/gui/image/image.pri b/src/gui/image/image.pri
-> +index 8db944e..af6e0fa 100644
-> +--- a/src/gui/image/image.pri
-> ++++ b/src/gui/image/image.pri
-> +@@ -3,6 +3,8 @@
-> + 
-> + # Qt kernel module
-> + 
-> ++INCLUDEPATH *= $$PWD
-> ++
+> +define ZXING_CPP_INSTALL_TARGET_CMDS
+> +	for i in $$(find $(@D)/buildroot-build/ -iname *.so -o -iname *.a); do \
+> +		$(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/lib; \
+> +	done
+> +	$(INSTALL) -m 755 $(@D)/buildroot-build/zxing $(TARGET_DIR)/usr/sbin
+> +endef
 
-It seems like we should instead use the upstream patch that has been
-applied:
-    https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=commitdiff;h=7f282aa9f718389199b95b7f53ecd6401172fcc6;hp=954f0d93976362d29044439e4eaa11d2dff16624
+Why can't we use the standard 'install' rule for either staging or
+target?
 
 Regards,
 Yann E. MORIN.
 
-> + HEADERS += \
-> +         image/qbitmap.h \
-> +         image/qimage.h \
-> +-- 
-> +2.1.0
-> +
+> +$(eval $(cmake-package))
+> diff --git a/package/zxing/0001-makefile.patch b/package/zxing/0001-makefile.patch
+> deleted file mode 100644
+> index 66896bf..0000000
+> --- a/package/zxing/0001-makefile.patch
+> +++ /dev/null
+> @@ -1,30 +0,0 @@
+> -[PATCH] add Makefile
+> -
+> -The scons based build system doesn't handle cross compilation, special
+> -compiler flags or (un)installation, so add a simple makefile instead
+> -which does.
+> -
+> -Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ----
+> - cpp/core/src/Makefile |   14 ++++++++++++++
+> - 1 file changed, 14 insertions(+)
+> -
+> -Index: zxing-2.0/cpp/core/src/Makefile
+> -===================================================================
+> ---- /dev/null
+> -+++ zxing-2.0/cpp/core/src/Makefile
+> -@@ -0,0 +1,14 @@
+> -+override CXXFLAGS += -I.
+> -+SRCS := $(shell find -name '*.cpp')
+> -+
+> -+libzxing.a: $(SRCS:.cpp=.o)
+> -+	$(AR) $(ARFLAGS) $@ $^
+> -+
+> -+install: libzxing.a
+> -+	install -D -m 0644 $^ $(DESTDIR)/usr/lib/$^
+> -+	find -name '*.h' -exec install -m 0644 -D "{}" \
+> -+		"$(DESTDIR)/usr/include/{}" ";"
+> -+
+> -+uninstall:
+> -+	rm -f $(DESTDIR)/usr/lib/libzxing.a
+> -+	rm -rf $(DESTDIR)/usr/include/zxing
+> diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
+> deleted file mode 100644
+> index 94e8b1f..0000000
+> --- a/package/zxing/zxing.mk
+> +++ /dev/null
+> @@ -1,40 +0,0 @@
+> -################################################################################
+> -#
+> -# zxing
+> -#
+> -################################################################################
+> -
+> -ZXING_VERSION = 2.3.0
+> -ZXING_SITE = http://zxing.googlecode.com/files
+> -ZXING_SOURCE = ZXing-$(ZXING_VERSION).zip
+> -ZXING_LICENSE = Apache-2.0
+> -ZXING_LICENSE_FILES = COPYING
+> -ZXING_INSTALL_STAGING = YES
+> -
+> -ifneq ($(BR2_ENABLE_LOCALE),y)
+> -ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> -ZXING_DEPENDENCIES += libiconv
+> -else
+> -# There is no locale support in the toolchain and libiconv
+> -# is not available so disable iconv support in zxing
+> -ZING_MAKE_OPTS = CXXFLAGS+="-DNO_ICONV"
+> -endif
+> -endif
+> -
+> -define ZXING_EXTRACT_CMDS
+> -	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(ZXING_SOURCE)
+> -endef
+> -
+> -define ZXING_BUILD_CMDS
+> -	$(MAKE) -C $(@D)/cpp/core/src $(TARGET_CONFIGURE_OPTS) $(ZING_MAKE_OPTS)
+> -endef
+> -
+> -define ZXING_INSTALL_STAGING_CMDS
+> -	$(MAKE) -C $(@D)/cpp/core/src DESTDIR=$(STAGING_DIR) install
+> -endef
+> -
+> -define ZXING_INSTALL_TARGET_CMDS
+> -	$(MAKE) -C $(@D)/cpp/core/src DESTDIR=$(TARGET_DIR) install
+> -endef
+> -
+> -$(eval $(generic-package))
 > -- 
-> 2.1.0
+> 2.1.4
 > 
 > _______________________________________________
 > buildroot mailing list
