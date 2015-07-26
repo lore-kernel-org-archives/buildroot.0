@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:21:43 +0200
-Subject: [Buildroot] [PATCH] package/kyua: add atf reverse dependency
-In-Reply-To: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
-References: <1437744272-27546-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150726152143.0e781dd1@free-electrons.com>
+Date: Sun, 26 Jul 2015 15:22:03 +0200
+Subject: [Buildroot] [git commit] package/ffmpeg: Fix mips compile
+Message-ID: <20150726132209.0EB86819C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=1ca32adee49b7eb3194e469eb7d59e0a392f1320
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Jul 2015 15:24:32 +0200, Romain Naour wrote:
-> atf package depends on BR2_USE_MMU, therefore kyua must
-> also depend on it.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/929/9290a39d9b77e5a57e59912ce3d901149e9d6c11/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/kyua/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+buildroot has no support for msa, CONFIG_CPU_HAS_MSA is not enabled in
+kernel config.
 
-Applied, thanks.
+Fixes
+http://autobuild.buildroot.net/results/030/03055aa696e9e885baabb43fff613d751974a4b7//
+http://autobuild.buildroot.net/results/6b5/6b5c13c949e8ae23f1b58c6da4002371130e9bb3//
+http://autobuild.buildroot.net/results/1af/1af3c68bc21503438fb0066f5e51e82e35a5442b//
+and many others
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 0162db2..28c6012 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,6 +41,7 @@ FFMPEG_CONF_OPTS = \
+ 	--enable-runtime-cpudetect \
+ 	--disable-hardcoded-tables \
+ 	--disable-memalign-hack \
++	--disable-msa \
+ 	--enable-hwaccels \
+ 	--disable-avisynth \
+ 	--disable-frei0r \
