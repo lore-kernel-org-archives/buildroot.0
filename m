@@ -1,60 +1,34 @@
 From: Brendan Heading <brendanheading@gmail.com>
-Date: Sun, 26 Jul 2015 23:50:45 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/exfat-utils: fix compilation
-	error with musl
-Message-ID: <1437951045-14508-1-git-send-email-brendanheading@gmail.com>
+Date: Sun, 26 Jul 2015 23:56:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/exfat-utils: fix compilation
+ error with musl
+In-Reply-To: <20150726225918.5773dfda@free-electrons.com>
+References: <1437932111-411-1-git-send-email-brendanheading@gmail.com>
+ <20150726225918.5773dfda@free-electrons.com>
+Message-ID: <CA+BsyQ7GC+QLmcS6GHMp9_DLgM6trx6L=hADqr_jA5hWa2_gGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-exfat-utils build would not build on Linux unless __GLIBC__ was defined.
-Patch added to use more relaxed __linux__ instead.
+> The libfuse dependency seems to be unrelated to the musl problem, so it
+> should be a separate patch.
+>
+> Also, I just did a build of exfat-utils which libfuse, and it built
+> just fine, so I think you're wrong with the fact that it needs libfuse.
+> Here is the defconfig I've used:
+>
 
-See http://autobuild.buildroot.net/results/c60/c60d0f9a93c90d41c3c86c78b0a0
+Thomas, there must have been something in my coffee today.
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+I've resubmitted with your (superior) patch suggestion and with the
+dependency stuff removed. Hopefully it will do the job :) If that looks
+better I'll send the updated patch to the exfat mailing list.
 
----
-Changes v1 -> v2 :
-   - removed unnecessary dependency change
-   - improvements (much simpler patch) as suggested by Thomas P
+regards
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- .../0001-fix-compiling-with-non-glibc-libcs.patch  | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
-
-diff --git a/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch b/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
-new file mode 100644
-index 0000000..6244b16
---- /dev/null
-+++ b/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
-@@ -0,0 +1,23 @@
-+[PATCH] fix compilation when libc does not define __GLIBC__
-+
-+libexfat would only compile on Linux with __GLIBC__ defined. Changed
-+to use __linux__ which likely better fits the original intent.
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+---
-+ platform.h |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: libexfat/libexfat/platform.h
-+===================================================================
-+--- libexfat/libexfat/platform.h	(revision 422)
-++++ libexfat/libexfat/platform.h	(working copy)
-+@@ -24,7 +24,7 @@
-+ #ifndef PLATFORM_H_INCLUDED
-+ #define PLATFORM_H_INCLUDED
-+ 
-+-#if defined(__GLIBC__)
-++#if defined(__linux__)
-+ 
-+ #include <endian.h>
-+ #include <byteswap.h>
--- 
-2.4.3
+Brendan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/e996c695/attachment.html>
