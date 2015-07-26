@@ -1,36 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:22:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ffmpeg: Fix mips compile
-In-Reply-To: <1437761628-4558-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1437761628-4558-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150726152230.4dc025e1@free-electrons.com>
+Date: Sun, 26 Jul 2015 15:24:20 +0200
+Subject: [Buildroot] [git commit] package/boost: boost needs wchar
+Message-ID: <20150726132425.DEDC0819C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=d86b94e028dd2de9dab8240c6285a36c7f0a8afa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Jul 2015 20:13:47 +0200, Bernd Kuhls wrote:
-> buildroot has no support for msa, CONFIG_CPU_HAS_MSA is not enabled in
-> kernel config.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/030/03055aa696e9e885baabb43fff613d751974a4b7//
-> http://autobuild.buildroot.net/results/6b5/6b5c13c949e8ae23f1b58c6da4002371130e9bb3//
-> http://autobuild.buildroot.net/results/1af/1af3c68bc21503438fb0066f5e51e82e35a5442b//
-> and many others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ffmpeg/ffmpeg.mk |    1 +
->  1 file changed, 1 insertion(+)
+The most modules of boost needs a toolchain with wchar. To ease maintenance
+we make the entire boost package depend on wchar.
 
-Both applied, thanks.
+Also add a reverse dependency to libftdipp1 and yaml-cpp.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fixes:
+http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad233ff679be007d2953/
+http://autobuild.buildroot.net/results/12f/12f544c97e3451fb2a72025ebc62292957e47070/
+http://autobuild.buildroot.net/results/ef6/ef6c897ea7547e8ed5f019e8ce4473f0998f2c16/
+http://autobuild.buildroot.net/results/7a0/7a0ab069c505696a7887ba5c561b76b233ce59d5/
+
+and more.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/boost/Config.in    |   13 +++----------
+ package/libftdi1/Config.in |    5 +++--
+ package/yaml-cpp/Config.in |    5 +++--
+ 3 files changed, 9 insertions(+), 14 deletions(-)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 68004b6..ac70152 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -1,5 +1,5 @@
+-comment "boost needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "boost needs a toolchain w/ C++, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	bool
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_BOOST
+ 	# that unfortunately doesn't work. Until someone fixes that,
+ 	# let's depend on threads.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  A general purpose C++ library
+ 
+@@ -77,10 +78,6 @@ config BR2_PACKAGE_BOOST_EXCEPTION
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
+-	depends on BR2_USE_WCHAR
+-
+-comment "boost-filesystem needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_BOOST_GRAPH
+ 	bool "boost-graph"
+@@ -94,12 +91,8 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
+ 	select BR2_PACKAGE_ZLIB
+ 
+ config BR2_PACKAGE_BOOST_LOCALE
+-	depends on BR2_USE_WCHAR
+ 	bool "boost-locale"
+ 
+-comment "boost-locale needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
+-
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/libftdi1/Config.in b/package/libftdi1/Config.in
+index 4a490a5..61d4c1c 100644
+--- a/package/libftdi1/Config.in
++++ b/package/libftdi1/Config.in
+@@ -15,11 +15,12 @@ config BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # boost
+ 	help
+ 	  C++ bindings for libftdi
+ 
+-comment "libftdipp1 needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libftdipp1 needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS
+diff --git a/package/yaml-cpp/Config.in b/package/yaml-cpp/Config.in
+index 9e00b3d..3cfb955 100644
+--- a/package/yaml-cpp/Config.in
++++ b/package/yaml-cpp/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_YAML_CPP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_USE_WCHAR # boost
+ 	select BR2_PACKAGE_BOOST
+ 	help
+ 	  yaml-cpp is a YAML parser and emitter in C++ matching
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_YAML_CPP
+ 
+ 	  https://code.google.com/p/yaml-cpp/
+ 
+-comment "yaml-cpp needs a toolchain w/ C++, threads"
++comment "yaml-cpp needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
