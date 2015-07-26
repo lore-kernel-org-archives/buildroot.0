@@ -1,115 +1,120 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 31 Jul 2015 16:56:57 -0700
-Subject: [Buildroot] [PATCH v1 3/3] aufs-util: new package
-In-Reply-To: <1438387017-10597-1-git-send-email-christian@paral.in>
-References: <1438387017-10597-1-git-send-email-christian@paral.in>
-Message-ID: <1438387017-10597-3-git-send-email-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jul 2015 15:18:39 +0200
+Subject: [Buildroot] [git commit branch/next] core/download: don't be
+	needlessly verbose in backends
+Message-ID: <20150808105641.5A3437FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding the aufs-util utilities. Uses the linux header version settings
-to guess the correct version of aufs-util but ultimately relies on the
-user to enter the correct version of aufs-util to use.
+commit: http://git.buildroot.net/buildroot/commit/?id=3dea23cf53258a3fa36cff6832fe193d75afdad1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+In 50c8b7e (support/download: support -q in all download backends), the
+backend were made to respect the quietness of the main Makefile, when -s
+is poassed on the 'make' command line. In doing so, they were all made
+to be verbose by default.
+
+However, the verbosity of some of the tools, like scp, is very high, and
+is in fact intended for debug purposes.
+
+Drop being verbose by default, just use whatever each tool deems normal
+output. Only respect the quietness requested by the user.
+
+Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |  1 +
- package/aufs-util/Config.in    | 34 ++++++++++++++++++++++++++++++++++
- package/aufs-util/aufs-util.mk | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
- create mode 100644 package/aufs-util/Config.in
- create mode 100644 package/aufs-util/aufs-util.mk
+ support/download/bzr  |    2 +-
+ support/download/cp   |    5 +++++
+ support/download/git  |    2 +-
+ support/download/hg   |    2 +-
+ support/download/scp  |    2 +-
+ support/download/wget |    2 +-
+ 6 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 43c58ca..9bb4993 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -148,6 +148,7 @@ endif
- endmenu
+diff --git a/support/download/bzr b/support/download/bzr
+index 870ce8d..c567466 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -12,7 +12,7 @@ set -e
+ #   BZR      : the bzr command to call
  
- menu "Filesystem and flash utilities"
-+	source "package/aufs-util/Config.in"
- 	source "package/btrfs-progs/Config.in"
- 	source "package/cifs-utils/Config.in"
- 	source "package/cpio/Config.in"
-diff --git a/package/aufs-util/Config.in b/package/aufs-util/Config.in
-new file mode 100644
-index 0000000..2b999aa
---- /dev/null
-+++ b/package/aufs-util/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_AUFS_UTIL
-+	bool "aufs-util"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Aufs command line utilities.
-+	  Needs a kernel with aufs support. A kernel
-+	  extension package is available.
+ 
+-verbose=-v
++verbose=
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
+diff --git a/support/download/cp b/support/download/cp
+index 132cad7..6e29eef 100755
+--- a/support/download/cp
++++ b/support/download/cp
+@@ -11,7 +11,12 @@ set -e
+ # Environment:
+ #   LOCALFILES: the cp command to call
+ 
++# 'cp' usually does not print anything on its stdout, whereas the
++# other download backends, even if not verbose, at least print some
++# progress information.
++# Make 'cp' verbose by default, so it behaves a bit like the others.
+ verbose=-v
 +
-+	  http://sourceforge.net/p/aufs/aufs-util/
-+
-+# While we don't build from the kernel headers
-+# we can get a default value here
-+config BR2_PACKAGE_AUFS_UTIL_VERSION
-+	string "aufs-util branch"
-+	depends on BR2_PACKAGE_AUFS_UTIL
-+	help
-+	  Aufs-util repository branch to use. Must match kernel version.
-+	default "3.0"  if BR2_KERNEL_HEADERS_3_0
-+	default "3.2"  if BR2_KERNEL_HEADERS_3_2
-+	default "3.2"  if BR2_KERNEL_HEADERS_3_4
-+	default "3.9"  if BR2_KERNEL_HEADERS_3_10 || BR2_KERNEL_HEADERS_3_11 || BR2_KERNEL_HEADERS_3_12 || BR2_KERNEL_HEADERS_3_13
-+	default "3.14" if BR2_KERNEL_HEADERS_3_14 || BR2_KERNEL_HEADERS_3_15 || BR2_KERNEL_HEADERS_3_16 || BR2_KERNEL_HEADERS_3_17 || BR2_KERNEL_HEADERS_3_18 || BR2_KERNEL_HEADERS_3_19
-+	default "4.0"  if BR2_KERNEL_HEADERS_4_0 || BR2_KERNEL_HEADERS_4_1
-+
-+comment "aufs-util needs a linux kernel"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "aufs-util needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/aufs-util/aufs-util.mk b/package/aufs-util/aufs-util.mk
-new file mode 100644
-index 0000000..0733aa9
---- /dev/null
-+++ b/package/aufs-util/aufs-util.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# aufs-util
-+#
-+################################################################################
-+
-+# linux-headers
-+AUFS_UTIL_VERSION = aufs$(call qstrip,$(BR2_PACKAGE_AUFS_UTIL_VERSION))
-+AUFS_UTIL_SITE = git://git.code.sf.net/p/aufs/aufs-util
-+AUFS_UTIL_DEPENDENCIES = linux
-+AUFS_UTIL_LICENSE = GNU
-+AUFS_UTIL_LICENSE_FILES = COPYING
-+
-+# Slight hack for a bug with aufsmvdown
-+# Remove user setting from install command
-+define AUFS_UTIL_CONFIGURE_CMDS
-+	$(SED) 's/\.a\[/\.stbr\[/g' $(@D)/aumvdown.c
-+	$(SED) 's/\-o root \-g root //g' $(@D)/Makefile
-+endef
-+
-+define AUFS_UTIL_BUILD_CMDS
-+	$(MAKE) -C $(LINUX_BUILDDIR) headers_install
-+	$(MAKE) -C $(@D) CPPFLAGS="-I $(LINUX_BUILDDIR)/usr/include/" HOSTCC="$(CC)" HOSTLD="$(LD)" INSTALL="$(INSTALL)" all
-+endef
-+
-+define AUFS_UTIL_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) INSTALL="$(INSTALL)" DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.1.4
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=;;
+diff --git a/support/download/git b/support/download/git
+index fd5f539..0e6103b 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -11,7 +11,7 @@ set -e
+ # Environment:
+ #   GIT      : the git command to call
+ 
+-verbose=-v
++verbose=
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=-q; exec >/dev/null;;
+diff --git a/support/download/hg b/support/download/hg
+index f6880fa..d6654a1 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -11,7 +11,7 @@ set -e
+ # Environment:
+ #   HG       : the hg command to call
+ 
+-verbose=-v
++verbose=
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
+diff --git a/support/download/scp b/support/download/scp
+index 3d6876f..1a62f30 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -11,7 +11,7 @@ set -e
+ # Environment:
+ #   SCP       : the scp command to call
+ 
+-verbose=-v
++verbose=
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
+diff --git a/support/download/wget b/support/download/wget
+index 7eb21a4..885bcf1 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -11,7 +11,7 @@ set -e
+ # Environment:
+ #   WGET     : the wget command to call
+ 
+-verbose=-v
++verbose=
+ while getopts :q OPT; do
+     case "${OPT}" in
+     q)  verbose=-q;;
