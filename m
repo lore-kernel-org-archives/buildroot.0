@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:36:23 +0200
-Subject: [Buildroot] [PATCH 05/12] libfreefare: Bump version and change
- site
-In-Reply-To: <1437943118-18060-6-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun, 26 Jul 2015 23:39:01 +0200
+Subject: [Buildroot] [PATCH 06/12] libiscsi: Bump version
+In-Reply-To: <1437943118-18060-7-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1437943118-18060-6-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150726233623.7b779211@free-electrons.com>
+ <1437943118-18060-7-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150726233901.5305d5bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,22 @@ To: buildroot@busybox.net
 
 Dear Maxime Hadjinlian,
 
-On Sun, 26 Jul 2015 22:38:31 +0200, Maxime Hadjinlian wrote:
+On Sun, 26 Jul 2015 22:38:32 +0200, Maxime Hadjinlian wrote:
+> Patches were applied upstream so they are removed.
 
-> -LIBFREEFARE_VERSION = 0.3.4
-> -LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
-> +LIBFREEFARE_VERSION = 0.4.0
-> +LIBFREEFARE_SOURCE = libfreefare-$(LIBFREEFARE_VERSION).tar.bz2
-> +# Do not use the github helper here, the generated tarball is *NOT* the same
-> +# # as the one uploaded by upstream for the release.
+Since you did the research, it would have good to put the pointers to
+the upstream commits for the respective patches.
 
-   ^^^^
+> +# Note: Upstream can be found at:
+> +# https://github.com/sahlberg/libiscsi
 
-Crappy text editor again?
+Comment not needed, since the Config.in help text already mentions that
+as the help text.
 
-Fixed, of course.
+>  LIBISCSI_SITE = https://sites.google.com/site/libiscsitarballs/libiscsitarballs
+
+So in the end, we're still using Google? Or maybe sites.google.com is
+not disappearing?
 
 Thomas
 -- 
