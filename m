@@ -1,118 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:48:14 +0200
-Subject: [Buildroot] [git commit] can-utils: bump version
-Message-ID: <20150726134832.3B90381D6D@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 15:48:48 +0200
+Subject: [Buildroot] [git commit] libubox: bump version
+Message-ID: <20150726134853.06C6481D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d41465a7b533cff2bdfe23012da246493dcc14ec
+commit: http://git.buildroot.net/buildroot/commit/?id=87932844f7e31a9dc53e00a05ac1bc8a6c69c15a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstreamed patches.
+Change upstream location and remove upstreamed patches.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-log2asc-include-sys-time.h.patch          |   28 -------------
- ...Include-linux-sockios.h-to-fix-musl-build.patch |   42 --------------------
- package/can-utils/can-utils.mk                     |    2 +-
- 3 files changed, 1 insertions(+), 71 deletions(-)
+ package/libubox/0001-drop-legacy-json-c.patch |   34 -------------------------
+ package/libubox/libubox.mk                    |    4 +-
+ 2 files changed, 2 insertions(+), 36 deletions(-)
 
-diff --git a/package/can-utils/0001-log2asc-include-sys-time.h.patch b/package/can-utils/0001-log2asc-include-sys-time.h.patch
+diff --git a/package/libubox/0001-drop-legacy-json-c.patch b/package/libubox/0001-drop-legacy-json-c.patch
 deleted file mode 100644
-index 30cf23b..0000000
---- a/package/can-utils/0001-log2asc-include-sys-time.h.patch
+index 84bd99a..0000000
+--- a/package/libubox/0001-drop-legacy-json-c.patch
 +++ /dev/null
-@@ -1,28 +0,0 @@
--From 50a71462a3291f7e08fa25f67b274792bb419211 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Tue, 14 Jul 2015 21:24:37 +0200
--Subject: [PATCH 1/2] log2asc: include sys/time.h
+@@ -1,34 +0,0 @@
+-[PATCH] libubox: drop legacy json-c support
 -
--Without this patch compilation against musl C library
--breaks, because struct timeval cannot be found.
+-The cmake logic is wrong (E.G. PKG_CHECK_FOR_MODULES fails unless all
+-modules are found), and the legacy libjson.so name is also used by the other
+-libjson (http://sourceforge.net/projects/libjson/) which provides an
+-incompatible API, so just drop it.
 -
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- log2asc.c | 1 +
-- 1 file changed, 1 insertion(+)
+- CMakeLists.txt |    4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/log2asc.c b/log2asc.c
--index 29d13e8..8fb88a9 100644
----- a/log2asc.c
--+++ b/log2asc.c
--@@ -48,6 +48,7 @@
-- #include <unistd.h>
+-Index: libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b/CMakeLists.txt
+-===================================================================
+---- libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b.orig/CMakeLists.txt
+-+++ libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b/CMakeLists.txt
+-@@ -13,7 +13,7 @@
+- ENDIF()
 - 
-- #include <net/if.h>
--+#include <sys/time.h>
-- #include <linux/can.h>
+- INCLUDE(FindPkgConfig)
+--PKG_CHECK_MODULES(JSONC json-c json)
+-+PKG_CHECK_MODULES(JSONC json-c)
+- IF(JSONC_FOUND)
+-   ADD_DEFINITIONS(-DJSONC)
+-   INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
+-@@ -42,7 +42,7 @@
 - 
-- #include "lib.h"
---- 
--2.1.4
--
-diff --git a/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch b/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
-deleted file mode 100644
-index aca3eb4..0000000
---- a/package/can-utils/0002-Include-linux-sockios.h-to-fix-musl-build.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From 204cfffefb2ee6058e5d22a4b65cff22e6cff5ee Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Thu, 16 Jul 2015 21:30:02 +0200
--Subject: [PATCH 2/2] Include linux/sockios.h to fix musl build
--
--Including <sys/ioctl.h> and <net/if.h> is not sufficient
--to musl to find SIOCSIFNAME, so <linux/sockios.h> must be
--included too.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- slcan_attach.c | 1 +
-- slcand.c       | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/slcan_attach.c b/slcan_attach.c
--index ab8ff0a..485cbe3 100644
----- a/slcan_attach.c
--+++ b/slcan_attach.c
--@@ -52,6 +52,7 @@
-- #include <net/if.h>
-- #include <termios.h>
-- #include <linux/tty.h>
--+#include <linux/sockios.h>
+- ADD_SUBDIRECTORY(lua)
 - 
-- void print_usage(char *prg)
-- {
--diff --git a/slcand.c b/slcand.c
--index e5e4752..e8c70e0 100644
----- a/slcand.c
--+++ b/slcand.c
--@@ -38,6 +38,7 @@
-- #include <net/if.h>
-- #include <termios.h>
-- #include <linux/tty.h>
--+#include <linux/sockios.h>
-- 
-- /* Change this to whatever your daemon is called */
-- #define DAEMON_NAME "slcand"
---- 
--2.1.4
--
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 23649fe..8e8ed4e 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,7 +4,7 @@
+--find_library(json NAMES json-c json)
+-+find_library(json NAMES json-c)
+- IF(EXISTS ${json})
+- 	ADD_LIBRARY(blobmsg_json SHARED blobmsg_json.c)
+- 	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 5d9c01d..4c56951 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CAN_UTILS_VERSION = 0eb1e3db2e20b0d895468363dbe6030cd8afa61c
-+CAN_UTILS_VERSION = f0abaaacb0a3f620f73dd6fd716d7daa3c36a8e3
- CAN_UTILS_SITE = $(call github,linux-can,can-utils,$(CAN_UTILS_VERSION))
- CAN_UTILS_AUTORECONF = YES
- 
+-LIBUBOX_VERSION = 5a0bbefc8fa440446253b171d0ac038d839360e3
+-LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
++LIBUBOX_VERSION = e88d816d6e462180f0337565e04e36be58a63309
++LIBUBOX_SITE = git://git.openwrt.org/project/libubox.git
+ LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
+ LIBUBOX_INSTALL_STAGING = YES
+ LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
