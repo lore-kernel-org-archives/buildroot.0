@@ -1,53 +1,51 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 26 Jul 2015 22:38:28 +0200
-Subject: [Buildroot] [PATCH 02/12] yaml-cpp: Bump version and change site
+Date: Sun, 26 Jul 2015 22:38:29 +0200
+Subject: [Buildroot] [PATCH 03/12] libass: Bump version and change site
 In-Reply-To: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1437943118-18060-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1437943118-18060-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Google Code is a closing forge, yaml-cpp has already made the move
-to Github.
+Google Code is a closing forge, libass has already made the move to Github.
 
 Since a new release was available a bump was also in order.
-The hash is removed since the tarball from Github is generated.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/yaml-cpp/yaml-cpp.hash | 5 -----
- package/yaml-cpp/yaml-cpp.mk   | 4 ++--
- 2 files changed, 2 insertions(+), 7 deletions(-)
- delete mode 100644 package/yaml-cpp/yaml-cpp.hash
+ package/libass/libass.hash | 4 ++--
+ package/libass/libass.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/yaml-cpp/yaml-cpp.hash b/package/yaml-cpp/yaml-cpp.hash
-deleted file mode 100644
-index 391e317..0000000
---- a/package/yaml-cpp/yaml-cpp.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# hash from: https://yaml-cpp.googlecode.com/files/yaml-cpp-0.5.1.tar.gz:
--sha1 9c5414b4090491e96d1b808fe8628b31e625fdaa  yaml-cpp-0.5.1.tar.gz
--
--# Locally calculated:
--sha256 3e7c9052b43d987d41819a203d97fc45de4eed3ec67e0fdb14265c3d11046f06  yaml-cpp-0.5.1.tar.gz
-diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
-index afc70bd..cea54a9 100644
---- a/package/yaml-cpp/yaml-cpp.mk
-+++ b/package/yaml-cpp/yaml-cpp.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index b7510de..f300166 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+-# From https://code.google.com/p/libass/downloads/detail?name=libass-0.10.2.tar.xz&can=2&q=
+-sha1 72a153364e838d3b561bae3653f1515169d479c4 libass-0.10.2.tar.xz
++# Locally computed
++sha256 a67c54ebaf5ec19ae72e86259ee6ab6adfe2e64ed9f9149db03dc863360ea38c  libass-0.12.3.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 056ea8b..ed604b8 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,9 +4,11 @@
  #
  ################################################################################
  
--YAML_CPP_VERSION = 0.5.1
--YAML_CPP_SITE = https://yaml-cpp.googlecode.com/files
-+YAML_CPP_VERSION = 0.5.2
-+YAML_CPP_SITE = $(call github,jbeder,yaml-cpp,release-$(YAML_CPP_VERSION))
- YAML_CPP_INSTALL_STAGING = YES
- YAML_CPP_LICENSE = MIT
- YAML_CPP_LICENSE_FILES = license.txt
+-LIBASS_VERSION = 0.10.2
++LIBASS_VERSION = 0.12.3
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+-LIBASS_SITE = http://libass.googlecode.com/files
++# Do not use the github helper here, the generated tarball is *NOT* the same
++# # as the one uploaded by upstream for the release.
++LIBASS_SITE = https://github.com/libass/libass/releases/download/$(LIBASS_VERSION)
+ LIBASS_INSTALL_STAGING = YES
+ LIBASS_LICENSE = ISC
+ LIBASS_LICENSE_FILES = COPYING
 -- 
 2.1.4
