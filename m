@@ -1,91 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 19:35:17 +0200
-Subject: [Buildroot] [PATCH v8 1/1] mosh: new package
-In-Reply-To: <1437928447-26907-1-git-send-email-christian@paral.in>
-References: <1437928447-26907-1-git-send-email-christian@paral.in>
-Message-ID: <20150726193517.40776cc8@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun, 26 Jul 2015 18:35:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/exfat-utils: fix compilation error
+	with musl
+Message-ID: <1437932111-411-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+exfat-utils build would not build on Linux unless __GLIBC__ was defined.
+Reworked header file to relax this requirement in favour of other libcs.
+patch submitted to the exfat-utils mailing list for comment.
 
-On Sun, 26 Jul 2015 09:34:07 -0700, Christian Stewart wrote:
-> Adding mosh, the mobile shell. Mosh uses ssh or dropbear as an initial transport to
-> start mosh-server which uses UDP to communicate with the client.
-> Supports a predictive model to enhance performance on weak connections
-> and compensate for general lag. Also supports disconnections and
-> reconnections seamlessly.
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Also added missing dependency - exfat requires libfuse.
 
-I applied, with some more changes:
+See http://autobuild.buildroot.net/results/c60/c60d0f9a93c90d41c3c86c78b0a0
 
-    [Thomas:
-      - Add missing dependency on host-pkgconf, as noticed by Yann
-        E. Morin.
-      - Indicate that openssh/dropbear is a runtime dependency.
-      - Pass some variables in the configure environment to tell that SSP
-        support is not available when it isn't. Otherwise, it misdetects
-        the SSP support as being available, causing a build failure.]
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ .../0001-fix-compiling-with-non-glibc-libcs.patch  | 53 ++++++++++++++++++++++
+ package/exfat-utils/Config.in                      |  2 +
+ package/exfat-utils/exfat-utils.mk                 |  2 +-
+ 3 files changed, 56 insertions(+), 1 deletion(-)
+ create mode 100644 package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
 
-The last item clearly meant that the build was never tested with
-uClibc, which is our default C library. Please do at least a test build
-with uClibc before submitting new packages.
-
-Also, one comment below.
-
-
-> diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
-> new file mode 100644
-> index 0000000..114e6ed
-> --- /dev/null
-> +++ b/package/mosh/0001-remove-system-locale-calls.patch
-> @@ -0,0 +1,46 @@
-> +The locale command is not available on many systems. As this variable
-> +is unused and appears to have been written with the intent of
-> +displaying the locale settings to the user, it's not really necessary.
-> +As this breaks Mosh on a lot of systems, it's best to remove the calls.
-> +
-> +Upstream status: refused, see: https://github.com/keithw/mosh/issues/650
-
-I think upstream refused it, because the approach of your patch is not
-acceptable upstream.
-
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +---
-> + src/frontend/mosh-server.cc | 4 +++-
-> + src/frontend/stmclient.cc   | 4 +++-
-> + 2 files changed, 6 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
-> +index 76ed2ed..0d2f222 100644
-> +--- a/src/frontend/mosh-server.cc
-> ++++ b/src/frontend/mosh-server.cc
-> +@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
-> +       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
-> +       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
-> +       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
-> +-      int unused __attribute((unused)) = system( "locale" );
-> ++
-> ++      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
-
-Here is what your patch should do instead:
-
-	if (locale command exists)
-		int unused __attribute((unused)) = system( "locale" );
-	else
-		fprintf( stderr, "locale command not found, cannot show related debug output." );
-
-I'm pretty sure this is going to make your patch much more acceptable
-upstream. Can you retry with something like that?
-
-Thanks!
-
-Thomas
+diff --git a/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch b/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
+new file mode 100644
+index 0000000..90740fa
+--- /dev/null
++++ b/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
+@@ -0,0 +1,53 @@
++[PATCH] fix compilation when libc does not define __GLIBC__
++
++libexfat would only compile on Linux with __GLIBC__ defined. Changed
++the logic around to use standard defaults on Linux which will work
++for glibc/uclibc/musl.
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ platform.h |   23 ++++++++++-------------
++ 1 file changed, 10 insertions(+), 13 deletions(-)
++
++Index: libexfat/libexfat/platform.h
++===================================================================
++--- libexfat/libexfat/platform.h	(revision 422)
+++++ libexfat/libexfat/platform.h	(working copy)
++@@ -24,19 +24,8 @@
++ #ifndef PLATFORM_H_INCLUDED
++ #define PLATFORM_H_INCLUDED
++ 
++-#if defined(__GLIBC__)
+++#if defined(__APPLE__)
++ 
++-#include <endian.h>
++-#include <byteswap.h>
++-#define exfat_bswap16(x) bswap_16(x)
++-#define exfat_bswap32(x) bswap_32(x)
++-#define exfat_bswap64(x) bswap_64(x)
++-#define EXFAT_BYTE_ORDER __BYTE_ORDER
++-#define EXFAT_LITTLE_ENDIAN __LITTLE_ENDIAN
++-#define EXFAT_BIG_ENDIAN __BIG_ENDIAN
++-
++-#elif defined(__APPLE__)
++-
++ #include <machine/endian.h>
++ #include <libkern/OSByteOrder.h>
++ #define exfat_bswap16(x) OSSwapInt16(x)
++@@ -57,7 +46,15 @@
++ #define EXFAT_BIG_ENDIAN _BIG_ENDIAN
++ 
++ #else 
++-#error Unknown platform
+++/* Assume Linux. glibc, uclibc(ng) and musl all provide bswap_X functions. */
+++#include <endian.h>
+++#include <byteswap.h>
+++#define exfat_bswap16(x) bswap_16(x)
+++#define exfat_bswap32(x) bswap_32(x)
+++#define exfat_bswap64(x) bswap_64(x)
+++#define EXFAT_BYTE_ORDER __BYTE_ORDER
+++#define EXFAT_LITTLE_ENDIAN __LITTLE_ENDIAN
+++#define EXFAT_BIG_ENDIAN __BIG_ENDIAN
++ #endif
++ 
++ #endif /* ifndef PLATFORM_H_INCLUDED */
+diff --git a/package/exfat-utils/Config.in b/package/exfat-utils/Config.in
+index aedff5f..ead5d47 100644
+--- a/package/exfat-utils/Config.in
++++ b/package/exfat-utils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_EXFAT_UTILS
+ 	bool "exfat-utils"
++	select BR2_PACKAGE_LIBFUSE
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  exFAT filesystem utilities.
+@@ -8,3 +9,4 @@ config BR2_PACKAGE_EXFAT_UTILS
+ 
+ comment "exfat-utils needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
++
+diff --git a/package/exfat-utils/exfat-utils.mk b/package/exfat-utils/exfat-utils.mk
+index 4f43233..37c9b30 100644
+--- a/package/exfat-utils/exfat-utils.mk
++++ b/package/exfat-utils/exfat-utils.mk
+@@ -6,7 +6,7 @@
+ 
+ EXFAT_UTILS_VERSION = 1.1.1
+ EXFAT_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+-EXFAT_UTILS_DEPENDENCIES = host-scons
++EXFAT_UTILS_DEPENDENCIES = host-scons libfuse
+ EXFAT_UTILS_LICENSE = GPLv3+
+ EXFAT_UTILS_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
