@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 21:49:36 +0200
-Subject: [Buildroot] [git commit] quota: use pkg-config for libtirpc flags
-Message-ID: <20150726195346.E8768805FE@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 21:49:48 +0200
+Subject: [Buildroot] [git commit] xinetd: use pkg-config for libtirpc flags
+Message-ID: <20150726195347.05FD5805FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2732e1b9d91a1cb276ebe17d5acf53f6a9356e8
+commit: http://git.buildroot.net/buildroot/commit/?id=9daa5e3f5570ab4d2f075ca42bfaa82d57db61a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Instead of hardcoding the flags needed for libtirpc, use pkg-config.
@@ -16,23 +16,23 @@ Instead of hardcoding the flags needed for libtirpc, use pkg-config.
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/quota/quota.mk |    6 +++---
+ package/xinetd/xinetd.mk |    6 +++---
  1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 332f42e..5e5e637 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -19,9 +19,9 @@ QUOTA_LIBS += -lintl
- endif
- 
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index 92d0d53..9818512 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -17,9 +17,9 @@ XINETD_CFLAGS = $(TARGET_CFLAGS)
+ #     flags (so this case 2 is implicit and not visible below)
+ #  3. We don't have RPC support, pass -DNO_RPC to disable it
  ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
--QUOTA_DEPENDENCIES += libtirpc
--QUOTA_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
--QUOTA_LIBS += -ltirpc
-+QUOTA_DEPENDENCIES += libtirpc host-pkgconf
-+QUOTA_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
-+QUOTA_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
+-XINETD_DEPENDENCIES += libtirpc
+-XINETD_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+-XINETD_LIBS += -ltirpc
++XINETD_DEPENDENCIES += libtirpc host-pkgconf
++XINETD_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
++XINETD_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
+ else ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
+ XINETD_CFLAGS += -DNO_RPC
  endif
- 
- QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
