@@ -1,33 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:27:35 +0200
-Subject: [Buildroot] [PATCH v2] qt/qt5base: Fix INCLUDE_PATH when no
- JPEG/PNG support
-In-Reply-To: <DF93B075-B12C-49F2-87A0-77DB1CC27A45@ecagroup.com>
-References: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
- <20150725215529.GJ1847@free.fr>
- <DF93B075-B12C-49F2-87A0-77DB1CC27A45@ecagroup.com>
-Message-ID: <20150726152735.426ad7aa@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jul 2015 15:32:11 +0200
+Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
+In-Reply-To: <alpine.LNX.2.20.1507261047230.883@bas>
+References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
+ <20150725212807.GD1847@free.fr>
+ <alpine.LNX.2.20.1507261047230.883@bas>
+Message-ID: <20150726133211.GD3770@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Mikhail, All,
 
-On Sun, 26 Jul 2015 01:08:33 +0000, Julien CORJON wrote:
+On 2015-07-26 10:55 +0300, kyak spake thusly:
+> I get the following error:
+> 
+> >>>xterm 314 Building
 
-> Sure, we should! But let?s wait for the review to be finished ;-)
-> This patch has only been applied to the staging branch for the moment.
-> See https://codereview.qt-project.org/#/c/122145/
+It would have been more useful to also see the output of the configuring
+part, too.
 
-Ok, so I'll wait for a new patch from you that backports the upstream
-patch then. In the mean time, I'll mark your patch as Changes Requested.
+Also, can you look at output/build/xterm-314/config.log why it does not
+find libICE?
 
-Thanks!
+Otherwise, I'm not able to reproduce this error with your .config... ;-/
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
