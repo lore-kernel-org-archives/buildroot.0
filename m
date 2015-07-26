@@ -1,67 +1,121 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 21:03:16 +0200
-Subject: [Buildroot] [PATCH] package/libselinmux: fix build with musl
-Message-ID: <1437937396-23254-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 26 Jul 2015 21:37:41 +0200
+Subject: [Buildroot] [PATCHv2 1/1] xterm: x-includes and x-libraries
+ must be set for cross-compiling
+In-Reply-To: <20150726175949.GI3770@free.fr>
+References: <1437932796-16216-1-git-send-email-bas@bmail.ru>
+ <20150726175949.GI3770@free.fr>
+Message-ID: <55B53705.7010703@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-musl does not define glibcisms, so we ar emissing some macros.
+Hi Mikhail, Yann, All,
 
-Define what we need in case the macro is missing. We're using a dumb
-implementation, which is rather slow, to avoid copying from glibc, to
-avoid propagating the LGPL to libselinux, which is Public Domain.
+Le 26/07/2015 19:59, Yann E. MORIN a ?crit :
+> Mikhail, All,
+> 
+> On 2015-07-26 20:46 +0300, kyak spake thusly:
+>> From: Mikhail Peselnik <bas@bmail.ru>
+>>
+>> These flags need to be set so that the configure script would
+>> correctly use libICE from cross-toolchain rather than from host.
+>> Also, the xterm package is missing the freetype2 dependency, as
+>> noted by Romain Naour.
 
-Fixes a buncha autobuild failures:
-    http://autobuild.buildroot.org/results/d4d/d4d209719d1ce5219f84719ad72fcb6a0c684007/
-    http://autobuild.buildroot.org/results/1a6/1a65cc3d2c23a3c17c605788be62dbd18cbdaf76/
-    http://autobuild.buildroot.org/results/0d0/0d0e4713833182d0f634b9b39b2c56f2bc0adcac/
-    ...
+This patch does two things: add x-includes, x-libraries and add freetype2
+dependency.
+It would be good to split these changes in two different patches.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
- package/libselinux/0002-fix-musl-build.patch | 30 ++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/libselinux/0002-fix-musl-build.patch
+>>
+>> This fix is similar to "package/efl/libevas: x-includes and x-libraries
+>> must be set for cross-compiling" done by Romain Naour on libecore.
+>>
+>> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+> 
+> The From filed does not match your Signed-off-by; please fix your git
+> config with:
+> 
+>     git config --global user.name 'Mikhail Peselnik'
+>     git config --global user.email 'bas at bmail.ru'
+> 
+>> ---
+>>  package/xterm/Config.in | 1 +
+>>  package/xterm/xterm.mk  | 7 +++++--
+>>  2 files changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/xterm/Config.in b/package/xterm/Config.in
+>> index e17d2c6..f549df4 100644
+>> --- a/package/xterm/Config.in
+>> +++ b/package/xterm/Config.in
+>> @@ -4,6 +4,7 @@ config BR2_PACKAGE_XTERM
+>>  	select BR2_PACKAGE_XLIB_LIBXAW
+>>  	depends on BR2_PACKAGE_XORG7
+>>  	depends on BR2_USE_MMU # fork()
+>> +	depends on BR2_PACKAGE_FREETYPE
+> 
+> This should be a 'select' rather than a 'depends on'.
 
-diff --git a/package/libselinux/0002-fix-musl-build.patch b/package/libselinux/0002-fix-musl-build.patch
-new file mode 100644
-index 0000000..9e6b734
---- /dev/null
-+++ b/package/libselinux/0002-fix-musl-build.patch
-@@ -0,0 +1,30 @@
-+fix undefined macros in musl
-+
-+musl does not define glibc-specific macros, so use a simple version of
-+the macro when it is not defined.
-+
-+This is very inefficient, however, but copying the code from glibc is
-+not really possible because it is LGPL while libselinux in Public
-+Domain, and we want to avoid license propaation, so this macro is
-+completely written from scratch, and non-optimal.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN libselinux-2.1.13.orig/src/booleans.c libselinux-2.1.13/src/booleans.c
-+--- libselinux-2.1.13.orig/src/booleans.c	2013-02-06 02:43:22.000000000 +0100
-++++ libselinux-2.1.13/src/booleans.c	2015-07-26 20:40:41.311801914 +0200
-+@@ -62,6 +62,14 @@
-+ 		goto bad;
-+ 	}
-+ 
-++/* Simple (but inefficient) version of _D_ALLOC_NAMLEN when
-++ * building with a C library that misses it (e.g. musl).
-++ * Note: glibc does a strlen on (d)->d_name, so assume it is safe.
-++ */
-++#ifndef _D_ALLOC_NAMLEN
-++#define _D_ALLOC_NAMLEN(d) (strlen((d)->d_name)+1)
-++#endif
-++
-+ 	for (i = 0; i < *len; i++) {
-+ 		n[i] = (char *)malloc(_D_ALLOC_NAMLEN(namelist[i]));
-+ 		if (!n[i]) {
--- 
-1.9.1
+In not sure about select. There is a --disable-freetype option, see below.
+
+> 
+>>  	help
+>>  	  xterm terminal emulator
+>>  
+>> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+>> index 56f692d..f7a332d 100644
+>> --- a/package/xterm/xterm.mk
+>> +++ b/package/xterm/xterm.mk
+>> @@ -10,6 +10,9 @@ XTERM_SITE = ftp://invisible-island.net/xterm
+>>  XTERM_DEPENDENCIES = ncurses xlib_libXaw
+>>  XTERM_LICENSE = MIT
+>>  XTERM_LICENSE_FILES = version.c
+>> -XTERM_CONF_OPTS = --enable-256-color
+>> -
+>> +XTERM_CONF_OPTS = --enable-256-color \
+>> +	--x-includes=$(STAGING_DIR)/usr/include \
+>> +	--x-libraries=$(STAGING_DIR)/usr/lib \
+>> +	--with-freetype-cflags=$(STAGING_DIR)/usr/include \
+> 
+> I guess this should instead be: -I$(STAGING_DIR)/usr/include
+> 
+>> +	--with-freetype-libs=$(STAGING_DIR)/usr/lib
+> 
+> And this: -L$(STAGING_DIR)/usr/lib
+> 
+> You may also want to add:
+> 
+>     --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
+
+Maybe something like this (untested):
+
+ifeq ($(BR2_PACKAGE_FREETYPE),y)
+XTERM_CONF_OPTS += --with-freetype-config="$(STAGING_DIR)/usr/bin/freetype-config" \
+                   --with-freetype-cflags="-I$(STAGING_DIR)/usr/include" \
+                   --with-freetype-libs="-L$(STAGING_DIR)/usr/lib"
+else
+XTERM_CONF_OPTS += --disable-freetype
+endif
+
+But it you think that freetype must always be selected, this is ok.
+
+Thoughts ?
+
+Best regards,
+Romain Naour
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>  $(eval $(autotools-package))
+>> -- 
+>> 2.4.6
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
