@@ -1,39 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 15:32:11 +0200
-Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
-In-Reply-To: <alpine.LNX.2.20.1507261047230.883@bas>
-References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
- <20150725212807.GD1847@free.fr>
- <alpine.LNX.2.20.1507261047230.883@bas>
-Message-ID: <20150726133211.GD3770@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jul 2015 15:41:01 +0200
+Subject: [Buildroot] [git commit] package/linux-backports: switch to using
+	the kernel-module infra
+Message-ID: <20150726134108.244117FFFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mikhail, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=e5a5a58aa7d9d60e7f03467edd3bd31a00213795
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-07-26 10:55 +0300, kyak spake thusly:
-> I get the following error:
-> 
-> >>>xterm 314 Building
+linux-backports manually generates its autoconf.h header, which needs a
+.config file.
 
-It would have been more useful to also see the output of the configuring
-part, too.
+Using a pre- or post-configure hook does not really work, because
+generating that file touches the .config, and thus our .stamp files ar
+enot longer properly time-ordered and running a subsequent make would
+incorrectly believe it has to rebuild linux-backports.
 
-Also, can you look at output/build/xterm-314/config.log why it does not
-find libICE?
+So, even though this is not a fixup proper, we generate that file from
+the _KCONFIG_FIXUP_CMDS to ensure the stampt file is created after we
+touch .config.
 
-Otherwise, I'm not able to reproduce this error with your .config... ;-/
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Tested-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-backports/linux-backports.mk |   48 +++++++++++++++++----------
+ 1 files changed, 30 insertions(+), 18 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index e4ac9f4..44ac7e7 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -11,33 +11,44 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
+ LINUX_BACKPORTS_LICENSE = GPLv2
+ LINUX_BACKPORTS_LICENSE_FILES = COPYING
+ 
+-LINUX_BACKPORTS_DEPENDENCIES = linux
+-
+-LINUX_BACKPORTS_MAKE_OPTS = \
+-	$(LINUX_MAKE_FLAGS) \
+-	KLIB_BUILD=$(LINUX_DIR) \
+-	KLIB=$(TARGET_DIR)
+-
+ ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+ LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+ else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+ LINUX_BACKPORTS_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE))
+ endif
+ 
+-define LINUX_BACKPORTS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
+-endef
+-
+-define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
+-		-C $(LINUX_DIR) M=$(@D) \
+-		INSTALL_MOD_DIR=backports \
+-		modules_install
+-endef
+-
+ LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
+ LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+ 
++# linux-backports' build system expects the config options to be present
++# in the environment, and it is so when using their custom buildsystem,
++# because they are set in the main Makefile, which then calls a second
++# Makefile.
++#
++# In our case, we do not use that first Makefile. So, we parse the
++# .config file, filter-out comment lines and put the rest as command
++# line variables.
++#
++# LINUX_BACKPORTS_MAKE_OPTS is used by the kconfig-package infra, while
++# LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
++#
++LINUX_BACKPORTS_MAKE_OPTS = \
++	BACKPORT_DIR=$(@D) \
++	KLIB_BUILD=$(LINUX_DIR) \
++	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
++	INSTALL_MOD_DIR=backports \
++	`sed -r -e '/^\#/d;' $(@D)/.config`
++
++LINUX_BACKPORTS_MODULE_MAKE_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
++
++# This file is not automatically generated by 'oldconfig' that we use in
++# the kconfig-package infrastructure. In the linux buildsystem, it is
++# generated by running silentoldconfig, but that's not the case for
++# linux-backports: it uses a hand-crafted rule to generate that file.
++define LINUX_BACKPORTS_KCONFIG_FIXUP_CMDS
++	$(MAKE) -C $(@D) $(LINUX_BACKPORTS_MAKE_OPTS) backport-include/backport/autoconf.h
++endef
++
+ # Checks to give errors that the user can understand
+ ifeq ($(BR_BUILDING),y)
+ 
+@@ -55,6 +66,7 @@ endif
+ 
+ endif # BR_BUILDING
+ 
++$(eval $(kernel-module))
+ $(eval $(kconfig-package))
+ 
+ # linux-backports' own .config file needs options from the kernel's own
