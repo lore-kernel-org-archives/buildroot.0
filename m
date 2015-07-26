@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:34:03 +0200
-Subject: [Buildroot] [PATCH 00/12] Google Code: Change site
-In-Reply-To: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun, 26 Jul 2015 23:34:48 +0200
+Subject: [Buildroot] [PATCH 03/12] libass: Bump version and change site
+In-Reply-To: <1437943118-18060-4-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150726233403.7aecead1@free-electrons.com>
+ <1437943118-18060-4-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150726233448.738b1591@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +13,23 @@ To: buildroot@busybox.net
 
 Dear Maxime Hadjinlian,
 
-On Sun, 26 Jul 2015 22:38:26 +0200, Maxime Hadjinlian wrote:
+On Sun, 26 Jul 2015 22:38:29 +0200, Maxime Hadjinlian wrote:
+> Google Code is a closing forge, libass has already made the move to Github.
 
-> Some projects have already moved on, this series bump/change the site of
-> theses projects.
-> 
-> A few are still on Google Code, they seems pretty abandonned, so a
-> decision will be needed regarding theses. Switch to Alioth ? Look for a
-> fork ?
+This line is too long. Use a real text editor that wraps properly :-)
 
-With still have 1.5 years ahead of us before they go offline. So I
-would suggest that we could to monitor those projects in the coming
-months, and only start taking radical decision in 9-12 months.
+> -LIBASS_VERSION = 0.10.2
+> +LIBASS_VERSION = 0.12.3
+>  LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+> -LIBASS_SITE = http://libass.googlecode.com/files
+> +# Do not use the github helper here, the generated tarball is *NOT* the same
+> +# # as the one uploaded by upstream for the release.
 
-> Maxime Hadjinlian (12):
->   zxing_cpp: New package
->   yaml-cpp: Bump version and change site
->   libass: Bump version and change site
->   explorercanvas: Bump version and change site
->   libfreefare: Bump version and change site
->   libiscsi: Bump version
->   libllcp: Bump version and change site
->   libnfc: Bump version and change site
->   python-pycrc16: Change site
->   python-dpkt: Bump version and change site
->   python-pypcap: Bump version and change site
->   qextserialport: Bump version and change site
+   ^^^
 
-I've applied all except the zxing_cpp patch. But I had to do some fixes
-for some of them, so I'll reply to the specific patches.
+and doesn't mess up comments when rewrapping text :-)
 
-Thanks!
+Applied with those issues fixed.
 
 Thomas
 -- 
