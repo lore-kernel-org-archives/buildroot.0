@@ -1,36 +1,34 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sun, 26 Jul 2015 20:53:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/scons: fix missing dependency
-In-Reply-To: <20150726213943.3d3ebbe9@free-electrons.com>
-References: <1437932577-874-1-git-send-email-brendanheading@gmail.com>
- <20150726213943.3d3ebbe9@free-electrons.com>
-Message-ID: <CA+BsyQ7ixc8YzGzEpNF5OvEMjrTRtS7fLNyNZZYxBU3qqFM03Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jul 2015 21:49:06 +0200
+Subject: [Buildroot] [git commit] rpcbind: use pkg-config for libtirpc flags
+Message-ID: <20150726195346.BDBBC81D7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 July 2015 at 20:39, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=c64d6bb8ba5382b14aebdb6ea40a84932de1b11b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->
-> > +HOST_SCONS_DEPENDENCIES = host-python
-> >  HOST_SCONS_NEEDS_HOST_PYTHON = python2
-> >
-> >  HOST_SCONS_INSTALL_OPTS = \
->
-> This does not make sense: scons uses host-python-package, and the
-> python package infrastructure automatically adds host-python as a
-> dependency for host python packages.
+Instead of hardcoding the flags needed for libtirpc, use pkg-config.
 
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpcbind/rpcbind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-My apologies Thomas.
-
-While I was fixing the exfat problem I ran into an issue where scons would
-not run because python wasn't present. I just tried to reproduce it again
-from scratch and it's no longer happening. I see from your explanation that
-it should work fine.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/4323dc14/attachment.html>
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index d879de1..1e28af9 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -11,7 +11,7 @@ RPCBIND_LICENSE = BSD-3c
+ RPCBIND_LICENSE_FILES = COPYING
+ 
+ RPCBIND_CONF_ENV += \
+-	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
++	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
+ RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
+ RPCBIND_CONF_OPTS += --with-rpcuser=root
+ RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
