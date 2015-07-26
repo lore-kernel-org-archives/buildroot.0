@@ -1,87 +1,52 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Sun, 26 Jul 2015 00:59:32 -0400
-Subject: [Buildroot] [PATCH v2] cmocka: new package
-Message-ID: <1437886772-6787-1-git-send-email-nimaim@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Jul 2015 00:35:09 +0200
+Subject: [Buildroot] [PATCH 0/3] xorg: misc fixes and changes (branch
+	yem/xorg)
+Message-ID: <cover.1437950027.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nimai Mahajan <nimaim@gmail.com>
+Hello All!
 
-Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
----
-Changes v1->v2: Removed host-cmake dependency (Baruch)
+This series introduces three changes in our Xorg stack:
+  - the default server is changed from KDrive to modular
+  - the dependency on libdrm is cleaned up
+  - a missing dependency on libdrm has been added for DRI2
 
- package/Config.in          |  1 +
- package/cmocka/Config.in   | 11 +++++++++++
- package/cmocka/cmocka.hash |  2 ++
- package/cmocka/cmocka.mk   | 17 +++++++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/cmocka/Config.in
- create mode 100644 package/cmocka/cmocka.hash
- create mode 100644 package/cmocka/cmocka.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index f029e1d..e0dd14e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1037,6 +1037,7 @@ menu "Other"
- 	source "package/boost/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
-+	source "package/cmocka/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/ding-libs/Config.in"
- 	source "package/eigen/Config.in"
-diff --git a/package/cmocka/Config.in b/package/cmocka/Config.in
-new file mode 100644
-index 0000000..37064bf
---- /dev/null
-+++ b/package/cmocka/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_CMOCKA
-+	bool "cmocka"
-+	help
-+	  cmocka is an elegant unit testing framework for C with support
-+	  for mock objects. It only requires the standard C library,
-+	  works on a range of computing platforms (including embedded)
-+	  and with different compilers. It is a fork of Google's very
-+	  popular cmockery unit testing framework to fix bugs and support 
-+	  it in the future.
-+
-+	  https://cmocka.org/
-diff --git a/package/cmocka/cmocka.hash b/package/cmocka/cmocka.hash
-new file mode 100644
-index 0000000..96b81cb
---- /dev/null
-+++ b/package/cmocka/cmocka.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 b36050d7a1224296803d216cba1a9d4c58c31bf308b2d6d6649d61aa5a36753b cmocka-1.0.1.tar.xz
-diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
-new file mode 100644
-index 0000000..812df76
---- /dev/null
-+++ b/package/cmocka/cmocka.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# cmocka
-+#
-+################################################################################
-+
-+CMOCKA_VERSION = 1.0.1
-+CMOCKA_SOURCE = cmocka-$(CMOCKA_VERSION).tar.xz
-+CMOCKA_SITE = https://cmocka.org/files/1.0/
-+CMOCKA_LICENSE = Apache-2.0
-+CMOCKA_LICENSE_FILES = COPYING
-+CMOCKA_INSTALL_STAGING = YES
-+
-+# cmocka only supports out of source builds
-+CMOCKA_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+$(eval $(cmake-package))
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 5ccde01652bc41da325bf4c9a5abbf0031080784:
+
+  php: remove redundant --static flag to pkg-config (2015-07-26 23:45:02 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/xorg
+
+for you to fetch changes up to ed8d79ec52aec5a5724e4a93b65d6f54240a750c:
+
+  package/xserver_xorg-server: dri2 needs libdrm (2015-07-27 00:31:49 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/xserver: switch to the modular server as default
+      package/xserver: commonalise dependency on libdrm
+      package/xserver_xorg-server: dri2 needs libdrm
+
+ package/x11r7/xserver_xorg-server/Config.in           |  2 +-
+ .../x11r7/xserver_xorg-server/xserver_xorg-server.mk  | 19 ++++++++++++++-----
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
