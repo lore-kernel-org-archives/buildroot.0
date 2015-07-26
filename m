@@ -1,89 +1,165 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 26 Jul 2015 19:14:09 +0200
-Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
-In-Reply-To: <20150726161346.GE3770@free.fr>
-References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
- <20150725212807.GD1847@free.fr> <alpine.LNX.2.20.1507261047230.883@bas>
- <20150726133211.GD3770@free.fr> <alpine.LNX.2.20.1507261839280.883@bas>
- <20150726161346.GE3770@free.fr>
-Message-ID: <55B51561.5040909@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jul 2015 19:30:22 +0200
+Subject: [Buildroot] [git commit] mosh: new package
+Message-ID: <20150726173308.B4B7D81DB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Mikhail, Yann, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=6406d41e6001093e3c2a0335547f7810d5f0483f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 26/07/2015 18:13, Yann E. MORIN a ?crit :
-> Mikhail, All,
-> 
-> [Please, do not top-post]
-> 
-> On 2015-07-26 18:49 +0300, kyak spake thusly:
->> Sure, i should've attached this information in the first place. After all, i
->> too used it for debugging of this problem.
->>
->> Full build log: http://paste.pound-python.org/show/dQ2gfhqx7aQMHAQlRVfK/
->>
->> config.log: http://paste.pound-python.org/show/EsWJPVSwSaYKN2S0UYJH/
->>
->> Basically, when configure tests for libICE, it attempts to use host search
->> path looking for IceConnectionNumber symbol:
->>
->> "warning: library search path "/usr/lib64" is unsafe for cross-compilation"
-> 
-> Ah, but then that's what we must fix, instead of forcing detectin of
-> libICE. So, I'm marking your patch as "Changes Requested" in Patchwork.
-> 
-> Unfortunately, I can't reproduce that leakage on my setup... :-(
+Adding mosh, the mobile shell. Mosh uses ssh or dropbear as an initial
+transport to start mosh-server which uses UDP to communicate with the
+client.  Supports a predictive model to enhance performance on weak
+connections and compensate for general lag. Also supports
+disconnections and reconnections seamlessly.
 
-Me neither but I made a diff between your build.log and mine:
+[Thomas:
+  - Add missing dependency on host-pkgconf, as noticed by Yann
+    E. Morin.
+  - Indicate that openssh/dropbear is a runtime dependency.
+  - Pass some variables in the configure environment to tell that SSP
+    support is not available when it isn't. Otherwise, it misdetects
+    the SSP support as being available, causing a build failure.]
 
-Yours:
-checking for X... libraries /usr/lib64, headers
-Mine:
-checking for X... libraries , headers
+Signed-off-by: Christian Stewart <christian@paral.in>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/mosh/0001-remove-system-locale-calls.patch |   46 ++++++++++++++++++++
+ package/mosh/Config.in                             |   20 +++++++++
+ package/mosh/mosh.hash                             |    2 +
+ package/mosh/mosh.mk                               |   22 +++++++++
+ 5 files changed, 91 insertions(+), 0 deletions(-)
 
-I recommends you to add --x-includes and --x-libraries in xterm.mk:
-
-./configure --help
-X features:
-  --x-includes=DIR    X include files are in DIR
-  --x-libraries=DIR   X library files are in DIR
-
-like we did for libecore package:
-http://git.buildroot.net/buildroot/commit/?id=0d9d8984a9240a27f5ed2e15f1977ada67266906
-
-Also it seems that a dependency on freetype is missing
-
-Mine:
-freetype-config... /usr/bin/freetype-config
-Yours:
-checking for FreeType config...
-/home/user/build/buildroot/output/host/usr/bin/pkg-config xft
-
-but even with freetype builded before xterm, it still use
-/usr/bin/freetype-config... Also, I guess that you don't have freetype installed
-on your host.
-
-./configure --help
-  --disable-freetype      disable freetype library-support
-  --with-freetype-config  configure script to use for FreeType
-  --with-freetype-cflags  -D/-I options for compiling with FreeType
-  --with-freetype-libs    -L/-l options to link FreeType
-
-So, the xterm package seems incomplete in Buildroot and your initial patch is
-not correct.
-Can you rework this package by adding (at least) X features options and freetype
-options in xterm.mk?
-
-Thanks for your report!
-
-Best regards,
-Romain Naour
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+diff --git a/package/Config.in b/package/Config.in
+index 2697e56..f029e1d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1252,6 +1252,7 @@ endif
+ 	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
+ 	source "package/monkey/Config.in"
++	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+ 	source "package/mtr/Config.in"
+diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
+new file mode 100644
+index 0000000..114e6ed
+--- /dev/null
++++ b/package/mosh/0001-remove-system-locale-calls.patch
+@@ -0,0 +1,46 @@
++The locale command is not available on many systems. As this variable
++is unused and appears to have been written with the intent of
++displaying the locale settings to the user, it's not really necessary.
++As this breaks Mosh on a lot of systems, it's best to remove the calls.
++
++Upstream status: refused, see: https://github.com/keithw/mosh/issues/650
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ src/frontend/mosh-server.cc | 4 +++-
++ src/frontend/stmclient.cc   | 4 +++-
++ 2 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
++index 76ed2ed..0d2f222 100644
++--- a/src/frontend/mosh-server.cc
+++++ b/src/frontend/mosh-server.cc
++@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
++       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
++       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
++       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
++-      int unused __attribute((unused)) = system( "locale" );
+++
+++      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
+++
++       exit( 1 );
++     }
++   }
++diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
++index 9e4d916..06fac8b 100644
++--- a/src/frontend/stmclient.cc
+++++ b/src/frontend/stmclient.cc
++@@ -85,7 +85,9 @@ void STMClient::init( void )
++ 
++     fprintf( stderr, "mosh-client needs a UTF-8 native locale to run.\n\n" );
++     fprintf( stderr, "Unfortunately, the client's environment (%s) specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(), native_charset.c_str() );
++-    int unused __attribute((unused)) = system( "locale" );
+++
+++    fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
+++
++     exit( 1 );
++   }
++ 
++-- 
++2.1.4
++
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+new file mode 100644
+index 0000000..2f5214c
+--- /dev/null
++++ b/package/mosh/Config.in
+@@ -0,0 +1,20 @@
++comment "mosh needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_MOSH
++	bool "mosh"
++	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS #protobuf
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
++	# runtime dependency
++	select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
++	help
++	  Remote terminal application that supports intermittent connectivity,
++	  allows roaming, and provides speculative local echo and line editing
++	  of user keystrokes.
++
++	  https://mosh.mit.edu
+diff --git a/package/mosh/mosh.hash b/package/mosh/mosh.hash
+new file mode 100644
+index 0000000..ab925b5
+--- /dev/null
++++ b/package/mosh/mosh.hash
+@@ -0,0 +1,2 @@
++# From: http://mailman.mit.edu/pipermail/mosh-users/2015-July/000283.html
++sha256 1af809e5d747c333a852fbf7acdbf4d354dc4bbc2839e3afe5cf798190074be3 mosh-1.2.5.tar.gz
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+new file mode 100644
+index 0000000..02954f9
+--- /dev/null
++++ b/package/mosh/mosh.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# mosh
++#
++################################################################################
++
++MOSH_VERSION = 1.2.5
++MOSH_SITE = https://mosh.mit.edu/
++MOSH_DEPENDENCIES = zlib ncurses protobuf openssl host-pkgconf
++MOSH_LICENSE = GPLv3+ with exception
++MOSH_LICENSE_FILES = COPYING COPYING.iOS
++
++# help the detection of the SSP support: mosh configure.ac doesn't do
++# a link test, so it doesn't detect when the toolchain doesn't have
++# libssp.
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++MOSH_CONF_ENV += \
++	ax_cv_check_cflags__Werror___fstack_protector_all=no \
++	ax_cv_check_cxxflags__Werror___fstack_protector_all=no
++endif
++
++$(eval $(autotools-package))
