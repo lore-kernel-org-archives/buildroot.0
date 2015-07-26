@@ -1,121 +1,166 @@
-From: kyak <bas@bmail.ru>
-Date: Sun, 26 Jul 2015 10:55:16 +0300 (MSK)
-Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
-In-Reply-To: <20150725212807.GD1847@free.fr>
-References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
- <20150725212807.GD1847@free.fr>
-Message-ID: <alpine.LNX.2.20.1507261047230.883@bas>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jul 2015 11:09:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: fix undefined
+ reference to _authdes_seccreate
+In-Reply-To: <1437751142-3532-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1437751142-3532-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150726090922.GA3770@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+J?rg, All,
 
-I get the following error:
+On 2015-07-24 17:19 +0200, J?rg Krause spake thusly:
+> Commit 1c4767fa9d8c19b52824b1c10e0e25f413111f2d disables the C files auth_des.c
+> and authdes_prot.c implementing DES authentification but forgets to remove
+> a function call to authdes_seccreate() in rpc_soc.c.
+> 
+> We add a seperate patch to disable the DES authentification (and not disable it
+> together with NIS). DES is not provided by uClibc and musl.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/33f/33f1849c6d1441d8565835872281e33a980aba6f/
+> http://autobuild.buildroot.net/results/02e/02e9321b54d41b4b5c91d93c9942499a20d26919/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
->>> xterm 314 Building
-PATH="/home/user/build/buildroot/output/host/bin:/home/user/build/buildroot/output/host/sbin:/home/user/build/buildroot/output/host/usr/bin:/home/user/build/buildroot/output/host/usr/sbin:/home/user/perl5/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/opt/android-sdk/platform-tools:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/user/bin" 
-/usr/bin/make -j9  -C /home/user/build/buildroot/output/build/xterm-314/
-make[1]: Entering directory 
-'/home/user/build/buildroot/output/build/xterm-314'
-/bin/sh ./plink.sh 
-/home/user/build/buildroot/output/host/usr/bin/i686-buildroot-linux-gnu-gcc 
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os 
--Wl,-rpath,/home/user/build/buildroot/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib 
--o xterm button.o cachedGCs.o charproc.o charsets.o cursor.o data.o 
-doublechr.o fontutils.o input.o linedata.o main.o menu.o misc.o print.o 
-ptydata.o scrollback.o screen.o scrollbar.o tabs.o util.o version.o 
-xstrings.o xtermcap.o VTPrsTbl.o TekPrsTbl.o Tekproc.o charclass.o 
-precompose.o wcwidth.o 
--L/home/user/build/buildroot/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib 
--lXft -lfontconfig 
--L/home/user/build/buildroot/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib 
--lfreetype -lutil -lXaw7 -lXmu -lXt -lX11 -lncurses
-testing if -lXft is needed
-...yes
-testing if -lfontconfig is needed
-...yes
-testing if -lfreetype is needed
-...yes
-testing if -lutil is needed
-...yes
-testing if -lXaw7 is needed
-...yes
-testing if -lXmu is needed
-...yes
-testing if -lXt is needed
-...yes
-testing if -lX11 is needed
-...yes
-testing if -lncurses is needed
-...yes
-/home/user/build/buildroot/output/host/usr/lib/gcc/i686-buildroot-linux-gnu/4.9.3/../../../../i686-buildroot-linux-gnu/bin/ld: 
-misc.o: undefined reference to symbol 'IceConnectionNumber'
-/home/user/build/buildroot/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/libICE.so.6: 
-error adding symbols: DSO missing from command line
-collect2: error: ld returned 1 exit status
-Makefile:178: recipe for target 'xterm' failed
-make[1]: *** [xterm] Error 1
-make[1]: Leaving directory 
-'/home/user/build/buildroot/output/build/xterm-314'
-package/pkg-generic.mk:156: recipe for target 
-'/home/user/build/buildroot/output/build/xterm-314/.stamp_built' failed
-make: *** [/home/user/build/buildroot/output/build/xterm-314/.stamp_built] 
-Error 2
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: build-tested only, busybox now builds]
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I'm running current Arch Linux.
-I don't have a defconfig, but here is the current config:
-http://paste.pound-python.org/show/7ptuA3j9NutxLmAjGxgM/
+Regards,
+Yann E. MORIN.
 
-On Sat, 25 Jul 2015, Yann E. MORIN wrote:
-
-> Mikhail, All,
->
-> On 2015-07-24 17:54 +0300, kyak spake thusly:
->> With some hosts, xterm configure script fails to detect presence of
->> libICE. This results in error during xterm linking stage, because -lICE
->> is not passed to linker. This patches forces configure script to detect
->> libICE.
->
-> Could you share the error message you get, with some mor einfo about
-> your host that exhibit the issue, please?
->
-> Also, a defconfig to reproduce the build would be helpful! ;-)
->
-> Regards,
-> Yann E. MORIN.
->
->> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
->> ---
->>  package/xterm/xterm.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
->> index 56f692d..dd07e35 100644
->> --- a/package/xterm/xterm.mk
->> +++ b/package/xterm/xterm.mk
->> @@ -11,5 +11,6 @@ XTERM_DEPENDENCIES = ncurses xlib_libXaw
->>  XTERM_LICENSE = MIT
->>  XTERM_LICENSE_FILES = version.c
->>  XTERM_CONF_OPTS = --enable-256-color
->> +XTERM_CONF_ENV = ac_cv_lib_ICE_IceConnectionNumber=yes
->>
->>  $(eval $(autotools-package))
->> --
->> 2.4.6
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> ---
+>  ...able-parts-of-TIRPC-requiring-NIS-support.patch |  6 +-
+>  ...0007-Disable-DES-authentification-support.patch | 75 ++++++++++++++++++++++
+>  2 files changed, 78 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libtirpc/0007-Disable-DES-authentification-support.patch
+> 
+> diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+> index ea30fb2..7f58ab3 100644
+> --- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+> +++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+> @@ -1,4 +1,4 @@
+> -From cb2f393afdb444bf97a7327991f8f5a2c2f64082 Mon Sep 17 00:00:00 2001
+> +From 15adb318818f5d0ac609ef2b87643dd760487cb6 Mon Sep 17 00:00:00 2001
+>  From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+>  Date: Mon, 20 Jul 2015 20:30:11 +0200
+>  Subject: [PATCH 1/1] Disable parts of TIRPC requiring NIS support
+> @@ -16,7 +16,7 @@ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>  
+>  diff --git a/src/Makefile.am b/src/Makefile.am
+> -index 6cc567a..2b26a29 100644
+> +index 6cc567a..9834f9a 100644
+>  --- a/src/Makefile.am
+>  +++ b/src/Makefile.am
+>  @@ -51,7 +51,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
+> @@ -24,7 +24,7 @@ index 6cc567a..2b26a29 100644
+>           rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+>           svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+>  -        auth_time.c auth_des.c authdes_prot.c debug.c
+> -+        debug.c
+> ++        auth_des.c authdes_prot.c debug.c
+>   
+>   ## XDR
+>   libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
+> diff --git a/package/libtirpc/0007-Disable-DES-authentification-support.patch b/package/libtirpc/0007-Disable-DES-authentification-support.patch
+> new file mode 100644
+> index 0000000..c251811
+> --- /dev/null
+> +++ b/package/libtirpc/0007-Disable-DES-authentification-support.patch
+> @@ -0,0 +1,75 @@
+> +From 79975eb4104667be85abd06874c258438826b674 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> +Date: Fri, 24 Jul 2015 14:45:52 +0200
+> +Subject: [PATCH] Disable DES authentification support
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +uClibc and musl does not provide DES authentication.
+> +
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +---
+> + src/Makefile.am |  2 +-
+> + src/rpc_soc.c   | 32 --------------------------------
+> + 2 files changed, 1 insertion(+), 33 deletions(-)
+> +
+> +diff --git a/src/Makefile.am b/src/Makefile.am
+> +index 960a522..3a88e31 100644
+> +--- a/src/Makefile.am
+> ++++ b/src/Makefile.am
+> +@@ -51,7 +51,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
+> +         rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
+> +         rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+> +         svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+> +-        auth_des.c authdes_prot.c debug.c
+> ++        debug.c
+> + 
+> + ## XDR
+> + libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
+> +diff --git a/src/rpc_soc.c b/src/rpc_soc.c
+> +index e146ed4..161a1ec 100644
+> +--- a/src/rpc_soc.c
+> ++++ b/src/rpc_soc.c
+> +@@ -521,38 +521,6 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
+> + }
+> + 
+> + /*
+> +- * Create the client des authentication object. Obsoleted by
+> +- * authdes_seccreate().
+> +- */
+> +-AUTH *
+> +-authdes_create(servername, window, syncaddr, ckey)
+> +-	char *servername;		/* network name of server */
+> +-	u_int window;			/* time to live */
+> +-	struct sockaddr *syncaddr;	/* optional hostaddr to sync with */
+> +-	des_block *ckey;		/* optional conversation key to use */
+> +-{
+> +-	AUTH *dummy;
+> +-	AUTH *nauth;
+> +-	char hostname[NI_MAXHOST];
+> +-
+> +-	if (syncaddr) {
+> +-		/*
+> +-		 * Change addr to hostname, because that is the way
+> +-		 * new interface takes it.
+> +-		 */
+> +-		if (getnameinfo(syncaddr, sizeof(syncaddr), hostname,
+> +-		    sizeof hostname, NULL, 0, 0) != 0)
+> +-			goto fallback;
+> +-
+> +-		nauth = authdes_seccreate(servername, window, hostname, ckey);
+> +-		return (nauth);
+> +-	}
+> +-fallback:
+> +-	dummy = authdes_seccreate(servername, window, NULL, ckey);
+> +-	return (dummy);
+> +-}
+> +-
+> +-/*
+> +  * Create a client handle for a unix connection. Obsoleted by clnt_vc_create()
+> +  */
+> + CLIENT *
+> +-- 
+> +2.4.6
+> +
 > -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
->
+> 2.4.6
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
