@@ -1,56 +1,54 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 26 Jul 2015 20:55:27 +0200
-Subject: [Buildroot] [RFC 17/37] package/efl: add jp2k config option
+Date: Sun, 26 Jul 2015 20:55:34 +0200
+Subject: [Buildroot] [RFC 24/37] package/libelementary: add host package
 In-Reply-To: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
 References: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1437936947-17632-18-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1437936947-17632-25-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+libelementary for the target needs elm_prefs_cc in order to
+cross-compile correctly.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/efl/Config.in | 7 +++++++
- package/efl/efl.mk    | 7 +++++++
- 2 files changed, 14 insertions(+)
+ package/libelementary/libelementary.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 4077565..d36a38e 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -51,6 +51,13 @@ config BR2_PACKAGE_EFL_PNG
- 	  This enables the loader code that loads png files using
- 	  libpng.
+diff --git a/package/libelementary/libelementary.mk b/package/libelementary/libelementary.mk
+index 0bec456..e8b026e 100644
+--- a/package/libelementary/libelementary.mk
++++ b/package/libelementary/libelementary.mk
+@@ -12,14 +12,26 @@ LIBELEMENTARY_LICENSE_FILES = COPYING
  
-+config BR2_PACKAGE_EFL_JP2K
-+	bool "libevas jp2k loader"
-+	select BR2_PACKAGE_OPENJPEG
-+	help
-+	  This enables the loader code that loads jp2k files using
-+	  openjpeg.
-+
- config BR2_PACKAGE_EFL_JPEG
- 	bool "libevas jpeg loader"
- 	help
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 8f5c9fb..201e578 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -194,6 +194,13 @@ else
- EFL_CONF_OPTS += --enable-image-loader-tiff=no
- endif
+ LIBELEMENTARY_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_EFL_JP2K),y)
-+EFL_CONF_OPTS += --enable-image-loader-jp2k=yes
-+EFL_DEPENDENCIES += openjpeg
-+else
-+EFL_CONF_OPTS += --enable-image-loader-jp2k=no
-+endif
+-LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl
++LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl host-libelementary
+ 
+ LIBELEMENTARY_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
++	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
+ 	--with-doxygen=no \
+ 	--disable-elementary-test
+ 
++# We need a host package in order to provide elm_prefs_cc and
++# elementary_codegen.
++HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl
++HOST_LIBELEMENTARY_CONF_OPTS = \
++	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++ 	--with-doxygen=no \
++ 	--disable-elementary-test
 +
- ifeq ($(BR2_PACKAGE_EFL_WEBP),y)
- EFL_CONF_OPTS += --enable-image-loader-webp=yes
- EFL_DEPENDENCIES += webp
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.4.3
