@@ -1,42 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:22:03 +0200
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: Fix mips
-	compile
-Message-ID: <20150808105641.7D2127FFCF@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 15:20:10 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain-external wrapper:
+	don't pass march/mcpu if mtune is on cmdline
+Message-ID: <20150808105641.61FF57FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ca32adee49b7eb3194e469eb7d59e0a392f1320
+commit: http://git.buildroot.net/buildroot/commit/?id=b62cb78d6fa982c0777053fe612159c692f1a948
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-buildroot has no support for msa, CONFIG_CPU_HAS_MSA is not enabled in
-kernel config.
+Before commit 5715d2dcf48a39c16a3f3e41c97109613fed121d, the external
+toolchain wrapper would not pass its own march/mcpu/mtune flags to the real
+compiler if at least one of them was passed on the wrapper command-line.
 
-Fixes
-http://autobuild.buildroot.net/results/030/03055aa696e9e885baabb43fff613d751974a4b7//
-http://autobuild.buildroot.net/results/6b5/6b5c13c949e8ae23f1b58c6da4002371130e9bb3//
-http://autobuild.buildroot.net/results/1af/1af3c68bc21503438fb0066f5e51e82e35a5442b//
-and many others
+The mentioned commit intended to remove the passing of an mtune parameter
+coming from Buildroot, which was always empty after some other refactoring,
+but the changes have the side-effect that march/mcpu is now also passed when
+mtune is already given on the command-line. In that case, only mtune should
+be passed to the real compiler.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Restore part of the original toolchain wrapper code to check the presence of
+mtune on the command-line.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../toolchain-external/ext-toolchain-wrapper.c     |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 0162db2..28c6012 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -41,6 +41,7 @@ FFMPEG_CONF_OPTS = \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
- 	--disable-memalign-hack \
-+	--disable-msa \
- 	--enable-hwaccels \
- 	--disable-avisynth \
- 	--disable-frei0r \
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index e2d01dc..b3b02d8 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -177,11 +177,12 @@ int main(int argc, char **argv)
+ 
+ #if defined(BR_ARCH) || \
+     defined(BR_CPU)
+-	/* Add our -march/cpu/abi flags, but only if none are
+-	 * already specified on the commandline
++	/* Add our -march/cpu flags, but only if none of
++	 * -march/mtune/mcpu are already specified on the commandline
+ 	 */
+ 	for (i = 1; i < argc; i++) {
+ 		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
++		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
+ 		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
+ 			break;
+ 	}
