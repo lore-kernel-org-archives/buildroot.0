@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:25:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: boost needs wchar
-In-Reply-To: <1437725693-21075-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1437725693-21075-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150726152523.3de110db@free-electrons.com>
+Date: Sun, 26 Jul 2015 15:25:17 +0200
+Subject: [Buildroot] [git commit] qt5/qtwebsocket: remove GPLv2 license
+Message-ID: <20150726132534.009D8819C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=16d7f4af71ec18f5d28c4c13ebed3a41a7c131f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Jul 2015 10:14:53 +0200, J?rg Krause wrote:
-> The most modules of boost needs a toolchain with wchar. To ease maintenance
-> we make the entire boost package depend on wchar.
-> 
-> Also add a reverse dependency to libftdipp1 and yaml-cpp.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/49f/49f5c0521fc90fbd4673ad233ff679be007d2953/
-> http://autobuild.buildroot.net/results/12f/12f544c97e3451fb2a72025ebc62292957e47070/
-> http://autobuild.buildroot.net/results/ef6/ef6c897ea7547e8ed5f019e8ce4473f0998f2c16/
-> http://autobuild.buildroot.net/results/7a0/7a0ab069c505696a7887ba5c561b76b233ce59d5/
-> 
-> and more.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/boost/Config.in    | 13 +++----------
->  package/libftdi1/Config.in |  5 +++--
->  package/yaml-cpp/Config.in |  5 +++--
->  3 files changed, 9 insertions(+), 14 deletions(-)
+This module loose his GPLv2 licensing option. Remains the LGPLv2.1 with
+exception and LGPLv3 as the possible open-source licenses.
 
-Applied, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/6c80ba0669a7fc8cc60baaa849044fd65a78ce87/
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5websockets/qt5websockets.mk |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
+index 2b257e1..1d7c1f1 100644
+--- a/package/qt5/qt5websockets/qt5websockets.mk
++++ b/package/qt5/qt5websockets/qt5websockets.mk
+@@ -11,10 +11,8 @@ QT5WEBSOCKETS_DEPENDENCIES = qt5base
+ QT5WEBSOCKETS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-# Source files contain references to LGPL_EXCEPTION.txt but it is not included
+-# in the archive.
+-QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
++QT5WEBSOCKETS_LICENSE = LGPLv2.1 with exception or LGPLv3
++QT5WEBSOCKETS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+ else
+ QT5WEBSOCKETS_LICENSE = Commercial license
+ QT5WEBSOCKETS_REDISTRIBUTE = NO
