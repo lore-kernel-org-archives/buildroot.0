@@ -1,27 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:40:19 +0200
-Subject: [Buildroot] [PATCH 08/12] libnfc: Bump version and change site
-In-Reply-To: <1437943118-18060-9-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1437943118-18060-9-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150726234019.09411e6c@free-electrons.com>
+Date: Sun, 26 Jul 2015 23:29:43 +0200
+Subject: [Buildroot] [git commit] qextserialport: Bump version and change
+	site
+Message-ID: <20150726214034.0B05E7FE99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=0b97d38e9e84658a8abaad6bbf0e323d496e415d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Jul 2015 22:38:34 +0200, Maxime Hadjinlian wrote:
-> Google Code is a closing forge, libllcp has already made the move to Github.
+Google Code is a closing forge, qextserialport has already made the move
+to Github.
 
-libllcp -> libnfc.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qextserialport/qextserialport.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-Applied with that fixed, of course.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 61f7b05..6f82b39 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -4,13 +4,10 @@
+ #
+ ################################################################################
+ 
+-QEXTSERIALPORT_VERSION = 6c47244de4ce6db43c2f05caee957666c951dae1
+-QEXTSERIALPORT_SITE = https://qextserialport.googlecode.com/git
+-QEXTSERIALPORT_SITE_METHOD = git
+-
++QEXTSERIALPORT_VERSION = ada321a9ee463f628e7b781b8ed00ff219152158
++QEXTSERIALPORT_SITE = $(call github,qextserialport,qextserialport,$(QEXTSERIALPORT_VERSION))
+ QEXTSERIALPORT_LICENSE = MIT
+ QEXTSERIALPORT_LICENSE_FILES = LICENSE
+-
+ QEXTSERIALPORT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT),y)
