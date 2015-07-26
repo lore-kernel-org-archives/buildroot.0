@@ -1,67 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 22:11:55 +0200
-Subject: [Buildroot] [PATCH 4/4] php: remove redundant --static flag to
-	pkg-config
-In-Reply-To: <1437937112-13269-4-git-send-email-patrickdepinguin@gmail.com>
-References: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
- <1437937112-13269-4-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150726201155.GO3770@free.fr>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun, 26 Jul 2015 21:14:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/exfat-utils: fix compilation
+ error with musl
+In-Reply-To: <20150726200401.GF17029@tarshish>
+References: <1437932111-411-1-git-send-email-brendanheading@gmail.com>
+ <20150726193803.GB17029@tarshish>
+ <CA+BsyQ6yfCRKAHpMq2Y68N9DSKrD3z20jBzfWgmSdqnTjXEk4w@mail.gmail.com>
+ <20150726200401.GF17029@tarshish>
+Message-ID: <CA+BsyQ6gLC2LQdReP1rAuO1CjeL+BAw0+Z9qFB7moLWTUh5v9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>
+> Just copy the dependencies of BR2_PACKAGE_LIBFUSE to
+> BR2_PACKAGE_EXFAT_UTILS.
+> See the explanation at
+> http://nightly.buildroot.org/manual.html#_config_files
+> under "Choosing depends on or select".
+>
 
-On 2015-07-26 20:58 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> The pkg-config tool is automatically passing --static when BR2_STATIC_LIBS
-> is set (see package/pkgconf/pkgconf.mk), so no need to pass it explicitly
-> from package .mk files.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Baruch,
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I think this has already been done ? package/exfat/Config.in :
 
-Regards,
-Yann E. MORIN.
+config BR2_PACKAGE_EXFAT
+bool "exFAT (FUSE)"
+depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+depends on BR2_USE_MMU # libfuse
+depends on BR2_USE_WCHAR
+depends on !BR2_STATIC_LIBS # libfuse
+select BR2_PACKAGE_LIBFUSE <-- added by me
+help
+  A full-featured exFAT file system implementation for GNU/Linux
+  and other Unix-like systems as a FUSE module.
 
-> ---
->  package/php/php.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 39f4e2a..4b171cf 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -116,7 +116,7 @@ PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
->  PHP_DEPENDENCIES += openssl
->  # openssl needs zlib, but the configure script forgets to link against
->  # it causing detection failures with static linking
-> -PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static openssl`
-> +PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
->  endif
->  
->  ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
-> @@ -187,7 +187,7 @@ endif
->  ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
->  PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
->  PHP_DEPENDENCIES += sqlite
-> -PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static sqlite3`
-> +PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs sqlite3`
->  endif
->  
->  ### PDO
-> -- 
-> 1.8.5.1
-> 
+  http://code.google.com/p/exfat/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+package/libfuse/Config.in :
+
+config BR2_PACKAGE_LIBFUSE
+bool "libfuse"
+# Really doesn't like static, see fuse/lib/fuse.c
+depends on !BR2_STATIC_LIBS
+depends on BR2_TOOLCHAIN_HAS_THREADS
+depends on BR2_USE_MMU # fork()
+help
+  FUSE (Filesystem in UserSpacE)
+
+  http://fuse.sourceforge.net/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/1267c0cc/attachment.html>
