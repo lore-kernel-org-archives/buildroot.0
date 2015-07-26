@@ -1,57 +1,50 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 27 Jul 2015 00:19:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: journald should use
- volatile storage
-In-Reply-To: <CANPyyuN093C11GRiFUC+kTqq2T-XtSe4Adh3P+vSTBXJELGo6A@mail.gmail.com>
-References: <1425201058-3946-1-git-send-email-nroach44@gmail.com>
- <87h9u4xxb1.fsf@dell.be.48ers.dk>
- <CANPyyuN093C11GRiFUC+kTqq2T-XtSe4Adh3P+vSTBXJELGo6A@mail.gmail.com>
-Message-ID: <CAGduivxi4cEmFgVHJ9O30=XXKGdtdk3m5P-m__o4XZFkt4Ee6g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 27 Jul 2015 01:20:39 +0300
+Subject: [Buildroot] [PATCH v8 1/1] mosh: new package
+In-Reply-To: <1437928447-26907-1-git-send-email-christian@paral.in>
+References: <1437928447-26907-1-git-send-email-christian@paral.in>
+Message-ID: <20150726222039.GL17029@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nathaniel, Mike, all
+Hi Christian,
 
-On Mon, Mar 2, 2015 at 6:13 PM, Mike Williams <mike@mikebwilliams.com> wrote:
-> On Sun, Mar 1, 2015 at 3:44 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>>> "Nathaniel" == Nathaniel Roach <nroach44@gmail.com> writes:
->>
->>  > (By default)
->>  > This fixes https://bugs.busybox.net/show_bug.cgi?id=7892
->>
->>  > Journald was attempting to write the logs to file before the
->>  > underlying file system was up. A proposed solution was to bring
->>  > /tmp up beforehand, but that did not always solve the issue.
-This should never happens, the service that starts journald depends on
-earlier services that mount the related filesystem. And even if they
-are not present, it should be able to deal with it (I have a setup
-where journald is started before the mountpoint where it should write
-is mounted and I never had any problem with it).
->>
->>  > In addition, since the logging directory was a tmpfs to begin with
->>  > (/var/log -> /tmp) this should save some cycles.
->>
->>  > Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
->>
->> Sorry, cannot reproduce this here. How do you see it exactly?
->>
->> See bugtracker for details about my tests with
->> qemu_arm_versatile_defconfig.
->>
->
-> I recently started having this issue on my SAMA5 system and this patch
-> fixed it. It seems to be some sort of race condition; before this
-> patch it would occur about 1 out of 3 boots. I've since booted a dozen
-> times without an issue.
-I would really think the issue is elsewhere since you both have the
-same board and Peter could not reproduce and neither can I with 4
-different platform (3 are ARM based but so is the SAMA5).
->
-> Mike
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+On Sun, Jul 26, 2015 at 09:34:07AM -0700, Christian Stewart wrote:
+> diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+> new file mode 100644
+> index 0000000..9841b2e
+> --- /dev/null
+> +++ b/package/mosh/Config.in
+> @@ -0,0 +1,19 @@
+> +comment "mosh needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+The dependencies comment should depend on supported arches. Since this patch 
+has already been applied, I'll send a follow-up.
+
+> +config BR2_PACKAGE_MOSH
+> +	bool "mosh"
+> +	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS #protobuf
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf
+> +	select BR2_PACKAGE_PROTOBUF
+> +	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_OPENSSL
+> +	select BR2_PACKAGE_OPENSSH if !BR2_PACKAGE_DROPBEAR_CLIENT
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  Remote terminal application that supports intermittent connectivity,
+> +	  allows roaming, and provides speculative local echo and line editing
+> +	  of user keystrokes.
+> +
+> +	  https://mosh.mit.edu
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
