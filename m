@@ -1,31 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:49:04 +0200
-Subject: [Buildroot] [PATCH] libubox: bump version
-In-Reply-To: <1437853017-4009-1-git-send-email-yegorslists@googlemail.com>
-References: <1437853017-4009-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150726154904.7f063125@free-electrons.com>
+From: kyak <bas@bmail.ru>
+Date: Sun, 26 Jul 2015 18:49:53 +0300 (MSK)
+Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
+In-Reply-To: <20150726133211.GD3770@free.fr>
+References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
+ <20150725212807.GD1847@free.fr> <alpine.LNX.2.20.1507261047230.883@bas>
+ <20150726133211.GD3770@free.fr>
+Message-ID: <alpine.LNX.2.20.1507261839280.883@bas>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Hi Yann,
 
-On Sat, 25 Jul 2015 21:36:57 +0200, Yegor Yefremov wrote:
-> Change upstream location and remove upstreamed patches.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/libubox/0001-drop-legacy-json-c.patch | 34 ---------------------------
->  package/libubox/libubox.mk                    |  4 ++--
->  2 files changed, 2 insertions(+), 36 deletions(-)
->  delete mode 100644 package/libubox/0001-drop-legacy-json-c.patch
+Sure, i should've attached this information in the first place. After all, 
+i too used it for debugging of this problem.
 
-Applied, thanks.
+Full build log: http://paste.pound-python.org/show/dQ2gfhqx7aQMHAQlRVfK/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+config.log: http://paste.pound-python.org/show/EsWJPVSwSaYKN2S0UYJH/
+
+Basically, when configure tests for libICE, it attempts to use host search 
+path looking for IceConnectionNumber symbol:
+
+"warning: library search path "/usr/lib64" is unsafe for 
+cross-compilation"
+
+On Sun, 26 Jul 2015, Yann E. MORIN wrote:
+
+> Mikhail, All,
+>
+> On 2015-07-26 10:55 +0300, kyak spake thusly:
+>> I get the following error:
+>>
+>>>>> xterm 314 Building
+>
+> It would have been more useful to also see the output of the configuring
+> part, too.
+>
+> Also, can you look at output/build/xterm-314/config.log why it does not
+> find libICE?
+>
+> Otherwise, I'm not able to reproduce this error with your .config... ;-/
+>
+> Regards,
+> Yann E. MORIN.
+>
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+>
