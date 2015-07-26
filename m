@@ -1,70 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 14:08:14 +0200
-Subject: [Buildroot] [PATCH v2 1/1] toolchain-external wrapper: don't
- pass march/mcpu if mtune is on cmdline
-In-Reply-To: <1437907987-5821-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1437907987-5821-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150726120814.GB3770@free.fr>
+Date: Sun, 26 Jul 2015 14:11:55 +0200
+Subject: [Buildroot] [PATCH] zxing_cpp: New package
+In-Reply-To: <CAGduivzTUvGvGs98N1eVnif0tb2ncoJSKD+cn4Y0DmcpET4waw@mail.gmail.com>
+References: <1437689326-23261-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <20150725222152.GK1847@free.fr>
+ <CAGduivzTUvGvGs98N1eVnif0tb2ncoJSKD+cn4Y0DmcpET4waw@mail.gmail.com>
+Message-ID: <20150726121155.GC3770@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Maxime, All,
 
-On 2015-07-26 12:53 +0200, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> Before commit 5715d2dcf48a39c16a3f3e41c97109613fed121d, the external
-> toolchain wrapper would not pass its own march/mcpu/mtune flags to the real
-> compiler if at least one of them was passed on the wrapper command-line.
-> 
-> The mentioned commit intended to remove the passing of an mtune parameter
-> coming from Buildroot, which was always empty after some other refactoring,
-> but the changes have the side-effect that march/mcpu is now also passed when
-> mtune is already given on the command-line. In that case, only mtune should
-> be passed to the real compiler.
-> 
-> Restore part of the original toolchain wrapper code to check the presence of
-> mtune on the command-line.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 2015-07-26 13:27 +0200, Maxime Hadjinlian spake thusly:
+> On Sun, Jul 26, 2015 at 12:21 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2015-07-24 00:08 +0200, Maxime Hadjinlian spake thusly:
+[--SNIP--]
+> >> +define ZXING_CPP_INSTALL_STAGING_CMDS
+> >> +     for i in $$(find $(@D)/buildroot-build/core/src -iname *.h); do \
+> >> +             $(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/local/include; \
+> >> +     done
+> >> +endef
+> >> +
+> >> +define ZXING_CPP_INSTALL_TARGET_CMDS
+> >> +     for i in $$(find $(@D)/buildroot-build/ -iname *.so -o -iname *.a); do \
+> >> +             $(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/lib; \
+> >> +     done
+> >> +     $(INSTALL) -m 755 $(@D)/buildroot-build/zxing $(TARGET_DIR)/usr/sbin
+> >> +endef
+> >
+> > Why can't we use the standard 'install' rule for either staging or
+> > target?
+> There's no install in the CMakeLists from the original package,
+> there's already multiple issues in their Github to add it but it
+> doesn't seem like the maintainer is resolved to add them. Since I
+> don't want to add a patch that'll just rot there, I went this way.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+That's not how I interpret the comments in the issue report; on the
+contrary, I understand that the maintainer will welcome pull requests
+for new features, so if you were to send such a PR, it seems it would
+have quite some good chances to get in.
+
+Anyway, OK for the way you'r edoing it for now...
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> v2: do not unnecessarily increase EXCLUSIVE_ARGS (Yann)
-> 
-> 
->  toolchain/toolchain-external/ext-toolchain-wrapper.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> index e2d01dc..b3b02d8 100644
-> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> @@ -177,11 +177,12 @@ int main(int argc, char **argv)
->  
->  #if defined(BR_ARCH) || \
->      defined(BR_CPU)
-> -	/* Add our -march/cpu/abi flags, but only if none are
-> -	 * already specified on the commandline
-> +	/* Add our -march/cpu flags, but only if none of
-> +	 * -march/mtune/mcpu are already specified on the commandline
->  	 */
->  	for (i = 1; i < argc; i++) {
->  		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
-> +		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
->  		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
->  			break;
->  	}
-> -- 
-> 1.8.5.1
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
