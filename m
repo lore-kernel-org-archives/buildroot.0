@@ -1,64 +1,85 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Jul 2015 23:34:13 +0300
-Subject: [Buildroot] [PATCH 1/1] package/exfat-utils: fix compilation
- error with musl
-In-Reply-To: <CA+BsyQ6gLC2LQdReP1rAuO1CjeL+BAw0+Z9qFB7moLWTUh5v9A@mail.gmail.com>
-References: <1437932111-411-1-git-send-email-brendanheading@gmail.com>
- <20150726193803.GB17029@tarshish>
- <CA+BsyQ6yfCRKAHpMq2Y68N9DSKrD3z20jBzfWgmSdqnTjXEk4w@mail.gmail.com>
- <20150726200401.GF17029@tarshish>
- <CA+BsyQ6gLC2LQdReP1rAuO1CjeL+BAw0+Z9qFB7moLWTUh5v9A@mail.gmail.com>
-Message-ID: <20150726203413.GG17029@tarshish>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 26 Jul 2015 22:38:26 +0200
+Subject: [Buildroot] [PATCH 00/12] Google Code: Change site
+Message-ID: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Brendan,
+Hi all,
 
-On Sun, Jul 26, 2015 at 09:14:29PM +0100, Brendan Heading wrote:
-> > Just copy the dependencies of BR2_PACKAGE_LIBFUSE to
-> > BR2_PACKAGE_EXFAT_UTILS.
-> > See the explanation at
-> > http://nightly.buildroot.org/manual.html#_config_files
-> > under "Choosing depends on or select".
-> 
-> I think this has already been done ? package/exfat/Config.in :
-> 
-> config BR2_PACKAGE_EXFAT
-> bool "exFAT (FUSE)"
-> depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-> depends on BR2_USE_MMU # libfuse
-> depends on BR2_USE_WCHAR
-> depends on !BR2_STATIC_LIBS # libfuse
-> select BR2_PACKAGE_LIBFUSE <-- added by me
+For thoses of you that don't know, Google Code will be read-only by
+August and close its door at the end of the year. The sources will
+remain online for a full year and then it's gone.
 
-As far as I can see your patch touches package/exfat-utils/Config.in, not 
-package/exfat/Config.in.
+Some projects have already moved on, this series bump/change the site of
+theses projects.
 
-baruch
+A few are still on Google Code, they seems pretty abandonned, so a
+decision will be needed regarding theses. Switch to Alioth ? Look for a
+fork ?
 
-> help
->   A full-featured exFAT file system implementation for GNU/Linux
->   and other Unix-like systems as a FUSE module.
-> 
->   http://code.google.com/p/exfat/
-> 
-> package/libfuse/Config.in :
-> 
-> config BR2_PACKAGE_LIBFUSE
-> bool "libfuse"
-> # Really doesn't like static, see fuse/lib/fuse.c
-> depends on !BR2_STATIC_LIBS
-> depends on BR2_TOOLCHAIN_HAS_THREADS
-> depends on BR2_USE_MMU # fork()
-> help
->   FUSE (Filesystem in UserSpacE)
-> 
->   http://fuse.sourceforge.net/
+Maxime Hadjinlian (12):
+  zxing_cpp: New package
+  yaml-cpp: Bump version and change site
+  libass: Bump version and change site
+  explorercanvas: Bump version and change site
+  libfreefare: Bump version and change site
+  libiscsi: Bump version
+  libllcp: Bump version and change site
+  libnfc: Bump version and change site
+  python-pycrc16: Change site
+  python-dpkt: Bump version and change site
+  python-pypcap: Bump version and change site
+  qextserialport: Bump version and change site
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+ Config.in.legacy                                   |  8 +++
+ package/Config.in                                  |  2 +-
+ package/explorercanvas/explorercanvas.hash         |  2 -
+ package/explorercanvas/explorercanvas.mk           | 12 +---
+ package/libass/libass.hash                         |  4 +-
+ package/libass/libass.mk                           |  6 +-
+ package/libfreefare/libfreefare.hash               |  2 +
+ package/libfreefare/libfreefare.mk                 |  7 +-
+ ...01-Fix-warnings-related-to-subdir-objects.patch | 46 ------------
+ ...tool-AM_PROG_AR-warning-during-autoreconf.patch | 42 -----------
+ ...0003-Fix-CUnit-test-for-cross-compilation.patch | 56 ---------------
+ ...4-examples-fix-uint64_t-formatting-issues.patch | 49 -------------
+ ...005-ld_iscsi-fix-largefile-related-issues.patch | 83 ----------------------
+ ...nly-build-the-test-tool-and-ld-iscsi-iff-.patch | 55 --------------
+ package/libiscsi/libiscsi.hash                     |  3 +
+ package/libiscsi/libiscsi.mk                       |  7 +-
+ package/libllcp/libllcp.mk                         |  5 +-
+ package/libnfc/libnfc.hash                         |  3 +
+ package/libnfc/libnfc.mk                           |  6 +-
+ package/python-crc16/python-crc16.mk               |  3 +-
+ package/python-dpkt/python-dpkt.mk                 |  5 +-
+ package/python-pypcap/python-pypcap.mk             |  5 +-
+ package/qextserialport/qextserialport.mk           |  7 +-
+ package/yaml-cpp/yaml-cpp.hash                     |  5 --
+ package/yaml-cpp/yaml-cpp.mk                       |  4 +-
+ package/{zxing => zxing-cpp}/Config.in             | 10 +--
+ package/zxing-cpp/zxing-cpp.mk                     | 33 +++++++++
+ package/zxing/0001-makefile.patch                  | 30 --------
+ package/zxing/zxing.mk                             | 40 -----------
+ 29 files changed, 86 insertions(+), 454 deletions(-)
+ delete mode 100644 package/explorercanvas/explorercanvas.hash
+ create mode 100644 package/libfreefare/libfreefare.hash
+ delete mode 100644 package/libiscsi/0001-Fix-warnings-related-to-subdir-objects.patch
+ delete mode 100644 package/libiscsi/0002-Avoid-libtool-AM_PROG_AR-warning-during-autoreconf.patch
+ delete mode 100644 package/libiscsi/0003-Fix-CUnit-test-for-cross-compilation.patch
+ delete mode 100644 package/libiscsi/0004-examples-fix-uint64_t-formatting-issues.patch
+ delete mode 100644 package/libiscsi/0005-ld_iscsi-fix-largefile-related-issues.patch
+ delete mode 100644 package/libiscsi/0006-configure-only-build-the-test-tool-and-ld-iscsi-iff-.patch
+ create mode 100644 package/libiscsi/libiscsi.hash
+ create mode 100644 package/libnfc/libnfc.hash
+ delete mode 100644 package/yaml-cpp/yaml-cpp.hash
+ rename package/{zxing => zxing-cpp}/Config.in (52%)
+ create mode 100644 package/zxing-cpp/zxing-cpp.mk
+ delete mode 100644 package/zxing/0001-makefile.patch
+ delete mode 100644 package/zxing/zxing.mk
+
+--
+2.1.4
