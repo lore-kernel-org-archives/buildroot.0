@@ -1,51 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 21:47:00 +0200
-Subject: [Buildroot] [PATCHv2 1/1] xterm: x-includes and x-libraries
- must be set for cross-compiling
-In-Reply-To: <1437932796-16216-1-git-send-email-bas@bmail.ru>
-References: <1437932796-16216-1-git-send-email-bas@bmail.ru>
-Message-ID: <20150726214700.68302c4a@free-electrons.com>
+Date: Sun, 26 Jul 2015 21:47:48 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: support building with
+	toolchains without native RPC
+Message-ID: <20150726194819.1640281972@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=baedef979cda7783b399099b49cd23536e44b1c7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Jul 2015 20:46:36 +0300, kyak wrote:
-> From: Mikhail Peselnik <bas@bmail.ru>
-> 
-> These flags need to be set so that the configure script would
-> correctly use libICE from cross-toolchain rather than from host.
-> Also, the xterm package is missing the freetype2 dependency, as
-> noted by Romain Naour.
+ltp-testsuite needs RPC, but this could also be provided by libtirpc.
 
-So it should be two patches.
+The dependency of libtirpc on
+!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 does not need to be
+propagated, because it is always satisfied: ltp-testsuite depends on
+BR2_USE_MMU which is always unset for Blackfin targets.
 
-Basically, if your patch does something that isn't summarized in the
-commit title, then probably something wrong is going on.
+Since musl toolchains never have RPC support, this change would now allow
+building of ltp-testsuite on musl toolchains. Unfortunately, ltp-testsuite
+does not build yet with musl, so a specific check on musl is added.
+This is deemed more conceptually correct than checking on glibc||uclibc.
 
-So, one patch for x-includes/x-libraries, one patch for the missing
-freetype2 dependency.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ltp-testsuite/Config.in        |    7 ++++---
+ package/ltp-testsuite/ltp-testsuite.mk |   15 +++++++++++++--
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-However, I believe Romain was maybe wrong: the freetype dependency
-seems to be optional, according to configure.in. So it should probably
-just be:
-
-ifeq ($(BR2_PACKAGE_FREETYPE),y)
-XTERM_DEPENDENCIES += freetype
-XTERM_CONF_OPTS += --enable-freetype
-else
-XTERM_CONF_OPTS += --disable-freetype
-endif
-
-Romain, can you confirm?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 52c02ce..91b09ce 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -6,7 +6,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 	bool "ltp-testsuite"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	# does not build, cachectl.h issue
+ 	depends on !BR2_nios2
+ 	help
+@@ -21,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 
+ 	  http://ltp.sourceforge.net/
+ 
+-comment "ltp-testsuite needs a toolchain w/ RPC, threads"
++comment "ltp-testsuite needs a non-musl toolchain w/ threads"
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 2d4f286..acc1640 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -19,8 +19,19 @@ endif
+ 
+ # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+ # support.
++LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
++LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
++LTP_TESTSUITE_LIBS =
++
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++LTP_TESTSUITE_DEPENDENCIES += libtirpc host-pkgconf
++LTP_TESTSUITE_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
++LTP_TESTSUITE_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
++endif
++
+ LTP_TESTSUITE_CONF_ENV += \
+-	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+-	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
++	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
++	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
++	LIBS="$(LTP_TESTSUITE_LIBS)"
+ 
+ $(eval $(autotools-package))
