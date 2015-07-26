@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 18:21:46 +0200
-Subject: [Buildroot] [git commit] perl-xml-libxml: bump to version 2.0121
-Message-ID: <20150726162156.8798781D77@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 18:25:15 +0200
+Subject: [Buildroot] Unable to login as root to new buildroot system
+In-Reply-To: <CAChFQ9R=5anPgo9mboKxCkppsadQkSzC_WhpevWoarwgKVhLQg@mail.gmail.com>
+References: <CAChFQ9R=5anPgo9mboKxCkppsadQkSzC_WhpevWoarwgKVhLQg@mail.gmail.com>
+Message-ID: <20150726182515.1e0b67c8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70b0640a2b72f6160244bdc1ae2b060367cd2a41
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Adam Baxter,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl-xml-libxml/perl-xml-libxml.hash |    4 ++--
- package/perl-xml-libxml/perl-xml-libxml.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, 24 Jul 2015 17:25:00 -0700, Adam Baxter wrote:
+> I'm using the latest Git version of buildroot and the following config -
+> https://github.com/voltagex/serial-vm-buildroot
+> 
+> It builds and boots with qemu just fine, but no matter what combination of
+> getty/no getty/shell/root password I use, I can't login. Even with a blank
+> root password I'm told that the password is incorrect, and I can't work out
+> how to make it boot straight to a root prompt.
+> 
+> Can anyone help? The repo above should be able to be built with make
+> serial_defconfig, but if there's still hardcoded paths to a 'voltagex' or
+> 'ubuntu' user you'll have to let me know how to remove them.
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
-index 37d8b3d..516aaef 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.hash
-+++ b/package/perl-xml-libxml/perl-xml-libxml.hash
-@@ -1,3 +1,3 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    da8d61a5d0d1bfd8d46814e376d33f58 XML-LibXML-2.0118.tar.gz
--sha256 cc64ae26ef5ebc0f64ba292c582f1cd70701c6513133a063e2d25c3257430c9c XML-LibXML-2.0118.tar.gz
-+md5    1544ab9ac110f5da296015346561ce02 XML-LibXML-2.0121.tar.gz
-+sha256 ec431011cb37a04640fd2316f64d0405a274eece2c6f3847f7fbd336eb1c0dc9 XML-LibXML-2.0121.tar.gz
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index e93623c..d58a1f3 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_XML_LIBXML_VERSION = 2.0118
-+PERL_XML_LIBXML_VERSION = 2.0121
- PERL_XML_LIBXML_SOURCE = XML-LibXML-$(PERL_XML_LIBXML_VERSION).tar.gz
- PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = perl zlib libxml2 perl-xml-sax perl-xml-namespacesupport
+Your configuration has:
+
+BR2_TARGET_GENERIC_GETTY_OPTIONS="-n"
+
+Are you sure you really want this getty option?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
