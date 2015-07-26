@@ -1,77 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:48:48 +0200
-Subject: [Buildroot] [git commit branch/next] libubox: bump version
-Message-ID: <20150808105641.C5F1F7FFCF@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 21:47:48 +0200
+Subject: [Buildroot] [git commit branch/next] ltp-testsuite: support
+	building with toolchains without native RPC
+Message-ID: <20150808105642.5102780414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87932844f7e31a9dc53e00a05ac1bc8a6c69c15a
+commit: http://git.buildroot.net/buildroot/commit/?id=baedef979cda7783b399099b49cd23536e44b1c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Change upstream location and remove upstreamed patches.
+ltp-testsuite needs RPC, but this could also be provided by libtirpc.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+The dependency of libtirpc on
+!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 does not need to be
+propagated, because it is always satisfied: ltp-testsuite depends on
+BR2_USE_MMU which is always unset for Blackfin targets.
+
+Since musl toolchains never have RPC support, this change would now allow
+building of ltp-testsuite on musl toolchains. Unfortunately, ltp-testsuite
+does not build yet with musl, so a specific check on musl is added.
+This is deemed more conceptually correct than checking on glibc||uclibc.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libubox/0001-drop-legacy-json-c.patch |   34 -------------------------
- package/libubox/libubox.mk                    |    4 +-
- 2 files changed, 2 insertions(+), 36 deletions(-)
+ package/ltp-testsuite/Config.in        |    7 ++++---
+ package/ltp-testsuite/ltp-testsuite.mk |   15 +++++++++++++--
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/package/libubox/0001-drop-legacy-json-c.patch b/package/libubox/0001-drop-legacy-json-c.patch
-deleted file mode 100644
-index 84bd99a..0000000
---- a/package/libubox/0001-drop-legacy-json-c.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--[PATCH] libubox: drop legacy json-c support
--
--The cmake logic is wrong (E.G. PKG_CHECK_FOR_MODULES fails unless all
--modules are found), and the legacy libjson.so name is also used by the other
--libjson (http://sourceforge.net/projects/libjson/) which provides an
--incompatible API, so just drop it.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- CMakeLists.txt |    4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--Index: libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b/CMakeLists.txt
--===================================================================
----- libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b.orig/CMakeLists.txt
--+++ libubox-bbd846ec2d72b2629758b69dc122ac0b0f2c3e4b/CMakeLists.txt
--@@ -13,7 +13,7 @@
-- ENDIF()
-- 
-- INCLUDE(FindPkgConfig)
---PKG_CHECK_MODULES(JSONC json-c json)
--+PKG_CHECK_MODULES(JSONC json-c)
-- IF(JSONC_FOUND)
--   ADD_DEFINITIONS(-DJSONC)
--   INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
--@@ -42,7 +42,7 @@
-- 
-- ADD_SUBDIRECTORY(lua)
-- 
---find_library(json NAMES json-c json)
--+find_library(json NAMES json-c)
-- IF(EXISTS ${json})
-- 	ADD_LIBRARY(blobmsg_json SHARED blobmsg_json.c)
-- 	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index 5d9c01d..4c56951 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 52c02ce..91b09ce 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -6,7 +6,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
+ 	bool "ltp-testsuite"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	# does not build, cachectl.h issue
+ 	depends on !BR2_nios2
+ 	help
+@@ -21,7 +22,7 @@ config BR2_PACKAGE_LTP_TESTSUITE
  
--LIBUBOX_VERSION = 5a0bbefc8fa440446253b171d0ac038d839360e3
--LIBUBOX_SITE = git://nbd.name/luci2/libubox.git
-+LIBUBOX_VERSION = e88d816d6e462180f0337565e04e36be58a63309
-+LIBUBOX_SITE = git://git.openwrt.org/project/libubox.git
- LIBUBOX_LICENSE = LGPLv2.1, GPLv2, BSD-3c, MIT
- LIBUBOX_INSTALL_STAGING = YES
- LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
+ 	  http://ltp.sourceforge.net/
+ 
+-comment "ltp-testsuite needs a toolchain w/ RPC, threads"
++comment "ltp-testsuite needs a non-musl toolchain w/ threads"
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 2d4f286..acc1640 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -19,8 +19,19 @@ endif
+ 
+ # ltp-testsuite uses <fts.h>, which isn't compatible with largefile
+ # support.
++LTP_TESTSUITE_CFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))
++LTP_TESTSUITE_CPPFLAGS = $(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))
++LTP_TESTSUITE_LIBS =
++
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++LTP_TESTSUITE_DEPENDENCIES += libtirpc host-pkgconf
++LTP_TESTSUITE_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
++LTP_TESTSUITE_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
++endif
++
+ LTP_TESTSUITE_CONF_ENV += \
+-	CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
+-	CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
++	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
++	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
++	LIBS="$(LTP_TESTSUITE_LIBS)"
+ 
+ $(eval $(autotools-package))
