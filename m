@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:25:36 +0200
-Subject: [Buildroot] [git commit branch/next] python-dpkt: Bump version and
-	change site
-Message-ID: <20150808105642.CD839818F0@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 23:44:20 +0200
+Subject: [Buildroot] [git commit branch/next] aiccu: remove redundant
+	--static flag to pkg-config
+Message-ID: <20150808105642.E8FE87FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f38b397c886472169fdb1ad8594024eb7cc538c
+commit: http://git.buildroot.net/buildroot/commit/?id=d4b539564fce4aa8bfbbd9e16c801b8ddae96141
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Google Code is a closing forge, python-dpkt has already made the move to
-Github.
+The pkg-config tool is automatically passing --static when BR2_STATIC_LIBS
+is set (see package/pkgconf/pkgconf.mk), so no need to pass it explicitly
+from package .mk files.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-dpkt/python-dpkt.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/aiccu/aiccu.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
-index fb630fb..3015502 100644
---- a/package/python-dpkt/python-dpkt.mk
-+++ b/package/python-dpkt/python-dpkt.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
+index fc328fd..60d65dd 100644
+--- a/package/aiccu/aiccu.mk
++++ b/package/aiccu/aiccu.mk
+@@ -16,7 +16,7 @@ AICCU_LFDLAGS = $(TARGET_LDFLAGS)
+ # aiccu forgets to link with gnutls' dependencies breaking the build when
+ # linking statically
+ ifeq ($(BR2_STATIC_LIBS),y)
+-AICCU_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --static --libs gnutls`
++AICCU_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs gnutls`
+ endif
  
--PYTHON_DPKT_VERSION = 1.7
--PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
--PYTHON_DPKT_SITE = http://dpkt.googlecode.com/files
-+PYTHON_DPKT_VERSION = 1.8.r98
-+PYTHON_DPKT_SITE = $(call github,kbandla,dpkt,$(PYTHON_DPKT_VERSION))
- PYTHON_DPKT_SETUP_TYPE = distutils
- PYTHON_DPKT_LICENSE = BSD-3c
- PYTHON_DPKT_LICENSE_FILES = LICENSE
+ # dummy RPM_OPT_FLAGS to disable stripping
