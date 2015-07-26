@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:19:19 +0200
-Subject: [Buildroot] [git commit branch/next] evtest: bump version to 1.33
-Message-ID: <20150808105643.1DC407FD83@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 23:29:43 +0200
+Subject: [Buildroot] [git commit branch/next] qextserialport: Bump version
+	and change site
+Message-ID: <20150808105642.DFFB47FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fef8e3552dcfe4ac2a859ce0987ad42d406db141
+commit: http://git.buildroot.net/buildroot/commit/?id=0b97d38e9e84658a8abaad6bbf0e323d496e415d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Google Code is a closing forge, qextserialport has already made the move
+to Github.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/evtest/evtest.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qextserialport/qextserialport.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/evtest/evtest.mk b/package/evtest/evtest.mk
-index 1573f52..3e02f7c 100644
---- a/package/evtest/evtest.mk
-+++ b/package/evtest/evtest.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 61f7b05..6f82b39 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -4,13 +4,10 @@
  #
  ################################################################################
  
--EVTEST_VERSION = 1.32
-+EVTEST_VERSION = 1.33
- EVTEST_SOURCE = evtest-$(EVTEST_VERSION).tar.gz
- EVTEST_SITE = http://cgit.freedesktop.org/evtest/snapshot
- EVTEST_LICENSE = GPLv2+
+-QEXTSERIALPORT_VERSION = 6c47244de4ce6db43c2f05caee957666c951dae1
+-QEXTSERIALPORT_SITE = https://qextserialport.googlecode.com/git
+-QEXTSERIALPORT_SITE_METHOD = git
+-
++QEXTSERIALPORT_VERSION = ada321a9ee463f628e7b781b8ed00ff219152158
++QEXTSERIALPORT_SITE = $(call github,qextserialport,qextserialport,$(QEXTSERIALPORT_VERSION))
+ QEXTSERIALPORT_LICENSE = MIT
+ QEXTSERIALPORT_LICENSE_FILES = LICENSE
+-
+ QEXTSERIALPORT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT),y)
