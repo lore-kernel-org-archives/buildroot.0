@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 18:21:40 +0200
-Subject: [Buildroot] [git commit] perl-uri: bump to version 1.68
-Message-ID: <20150726162156.84C5981D64@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 18:21:34 +0200
+Subject: [Buildroot] [git commit] perl-path-tiny: bump to version 0.072
+Message-ID: <20150726162156.60FB07FFA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=183d95c83c734c554c8bf976492d16710024da8d
+commit: http://git.buildroot.net/buildroot/commit/?id=b23950eb03e7d26ae6410e27ac97d94684137a5e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-uri/perl-uri.hash |    4 ++--
- package/perl-uri/perl-uri.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-path-tiny/perl-path-tiny.hash |    4 ++--
+ package/perl-path-tiny/perl-path-tiny.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index da33416..ea8de44 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
+diff --git a/package/perl-path-tiny/perl-path-tiny.hash b/package/perl-path-tiny/perl-path-tiny.hash
+index 91c1d1e..a62c165 100644
+--- a/package/perl-path-tiny/perl-path-tiny.hash
++++ b/package/perl-path-tiny/perl-path-tiny.hash
 @@ -1,3 +1,3 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    d0ef53b6c63bcc02ba55f405c30741e3 URI-1.67.tar.gz
--sha256 7088d43d5f4902becfa5e0627751f5e6d0e0bdd1637b2d39e70ce807068a274e URI-1.67.tar.gz
-+md5    4a954ab8d79f831616ca817ba4b26cb9 URI-1.68.tar.gz
-+sha256 c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358 URI-1.68.tar.gz
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 421a89f..f1aecb0 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,11 +4,11 @@
+-md5    76e99fd1bb615f56954025ae636c6233 Path-Tiny-0.068.tar.gz
+-sha256 a331fbd855a6216877c643c4cae4bf7edfdf7e13cd8142d2cb2d12eafdebaee0 Path-Tiny-0.068.tar.gz
++md5    840696b295230682c727297c87fe42d6 Path-Tiny-0.072.tar.gz
++sha256 d7507c7822d4f7f60a5329d26c8afce31022cd92d02b011e367cc6a1eeae6981 Path-Tiny-0.072.tar.gz
+diff --git a/package/perl-path-tiny/perl-path-tiny.mk b/package/perl-path-tiny/perl-path-tiny.mk
+index 534453b..71e2e43 100644
+--- a/package/perl-path-tiny/perl-path-tiny.mk
++++ b/package/perl-path-tiny/perl-path-tiny.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 1.67
-+PERL_URI_VERSION = 1.68
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_DEPENDENCIES = perl
- PERL_URI_LICENSE = Artistic or GPLv1+
--PERL_URI_LICENSE_FILES = README
-+PERL_URI_LICENSE_FILES = LICENSE
- 
- $(eval $(perl-package))
+-PERL_PATH_TINY_VERSION = 0.068
++PERL_PATH_TINY_VERSION = 0.072
+ PERL_PATH_TINY_SOURCE = Path-Tiny-$(PERL_PATH_TINY_VERSION).tar.gz
+ PERL_PATH_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
+ PERL_PATH_TINY_DEPENDENCIES = perl
