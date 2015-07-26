@@ -1,48 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 18:13:46 +0200
-Subject: [Buildroot] [PATCH 1/1] xterm: force detection of libICE
-In-Reply-To: <alpine.LNX.2.20.1507261839280.883@bas>
-References: <1437749654-29431-1-git-send-email-bas@bmail.ru>
- <20150725212807.GD1847@free.fr>
- <alpine.LNX.2.20.1507261047230.883@bas>
- <20150726133211.GD3770@free.fr>
- <alpine.LNX.2.20.1507261839280.883@bas>
-Message-ID: <20150726161346.GE3770@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jul 2015 18:21:29 +0200
+Subject: [Buildroot] [git commit] perl-net-ssleay: bump to version 1.70
+Message-ID: <20150726162155.A603F7FC1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mikhail, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=5c8a4d0f59ffd20f1c9419c6bd6702a980b6f6e5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Please, do not top-post]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl-net-ssleay/perl-net-ssleay.hash |    4 ++--
+ package/perl-net-ssleay/perl-net-ssleay.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2015-07-26 18:49 +0300, kyak spake thusly:
-> Sure, i should've attached this information in the first place. After all, i
-> too used it for debugging of this problem.
-> 
-> Full build log: http://paste.pound-python.org/show/dQ2gfhqx7aQMHAQlRVfK/
-> 
-> config.log: http://paste.pound-python.org/show/EsWJPVSwSaYKN2S0UYJH/
-> 
-> Basically, when configure tests for libICE, it attempts to use host search
-> path looking for IceConnectionNumber symbol:
-> 
-> "warning: library search path "/usr/lib64" is unsafe for cross-compilation"
-
-Ah, but then that's what we must fix, instead of forcing detectin of
-libICE. So, I'm marking your patch as "Changes Requested" in Patchwork.
-
-Unfortunately, I can't reproduce that leakage on my setup... :-(
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
+index 4a6bcaa..ca659c7 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.hash
++++ b/package/perl-net-ssleay/perl-net-ssleay.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    2db2445eb072b6ecf8a1a79c9ed3e4de Net-SSLeay-1.68.tar.gz
+-sha256 1701e24ec683529cb114e7b7877632f2e965a81381a70b696ee0692ee1e75cd4 Net-SSLeay-1.68.tar.gz
++md5    511cc451a64b0c5051bd9167f37051a0 Net-SSLeay-1.70.tar.gz
++sha256 05eaaa29b8f67778040eee53150ba702fc0ce49420ddd0f1ca68d082f4ee9f4a Net-SSLeay-1.70.tar.gz
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index 0ee9566..8a40a29 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_NET_SSLEAY_VERSION = 1.68
++PERL_NET_SSLEAY_VERSION = 1.70
+ PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+ PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
+ PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
