@@ -1,42 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:22:24 +0200
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: bump version
-	to 2.7.2
-Message-ID: <20150808105641.869707FFCF@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 15:21:06 +0200
+Subject: [Buildroot] [git commit branch/next] package/libtirpc: fix
+	undefined reference to _authdes_seccreate
+Message-ID: <20150808105641.6B6457FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a95960e5655ce0f56de38bd4aa0f0c007d3a5a0f
+commit: http://git.buildroot.net/buildroot/commit/?id=6ba49e2b913f1aa399088592a237dd45e495cb39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Commit 1c4767fa9d8c19b52824b1c10e0e25f413111f2d disables the C files auth_des.c
+and authdes_prot.c implementing DES authentification but forgets to remove
+a function call to authdes_seccreate() in rpc_soc.c.
+
+We add a seperate patch to disable the DES authentification (and not disable it
+together with NIS). DES is not provided by uClibc and musl.
+
+Fixes:
+http://autobuild.buildroot.org/results/33f/33f1849c6d1441d8565835872281e33a980aba6f/
+http://autobuild.buildroot.net/results/02e/02e9321b54d41b4b5c91d93c9942499a20d26919/
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.hash |    2 +-
- package/ffmpeg/ffmpeg.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |    6 +-
+ ...0007-Disable-DES-authentification-support.patch |   75 ++++++++++++++++++++
+ 2 files changed, 78 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index a6cb310..2e6b413 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	7e07b97d2415feeae9c9b5595e35e7b7aab33207e81bf9f8c0d1eece43f7f720	ffmpeg-2.7.1.tar.bz2
-+sha256	7ceb7550ad628c526fa6c9ff23fdfb687a62f54d90c4a730998d8c2b417b9ef2	ffmpeg-2.7.2.tar.bz2
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 28c6012..54c9f52 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+index ea30fb2..7f58ab3 100644
+--- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
++++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+@@ -1,4 +1,4 @@
+-From cb2f393afdb444bf97a7327991f8f5a2c2f64082 Mon Sep 17 00:00:00 2001
++From 15adb318818f5d0ac609ef2b87643dd760487cb6 Mon Sep 17 00:00:00 2001
+ From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+ Date: Mon, 20 Jul 2015 20:30:11 +0200
+ Subject: [PATCH 1/1] Disable parts of TIRPC requiring NIS support
+@@ -16,7 +16,7 @@ Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+  1 file changed, 3 insertions(+), 3 deletions(-)
  
--FFMPEG_VERSION = 2.7.1
-+FFMPEG_VERSION = 2.7.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ diff --git a/src/Makefile.am b/src/Makefile.am
+-index 6cc567a..2b26a29 100644
++index 6cc567a..9834f9a 100644
+ --- a/src/Makefile.am
+ +++ b/src/Makefile.am
+ @@ -51,7 +51,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
+@@ -24,7 +24,7 @@ index 6cc567a..2b26a29 100644
+          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
+ -        auth_time.c auth_des.c authdes_prot.c debug.c
+-+        debug.c
+++        auth_des.c authdes_prot.c debug.c
+  
+  ## XDR
+  libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
+diff --git a/package/libtirpc/0007-Disable-DES-authentification-support.patch b/package/libtirpc/0007-Disable-DES-authentification-support.patch
+new file mode 100644
+index 0000000..c251811
+--- /dev/null
++++ b/package/libtirpc/0007-Disable-DES-authentification-support.patch
+@@ -0,0 +1,75 @@
++From 79975eb4104667be85abd06874c258438826b674 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Fri, 24 Jul 2015 14:45:52 +0200
++Subject: [PATCH] Disable DES authentification support
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++uClibc and musl does not provide DES authentication.
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ src/Makefile.am |  2 +-
++ src/rpc_soc.c   | 32 --------------------------------
++ 2 files changed, 1 insertion(+), 33 deletions(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 960a522..3a88e31 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -51,7 +51,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
++         rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
++         rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
++         svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
++-        auth_des.c authdes_prot.c debug.c
+++        debug.c
++ 
++ ## XDR
++ libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
++diff --git a/src/rpc_soc.c b/src/rpc_soc.c
++index e146ed4..161a1ec 100644
++--- a/src/rpc_soc.c
+++++ b/src/rpc_soc.c
++@@ -521,38 +521,6 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
++ }
++ 
++ /*
++- * Create the client des authentication object. Obsoleted by
++- * authdes_seccreate().
++- */
++-AUTH *
++-authdes_create(servername, window, syncaddr, ckey)
++-	char *servername;		/* network name of server */
++-	u_int window;			/* time to live */
++-	struct sockaddr *syncaddr;	/* optional hostaddr to sync with */
++-	des_block *ckey;		/* optional conversation key to use */
++-{
++-	AUTH *dummy;
++-	AUTH *nauth;
++-	char hostname[NI_MAXHOST];
++-
++-	if (syncaddr) {
++-		/*
++-		 * Change addr to hostname, because that is the way
++-		 * new interface takes it.
++-		 */
++-		if (getnameinfo(syncaddr, sizeof(syncaddr), hostname,
++-		    sizeof hostname, NULL, 0, 0) != 0)
++-			goto fallback;
++-
++-		nauth = authdes_seccreate(servername, window, hostname, ckey);
++-		return (nauth);
++-	}
++-fallback:
++-	dummy = authdes_seccreate(servername, window, NULL, ckey);
++-	return (dummy);
++-}
++-
++-/*
++  * Create a client handle for a unix connection. Obsoleted by clnt_vc_create()
++  */
++ CLIENT *
++-- 
++2.4.6
++
