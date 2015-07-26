@@ -1,79 +1,50 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sun, 26 Jul 2015 22:41:54 +0000
-Subject: [Buildroot] [PATCH] mosh: don't show dependencies comment on
- unsupported arches
-In-Reply-To: <20150726223802.GP3770@free.fr>
-References: <b994c845f6e1f42f7a88e70dfffb4b00ce6d134e.1437949287.git.baruch@tkos.co.il>
- <20150726223802.GP3770@free.fr>
-Message-ID: <CA+h8R2rr7mUx0PxbQ7iQbk5jcsM73o+So06k2-hOvoN4yGsFxw@mail.gmail.com>
+Date: Sun, 26 Jul 2015 22:45:41 +0000
+Subject: [Buildroot] [PATCH v6 1/1] rtl8821au: new package
+In-Reply-To: <alpine.LNX.2.00.1507262133400.12764@T520.local>
+References: <1437691280-23926-1-git-send-email-christian@paral.in>
+ <alpine.LNX.2.00.1507241546220.30794@localhost>
+ <20150725161334.GI3662@free.fr>
+ <alpine.LNX.2.00.1507262133400.12764@T520.local>
+Message-ID: <CA+h8R2pQPtABif=URE-g--bpLNnyDJCZMBCi5jUaFUXWC9DJNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Ulli,
 
-Not sure how I missed that.
-
-Thanks!
-Christian
-
-Acked-by: "Christian Stewart" <c <yann.morin.1998@free.fr>hristian at paral.in>
-
-On Sun, Jul 26, 2015 at 3:38 PM Yann E. MORIN <yann.morin.1998@free.fr>
+On Sun, Jul 26, 2015 at 12:59 PM Hans Ulli Kroll <ulli.kroll@googlemail.com>
 wrote:
 
-> Baruch, All,
+[snip]
+
+So, now the driver is *allways* build with debug info, see
+> CONFIG_RTLWIFI_DEBUG
+> but you *must* enable this while loading the driver i.e.
 >
-> On 2015-07-27 01:21 +0300, Baruch Siach spake thusly:
-> > Cc: Christian Stewart <christian@paral.in>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> insmod rtl8821au debug=5
 >
-> Thanks for spotting that! :-)
+> To be very verbose, default is debug=0 for no debug output.
 >
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+That's a bit odd. When loading the driver as-is from your repository
+without any arguments, I get a very verbose amount of logging to the kernel
+logs. Are you sure this is the case? With the patch in the merged
+repository most of the debugging is disabled through header define comments.
+
+
 >
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  package/mosh/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-> > index 2f5214cd3c88..4ad7d61023b6 100644
-> > --- a/package/mosh/Config.in
-> > +++ b/package/mosh/Config.in
-> > @@ -1,5 +1,6 @@
-> >  comment "mosh needs a toolchain w/ threads"
-> >       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> > +     depends on !(BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64)
-> >
-> >  config BR2_PACKAGE_MOSH
-> >       bool "mosh"
-> > --
-> > 2.1.4
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
+> For the code itself :
+> I've done *a lot* functions renames and other things.
+> I use the rtl8821ae driver as some kind of pattern and the rtl8192cu
+> driver for the USB part.
+
+
+Great!
+
+~ Christian
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/71145644/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/2fa19724/attachment.html>
