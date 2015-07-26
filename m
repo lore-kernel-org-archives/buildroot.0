@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:25:38 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5/qtwebsocket: remove GPLv2 license
-In-Reply-To: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
-References: <1437725083-12959-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20150726152538.5312b43b@free-electrons.com>
+Date: Sun, 26 Jul 2015 15:27:35 +0200
+Subject: [Buildroot] [PATCH v2] qt/qt5base: Fix INCLUDE_PATH when no
+ JPEG/PNG support
+In-Reply-To: <DF93B075-B12C-49F2-87A0-77DB1CC27A45@ecagroup.com>
+References: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
+ <20150725215529.GJ1847@free.fr>
+ <DF93B075-B12C-49F2-87A0-77DB1CC27A45@ecagroup.com>
+Message-ID: <20150726152735.426ad7aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien Corjon,
+Hello,
 
-On Fri, 24 Jul 2015 10:04:43 +0200, Julien Corjon wrote:
-> This module loose his GPLv2 licensing option. Remains the LGPLv2.1 with
-> exception and LGPLv3 as the possible open-source licenses.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/6c80ba0669a7fc8cc60baaa849044fd65a78ce87/
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  package/qt5/qt5websockets/qt5websockets.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+On Sun, 26 Jul 2015 01:08:33 +0000, Julien CORJON wrote:
 
-Applied, thanks.
+> Sure, we should! But let?s wait for the review to be finished ;-)
+> This patch has only been applied to the staging branch for the moment.
+> See https://codereview.qt-project.org/#/c/122145/
+
+Ok, so I'll wait for a new patch from you that backports the upstream
+patch then. In the mean time, I'll mark your patch as Changes Requested.
+
+Thanks!
 
 Thomas
 -- 
