@@ -1,63 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 00:31:46 +0200
-Subject: [Buildroot] [PATCH 06/47] package/kodi: Rework audio encoder
- support
-In-Reply-To: <1437597069-6448-7-git-send-email-bernd.kuhls@t-online.de>
-References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150725223146.GL1847@free.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Sun, 26 Jul 2015 01:08:33 +0000
+Subject: [Buildroot] [PATCH v2] qt/qt5base: Fix INCLUDE_PATH when no
+ JPEG/PNG support
+In-Reply-To: <20150725215529.GJ1847@free.fr>
+References: <1437717100-13749-1-git-send-email-corjon.j@ecagroup.com>
+ <20150725215529.GJ1847@free.fr>
+Message-ID: <DF93B075-B12C-49F2-87A0-77DB1CC27A45@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Dear Yann,
 
-On 2015-07-22 22:30 +0200, Bernd Kuhls spake thusly:
-> Make option BR2_PACKAGE_KODI_OPTICALDRIVE invisible, it is only
-> needed when an audio encoder addon is enabled.
-> 
-> Add Kconfig submenu for audio encoders to prepare for addition of
-> more binary addons.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[--SNIP--]
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index 7d4b068..f182fbf 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -247,20 +247,14 @@ config BR2_PACKAGE_KODI_WAVPACK
->  	  Select this if you want to play back WV files.
->  
->  config BR2_PACKAGE_KODI_OPTICALDRIVE
-> -	bool "optical drive"
-> -	help
-> -	  Enable support for optical drives
-> -
-> -if BR2_PACKAGE_KODI_OPTICALDRIVE
-> -
-> -comment "Kodi audioencoder addons"
-> -
-> -source "package/kodi-audioencoder-flac/Config.in"
-> -source "package/kodi-audioencoder-lame/Config.in"
-> -source "package/kodi-audioencoder-vorbis/Config.in"
-> -source "package/kodi-audioencoder-wav/Config.in"
-> +	bool
+Le 25 juil. 2015 ? 23:55, Yann E. MORIN <yann.morin.1998 at free.fr<mailto:yann.morin.1998@free.fr>> a ?crit :
 
-Does that mean that support for optical drives is no longer useful
-without an audio encider?
+Julien, All,
 
-I.e. how is one supposed to read a DVD/BRD/AudioCD ?
+On 2015-07-24 07:51 +0200, Julien Corjon spake thusly:
+Fixes:
+ http://autobuild.buildroot.net/results/4be77432390c4cfb557c3f2cc52cf732de037949/
+ http://autobuild.buildroot.net/results/255a77e01d8af4090e03acb82f9ad93b7c4dd212/
+ http://autobuild.buildroot.net/results/7844e6a3eeecf67dc29277b73bfe714e4d8f0d85/
+ http://autobuild.buildroot.net/results/b941f35b6c8e1cf3b2c4b046dfcce98700d8f408/
+ http://autobuild.buildroot.net/results/c64b640a39285f59cde47cb8d06ab70a5ac97c8b/
+ http://autobuild.buildroot.net/results/f6d24b50f58251c8051d39bc1d09b5b43f81f441/
 
-Otherwise:
+Signed-off-by: Julien Corjon <corjon.j at ecagroup.com<mailto:corjon.j@ecagroup.com>>
+---
+v1 -> v2 :
+ - Add autobuild references (suggested by thomas)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+...008-QtGui-force-image-dir-in-include_path.patch | 33 ++++++++++++++++++++++
+1 file changed, 33 insertions(+)
+create mode 100644 package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+
+diff --git a/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch b/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+new file mode 100644
+index 0000000..4e5068b
+--- /dev/null
++++ b/package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+@@ -0,0 +1,33 @@
++From 6065be41dbd04690236418098fca504140fc205c Mon Sep 17 00:00:00 2001
++From: Julien Corjon <corjon.j at ecagroup.com<mailto:corjon.j@ecagroup.com>>
++Date: Thu, 23 Jul 2015 13:32:47 +0200
++Subject: [PATCH 1/1] QtGui: force image directory in INCLUDE_PATH
++
++If PNG/JPEG/GIF support is not set qplaformpixmap inclusion then
++image/qplatformpixmap.h cannot be found from painting/qbrush.cpp
++
++Change-Id: I165c888b2afc51de47267607883615d3aa3bae40
++
++Upstream-Status: https://bugreports.qt.io/browse/QTBUG-47400
++
++Signed-off-by: Julien Corjon <corjon.j at ecagroup.com<mailto:corjon.j@ecagroup.com>>
++---
++ src/gui/image/image.pri | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/gui/image/image.pri b/src/gui/image/image.pri
++index 8db944e..af6e0fa 100644
++--- a/src/gui/image/image.pri
+++++ b/src/gui/image/image.pri
++@@ -3,6 +3,8 @@
++
++ # Qt kernel module
++
+++INCLUDEPATH *= $$PWD
+++
+
+It seems like we should instead use the upstream patch that has been
+applied:
+   https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=commitdiff;h=7f282aa9f718389199b95b7f53ecd6401172fcc6;hp=954f0d93976362d29044439e4eaa11d2dff16624
+
+Sure, we should! But let?s wait for the review to be finished ;-)
+This patch has only been applied to the staging branch for the moment.
+See https://codereview.qt-project.org/#/c/122145/
+
+Regards,
+Julien
+
 
 Regards,
 Yann E. MORIN.
 
--- 
++ HEADERS += \
++         image/qbitmap.h \
++         image/qimage.h \
++--
++2.1.0
++
+--
+2.1.0
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net<mailto:buildroot@busybox.net>
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+--
 .-----------------.--------------------.------------------.--------------------.
 |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
 | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
