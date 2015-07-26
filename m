@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 26 Jul 2015 20:58:31 +0200
-Subject: [Buildroot] [PATCH 3/4] nmap: remove redundant --static flag to
+Date: Sun, 26 Jul 2015 20:58:32 +0200
+Subject: [Buildroot] [PATCH 4/4] php: remove redundant --static flag to
 	pkg-config
 In-Reply-To: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1437937112-13269-3-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1437937112-13269-4-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,25 +17,32 @@ The pkg-config tool is automatically passing --static when BR2_STATIC_LIBS
 is set (see package/pkgconf/pkgconf.mk), so no need to pass it explicitly
 from package .mk files.
 
-Additionally, replace a missed occurrence of $(shell) with backticks.
-
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/nmap/nmap.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index d450f5e..1a0e977 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -30,7 +30,7 @@ NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
- NMAP_DEPENDENCIES += host-pkgconf openssl
--NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
-+NMAP_LIBS_FOR_STATIC_LINK += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- else
- NMAP_CONF_OPTS += --without-openssl
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 39f4e2a..4b171cf 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -116,7 +116,7 @@ PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += openssl
+ # openssl needs zlib, but the configure script forgets to link against
+ # it causing detection failures with static linking
+-PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static openssl`
++PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
  endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+@@ -187,7 +187,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
+ PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += sqlite
+-PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static sqlite3`
++PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs sqlite3`
+ endif
+ 
+ ### PDO
 -- 
 1.8.5.1
