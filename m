@@ -1,113 +1,83 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 26 Jul 2015 20:55:19 +0200
-Subject: [Buildroot] [RFC 09/37] package/efl: new host-package
+Date: Sun, 26 Jul 2015 20:55:12 +0200
+Subject: [Buildroot] [02/37] package/x11r7/xlib_libXp: new package
 In-Reply-To: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
 References: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1437936947-17632-10-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1437936947-17632-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new host-package provide edje_cc, embryo_cc and eet binaries
-that will be used by efl packages which will be updated later.
+Although xlib_libXp is no longer provided with X.org
+since 7.4 release [1], some packages may need it.
+
+[1] http://www.x.org/wiki/Releases/ModuleVersions
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/efl/efl.hash |  2 ++
- package/efl/efl.mk   | 74 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 76 insertions(+)
- create mode 100644 package/efl/efl.hash
- create mode 100644 package/efl/efl.mk
+ package/x11r7/Config.in                |  1 +
+ package/x11r7/xlib_libXp/Config.in     | 11 +++++++++++
+ package/x11r7/xlib_libXp/xlib_libXp.mk | 20 ++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/x11r7/xlib_libXp/Config.in
+ create mode 100644 package/x11r7/xlib_libXp/xlib_libXp.mk
 
-diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index ed2b797..7922a5b 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -40,6 +40,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xlib_libXi/Config.in
+ 		source package/x11r7/xlib_libXinerama/Config.in
+ 		source package/x11r7/xlib_libXmu/Config.in
++		source package/x11r7/xlib_libXp/Config.in
+ 		source package/x11r7/xlib_libXpm/Config.in
+ 		source package/x11r7/xlib_libXrandr/Config.in
+ 		source package/x11r7/xlib_libXrender/Config.in
+diff --git a/package/x11r7/xlib_libXp/Config.in b/package/x11r7/xlib_libXp/Config.in
 new file mode 100644
-index 0000000..93398fe
+index 0000000..e1060da
 --- /dev/null
-+++ b/package/efl/efl.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/efl/efl-1.14.2.tar.xz.sha256
-+sha256	b95955ab82d144b6b88ba37448e87ca4608855f75115231bf9014b3acc0ee54d	efl-1.14.2.tar.xz
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
++++ b/package/x11r7/xlib_libXp/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_XLIB_LIBXP
++	bool "libXp"
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXAU
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XPROTO_PRINTPROTO
++	select BR2_PACKAGE_XUTIL_UTIL_MACROS
++	help
++	  X.Org Print Client Library
++	  libXp provides public APIs to allow client applications to render
++	  to non-display devices.
+diff --git a/package/x11r7/xlib_libXp/xlib_libXp.mk b/package/x11r7/xlib_libXp/xlib_libXp.mk
 new file mode 100644
-index 0000000..9e6ea2a
+index 0000000..1fcb0f4
 --- /dev/null
-+++ b/package/efl/efl.mk
-@@ -0,0 +1,74 @@
++++ b/package/x11r7/xlib_libXp/xlib_libXp.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# efl
-+#
-+################################################################################
-+
-+EFL_VERSION = 1.14.2
-+EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
-+EFL_SITE = http://download.enlightenment.org/rel/libs/efl/
-+EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
-+EFL_LICENSE_FILES = COPYING
-+
-+################################################################################
-+#
-+# host-efl
++# xlib_libXp
 +#
 +################################################################################
 +
-+# We want to build only some host tools used later in the build.
-+# Actually we want: edje_cc, embryo_cc and eet.
++XLIB_LIBXP_VERSION = 1.0.3
++XLIB_LIBXP_SOURCE = libXp-$(XLIB_LIBXP_VERSION).tar.bz2
++XLIB_LIBXP_SITE = http://xorg.freedesktop.org/releases/individual/lib/
++XLIB_LIBXP_LICENSE = MIT
++XLIB_LIBXP_LICENSE_FILES = COPYING
++XLIB_LIBXP_INSTALL_STAGING = YES
++XLIB_LIBXP_DEPENDENCIES = host-pkgconf \
++	xlib_libX11 \
++	xlib_libXau \
++	xlib_libXext \
++	xproto_printproto \
++	xutil_util-macros
 +
-+# Host dependencies:
-+# * host-dbus: for Eldbus
-+# * host-freetype: for libevas
-+# * host-libglib2: for libecore
-+# * host-libjpeg, host-libpng: for libevas image loader
-+# * host-lua: disable luajit dependency
-+HOST_EFL_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-dbus \
-+	host-freetype \
-+	host-libglib2 \
-+	host-libjpeg \
-+	host-libpng \
-+	host-lua \
-+	host-zlib
-+
-+# Configure options:
-+# --disable-audio, --disable-multisense remove libsndfile dependency.
-+# --disable-cxx-bindings: disable C++11 bindings.
-+# --disable-fontconfig: remove dependency on fontconfig.
-+# --disable-fribidi: remove dependency on libfribidi.
-+# --disable-gstreamer1: remove dependency on gtreamer 1.0.
-+# --disable-libeeze: remove libudev dependency.
-+# --disable-libmount: remove dependency on host-util-linux libmount.
-+# --disable-physics: remove Bullet dependency.
-+# --enable-image-loader-gif=no: disable Gif dependency.
-+# --enable-image-loader-tiff=no: disable Tiff dependency.
-+# --enable-lua-old: disable Elua and remove luajit dependency.
-+# --with-crypto=none: remove dependencies on openssl or gnutls.
-+# --with-x11=none: remove dependency on X.org.
-+#   Yes I really know what I am doing.
-+HOST_EFL_CONF_OPTS += \
-+	--disable-audio \
-+	--disable-cxx-bindings \
-+	--disable-fontconfig \
-+	--disable-fribidi \
-+	--disable-gstreamer1 \
-+	--disable-libeeze \
-+	--disable-libmount \
-+	--disable-multisense \
-+	--disable-physics \
-+	--enable-image-loader-gif=no \
-+	--enable-image-loader-jpeg=yes \
-+	--enable-image-loader-png=yes \
-+	--enable-image-loader-tiff=no \
-+	--enable-lua-old \
-+	--with-crypto=none \
-+	--with-glib=yes \
-+	--with-opengl=none \
-+	--with-x11=none \
-+	--enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
-+
-+$(eval $(host-autotools-package))
++$(eval $(autotools-package))
 -- 
 2.4.3
