@@ -1,7 +1,9 @@
 From: Geoffrey Ragot <geoffreyragot@gmail.com>
-Date: Sun, 26 Jul 2015 14:12:17 +0200
-Subject: [Buildroot] [PATCH 1/2] Add pyyaml package
-Message-ID: <1437912738-24116-1-git-send-email-geoffrey.ragot@gmail.com>
+Date: Sun, 26 Jul 2015 14:12:18 +0200
+Subject: [Buildroot] [PATCH 2/2] Add pycli package
+In-Reply-To: <1437912738-24116-1-git-send-email-geoffrey.ragot@gmail.com>
+References: <1437912738-24116-1-git-send-email-geoffrey.ragot@gmail.com>
+Message-ID: <1437912738-24116-2-git-send-email-geoffrey.ragot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,58 +12,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Geoffrey Ragot <geoffrey.ragot@gmail.com>
 ---
- package/Config.in                      |  1 +
- package/python-pyyaml/Config.in        |  8 ++++++++
- package/python-pyyaml/python-pyyaml.mk | 15 +++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/python-pyyaml/Config.in
- create mode 100644 package/python-pyyaml/python-pyyaml.mk
+ package/Config.in                    |  1 +
+ package/python-pycli/Config.in       |  4 ++++
+ package/python-pycli/python-pycli.mk | 15 +++++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/python-pycli/Config.in
+ create mode 100644 package/python-pycli/python-pycli.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cfa7512..8bc27a4 100644
+index 8bc27a4..06a4326 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -649,6 +649,7 @@ menu "external python modules"
- 	source "package/python-pyusb/Config.in"
- 	source "package/python-pyxb/Config.in"
- 	source "package/python-pyxml/Config.in"
-+	source "package/python-pyyaml/Config.in"
- 	source "package/python-pyzmq/Config.in"
- 	source "package/python-requests/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
-diff --git a/package/python-pyyaml/Config.in b/package/python-pyyaml/Config.in
+@@ -633,6 +633,7 @@ menu "external python modules"
+ 	source "package/python-protobuf/Config.in"
+ 	source "package/python-psutil/Config.in"
+ 	source "package/python-pyasn/Config.in"
++	source "package/python-pycli/Config.in"
+ 	source "package/python-pycrypto/Config.in"
+ 	source "package/python-pydal/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+diff --git a/package/python-pycli/Config.in b/package/python-pycli/Config.in
 new file mode 100644
-index 0000000..a63c445
+index 0000000..a4f157e
 --- /dev/null
-+++ b/package/python-pyyaml/Config.in
-@@ -0,0 +1,8 @@
-+comment "python-pyyaml require libyaml"
-+	depends on !BR2_PACKAGE_LIBYAML
-+
-+config BR2_PACKAGE_PYTHON_PYYAML
-+	bool "python-pyyaml"
-+	depends on BR2_PACKAGE_LIBYAML
++++ b/package/python-pycli/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_PYTHON_PYCLI
++	bool "python-pycli"
 +	help
-+	  The PyYAML package contains binding to the libyaml API.
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
++	  The cli package is a framework for making simple, correct command line applications in Python.
+diff --git a/package/python-pycli/python-pycli.mk b/package/python-pycli/python-pycli.mk
 new file mode 100644
-index 0000000..ef10dac
+index 0000000..6857425
 --- /dev/null
-+++ b/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pycli/python-pycli.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-pyyaml
++# python-pycli
 +#
 +################################################################################
 +
-+PYTHON_PYYAML_VERSION = 3.11
-+PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
-+PYTHON_PYYAML_SITE = https://pypi.python.org/packages/source/P/PyYAML/
-+PYTHON_PYYAML_SETUP_TYPE = distutils
-+PYTHON_PYYAML_LICENSE = Python software foundation license v2
-+PYTHON_PYYAML_LICENSE_FILES = LICENSE
-+PYTHON_PYYAML_DEPENDENCIES = libyaml
++PYTHON_PYCLI_VERSION = devel
++PYTHON_PYCLI_SOURCE = pyCLI-$(PYTHON_PYCLI_VERSION).tar.gz
++PYTHON_PYCLI_SITE = https://pypi.python.org/packages/source/p/pyCLI/
++PYTHON_PYCLI_SETUP_TYPE = distutils
++PYTHON_PYCLI_LICENSE = Python software foundation license v2
++PYTHON_PYCLI_LICENSE_FILES = LICENSE
++PYTHON_PYCLI_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
