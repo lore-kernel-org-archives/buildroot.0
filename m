@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 21:49:36 +0200
-Subject: [Buildroot] [git commit branch/next] quota: use pkg-config for
-	libtirpc flags
-Message-ID: <20150808105642.73B0C7FFCF@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 18:21:29 +0200
+Subject: [Buildroot] [git commit branch/next] perl-net-ssleay: bump to
+	version 1.70
+Message-ID: <20150808105641.E37317FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2732e1b9d91a1cb276ebe17d5acf53f6a9356e8
+commit: http://git.buildroot.net/buildroot/commit/?id=5c8a4d0f59ffd20f1c9419c6bd6702a980b6f6e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Instead of hardcoding the flags needed for libtirpc, use pkg-config.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/quota/quota.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-net-ssleay/perl-net-ssleay.hash |    4 ++--
+ package/perl-net-ssleay/perl-net-ssleay.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 332f42e..5e5e637 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -19,9 +19,9 @@ QUOTA_LIBS += -lintl
- endif
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
+index 4a6bcaa..ca659c7 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.hash
++++ b/package/perl-net-ssleay/perl-net-ssleay.hash
+@@ -1,3 +1,3 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    2db2445eb072b6ecf8a1a79c9ed3e4de Net-SSLeay-1.68.tar.gz
+-sha256 1701e24ec683529cb114e7b7877632f2e965a81381a70b696ee0692ee1e75cd4 Net-SSLeay-1.68.tar.gz
++md5    511cc451a64b0c5051bd9167f37051a0 Net-SSLeay-1.70.tar.gz
++sha256 05eaaa29b8f67778040eee53150ba702fc0ce49420ddd0f1ca68d082f4ee9f4a Net-SSLeay-1.70.tar.gz
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index 0ee9566..8a40a29 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
--QUOTA_DEPENDENCIES += libtirpc
--QUOTA_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
--QUOTA_LIBS += -ltirpc
-+QUOTA_DEPENDENCIES += libtirpc host-pkgconf
-+QUOTA_CFLAGS += "`$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
-+QUOTA_LIBS += "`$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`"
- endif
- 
- QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
+-PERL_NET_SSLEAY_VERSION = 1.68
++PERL_NET_SSLEAY_VERSION = 1.70
+ PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+ PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
+ PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
