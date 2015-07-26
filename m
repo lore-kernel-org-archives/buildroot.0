@@ -1,30 +1,28 @@
-From: Adam Baxter <voltagex@voltagex.org>
-Date: Sun, 26 Jul 2015 09:26:57 -0700
-Subject: [Buildroot] Unable to login as root to new buildroot system
-In-Reply-To: <20150726182515.1e0b67c8@free-electrons.com>
-References: <CAChFQ9R=5anPgo9mboKxCkppsadQkSzC_WhpevWoarwgKVhLQg@mail.gmail.com>
- <20150726182515.1e0b67c8@free-electrons.com>
-Message-ID: <CAChFQ9QdOZ=BLF7fQ2XjcW2YszGcD2PuXWGydkW-zEbsLitGsw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Jul 2015 18:27:16 +0200
+Subject: [Buildroot] [V2 1/6] perl-io-socket-ssl: bump to version 2.016
+In-Reply-To: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
+References: <1437748731-31026-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20150726182716.69a00651@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 July 2015 at 09:25, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Dear Francois Perrad,
 
-> Dear Adam Baxter,
->
->
-> Your configuration has:
->
-> BR2_TARGET_GENERIC_GETTY_OPTIONS="-n"
->
-> Are you sure you really want this getty option?
->
+On Fri, 24 Jul 2015 16:38:46 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 4 ++--
+>  package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Probably not, thanks!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/c27205bf/attachment.html>
+All 6 patches applied, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
