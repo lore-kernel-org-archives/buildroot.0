@@ -1,48 +1,67 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 26 Jul 2015 20:58:32 +0200
-Subject: [Buildroot] [PATCH 4/4] php: remove redundant --static flag to
-	pkg-config
-In-Reply-To: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1437937112-13269-4-git-send-email-patrickdepinguin@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jul 2015 21:03:16 +0200
+Subject: [Buildroot] [PATCH] package/libselinmux: fix build with musl
+Message-ID: <1437937396-23254-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+musl does not define glibcisms, so we ar emissing some macros.
 
-The pkg-config tool is automatically passing --static when BR2_STATIC_LIBS
-is set (see package/pkgconf/pkgconf.mk), so no need to pass it explicitly
-from package .mk files.
+Define what we need in case the macro is missing. We're using a dumb
+implementation, which is rather slow, to avoid copying from glibc, to
+avoid propagating the LGPL to libselinux, which is Public Domain.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Fixes a buncha autobuild failures:
+    http://autobuild.buildroot.org/results/d4d/d4d209719d1ce5219f84719ad72fcb6a0c684007/
+    http://autobuild.buildroot.org/results/1a6/1a65cc3d2c23a3c17c605788be62dbd18cbdaf76/
+    http://autobuild.buildroot.org/results/0d0/0d0e4713833182d0f634b9b39b2c56f2bc0adcac/
+    ...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
 ---
- package/php/php.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libselinux/0002-fix-musl-build.patch | 30 ++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/libselinux/0002-fix-musl-build.patch
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 39f4e2a..4b171cf 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -116,7 +116,7 @@ PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += openssl
- # openssl needs zlib, but the configure script forgets to link against
- # it causing detection failures with static linking
--PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static openssl`
-+PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
-@@ -187,7 +187,7 @@ endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_SQLITE),y)
- PHP_CONF_OPTS += --with-sqlite3=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += sqlite
--PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs --static sqlite3`
-+PHP_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs sqlite3`
- endif
- 
- ### PDO
+diff --git a/package/libselinux/0002-fix-musl-build.patch b/package/libselinux/0002-fix-musl-build.patch
+new file mode 100644
+index 0000000..9e6b734
+--- /dev/null
++++ b/package/libselinux/0002-fix-musl-build.patch
+@@ -0,0 +1,30 @@
++fix undefined macros in musl
++
++musl does not define glibc-specific macros, so use a simple version of
++the macro when it is not defined.
++
++This is very inefficient, however, but copying the code from glibc is
++not really possible because it is LGPL while libselinux in Public
++Domain, and we want to avoid license propaation, so this macro is
++completely written from scratch, and non-optimal.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN libselinux-2.1.13.orig/src/booleans.c libselinux-2.1.13/src/booleans.c
++--- libselinux-2.1.13.orig/src/booleans.c	2013-02-06 02:43:22.000000000 +0100
+++++ libselinux-2.1.13/src/booleans.c	2015-07-26 20:40:41.311801914 +0200
++@@ -62,6 +62,14 @@
++ 		goto bad;
++ 	}
++ 
+++/* Simple (but inefficient) version of _D_ALLOC_NAMLEN when
+++ * building with a C library that misses it (e.g. musl).
+++ * Note: glibc does a strlen on (d)->d_name, so assume it is safe.
+++ */
+++#ifndef _D_ALLOC_NAMLEN
+++#define _D_ALLOC_NAMLEN(d) (strlen((d)->d_name)+1)
+++#endif
+++
++ 	for (i = 0; i < *len; i++) {
++ 		n[i] = (char *)malloc(_D_ALLOC_NAMLEN(namelist[i]));
++ 		if (!n[i]) {
 -- 
-1.8.5.1
+1.9.1
