@@ -1,33 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 26 Jul 2015 12:47:23 +0200
-Subject: [Buildroot] [PATCHv2] core/download: don't be needlessly
- verbose in backends
-In-Reply-To: <1437906386-31727-1-git-send-email-yann.morin.1998@free.fr>
-References: <1437906386-31727-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LW1S1jJOBM7V-fP_2N+UrhaTcS27+xni4TXQuhYskHjTw@mail.gmail.com>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sun, 26 Jul 2015 12:49:38 +0200
+Subject: [Buildroot] [PATCH 1/1] Added extra patch to qt5base package for
+	fixing ccache related compile error with new QT 5.5
+Message-ID: <1437907778-3734-1-git-send-email-jaap@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 26, 2015 at 12:26 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> In 50c8b7e (support/download: support -q in all download backends), the
-> backend were made to respect the quietness of the main Makefile, when -s
-> is poassed on the 'make' command line. In doing so, they were all made
-> to be verbose by default.
->
-> However, the verbosity of some of the tools, like scp, is very high, and
-> is in fact intended for debug purposes.
->
-> Drop being verbose by default, just use whatever each tool deems normal
-> output. Only respect the quietness requested by the user.
->
-> Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
+Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/qt5/qt5base/0008-ccache_buildroot_fix.patch | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/qt5/qt5base/0008-ccache_buildroot_fix.patch
 
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-(I tested the scp change already, and did manual tests of the output
-differences for hg, wget and cp.)
+diff --git a/package/qt5/qt5base/0008-ccache_buildroot_fix.patch b/package/qt5/qt5base/0008-ccache_buildroot_fix.patch
+new file mode 100644
+index 0000000..62aa57b
+--- /dev/null
++++ b/package/qt5/qt5base/0008-ccache_buildroot_fix.patch
+@@ -0,0 +1,16 @@
++Author: Jaap Crezee <jaap@jcz.nl>
++---
++diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
++index cd3a0cf..674b3dd 100644
++--- a/mkspecs/features/device_config.prf
+++++ b/mkspecs/features/device_config.prf
++@@ -35,6 +35,9 @@ defineTest(deviceSanityCheckCompiler) {
++             return()
++     }
++ 
+++    # Last resort, check if we can still execute it (for example in Buildroot/Crosscompile...)
+++    system("which $$QMAKE_CXX > /dev/null"):return()
+++
++     # QMAKE_CXX does not point to a compiler.
++     error("Compiler $$QMAKE_CXX not found. Check the value of CROSS_COMPILE -device-option")
++ }
+-- 
+2.4.6
