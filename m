@@ -1,54 +1,48 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 26 Jul 2015 20:55:34 +0200
-Subject: [Buildroot] [RFC 24/37] package/libelementary: add host package
+Date: Sun, 26 Jul 2015 20:55:24 +0200
+Subject: [Buildroot] [RFC 14/37] package/efl: add libblkid dependency
 In-Reply-To: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
 References: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1437936947-17632-25-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1437936947-17632-15-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libelementary for the target needs elm_prefs_cc in order to
-cross-compile correctly.
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/libelementary/libelementary.mk | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ package/efl/Config.in | 1 +
+ package/efl/efl.mk    | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/libelementary/libelementary.mk b/package/libelementary/libelementary.mk
-index 0bec456..e8b026e 100644
---- a/package/libelementary/libelementary.mk
-+++ b/package/libelementary/libelementary.mk
-@@ -12,14 +12,26 @@ LIBELEMENTARY_LICENSE_FILES = COPYING
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 1b26509..9f204d6 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -29,6 +29,7 @@ config BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	default y
+ 	help
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 66914dc..5ee3622 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -40,6 +40,11 @@ else
+ EFL_CONF_OPTS += --disable-libmount
+ endif
  
- LIBELEMENTARY_INSTALL_STAGING = YES
- 
--LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl
-+LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl host-libelementary
- 
- LIBELEMENTARY_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
-+	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
- 	--with-doxygen=no \
- 	--disable-elementary-test
- 
-+# We need a host package in order to provide elm_prefs_cc and
-+# elementary_codegen.
-+HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl
-+HOST_LIBELEMENTARY_CONF_OPTS = \
-+	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+ 	--with-doxygen=no \
-+ 	--disable-elementary-test
++# libblkid is part of required tools, see EFL's README.
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
++EFL_DEPENDENCIES += util-linux
++endif
 +
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ # If fontconfig is disabled, this is going to make general font
+ # searching not work, and only some very direct 'load /path/file.ttf'
+ # will work alongside some old-school ttf file path searching. This
 -- 
 2.4.3
