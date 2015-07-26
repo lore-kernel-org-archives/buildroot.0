@@ -1,111 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 15:41:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/linux-backports:
-	switch to using the kernel-module infra
-Message-ID: <20150808105641.AEF1A7FFCF@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 15:08:01 +0200
+Subject: [Buildroot] [git commit branch/next] rtl8821au: new package
+Message-ID: <20150808105641.34A9C818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5a5a58aa7d9d60e7f03467edd3bd31a00213795
+commit: http://git.buildroot.net/buildroot/commit/?id=37ba45c6c2824a12a281a221b1730b7ee59a561d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-linux-backports manually generates its autoconf.h header, which needs a
-.config file.
+This patch adds the rtl8821au wifi driver. The driver is sourced from
+ulli-kroll's work on GitHub, which includes various fixes and better LED
+handling. Currently USB3 support is broken in this driver - it will
+only connect to the EHCI controller in a USB3 port.
 
-Using a pre- or post-configure hook does not really work, because
-generating that file touches the .config, and thus our .stamp files ar
-enot longer properly time-ordered and running a subsequent make would
-incorrectly believe it has to rebuild linux-backports.
-
-So, even though this is not a fixup proper, we generate that file from
-the _KCONFIG_FIXUP_CMDS to ensure the stampt file is created after we
-touch .config.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Christian Stewart <christian@paral.in>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-backports/linux-backports.mk |   48 +++++++++++++++++----------
- 1 files changed, 30 insertions(+), 18 deletions(-)
+ package/Config.in                                  |    1 +
+ package/rtl8821au/0001-disable-default-debug.patch |   24 +++++++++++++++++++
+ package/rtl8821au/Config.in                        |   10 ++++++++
+ package/rtl8821au/rtl8821au.mk                     |   25 ++++++++++++++++++++
+ 4 files changed, 60 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index e4ac9f4..44ac7e7 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
-@@ -11,33 +11,44 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
- LINUX_BACKPORTS_LICENSE = GPLv2
- LINUX_BACKPORTS_LICENSE_FILES = COPYING
- 
--LINUX_BACKPORTS_DEPENDENCIES = linux
--
--LINUX_BACKPORTS_MAKE_OPTS = \
--	$(LINUX_MAKE_FLAGS) \
--	KLIB_BUILD=$(LINUX_DIR) \
--	KLIB=$(TARGET_DIR)
--
- ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
- LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
- else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
- LINUX_BACKPORTS_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE))
- endif
- 
--define LINUX_BACKPORTS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) -C $(@D)
--endef
--
--define LINUX_BACKPORTS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_BACKPORTS_MAKE_OPTS) \
--		-C $(LINUX_DIR) M=$(@D) \
--		INSTALL_MOD_DIR=backports \
--		modules_install
--endef
--
- LINUX_BACKPORTS_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CONFIG_FRAGMENT_FILES))
- LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
- 
-+# linux-backports' build system expects the config options to be present
-+# in the environment, and it is so when using their custom buildsystem,
-+# because they are set in the main Makefile, which then calls a second
-+# Makefile.
-+#
-+# In our case, we do not use that first Makefile. So, we parse the
-+# .config file, filter-out comment lines and put the rest as command
-+# line variables.
-+#
-+# LINUX_BACKPORTS_MAKE_OPTS is used by the kconfig-package infra, while
-+# LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
-+#
-+LINUX_BACKPORTS_MAKE_OPTS = \
-+	BACKPORT_DIR=$(@D) \
-+	KLIB_BUILD=$(LINUX_DIR) \
-+	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
-+	INSTALL_MOD_DIR=backports \
-+	`sed -r -e '/^\#/d;' $(@D)/.config`
+diff --git a/package/Config.in b/package/Config.in
+index cfa7512..070ec6a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -404,6 +404,7 @@ endif
+ 	source "package/read-edid/Config.in"
+ 	source "package/rng-tools/Config.in"
+ 	source "package/rpi-userland/Config.in"
++	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/setserial/Config.in"
+diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
+new file mode 100644
+index 0000000..de6fc62
+--- /dev/null
++++ b/package/rtl8821au/0001-disable-default-debug.patch
+@@ -0,0 +1,24 @@
++Comment out the hardcoded debug defines. If extra debug is needed, we can add it
++as a define in the make flags.
 +
-+LINUX_BACKPORTS_MODULE_MAKE_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
++Signed-off-by: Christian Stewart <christian@paral.in>
 +
-+# This file is not automatically generated by 'oldconfig' that we use in
-+# the kconfig-package infrastructure. In the linux buildsystem, it is
-+# generated by running silentoldconfig, but that's not the case for
-+# linux-backports: it uses a hand-crafted rule to generate that file.
-+define LINUX_BACKPORTS_KCONFIG_FIXUP_CMDS
-+	$(MAKE) -C $(@D) $(LINUX_BACKPORTS_MAKE_OPTS) backport-include/backport/autoconf.h
++diff --git a/include/autoconf.h b/include/autoconf.h
++--- a/include/autoconf.h
+++++ b/include/autoconf.h
++@@ -130,12 +130,12 @@
++ /*
++  * Debug Related Config
++  */
++-#define DBG	1
+++//#define DBG	1
++ 
++-#define CONFIG_DEBUG /* DBG_871X, etc... */
+++//#define CONFIG_DEBUG /* DBG_871X, etc... */
++ //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
++ 
++-#define CONFIG_PROC_DEBUG
+++//#define CONFIG_PROC_DEBUG
++ 
++ 
++ //#define DBG_TX
+diff --git a/package/rtl8821au/Config.in b/package/rtl8821au/Config.in
+new file mode 100644
+index 0000000..9827ad5
+--- /dev/null
++++ b/package/rtl8821au/Config.in
+@@ -0,0 +1,10 @@
++comment "rtl8821au needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_RTL8821AU
++	bool "rtl8821au"
++	depends on BR2_LINUX_KERNEL
++	help
++	  rtl8821au wifi driver
++
++	  https://github.com/paralin/rtl8821au
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+new file mode 100644
+index 0000000..d218e3c
+--- /dev/null
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# rtl8821au
++#
++################################################################################
++
++RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
++RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
++RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
++RTL8821AU_LICENSE_FILES = COPYING
++
++RTL8821AU_MODULE_MAKE_OPTS = \
++	CONFIG_RTL8812AU_8821AU=m \
++	KVER=$(LINUX_VERSION_PROBED) \
++	USER_EXTRA_CFLAGS=-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN
++
++define RTL8821AU_FIRMWARE_INSTALL
++	mkdir -p $(TARGET_DIR)/lib/firmware/rtlwifi/
++	$(INSTALL) -D -m 0644 $(@D)/firmware/* $(TARGET_DIR)/lib/firmware/rtlwifi/
 +endef
 +
- # Checks to give errors that the user can understand
- ifeq ($(BR_BUILDING),y)
- 
-@@ -55,6 +66,7 @@ endif
- 
- endif # BR_BUILDING
- 
++RTL8821AU_POST_INSTALL_TARGET_HOOKS += RTL8821AU_FIRMWARE_INSTALL
++
 +$(eval $(kernel-module))
- $(eval $(kconfig-package))
- 
- # linux-backports' own .config file needs options from the kernel's own
++$(eval $(generic-package))
