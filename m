@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:29:43 +0200
-Subject: [Buildroot] [git commit] qextserialport: Bump version and change
-	site
-Message-ID: <20150726214034.0B05E7FE99@busybox.osuosl.org>
+Date: Sun, 26 Jul 2015 23:28:55 +0200
+Subject: [Buildroot] [git commit] python-pypcap: Bump version and change site
+Message-ID: <20150726214034.02FDD81D60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b97d38e9e84658a8abaad6bbf0e323d496e415d
+commit: http://git.buildroot.net/buildroot/commit/?id=facf243dc90ca4d23903903c4e31f0393ab4636a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Google Code is a closing forge, qextserialport has already made the move
-to Github.
+Google Code is a closing forge, python-pypcap has already made the
+move to Github.
+
+We are not using the latest available tag as it dates back from 2005,
+and ~20 more commits have been made after the last tag. Therefore,
+we're using the latest commit.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qextserialport/qextserialport.mk |    7 ++-----
- 1 files changed, 2 insertions(+), 5 deletions(-)
+ package/python-pypcap/python-pypcap.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-index 61f7b05..6f82b39 100644
---- a/package/qextserialport/qextserialport.mk
-+++ b/package/qextserialport/qextserialport.mk
-@@ -4,13 +4,10 @@
+diff --git a/package/python-pypcap/python-pypcap.mk b/package/python-pypcap/python-pypcap.mk
+index 89f2dc1..bff9d8f 100644
+--- a/package/python-pypcap/python-pypcap.mk
++++ b/package/python-pypcap/python-pypcap.mk
+@@ -4,9 +4,8 @@
  #
  ################################################################################
  
--QEXTSERIALPORT_VERSION = 6c47244de4ce6db43c2f05caee957666c951dae1
--QEXTSERIALPORT_SITE = https://qextserialport.googlecode.com/git
--QEXTSERIALPORT_SITE_METHOD = git
--
-+QEXTSERIALPORT_VERSION = ada321a9ee463f628e7b781b8ed00ff219152158
-+QEXTSERIALPORT_SITE = $(call github,qextserialport,qextserialport,$(QEXTSERIALPORT_VERSION))
- QEXTSERIALPORT_LICENSE = MIT
- QEXTSERIALPORT_LICENSE_FILES = LICENSE
--
- QEXTSERIALPORT_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT),y)
+-PYTHON_PYPCAP_VERSION = 102
+-PYTHON_PYPCAP_SITE = https://pypcap.googlecode.com/svn/trunk
+-PYTHON_PYPCAP_SITE_METHOD = svn
++PYTHON_PYPCAP_VERSION = 6f46e7bf29a648256ddc732a7d0ec83d3ffca390
++PYTHON_PYPCAP_SITE = $(call github,dugsong,pypcap,$(PYTHON_PYPCAP_VERSION))
+ PYTHON_PYPCAP_LICENSE = BSD-3c
+ PYTHON_PYPCAP_LICENSE_FILES = LICENSE
+ PYTHON_PYPCAP_SETUP_TYPE = distutils
