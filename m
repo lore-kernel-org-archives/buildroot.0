@@ -1,98 +1,121 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 19:59:49 +0200
-Subject: [Buildroot] [PATCHv2 1/1] xterm: x-includes and x-libraries
- must be set for cross-compiling
-In-Reply-To: <1437932796-16216-1-git-send-email-bas@bmail.ru>
-References: <1437932796-16216-1-git-send-email-bas@bmail.ru>
-Message-ID: <20150726175949.GI3770@free.fr>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 26 Jul 2015 18:02:29 +0000
+Subject: [Buildroot] [PATCH v8 1/1] mosh: new package
+In-Reply-To: <20150726193517.40776cc8@free-electrons.com>
+References: <1437928447-26907-1-git-send-email-christian@paral.in>
+ <20150726193517.40776cc8@free-electrons.com>
+Message-ID: <CA+h8R2qyYPpyNpASpjg1+8ivxhX2x8yvD4pdzhSn3W=ypphqQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mikhail, All,
+Thomas,
 
-On 2015-07-26 20:46 +0300, kyak spake thusly:
-> From: Mikhail Peselnik <bas@bmail.ru>
-> 
-> These flags need to be set so that the configure script would
-> correctly use libICE from cross-toolchain rather than from host.
-> Also, the xterm package is missing the freetype2 dependency, as
-> noted by Romain Naour.
-> 
-> This fix is similar to "package/efl/libevas: x-includes and x-libraries
-> must be set for cross-compiling" done by Romain Naour on libecore.
-> 
-> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+No, they will reject it regardless of how it is coded. Checking a global
+POSIX command exists is not worth it to them as it exists on most systems
+anyway. They requested I make a patch for BR that outputs a special debug
+line for buildroot users so they know what they're dealing with if someone
+submits a log.
 
-The From filed does not match your Signed-off-by; please fix your git
-config with:
+Thank you for the fixes!
 
-    git config --global user.name 'Mikhail Peselnik'
-    git config --global user.email 'bas at bmail.ru'
+Christian
 
-> ---
->  package/xterm/Config.in | 1 +
->  package/xterm/xterm.mk  | 7 +++++--
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/xterm/Config.in b/package/xterm/Config.in
-> index e17d2c6..f549df4 100644
-> --- a/package/xterm/Config.in
-> +++ b/package/xterm/Config.in
-> @@ -4,6 +4,7 @@ config BR2_PACKAGE_XTERM
->  	select BR2_PACKAGE_XLIB_LIBXAW
->  	depends on BR2_PACKAGE_XORG7
->  	depends on BR2_USE_MMU # fork()
-> +	depends on BR2_PACKAGE_FREETYPE
+On Sun, Jul 26, 2015, 10:35 AM Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-This should be a 'select' rather than a 'depends on'.
-
->  	help
->  	  xterm terminal emulator
->  
-> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-> index 56f692d..f7a332d 100644
-> --- a/package/xterm/xterm.mk
-> +++ b/package/xterm/xterm.mk
-> @@ -10,6 +10,9 @@ XTERM_SITE = ftp://invisible-island.net/xterm
->  XTERM_DEPENDENCIES = ncurses xlib_libXaw
->  XTERM_LICENSE = MIT
->  XTERM_LICENSE_FILES = version.c
-> -XTERM_CONF_OPTS = --enable-256-color
-> -
-> +XTERM_CONF_OPTS = --enable-256-color \
-> +	--x-includes=$(STAGING_DIR)/usr/include \
-> +	--x-libraries=$(STAGING_DIR)/usr/lib \
-> +	--with-freetype-cflags=$(STAGING_DIR)/usr/include \
-
-I guess this should instead be: -I$(STAGING_DIR)/usr/include
-
-> +	--with-freetype-libs=$(STAGING_DIR)/usr/lib
-
-And this: -L$(STAGING_DIR)/usr/lib
-
-You may also want to add:
-
-    --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
-
-Regards,
-Yann E. MORIN.
-
->  $(eval $(autotools-package))
-> -- 
-> 2.4.6
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Christian,
+>
+> On Sun, 26 Jul 2015 09:34:07 -0700, Christian Stewart wrote:
+> > Adding mosh, the mobile shell. Mosh uses ssh or dropbear as an initial
+> transport to
+> > start mosh-server which uses UDP to communicate with the client.
+> > Supports a predictive model to enhance performance on weak connections
+> > and compensate for general lag. Also supports disconnections and
+> > reconnections seamlessly.
+> >
+> > Signed-off-by: Christian Stewart <christian@paral.in>
+>
+> I applied, with some more changes:
+>
+>     [Thomas:
+>       - Add missing dependency on host-pkgconf, as noticed by Yann
+>         E. Morin.
+>       - Indicate that openssh/dropbear is a runtime dependency.
+>       - Pass some variables in the configure environment to tell that SSP
+>         support is not available when it isn't. Otherwise, it misdetects
+>         the SSP support as being available, causing a build failure.]
+>
+> The last item clearly meant that the build was never tested with
+> uClibc, which is our default C library. Please do at least a test build
+> with uClibc before submitting new packages.
+>
+> Also, one comment below.
+>
+>
+> > diff --git a/package/mosh/0001-remove-system-locale-calls.patch
+> b/package/mosh/0001-remove-system-locale-calls.patch
+> > new file mode 100644
+> > index 0000000..114e6ed
+> > --- /dev/null
+> > +++ b/package/mosh/0001-remove-system-locale-calls.patch
+> > @@ -0,0 +1,46 @@
+> > +The locale command is not available on many systems. As this variable
+> > +is unused and appears to have been written with the intent of
+> > +displaying the locale settings to the user, it's not really necessary.
+> > +As this breaks Mosh on a lot of systems, it's best to remove the calls.
+> > +
+> > +Upstream status: refused, see:
+> https://github.com/keithw/mosh/issues/650
+>
+> I think upstream refused it, because the approach of your patch is not
+> acceptable upstream.
+>
+> > +Signed-off-by: Christian Stewart <christian@paral.in>
+> > +---
+> > + src/frontend/mosh-server.cc | 4 +++-
+> > + src/frontend/stmclient.cc   | 4 +++-
+> > + 2 files changed, 6 insertions(+), 2 deletions(-)
+> > +
+> > +diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
+> > +index 76ed2ed..0d2f222 100644
+> > +--- a/src/frontend/mosh-server.cc
+> > ++++ b/src/frontend/mosh-server.cc
+> > +@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
+> > +       fprintf( stderr, "mosh-server needs a UTF-8 native locale to
+> run.\n\n" );
+> > +       fprintf( stderr, "Unfortunately, the local environment (%s)
+> specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(),
+> native_charset.c_str() );
+> > +       fprintf( stderr, "The client-supplied environment (%s)
+> specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(),
+> client_charset.c_str() );
+> > +-      int unused __attribute((unused)) = system( "locale" );
+> > ++
+> > ++      fprintf( stderr, "This is a buildroot system, 'locale' debug
+> output has been removed." );
+>
+> Here is what your patch should do instead:
+>
+>         if (locale command exists)
+>                 int unused __attribute((unused)) = system( "locale" );
+>         else
+>                 fprintf( stderr, "locale command not found, cannot show
+> related debug output." );
+>
+> I'm pretty sure this is going to make your patch much more acceptable
+> upstream. Can you retry with something like that?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150726/47cb4e8e/attachment.html>
