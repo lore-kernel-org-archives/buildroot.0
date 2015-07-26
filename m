@@ -1,42 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 26 Jul 2015 23:04:01 +0300
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Jul 2015 22:07:29 +0200
 Subject: [Buildroot] [PATCH 1/1] package/exfat-utils: fix compilation
  error with musl
-In-Reply-To: <CA+BsyQ6yfCRKAHpMq2Y68N9DSKrD3z20jBzfWgmSdqnTjXEk4w@mail.gmail.com>
+In-Reply-To: <1437932111-411-1-git-send-email-brendanheading@gmail.com>
 References: <1437932111-411-1-git-send-email-brendanheading@gmail.com>
- <20150726193803.GB17029@tarshish>
- <CA+BsyQ6yfCRKAHpMq2Y68N9DSKrD3z20jBzfWgmSdqnTjXEk4w@mail.gmail.com>
-Message-ID: <20150726200401.GF17029@tarshish>
+Message-ID: <20150726200729.GK3770@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Brendan,
+Brendan, All,
 
-On Sun, Jul 26, 2015 at 08:59:36PM +0100, Brendan Heading wrote:
-> > > --- a/package/exfat-utils/Config.in
-> > > +++ b/package/exfat-utils/Config.in
-> > > @@ -1,5 +1,6 @@
-> > >  config BR2_PACKAGE_EXFAT_UTILS
-> > >       bool "exfat-utils"
-> > > +     select BR2_PACKAGE_LIBFUSE
-> > >       depends on BR2_USE_WCHAR
-> >
-> > Please propagate BR2_PACKAGE_LIBFUSE dependencies.
+On 2015-07-26 18:35 +0100, Brendan Heading spake thusly:
+> exfat-utils build would not build on Linux unless __GLIBC__ was defined.
+> Reworked header file to relax this requirement in favour of other libcs.
+> patch submitted to the exfat-utils mailing list for comment.
 > 
-> Baruch,
-> 
-> Sorry .. can you define "propagate" ?
+> Also added missing dependency - exfat requires libfuse.
 
-Just copy the dependencies of BR2_PACKAGE_LIBFUSE to BR2_PACKAGE_EXFAT_UTILS. 
-See the explanation at http://nightly.buildroot.org/manual.html#_config_files 
-under "Choosing depends on or select".
+Your patch then does two different things;
+  - add a missing dependency
+  - fix a build failure with musl
 
-baruch
+It thus should be two different patches, one for each changes.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
