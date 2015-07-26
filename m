@@ -1,55 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 26 Jul 2015 12:53:07 +0200
-Subject: [Buildroot] [PATCH v2 1/1] toolchain-external wrapper: don't pass
-	march/mcpu if mtune is on cmdline
-Message-ID: <1437907987-5821-1-git-send-email-patrickdepinguin@gmail.com>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Sun, 26 Jul 2015 12:54:02 +0200
+Subject: [Buildroot] qt5base build issue
+In-Reply-To: <CAGm1_kuOuWD54_EaA0_2odvFJ9sUJ3HBbwR9Thm8a9cWb-rspQ@mail.gmail.com>
+References: <CAGm1_kumsLYH8RmBn3WWr64_yN1mjhc5DGhiZfpqCSdc3jvPtQ@mail.gmail.com>
+ <55B0FEED.4070700@ecagroup.com>
+ <CAGm1_kv_JrjpKVJ50_APpNsfP1knqxkNcr8bN0bSacvxVsjq7A@mail.gmail.com>
+ <CAGm1_ku+MGyBs_CkXtAjZVgqCkmNAPJ8mjW6yc05unKzyQRDhA@mail.gmail.com>
+ <55B1FA0C.6000809@ecagroup.com>
+ <CAGm1_kujy48mMmd4QMSJL+zbEXf3ooRWN8mKd+WF6e5Dg3LeQA@mail.gmail.com>
+ <55B210AF.8010004@ecagroup.com> <55B3B794.3080706@jcz.nl>
+ <CAGm1_kuOuWD54_EaA0_2odvFJ9sUJ3HBbwR9Thm8a9cWb-rspQ@mail.gmail.com>
+Message-ID: <55B4BC4A.7050003@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hello Yegor,
 
-Before commit 5715d2dcf48a39c16a3f3e41c97109613fed121d, the external
-toolchain wrapper would not pass its own march/mcpu/mtune flags to the real
-compiler if at least one of them was passed on the wrapper command-line.
+On 07/25/15 22:02, Yegor Yefremov wrote:
+> Works for me too. Thanks.
+> 
+> Please resend this patch via git send-mail. You can add my "Tested-by:
+> Yegor Yefremov <yegorslists@googlemail.com>".
 
-The mentioned commit intended to remove the passing of an mtune parameter
-coming from Buildroot, which was always empty after some other refactoring,
-but the changes have the side-effect that march/mcpu is now also passed when
-mtune is already given on the command-line. In that case, only mtune should
-be passed to the real compiler.
+Done.
 
-Restore part of the original toolchain wrapper code to check the presence of
-mtune on the command-line.
+> Btw have you already filed a bug request by Qt?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
-v2: do not unnecessarily increase EXCLUSIVE_ARGS (Yann)
+No, at least not yet. I will think about that, but it would require a lot of time to
+describe why/how. There are several other problems in the qt5base configure script, but I
+haven't taken the time to patch these as well...
+It's a pity a day only has 24 hours ;).
 
+regards,
 
- toolchain/toolchain-external/ext-toolchain-wrapper.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index e2d01dc..b3b02d8 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -177,11 +177,12 @@ int main(int argc, char **argv)
- 
- #if defined(BR_ARCH) || \
-     defined(BR_CPU)
--	/* Add our -march/cpu/abi flags, but only if none are
--	 * already specified on the commandline
-+	/* Add our -march/cpu flags, but only if none of
-+	 * -march/mtune/mcpu are already specified on the commandline
- 	 */
- 	for (i = 1; i < argc; i++) {
- 		if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
-+		    !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
- 		    !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
- 			break;
- 	}
--- 
-1.8.5.1
+Jaap
