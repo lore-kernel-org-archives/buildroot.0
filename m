@@ -1,37 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:46:18 +0200
-Subject: [Buildroot] [PATCH 1/4] aiccu: remove redundant --static flag
- to pkg-config
-In-Reply-To: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1437937112-13269-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20150726234618.57d4f61e@free-electrons.com>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Sun, 26 Jul 2015 00:17:49 -0400
+Subject: [Buildroot] [PATCH 1/1] cmocka: new package
+Message-ID: <1437884269-6134-1-git-send-email-nimaim@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+From: Nimai Mahajan <nimaim@gmail.com>
 
-On Sun, 26 Jul 2015 20:58:29 +0200, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> The pkg-config tool is automatically passing --static when BR2_STATIC_LIBS
-> is set (see package/pkgconf/pkgconf.mk), so no need to pass it explicitly
-> from package .mk files.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  package/aiccu/aiccu.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/cmocka/Config.in   | 11 +++++++++++
+ package/cmocka/cmocka.hash |  2 ++
+ package/cmocka/cmocka.mk   | 18 ++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/cmocka/Config.in
+ create mode 100644 package/cmocka/cmocka.hash
+ create mode 100644 package/cmocka/cmocka.mk
 
-All four patches applied, thanks. Thanks also to Yann for the review,
-and the discussion on IRC leading to those clean up patches.
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f029e1d..e0dd14e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1037,6 +1037,7 @@ menu "Other"
+ 	source "package/boost/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
++	source "package/cmocka/Config.in"
+ 	source "package/cppcms/Config.in"
+ 	source "package/ding-libs/Config.in"
+ 	source "package/eigen/Config.in"
+diff --git a/package/cmocka/Config.in b/package/cmocka/Config.in
+new file mode 100644
+index 0000000..37064bf
+--- /dev/null
++++ b/package/cmocka/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_CMOCKA
++	bool "cmocka"
++	help
++	  cmocka is an elegant unit testing framework for C with support
++	  for mock objects. It only requires the standard C library,
++	  works on a range of computing platforms (including embedded)
++	  and with different compilers. It is a fork of Google's very
++	  popular cmockery unit testing framework to fix bugs and support 
++	  it in the future.
++
++	  https://cmocka.org/
+diff --git a/package/cmocka/cmocka.hash b/package/cmocka/cmocka.hash
+new file mode 100644
+index 0000000..96b81cb
+--- /dev/null
++++ b/package/cmocka/cmocka.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 b36050d7a1224296803d216cba1a9d4c58c31bf308b2d6d6649d61aa5a36753b cmocka-1.0.1.tar.xz
+diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
+new file mode 100644
+index 0000000..740ff64
+--- /dev/null
++++ b/package/cmocka/cmocka.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# cmocka
++#
++################################################################################
++
++CMOCKA_VERSION = 1.0.1
++CMOCKA_SOURCE = cmocka-$(CMOCKA_VERSION).tar.xz
++CMOCKA_SITE = https://cmocka.org/files/1.0/
++CMOCKA_LICENSE = Apache-2.0
++CMOCKA_LICENSE_FILES = COPYING
++CMOCKA_DEPENDENCIES = host-cmake
++CMOCKA_INSTALL_STAGING = YES
++
++# cmocka only supports out of source builds
++CMOCKA_SUPPORTS_IN_SOURCE_BUILD = NO
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
