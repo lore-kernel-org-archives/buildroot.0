@@ -1,57 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Jul 2015 14:11:55 +0200
-Subject: [Buildroot] [PATCH] zxing_cpp: New package
-In-Reply-To: <CAGduivzTUvGvGs98N1eVnif0tb2ncoJSKD+cn4Y0DmcpET4waw@mail.gmail.com>
-References: <1437689326-23261-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20150725222152.GK1847@free.fr>
- <CAGduivzTUvGvGs98N1eVnif0tb2ncoJSKD+cn4Y0DmcpET4waw@mail.gmail.com>
-Message-ID: <20150726121155.GC3770@free.fr>
+From: Geoffrey Ragot <geoffreyragot@gmail.com>
+Date: Sun, 26 Jul 2015 14:12:17 +0200
+Subject: [Buildroot] [PATCH 1/2] Add pyyaml package
+Message-ID: <1437912738-24116-1-git-send-email-geoffrey.ragot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+Signed-off-by: Geoffrey Ragot <geoffrey.ragot@gmail.com>
+---
+ package/Config.in                      |  1 +
+ package/python-pyyaml/Config.in        |  8 ++++++++
+ package/python-pyyaml/python-pyyaml.mk | 15 +++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/python-pyyaml/Config.in
+ create mode 100644 package/python-pyyaml/python-pyyaml.mk
 
-On 2015-07-26 13:27 +0200, Maxime Hadjinlian spake thusly:
-> On Sun, Jul 26, 2015 at 12:21 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2015-07-24 00:08 +0200, Maxime Hadjinlian spake thusly:
-[--SNIP--]
-> >> +define ZXING_CPP_INSTALL_STAGING_CMDS
-> >> +     for i in $$(find $(@D)/buildroot-build/core/src -iname *.h); do \
-> >> +             $(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/local/include; \
-> >> +     done
-> >> +endef
-> >> +
-> >> +define ZXING_CPP_INSTALL_TARGET_CMDS
-> >> +     for i in $$(find $(@D)/buildroot-build/ -iname *.so -o -iname *.a); do \
-> >> +             $(INSTALL) -m 644 $$i $(TARGET_DIR)/usr/lib; \
-> >> +     done
-> >> +     $(INSTALL) -m 755 $(@D)/buildroot-build/zxing $(TARGET_DIR)/usr/sbin
-> >> +endef
-> >
-> > Why can't we use the standard 'install' rule for either staging or
-> > target?
-> There's no install in the CMakeLists from the original package,
-> there's already multiple issues in their Github to add it but it
-> doesn't seem like the maintainer is resolved to add them. Since I
-> don't want to add a patch that'll just rot there, I went this way.
-
-That's not how I interpret the comments in the issue report; on the
-contrary, I understand that the maintainer will welcome pull requests
-for new features, so if you were to send such a PR, it seems it would
-have quite some good chances to get in.
-
-Anyway, OK for the way you'r edoing it for now...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index cfa7512..8bc27a4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -649,6 +649,7 @@ menu "external python modules"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+ 	source "package/python-pyxml/Config.in"
++	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+diff --git a/package/python-pyyaml/Config.in b/package/python-pyyaml/Config.in
+new file mode 100644
+index 0000000..a63c445
+--- /dev/null
++++ b/package/python-pyyaml/Config.in
+@@ -0,0 +1,8 @@
++comment "python-pyyaml require libyaml"
++	depends on !BR2_PACKAGE_LIBYAML
++
++config BR2_PACKAGE_PYTHON_PYYAML
++	bool "python-pyyaml"
++	depends on BR2_PACKAGE_LIBYAML
++	help
++	  The PyYAML package contains binding to the libyaml API.
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+new file mode 100644
+index 0000000..ef10dac
+--- /dev/null
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pyyaml
++#
++################################################################################
++
++PYTHON_PYYAML_VERSION = 3.11
++PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
++PYTHON_PYYAML_SITE = https://pypi.python.org/packages/source/P/PyYAML/
++PYTHON_PYYAML_SETUP_TYPE = distutils
++PYTHON_PYYAML_LICENSE = Python software foundation license v2
++PYTHON_PYYAML_LICENSE_FILES = LICENSE
++PYTHON_PYYAML_DEPENDENCIES = libyaml
++
++$(eval $(python-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.6
