@@ -1,67 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 21:39:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/scons: fix missing dependency
-In-Reply-To: <1437932577-874-1-git-send-email-brendanheading@gmail.com>
-References: <1437932577-874-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150726213943.3d3ebbe9@free-electrons.com>
+Date: Sun, 26 Jul 2015 21:41:30 +0200
+Subject: [Buildroot] [PATCH v8 1/1] mosh: new package
+In-Reply-To: <CA+h8R2qyYPpyNpASpjg1+8ivxhX2x8yvD4pdzhSn3W=ypphqQg@mail.gmail.com>
+References: <1437928447-26907-1-git-send-email-christian@paral.in>
+ <20150726193517.40776cc8@free-electrons.com>
+ <CA+h8R2qyYPpyNpASpjg1+8ivxhX2x8yvD4pdzhSn3W=ypphqQg@mail.gmail.com>
+Message-ID: <20150726214130.196b8cbf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Dear Christian Stewart,
 
-On Sun, 26 Jul 2015 18:42:57 +0100, Brendan Heading wrote:
-> host-scons did not depend on host-python, causing build failures in
-> some instances.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
->  package/scons/scons.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-> index 39fb258..3ad0fa5 100644
-> --- a/package/scons/scons.mk
-> +++ b/package/scons/scons.mk
-> @@ -10,6 +10,7 @@ SCONS_LICENSE = MIT
->  SCONS_LICENSE_FILES = LICENSE.txt
->  SCONS_SETUP_TYPE = distutils
->  
-> +HOST_SCONS_DEPENDENCIES = host-python
->  HOST_SCONS_NEEDS_HOST_PYTHON = python2
->  
->  HOST_SCONS_INSTALL_OPTS = \
+Please don't top-post, thanks!
 
-This does not make sense: scons uses host-python-package, and the
-python package infrastructure automatically adds host-python as a
-dependency for host python packages. From package/pkg-python.mk:
+On Sun, 26 Jul 2015 18:02:29 +0000, Christian Stewart wrote:
 
-ifeq ($(4),target)
-$(2)_DEPENDENCIES += $$(if $$(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python)
-else
-ifeq ($$($(2)_NEEDS_HOST_PYTHON),)
-$(2)_DEPENDENCIES += $$(if $$(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-else
-ifeq ($$($(2)_NEEDS_HOST_PYTHON),python2)
-$(2)_DEPENDENCIES += host-python
-else ifeq ($$($(2)_NEEDS_HOST_PYTHON),python3)
-$(2)_DEPENDENCIES += host-python3
-else
-$$(error Incorrect value '$$($(2)_NEEDS_HOST_PYTHON)' for $(2)_NEEDS_HOST_PYTHON)
-endif
-endif # ($$($(2)_NEEDS_HOST_PYTHON),)
-endif # ($(4),target)
+> No, they will reject it regardless of how it is coded. Checking a global
+> POSIX command exists is not worth it to them as it exists on most systems
+> anyway. They requested I make a patch for BR that outputs a special debug
+> line for buildroot users so they know what they're dealing with if someone
+> submits a log.
 
-So, maybe there's a bug in there, or your analysis of the build failure
-was wrong. But clearly the solution is not to add host-python as a
-dependency in scons.mk.
+Can you try anyway? Because what I'm proposing is significantly
+different from what you proposed in your pull request. My proposal has
+the advantage of keeping the locale output when 'locale' is available
+*and* warn that locale is not available otherwise. Basically it exactly
+matches the requirements of the upstream mosh developers.
 
-I've marked your patch as Rejected. Please explain in more details what
-the problem was and how we can reproduce it.
+We don't like to keep patches in Buildroot forever, so having an
+upstreamable solution is important.
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
