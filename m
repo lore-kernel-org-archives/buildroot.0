@@ -1,111 +1,135 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 26 Jul 2015 20:55:45 +0200
-Subject: [Buildroot] [RFC 35/37] package/libeet: remove package
+Date: Sun, 26 Jul 2015 20:55:35 +0200
+Subject: [Buildroot] [RFC 25/37] package/enlightenment: bump to version
+	0.19.7
 In-Reply-To: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
 References: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1437936947-17632-36-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1437936947-17632-26-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeet is now available in efl package.
+Update url, add hash file, use xz archive and switch
+select to efl-core.
+Add efl reverse dependencies.
+
+Select png and jpeg image loader since enlightenment_start
+fail if png and jpeg image loader is not available in elf
+libraries.
+
+Also select libelementary
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- Config.in.legacy         |  7 +++++++
- package/Config.in        |  1 -
- package/libeet/Config.in | 16 ----------------
- package/libeet/libeet.mk | 27 ---------------------------
- 4 files changed, 7 insertions(+), 44 deletions(-)
- delete mode 100644 package/libeet/Config.in
- delete mode 100644 package/libeet/libeet.mk
+ package/enlightenment/Config.in          | 36 +++++++++++---------------------
+ package/enlightenment/enlightenment.hash |  2 ++
+ package/enlightenment/enlightenment.mk   | 22 +++++++------------
+ 3 files changed, 22 insertions(+), 38 deletions(-)
+ create mode 100644 package/enlightenment/enlightenment.hash
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index d73adff..ee70260 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.08"
- 
-+config BR2_PACKAGE_LIBEET
-+	bool "libeet package has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EFL
-+	help
-+	  The libeet package has been removed with the efl bump to 1.14.
-+
- config BR2_PACKAGE_LIBEVAS
- 	bool "libevas package has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 55f6121..167f710 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -242,7 +242,6 @@ endif
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
- 	source "package/imagemagick/Config.in"
--	source "package/libeet/Config.in"
- 	source "package/libeina/Config.in"
- 	source "package/libelementary/Config.in"
- 	source "package/libevas-generic-loaders/Config.in"
-diff --git a/package/libeet/Config.in b/package/libeet/Config.in
-deleted file mode 100644
-index 3f36295..0000000
---- a/package/libeet/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_LIBEET
--	bool "libeet"
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_JPEG
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index 1af42c7..4db11a8 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -1,32 +1,20 @@
+ config BR2_PACKAGE_ENLIGHTENMENT
+ 	bool "enlightenment"
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_X
 -	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEVAS_JPEG
+-	select BR2_PACKAGE_LIBEVAS_PNG
+-	select BR2_PACKAGE_LIBEVAS_EET
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEDJE
+-	select BR2_PACKAGE_LIBEFREET
+-	select BR2_PACKAGE_LIBEDBUS
+-	select BR2_PACKAGE_LIBEIO
++	select BR2_PACKAGE_EFL
++	select BR2_PACKAGE_EFL_X
++	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
++	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	select BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+-	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
+-	depends on BR2_USE_WCHAR
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	# libedbus -> dbus
+-	# libedbus -> glib2, libevas
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	# libedbus -> dbus, efl libraries
 -	depends on BR2_USE_MMU
--	depends on BR2_USE_WCHAR # efl
--	help
--	  Eet is a tiny library designed to write an arbitary set of
--	  chunks of data to a file and optionally compress each chunk
--	  (very much like a zip file).
--
--	  http://trac.enlightenment.org/e/wiki/Eet
--
--comment "libeet needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-diff --git a/package/libeet/libeet.mk b/package/libeet/libeet.mk
-deleted file mode 100644
-index fc3d7f9..0000000
---- a/package/libeet/libeet.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# libeet
--#
--################################################################################
--
--LIBEET_VERSION = 1.7.10
--LIBEET_SOURCE = eet-$(LIBEET_VERSION).tar.bz2
--LIBEET_SITE = http://download.enlightenment.org/releases
--LIBEET_LICENSE = BSD-2c
--LIBEET_LICENSE_FILES = COPYING
--
--LIBEET_INSTALL_STAGING = YES
--
--LIBEET_DEPENDENCIES = host-pkgconf zlib jpeg libeina
--HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-libjpeg host-libeina
--
--ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
--LIBEET_DEPENDENCIES += gnutls libgcrypt
--LIBEET_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
--LIBEET_CONF_OPTS += --enable-gnutls
--else
--LIBEET_CONF_OPTS += --disable-gnutls
--endif
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
+-	depends on BR2_PACKAGE_XORG7
+ 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_USES_GLIBC # efl
++	depends on BR2_USE_MMU # efl
+ 	help
+ 	  Enlightenment, also known simply as E, is a stacking window
+ 	  manager for the X Window System which can be used alone or
+@@ -36,7 +24,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 
+ 	  http://www.enlightenment.org/
+ 
+-comment "enlightenment needs a toolchain w/ wchar, C++, threads"
++comment "enlightenment needs udev /dev management and a (e)glibc toolchain w/ C++"
+ 	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
+new file mode 100644
+index 0000000..2c8e2ec
+--- /dev/null
++++ b/package/enlightenment/enlightenment.hash
+@@ -0,0 +1,2 @@
++# From https://phab.enlightenment.org/phame/live/3/post/e19_7_release/
++sha256	5737d7abfd536a665dcd927a0fc8d65fd566b206f9994fd0c997677d0871a320 enlightenment-0.19.7.tar.xz
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ddebe06..d589571 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -4,24 +4,18 @@
+ #
+ ################################################################################
+ 
+-ENLIGHTENMENT_VERSION = 0.17.6
+-ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
++ENLIGHTENMENT_VERSION = 0.19.7
++ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
++ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment/
+ ENLIGHTENMENT_LICENSE = BSD-2c
+ ENLIGHTENMENT_LICENSE_FILES = COPYING
+ 
+-ENLIGHTENMENT_DEPENDENCIES = 	\
+-	host-pkgconf 		\
+-	libecore 		\
+-	libeet 			\
+-	libeina 		\
+-	libevas 		\
++ENLIGHTENMENT_DEPENDENCIES = \
++	host-pkgconf \
++	host-efl \
++	efl \
++	libelementary \
+ 	libevas-generic-loaders \
+-	libedje 		\
+-	libefreet 		\
+-	libedbus 		\
+-	libeio 			\
+-	host-libedje 		\
+-	host-libeet		\
+ 	xcb-util-keysyms
+ 
+ ENLIGHTENMENT_CONF_OPTS = \
 -- 
 2.4.3
