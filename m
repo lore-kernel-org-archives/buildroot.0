@@ -1,39 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 21:41:30 +0200
-Subject: [Buildroot] [PATCH v8 1/1] mosh: new package
-In-Reply-To: <CA+h8R2qyYPpyNpASpjg1+8ivxhX2x8yvD4pdzhSn3W=ypphqQg@mail.gmail.com>
-References: <1437928447-26907-1-git-send-email-christian@paral.in>
- <20150726193517.40776cc8@free-electrons.com>
- <CA+h8R2qyYPpyNpASpjg1+8ivxhX2x8yvD4pdzhSn3W=ypphqQg@mail.gmail.com>
-Message-ID: <20150726214130.196b8cbf@free-electrons.com>
+Date: Sun, 26 Jul 2015 21:44:45 +0200
+Subject: [Buildroot] [PATCHv2 1/1] xterm: x-includes and x-libraries
+ must be set for cross-compiling
+In-Reply-To: <20150726175949.GI3770@free.fr>
+References: <1437932796-16216-1-git-send-email-bas@bmail.ru>
+ <20150726175949.GI3770@free.fr>
+Message-ID: <20150726214445.4b5534a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christian Stewart,
+Yann,
 
-Please don't top-post, thanks!
+On Sun, 26 Jul 2015 19:59:49 +0200, Yann E. MORIN wrote:
 
-On Sun, 26 Jul 2015 18:02:29 +0000, Christian Stewart wrote:
+> On 2015-07-26 20:46 +0300, kyak spake thusly:
+> > From: Mikhail Peselnik <bas@bmail.ru>
+> > 
+> > These flags need to be set so that the configure script would
+> > correctly use libICE from cross-toolchain rather than from host.
+> > Also, the xterm package is missing the freetype2 dependency, as
+> > noted by Romain Naour.
+> > 
+> > This fix is similar to "package/efl/libevas: x-includes and x-libraries
+> > must be set for cross-compiling" done by Romain Naour on libecore.
+> > 
+> > Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+> 
+> The From filed does not match your Signed-off-by; please fix your git
+> config with:
+> 
+>     git config --global user.name 'Mikhail Peselnik'
+>     git config --global user.email 'bas at bmail.ru'
 
-> No, they will reject it regardless of how it is coded. Checking a global
-> POSIX command exists is not worth it to them as it exists on most systems
-> anyway. They requested I make a patch for BR that outputs a special debug
-> line for buildroot users so they know what they're dealing with if someone
-> submits a log.
+Are you sure?
 
-Can you try anyway? Because what I'm proposing is significantly
-different from what you proposed in your pull request. My proposal has
-the advantage of keeping the locale output when 'locale' is available
-*and* warn that locale is not available otherwise. Basically it exactly
-matches the requirements of the upstream mosh developers.
+In the patch itself, I see:
 
-We don't like to keep patches in Buildroot forever, so having an
-upstreamable solution is important.
+  From: Mikhail Peselnik <bas@bmail.ru>
+  Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
 
-Thanks,
+which does match. However, it indeed doesn't match the From of the mail
+itself:
+
+  From: kyak <bas@bmail.ru>
+
+Which I'm not sure is related to the Git configuration. And while it's
+a bit ugly, I think it doesn't cause any problem because Git will use
+the From: from inside the patch itself in preference over the From: of
+the e-mail.
 
 Thomas
 -- 
