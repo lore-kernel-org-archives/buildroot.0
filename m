@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 18:34:45 +0200
-Subject: [Buildroot] [PATCH 2/3] package/python-pydal: bump to version
- v15.07
-In-Reply-To: <1437768317-9283-3-git-send-email-angelo.compagnucci@gmail.com>
-References: <1437768317-9283-1-git-send-email-angelo.compagnucci@gmail.com>
- <1437768317-9283-3-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150726183445.742f6768@free-electrons.com>
+Date: Sun, 26 Jul 2015 18:37:35 +0200
+Subject: [Buildroot] [git commit] rpi-userland: pass -DALL_APPS=OFF when
+	example apps are disabled
+Message-ID: <20150726163856.8EB5C805F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=2bb611a046afcc2b3546b6ca20099100b31ef229
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Jul 2015 22:05:16 +0200, Angelo Compagnucci wrote:
-> This patch bumps python-pydal to version v15.07.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/python-pydal/python-pydal.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+It should have been part of commit
+d705809c7a32d6868a742b790648a65857f21197.
 
-I've applied patches 2/3 and 3/3 of your series. I've marked patch 1/3
-as "Changes Requested" since I made some comments about it. Can you
-respin 1/3 ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-userland/rpi-userland.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 3a31733..403409d 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -46,6 +46,10 @@ define RPI_USERLAND_EXTRA_LIBS_STAGING
+ endef
+ RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_EXTRA_LIBS_STAGING
+ 
++else
++
++RPI_USERLAND_CONF_OPTS += -DALL_APPS=OFF
++
+ endif # BR2_PACKAGE_RPI_USERLAND_HELLO
+ 
+ define RPI_USERLAND_POST_TARGET_CLEANUP
