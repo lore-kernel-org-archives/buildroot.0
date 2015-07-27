@@ -1,36 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:16:56 +0200
-Subject: [Buildroot] [git commit branch/next] python-pycrc16: Change site
-Message-ID: <20150808105642.C3A707FFCF@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:26:26 +0200
+Subject: [Buildroot] [git commit branch/next] dado: add hash file
+Message-ID: <20150808105643.441957FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9603574567f77a262d0da1311d19b088bef68e75
+commit: http://git.buildroot.net/buildroot/commit/?id=5407b90631e2fff212f23717ae505b905f62bdc6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Google Code is a closing forge, python-pycrc16 has already made the move
-to Github.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-crc16/python-crc16.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/dado/dado.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-crc16/python-crc16.mk b/package/python-crc16/python-crc16.mk
-index 5b9b13b..3a292a0 100644
---- a/package/python-crc16/python-crc16.mk
-+++ b/package/python-crc16/python-crc16.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- PYTHON_CRC16_VERSION = 0.1.1
--PYTHON_CRC16_SOURCE = crc16-$(PYTHON_CRC16_VERSION).tar.gz
--PYTHON_CRC16_SITE = http://pycrc16.googlecode.com/files
-+PYTHON_CRC16_SITE = $(call github,gennady,pycrc16,v$(PYTHON_CRC16_VERSION))
- PYTHON_CRC16_LICENSE = LGPLv3+
- PYTHON_CRC16_LICENSE_FILES = COPYING.txt
- PYTHON_CRC16_SETUP_TYPE = distutils
+diff --git a/package/dado/dado.hash b/package/dado/dado.hash
+new file mode 100644
+index 0000000..3f17f08
+--- /dev/null
++++ b/package/dado/dado.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	b7a68583c36643ad9040937d7e2b99230af7da83c7cbd13c9923881f1eb7490f  dado-1.6.0-1.src.rock
