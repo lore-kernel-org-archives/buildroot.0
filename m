@@ -1,27 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:29:51 +0200
-Subject: [Buildroot] [git commit branch/next] lunit: add hash file
-Message-ID: <20150808105644.03E3A7FD83@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 23:13:05 +0200
+Subject: [Buildroot] [git commit branch/next] exfat-utils: indicate upstream
+	status of the musl patch
+Message-ID: <20150808105644.712817FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=949512498008938d1440a19a00b3d238db365bba
+commit: http://git.buildroot.net/buildroot/commit/?id=efc54fe91ebd849618a15363602b84e53e15037d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lunit/lunit.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ .../0001-fix-compiling-with-non-glibc-libcs.patch  |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/lunit/lunit.hash b/package/lunit/lunit.hash
-new file mode 100644
-index 0000000..9c8d53c
---- /dev/null
-+++ b/package/lunit/lunit.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	b19854c685337ddcec2fe9c22113d2cd14715d52ccd2676abe2fa49b61a2ec4d  lunit-0.5-2.src.rock
+diff --git a/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch b/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
+index 6244b16..d280040 100644
+--- a/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
++++ b/package/exfat-utils/0001-fix-compiling-with-non-glibc-libcs.patch
+@@ -3,6 +3,9 @@
+ libexfat would only compile on Linux with __GLIBC__ defined. Changed
+ to use __linux__ which likely better fits the original intent.
+ 
++Upstream status: applied.
++See https://groups.google.com/forum/#!topic/exfat/8g3yumqrf1A.
++
+ Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+ ---
+  platform.h |    2 +-
