@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Jul 2015 19:52:59 -0300
-Subject: [Buildroot] [PATCH] vsftpd: bump to version 3.0.3
-Message-ID: <1438037579-19439-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 27 Jul 2015 19:53:22 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.21
+Message-ID: <1438037602-19484-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vsftpd/vsftpd.hash | 2 +-
- package/vsftpd/vsftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-index 6b46e4b..a0cd55b 100644
---- a/package/vsftpd/vsftpd.hash
-+++ b/package/vsftpd/vsftpd.hash
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 91b297c..5e75b2e 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	be46f0e2c5528fe021fafc8dab1ecfea0c1f183063a06977f8537fcd0b195e56	vsftpd-3.0.2.tar.gz
-+sha256	9d4d2bf6e6e2884852ba4e69e157a2cecd68c5a7635d66a3a8cf8d898c955ef7	vsftpd-3.0.3.tar.gz
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index e5b505d..1e48264 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://www.stunnel.org/pipermail/stunnel-users/2015-June/005094.html
+-sha256	0532c0a2f8de3da1ab625e384146501ce5936fac63d01561c3a9bf652b692317	stunnel-5.18.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005180.html
++sha256	2aef568b1955f5e233f6a8e17ebce3d30755f1be44c813f5a48e621f785596e3	stunnel-5.21.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 4674694..5e9cd72 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--VSFTPD_VERSION = 3.0.2
-+VSFTPD_VERSION = 3.0.3
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
- VSFTPD_LICENSE = GPLv2
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).18
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).21
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
 2.3.6
