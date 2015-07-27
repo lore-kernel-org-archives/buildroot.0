@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Jul 2015 19:25:43 +0200
+Date: Mon, 27 Jul 2015 19:32:50 +0200
 Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: remove debugging
  patch
-In-Reply-To: <1438014835-11707-1-git-send-email-christian@paral.in>
+In-Reply-To: <20150727172543.GB4075@free.fr>
 References: <1438014835-11707-1-git-send-email-christian@paral.in>
-Message-ID: <20150727172543.GB4075@free.fr>
+ <20150727172543.GB4075@free.fr>
+Message-ID: <20150727173250.GC4075@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +14,98 @@ To: buildroot@busybox.net
 
 Christian, All,
 
-On 2015-07-27 09:33 -0700, Christian Stewart spake thusly:
-> This patch updates rtl8821au to include an upstream commit which
-> disables debug output without a runtime insmod parameter debug=level.
-
-s/without/with/
-
-> This makes the old buildroot patch to remove hardcoded debug defines
-> unnecessary: as such, it has been removed.
+On 2015-07-27 19:25 +0200, Yann E. MORIN spake thusly:
+> On 2015-07-27 09:33 -0700, Christian Stewart spake thusly:
+> > This patch updates rtl8821au to include an upstream commit which
+> > disables debug output without a runtime insmod parameter debug=level.
 > 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> s/without/with/
 
-Otherwise:
+As discussed on IRC, this was nt clear enough, so here's an alternate
+phrasing:
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    ... an upstream commit which disables debug output, unless a runtime
+    insmod parameter debug=level is passed when loading the module.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/rtl8821au/0001-disable-default-debug.patch | 24 ----------------------
->  package/rtl8821au/rtl8821au.mk                     |  2 +-
->  2 files changed, 1 insertion(+), 25 deletions(-)
->  delete mode 100644 package/rtl8821au/0001-disable-default-debug.patch
+> > This makes the old buildroot patch to remove hardcoded debug defines
+> > unnecessary: as such, it has been removed.
+> > 
+> > Signed-off-by: Christian Stewart <christian@paral.in>
 > 
-> diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
-> deleted file mode 100644
-> index de6fc62..0000000
-> --- a/package/rtl8821au/0001-disable-default-debug.patch
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -Comment out the hardcoded debug defines. If extra debug is needed, we can add it
-> -as a define in the make flags.
-> -
-> -Signed-off-by: Christian Stewart <christian@paral.in>
-> -
-> -diff --git a/include/autoconf.h b/include/autoconf.h
-> ---- a/include/autoconf.h
-> -+++ b/include/autoconf.h
-> -@@ -130,12 +130,12 @@
-> - /*
-> -  * Debug Related Config
-> -  */
-> --#define DBG	1
-> -+//#define DBG	1
-> - 
-> --#define CONFIG_DEBUG /* DBG_871X, etc... */
-> -+//#define CONFIG_DEBUG /* DBG_871X, etc... */
-> - //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
-> - 
-> --#define CONFIG_PROC_DEBUG
-> -+//#define CONFIG_PROC_DEBUG
-> - 
-> - 
-> - //#define DBG_TX
-> diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-> index d218e3c..eddb18e 100644
-> --- a/package/rtl8821au/rtl8821au.mk
-> +++ b/package/rtl8821au/rtl8821au.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
-> +RTL8821AU_VERSION = fef8c9d67d076eee9dfb9e19cb7cb69815d5a207
->  RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
->  RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
->  RTL8821AU_LICENSE_FILES = COPYING
+> Otherwise:
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> > ---
+> >  package/rtl8821au/0001-disable-default-debug.patch | 24 ----------------------
+> >  package/rtl8821au/rtl8821au.mk                     |  2 +-
+> >  2 files changed, 1 insertion(+), 25 deletions(-)
+> >  delete mode 100644 package/rtl8821au/0001-disable-default-debug.patch
+> > 
+> > diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
+> > deleted file mode 100644
+> > index de6fc62..0000000
+> > --- a/package/rtl8821au/0001-disable-default-debug.patch
+> > +++ /dev/null
+> > @@ -1,24 +0,0 @@
+> > -Comment out the hardcoded debug defines. If extra debug is needed, we can add it
+> > -as a define in the make flags.
+> > -
+> > -Signed-off-by: Christian Stewart <christian@paral.in>
+> > -
+> > -diff --git a/include/autoconf.h b/include/autoconf.h
+> > ---- a/include/autoconf.h
+> > -+++ b/include/autoconf.h
+> > -@@ -130,12 +130,12 @@
+> > - /*
+> > -  * Debug Related Config
+> > -  */
+> > --#define DBG	1
+> > -+//#define DBG	1
+> > - 
+> > --#define CONFIG_DEBUG /* DBG_871X, etc... */
+> > -+//#define CONFIG_DEBUG /* DBG_871X, etc... */
+> > - //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
+> > - 
+> > --#define CONFIG_PROC_DEBUG
+> > -+//#define CONFIG_PROC_DEBUG
+> > - 
+> > - 
+> > - //#define DBG_TX
+> > diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+> > index d218e3c..eddb18e 100644
+> > --- a/package/rtl8821au/rtl8821au.mk
+> > +++ b/package/rtl8821au/rtl8821au.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
+> > +RTL8821AU_VERSION = fef8c9d67d076eee9dfb9e19cb7cb69815d5a207
+> >  RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
+> >  RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
+> >  RTL8821AU_LICENSE_FILES = COPYING
+> > -- 
+> > 2.1.4
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > -- 
-> 2.1.4
-> 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
