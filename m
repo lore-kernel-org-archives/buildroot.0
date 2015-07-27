@@ -1,10 +1,11 @@
-From: =?UTF-8?Q?No=C3=A9_RUBINSTEIN?= <nrubinstein@aldebaran.com>
-Date: Mon, 27 Jul 2015 11:24:16 +0200
-Subject: [Buildroot] [PATCHv2 13/15] fs/iso9660: add hybrid image support
-In-Reply-To: <1433802108-14351-14-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1433802108-14351-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1433802108-14351-14-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAOJKDvKk2uRb8nr3fVUubnd26CUn=n2XH60YMSYLzQukAnN5PQ@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 27 Jul 2015 11:34:06 +0200
+Subject: [Buildroot] [PATCH] package/exim: Fix compilation error with
+ musl
+In-Reply-To: <20150726151005.12a9989d@free-electrons.com>
+References: <1437831415-6066-1-git-send-email-luca@lucaceresoli.net>
+ <20150726151005.12a9989d@free-electrons.com>
+Message-ID: <55B5FB0E.2060600@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +14,52 @@ To: buildroot@busybox.net
 
 Dear Thomas,
 
-Sorry for the late answer.
+Thomas Petazzoni wrote:
+> Dear Luca Ceresoli,
+>
+> On Sat, 25 Jul 2015 15:36:55 +0200, Luca Ceresoli wrote:
+>> From: Bernd Kuhls <bernd.kuhls@t-online.de>
+>>
+>> Fixes
+>> smtp_in.c: In function ?smtp_start_session?:
+>> smtp_in.c:1976:36: error: invalid application of ?sizeof? to incomplete type ?struct options?
+>>       EXIM_SOCKLEN_T optlen = sizeof(struct ip_options) + MAX_IPOPTLEN;
+>>
+>> smtp_in.c misdetects the needed style for ip_options, only OPTSTYLE == 2 works.
+>> Since musl does not provide any macro[1] to detect it we need to pretend to be
+>> darwin in order to fix the compile bug.
+>>
+>> [1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
+>>
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> [Luca: simplify by using only one sed invocation]
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>
+>> ---
+>>
+>> I'm adopting this oldish patch (https://patchwork.ozlabs.org/patch/460496/)
+>> from Bernd. The bug it fixes is still there, and the fix is still valid. I
+>> just simplified it according to my comments to the original patch.
+>
+> Thanks for picking up an old patch, definitely useful! I'm not too
+> happy with us pretending to be Darwin when building against Musl, as it
+> could fire back on us in the future (like if Exim starts using
+> something really Darwin specific). But oh well, I guess it's good
+> enough for now.
 
-2015-06-09 0:21 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
-> +define ROOTFS_ISO9660_GEN_HYBRID
-> +       $(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
-> +endef
-> +
-> +ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
+Indeed.
 
-My understanding is that _POST_GEN_HOOKS has been skipped in the v2
-patch series, so this does not work. Is that correct?
+Actually, for the sake of _building_, setting NO_IP_OPTIONS instead of
+DARWIN_IP_OPTIONS would be fine as well. But it would result in OPTSTYLE
+to be set to 3, not 2. Bernd, do you think it would work anyway?
 
-Regards,
-No? Rubinstein.
+For the curious, the *_IP_OPTIONS defines are only referenced in this
+file:
+
+   http://git.exim.org/exim.git/blob/HEAD:/src/src/smtp_in.c#l1961
+
+where there's a lengthy commentary about the headaches with the various
+C libraries.
 
 -- 
-
-
-
-
-*This email and any attachment thereto are confidential and intended solely 
-for the use of the individual or entity to whom they are addressed.If you 
-are not the intended recipient, please be advised that disclosing, copying, 
-distributing or taking any action in reliance on the contents of this email 
-is strictly prohibited. In such case, please immediately advise the sender, 
-and delete all copies and attachment from your system.This email shall not 
-be construed and is not tantamount to an offer, an acceptance of offer, or 
-an agreement by Aldebaran Robotics on any discussion or contractual 
-document whatsoever. No employee or agent is authorized to represent or 
-bind Aldebaran Robotics to third parties by email, or act on behalf of 
-Aldebaran Robotics by email, without express written confirmation by 
-Aldebaran Robotics? duly authorized representatives.*
-------------------------------
-
-*Ce message ?lectronique et ?ventuelles pi?ces jointes sont confidentiels, 
-et exclusivement destin?s ? la personne ou l'entit? ? qui ils sont 
-adress?s.*
-
-*Si vous n'?tes pas le destinataire vis?, vous ?tes pri? de ne pas 
-divulguer, copier, distribuer ou prendre toute d?cision sur la foi de ce 
-message ?lectronique. Merci d'en aviser imm?diatement l'exp?diteur et de 
-supprimer toutes les copies et ?ventuelles pi?ces jointes de votre syst?me.*
-
-*Ce message ?lectronique n'?quivaut pas ? une offre, ? une acceptation 
-d?offre, ou ? un accord d'Aldebaran Robotics sur toute discussion ou 
-document contractuel quel qu?il soit, et ne peut ?tre interpr?t? comme tel. 
-Aucun employ? ou agent d?Aldebaran Robotics n'est autoris? ? repr?senter ou 
-? engager la soci?t? par email, ou ? agir au nom et pour le compte de la 
-soci?t? par email, sans qu?une confirmation ?crite soit donn?e par le 
-repr?sentant l?gal d?Aldebaran Robotics ou par toute autre personne ayant 
-re?u d?l?gation de pouvoir appropri?e.*
+Luca
