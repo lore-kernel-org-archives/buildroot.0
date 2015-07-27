@@ -1,61 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 27 Jul 2015 23:47:28 +0200
-Subject: [Buildroot] [PATCH] jquery-datetimepicker: new package
-In-Reply-To: <20150727223450.16eac5ed@free-electrons.com>
-References: <1438022252-8024-1-git-send-email-yegorslists@googlemail.com>
- <20150727223450.16eac5ed@free-electrons.com>
-Message-ID: <CAGm1_kteF24o0sdMxOVK1=4PDjcRXnnoOkJ4yp6ZFmsTPk4-uQ@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 27 Jul 2015 23:50:20 +0200
+Subject: [Buildroot] [PATCH 06/12] libiscsi: Bump version
+In-Reply-To: <20150727233843.2502590e@free-electrons.com>
+References: <1437943118-18060-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1437943118-18060-7-git-send-email-maxime.hadjinlian@gmail.com>
+ <20150727233843.2502590e@free-electrons.com>
+Message-ID: <CAGduivzYWZPFXiGoyLUNJccoYQxauiv+HEbTdH5btsJVSWRprw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 27, 2015 at 10:34 PM, Thomas Petazzoni
+Hi Thomas, all
+
+On Mon, Jul 27, 2015 at 11:38 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Yegor,
+> Dear Maxime Hadjinlian,
 >
-> On Mon, 27 Jul 2015 20:37:32 +0200, Yegor Yefremov wrote:
->> Introduce jQuery submenu for jQuery plugins.
+> On Sun, 26 Jul 2015 22:38:32 +0200, Maxime Hadjinlian wrote:
+>> Patches were applied upstream so they are removed.
+>> Also remove the autoreconf which has no purposes anymore
 >>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>  package/Config.in                                      |  5 +++++
->>  package/jquery-datetimepicker/Config.in                |  7 +++++++
->>  package/jquery-datetimepicker/jquery-datetimepicker.mk | 18 ++++++++++++++++++
->>  3 files changed, 30 insertions(+)
->>  create mode 100644 package/jquery-datetimepicker/Config.in
->>  create mode 100644 package/jquery-datetimepicker/jquery-datetimepicker.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index f029e1d..f240c26 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -882,6 +882,11 @@ menu "Javascript"
->>       source "package/explorercanvas/Config.in"
->>       source "package/flot/Config.in"
->>       source "package/jquery/Config.in"
->> +if BR2_PACKAGE_JQUERY
->> +menu "external jQuery plugins"
->> +     source "package/jquery-datetimepicker/Config.in"
->> +endmenu
->> +endif
+>> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 >
-> I'm not happy with this change: there are already other jquery plugins
-> below:
+> This is causing some regression:
 >
->>       source "package/jquery-keyboard/Config.in"
->>       source "package/jquery-mobile/Config.in"
->>       source "package/jquery-sparkline/Config.in"
+>   http://autobuild.buildroot.org/results/0a9/0a96f3654983ed2efc851522352dec43c1df0077/build-end.log
 >
-> So, what I'd prefer is to have two patches:
+> This is due to the fact that ld is used instead of gcc. Can you have a
+> look?
+Dully noted, I'll add it to my todo list and look at it asap.
 >
->  */ One adding the jquery-datetimepicker package
+> Thanks,
 >
->  */ One moving all jquery plugins to a sub-menu
->
-> Can you rework with this idea in mind?
-
-OK. I'll do this.
-
-Yegor
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
