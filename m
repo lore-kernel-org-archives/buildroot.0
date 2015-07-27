@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:26:26 +0200
-Subject: [Buildroot] [git commit] lbase64: add hash file
-Message-ID: <20150727203134.1587581DF9@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:29:50 +0200
+Subject: [Buildroot] [git commit] lua-csnappy: add hash file
+Message-ID: <20150727203134.81DFF7FA29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1643a8c020ee8c05235a3b5089fb2789c23c2e6f
+commit: http://git.buildroot.net/buildroot/commit/?id=4b15e9a61ece4ed9e05c44ae25146c40f9ae1508
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lbase64/lbase64.hash |    2 ++
+ package/lua-csnappy/lua-csnappy.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lbase64/lbase64.hash b/package/lbase64/lbase64.hash
+diff --git a/package/lua-csnappy/lua-csnappy.hash b/package/lua-csnappy/lua-csnappy.hash
 new file mode 100644
-index 0000000..0806090
+index 0000000..2864c3f
 --- /dev/null
-+++ b/package/lbase64/lbase64.hash
++++ b/package/lua-csnappy/lua-csnappy.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	7326658d48a70382b496eb88220b0c398c19ed712e39863939330fec0533362a  lbase64-20120820-1.src.rock
++sha256	3504789c7832f4ed3d7aef47ba9d62940985cde7556284db2233842bfb7d8876  lua-csnappy-0.1.3-1.src.rock
