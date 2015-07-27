@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:51:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/exfat-utils: fix compilation
- error with musl
-In-Reply-To: <1437951045-14508-1-git-send-email-brendanheading@gmail.com>
-References: <1437951045-14508-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150727225127.235df019@free-electrons.com>
+Date: Mon, 27 Jul 2015 22:52:51 +0200
+Subject: [Buildroot] [git commit] lighttpd: bump to version 1.4.36
+Message-ID: <20150727205259.AB2B97F8A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=a151706155c4e522cd1d3da39ff76dcb6676b00f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Jul 2015 23:50:45 +0100, Brendan Heading wrote:
-> exfat-utils build would not build on Linux unless __GLIBC__ was defined.
-> Patch added to use more relaxed __linux__ instead.
-> 
-> See http://autobuild.buildroot.net/results/c60/c60d0f9a93c90d41c3c86c78b0a0
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> 
-> ---
-> Changes v1 -> v2 :
->    - removed unnecessary dependency change
->    - improvements (much simpler patch) as suggested by Thomas P
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lighttpd/lighttpd.hash |    2 +-
+ package/lighttpd/lighttpd.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks. Can you please submit the patch upstream?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 01d3458..f74727c 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,2 +1,2 @@
+ # From http://www.lighttpd.net/
+-sha256	113e9b72ccbd1da5deb0774bf93cf0ca15dc82aad2da0f04e5ab27d37d3f30a3	lighttpd-1.4.35.tar.xz
++sha256	897ab6b1cc7bd51671f8af759e7846245fbbca0685c30017e93a5882a9ac1a53	lighttpd-1.4.36.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index d602556..c75eeff 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).35
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).36
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
