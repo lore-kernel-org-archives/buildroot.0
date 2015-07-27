@@ -1,57 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:21:47 +0200
-Subject: [Buildroot] [git commit] dmraid: exclude nios2 sourcery toolchains,
-	_gp issue
-Message-ID: <20150727202258.5EE8D81DE4@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 27 Jul 2015 20:23:25 +0000
+Subject: [Buildroot] Autobuilder update: ARC toolchain updated
+Message-ID: <9bab4b24-a7a4-46e2-a93b-06008b42ef69@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb0433e35d6d03c472119357209dff13824d5110
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes:
+27 ???? 2015 ?. 11:17 PM ???????????? Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ???????:
+>
+> Hello,
+>
+> I just pushed a minor update to the autobuilder configuration: I
+> rebuilt the ARC pre-built toolchain with the latest Buildroot master.
+> This should fix many of the .tbss related build problem.
+>
+> See:
+>
+>   http://git.buildroot.net/buildroot-test/commit/?id=c1b141aa4f892493d9e6cb6361d0edf68575798b
+>
+> I will probably rebuild all Buildroot pre-built toolchains once -rc1 is
+> released.
+>
 
-  http://autobuild.buildroot.net/results/a7e2631d06634d768faf5c1d02712cc9b38562c6/
+Thanks for doing that.
+But I have to tell you that even with that updated toolchain .tbss issues won't go completely.
 
-Investigation of nios2 config.log shows that this is caused by the
-"infamous" _gp link issue on codesourcery toolchains:
+You'll see a bit of a different issue specifically linking applications with lots libstdc++.
 
-configure:9118: /ssd1/thomas/autobuild/instance-0/output/host/usr/bin/nios2-linux-gnu-gcc -o conftest -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64    conftest.c -ldevmapper-event   >&5
-/ssd1/thomas/autobuild/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.8.3/../../../../nios2-linux-gnu/bin/ld: /ssd1/thomas/autobuild/instance-0/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/crt1.o: undefined reference to symbol '_gp'
-/ssd1/thomas/autobuild/instance-0/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/libdevmapper.so.1.02: error adding symbols: DSO missing from command line
-collect2: error: ld returned 1 exit status
+We're aware of that new issue (.tbss fix was unfortunately incomplete) and working on proper fix.
 
-As with other cases, fixed by disabling this package when codesourcery
-toolchains are in use.
+BTW when are you going to cut rc1? I'll try to make sure our fix is ready by then.
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dmraid/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
-
-diff --git a/package/dmraid/Config.in b/package/dmraid/Config.in
-index 4a8cf61..ec50670 100644
---- a/package/dmraid/Config.in
-+++ b/package/dmraid/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_DMRAID
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
- 	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
-+	# dmraid triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	select BR2_PACKAGE_LVM2
- 	help
- 	  dmraid discovers, activates, deactivates and displays properties
-@@ -13,4 +16,7 @@ config BR2_PACKAGE_DMRAID
- 
- comment "dmraid needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	# dmraid triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+-Alexey
