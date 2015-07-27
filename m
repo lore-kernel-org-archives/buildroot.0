@@ -1,65 +1,55 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 27 Jul 2015 11:34:06 +0200
-Subject: [Buildroot] [PATCH] package/exim: Fix compilation error with
- musl
-In-Reply-To: <20150726151005.12a9989d@free-electrons.com>
-References: <1437831415-6066-1-git-send-email-luca@lucaceresoli.net>
- <20150726151005.12a9989d@free-electrons.com>
-Message-ID: <55B5FB0E.2060600@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Jul 2015 11:42:11 +0200
+Subject: [Buildroot] [PATCHv2 13/15] fs/iso9660: add hybrid image support
+In-Reply-To: <CAOJKDvKk2uRb8nr3fVUubnd26CUn=n2XH60YMSYLzQukAnN5PQ@mail.gmail.com>
+References: <1433802108-14351-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1433802108-14351-14-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAOJKDvKk2uRb8nr3fVUubnd26CUn=n2XH60YMSYLzQukAnN5PQ@mail.gmail.com>
+Message-ID: <20150727114211.5dad487b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+No?,
 
-Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
->
-> On Sat, 25 Jul 2015 15:36:55 +0200, Luca Ceresoli wrote:
->> From: Bernd Kuhls <bernd.kuhls@t-online.de>
->>
->> Fixes
->> smtp_in.c: In function ?smtp_start_session?:
->> smtp_in.c:1976:36: error: invalid application of ?sizeof? to incomplete type ?struct options?
->>       EXIM_SOCKLEN_T optlen = sizeof(struct ip_options) + MAX_IPOPTLEN;
->>
->> smtp_in.c misdetects the needed style for ip_options, only OPTSTYLE == 2 works.
->> Since musl does not provide any macro[1] to detect it we need to pretend to be
->> darwin in order to fix the compile bug.
->>
->> [1] http://wiki.musl-libc.org/wiki/FAQ#Q:_why_is_there_no_MUSL_macro_.3F
->>
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> [Luca: simplify by using only one sed invocation]
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> ---
->>
->> I'm adopting this oldish patch (https://patchwork.ozlabs.org/patch/460496/)
->> from Bernd. The bug it fixes is still there, and the fix is still valid. I
->> just simplified it according to my comments to the original patch.
->
-> Thanks for picking up an old patch, definitely useful! I'm not too
-> happy with us pretending to be Darwin when building against Musl, as it
-> could fire back on us in the future (like if Exim starts using
-> something really Darwin specific). But oh well, I guess it's good
-> enough for now.
+On Mon, 27 Jul 2015 11:24:16 +0200, No? RUBINSTEIN wrote:
 
-Indeed.
+> 2015-06-09 0:21 GMT+02:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+> > +ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
+> > +define ROOTFS_ISO9660_GEN_HYBRID
+> > +       $(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
+> > +endef
+> > +
+> > +ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
+> 
+> My understanding is that _POST_GEN_HOOKS has been skipped in the v2
+> patch series, so this does not work. Is that correct?
 
-Actually, for the sake of _building_, setting NO_IP_OPTIONS instead of
-DARWIN_IP_OPTIONS would be fine as well. But it would result in OPTSTYLE
-to be set to 3, not 2. Bernd, do you think it would work anyway?
+Oops, you are absolutely right. I guess we simply need to do something
+like:
 
-For the curious, the *_IP_OPTIONS defines are only referenced in this
-file:
+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
+define ROOTFS_ISO9660_GEN_HYBRID
+        $(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
+endef
+endif
 
-   http://git.exim.org/exim.git/blob/HEAD:/src/src/smtp_in.c#l1961
+define ROOTFS_ISO9660_CMD
+        $(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+                -no-emul-boot -boot-load-size 4 -boot-info-table \
+                -o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+	$(ROOTFS_ISO9660_GEN_HYBRID)
+endef
 
-where there's a lengthy commentary about the headaches with the various
-C libraries.
+Can you try this, and if it works, send the corresponding patch?
 
+Thanks a lot!
+
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
