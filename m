@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 27 Jul 2015 20:51:23 +0200
-Subject: [Buildroot] [PATCH 32/32] xavante: add hash file
+Date: Mon, 27 Jul 2015 20:51:16 +0200
+Subject: [Buildroot] [PATCH 25/32] luasec: add hash file
 In-Reply-To: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
 References: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1438023083-19010-32-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1438023083-19010-25-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/xavante/xavante.hash | 2 ++
+ package/luasec/luasec.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/xavante/xavante.hash
+ create mode 100644 package/luasec/luasec.hash
 
-diff --git a/package/xavante/xavante.hash b/package/xavante/xavante.hash
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
 new file mode 100644
-index 0000000..d960c2d
+index 0000000..1e9f70a
 --- /dev/null
-+++ b/package/xavante/xavante.hash
++++ b/package/luasec/luasec.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	d683bebdb3e1b497dc04ceb3fb8f1c8c67a6486ab0c6da0c23f281cc07a63657  xavante-2.3.0-1.src.rock
++sha256	d2198cc39b3fa55bd5020046742b34093b6efcb619cf4032948b8c8556202a32  luasec-0.5-2.src.rock
 -- 
 2.1.4
