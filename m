@@ -1,65 +1,67 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 27 Jul 2015 17:04:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/xterm: compile with libXft
- support when it selected
-In-Reply-To: <1438008410-1465-2-git-send-email-bas@bmail.ru>
-References: <1438008410-1465-1-git-send-email-bas@bmail.ru>
- <1438008410-1465-2-git-send-email-bas@bmail.ru>
-Message-ID: <55B64893.8010801@openwide.fr>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 27 Jul 2015 09:33:55 -0700
+Subject: [Buildroot] [PATCH v1 1/1] package/rtl8821au: remove debugging patch
+Message-ID: <1438014835-11707-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mikhail,
+This patch updates rtl8821au to include an upstream commit which
+disables debug output without a runtime insmod parameter debug=level.
+This makes the old buildroot patch to remove hardcoded debug defines
+unnecessary: as such, it has been removed.
 
-Le 27/07/2015 16:46, Mikhail Peselnik a ?crit :
-> When libXft (FreeType) library is selected, xterm will use it.
-> host-pkgcong is used to search for libXft during configure, so it
-> is in the dependencies.
-> 
-> Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/rtl8821au/0001-disable-default-debug.patch | 24 ----------------------
+ package/rtl8821au/rtl8821au.mk                     |  2 +-
+ 2 files changed, 1 insertion(+), 25 deletions(-)
+ delete mode 100644 package/rtl8821au/0001-disable-default-debug.patch
 
-Thanks for your patches!
-
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-[Build tested only and checked that the libXft library is detected by the
-configure script
-"checking if we can link with FreeType libraries... yes"]
-Tested-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
-Romain
-
-> ---
->  package/xterm/xterm.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-> index 778b40c..e7afff2 100644
-> --- a/package/xterm/xterm.mk
-> +++ b/package/xterm/xterm.mk
-> @@ -7,11 +7,19 @@
->  XTERM_VERSION = 314
->  XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
->  XTERM_SITE = ftp://invisible-island.net/xterm
-> -XTERM_DEPENDENCIES = ncurses xlib_libXaw
-> +XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
->  XTERM_LICENSE = MIT
->  XTERM_LICENSE_FILES = version.c
->  XTERM_CONF_OPTS = --enable-256-color \
->  	--x-includes=$(STAGING_DIR)/usr/include \
->  	--x-libraries=$(STAGING_DIR)/usr/lib
->  
-> +ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
-> +XTERM_DEPENDENCIES += xlib_libXft
-> +XTERM_CONF_OPTS += --enable-freetype \
-> +	--with-freetype-config=auto
-> +else
-> +XTERM_CONF_OPTS += --disable-freetype
-> +endif
-> +
->  $(eval $(autotools-package))
-> 
+diff --git a/package/rtl8821au/0001-disable-default-debug.patch b/package/rtl8821au/0001-disable-default-debug.patch
+deleted file mode 100644
+index de6fc62..0000000
+--- a/package/rtl8821au/0001-disable-default-debug.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Comment out the hardcoded debug defines. If extra debug is needed, we can add it
+-as a define in the make flags.
+-
+-Signed-off-by: Christian Stewart <christian@paral.in>
+-
+-diff --git a/include/autoconf.h b/include/autoconf.h
+---- a/include/autoconf.h
+-+++ b/include/autoconf.h
+-@@ -130,12 +130,12 @@
+- /*
+-  * Debug Related Config
+-  */
+--#define DBG	1
+-+//#define DBG	1
+- 
+--#define CONFIG_DEBUG /* DBG_871X, etc... */
+-+//#define CONFIG_DEBUG /* DBG_871X, etc... */
+- //#define CONFIG_DEBUG_RTL871X /* RT_TRACE, RT_PRINT_DATA, _func_enter_, _func_exit_ */
+- 
+--#define CONFIG_PROC_DEBUG
+-+//#define CONFIG_PROC_DEBUG
+- 
+- 
+- //#define DBG_TX
+diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
+index d218e3c..eddb18e 100644
+--- a/package/rtl8821au/rtl8821au.mk
++++ b/package/rtl8821au/rtl8821au.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTL8821AU_VERSION = f58e4a7fb27551bdbb4aee9db6086dd6ad996c8d
++RTL8821AU_VERSION = fef8c9d67d076eee9dfb9e19cb7cb69815d5a207
+ RTL8821AU_SITE = $(call github,ulli-kroll,rtl8821au,$(RTL8821AU_VERSION))
+ RTL8821AU_LICENSE = GPLv2, proprietary (rtl8821au.bin firmware)
+ RTL8821AU_LICENSE_FILES = COPYING
+-- 
+2.1.4
