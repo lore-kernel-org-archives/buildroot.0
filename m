@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 27 Jul 2015 20:51:07 +0200
-Subject: [Buildroot] [PATCH 16/32] lua-messagepack: add hash file
+Date: Mon, 27 Jul 2015 20:51:09 +0200
+Subject: [Buildroot] [PATCH 18/32] lua-testmore: add hash file
 In-Reply-To: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
 References: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1438023083-19010-16-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1438023083-19010-18-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-messagepack/lua-messagepack.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/lua-messagepack/lua-messagepack.hash
+ package/lua-testmore/lua-testmore.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/lua-testmore/lua-testmore.hash
 
-diff --git a/package/lua-messagepack/lua-messagepack.hash b/package/lua-messagepack/lua-messagepack.hash
+diff --git a/package/lua-testmore/lua-testmore.hash b/package/lua-testmore/lua-testmore.hash
 new file mode 100644
-index 0000000..e4a442d
+index 0000000..439097b
 --- /dev/null
-+++ b/package/lua-messagepack/lua-messagepack.hash
-@@ -0,0 +1,3 @@
++++ b/package/lua-testmore/lua-testmore.hash
+@@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	7b173f90a7d1c473aa176de8358060e5e7d312c97c5add327007bf04709e0300  lua-messagepack-0.3.3-1.src.rock
-+sha256	bd7d6e02d40b53ed143a8c7222c6ae0cbb7c7fd4fafda9c5f5326423d06ea25d  lua-messagepack-lua53-0.3.3-1.src.rock
++sha256	a76a9b707487bf3e8b6a5362640bc2e010d184c4f66e423de7b28bd480a0db90  lua-testmore-0.3.2-1.src.rock
 -- 
 2.1.4
