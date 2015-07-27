@@ -1,25 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:17:03 +0200
-Subject: [Buildroot] Autobuilder update: ARC toolchain updated
-Message-ID: <20150727221703.6e5ba748@free-electrons.com>
+Date: Mon, 27 Jul 2015 22:19:01 +0200
+Subject: [Buildroot] [PATCH 01/47] package/libsquish: New package
+In-Reply-To: <1437597069-6448-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
+ <1437597069-6448-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150727221901.3f8f9eda@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Bernd Kuhls,
 
-I just pushed a minor update to the autobuilder configuration: I
-rebuilt the ARC pre-built toolchain with the latest Buildroot master.
-This should fix many of the .tbss related build problem.
+On Wed, 22 Jul 2015 22:30:23 +0200, Bernd Kuhls wrote:
+> Kodi 15.0 contains an updated version of libsquish:
+> https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
+> 
+> The OpenElec project provides a separate tarball including the Kodi-
+> specific patches:
+> http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
+> 
+> This patch contains the relevant diff between upstream libsquish 1.13
+> and the OpenElec tarball.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/Config.in                 |    1 +
+>  package/libsquish/0001-kodi.patch |  327 +++++++++++++++++++++++++++++++++++++
+>  package/libsquish/Config.in       |   13 ++
+>  package/libsquish/libsquish.hash  |    2 +
+>  package/libsquish/libsquish.mk    |   35 ++++
+>  5 files changed, 378 insertions(+)
+>  create mode 100644 package/libsquish/0001-kodi.patch
+>  create mode 100644 package/libsquish/Config.in
+>  create mode 100644 package/libsquish/libsquish.hash
+>  create mode 100644 package/libsquish/libsquish.mk
 
-See:
+Applied after doing some changes:
 
-  http://git.buildroot.net/buildroot-test/commit/?id=c1b141aa4f892493d9e6cb6361d0edf68575798b
+    [Thomas:
+     - don't create the usr/lib/pkgconfig directory in STAGING_DIR and
+       TARGET_DIR, since libsquish installation doesn't install a .pc
+       file.
+     - instead, create usr/include and usr/lib.
+     - fixup the symlink logic so that the target directory only has a
+       symbolic link named after the library SONAME, while the staging dir
+       has both usual symlinks: one named after the SONAME, one just
+       libsquish.so. Suggested by Yann E. Morin.]
 
-I will probably rebuild all Buildroot pre-built toolchains once -rc1 is
-released.
+Bernd, if you can contribute upstream a bit to improve the Makefile and
+therefore make the build logic in Buildroot simpler, it would be nice.
+Thanks!
 
 Best regards,
 
