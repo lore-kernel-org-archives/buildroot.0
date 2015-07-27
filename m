@@ -1,29 +1,73 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Mon, 27 Jul 2015 21:59:48 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/exfat-utils: fix compilation
- error with musl
-In-Reply-To: <20150727225127.235df019@free-electrons.com>
-References: <1437951045-14508-1-git-send-email-brendanheading@gmail.com>
- <20150727225127.235df019@free-electrons.com>
-Message-ID: <CA+BsyQ5WPVQAjLs8UgTyP6BzEYL8PhN7hEUVW1O1+US1dkzP1w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 27 Jul 2015 22:55:23 +0200
+Subject: [Buildroot] [git commit] package/gcc: fix gcc 4.7 build with gcc5
+Message-ID: <20150727210300.1226781E0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> Applied, thanks. Can you please submit the patch upstream?
->
+commit: http://git.buildroot.net/buildroot/commit/?id=c63d2b977adf545ab733447a532cff05cb155e95
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Already done, and accepted by the upstream maintainer. I'll keep an eye out
-for the next upstream release.
+gcc 4.7 doesn't build with gcc5.
 
-https://groups.google.com/forum/#!topic/exfat/8g3yumqrf1A
+Patch is from DragonFlyBSD github [1]
 
-regards
+[1] https://github.com/DragonFlyBSD/DPorts/issues/136
 
-Brendan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150727/97ecece9/attachment.html>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch    |   42 ++++++++++++++++++++
+ 1 files changed, 42 insertions(+), 0 deletions(-)
+
+diff --git a/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+new file mode 100644
+index 0000000..b076e54
+--- /dev/null
++++ b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+@@ -0,0 +1,42 @@
++From 4fb4acf88912dd978bb63ecab79641a5795ce84f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Mon, 27 Jul 2015 15:05:14 +0200
++Subject: [PATCH] gcc: fix build with gcc5
++
++gcc < 4.8 doesn't build with gcc5.
++
++Patch is from DragonFlyBSD github [1]
++
++[1] https://github.com/DragonFlyBSD/DPorts/issues/136
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ gcc/cp/cfns.h | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 62cdfab..4f63cc4 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -53,6 +53,9 @@ __inline
++ static unsigned int hash (const char *, unsigned int);
++ #ifdef __GNUC__
++ __inline
+++#ifdef __GNUC_STDC_INLINE__
+++__attribute__ ((__gnu_inline__))
+++#endif
++ #endif
++ const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++@@ -96,7 +99,7 @@ hash (register const char *str, register unsigned int len)
++       400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
++       400, 400, 400, 400, 400, 400, 400
++     };
++-  register int hval = len;
+++  register int hval = (int)len;
++ 
++   switch (hval)
++     {
++-- 
++2.4.3
++
