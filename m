@@ -1,35 +1,33 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 27 Jul 2015 09:03:01 +0200
-Subject: [Buildroot] [PATCH] package/mono: fixing missing locale
-Message-ID: <1437980581-9378-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Hans Ulli Kroll <ulli.kroll@googlemail.com>
+Date: Mon, 27 Jul 2015 09:15:41 +0200 (CEST)
+Subject: [Buildroot] [PATCH v6 1/1] rtl8821au: new package
+In-Reply-To: <CA+h8R2pQPtABif=URE-g--bpLNnyDJCZMBCi5jUaFUXWC9DJNQ@mail.gmail.com>
+References: <1437691280-23926-1-git-send-email-christian@paral.in>
+ <alpine.LNX.2.00.1507241546220.30794@localhost>
+ <20150725161334.GI3662@free.fr>
+ <alpine.LNX.2.00.1507262133400.12764@T520.local>
+ <CA+h8R2pQPtABif=URE-g--bpLNnyDJCZMBCi5jUaFUXWC9DJNQ@mail.gmail.com>
+Message-ID: <alpine.LNX.2.00.1507270914040.5678@T520.work>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes compilation error in case of a missing locale in toolchain.
+On Sun, 26 Jul 2015, Christian Stewart wrote:
+Hi,
 
-Fixes: http://autobuild.buildroot.net/results/a0fc33a4ed90844f9529acc76a6ba183fe253771/
-       http://autobuild.buildroot.net/results/3ff839e894f0b8f9c2e3af9629d45e8efc09aecd/
-       http://autobuild.buildroot.net/results/5e11117048d965bc1fc44c738bb51f11164304af/
+I've done a quick test during my coffee break ...
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/mono/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> That's a bit odd. When loading the driver as-is from your repository
+> without any arguments, I get a very verbose amount of logging to the kernel
+> logs. Are you sure this is the case? With the patch in the merged
+> repository most of the debugging is disabled through header define comments.
+> 
+> 
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index 4445f4b..0c7129b 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_MONO
- 	bool "mono"
- 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  An open source, cross-platform, implementation of C#
- 	  and the CLR that is binary compatible with Microsoft.NET.
--- 
-1.9.1
+I missed some old dev_info() in rtl8821au/.
+Now changed.
+Pushed.
+
+Ulli
