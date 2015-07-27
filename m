@@ -1,41 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:53:26 +0200
-Subject: [Buildroot] [git commit branch/next] xterm: x-includes and
-	x-libraries must be set for cross-compiling
-Message-ID: <20150808105644.414197FD83@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:55:23 +0200
+Subject: [Buildroot] [git commit branch/next] package/gcc: fix gcc 4.7 build
+	with gcc5
+Message-ID: <20150808105644.510F37FD83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f24bd7273dcec0876779a6c3949a3e5e64d44712
+commit: http://git.buildroot.net/buildroot/commit/?id=c63d2b977adf545ab733447a532cff05cb155e95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-These flags need to be set so that the configure script would
-correctly use libICE from cross-toolchain rather than from host.
+gcc 4.7 doesn't build with gcc5.
 
-This fix is similar to "package/efl/libevas: x-includes and x-libraries
-must be set for cross-compiling" done by Romain Naour on libecore.
+Patch is from DragonFlyBSD github [1]
 
-Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+[1] https://github.com/DragonFlyBSD/DPorts/issues/136
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xterm/xterm.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ .../gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch    |   42 ++++++++++++++++++++
+ 1 files changed, 42 insertions(+), 0 deletions(-)
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 56f692d..778b40c 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -10,6 +10,8 @@ XTERM_SITE = ftp://invisible-island.net/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw
- XTERM_LICENSE = MIT
- XTERM_LICENSE_FILES = version.c
--XTERM_CONF_OPTS = --enable-256-color
-+XTERM_CONF_OPTS = --enable-256-color \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
- 
- $(eval $(autotools-package))
+diff --git a/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+new file mode 100644
+index 0000000..b076e54
+--- /dev/null
++++ b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+@@ -0,0 +1,42 @@
++From 4fb4acf88912dd978bb63ecab79641a5795ce84f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Mon, 27 Jul 2015 15:05:14 +0200
++Subject: [PATCH] gcc: fix build with gcc5
++
++gcc < 4.8 doesn't build with gcc5.
++
++Patch is from DragonFlyBSD github [1]
++
++[1] https://github.com/DragonFlyBSD/DPorts/issues/136
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ gcc/cp/cfns.h | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 62cdfab..4f63cc4 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -53,6 +53,9 @@ __inline
++ static unsigned int hash (const char *, unsigned int);
++ #ifdef __GNUC__
++ __inline
+++#ifdef __GNUC_STDC_INLINE__
+++__attribute__ ((__gnu_inline__))
+++#endif
++ #endif
++ const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++@@ -96,7 +99,7 @@ hash (register const char *str, register unsigned int len)
++       400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
++       400, 400, 400, 400, 400, 400, 400
++     };
++-  register int hval = len;
+++  register int hval = (int)len;
++ 
++   switch (hval)
++     {
++-- 
++2.4.3
++
