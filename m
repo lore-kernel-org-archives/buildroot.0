@@ -1,90 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 23:45:01 +0200
-Subject: [Buildroot] [git commit] rpcbind: add systemd support
-Message-ID: <20150727214536.CA662805FE@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 27 Jul 2015 14:45:48 -0700
+Subject: [Buildroot] [PATCH v1 1/1] package/mosh: remove unnecessary patch
+Message-ID: <1438033548-10582-1-git-send-email-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0db9c4d197b19bb14f67deeeac495a85a4c28767
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+According to upstream (keithw/mosh issue #650), it's okay to have the
+"locale" system command fail with "command not found" because this is a
+non-critical action that occurs just before Mosh exits with an error
+anyway. Thus, this patch is unnecssary, and can be removed.
 
-systemd files taken from Arch Linux.
-
-[Thomas:
- - fix indentation
- - indicate source of systemd files.]
-
-Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
-Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/rpcbind/rpcbind.mk      |   16 ++++++++++++++++
- package/rpcbind/rpcbind.service |   10 ++++++++++
- package/rpcbind/rpcbind.socket  |    8 ++++++++
- 3 files changed, 34 insertions(+), 0 deletions(-)
+ package/mosh/0001-remove-system-locale-calls.patch | 46 ----------------------
+ 1 file changed, 46 deletions(-)
+ delete mode 100644 package/mosh/0001-remove-system-locale-calls.patch
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index 1e28af9..4360d1f 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -14,11 +14,27 @@ RPCBIND_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
- RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
- RPCBIND_CONF_OPTS += --with-rpcuser=root
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
-+else
- RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
-+endif
-+
-+define RPCBIND_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
-+	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/rpcbind.socket \
-+		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/rpcbind.socket
-+endef
- 
- define RPCBIND_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
- 		$(TARGET_DIR)/etc/init.d/S30rpcbind
- endef
- 
-+
- $(eval $(autotools-package))
-diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
-new file mode 100644
-index 0000000..b7a32a1
---- /dev/null
-+++ b/package/rpcbind/rpcbind.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=RPC bind service
-+Requires=rpcbind.socket
-+
-+[Service]
-+Type=forking
-+ExecStart=/usr/bin/rpcbind
-+
-+[Install]
-+Also=rpcbind.socket
-diff --git a/package/rpcbind/rpcbind.socket b/package/rpcbind/rpcbind.socket
-new file mode 100644
-index 0000000..d63c1d9
---- /dev/null
-+++ b/package/rpcbind/rpcbind.socket
-@@ -0,0 +1,8 @@
-+[Unit]
-+Description=RPCbind Server Activation Socket
-+
-+[Socket]
-+ListenStream=/var/run/rpcbind.sock
-+
-+[Install]
-+WantedBy=sockets.target
+diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
+deleted file mode 100644
+index 114e6ed..0000000
+--- a/package/mosh/0001-remove-system-locale-calls.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-The locale command is not available on many systems. As this variable
+-is unused and appears to have been written with the intent of
+-displaying the locale settings to the user, it's not really necessary.
+-As this breaks Mosh on a lot of systems, it's best to remove the calls.
+-
+-Upstream status: refused, see: https://github.com/keithw/mosh/issues/650
+-
+-Signed-off-by: Christian Stewart <christian@paral.in>
+----
+- src/frontend/mosh-server.cc | 4 +++-
+- src/frontend/stmclient.cc   | 4 +++-
+- 2 files changed, 6 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
+-index 76ed2ed..0d2f222 100644
+---- a/src/frontend/mosh-server.cc
+-+++ b/src/frontend/mosh-server.cc
+-@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
+-       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
+-       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
+-       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
+--      int unused __attribute((unused)) = system( "locale" );
+-+
+-+      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
+-+
+-       exit( 1 );
+-     }
+-   }
+-diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
+-index 9e4d916..06fac8b 100644
+---- a/src/frontend/stmclient.cc
+-+++ b/src/frontend/stmclient.cc
+-@@ -85,7 +85,9 @@ void STMClient::init( void )
+- 
+-     fprintf( stderr, "mosh-client needs a UTF-8 native locale to run.\n\n" );
+-     fprintf( stderr, "Unfortunately, the client's environment (%s) specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(), native_charset.c_str() );
+--    int unused __attribute((unused)) = system( "locale" );
+-+
+-+    fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
+-+
+-     exit( 1 );
+-   }
+- 
+--- 
+-2.1.4
+-
+-- 
+2.1.4
