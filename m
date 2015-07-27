@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:29:50 +0200
-Subject: [Buildroot] [git commit] luafilesystem: add hash file
-Message-ID: <20150727203134.BC66C7F918@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:29:51 +0200
+Subject: [Buildroot] [git commit] lzlib: add hash file
+Message-ID: <20150727203135.0896D7FA29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb2dc0b75083aa2cec66716c371d44230c408dd9
+commit: http://git.buildroot.net/buildroot/commit/?id=8909e9e4da3db76ca3d3be1d1fc06b11b9d655a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luafilesystem/luafilesystem.hash |    2 ++
+ package/lzlib/lzlib.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/luafilesystem/luafilesystem.hash b/package/luafilesystem/luafilesystem.hash
+diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
 new file mode 100644
-index 0000000..e91f9d6
+index 0000000..d823e8b
 --- /dev/null
-+++ b/package/luafilesystem/luafilesystem.hash
++++ b/package/lzlib/lzlib.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	70121e78b8ef9365265b85027729d0520c1163f5609abfa9554b215a672f4e7a  luafilesystem-1.6.3-1.src.rock
++sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
