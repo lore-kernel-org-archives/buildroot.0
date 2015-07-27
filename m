@@ -1,83 +1,72 @@
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Date: Mon, 27 Jul 2015 08:00:14 -0500
-Subject: [Buildroot] [PATCH] package/libselinmux: fix build with musl
-In-Reply-To: <1437937396-23254-1-git-send-email-yann.morin.1998@free.fr>
-References: <1437937396-23254-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CANn-YGQ1tVfct05mzy-HM2=6UY54wgGfOn2GJ6vWk0QD6mYW3w@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 27 Jul 2015 16:20:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gcc: fix gcc 4.7 build with gcc5
+Message-ID: <1438006860-5990-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+gcc 4.7 doesn't build with gcc5.
 
-This looks good to me.
+Patch is from DragonFlyBSD github [1]
 
-On Sun, Jul 26, 2015 at 2:03 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> musl does not define glibcisms, so we ar emissing some macros.
->
-> Define what we need in case the macro is missing. We're using a dumb
-> implementation, which is rather slow, to avoid copying from glibc, to
-> avoid propagating the LGPL to libselinux, which is Public Domain.
->
-> Fixes a buncha autobuild failures:
->     http://autobuild.buildroot.org/results/d4d/d4d209719d1ce5219f84719ad72fcb6a0c684007/
->     http://autobuild.buildroot.org/results/1a6/1a65cc3d2c23a3c17c605788be62dbd18cbdaf76/
->     http://autobuild.buildroot.org/results/0d0/0d0e4713833182d0f634b9b39b2c56f2bc0adcac/
->     ...
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
+[1] https://github.com/DragonFlyBSD/DPorts/issues/136
 
-Reviewed-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ .../gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch    | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
 
-> ---
->  package/libselinux/0002-fix-musl-build.patch | 30 ++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/libselinux/0002-fix-musl-build.patch
->
-> diff --git a/package/libselinux/0002-fix-musl-build.patch b/package/libselinux/0002-fix-musl-build.patch
-> new file mode 100644
-> index 0000000..9e6b734
-> --- /dev/null
-> +++ b/package/libselinux/0002-fix-musl-build.patch
-> @@ -0,0 +1,30 @@
-> +fix undefined macros in musl
-> +
-> +musl does not define glibc-specific macros, so use a simple version of
-> +the macro when it is not defined.
-> +
-> +This is very inefficient, however, but copying the code from glibc is
-> +not really possible because it is LGPL while libselinux in Public
-> +Domain, and we want to avoid license propaation, so this macro is
-> +completely written from scratch, and non-optimal.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +diff -durN libselinux-2.1.13.orig/src/booleans.c libselinux-2.1.13/src/booleans.c
-> +--- libselinux-2.1.13.orig/src/booleans.c      2013-02-06 02:43:22.000000000 +0100
-> ++++ libselinux-2.1.13/src/booleans.c   2015-07-26 20:40:41.311801914 +0200
-> +@@ -62,6 +62,14 @@
-> +               goto bad;
-> +       }
-> +
-> ++/* Simple (but inefficient) version of _D_ALLOC_NAMLEN when
-> ++ * building with a C library that misses it (e.g. musl).
-> ++ * Note: glibc does a strlen on (d)->d_name, so assume it is safe.
-> ++ */
-> ++#ifndef _D_ALLOC_NAMLEN
-> ++#define _D_ALLOC_NAMLEN(d) (strlen((d)->d_name)+1)
-> ++#endif
-> ++
-> +       for (i = 0; i < *len; i++) {
-> +               n[i] = (char *)malloc(_D_ALLOC_NAMLEN(namelist[i]));
-> +               if (!n[i]) {
-> --
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Senior Software Engineer, Rockwell Collins
-clayton.shotwell at rockwellcollins.com
+diff --git a/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+new file mode 100644
+index 0000000..b076e54
+--- /dev/null
++++ b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
+@@ -0,0 +1,42 @@
++From 4fb4acf88912dd978bb63ecab79641a5795ce84f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Mon, 27 Jul 2015 15:05:14 +0200
++Subject: [PATCH] gcc: fix build with gcc5
++
++gcc < 4.8 doesn't build with gcc5.
++
++Patch is from DragonFlyBSD github [1]
++
++[1] https://github.com/DragonFlyBSD/DPorts/issues/136
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ gcc/cp/cfns.h | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
++index 62cdfab..4f63cc4 100644
++--- a/gcc/cp/cfns.h
+++++ b/gcc/cp/cfns.h
++@@ -53,6 +53,9 @@ __inline
++ static unsigned int hash (const char *, unsigned int);
++ #ifdef __GNUC__
++ __inline
+++#ifdef __GNUC_STDC_INLINE__
+++__attribute__ ((__gnu_inline__))
+++#endif
++ #endif
++ const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++@@ -96,7 +99,7 @@ hash (register const char *str, register unsigned int len)
++       400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
++       400, 400, 400, 400, 400, 400, 400
++     };
++-  register int hval = len;
+++  register int hval = (int)len;
++ 
++   switch (hval)
++     {
++-- 
++2.4.3
++
+-- 
+2.4.3
