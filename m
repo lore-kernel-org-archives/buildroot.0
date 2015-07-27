@@ -1,41 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:53:26 +0200
-Subject: [Buildroot] [git commit] xterm: x-includes and x-libraries must be
-	set for cross-compiling
-Message-ID: <20150727205330.D2B1C81D5B@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:53:39 +0200
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.11
+In-Reply-To: <1438030064-31275-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1438030064-31275-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150727225339.45a162d0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f24bd7273dcec0876779a6c3949a3e5e64d44712
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-These flags need to be set so that the configure script would
-correctly use libICE from cross-toolchain rather than from host.
+On Mon, 27 Jul 2015 17:47:44 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/sqlite/0001-fix-parallel-build.patch | 22 ----------------------
+>  package/sqlite/sqlite.hash                   |  2 +-
+>  package/sqlite/sqlite.mk                     |  2 +-
+>  3 files changed, 2 insertions(+), 24 deletions(-)
+>  delete mode 100644 package/sqlite/0001-fix-parallel-build.patch
 
-This fix is similar to "package/efl/libevas: x-includes and x-libraries
-must be set for cross-compiling" done by Romain Naour on libecore.
+Applied, thanks.
 
-Signed-off-by: Mikhail Peselnik <bas@bmail.ru>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xterm/xterm.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 56f692d..778b40c 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -10,6 +10,8 @@ XTERM_SITE = ftp://invisible-island.net/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw
- XTERM_LICENSE = MIT
- XTERM_LICENSE_FILES = version.c
--XTERM_CONF_OPTS = --enable-256-color
-+XTERM_CONF_OPTS = --enable-256-color \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
