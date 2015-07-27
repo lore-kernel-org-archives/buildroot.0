@@ -1,79 +1,73 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 27 Jul 2015 00:35:30 +0000
-Subject: [Buildroot] [PATCH] mosh: don't show dependencies comment on
- unsupported arches
-In-Reply-To: <20150726225812.GM17029@tarshish>
-References: <b994c845f6e1f42f7a88e70dfffb4b00ce6d134e.1437949287.git.baruch@tkos.co.il>
- <20150726223802.GP3770@free.fr>
- <CA+h8R2rr7mUx0PxbQ7iQbk5jcsM73o+So06k2-hOvoN4yGsFxw@mail.gmail.com>
- <20150726225812.GM17029@tarshish>
-Message-ID: <CA+h8R2pZnvCBEcs5GJLD1ZYDLmd4HOwv1Wt0-Q2tf=uZXkigZQ@mail.gmail.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Mon, 27 Jul 2015 10:27:33 +0800
+Subject: [Buildroot] [PATCH 1/1] package/systemd: journald should use
+	volatile storage
+In-Reply-To: <CAGduivxi4cEmFgVHJ9O30=XXKGdtdk3m5P-m__o4XZFkt4Ee6g@mail.gmail.com>
+References: <1425201058-3946-1-git-send-email-nroach44@gmail.com>
+ <87h9u4xxb1.fsf@dell.be.48ers.dk>
+ <CANPyyuN093C11GRiFUC+kTqq2T-XtSe4Adh3P+vSTBXJELGo6A@mail.gmail.com>
+ <CAGduivxi4cEmFgVHJ9O30=XXKGdtdk3m5P-m__o4XZFkt4Ee6g@mail.gmail.com>
+Message-ID: <B1E851A7-271C-4943-9183-24D5A908A690@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yeah, I saw that after submitting the email... On my end it just looked
-like my email, I guess something went weird with my email client.
+On 27 July 2015 6:19:00 am AWST, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
+>Hi Nathaniel, Mike, all
+>
+>On Mon, Mar 2, 2015 at 6:13 PM, Mike Williams <mike@mikebwilliams.com>
+>wrote:
+>> On Sun, Mar 1, 2015 at 3:44 PM, Peter Korsgaard <peter@korsgaard.com>
+>wrote:
+>>>>>>>> "Nathaniel" == Nathaniel Roach <nroach44@gmail.com> writes:
+>>>
+>>>  > (By default)
+>>>  > This fixes https://bugs.busybox.net/show_bug.cgi?id=7892
+>>>
+>>>  > Journald was attempting to write the logs to file before the
+>>>  > underlying file system was up. A proposed solution was to bring
+>>>  > /tmp up beforehand, but that did not always solve the issue.
+>This should never happens, the service that starts journald depends on
+>earlier services that mount the related filesystem. And even if they
+>are not present, it should be able to deal with it (I have a setup
+>where journald is started before the mountpoint where it should write
+>is mounted and I never had any problem with it).
+>>>
+>>>  > In addition, since the logging directory was a tmpfs to begin
+>with
+>>>  > (/var/log -> /tmp) this should save some cycles.
+>>>
+>>>  > Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+>>>
+>>> Sorry, cannot reproduce this here. How do you see it exactly?
+>>>
+>>> See bugtracker for details about my tests with
+>>> qemu_arm_versatile_defconfig.
+>>>
+>>
+>> I recently started having this issue on my SAMA5 system and this
+>patch
+>> fixed it. It seems to be some sort of race condition; before this
+>> patch it would occur about 1 out of 3 boots. I've since booted a
+>dozen
+>> times without an issue.
+>I would really think the issue is elsewhere since you both have the
+>same board and Peter could not reproduce and neither can I with 4
+>different platform (3 are ARM based but so is the SAMA5).
+>>
+>> Mike
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>_______________________________________________
+>buildroot mailing list
+>buildroot at busybox.net
+>http://lists.busybox.net/mailman/listinfo/buildroot
 
-Christian
-
-On Sun, Jul 26, 2015 at 3:58 PM Baruch Siach <baruch@tkos.co.il> wrote:
-
-> Hi Christian,
->
-> On Sun, Jul 26, 2015 at 10:41:54PM +0000, Christian Stewart wrote:
-> > Not sure how I missed that.
-> >
-> > Thanks!
-> > Christian
-> >
-> > Acked-by: "Christian Stewart" <c <yann.morin.1998@free.fr>
-> hristian at paral.in>
->
-> Something went wrong here, I think.
->
-> baruch
->
-> > On Sun, Jul 26, 2015 at 3:38 PM Yann E. MORIN <yann.morin.1998@free.fr>
-> > wrote:
-> >
-> > > Baruch, All,
-> > >
-> > > On 2015-07-27 01:21 +0300, Baruch Siach spake thusly:
-> > > > Cc: Christian Stewart <christian@paral.in>
-> > > > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > >
-> > > Thanks for spotting that! :-)
-> > >
-> > > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > >
-> > > Regards,
-> > > Yann E. MORIN.
-> > >
-> > > > ---
-> > > >  package/mosh/Config.in | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-> > > > index 2f5214cd3c88..4ad7d61023b6 100644
-> > > > --- a/package/mosh/Config.in
-> > > > +++ b/package/mosh/Config.in
-> > > > @@ -1,5 +1,6 @@
-> > > >  comment "mosh needs a toolchain w/ threads"
-> > > >       depends on !BR2_TOOLCHAIN_HAS_THREADS
-> > > > +     depends on !(BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64)
-> > > >
-> > > >  config BR2_PACKAGE_MOSH
-> > > >       bool "mosh"
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
+As noted in the bug I filed for this (on mobile so I can't link), this issue is caused by having "rw" in the kernel parameters. This causes journald to think it has persistent storage (because it is set to auto) and thus tries to write to a file system that isn't up.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150727/04b40e5a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150727/74db7902/attachment.html>
