@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:29:51 +0200
-Subject: [Buildroot] [git commit] xavante: add hash file
-Message-ID: <20150727203135.28F757F918@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:26:26 +0200
+Subject: [Buildroot] [git commit] lbase64: add hash file
+Message-ID: <20150727203134.1587581DF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52c76667184b9de0d07169016622304d7938e571
+commit: http://git.buildroot.net/buildroot/commit/?id=1643a8c020ee8c05235a3b5089fb2789c23c2e6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xavante/xavante.hash |    2 ++
+ package/lbase64/lbase64.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/xavante/xavante.hash b/package/xavante/xavante.hash
+diff --git a/package/lbase64/lbase64.hash b/package/lbase64/lbase64.hash
 new file mode 100644
-index 0000000..d960c2d
+index 0000000..0806090
 --- /dev/null
-+++ b/package/xavante/xavante.hash
++++ b/package/lbase64/lbase64.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	d683bebdb3e1b497dc04ceb3fb8f1c8c67a6486ab0c6da0c23f281cc07a63657  xavante-2.3.0-1.src.rock
++sha256	7326658d48a70382b496eb88220b0c398c19ed712e39863939330fec0533362a  lbase64-20120820-1.src.rock
