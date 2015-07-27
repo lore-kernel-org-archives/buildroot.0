@@ -1,40 +1,88 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 27 Jul 2015 19:53:22 -0300
-Subject: [Buildroot] [PATCH] stunnel: bump to version 5.21
-Message-ID: <1438037602-19484-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+Date: Mon, 27 Jul 2015 23:27:02 +0200
+Subject: [Buildroot] [PATCH] rpcbind: add systemd support
+In-Reply-To: <1437339759-21456-2-git-send-email-aurelien@chabot.fr>
+References: <1437339759-21456-2-git-send-email-aurelien@chabot.fr>
+Message-ID: <1438032422-17265-1-git-send-email-aurelien@chabot.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Service and socket files come from ArchLinux.
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 91b297c..5e75b2e 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-users/2015-June/005094.html
--sha256	0532c0a2f8de3da1ab625e384146501ce5936fac63d01561c3a9bf652b692317	stunnel-5.18.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005180.html
-+sha256	2aef568b1955f5e233f6a8e17ebce3d30755f1be44c813f5a48e621f785596e3	stunnel-5.21.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 4674694..5e9cd72 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
+---
+ package/rpcbind/rpcbind.mk      | 18 +++++++++++++++++-
+ package/rpcbind/rpcbind.service | 10 ++++++++++
+ package/rpcbind/rpcbind.socket  |  8 ++++++++
+ 3 files changed, 35 insertions(+), 1 deletion(-)
+ create mode 100644 package/rpcbind/rpcbind.service
+ create mode 100644 package/rpcbind/rpcbind.socket
+
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 1e28af9..97c5bbb 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -14,11 +14,27 @@ RPCBIND_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
+ RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
+ RPCBIND_CONF_OPTS += --with-rpcuser=root
+-RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
++
++ifeq ($(BR2_INIT_SYSTEMD),y)
++	RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
++else
++	RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
++endif
++
++define RPCBIND_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
++	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.socket \
++		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/rpcbind.socket \
++		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/rpcbind.socket
++endef
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).18
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).21
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ define RPCBIND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
+ 		$(TARGET_DIR)/etc/init.d/S30rpcbind
+ endef
+ 
++
+ $(eval $(autotools-package))
+diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
+new file mode 100644
+index 0000000..b7a32a1
+--- /dev/null
++++ b/package/rpcbind/rpcbind.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=RPC bind service
++Requires=rpcbind.socket
++
++[Service]
++Type=forking
++ExecStart=/usr/bin/rpcbind
++
++[Install]
++Also=rpcbind.socket
+diff --git a/package/rpcbind/rpcbind.socket b/package/rpcbind/rpcbind.socket
+new file mode 100644
+index 0000000..d63c1d9
+--- /dev/null
++++ b/package/rpcbind/rpcbind.socket
+@@ -0,0 +1,8 @@
++[Unit]
++Description=RPCbind Server Activation Socket
++
++[Socket]
++ListenStream=/var/run/rpcbind.sock
++
++[Install]
++WantedBy=sockets.target
 -- 
-2.3.6
+2.4.6
