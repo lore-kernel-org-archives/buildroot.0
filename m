@@ -1,41 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 23:53:17 +0200
-Subject: [Buildroot] [PATCH] package/libselinmux: fix build with musl
-In-Reply-To: <1437937396-23254-1-git-send-email-yann.morin.1998@free.fr>
-References: <1437937396-23254-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150727235317.683a0b11@free-electrons.com>
+Date: Mon, 27 Jul 2015 23:54:41 +0200
+Subject: [Buildroot] [git commit] transmission: improve systemd support
+Message-ID: <20150727215532.E3A53807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=c0f4bb97e4bc29b67bd1e17918cf3e694f137523
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 26 Jul 2015 21:03:16 +0200, Yann E. MORIN wrote:
-> musl does not define glibcisms, so we ar emissing some macros.
-> 
-> Define what we need in case the macro is missing. We're using a dumb
-> implementation, which is rather slow, to avoid copying from glibc, to
-> avoid propagating the LGPL to libselinux, which is Public Domain.
-> 
-> Fixes a buncha autobuild failures:
->     http://autobuild.buildroot.org/results/d4d/d4d209719d1ce5219f84719ad72fcb6a0c684007/
->     http://autobuild.buildroot.org/results/1a6/1a65cc3d2c23a3c17c605788be62dbd18cbdaf76/
->     http://autobuild.buildroot.org/results/0d0/0d0e4713833182d0f634b9b39b2c56f2bc0adcac/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
->  package/libselinux/0002-fix-musl-build.patch | 30 ++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/libselinux/0002-fix-musl-build.patch
+Support running transmission-daemon in system-wide mode using systemd:
 
-I've fixed a bunch of typos and applied, thanks!
+1. Pass --with-systemd-daemon to configure script if systemd is enabled.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2. Create the transmission user if having daemon
+
+3. Install transmission-daemon.service for systemd.
+
+[Aur??lien : Fix symlink relative path, use upstream service file,
+no need for config path, and use transmission user in sysv script,
+remove sysctl stuff]
+
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/transmission/S92transmission |    4 +---
+ package/transmission/transmission.mk |   19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 1870522..e5976b0 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -24,9 +24,7 @@
+ # by default, this is set to 'transmission'.
+ # For the sake of security you shouldn't set a password
+ # on this user
+-#USERNAME=transmission
+-USERNAME=default
+-
++USERNAME=transmission
+ 
+ 
+ # ----- *ADVANCED* CONFIGURATION -----
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index bbc32bf..efc00a1 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -36,11 +36,30 @@ endif
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
+ TRANSMISSION_CONF_OPTS += --enable-daemon
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TRANSMISSION_DEPENDENCIES += systemd
++TRANSMISSION_CONF_OPTS += --with-systemd-daemon
++else
++TRANSMISSION_CONF_OPTS += --without-systemd-daemon
++endif
++
++define TRANSMISSION_USERS
++	transmission -1 transmission -1 * /var/lib/transmission - transmission Transmission Daemon
++endef
++
+ define TRANSMISSION_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
+ 		$(TARGET_DIR)/etc/init.d/S92transmission
+ endef
+ 
++define TRANSMISSION_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission-daemon.service
++endef
++
+ else
+ TRANSMISSION_CONF_OPTS += --disable-daemon
+ endif
