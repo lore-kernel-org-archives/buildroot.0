@@ -1,46 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:28:04 +0200
-Subject: [Buildroot] [PATCH 17/32] lua-periphery: add hash file
-In-Reply-To: <1438023083-19010-17-git-send-email-francois.perrad@gadz.org>
-References: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
- <1438023083-19010-17-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150727222804.3db06e81@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 27 Jul 2015 21:28:21 +0100
+Subject: [Buildroot] nios2 : gcc 4.9.x buildroot toolchain broken
+Message-ID: <CA+BsyQ6wmo0d4iZx_vREdZw9h=hQBg4vPOLwx9cwHAJGHhoGmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Hi guys,
 
-On Mon, 27 Jul 2015 20:51:08 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua-periphery/lua-periphery.hash | 2 ++
->  1 file changed, 2 insertions(+)
->  create mode 100644 package/lua-periphery/lua-periphery.hash
-> 
-> diff --git a/package/lua-periphery/lua-periphery.hash b/package/lua-periphery/lua-periphery.hash
-> new file mode 100644
-> index 0000000..84b97bd
-> --- /dev/null
-> +++ b/package/lua-periphery/lua-periphery.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256	cb08554ed74cda2d1c939dd9320175a6cd02266a530b41287b8e7cde04a5bc48  lua-periphery-1.0.4-1.src.rock
+While looking at the dmraid build bug on nios2 I noted that it is not
+possible to build a buildroot toolchain based on GCC 4.9.x for that
+platform.
 
-This patch doesn't apply on the latest master: lua-periphery has been
-bumped to a more recent version and a hash file has already been
-created.
+You can reproduce the problem using the following (one-line) defconfig :
 
-Please make sure that your series apply to the latest master before
-sending, thanks a lot!
+BR2_nios2=y
 
-I've marked this one as Rejected in patchwork. I'll look at the other
-patches now.
+I tested it against the commit : 5ccde01652bc41da325bf4c9a5abbf0031080784
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+The error is as follows :
+
+=============
+../../../libgcc/config/nios2/linux-atomic.c:23:24: fatal error:
+asm/unistd.h: No such file or directory
+ #include <asm/unistd.h>
+                        ^
+compilation terminated.
+=============
+
+The problem only occurs on GCC 4.9.x. GCC 5.x builds fine.
+
+Someone already submitted a patch to fix this :
+
+http://lists.busybox.net/pipermail/buildroot/2015-February/119084.html
+
+The submitter promised to do some more work but it seems to have been left
+that way since last February.
+
+We can either :
+- disable GCC 4.9.x for nios2 (leaving 5.x as the only supported buildroot
+toolchain)
+- integrate & test the above patch
+
+What does everyone think ? Given that the above patch seems to be
+considered incomplete maybe we should disable nios2 4.9.x for now until the
+required additions have been submitted.
+
+regards
+
+Brendan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150727/fb963678/attachment.html>
