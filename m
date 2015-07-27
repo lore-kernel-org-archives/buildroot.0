@@ -1,90 +1,85 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 28 Jul 2015 00:07:27 +0200
-Subject: [Buildroot] [PATCH] mongrel2: Bump version and change hosting
-Message-ID: <1438034847-16930-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2015 00:09:21 +0200
+Subject: [Buildroot] [git commit] python-pyyaml: new package
+Message-ID: <20150727220944.7B02081DEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mongrel2 has changed it's repository.
-It was also the opportunity to bump it.
-Adding a hash, since we use this packages as an example for the hash in
-the manual, it was a bit shamefull that it did not have a proper hash.
+commit: http://git.buildroot.net/buildroot/commit/?id=f098adb66cf744b8e3700990f5ee9857483e010f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove 0001-use-CC-variable-to-compile-procer.patch, an equivalent was
-applied upstream:
-https://github.com/mongrel2/mongrel2/commit/eafe3cf3efde4278040f38b5808f336e3d102c84
+[Thomas:
+  - use 'select' rather than 'depends on' for the yaml library
+    dependency
+  - add hash file.
+  - add upstream URL in Config.in help text
+  - rework commit title.]
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Geoffrey Ragot <geoffrey.ragot@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-use-CC-variable-to-compile-procer.patch   | 28 ----------------------
- package/mongrel2/mongrel2.hash                     |  2 ++
- package/mongrel2/mongrel2.mk                       |  5 ++--
- 3 files changed, 5 insertions(+), 30 deletions(-)
- delete mode 100644 package/mongrel2/0001-use-CC-variable-to-compile-procer.patch
- create mode 100644 package/mongrel2/mongrel2.hash
+ package/Config.in                        |    1 +
+ package/python-pyyaml/Config.in          |    7 +++++++
+ package/python-pyyaml/python-pyyaml.hash |    4 ++++
+ package/python-pyyaml/python-pyyaml.mk   |   15 +++++++++++++++
+ 4 files changed, 27 insertions(+), 0 deletions(-)
 
-diff --git a/package/mongrel2/0001-use-CC-variable-to-compile-procer.patch b/package/mongrel2/0001-use-CC-variable-to-compile-procer.patch
-deleted file mode 100644
-index 310177a..0000000
---- a/package/mongrel2/0001-use-CC-variable-to-compile-procer.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From d30cf797af4828e49fd3c0f25841e669dec05ed5 Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Wed, 27 Mar 2013 14:02:00 +0100
--Subject: [PATCH 3/4] use CC variable to compile procer.
--
--This fixes procer tool cross-compilation issues.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
-----
-- tools/procer/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/tools/procer/Makefile b/tools/procer/Makefile
--index d0d7de0..bb9aa31 100644
----- a/tools/procer/Makefile
--+++ b/tools/procer/Makefile
--@@ -8,7 +8,7 @@ all: procer
-- 
-- 
-- procer: ../../build/libm2.a ${OBJECTS}
---	gcc $(OPTFLAGS) $(OPTLIBS) -o $@ ${OBJECTS} ../../build/libm2.a ${LIBS}
--+	$(CC) $(OPTFLAGS) $(OPTLIBS) -o $@ ${OBJECTS} ../../build/libm2.a ${LIBS}
-- 
-- clean:
-- 	rm -f *.o procer
---- 
--1.8.1.4
--
-diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+diff --git a/package/Config.in b/package/Config.in
+index 840d593..1e39c74 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -652,6 +652,7 @@ menu "external python modules"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+ 	source "package/python-pyxml/Config.in"
++	source "package/python-pyyaml/Config.in"
+ 	source "package/python-pyzmq/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-rtslib-fb/Config.in"
+diff --git a/package/python-pyyaml/Config.in b/package/python-pyyaml/Config.in
 new file mode 100644
-index 0000000..b8f8de3
+index 0000000..45e818b
 --- /dev/null
-+++ b/package/mongrel2/mongrel2.hash
-@@ -0,0 +1,2 @@
++++ b/package/python-pyyaml/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYYAML
++	bool "python-pyyaml"
++	select BR2_PACKAGE_LIBYAML
++	help
++	  The PyYAML package contains binding to the libyaml API.
++
++	  http://pyyaml.org/
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+new file mode 100644
+index 0000000..a6d9a77
+--- /dev/null
++++ b/package/python-pyyaml/python-pyyaml.hash
+@@ -0,0 +1,4 @@
++# From https://pypi.python.org/pypi?:action=show_md5&digest=f50e08ef0fe55178479d3a618efe21db
++md5 f50e08ef0fe55178479d3a618efe21db PyYAML-3.11.tar.gz
 +# Locally computed
-+sha256 543553c3082f2b992649a975f6cb7324ae2aea93af05288ea4f2c1262a7f63b2  mongrel2-v1.9.2.tar.bz2
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index 23cec50..0be4832 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--MONGREL2_VERSION = v1.9.1
-+MONGREL2_VERSION = 1.9.2
-+MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
- # Do not use the github helper here, the generated tarball is *NOT* the same
- # as the one uploaded by upstream for the release.
--MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
-+MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/$(MONGREL2_VERSION)
- MONGREL2_LICENSE = BSD-3c
- MONGREL2_LICENSE_FILES = LICENSE
- MONGREL2_DEPENDENCIES = sqlite zeromq
--- 
-2.1.4
++sha256 c36c938a872e5ff494938b33b14aaa156cb439ec67548fcab3535bb78b0846e8 PyYAML-3.11.tar.gz
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+new file mode 100644
+index 0000000..ef10dac
+--- /dev/null
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pyyaml
++#
++################################################################################
++
++PYTHON_PYYAML_VERSION = 3.11
++PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
++PYTHON_PYYAML_SITE = https://pypi.python.org/packages/source/P/PyYAML/
++PYTHON_PYYAML_SETUP_TYPE = distutils
++PYTHON_PYYAML_LICENSE = Python software foundation license v2
++PYTHON_PYYAML_LICENSE_FILES = LICENSE
++PYTHON_PYYAML_DEPENDENCIES = libyaml
++
++$(eval $(python-package))
