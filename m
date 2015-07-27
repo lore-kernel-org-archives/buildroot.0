@@ -1,38 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:44:20 +0200
-Subject: [Buildroot] [git commit branch/next] aiccu: remove redundant
-	--static flag to pkg-config
-Message-ID: <20150808105642.E8FE87FFCF@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:26:26 +0200
+Subject: [Buildroot] [git commit branch/next] copas: add hash file
+Message-ID: <20150808105643.3509C7FD83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4b539564fce4aa8bfbbd9e16c801b8ddae96141
+commit: http://git.buildroot.net/buildroot/commit/?id=81ce3c1f8d4500dd76b269c804a59ab8aa68eb83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The pkg-config tool is automatically passing --static when BR2_STATIC_LIBS
-is set (see package/pkgconf/pkgconf.mk), so no need to pass it explicitly
-from package .mk files.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/aiccu/aiccu.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/copas/copas.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/aiccu/aiccu.mk b/package/aiccu/aiccu.mk
-index fc328fd..60d65dd 100644
---- a/package/aiccu/aiccu.mk
-+++ b/package/aiccu/aiccu.mk
-@@ -16,7 +16,7 @@ AICCU_LFDLAGS = $(TARGET_LDFLAGS)
- # aiccu forgets to link with gnutls' dependencies breaking the build when
- # linking statically
- ifeq ($(BR2_STATIC_LIBS),y)
--AICCU_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --static --libs gnutls`
-+AICCU_LDFLAGS += `$(PKG_CONFIG_HOST_BINARY) --libs gnutls`
- endif
- 
- # dummy RPM_OPT_FLAGS to disable stripping
+diff --git a/package/copas/copas.hash b/package/copas/copas.hash
+new file mode 100644
+index 0000000..35dff2f
+--- /dev/null
++++ b/package/copas/copas.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	05be032ac2f3a32eb2eb536d41d2f5af620dded6e158c54d1ab0f73d2957dc68  copas-2.0.0-1.src.rock
