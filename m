@@ -1,43 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Jul 2015 23:29:43 +0200
-Subject: [Buildroot] [git commit branch/next] qextserialport: Bump version
-	and change site
-Message-ID: <20150808105642.DFFB47FFCF@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 22:26:26 +0200
+Subject: [Buildroot] [git commit branch/next] ljlinenoise: add hash file
+Message-ID: <20150808105643.542D37FD83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b97d38e9e84658a8abaad6bbf0e323d496e415d
+commit: http://git.buildroot.net/buildroot/commit/?id=0d25edb79aae4a10859731a44b5cd3d5d2a914b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Google Code is a closing forge, qextserialport has already made the move
-to Github.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qextserialport/qextserialport.mk |    7 ++-----
- 1 files changed, 2 insertions(+), 5 deletions(-)
+ package/ljlinenoise/ljlinenoise.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-index 61f7b05..6f82b39 100644
---- a/package/qextserialport/qextserialport.mk
-+++ b/package/qextserialport/qextserialport.mk
-@@ -4,13 +4,10 @@
- #
- ################################################################################
- 
--QEXTSERIALPORT_VERSION = 6c47244de4ce6db43c2f05caee957666c951dae1
--QEXTSERIALPORT_SITE = https://qextserialport.googlecode.com/git
--QEXTSERIALPORT_SITE_METHOD = git
--
-+QEXTSERIALPORT_VERSION = ada321a9ee463f628e7b781b8ed00ff219152158
-+QEXTSERIALPORT_SITE = $(call github,qextserialport,qextserialport,$(QEXTSERIALPORT_VERSION))
- QEXTSERIALPORT_LICENSE = MIT
- QEXTSERIALPORT_LICENSE_FILES = LICENSE
--
- QEXTSERIALPORT_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT),y)
+diff --git a/package/ljlinenoise/ljlinenoise.hash b/package/ljlinenoise/ljlinenoise.hash
+new file mode 100644
+index 0000000..7b4a948
+--- /dev/null
++++ b/package/ljlinenoise/ljlinenoise.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	a5fa2a88d8232bd0f97d3af9aafe780cd855830b42a9ab87c9ae2a5697b044a1  ljlinenoise-0.1.2-1.src.rock
