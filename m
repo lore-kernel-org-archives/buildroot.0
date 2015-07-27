@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 27 Jul 2015 20:51:19 +0200
-Subject: [Buildroot] [PATCH 28/32] lunit: add hash file
+Date: Mon, 27 Jul 2015 20:51:20 +0200
+Subject: [Buildroot] [PATCH 29/32] lzlib: add hash file
 In-Reply-To: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
 References: <1438023083-19010-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1438023083-19010-28-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1438023083-19010-29-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lunit/lunit.hash | 2 ++
+ package/lzlib/lzlib.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/lunit/lunit.hash
+ create mode 100644 package/lzlib/lzlib.hash
 
-diff --git a/package/lunit/lunit.hash b/package/lunit/lunit.hash
+diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
 new file mode 100644
-index 0000000..9c8d53c
+index 0000000..d823e8b
 --- /dev/null
-+++ b/package/lunit/lunit.hash
++++ b/package/lzlib/lzlib.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	b19854c685337ddcec2fe9c22113d2cd14715d52ccd2676abe2fa49b61a2ec4d  lunit-0.5-2.src.rock
++sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
 -- 
 2.1.4
