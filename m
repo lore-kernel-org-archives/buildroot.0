@@ -1,76 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 23:46:52 +0200
-Subject: [Buildroot] [git commit] package/mosh: remove unnecessary patch
-Message-ID: <20150727214702.16F91800BA@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 27 Jul 2015 23:47:28 +0200
+Subject: [Buildroot] [PATCH] jquery-datetimepicker: new package
+In-Reply-To: <20150727223450.16eac5ed@free-electrons.com>
+References: <1438022252-8024-1-git-send-email-yegorslists@googlemail.com>
+ <20150727223450.16eac5ed@free-electrons.com>
+Message-ID: <CAGm1_kteF24o0sdMxOVK1=4PDjcRXnnoOkJ4yp6ZFmsTPk4-uQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=37dde2d31348ca35c816109f529a57bfc24bec26
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Jul 27, 2015 at 10:34 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Yegor,
+>
+> On Mon, 27 Jul 2015 20:37:32 +0200, Yegor Yefremov wrote:
+>> Introduce jQuery submenu for jQuery plugins.
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  package/Config.in                                      |  5 +++++
+>>  package/jquery-datetimepicker/Config.in                |  7 +++++++
+>>  package/jquery-datetimepicker/jquery-datetimepicker.mk | 18 ++++++++++++++++++
+>>  3 files changed, 30 insertions(+)
+>>  create mode 100644 package/jquery-datetimepicker/Config.in
+>>  create mode 100644 package/jquery-datetimepicker/jquery-datetimepicker.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index f029e1d..f240c26 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -882,6 +882,11 @@ menu "Javascript"
+>>       source "package/explorercanvas/Config.in"
+>>       source "package/flot/Config.in"
+>>       source "package/jquery/Config.in"
+>> +if BR2_PACKAGE_JQUERY
+>> +menu "external jQuery plugins"
+>> +     source "package/jquery-datetimepicker/Config.in"
+>> +endmenu
+>> +endif
+>
+> I'm not happy with this change: there are already other jquery plugins
+> below:
+>
+>>       source "package/jquery-keyboard/Config.in"
+>>       source "package/jquery-mobile/Config.in"
+>>       source "package/jquery-sparkline/Config.in"
+>
+> So, what I'd prefer is to have two patches:
+>
+>  */ One adding the jquery-datetimepicker package
+>
+>  */ One moving all jquery plugins to a sub-menu
+>
+> Can you rework with this idea in mind?
 
-According to upstream (keithw/mosh issue #650), it's okay to have the
-"locale" system command fail with "command not found" because this is a
-non-critical action that occurs just before Mosh exits with an error
-anyway. Thus, this patch is unnecssary, and can be removed.
+OK. I'll do this.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mosh/0001-remove-system-locale-calls.patch |   46 --------------------
- 1 files changed, 0 insertions(+), 46 deletions(-)
-
-diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
-deleted file mode 100644
-index 114e6ed..0000000
---- a/package/mosh/0001-remove-system-locale-calls.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--The locale command is not available on many systems. As this variable
--is unused and appears to have been written with the intent of
--displaying the locale settings to the user, it's not really necessary.
--As this breaks Mosh on a lot of systems, it's best to remove the calls.
--
--Upstream status: refused, see: https://github.com/keithw/mosh/issues/650
--
--Signed-off-by: Christian Stewart <christian@paral.in>
-----
-- src/frontend/mosh-server.cc | 4 +++-
-- src/frontend/stmclient.cc   | 4 +++-
-- 2 files changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
--index 76ed2ed..0d2f222 100644
----- a/src/frontend/mosh-server.cc
--+++ b/src/frontend/mosh-server.cc
--@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
--       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
--       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
--       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
---      int unused __attribute((unused)) = system( "locale" );
--+
--+      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
--+
--       exit( 1 );
--     }
--   }
--diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
--index 9e4d916..06fac8b 100644
----- a/src/frontend/stmclient.cc
--+++ b/src/frontend/stmclient.cc
--@@ -85,7 +85,9 @@ void STMClient::init( void )
-- 
--     fprintf( stderr, "mosh-client needs a UTF-8 native locale to run.\n\n" );
--     fprintf( stderr, "Unfortunately, the client's environment (%s) specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(), native_charset.c_str() );
---    int unused __attribute((unused)) = system( "locale" );
--+
--+    fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
--+
--     exit( 1 );
--   }
-- 
---- 
--2.1.4
--
+Yegor
