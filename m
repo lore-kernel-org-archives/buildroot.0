@@ -1,41 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 09:53:38 +0200
-Subject: [Buildroot] [git commit branch/next] vsftpd: bump to version 3.0.3
-Message-ID: <20150808105644.D4A7B7FD83@busybox.osuosl.org>
+Date: Mon, 27 Jul 2015 23:54:41 +0200
+Subject: [Buildroot] [git commit branch/next] transmission: improve systemd
+	support
+Message-ID: <20150808105644.ADCE07FD83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c455a4fe7d51308ebe5aa277be117b42048620b2
+commit: http://git.buildroot.net/buildroot/commit/?id=c0f4bb97e4bc29b67bd1e17918cf3e694f137523
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vsftpd/vsftpd.hash |    2 +-
- package/vsftpd/vsftpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Support running transmission-daemon in system-wide mode using systemd:
 
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-index 6b46e4b..a0cd55b 100644
---- a/package/vsftpd/vsftpd.hash
-+++ b/package/vsftpd/vsftpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	be46f0e2c5528fe021fafc8dab1ecfea0c1f183063a06977f8537fcd0b195e56	vsftpd-3.0.2.tar.gz
-+sha256	9d4d2bf6e6e2884852ba4e69e157a2cecd68c5a7635d66a3a8cf8d898c955ef7	vsftpd-3.0.3.tar.gz
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index e5b505d..1e48264 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+1. Pass --with-systemd-daemon to configure script if systemd is enabled.
+
+2. Create the transmission user if having daemon
+
+3. Install transmission-daemon.service for systemd.
+
+[Aur??lien : Fix symlink relative path, use upstream service file,
+no need for config path, and use transmission user in sysv script,
+remove sysctl stuff]
+
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/transmission/S92transmission |    4 +---
+ package/transmission/transmission.mk |   19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 1870522..e5976b0 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -24,9 +24,7 @@
+ # by default, this is set to 'transmission'.
+ # For the sake of security you shouldn't set a password
+ # on this user
+-#USERNAME=transmission
+-USERNAME=default
+-
++USERNAME=transmission
  
--VSFTPD_VERSION = 3.0.2
-+VSFTPD_VERSION = 3.0.3
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
- VSFTPD_LICENSE = GPLv2
+ 
+ # ----- *ADVANCED* CONFIGURATION -----
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index bbc32bf..efc00a1 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -36,11 +36,30 @@ endif
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
+ TRANSMISSION_CONF_OPTS += --enable-daemon
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TRANSMISSION_DEPENDENCIES += systemd
++TRANSMISSION_CONF_OPTS += --with-systemd-daemon
++else
++TRANSMISSION_CONF_OPTS += --without-systemd-daemon
++endif
++
++define TRANSMISSION_USERS
++	transmission -1 transmission -1 * /var/lib/transmission - transmission Transmission Daemon
++endef
++
+ define TRANSMISSION_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
+ 		$(TARGET_DIR)/etc/init.d/S92transmission
+ endef
+ 
++define TRANSMISSION_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0755 $(@D)/daemon/transmission-daemon.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/transmission-daemon.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/transmission-daemon.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/transmission-daemon.service
++endef
++
+ else
+ TRANSMISSION_CONF_OPTS += --disable-daemon
+ endif
