@@ -1,88 +1,181 @@
-From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
-Date: Mon, 27 Jul 2015 23:27:02 +0200
-Subject: [Buildroot] [PATCH] rpcbind: add systemd support
-In-Reply-To: <1437339759-21456-2-git-send-email-aurelien@chabot.fr>
-References: <1437339759-21456-2-git-send-email-aurelien@chabot.fr>
-Message-ID: <1438032422-17265-1-git-send-email-aurelien@chabot.fr>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Mon, 27 Jul 2015 21:48:50 -0400
+Subject: [Buildroot] [PATCH v2] cmocka: new package
+In-Reply-To: <55B66C37.9080103@openwide.fr>
+References: <1437886772-6787-1-git-send-email-nimaim@gmail.com>
+ <55B66C37.9080103@openwide.fr>
+Message-ID: <CALoSW67sva_5aqGocidwUR_ZCcmoLrA2+YE3_4PBr3Kz5HEqkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Service and socket files come from ArchLinux.
+On Mon, Jul 27, 2015 at 1:36 PM, Romain Naour <romain.naour@openwide.fr>
+wrote:
+> Hi Nimai,
+>
+> Le 26/07/2015 06:59, Nimai Mahajan a ?crit :
+>> From: Nimai Mahajan <nimaim@gmail.com>
+>>
+>> Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+>> ---
+>> Changes v1->v2: Removed host-cmake dependency (Baruch)
+>>
+>> package/Config.in | 1 +
+>> package/cmocka/Config.in | 11 +++++++++++
+>> package/cmocka/cmocka.hash | 2 ++
+>> package/cmocka/cmocka.mk | 17 +++++++++++++++++
+>> 4 files changed, 31 insertions(+)
+>> create mode 100644 package/cmocka/Config.in
+>> create mode 100644 package/cmocka/cmocka.hash
+>> create mode 100644 package/cmocka/cmocka.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index f029e1d..e0dd14e 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1037,6 +1037,7 @@ menu "Other"
+>> source "package/boost/Config.in"
+>> source "package/clapack/Config.in"
+>> source "package/classpath/Config.in"
+>> + source "package/cmocka/Config.in"
+>> source "package/cppcms/Config.in"
+>> source "package/ding-libs/Config.in"
+>> source "package/eigen/Config.in"
+>> diff --git a/package/cmocka/Config.in b/package/cmocka/Config.in
+>> new file mode 100644
+>> index 0000000..37064bf
+>> --- /dev/null
+>> +++ b/package/cmocka/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_CMOCKA
+>> + bool "cmocka"
+>
+> cmocka only build a shared library libcmocka.so, so this package must not
+be
+> selected on static only build (it's hard coded in src/CMakeLists.txt):
+> depends on !BR2_STATIC_LIBS
+>
+>> + help
+>> + cmocka is an elegant unit testing framework for C with support
+>> + for mock objects. It only requires the standard C library,
+>> + works on a range of computing platforms (including embedded)
+>> + and with different compilers. It is a fork of Google's very
+>> + popular cmockery unit testing framework to fix bugs and support
+>> + it in the future.
+>> +
+>> + https://cmocka.org/
+>
+> And add a comment here:
+> comment "cmocka needs a toolchain w/ dynamic library"
+> depends on BR2_STATIC_LIBS
+>
+> Also I tried to build with a uClibc-ng toolchain without stack protection
+> support (libssp) and cmocka fail to build. I haven't tested with a musl
+toolchain.
+>
+> CMake Error at
+>
+/home/naourr/git/buildroot/test/uclibc-ng/host/usr/share/cmake-3.1/Modules/TestBigEndian.cmake:51
+> (message):
+> no suitable type found
+> Call Stack (most recent call first):
+> ConfigureChecks.cmake:142 (test_big_endian)
+> CMakeLists.txt:43 (include)
+>
+>
+> -- Configuring incomplete, errors occurred!
+> See also
+>
+"/home/naourr/git/buildroot/test/uclibc-ng/build/cmocka-1.0.1/buildroot-build/CMakeFiles/CMakeOutput.log".
+> See also
+>
+"/home/naourr/git/buildroot/test/uclibc-ng/build/cmocka-1.0.1/buildroot-build/CMakeFiles/CMakeError.log".
+>
+> Here the content of CMakeError.log (see -fstack-protector):
+>
+>
+/home/naourr/git/buildroot/test/uclibc-ng/host/usr/bin/i686-buildroot-linux-uclibc-gcc
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+> -std=gnu99 -pedantic -pedantic-errors -Wall -Wextra -Wshadow
+> -Wmissing-prototypes -Wdeclaration-after-statement -Wunused -Wfloat-equal
+> -Wpointer-arith -Wwrite-strings -Wformat-security
+-Wmissing-format-attribute
+> -Wundef -fPIC -fstack-protector -D_GNU_SOURCE
+> CMakeFiles/cmTryCompileExec2344790343.dir/CMAKE_SIZEOF_UNSIGNED_LONG.c.o
+-o
+> cmTryCompileExec2344790343 -rdynamic -lrt
+>
+/home/naourr/git/buildroot/test/uclibc-ng/host/usr/lib/gcc/i686-buildroot-linux-uclibc/4.9.3/../../../../i686-buildroot-linux-uclibc/bin/ld:
+> ne peut trouver -lssp_nonshared
+>
+/home/naourr/git/buildroot/test/uclibc-ng/host/usr/lib/gcc/i686-buildroot-linux-uclibc/4.9.3/../../../../i686-buildroot-linux-uclibc/bin/ld:
+> ne peut trouver -lssp
+> collect2: erreur: ld a retourn? 1 code d'?tat d'ex?cution
+>
+> -fstack-protector is added by cmake/Modules/DefineCompilerFlags.cmake:
+>
+> check_c_compiler_flag_ssp("-fstack-protector" WITH_STACK_PROTECTOR)
+> if (WITH_STACK_PROTECTOR)
+> set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
+> endif (WITH_STACK_PROTECTOR)
+>
+> For some reason, -fstack-protector is still added even when the ssp
+support is
+> disabled in the toolchain. It build fine when -fstack-protector is
+removed.
+>
+> Thoughts ?
+>
+> Best regards,
+> Romain Naour
 
-Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
----
- package/rpcbind/rpcbind.mk      | 18 +++++++++++++++++-
- package/rpcbind/rpcbind.service | 10 ++++++++++
- package/rpcbind/rpcbind.socket  |  8 ++++++++
- 3 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 package/rpcbind/rpcbind.service
- create mode 100644 package/rpcbind/rpcbind.socket
+Thanks for testing Romain ... my fault, I only tested this with the
+internal glibc toolchain (on ARM and x86) which I have readily available
+and thought it was okay. I will play around with your findings and test out
+what works best for uClibc. I am still learning the intricacies of
+Buildroot and Cmake (and Git for that matter) but will see what I can find,
+otherwise I request the help of the gurus here :-) I researched many other
+test frameworks and found this one to be the most feature rich and flexible
+for C so worth having in Buildroot I'd say.
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index 1e28af9..97c5bbb 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -14,11 +14,27 @@ RPCBIND_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
- RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
- RPCBIND_CONF_OPTS += --with-rpcuser=root
--RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+	RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=/usr/lib/systemd/system
-+else
-+	RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
-+endif
-+
-+define RPCBIND_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.service
-+	$(INSTALL) -m 0755 -D package/rpcbind/rpcbind.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/rpcbind.socket
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/rpcbind.socket \
-+		$(TARGET_DIR)/etc/systemd/system/sockets.target.wants/rpcbind.socket
-+endef
- 
- define RPCBIND_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
- 		$(TARGET_DIR)/etc/init.d/S30rpcbind
- endef
- 
-+
- $(eval $(autotools-package))
-diff --git a/package/rpcbind/rpcbind.service b/package/rpcbind/rpcbind.service
-new file mode 100644
-index 0000000..b7a32a1
---- /dev/null
-+++ b/package/rpcbind/rpcbind.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=RPC bind service
-+Requires=rpcbind.socket
-+
-+[Service]
-+Type=forking
-+ExecStart=/usr/bin/rpcbind
-+
-+[Install]
-+Also=rpcbind.socket
-diff --git a/package/rpcbind/rpcbind.socket b/package/rpcbind/rpcbind.socket
-new file mode 100644
-index 0000000..d63c1d9
---- /dev/null
-+++ b/package/rpcbind/rpcbind.socket
-@@ -0,0 +1,8 @@
-+[Unit]
-+Description=RPCbind Server Activation Socket
-+
-+[Socket]
-+ListenStream=/var/run/rpcbind.sock
-+
-+[Install]
-+WantedBy=sockets.target
--- 
-2.4.6
+>> diff --git a/package/cmocka/cmocka.hash b/package/cmocka/cmocka.hash
+>> new file mode 100644
+>> index 0000000..96b81cb
+>> --- /dev/null
+>> +++ b/package/cmocka/cmocka.hash
+>> @@ -0,0 +1,2 @@
+>> +# Locally computed:
+>> +sha256 b36050d7a1224296803d216cba1a9d4c58c31bf308b2d6d6649d61aa5a36753b
+cmocka-1.0.1.tar.xz
+>> diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
+>> new file mode 100644
+>> index 0000000..812df76
+>> --- /dev/null
+>> +++ b/package/cmocka/cmocka.mk
+>> @@ -0,0 +1,17 @@
+>>
++################################################################################
+>> +#
+>> +# cmocka
+>> +#
+>>
++################################################################################
+>> +
+>> +CMOCKA_VERSION = 1.0.1
+>> +CMOCKA_SOURCE = cmocka-$(CMOCKA_VERSION).tar.xz
+>> +CMOCKA_SITE = https://cmocka.org/files/1.0/
+>> +CMOCKA_LICENSE = Apache-2.0
+>> +CMOCKA_LICENSE_FILES = COPYING
+>> +CMOCKA_INSTALL_STAGING = YES
+>> +
+>> +# cmocka only supports out of source builds
+>> +CMOCKA_SUPPORTS_IN_SOURCE_BUILD = NO
+>> +
+>> +$(eval $(cmake-package))
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150727/3deaca83/attachment.html>
