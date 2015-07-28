@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:39:38 -0300
-Subject: [Buildroot] [PATCH 037/113] libraw: add hash file
+Date: Tue, 28 Jul 2015 15:39:39 -0300
+Subject: [Buildroot] [PATCH 038/113] libqrencode: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-37-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-38-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libraw/libraw.hash | 2 ++
+ package/libqrencode/libqrencode.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/libraw/libraw.hash
+ create mode 100644 package/libqrencode/libqrencode.hash
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
 new file mode 100644
-index 0000000..98d3c12
+index 0000000..8c94ccd
 --- /dev/null
-+++ b/package/libraw/libraw.hash
++++ b/package/libqrencode/libqrencode.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	588caf5324c76240d6370852691e05ac8ef89428ee8d45168f15ce47422bc36b  LibRaw-0.13.4.tar.gz
++# From http://fukuchi.org/works/qrencode/qrencode-3.4.2.tar.gz.sha1
++sha1	7daaad61f333ff6cdabfb0d925c3ab668d16dee2	qrencode-3.4.2.tar.gz
 -- 
 2.3.6
