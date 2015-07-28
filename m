@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit] lshw: add hash file
-Message-ID: <20150728204047.ED2927F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:11 +0200
+Subject: [Buildroot] [git commit] php-ssh2: add hash file
+Message-ID: <20150728204048.CB8A981E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2d12321e8ca9d1b06c76c9dcdbd1c9f8d6fefeb
+commit: http://git.buildroot.net/buildroot/commit/?id=cbe6203eedd1cff2fd5f2dbcdb69794c4a5c0124
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lshw/lshw.hash |    2 ++
+ package/php-ssh2/php-ssh2.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
+diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
 new file mode 100644
-index 0000000..d829369
+index 0000000..d599662
 --- /dev/null
-+++ b/package/lshw/lshw.hash
++++ b/package/php-ssh2/php-ssh2.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	809882429555b93259785cc261dbff04c16c93d064db5f445a51945bc47157cb	lshw-B.02.16.tar.gz
++sha256	600c82d2393acf3642f19914f06a7afea57ee05cb8c10e8a5510b32188b97f99	ssh2-0.12.tgz
