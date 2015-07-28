@@ -1,31 +1,33 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 28 Jul 2015 16:26:31 +0200
-Subject: [Buildroot] [PATCH] libiscsi: Force configure to use gcc for LD
-Message-ID: <1438093591-14134-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2015 16:32:49 +0200
+Subject: [Buildroot] [PATCH] freerdp: Add support for tz package
+In-Reply-To: <CAFkzVZZZyZqz+hoWqhLaeu78HX+nx=E4+0rxE1z_mZE-BmCOWA@mail.gmail.com>
+References: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
+ <20150728110713.74b1e037@free-electrons.com>
+ <CAFkzVZaKVSv=-YU2pdqAf0eB9MSWFT8j7soCY0vhEwO7H_PxUg@mail.gmail.com>
+ <20150728160353.7cc0b9ec@free-electrons.com>
+ <CAFkzVZZZyZqz+hoWqhLaeu78HX+nx=E4+0rxE1z_mZE-BmCOWA@mail.gmail.com>
+Message-ID: <20150728163249.487070fc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/0a9/0a96f3654983ed2efc851522352dec43c1df0077/
+Dear Scott Fan,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/libiscsi/libiscsi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+On Tue, 28 Jul 2015 22:26:18 +0800, Scott Fan wrote:
 
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-index 7877cd9..4d27371 100644
---- a/package/libiscsi/libiscsi.mk
-+++ b/package/libiscsi/libiscsi.mk
-@@ -10,4 +10,6 @@ LIBISCSI_LICENSE = GPLv2+ LGPLv2.1+
- LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
- LIBISCSI_INSTALL_STAGING = YES
- 
-+LIBISCSI_CONF_OPTS = LD="$(TARGET_CC)"
-+
- $(eval $(autotools-package))
+> you can merge the patch 501074, 501261 now,
+
+Well, they need some review and testing first.
+
+> pls abort the previous patch 501049, 501050
+
+Thanks, those ones marked as "Superseded".
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
