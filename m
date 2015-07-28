@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 09:48:02 +0200
-Subject: [Buildroot] [PATCH v3] package/python-web2py: cleaning for
- space saving
-In-Reply-To: <1438066220-7019-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1438066220-7019-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150728094802.23897950@free-electrons.com>
+Date: Tue, 28 Jul 2015 09:50:13 +0200
+Subject: [Buildroot] [PATCH v2 3/4] cubieboard: update build support for
+ cubieboard 1/2/3.
+In-Reply-To: <1438067769-10254-3-git-send-email-fancp2007@gmail.com>
+References: <1438067769-10254-1-git-send-email-fancp2007@gmail.com>
+ <1438067769-10254-3-git-send-email-fancp2007@gmail.com>
+Message-ID: <20150728095013.2a332e73@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Scott,
 
-On Tue, 28 Jul 2015 08:50:20 +0200, Angelo Compagnucci wrote:
+On Tue, 28 Jul 2015 15:16:08 +0800, Scott Fan wrote:
+> This patch update the cb1/cb2's defconfig to mainline u-boot version,
+> and bump their linux-sunxi kernel to latest stage/sunxi-3.4 branch.
+> 
+> Additionally, add defconfig for cubieboard3 (a.k.a. cubietruck).
+> 
+> Finally, support set up the SD card only to boot from network.
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-> -define PYTHON_WEB2PY_INSTALL_INIT_SYSV
-> -	$(INSTALL) -m 0755 -D package/python-web2py/S51web2py \
-> -		$(TARGET_DIR)/etc/init.d/S51web2py
+When you post new versions of a patch series, please make sure to
+include a changelog of what was modified. Otherwise it's difficult for
+people reviewing your patches to figure out what you've changed.
 
-Why do you remove those lines? You don't want to install the init
-script anymore?
-
-Thanks,
+See
+http://buildroot.org/downloads/manual/manual.html#submitting-patches
+for some discussion about this.
 
 Thomas
 -- 
