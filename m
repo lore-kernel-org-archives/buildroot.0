@@ -1,55 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 23:10:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cc-tool: fix gcc 5 issue
-In-Reply-To: <1438098186-31099-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1438098186-31099-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150728231034.61147736@free-electrons.com>
+Date: Tue, 28 Jul 2015 23:11:36 +0200
+Subject: [Buildroot] [git commit] package/libglib2: fix compilation issue on
+	SPARC
+Message-ID: <20150728211142.9323A81D63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=e4a707e79838680984cd4bb25b5a9959fc44ddc8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Jul 2015 17:43:06 +0200, J?rg Krause wrote:
-> The version of boost.m4 initially included in cc-tool has an issue
-> with gcc5 (one of its tests fails due to the first change described in [1]
-> "Preprocessor issues").
-> 
-> This was fixed upstream (boost.m4 project) in Nov 2014 [2].
-> 
-> We add the latest commit [3] of upstream boost.m4 plus a patch from github PR
-> [4] to add detection for gcc 5.1.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a4c/a4c057e0b1ab6a2ffd69b27f6f5a79f98eb040f6/
-> 
-> [1]
-> https://gcc.gnu.org/gcc-5/porting_to.html
-> 
-> [2]
-> https://github.com/tsuna/boost.m4/commit/32553aaf4d5090da19aa0ec33b936982c685009f
-> 
-> [3]
-> https://github.com/tsuna/boost.m4/commit/d9ff75b6af66360d76f46f469a26ab18e24e1030
-> 
-> [4]
-> https://github.com/rubenk/boost.m4/commit/b879eb85f112cf054643d2e7f9544c230299c0b2
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/cc-tool/0002-boost-m4.patch | 883 ++++++++++++++++++++++++++++++++++++
->  package/cc-tool/cc-tool.mk          |   3 +
->  2 files changed, 886 insertions(+)
->  create mode 100644 package/cc-tool/0002-boost-m4.patch
+Fixes http://autobuild.buildroot.net/results/b3c/b3cb6515496cf09d305a1077d01f87d75ece8a8d/
 
-Applied, thanks. Did you submit the patch to upstream cc-tool?
+Patch added to improve detection of atomic support in the compiler.
 
-Thanks a lot!
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-fix-compile-time-atomic-detection.patch   |   28 ++++++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+new file mode 100644
+index 0000000..f6d0c5d
+--- /dev/null
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -0,0 +1,28 @@
++[PATCH] Fix compilation issues on architectures with limited atomic support
++
++Improved compile-time detection of atomic support in the compiler.
++
++Upstream-Status: submitted
++See : https://bugzilla.gnome.org/show_bug.cgi?id=752731
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ glib/gthread-posix.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
++index ae5d805..8db8557 100644
++--- a/glib/gthread-posix.c
+++++ b/glib/gthread-posix.c
++@@ -67,7 +67,7 @@
++ #endif
++ 
++ /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
++-#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
+++#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
++ #define USE_NATIVE_MUTEX
++ #endif
++ 
++-- 
++2.4.3
++
