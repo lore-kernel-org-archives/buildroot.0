@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:12 +0200
-Subject: [Buildroot] [git commit] python-pycrypto: add hash file
-Message-ID: <20150728204049.3BE3281E78@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:14 +0200
+Subject: [Buildroot] [git commit] directfb-examples: add hash file
+Message-ID: <20150728204054.9AABD7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4457c7c43a208333548e3f8225482239a8a37293
+commit: http://git.buildroot.net/buildroot/commit/?id=56338071dfbf832b5b132666791f912d51a45f3a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pycrypto/python-pycrypto.hash |    2 ++
+ package/directfb-examples/directfb-examples.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
+diff --git a/package/directfb-examples/directfb-examples.hash b/package/directfb-examples/directfb-examples.hash
 new file mode 100644
-index 0000000..e7f809a
+index 0000000..c647fca
 --- /dev/null
-+++ b/package/python-pycrypto/python-pycrypto.hash
++++ b/package/directfb-examples/directfb-examples.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	7293c9d7e8af2e44a82f86eb9c3b058880f4bcc884bf3ad6c8a34b64986edde8	pycrypto-2.6.tar.gz
++# Locally calculated
++sha256	b08293697c211b690856f76a25ad7acd4ca458b4132851e0a1e471d0bf23c821	DirectFB-examples-1.6.0.tar.gz
