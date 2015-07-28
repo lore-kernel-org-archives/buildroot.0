@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:12 +0200
-Subject: [Buildroot] [git commit] python-cffi: add hash file
-Message-ID: <20150728204049.1806A81E73@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:13 +0200
+Subject: [Buildroot] [git commit] b43-fwcutter: add hash file
+Message-ID: <20150728204054.77C847F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=004391de4e30c1b7c52a793affeb1d4d8c715b90
+commit: http://git.buildroot.net/buildroot/commit/?id=3eec4ebd9fb39e0ca72dc1641185bfc35c596826
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cffi/python-cffi.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/b43-fwcutter/b43-fwcutter.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+diff --git a/package/b43-fwcutter/b43-fwcutter.hash b/package/b43-fwcutter/b43-fwcutter.hash
 new file mode 100644
-index 0000000..b41c979
+index 0000000..3181c76
 --- /dev/null
-+++ b/package/python-cffi/python-cffi.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.python.org/pypi/cffi/0.8.6
-+md5	474b5a68299a6f05009171de1dc91be6	cffi-0.8.6.tar.gz
-+# Calculated based on the hash above
-+sha256	2532d9e3af9e3c6d0f710fc98b0295b563c7f39cfd97dd2242bd36fbf4900610	cffi-0.8.6.tar.gz
++++ b/package/b43-fwcutter/b43-fwcutter.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	4c6a53d1f5d76b8aa224d294bee47726b1477f35327f4e23e8cb799865e0f6eb	b43-fwcutter-015.tar.bz2
