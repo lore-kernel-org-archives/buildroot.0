@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit] php-zmq: add hash file
-Message-ID: <20150728204048.DD24C81E69@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit] libfcgi: add hash file
+Message-ID: <20150728204046.EDA257F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7a95f8471f27855cf338dd4d5ac614ab4a97a68
+commit: http://git.buildroot.net/buildroot/commit/?id=713f732b893746f826316704bb04f09f7247dff2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-zmq/php-zmq.hash |    2 ++
+ package/libfcgi/libfcgi.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/php-zmq/php-zmq.hash b/package/php-zmq/php-zmq.hash
+diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
 new file mode 100644
-index 0000000..50ce639
+index 0000000..586ff1e
 --- /dev/null
-+++ b/package/php-zmq/php-zmq.hash
++++ b/package/libfcgi/libfcgi.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	c9b0af56826fc5e1a95a0fef25e671d9839a421d79e174931faacd8bee389f31	zmq-1.1.2.tgz
++sha256	66fc45c6b36a21bf2fbbb68e90f780cc21a9da1fffbae75e76d2b4402d3f05b9	fcgi-2.4.0.tar.gz
