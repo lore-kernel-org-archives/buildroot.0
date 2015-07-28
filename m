@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit branch/next] libxkbcommon: add hash file
-Message-ID: <20150808105646.6DFD77FFCF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:10 +0200
+Subject: [Buildroot] [git commit branch/next] ndisc6: add hash file
+Message-ID: <20150808105647.0F8137FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=405c17b1393c7e1d5b824a0ae5e7a9475d761ebe
+commit: http://git.buildroot.net/buildroot/commit/?id=c610e2112787c62373f9d35df457b3a54c0ebb51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxkbcommon/libxkbcommon.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/ndisc6/ndisc6.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
 new file mode 100644
-index 0000000..9cbe440
+index 0000000..8d71bde
 --- /dev/null
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -0,0 +1,3 @@
-+# From http://lists.freedesktop.org/archives/wayland-devel/2014-October/017836.html
-+md5	2e1faeafcc609c30af3a561a91e84158	libxkbcommon-0.5.0.tar.xz
-+sha1	7127993bfb69e13cdff25fb8b3c8f26ce6be5bfa	libxkbcommon-0.5.0.tar.xz
++++ b/package/ndisc6/ndisc6.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	6acec8a0cb9efa3ac98456f46c3016aeec0598b0c7557c95242b5228ad62ca7a	ndisc6-1.0.2.tar.bz2
