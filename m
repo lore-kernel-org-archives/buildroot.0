@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit] lsuio: add hash file
-Message-ID: <20150728204048.0204F7F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit] giblib: add hash file
+Message-ID: <20150728204046.7C3AD7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b46e4124de1d7533e67f0a6f1f120b74ed4eb96
+commit: http://git.buildroot.net/buildroot/commit/?id=44ec4426a0db20b38f3df9c90a1efdd2b8c93b12
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lsuio/lsuio.hash |    2 ++
+ package/giblib/giblib.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lsuio/lsuio.hash b/package/lsuio/lsuio.hash
+diff --git a/package/giblib/giblib.hash b/package/giblib/giblib.hash
 new file mode 100644
-index 0000000..d6077af
+index 0000000..942aee7
 --- /dev/null
-+++ b/package/lsuio/lsuio.hash
++++ b/package/giblib/giblib.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	c88b3850248b2d3419e025abd7b9b0991c8bd33a2d4983f9608408a29900bfb5	lsuio-0.2.0.tar.gz
++sha256	176611c4d88d742ea4013991ad54c2f9d2feefbc97a28434c0f48922ebaa8bac  giblib-1.2.4.tar.gz
