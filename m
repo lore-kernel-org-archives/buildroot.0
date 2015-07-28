@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:12 +0200
-Subject: [Buildroot] [git commit] smstools3: add hash file
-Message-ID: <20150728204053.EEE567F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:13 +0200
+Subject: [Buildroot] [git commit] tinc: add hash file
+Message-ID: <20150728204054.39EB37F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bed9b62b628d9687672423978e8ea130187cf2fa
+commit: http://git.buildroot.net/buildroot/commit/?id=9d0c8a65377ff748c5419e76147f0b76ebb716f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/smstools3/smstools3.hash |    2 ++
+ package/tinc/tinc.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/smstools3/smstools3.hash b/package/smstools3/smstools3.hash
+diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
 new file mode 100644
-index 0000000..b0b521f
+index 0000000..721b6bd
 --- /dev/null
-+++ b/package/smstools3/smstools3.hash
++++ b/package/tinc/tinc.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ed00ffaeaa312a5b4f969f4e97a64603a866bbe16e393ea02f5bf05234814d59	smstools3-3.1.15.tar.gz
++# Locally calculated after checking pgp signature
++sha256	498e58f9f39e3922030a63cf62baf4b46a40fbda8d90b23ec0f084f4a9f9b687	tinc-1.0.24.tar.gz
