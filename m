@@ -1,35 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:44:38 +0200
-Subject: [Buildroot] [git commit branch/next] binutils: bump 2.25.x series
-	to 2.25.1
-Message-ID: <20150808105649.0C94B818F0@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 23:11:36 +0200
+Subject: [Buildroot] [git commit branch/next] package/libglib2: fix
+	compilation issue on SPARC
+Message-ID: <20150808105649.4C5C88190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8fd20b5e6baa1c85766a737e194448ea4359899
+commit: http://git.buildroot.net/buildroot/commit/?id=e4a707e79838680984cd4bb25b5a9959fc44ddc8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes http://autobuild.buildroot.net/results/b3c/b3cb6515496cf09d305a1077d01f87d75ece8a8d/
+
+Patch added to improve detection of atomic support in the compiler.
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../binutils/{2.25 => 2.25.1}/120-sh-conf.patch    |    0
- .../300-001_ld_makefile_patch.patch                |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../binutils/{2.25 => 2.25.1}/500-sysroot.patch    |    0
- .../600-poison-system-directories.patch            |    0
- ...ines-search-code-for-conditional-branches.patch |    0
- ...nsa-optimize-check_section_ebb_pcrels_fit.patch |    0
- .../907-xtensa-optimize-removed_by_actions.patch   |    0
- .../908-xtensa-optimize-find_removed_literal.patch |    0
- ...tensa-replace-action-list-with-splay-tree.patch |    0
- ...10-xtensa-optimize-trampolines-relaxation.patch |    0
- ...localized-symbol-refcounting-with-gc-sect.patch |    0
- ...x-gas-segfault-with-text-section-literals.patch |    0
- package/binutils/Config.in.host                    |    4 ++--
- package/binutils/binutils.hash                     |    2 +-
- 15 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-fix-compile-time-atomic-detection.patch   |   28 ++++++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+new file mode 100644
+index 0000000..f6d0c5d
+--- /dev/null
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -0,0 +1,28 @@
++[PATCH] Fix compilation issues on architectures with limited atomic support
++
++Improved compile-time detection of atomic support in the compiler.
++
++Upstream-Status: submitted
++See : https://bugzilla.gnome.org/show_bug.cgi?id=752731
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ glib/gthread-posix.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
++index ae5d805..8db8557 100644
++--- a/glib/gthread-posix.c
+++++ b/glib/gthread-posix.c
++@@ -67,7 +67,7 @@
++ #endif
++ 
++ /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
++-#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
+++#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
++ #define USE_NATIVE_MUTEX
++ #endif
++ 
++-- 
++2.4.3
++
