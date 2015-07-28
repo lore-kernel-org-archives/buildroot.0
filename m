@@ -1,30 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 23:19:57 +0200
-Subject: [Buildroot] [PATCH v2] jquery-datetimepicker: new package
-In-Reply-To: <1438107267-2163-1-git-send-email-yegorslists@googlemail.com>
-References: <1438107267-2163-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150728231957.2bf60f53@free-electrons.com>
+Date: Tue, 28 Jul 2015 23:23:15 +0200
+Subject: [Buildroot] [git commit] qt5base: fix activation of i.MX visual ID
+	workaround
+Message-ID: <20150728212406.7EA358040E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+commit: http://git.buildroot.net/buildroot/commit/?id=ad53b303e75691c5e85462cc7f7a2116b547bddf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Jul 2015 20:14:27 +0200, Yegor Yefremov wrote:
+The workaround implemented in 0001-Force_egl_visual_ID_33.patch has to
+be enabled as soon as gpu_vivante/xorg is used. This does not depends
+on eglfs option.
 
-> +JQUERY_DATETIMEPICKER_VERSION = 2.4.5
-> +JQUERY_DATETIMEPICKER_SITE = $(call github,xdan,datetimepicker,$(JQUERY_DATETIMEPICKER_VERSION))
-> +JQUERY_DATETIMEPICKER_LICENSE = MIT
+[Thomas: minor commit log tweaks.]
 
-The source code has a license file, so I've added the
-<pkg>_LICENSE_FILES variable here, and applied.
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/qt5base.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 6f0f526..753b069 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -118,12 +118,13 @@ endif
+ QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
+ QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
+ 
+-ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+-QT5BASE_CONFIGURE_OPTS += -eglfs
+-QT5BASE_DEPENDENCIES   += libegl
+ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+ QT5BASE_EXTRA_CFLAGS = -DENABLE_MX6_WORKAROUND
+ endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
++QT5BASE_CONFIGURE_OPTS += -eglfs
++QT5BASE_DEPENDENCIES   += libegl
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-eglfs
+ endif
