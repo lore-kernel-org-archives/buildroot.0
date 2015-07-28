@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:40:20 -0300
-Subject: [Buildroot] [PATCH 079/113] portaudio: add hash file
+Date: Tue, 28 Jul 2015 15:40:21 -0300
+Subject: [Buildroot] [PATCH 080/113] pulseaudio: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-79-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-80-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/portaudio/portaudio.hash | 2 ++
- 1 file changed, 2 insertions(+)
- create mode 100644 package/portaudio/portaudio.hash
+ package/pulseaudio/pulseaudio.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 package/pulseaudio/pulseaudio.hash
 
-diff --git a/package/portaudio/portaudio.hash b/package/portaudio/portaudio.hash
+diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
 new file mode 100644
-index 0000000..b83e9d9
+index 0000000..dad495e
 --- /dev/null
-+++ b/package/portaudio/portaudio.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	9c26d1330d506496789edafe55b0386f20d83c4aa2c0e3f81fbeb0f114ab1b99	pa_stable_v19_20111121.tgz
++++ b/package/pulseaudio/pulseaudio.hash
+@@ -0,0 +1,3 @@
++# From http://freedesktop.org/software/pulseaudio/releases/pulseaudio-5.0.tar.xz.{md5,sha1}
++md5	c43749838612f4860465e83ed62ca38e	pulseaudio-5.0.tar.xz
++sha1	e420931a0b9cf37331cd06e30ba415046317ab85	pulseaudio-5.0.tar.xz
 -- 
 2.3.6
