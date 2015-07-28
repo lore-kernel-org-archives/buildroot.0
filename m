@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:10 +0200
-Subject: [Buildroot] [git commit branch/next] neard: add hash file
-Message-ID: <20150808105647.1798B7FD56@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:11 +0200
+Subject: [Buildroot] [git commit branch/next] php-geoip: add hash file
+Message-ID: <20150808105647.7D2597FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=60fde9af56872f5a399727786b5267272c282d07
+commit: http://git.buildroot.net/buildroot/commit/?id=0db29a46bfdb4d630bb9a3920030155241e115af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/neard/neard.hash |    2 ++
+ package/php-geoip/php-geoip.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/neard/neard.hash b/package/neard/neard.hash
+diff --git a/package/php-geoip/php-geoip.hash b/package/php-geoip/php-geoip.hash
 new file mode 100644
-index 0000000..7517093
+index 0000000..275a098
 --- /dev/null
-+++ b/package/neard/neard.hash
++++ b/package/php-geoip/php-geoip.hash
 @@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/network/nfc/sha256sums.asc
-+sha256	6ea724b443d39d679168fc7776a965d1f64727c3735391df2c01469ee7cd8cca	neard-0.14.tar.xz
++# Locally calculated
++sha256	82c6deb7264d2ff7c4d6c45a7d27cff7ab097be965795e317e04a9c5b7be98b9	geoip-1.1.0.tgz
