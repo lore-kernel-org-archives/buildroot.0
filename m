@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:40:50 -0300
-Subject: [Buildroot] [PATCH 109/113] cwiid: add hash file
+Date: Tue, 28 Jul 2015 15:40:51 -0300
+Subject: [Buildroot] [PATCH 110/113] dcron: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-109-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-110-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cwiid/cwiid.hash | 2 ++
+ package/dcron/dcron.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/cwiid/cwiid.hash
+ create mode 100644 package/dcron/dcron.hash
 
-diff --git a/package/cwiid/cwiid.hash b/package/cwiid/cwiid.hash
+diff --git a/package/dcron/dcron.hash b/package/dcron/dcron.hash
 new file mode 100644
-index 0000000..749c9c3
+index 0000000..3e53ddc
 --- /dev/null
-+++ b/package/cwiid/cwiid.hash
++++ b/package/dcron/dcron.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	8880378303d872ea65b037184ad6c96bc68f87764b503c152032f56344b5e81d	cwiid-0.6.00.tgz
++sha256	9e50edb6f5bd8153b16bad05087d985e5153ce45cc01ae77e7f842213fb4a824	dcron-4.5.tar.gz
 -- 
 2.3.6
