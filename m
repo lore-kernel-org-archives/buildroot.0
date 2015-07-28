@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit] portaudio: add hash file
-Message-ID: <20150728204048.F296A81E6F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:57 +0200
+Subject: [Buildroot] [git commit] lsuio: add hash file
+Message-ID: <20150728204048.0204F7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=969a2ecefeea63e3f1326a23a939674e931d69ab
+commit: http://git.buildroot.net/buildroot/commit/?id=7b46e4124de1d7533e67f0a6f1f120b74ed4eb96
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/portaudio/portaudio.hash |    2 ++
+ package/lsuio/lsuio.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/portaudio/portaudio.hash b/package/portaudio/portaudio.hash
+diff --git a/package/lsuio/lsuio.hash b/package/lsuio/lsuio.hash
 new file mode 100644
-index 0000000..b83e9d9
+index 0000000..d6077af
 --- /dev/null
-+++ b/package/portaudio/portaudio.hash
++++ b/package/lsuio/lsuio.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	9c26d1330d506496789edafe55b0386f20d83c4aa2c0e3f81fbeb0f114ab1b99	pa_stable_v19_20111121.tgz
++sha256	c88b3850248b2d3419e025abd7b9b0991c8bd33a2d4983f9608408a29900bfb5	lsuio-0.2.0.tar.gz
