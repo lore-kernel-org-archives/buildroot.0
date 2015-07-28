@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] libmpd: add hash file
-Message-ID: <20150728204047.354B37F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:10 +0200
+Subject: [Buildroot] [git commit] nut: add hash file
+Message-ID: <20150728204048.7D88F81E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae93c232eab594ee582a52e9b367a64d5726fc3c
+commit: http://git.buildroot.net/buildroot/commit/?id=3297a24a4b06b973c0d2efa1b7f9ea60fb8dc2f8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmpd/libmpd.hash |    2 ++
+ package/nut/nut.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmpd/libmpd.hash b/package/libmpd/libmpd.hash
+diff --git a/package/nut/nut.hash b/package/nut/nut.hash
 new file mode 100644
-index 0000000..ca06c75
+index 0000000..0174366
 --- /dev/null
-+++ b/package/libmpd/libmpd.hash
++++ b/package/nut/nut.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	fe20326b0d10641f71c4673fae637bf9222a96e1712f71f170fca2fc34bf7a83	libmpd-11.8.17.tar.gz
++# From http://www.networkupstools.org/source/2.7/nut-2.7.2.tar.gz.sha256
++sha256	4d5365359b059d96dfcb77458f361a114d26c84f1297ffcd0c6c166f7200376d	nut-2.7.2.tar.gz
