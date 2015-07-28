@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit] lzma: add hash file
-Message-ID: <20150728204048.0CDE17F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:11 +0200
+Subject: [Buildroot] [git commit] php-memcached: add hash file
+Message-ID: <20150728204048.C31D381E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7d2bb69e71754e4fe96555efbce5c86f0f9f987
+commit: http://git.buildroot.net/buildroot/commit/?id=c42841ebbbe874b7e85e102b8e7e6a435ec9aede
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lzma/lzma.hash |    2 ++
+ package/php-memcached/php-memcached.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lzma/lzma.hash b/package/lzma/lzma.hash
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
 new file mode 100644
-index 0000000..e73517c
+index 0000000..bc2e97a
 --- /dev/null
-+++ b/package/lzma/lzma.hash
++++ b/package/php-memcached/php-memcached.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	02aa57f995d15b7acb7c2496d88a39fb0124ea00bf027cc61dd24eddb5942dff	lzma-4.32.7.tar.xz
++sha256	17b9600f6d4c807f23a3f5c45fcd8775ca2e61d6eda70370af2bef4c6e159f58	memcached-2.2.0.tgz
