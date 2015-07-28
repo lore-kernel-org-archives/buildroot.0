@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:14 +0200
-Subject: [Buildroot] [git commit] dcron: add hash file
-Message-ID: <20150728204054.926D77F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit] libqrencode: add hash file
+Message-ID: <20150728204047.635E381E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=611714a0020a15ce2f371d8ffc26f84fb07daf7d
+commit: http://git.buildroot.net/buildroot/commit/?id=d15d8996cf99e4676c2e5f086ebc5ff91783db21
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dcron/dcron.hash |    2 ++
+ package/libqrencode/libqrencode.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dcron/dcron.hash b/package/dcron/dcron.hash
+diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
 new file mode 100644
-index 0000000..3e53ddc
+index 0000000..8c94ccd
 --- /dev/null
-+++ b/package/dcron/dcron.hash
++++ b/package/libqrencode/libqrencode.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	9e50edb6f5bd8153b16bad05087d985e5153ce45cc01ae77e7f842213fb4a824	dcron-4.5.tar.gz
++# From http://fukuchi.org/works/qrencode/qrencode-3.4.2.tar.gz.sha1
++sha1	7daaad61f333ff6cdabfb0d925c3ab668d16dee2	qrencode-3.4.2.tar.gz
