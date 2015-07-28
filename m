@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit] sound-theme-freedesktop: add hash file
-Message-ID: <20150728204054.16DC97FE8D@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:57 +0200
+Subject: [Buildroot] [git commit] libsocketcan: add hash file
+Message-ID: <20150728204047.907E47F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c8d44bd5f9a9e6a3d7a0b51b13307923f4dc1bd
+commit: http://git.buildroot.net/buildroot/commit/?id=fa0537d150f7515db2786a23e6a8727eda0e5af8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../sound-theme-freedesktop.hash                   |    2 ++
+ package/libsocketcan/libsocketcan.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sound-theme-freedesktop/sound-theme-freedesktop.hash b/package/sound-theme-freedesktop/sound-theme-freedesktop.hash
+diff --git a/package/libsocketcan/libsocketcan.hash b/package/libsocketcan/libsocketcan.hash
 new file mode 100644
-index 0000000..cde02ca
+index 0000000..2546c66
 --- /dev/null
-+++ b/package/sound-theme-freedesktop/sound-theme-freedesktop.hash
++++ b/package/libsocketcan/libsocketcan.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	e6595afb02b76099ef6df42c2ac7c4f9680c21c3f26b2a7ca0943d1fdbbd9aef	sound-theme-freedesktop-0.7.tar.bz2
++sha256	3c83e386c3fa7673141658472ae0b0e2a9f5849bf52fd9f7b22b04fd98ec7b6e	libsocketcan-0.0.10.tar.bz2
