@@ -1,67 +1,129 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Tue, 28 Jul 2015 10:21:31 +0200
-Subject: [Buildroot] [PATCH v2] package/dropbear: Fix symlink only if
-	pointing to the right directory
-Message-ID: <1438071691-9078-1-git-send-email-paul@crapouillou.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2015 10:22:53 +0200
+Subject: [Buildroot] [PATCH 2/2] Remmina: new package
+In-Reply-To: <1438071328-12502-2-git-send-email-fancp2007@gmail.com>
+References: <1438071328-12502-1-git-send-email-fancp2007@gmail.com>
+ <1438071328-12502-2-git-send-email-fancp2007@gmail.com>
+Message-ID: <20150728102253.713de783@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit ensures that the /etc/dropbear symlink won't be removed if
-it points elsewhere than /var/run/dropbear.
+Dear Scott Fan,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
+On Tue, 28 Jul 2015 16:15:28 +0800, Scott Fan wrote:
+> Remmina is a remote desktop client written in GTK+.
+> Currently RDP, VNC, NX, XDMCP and SSH are supported.
+> 
+> http://remmina.sourceforge.net/
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-v2: Use "readlink -f", as the symbolic link might be pointing to a relative
-path and not an absolute path.
+Thanks for this contribution. See some comments below.
 
- package/dropbear/S50dropbear      | 6 ++++--
- package/dropbear/dropbear.service | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+> diff --git a/package/remmina/0001-libintl-underlink.patch b/package/remmina/0001-libintl-underlink.patch
+> new file mode 100644
+> index 0000000..6afba38
+> --- /dev/null
+> +++ b/package/remmina/0001-libintl-underlink.patch
+> @@ -0,0 +1,11 @@
 
-diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-index af50ccf..f551677 100644
---- a/package/dropbear/S50dropbear
-+++ b/package/dropbear/S50dropbear
-@@ -12,12 +12,14 @@ start() {
- 	echo -n "Starting dropbear sshd: "
- 	umask 077
- 
--	# If /etc/dropbear is not a directory, and
-+	# If /etc/dropbear is a symlink to /var/run/dropbear, and
- 	#   - the filesystem is RO (i.e. we can not rm the symlink),
- 	#     create the directory pointed to by the symlink.
- 	#   - the filesystem is RW (i.e. we can rm the symlink),
- 	#     replace the symlink with an actual directory
--	if ! [ -d /etc/dropbear ]; then
-+	if [ -L /etc/dropbear \
-+		-a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
-+	then
- 		if rm -f /etc/dropbear; then
- 			mkdir -p /etc/dropbear
- 		else
-diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
-index 0e2cf54..f1d4d5d 100644
---- a/package/dropbear/dropbear.service
-+++ b/package/dropbear/dropbear.service
-@@ -3,13 +3,13 @@ Description=Dropbear SSH daemon
- After=syslog.target network.target auditd.service
- 
- [Service]
--# If /etc/dropbear is not a directory, and
-+# If /etc/dropbear is a symlink to /var/run/dropbear, and
- #   - the filesystem is RO (i.e. we can not rm the symlink),
- #     create the directory pointed to by the symlink.
- #   - the filesystem is RW (i.e. we can rm the symlink),
- #     replace the symlink with an actual directory
- ExecStartPre=/bin/sh -c '\
--if ! [ -d /etc/dropbear ]; then \
-+if [ -L /etc/dropbear -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]; then \
-     if rm -f /etc/dropbear; then \
-         mkdir -p /etc/dropbear; \
-     else \
+All patches should have a description + Signed-off-by. See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+
+> +--- ./remmina/CMakeLists.txt.orig
+> ++++ ./remmina/CMakeLists.txt
+> +@@ -91,7 +91,7 @@
+> + add_executable(remmina ${REMMINA_SRCS})
+> + 
+> + include_directories(${GTK_INCLUDE_DIRS})
+> +-target_link_libraries(remmina ${GTK_LIBRARIES})
+> ++target_link_libraries(remmina ${GTK_LIBRARIES} -lintl)
+
+This is not good: libintl may not exist. If you're using glibc, then
+the gettext functions are provided by the C library itself.
+
+> diff --git a/package/remmina/Config.in b/package/remmina/Config.in
+> new file mode 100644
+> index 0000000..168f898
+> --- /dev/null
+> +++ b/package/remmina/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_REMMINA
+> +	bool "Remmina"
+
+lowercase
+
+> +	depends on BR2_PACKAGE_LIBGTK3
+> +	select BR2_PACKAGE_LIBGCRYPT
+> +	select BR2_PACKAGE_LIBSSH
+> +	select BR2_PACKAGE_LIBVNCSERVER
+
+libvncserver depends on BR2_USE_MMU, so you need to propagate this
+dependency. Though I admit this dependency is already inherited by the
+libgtk3 dependency.
+
+> +	select BR2_PACKAGE_FREERDP
+
+Depends on wchar, !static libs and threads. For example, libgtk3 does
+not have the !static libs dependency.
+
+> +	select BR2_PACKAGE_GETTEXT
+
+This looks suspicious. Look at
+http://buildroot.org/downloads/manual/manual.html#_gettext_integration_and_interaction_with_packages.
+
+
+> +	help
+> +	  Remmina is a remote desktop client written in GTK+, aiming to be useful for 
+> +	  system administrators and travellers, who need to work with lots of remote 
+> +	  computers in front of either large monitors or tiny netbooks. 
+> +
+> +	  Remmina supports multiple network protocols in an integrated and consistent 
+> +	  user interface. Currently RDP, VNC, NX, XDMCP and SSH are supported.
+
+Lines too long, please wrap at 72 characters.
+
+> +	  http://remmina.sourceforge.net/
+> diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
+> new file mode 100644
+> index 0000000..0a03f3d
+> --- /dev/null
+> +++ b/package/remmina/remmina.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# Remmina
+
+lowercase
+
+> +#
+> +################################################################################
+> +
+> +REMMINA_VERSION = v1.1.2
+> +REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
+> +REMMINA_DEPENDENCIES = libgtk3 libgcrypt libssh libvncserver freerdp gettext
+> +REMMINA_LICENSE = GPLv2
+
+The license is GPLv2+ with OpenSSL exception
+
+> +REMMINA_LICENSE_FILES = LICENSE
+
+Should also contain COPYING and LICENSE.OpenSSL
+
+> +
+> +REMMINA_CONF_OPTS = \
+> +	-DWITH_AVAHI=OFF \
+> +	-DWITH_APPINDICATOR=OFF \
+> +	-DWITH_TELEPATHY=OFF \
+> +	-DWITH_GNOMEKEYRING=OFF
+> +
+> +$(eval $(cmake-package))
+
+Thomas
 -- 
-2.4.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
