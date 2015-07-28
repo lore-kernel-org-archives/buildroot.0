@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] liblinear: add hash file
-Message-ID: <20150728204047.0C9C27F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit] ramsmp: add hash file
+Message-ID: <20150728204051.A3C797F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=929f2da54d26e26cab6e942ee67d42fabe49a7fc
+commit: http://git.buildroot.net/buildroot/commit/?id=42fd7728022014f0b4955160d5e92f3c537f6b5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/liblinear/liblinear.hash |    2 ++
+ package/ramsmp/ramsmp.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+diff --git a/package/ramsmp/ramsmp.hash b/package/ramsmp/ramsmp.hash
 new file mode 100644
-index 0000000..8a335cc
+index 0000000..46aa3f1
 --- /dev/null
-+++ b/package/liblinear/liblinear.hash
++++ b/package/ramsmp/ramsmp.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	0ab97ca81c62457fcfe78f56619a7b2f70c1f7c875b4101827343555b4f6c3f4	liblinear-1.96.tar.gz
++# Locally computed
++sha256	39fb15493fb3c293575746d56f6ab9faaa1d876d8b1f0d8e5a4042d2ace95839	ramsmp-3.5.0.tar.gz
