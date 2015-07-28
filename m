@@ -1,40 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 28 Jul 2015 21:02:43 +0000
-Subject: [Buildroot] [PATCH] binutils: more fixes for arc-2015.06 tools
-In-Reply-To: <20150728225707.1b257d69@free-electrons.com>
-References: <1438090392-30182-1-git-send-email-abrodkin@synopsys.com>
- <20150728225707.1b257d69@free-electrons.com>
-Message-ID: <1438117363.23193.1.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2015 23:06:57 +0200
+Subject: [Buildroot] [git commit] libiscsi: Force configure to use gcc for LD
+Message-ID: <20150728210734.0D5438177A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=84471f1e4b531a262e8f4d2423baf5257ecd29fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 2015-07-28 at 22:57 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue, 28 Jul 2015 16:33:12 +0300, Alexey Brodkin wrote:
-> > Two patches below are taken from development branch of ARC binutils,
-> > so one the next release of ARC tools happens both patches must be removed.
-> > 
-> > These 2 patches:
-> >  0003-ld-arc-Provide-the-.tdata-symbol.patch
-> >  0004-Provide-.tbss-symbol.patch
-> > fix missing .tbss and .tdata sections during linkage stage such as:
-> > ------------------------------>8---------------------------
-> > arc-linux-g++ test.cpp
-> > ../arc-buildroot-linux-uclibc/lib/libstdc++.so: undefined reference to '.tbss'
-> > collect2: error: ld returned 1 exit status
-> > ------------------------------>8---------------------------
-> 
-> Applied, thanks. After applying this patch, I've started a rebuild of
-> the pre-built ARC external toolchain, so that we test with the latest
-> fixes. I will deploy it probably tomorrow morning.
+Fixes
+http://autobuild.buildroot.org/results/0a9/0a96f3654983ed2efc851522352dec43c1df0077/
 
-Yep this is what I wanted to ask you once both patches are applied.
-Let's see if we finally get less failures for ARC.
+[Thomas:
+  - pass the CC variable in <pkg>_CONF_ENV instead of <pkg>_CONF_OPTS
+  - add comment in the code explaining why we are doing this.]
 
--Alexey
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libiscsi/libiscsi.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
+index 7877cd9..adb94bd 100644
+--- a/package/libiscsi/libiscsi.mk
++++ b/package/libiscsi/libiscsi.mk
+@@ -10,4 +10,8 @@ LIBISCSI_LICENSE = GPLv2+ LGPLv2.1+
+ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
+ LIBISCSI_INSTALL_STAGING = YES
+ 
++# Force libiscsi to use gcc as the linker, otherwise it uses directly
++# ld, which doesn't work for certain architectures.
++LIBISCSI_CONF_ENV = LD="$(TARGET_CC)"
++
+ $(eval $(autotools-package))
