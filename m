@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit branch/next] libraw1394: add hash file
-Message-ID: <20150808105646.406D47FE8F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:57 +0200
+Subject: [Buildroot] [git commit branch/next] libyaml: add hash file
+Message-ID: <20150808105646.7DDCF7FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e7ca5814f1424220d72dcdc0ffcfc14ca3224ca
+commit: http://git.buildroot.net/buildroot/commit/?id=c3273b7d650aec23da0d66c0d9356b1fadd51551
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libraw1394/libraw1394.hash |    2 ++
+ package/libyaml/libyaml.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libraw1394/libraw1394.hash b/package/libraw1394/libraw1394.hash
+diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
 new file mode 100644
-index 0000000..5d18e98
+index 0000000..fd039fa
 --- /dev/null
-+++ b/package/libraw1394/libraw1394.hash
++++ b/package/libyaml/libyaml.hash
 @@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/libs/ieee1394/sha256sums.asc
-+sha256	e3dc814bc8014cc0bd306767c15e686c9b3b07fcacbbf62862fb1c1de2d708a4	libraw1394-2.0.7.tar.xz
++# Locally calculated
++sha256	7da6971b4bd08a986dd2a61353bc422362bd0edcc67d7ebaac68c95f74182749	yaml-0.1.6.tar.gz
