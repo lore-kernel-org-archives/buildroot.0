@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit] sound-theme-borealis: add hash file
-Message-ID: <20150728204054.049FF7F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:11 +0200
+Subject: [Buildroot] [git commit] polkit: add hash file
+Message-ID: <20150728204048.EA03681E6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=930d31f9e6e2ba474d177785b02d3912ab6af6bf
+commit: http://git.buildroot.net/buildroot/commit/?id=b123c9f04d3c9f6d821c7582f9f9b3458b05a2c4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../sound-theme-borealis/sound-theme-borealis.hash |    2 ++
+ package/polkit/polkit.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sound-theme-borealis/sound-theme-borealis.hash b/package/sound-theme-borealis/sound-theme-borealis.hash
+diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
 new file mode 100644
-index 0000000..7a4d3e1
+index 0000000..5e133b4
 --- /dev/null
-+++ b/package/sound-theme-borealis/sound-theme-borealis.hash
++++ b/package/polkit/polkit.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	dd80a9c6317de29d42786ba7d95b114b64d06ec6c0c17dd18df853a5c668e727	Borealis_sound_theme_ogg-0.9a.tar.bz2
++# Locally calculated after checking pgp signature
++sha256	36607c8ce576980ee55bd12bab1944f13217eb8e9d04ab56022545861ece3bc5	polkit-0.103.tar.gz
