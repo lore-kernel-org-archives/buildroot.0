@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:40:13 -0300
-Subject: [Buildroot] [PATCH 072/113] php-geoip: add hash file
+Date: Tue, 28 Jul 2015 15:40:14 -0300
+Subject: [Buildroot] [PATCH 073/113] php-imagick: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-72-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-73-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/php-geoip/php-geoip.hash | 2 ++
+ package/php-imagick/php-imagick.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/php-geoip/php-geoip.hash
+ create mode 100644 package/php-imagick/php-imagick.hash
 
-diff --git a/package/php-geoip/php-geoip.hash b/package/php-geoip/php-geoip.hash
+diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
 new file mode 100644
-index 0000000..275a098
+index 0000000..6173eca
 --- /dev/null
-+++ b/package/php-geoip/php-geoip.hash
++++ b/package/php-imagick/php-imagick.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	82c6deb7264d2ff7c4d6c45a7d27cff7ab097be965795e317e04a9c5b7be98b9	geoip-1.1.0.tgz
++sha256	528769ac304a0bbe9a248811325042188c9d16e06de16f111fee317c85a36c93	imagick-3.1.2.tgz
 -- 
 2.3.6
