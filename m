@@ -1,86 +1,118 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:56:09 +0200
-Subject: [Buildroot] [git commit branch/next] iproute2: needs headers >= 3.0
-Message-ID: <20150808105649.30C547FE8F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:44:29 +0200
+Subject: [Buildroot] [git commit branch/next] binutils: rename config option
+Message-ID: <20150808105648.F1E287FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=869af2ad3de46c79677699f007a5ee942aa0bb3d
+commit: http://git.buildroot.net/buildroot/commit/?id=f84cc202aa04a1a4754a367f3b440c1f8cb38db9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The newest iproute2 version requires a toolchain with headers >= 3.0 for
-proper namespace & bpf support, so adjust the dependencies and
-dependants accordingly. Fixes:
-
-http://autobuild.buildroot.net/results/fa8/fa810f310c7540e02c0ed84c4a3ce74ab602daa5/
+Rename the binutils configuration option to match that one used by gcc
+where the patchlevel is explicitly left out.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ifupdown/Config.in |    6 ++++--
- package/iproute2/Config.in |    5 +++++
- package/openswan/Config.in |    5 +++++
- 3 files changed, 14 insertions(+), 2 deletions(-)
+ Config.in.legacy                |   27 +++++++++++++++++++++++++++
+ package/binutils/Config.in.host |   14 +++++++-------
+ package/gcc/Config.in.host      |    2 +-
+ 3 files changed, 35 insertions(+), 8 deletions(-)
 
-diff --git a/package/ifupdown/Config.in b/package/ifupdown/Config.in
-index 10cf2be..1e11e4e 100644
---- a/package/ifupdown/Config.in
-+++ b/package/ifupdown/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_IFUPDOWN
- 	bool "ifupdown"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
- 	# Default/our uclibc lacks wordexp()
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	# runtime for ip binary
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_IFUPDOWN
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4afeb83..08caa8b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,33 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.08"
  
- 	  https://tracker.debian.org/pkg/ifupdown
- 
--comment "ifupdown needs an (e)glibc or musl toolchain"
-+comment "ifupdown needs an (e)glibc or musl toolchain w/ headers >= 3.0"
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/iproute2/Config.in b/package/iproute2/Config.in
-index 0662492..fd373a8 100644
---- a/package/iproute2/Config.in
-+++ b/package/iproute2/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_IPROUTE2
- 	bool "iproute2"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # bpf, namespaces
- 	help
- 	  Kernel routing and traffic control utilities. Provides things
- 	  like ip and tc.
- 
- 	  http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2
++config BR2_BINUTILS_VERSION_2_23_2
++	bool "binutils 2.23 option renamed"
++	select BR2_LEGACY
++	select BR2_BINUTILS_VERSION_2_23_X
++	help
++	  The binutils version option has been renamed to match the
++	  same patchlevel logic used by gcc. The new option is now
++	  BR2_BINUTILS_VERSION_2_23_X.
 +
-+comment "iproute2 needs a toolchain w/ headers >= 3.0"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-index 932a75f..0370143 100644
---- a/package/openswan/Config.in
-+++ b/package/openswan/Config.in
-@@ -1,9 +1,14 @@
- config BR2_PACKAGE_OPENSWAN
- 	bool "openswan"
- 	depends on BR2_USE_MMU # iproute2
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
- 	select BR2_PACKAGE_GMP
- 	select BR2_PACKAGE_IPROUTE2
- 	help
- 	  Openswan is an implementation of IPsec for Linux
- 
- 	  http://www.openswan.org
++config BR2_BINUTILS_VERSION_2_24
++	bool "binutils 2.24 option renamed"
++	select BR2_LEGACY
++	select BR2_BINUTILS_VERSION_2_24_X
++	help
++	  The binutils version option has been renamed to match the
++	  same patchlevel logic used by gcc. The new option is now
++	  BR2_BINUTILS_VERSION_2_24_X.
 +
-+comment "openswan needs a toolchain w/ headers >= 3.0"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++config BR2_BINUTILS_VERSION_2_25
++	bool "binutils 2.25 option renamed"
++	select BR2_LEGACY
++	select BR2_BINUTILS_VERSION_2_25_X
++	help
++	  The binutils version option has been renamed to match the
++	  same patchlevel logic used by gcc. The new option is now
++	  BR2_BINUTILS_VERSION_2_25_X.
++
+ config BR2_PACKAGE_PERF
+ 	bool "perf option has been renamed"
+ 	select BR2_LEGACY
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 70253cc..6e7acab 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -3,21 +3,21 @@ comment "Binutils Options"
+ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
+-	default BR2_BINUTILS_VERSION_2_24
++	default BR2_BINUTILS_VERSION_2_24_X
+ 	help
+ 	  Select the version of binutils you wish to use.
+ 
+-	config BR2_BINUTILS_VERSION_2_23_2
++	config BR2_BINUTILS_VERSION_2_23_X
+ 		depends on !BR2_aarch64 && !BR2_microblaze && \
+ 			   !BR2_powerpc64le && !BR2_nios2
+ 		bool "binutils 2.23.2"
+ 
+-	config BR2_BINUTILS_VERSION_2_24
++	config BR2_BINUTILS_VERSION_2_24_X
+ 		# supported, but broken on Nios-II and powerpc64le
+ 		depends on !BR2_nios2 && !BR2_powerpc64le
+ 		bool "binutils 2.24"
+ 
+-	config BR2_BINUTILS_VERSION_2_25
++	config BR2_BINUTILS_VERSION_2_25_X
+ 		bool "binutils 2.25"
+ 
+ endchoice
+@@ -25,9 +25,9 @@ endchoice
+ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "arc-2015.06"	if BR2_arc
+-	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
+-	default "2.24"		if BR2_BINUTILS_VERSION_2_24
+-	default "2.25"		if BR2_BINUTILS_VERSION_2_25
++	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_X
++	default "2.24"		if BR2_BINUTILS_VERSION_2_24_X
++	default "2.25"		if BR2_BINUTILS_VERSION_2_25_X
+ 
+ config BR2_BINUTILS_ENABLE_LTO
+ 	bool
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 3d64b6f..93c9032 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -61,7 +61,7 @@ choice
+ 		# Broken or unsupported PPC cores
+ 		depends on !BR2_powerpc_power8
+ 		# gcc-4.8.x + binutils-2.25 is broken for MIPS
+-		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25)
++		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 
