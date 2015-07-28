@@ -1,77 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 23:46:52 +0200
-Subject: [Buildroot] [git commit branch/next] package/mosh: remove
-	unnecessary patch
-Message-ID: <20150808105644.9B45C7FD83@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit branch/next] libosip2: add hash file
+Message-ID: <20150808105646.1A94D7FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=37dde2d31348ca35c816109f529a57bfc24bec26
+commit: http://git.buildroot.net/buildroot/commit/?id=f4b00fe29cc6632a24e883c6ecb92693fc30ddd4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-According to upstream (keithw/mosh issue #650), it's okay to have the
-"locale" system command fail with "command not found" because this is a
-non-critical action that occurs just before Mosh exits with an error
-anyway. Thus, this patch is unnecssary, and can be removed.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mosh/0001-remove-system-locale-calls.patch |   46 --------------------
- 1 files changed, 0 insertions(+), 46 deletions(-)
+ package/libosip2/libosip2.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mosh/0001-remove-system-locale-calls.patch b/package/mosh/0001-remove-system-locale-calls.patch
-deleted file mode 100644
-index 114e6ed..0000000
---- a/package/mosh/0001-remove-system-locale-calls.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--The locale command is not available on many systems. As this variable
--is unused and appears to have been written with the intent of
--displaying the locale settings to the user, it's not really necessary.
--As this breaks Mosh on a lot of systems, it's best to remove the calls.
--
--Upstream status: refused, see: https://github.com/keithw/mosh/issues/650
--
--Signed-off-by: Christian Stewart <christian@paral.in>
-----
-- src/frontend/mosh-server.cc | 4 +++-
-- src/frontend/stmclient.cc   | 4 +++-
-- 2 files changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/src/frontend/mosh-server.cc b/src/frontend/mosh-server.cc
--index 76ed2ed..0d2f222 100644
----- a/src/frontend/mosh-server.cc
--+++ b/src/frontend/mosh-server.cc
--@@ -313,7 +313,9 @@ int main( int argc, char *argv[] )
--       fprintf( stderr, "mosh-server needs a UTF-8 native locale to run.\n\n" );
--       fprintf( stderr, "Unfortunately, the local environment (%s) specifies\nthe character set \"%s\",\n\n", native_ctype.str().c_str(), native_charset.c_str() );
--       fprintf( stderr, "The client-supplied environment (%s) specifies\nthe character set \"%s\".\n\n", client_ctype.str().c_str(), client_charset.c_str() );
---      int unused __attribute((unused)) = system( "locale" );
--+
--+      fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
--+
--       exit( 1 );
--     }
--   }
--diff --git a/src/frontend/stmclient.cc b/src/frontend/stmclient.cc
--index 9e4d916..06fac8b 100644
----- a/src/frontend/stmclient.cc
--+++ b/src/frontend/stmclient.cc
--@@ -85,7 +85,9 @@ void STMClient::init( void )
-- 
--     fprintf( stderr, "mosh-client needs a UTF-8 native locale to run.\n\n" );
--     fprintf( stderr, "Unfortunately, the client's environment (%s) specifies\nthe character set \"%s\".\n\n", native_ctype.str().c_str(), native_charset.c_str() );
---    int unused __attribute((unused)) = system( "locale" );
--+
--+    fprintf( stderr, "This is a buildroot system, 'locale' debug output has been removed." );
--+
--     exit( 1 );
--   }
-- 
---- 
--2.1.4
--
+diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
+new file mode 100644
+index 0000000..9ff2d9a
+--- /dev/null
++++ b/package/libosip2/libosip2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	c9a18b0c760506d150017cdb1fa5c1cefe12b8dcbbf9a7e784eb75af376e96cd	libosip2-3.6.0.tar.gz
