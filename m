@@ -1,57 +1,218 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 23:37:39 +0200
-Subject: [Buildroot] [git commit branch/next] docs/manual: Modify GitHub
-	FOO_SITE explanation
-Message-ID: <20150808105649.8F2E47FE8F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 23:13:03 +0200
+Subject: [Buildroot] [git commit branch/next] package/acpid: fix musl build
+	problem
+Message-ID: <20150808105649.54D5F81915@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8d281d816f5c7bf85b3643892b0edd9406dcb4b
+commit: http://git.buildroot.net/buildroot/commit/?id=1b53609f993bf52c4b201d412fd88a38b334ab62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-GitHub has changed its layout, there is no longer any green nor grey
-button, it's a link with a tiny icon that indicates if it's uploaded by
-the maintainer or not.
-In order to not confuse anyone, adding an image should make it clear.
+Fixes http://autobuild.buildroot.net/results/7e6/7e60af535dd4177afdc4cb7b92e9abf27c3fba07
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Lionel Orry <lionel.orry@gmail.com>
+acpid uses TEMP_FAILURE_RETRY which is a glibc feature.
+patch adds this macro if it is not present and __GLIBC__
+is undefined.
+
+Patch submitted upstream.
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-tips.txt         |   18 ++++++++++--------
- docs/website/images/github_hash_mongrel2.png |  Bin 0 -> 19029 bytes
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ .../acpid/0003-support-for-non-glibc-libcs.patch   |  184 ++++++++++++++++++++
+ 1 files changed, 184 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 6699951..896be00 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -63,11 +63,13 @@ need to do AUTORECONF).
- 
- You can see on the release page if it's an uploaded tarball or a git tag:
- 
--- If there is a green download button, like
--  https://github.com/zedshaw/mongrel2/releases/tag/v1.9.1[mongrel2], then it
--  was uploaded by the maintainer and you should use the link of that button to
--  specify +FOO_SITE+, and not use the 'github' helper.
--- If there is grey download button, like
--  https://github.com/xbmc/xbmc/releases/tag/13.2-Gotham[xbmc], then it's an
--  automatically generated tarball and you should use the 'github' helper
--  function.
-+image::github_hash_mongrel2.png[]
-+
-+- If it looks like the image above then it was uploaded by the
-+  maintainer and you should use that link (in that example:
-+  'mongrel2-v1.9.2.tar.bz2') to specify +FOO_SITE+, and not use the
-+  'github' helper.
-+
-+- On the other hand, if there's is *only* the "Source code" link, then
-+  it's an automatically generated tarball and you should use the
-+  'github' helper function.
-diff --git a/docs/website/images/github_hash_mongrel2.png b/docs/website/images/github_hash_mongrel2.png
+diff --git a/package/acpid/0003-support-for-non-glibc-libcs.patch b/package/acpid/0003-support-for-non-glibc-libcs.patch
 new file mode 100644
-index 0000000..c695c31
-Binary files /dev/null and b/docs/website/images/github_hash_mongrel2.png differ
+index 0000000..f152d32
+--- /dev/null
++++ b/package/acpid/0003-support-for-non-glibc-libcs.patch
+@@ -0,0 +1,184 @@
++From a3dac1c3cee169e52c7d644dd565235a1cd833e3 Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Wed, 22 Jul 2015 23:10:11 +0100
++Subject: [PATCH] support for non-glibc libcs
++
++Added a TEMP_FAILURE_RETRY macro. This is a glibcism provided by
++glibc and uclibc, but missing from musl (& possibly other libcs).
++
++Upstream-status: submitted (see https://sourceforge.net/p/acpid2/tickets/7/)
++---
++ acpi_listen.c         |  2 ++
++ acpid.c               |  1 +
++ event.c               |  2 ++
++ input_layer.c         |  1 +
++ kacpimon/libnetlink.h |  2 ++
++ libc_compat.h         | 40 ++++++++++++++++++++++++++++++++++++++++
++ libnetlink.c          |  2 ++
++ netlink.c             |  1 +
++ proc.c                |  1 +
++ ud_socket.c           |  1 +
++ 10 files changed, 53 insertions(+)
++ create mode 100644 libc_compat.h
++
++diff --git a/acpi_listen.c b/acpi_listen.c
++index d0bc175..839e4f9 100644
++--- a/acpi_listen.c
+++++ b/acpi_listen.c
++@@ -39,6 +39,8 @@
++ #include "acpid.h"
++ #include "ud_socket.h"
++ 
+++#include "libc_compat.h"
+++
++ static int handle_cmdline(int *argc, char ***argv);
++ static char *read_line(int fd);
++ 
++diff --git a/acpid.c b/acpid.c
++index 23f1e58..8555c82 100644
++--- a/acpid.c
+++++ b/acpid.c
++@@ -41,6 +41,7 @@
++ #include "input_layer.h"
++ #include "inotify_handler.h"
++ #include "netlink.h"
+++#include "libc_compat.h"
++ 
++ static int handle_cmdline(int *argc, char ***argv);
++ static void close_fds(void);
++diff --git a/event.c b/event.c
++index 324078f..3b069a2 100644
++--- a/event.c
+++++ b/event.c
++@@ -39,6 +39,8 @@
++ #include "log.h"
++ #include "sock.h"
++ #include "ud_socket.h"
+++#include "libc_compat.h"
+++
++ #include "event.h"
++ /*
++  * What is a rule?  It's polymorphic, pretty much.
++diff --git a/input_layer.c b/input_layer.c
++index 9aa19c6..cbf8085 100644
++--- a/input_layer.c
+++++ b/input_layer.c
++@@ -42,6 +42,7 @@
++ #include "log.h"
++ #include "connection_list.h"
++ #include "event.h"
+++#include "libc_compat.h"
++ 
++ #include "input_layer.h"
++ 
++diff --git a/kacpimon/libnetlink.h b/kacpimon/libnetlink.h
++index 6185cbc..0c61896 100644
++--- a/kacpimon/libnetlink.h
+++++ b/kacpimon/libnetlink.h
++@@ -7,6 +7,8 @@
++ #include <linux/netlink.h>
++ #include <linux/rtnetlink.h>
++ 
+++#include "libc_compat.h"
+++
++ struct rtnl_handle
++ {
++ 	int			fd;
++diff --git a/libc_compat.h b/libc_compat.h
++new file mode 100644
++index 0000000..39f2336
++--- /dev/null
+++++ b/libc_compat.h
++@@ -0,0 +1,40 @@
+++/*
+++ *  libc_compat.h - implement defs/macros missing from some libcs
+++ *
+++ *  Copyright (C) 1999-2000 Andrew Henroid
+++ *  Copyright (C) 2001 Sun Microsystems
+++ *  Portions Copyright (C) 2004 Tim Hockin (thockin at hockin.org)
+++ *
+++ *  This program is free software; you can redistribute it and/or modify
+++ *  it under the terms of the GNU General Public License as published by
+++ *  the Free Software Foundation; either version 2 of the License, or
+++ *  (at your option) any later version.
+++ *
+++ *  This program is distributed in the hope that it will be useful,
+++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++ *  GNU General Public License for more details.
+++ *
+++ *  You should have received a copy of the GNU General Public License
+++ *  along with this program; if not, write to the Free Software
+++ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+++ */
+++
+++#ifndef LIBC_COMPAT_H__
+++#define LIBC_COMPAT_H__
+++
+++/* Evaluate EXPRESSION, and repeat as long as it returns -1 with `errno'
+++   set to EINTR. This macro is present on glibc/uclibc but may not be in other cases.  */
+++
+++#ifndef ____GLIBC__
+++#ifndef TEMP_FAILURE_RETRY
+++#define TEMP_FAILURE_RETRY(expression) \
+++  (__extension__                                                             \
+++    ({ long int __result;                                                    \
+++       do __result = (long int) (expression);                                \
+++       while (__result == -1L && errno == EINTR);                            \
+++       __result; }))
+++#endif
+++#endif /* __GLIBC__ */
+++
+++#endif /* LIBC_COMPAT_H__ */
++diff --git a/libnetlink.c b/libnetlink.c
++index e61d417..cc7aedc 100644
++--- a/libnetlink.c
+++++ b/libnetlink.c
++@@ -24,6 +24,8 @@
++ #include <time.h>
++ #include <sys/uio.h>
++ 
+++#include "libc_compat.h"
+++
++ #include "libnetlink.h"
++ 
++ void rtnl_close(struct rtnl_handle *rth)
++diff --git a/netlink.c b/netlink.c
++index c64e878..27e3536 100644
++--- a/netlink.c
+++++ b/netlink.c
++@@ -41,6 +41,7 @@
++ #include "libnetlink.h"
++ #include "genetlink.h"
++ #include "acpi_genetlink.h"
+++#include "libc_compat.h"
++ 
++ #include "acpi_ids.h"
++ #include "connection_list.h"
++diff --git a/proc.c b/proc.c
++index 5bb8fa2..f96b913 100644
++--- a/proc.c
+++++ b/proc.c
++@@ -31,6 +31,7 @@
++ #include "log.h"
++ #include "event.h"
++ #include "connection_list.h"
+++#include "libc_compat.h"
++ 
++ #include "proc.h"
++ 
++diff --git a/ud_socket.c b/ud_socket.c
++index 2790686..1790917 100644
++--- a/ud_socket.c
+++++ b/ud_socket.c
++@@ -21,6 +21,7 @@
++ #include "acpid.h"
++ #include "log.h"
++ #include "ud_socket.h"
+++#include "libc_compat.h"
++ 
++ int
++ ud_create_socket(const char *name, mode_t socketmode)
++-- 
++2.4.3
++
