@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 09:53:38 +0200
-Subject: [Buildroot] [git commit] vsftpd: bump to version 3.0.3
-Message-ID: <20150728075357.52A7E81E57@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 09:53:44 +0200
+Subject: [Buildroot] [git commit] stunnel: bump to version 5.21
+Message-ID: <20150728075357.5D9B47FBAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c455a4fe7d51308ebe5aa277be117b42048620b2
+commit: http://git.buildroot.net/buildroot/commit/?id=2a2ee97d1698ba1a624fb0b48655e9b17c395263
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vsftpd/vsftpd.hash |    2 +-
- package/vsftpd/vsftpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.hash |    4 ++--
+ package/stunnel/stunnel.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.hash b/package/vsftpd/vsftpd.hash
-index 6b46e4b..a0cd55b 100644
---- a/package/vsftpd/vsftpd.hash
-+++ b/package/vsftpd/vsftpd.hash
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 91b297c..5e75b2e 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	be46f0e2c5528fe021fafc8dab1ecfea0c1f183063a06977f8537fcd0b195e56	vsftpd-3.0.2.tar.gz
-+sha256	9d4d2bf6e6e2884852ba4e69e157a2cecd68c5a7635d66a3a8cf8d898c955ef7	vsftpd-3.0.3.tar.gz
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index e5b505d..1e48264 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://www.stunnel.org/pipermail/stunnel-users/2015-June/005094.html
+-sha256	0532c0a2f8de3da1ab625e384146501ce5936fac63d01561c3a9bf652b692317	stunnel-5.18.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005180.html
++sha256	2aef568b1955f5e233f6a8e17ebce3d30755f1be44c813f5a48e621f785596e3	stunnel-5.21.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 4674694..5e9cd72 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--VSFTPD_VERSION = 3.0.2
-+VSFTPD_VERSION = 3.0.3
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
- VSFTPD_LICENSE = GPLv2
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).18
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).21
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
