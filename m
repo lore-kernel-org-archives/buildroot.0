@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:39:26 -0300
-Subject: [Buildroot] [PATCH 025/113] libbsd: add hash file
+Date: Tue, 28 Jul 2015 15:39:27 -0300
+Subject: [Buildroot] [PATCH 026/113] libebml: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-25-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-26-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libbsd/libbsd.hash | 2 ++
+ package/libebml/libebml.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/libbsd/libbsd.hash
+ create mode 100644 package/libebml/libebml.hash
 
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
 new file mode 100644
-index 0000000..be4ba50
+index 0000000..d5a8cb8
 --- /dev/null
-+++ b/package/libbsd/libbsd.hash
++++ b/package/libebml/libebml.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	9e8f34ffa9c8579c87965a55a82d8ac37a1dc64858f717b7c49452ade277cc62	libbsd-0.6.0.tar.xz
++# Locally calculated
++sha256	195894b31aaca55657c9bc157d744f23b0c25597606b97cfa5a9039c4b684295	libebml-1.3.1.tar.bz2
 -- 
 2.3.6
