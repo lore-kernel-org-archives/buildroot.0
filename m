@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] libmbus: add hash file
-Message-ID: <20150728204047.26AB47F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:10 +0200
+Subject: [Buildroot] [git commit] parted: add hash file
+Message-ID: <20150728204048.986A081E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7f56671bf211a8c32de60a278bf4a42bf3c67c5
+commit: http://git.buildroot.net/buildroot/commit/?id=9e7489508bd93eb70dde5b8169bdcb2953d3c214
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmbus/libmbus.hash |    2 ++
+ package/parted/parted.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmbus/libmbus.hash b/package/libmbus/libmbus.hash
+diff --git a/package/parted/parted.hash b/package/parted/parted.hash
 new file mode 100644
-index 0000000..faf6a27
+index 0000000..297b5d7
 --- /dev/null
-+++ b/package/libmbus/libmbus.hash
++++ b/package/parted/parted.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	9fca42592da0ba75df66c6f885a4dbfa916d23e65e3d1ce6e38d940d2a2719a4	libmbus-0.8.0.tar.gz
++# Locally calculated after checking pgp signature
++sha256	5e9cc1f91eaf016e5033d85b9b893fd6d3ffaca532a48de1082df9b94225ca15	parted-3.1.tar.xz
