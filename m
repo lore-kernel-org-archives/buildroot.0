@@ -1,84 +1,138 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 00:01:09 +0200
-Subject: [Buildroot] [git commit branch/next] python-pycli: new package
-Message-ID: <20150808105649.9762A81830@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 23:15:15 +0200
+Subject: [Buildroot] [git commit branch/next] usb_modeswitch: fix static
+	build failure
+Message-ID: <20150808105649.72A4B7FD56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ec19e5e47486d2ba61564b37f1c8b6e62ec6d28
+commit: http://git.buildroot.net/buildroot/commit/?id=c2cb0c420526906733d66c3229dce0f08cad437d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas:
-  - rewrap too long lines in Config.in help text
-  - add missing upstream URL in Config.in help text
-  - add missing hash file
-  - fix the licensing informations, which were incorrect
-  - remove duplicate <pkg>_SETUP_TYPE definition.]
+abort() is used in two different places, jim (proper C library abort)
+and usb_modeswitch.c (custom abort function).
+Status: emailed the patch to author.
 
-Signed-off-by: Geoffrey Ragot <geoffrey.ragot@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/789/7899a37d2c766716a1deff58e8be94c5c4962240/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |    1 +
- package/python-pycli/Config.in         |    7 +++++++
- package/python-pycli/python-pycli.hash |    4 ++++
- package/python-pycli/python-pycli.mk   |   14 ++++++++++++++
- 4 files changed, 26 insertions(+), 0 deletions(-)
+ package/usb_modeswitch/0001-rename-abort.patch |  105 ++++++++++++++++++++++++
+ 1 files changed, 105 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 8db91eb..eba74a0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -636,6 +636,7 @@ menu "external python modules"
- 	source "package/python-protobuf/Config.in"
- 	source "package/python-psutil/Config.in"
- 	source "package/python-pyasn/Config.in"
-+	source "package/python-pycli/Config.in"
- 	source "package/python-pycrypto/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pyftpdlib/Config.in"
-diff --git a/package/python-pycli/Config.in b/package/python-pycli/Config.in
+diff --git a/package/usb_modeswitch/0001-rename-abort.patch b/package/usb_modeswitch/0001-rename-abort.patch
 new file mode 100644
-index 0000000..e1ce3b9
+index 0000000..739e817
 --- /dev/null
-+++ b/package/python-pycli/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYCLI
-+	bool "python-pycli"
-+	help
-+	  The cli package is a framework for making simple, correct
-+	  command line applications in Python.
++++ b/package/usb_modeswitch/0001-rename-abort.patch
+@@ -0,0 +1,105 @@
++abort() is a C library function and used by Jim, so it results in
++a duplicate definition and confusion when linking statically.
 +
-+	  https://pythonhosted.org/pyCLI/
-diff --git a/package/python-pycli/python-pycli.hash b/package/python-pycli/python-pycli.hash
-new file mode 100644
-index 0000000..8be3178
---- /dev/null
-+++ b/package/python-pycli/python-pycli.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.python.org/pypi?:action=show_md5&digest=5cad880168f3423a1235b396735c1360
-+md5 5cad880168f3423a1235b396735c1360 pyCLI-devel.tar.gz
-+# Locally calculated
-+sha256 d7dc3245d79ef00ba5c0d6b008eb3d1a519c0df4cfa4467eee5160a80c6ddc0a pyCLI-devel.tar.gz
-diff --git a/package/python-pycli/python-pycli.mk b/package/python-pycli/python-pycli.mk
-new file mode 100644
-index 0000000..2d83acd
---- /dev/null
-+++ b/package/python-pycli/python-pycli.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pycli
-+#
-+################################################################################
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+PYTHON_PYCLI_VERSION = devel
-+PYTHON_PYCLI_SOURCE = pyCLI-$(PYTHON_PYCLI_VERSION).tar.gz
-+PYTHON_PYCLI_SITE = https://pypi.python.org/packages/source/p/pyCLI/
-+PYTHON_PYCLI_LICENSE = ISC-like
-+PYTHON_PYCLI_LICENSE_FILES = lib/cli/__init__.py
-+PYTHON_PYCLI_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
++diff -Nura usb-modeswitch-2.2.5.orig/usb_modeswitch.c usb-modeswitch-2.2.5/usb_modeswitch.c
++--- usb-modeswitch-2.2.5.orig/usb_modeswitch.c	2015-07-28 08:24:41.043352748 -0300
+++++ usb-modeswitch-2.2.5/usb_modeswitch.c	2015-07-28 08:38:43.557315576 -0300
++@@ -544,7 +544,7 @@
++ 		libusb_open(dev, &devh);
++ 		if (devh == NULL) {
++ 			SHOW_PROGRESS(output,"Error opening the device. Abort\n\n");
++-			abort();
+++			abortOut();
++ 		}
++ 	}
++ 
++@@ -574,18 +574,18 @@
++ 			ResponseEndpoint = find_first_bulk_endpoint(LIBUSB_ENDPOINT_IN);
++ 		if (!MessageEndpoint) {
++ 			fprintf(stderr,"Error: message endpoint not given or found. Abort\n\n");
++-			abort();
+++			abortOut();
++ 		}
++ 		if (!ResponseEndpoint) {
++ 			fprintf(stderr,"Error: response endpoint not given or found. Abort\n\n");
++-			abort();
+++			abortOut();
++ 		}
++ 		SHOW_PROGRESS(output,"Use endpoints 0x%02x (out) and 0x%02x (in)\n", MessageEndpoint, ResponseEndpoint);
++ 	}
++ 
++ 	if (interfaceClass == -1) {
++ 		fprintf(stderr, "Error: Could not get class of interface %d. Does it exist? Abort\n\n",Interface);
++-		abort();
+++		abortOut();
++ 	}
++ 
++ 	if (defaultClass == 0)
++@@ -601,7 +601,7 @@
++ 		if (defaultClass != 8) {
++ 			fprintf(stderr, "Error: can't use storage command in MessageContent with interface %d;\n"
++ 				"       interface class is %d, expected 8. Abort\n\n", Interface, defaultClass);
++-			abort();
+++			abortOut();
++ 		}
++ 
++ 	if (InquireDevice && show_progress) {
++@@ -629,7 +629,7 @@
++ 	 */
++ 	if ( ModeMap & (ModeMap-1) ) {
++ 		fprintf(output,"Multiple special modes selected; check configuration. Abort\n\n");
++-		abort();
+++		abortOut();
++ 	}
++ 
++ 	if ((strlen(MessageContent) || StandardEject) && ModeMap ) {
++@@ -1339,7 +1339,7 @@
++ 	ret = libusb_claim_interface(devh, Interface);
++ 	if (ret < 0) {
++ 		SHOW_PROGRESS(output," Could not claim interface (error %d). Abort\n", ret);
++-		abort();
+++		abortOut();
++ 	}
++ //	libusb_clear_halt(devh, MessageEndpoint);
++ 	if (show_progress)
++@@ -1832,7 +1832,7 @@
++ 	int ret = libusb_get_active_config_descriptor(dev, &active_config);
++ 	if (ret < 0) {
++ 		SHOW_PROGRESS(output," Determining the active configuration failed (error %d). Abort\n", ret);
++-		abort();
+++		abortOut();
++ 	}
++ 	return active_config->bConfigurationValue;
++ }
++@@ -1878,7 +1878,7 @@
++ 			}
++ 			if (file==NULL) {
++ 				fprintf(stderr, "Error: Could not find file %s. Abort\n\n", FileName);
++-				abort();
+++				abortOut();
++ 			} else {
++ 				token = fgets(Str, LINE_DIM-1, file);
++ 			}
++@@ -2014,7 +2014,7 @@
++ 		closelog();
++ }
++ 
++-void abort()
+++void abortOut()
++ {
++ 	close_all();
++ 	exit(1);
++diff -Nura usb-modeswitch-2.2.5.orig/usb_modeswitch.h usb-modeswitch-2.2.5/usb_modeswitch.h
++--- usb-modeswitch-2.2.5.orig/usb_modeswitch.h	2015-07-28 08:24:41.043352748 -0300
+++++ usb-modeswitch-2.2.5/usb_modeswitch.h	2015-07-28 08:38:54.986708480 -0300
++@@ -61,7 +61,7 @@
++ void printVersion();
++ void printHelp();
++ void close_all();
++-void abort();
+++void abortOut();
++ int readArguments(int argc, char **argv);
++ void deviceDescription();
++ int deviceInquire();
