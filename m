@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:12 +0200
-Subject: [Buildroot] [git commit] rpm: add hash file
-Message-ID: <20150728204053.A59E47FE8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] smstools3: add hash file
+Message-ID: <20150728204053.EEE567F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c0ab9fb325f1171b5eeabc6d11bffb6536d7a17e
+commit: http://git.buildroot.net/buildroot/commit/?id=bed9b62b628d9687672423978e8ea130187cf2fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpm/rpm.hash |    2 ++
+ package/smstools3/smstools3.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
+diff --git a/package/smstools3/smstools3.hash b/package/smstools3/smstools3.hash
 new file mode 100644
-index 0000000..0665746
+index 0000000..b0b521f
 --- /dev/null
-+++ b/package/rpm/rpm.hash
++++ b/package/smstools3/smstools3.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	34a959c0ed670cadcdc52c6025e822fac6f5d1015e3b75123f53ebe53b923e98	rpm-5.2.0.tar.gz
++sha256	ed00ffaeaa312a5b4f969f4e97a64603a866bbe16e393ea02f5bf05234814d59	smstools3-3.1.15.tar.gz
