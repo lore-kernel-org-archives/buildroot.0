@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit] polkit: add hash file
-Message-ID: <20150728204048.EA03681E6C@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit] rpm: add hash file
+Message-ID: <20150728204053.A59E47FE8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b123c9f04d3c9f6d821c7582f9f9b3458b05a2c4
+commit: http://git.buildroot.net/buildroot/commit/?id=c0ab9fb325f1171b5eeabc6d11bffb6536d7a17e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/polkit/polkit.hash |    2 ++
+ package/rpm/rpm.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
+diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
 new file mode 100644
-index 0000000..5e133b4
+index 0000000..0665746
 --- /dev/null
-+++ b/package/polkit/polkit.hash
++++ b/package/rpm/rpm.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	36607c8ce576980ee55bd12bab1944f13217eb8e9d04ab56022545861ece3bc5	polkit-0.103.tar.gz
++# Locally calculated
++sha256	34a959c0ed670cadcdc52c6025e822fac6f5d1015e3b75123f53ebe53b923e98	rpm-5.2.0.tar.gz
