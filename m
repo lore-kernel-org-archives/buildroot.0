@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:10 +0200
-Subject: [Buildroot] [git commit] newt: add hash file
-Message-ID: <20150728204048.6A6EA81E69@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit] genpart: add hash file
+Message-ID: <20150728204046.7412A7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=949fefecfc2653a4f1ed2ddfaf3eeafd7f47b0d2
+commit: http://git.buildroot.net/buildroot/commit/?id=64d1e0b410dc24c6c39ed8758c79b46339d56d97
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/newt/newt.hash |    2 ++
+ package/genpart/genpart.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/newt/newt.hash b/package/newt/newt.hash
+diff --git a/package/genpart/genpart.hash b/package/genpart/genpart.hash
 new file mode 100644
-index 0000000..ca64f41
+index 0000000..b741dbd
 --- /dev/null
-+++ b/package/newt/newt.hash
++++ b/package/genpart/genpart.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	771b0e634ede56ae6a6acd910728bb5832ac13ddb0d1d27919d2498dab70c91e	newt-0.52.18.tar.gz
++sha256	bfb39434f31d10f1b8c7b6bc6ec612309838c2819022561541c4d2d5a424e3f2	genpart-1.0.2.tar.bz2
