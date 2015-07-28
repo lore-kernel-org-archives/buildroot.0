@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:12 +0200
-Subject: [Buildroot] [git commit] simicsfs: add hash file
-Message-ID: <20150728204053.E0BB17F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit] libroxml: add hash file
+Message-ID: <20150728204047.7434581E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed4b7adf33d494c5e821a3dcc65d27479104f68a
+commit: http://git.buildroot.net/buildroot/commit/?id=9f94025f5d1cadd9b2e24f36ef6fdadf9df950d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/simicsfs/simicsfs.hash |    2 ++
+ package/libroxml/libroxml.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/simicsfs/simicsfs.hash b/package/simicsfs/simicsfs.hash
+diff --git a/package/libroxml/libroxml.hash b/package/libroxml/libroxml.hash
 new file mode 100644
-index 0000000..42ada91
+index 0000000..32482e6
 --- /dev/null
-+++ b/package/simicsfs/simicsfs.hash
++++ b/package/libroxml/libroxml.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	d0cf7caf888dc1e7dc9496c4b59af98eb2b69d6113d6920757465902e1f21f38	simicsfs-1.18.tar.gz
++sha256	1da8f20b530eba4409f2b217587d2f1281ff5d9ba45b24aeac71b94c6c621b78	libroxml-2.3.0.tar.gz
