@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:12 +0200
-Subject: [Buildroot] [git commit branch/next] python-cffi: add hash file
-Message-ID: <20150808105647.D3F627FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-pycrypto: add hash file
+Message-ID: <20150808105648.02F757FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=004391de4e30c1b7c52a793affeb1d4d8c715b90
+commit: http://git.buildroot.net/buildroot/commit/?id=4457c7c43a208333548e3f8225482239a8a37293
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-cffi/python-cffi.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/python-pycrypto/python-pycrypto.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
 new file mode 100644
-index 0000000..b41c979
+index 0000000..e7f809a
 --- /dev/null
-+++ b/package/python-cffi/python-cffi.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.python.org/pypi/cffi/0.8.6
-+md5	474b5a68299a6f05009171de1dc91be6	cffi-0.8.6.tar.gz
-+# Calculated based on the hash above
-+sha256	2532d9e3af9e3c6d0f710fc98b0295b563c7f39cfd97dd2242bd36fbf4900610	cffi-0.8.6.tar.gz
++++ b/package/python-pycrypto/python-pycrypto.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	7293c9d7e8af2e44a82f86eb9c3b058880f4bcc884bf3ad6c8a34b64986edde8	pycrypto-2.6.tar.gz
