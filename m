@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit branch/next] log4cxx: add hash file
-Message-ID: <20150808105646.97FD57FE8F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit branch/next] python-thrift: add hash file
+Message-ID: <20150808105648.164517FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=343c77a1e770e631757e06291f0bf9a0d3f415a4
+commit: http://git.buildroot.net/buildroot/commit/?id=de98273cbaa7f9a1c7d83981b3601dfcf4391081
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/log4cxx/log4cxx.hash |    2 ++
+ package/python-thrift/python-thrift.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
 new file mode 100644
-index 0000000..469d99a
+index 0000000..811aa98
 --- /dev/null
-+++ b/package/log4cxx/log4cxx.hash
++++ b/package/python-thrift/python-thrift.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c	apache-log4cxx-0.10.0.tar.gz
++# From https://www.apache.org/dist/thrift/0.9.2/thrift-0.9.2.tar.gz.md5
++md5	89f63cc4d0100912f4a1f8a9dee63678	thrift-0.9.2.tar.gz
