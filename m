@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit branch/next] libfcgi: add hash file
-Message-ID: <20150808105645.DD1437FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libebml: add hash file
+Message-ID: <20150808105645.CD0D57FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=713f732b893746f826316704bb04f09f7247dff2
+commit: http://git.buildroot.net/buildroot/commit/?id=8ffa00e28458f44bcc3b6af357b6f98786bd2995
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfcgi/libfcgi.hash |    2 ++
+ package/libebml/libebml.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
 new file mode 100644
-index 0000000..586ff1e
+index 0000000..d5a8cb8
 --- /dev/null
-+++ b/package/libfcgi/libfcgi.hash
++++ b/package/libebml/libebml.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	66fc45c6b36a21bf2fbbb68e90f780cc21a9da1fffbae75e76d2b4402d3f05b9	fcgi-2.4.0.tar.gz
++sha256	195894b31aaca55657c9bc157d744f23b0c25597606b97cfa5a9039c4b684295	libebml-1.3.1.tar.bz2
