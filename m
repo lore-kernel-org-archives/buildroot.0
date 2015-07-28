@@ -1,28 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit] libxkbcommon: add hash file
-Message-ID: <20150728204047.A39087F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit] python-pycrypto: add hash file
+Message-ID: <20150728204049.3BE3281E78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=405c17b1393c7e1d5b824a0ae5e7a9475d761ebe
+commit: http://git.buildroot.net/buildroot/commit/?id=4457c7c43a208333548e3f8225482239a8a37293
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libxkbcommon/libxkbcommon.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/python-pycrypto/python-pycrypto.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
 new file mode 100644
-index 0000000..9cbe440
+index 0000000..e7f809a
 --- /dev/null
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -0,0 +1,3 @@
-+# From http://lists.freedesktop.org/archives/wayland-devel/2014-October/017836.html
-+md5	2e1faeafcc609c30af3a561a91e84158	libxkbcommon-0.5.0.tar.xz
-+sha1	7127993bfb69e13cdff25fb8b3c8f26ce6be5bfa	libxkbcommon-0.5.0.tar.xz
++++ b/package/python-pycrypto/python-pycrypto.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	7293c9d7e8af2e44a82f86eb9c3b058880f4bcc884bf3ad6c8a34b64986edde8	pycrypto-2.6.tar.gz
