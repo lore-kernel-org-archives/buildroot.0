@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit branch/next] iostat: add hash file
-Message-ID: <20150808105645.925957FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gsl: add hash file
+Message-ID: <20150808105645.7C06A7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a56faef2fd0760135be048caa4ac98ccf62dc63d
+commit: http://git.buildroot.net/buildroot/commit/?id=c6871f02a8c88f52d0e6153f3914bab8b071fe41
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iostat/iostat.hash |    2 ++
+ package/gsl/gsl.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/iostat/iostat.hash b/package/iostat/iostat.hash
+diff --git a/package/gsl/gsl.hash b/package/gsl/gsl.hash
 new file mode 100644
-index 0000000..2ba10a3
+index 0000000..bc33e4e
 --- /dev/null
-+++ b/package/iostat/iostat.hash
++++ b/package/gsl/gsl.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	edc5aa73f43bd6c7d49f2c1d5906a0a68c0b28bc4dfdaf1f2aa5ae4a2449c58e	iostat-2.2.tar.gz
++# Locally calculated after checking pgp signature
++sha256	73bc2f51b90d2a780e6d266d43e487b3dbd78945dd0b04b14ca5980fe28d2f53	gsl-1.16.tar.gz
