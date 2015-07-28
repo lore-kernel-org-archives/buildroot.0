@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit branch/next] jansson: add hash file
-Message-ID: <20150808105645.AB0A77FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libatasmart: add hash file
+Message-ID: <20150808105645.BBC887FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d0209312b90ad8a155711e642110372a972a219
+commit: http://git.buildroot.net/buildroot/commit/?id=f52c0a8e36d6d380cd7c7719e50b2f64c77b6922
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jansson/jansson.hash |    2 ++
+ package/libatasmart/libatasmart.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
+diff --git a/package/libatasmart/libatasmart.hash b/package/libatasmart/libatasmart.hash
 new file mode 100644
-index 0000000..013d929
+index 0000000..8733d07
 --- /dev/null
-+++ b/package/jansson/jansson.hash
++++ b/package/libatasmart/libatasmart.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	7905e6590fb316c0ff943df3dc6a21cd81a59cff7a6d12514054c359d04d78d7	jansson-2.7.tar.gz
++# Locally calculated
++sha256	61f0ea345f63d28ab2ff0dc352c22271661b66bf09642db3a4049ac9dbdb0f8d	libatasmart-0.19.tar.xz
