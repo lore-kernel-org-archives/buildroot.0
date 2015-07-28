@@ -1,107 +1,67 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Tue, 28 Jul 2015 16:15:28 +0800
-Subject: [Buildroot] [PATCH 2/2] Remmina: new package
-In-Reply-To: <1438071328-12502-1-git-send-email-fancp2007@gmail.com>
-References: <1438071328-12502-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <1438071328-12502-2-git-send-email-fancp2007@gmail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Tue, 28 Jul 2015 10:21:31 +0200
+Subject: [Buildroot] [PATCH v2] package/dropbear: Fix symlink only if
+	pointing to the right directory
+Message-ID: <1438071691-9078-1-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remmina is a remote desktop client written in GTK+.
-Currently RDP, VNC, NX, XDMCP and SSH are supported.
+This commit ensures that the /etc/dropbear symlink won't be removed if
+it points elsewhere than /var/run/dropbear.
 
-http://remmina.sourceforge.net/
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/Config.in                            |  1 +
- package/remmina/0001-libintl-underlink.patch | 11 +++++++++++
- package/remmina/Config.in                    | 17 +++++++++++++++++
- package/remmina/remmina.mk                   | 19 +++++++++++++++++++
- 4 files changed, 48 insertions(+)
- create mode 100644 package/remmina/0001-libintl-underlink.patch
- create mode 100644 package/remmina/Config.in
- create mode 100644 package/remmina/remmina.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 8d9511c..8ca27f4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -239,6 +239,7 @@ endif
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
-+	source "package/remmina/Config.in"
- 	source "package/imagemagick/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-diff --git a/package/remmina/0001-libintl-underlink.patch b/package/remmina/0001-libintl-underlink.patch
-new file mode 100644
-index 0000000..6afba38
---- /dev/null
-+++ b/package/remmina/0001-libintl-underlink.patch
-@@ -0,0 +1,11 @@
-+--- ./remmina/CMakeLists.txt.orig
-++++ ./remmina/CMakeLists.txt
-+@@ -91,7 +91,7 @@
-+ add_executable(remmina ${REMMINA_SRCS})
-+ 
-+ include_directories(${GTK_INCLUDE_DIRS})
-+-target_link_libraries(remmina ${GTK_LIBRARIES})
-++target_link_libraries(remmina ${GTK_LIBRARIES} -lintl)
-+ 
-+ find_package(X11)
-+ include_directories(${X11_INCLUDE_DIR})
-diff --git a/package/remmina/Config.in b/package/remmina/Config.in
-new file mode 100644
-index 0000000..168f898
---- /dev/null
-+++ b/package/remmina/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_REMMINA
-+	bool "Remmina"
-+	depends on BR2_PACKAGE_LIBGTK3
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBVNCSERVER
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_GETTEXT
-+	help
-+	  Remmina is a remote desktop client written in GTK+, aiming to be useful for 
-+	  system administrators and travellers, who need to work with lots of remote 
-+	  computers in front of either large monitors or tiny netbooks. 
-+
-+	  Remmina supports multiple network protocols in an integrated and consistent 
-+	  user interface. Currently RDP, VNC, NX, XDMCP and SSH are supported.
-+
-+	  http://remmina.sourceforge.net/
-diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
-new file mode 100644
-index 0000000..0a03f3d
---- /dev/null
-+++ b/package/remmina/remmina.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# Remmina
-+#
-+################################################################################
-+
-+REMMINA_VERSION = v1.1.2
-+REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
-+REMMINA_DEPENDENCIES = libgtk3 libgcrypt libssh libvncserver freerdp gettext
-+REMMINA_LICENSE = GPLv2
-+REMMINA_LICENSE_FILES = LICENSE
-+
-+REMMINA_CONF_OPTS = \
-+	-DWITH_AVAHI=OFF \
-+	-DWITH_APPINDICATOR=OFF \
-+	-DWITH_TELEPATHY=OFF \
-+	-DWITH_GNOMEKEYRING=OFF
-+
-+$(eval $(cmake-package))
+v2: Use "readlink -f", as the symbolic link might be pointing to a relative
+path and not an absolute path.
+
+ package/dropbear/S50dropbear      | 6 ++++--
+ package/dropbear/dropbear.service | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index af50ccf..f551677 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -12,12 +12,14 @@ start() {
+ 	echo -n "Starting dropbear sshd: "
+ 	umask 077
+ 
+-	# If /etc/dropbear is not a directory, and
++	# If /etc/dropbear is a symlink to /var/run/dropbear, and
+ 	#   - the filesystem is RO (i.e. we can not rm the symlink),
+ 	#     create the directory pointed to by the symlink.
+ 	#   - the filesystem is RW (i.e. we can rm the symlink),
+ 	#     replace the symlink with an actual directory
+-	if ! [ -d /etc/dropbear ]; then
++	if [ -L /etc/dropbear \
++		-a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
++	then
+ 		if rm -f /etc/dropbear; then
+ 			mkdir -p /etc/dropbear
+ 		else
+diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
+index 0e2cf54..f1d4d5d 100644
+--- a/package/dropbear/dropbear.service
++++ b/package/dropbear/dropbear.service
+@@ -3,13 +3,13 @@ Description=Dropbear SSH daemon
+ After=syslog.target network.target auditd.service
+ 
+ [Service]
+-# If /etc/dropbear is not a directory, and
++# If /etc/dropbear is a symlink to /var/run/dropbear, and
+ #   - the filesystem is RO (i.e. we can not rm the symlink),
+ #     create the directory pointed to by the symlink.
+ #   - the filesystem is RW (i.e. we can rm the symlink),
+ #     replace the symlink with an actual directory
+ ExecStartPre=/bin/sh -c '\
+-if ! [ -d /etc/dropbear ]; then \
++if [ -L /etc/dropbear -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]; then \
+     if rm -f /etc/dropbear; then \
+         mkdir -p /etc/dropbear; \
+     else \
 -- 
 2.4.6
