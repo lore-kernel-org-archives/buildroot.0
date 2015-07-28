@@ -1,113 +1,100 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 28 Jul 2015 08:50:20 +0200
-Subject: [Buildroot] [PATCH v3] package/python-web2py: cleaning for space
-	saving
-Message-ID: <1438066220-7019-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Tue, 28 Jul 2015 09:01:47 +0200
+Subject: [Buildroot] [PATCH] mongrel2: Bump version and change hosting
+In-Reply-To: <1438034847-16930-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1438034847-16930-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAKAx1cgU5Ra4=v=iTQWqDQJ6OP_b8z25kbq-GkNrFyZU3511nQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch removes from web2py folder welcome, examples application
-and a bunch of other files uneeded in production,
-furthermore, it removes the admin interface if unneeded.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changes:
-
-v2->v3:
- * Changed to a positive logic for PYTHON_WEB2PY_INSTALL_ADMIN (suggested by Thomas).
- * Changed to a makefile based conditional logic (suggested by Thomas).
- * Extended cleaning of uneeded files.
-
-v1->v2:
- * Reworked otion sequence as suggested by Thomas.
- * Changed to a makefile based conditional as suggested by Thomas.
-
- package/python-web2py/Config.in        | 11 ++++++++++
- package/python-web2py/python-web2py.mk | 37 +++++++++++++++++++++++++++-------
- 2 files changed, 41 insertions(+), 7 deletions(-)
-
-diff --git a/package/python-web2py/Config.in b/package/python-web2py/Config.in
-index b10d3a4..3b55153 100644
---- a/package/python-web2py/Config.in
-+++ b/package/python-web2py/Config.in
-@@ -14,6 +14,15 @@ config BR2_PACKAGE_PYTHON_WEB2PY
- 
- if BR2_PACKAGE_PYTHON_WEB2PY
- 
-+config BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
-+	bool "install admin panel application"
-+	default y
-+	help
-+	  This option install web2py admin panel application.
-+	  It can be removed to save space on embedded systems.
-+
-+if BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN
-+
- config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
- 	string "admin panel password"
- 	default web2py
-@@ -21,3 +30,5 @@ config BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD
- 	  Set the admin panel password.
- 
- endif
-+
-+endif
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 313114a..8de3283 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -11,18 +11,41 @@ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
- PYTHON_WEB2PY_DEPENDENCIES = python python-pydal host-python-pydal
- 
- define PYTHON_WEB2PY_INSTALL_TARGET_CMDS
--	$(HOST_DIR)/usr/bin/python2 -c 'import os; \
--		os.chdir("$(@D)"); \
--		from gluon.main import save_password; \
--		save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)'
- 	mkdir -p $(TARGET_DIR)/var/www/web2py
- 	cp -dpfr $(@D)/* $(TARGET_DIR)/var/www/web2py
-+	rm -rf $(TARGET_DIR)/var/www/web2py/welcome.w2p
-+	rm -rf $(TARGET_DIR)/var/www/web2py/applications/examples
-+	rm -rf $(TARGET_DIR)/var/www/web2py/applications/welcome
-+	rm -rf $(TARGET_DIR)/var/www/web2py/deposit
-+	rm -rf $(TARGET_DIR)/var/www/web2py/docs
-+	rm -rf $(TARGET_DIR)/var/www/web2py/examples
-+	rm -rf $(TARGET_DIR)/var/www/web2py/extras
-+	rm -rf $(TARGET_DIR)/var/www/web2py/handlers
-+	rm -rf $(TARGET_DIR)/var/www/web2py/scripts
-+	rm -rf $(TARGET_DIR)/var/www/web2py/ABOUT
-+	rm -rf $(TARGET_DIR)/var/www/web2py/anyserver.py
-+	rm -rf $(TARGET_DIR)/var/www/web2py/CHANGELOG
-+	rm -rf $(TARGET_DIR)/var/www/web2py/Makefile
-+	rm -rf $(TARGET_DIR)/var/www/web2py/MANIFEST.in
-+	rm -rf $(TARGET_DIR)/var/www/web2py/README.markdown
-+	rm -rf $(TARGET_DIR)/var/www/web2py/setup.py
-+	rm -rf $(TARGET_DIR)/var/www/web2py/tox.ini
- endef
- 
--define PYTHON_WEB2PY_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/python-web2py/S51web2py \
--		$(TARGET_DIR)/etc/init.d/S51web2py
-+ifeq ($(BR2_PACKAGE_PYTHON_WEB2PY_INSTALL_ADMIN),y)
-+define PYTHON_WEB2PY_GENERATE_PASSWORD
-+	$(HOST_DIR)/usr/bin/python2 -c 'import os; \
-+	os.chdir("$(@D)"); \
-+	from gluon.main import save_password; \
-+	save_password($(BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD),8000)';
-+endef
-+PYTHON_WEB2PY_POST_BUILD_HOOKS += PYTHON_WEB2PY_GENERATE_PASSWORD
-+else
-+define PYTHON_WEB2PY_REMOVE_ADMIN
-+	rm -rf $(TARGET_DIR)/var/www/web2py/applications/admin
- endef
-+PYTHON_WEB2PY_POST_INSTALL_TARGET_HOOKS += PYTHON_WEB2PY_REMOVE_ADMIN
-+endif
- 
- define PYTHON_WEB2PY_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 package/python-web2py/web2py.service \
--- 
-1.9.1
+On Tue, Jul 28, 2015 at 12:07 AM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> mongrel2 has changed it's repository.
+> It was also the opportunity to bump it.
+> Adding a hash, since we use this packages as an example for the hash in
+> the manual, it was a bit shamefull that it did not have a proper hash.
+>
+> Remove 0001-use-CC-variable-to-compile-procer.patch, an equivalent was
+> applied upstream:
+> https://github.com/mongrel2/mongrel2/commit/eafe3cf3efde4278040f38b5808f336e3d102c84
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Lionel Orry <lionel.orry@gmail.com>
+> ---
+>  .../0001-use-CC-variable-to-compile-procer.patch   | 28 ----------------------
+>  package/mongrel2/mongrel2.hash                     |  2 ++
+>  package/mongrel2/mongrel2.mk                       |  5 ++--
+>  3 files changed, 5 insertions(+), 30 deletions(-)
+>  delete mode 100644 package/mongrel2/0001-use-CC-variable-to-compile-procer.patch
+>  create mode 100644 package/mongrel2/mongrel2.hash
+>
+> diff --git a/package/mongrel2/0001-use-CC-variable-to-compile-procer.patch b/package/mongrel2/0001-use-CC-variable-to-compile-procer.patch
+> deleted file mode 100644
+> index 310177a..0000000
+> --- a/package/mongrel2/0001-use-CC-variable-to-compile-procer.patch
+> +++ /dev/null
+> @@ -1,28 +0,0 @@
+> -From d30cf797af4828e49fd3c0f25841e669dec05ed5 Mon Sep 17 00:00:00 2001
+> -From: Lionel Orry <lionel.orry@gmail.com>
+> -Date: Wed, 27 Mar 2013 14:02:00 +0100
+> -Subject: [PATCH 3/4] use CC variable to compile procer.
+> -
+> -This fixes procer tool cross-compilation issues.
+> -
+> -Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+> ----
+> - tools/procer/Makefile | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/tools/procer/Makefile b/tools/procer/Makefile
+> -index d0d7de0..bb9aa31 100644
+> ---- a/tools/procer/Makefile
+> -+++ b/tools/procer/Makefile
+> -@@ -8,7 +8,7 @@ all: procer
+> -
+> -
+> - procer: ../../build/libm2.a ${OBJECTS}
+> --      gcc $(OPTFLAGS) $(OPTLIBS) -o $@ ${OBJECTS} ../../build/libm2.a ${LIBS}
+> -+      $(CC) $(OPTFLAGS) $(OPTLIBS) -o $@ ${OBJECTS} ../../build/libm2.a ${LIBS}
+> -
+> - clean:
+> -       rm -f *.o procer
+> ---
+> -1.8.1.4
+> -
+> diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+> new file mode 100644
+> index 0000000..b8f8de3
+> --- /dev/null
+> +++ b/package/mongrel2/mongrel2.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 543553c3082f2b992649a975f6cb7324ae2aea93af05288ea4f2c1262a7f63b2  mongrel2-v1.9.2.tar.bz2
+> diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+> index 23cec50..0be4832 100644
+> --- a/package/mongrel2/mongrel2.mk
+> +++ b/package/mongrel2/mongrel2.mk
+> @@ -4,10 +4,11 @@
+>  #
+>  ################################################################################
+>
+> -MONGREL2_VERSION = v1.9.1
+> +MONGREL2_VERSION = 1.9.2
+> +MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
+>  # Do not use the github helper here, the generated tarball is *NOT* the same
+>  # as the one uploaded by upstream for the release.
+> -MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)
+> +MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/$(MONGREL2_VERSION)
+>  MONGREL2_LICENSE = BSD-3c
+>  MONGREL2_LICENSE_FILES = LICENSE
+>  MONGREL2_DEPENDENCIES = sqlite zeromq
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
