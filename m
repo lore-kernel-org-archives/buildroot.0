@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit] ucl: add hash file
-Message-ID: <20150728204054.558977F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:14 +0200
+Subject: [Buildroot] [git commit] c-icap-modules: add hash file
+Message-ID: <20150728204054.815717F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=028d7f246f3f1d4fd0f402b8363b2800b57d6872
+commit: http://git.buildroot.net/buildroot/commit/?id=633e04fb6318c0a7b9b0017bc4bb04ce22cd5e5d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ucl/ucl.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/c-icap-modules/c-icap-modules.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/ucl/ucl.hash b/package/ucl/ucl.hash
+diff --git a/package/c-icap-modules/c-icap-modules.hash b/package/c-icap-modules/c-icap-modules.hash
 new file mode 100644
-index 0000000..6b1f41e
+index 0000000..cf325ec
 --- /dev/null
-+++ b/package/ucl/ucl.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	b865299ffd45d73412293369c9754b07637680e5c826915f097577cd27350348	ucl-1.03.tar.gz
++++ b/package/c-icap-modules/c-icap-modules.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/c-icap/files/c-icap-modules/0.3.x/
++md5	25a904f98cddbcc7431b22720cd3996e	c_icap_modules-0.3.2.tar.gz
++sha1	98dd7b3bf40b8831e297ffa8c4e1eaf7cef57cd0	c_icap_modules-0.3.2.tar.gz
