@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:39:46 -0300
-Subject: [Buildroot] [PATCH 045/113] libxkbcommon: add hash file
+Date: Tue, 28 Jul 2015 15:39:47 -0300
+Subject: [Buildroot] [PATCH 046/113] libxslt: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-45-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-46-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libxkbcommon/libxkbcommon.hash | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 package/libxkbcommon/libxkbcommon.hash
+ package/libxslt/libxslt.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/libxslt/libxslt.hash
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
 new file mode 100644
-index 0000000..9cbe440
+index 0000000..140db09
 --- /dev/null
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -0,0 +1,3 @@
-+# From http://lists.freedesktop.org/archives/wayland-devel/2014-October/017836.html
-+md5	2e1faeafcc609c30af3a561a91e84158	libxkbcommon-0.5.0.tar.xz
-+sha1	7127993bfb69e13cdff25fb8b3c8f26ce6be5bfa	libxkbcommon-0.5.0.tar.xz
++++ b/package/libxslt/libxslt.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c	libxslt-1.1.28.tar.gz
 -- 
 2.3.6
