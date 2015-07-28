@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit branch/next] python-bottle: add hash file
-Message-ID: <20150808105647.C9FB27FE8F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:14 +0200
+Subject: [Buildroot] [git commit branch/next] directfb-examples: add hash
+	file
+Message-ID: <20150808105648.D8A5A7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0fb98f672c53b044dbd2c9dee1428168f0cb78b2
+commit: http://git.buildroot.net/buildroot/commit/?id=56338071dfbf832b5b132666791f912d51a45f3a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-bottle/python-bottle.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/directfb-examples/directfb-examples.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+diff --git a/package/directfb-examples/directfb-examples.hash b/package/directfb-examples/directfb-examples.hash
 new file mode 100644
-index 0000000..8c7d428
+index 0000000..c647fca
 --- /dev/null
-+++ b/package/python-bottle/python-bottle.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.python.org/pypi/bottle/0.12.7
-+md5	ed0b83c9dbbdbde784e7c652d61c59f4	bottle-0.12.7.tar.gz
-+# Calculated based on the hash above
-+sha256	e3ea2191f06ca51af45bf6ca41ed2d1b2d809ceda0876466879fe205be7b2073	bottle-0.12.7.tar.gz
++++ b/package/directfb-examples/directfb-examples.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	b08293697c211b690856f76a25ad7acd4ca458b4132851e0a1e471d0bf23c821	DirectFB-examples-1.6.0.tar.gz
