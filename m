@@ -1,57 +1,35 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Tue, 28 Jul 2015 16:25:16 +0800
-Subject: [Buildroot] [PATCH] freerdp: Add support for tz package
-Message-ID: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Jul 2015 10:31:34 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix static linking of pthread apps
+ for x86/x86_64
+In-Reply-To: <20150722161325.GA7861@waldemar-brodkorb.de>
+References: <20150722161325.GA7861@waldemar-brodkorb.de>
+Message-ID: <20150728103134.64b30325@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes error message while freerdp connected the remote desktop:
-Unable to detect time zone
+Dear Waldemar Brodkorb,
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- .../freerdp/0004-add-support-for-tz-package.patch  | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/freerdp/0004-add-support-for-tz-package.patch
+On Wed, 22 Jul 2015 18:13:26 +0200, Waldemar Brodkorb wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/182424bd2fea36af95eea31f7dd53f0399433616/
+> http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/package/freerdp/0004-add-support-for-tz-package.patch b/package/freerdp/0004-add-support-for-tz-package.patch
-new file mode 100644
-index 0000000..93e4afd
---- /dev/null
-+++ b/package/freerdp/0004-add-support-for-tz-package.patch
-@@ -0,0 +1,30 @@
-+From 605d0a85183d2f9d5b0da5629cbadf01173bbb2f Mon Sep 17 00:00:00 2001
-+From: Scott Fan <fancp2007@gmail.com>
-+Date: Mon, 13 Jul 2015 15:01:17 +0800
-+Subject: [PATCH] Add support for tz package
-+
-+Fixes error message while freerdp connected the remote desktop:
-+Unable to detect time zone
-+
-+Signed-off-by: Scott Fan <fancp2007@gmail.com>
-+---
-+ libfreerdp/locale/timezone.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/libfreerdp/locale/timezone.c b/libfreerdp/locale/timezone.c
-+index 3070f1f..4a06786 100644
-+--- a/libfreerdp/locale/timezone.c
-++++ b/libfreerdp/locale/timezone.c
-+@@ -1539,7 +1539,8 @@ char* freerdp_get_unix_timezone_identifier()
-+ 	 * America/Montreal for example.
-+ 	 */
-+ 	
-+-	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1)
-++	if ((len = readlink("/etc/localtime", buf, sizeof(buf) - 1)) != -1 ||
-++	    (len = readlink("/etc/TZ", buf, sizeof(buf) - 1)) != -1)
-+ 	{
-+ 		int num = 0;
-+ 		int pos = len;
-+-- 
-+2.4.5
-+
+FWIW, we have the same problem on SuperH:
+
+  http://autobuild.buildroot.net/results/755/7559993edf68cc697832d65ab3bd925724861e5e/build-end.log
+
+The toolchain was built with Buildroot at commit 85945aa.
+
+Thanks!
+
+Thomas
 -- 
-2.4.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
