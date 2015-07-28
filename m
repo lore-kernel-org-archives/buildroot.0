@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit] python-bottle: add hash file
-Message-ID: <20150728204049.1099181E72@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit] python-pyrex: add hash file
+Message-ID: <20150728204049.AAEA97F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0fb98f672c53b044dbd2c9dee1428168f0cb78b2
+commit: http://git.buildroot.net/buildroot/commit/?id=459aa4a0210554ab9a5d95d4c30addc1b3a5a2bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-bottle/python-bottle.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/python-pyrex/python-pyrex.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+diff --git a/package/python-pyrex/python-pyrex.hash b/package/python-pyrex/python-pyrex.hash
 new file mode 100644
-index 0000000..8c7d428
+index 0000000..607d303
 --- /dev/null
-+++ b/package/python-bottle/python-bottle.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.python.org/pypi/bottle/0.12.7
-+md5	ed0b83c9dbbdbde784e7c652d61c59f4	bottle-0.12.7.tar.gz
-+# Calculated based on the hash above
-+sha256	e3ea2191f06ca51af45bf6ca41ed2d1b2d809ceda0876466879fe205be7b2073	bottle-0.12.7.tar.gz
++++ b/package/python-pyrex/python-pyrex.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	5f87df06831d0b3412eb4bc9d3fc2ee7bfae1b913d7da8c23ab2bf5699fb6b50	Pyrex-0.9.9.tar.gz
