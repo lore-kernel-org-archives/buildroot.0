@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 11:02:15 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/x11r7/libepoxy: Fix OpenGL /
- EGL dependencies
-In-Reply-To: <8266336.GrICkLfAp5@sagittea>
-References: <1430943308-13319-1-git-send-email-bernd.kuhls@t-online.de>
- <20150710111952.5787d499@free-electrons.com>
- <8266336.GrICkLfAp5@sagittea>
-Message-ID: <20150728110215.140a067a@free-electrons.com>
+Date: Tue, 28 Jul 2015 11:07:13 +0200
+Subject: [Buildroot] [PATCH] freerdp: Add support for tz package
+In-Reply-To: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
+References: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
+Message-ID: <20150728110713.74b1e037@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Dear Scott Fan,
 
-On Tue, 28 Jul 2015 10:23:23 +0200, J?r?me Pouiller wrote:
-
-> > This doesn't make a lot of sense to me. Either you use EGL and you
-> > don't X, or you have X and you don't EGL.
-> As far as I understand, EGL is counterpart of GLX for GLESv2. As soon as you 
-> want to use GLEsv2, you need EGL. Therefore, EGL is not mutually exclusive 
-> with Xorg.
+On Tue, 28 Jul 2015 16:25:16 +0800, Scott Fan wrote:
+> Fixes error message while freerdp connected the remote desktop:
+> Unable to detect time zone
 > 
-> Here is an example program that work with Xorg and use EGL:
->   http://exoticorn.de/simplegl.tgz
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-Ah, okay. Then I indeed misunderstood this. I'll look again at Bernd's
-patch then. Thanks!
+You have already sent this patch numerous times, but you never include
+a changelog between the versions, so we don't understand why you're
+sending it again and again.
+
+Can you at least put a cover letter in your patch series, which
+explains why you are sending the patches again?
+
+Thanks,
 
 Thomas
 -- 
