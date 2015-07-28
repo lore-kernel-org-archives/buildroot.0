@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:30:37 +0200
-Subject: [Buildroot] [git commit branch/next] configs/riotboard: bump u-boot
-	to version 2015.07
-Message-ID: <20150808105644.E4BCC7FD83@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:55 +0200
+Subject: [Buildroot] [git commit branch/next] dbus-python: add hash file
+Message-ID: <20150808105644.ECEEA7FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c0f5c31737eb8dddd2c1db5ae5b36678847c40b
+commit: http://git.buildroot.net/buildroot/commit/?id=8b30202e885b8d5a2e99c5b15d1273cf96efa4fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/riotboard_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dbus-python/dbus-python.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 7d37c25..98fdd6f 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
- 
- # bootloader
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_VERSION="2015.04"
-+BR2_TARGET_UBOOT_VERSION="2015.07"
- BR2_TARGET_UBOOT_BOARDNAME="riotboard"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
+diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
+new file mode 100644
+index 0000000..94af72e
+--- /dev/null
++++ b/package/dbus-python/dbus-python.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	e12c6c8b2bf3a9302f75166952cbe41d6b38c3441bbc6767dbd498942316c6df	dbus-python-1.2.0.tar.gz
