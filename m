@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit] php-memcached: add hash file
-Message-ID: <20150728204048.C31D381E3E@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:13 +0200
+Subject: [Buildroot] [git commit] webrtc-audio-processing: add hash file
+Message-ID: <20150728204054.6EEC27F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c42841ebbbe874b7e85e102b8e7e6a435ec9aede
+commit: http://git.buildroot.net/buildroot/commit/?id=f88e3a9e7ce62a217f4e7cc3696e5962b4359ba5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-memcached/php-memcached.hash |    2 ++
+ .../webrtc-audio-processing.hash                   |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
+diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.hash b/package/webrtc-audio-processing/webrtc-audio-processing.hash
 new file mode 100644
-index 0000000..bc2e97a
+index 0000000..afba5a9
 --- /dev/null
-+++ b/package/php-memcached/php-memcached.hash
++++ b/package/webrtc-audio-processing/webrtc-audio-processing.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	17b9600f6d4c807f23a3f5c45fcd8775ca2e61d6eda70370af2bef4c6e159f58	memcached-2.2.0.tgz
++sha256	ed4b52f9c2688b97628035a5565377d74704d7c04de4254a768df3342c7afedc	webrtc-audio-processing-0.1.tar.xz
