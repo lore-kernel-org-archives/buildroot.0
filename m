@@ -1,74 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Jul 2015 22:55:23 +0200
-Subject: [Buildroot] [git commit branch/next] package/gcc: fix gcc 4.7 build
-	with gcc5
-Message-ID: <20150808105644.510F37FD83@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 09:53:16 +0200
+Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version 1.0.1
+Message-ID: <20150808105644.C5C397FD83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c63d2b977adf545ab733447a532cff05cb155e95
+commit: http://git.buildroot.net/buildroot/commit/?id=668aa0f477924f6fce2819b8152e00001dfcaa2d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gcc 4.7 doesn't build with gcc5.
-
-Patch is from DragonFlyBSD github [1]
-
-[1] https://github.com/DragonFlyBSD/DPorts/issues/136
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch    |   42 ++++++++++++++++++++
- 1 files changed, 42 insertions(+), 0 deletions(-)
+ package/harfbuzz/harfbuzz.hash |    4 ++--
+ package/harfbuzz/harfbuzz.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
-new file mode 100644
-index 0000000..b076e54
---- /dev/null
-+++ b/package/gcc/4.7.4/844-gcc-fix-build-with-gcc5.patch
-@@ -0,0 +1,42 @@
-+From 4fb4acf88912dd978bb63ecab79641a5795ce84f Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Mon, 27 Jul 2015 15:05:14 +0200
-+Subject: [PATCH] gcc: fix build with gcc5
-+
-+gcc < 4.8 doesn't build with gcc5.
-+
-+Patch is from DragonFlyBSD github [1]
-+
-+[1] https://github.com/DragonFlyBSD/DPorts/issues/136
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ gcc/cp/cfns.h | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/gcc/cp/cfns.h b/gcc/cp/cfns.h
-+index 62cdfab..4f63cc4 100644
-+--- a/gcc/cp/cfns.h
-++++ b/gcc/cp/cfns.h
-+@@ -53,6 +53,9 @@ __inline
-+ static unsigned int hash (const char *, unsigned int);
-+ #ifdef __GNUC__
-+ __inline
-++#ifdef __GNUC_STDC_INLINE__
-++__attribute__ ((__gnu_inline__))
-++#endif
-+ #endif
-+ const char * libc_name_p (const char *, unsigned int);
-+ /* maximum key range = 391, duplicates = 0 */
-+@@ -96,7 +99,7 @@ hash (register const char *str, register unsigned int len)
-+       400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
-+       400, 400, 400, 400, 400, 400, 400
-+     };
-+-  register int hval = len;
-++  register int hval = (int)len;
-+ 
-+   switch (hval)
-+     {
-+-- 
-+2.4.3
-+
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 26f4688..daf495c 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.41.tar.bz2.sha256
+-sha256	d81aa53d0c02b437beeaac159d7fc16394d676bbce0860fb6f6a10b587dc057c	harfbuzz-0.9.41.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.1.tar.bz2.sha256
++sha256	32a1a7ad584a2f2cfba5c1d234d046c0521e86e7a21d403e15e89aa509ef0ea8	harfbuzz-1.0.1.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 001405f..1d10a94 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 0.9.41
++HARFBUZZ_VERSION = 1.0.1
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
