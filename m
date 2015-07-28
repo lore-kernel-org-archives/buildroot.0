@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:11 +0200
-Subject: [Buildroot] [git commit branch/next] php-imagick: add hash file
-Message-ID: <20150808105647.864EC7FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] php-yaml: add hash file
+Message-ID: <20150808105647.A16BC818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=17c188e6c94b59d9d73f5d88216b2f34f7d5cd21
+commit: http://git.buildroot.net/buildroot/commit/?id=a321df9e7852ab34e1a4b80a567110b8064dab04
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php-imagick/php-imagick.hash |    2 ++
+ package/php-yaml/php-yaml.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/php-imagick/php-imagick.hash b/package/php-imagick/php-imagick.hash
+diff --git a/package/php-yaml/php-yaml.hash b/package/php-yaml/php-yaml.hash
 new file mode 100644
-index 0000000..6173eca
+index 0000000..e4f22a6
 --- /dev/null
-+++ b/package/php-imagick/php-imagick.hash
++++ b/package/php-yaml/php-yaml.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	528769ac304a0bbe9a248811325042188c9d16e06de16f111fee317c85a36c93	imagick-3.1.2.tgz
++sha256	762ec3d9eb163ac0d063118df8c5e2ee6746dbe8566d32055e7e066e590937c3	yaml-1.1.1.tgz
