@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:20:52 +0200
-Subject: [Buildroot] [git commit branch/next] e2fsprogs: disable e4defrag in
-	host variant
-Message-ID: <20150808105650.258C97FD56@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 23:23:15 +0200
+Subject: [Buildroot] [git commit branch/next] qt5base: fix activation of
+	i.MX visual ID workaround
+Message-ID: <20150808105649.87BD87FD56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0bbd1dbc156cc81e6f9986c79774c67d537832a8
+commit: http://git.buildroot.net/buildroot/commit/?id=ad53b303e75691c5e85462cc7f7a2116b547bddf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-e4defrag from e2fsprogs 1.42.13 encounters these build errors on RHEL5.8 hosts:
-e4defrag.c:197:2: error: #error sync_file_range not available!
-e4defrag.c:201:2: error: #error fallocate64 not available!
+The workaround implemented in 0001-Force_egl_visual_ID_33.patch has to
+be enabled as soon as gpu_vivante/xorg is used. This does not depends
+on eglfs option.
 
-It's possible to fix these problems, but we don't use it on the host
-anyway, so just disable it.
+[Thomas: minor commit log tweaks.]
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/qt5/qt5base/qt5base.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index c863f70..178372b 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -12,6 +12,10 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
- E2FSPROGS_INSTALL_STAGING = YES
- E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 6f0f526..753b069 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -118,12 +118,13 @@ endif
+ QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
+ QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
  
-+# e4defrag doesn't build on older systems like RHEL5.x, and we don't
-+# need it on the host anyway.
-+HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
+-ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+-QT5BASE_CONFIGURE_OPTS += -eglfs
+-QT5BASE_DEPENDENCIES   += libegl
+ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+ QT5BASE_EXTRA_CFLAGS = -DENABLE_MX6_WORKAROUND
+ endif
 +
- E2FSPROGS_CONF_OPTS = \
- 	$(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
++ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
++QT5BASE_CONFIGURE_OPTS += -eglfs
++QT5BASE_DEPENDENCIES   += libegl
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-eglfs
+ endif
