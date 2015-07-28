@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:55 +0200
-Subject: [Buildroot] [git commit] enscript: add hash file
-Message-ID: <20150728204046.20FE57F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:10 +0200
+Subject: [Buildroot] [git commit] ncdu: add hash file
+Message-ID: <20150728204048.47A8B81E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62ad589d1f0e5514c37645e3546a2087c3a7e6f5
+commit: http://git.buildroot.net/buildroot/commit/?id=ac30fc9085a5673abfa8341768d6802f9cbdae14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/enscript/enscript.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/ncdu/ncdu.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/enscript/enscript.hash b/package/enscript/enscript.hash
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
 new file mode 100644
-index 0000000..8b7694d
+index 0000000..7985c99
 --- /dev/null
-+++ b/package/enscript/enscript.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	6d56bada6934d055b34b6c90399aa85975e66457ac5bf513427ae7fc77f5c0bb	enscript-1.6.6.tar.gz
++++ b/package/ncdu/ncdu.hash
+@@ -0,0 +1,3 @@
++# From http://dev.yorhel.nl/download/ncdu-1.9.tar.gz.{md5,sha1}
++md5	93258079db897d28bb8890e2db89b1fb	ncdu-1.9.tar.gz
++sha1	27cb5464b192db8ffdf0a894fe51d29985348eb0	ncdu-1.9.tar.gz
