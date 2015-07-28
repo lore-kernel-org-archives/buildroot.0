@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:10 +0200
-Subject: [Buildroot] [git commit branch/next] mtools: add hash file
-Message-ID: <20150808105646.F25EE7FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] neard: add hash file
+Message-ID: <20150808105647.1798B7FD56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27af9ef990c38f219f383ee36caaf07c2a8b5db6
+commit: http://git.buildroot.net/buildroot/commit/?id=60fde9af56872f5a399727786b5267272c282d07
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mtools/mtools.hash |    2 ++
+ package/neard/neard.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+diff --git a/package/neard/neard.hash b/package/neard/neard.hash
 new file mode 100644
-index 0000000..5d86498
+index 0000000..7517093
 --- /dev/null
-+++ b/package/mtools/mtools.hash
++++ b/package/neard/neard.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	59e9cf80885399c4f229e5d87e49c0c2bfeec044e1386d59fcd0b0aead6b2f85	mtools-4.0.18.tar.bz2
++# From https://www.kernel.org/pub/linux/network/nfc/sha256sums.asc
++sha256	6ea724b443d39d679168fc7776a965d1f64727c3735391df2c01469ee7cd8cca	neard-0.14.tar.xz
