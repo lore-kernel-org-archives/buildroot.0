@@ -1,40 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 23:00:23 +0200
-Subject: [Buildroot] [PATCH v2] package/mono: fixing missing locale
-In-Reply-To: <1437991584-27267-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1437991584-27267-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150728230023.352792e0@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 28 Jul 2015 21:02:43 +0000
+Subject: [Buildroot] [PATCH] binutils: more fixes for arc-2015.06 tools
+In-Reply-To: <20150728225707.1b257d69@free-electrons.com>
+References: <1438090392-30182-1-git-send-email-abrodkin@synopsys.com>
+ <20150728225707.1b257d69@free-electrons.com>
+Message-ID: <1438117363.23193.1.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Hi Thomas,
 
-On Mon, 27 Jul 2015 12:06:24 +0200, Angelo Compagnucci wrote:
-> This patch fixes compilation error in case of a missing locale in toolchain.
+On Tue, 2015-07-28 at 22:57 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
 > 
-> Fixes: http://autobuild.buildroot.net/results/a0fc33a4ed90844f9529acc76a6ba183fe253771/
->        http://autobuild.buildroot.net/results/3ff839e894f0b8f9c2e3af9629d45e8efc09aecd/
->        http://autobuild.buildroot.net/results/5e11117048d965bc1fc44c738bb51f11164304af/
+> On Tue, 28 Jul 2015 16:33:12 +0300, Alexey Brodkin wrote:
+> > Two patches below are taken from development branch of ARC binutils,
+> > so one the next release of ARC tools happens both patches must be removed.
+> > 
+> > These 2 patches:
+> >  0003-ld-arc-Provide-the-.tdata-symbol.patch
+> >  0004-Provide-.tbss-symbol.patch
+> > fix missing .tbss and .tdata sections during linkage stage such as:
+> > ------------------------------>8---------------------------
+> > arc-linux-g++ test.cpp
+> > ../arc-buildroot-linux-uclibc/lib/libstdc++.so: undefined reference to '.tbss'
+> > collect2: error: ld returned 1 exit status
+> > ------------------------------>8---------------------------
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Applied, thanks. After applying this patch, I've started a rebuild of
+> the pre-built ARC external toolchain, so that we test with the latest
+> fixes. I will deploy it probably tomorrow morning.
 
-This patch didn't fix the problem. See:
+Yep this is what I wanted to ask you once both patches are applied.
+Let's see if we finally get less failures for ARC.
 
-  http://autobuild.buildroot.org/results/aeb/aebfbd4e7fe46edbd3798563df28b4d89903becd/build-end.log
-
-This build was done with Git commit
-2a2ee97d1698ba1a624fb0b48655e9b17c395263, which does have your patch
-applied.
-
-Can you have a look?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
