@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit branch/next] libplayer: add hash file
-Message-ID: <20150808105646.217747FFCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libpthsem: add hash file
+Message-ID: <20150808105646.29E2E7FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc8a994c4d7fa95c9b41ccf9ff39310a0c8908a4
+commit: http://git.buildroot.net/buildroot/commit/?id=e196223bd4c027e3ff503dab9fcc8dc0524f4adc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libplayer/libplayer.hash |    2 ++
+ package/libpthsem/libpthsem.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libplayer/libplayer.hash b/package/libplayer/libplayer.hash
+diff --git a/package/libpthsem/libpthsem.hash b/package/libpthsem/libpthsem.hash
 new file mode 100644
-index 0000000..6f13143
+index 0000000..b6aa2b8
 --- /dev/null
-+++ b/package/libplayer/libplayer.hash
++++ b/package/libpthsem/libpthsem.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	aa5eeb54f773bc9cad2733e4a0b5870208fc7f75024515ea87e55f64653e9d65	libplayer-2.0.1.tar.bz2
++sha256	4024cafdd5d4bce2b1778a6be5491222c3f6e7ef1e43971264c451c0012c5c01  pthsem_2.0.8.tar.gz
