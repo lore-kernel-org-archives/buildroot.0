@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] libatasmart: add hash file
-Message-ID: <20150728204046.CD77A7F9DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libosip2: add hash file
+Message-ID: <20150728204047.3DBAD81E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f52c0a8e36d6d380cd7c7719e50b2f64c77b6922
+commit: http://git.buildroot.net/buildroot/commit/?id=f4b00fe29cc6632a24e883c6ecb92693fc30ddd4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libatasmart/libatasmart.hash |    2 ++
+ package/libosip2/libosip2.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libatasmart/libatasmart.hash b/package/libatasmart/libatasmart.hash
+diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
 new file mode 100644
-index 0000000..8733d07
+index 0000000..9ff2d9a
 --- /dev/null
-+++ b/package/libatasmart/libatasmart.hash
++++ b/package/libosip2/libosip2.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	61f0ea345f63d28ab2ff0dc352c22271661b66bf09642db3a4049ac9dbdb0f8d	libatasmart-0.19.tar.xz
++# Locally calculated after checking pgp signature
++sha256	c9a18b0c760506d150017cdb1fa5c1cefe12b8dcbbf9a7e784eb75af376e96cd	libosip2-3.6.0.tar.gz
