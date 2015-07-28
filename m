@@ -1,136 +1,89 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 08:51:58 -0300
-Subject: [Buildroot] [PATCH] usb_modeswitch: fix static build failure
-Message-ID: <1438084318-27699-1-git-send-email-gustavo@zacarias.com.ar>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Tue, 28 Jul 2015 12:19:49 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-07-27
+In-Reply-To: <20150728105715.22962d48@free-electrons.com>
+References: <20150728063018.ECCE8101BC0@stock.ovh.net>
+ <20150728105715.22962d48@free-electrons.com>
+Message-ID: <55B77365.5090505@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-abort() is used in two different places, jim (proper C library abort)
-and usb_modeswitch.c (custom abort function).
-Status: emailed the patch to author.
+Thomas, All
 
-Fixes:
-http://autobuild.buildroot.net/results/789/7899a37d2c766716a1deff58e8be94c5c4962240/
+Le 28/07/2015 10:57, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> Brendan, Guillaume, J?rg, Waldemar, Samuel, Johan, Maxime, Alexey, Max,
+> Gustavo, Julien, Vicente, Clayton, see below. Thanks!
+>
+> On Tue, 28 Jul 2015 08:30:18 +0200 (CEST), Thomas Petazzoni wrote:
+>> Build statistics for 2015-07-27
+>> ===============================
+>>
+>>          success : 124
+>>         failures : 68
+>
+> This is getting a bit better, so let's have a look at the build
+> failures. Here are some quick stats I gathered on the failure reasons:
+>
+> 	misc issues:			19
+> 	ARC toolchain problems:		12
+> 	musl:				 8
+> 	too old gcc:			 8
+> 	sourceforge download problem:	 6
+> 	static linking issues:		 4
+> 	atomic issues:			 3
+> 	issues already fixed:		 3
+> 	host-erlang-rebar timeout:	 2
+> 	xtensa toolchain problems:	 2
+> 	gcc 5.x problems:		 2
+>
+>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/usb_modeswitch/0001-rename-abort.patch | 105 +++++++++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/usb_modeswitch/0001-rename-abort.patch
+[snip]
 
-diff --git a/package/usb_modeswitch/0001-rename-abort.patch b/package/usb_modeswitch/0001-rename-abort.patch
-new file mode 100644
-index 0000000..739e817
---- /dev/null
-+++ b/package/usb_modeswitch/0001-rename-abort.patch
-@@ -0,0 +1,105 @@
-+abort() is a C library function and used by Jim, so it results in
-+a duplicate definition and confusion when linking statically.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura usb-modeswitch-2.2.5.orig/usb_modeswitch.c usb-modeswitch-2.2.5/usb_modeswitch.c
-+--- usb-modeswitch-2.2.5.orig/usb_modeswitch.c	2015-07-28 08:24:41.043352748 -0300
-++++ usb-modeswitch-2.2.5/usb_modeswitch.c	2015-07-28 08:38:43.557315576 -0300
-+@@ -544,7 +544,7 @@
-+ 		libusb_open(dev, &devh);
-+ 		if (devh == NULL) {
-+ 			SHOW_PROGRESS(output,"Error opening the device. Abort\n\n");
-+-			abort();
-++			abortOut();
-+ 		}
-+ 	}
-+ 
-+@@ -574,18 +574,18 @@
-+ 			ResponseEndpoint = find_first_bulk_endpoint(LIBUSB_ENDPOINT_IN);
-+ 		if (!MessageEndpoint) {
-+ 			fprintf(stderr,"Error: message endpoint not given or found. Abort\n\n");
-+-			abort();
-++			abortOut();
-+ 		}
-+ 		if (!ResponseEndpoint) {
-+ 			fprintf(stderr,"Error: response endpoint not given or found. Abort\n\n");
-+-			abort();
-++			abortOut();
-+ 		}
-+ 		SHOW_PROGRESS(output,"Use endpoints 0x%02x (out) and 0x%02x (in)\n", MessageEndpoint, ResponseEndpoint);
-+ 	}
-+ 
-+ 	if (interfaceClass == -1) {
-+ 		fprintf(stderr, "Error: Could not get class of interface %d. Does it exist? Abort\n\n",Interface);
-+-		abort();
-++		abortOut();
-+ 	}
-+ 
-+ 	if (defaultClass == 0)
-+@@ -601,7 +601,7 @@
-+ 		if (defaultClass != 8) {
-+ 			fprintf(stderr, "Error: can't use storage command in MessageContent with interface %d;\n"
-+ 				"       interface class is %d, expected 8. Abort\n\n", Interface, defaultClass);
-+-			abort();
-++			abortOut();
-+ 		}
-+ 
-+ 	if (InquireDevice && show_progress) {
-+@@ -629,7 +629,7 @@
-+ 	 */
-+ 	if ( ModeMap & (ModeMap-1) ) {
-+ 		fprintf(output,"Multiple special modes selected; check configuration. Abort\n\n");
-+-		abort();
-++		abortOut();
-+ 	}
-+ 
-+ 	if ((strlen(MessageContent) || StandardEject) && ModeMap ) {
-+@@ -1339,7 +1339,7 @@
-+ 	ret = libusb_claim_interface(devh, Interface);
-+ 	if (ret < 0) {
-+ 		SHOW_PROGRESS(output," Could not claim interface (error %d). Abort\n", ret);
-+-		abort();
-++		abortOut();
-+ 	}
-+ //	libusb_clear_halt(devh, MessageEndpoint);
-+ 	if (show_progress)
-+@@ -1832,7 +1832,7 @@
-+ 	int ret = libusb_get_active_config_descriptor(dev, &active_config);
-+ 	if (ret < 0) {
-+ 		SHOW_PROGRESS(output," Determining the active configuration failed (error %d). Abort\n", ret);
-+-		abort();
-++		abortOut();
-+ 	}
-+ 	return active_config->bConfigurationValue;
-+ }
-+@@ -1878,7 +1878,7 @@
-+ 			}
-+ 			if (file==NULL) {
-+ 				fprintf(stderr, "Error: Could not find file %s. Abort\n\n", FileName);
-+-				abort();
-++				abortOut();
-+ 			} else {
-+ 				token = fgets(Str, LINE_DIM-1, file);
-+ 			}
-+@@ -2014,7 +2014,7 @@
-+ 		closelog();
-+ }
-+ 
-+-void abort()
-++void abortOut()
-+ {
-+ 	close_all();
-+ 	exit(1);
-+diff -Nura usb-modeswitch-2.2.5.orig/usb_modeswitch.h usb-modeswitch-2.2.5/usb_modeswitch.h
-+--- usb-modeswitch-2.2.5.orig/usb_modeswitch.h	2015-07-28 08:24:41.043352748 -0300
-++++ usb-modeswitch-2.2.5/usb_modeswitch.h	2015-07-28 08:38:54.986708480 -0300
-+@@ -61,7 +61,7 @@
-+ void printVersion();
-+ void printHelp();
-+ void close_all();
-+-void abort();
-++void abortOut();
-+ int readArguments(int argc, char **argv);
-+ void deviceDescription();
-+ int deviceInquire();
--- 
-2.3.6
+>
+>>           arm |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/30acea45fb497942129ca57c143bab6174e14609/
+>
+> painting/qbrush.cpp
+> painting/qbrush.cpp:38:29: fatal error: qplatformpixmap.h: No such file or directory
+> compilation terminated.
+>
+> Julien, do you know what's going on ? It might be fixed by one of the
+> patch you submitted, can you point to it if that's the case ?
+
+Bug as been submitted to Qt here : 
+https://bugreports.qt.io/browse/QTBUG-47400
+I made a patch for buildroot here : 
+https://patchwork.ozlabs.org/patch/500018/ and we said we tag it as 
+"Changes Requested" until Qt mainline patch will be accepted (see 
+https://codereview.qt-project.org/#/c/122145/)
+Since Qt Continuous integration system does not seems to fail on this 
+issue, I think we can include this one to qt5base package "as is".
+Should I submit the patch yet or wait for the mainline patch to be accepted?
+
+>
+>>      mips64el |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/f91de4a596817997b2f35c24b07aec43916c9e1b/
+>
+> /home/peko/autobuild/instance-0/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/gnu/lib-names.h:34:37: fatal error: gnu/lib-names-n64_soft.h: No such file or directory
+>   # include <gnu/lib-names-n64_soft.h>
+>
+> Vicente ?
+>
+>>        mipsel |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/f0891474fe2cd3e47b1489f147e31f698dbd013f/
+>
+> painting/qbrush.cpp:38:29: fatal error: qplatformpixmap.h: No such file or directory
+>   #include "qplatformpixmap.h"
+>
+
+[snip]
+
+>
+> Thomas
+>
+
+Julien
