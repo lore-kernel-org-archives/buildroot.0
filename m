@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:39:50 -0300
-Subject: [Buildroot] [PATCH 049/113] lite: add hash file
+Date: Tue, 28 Jul 2015 15:39:51 -0300
+Subject: [Buildroot] [PATCH 050/113] log4cxx: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-49-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-50-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linphone/linphone.hash | 2 ++
- package/lite/lite.hash         | 2 ++
- 2 files changed, 4 insertions(+)
- create mode 100644 package/linphone/linphone.hash
- create mode 100644 package/lite/lite.hash
+ package/log4cxx/log4cxx.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/log4cxx/log4cxx.hash
 
-diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
+diff --git a/package/log4cxx/log4cxx.hash b/package/log4cxx/log4cxx.hash
 new file mode 100644
-index 0000000..9ed9d37
+index 0000000..469d99a
 --- /dev/null
-+++ b/package/linphone/linphone.hash
++++ b/package/log4cxx/log4cxx.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated after checking pgp signature
-+sha256	05ba81223e9378c3bce8d33080213b9925af49bd9623cd9004eb3dd22ca9d2a0	linphone-3.6.1.tar.gz
-diff --git a/package/lite/lite.hash b/package/lite/lite.hash
-new file mode 100644
-index 0000000..9da6b4b
---- /dev/null
-+++ b/package/lite/lite.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	1b784cf595c3d5313e3705db210119f77d48826dbc7fcf6328af83a1270c2264	LiTE-0.8.10.tar.gz
++sha256	0de0396220a9566a580166e66b39674cb40efd2176f52ad2c65486c99c920c8c	apache-log4cxx-0.10.0.tar.gz
 -- 
 2.3.6
