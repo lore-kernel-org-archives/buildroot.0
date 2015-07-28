@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit] libsigsegv: add hash file
-Message-ID: <20150728204047.85AF07F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit] rtptools: add hash file
+Message-ID: <20150728204053.C913C7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd918f4d7db5b91ba9f4fd434486a2aee4c60d89
+commit: http://git.buildroot.net/buildroot/commit/?id=f657fc96b6f430424997ba23dce173cc641f25bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigsegv/libsigsegv.hash |    2 ++
+ package/rtptools/rtptools.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsigsegv/libsigsegv.hash b/package/libsigsegv/libsigsegv.hash
+diff --git a/package/rtptools/rtptools.hash b/package/rtptools/rtptools.hash
 new file mode 100644
-index 0000000..0151105
+index 0000000..bf5b4a6
 --- /dev/null
-+++ b/package/libsigsegv/libsigsegv.hash
++++ b/package/rtptools/rtptools.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	8460a4a3dd4954c3d96d7a4f5dd5bc4d9b76f5754196aa245287553b26d2199a	libsigsegv-2.10.tar.gz
++# Locally calculated
++sha256	99d681f6e328486fa1fc16581b0a5974e31eb2708101683ee9c8a0b6bed31050	rtptools-1.20.tar.gz
