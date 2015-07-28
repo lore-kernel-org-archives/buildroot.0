@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:10 +0200
-Subject: [Buildroot] [git commit branch/next] nss-mdns: add hash file
-Message-ID: <20150808105647.31CD07FE8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] newt: add hash file
+Message-ID: <20150808105647.2839280741@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e2c866546d4935fa0ebd53333a8f329b8b6583b
+commit: http://git.buildroot.net/buildroot/commit/?id=949fefecfc2653a4f1ed2ddfaf3eeafd7f47b0d2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nss-mdns/nss-mdns.hash |    2 ++
+ package/newt/newt.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/nss-mdns/nss-mdns.hash b/package/nss-mdns/nss-mdns.hash
+diff --git a/package/newt/newt.hash b/package/newt/newt.hash
 new file mode 100644
-index 0000000..169c497
+index 0000000..ca64f41
 --- /dev/null
-+++ b/package/nss-mdns/nss-mdns.hash
++++ b/package/newt/newt.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	1e683c2e7c3921814706d62fbbd3e9cbf493a75fa00255e0e715508d8134fa6d	nss-mdns-0.10.tar.gz
++sha256	771b0e634ede56ae6a6acd910728bb5832ac13ddb0d1d27919d2498dab70c91e	newt-0.52.18.tar.gz
