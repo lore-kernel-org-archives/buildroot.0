@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:55 +0200
-Subject: [Buildroot] [git commit] dos2unix: add hash file
-Message-ID: <20150728204045.F3C3B7F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit] libebml: add hash file
+Message-ID: <20150728204046.DDFAE7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff2bc2fd30da613340ab85f6d0043eaed89800ff
+commit: http://git.buildroot.net/buildroot/commit/?id=8ffa00e28458f44bcc3b6af357b6f98786bd2995
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dos2unix/dos2unix.hash |    2 ++
+ package/libebml/libebml.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
 new file mode 100644
-index 0000000..7880f1d
+index 0000000..d5a8cb8
 --- /dev/null
-+++ b/package/dos2unix/dos2unix.hash
++++ b/package/libebml/libebml.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	551afe005a86e58664b4f41327408e73afafe92400488dd0aab1dad6deb4e72b	dos2unix-7.0.tar.gz
++# Locally calculated
++sha256	195894b31aaca55657c9bc157d744f23b0c25597606b97cfa5a9039c4b684295	libebml-1.3.1.tar.bz2
