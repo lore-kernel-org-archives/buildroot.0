@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:10 +0200
-Subject: [Buildroot] [git commit] parted: add hash file
-Message-ID: <20150728204048.986A081E3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] newt: add hash file
+Message-ID: <20150728204048.6A6EA81E69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e7489508bd93eb70dde5b8169bdcb2953d3c214
+commit: http://git.buildroot.net/buildroot/commit/?id=949fefecfc2653a4f1ed2ddfaf3eeafd7f47b0d2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/parted/parted.hash |    2 ++
+ package/newt/newt.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/parted/parted.hash b/package/parted/parted.hash
+diff --git a/package/newt/newt.hash b/package/newt/newt.hash
 new file mode 100644
-index 0000000..297b5d7
+index 0000000..ca64f41
 --- /dev/null
-+++ b/package/parted/parted.hash
++++ b/package/newt/newt.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	5e9cc1f91eaf016e5033d85b9b893fd6d3ffaca532a48de1082df9b94225ca15	parted-3.1.tar.xz
++# Locally calculated
++sha256	771b0e634ede56ae6a6acd910728bb5832ac13ddb0d1d27919d2498dab70c91e	newt-0.52.18.tar.gz
