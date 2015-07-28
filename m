@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit branch/next] sylpheed: add hash file
-Message-ID: <20150808105648.6865D81904@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit branch/next] simicsfs: add hash file
+Message-ID: <20150808105648.401B17FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df9e6b0aaa7fe08bb9e867ca3995d6694fd874b9
+commit: http://git.buildroot.net/buildroot/commit/?id=ed4b7adf33d494c5e821a3dcc65d27479104f68a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sylpheed/sylpheed.hash |    2 ++
+ package/simicsfs/simicsfs.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sylpheed/sylpheed.hash b/package/sylpheed/sylpheed.hash
+diff --git a/package/simicsfs/simicsfs.hash b/package/simicsfs/simicsfs.hash
 new file mode 100644
-index 0000000..39c0927
+index 0000000..42ada91
 --- /dev/null
-+++ b/package/sylpheed/sylpheed.hash
++++ b/package/simicsfs/simicsfs.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	4aeb7c6436ad485a2cc101dd68a1fb84abcad4c6471ed9ddefec65e482e5b2b1	sylpheed-3.2.0.tar.bz2
++# Locally calculated
++sha256	d0cf7caf888dc1e7dc9496c4b59af98eb2b69d6113d6920757465902e1f21f38	simicsfs-1.18.tar.gz
