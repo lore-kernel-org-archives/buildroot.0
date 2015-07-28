@@ -1,40 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 16:05:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-07-27
-In-Reply-To: <1438092036.1610.2.camel@embedded.rocks>
-References: <20150728063018.ECCE8101BC0@stock.ovh.net>
- <20150728105715.22962d48@free-electrons.com>
- <1438092036.1610.2.camel@embedded.rocks>
-Message-ID: <20150728160508.5475ef5d@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Jul 2015 11:14:22 -0300
+Subject: [Buildroot] [PATCH] iproute2: needs headers >= 3.0
+Message-ID: <1438092862-7252-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+The newest iproute2 version requires a toolchain with headers >= 3.0 for
+proper namespace & bpf support, so adjust the dependencies and
+dependants accordingly. Fixes:
 
-On Tue, 28 Jul 2015 16:00:36 +0200, J?rg Krause wrote:
+http://autobuild.buildroot.net/results/fa8/fa810f310c7540e02c0ed84c4a3ce74ab602daa5/
 
-> > J?rg, you have touched Boost/cc-tool recently, can you have a look?
-> 
-> The old version of boost.m4 currently included in cc-tool has an issue
-> with gcc5 (one of its tests fails due to the first change described in 
-> https://gcc.gnu.org/gcc-5/porting_to.html , "Preprocessor issues").
-> 
-> This was fixed upstream in Nov 2014:
-> 
-> https://github.com/tsuna/boost.m4/commit/32553aaf4d5090da19aa0ec33b9369
-> 82c685009f
-> 
-> I'll update boost.m4 for cc-tool and submit a patch.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ifupdown/Config.in | 6 ++++--
+ package/iproute2/Config.in | 5 +++++
+ package/openswan/Config.in | 5 +++++
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-Thanks! Can you also raise the issue to upstream cc-tool, so that it
-gets fixed there as well?
-
-Thomas
+diff --git a/package/ifupdown/Config.in b/package/ifupdown/Config.in
+index 10cf2be..1e11e4e 100644
+--- a/package/ifupdown/Config.in
++++ b/package/ifupdown/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IFUPDOWN
+ 	bool "ifupdown"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
+ 	# Default/our uclibc lacks wordexp()
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	# runtime for ip binary
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_IFUPDOWN
+ 
+ 	  https://tracker.debian.org/pkg/ifupdown
+ 
+-comment "ifupdown needs an (e)glibc or musl toolchain"
++comment "ifupdown needs an (e)glibc or musl toolchain w/ headers >= 3.0"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/iproute2/Config.in b/package/iproute2/Config.in
+index 0662492..fd373a8 100644
+--- a/package/iproute2/Config.in
++++ b/package/iproute2/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_IPROUTE2
+ 	bool "iproute2"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # bpf, namespaces
+ 	help
+ 	  Kernel routing and traffic control utilities. Provides things
+ 	  like ip and tc.
+ 
+ 	  http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2
++
++comment "iproute2 needs a toolchain w/ headers >= 3.0"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index 932a75f..0370143 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_OPENSWAN
+ 	bool "openswan"
+ 	depends on BR2_USE_MMU # iproute2
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_IPROUTE2
+ 	help
+ 	  Openswan is an implementation of IPsec for Linux
+ 
+ 	  http://www.openswan.org
++
++comment "openswan needs a toolchain w/ headers >= 3.0"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
