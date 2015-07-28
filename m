@@ -1,59 +1,86 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 28 Jul 2015 10:12:52 +0200
-Subject: [Buildroot] [PATCH 00/13] Update Freescale packages to
-	3.10.53-1.1.0_GA
-In-Reply-To: <CAAMH-yuqz=JYq8Z=CuRAtzauxP3LQv4vyNGVLBpUwdB-Pt1Mjw@mail.gmail.com>
-References: <CAD7j7Q-B9NAQqVHZr+uPmFTjOa5BJ-Orc3bOKFx81UHYX8Yk0Q@mail.gmail.com>
- <CAD7j7Q_sNtMoMvD5oCbGAG8zUr1tyiPEgGNQfODXxz-z2_TVdQ@mail.gmail.com>
- <CAAMH-yuqz=JYq8Z=CuRAtzauxP3LQv4vyNGVLBpUwdB-Pt1Mjw@mail.gmail.com>
-Message-ID: <9103272.Gv7pRDqVQb@sagittea>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Tue, 28 Jul 2015 16:15:27 +0800
+Subject: [Buildroot] [PATCH 1/2] libssh: new package
+Message-ID: <1438071328-12502-1-git-send-email-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary, Carlos,
+libssh2 and libssh both implement SSH and provide a library API for apps.
+Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of code.
 
-On Monday 27 July 2015 19:42:08 Gary Bisson wrote:
-> Hi Carlos,
-> 
-> On Sat, Jul 18, 2015 at 10:06 PM, Carlos Soto <csotoalonso@gmail.com> wrote:
-> >
-> >
-> > 2015-07-18 21:55 GMT+02:00 Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com>:
-> >>
-> >> Dear Carlos Soto,
-> >>
-> >> On Sat, 18 Jul 2015 21:36:04 +0200, Carlos Soto wrote:
-[...]
-> >> > Anyway, they seem to work except for the fact that as soon as a program
-> >> > is
-> >> > stopped (mainly I've tried with glxgears) the xserver crashes. That's
-> >> > the
-> >> > error log:
-> >>
-> >> I'm adding Gary in Cc, he can probably help about this, at least
-> >> confirm whether he can reproduce the same problem or not.
-> >
-> >
-> > Great! I'll also try it again once I update my local copy
-> 
-> Yes I confirm I've built the master branch today and I see this error
-> when closing the X app. I will let you know if I find what causes this
-> error. Note that in my case it doesn't happen all the time. I suspect
-> the vivante libraries...
-As far as remember, by default X server terminate when the last client exit. 
-When you produce problem, are you closing the last client? You can try to pass 
---noreset option when you launch X.
+[libssh2 vs libssh - A comparison]
+http://www.libssh2.org/libssh2-vs-libssh.html
 
-In add, notice glxgears is not the best program to test. Indeed Vivante driver 
-does not support GLX/OpenGL API very well (it normally fallback to software 
-rendering provided by mesa3d). Prefer test with a GLESv2 program.
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/libssh/Config.in   |  9 +++++++++
+ package/libssh/libssh.hash |  2 ++
+ package/libssh/libssh.mk   | 16 ++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/libssh/Config.in
+ create mode 100644 package/libssh/libssh.hash
+ create mode 100644 package/libssh/libssh.mk
 
-
+diff --git a/package/Config.in b/package/Config.in
+index 1e39c74..8d9511c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -748,6 +748,7 @@ menu "Crypto"
+ 	source "package/libsecret/Config.in"
+ 	source "package/libsha1/Config.in"
+ 	source "package/libsodium/Config.in"
++	source "package/libssh/Config.in"
+ 	source "package/libssh2/Config.in"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
+diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+new file mode 100644
+index 0000000..f5c4405
+--- /dev/null
++++ b/package/libssh/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBSSH
++	bool "libssh"
++	help
++	  libssh is a mulitplatform C library implementing the SSHv2 and SSHv1
++	  protocol on client and server side. With libssh, you can remotely execute
++	  programs, transfer files, use a secure and transparent tunnel for your
++	  remote applications.
++
++	  http://www.libssh.org/
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+new file mode 100644
+index 0000000..81466cc
+--- /dev/null
++++ b/package/libssh/libssh.hash
+@@ -0,0 +1,2 @@
++# from https://red.libssh.org/projects/libssh/files/
++md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+new file mode 100644
+index 0000000..9d5422f
+--- /dev/null
++++ b/package/libssh/libssh.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++## libssh
++#
++#################################################################################
++
++LIBSSH_VERSION = 0.7.1
++LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
++LIBSSH_SITE = https://red.libssh.org/attachments/download/154
++LIBSSH_LICENSE = LGPLv2.1
++LIBSSH_LICENSE_FILES = COPYING
++LIBSSH_INSTALL_STAGING = YES
++LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBSSH_CONF_OPTS += -DWITH_SERVER=OFF
++
++$(eval $(cmake-package))
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+2.4.6
