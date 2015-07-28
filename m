@@ -1,27 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:55 +0200
-Subject: [Buildroot] [git commit branch/next] fmtools: add hash file
-Message-ID: <20150808105645.569DD7F8D4@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 09:53:32 +0200
+Subject: [Buildroot] [git commit branch/next] pure-ftpd: bump to version
+	1.0.42
+Message-ID: <20150808105644.CD4537FD83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af434274a0821cb1b6256420da6c5657671be612
+commit: http://git.buildroot.net/buildroot/commit/?id=b1b3ce81a7711b7b5ffb37c0c61ff606b8463bc1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+bzero patch upstream so drop it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fmtools/fmtools.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ ...x-building-in-case-of-HAVE_EXPLICIT_BZERO.patch |   40 --------------------
+ package/pure-ftpd/pure-ftpd.hash                   |    2 +-
+ package/pure-ftpd/pure-ftpd.mk                     |    2 +-
+ 3 files changed, 2 insertions(+), 42 deletions(-)
 
-diff --git a/package/fmtools/fmtools.hash b/package/fmtools/fmtools.hash
-new file mode 100644
-index 0000000..435cf0a
---- /dev/null
-+++ b/package/fmtools/fmtools.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	75174e07d8cde6d4a8a5d7bbaa3a3b0760a850e7f6840cb7c6246227b18f5a39	fmtools-2.0.7.tar.gz
+diff --git a/package/pure-ftpd/0002-Fix-building-in-case-of-HAVE_EXPLICIT_BZERO.patch b/package/pure-ftpd/0002-Fix-building-in-case-of-HAVE_EXPLICIT_BZERO.patch
+deleted file mode 100644
+index 8117f88..0000000
+--- a/package/pure-ftpd/0002-Fix-building-in-case-of-HAVE_EXPLICIT_BZERO.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From f70c363b633229368ed352ce4f599da033cbbdf1 Mon Sep 17 00:00:00 2001
+-From: Alexey Brodkin <abrodkin@synopsys.com>
+-Date: Thu, 9 Jul 2015 09:38:25 +0300
+-Subject: [PATCH] Fix building in case of HAVE_EXPLICIT_BZERO
+-
+-Currently if toolchain has implementation of explicit_bzero() and so
+-HAVE_EXPLICIT_BZERO gets defined during configuration compilation will
+-fail that way:
+------------------------------------->8------------------------------
+-utils.c: In function 'pure_memzero':
+-utils.c:49:1: error: expected declaration or statement at end of input
+- }
+- ^
+------------------------------------->8------------------------------
+-
+-That happens because closing "#endif" is put 1 line below than really
+-meant.
+-
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+----
+- src/utils.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/utils.c b/src/utils.c
+-index 228a8dc..f41492d 100644
+---- a/src/utils.c
+-+++ b/src/utils.c
+-@@ -25,8 +25,8 @@ void pure_memzero(void * const pnt, const size_t len)
+-     while (i < len) {
+-         pnt_[i++] = 0U;
+-     }
+--}
+- # endif
+-+}
+- 
+- int pure_memcmp(const void * const b1_, const void * const b2_, size_t len)
+- {
+--- 
+-2.4.3
+-
+diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
+index d1f812e..6996290 100644
+--- a/package/pure-ftpd/pure-ftpd.hash
++++ b/package/pure-ftpd/pure-ftpd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1d48f650f366b8151d86b86c79f4bb874e95143bdac0e767038eda832d28a010	pure-ftpd-1.0.41.tar.bz2
++sha256	efd11295998453e31dbeef9159624beabbac2643a338134ae8c2ef529aa2ec10	pure-ftpd-1.0.42.tar.bz2
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index b49f047..aa65e9e 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PURE_FTPD_VERSION = 1.0.41
++PURE_FTPD_VERSION = 1.0.42
+ PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
+ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
+ PURE_FTPD_LICENSE = ISC
