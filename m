@@ -1,849 +1,259 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 28 Jul 2015 16:32:33 +0300
-Subject: [Buildroot] [PATCH] uclibc: arc-2015.06 - add patches on top of
-	release
-Message-ID: <1438090353-30077-1-git-send-email-abrodkin@synopsys.com>
+Date: Tue, 28 Jul 2015 16:33:12 +0300
+Subject: [Buildroot] [PATCH] binutils: more fixes for arc-2015.06 tools
+Message-ID: <1438090392-30182-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds 2 patches on top of arc-2015.06 release:
- 0001-nptl-remove-duplicate-vfork-in-libpthread.patch
- 0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch
+Two patches below are taken from development branch of ARC binutils,
+so one the next release of ARC tools happens both patches must be removed.
 
-The first patch fixes multiple build issues when using static build like
-http://autobuild.buildroot.net/results/b704016acfa38e7998739a2c70bcf6020c59bda8/
-
-The second patch allows for building uClibc for ARCv2 based CPUs that
-doesn't have 64-bit load/store capabilities.
-
-Both patches should be a part of the next release/update of ARC GNU
-tools so then they should be removed from Buildroot.
+These 2 patches:
+ 0003-ld-arc-Provide-the-.tdata-symbol.patch
+ 0004-Provide-.tbss-symbol.patch
+fix missing .tbss and .tdata sections during linkage stage such as:
+------------------------------>8---------------------------
+arc-linux-g++ test.cpp
+../arc-buildroot-linux-uclibc/lib/libstdc++.so: undefined reference to '.tbss'
+collect2: error: ld returned 1 exit status
+------------------------------>8---------------------------
 
 Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nptl-remove-duplicate-vfork-in-libpthread.patch | 722 +++++++++++++++++++++
- ...e-memset-so-it-could-be-used-without-doub.patch |  81 +++
- 2 files changed, 803 insertions(+)
- create mode 100644 package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch
- create mode 100644 package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch
+ .../0002-ld-arc-Provide-the-.tdata-symbol.patch    | 145 +++++++++++++++++++++
+ .../arc-2015.06/0003-Provide-.tbss-symbol.patch    |  70 ++++++++++
+ 2 files changed, 215 insertions(+)
+ create mode 100644 package/binutils/arc-2015.06/0002-ld-arc-Provide-the-.tdata-symbol.patch
+ create mode 100644 package/binutils/arc-2015.06/0003-Provide-.tbss-symbol.patch
 
-diff --git a/package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch b/package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch
+diff --git a/package/binutils/arc-2015.06/0002-ld-arc-Provide-the-.tdata-symbol.patch b/package/binutils/arc-2015.06/0002-ld-arc-Provide-the-.tdata-symbol.patch
 new file mode 100644
-index 0000000..6b609af
+index 0000000..40341a5
 --- /dev/null
-+++ b/package/uclibc/arc-2015.06/0001-nptl-remove-duplicate-vfork-in-libpthread.patch
-@@ -0,0 +1,722 @@
-+From a22a0030f32b828c0f2e804d1ed1fe567ddab680 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 20 Sep 2014 22:09:00 +0200
-+Subject: [PATCH] nptl: remove duplicate vfork() in libpthread
++++ b/package/binutils/arc-2015.06/0002-ld-arc-Provide-the-.tdata-symbol.patch
+@@ -0,0 +1,145 @@
++From daf1ff839fc68ef31e3263780de4604a95118702 Mon Sep 17 00:00:00 2001
++From: Andrew Burgess <andrew.burgess@embecosm.com>
++Date: Thu, 23 Jul 2015 14:44:15 +0100
++Subject: [PATCH 1/2] ld/arc: Provide the .tdata symbol.
 +
-+Automatic patching via two oneliners by Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>:
-+sed -i -e 's/[[:space:]]pt-vfork\.[csS]//' -e '/^ASFLAGS-pt-vfork\./d' $(git grep -l pt-vfork libpthread/nptl/sysdeps)
-+find libpthread/nptl -name "*pt-vfork*" -exec git rm {} \;
++When creating local dynamic tls access we rely on a .tdata symbol being
++available to link against.  Normally, this is fine, as content is placed
++into the .tdata section the linker makes a .tdata symbol available and
++all is fine.
 +
-+Reported-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++However, these linker created section symbols only exist for input
++sections, not output sections, so, when we assemble with
++-fdata-sections, and the content is placed not into '.tdata', but into
++sections like, '.tdata.variable' we end up in a situation where there is
++no input section called '.tdata', and so the linker does not create a
++symbol called '.tdata' for us, at which point the link fails.
++
++The solution it to have the linker script explicitly provide the symbol
++'.tdata', this should ensure that the symbol is always available.
++
++ld/ChangeLog:
++
++	* scripttempl/arclinux.sc (.tdata): Provide the .tdata symbol.
++
++ld/testsuite/ChangeLog:
++
++	* ld/testsuite/ld-arc/arc.exp: Run new test.
++	* ld/testsuite/ld-arc/tls-data-sections.d: New file.
++	* ld/testsuite/ld-arc/tls-data-sections.s: New file.
 +---
-+ .../nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S  | 42 --------------
-+ .../nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S    |  7 ---
-+ .../nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S    | 37 ------------
-+ .../sysdeps/unix/sysv/linux/i386/Makefile.arch     |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S   | 67 ----------------------
-+ .../sysdeps/unix/sysv/linux/metag/Makefile.arch    |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S  | 51 ----------------
-+ .../sysdeps/unix/sysv/linux/mips/Makefile.arch     |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S   | 37 ------------
-+ .../sysdeps/unix/sysv/linux/powerpc/Makefile.arch  |  2 +-
-+ .../unix/sysv/linux/powerpc/powerpc32/pt-vfork.S   | 48 ----------------
-+ .../unix/sysv/linux/powerpc/powerpc64/pt-vfork.S   | 48 ----------------
-+ .../sysdeps/unix/sysv/linux/powerpc/pt-vfork.S     |  5 --
-+ .../nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch  |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S     | 64 ---------------------
-+ .../sysdeps/unix/sysv/linux/sparc/Makefile.arch    |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S  | 44 --------------
-+ .../sysdeps/unix/sysv/linux/x86_64/Makefile.arch   |  2 +-
-+ .../nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S | 32 -----------
-+ 21 files changed, 9 insertions(+), 491 deletions(-)
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S
-+ delete mode 100644 libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S
++ ld/ChangeLog.ARC                        |  4 ++++
++ ld/scripttempl/arclinux.sc              |  2 +-
++ ld/testsuite/ChangeLog.ARC              |  6 ++++++
++ ld/testsuite/ld-arc/arc.exp             |  1 +
++ ld/testsuite/ld-arc/tls-data-sections.d | 12 ++++++++++++
++ ld/testsuite/ld-arc/tls-data-sections.s | 30 ++++++++++++++++++++++++++++++
++ 6 files changed, 54 insertions(+), 1 deletion(-)
++ create mode 100644 ld/testsuite/ld-arc/tls-data-sections.d
++ create mode 100644 ld/testsuite/ld-arc/tls-data-sections.s
 +
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S
-+deleted file mode 100644
-+index a6005c1..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/alpha/pt-vfork.S
-++++ /dev/null
-+@@ -1,42 +0,0 @@
-+-/* Copyright (C) 2003, 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <sysdep.h>
-+-#include <tcb-offsets.h>
-+-
-+-#undef PSEUDO_PREPARE_ARGS
-+-#define PSEUDO_PREPARE_ARGS						\
-+-	/* Load the current cached pid value across the vfork.  */	\
-+-	rduniq;								\
-+-	ldl	a2, PID_OFFSET(v0);					\
-+-	mov	v0, a1;							\
-+-	/* Write back its negation, to indicate that the pid value is	\
-+-	   uninitialized in the the child, and in the window between	\
-+-	   here and the point at which we restore the value.  */	\
-+-	negl	a2, t0;							\
-+-	stl	t0, PID_OFFSET(v0);
-+-
-+-PSEUDO (__vfork, vfork, 0)
-+-
-+-	/* If we're back in the parent, restore the saved pid.  */
-+-	beq	v0, 1f
-+-	stl	a2, PID_OFFSET(a1)
-+-1:	ret
-+-
-+-PSEUDO_END (__vfork)
-+-
-+-weak_alias (__vfork, vfork)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch
-+index 8e3c7b0..3b9db6a 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arc/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
-+ #
++diff --git a/ld/ChangeLog.ARC b/ld/ChangeLog.ARC
++index fac6f48..0006bb3 100644
++--- a/ld/ChangeLog.ARC
+++++ b/ld/ChangeLog.ARC
++@@ -1,3 +1,7 @@
+++2015-07-23  Andrew Burgess  <andrew.burgess@embecosm.com>
+++
+++	* scripttempl/arclinux.sc (.tdata): Provide the .tdata symbol.
+++
++ 2015-03-26: Claudiu Zissulescu <claziss@synopsys.com>
 + 
-+-libpthread_linux_arch_SSRC = pt-vfork.S
-++libpthread_linux_arch_SSRC =
-+ libpthread_linux_arch_CSRC = pthread_once.c lowlevellock.c \
-+ 	pt-__syscall_rt_sigaction.c pt-__syscall_error.c
++ 	* testsuite/ld-arc/sda_relocs.d: New file.
++diff --git a/ld/scripttempl/arclinux.sc b/ld/scripttempl/arclinux.sc
++index 9d43ca3..1385b30 100644
++--- a/ld/scripttempl/arclinux.sc
+++++ b/ld/scripttempl/arclinux.sc
++@@ -326,7 +326,7 @@ cat <<EOF
++   .data1        ${RELOCATING-0} : { *(.data1) }
++   /* TLS local dynamic uses .tdata as a reference point.  */
++   ${RELOCATING+${CREATE_SHLIB+PROVIDE_HIDDEN (.tdata = .);}}
++-  .tdata	${RELOCATING-0} : { *(.tdata${RELOCATING+ .tdata.* .gnu.linkonce.td.*}) }
+++  .tdata	${RELOCATING-0} : { PROVIDE_HIDDEN(.tdata = .); *(.tdata${RELOCATING+ .tdata.* .gnu.linkonce.td.*}) }
++   .tbss		${RELOCATING-0} : { *(.tbss${RELOCATING+ .tbss.* .gnu.linkonce.tb.*})${RELOCATING+ *(.tcommon)} }
++   .eh_frame     ${RELOCATING-0} : { KEEP (*(.eh_frame)) }
++   .gcc_except_table ${RELOCATING-0} : { *(.gcc_except_table) }
++diff --git a/ld/testsuite/ChangeLog.ARC b/ld/testsuite/ChangeLog.ARC
++index b6d3eff..79f7ea9 100644
++--- a/ld/testsuite/ChangeLog.ARC
+++++ b/ld/testsuite/ChangeLog.ARC
++@@ -1,3 +1,9 @@
+++2015-07-23  Andrew Burgess  <andrew.burgess@embecosm.com>
+++
+++	* ld/testsuite/ld-arc/arc.exp: Run new test.
+++	* ld/testsuite/ld-arc/tls-data-sections.d: New file.
+++	* ld/testsuite/ld-arc/tls-data-sections.s: New file.
+++
++ 2015-06-06  Andrew Burgess  <andrew.burgess@embecosm.com>
 + 
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S
-+deleted file mode 100644
-+index f222dca..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arc/pt-vfork.S
-++++ /dev/null
-+@@ -1,7 +0,0 @@
-+-/*
-+- * Copyright (C) 2013 Synopsys, Inc. (www.synopsys.com)
-+- *
-+- * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
-+- */
-+-
-+-#include "vfork.S"
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch
-+index c8d5d4a..e61072e 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
++ 	* ld-arc/unaligned-pc32.d: New file.
++diff --git a/ld/testsuite/ld-arc/arc.exp b/ld/testsuite/ld-arc/arc.exp
++index d2bfafe..74ab458 100644
++--- a/ld/testsuite/ld-arc/arc.exp
+++++ b/ld/testsuite/ld-arc/arc.exp
++@@ -47,3 +47,4 @@ if {[check_shared_lib_support]} {
 + 
-+-libpthread_linux_arch_SSRC = pt-vfork.S
-++libpthread_linux_arch_SSRC =
-+ libpthread_linux_arch_CSRC = pthread_once.c \
-+ 	pt-__syscall_rt_sigaction.c pt-__syscall_error.c \
-+ 	lowlevellock.c
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S
-+deleted file mode 100644
-+index df18f03..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/pt-vfork.S
-++++ /dev/null
-+@@ -1,37 +0,0 @@
-+-/* Copyright (C) 2005 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <tcb-offsets.h>
-+-
-+-/* Save the PID value.  */
-+-#define SAVE_PID \
-+-	str	lr, [sp, #-4]!;		/* Save LR.  */			\
-+-	mov	r0, #0xffff0fff;	/* Point to the high page.  */	\
-+-	mov	lr, pc;			/* Save our return address.  */	\
-+-	sub	pc, r0, #31;		/* Jump to the TLS entry.  */	\
-+-	ldr	lr, [sp], #4;		/* Restore LR.  */		\
-+-	mov	r2, r0;			/* Save the TLS addr in r2.  */	\
-+-	ldr	r3, [r2, #PID_OFFSET];	/* Load the saved PID.  */	\
-+-	rsb	r0, r3, #0;		/* Negate it.  */		\
-+-	str	r0, [r2, #PID_OFFSET]	/* Store the temporary PID.  */
-+-
-+-/* Restore the old PID value in the parent.  */
-+-#define RESTORE_PID \
-+-	cmp	r0, #0;			/* If we are the parent... */	\
-+-	strne	r3, [r2, #PID_OFFSET]	/* ... restore the saved PID.  */
-+-
-+-#include "../../../../../../../libc/sysdeps/linux/arm/vfork.S"
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch
-+index fff0dae..9dc878c 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S clone.S pthread_spin_unlock.S pthread_once.S
-++libpthread_linux_arch_SSRC = clone.S pthread_spin_unlock.S pthread_once.S
-+ libpthread_linux_arch_CSRC = pthread_spin_init.c pt-__syscall_error.c
-+ 
-+ libc_linux_arch_CSRC = fork.c
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S
-+deleted file mode 100644
-+index 5bba782..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/pt-vfork.S
-++++ /dev/null
-+@@ -1,67 +0,0 @@
-+-/* Copyright (C) 1999, 2002, 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-   Contributed by Andreas Schwab <schwab@gnu.org>.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <sysdep.h>
-+-#define _ERRNO_H	1
-+-#include <bits/errno.h>
-+-#include <bits/kernel-features.h>
-+-#include <tcb-offsets.h>
-+-
-+-/* Save the PID value.  */
-+-#define SAVE_PID \
-+-	movl	%gs:PID, %edx; 						      \
-+-	movl	%edx, %eax;						      \
-+-	negl	%eax;							      \
-+-	movl	%eax, %gs:PID
-+-
-+-/* Restore the old PID value in the parent.  */
-+-#define RESTORE_PID \
-+-	testl	%eax, %eax;						      \
-+-	je	1f;							      \
-+-	movl	%edx, %gs:PID;						      \
-+-1:
-+-
-+-/* Clone the calling process, but without copying the whole address space.
-+-   The calling process is suspended until the new process exits or is
-+-   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
-+-   and the process ID of the new process to the old process.  */
-+-
-+-ENTRY (__vfork)
-+-	/* Pop the return PC value into ECX.  */
-+-	popl	%ecx
-+-
-+-	SAVE_PID
-+-
-+-	/* Stuff the syscall number in EAX and enter into the kernel.  */
-+-	movl	$SYS_ify (vfork), %eax
-+-	int	$0x80
-+-
-+-	RESTORE_PID
-+-
-+-	/* Jump to the return PC.  Don't jump directly since this
-+-	   disturbs the branch target cache.  Instead push the return
-+-	   address back on the stack.  */
-+-	pushl	%ecx
-+-
-+-	cmpl	$-4095, %eax
-+-	jae	SYSCALL_ERROR_LABEL	/* Branch forward if it failed.  */
-+-L(pseudo_end):
-+-	ret
-+-PSEUDO_END (__vfork)
-+-
-+-weak_alias (__vfork, vfork)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch
-+index 4d02d0c..ddc7680 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/metag/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S
-++libpthread_linux_arch_SSRC =
-+ libpthread_linux_arch_CSRC = pthread_once.c \
-+ 	pt-__syscall_rt_sigaction.c pt-__syscall_error.c \
-+ 	lowlevellock.c
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S
-+deleted file mode 100644
-+index 489c749..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/metag/pt-vfork.S
-++++ /dev/null
-+@@ -1,51 +0,0 @@
-+-/* Copyright (C) 2005 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, write to the Free
-+-   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-+-   02111-1307 USA.  */
-+-
-+-#include <tcb-offsets.h>
-+-#include <asm/unistd.h>
-+-
-+-#ifdef __PIC__
-+-#define __VFORK_METAG_LOAD_TP ___metag_load_tp at PLT
-+-#else
-+-#define __VFORK_METAG_LOAD_TP ___metag_load_tp
-+-#endif
-+-
-+-/* Save the PID value.  */
-+-#define SAVE_PID \
-+-	SETL	[A0StP++], D0FrT, D1RtP; \
-+-	CALLR	D1RtP, __VFORK_METAG_LOAD_TP; \
-+-	SUB	D0Re0, D0Re0, #TLS_PRE_TCB_SIZE; \
-+-	GETD	D0FrT, [D0Re0 + #PID]; \
-+-	NEG	D0FrT, D0FrT; \
-+-	SETD	[D0Re0 + #PID], D0FrT; \
-+-	GETL	D0FrT, D1RtP, [--A0StP];
-+-
-+-#define RESTORE_PID \
-+-	CMP 	D0Re0, #0; \
-+-	BEQ	1f; \
-+-	MSETL	[A0StP++], D0Re0, D0FrT; \
-+-	CALLR	D1RtP, __VFORK_METAG_LOAD_TP; \
-+-	SUB	D0Re0, D0Re0, #TLS_PRE_TCB_SIZE; \
-+-	GETD	D0FrT, [D0Re0 + #PID]; \
-+-	NEG	D0FrT, D0FrT; \
-+-	SETD	[D0Re0 + #PID], D0FrT; \
-+-	GETL	D0FrT, D1RtP, [--A0StP]; \
-+-	GETL	D0Re0, D1Re0, [--A0StP]; \
-+-1:
-+-
-+-#include <../../../../../../../libc/sysdeps/linux/metag/vfork.S>
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch
-+index 4a3d0f2..f87dedc 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/mips/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S clone.S
-++libpthread_linux_arch_SSRC = clone.S
-+ libpthread_linux_arch_CSRC = pthread_once.c pt-__syscall_rt_sigaction.c
-+ 
-+ libc_linux_arch_CSRC = fork.c
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S
-+deleted file mode 100644
-+index 52fbde3..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/mips/pt-vfork.S
-++++ /dev/null
-+@@ -1,37 +0,0 @@
-+-/* Copyright (C) 2005 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <features.h>
-+-#include <tls.h>
-+-
-+-/* Save the PID value.  */
-+-#define SAVE_PID \
-+-	READ_THREAD_POINTER(v1);	/* Get the thread pointer.  */	\
-+-	lw	a2, PID_OFFSET(v1);	/* Load the saved PID.  */	\
-+-	subu	a2, $0, a2;		/* Negate it.  */		\
-+-	sw	a2, PID_OFFSET(v1);	/* Store the temporary PID.  */
-+-
-+-/* Restore the old PID value in the parent.  */
-+-#define RESTORE_PID \
-+-	beqz	v0, 1f;			/* If we are the parent... */	\
-+-	READ_THREAD_POINTER(v1);	/* Get the thread pointer.  */	\
-+-	lw	a2, PID_OFFSET(v1);	/* Load the saved PID.  */	\
-+-	subu	a2, $0, a2;		/* Re-negate it.  */		\
-+-	sw	a2, PID_OFFSET(v1);	/* Restore the PID.  */		\
-+-1:
-+-
-+-#include <../../../../../../../libc/sysdeps/linux/mips/vfork.S>
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch
-+index 21b9b72..df4bb69 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S
-++libpthread_linux_arch_SSRC =
-+ libpthread_linux_arch_CSRC = pthread_once.c pt-__syscall_error.c
-+ 
-+ libc_linux_arch_CSRC = fork.c
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S
-+deleted file mode 100644
-+index 2f82504..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc32/pt-vfork.S
-++++ /dev/null
-+@@ -1,48 +0,0 @@
-+-/* Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-   Contributed by Jakub Jelinek <jakub@redhat.com>, 2004.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <sysdep.h>
-+-#define _ERRNO_H	1
-+-#include <bits/errno.h>
-+-#include <bits/kernel-features.h>
-+-#include <tcb-offsets.h>
-+-
-+-/* Clone the calling process, but without copying the whole address space.
-+-   The calling process is suspended until the new process exits or is
-+-   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
-+-   and the process ID of the new process to the old process.  */
-+-
-+-ENTRY (__vfork)
-+-	lwz	0,PID(2)
-+-	neg	0,0
-+-	stw	0,PID(2)
-+-
-+-	DO_CALL (SYS_ify (vfork))
-+-
-+-	cmpwi	1,3,0
-+-	beqlr-	1
-+-
-+-	lwz	0,PID(2)
-+-	neg	0,0
-+-	stw	0,PID(2)
-+-
-+-	PSEUDO_RET
-+-
-+-PSEUDO_END (__vfork)
-+-
-+-weak_alias (__vfork, vfork)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S
-+deleted file mode 100644
-+index 12e47b3..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/powerpc64/pt-vfork.S
-++++ /dev/null
-+@@ -1,48 +0,0 @@
-+-/* Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-   Contributed by Jakub Jelinek <jakub@redhat.com>, 2004.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <sysdep.h>
-+-#define _ERRNO_H	1
-+-#include <bits/errno.h>
-+-#include <bits/kernel-features.h>
-+-#include <tcb-offsets.h>
-+-
-+-/* Clone the calling process, but without copying the whole address space.
-+-   The calling process is suspended until the new process exits or is
-+-   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
-+-   and the process ID of the new process to the old process.  */
-+-
-+-ENTRY (__vfork)
-+-	lwz	0,PID(13)
-+-	neg	0,0
-+-	stw	0,PID(13)
-+-
-+-	DO_CALL (SYS_ify (vfork))
-+-
-+-	cmpwi	1,3,0
-+-	beqlr-	1
-+-
-+-	lwz	0,PID(13)
-+-	neg	0,0
-+-	stw	0,PID(13)
-+-
-+-	PSEUDO_RET
-+-
-+-PSEUDO_END (__vfork)
-+-
-+-weak_alias (__vfork, vfork)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S
-+deleted file mode 100644
-+index 0225219..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/powerpc/pt-vfork.S
-++++ /dev/null
-+@@ -1,5 +0,0 @@
-+-#if defined __powerpc64__
-+-# include "powerpc64/pt-vfork.S"
-+-#else
-+-# include "powerpc32/pt-vfork.S"
-+-#endif
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch
-+index 154dd6e..908d9e1 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/sh/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S pthread_once.S pthread_rwlock_wrlock.S \
-++libpthread_linux_arch_SSRC = pthread_once.S pthread_rwlock_wrlock.S \
-+ 			pthread_rwlock_rdlock.S pthread_rwlock_unlock.S \
-+ 			lowlevellock.S lowlevelrobustlock.S pthread_barrier_wait.S \
-+ 			pthread_cond_broadcast.S pthread_cond_signal.S \
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S
-+deleted file mode 100644
-+index 56aa6d0..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/sh/pt-vfork.S
-++++ /dev/null
-+@@ -1,64 +0,0 @@
-+-/* Copyright (C) 2003, 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <sysdep.h>
-+-#define _ERRNO_H	1
-+-#include <bits/errno.h>
-+-#include <tcb-offsets.h>
-+-
-+-/* Clone the calling process, but without copying the whole address space.
-+-   The calling process is suspended until the new process exits or is
-+-   replaced by a call to `execve'.  Return -1 for errors, 0 to the new process,
-+-   and the process ID of the new process to the old process.  */
-+-
-+-ENTRY (__vfork)
-+-	/* Save the PID value.  */
-+-	stc	gbr, r2
-+-	mov.w	.L2, r0
-+-	mov.l	@(r0,r2), r4
-+-	neg	r4, r1
-+-	mov.l	r1, @(r0,r2)
-+-
-+-	mov.w	.L1, r3
-+-	trapa	#0x10
-+-	mov     r0, r1
-+-
-+-	/* Restore the old PID value in the parent.  */
-+-	tst	r0, r0
-+-	bt/s	2f
-+-	 stc	gbr, r2
-+-	mov.w	.L2, r0
-+-	mov.l	r4, @(r0,r2)
-+-	mov	r1, r0
-+-2:
-+-	mov	#-12, r2
-+-	shad	r2, r1
-+-	not	r1, r1			// r1=0 means r0 = -1 to -4095
-+-	tst	r1, r1			// i.e. error in linux
-+-	bf	.Lpseudo_end
-+-	SYSCALL_ERROR_HANDLER
-+-.Lpseudo_end:
-+-	rts
-+-	 nop
-+-.L1:
-+-	.word	__NR_vfork
-+-.L2:
-+-	.word	PID - TLS_PRE_TCB_SIZE
-+-
-+-PSEUDO_END (__vfork)
-+-
-+-weak_alias (__vfork, vfork)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch
-+index 2b2b5f5..01a9e87 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S clone.S
-++libpthread_linux_arch_SSRC = clone.S
-+ libpthread_linux_arch_CSRC = pthread_once.c lowlevellock.c \
-+ 	pthread_barrier_init.c pthread_barrier_wait.c pthread_barrier_destroy.c \
-+ 	pt-__syscall_error.c
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S
-+deleted file mode 100644
-+index 37231a8..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/sparc/pt-vfork.S
-++++ /dev/null
-+@@ -1,44 +0,0 @@
-+-/* Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-   Contributed by Jakub Jelinek <jakub@redhat.com>, 2004.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <sysdep.h>
-+-#include <tcb-offsets.h>
-+-
-+-	.text
-+-	.globl		__syscall_error
-+-ENTRY(__vfork)
-+-	ld	[%g7 + PID], %o5
-+-	sub	%g0, %o5, %o4
-+-	st	%o4, [%g7 + PID]
-+-
-+-	LOADSYSCALL(vfork)
-+-	ta	0x10
-+-	bcc	2f
-+-	 mov	%o7, %g1
-+-	st	%o5, [%g7 + PID]
-+-	call	__syscall_error
-+-	 mov	%g1, %o7
-+-2:	sub	%o1, 1, %o1
-+-	andcc	%o0, %o1, %o0
-+-	bne,a	1f
-+-	 st	%o5, [%g7 + PID]
-+-1:	retl
-+-	 nop
-+-END(__vfork)
-+-
-+-weak_alias (__vfork, vfork)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch
-+index ebd5060..af14164 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/Makefile.arch
-+@@ -5,7 +5,7 @@
-+ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
-+ #
-+ 
-+-libpthread_linux_arch_SSRC = pt-vfork.S clone.S pthread_once.S \
-++libpthread_linux_arch_SSRC = clone.S pthread_once.S \
-+ 	lowlevellock.S pthread_barrier_wait.S pthread_cond_signal.S pthread_cond_broadcast.S \
-+ 	sem_post.S sem_timedwait.S lowlevelrobustlock.S \
-+ 	sem_trywait.S sem_wait.S pthread_rwlock_rdlock.S pthread_rwlock_wrlock.S \
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S
-+deleted file mode 100644
-+index 08a085c..0000000
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/pt-vfork.S
-++++ /dev/null
-+@@ -1,32 +0,0 @@
-+-/* Copyright (C) 2004 Free Software Foundation, Inc.
-+-   This file is part of the GNU C Library.
-+-
-+-   The GNU C Library is free software; you can redistribute it and/or
-+-   modify it under the terms of the GNU Lesser General Public
-+-   License as published by the Free Software Foundation; either
-+-   version 2.1 of the License, or (at your option) any later version.
-+-
-+-   The GNU C Library is distributed in the hope that it will be useful,
-+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+-   Lesser General Public License for more details.
-+-
-+-   You should have received a copy of the GNU Lesser General Public
-+-   License along with the GNU C Library; if not, see
-+-   <http://www.gnu.org/licenses/>.  */
-+-
-+-#include <tcb-offsets.h>
-+-
-+-#define SAVE_PID \
-+-	movl	%fs:PID, %esi;						      \
-+-	movl	%esi, %edx;						      \
-+-	negl	%edx;							      \
-+-	movl	%edx, %fs:PID
-+-
-+-#define RESTORE_PID \
-+-	testq	%rax, %rax;						      \
-+-	je	1f;							      \
-+-	movl	%esi, %fs:PID;						      \
-+-1:
-+-
-+-#include <../../../../../../../libc/sysdeps/linux/x86_64/vfork.S>
++ run_dump_test "sda_relocs"
++ run_dump_test "unaligned-pc32"
+++run_dump_test "tls-data-sections"
++diff --git a/ld/testsuite/ld-arc/tls-data-sections.d b/ld/testsuite/ld-arc/tls-data-sections.d
++new file mode 100644
++index 0000000..9823bf0
++--- /dev/null
+++++ b/ld/testsuite/ld-arc/tls-data-sections.d
++@@ -0,0 +1,12 @@
+++#source: tls-data-sections.s
+++#ld: --entry=main
+++#objdump: -rd
+++
+++
+++.*:     file format elf32-littlearc
+++
+++
+++Disassembly of section \.text:
+++
+++00010094 <main>:
+++   10094:	00 21 80 3f 00 00 08 00 	add        r0,r25,8
++diff --git a/ld/testsuite/ld-arc/tls-data-sections.s b/ld/testsuite/ld-arc/tls-data-sections.s
++new file mode 100644
++index 0000000..f0450c0
++--- /dev/null
+++++ b/ld/testsuite/ld-arc/tls-data-sections.s
++@@ -0,0 +1,30 @@
+++        /* This file is not intended to be real code, however, the
+++           contents of the main function is real code as generated as
+++           part of a local dynamic tls model access.  The purpose of
+++           this test is to check that such an access will link
+++           correctly.
+++
+++           Notice that the relocation in main references '.tdata', and
+++           though we put content into '.tdata.pgsz.1362' we don't
+++           create a '.tdata' section.  This is intentional, this example
+++           was generated using -fdata-sections.
+++
+++           The '.tdata' section will be created in the linker script,
+++           and we do expect to be able to reference it.  This should link.
+++        */
+++
+++        .section ".text", "ax"
+++        .global main, _start
+++_start: 
+++        .type   main, @function
+++main:
+++        add r0,pcl, at .tdata@tlsgd                ;8
+++        .size   main, .-main
+++
+++        .section        .tdata.pgsz.1362,"awT", at progbits
+++        .align 8
+++        .type   pgsz.1362, @object
+++        .size   pgsz.1362, 4
+++
+++pgsz.1362:
+++        .word   1
 +-- 
 +2.4.3
 +
-diff --git a/package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch b/package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch
+diff --git a/package/binutils/arc-2015.06/0003-Provide-.tbss-symbol.patch b/package/binutils/arc-2015.06/0003-Provide-.tbss-symbol.patch
 new file mode 100644
-index 0000000..647f97e
+index 0000000..34bb2a2
 --- /dev/null
-+++ b/package/uclibc/arc-2015.06/0002-ARCv2-update-memset-so-it-could-be-used-without-doub.patch
-@@ -0,0 +1,81 @@
-+From 9b79d39b027f0a44215c4c13f7fd23b710727c37 Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <abrodkin@synopsys.com>
-+Date: Thu, 16 Jul 2015 11:38:29 +0300
-+Subject: [PATCH] ARCv2: update memset() so it could be used without double
-+ load/stores
++++ b/package/binutils/arc-2015.06/0003-Provide-.tbss-symbol.patch
+@@ -0,0 +1,70 @@
++From a6014a956a4f2263c28240bb9191bee8f924b5db Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@synopsys.com>
++Date: Tue, 28 Jul 2015 13:34:47 +0200
++Subject: [PATCH 2/2] Provide .tbss symbol
 +
-+Existing version of memset() relies on existence of 64-bit load/stores.
-+While ARC HS38 may not have those instructions implemented in SoC.
-+
-+Proposed implementation checks if "-mno-ll64" option was passed to gcc
-+(for ARCv2 "-mll64" is set implicitly by default) by checking __LL64__
-+definition and if it is not defined uses 32-bit load/stores.
-+
-+Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+Cc: Vineet Gupta <vgupta@synopsys.com>
 +---
-+ libc/string/arc/arcv2/memset.S | 30 ++++++++++++++++++++++++++++++
-+ 1 file changed, 30 insertions(+)
++ ld/ChangeLog.ARC           | 14 +++++++++-----
++ ld/scripttempl/arclinux.sc |  2 +-
++ 2 files changed, 10 insertions(+), 6 deletions(-)
 +
-+diff --git a/libc/string/arc/arcv2/memset.S b/libc/string/arc/arcv2/memset.S
-+index d076ad1..0918d37 100644
-+--- a/libc/string/arc/arcv2/memset.S
-++++ b/libc/string/arc/arcv2/memset.S
-+@@ -52,6 +52,7 @@ ENTRY(memset)
-+ 	lpnz	@.Lset64bytes
-+ 	;; LOOP START
-+ 	PREWRITE(r3, 64)	;Prefetch the next write location
-++#ifdef __LL64__
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-+@@ -60,16 +61,45 @@ ENTRY(memset)
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-++#else
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++#endif
-+ .Lset64bytes:
++diff --git a/ld/ChangeLog.ARC b/ld/ChangeLog.ARC
++index 0006bb3..fb5c717 100644
++--- a/ld/ChangeLog.ARC
+++++ b/ld/ChangeLog.ARC
++@@ -1,8 +1,12 @@
+++2015-07-28  Claudiu Zissulescu  <claziss@synopsys.com>
+++
+++	* scripttempl/arclinux.sc (.tbss): Provide the .tbss symbol.
+++
++ 2015-07-23  Andrew Burgess  <andrew.burgess@embecosm.com>
 + 
-+ 	lsr.f	lp_count, r2, 5 ;Last remaining  max 124 bytes
-+ 	lpnz	.Lset32bytes
-+ 	;; LOOP START
-+ 	prefetchw [r3, 32]	;Prefetch the next write location
-++#ifdef __LL64__
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-+ 	std.ab	r4, [r3, 8]
-++#else
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++	st.ab	r4, [r3, 4]
-++#endif
-+ .Lset32bytes:
++ 	* scripttempl/arclinux.sc (.tdata): Provide the .tdata symbol.
 + 
-+ 	and.f	lp_count, r2, 0x1F ;Last remaining 31 bytes
++-2015-03-26: Claudiu Zissulescu <claziss@synopsys.com>
+++2015-03-26  Claudiu Zissulescu <claziss@synopsys.com>
++ 
++ 	* testsuite/ld-arc/sda_relocs.d: New file.
++ 	* testsuite/ld-arc/sda_relocs.ld: Likewise.
++@@ -13,21 +17,21 @@
++ 	* scripttempl/arclinux.sc: PROVIDE_HIDDEN .tdata (in case the
++ 	section won't be included).
++ 
++-2014-12-17: Claudiu Zissulescu <claziss@synopsys.com>
+++2014-12-17  Claudiu Zissulescu  <claziss@synopsys.com>
++ 
++ 	* scripttempl/elfarcv2.sc: Update .startup section.
++ 
++-2014-12-08: Claudiu Zissulescu <claziss@synopsys.com>
+++2014-12-08  Claudiu Zissulescu  <claziss@synopsys.com>
++ 
++ 	* emulparams/arcv2elf.sh :Add discarded sections.
++ 	* emulparams/arcv2elfb.sh: Likewise
++ 	* scripttempl/elfarcv2.sc: New sections.
++ 
++-2014-12-01: Claudiu Zissulescu <claziss@synopsys.com>
+++2014-12-01  Claudiu Zissulescu  <claziss@synopsys.com>
++ 
++ 	* scripttempl/elfarcv2.sc: Align the start of the stack.
++ 
++-2014-11-27: Claudiu Zissulescu <claziss@synopsys.com>
+++2014-11-27  Claudiu Zissulescu  <claziss@synopsys.com>
++ 
++ 	* Makefile.am: Add two new emulation scripts for ARCv2.
++ 	* configure.tgt: Likewise.
++diff --git a/ld/scripttempl/arclinux.sc b/ld/scripttempl/arclinux.sc
++index 1385b30..bef5336 100644
++--- a/ld/scripttempl/arclinux.sc
+++++ b/ld/scripttempl/arclinux.sc
++@@ -327,7 +327,7 @@ cat <<EOF
++   /* TLS local dynamic uses .tdata as a reference point.  */
++   ${RELOCATING+${CREATE_SHLIB+PROVIDE_HIDDEN (.tdata = .);}}
++   .tdata	${RELOCATING-0} : { PROVIDE_HIDDEN(.tdata = .); *(.tdata${RELOCATING+ .tdata.* .gnu.linkonce.td.*}) }
++-  .tbss		${RELOCATING-0} : { *(.tbss${RELOCATING+ .tbss.* .gnu.linkonce.tb.*})${RELOCATING+ *(.tcommon)} }
+++  .tbss		${RELOCATING-0} : { PROVIDE_HIDDEN(.tbss = .); *(.tbss${RELOCATING+ .tbss.* .gnu.linkonce.tb.*})${RELOCATING+ *(.tcommon)} }
++   .eh_frame     ${RELOCATING-0} : { KEEP (*(.eh_frame)) }
++   .gcc_except_table ${RELOCATING-0} : { *(.gcc_except_table) }
++   ${WRITABLE_RODATA+${RODATA}}
 +-- 
 +2.4.3
 +
