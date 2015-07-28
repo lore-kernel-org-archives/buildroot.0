@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit] b43-fwcutter: add hash file
-Message-ID: <20150728204054.77C847F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:14 +0200
+Subject: [Buildroot] [git commit] dcron: add hash file
+Message-ID: <20150728204054.926D77F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3eec4ebd9fb39e0ca72dc1641185bfc35c596826
+commit: http://git.buildroot.net/buildroot/commit/?id=611714a0020a15ce2f371d8ffc26f84fb07daf7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/b43-fwcutter/b43-fwcutter.hash |    2 ++
+ package/dcron/dcron.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/b43-fwcutter/b43-fwcutter.hash b/package/b43-fwcutter/b43-fwcutter.hash
+diff --git a/package/dcron/dcron.hash b/package/dcron/dcron.hash
 new file mode 100644
-index 0000000..3181c76
+index 0000000..3e53ddc
 --- /dev/null
-+++ b/package/b43-fwcutter/b43-fwcutter.hash
++++ b/package/dcron/dcron.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	4c6a53d1f5d76b8aa224d294bee47726b1477f35327f4e23e8cb799865e0f6eb	b43-fwcutter-015.tar.bz2
++# Locally calculated
++sha256	9e50edb6f5bd8153b16bad05087d985e5153ce45cc01ae77e7f842213fb4a824	dcron-4.5.tar.gz
