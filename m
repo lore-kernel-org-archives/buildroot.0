@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:55 +0200
-Subject: [Buildroot] [git commit branch/next] fbgrab: add hash file
-Message-ID: <20150808105645.37D5C7FFCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] flickcurl: add hash file
+Message-ID: <20150808105645.476FB7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56d736d2a73620a69948acb08d8ac2183d853170
+commit: http://git.buildroot.net/buildroot/commit/?id=68202ff43a87d9b23c8d09fa19d44d30a60d8707
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fbgrab/fbgrab.hash |    2 ++
+ package/flickcurl/flickcurl.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+diff --git a/package/flickcurl/flickcurl.hash b/package/flickcurl/flickcurl.hash
 new file mode 100644
-index 0000000..4652f2c
+index 0000000..fd091ec
 --- /dev/null
-+++ b/package/fbgrab/fbgrab.hash
++++ b/package/flickcurl/flickcurl.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	61e0772ad6ea744ee597ae478398ddd0ba6fceee2cf343859bebde2c15bafb91	fbgrab-1.2.tar.gz
++# Locally calculated after checking pgp signature
++sha256	ff42a36c7c1c7d368246f6bc9b7d792ed298348e5f0f5d432e49f6803562f5a3	flickcurl-1.26.tar.gz
