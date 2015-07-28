@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] libmatroska: add hash file
-Message-ID: <20150728204047.1D9307F9DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libplayer: add hash file
+Message-ID: <20150728204047.46CCE81E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94ad331a9a33a99c00c565a821df7b0b9421789a
+commit: http://git.buildroot.net/buildroot/commit/?id=bc8a994c4d7fa95c9b41ccf9ff39310a0c8908a4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmatroska/libmatroska.hash |    2 ++
+ package/libplayer/libplayer.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
+diff --git a/package/libplayer/libplayer.hash b/package/libplayer/libplayer.hash
 new file mode 100644
-index 0000000..4d9a535
+index 0000000..6f13143
 --- /dev/null
-+++ b/package/libmatroska/libmatroska.hash
++++ b/package/libplayer/libplayer.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	bea10320f1f1fd121bbd7db9ffc77b2518e8269f00903549c5425478bbf8393f	libmatroska-1.4.2.tar.bz2
++sha256	aa5eeb54f773bc9cad2733e4a0b5870208fc7f75024515ea87e55f64653e9d65	libplayer-2.0.1.tar.bz2
