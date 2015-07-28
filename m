@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit] webrtc-audio-processing: add hash file
-Message-ID: <20150728204054.6EEC27F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:12 +0200
+Subject: [Buildroot] [git commit] python-thrift: add hash file
+Message-ID: <20150728204049.B4FA081E7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f88e3a9e7ce62a217f4e7cc3696e5962b4359ba5
+commit: http://git.buildroot.net/buildroot/commit/?id=de98273cbaa7f9a1c7d83981b3601dfcf4391081
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../webrtc-audio-processing.hash                   |    2 ++
+ package/python-thrift/python-thrift.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.hash b/package/webrtc-audio-processing/webrtc-audio-processing.hash
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
 new file mode 100644
-index 0000000..afba5a9
+index 0000000..811aa98
 --- /dev/null
-+++ b/package/webrtc-audio-processing/webrtc-audio-processing.hash
++++ b/package/python-thrift/python-thrift.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ed4b52f9c2688b97628035a5565377d74704d7c04de4254a768df3342c7afedc	webrtc-audio-processing-0.1.tar.xz
++# From https://www.apache.org/dist/thrift/0.9.2/thrift-0.9.2.tar.gz.md5
++md5	89f63cc4d0100912f4a1f8a9dee63678	thrift-0.9.2.tar.gz
