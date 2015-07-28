@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:40:28 -0300
-Subject: [Buildroot] [PATCH 087/113] python-pyrex: add hash file
+Date: Tue, 28 Jul 2015 15:40:29 -0300
+Subject: [Buildroot] [PATCH 088/113] python-thrift: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-87-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-88-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-pyrex/python-pyrex.hash | 2 ++
+ package/python-thrift/python-thrift.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/python-pyrex/python-pyrex.hash
+ create mode 100644 package/python-thrift/python-thrift.hash
 
-diff --git a/package/python-pyrex/python-pyrex.hash b/package/python-pyrex/python-pyrex.hash
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
 new file mode 100644
-index 0000000..607d303
+index 0000000..811aa98
 --- /dev/null
-+++ b/package/python-pyrex/python-pyrex.hash
++++ b/package/python-thrift/python-thrift.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	5f87df06831d0b3412eb4bc9d3fc2ee7bfae1b913d7da8c23ab2bf5699fb6b50	Pyrex-0.9.9.tar.gz
++# From https://www.apache.org/dist/thrift/0.9.2/thrift-0.9.2.tar.gz.md5
++md5	89f63cc4d0100912f4a1f8a9dee63678	thrift-0.9.2.tar.gz
 -- 
 2.3.6
