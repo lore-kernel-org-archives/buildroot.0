@@ -1,58 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 23:11:36 +0200
-Subject: [Buildroot] [git commit branch/next] package/libglib2: fix
-	compilation issue on SPARC
-Message-ID: <20150808105649.4C5C88190C@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:56:09 +0200
+Subject: [Buildroot] [git commit branch/next] iproute2: needs headers >= 3.0
+Message-ID: <20150808105649.30C547FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e4a707e79838680984cd4bb25b5a9959fc44ddc8
+commit: http://git.buildroot.net/buildroot/commit/?id=869af2ad3de46c79677699f007a5ee942aa0bb3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/b3c/b3cb6515496cf09d305a1077d01f87d75ece8a8d/
+The newest iproute2 version requires a toolchain with headers >= 3.0 for
+proper namespace & bpf support, so adjust the dependencies and
+dependants accordingly. Fixes:
 
-Patch added to improve detection of atomic support in the compiler.
+http://autobuild.buildroot.net/results/fa8/fa810f310c7540e02c0ed84c4a3ce74ab602daa5/
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-compile-time-atomic-detection.patch   |   28 ++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ package/ifupdown/Config.in |    6 ++++--
+ package/iproute2/Config.in |    5 +++++
+ package/openswan/Config.in |    5 +++++
+ 3 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-new file mode 100644
-index 0000000..f6d0c5d
---- /dev/null
-+++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-@@ -0,0 +1,28 @@
-+[PATCH] Fix compilation issues on architectures with limited atomic support
+diff --git a/package/ifupdown/Config.in b/package/ifupdown/Config.in
+index 10cf2be..1e11e4e 100644
+--- a/package/ifupdown/Config.in
++++ b/package/ifupdown/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IFUPDOWN
+ 	bool "ifupdown"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
+ 	# Default/our uclibc lacks wordexp()
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	# runtime for ip binary
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_IFUPDOWN
+ 
+ 	  https://tracker.debian.org/pkg/ifupdown
+ 
+-comment "ifupdown needs an (e)glibc or musl toolchain"
++comment "ifupdown needs an (e)glibc or musl toolchain w/ headers >= 3.0"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/iproute2/Config.in b/package/iproute2/Config.in
+index 0662492..fd373a8 100644
+--- a/package/iproute2/Config.in
++++ b/package/iproute2/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_IPROUTE2
+ 	bool "iproute2"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # bpf, namespaces
+ 	help
+ 	  Kernel routing and traffic control utilities. Provides things
+ 	  like ip and tc.
+ 
+ 	  http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2
 +
-+Improved compile-time detection of atomic support in the compiler.
++comment "iproute2 needs a toolchain w/ headers >= 3.0"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+index 932a75f..0370143 100644
+--- a/package/openswan/Config.in
++++ b/package/openswan/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_OPENSWAN
+ 	bool "openswan"
+ 	depends on BR2_USE_MMU # iproute2
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # iproute2
+ 	select BR2_PACKAGE_GMP
+ 	select BR2_PACKAGE_IPROUTE2
+ 	help
+ 	  Openswan is an implementation of IPsec for Linux
+ 
+ 	  http://www.openswan.org
 +
-+Upstream-Status: submitted
-+See : https://bugzilla.gnome.org/show_bug.cgi?id=752731
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+---
-+ glib/gthread-posix.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
-+index ae5d805..8db8557 100644
-+--- a/glib/gthread-posix.c
-++++ b/glib/gthread-posix.c
-+@@ -67,7 +67,7 @@
-+ #endif
-+ 
-+ /* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-+-#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
-++#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4) && !defined(__clang__)
-+ #define USE_NATIVE_MUTEX
-+ #endif
-+ 
-+-- 
-+2.4.3
-+
++comment "openswan needs a toolchain w/ headers >= 3.0"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
