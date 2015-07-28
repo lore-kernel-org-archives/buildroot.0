@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:39:10 -0300
-Subject: [Buildroot] [PATCH 009/113] flickcurl: add hash file
+Date: Tue, 28 Jul 2015 15:39:11 -0300
+Subject: [Buildroot] [PATCH 010/113] flot: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/flickcurl/flickcurl.hash | 2 ++
+ package/flot/flot.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/flickcurl/flickcurl.hash
+ create mode 100644 package/flot/flot.hash
 
-diff --git a/package/flickcurl/flickcurl.hash b/package/flickcurl/flickcurl.hash
+diff --git a/package/flot/flot.hash b/package/flot/flot.hash
 new file mode 100644
-index 0000000..fd091ec
+index 0000000..9bf348a
 --- /dev/null
-+++ b/package/flickcurl/flickcurl.hash
++++ b/package/flot/flot.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	ff42a36c7c1c7d368246f6bc9b7d792ed298348e5f0f5d432e49f6803562f5a3	flickcurl-1.26.tar.gz
++# Locally calculated
++sha256	d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952	flot-0.8.3.tar.gz
 -- 
 2.3.6
