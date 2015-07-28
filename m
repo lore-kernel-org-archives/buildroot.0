@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] libfcgi: add hash file
-Message-ID: <20150728204046.EDA257F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:57 +0200
+Subject: [Buildroot] [git commit] libzip: add hash file
+Message-ID: <20150728204047.C8A1B7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=713f732b893746f826316704bb04f09f7247dff2
+commit: http://git.buildroot.net/buildroot/commit/?id=7ccf520d1cbf85a69cb3b1bf862f1f89f713ad6d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfcgi/libfcgi.hash |    2 ++
+ package/libzip/libzip.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
+diff --git a/package/libzip/libzip.hash b/package/libzip/libzip.hash
 new file mode 100644
-index 0000000..586ff1e
+index 0000000..ccd0e6a
 --- /dev/null
-+++ b/package/libfcgi/libfcgi.hash
++++ b/package/libzip/libzip.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	66fc45c6b36a21bf2fbbb68e90f780cc21a9da1fffbae75e76d2b4402d3f05b9	fcgi-2.4.0.tar.gz
++sha256	7cfbbc2c540e154b933b6e9ec781e2671086bd8114eb744ae1a1ade34d2bb6bb	libzip-0.11.2.tar.xz
