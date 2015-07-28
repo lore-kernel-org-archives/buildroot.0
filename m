@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:37:10 +0200
-Subject: [Buildroot] [git commit] neard: add hash file
-Message-ID: <20150728204048.58AEA81E3E@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:55 +0200
+Subject: [Buildroot] [git commit] enscript: add hash file
+Message-ID: <20150728204046.20FE57F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=60fde9af56872f5a399727786b5267272c282d07
+commit: http://git.buildroot.net/buildroot/commit/?id=62ad589d1f0e5514c37645e3546a2087c3a7e6f5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/neard/neard.hash |    2 ++
+ package/enscript/enscript.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/neard/neard.hash b/package/neard/neard.hash
+diff --git a/package/enscript/enscript.hash b/package/enscript/enscript.hash
 new file mode 100644
-index 0000000..7517093
+index 0000000..8b7694d
 --- /dev/null
-+++ b/package/neard/neard.hash
++++ b/package/enscript/enscript.hash
 @@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/network/nfc/sha256sums.asc
-+sha256	6ea724b443d39d679168fc7776a965d1f64727c3735391df2c01469ee7cd8cca	neard-0.14.tar.xz
++# Locally calculated after checking pgp signature
++sha256	6d56bada6934d055b34b6c90399aa85975e66457ac5bf513427ae7fc77f5c0bb	enscript-1.6.6.tar.gz
