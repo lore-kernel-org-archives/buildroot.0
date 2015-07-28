@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:37:13 +0200
-Subject: [Buildroot] [git commit] urg: add hash file
-Message-ID: <20150728204054.5DDBE7F9DF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ussp-push: add hash file
+Message-ID: <20150728204054.666B47F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c84434dbb624fad0fef50e1705f602480c7a61c1
+commit: http://git.buildroot.net/buildroot/commit/?id=dc7f9887f005a9991b5c7e68362a7806723d140c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/urg/urg.hash |    2 ++
+ package/ussp-push/ussp-push.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/urg/urg.hash b/package/urg/urg.hash
+diff --git a/package/ussp-push/ussp-push.hash b/package/ussp-push/ussp-push.hash
 new file mode 100644
-index 0000000..5764a14
+index 0000000..91afb9d
 --- /dev/null
-+++ b/package/urg/urg.hash
++++ b/package/ussp-push/ussp-push.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	b2cab7e539c90c60fc99a2350a42b5d5390ff952b694b196c3cbb54623cfee7f	urg-0.8.18.zip
++sha256	bb2748eaed6164812555b4a1e186c4f2820c5ef9ce30f12d7aac28a452719bbd	ussp-push-0.11.tar.gz
