@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 28 Jul 2015 22:32:56 +0200
-Subject: [Buildroot] [git commit] libosip2: add hash file
-Message-ID: <20150728204047.3DBAD81E3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ifplugd: add hash file
+Message-ID: <20150728204046.93E8C7F9DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4b00fe29cc6632a24e883c6ecb92693fc30ddd4
+commit: http://git.buildroot.net/buildroot/commit/?id=58e0d4c1bd7ead609f4484f0a39bfa706188a9c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libosip2/libosip2.hash |    2 ++
+ package/ifplugd/ifplugd.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
+diff --git a/package/ifplugd/ifplugd.hash b/package/ifplugd/ifplugd.hash
 new file mode 100644
-index 0000000..9ff2d9a
+index 0000000..2977c69
 --- /dev/null
-+++ b/package/libosip2/libosip2.hash
++++ b/package/ifplugd/ifplugd.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	c9a18b0c760506d150017cdb1fa5c1cefe12b8dcbbf9a7e784eb75af376e96cd	libosip2-3.6.0.tar.gz
++# Locally calculated
++sha256	474754ac4ab32d738cbf2a4a3e87ee0a2c71b9048a38bdcd7df1e4f9fd6541f0	ifplugd-0.28.tar.gz
