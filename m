@@ -1,34 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 11:07:13 +0200
-Subject: [Buildroot] [PATCH] freerdp: Add support for tz package
-In-Reply-To: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
-References: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <20150728110713.74b1e037@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue, 28 Jul 2015 11:06:25 +0200
+Subject: [Buildroot] [PATCH] qt5base/gpu_vivante: Fix activation of visualID
+	workaround
+Message-ID: <1438074385-6443-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Scott Fan,
+0001-Force_egl_visual_ID_33.patch have to be enabled as soon as gpu_vivante/xorg
+is used. This does not depends on eglfs option.
 
-On Tue, 28 Jul 2015 16:25:16 +0800, Scott Fan wrote:
-> Fixes error message while freerdp connected the remote desktop:
-> Unable to detect time zone
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+ package/qt5/qt5base/qt5base.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-You have already sent this patch numerous times, but you never include
-a changelog between the versions, so we don't understand why you're
-sending it again and again.
-
-Can you at least put a cover letter in your patch series, which
-explains why you are sending the patches again?
-
-Thanks,
-
-Thomas
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 6f0f526..753b069 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -118,12 +118,13 @@ endif
+ QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
+ QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
+ 
+-ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+-QT5BASE_CONFIGURE_OPTS += -eglfs
+-QT5BASE_DEPENDENCIES   += libegl
+ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+ QT5BASE_EXTRA_CFLAGS = -DENABLE_MX6_WORKAROUND
+ endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
++QT5BASE_CONFIGURE_OPTS += -eglfs
++QT5BASE_DEPENDENCIES   += libegl
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-eglfs
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
