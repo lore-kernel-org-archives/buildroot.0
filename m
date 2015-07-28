@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 16:02:11 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <55B789FC.6070001@zacarias.com.ar>
-References: <20150722063018.99E6B101957@stock.ovh.net>
- <20150722094349.424e7a3e@free-electrons.com>
- <55AF91EA.3080701@zacarias.com.ar>
- <20150722150320.43874326@free-electrons.com>
- <55B789FC.6070001@zacarias.com.ar>
-Message-ID: <20150728160211.3300a733@free-electrons.com>
+Date: Tue, 28 Jul 2015 16:03:53 +0200
+Subject: [Buildroot] [PATCH] freerdp: Add support for tz package
+In-Reply-To: <CAFkzVZaKVSv=-YU2pdqAf0eB9MSWFT8j7soCY0vhEwO7H_PxUg@mail.gmail.com>
+References: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
+ <20150728110713.74b1e037@free-electrons.com>
+ <CAFkzVZaKVSv=-YU2pdqAf0eB9MSWFT8j7soCY0vhEwO7H_PxUg@mail.gmail.com>
+Message-ID: <20150728160353.7cc0b9ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Dear Scott Fan,
 
-On Tue, 28 Jul 2015 10:56:12 -0300, Gustavo Zacarias wrote:
+On Tue, 28 Jul 2015 21:45:55 +0800, Scott Fan wrote:
+> Sorry, my emails always been blocked by GFW in China, so i'm not sure
+> whether mails sent successfully. Just now, i've got a stable VPN connection.
+> I promise i won't repeat again.
 
-> The minimum required headers for iproute2 are 3.0, below that (2.6.39) 
-> it fails with namespaces. BPF is probably failing before ns because it's 
-> even older.
-> So it's probably time to exclude iproute2 for very old toolchains, but 
-> unfortunately openswan & ifupdown (not that important) will suffer from it.
-> It's possible openswan can work with busybox ip tools, i haven't tested 
-> that scenario, and unfortuantely (again) it's one of those packages that 
-> aren't so easy to test.
+Ok, I understand. You can check whether your e-mail arrived to the list
+by checking the list archives:
 
-I am fine with the solution of having those packages use a >= 3.0
-kernel headers dependency.
+   http://lists.busybox.net/pipermail/buildroot/
 
-If someone wants openswan with the Busybox IP tools, they can
-contribute :-)
+Note that it takes some time for the e-mails to get archived. I'm not
+sure how much, but maybe up to a few hours.
+
+> THIS patch should be independent from the patch series, which fixes the
+> error
+> message 'Unable to detect time zone' while the freerdp command connected a
+> remote desktop.
+
+Right, but it was part of your earlier patch series nonetheless.
+
+Could you have a look at
+http://patchwork.ozlabs.org/project/buildroot/list/, and tell us which
+of your patches are the latest ones and should still be considered for
+merging, and which ones are no longer current?
+
+Thanks!
 
 Thomas
 -- 
