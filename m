@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:57 +0200
-Subject: [Buildroot] [git commit] lrzsz: add hash file
-Message-ID: <20150728204047.E4D857F9DF@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:37:10 +0200
+Subject: [Buildroot] [git commit] netplug: add hash file
+Message-ID: <20150728204048.616EE81E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66ad67bb1670b5fa5c26cb8fce86bac7c2e15882
+commit: http://git.buildroot.net/buildroot/commit/?id=383d282e5cea0e25c5e5dd135a8f077a44a2624a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lrzsz/lrzsz.hash |    2 ++
+ package/netplug/netplug.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lrzsz/lrzsz.hash b/package/lrzsz/lrzsz.hash
+diff --git a/package/netplug/netplug.hash b/package/netplug/netplug.hash
 new file mode 100644
-index 0000000..932832d
+index 0000000..16a98b7
 --- /dev/null
-+++ b/package/lrzsz/lrzsz.hash
++++ b/package/netplug/netplug.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	c28b36b14bddb014d9e9c97c52459852f97bd405f89113f30bee45ed92728ff1	lrzsz-0.12.20.tar.gz
++sha256	5180dfd9a7d3d0633a027b0a04f01b45a6a64623813cd48bd54423b90814864e	netplug-1.2.9.2.tar.bz2
