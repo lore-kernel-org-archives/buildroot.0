@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Jul 2015 22:32:55 +0200
-Subject: [Buildroot] [git commit branch/next] fbdump: add hash file
-Message-ID: <20150808105645.307317FE8F@busybox.osuosl.org>
+Date: Tue, 28 Jul 2015 22:32:56 +0200
+Subject: [Buildroot] [git commit branch/next] genimage: add hash file
+Message-ID: <20150808105645.658137F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c26395735dd60ac720c479802fa0ae4ea3edcc0e
+commit: http://git.buildroot.net/buildroot/commit/?id=13ea748ec5b5fdf08684cb383dc230f9476d6f59
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fbdump/fbdump.hash |    2 ++
+ package/genimage/genimage.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/fbdump/fbdump.hash b/package/fbdump/fbdump.hash
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
 new file mode 100644
-index 0000000..15cc839
+index 0000000..71b7601
 --- /dev/null
-+++ b/package/fbdump/fbdump.hash
++++ b/package/genimage/genimage.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	c4d521a86229b3106cf69786008ad94f899da5288a19a067deae84951880722d	fbdump-0.4.2.tar.gz
++sha256	7366dcfe4c542298ffe8a6c8d3551b1c3a84e25bfbb76ca75b9692e974f4534a	genimage-7.tar.xz
