@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Jul 2015 15:40:02 -0300
-Subject: [Buildroot] [PATCH 061/113] ndisc6: add hash file
+Date: Tue, 28 Jul 2015 15:40:03 -0300
+Subject: [Buildroot] [PATCH 062/113] neard: add hash file
 In-Reply-To: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1438108854-11932-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438108854-11932-61-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1438108854-11932-62-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ndisc6/ndisc6.hash | 2 ++
+ package/neard/neard.hash | 2 ++
  1 file changed, 2 insertions(+)
- create mode 100644 package/ndisc6/ndisc6.hash
+ create mode 100644 package/neard/neard.hash
 
-diff --git a/package/ndisc6/ndisc6.hash b/package/ndisc6/ndisc6.hash
+diff --git a/package/neard/neard.hash b/package/neard/neard.hash
 new file mode 100644
-index 0000000..8d71bde
+index 0000000..7517093
 --- /dev/null
-+++ b/package/ndisc6/ndisc6.hash
++++ b/package/neard/neard.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	6acec8a0cb9efa3ac98456f46c3016aeec0598b0c7557c95242b5228ad62ca7a	ndisc6-1.0.2.tar.bz2
++# From https://www.kernel.org/pub/linux/network/nfc/sha256sums.asc
++sha256	6ea724b443d39d679168fc7776a965d1f64727c3735391df2c01469ee7cd8cca	neard-0.14.tar.xz
 -- 
 2.3.6
