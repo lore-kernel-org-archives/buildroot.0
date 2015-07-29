@@ -1,12 +1,15 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed, 29 Jul 2015 11:48:56 +0200
-Subject: [Buildroot] [PATCH] quota: fix build with libtirpc
-Message-ID: <1438163336-26928-1-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Jul 2015 11:57:30 +0200
+Subject: [Buildroot] [git commit] quota: fix build with libtirpc
+Message-ID: <20150729095735.51AD981E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=7d9c852de61ec80943d0ddd25ef23045a6651517
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
   http://autobuild.buildroot.net/results/bba8faf210414d956cc07629b8ba99ceed0ebdf6/
@@ -22,10 +25,11 @@ Fixes:
 QUOTA_CFLAGS / QUOTA_LIBS shouldn't be quoted since QUOTA_MAKE_OPTS and
 QUOTA_CONF_ENV already add quotes.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/quota/quota.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/quota/quota.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/quota/quota.mk b/package/quota/quota.mk
 index 5e5e637..a6b0322 100644
@@ -42,5 +46,3 @@ index 5e5e637..a6b0322 100644
  endif
  
  QUOTA_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LIBS="$(QUOTA_LIBS)"
--- 
-2.1.4
