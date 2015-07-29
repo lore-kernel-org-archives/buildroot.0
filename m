@@ -1,39 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:19:43 +0200
-Subject: [Buildroot] [PATCH] package/aircrack-ng: fix musl build
-In-Reply-To: <1438192035-20476-1-git-send-email-romain.naour@openwide.fr>
-References: <1438192035-20476-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150729221943.717e5a2f@free-electrons.com>
+Date: Wed, 29 Jul 2015 22:20:05 +0200
+Subject: [Buildroot] [git commit] package/ctorrent: fix compilation under
+	musl.
+Message-ID: <20150729202014.B70737FF58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=b5ba8d60f73fce1e839be784db912d9527e2f974
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 29 Jul 2015 19:47:15 +0200, Romain Naour wrote:
-> Backport an upstream patch [1] and remove sys/cdefs.h from
-> ethernet.h as suggested by the musl wiki [2].
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9721496871d104b4cfb68ce133b5f48612cb7e50/
-> 
-> [1] https://github.com/aircrack-ng/aircrack-ng/commit/42de9f800056601443ac12edbba7bd5802740db2
-> [2] http://wiki.musl-libc.org/wiki/FAQ
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  ...ide-ng-Use-termios-instead-of-sys-termios.patch | 27 +++++++++++
->  package/aircrack-ng/0004-fix-musl-build.patch      | 53 ++++++++++++++++++++++
->  2 files changed, 80 insertions(+)
->  create mode 100644 package/aircrack-ng/0003-Wesside-ng-Use-termios-instead-of-sys-termios.patch
->  create mode 100644 package/aircrack-ng/0004-fix-musl-build.patch
+Fixes http://autobuild.buildroot.net/results/2c9/2c9ef771d146ce5b9df82735fdeb62926c84bd9f/
 
-Applied, thanks! Please don't forget to submit patch 0004 upstream.
+Build failed due to use of ssize_t without including <unistd.h>.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Patch submitted upstream (note: project appears dormant).
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ctorrent/0001-fix-musl-build.patch |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
+
+diff --git a/package/ctorrent/0001-fix-musl-build.patch b/package/ctorrent/0001-fix-musl-build.patch
+new file mode 100644
+index 0000000..3ba80be
+--- /dev/null
++++ b/package/ctorrent/0001-fix-musl-build.patch
+@@ -0,0 +1,20 @@
++[PATCH] Fix compilation on musl
++
++Using the ssize_t typedef requires including <unistd.h>. 
++
++See : https://sourceforge.net/p/dtorrent/patches/3/
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++Upstream-status: submitted
++---
++diff -Nur a/compat.c b/compat.c
++--- a/compat.c	2015-07-29 18:22:24.658415171 +0100
+++++ b/compat.c	2015-07-29 18:36:21.752576311 +0100
++@@ -63,6 +63,7 @@
++ 
++ #ifndef HAVE_STRNSTR
++ #include <string.h>
+++#include <unistd.h>
++ /* FUNCTION PROGRAMER: Siberiaic Sang */
++ char *strnstr(const char *haystack, const char *needle, size_t haystacklen)
++ {
