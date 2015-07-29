@@ -1,40 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Jul 2015 09:40:27 -0300
-Subject: [Buildroot] [PATCH v6 4/4] libgail: mark as deprecated
-In-Reply-To: <1438173627-16478-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438173627-16478-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438173627-16478-5-git-send-email-gustavo@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 29 Jul 2015 13:01:30 +0000
+Subject: [Buildroot] [PATCH v2] toolchain-external: fix gdbserver
+ copying for external arc-2014.12 tools
+In-Reply-To: <20150711104535.3b2c1bfd@free-electrons.com>
+References: <1427271071-9541-1-git-send-email-abrodkin@synopsys.com>
+ <55A0CA2A.1010308@openwide.fr> <20150711104535.3b2c1bfd@free-electrons.com>
+Message-ID: <1438174889.16101.0.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark libgail as deprecated now that midori has been updated to use
-webkitgtk24 and the only package that uses it (webkit) has been
-deprecated.
+Thomas, Romain,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgail/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+On Sat, 2015-07-11 at 10:45 +0200, Thomas Petazzoni wrote:
+> Dear Romain Naour,
+> 
+> On Sat, 11 Jul 2015 09:47:54 +0200, Romain Naour wrote:
+> 
+> > Le 25/03/2015 09:11, Alexey Brodkin a ?crit :
+> > > Historically in pre-built ARC GNU tools gdbserver is located in
+> > > top-level "target-bin" folder.
+> > > 
+> > > Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
+> > > selected Buildroot won't find gdbserver (it looks within
+> > > SYSROOT/ARCH_SYSROOT folder).
+> > > 
+> > > Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
+> > > gdbserver from "target-bin" folder into SYSROOT/usr/bin.
+> > 
+> > Since this patch, the arc 2014.12 prebuild toolchain as been marked as broken
+> > [1]. This patch is still needed ?
+> 
+> I'd say no for the moment, I'll mark the patch as Rejected for now.
 
-diff --git a/package/libgail/Config.in b/package/libgail/Config.in
-index 3967083..5e4f03b 100644
---- a/package/libgail/Config.in
-+++ b/package/libgail/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBGAIL
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
- 	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_DEPRECATED_SINCE_2015_08
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  GAIL provides accessibility support for gtk+ and
-@@ -27,3 +28,4 @@ comment "libgail needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_DEPRECATED_SINCE_2015_08
--- 
-2.3.6
+Indeed this patch is no longer required because in arc-2015.06 toolchain
+we put gdbserver in proper place  "sysroot/usr/bin".
+
+-Alexey
