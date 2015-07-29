@@ -1,83 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:45 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-wmc: new
-	package
-Message-ID: <20150808105651.4870A81904@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 17:39:31 +0200
+Subject: [Buildroot] [git commit branch/next] wireless-regdb: bump to
+	version 2015.07.20
+Message-ID: <20150808105649.F16227FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=967a4e9a20a849f411d5bde0ece0d47c57f67250
+commit: http://git.buildroot.net/buildroot/commit/?id=133625994f9ac69676b1c929e2484f5fb9664140
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas:
-   - use a shorter file as the license file, client.h instead of client.cpp
-   - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                     |    1 +
- package/kodi-pvr-wmc/Config.in       |    7 +++++++
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk |   13 +++++++++++++
- package/kodi/Config.in               |    1 +
- 4 files changed, 22 insertions(+), 0 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9fd211e..3b77b34 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -125,6 +125,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_VBOX
- 	select BR2_PACKAGE_KODI_PVR_VDR_VNSI
- 	select BR2_PACKAGE_KODI_PVR_VUPLUS
-+	select BR2_PACKAGE_KODI_PVR_WMC
- 	help
- 	  Kodi PVR addon was split into seperate modules
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 250f4d8..f02c1c3 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
++sha256	edac88b58f23f0a7d73aa2b21520d04019f30e3e604b0a60ca0a6af16044bdf2	wireless-regdb-2015.07.20.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 92068a6..fe76882 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/kodi-pvr-wmc/Config.in b/package/kodi-pvr-wmc/Config.in
-new file mode 100644
-index 0000000..2672c83
---- /dev/null
-+++ b/package/kodi-pvr-wmc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_WMC
-+	bool "kodi-pvr-wmc"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  Kodi's Windows Media Center client addon
-+
-+	  https://github.com/kodi-pvr/pvr.wmc
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-new file mode 100644
-index 0000000..fc385f9
---- /dev/null
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-pvr-wmc
-+#
-+################################################################################
-+
-+KODI_PVR_WMC_VERSION = e19c3e99c87e81d406bac0bc4e8edeb47df66dcc
-+KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
-+KODI_PVR_WMC_LICENSE = GPLv2+
-+KODI_PVR_WMC_LICENSE_FILES = src/client.h
-+KODI_PVR_WMC_DEPENDENCIES = kodi-platform
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 79e7e60..6b1b9f3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -273,6 +273,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-vbox/Config.in"
- 	source "package/kodi-pvr-vdr-vnsi/Config.in"
- 	source "package/kodi-pvr-vuplus/Config.in"
-+	source "package/kodi-pvr-wmc/Config.in"
- endmenu
- 
- endif # BR2_PACKAGE_KODI
+-WIRELESS_REGDB_VERSION = 2015.06.05
++WIRELESS_REGDB_VERSION = 2015.07.20
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
