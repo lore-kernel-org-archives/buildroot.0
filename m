@@ -1,45 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 13:01:42 +0200
-Subject: [Buildroot] [git commit] bind: security bump to version 9.9.7-P2
-Message-ID: <20150729110216.EDA4D81E91@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 13:02:16 +0200
+Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.74
+In-Reply-To: <1438165063-16133-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1438165063-16133-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150729130216.511ad243@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=948a1d40009ea62c2f0c851186539c491c93c1ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Fixes CVE-2015-5477 - An error in handling TKEY queries can cause named
-to exit with a REQUIRE assertion failure.
+On Wed, 29 Jul 2015 07:17:43 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/dnsmasq/dnsmasq.hash | 2 +-
+>  package/dnsmasq/dnsmasq.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bind/bind.hash |    4 ++--
- package/bind/bind.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied, thanks.
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index e74c773..6bc2d1b 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
--sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P2/bind-9.9.7-P2.tar.gz.sha256.asc
-+sha256	f5f433567e5f68d61460d86f691471259a49b6d10d7422acbd88b7fdb038b518	bind-9.9.7-P2.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 98a19ea..6201991 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.9.7-P1
-+BIND_VERSION = 9.9.7-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
