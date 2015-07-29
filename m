@@ -1,46 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 09:02:35 +0200
-Subject: [Buildroot] make uclibc-configured
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD8E34@svr-wa-exch1.atg.lc>
-References: <944894A3EB1D044A9003B2F944389BB20474AD8E34@svr-wa-exch1.atg.lc>
-Message-ID: <20150729090235.6c5429eb@free-electrons.com>
+Date: Wed, 29 Jul 2015 09:06:28 +0200
+Subject: [Buildroot] building host-e2fsprogs on RHEL5.8
+In-Reply-To: <55B81D1E.90203@mentor.com>
+References: <55B81D1E.90203@mentor.com>
+Message-ID: <20150729090628.70c71933@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tommy,
+Hollis,
 
-On Tue, 28 Jul 2015 17:07:06 -0700, Lee, Tommy wrote:
-
-> My "make uclibc-configured" command failed as shown below:
+On Tue, 28 Jul 2015 17:23:58 -0700, Hollis Blanchard wrote:
+> I get two errors when building buildroot's host-e2fsprogs (1.42.13) on 
+> RHEL5.8, both from e4defrag.c:
+> e4defrag.c:197:2: error: #error sync_file_range not available!
+> e4defrag.c:201:2: error: #error fallocate64 not available!
 > 
-> tclee at HP-Compaq-dc7900-Convertible-Minitower:~/Downloads/jul27mon15/buildroot$ make uclibc-configured
+> The latter can be patched by calling posix_fallocate64 instead. The 
+> former seems to be due to a known bug 
+> <https://bugzilla.redhat.com/show_bug.cgi?id=518581>, requiring manually 
+> calling syscall().
+> 
+> (For the record, this is glibc 2.5 and kernel 2.6.18.)
+> 
+> I can work around the problem with this:
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index 0537521..4aeda83 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -12,6 +12,9 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING 
+> lib/ss/mit-sipb-copyright.h l
+>   E2FSPROGS_INSTALL_STAGING = YES
+>   E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+> 
+> +HOST_E2FSPROGS_CONF_OPTS = \
+> +       --disable-defrag
+> +
+>   E2FSPROGS_CONF_OPTS = \
+>          $(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
+>          $(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
+> 
+> 
+> Alternately, if I come up with patches to work around these two 
+> problems, would buildroot carry them until upstream e2fsprogs (hopefully 
+> one day) picks them up?
 
-This target doesn't exist in Buildroot since many years. I guess you
-are probably using a very very old Buildroot.
+Thanks for the report.
 
-> .....
-> /home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3/gcc/doc/service.texi:6: warning: node prev `Service' in menu `Trouble' and in sectioning `Bugs' differ
-> /home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3/gcc/doc/service.texi:6: warning: node up `Service' in menu `Bugs' and in sectioning `Top' differ
-> make[2]: *** [doc/gcc.info] Error 1
-> rm gcc.pod
-> make[2]: Leaving directory `/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3-initial/gcc'
+To be honest, I don't think we really care about having the ext4
+defragmentation tool being built as part of our host-e2fsprogs build.
+So you could just as well submit a patch that does:
 
-This path also indicates you're using a very old Buildroot, that
-predates the moment where the toolchain logic has been converted to the
-package infrastructure.
+# the ext4 defragmentation utility doesn't build on old systems, and we
+# don't need it, so disable it
+HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
 
-> My host is Ubuntu-14.04LTS; my HOSTCC equals /usr/bin/gcc (Ubuntu
-> 4.8.4-2ubuntu1~14.04). You probably know how to resolve the issues. I
-> will provide you with the information of my Buildroot configuration.
-
-Please upgrade your Buildroot version to something more recent.
+Of course, do not hesitate to report the issue upstream. But I don't
+think it's worth adding patches to fix this in Buildroot in the mean
+time, just disable the tool.
 
 Best regards,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
