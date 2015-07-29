@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 11:59:07 +0200
-Subject: [Buildroot] [PATCH] Build El Torito for i386 PC
-In-Reply-To: <1438159289.2675.5.camel@intel.com>
-References: <1438159289.2675.5.camel@intel.com>
-Message-ID: <20150729115907.01a2f538@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 29 Jul 2015 07:17:43 -0300
+Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.74
+Message-ID: <1438165063-16133-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ray,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dnsmasq/dnsmasq.hash | 2 +-
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this patch!
-
-On Wed, 29 Jul 2015 08:41:29 +0000, Kinsella, Ray wrote:
-> Building Grub2 El Torito for i386 EFI errors complaining it cannot find cdboot.img
-> 
->         cdboot.img: No such file or directory
-> 
-> This commit builds El Torito for i386 EFI only
-
-It looks good, but the commit log lacks your Signed-off-by. See
-http://buildroot.org/downloads/manual/manual.html#submitting-patches
-for some details, and http://elinux.org/Developer_Certificate_Of_Origin.
-
-Can you resubmit with your SoB line added?
-
-Thanks!
-
-Thomas
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 2d6e78c..370792f 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0bff81103e53fcab3a3c4d0fd6df1882f9446dca4fa74ff8270e1d2ab872d8f6	dnsmasq-2.73.tar.xz
++sha256	9ed484b9879d63f7a0bc1010562f17d8aaadf4261e9a126299796cb9696d93ba	dnsmasq-2.74.tar.xz
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 13352a9..0df33ca 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.73
++DNSMASQ_VERSION = 2.74
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.3.6
