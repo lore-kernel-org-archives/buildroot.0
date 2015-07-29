@@ -1,66 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 23:37:25 +0200
-Subject: [Buildroot] [PATCH] package/golang: new package
-In-Reply-To: <20150729212003.GB3722@free.fr>
-References: <1438202101-5106-1-git-send-email-yann.morin.1998@free.fr>
- <20150729231228.0a59fcde@free-electrons.com>
- <20150729212003.GB3722@free.fr>
-Message-ID: <20150729233725.60512298@free-electrons.com>
+From: Matthew Starr <mstarr@hedonline.com>
+Date: Wed, 29 Jul 2015 16:54:34 -0500
+Subject: [Buildroot] Using buildroot generated toolchain as external
+	toolchain issues
+In-Reply-To: <20150729153034.514e8764@free-electrons.com>
+References: <64CA5C49A43E314D9F7DAE05370E2F7B06771147@hed-dc01.hed.local><1526636.mbSdBIvjiD@sagittea><20150729090036.65757161@free-electrons.com><64CA5C49A43E314D9F7DAE05370E2F7B06771148@hed-dc01.hed.local>
+ <20150729153034.514e8764@free-electrons.com>
+Message-ID: <64CA5C49A43E314D9F7DAE05370E2F7B0677114D@hed-dc01.hed.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas,
 
-On Wed, 29 Jul 2015 23:20:03 +0200, Yann E. MORIN wrote:
-
-> > Are you sure using VFPV3/VFPV2 is correct here? Looking at the GOARM
-> > values, it seems really like you're trying to check if we're building
-> > for ARMv5, ARMv6 or ARMv7. So what about using BR2_ARM_CPU_ARMV5,
-> > BR2_ARM_CPU_ARMV6 and BR2_ARM_CPU_ARMV7 instead ?
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Wednesday, July 29, 2015 8:31 AM
 > 
-> No, that really is the way it goes. See;
->     https://golang.org/doc/install/source#environment
+> > Could you send out the patch for the static libraries option.    This sounds
+> > like the solution that would be the least likely to cause issues if
+> > updating to a future version of buildroot.
 > 
-> ---8<---
-> * $GOARM (for arm only; default is auto-detected if building on the target
->   processor, 6 if not)
+> Attached.
 > 
->   - This sets the ARM floating point co-processor architecture version the
->     run-time should target. If you are compiling on the target system, its
->     value will be auto-detected.
+> > If the static library option is used, how would I go about deploying
+> > the toolchain to the other instances of buildroot that I use?
 > 
->     . GOARM=5: use software floating point; when CPU doesn't have VFP
->       co-processor
->     . GOARM=6: use VFPv1 only; default if cross compiling; usually ARM11
->       or better cores (VFPv2 or better is also supported)
->     . GOARM=7: use VFPv3; usually Cortex-A cores 
-> ---8<---
+> Just tarball the toolchain (i.e, output/host/), put the tarball somewhere, and
+> tell your other Buildroot instances to use it as an external toolchain.
 > 
-> So, what it really wants to know ifs what kind of FPU it can use.
 
-Alright, then a short comment above this might be useful.
+I applied the patch, built the toolchain, and pointed the other instances
+of buildroot to use the toolchain tar file.  I still received the same error
+as before I used the patch:
 
+output/host/opt/ext-toolchain/bin/../libexec/gcc/arm-buildroot-linux-gnueabihf/4.9.2/cc1: error while loading shared libraries: libcloog-isl.so.4: cannot open shared object file: No such file or directory
+Incorrect ABI setting: EABIhf selected, but toolchain is incompatible
+package/pkg-generic.mk:146: recipe for target 'output/build/toolchain-external-undefined/.stamp_configured' failed
 
-> > > +# We must install both the src/ and include/ subdirs because they
-> > > +# contain the go "runtime".
-> > > +define GOLANG_INSTALL_TARGET_CMDS
-> > > +	$(INSTALL) -D -m 0755 $(@D)/bin/linux_$(GOLANG_ARCH)/go $(TARGET_DIR)/usr/bin/go
-> > > +	$(INSTALL) -D -m 0755 $(@D)/bin/linux_$(GOLANG_ARCH)/gofmt $(TARGET_DIR)/usr/bin/gofmt
-> > > +	rm -rf $(TARGET_DIR)/usr/lib/go/
-> > 
-> > Why this rm -rf ?
-> 
-> To remove any pre-existing intall, in case one does golang-reinstall or
-> golang-rebuild...
+The toolchain files appear to be in the output/host/opt/ext-toolchain
+directory and the libcloog-isl.so.4 file is located under
+output/host/opt/ext-toolchain/lib/ directory.
 
-We're not doing this for any other package, so why should we be doing
-this for golang?
+I also played around with the options to build the libraries as static, shared,
+or both.  No matter what that setting was it made no difference.  I am
+guessing this only affects the target libraries and not host.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Are there any other configuration settings I need to get the patch to work?
+
+Best regards,
+ 
+Matthew Starr
