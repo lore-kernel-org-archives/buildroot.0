@@ -1,120 +1,40 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 29 Jul 2015 19:50:15 +0100
-Subject: [Buildroot] [PATCH 1/1] packages/btrfs-progs: fix build issues
-	under musl
-Message-ID: <1438195815-29424-1-git-send-email-brendanheading@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 29 Jul 2015 21:42:56 +0200
+Subject: [Buildroot] [PATCH 3/3] package/mesa3d: Fix dri config option
+In-Reply-To: <1438198976-25523-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1438198976-25523-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1438198976-25523-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/b97/b97f1e9cd459da96e3e1680bb7c43d8103ab12c2/
+The option is constructed by AC_ARG_ENABLE and not AC_ARG_WITH:
+http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n726
 
-Caused by assumptions around __GLIBC__ and header inclusion.
+Fixes
+http://autobuild.buildroot.net/results/6e3/6e313e2a4b2ff092d187ac564f25c14aaaceb0dd/
+http://autobuild.buildroot.net/results/e3c/e3c3e441038b72c78c8e94370baa036ab1effb6b/
+http://autobuild.buildroot.net/results/11f/11f09260428a766d1f274843a9aebe220fd0e988/
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...s-compilation-errors-when-using-musl-libc.patch | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/btrfs-progs/0001-btrfs-progs-compilation-errors-when-using-musl-libc.patch
+ package/mesa3d/mesa3d.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/btrfs-progs/0001-btrfs-progs-compilation-errors-when-using-musl-libc.patch b/package/btrfs-progs/0001-btrfs-progs-compilation-errors-when-using-musl-libc.patch
-new file mode 100644
-index 0000000..dde1851
---- /dev/null
-+++ b/package/btrfs-progs/0001-btrfs-progs-compilation-errors-when-using-musl-libc.patch
-@@ -0,0 +1,91 @@
-+From 8905b451014fce570984335f153f3977e94f0115 Mon Sep 17 00:00:00 2001
-+From: Brendan Heading <brendanheading@gmail.com>
-+Date: Wed, 29 Jul 2015 19:27:26 +0100
-+Subject: [PATCH 1/1] btrfs-progs: compilation errors when using musl libc
-+
-+- limits.h must be included to pick up PATH_MAX.
-+- remove double declaration of BTRFS_DISABLE_BACKTRACE
-+
-+kerncompat.h assumed that if __GLIBC__ was not defined,
-+it could safely define BTRFS_DISABLE_BACKTRACE, however this can be
-+defined by the configure script. Added a check to ensure it is not
-+defined first.
-+
-+Upstream-status: submitted
-+
-+See : http://thread.gmane.org/gmane.comp.file-systems.btrfs/46771
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+---
-+ cmds-inspect.c | 1 +
-+ cmds-receive.c | 1 +
-+ cmds-scrub.c   | 1 +
-+ cmds-send.c    | 1 +
-+ kerncompat.h   | 2 ++
-+ 5 files changed, 6 insertions(+)
-+
-+diff --git a/cmds-inspect.c b/cmds-inspect.c
-+index 71451fe..9712581 100644
-+--- a/cmds-inspect.c
-++++ b/cmds-inspect.c
-+@@ -20,6 +20,7 @@
-+ #include <stdint.h>
-+ #include <sys/ioctl.h>
-+ #include <errno.h>
-++#include <limits.h>
-+ 
-+ #include "kerncompat.h"
-+ #include "ioctl.h"
-+diff --git a/cmds-receive.c b/cmds-receive.c
-+index 071bea9..d4b3103 100644
-+--- a/cmds-receive.c
-++++ b/cmds-receive.c
-+@@ -28,6 +28,7 @@
-+ #include <wait.h>
-+ #include <assert.h>
-+ #include <getopt.h>
-++#include <limits.h>
-+ 
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+diff --git a/cmds-scrub.c b/cmds-scrub.c
-+index b7aa809..5a85dc4 100644
-+--- a/cmds-scrub.c
-++++ b/cmds-scrub.c
-+@@ -34,6 +34,7 @@
-+ #include <ctype.h>
-+ #include <signal.h>
-+ #include <stdarg.h>
-++#include <limits.h>
-+ 
-+ #include "ctree.h"
-+ #include "ioctl.h"
-+diff --git a/cmds-send.c b/cmds-send.c
-+index 20bba18..a0b7f95 100644
-+--- a/cmds-send.c
-++++ b/cmds-send.c
-+@@ -33,6 +33,7 @@
-+ #include <assert.h>
-+ #include <getopt.h>
-+ #include <uuid/uuid.h>
-++#include <limits.h>
-+ 
-+ #include "ctree.h"
-+ #include "ioctl.h"
-+diff --git a/kerncompat.h b/kerncompat.h
-+index 5d92856..7c627ba 100644
-+--- a/kerncompat.h
-++++ b/kerncompat.h
-+@@ -33,7 +33,9 @@
-+ #include <features.h>
-+ 
-+ #ifndef __GLIBC__
-++#ifndef BTRFS_DISABLE_BACKTRACE
-+ #define BTRFS_DISABLE_BACKTRACE
-++#endif
-+ #define __always_inline __inline __attribute__ ((__always_inline__))
-+ #endif
-+ 
-+-- 
-+2.4.3
-+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 82b1001..800d2f9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -93,7 +93,7 @@ endef
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+-	--without-dri-drivers --without-dri --disable-dri3
++	--without-dri-drivers --disable-dri --disable-dri3
+ MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
+ else
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
 -- 
-2.4.3
+2.1.4
