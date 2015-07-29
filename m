@@ -1,121 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:19:04 +0200
-Subject: [Buildroot] [git commit] package/aircrack-ng: fix musl build
-Message-ID: <20150729201913.EDFA98035E@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 17:39:31 +0200
+Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.07.20
+Message-ID: <20150729201913.E6D9781E8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71107b6cb0282862259817e33ae714644b185fcb
+commit: http://git.buildroot.net/buildroot/commit/?id=133625994f9ac69676b1c929e2484f5fb9664140
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport an upstream patch [1] and remove sys/cdefs.h from
-ethernet.h as suggested by the musl wiki [2].
-
-Fixes:
-http://autobuild.buildroot.net/results/9721496871d104b4cfb68ce133b5f48612cb7e50/
-
-[1] https://github.com/aircrack-ng/aircrack-ng/commit/42de9f800056601443ac12edbba7bd5802740db2
-[2] http://wiki.musl-libc.org/wiki/FAQ
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ide-ng-Use-termios-instead-of-sys-termios.patch |   27 ++++++++++
- package/aircrack-ng/0004-fix-musl-build.patch      |   53 ++++++++++++++++++++
- 2 files changed, 80 insertions(+), 0 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/aircrack-ng/0003-Wesside-ng-Use-termios-instead-of-sys-termios.patch b/package/aircrack-ng/0003-Wesside-ng-Use-termios-instead-of-sys-termios.patch
-new file mode 100644
-index 0000000..a10ee45
---- /dev/null
-+++ b/package/aircrack-ng/0003-Wesside-ng-Use-termios-instead-of-sys-termios.patch
-@@ -0,0 +1,27 @@
-+From 42de9f800056601443ac12edbba7bd5802740db2 Mon Sep 17 00:00:00 2001
-+From: Thomas d'Otreppe <tdotreppe@aircrack-ng.org>
-+Date: Wed, 8 Apr 2015 01:25:07 +0000
-+Subject: [PATCH] Wesside-ng: Use termios instead of sys/termios.
-+
-+git-svn-id: http://svn.aircrack-ng.org/trunk at 2533 28c6078b-6c39-48e3-add9-af49d547ecab
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/wesside-ng.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/wesside-ng.c b/src/wesside-ng.c
-+index 711d8b7..f44438a 100644
-+--- a/src/wesside-ng.c
-++++ b/src/wesside-ng.c
-+@@ -33,7 +33,7 @@
-+ 
-+ #include <sys/types.h>
-+ #include <sys/socket.h>
-+-#include <sys/termios.h>
-++#include <termios.h>
-+ #include <sys/ioctl.h>
-+ #include <sys/stat.h>
-+ #include <sys/wait.h>
-+-- 
-+2.4.3
-+
-diff --git a/package/aircrack-ng/0004-fix-musl-build.patch b/package/aircrack-ng/0004-fix-musl-build.patch
-new file mode 100644
-index 0000000..cc093d3
---- /dev/null
-+++ b/package/aircrack-ng/0004-fix-musl-build.patch
-@@ -0,0 +1,53 @@
-+From da6e87670ad4639371da056f9e36201a9236dfa2 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Wed, 29 Jul 2015 19:38:46 +0200
-+Subject: [PATCH] fix musl build
-+
-+aircrack-ng doesn't build with a musl toolchain due to
-+cdefs.h internal glibc header being used in internal
-+ethernet.h [1].
-+
-+[1] http://wiki.musl-libc.org/wiki/FAQ
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/include/ethernet.h | 20 +++++++++++---------
-+ 1 file changed, 11 insertions(+), 9 deletions(-)
-+
-+diff --git a/src/include/ethernet.h b/src/include/ethernet.h
-+index 72d5e81..e9d9236 100644
-+--- a/src/include/ethernet.h
-++++ b/src/include/ethernet.h
-+@@ -389,18 +389,20 @@ void	ether_vlan_mtap(struct bpf_if *, struct mbuf *,
-+ 
-+ #else /* _KERNEL */
-+ 
-+-#include <sys/cdefs.h>
-+-
-+ /*
-+  * Ethernet address conversion/parsing routines.
-+  */
-+-__BEGIN_DECLS
-+-struct	ether_addr *ether_aton(const char *);
-+-int	ether_hostton(const char *, struct ether_addr *);
-+-int	ether_line(const char *, struct ether_addr *, char *);
-+-char 	*ether_ntoa(const struct ether_addr *);
-+-int	ether_ntohost(char *, const struct ether_addr *);
-+-__END_DECLS
-++#ifdef __cplusplus
-++extern "C" {
-++#endif
-++	struct	ether_addr *ether_aton(const char *);
-++	int	ether_hostton(const char *, struct ether_addr *);
-++	int	ether_line(const char *, struct ether_addr *, char *);
-++	char 	*ether_ntoa(const struct ether_addr *);
-++	int	ether_ntohost(char *, const struct ether_addr *);
-++#ifdef __cplusplus
-++}
-++#endif
-+ 
-+ #endif /* !_KERNEL */
-+ 
-+-- 
-+2.4.3
-+
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 250f4d8..f02c1c3 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
++sha256	edac88b58f23f0a7d73aa2b21520d04019f30e3e604b0a60ca0a6af16044bdf2	wireless-regdb-2015.07.20.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 92068a6..fe76882 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2015.06.05
++WIRELESS_REGDB_VERSION = 2015.07.20
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
