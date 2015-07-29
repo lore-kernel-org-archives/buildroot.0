@@ -1,27 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:52:57 +0200
-Subject: [Buildroot] [PATCH 2/3] package/xserver: commonalise dependency
- on libdrm
-In-Reply-To: <4368a6cd5cf0f903bc2e0dd756b413b9ed8378ad.1437950027.git.yann.morin.1998@free.fr>
-References: <cover.1437950027.git.yann.morin.1998@free.fr>
- <4368a6cd5cf0f903bc2e0dd756b413b9ed8378ad.1437950027.git.yann.morin.1998@free.fr>
-Message-ID: <20150729225257.1dbe308d@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 29 Jul 2015 21:54:44 +0100
+Subject: [Buildroot] [PATCH 1/1] packages/btrfs-progs: fix build issues
+ under musl
+In-Reply-To: <20150729224726.71925205@free-electrons.com>
+References: <1438195815-29424-1-git-send-email-brendanheading@gmail.com>
+ <20150729224726.71925205@free-electrons.com>
+Message-ID: <CA+BsyQ5ro7WvW8o9pW4vMj9DZACULx7=jK-HjKon+GAFjOB=2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+> Can you check if that continues to work fine with glibc and musl, and
+> if so, submit the patches upstream?
+>
+> Thanks a lot!
 
-On Mon, 27 Jul 2015 00:35:11 +0200, Yann E. MORIN wrote:
+Sure. I will make a buildroot patch too.
 
-> +XSERVER_XORG_SERVER_NEEDS_LIBDRM = y
-
-Shouldn't we use an hidden Config.in boolean instead for this?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Brendan
