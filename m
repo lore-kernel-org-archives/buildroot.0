@@ -1,49 +1,33 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Wed, 29 Jul 2015 08:41:29 +0000
-Subject: [Buildroot] [PATCH] Build El Torito for i386 PC
-Message-ID: <1438159289.2675.5.camel@intel.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 29 Jul 2015 11:30:54 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150729100334.00137b70@free-electrons.com>
+References: <20150729063017.EDA6D101EBC@stock.ovh.net>
+ <20150729100334.00137b70@free-electrons.com>
+Message-ID: <8314698.FE2qvJLvco@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building Grub2 El Torito for i386 EFI errors complaining it cannot find cdboot.img
+Hello,
 
-        cdboot.img: No such file or directory
+On Wednesday 29 July 2015 10:03:34 Thomas Petazzoni wrote:
+[..]
+> >         sh4a |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/bba8faf210414d956cc07629b8ba99ceed0ebdf6/
+> >      aarch64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/f525b48e2982adc4987cb772be92eeda30569c13/
+> >      aarch64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/0d2c2cd0bda1dd3c1e137117df535d8e02d67e8b/
+> >          arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/a815a4f943e6a07f87f8f6bbf9910459575db311/
+> >         i686 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/1b72769e65444322de4bfcb02200b7d999f9f5c1/
+> >          arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/195f6c34904b8185d44611c3d56084cb7d3e8a14/
+> >     mips64el |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/aac02dd6c5ea04ea70cfa6921a04b5558a9bbe7f/
+> >          arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/fbaec431108bec088ff543771c52f2bc20e15b31/
+> 
+> Weird build issues.
+It is a quoting problem. I will send a patch. 
 
-This commit builds El Torito for i386 EFI only
----
- boot/grub2/grub2.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 280b4d6..7e0f31f 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -67,6 +67,14 @@ GRUB2_CONF_OPTS = \
- 
- GRUB2_INSTALL_TARGET_OPTS = DESTDIR=$(HOST_DIR) install
- 
-+ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
-+define GRUB2_IMAGE_INSTALL_ELTORITO
-+	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
-+		$(BINARIES_DIR)/grub-eltorito.img
-+endef
-+GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_IMAGE_INSTALL_ELTORITO
-+endif
-+
- define GRUB2_IMAGE_INSTALLATION
- 	mkdir -p $(dir $(GRUB2_IMAGE))
- 	$(HOST_DIR)/usr/bin/grub-mkimage \
-@@ -76,8 +84,6 @@ define GRUB2_IMAGE_INSTALLATION
- 		-p "$(GRUB2_PREFIX)" \
- 		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
- 		$(GRUB2_BUILTIN_MODULES)
--	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
--		$(BINARIES_DIR)/grub-eltorito.img
- 	mkdir -p $(dir $(GRUB2_CFG))
- 	$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG)
- endef
 -- 
-2.1.0
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
