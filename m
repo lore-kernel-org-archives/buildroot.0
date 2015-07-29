@@ -1,72 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 17:36:43 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] Build El Torito for i386 PC
-In-Reply-To: <1438170732.2675.12.camel@intel.com>
-References: <1438170732.2675.12.camel@intel.com>
-Message-ID: <20150729173643.18dabf28@free-electrons.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Wed, 29 Jul 2015 08:38:11 -0700
+Subject: [Buildroot] building host-e2fsprogs on RHEL5.8
+In-Reply-To: <20150729090628.70c71933@free-electrons.com>
+References: <55B81D1E.90203@mentor.com>
+ <20150729090628.70c71933@free-electrons.com>
+Message-ID: <55B8F363.2010606@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kinsella, Ray,
+Wonderful. I'm not even sure how I would the patches for those two 
+problems anyways... :-)
 
-On Wed, 29 Jul 2015 11:52:14 +0000, Kinsella, Ray wrote:
-> Building Grub2 El Torito for i386 EFI errors complaining it cannot find cdboot.img
-> 
->         cdboot.img: No such file or directory
-> 
-> This commit builds El Torito for i386 PC only
-> 
-> Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+Hollis Blanchard
+Mentor Graphics Emulation Division
 
-The title of the patch should have been:
-
-	grub2: build El Torito image only for i386 PC
-
-We want all commit titles to be prefixed by the name of the package the
-commit is touching.
-
-
-> +ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
-> +define GRUB2_IMAGE_INSTALL_ELTORITO
-> +	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
-> +		$(BINARIES_DIR)/grub-eltorito.img
-> +endef
-> +GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_IMAGE_INSTALL_ELTORITO
-> +endif
-> +
->  define GRUB2_IMAGE_INSTALLATION
->  	mkdir -p $(dir $(GRUB2_IMAGE))
->  	$(HOST_DIR)/usr/bin/grub-mkimage \
-> @@ -76,8 +84,6 @@ define GRUB2_IMAGE_INSTALLATION
->  		-p "$(GRUB2_PREFIX)" \
->  		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
->  		$(GRUB2_BUILTIN_MODULES)
-> -	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
-> -		$(BINARIES_DIR)/grub-eltorito.img
->  	mkdir -p $(dir $(GRUB2_CFG))
->  	$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG)
->  endef
-
-And I tested your patch, and it fails to build. So it seems like you
-did not test it properly. The reason is that the $(GRUB2_IMAGE) used by
-your new post-install hook is not generated until the next post-install
-hook (the existing GRUB2_IMAGE_INSTALLATION function) gets executed. But
-this hook is afterwards.
-
-So I changed the implementation to simply make the
-GRUB2_IMAGE_INSTALLATION function call GRUB2_IMAGE_INSTALL_ELTORITO.
-
-I applied your patch with those changes, see:
-
-   http://git.buildroot.net/buildroot/commit/?id=8f609ed603220e0ac0ef9a45b0214eb87ab85d1e
-
-Thanks for this contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On 07/29/2015 12:06 AM, Thomas Petazzoni wrote:
+> Hollis,
+>
+> On Tue, 28 Jul 2015 17:23:58 -0700, Hollis Blanchard wrote:
+>> I get two errors when building buildroot's host-e2fsprogs (1.42.13) on
+>> RHEL5.8, both from e4defrag.c:
+>> e4defrag.c:197:2: error: #error sync_file_range not available!
+>> e4defrag.c:201:2: error: #error fallocate64 not available!
+>>
+>> The latter can be patched by calling posix_fallocate64 instead. The
+>> former seems to be due to a known bug
+>> <https://bugzilla.redhat.com/show_bug.cgi?id=518581>, requiring manually
+>> calling syscall().
+>>
+>> (For the record, this is glibc 2.5 and kernel 2.6.18.)
+>>
+>> I can work around the problem with this:
+>> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+>> index 0537521..4aeda83 100644
+>> --- a/package/e2fsprogs/e2fsprogs.mk
+>> +++ b/package/e2fsprogs/e2fsprogs.mk
+>> @@ -12,6 +12,9 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING
+>> lib/ss/mit-sipb-copyright.h l
+>>    E2FSPROGS_INSTALL_STAGING = YES
+>>    E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+>>
+>> +HOST_E2FSPROGS_CONF_OPTS = \
+>> +       --disable-defrag
+>> +
+>>    E2FSPROGS_CONF_OPTS = \
+>>           $(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
+>>           $(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
+>>
+>>
+>> Alternately, if I come up with patches to work around these two
+>> problems, would buildroot carry them until upstream e2fsprogs (hopefully
+>> one day) picks them up?
+> Thanks for the report.
+>
+> To be honest, I don't think we really care about having the ext4
+> defragmentation tool being built as part of our host-e2fsprogs build.
+> So you could just as well submit a patch that does:
+>
+> # the ext4 defragmentation utility doesn't build on old systems, and we
+> # don't need it, so disable it
+> HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
+>
+> Of course, do not hesitate to report the issue upstream. But I don't
+> think it's worth adding patches to fix this in Buildroot in the mean
+> time, just disable the tool.
+>
+> Best regards,
+>
+> Thomas
