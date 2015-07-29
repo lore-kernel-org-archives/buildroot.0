@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 17:39:31 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2015.07.20
-Message-ID: <20150729201913.E6D9781E8A@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 22:19:43 +0200
+Subject: [Buildroot] [PATCH] package/aircrack-ng: fix musl build
+In-Reply-To: <1438192035-20476-1-git-send-email-romain.naour@openwide.fr>
+References: <1438192035-20476-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150729221943.717e5a2f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=133625994f9ac69676b1c929e2484f5fb9664140
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wireless-regdb/wireless-regdb.hash |    2 +-
- package/wireless-regdb/wireless-regdb.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, 29 Jul 2015 19:47:15 +0200, Romain Naour wrote:
+> Backport an upstream patch [1] and remove sys/cdefs.h from
+> ethernet.h as suggested by the musl wiki [2].
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/9721496871d104b4cfb68ce133b5f48612cb7e50/
+> 
+> [1] https://github.com/aircrack-ng/aircrack-ng/commit/42de9f800056601443ac12edbba7bd5802740db2
+> [2] http://wiki.musl-libc.org/wiki/FAQ
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  ...ide-ng-Use-termios-instead-of-sys-termios.patch | 27 +++++++++++
+>  package/aircrack-ng/0004-fix-musl-build.patch      | 53 ++++++++++++++++++++++
+>  2 files changed, 80 insertions(+)
+>  create mode 100644 package/aircrack-ng/0003-Wesside-ng-Use-termios-instead-of-sys-termios.patch
+>  create mode 100644 package/aircrack-ng/0004-fix-musl-build.patch
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 250f4d8..f02c1c3 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
-+sha256	edac88b58f23f0a7d73aa2b21520d04019f30e3e604b0a60ca0a6af16044bdf2	wireless-regdb-2015.07.20.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 92068a6..fe76882 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2015.06.05
-+WIRELESS_REGDB_VERSION = 2015.07.20
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+Applied, thanks! Please don't forget to submit patch 0004 upstream.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
