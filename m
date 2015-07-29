@@ -1,49 +1,124 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 29 Jul 2015 23:04:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: More fixes to static
-	compile
-Message-ID: <1438203871-8548-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Jul 2015 23:12:28 +0200
+Subject: [Buildroot] [PATCH] package/golang: new package
+In-Reply-To: <1438202101-5106-1-git-send-email-yann.morin.1998@free.fr>
+References: <1438202101-5106-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150729231228.0a59fcde@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libz is needed by libid3tag, fixes
-http://autobuild.buildroot.net/results/85e/85e53f2b30f107f486be08549ce6df08953ea499/
+Dear Yann E. MORIN,
 
-libm is needed by libexif, changes
+On Wed, 29 Jul 2015 22:35:01 +0200, Yann E. MORIN wrote:
 
-checking for exif_data_new_from_file in -lexif... no
-checking for exif_data_new_from_file in -lexif... no
+> diff --git a/package/golang/golang.hash b/package/golang/golang.hash
+> new file mode 100644
+> index 0000000..146e39c
+> --- /dev/null
+> +++ b/package/golang/golang.hash
+> @@ -0,0 +1 @@
 
-from the forementioned autobuilder config.log to
+Origin of the hash?
 
-checking for exif_data_new_from_file in -lexif... yes
+> +GOLANG_ARCH =
 
-The pkgconfig file of libvorbis is called vorbis.pc, fix wrong naming. Also
-we need to link against libsqlite3, so add that lib to the pkgconf call.
+Defining a variable to nothing is not very useful I believe.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/minidlna/minidlna.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +GOLANG_ENV = \
+> +	CC_FOR_TARGET="$(TARGET_CC)" \
+> +	LD_FOR_TARGET="$(TARGET_LD)" \
+> +	GOOS=linux
+> +
+> +ifeq ($(BR2_i386),y)
+> +GOLANG_ARCH = 386
+> +ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
+> +GOLANG_ENV += GO386=sse2
+> +else
+> +GOLANG_ENV += GO386=387
+> +endif
+> +endif # i386
+> +
+> +ifeq ($(BR2_x86_64),y)
+> +GOLANG_ARCH = amd64
+> +endif # x86_64
+> +
+> +# For ARM, the selection of the instruciton set is a bit unusual,
+> +# and is decided on whether the CPU has an FPU, and which one.
+> +ifeq ($(BR2_arm),y)
+> +GOLANG_ARCH = arm
+> +ifeq ($(BR2_ARM_CPU_HAS_VFPV3),y)
+> +GOLANG_ENV += GOARM=7
+> +else ifeq ($(BR2_ARM_CPU_HAS_VFPV2),y)
+> +GOLANG_ENV += GOARM=6
+> +else
+> +GOLANG_ENV += GOARM=5
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index ab93484..2f75993 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -17,9 +17,9 @@ MINIDLNA_DEPENDENCIES = \
- ifeq ($(BR2_STATIC_LIBS),y)
- # the configure script / Makefile forgets to link with some of the dependent
- # libraries breaking static linking, so help it along
--MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libavcodec libexif libvorbis`
-+MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libavcodec libexif vorbis sqlite3`
- MINIDLNA_STATIC_LIBS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)
--MINIDLNA_CONF_ENV += LIBS="$(MINIDLNA_STATIC_LIBS)"
-+MINIDLNA_CONF_ENV += LIBS="$(MINIDLNA_STATIC_LIBS) -lm -lz"
- else
- MINIDLNA_CONF_OPTS = \
- 	--disable-static
+Are you sure using VFPV3/VFPV2 is correct here? Looking at the GOARM
+values, it seems really like you're trying to check if we're building
+for ARMv5, ARMv6 or ARMv7. So what about using BR2_ARM_CPU_ARMV5,
+BR2_ARM_CPU_ARMV6 and BR2_ARM_CPU_ARMV7 instead ?
+
+> +define GOLANG_BUILD_CMDS
+> +	cd $(@D)/src/; \
+> +	$(GOLANG_ENV) \
+> +	GOROOT_FINAL="/usr/lib/go" \
+> +	GO_NO_HOST=1 \
+> +	./make.bash --no-banner
+
+Indent the lines after the cd, maybe, and do not excessively split
+lines.
+
+	cd $(@D)/src && \
+		$(GOLANG_ENV) GOROOT_FINAL="/usr/lib/go" GO_NO_HOST=1 \
+			./make.bash --no-banner
+
+> +# We must install both the src/ and include/ subdirs because they
+> +# contain the go "runtime".
+> +define GOLANG_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/linux_$(GOLANG_ARCH)/go $(TARGET_DIR)/usr/bin/go
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/linux_$(GOLANG_ARCH)/gofmt $(TARGET_DIR)/usr/bin/gofmt
+> +	rm -rf $(TARGET_DIR)/usr/lib/go/
+
+Why this rm -rf ?
+
+> +	mkdir -p $(TARGET_DIR)/usr/lib/go/
+> +	cp -a $(@D)/src $(TARGET_DIR)/usr/lib/go/
+> +	cp -a $(@D)/include $(TARGET_DIR)/usr/lib/go/
+> +	cp -a $(@D)/pkg $(TARGET_DIR)/usr/lib/go/
+> +endef
+> +
+> +define HOST_GOLANG_BUILD_CMDS
+> +	cd $(@D)/src/ ; \
+> +	$(GOLANG_ENV) \
+> +	GOROOT_FINAL="$(HOST_DIR)/usr/lib/go" \
+> +	GO_NO_TARGET=1 \
+> +	./make.bash --no-banner
+
+Ditto above.
+
+> +endef
+> +
+> +# We must install both the src/ and include/ subdirs because they
+> +# contain the go "runtime"
+> +define HOST_GOLANG_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/host/go $(HOST_DIR)/usr/bin/go
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/host/gofmt $(HOST_DIR)/usr/bin/gofmt
+> +	rm -rf $(HOST_DIR)/usr/lib/go/
+> +	mkdir -p $(HOST_DIR)/usr/lib/go/
+> +	cp -a $(@D)/src $(HOST_DIR)/usr/lib/go/
+> +	cp -a $(@D)/include $(HOST_DIR)/usr/lib/go/
+> +	cp -a $(@D)/pkg $(HOST_DIR)/usr/lib/go/
+> +endef
+> +
+> +$(eval $(generic-package))
+> +$(eval $(host-generic-package))
+
+
+
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
