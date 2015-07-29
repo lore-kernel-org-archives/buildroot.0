@@ -1,39 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 29 Jul 2015 08:21:48 -0300
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.07.20
-Message-ID: <1438168908-24743-1-git-send-email-gustavo@zacarias.com.ar>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Wed, 29 Jul 2015 11:52:14 +0000
+Subject: [Buildroot] [PATCH 1/1 v2] Build El Torito for i386 PC
+Message-ID: <1438170732.2675.12.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Building Grub2 El Torito for i386 EFI errors complaining it cannot find cdboot.img
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 250f4d8..f02c1c3 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
-+sha256	edac88b58f23f0a7d73aa2b21520d04019f30e3e604b0a60ca0a6af16044bdf2	wireless-regdb-2015.07.20.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 92068a6..fe76882 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+        cdboot.img: No such file or directory
+
+This commit builds El Torito for i386 PC only
+
+Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+---
+ boot/grub2/grub2.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 280b4d6..7e0f31f 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -67,6 +67,14 @@ GRUB2_CONF_OPTS = \
  
--WIRELESS_REGDB_VERSION = 2015.06.05
-+WIRELESS_REGDB_VERSION = 2015.07.20
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+ GRUB2_INSTALL_TARGET_OPTS = DESTDIR=$(HOST_DIR) install
+ 
++ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
++define GRUB2_IMAGE_INSTALL_ELTORITO
++	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
++		$(BINARIES_DIR)/grub-eltorito.img
++endef
++GRUB2_POST_INSTALL_TARGET_HOOKS += GRUB2_IMAGE_INSTALL_ELTORITO
++endif
++
+ define GRUB2_IMAGE_INSTALLATION
+ 	mkdir -p $(dir $(GRUB2_IMAGE))
+ 	$(HOST_DIR)/usr/bin/grub-mkimage \
+@@ -76,8 +84,6 @@ define GRUB2_IMAGE_INSTALLATION
+ 		-p "$(GRUB2_PREFIX)" \
+ 		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
+ 		$(GRUB2_BUILTIN_MODULES)
+-	cat $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE)/cdboot.img $(GRUB2_IMAGE) > \
+-		$(BINARIES_DIR)/grub-eltorito.img
+ 	mkdir -p $(dir $(GRUB2_CFG))
+ 	$(INSTALL) -D -m 0644 boot/grub2/grub.cfg $(GRUB2_CFG)
+ endef
 -- 
-2.3.6
+2.1.0
