@@ -1,41 +1,43 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 29 Jul 2015 13:01:30 +0000
-Subject: [Buildroot] [PATCH v2] toolchain-external: fix gdbserver
- copying for external arc-2014.12 tools
-In-Reply-To: <20150711104535.3b2c1bfd@free-electrons.com>
-References: <1427271071-9541-1-git-send-email-abrodkin@synopsys.com>
- <55A0CA2A.1010308@openwide.fr> <20150711104535.3b2c1bfd@free-electrons.com>
-Message-ID: <1438174889.16101.0.camel@synopsys.com>
+From: Matthew Starr <mstarr@hedonline.com>
+Date: Wed, 29 Jul 2015 08:22:57 -0500
+Subject: [Buildroot] Using buildroot generated toolchain as external
+	toolchain issues
+In-Reply-To: <20150729090036.65757161@free-electrons.com>
+References: <64CA5C49A43E314D9F7DAE05370E2F7B06771147@hed-dc01.hed.local><1526636.mbSdBIvjiD@sagittea>
+ <20150729090036.65757161@free-electrons.com>
+Message-ID: <64CA5C49A43E314D9F7DAE05370E2F7B06771148@hed-dc01.hed.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Romain,
+Thomas,
 
-On Sat, 2015-07-11 at 10:45 +0200, Thomas Petazzoni wrote:
-> Dear Romain Naour,
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: Wednesday, July 29, 2015 2:01 AM
 > 
-> On Sat, 11 Jul 2015 09:47:54 +0200, Romain Naour wrote:
+> Matthew, there are two options currently available to fix this problem:
 > 
-> > Le 25/03/2015 09:11, Alexey Brodkin a ?crit :
-> > > Historically in pre-built ARC GNU tools gdbserver is located in
-> > > top-level "target-bin" folder.
-> > > 
-> > > Because of that fact if BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is
-> > > selected Buildroot won't find gdbserver (it looks within
-> > > SYSROOT/ARCH_SYSROOT folder).
-> > > 
-> > > Simplest solution is to use TOOLCHAIN_EXTERNAL_FIXUP_CMDS where copy
-> > > gdbserver from "target-bin" folder into SYSROOT/usr/bin.
-> > 
-> > Since this patch, the arc 2014.12 prebuild toolchain as been marked as broken
-> > [1]. This patch is still needed ?
+>  * Use Samuel Martin's patches that adjust the RPATH of host binaries
+>    automatically at the end of the build:
 > 
-> I'd say no for the moment, I'll mark the patch as Rejected for now.
+>    http://lists.busybox.net/pipermail/buildroot/2015-July/132483.html
+>    and following patches.
+> 
+>  * Use a quick hack that consists in building the libraries needed by
+>    gcc as static libraries. This is the trick I'm currently using to
+>    build the Buildroot external toolchains used in the autobuilders
+>    (http://autobuild.buildroot.org). I can provide the patch if you
+>    want.
 
-Indeed this patch is no longer required because in arc-2015.06 toolchain
-we put gdbserver in proper place  "sysroot/usr/bin".
+Could you send out the patch for the static libraries option.    This sounds
+like the solution that would be the least likely to cause issues if updating
+to a future version of buildroot.
 
--Alexey
+If the static library option is used, how would I go about deploying the
+toolchain to the other instances of buildroot that I use?
+
+Best regards,
+ 
+Matthew Starr
