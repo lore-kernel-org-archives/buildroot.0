@@ -1,47 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 15:30:34 +0200
-Subject: [Buildroot] Using buildroot generated toolchain as external
- toolchain issues
-In-Reply-To: <64CA5C49A43E314D9F7DAE05370E2F7B06771148@hed-dc01.hed.local>
-References: <64CA5C49A43E314D9F7DAE05370E2F7B06771147@hed-dc01.hed.local>
- <1526636.mbSdBIvjiD@sagittea>
- <20150729090036.65757161@free-electrons.com>
- <64CA5C49A43E314D9F7DAE05370E2F7B06771148@hed-dc01.hed.local>
-Message-ID: <20150729153034.514e8764@free-electrons.com>
+Date: Wed, 29 Jul 2015 16:48:20 +0200
+Subject: [Buildroot] [git commit] libebml: needs wchar support
+Message-ID: <20150729144842.933A481D6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=b38205c79ac56a6fc61e614ff52f7a8d43ca0ab2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 29 Jul 2015 08:22:57 -0500, Matthew Starr wrote:
+Fixes:
 
-> Could you send out the patch for the static libraries option.    This sounds
-> like the solution that would be the least likely to cause issues if updating
-> to a future version of buildroot.
+  http://autobuild.buildroot.org/results/83a/83af643e377f53feea044eb6fe1447f7ea502612/
 
-Attached.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libebml/Config.in     |    5 +++--
+ package/libmatroska/Config.in |    5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-> If the static library option is used, how would I go about deploying the
-> toolchain to the other instances of buildroot that I use?
-
-Just tarball the toolchain (i.e, output/host/), put the tarball
-somewhere, and tell your other Buildroot instances to use it as an
-external toolchain.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-mpc-mpfr-gmp-build-statically-for-the-host.patch
-Type: text/x-patch
-Size: 1599 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150729/fdaa4113/attachment.bin>
+diff --git a/package/libebml/Config.in b/package/libebml/Config.in
+index b50a492..a00b894 100644
+--- a/package/libebml/Config.in
++++ b/package/libebml/Config.in
+@@ -1,11 +1,12 @@
+ config BR2_PACKAGE_LIBEBML
+ 	bool "libebml"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Access library for the EBML (Extensible Binary Meta
+ 	  Language, a binary derivative of XML) format.
+ 
+ 	  http://matroska.org
+ 
+-comment "libebml needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libebml needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/libmatroska/Config.in b/package/libmatroska/Config.in
+index 81270de..5815a46 100644
+--- a/package/libmatroska/Config.in
++++ b/package/libmatroska/Config.in
+@@ -2,11 +2,12 @@ config BR2_PACKAGE_LIBMATROSKA
+ 	bool "libmatroska"
+ 	select BR2_PACKAGE_LIBEBML
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Extensible open standard audio/video container format access
+ 	  library.
+ 
+ 	  http://matroska.org
+ 
+-comment "libmatroska needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libmatroska needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
