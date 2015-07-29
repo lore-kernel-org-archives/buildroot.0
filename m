@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:20:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ctorrent: fix compilation under
- musl.
-In-Reply-To: <1438192620-3601-1-git-send-email-brendanheading@gmail.com>
-References: <1438192620-3601-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150729222018.243ad215@free-electrons.com>
+Date: Wed, 29 Jul 2015 22:20:52 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: disable e4defrag in host variant
+Message-ID: <20150729202115.131C680F4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=0bbd1dbc156cc81e6f9986c79774c67d537832a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 29 Jul 2015 18:57:00 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/2c9/2c9ef771d146ce5b9df82735fdeb62926c84bd9f/
-> 
-> Build failed due to use of ssize_t without including <unistd.h>.
-> 
-> Patch submitted upstream (note: project appears dormant).
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
->  package/ctorrent/0001-fix-musl-build.patch | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->  create mode 100644 package/ctorrent/0001-fix-musl-build.patch
+e4defrag from e2fsprogs 1.42.13 encounters these build errors on RHEL5.8 hosts:
+e4defrag.c:197:2: error: #error sync_file_range not available!
+e4defrag.c:201:2: error: #error fallocate64 not available!
 
-Applied, thanks.
+It's possible to fix these problems, but we don't use it on the host
+anyway, so just disable it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/e2fsprogs/e2fsprogs.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index c863f70..178372b 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -12,6 +12,10 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
+ E2FSPROGS_INSTALL_STAGING = YES
+ E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+ 
++# e4defrag doesn't build on older systems like RHEL5.x, and we don't
++# need it on the host anyway.
++HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
++
+ E2FSPROGS_CONF_OPTS = \
+ 	$(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
