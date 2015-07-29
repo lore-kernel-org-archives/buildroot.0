@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 13:01:42 +0200
-Subject: [Buildroot] [git commit branch/next] bind: security bump to version
-	9.9.7-P2
-Message-ID: <20150808105649.AFA548190C@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 13:01:51 +0200
+Subject: [Buildroot] [git commit branch/next] packages/libfreeimage:
+	requires wchar
+Message-ID: <20150808105649.DA1808190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=948a1d40009ea62c2f0c851186539c491c93c1ea
+commit: http://git.buildroot.net/buildroot/commit/?id=5f893d08181e348202e56307885c22f4e9c62ec4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2015-5477 - An error in handling TKEY queries can cause named
-to exit with a REQUIRE assertion failure.
+Fixes http://autobuild.buildroot.net/results/6e9/6e9f2bf02e0a165826e9fab194d6bad7901051a9/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bind/bind.hash |    4 ++--
- package/bind/bind.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libfreeimage/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index e74c773..6bc2d1b 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
--sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P2/bind-9.9.7-P2.tar.gz.sha256.asc
-+sha256	f5f433567e5f68d61460d86f691471259a49b6d10d7422acbd88b7fdb038b518	bind-9.9.7-P2.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 98a19ea..6201991 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libfreeimage/Config.in b/package/libfreeimage/Config.in
+index 04fb278..4b462cb 100644
+--- a/package/libfreeimage/Config.in
++++ b/package/libfreeimage/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBFREEIMAGE
+ 	bool "libfreeimage"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_WCHAR
+ 	# compiler issue: "Error: invalid register number `63'"
+ 	depends on !BR2_arc
+ 	# Numerous build issues
+@@ -14,7 +15,7 @@ config BR2_PACKAGE_LIBFREEIMAGE
  
--BIND_VERSION = 9.9.7-P1
-+BIND_VERSION = 9.9.7-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+ 	  http://freeimage.sourceforge.net
+ 
+-comment "libfreeimage needs a toolchain w/ C++, dynamic library"
++comment "libfreeimage needs a toolchain w/ C++, dynamic library, wchar"
+ 	depends on !BR2_arc
+ 	depends on !BR2_bfin
+-	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
