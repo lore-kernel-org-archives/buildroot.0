@@ -1,40 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:51:00 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: Fix dri config option
-Message-ID: <20150729205152.987BF7FC26@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 22:52:57 +0200
+Subject: [Buildroot] [PATCH 2/3] package/xserver: commonalise dependency
+ on libdrm
+In-Reply-To: <4368a6cd5cf0f903bc2e0dd756b413b9ed8378ad.1437950027.git.yann.morin.1998@free.fr>
+References: <cover.1437950027.git.yann.morin.1998@free.fr>
+ <4368a6cd5cf0f903bc2e0dd756b413b9ed8378ad.1437950027.git.yann.morin.1998@free.fr>
+Message-ID: <20150729225257.1dbe308d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b65154c3e4e5c454359d1bef16ae33853cf383e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-The option is constructed by AC_ARG_ENABLE and not AC_ARG_WITH:
-http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n726
+On Mon, 27 Jul 2015 00:35:11 +0200, Yann E. MORIN wrote:
 
-Fixes
-http://autobuild.buildroot.net/results/6e3/6e313e2a4b2ff092d187ac564f25c14aaaceb0dd/
-http://autobuild.buildroot.net/results/e3c/e3c3e441038b72c78c8e94370baa036ab1effb6b/
-http://autobuild.buildroot.net/results/11f/11f09260428a766d1f274843a9aebe220fd0e988/
+> +XSERVER_XORG_SERVER_NEEDS_LIBDRM = y
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/mesa3d.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Shouldn't we use an hidden Config.in boolean instead for this?
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 82b1001..800d2f9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -93,7 +93,7 @@ endef
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
--	--without-dri-drivers --without-dri --disable-dri3
-+	--without-dri-drivers --disable-dri --disable-dri3
- MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
- else
- ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
