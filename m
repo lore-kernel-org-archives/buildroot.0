@@ -1,33 +1,31 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 29 Jul 2015 11:30:54 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150729100334.00137b70@free-electrons.com>
-References: <20150729063017.EDA6D101EBC@stock.ovh.net>
- <20150729100334.00137b70@free-electrons.com>
-Message-ID: <8314698.FE2qvJLvco@sagittea>
+From: Andy Aspell-Clark <andyaspellclark@gmail.com>
+Date: Wed, 29 Jul 2015 10:47:27 +0100
+Subject: [Buildroot] Grub (or syslinux) on target
+Message-ID: <CAHe2UA-NCGYK0+od+FeiVc2dtPxv3g3awx6F_Cevx8LCsHFnBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+I am developing a distro which will be booted over a network (using
+PXEboot). once booted into an initramfs it will auto install a root
+filesystem to the (prototype) VPX X86 SBC.
 
-On Wednesday 29 July 2015 10:03:34 Thomas Petazzoni wrote:
-[..]
-> >         sh4a |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/bba8faf210414d956cc07629b8ba99ceed0ebdf6/
-> >      aarch64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/f525b48e2982adc4987cb772be92eeda30569c13/
-> >      aarch64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/0d2c2cd0bda1dd3c1e137117df535d8e02d67e8b/
-> >          arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/a815a4f943e6a07f87f8f6bbf9910459575db311/
-> >         i686 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/1b72769e65444322de4bfcb02200b7d999f9f5c1/
-> >          arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/195f6c34904b8185d44611c3d56084cb7d3e8a14/
-> >     mips64el |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/aac02dd6c5ea04ea70cfa6921a04b5558a9bbe7f/
-> >          arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/fbaec431108bec088ff543771c52f2bc20e15b31/
-> 
-> Weird build issues.
-It is a quoting problem. I will send a patch. 
+I cannot remove the 'drive' from the embedded system to attach it to my dev
+system.
+
+I need the booted distro to include an installer for a bootloader (grub or
+syslinux would do).
+
+How do I make buildroot build a bootloader and place it in the target
+filesystem instead of in the host filesystem (along with it's dependancies)
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+<http://uk.linkedin.com/in/andyaspellclark>
+
+Asimov: "Those people who think they know everything are a great annoyance
+to those of us who do."
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150729/eb8e2e42/attachment.html>
