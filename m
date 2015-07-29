@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:56:58 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mesa3d: disable broken
- toolchains on nios2
-In-Reply-To: <1438198976-25523-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 29 Jul 2015 22:57:01 +0200
+Subject: [Buildroot] [PATCH 3/3] package/mesa3d: Fix dri config option
+In-Reply-To: <1438198976-25523-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1438198976-25523-1-git-send-email-bernd.kuhls@t-online.de>
- <1438198976-25523-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150729225658.118936f0@free-electrons.com>
+ <1438198976-25523-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150729225701.4c2eae06@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,21 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Wed, 29 Jul 2015 21:42:55 +0200, Bernd Kuhls wrote:
+On Wed, 29 Jul 2015 21:42:56 +0200, Bernd Kuhls wrote:
+> The option is constructed by AC_ARG_ENABLE and not AC_ARG_WITH:
+> http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n726
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/6e3/6e313e2a4b2ff092d187ac564f25c14aaaceb0dd/
+> http://autobuild.buildroot.net/results/e3c/e3c3e441038b72c78c8e94370baa036ab1effb6b/
+> http://autobuild.buildroot.net/results/11f/11f09260428a766d1f274843a9aebe220fd0e988/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/mesa3d.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index c702d0d..2926c89 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -11,6 +11,9 @@ menuconfig BR2_PACKAGE_MESA3D
->  	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	# Triggers the _gp link issue in nios2
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-
-You forgot to propagate these new dependencies to the comment about
-toolchain dependencies. I've done that and applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
