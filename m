@@ -1,51 +1,39 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 29 Jul 2015 18:57:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ctorrent: fix compilation under
-	musl.
-Message-ID: <1438192620-3601-1-git-send-email-brendanheading@gmail.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Wed, 29 Jul 2015 11:47:38 -0700
+Subject: [Buildroot] [PATCH] Disable e4defrag in host-e2fsprogs
+Message-ID: <1438195658-27948-1-git-send-email-hollis_blanchard@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/2c9/2c9ef771d146ce5b9df82735fdeb62926c84bd9f/
+e4defrag from e2fsprogs 1.42.13 encounters these build errors on RHEL5.8 hosts:
+e4defrag.c:197:2: error: #error sync_file_range not available!
+e4defrag.c:201:2: error: #error fallocate64 not available!
 
-Build failed due to use of ssize_t without including <unistd.h>.
+It's possible to fix these problems, but we don't use it on the host anyways,
+so just disable it.
 
-Patch submitted upstream (note: project appears dormant).
-
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 ---
- package/ctorrent/0001-fix-musl-build.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/ctorrent/0001-fix-musl-build.patch
+ package/e2fsprogs/e2fsprogs.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/ctorrent/0001-fix-musl-build.patch b/package/ctorrent/0001-fix-musl-build.patch
-new file mode 100644
-index 0000000..3ba80be
---- /dev/null
-+++ b/package/ctorrent/0001-fix-musl-build.patch
-@@ -0,0 +1,20 @@
-+[PATCH] Fix compilation on musl
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index c863f70..2f043ca 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -12,6 +12,10 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
+ E2FSPROGS_INSTALL_STAGING = YES
+ E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+ 
++# e4defrag doesn't build on older systems like RHEL5.x, and we don't need it
++# on the host anyways.
++HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
 +
-+Using the ssize_t typedef requires including <unistd.h>. 
-+
-+See : https://sourceforge.net/p/dtorrent/patches/3/
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+Upstream-status: submitted
-+---
-+diff -Nur a/compat.c b/compat.c
-+--- a/compat.c	2015-07-29 18:22:24.658415171 +0100
-++++ b/compat.c	2015-07-29 18:36:21.752576311 +0100
-+@@ -63,6 +63,7 @@
-+ 
-+ #ifndef HAVE_STRNSTR
-+ #include <string.h>
-++#include <unistd.h>
-+ /* FUNCTION PROGRAMER: Siberiaic Sang */
-+ char *strnstr(const char *haystack, const char *needle, size_t haystacklen)
-+ {
+ E2FSPROGS_CONF_OPTS = \
+ 	$(if $(BR2_STATIC_LIBS),,--enable-elf-shlibs) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
 -- 
-2.4.3
+2.3.2
