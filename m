@@ -1,53 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 22:50:31 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: disable broken toolchains
-	on nios2
-Message-ID: <20150729205152.8B1787FC26@busybox.osuosl.org>
+Date: Wed, 29 Jul 2015 22:51:00 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: Fix dri config option
+Message-ID: <20150729205152.987BF7FC26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ae18d5814ded710808c75f4c1ad335f5d786119
+commit: http://git.buildroot.net/buildroot/commit/?id=b65154c3e4e5c454359d1bef16ae33853cf383e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mesa3d configure triggers the _gp bug:
-http://autobuild.buildroot.net/results/8be/8be577dae511f82d45ab3b0a9bba370b81ad2ff9//mesa3d-10.6.1/config.log
-
-/home/test/autobuild/instance-1/output/host/opt/ext-toolchain/bin/../lib/gcc/nios2-linux-gnu/4.8.3/../../../../nios2-linux-gnu/bin/ld: /home/test/autobuild/instance-1/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/crt1.o: undefined reference to symbol '_gp'
-/home/test/autobuild/instance-1/output/host/usr/nios2-buildroot-linux-gnu/sysroot/usr/lib/libgpg-error.so.0: error adding symbols: DSO missing from command line
+The option is constructed by AC_ARG_ENABLE and not AC_ARG_WITH:
+http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n726
 
 Fixes
-http://autobuild.buildroot.net/results/8be/8be577dae511f82d45ab3b0a9bba370b81ad2ff9/
-
-[Thomas: propagate the dependency to mesa3d comment about toolchain
-dependencies.]
+http://autobuild.buildroot.net/results/6e3/6e313e2a4b2ff092d187ac564f25c14aaaceb0dd/
+http://autobuild.buildroot.net/results/e3c/e3c3e441038b72c78c8e94370baa036ab1effb6b/
+http://autobuild.buildroot.net/results/11f/11f09260428a766d1f274843a9aebe220fd0e988/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index c702d0d..93ae02a 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -11,6 +11,9 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	# Triggers the _gp link issue in nios2
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  Mesa 3D, an open-source implementation of the OpenGL specification.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 82b1001..800d2f9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -93,7 +93,7 @@ endef
  
-@@ -142,4 +145,6 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- endif # BR2_PACKAGE_MESA3D
- 
- comment "mesa3d needs a toolchain w/ C++, NPTL"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+-	--without-dri-drivers --without-dri --disable-dri3
++	--without-dri-drivers --disable-dri --disable-dri3
+ MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
+ else
+ ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
