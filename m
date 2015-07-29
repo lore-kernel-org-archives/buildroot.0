@@ -1,81 +1,36 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 29 Jul 2015 00:45:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bdwgc: musl build failure
-Message-ID: <1438127126-7488-1-git-send-email-brendanheading@gmail.com>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Tue, 28 Jul 2015 17:07:06 -0700
+Subject: [Buildroot] make uclibc-configured
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD8E34@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/1ed/1edb5e7dab88d3fefca533ab56f7ddc7dd5411d2/
+Hi Buildroot mailing list,
 
-bdwgc attempts to detect older __GLIBC__ versions but does not account
-for ths case when __GLIBC__ is not defined.
+My "make uclibc-configured" command failed as shown below:
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- package/bdwgc/0002-bdwgc-fix-musl-build.patch | 52 +++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/bdwgc/0002-bdwgc-fix-musl-build.patch
+tclee at HP-Compaq-dc7900-Convertible-Minitower:~/Downloads/jul27mon15/buildroot$ make uclibc-configured
+.....
+/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3/gcc/doc/service.texi:6: warning: node prev `Service' in menu `Trouble' and in sectioning `Bugs' differ
+/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3/gcc/doc/service.texi:6: warning: node up `Service' in menu `Bugs' and in sectioning `Top' differ
+make[2]: *** [doc/gcc.info] Error 1
+rm gcc.pod
+make[2]: Leaving directory `/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3-initial/gcc'
+make[1]: *** [all-gcc] Error 2
+make[1]: Leaving directory `/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3-initial'
+make: *** [/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3-initial/.compiled] Error 2
 
-diff --git a/package/bdwgc/0002-bdwgc-fix-musl-build.patch b/package/bdwgc/0002-bdwgc-fix-musl-build.patch
-new file mode 100644
-index 0000000..a15d44d
---- /dev/null
-+++ b/package/bdwgc/0002-bdwgc-fix-musl-build.patch
-@@ -0,0 +1,52 @@
-+[PATCH] bdwgc: fix musl build
-+
-+This is because musl does not define __GLIBC__. Some logic in os_deps.c
-+designed to detect and handle old versions of glibc only makes sense
-+if glibc is in use; this patch therefore checks to ensure __GLIBC__
-+is defined first.
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+Upstream-status: submitted
-+
-+---
-+ os_dep.c | 24 +++++++++++++-----------
-+ 1 file changed, 13 insertions(+), 11 deletions(-)
-+
-+diff --git a/os_dep.c b/os_dep.c
-+index 08c501d..a9a3386 100644
-+--- a/os_dep.c
-++++ b/os_dep.c
-+@@ -32,17 +32,19 @@
-+     /* prototypes, so we have to include the top-level sigcontext.h to    */
-+     /* make sure the former gets defined to be the latter if appropriate. */
-+ #   include <features.h>
-+-#   if 2 <= __GLIBC__
-+-#     if 2 == __GLIBC__ && 0 == __GLIBC_MINOR__
-+-        /* glibc 2.1 no longer has sigcontext.h.  But signal.h          */
-+-        /* has the right declaration for glibc 2.1.                     */
-+-#       include <sigcontext.h>
-+-#     endif /* 0 == __GLIBC_MINOR__ */
-+-#   else /* __GLIBC__ < 2 */
-+-      /* libc5 doesn't have <sigcontext.h>: go directly with the kernel   */
-+-      /* one.  Check LINUX_VERSION_CODE to see which we should reference. */
-+-#     include <asm/sigcontext.h>
-+-#   endif /* __GLIBC__ < 2 */
-++#   ifdef __GLIBC__
-++#     if 2 <= __GLIBC__
-++#       if 2 == __GLIBC__ && 0 == __GLIBC_MINOR__
-++          /* glibc 2.1 no longer has sigcontext.h.  But signal.h          */
-++          /* has the right declaration for glibc 2.1.                     */
-++#         include <sigcontext.h>
-++#       endif /* 0 == __GLIBC_MINOR__ */
-++#     else /* __GLIBC__ < 2 */
-++        /* libc5 doesn't have <sigcontext.h>: go directly with the kernel   */
-++        /* one.  Check LINUX_VERSION_CODE to see which we should reference. */
-++#       include <asm/sigcontext.h>
-++#     endif /* __GLIBC__ < 2 */
-++#   endif /* __GLIBC__ */
-+ # endif
-+ #endif /* LINUX && !POWERPC */
-+ 
-+-- 
-+2.4.3
-+
--- 
-2.4.3
+My host is Ubuntu-14.04LTS; my HOSTCC equals /usr/bin/gcc (Ubuntu 4.8.4-2ubuntu1~14.04). You probably know how to resolve the issues. I will provide you with the information of my Buildroot configuration.
+
+Tommy
+
+
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150728/9ca07a9e/attachment.html>
