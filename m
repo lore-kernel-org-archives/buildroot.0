@@ -1,19 +1,23 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 29 Jul 2015 11:46:26 +0100
-Subject: [Buildroot] [PATCH 1/1] packages/libfreeimage: requires wchar
-Message-ID: <1438166786-19653-1-git-send-email-brendanheading@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Jul 2015 13:01:51 +0200
+Subject: [Buildroot] [git commit] packages/libfreeimage: requires wchar
+Message-ID: <20150729110216.E7234807F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=5f893d08181e348202e56307885c22f4e9c62ec4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes http://autobuild.buildroot.net/results/6e9/6e9f2bf02e0a165826e9fab194d6bad7901051a9/
 
 Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfreeimage/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/libfreeimage/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/libfreeimage/Config.in b/package/libfreeimage/Config.in
 index 04fb278..4b462cb 100644
@@ -37,5 +41,3 @@ index 04fb278..4b462cb 100644
  	depends on !BR2_bfin
 -	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
--- 
-2.4.3
