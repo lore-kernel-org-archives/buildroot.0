@@ -1,60 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 29 Jul 2015 09:00:36 +0200
-Subject: [Buildroot] Using buildroot generated toolchain as external
- toolchain issues
-In-Reply-To: <1526636.mbSdBIvjiD@sagittea>
-References: <64CA5C49A43E314D9F7DAE05370E2F7B06771147@hed-dc01.hed.local>
- <1526636.mbSdBIvjiD@sagittea>
-Message-ID: <20150729090036.65757161@free-electrons.com>
+Date: Wed, 29 Jul 2015 09:02:35 +0200
+Subject: [Buildroot] make uclibc-configured
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD8E34@svr-wa-exch1.atg.lc>
+References: <944894A3EB1D044A9003B2F944389BB20474AD8E34@svr-wa-exch1.atg.lc>
+Message-ID: <20150729090235.6c5429eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, Matthew,
+Tommy,
 
-On Wed, 29 Jul 2015 08:22:04 +0200, J?r?me Pouiller wrote:
+On Tue, 28 Jul 2015 17:07:06 -0700, Lee, Tommy wrote:
 
-> > I then take the contents of the output/host/usr directory and put it in
-> > a tar
-> > file that is then used as the external toolchain in the other buildroot
-> > instances.  
-> Your problem come from this step. Buildroot toolchains are not "relocatable". 
-> It means they don't work if move them away from their original location 
-> (Samuel Martin sent a patch to fix this behavior).
-
-Correct.
-
+> My "make uclibc-configured" command failed as shown below:
 > 
-> Therefore, once you compiled your toolchain, use "Pre-installed toolchain" 
-> option in order to use it.
+> tclee at HP-Compaq-dc7900-Convertible-Minitower:~/Downloads/jul27mon15/buildroot$ make uclibc-configured
 
-This will not change anything: the toolchain must still be installed in
-the location for which it was compiled, but as you can explain below,
-this location can be customized.
+This target doesn't exist in Buildroot since many years. I guess you
+are probably using a very very old Buildroot.
 
-> Note: while you compile you toolchain, you can change BR2_HOST_DIR in order to 
-> build it directly in directory of you choice (/opt/arm-buildroot-linux-
-> gnueabihf for example).
+> .....
+> /home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3/gcc/doc/service.texi:6: warning: node prev `Service' in menu `Trouble' and in sectioning `Bugs' differ
+> /home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3/gcc/doc/service.texi:6: warning: node up `Service' in menu `Bugs' and in sectioning `Top' differ
+> make[2]: *** [doc/gcc.info] Error 1
+> rm gcc.pod
+> make[2]: Leaving directory `/home/tclee/Downloads/jul27mon15/buildroot/output/toolchain/gcc-4.6.3-initial/gcc'
 
-Matthew, there are two options currently available to fix this problem:
+This path also indicates you're using a very old Buildroot, that
+predates the moment where the toolchain logic has been converted to the
+package infrastructure.
 
- * Use Samuel Martin's patches that adjust the RPATH of host binaries
-   automatically at the end of the build:
+> My host is Ubuntu-14.04LTS; my HOSTCC equals /usr/bin/gcc (Ubuntu
+> 4.8.4-2ubuntu1~14.04). You probably know how to resolve the issues. I
+> will provide you with the information of my Buildroot configuration.
 
-   http://lists.busybox.net/pipermail/buildroot/2015-July/132483.html
-   and following patches.
-
- * Use a quick hack that consists in building the libraries needed by
-   gcc as static libraries. This is the trick I'm currently using to
-   build the Buildroot external toolchains used in the autobuilders
-   (http://autobuild.buildroot.org). I can provide the patch if you
-   want.
+Please upgrade your Buildroot version to something more recent.
 
 Best regards,
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
