@@ -1,35 +1,108 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 30 Jul 2015 11:32:46 +0200
-Subject: [Buildroot] [PATCH] firmware-imx: update package description
-In-Reply-To: <20150730092935.GJ17029@tarshish>
-References: <c319870a042c9f4d754de813123d3bab94a7690f.1438245688.git.baruch@tkos.co.il>
- <CAAMH-ytxW5PGSTU=M2nejNaikvS=Kxf=Yak_=aPS7MEWqcSfbA@mail.gmail.com>
- <20150730092935.GJ17029@tarshish>
-Message-ID: <CAAMH-yv0hKH85KcEXKZnawZG4j-fe1pMToSb=ynE0o4bATNdDA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Jul 2015 10:06:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 8246] New: X.org DRI2 build issue
+Message-ID: <bug-8246-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch
+https://bugs.busybox.net/show_bug.cgi?id=8246
 
-On Thu, Jul 30, 2015 at 11:29 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Gary,
->
-> On Thu, Jul 30, 2015 at 11:07:07AM +0200, Gary Bisson wrote:
->> Hi Baruch,
->>
->> On Thu, Jul 30, 2015 at 10:41 AM, Baruch Siach <baruch@tkos.co.il> wrote:
->> > Current firmware-imx version no longer contains ath6k and ar3k firmware.
->>
->> Good catch! Thanks for the patch.
->
-> Can you give a formal ack for patchwork to catch?
+           Summary: X.org DRI2 build issue
+           Product: buildroot
+           Version: 2015.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Sorry I meant to do it in my previous e-mail.
 
-Acked-by: Gary Bisson <gary.bisson@boundarydevices.com>
+With today's Buildroot master, the following defconfig:
 
-Thanks,
-Gary
+BR2_x86_64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_ALSA_LIB=y
+BR2_PACKAGE_KODI_AVAHI=y
+BR2_PACKAGE_KODI_DBUS=y
+BR2_PACKAGE_KODI_LIBBLURAY=y
+BR2_PACKAGE_KODI_GOOM=y
+BR2_PACKAGE_KODI_RSXS=y
+BR2_PACKAGE_KODI_LIBCEC=y
+BR2_PACKAGE_KODI_LIRC=y
+BR2_PACKAGE_KODI_LIBMICROHTTPD=y
+BR2_PACKAGE_KODI_LIBNFS=y
+BR2_PACKAGE_KODI_RTMPDUMP=y
+BR2_PACKAGE_KODI_LIBSHAIRPLAY=y
+BR2_PACKAGE_KODI_LIBSMBCLIENT=y
+BR2_PACKAGE_KODI_LIBTHEORA=y
+BR2_PACKAGE_KODI_LIBUSB=y
+BR2_PACKAGE_KODI_LIBVA=y
+BR2_PACKAGE_KODI_WAVPACK=y
+BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG=y
+BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART=y
+BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY=y
+BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU=y
+BR2_PACKAGE_KODI_AUDIODECODER_STSOUND=y
+BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY=y
+BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM=y
+BR2_PACKAGE_KODI_AUDIOENCODER_FLAC=y
+BR2_PACKAGE_KODI_AUDIOENCODER_LAME=y
+BR2_PACKAGE_KODI_AUDIOENCODER_VORBIS=y
+BR2_PACKAGE_KODI_AUDIOENCODER_WAV=y
+BR2_PACKAGE_KODI_ADDON_XVDR=y
+BR2_PACKAGE_KODI_PVR_ARGUSTV=y
+BR2_PACKAGE_KODI_PVR_DVBLINK=y
+BR2_PACKAGE_KODI_PVR_DVBVIEWER=y
+BR2_PACKAGE_KODI_PVR_FILMON=y
+BR2_PACKAGE_KODI_PVR_HTS=y
+BR2_PACKAGE_KODI_PVR_IPTVSIMPLE=y
+BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER=y
+BR2_PACKAGE_KODI_PVR_MYTHTV=y
+BR2_PACKAGE_KODI_PVR_NEXTPVR=y
+BR2_PACKAGE_KODI_PVR_NJOY=y
+BR2_PACKAGE_KODI_PVR_PCTV=y
+BR2_PACKAGE_KODI_PVR_STALKER=y
+BR2_PACKAGE_KODI_PVR_VBOX=y
+BR2_PACKAGE_KODI_PVR_VDR_VNSI=y
+BR2_PACKAGE_KODI_PVR_VUPLUS=y
+BR2_PACKAGE_KODI_PVR_WMC=y
+BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS=y
+BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS=y
+BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH=y
+BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC=y
+BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG=y
+BR2_PACKAGE_KODI_SCREENSAVER_PYRO=y
+BR2_PACKAGE_KODI_SCREENSAVER_STARS=y
+BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY=y
+BR2_PACKAGE_KODI_VISUALISATION_SPECTRUM=y
+BR2_PACKAGE_KODI_VISUALISATION_WAVEFORHUE=y
+BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_NVIDIA_DRIVER=y
+
+fails to build with the following error:
+
+In file included from dri2.c:43:0:
+./../../dri2/dri2.h:36:39: fatal error: X11/extensions/dri2tokens.h: No such
+file or directory
+compilation terminated.
+make[7]: *** [dri2.lo] Error 1
+
+I believe it is not needed to build Kodi to reproduce the build failure.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
