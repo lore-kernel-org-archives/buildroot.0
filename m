@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 30 Jul 2015 09:29:23 +0200
-Subject: [Buildroot] [git commit branch/next]
-	package/kodi-audioencoder-flac: bump version
-Message-ID: <20150808105650.779397F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi: Add option for
+	lirc support
+Message-ID: <20150808105650.690EF7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9d0808e8cb60b200584ad8990616e3916d69249
+commit: http://git.buildroot.net/buildroot/commit/?id=0818a6551fbd4f04478e443ec85d57ac70150f0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas:
-  - also remove -DCMAKE_MODULE_PATH, no longer needed.]
+https://github.com/xbmc/xbmc/commit/b641e1eea54b4b9ab7f1b95092ab0a755abc63be
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../kodi-audioencoder-flac.mk                      |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/kodi/Config.in |    5 +++++
+ package/kodi/kodi.mk   |    6 ++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index 2ccc1b7..f83050b 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index e8c9244..8dd3794 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -164,6 +164,11 @@ config BR2_PACKAGE_KODI_LIBCEC
+ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
  
--KODI_AUDIOENCODER_FLAC_VERSION = 84acb14101b9114472cd20f6a0f8fdefbb376113
-+KODI_AUDIOENCODER_FLAC_VERSION = a5e2d1262de3b2de567cf0a8207636ebaacb8775
- KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
- KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
- KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
- KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg
- KODI_AUDIOENCODER_FLAC_CONF_OPTS += \
--	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
- 	-DFLAC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
- 	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
++config BR2_PACKAGE_KODI_LIRC
++	bool "lirc"
++	help
++	  Enable lirc support
++
+ config BR2_PACKAGE_KODI_LIBMICROHTTPD
+ 	bool "web server"
+ 	select BR2_PACKAGE_LIBMICROHTTPD
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index e5304ab..6399ff1 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -186,6 +186,12 @@ else
+ KODI_CONF_OPTS += --disable-libcec
+ endif
  
++ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
++KODI_CONF_OPTS += --enable-lirc
++else
++KODI_CONF_OPTS += --disable-lirc
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
+ KODI_DEPENDENCIES += wavpack
+ endif
