@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:44 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-iptvsimple:
-	new package
-Message-ID: <20150808105650.E7B4F8190C@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:37:45 +0200
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-nextpvr: new
+	package
+Message-ID: <20150808105651.0C6588190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8c326ff83af1feabb84a2c50fdbe5c026d6e7664
+commit: http://git.buildroot.net/buildroot/commit/?id=0757c7d39db8b5d8a236251f98ab1f4bf16762f5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
@@ -19,65 +19,65 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |    1 +
- package/kodi-pvr-iptvsimple/Config.in              |    7 +++++++
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk |   13 +++++++++++++
- package/kodi/Config.in                             |    1 +
+ Config.in.legacy                             |    1 +
+ package/kodi-pvr-nextpvr/Config.in           |    7 +++++++
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk |   13 +++++++++++++
+ package/kodi/Config.in                       |    1 +
  4 files changed, 22 insertions(+), 0 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 96f7d7f..df50632 100644
+index 28aaf7d..56a82f9 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -115,6 +115,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_DVBVIEWER
- 	select BR2_PACKAGE_KODI_PVR_FILMON
- 	select BR2_PACKAGE_KODI_PVR_HTS
-+	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+@@ -118,6 +118,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+ 	select BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
+ 	select BR2_PACKAGE_KODI_PVR_MYTHTV
++	select BR2_PACKAGE_KODI_PVR_NEXTPVR
  	help
  	  Kodi PVR addon was split into seperate modules
  
-diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
+diff --git a/package/kodi-pvr-nextpvr/Config.in b/package/kodi-pvr-nextpvr/Config.in
 new file mode 100644
-index 0000000..b596749
+index 0000000..e520426
 --- /dev/null
-+++ b/package/kodi-pvr-iptvsimple/Config.in
++++ b/package/kodi-pvr-nextpvr/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
-+	bool "kodi-pvr-iptvsimple"
++config BR2_PACKAGE_KODI_PVR_NEXTPVR
++	bool "kodi-pvr-nextpvr"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  IPTV Live TV and Radio PVR client addon for Kodi
++	  Kodi's NextPVR client addon
 +
-+	  https://github.com/kodi-pvr/pvr.iptvsimple
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++	  https://github.com/kodi-pvr/pvr.nextpvr
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
 new file mode 100644
-index 0000000..4d5b9e9
+index 0000000..4ec0d80
 --- /dev/null
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-pvr-iptvsimple
++# kodi-pvr-nextpvr
 +#
 +################################################################################
 +
-+KODI_PVR_IPTVSIMPLE_VERSION = 23defebace9a596d549a688c1d017900aeaf7761
-+KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
-+KODI_PVR_IPTVSIMPLE_LICENSE = GPLv2+
-+KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
-+KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
++KODI_PVR_NEXTPVR_VERSION = 3a205e49b50baba605d3235f6613fdd36c1d3234
++KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
++KODI_PVR_NEXTPVR_LICENSE = GPLv2+
++KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
++KODI_PVR_NEXTPVR_DEPENDENCIES = kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 251b723..8184b87 100644
+index e9fd2b7..052f33f 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -263,6 +263,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-dvbviewer/Config.in"
- 	source "package/kodi-pvr-filmon/Config.in"
- 	source "package/kodi-pvr-hts/Config.in"
-+	source "package/kodi-pvr-iptvsimple/Config.in"
+@@ -266,6 +266,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-iptvsimple/Config.in"
+ 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
+ 	source "package/kodi-pvr-mythtv/Config.in"
++	source "package/kodi-pvr-nextpvr/Config.in"
  endmenu
  
  endif # BR2_PACKAGE_KODI
