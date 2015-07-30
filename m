@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 30 Jul 2015 09:37:45 +0200
 Subject: [Buildroot] [git commit branch/next]
-	package/kodi-audiodecoder-nosefart: new package
-Message-ID: <20150808105651.5796E81904@busybox.osuosl.org>
+	package/kodi-audiodecoder-sidplay: new package
+Message-ID: <20150808105651.5FC9781904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6383a78e4a3c33945ccb9ab2f0586ba1330b4cf
+commit: http://git.buildroot.net/buildroot/commit/?id=98c1792273b8219fb20b96982e78ee39939e97e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
@@ -18,52 +18,53 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-audiodecoder-nosefart/Config.in       |    7 +++++++
- .../kodi-audiodecoder-nosefart.mk                  |   13 +++++++++++++
+ package/kodi-audiodecoder-sidplay/Config.in        |    8 ++++++++
+ .../kodi-audiodecoder-sidplay.mk                   |   13 +++++++++++++
  package/kodi/Config.in                             |    1 +
- 3 files changed, 21 insertions(+), 0 deletions(-)
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-nosefart/Config.in b/package/kodi-audiodecoder-nosefart/Config.in
+diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
 new file mode 100644
-index 0000000..96591aa
+index 0000000..ae99afa
 --- /dev/null
-+++ b/package/kodi-audiodecoder-nosefart/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART
-+	bool "kodi-audiodecoder-nosefart"
++++ b/package/kodi-audiodecoder-sidplay/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
++	bool "kodi-audiodecoder-sidplay"
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBSIDPLAY2
 +	help
-+	  Nosefart decoder addon for Kodi
++	  Sidplay decoder addon for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.nosefart
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++	  https://github.com/notspiff/audiodecoder.sidplay
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 new file mode 100644
-index 0000000..40786d7
+index 0000000..82b5c2b
 --- /dev/null
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-nosefart
++# kodi-audiodecoder-sidplay
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_NOSEFART_VERSION = 936313f2be5c4936af8a643876363dcea76a8ebe
-+KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
-+KODI_AUDIODECODER_NOSEFART_LICENSE = GPLv2+
-+KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
-+KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_SIDPLAY_VERSION = 27b2c0582878857bfe03195471fa7ffa4bcc40f0
++KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
++KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
++KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
++KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 68882a9..a686d60 100644
+index a686d60..6256d80 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -251,6 +251,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
- 
+@@ -252,6 +252,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
  menu "Audio decoder addons"
  	source "package/kodi-audiodecoder-modplug/Config.in"
-+	source "package/kodi-audiodecoder-nosefart/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
++	source "package/kodi-audiodecoder-sidplay/Config.in"
  endmenu
  
  menu "Audio encoder addons"
