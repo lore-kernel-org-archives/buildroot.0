@@ -1,14 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:49:19 +0200
-Subject: [Buildroot] [git commit] package/kodi-screensaver-stars: new package
-Message-ID: <20150730132259.6BD217FFC3@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 10:23:21 +0200
+Subject: [Buildroot] [git commit] package/kodi-visualisation-spectrum: new
+	package
+Message-ID: <20150730132259.8CE027FFC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16f5cd5cf6324a4f55373a21d864ee04a8ee0c69
+commit: http://git.buildroot.net/buildroot/commit/?id=9877d90092dbadf4d868e3cd01e5346b9a75bc67
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Thomas:
@@ -17,55 +18,51 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-screensaver-stars/Config.in           |   10 ++++++++++
- .../kodi-screensaver-stars.mk                      |   13 +++++++++++++
+ package/kodi-visualisation-spectrum/Config.in      |    6 ++++++
+ .../kodi-visualisation-spectrum.mk                 |   13 +++++++++++++
  package/kodi/Config.in                             |    1 +
- 3 files changed, 24 insertions(+), 0 deletions(-)
+ 3 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
+diff --git a/package/kodi-visualisation-spectrum/Config.in b/package/kodi-visualisation-spectrum/Config.in
 new file mode 100644
-index 0000000..c78021a
+index 0000000..3b2b0a2
 --- /dev/null
-+++ b/package/kodi-screensaver-stars/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_STARS
-+	bool "kodi-screensaver-stars"
-+	depends on BR2_PACKAGE_KODI_GL
++++ b/package/kodi-visualisation-spectrum/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_VISUALISATION_SPECTRUM
++	bool "kodi-visualisation-spectrum"
 +	help
-+	  Starfield screensaver for Kodi
++	  Spectrum visualiser for Kodi
 +
-+	  https://github.com/notspiff/screensaver.stars
-+
-+comment "kodi-screensaver-starts needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
++	  https://github.com/notspiff/visualization.spectrum
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
 new file mode 100644
-index 0000000..f2a1be1
+index 0000000..79f03c8
 --- /dev/null
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-screensaver-stars
++# kodi-visualisation-spectrum
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_STARS_VERSION = 91b59f687ceb52488763aca4ba67d50a92f01731
-+KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
-+KODI_SCREENSAVER_STARS_LICENSE = GPLv2+
-+KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
-+KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
++KODI_VISUALISATION_SPECTRUM_VERSION = aae1960b5bc14e50914205e2dabcb51077690a64
++KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
++KODI_VISUALISATION_SPECTRUM_LICENSE = GPLv2+
++KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
++KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 1ef8d6c..758d47f 100644
+index edc471b..73ec88e 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -293,6 +293,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-greynetic/Config.in"
- 	source "package/kodi-screensaver-pingpong/Config.in"
- 	source "package/kodi-screensaver-pyro/Config.in"
-+	source "package/kodi-screensaver-stars/Config.in"
+@@ -298,6 +298,7 @@ endmenu
+ 
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
++	source "package/kodi-visualisation-spectrum/Config.in"
+ 	source "package/kodi-visualisation-waveform/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
