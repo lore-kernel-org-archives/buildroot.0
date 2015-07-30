@@ -1,74 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:44:08 +0200
+Date: Thu, 30 Jul 2015 09:37:46 +0200
 Subject: [Buildroot] [git commit branch/next]
-	package/kodi-screensaver-asteroids: new package
-Message-ID: <20150808105651.84FCE8190C@busybox.osuosl.org>
+	package/kodi-audiodecoder-stsound: new package
+Message-ID: <20150808105651.6F20B81904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e3078dec42e8a8d42120d803e83e6d1572987e1
+commit: http://git.buildroot.net/buildroot/commit/?id=742b1c4e3501db47da8251a382b40d70f0a695e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
-   - do not pass -DCMAKE_MODULE_PATH, no longer needed.
-   - add dependency on KODI_GL, since it includes <GL/gl.h>.]
+   - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-screensaver-asteroids/Config.in       |   10 ++++++++++
- .../kodi-screensaver-asteroids.mk                  |   13 +++++++++++++
- package/kodi/Config.in                             |    4 ++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
+ package/kodi-audiodecoder-stsound/Config.in        |    7 +++++++
+ .../kodi-audiodecoder-stsound.mk                   |   13 +++++++++++++
+ package/kodi/Config.in                             |    1 +
+ 3 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+diff --git a/package/kodi-audiodecoder-stsound/Config.in b/package/kodi-audiodecoder-stsound/Config.in
 new file mode 100644
-index 0000000..d5d92c6
+index 0000000..6be216a
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
-+	bool "kodi-screensaver-asteroids"
-+	depends on BR2_PACKAGE_KODI_GL
++++ b/package/kodi-audiodecoder-stsound/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_STSOUND
++	bool "kodi-audiodecoder-stsound"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Asteroids screensaver for Kodi
++	  YM decoder addon for Kodi
 +
-+	  https://github.com/notspiff/screensaver.asteroids
-+
-+comment "kodi-screensaver-asteroids needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++	  https://github.com/notspiff/audiodecoder.stsound
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 new file mode 100644
-index 0000000..dce8fb6
+index 0000000..23da01f
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-screensaver-asteroids
++# kodi-audiodecoder-stsound
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = d4c2e3b499544ef55be364b34e5569d9c31c9615
-+KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
-+KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
++KODI_AUDIODECODER_STSOUND_VERSION = f6fbae94818fedd09e2f55c6cd1cb283bfdab6f4
++KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
++KODI_AUDIODECODER_STSOUND_LICENSE = GPLv2+
++KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
++KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index af6aec7..ac6c6fc 100644
+index 9caf873..b3ab9ec 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -286,4 +286,8 @@ menu "PVR addons"
- 	source "package/kodi-pvr-wmc/Config.in"
+@@ -254,6 +254,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
++	source "package/kodi-audiodecoder-stsound/Config.in"
  endmenu
  
-+menu "Screensavers"
-+	source "package/kodi-screensaver-asteroids/Config.in"
-+endmenu
-+
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
