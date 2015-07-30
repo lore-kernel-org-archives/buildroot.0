@@ -1,111 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:29:24 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-addons: Prepare to split
-	into addon-specific packages
-Message-ID: <20150730132258.410A57FFC3@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:37:45 +0200
+Subject: [Buildroot] [git commit] package/kodi-audiodecoder-modplug: new
+	package
+Message-ID: <20150730132258.EADE07FFC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d9f1a92885b93c83667b0f563c2b58ca95152a5
+commit: http://git.buildroot.net/buildroot/commit/?id=0d695a9613f61fb1f3f557f3c28f2f6ba7309d7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The PVR addons formerly being part of the xbmc-pvr-addons package were
-split into seperate packages being hosted on https://github.com/kodi-pvr
-
-This patch removes the old PVR addon package to prepare for the new
-PVR addon packages being added as subsequent patches.
-
-[Thomas: keep alphabetic ordering for addons, as noticed by Yann
-E. Morin.]
+[Thomas:
+   - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                           |    6 ++++++
- package/kodi-pvr-addons/Config.in          |    6 ------
- package/kodi-pvr-addons/kodi-pvr-addons.mk |   27 ---------------------------
- package/kodi/Config.in                     |    7 +++----
- 4 files changed, 9 insertions(+), 37 deletions(-)
+ package/kodi-audiodecoder-modplug/Config.in        |    8 ++++++++
+ .../kodi-audiodecoder-modplug.mk                   |   13 +++++++++++++
+ package/kodi/Config.in                             |    4 ++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 08caa8b..e52a813 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.08"
- 
-+config BR2_PACKAGE_KODI_PVR_ADDONS
-+	bool "Kodi PVR addon was split"
-+	select BR2_LEGACY
+diff --git a/package/kodi-audiodecoder-modplug/Config.in b/package/kodi-audiodecoder-modplug/Config.in
+new file mode 100644
+index 0000000..0269973
+--- /dev/null
++++ b/package/kodi-audiodecoder-modplug/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG
++	bool "kodi-audiodecoder-modplug"
++	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBMODPLUG
 +	help
-+	  Kodi PVR addon was split into seperate modules
++	  Modplug decoder addon for Kodi
 +
- config BR2_BINUTILS_VERSION_2_23_2
- 	bool "binutils 2.23 option renamed"
- 	select BR2_LEGACY
-diff --git a/package/kodi-pvr-addons/Config.in b/package/kodi-pvr-addons/Config.in
-deleted file mode 100644
-index 80916c7..0000000
---- a/package/kodi-pvr-addons/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_KODI_PVR_ADDONS
--	bool "kodi-pvr-addons"
--	help
--	  A collection of PVR backend addons for Kodi
--
--	  https://github.com/opdenkamp/xbmc-pvr-addons
-diff --git a/package/kodi-pvr-addons/kodi-pvr-addons.mk b/package/kodi-pvr-addons/kodi-pvr-addons.mk
-deleted file mode 100644
-index 1a09265..0000000
---- a/package/kodi-pvr-addons/kodi-pvr-addons.mk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--################################################################################
--#
--# kodi-pvr-addons
--#
--################################################################################
--
--# This cset is on the branch 'helix'
--# When Kodi is updated, this should be updated to the corresponding branch
--KODI_PVR_ADDONS_VERSION = 4854fbe9dc0499ca8d1e10e8c18e329d3eb48814
--KODI_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(KODI_PVR_ADDONS_VERSION))
--KODI_PVR_ADDONS_LICENSE = GPLv3+
--KODI_PVR_ADDONS_LICENSE_FILES = COPYING
--
--# There's no ./configure in the git tree, we need to generate it
--KODI_PVR_ADDONS_AUTORECONF = YES
--
--KODI_PVR_ADDONS_DEPENDENCIES = zlib
--# This really is a runtime dependency, but we need KODI to be installed
--# first, since we'll install files in KODI's directories _after_ KODI has
--# installed its own files
--KODI_PVR_ADDONS_DEPENDENCIES += kodi
--
--KODI_PVR_ADDONS_CONF_OPTS = \
--	--enable-release \
--	--enable-addons-with-dependencies
--
--$(eval $(autotools-package))
++	  https://github.com/notspiff/audiodecoder.modplug
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+new file mode 100644
+index 0000000..004d89f
+--- /dev/null
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-audiodecoder-modplug
++#
++################################################################################
++
++KODI_AUDIODECODER_MODPLUG_VERSION = 5ae7349f39a8e5552c86dfdad339fb18c7e52550
++KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
++KODI_AUDIODECODER_MODPLUG_LICENSE = GPLv2+
++KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
++KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi-platform libmodplug
++
++$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6ec2463..52ae04e 100644
+index 6b1b9f3..68882a9 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -254,9 +254,8 @@ menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-wav/Config.in"
- endmenu
+@@ -249,6 +249,10 @@ config BR2_PACKAGE_KODI_WAVPACK
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	bool
  
--comment "Kodi PVR addons"
--
--source "package/kodi-addon-xvdr/Config.in"
--source "package/kodi-pvr-addons/Config.in"
-+menu "PVR addons"
-+	source "package/kodi-addon-xvdr/Config.in"
++menu "Audio decoder addons"
++	source "package/kodi-audiodecoder-modplug/Config.in"
 +endmenu
- 
- endif # BR2_PACKAGE_KODI
++
+ menu "Audio encoder addons"
+ 	source "package/kodi-audioencoder-flac/Config.in"
+ 	source "package/kodi-audioencoder-lame/Config.in"
