@@ -1,43 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 15:27:58 +0200
-Subject: [Buildroot] [PATCH 13/47] package/kodi-platform: new package
-In-Reply-To: <1437597069-6448-14-git-send-email-bernd.kuhls@t-online.de>
-References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-14-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150730152758.35833dde@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 30 Jul 2015 15:27:44 +0200
+Subject: [Buildroot] [PATCH] package/eudev: add libselinux dependency
+Message-ID: <1438262864-6073-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Disable libselinux support with musl toolchains which doesn't have
+struct mallinfo.
 
-On Wed, 22 Jul 2015 22:30:35 +0200, Bernd Kuhls wrote:
-> This package is used by the PVR addon packages and has no use by itself,
-> therefore is does not show up in menuconfig.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-platform/Config.in        |    7 +++++++
->  package/kodi-platform/kodi-platform.mk |   17 +++++++++++++++++
->  package/kodi/Config.in                 |    2 ++
->  3 files changed, 26 insertions(+)
->  create mode 100644 package/kodi-platform/Config.in
->  create mode 100644 package/kodi-platform/kodi-platform.mk
+selinux-util.c: In function ?mac_selinux_init?:
+selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
+         struct mallinfo before_mallinfo, after_mallinfo;
 
-Applied with some changes:
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
+---
+ package/eudev/eudev.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-    [Thomas:
-     - fix license information, as noticed by Yann E. Morin: the license
-       is GPLv2+, not GPLv3+, and there is no COPYING file, so a short
-       source file with the license header was used instead.
-     - remove -DCMAKE_MODULE_PATH, no longer needed now that
-       kodi-config.cmake is fixed.
-     - add patch to fix kodi-platform-config.cmake for cross-compilation.]
-
-Thomas
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 87bce3e..f904cdd 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -44,6 +44,15 @@ else
+ EUDEV_CONF_OPTS += --disable-gudev
+ endif
+ 
++# Disable selinux support with musl toolchains which doesn't have
++# struct mallinfo.
++ifeq ($(BR2_PACKAGE_LIBSELINUX)x$(BR2_TOOLCHAIN_USES_MUSL),yx)
++EUDEV_CONF_OPTS += --enable-selinux
++EUDEV_DEPENDENCIES += libselinux
++else
++EUDEV_CONF_OPTS += --disable-selinux
++endif
++
+ define EUDEV_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+ endef
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
