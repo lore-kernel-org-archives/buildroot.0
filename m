@@ -1,159 +1,139 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:29:23 +0200
-Subject: [Buildroot] [git commit] package/libcec: bump to version 3.0.1
-Message-ID: <20150730132257.D8ECC7FFC3@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:37:44 +0200
+Subject: [Buildroot] [git commit] package/kodi-platform: new package
+Message-ID: <20150730132258.4882F81EAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfefcd859f2b51a6ebe23c5be149ff258755e249
+commit: http://git.buildroot.net/buildroot/commit/?id=0b045afa44e4453a5aabe872a9daf2909b36815a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- reflect upstream changes of the build system by switching from
-  an autotools-package to cmake-package
+This package is used by the PVR addon packages and has no use by itself,
+therefore is does not show up in menuconfig.
 
 [Thomas:
-  - remove the gcc 4.5 dependency. While we do need a dependency on
-    the gcc version, the proposed implementation was not correct as it
-    wasn't handling external toolchains.
-  - add a patch to fix a problem caused by libcec build system trying
-    to use 'git' to get a version number, which does not work when the
-    version control system information is not available, as is the
-    case in Buildroot.]
+ - fix license information, as noticed by Yann E. Morin: the license
+   is GPLv2+, not GPLv3+, and there is no COPYING file, so a short
+   source file with the license header was used instead.
+ - remove -DCMAKE_MODULE_PATH, no longer needed now that
+   kodi-config.cmake is fixed.
+ - add patch to fix kodi-platform-config.cmake for cross-compilation.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-generate-an-invalid-env.h-when-not-built.patch |   31 ++++++++++++++++++++
- package/libcec/0001-remove-Wno-psabi.patch         |   21 -------------
- package/libcec/Config.in                           |    1 +
- package/libcec/libcec.mk                           |   23 +++++++++-----
- 4 files changed, 47 insertions(+), 29 deletions(-)
+ ...rm-config.cmake-fix-for-cross-compilation.patch |   54 ++++++++++++++++++++
+ package/kodi-platform/Config.in                    |    7 +++
+ package/kodi-platform/kodi-platform.mk             |   14 +++++
+ package/kodi/Config.in                             |    2 +
+ 4 files changed, 77 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcec/0001-fixed-don-t-generate-an-invalid-env.h-when-not-built.patch b/package/libcec/0001-fixed-don-t-generate-an-invalid-env.h-when-not-built.patch
+diff --git a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch b/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
 new file mode 100644
-index 0000000..d823a5b
+index 0000000..18a74e7
 --- /dev/null
-+++ b/package/libcec/0001-fixed-don-t-generate-an-invalid-env.h-when-not-built.patch
-@@ -0,0 +1,31 @@
-+From 369ffb5be23eca520df99732541d0482da271fd3 Mon Sep 17 00:00:00 2001
-+From: Lars Op den Kamp <lars@opdenkamp.eu>
-+Date: Sat, 11 Jul 2015 00:53:17 +0200
-+Subject: [PATCH] fixed: don't generate an invalid env.h when not built with
-+ the .git dir present. closes #112
++++ b/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
+@@ -0,0 +1,54 @@
++From a6e25dba4b5c1d911a4644a0ca116abc642cd72a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 30 Jul 2015 09:28:24 +0200
++Subject: [PATCH] kodiplatform-config.cmake: fix for cross-compilation
 +
-+Backported from upstream commit 2f32a9debc1f148b5dfcfc463480f1432bb71725.
++Use CMAKE_FIND_ROOT_PATH in kodiplatform-config.cmake in order to make
++it cross-compilation friendly.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ support/git-rev.sh | 7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
++ CMakeLists.txt               | 2 +-
++ kodiplatform-config.cmake.in | 6 +++---
++ 2 files changed, 4 insertions(+), 4 deletions(-)
 +
-+diff --git a/support/git-rev.sh b/support/git-rev.sh
-+index 5dce3d0..4aadae6 100755
-+--- a/support/git-rev.sh
-++++ b/support/git-rev.sh
-+@@ -1,5 +1,8 @@
-+ #!/bin/sh
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 25d8004..db23dc9 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -22,7 +22,7 @@ if(NOT WIN32)
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
++ endif()
 + 
-+ ## cmake doesn't read the variable when it doesn't end with a newline, and I haven't figured out how to have it add a newline directly...
-+-echo -n "`git --no-pager log --abbrev=7 -n 1 --pretty=format:"%h"`\n"
-+-
-++if [ -d .git ]; then
-++  echo "`git --no-pager log --abbrev=7 -n 1 --pretty=format:"%h"`"
-++else
-++  echo "<unknown>"
-++fi
++-set(kodiplatform_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR} "${CMAKE_INSTALL_PREFIX}/include/kodi")
+++set(kodiplatform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/kodi")
++ IF(WIN32)
++   LIST(APPEND kodiplatform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/kodi/windows")
++ ENDIF(WIN32)
++diff --git a/kodiplatform-config.cmake.in b/kodiplatform-config.cmake.in
++index 3fc5273..1bc437a 100644
++--- a/kodiplatform-config.cmake.in
+++++ b/kodiplatform-config.cmake.in
++@@ -10,16 +10,16 @@
++ #
++ # propagate these properties from one build system to the other
++ set (kodiplatform_VERSION "@kodiplatform_VERSION_MAJOR at .@kodiplatform_VERSION_MINOR@")
++-set (kodiplatform_INCLUDE_DIRS @kodiplatform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
+++set (kodiplatform_INCLUDE_DIRS @TINYXML_INCLUDE_DIR@ ${CMAKE_FIND_ROOT_PATH}@kodiplatform_INCLUDE_DIRS@ ${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/include)
++ set (kodiplatform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
++ set (kodiplatform_LINKER_FLAGS "@kodiplatform_LINKER_FLAGS@")
++ set (kodiplatform_CONFIG_VARS "@kodiplatform_CONFIG_VARS@")
++ 
++ # libraries come from the build tree where this file was generated
++ if(WIN32)
++-  set (kodiplatform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/kodiplatform.lib")
+++  set (kodiplatform_LIBRARY "${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/kodiplatform.lib")
++ else(WIN32)
++-  set (kodiplatform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lkodiplatform")
+++  set (kodiplatform_LIBRARY "-L${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lkodiplatform")
++ endif(WIN32)
++ set (kodiplatform_LIBRARIES ${kodiplatform_LIBRARY} "@kodiplatform_LIBRARIES@")
++ mark_as_advanced (kodiplatform_LIBRARY)
 +-- 
 +2.5.0
 +
-diff --git a/package/libcec/0001-remove-Wno-psabi.patch b/package/libcec/0001-remove-Wno-psabi.patch
-deleted file mode 100644
-index 4956c14..0000000
---- a/package/libcec/0001-remove-Wno-psabi.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Do not use -Wno-psabi option
--
--This option was added in gcc 4.5, and Buildroot still uses gcc 4.3 on
--some architectures. Since it's non essential (only disables some
--warning), let's get rid of it.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -137,7 +137,7 @@
-- use_udev="no"
-- use_adapter_detection="yes"
-- use_lockdev="no"
---SUPPRESS_MANGLING_WARNINGS=" -Wno-psabi"
--+SUPPRESS_MANGLING_WARNINGS=""
-- case "${host}" in
--   *-*-linux*)
--     ## search for udev if pkg-config was found
-diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-index e5fa9c8..2cf011d 100644
---- a/package/libcec/Config.in
-+++ b/package/libcec/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBCEC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
+diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
+new file mode 100644
+index 0000000..cde1925
+--- /dev/null
++++ b/package/kodi-platform/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PLATFORM
++	bool
 +	select BR2_PACKAGE_LIBPLATFORM
- 	help
- 	  libcec allows you in combination with the right hardware to
- 	  control your home theater devices with your TV remote
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 8bdc9ea..c5b008f 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = libcec-2.2.0-repack
-+LIBCEC_VERSION = libcec-3.0.1
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPLv2+
- LIBCEC_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ LIBCEC_LICENSE_FILES = COPYING
- # Autoreconf required due to being a dev tarball and not a release tarball.
- LIBCEC_AUTORECONF = YES
- LIBCEC_INSTALL_STAGING = YES
--LIBCEC_DEPENDENCIES = host-pkgconf
-+LIBCEC_DEPENDENCIES = host-pkgconf libplatform
- 
- ifeq ($(BR2_PACKAGE_LOCKDEV),y)
- LIBCEC_DEPENDENCIES += lockdev
-@@ -22,13 +22,20 @@ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- LIBCEC_DEPENDENCIES += udev
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+LIBCEC_DEPENDENCIES += host-swig $(if $(BR2_PACKAGE_PYTHON3),python3,python)
-+endif
++	help
++	  Kodi add-on platform support library
 +
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--LIBCEC_CONF_OPTS = --enable-rpi \
--	--with-rpi-include-path=$(STAGING_DIR)/usr/include
- LIBCEC_DEPENDENCIES += rpi-userland
--LIBCEC_CONF_ENV += LIBS="-lvcos -lvchostif"
--else
--LIBCEC_CONF_OPTS = --disable-rpi
-+LIBCEC_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="-lvcos -lvchiq_arm" \
-+	-DCMAKE_CXX_FLAGS="-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux \
-+		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads"
-+endif
++	  https://github.com/xbmc/kodi-platform
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+new file mode 100644
+index 0000000..0a7cc2e
+--- /dev/null
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# kodi-platform
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+LIBCEC_DEPENDENCIES += xlib_libXrandr
- endif
- 
--$(eval $(autotools-package))
++KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
++KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
++KODI_PLATFORM_LICENSE = GPLv2+
++KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
++KODI_PLATFORM_INSTALL_STAGING = YES
++KODI_PLATFORM_DEPENDENCIES = libplatform kodi
++
 +$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 52ae04e..e8a7608 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -102,6 +102,8 @@ menuconfig BR2_PACKAGE_KODI
+ 
+ if BR2_PACKAGE_KODI
+ 
++source "package/kodi-platform/Config.in"
++
+ config BR2_PACKAGE_KODI_ALSA_LIB
+ 	bool "alsa"
+ 	select BR2_PACKAGE_ALSA_LIB
