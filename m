@@ -1,39 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 30 Jul 2015 08:17:39 -0300
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.8.11.1
-Message-ID: <1438255059-26620-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 30 Jul 2015 13:11:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 7772] libxml-parser-perl build failure: missing
+ dependency ExtUtils/MakeMaker
+In-Reply-To: <bug-7772-163@https.bugs.busybox.net/>
+References: <bug-7772-163@https.bugs.busybox.net/>
+Message-ID: <20150730131104.A078E81E90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=7772
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 1c30137..8b507f0 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	da1322d883548bdb0f6312941b20ed497e3754fa	sqlite-autoconf-3081100.tar.gz
-+sha1	d0e22d7e361b6f50830a3cdeafe35311443f8f9a	sqlite-autoconf-3081101.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 34eab2b..afeae6c6 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3081100
-+SQLITE_VERSION = 3081101
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-07-30 13:11:04 UTC ---
+(In reply to comment #5)
+> (In reply to comment #4)
+> > Vicente, do you have a readily available chroot in which we can run Buildroot
+> > to reproduce this problem?
+> 
+> No, I don't. But you can just remove perl-MakeMaker from your host machine and
+> try to build Buildroot using a defconfig which includes libxml-parser-perl.
+
+Well, on Debian/Ubuntu, perl-MakeMaker is part of the perl-modules package. If
+you try to remove it, it also removes perl, and Buildroot won't run without
+perl:
+
+root at build:/# apt-get remove perl-modules
+[...]
+The following packages will be REMOVED:
+  cvs git git-core liberror-perl libfile-copy-recursive-perl perl perl-modules
+sgml-base update-inetd xml-core
+
+So it's basically a scenario that isn't possible.
+
+On which system do you have this problem?
+
 -- 
-2.3.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
