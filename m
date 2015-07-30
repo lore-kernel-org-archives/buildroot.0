@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 15:25:49 +0200
-Subject: [Buildroot] [PATCH 01/47] package/libsquish: New package
-In-Reply-To: <1437597069-6448-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 30 Jul 2015 15:26:42 +0200
+Subject: [Buildroot] [PATCH 02/47] package/libplatform: new package
+In-Reply-To: <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150730152549.6af02773@free-electrons.com>
+ <1437597069-6448-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150730152642.13f9b7e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,28 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Wed, 22 Jul 2015 22:30:23 +0200, Bernd Kuhls wrote:
-> Kodi 15.0 contains an updated version of libsquish:
-> https://github.com/xbmc/xbmc/tree/master/tools/depends/native/libsquish-native
-> 
-> The OpenElec project provides a separate tarball including the Kodi-
-> specific patches:
-> http://sources.openelec.tv/devel/libsquish-1.10-openelec.tar.gz
-> 
-> This patch contains the relevant diff between upstream libsquish 1.13
-> and the OpenElec tarball.
+On Wed, 22 Jul 2015 22:30:24 +0200, Bernd Kuhls wrote:
+> Needed by libcec 3.x
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/Config.in                 |    1 +
->  package/libsquish/0001-kodi.patch |  327 +++++++++++++++++++++++++++++++++++++
->  package/libsquish/Config.in       |   13 ++
->  package/libsquish/libsquish.hash  |    2 +
->  package/libsquish/libsquish.mk    |   35 ++++
->  5 files changed, 378 insertions(+)
->  create mode 100644 package/libsquish/0001-kodi.patch
->  create mode 100644 package/libsquish/Config.in
->  create mode 100644 package/libsquish/libsquish.hash
->  create mode 100644 package/libsquish/libsquish.mk
+>  package/Config.in                  |    1 +
+>  package/libplatform/Config.in      |    6 ++++++
+>  package/libplatform/libplatform.mk |   16 ++++++++++++++++
+>  3 files changed, 23 insertions(+)
+>  create mode 100644 package/libplatform/Config.in
+>  create mode 100644 package/libplatform/libplatform.mk
 
-I applied with some fixes:
+Applied with some changes:
 
     [Thomas:
-     - don't create the usr/lib/pkgconfig directory in STAGING_DIR and
-       TARGET_DIR, since libsquish installation doesn't install a .pc
-       file.
-     - instead, create usr/include and usr/lib.
-     - fixup the symlink logic so that the target directory only has a
-       symbolic link named after the library SONAME, while the staging dir
-       has both usual symlinks: one named after the SONAME, one just
-       libsquish.so. Suggested by Yann E. Morin.]
+      - adjust licensing information: license is not GPLv3+, but GPLv2+
+        plus one source file in PHP license v3.01.
+      - add proper license files.
+      - remove the -DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi since
+        it doesn't seem to be necessary
+      - add patch to fix invalid header and library paths in
+        platform-config.cmake.]
 
 Thomas
 -- 
