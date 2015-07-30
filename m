@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:19:25 +0200
-Subject: [Buildroot] [git commit] libgail: mark as deprecated
-Message-ID: <20150730211931.82DC07FA17@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 23:10:02 +0200
+Subject: [Buildroot] [git commit] package/libserialport: bump to latest
+	commit
+Message-ID: <20150730211931.4577B80720@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45f79c711ce80951c0e511cb87a4efc761ab332e
+commit: http://git.buildroot.net/buildroot/commit/?id=ac73040ea22f6668590be793ff2ddb0a534f43aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mark libgail as deprecated now that midori has been updated to use
-webkitgtk24 and the only package that uses it (webkit) has been
-deprecated.
+The previous commit e31f2c6b8b8f2b7e554df911cc9a3482b99632b4 is from Dec 5 2014.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgail/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libserialport/libserialport.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libgail/Config.in b/package/libgail/Config.in
-index 3967083..5e4f03b 100644
---- a/package/libgail/Config.in
-+++ b/package/libgail/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBGAIL
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
- 	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
- 	depends on BR2_PACKAGE_LIBGTK2
-+	depends on BR2_DEPRECATED_SINCE_2015_08
- 	select BR2_PACKAGE_PANGO
- 	help
- 	  GAIL provides accessibility support for gtk+ and
-@@ -27,3 +28,4 @@ comment "libgail needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_DEPRECATED_SINCE_2015_08
+diff --git a/package/libserialport/libserialport.mk b/package/libserialport/libserialport.mk
+index 2e57653..3dcbccb 100644
+--- a/package/libserialport/libserialport.mk
++++ b/package/libserialport/libserialport.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSERIALPORT_VERSION = e31f2c6b8b8f2b7e554df911cc9a3482b99632b4
++LIBSERIALPORT_VERSION = f77bb46df5d883527da8b7eb4a5328ea7e990dbb
+ # No https access on upstream git
+ LIBSERIALPORT_SITE = git://sigrok.org/libserialport
+ LIBSERIALPORT_LICENSE = LGPLv3+
