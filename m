@@ -1,82 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:44 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: new package
-Message-ID: <20150730132258.941907FFC3@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:37:45 +0200
+Subject: [Buildroot] [git commit] package/kodi-audiodecoder-sidplay: new
+	package
+Message-ID: <20150730132259.077597FFC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afb2f155a1ff77b68736ba2eb23d8f89898a01fa
+commit: http://git.buildroot.net/buildroot/commit/?id=98c1792273b8219fb20b96982e78ee39939e97e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Thomas:
-   - use a shorter file as the license file, client.h instead of client.cpp
    - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                           |    1 +
- package/kodi-pvr-mythtv/Config.in          |    7 +++++++
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk |   13 +++++++++++++
- package/kodi/Config.in                     |    1 +
- 4 files changed, 22 insertions(+), 0 deletions(-)
+ package/kodi-audiodecoder-sidplay/Config.in        |    8 ++++++++
+ .../kodi-audiodecoder-sidplay.mk                   |   13 +++++++++++++
+ package/kodi/Config.in                             |    1 +
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3f03ca0..28aaf7d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -117,6 +117,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_HTS
- 	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
- 	select BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
-+	select BR2_PACKAGE_KODI_PVR_MYTHTV
- 	help
- 	  Kodi PVR addon was split into seperate modules
- 
-diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
+diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
 new file mode 100644
-index 0000000..798ff3e
+index 0000000..ae99afa
 --- /dev/null
-+++ b/package/kodi-pvr-mythtv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_MYTHTV
-+	bool "kodi-pvr-mythtv"
++++ b/package/kodi-audiodecoder-sidplay/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
++	bool "kodi-audiodecoder-sidplay"
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBSIDPLAY2
 +	help
-+	  MythTV PVR for Kodi
++	  Sidplay decoder addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.mythtv
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++	  https://github.com/notspiff/audiodecoder.sidplay
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 new file mode 100644
-index 0000000..c26224a
+index 0000000..82b5c2b
 --- /dev/null
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-pvr-mythtv
++# kodi-audiodecoder-sidplay
 +#
 +################################################################################
 +
-+KODI_PVR_MYTHTV_VERSION = 75fee97e2e690b0ee6d2b1540218b61586683e20
-+KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
-+KODI_PVR_MYTHTV_LICENSE = GPLv2+
-+KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
-+KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
++KODI_AUDIODECODER_SIDPLAY_VERSION = 27b2c0582878857bfe03195471fa7ffa4bcc40f0
++KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
++KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
++KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
++KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index fc01b5b..e9fd2b7 100644
+index a686d60..6256d80 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -265,6 +265,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-hts/Config.in"
- 	source "package/kodi-pvr-iptvsimple/Config.in"
- 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
-+	source "package/kodi-pvr-mythtv/Config.in"
+@@ -252,6 +252,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
++	source "package/kodi-audiodecoder-sidplay/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
