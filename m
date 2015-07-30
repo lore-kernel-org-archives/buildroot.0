@@ -1,43 +1,38 @@
 From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <noe.rubinstein@gmail.com>
-Date: Thu, 30 Jul 2015 16:47:30 +0200
-Subject: [Buildroot] [PATCH 1/2] fs/iso9660: fix hybrid image support
-Message-ID: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+Date: Thu, 30 Jul 2015 16:47:31 +0200
+Subject: [Buildroot] [PATCH 2/2] fs/iso9660: install Isolinux comboot modules
+In-Reply-To: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+References: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <1438267651-16818-2-git-send-email-nrubinstein@aldebaran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-*_POST_GEN_HOOKS was never merged.
-
-Suggested by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This installs every module selected by the BR2_TARGET_SYSLINUX_C32.
+This is useful when using a custom Isolinux configuration file that may use
+comboot modules.
 
 Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
 ---
- fs/iso9660/iso9660.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ fs/iso9660/iso9660.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index d836194..9100547 100644
+index 9100547..cdafd4c 100644
 --- a/fs/iso9660/iso9660.mk
 +++ b/fs/iso9660/iso9660.mk
-@@ -146,15 +146,14 @@ endif # ROOTFS_ISO9660_USE_INITRD
- define ROOTFS_ISO9660_CMD
- 	$(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
- 		-no-emul-boot -boot-load-size 4 -boot-info-table \
--		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
-+		-o $@ $(ROOTFS_ISO9660_TARGET_DIR) \
-+	$(if $(ROOTFS_ISO9660_GEN_HYBRID), && $(ROOTFS_ISO9660_GEN_HYBRID))
+@@ -68,8 +68,8 @@ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ 	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
+ ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
+ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+-	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/isolinux.bin \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.bin
++	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
++		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/
+ 	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
+ 		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
  endef
- 
- ifeq ($(BR2_TARGET_ROOTFS_ISO9660_HYBRID),y)
- define ROOTFS_ISO9660_GEN_HYBRID
- 	$(HOST_DIR)/usr/bin/isohybrid -t 0x96 $@
- endef
--
--ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
- endif
- 
- $(eval $(call ROOTFS_TARGET,iso9660))
 -- 
 2.1.4
