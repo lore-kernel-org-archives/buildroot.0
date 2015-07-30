@@ -1,26 +1,38 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 30 Jul 2015 21:46:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/btrfs-progs: fix build issues
- under musl
-In-Reply-To: <1438271680-3692-1-git-send-email-brendanheading@gmail.com>
-References: <1438271680-3692-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <1438285601.21638.2.camel@embedded.rocks>
+Date: Thu, 30 Jul 2015 21:58:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: More fixes to static
+ compile
+In-Reply-To: <1438203871-8548-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1438203871-8548-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1438286327.21638.6.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Do, 2015-07-30 at 16:54 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/b97/b97f1e9cd459da96e3e1
-> 680bb7c43d8103ab12c2/build-end.log
+On Mi, 2015-07-29 at 23:04 +0200, Bernd Kuhls wrote:
+> libz is needed by libid3tag, fixes
+> http://autobuild.buildroot.net/results/85e/85e53f2b30f107f486be08549c
+> e6df08953ea499/
 > 
-> Patches by Thomas to refactor detection of __always_inline and 
-> backtrace
-> detection. Also added #include <limits.h> for PATH_MAX.
+> libm is needed by libexif, changes
 > 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> checking for exif_data_new_from_file in -lexif... no
+> checking for exif_data_new_from_file in -lexif... no
+> 
+> from the forementioned autobuilder config.log to
+> 
+> checking for exif_data_new_from_file in -lexif... yes
+> 
+> The pkgconfig file of libvorbis is called vorbis.pc, fix wrong 
+> naming. Also
+> we need to link against libsqlite3, so add that lib to the pkgconf 
+> call.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-btrfs-progs successfully builds with musl after applying this patch.
+minidlna successfully compiles in a static build after applying the
+patch. Tested with the config file from the autobuilder.
 
 Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
