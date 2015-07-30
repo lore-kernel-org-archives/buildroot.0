@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:45 +0200
-Subject: [Buildroot] [git commit] package/kodi-audiodecoder-sidplay: new
+Date: Thu, 30 Jul 2015 10:23:21 +0200
+Subject: [Buildroot] [git commit] package/kodi-visualisation-waveform: new
 	package
-Message-ID: <20150730132259.077597FFC3@busybox.osuosl.org>
+Message-ID: <20150730132259.839C57FFC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98c1792273b8219fb20b96982e78ee39939e97e7
+commit: http://git.buildroot.net/buildroot/commit/?id=74f64cc3bcbe9ed3973fbf007f975a366b4bc23f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Thomas:
@@ -18,53 +18,51 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-audiodecoder-sidplay/Config.in        |    8 ++++++++
- .../kodi-audiodecoder-sidplay.mk                   |   13 +++++++++++++
+ package/kodi-visualisation-waveform/Config.in      |    6 ++++++
+ .../kodi-visualisation-waveform.mk                 |   13 +++++++++++++
  package/kodi/Config.in                             |    1 +
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ 3 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
+diff --git a/package/kodi-visualisation-waveform/Config.in b/package/kodi-visualisation-waveform/Config.in
 new file mode 100644
-index 0000000..ae99afa
+index 0000000..56f2509
 --- /dev/null
-+++ b/package/kodi-audiodecoder-sidplay/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
-+	bool "kodi-audiodecoder-sidplay"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBSIDPLAY2
++++ b/package/kodi-visualisation-waveform/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM
++	bool "kodi-visualisation-waveform"
 +	help
-+	  Sidplay decoder addon for Kodi
++	  Waveform visualiser for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.sidplay
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++	  https://github.com/notspiff/visualization.waveform
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
 new file mode 100644
-index 0000000..82b5c2b
+index 0000000..eec0cfc
 --- /dev/null
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-sidplay
++# kodi-visualisation-waveform
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 27b2c0582878857bfe03195471fa7ffa4bcc40f0
-+KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
-+KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
-+KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
-+KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
++KODI_VISUALISATION_WAVEFORM_VERSION = abbdbffc5fd2dff1d627de8df3cb5a3887d1119c
++KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
++KODI_VISUALISATION_WAVEFORM_LICENSE = GPLv2+
++KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
++KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a686d60..6256d80 100644
+index fd0a53b..edc471b 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -252,6 +252,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
- 	source "package/kodi-audiodecoder-nosefart/Config.in"
-+	source "package/kodi-audiodecoder-sidplay/Config.in"
+@@ -298,6 +298,7 @@ endmenu
+ 
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
++	source "package/kodi-visualisation-waveform/Config.in"
  endmenu
  
- menu "Audio encoder addons"
+ endif # BR2_PACKAGE_KODI
