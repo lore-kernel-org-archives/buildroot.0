@@ -1,45 +1,38 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 30 Jul 2015 15:27:44 +0200
-Subject: [Buildroot] [PATCH] package/eudev: add libselinux dependency
-Message-ID: <1438262864-6073-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2015 15:29:11 +0200
+Subject: [Buildroot] [PATCH 37/47] package/kodi-screensaver-asteroids:
+ new package
+In-Reply-To: <1437597069-6448-38-git-send-email-bernd.kuhls@t-online.de>
+References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
+ <1437597069-6448-38-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150730152911.402c72db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable libselinux support with musl toolchains which doesn't have
-struct mallinfo.
+Dear Bernd Kuhls,
 
-selinux-util.c: In function ?mac_selinux_init?:
-selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
-         struct mallinfo before_mallinfo, after_mallinfo;
+On Wed, 22 Jul 2015 22:30:59 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/kodi-screensaver-asteroids/Config.in          |    6 ++++++
+>  .../kodi-screensaver-asteroids.mk                     |   17 +++++++++++++++++
+>  package/kodi/Config.in                                |    4 ++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/kodi-screensaver-asteroids/Config.in
+>  create mode 100644 package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
----
- package/eudev/eudev.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+For me, none of the screensaver packages worked with OpenGL ES, since
+they all include <GL/gl.h>. You have added a dependency on GL for the
+kodi-screensaver-crystalmorph package, but all other screensaver needed
+the same dependency, so I added it.
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 87bce3e..f904cdd 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -44,6 +44,15 @@ else
- EUDEV_CONF_OPTS += --disable-gudev
- endif
- 
-+# Disable selinux support with musl toolchains which doesn't have
-+# struct mallinfo.
-+ifeq ($(BR2_PACKAGE_LIBSELINUX)x$(BR2_TOOLCHAIN_USES_MUSL),yx)
-+EUDEV_CONF_OPTS += --enable-selinux
-+EUDEV_DEPENDENCIES += libselinux
-+else
-+EUDEV_CONF_OPTS += --disable-selinux
-+endif
-+
- define EUDEV_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
- endef
+Best regards,
+
+Thomas
 -- 
-2.4.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
