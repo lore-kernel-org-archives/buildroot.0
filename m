@@ -1,39 +1,40 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 30 Jul 2015 23:28:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libserial: bump to version
- 0.6.0rc2
-In-Reply-To: <20150730230054.3b0dd927@free-electrons.com>
-References: <1438284088-20483-1-git-send-email-joerg.krause@embedded.rocks>
- <20150730230054.3b0dd927@free-electrons.com>
-Message-ID: <1438291705.21638.12.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2015 23:31:26 +0200
+Subject: [Buildroot] [git commit] fs/iso9660: install Isolinux comboot
+	modules
+Message-ID: <20150730213131.7223A81D78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Do, 2015-07-30 at 23:00 +0200, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Thu, 30 Jul 2015 21:21:28 +0200, J?rg Krause wrote:
-> 
-> >   * add new dependency to boost
-> 
-> Woo, now to use a simple library to communicate over serial port, you
-> need Boost. Open-source developers are crazy sometimes.
+commit: http://git.buildroot.net/buildroot/commit/?id=8fb2b4c9daf00bcba3d6626f19c21f52675ce6b0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Seems boost::scoped_ptr is absolutely necessary :-)
+This installs every module selected by the BR2_TARGET_SYSLINUX_C32.
+This is useful when using a custom Isolinux configuration file that may use
+comboot modules.
 
-> 
-> >  	depends on BR2_INSTALL_LIBSTDCPP
-> > +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
-> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-> > +	depends on BR2_USE_WCHAR # boost
-> > +	select boost
-> 
-> Really? I don't think this is the valid way to select boost :-)
-> 
+Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/iso9660/iso9660.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Oops!
-
-J?rg
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index d836194..32d79d7 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -68,8 +68,8 @@ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
+ 	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
+ ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
+ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+-	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/isolinux.bin \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.bin
++	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/* \
++		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/
+ 	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
+ 		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
+ endef
