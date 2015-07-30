@@ -1,83 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:44 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-argustv: new
+Date: Thu, 30 Jul 2015 09:37:45 +0200
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-stalker: new
 	package
-Message-ID: <20150808105650.BE2BA81904@busybox.osuosl.org>
+Message-ID: <20150808105651.259F081904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2579ec20e2ea9c77f24a497dc4febd8672bd1a7f
+commit: http://git.buildroot.net/buildroot/commit/?id=70cf949fb096ae1d77f88416dda9dd9161dbc10b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
- - use a shorter file as the license file, client.h instead of client.cpp
- - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
+   - use a shorter file as the license file, client.h instead of client.cpp
+   - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  Config.in.legacy                             |    1 +
- package/kodi-pvr-argustv/Config.in           |    7 +++++++
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk |   13 +++++++++++++
+ package/kodi-pvr-stalker/Config.in           |    7 +++++++
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk |   13 +++++++++++++
  package/kodi/Config.in                       |    1 +
  4 files changed, 22 insertions(+), 0 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index e52a813..734a5b5 100644
+index 9046650..718bf66 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -110,6 +110,7 @@ comment "Legacy options removed in 2015.08"
- config BR2_PACKAGE_KODI_PVR_ADDONS
- 	bool "Kodi PVR addon was split"
- 	select BR2_LEGACY
-+	select BR2_PACKAGE_KODI_PVR_ARGUSTV
+@@ -121,6 +121,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_NEXTPVR
+ 	select BR2_PACKAGE_KODI_PVR_NJOY
+ 	select BR2_PACKAGE_KODI_PVR_PCTV
++	select BR2_PACKAGE_KODI_PVR_STALKER
  	help
  	  Kodi PVR addon was split into seperate modules
  
-diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
+diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
 new file mode 100644
-index 0000000..698ff46
+index 0000000..b327fd8
 --- /dev/null
-+++ b/package/kodi-pvr-argustv/Config.in
++++ b/package/kodi-pvr-stalker/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_ARGUSTV
-+	bool "kodi-pvr-argustv"
++config BR2_PACKAGE_KODI_PVR_STALKER
++	bool "kodi-pvr-stalker"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Kodi's ARGUS TV client addon
++	  A PVR Client that connects Kodi to Stalker Middleware
 +
-+	  https://github.com/kodi-pvr/pvr.argustv
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
++	  https://github.com/kodi-pvr/pvr.stalker
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
 new file mode 100644
-index 0000000..8fb5c89
+index 0000000..589cf7d
 --- /dev/null
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-pvr-argustv
++# kodi-pvr-stalker
 +#
 +################################################################################
 +
-+KODI_PVR_ARGUSTV_VERSION = 96c80267935d8edc4f6f92d16b540ef77cdcb1db
-+KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
-+KODI_PVR_ARGUSTV_LICENSE = GPLv2+
-+KODI_PVR_ARGUSTV_LICENSE_FILES = src/client.h
-+KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_STALKER_VERSION = 5f6eb1992ffd45a075ebb7bc4253c4a88bf65c80
++KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
++KODI_PVR_STALKER_LICENSE = GPLv2+
++KODI_PVR_STALKER_LICENSE_FILES = src/client.h
++KODI_PVR_STALKER_DEPENDENCIES = kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index e8a7608..33926d8 100644
+index 7c9709e..93c1423 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -258,6 +258,7 @@ endmenu
- 
- menu "PVR addons"
- 	source "package/kodi-addon-xvdr/Config.in"
-+	source "package/kodi-pvr-argustv/Config.in"
+@@ -269,6 +269,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-nextpvr/Config.in"
+ 	source "package/kodi-pvr-njoy/Config.in"
+ 	source "package/kodi-pvr-pctv/Config.in"
++	source "package/kodi-pvr-stalker/Config.in"
  endmenu
  
  endif # BR2_PACKAGE_KODI
