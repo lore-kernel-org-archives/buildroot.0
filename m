@@ -1,52 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Jul 2015 23:19:16 +0200
-Subject: [Buildroot] [PATCH 1/2] fs/iso9660: fix hybrid image support
-In-Reply-To: <20150730170352.0331b2c4@free-electrons.com>
-References: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
- <20150730165052.1eea5a29@free-electrons.com>
- <CAOccFZCnm3yrooc7uwiAphQz9SEzFtmMkUwCyv3z6EY_OknRSg@mail.gmail.com>
- <20150730170352.0331b2c4@free-electrons.com>
-Message-ID: <20150730211916.GC3744@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2015 23:19:25 +0200
+Subject: [Buildroot] [git commit] libgail: mark as deprecated
+Message-ID: <20150730211931.82DC07FA17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=45f79c711ce80951c0e511cb87a4efc761ab332e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-07-30 17:03 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 30 Jul 2015 16:56:34 +0200, No? Rubinstein wrote:
-> > On Thu, Jul 30, 2015 at 4:50 PM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com> wrote:
-> > > Can you resubmit with the && thing ? It is not needed: make will
-> > > abort automatically if genisoimage fails.
-> > 
-> > The issue is syntactic: ROOTFS_ISO9660_CMD is used in this line in common.mk:
-> > 
-> >     echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
-> > 
-> > Therefore it can not contain any newline. This would be fixed by using
-> > the file function in GNU make
-> > <https://www.gnu.org/software/make/manual/html_node/File-Function.html>
-> > but it would not work with GNU make 3.81.
-> 
-> Hum then maybe in the end my _POST_GEN_HOOKS idea is better?
+Mark libgail as deprecated now that midori has been updated to use
+webkitgtk24 and the only package that uses it (webkit) has been
+deprecated.
 
-Yes, that would make it symetrical with the existing _PRE_GEN hooks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libgail/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-No?, would you care to implement this post-gen hooks and resubmit using
-that, please?
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libgail/Config.in b/package/libgail/Config.in
+index 3967083..5e4f03b 100644
+--- a/package/libgail/Config.in
++++ b/package/libgail/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBGAIL
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
+ 	depends on BR2_PACKAGE_LIBGTK2
++	depends on BR2_DEPRECATED_SINCE_2015_08
+ 	select BR2_PACKAGE_PANGO
+ 	help
+ 	  GAIL provides accessibility support for gtk+ and
+@@ -27,3 +28,4 @@ comment "libgail needs a toolchain w/ C++, wchar, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_DEPRECATED_SINCE_2015_08
