@@ -1,83 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:45 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-stalker: new
-	package
-Message-ID: <20150808105651.259F081904@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:29:23 +0200
+Subject: [Buildroot] [git commit branch/next]
+	package/kodi-audioencoder-lame: bump version
+Message-ID: <20150808105650.7EF967F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70cf949fb096ae1d77f88416dda9dd9161dbc10b
+commit: http://git.buildroot.net/buildroot/commit/?id=e5ce686d3012d8f6603b1b4b49325e283021e19b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
-   - use a shorter file as the license file, client.h instead of client.cpp
-   - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
+  - also remove -DCMAKE_MODULE_PATH, no longer needed.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                             |    1 +
- package/kodi-pvr-stalker/Config.in           |    7 +++++++
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk |   13 +++++++++++++
- package/kodi/Config.in                       |    1 +
- 4 files changed, 22 insertions(+), 0 deletions(-)
+ .../kodi-audioencoder-lame.mk                      |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9046650..718bf66 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -121,6 +121,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
- 	select BR2_PACKAGE_KODI_PVR_NEXTPVR
- 	select BR2_PACKAGE_KODI_PVR_NJOY
- 	select BR2_PACKAGE_KODI_PVR_PCTV
-+	select BR2_PACKAGE_KODI_PVR_STALKER
- 	help
- 	  Kodi PVR addon was split into seperate modules
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+index 8a4a28c..cfdf109 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-new file mode 100644
-index 0000000..b327fd8
---- /dev/null
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_STALKER
-+	bool "kodi-pvr-stalker"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	help
-+	  A PVR Client that connects Kodi to Stalker Middleware
-+
-+	  https://github.com/kodi-pvr/pvr.stalker
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-new file mode 100644
-index 0000000..589cf7d
---- /dev/null
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-pvr-stalker
-+#
-+################################################################################
-+
-+KODI_PVR_STALKER_VERSION = 5f6eb1992ffd45a075ebb7bc4253c4a88bf65c80
-+KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
-+KODI_PVR_STALKER_LICENSE = GPLv2+
-+KODI_PVR_STALKER_LICENSE_FILES = src/client.h
-+KODI_PVR_STALKER_DEPENDENCIES = kodi-platform
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 7c9709e..93c1423 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -269,6 +269,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-nextpvr/Config.in"
- 	source "package/kodi-pvr-njoy/Config.in"
- 	source "package/kodi-pvr-pctv/Config.in"
-+	source "package/kodi-pvr-stalker/Config.in"
- endmenu
+-KODI_AUDIOENCODER_LAME_VERSION = 3eb59de951996659c143faaabacc5f34ee9a0b81
++KODI_AUDIOENCODER_LAME_VERSION = b283cd50cd2f89b7fd7b903c957a6a993e3756d2
+ KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
+ KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
+ KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
+ KODI_AUDIOENCODER_LAME_CONF_OPTS += \
+-	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
+ 	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
  
- endif # BR2_PACKAGE_KODI
+ $(eval $(cmake-package))
