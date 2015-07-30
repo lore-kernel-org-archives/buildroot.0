@@ -1,36 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:09:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/yaml-cpp: disable testing and
- parse tools
-In-Reply-To: <1438281586-18052-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1438281586-18052-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150730230921.5a63db93@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 Jul 2015 23:19:16 +0200
+Subject: [Buildroot] [PATCH 1/2] fs/iso9660: fix hybrid image support
+In-Reply-To: <20150730170352.0331b2c4@free-electrons.com>
+References: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+ <20150730165052.1eea5a29@free-electrons.com>
+ <CAOccFZCnm3yrooc7uwiAphQz9SEzFtmMkUwCyv3z6EY_OknRSg@mail.gmail.com>
+ <20150730170352.0331b2c4@free-electrons.com>
+Message-ID: <20150730211916.GC3744@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Thomas, All,
 
-On Thu, 30 Jul 2015 20:39:46 +0200, J?rg Krause wrote:
-> The gmock testing framework uses fork() and therefor yaml-cpp fails to build
-> for a MMU-less targets. Since we are only interested in building the yaml-cpp
-> library we disable the testing and parse tools (command line tools).
+On 2015-07-30 17:03 +0200, Thomas Petazzoni spake thusly:
+> On Thu, 30 Jul 2015 16:56:34 +0200, No? Rubinstein wrote:
+> > On Thu, Jul 30, 2015 at 4:50 PM, Thomas Petazzoni
+> > <thomas.petazzoni@free-electrons.com> wrote:
+> > > Can you resubmit with the && thing ? It is not needed: make will
+> > > abort automatically if genisoimage fails.
+> > 
+> > The issue is syntactic: ROOTFS_ISO9660_CMD is used in this line in common.mk:
+> > 
+> >     echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+> > 
+> > Therefore it can not contain any newline. This would be fixed by using
+> > the file function in GNU make
+> > <https://www.gnu.org/software/make/manual/html_node/File-Function.html>
+> > but it would not work with GNU make 3.81.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/2ce/2ce3c6d0140696cdf73f2ad1499b779c83ad8f6e/
-> 
-> Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/yaml-cpp/yaml-cpp.mk | 3 +++
->  1 file changed, 3 insertions(+)
+> Hum then maybe in the end my _POST_GEN_HOOKS idea is better?
 
-Applied, thanks.
+Yes, that would make it symetrical with the existing _PRE_GEN hooks.
 
-Thomas
+No?, would you care to implement this post-gen hooks and resubmit using
+that, please?
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
