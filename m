@@ -1,31 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:27:47 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/eudev: add libselinux
- dependency
-In-Reply-To: <1438272098-28557-1-git-send-email-romain.naour@openwide.fr>
-References: <1438272098-28557-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150730232747.50bacd39@free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 30 Jul 2015 23:28:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libserial: bump to version
+ 0.6.0rc2
+In-Reply-To: <20150730230054.3b0dd927@free-electrons.com>
+References: <1438284088-20483-1-git-send-email-joerg.krause@embedded.rocks>
+ <20150730230054.3b0dd927@free-electrons.com>
+Message-ID: <1438291705.21638.12.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+On Do, 2015-07-30 at 23:00 +0200, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
+> 
+> On Thu, 30 Jul 2015 21:21:28 +0200, J?rg Krause wrote:
+> 
+> >   * add new dependency to boost
+> 
+> Woo, now to use a simple library to communicate over serial port, you
+> need Boost. Open-source developers are crazy sometimes.
 
-On Thu, 30 Jul 2015 18:01:37 +0200, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
-> v2: Don't disable selinux support for musl toolchains (Thomas)
-> ---
->  package/eudev/eudev.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Seems boost::scoped_ptr is absolutely necessary :-)
 
-Applied, thanks.
+> 
+> >  	depends on BR2_INSTALL_LIBSTDCPP
+> > +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+> > +	depends on BR2_USE_WCHAR # boost
+> > +	select boost
+> 
+> Really? I don't think this is the valid way to select boost :-)
+> 
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Oops!
+
+J?rg
