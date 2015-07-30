@@ -1,42 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:25:10 +0200
-Subject: [Buildroot] [git commit branch/next] sqlite: bump to version
-	3.8.11.1
-Message-ID: <20150808105652.2D2077FE0E@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 23:08:01 +0200
+Subject: [Buildroot] [git commit branch/next] firmware-imx: update package
+	description
+Message-ID: <20150808105651.E398B7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a3580eff7fbdbeefc26698062768c68cb8ab1b3
+commit: http://git.buildroot.net/buildroot/commit/?id=75369a86106c1beae70f78519b8f9436f1a7e821
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Current firmware-imx version no longer contains ath6k and ar3k firmware.
+
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/firmware-imx/Config.in |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 1c30137..8b507f0 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	da1322d883548bdb0f6312941b20ed497e3754fa	sqlite-autoconf-3081100.tar.gz
-+sha1	d0e22d7e361b6f50830a3cdeafe35311443f8f9a	sqlite-autoconf-3081101.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 34eab2b..afeae6c6 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index dd96d88..fca280a 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -4,10 +4,7 @@ config BR2_PACKAGE_FIRMWARE_IMX
+ 	help
+ 	  Firmware blobs for the Freescale i.MX SoCs.
  
--SQLITE_VERSION = 3081100
-+SQLITE_VERSION = 3081101
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+-	  It contains blobs for Atheros AR6003, SDMA and VPU.
+-
+-	  Note: it also contains a blob for ar3k/30101 but upstream
+-	  linux-firmware has that as well.
++	  It contains blobs for SDMA and VPU.
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
