@@ -1,49 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Jul 2015 18:37:53 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/golang: new package
-In-Reply-To: <1438209421-4625-1-git-send-email-christian@paral.in>
-References: <1438209421-4625-1-git-send-email-christian@paral.in>
-Message-ID: <20150730163753.GB3744@free.fr>
+From: =?UTF-8?Q?No=C3=A9_Rubinstein?= <noe.rubinstein@gmail.com>
+Date: Thu, 30 Jul 2015 18:42:37 +0200
+Subject: [Buildroot] [PATCH 1/2] fs/iso9660: fix hybrid image support
+In-Reply-To: <20150730170352.0331b2c4@free-electrons.com>
+References: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+ <20150730165052.1eea5a29@free-electrons.com>
+ <CAOccFZCnm3yrooc7uwiAphQz9SEzFtmMkUwCyv3z6EY_OknRSg@mail.gmail.com>
+ <20150730170352.0331b2c4@free-electrons.com>
+Message-ID: <CAOccFZBc5Nn1F5fKTMJT6U6mjBd0z88hrKLk18vFQLnKSAkiig@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+> Hum then maybe in the end my _POST_GEN_HOOKS idea is better?
 
-On 2015-07-29 15:37 -0700, Christian Stewart spake thusly:
-> This patch adds golang, the Go compiler-and-interpreter.
+Would you prefer something like:
 
-Please, do not resend so fast.
+>  define ROOTFS_ISO9660_CMD
+>         $(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+>                 -no-emul-boot -boot-load-size 4 -boot-info-table \
+> -               -o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+> +               -o $@ $(ROOTFS_ISO9660_TARGET_DIR) ; \
+> +       $(ROOTFS_ISO9660_GEN_HYBRID)
+>  endef
 
-After a review, it is usually good to wait a bit, to give others a
-chance to review, too.
-
-Re-sending too fast means others would review the previous iteration
-(bad) but that you would also have a lot of re-spin to do. Also,
-potential reviewr (and committer) may get wary of this many respins.
-
-I know you are probably eager to see that merged soon, but re-sending
-too fast is not the best way to make that happen.
-
-Unless the committer asks for a simple fixup and a prompt respin, of
-course. Otherwise, let it settle for a day...
-
-Beside, in that case, your respin is not correct, because it does not
-address the rm-rf that Thomas pointed out, so I'll have to repin my
-version...
-
-Don't get me wrong: I too am eager to see it merged, and we all do
-appreciate your work on this! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--
+No? Rubinstein
