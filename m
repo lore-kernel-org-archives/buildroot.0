@@ -1,47 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2015 13:18:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 7772] libxml-parser-perl build failure: missing
- dependency ExtUtils/MakeMaker
-In-Reply-To: <bug-7772-163@https.bugs.busybox.net/>
-References: <bug-7772-163@https.bugs.busybox.net/>
-Message-ID: <20150730131817.5123781EA9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2015 09:29:23 +0200
+Subject: [Buildroot] [git commit] package/kodi-audioencoder-vorbis: bump
+	version
+Message-ID: <20150730132258.1B6E4807AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7772
+commit: http://git.buildroot.net/buildroot/commit/?id=a3d5e46d759ba83f4ddcf7f13cd87c2931401374
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #7 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-07-30 13:18:17 UTC ---
-(In reply to comment #6)
-> (In reply to comment #5)
-> > (In reply to comment #4)
-> > > Vicente, do you have a readily available chroot in which we can run Buildroot
-> > > to reproduce this problem?
-> > 
-> > No, I don't. But you can just remove perl-MakeMaker from your host machine and
-> > try to build Buildroot using a defconfig which includes libxml-parser-perl.
-> 
-> Well, on Debian/Ubuntu, perl-MakeMaker is part of the perl-modules package. If
-> you try to remove it, it also removes perl, and Buildroot won't run without
-> perl:
-> 
-> root at build:/# apt-get remove perl-modules
-> [...]
-> The following packages will be REMOVED:
->   cvs git git-core liberror-perl libfile-copy-recursive-perl perl perl-modules
-> sgml-base update-inetd xml-core
-> 
-> So it's basically a scenario that isn't possible.
-> 
-> On which system do you have this problem?
+[Thomas:
+  - also remove -DCMAKE_MODULE_PATH, no longer needed.]
 
-I remember this happened on a minimal Gentoo installation, but that happened 6
-months ago... You can close this bug if you want. If this happens again, I will
-reopen it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../kodi-audioencoder-vorbis.mk                    |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index 493fcbf..a7e99d1 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_VORBIS_VERSION = d556a6872e59806526f208e8d0af5f886a6c67bb
++KODI_AUDIOENCODER_VORBIS_VERSION = 15d619dae4411ecebadf2ec2996d611600ad0bee
+ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
+ KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis
+ KODI_AUDIOENCODER_VORBIS_CONF_OPTS += \
+-	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi \
+ 	-DOGG_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
+ 	-DVORBIS_INCLUDE_DIRS=$(STAGING_DIR)/usr/include \
+ 	-DVORBISENC_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
