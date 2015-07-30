@@ -1,56 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:29:23 +0200
-Subject: [Buildroot] [git commit] package/kodi: Add option for lirc support
-Message-ID: <20150730132257.F2806807AA@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:29:24 +0200
+Subject: [Buildroot] [git commit] package/kodi-audioencoder-wav: bump version
+Message-ID: <20150730132258.2240281EAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0818a6551fbd4f04478e443ec85d57ac70150f0b
+commit: http://git.buildroot.net/buildroot/commit/?id=2cc1d73ef5ee8be1b24477ace16542a1d6106db0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/xbmc/xbmc/commit/b641e1eea54b4b9ab7f1b95092ab0a755abc63be
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in |    5 +++++
- package/kodi/kodi.mk   |    6 ++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ .../kodi-audioencoder-wav/kodi-audioencoder-wav.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index e8c9244..8dd3794 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -164,6 +164,11 @@ config BR2_PACKAGE_KODI_LIBCEC
- comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+index 06803f2..f2b7c2a 100644
+--- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_KODI_LIRC
-+	bool "lirc"
-+	help
-+	  Enable lirc support
-+
- config BR2_PACKAGE_KODI_LIBMICROHTTPD
- 	bool "web server"
- 	select BR2_PACKAGE_LIBMICROHTTPD
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index e5304ab..6399ff1 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -186,6 +186,12 @@ else
- KODI_CONF_OPTS += --disable-libcec
- endif
+-KODI_AUDIOENCODER_WAV_VERSION = 40aaedfa1cd9c75749c82f6e1bd7c42ef61fdb38
++KODI_AUDIOENCODER_WAV_VERSION = 797c990eea7851889cd44a597c0392deba9c51c0
+ KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
+ KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
+ KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
+-KODI_AUDIOENCODER_WAV_CONF_OPTS += \
+-	-DCMAKE_MODULE_PATH=$(STAGING_DIR)/usr/lib/kodi
  
-+ifeq ($(BR2_PACKAGE_KODI_LIRC),y)
-+KODI_CONF_OPTS += --enable-lirc
-+else
-+KODI_CONF_OPTS += --disable-lirc
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
- KODI_DEPENDENCIES += wavpack
- endif
+ $(eval $(cmake-package))
