@@ -1,43 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:23:50 +0200
-Subject: [Buildroot] [PATCH] package: Introduce
- $(2)_INFRA_EXTRA_DEPENDENCIES
-In-Reply-To: <1436898465-11711-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1436898465-11711-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150730232350.028b27ff@free-electrons.com>
+Date: Thu, 30 Jul 2015 23:24:45 +0200
+Subject: [Buildroot] [PATCH v6 0/4] The big webkitgtk bump
+In-Reply-To: <1438173627-16478-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1438173627-16478-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150730232445.63518279@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Gustavo Zacarias,
 
-On Tue, 14 Jul 2015 20:27:45 +0200, Maxime Hadjinlian wrote:
-> Instead of repeating the filter-out function to remove the host-package
-> that we don't want as dependencies in each infra, handle it it
-> pkg-generic through a generic variable, which is specified by each
-> infra.
-> 
-> The $(2)_INFRA_EXTRA_DEPENDENCIES contains the specific host package
-> that we want to filter from the package's dependencies.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-autotools.mk | 12 ++++--------
->  package/pkg-cmake.mk     |  7 -------
->  package/pkg-generic.mk   |  3 ++-
->  package/pkg-python.mk    | 17 +++--------------
->  package/pkg-rebar.mk     | 16 +++++++---------
->  package/pkg-virtual.mk   |  7 -------
->  6 files changed, 16 insertions(+), 46 deletions(-)
+On Wed, 29 Jul 2015 09:40:23 -0300, Gustavo Zacarias wrote:
 
-This patch has received some comments. Could you please handle them,
-and resubmit an updated version?
+> Gustavo Zacarias (4):
+>   webkitgtk24: new package
+>   midori: bump to version 0.5.9
+>   webkit: mark as deprecated
+>   libgail: mark as deprecated
 
-In the mean time, patch marked as Changes Requested.
-
-Thanks,
+All four patches applied, thanks!
 
 Thomas
 -- 
