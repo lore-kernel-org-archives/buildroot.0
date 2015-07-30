@@ -1,169 +1,144 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 31 Jul 2015 00:15:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: bump to version 1.6.5
-Message-ID: <1438294547-8240-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Fri, 31 Jul 2015 00:23:24 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libserial: bump to version
+	0.6.0rc2
+Message-ID: <1438295004-5934-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch 0001-Revert-Use-std-namespace-for-snprintf.patch:
-This patch was initially intented to remove upstream commit
-1c58876185d2a4ed87dac4a54b82f607e74f55fd to disable std::snprintf() for all
-compilers. However, the patch actually reverts upstream commit
-240ddb6a1b7aae7c6528e328995812ee695a73af which only uses std namespace if the
-compiler defines __cplusplus >= 201103L, thus is a recent C++11 compiler.
-Furthermore, upstream commit fac87108a49fb1b2640eff5d8e4cc7a12723a510 adds
-the `-std=c++11` compiler flag to gcc, so jsoncpp now requires a C++11 compiler
-either way.
+Also:
+  * Update patch #1
+  * Remove patch #2, fixed upstream
+  * add new dependency to boost
+  * use hashes from sourceforge
 
-With jsoncpp requiring a recent C++11 compiler we have to disable some old
-toolchains which do not understand `-std=c++11`.
-
-Add a patch to remove `-Werror` from the compiler flags to allow building with
-CS ARM toolchains. Patch is pending upstream [1].
-
-[1]
-https://github.com/open-source-parsers/jsoncpp/pull/323
-
-Cc: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/jsoncpp/0001-Remove-Werror.patch           | 37 ++++++++++++++++++++
- ...001-Revert-Use-std-namespace-for-snprintf.patch | 39 ----------------------
- package/jsoncpp/Config.in                          | 12 +++++++
- package/jsoncpp/jsoncpp.mk                         |  2 +-
- 4 files changed, 50 insertions(+), 40 deletions(-)
- create mode 100644 package/jsoncpp/0001-Remove-Werror.patch
- delete mode 100644 package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+Changes in v2:
+  * Fix selecting package boost (Thomas Petazzoni)
+---
+ .../libserial/0001-disable-python-bindings.patch    | 21 +++++++++++----------
+ .../libserial/0002-add-missing-header-include.patch | 15 ---------------
+ package/libserial/Config.in                         |  8 ++++++--
+ package/libserial/libserial.hash                    |  5 +++--
+ package/libserial/libserial.mk                      |  3 ++-
+ 5 files changed, 22 insertions(+), 30 deletions(-)
+ delete mode 100644 package/libserial/0002-add-missing-header-include.patch
 
-diff --git a/package/jsoncpp/0001-Remove-Werror.patch b/package/jsoncpp/0001-Remove-Werror.patch
-new file mode 100644
-index 0000000..5c28ba7
---- /dev/null
-+++ b/package/jsoncpp/0001-Remove-Werror.patch
-@@ -0,0 +1,37 @@
-+From d7b84f69c5e92178e110552cce27f900744e1779 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Thu, 30 Jul 2015 23:47:05 +0200
-+Subject: [PATCH 1/1] Remove Werror
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+-Werror shouldn't be used in released code since it can cause random build
-+failures on moderate warnings. It also depends on the used toolchain since
-+different toolchains may or may not print the same warnings.
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ CMakeLists.txt | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index cab0de8..62bf203 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -97,10 +97,10 @@ endif( MSVC )
-+ 
-+ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-+   # using regular Clang or AppleClang
-+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Werror -Wall -Wconversion -Wshadow -Wno-sign-conversion")
-++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wno-sign-conversion")
-+ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-+   # using GCC
-+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Werror -Wall -Wconversion -Wshadow -Wextra -pedantic")
-++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wconversion -Wshadow -Wextra -pedantic")
-+   # not yet ready for -Wsign-conversion
-+ endif()
-+ 
-+-- 
-+2.5.0
-+
-diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-deleted file mode 100644
-index 7935849..0000000
---- a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 29bfb6ac06b7304d326e3b70fc0209a702b89d83 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Subject: [PATCH] Revert "Use std namespace for snprintf."
--
--This reverts commit 1c58876185d2a4ed87dac4a54b82f607e74f55fd.
--
--std::snprintf() is only available in C++11, which is not provided by
--all compilers. Since the C library snprintf() can easily be used as a
--replacement on Linux systems, this patch changes jsoncpp to use the C
--library snprintf() instead of C++11 std::snprintf(), fixing the build error
--below:
--
--src/lib_json/json_writer.cpp:33:18: error: 'snprintf' is not a member of 'std'
--
--Upstream status: sent upstream
--package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--
-- src/lib_json/json_writer.cpp | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
--index 83102fd2bb86..f7ad1e21bbc0 100644
----- a/src/lib_json/json_writer.cpp
--+++ b/src/lib_json/json_writer.cpp
--@@ -29,8 +29,6 @@
-- 
-- #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
-- #define snprintf _snprintf
---#elif __cplusplus >= 201103L
---#define snprintf std::snprintf
-- #endif
-- 
-- #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
---- 
--2.1.4
--
-diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
-index 2c96f13..15e59d1 100644
---- a/package/jsoncpp/Config.in
-+++ b/package/jsoncpp/Config.in
-@@ -1,4 +1,10 @@
- config BR2_PACKAGE_JSONCPP
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old, no C++11
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109 # Ditto
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	bool "jsoncpp"
- 	help
-@@ -11,4 +17,10 @@ config BR2_PACKAGE_JSONCPP
- 	  https://github.com/open-source-parsers/jsoncpp
+diff --git a/package/libserial/0001-disable-python-bindings.patch b/package/libserial/0001-disable-python-bindings.patch
+index 54b5cb6..1f2f5ed 100644
+--- a/package/libserial/0001-disable-python-bindings.patch
++++ b/package/libserial/0001-disable-python-bindings.patch
+@@ -1,25 +1,26 @@
+ Disable build of Python bindings, which requires the sipconfig module.
  
- comment "jsoncpp needs a toolchain w/ C++"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old, no C++11
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109 # Ditto
- 	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index 63b18e6..132e264 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -4,7 +4,7 @@
+ Signed-off-by: Simon Dawson <spdawson@gmail.com>
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ 
+-diff -Nurp a/Makefile.am b/Makefile.am
+---- a/Makefile.am	2008-11-12 01:27:31.000000000 +0000
+-+++ b/Makefile.am	2013-04-16 09:41:13.476002178 +0100
++diff -purN libserial-0.6.0rc2.orig/Makefile.am libserial-0.6.0rc2/Makefile.am
++--- libserial-0.6.0rc2.orig/Makefile.am	2014-06-05 18:37:25.000000000 +0200
+++++ libserial-0.6.0rc2/Makefile.am	2015-07-30 20:59:28.828429011 +0200
+ @@ -1,4 +1,4 @@
+ -SUBDIRS=src doc examples sip
+ +SUBDIRS=src doc examples
++ ACLOCAL_AMFLAGS=-I m4
+  
+  EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
+- 
+-diff -Nurp a/Makefile.in b/Makefile.in
+---- a/Makefile.in	2008-11-12 01:28:14.000000000 +0000
+-+++ b/Makefile.in	2013-04-16 09:41:05.628013626 +0100
+-@@ -197,7 +197,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
++diff -purN libserial-0.6.0rc2.orig/Makefile.in libserial-0.6.0rc2/Makefile.in
++--- libserial-0.6.0rc2.orig/Makefile.in	2014-06-05 18:40:09.000000000 +0200
+++++ libserial-0.6.0rc2/Makefile.in	2015-07-30 21:00:09.215188376 +0200
++@@ -348,7 +348,7 @@ target_alias = @target_alias@
++ top_build_prefix = @top_build_prefix@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+ -SUBDIRS = src doc examples sip
+ +SUBDIRS = src doc examples
++ ACLOCAL_AMFLAGS = -I m4
+  EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
+  pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = libserial.pc
+diff --git a/package/libserial/0002-add-missing-header-include.patch b/package/libserial/0002-add-missing-header-include.patch
+deleted file mode 100644
+index a022637..0000000
+--- a/package/libserial/0002-add-missing-header-include.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Add a missing header include, to fix a build error.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/src/SerialPort.cpp b/src/SerialPort.cpp
+---- a/src/SerialPort.cpp	2008-11-12 01:27:30.000000000 +0000
+-+++ b/src/SerialPort.cpp	2013-04-23 15:43:41.537495852 +0100
+-@@ -27,6 +27,7 @@
+- #include <cassert>
+- #include <termios.h>
+- #include <fcntl.h>
+-+#include <unistd.h>
+- #include <sys/ioctl.h>
+- #include <sys/time.h>
+- #include <signal.h>
+diff --git a/package/libserial/Config.in b/package/libserial/Config.in
+index 22adb72..83cd370 100644
+--- a/package/libserial/Config.in
++++ b/package/libserial/Config.in
+@@ -1,11 +1,15 @@
+ config BR2_PACKAGE_LIBSERIAL
+ 	bool "libserial"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	depends on BR2_USE_WCHAR # boost
++	select BR2_PACKAGE_BOOST
+ 	help
+ 	  Simplified serial port programming in C++ under POSIX operating
+ 	  systems.
+ 
+ 	  http://libserial.sourceforge.net/
+ 
+-comment "libserial needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libserial needs a toolchain w/ C++, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/libserial/libserial.hash b/package/libserial/libserial.hash
+index 26f65e5..024d657 100644
+--- a/package/libserial/libserial.hash
++++ b/package/libserial/libserial.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  60d8aebf5f262c12baf94ce61d61198fc9b79da2432c735c200decd08ead1fb4  libserial-0.6.0rc1.tar.gz
++# From http://sourceforge.net/projects/libserial/files/libserial/0.6.0rc2/
++sha1  e09113be3ba595135e95e853003ff96feea0da63  libserial-0.6.0rc2.tar.gz
++md5  7787679b22901e4810bc53ecccdf8266  libserial-0.6.0rc2.tar.gz
+diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
+index d2c928b..11f1874 100644
+--- a/package/libserial/libserial.mk
++++ b/package/libserial/libserial.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--JSONCPP_VERSION = 1.6.1
-+JSONCPP_VERSION = 1.6.5
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
+-LIBSERIAL_VERSION = 0.6.0rc1
++LIBSERIAL_VERSION = 0.6.0rc2
+ LIBSERIAL_SITE = http://downloads.sourceforge.net/libserial
+ LIBSERIAL_INSTALL_STAGING = YES
+ LIBSERIAL_LICENSE = GPLv2+
+ LIBSERIAL_LICENSE_FILES = COPYING
++LIBSERIAL_DEPENDENCIES = boost
+ 
+ LIBSERIAL_CONF_ENV = ac_cv_prog_DOCBOOK2PDF=no
+ 
 -- 
 2.5.0
