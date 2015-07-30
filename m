@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 30 Jul 2015 09:37:44 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-mythtv: new
-	package
-Message-ID: <20150808105651.03E768190C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-iptvsimple:
+	new package
+Message-ID: <20150808105650.E7B4F8190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afb2f155a1ff77b68736ba2eb23d8f89898a01fa
+commit: http://git.buildroot.net/buildroot/commit/?id=8c326ff83af1feabb84a2c50fdbe5c026d6e7664
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
@@ -19,65 +19,65 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                           |    1 +
- package/kodi-pvr-mythtv/Config.in          |    7 +++++++
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk |   13 +++++++++++++
- package/kodi/Config.in                     |    1 +
+ Config.in.legacy                                   |    1 +
+ package/kodi-pvr-iptvsimple/Config.in              |    7 +++++++
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk |   13 +++++++++++++
+ package/kodi/Config.in                             |    1 +
  4 files changed, 22 insertions(+), 0 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 3f03ca0..28aaf7d 100644
+index 96f7d7f..df50632 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -117,6 +117,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+@@ -115,6 +115,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_DVBVIEWER
+ 	select BR2_PACKAGE_KODI_PVR_FILMON
  	select BR2_PACKAGE_KODI_PVR_HTS
- 	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
- 	select BR2_PACKAGE_KODI_PVR_MEDIAPORTAL_TVSERVER
-+	select BR2_PACKAGE_KODI_PVR_MYTHTV
++	select BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
  	help
  	  Kodi PVR addon was split into seperate modules
  
-diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
+diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
 new file mode 100644
-index 0000000..798ff3e
+index 0000000..b596749
 --- /dev/null
-+++ b/package/kodi-pvr-mythtv/Config.in
++++ b/package/kodi-pvr-iptvsimple/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_PVR_MYTHTV
-+	bool "kodi-pvr-mythtv"
++config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
++	bool "kodi-pvr-iptvsimple"
 +	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  MythTV PVR for Kodi
++	  IPTV Live TV and Radio PVR client addon for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.mythtv
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++	  https://github.com/kodi-pvr/pvr.iptvsimple
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
 new file mode 100644
-index 0000000..c26224a
+index 0000000..4d5b9e9
 --- /dev/null
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-pvr-mythtv
++# kodi-pvr-iptvsimple
 +#
 +################################################################################
 +
-+KODI_PVR_MYTHTV_VERSION = 75fee97e2e690b0ee6d2b1540218b61586683e20
-+KODI_PVR_MYTHTV_SITE = $(call github,kodi-pvr,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
-+KODI_PVR_MYTHTV_LICENSE = GPLv2+
-+KODI_PVR_MYTHTV_LICENSE_FILES = src/client.h
-+KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
++KODI_PVR_IPTVSIMPLE_VERSION = 23defebace9a596d549a688c1d017900aeaf7761
++KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
++KODI_PVR_IPTVSIMPLE_LICENSE = GPLv2+
++KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
++KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index fc01b5b..e9fd2b7 100644
+index 251b723..8184b87 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -265,6 +265,7 @@ menu "PVR addons"
+@@ -263,6 +263,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-dvbviewer/Config.in"
+ 	source "package/kodi-pvr-filmon/Config.in"
  	source "package/kodi-pvr-hts/Config.in"
- 	source "package/kodi-pvr-iptvsimple/Config.in"
- 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
-+	source "package/kodi-pvr-mythtv/Config.in"
++	source "package/kodi-pvr-iptvsimple/Config.in"
  endmenu
  
  endif # BR2_PACKAGE_KODI
