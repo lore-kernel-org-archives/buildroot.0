@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 10:23:21 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-waveform: new
+Date: Thu, 30 Jul 2015 09:37:46 +0200
+Subject: [Buildroot] [git commit] package/kodi-audiodecoder-stsound: new
 	package
-Message-ID: <20150730132259.839C57FFC3@busybox.osuosl.org>
+Message-ID: <20150730132259.1FE3081EAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74f64cc3bcbe9ed3973fbf007f975a366b4bc23f
+commit: http://git.buildroot.net/buildroot/commit/?id=742b1c4e3501db47da8251a382b40d70f0a695e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Thomas:
@@ -18,51 +18,52 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-visualisation-waveform/Config.in      |    6 ++++++
- .../kodi-visualisation-waveform.mk                 |   13 +++++++++++++
+ package/kodi-audiodecoder-stsound/Config.in        |    7 +++++++
+ .../kodi-audiodecoder-stsound.mk                   |   13 +++++++++++++
  package/kodi/Config.in                             |    1 +
- 3 files changed, 20 insertions(+), 0 deletions(-)
+ 3 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-visualisation-waveform/Config.in b/package/kodi-visualisation-waveform/Config.in
+diff --git a/package/kodi-audiodecoder-stsound/Config.in b/package/kodi-audiodecoder-stsound/Config.in
 new file mode 100644
-index 0000000..56f2509
+index 0000000..6be216a
 --- /dev/null
-+++ b/package/kodi-visualisation-waveform/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM
-+	bool "kodi-visualisation-waveform"
++++ b/package/kodi-audiodecoder-stsound/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_STSOUND
++	bool "kodi-audiodecoder-stsound"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Waveform visualiser for Kodi
++	  YM decoder addon for Kodi
 +
-+	  https://github.com/notspiff/visualization.waveform
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++	  https://github.com/notspiff/audiodecoder.stsound
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 new file mode 100644
-index 0000000..eec0cfc
+index 0000000..23da01f
 --- /dev/null
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-visualisation-waveform
++# kodi-audiodecoder-stsound
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_WAVEFORM_VERSION = abbdbffc5fd2dff1d627de8df3cb5a3887d1119c
-+KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
-+KODI_VISUALISATION_WAVEFORM_LICENSE = GPLv2+
-+KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
-+KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
++KODI_AUDIODECODER_STSOUND_VERSION = f6fbae94818fedd09e2f55c6cd1cb283bfdab6f4
++KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
++KODI_AUDIODECODER_STSOUND_LICENSE = GPLv2+
++KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
++KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index fd0a53b..edc471b 100644
+index 9caf873..b3ab9ec 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -298,6 +298,7 @@ endmenu
- 
- menu "Visualisations"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
-+	source "package/kodi-visualisation-waveform/Config.in"
+@@ -254,6 +254,7 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
++	source "package/kodi-audiodecoder-stsound/Config.in"
  endmenu
  
- endif # BR2_PACKAGE_KODI
+ menu "Audio encoder addons"
