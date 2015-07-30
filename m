@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:00:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libserial: bump to version
- 0.6.0rc2
-In-Reply-To: <1438284088-20483-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1438284088-20483-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150730230054.3b0dd927@free-electrons.com>
+Date: Thu, 30 Jul 2015 23:08:01 +0200
+Subject: [Buildroot] [git commit] firmware-imx: update package description
+Message-ID: <20150730210806.5CA6B81D81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=75369a86106c1beae70f78519b8f9436f1a7e821
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Jul 2015 21:21:28 +0200, J?rg Krause wrote:
+Current firmware-imx version no longer contains ath6k and ar3k firmware.
 
->   * add new dependency to boost
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freescale-imx/firmware-imx/Config.in |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-Woo, now to use a simple library to communicate over serial port, you
-need Boost. Open-source developers are crazy sometimes.
-
-
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-> +	depends on BR2_USE_WCHAR # boost
-> +	select boost
-
-Really? I don't think this is the valid way to select boost :-)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index dd96d88..fca280a 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -4,10 +4,7 @@ config BR2_PACKAGE_FIRMWARE_IMX
+ 	help
+ 	  Firmware blobs for the Freescale i.MX SoCs.
+ 
+-	  It contains blobs for Atheros AR6003, SDMA and VPU.
+-
+-	  Note: it also contains a blob for ar3k/30101 but upstream
+-	  linux-firmware has that as well.
++	  It contains blobs for SDMA and VPU.
+ 
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
