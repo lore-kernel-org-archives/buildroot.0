@@ -1,40 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:08:23 +0200
-Subject: [Buildroot] [git commit branch/next] package/yaml-cpp: disable
-	testing and parse tools
-Message-ID: <20150808105651.EAABC7FE8F@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 10:23:21 +0200
+Subject: [Buildroot] [git commit branch/next]
+	package/kodi-visualisation-waveform: new package
+Message-ID: <20150808105651.C9B4F81830@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d15325a925b03ee223578483eb80d20b95ae4ce
+commit: http://git.buildroot.net/buildroot/commit/?id=74f64cc3bcbe9ed3973fbf007f975a366b4bc23f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The gmock testing framework uses fork() and therefor yaml-cpp fails to build
-for a MMU-less targets. Since we are only interested in building the yaml-cpp
-library we disable the testing and parse tools (command line tools).
+[Thomas:
+   - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
 
-Fixes:
-http://autobuild.buildroot.net/results/2ce/2ce3c6d0140696cdf73f2ad1499b779c83ad8f6e/
-
-Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/yaml-cpp/yaml-cpp.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/kodi-visualisation-waveform/Config.in      |    6 ++++++
+ .../kodi-visualisation-waveform.mk                 |   13 +++++++++++++
+ package/kodi/Config.in                             |    1 +
+ 3 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
-index cea54a9..6a01b02 100644
---- a/package/yaml-cpp/yaml-cpp.mk
-+++ b/package/yaml-cpp/yaml-cpp.mk
-@@ -12,4 +12,7 @@ YAML_CPP_LICENSE_FILES = license.txt
- 
- YAML_CPP_DEPENDENCIES = boost
- 
-+# Disable testing and parse tools
-+YAML_CPP_CONF_OPTS += -DYAML_CPP_BUILD_TOOLS=OFF
+diff --git a/package/kodi-visualisation-waveform/Config.in b/package/kodi-visualisation-waveform/Config.in
+new file mode 100644
+index 0000000..56f2509
+--- /dev/null
++++ b/package/kodi-visualisation-waveform/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM
++	bool "kodi-visualisation-waveform"
++	help
++	  Waveform visualiser for Kodi
 +
- $(eval $(cmake-package))
++	  https://github.com/notspiff/visualization.waveform
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+new file mode 100644
+index 0000000..eec0cfc
+--- /dev/null
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-visualisation-waveform
++#
++################################################################################
++
++KODI_VISUALISATION_WAVEFORM_VERSION = abbdbffc5fd2dff1d627de8df3cb5a3887d1119c
++KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
++KODI_VISUALISATION_WAVEFORM_LICENSE = GPLv2+
++KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
++KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index fd0a53b..edc471b 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -298,6 +298,7 @@ endmenu
+ 
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
++	source "package/kodi-visualisation-waveform/Config.in"
+ endmenu
+ 
+ endif # BR2_PACKAGE_KODI
