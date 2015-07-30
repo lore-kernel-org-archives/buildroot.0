@@ -1,42 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:49:39 +0200
-Subject: [Buildroot] [PATCH v2 1/1] angularjs: new package.
-In-Reply-To: <1437403844-19942-1-git-send-email-ignacy.gawedzki@green-communications.fr>
-References: <1437403844-19942-1-git-send-email-ignacy.gawedzki@green-communications.fr>
-Message-ID: <20150730234939.3976d6d3@free-electrons.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 30 Jul 2015 16:54:55 -0500
+Subject: [Buildroot] [PATCH v4 2015.08 0/4] Generate package size
+	statistics
+In-Reply-To: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAMQcK5JjmneoRgJri0C3Lx5agSgmr+dquPs6oaPca6es==dMmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ignacy Gaw?dzki,
+Hi Thomas,
 
-On Mon, 20 Jul 2015 16:50:44 +0200, Ignacy Gaw?dzki wrote:
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
-> ---
->  package/Config.in                |  1 +
->  package/angularjs/Config.in      | 79 ++++++++++++++++++++++++++++++++++++++++
->  package/angularjs/angularjs.hash |  2 +
->  package/angularjs/angularjs.mk   | 38 +++++++++++++++++++
->  4 files changed, 120 insertions(+)
->  create mode 100644 package/angularjs/Config.in
->  create mode 100644 package/angularjs/angularjs.hash
->  create mode 100644 package/angularjs/angularjs.mk
+On Mon, May 25, 2015 at 4:56 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> Thomas Petazzoni (4):
+>   pkg-generic: add step_pkg_size global instrumentation hook
+>   support/scripts: add size-stats script
+>   Makefile: implement a size-stats target
+>   docs/manual: add section about size graphing
+>
+>  Makefile                     |   9 ++
+>  docs/manual/common-usage.txt |  39 +++++++
+>  package/pkg-generic.mk       |  32 ++++++
+>  support/scripts/size-stats   | 238 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 318 insertions(+)
+>  create mode 100755 support/scripts/size-stats
 
-Applied with some minor tweaks:
+We have been rebasing your patch on top of the latest master and since
+around July 23rd (that is when we jumped to from June) it doesn't
+appear the graph generation is working anymore. I think it has to do
+with how you are treating the filesystem skeleton now as a package but
+really don't know if that is the case or not.
 
-    [Thomas:
-      - improve the <pkg>_EXTRACT_CMDS so that the source files really end
-        up directly under $(@D) and not in a subdirectory of it. It makes
-        the rest of the package simpler and more standard.
-      - remove capital letters in the package name in Config.in, and do
-        other minor tweaks in Config.in]
+Here is the error that is happening when we try to get the package stats:
 
-Thanks!
+umask 0022 && make -C /tmp/linux/buildroot
+O=/tmp/linux/build/test-build/. size-stats
+usage: size-stats [-h] --builddir BUILDDIR [--graph GRAPH]
+                  [--file-size-csv FILE_SIZE_CSV]
+                  [--package-size-csv PKG_SIZE_CSV] --skeleton-path
+                  SKELETON_PATH
+size-stats: error: argument --skeleton-path/-s: expected one argument
+make[4]: *** [size-stats] Error 2
+make[3]: *** [_all] Error 2
+Failed to graph the package size statistics
 
-Thomas
+Thanks,
+-Ryan
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
