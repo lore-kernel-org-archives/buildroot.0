@@ -1,42 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Jul 2015 13:11:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 7772] libxml-parser-perl build failure: missing
- dependency ExtUtils/MakeMaker
-In-Reply-To: <bug-7772-163@https.bugs.busybox.net/>
-References: <bug-7772-163@https.bugs.busybox.net/>
-Message-ID: <20150730131104.A078E81E90@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 30 Jul 2015 13:14:16 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-07-29
+In-Reply-To: <1438247167.5763.13.camel@synopsys.com>
+References: <20150730063016.85822101F90@stock.ovh.net>
+ <1438247167.5763.13.camel@synopsys.com>
+Message-ID: <1438262056.5763.48.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7772
+Hi Thomas,
 
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-07-30 13:11:04 UTC ---
-(In reply to comment #5)
-> (In reply to comment #4)
-> > Vicente, do you have a readily available chroot in which we can run Buildroot
-> > to reproduce this problem?
+On Thu, 2015-07-30 at 12:06 +0300, Alexey Brodkin wrote:
+> Hi Thomas,
+> >          arc |                    sudo-1.8.13 | NOK | 
+> > 
+> > http://autobuild.buildroot.net/results/1b77539d08ffd950317a58cef8e2a4ce624c4710/
+> ------------------------->8--------------------
+> /home/test/autobuild/instance-0/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getenv.os): In
+> function `__GI_getenv':
+> getenv.c:(.text+0x0): multiple definition of `getenv'
+> env_hooks.o:env_hooks.c:(.text+0x11c): first defined here
+> ------------------------->8--------------------
 > 
-> No, I don't. But you can just remove perl-MakeMaker from your host machine and
-> try to build Buildroot using a defconfig which includes libxml-parser-perl.
+> I believe something similar to the issue Vincente fixed for Bash, see
+> http://git.buildroot.net/buildroot/commit/?id=9623ff651f83a350819719f10705552da9793205
+> 
+> Will look into that and prepare a patch.
 
-Well, on Debian/Ubuntu, perl-MakeMaker is part of the perl-modules package. If
-you try to remove it, it also removes perl, and Buildroot won't run without
-perl:
+Looks like there's no simple way to resolve this issue with static building on "sudo" against uClibc.
+There's no autoconf option to disable internal implementation of "getenv" and somehow "sudo" could be
+built as a static binary on my x86 host (obviously with glibc).
 
-root at build:/# apt-get remove perl-modules
-[...]
-The following packages will be REMOVED:
-  cvs git git-core liberror-perl libfile-copy-recursive-perl perl perl-modules
-sgml-base update-inetd xml-core
+I'd say that this has something to do with uClibc (how it differs in implementation of "getenv")
+compared to glibc but this is out of my scope of knowledge.
 
-So it's basically a scenario that isn't possible.
+Probably Waldemar might be interested in that issue as well.
 
-On which system do you have this problem?
+And as a dirty hack we may disable "sudo" in static builds but I don't like this approach personally
+knowing that could be done with another libc implementation.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+And indeed this is arch-independent problem with uClibc.
+
+-Alexey
