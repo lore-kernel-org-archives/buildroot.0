@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 15:29:11 +0200
-Subject: [Buildroot] [PATCH 37/47] package/kodi-screensaver-asteroids:
- new package
-In-Reply-To: <1437597069-6448-38-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 30 Jul 2015 15:30:18 +0200
+Subject: [Buildroot] [PATCH 47/47]
+ package/kodi-visualisation-waveforhue: new package
+In-Reply-To: <1437597069-6448-48-git-send-email-bernd.kuhls@t-online.de>
 References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <1437597069-6448-38-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150730152911.402c72db@free-electrons.com>
+ <1437597069-6448-48-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150730153018.0790acfe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,23 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Wed, 22 Jul 2015 22:30:59 +0200, Bernd Kuhls wrote:
+On Wed, 22 Jul 2015 22:31:09 +0200, Bernd Kuhls wrote:
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/kodi-screensaver-asteroids/Config.in          |    6 ++++++
->  .../kodi-screensaver-asteroids.mk                     |   17 +++++++++++++++++
->  package/kodi/Config.in                                |    4 ++++
->  3 files changed, 27 insertions(+)
->  create mode 100644 package/kodi-screensaver-asteroids/Config.in
->  create mode 100644 package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+>  package/kodi-visualisation-waveforhue/Config.in       |    6 ++++++
+>  .../kodi-visualisation-waveforhue.mk                  |   17 +++++++++++++++++
+>  package/kodi/Config.in                                |    1 +
+>  3 files changed, 24 insertions(+)
+>  create mode 100644 package/kodi-visualisation-waveforhue/Config.in
+>  create mode 100644 package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
 
-For me, none of the screensaver packages worked with OpenGL ES, since
-they all include <GL/gl.h>. You have added a dependency on GL for the
-kodi-screensaver-crystalmorph package, but all other screensaver needed
-the same dependency, so I added it.
+This package was not building in OpenGL ES / EGL mode due to an invalid
+header path in src/Main_gles.cpp. I've fixed that by the patch
+0001-Adapt-xbmc_vis_dll.h-header-path.patch. If you could submit it
+upstream, it would be great.
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
