@@ -1,322 +1,132 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 29 Jul 2015 15:37:01 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/golang: new package
-Message-ID: <1438209421-4625-1-git-send-email-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2015 08:30:16 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-07-29
+Message-ID: <20150730063016.4CA9B101F42@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds golang, the Go compiler-and-interpreter.
+Build statistics for 2015-07-29
+===============================
 
-We're adding a host package to get the golang cross-compiler, and a
-target package to get the golang interpreter on the target.
+        success : 223
+       failures : 63 
+       timeouts : 4  
+          TOTAL : 290
 
-It is to be noted that golang's buildsystem is going at great length to
-not do anything like any other buildsystem, and is full of little
-tricks.
+Classification of failures by reason
+====================================
 
-First-off, even though it generates code for the target, the host-variant
-does not need the toolchain; it has its own built-in code generator. Yet,
-building the target variant, the toolchain is indeed required.
+               libpthsem-2.0.8 | 7 
+       host-erlang-rebar-2.5.1 | 4 
+                    quota-4.01 | 4 
+                  midori-0.4.6 | 4 
+libsigrok-fe473123ba836445d... | 4 
+             expect-2014-05-02 | 4 
+      make: *** [_all] Error 2 | 3 
+                  mono-4.0.2.5 | 3 
+                 libebml-1.3.1 | 3 
+                busybox-1.23.2 | 2 
+                   audit-2.4.3 | 2 
+                     rpm-5.2.0 | 2 
+             libselinux-2.1.13 | 2 
+                directfb-1.6.3 | 1 
+                      atf-0.21 | 1 
+                  bonnie-1.03e | 1 
+                  ffmpeg-2.7.2 | 1 
+                 mesa3d-10.6.2 | 1 
+                    libev-4.19 | 1 
+                  cppcms-1.0.4 | 1 
+                 webkit-1.11.5 | 1 
+           aircrack-ng-1.2-rc1 | 1 
+                   sudo-1.8.13 | 1 
+filemq-482797b8aa30fcc9ea13... | 1 
+               libcap-ng-0.7.4 | 1 
+               linux-pam-1.1.8 | 1 
+                   bdwgc-7.4.2 | 1 
+                 lrzsz-0.12.20 | 1 
+                 clapack-3.2.1 | 1 
+                  boost-1.58.0 | 1 
+libatomic_ops-libatomic_ops... | 1 
+                     ola-0.9.6 | 1 
+           qt5multimedia-5.5.0 | 1 
+                 empty-0.6.19b | 1 
+                minidlna-1.1.4 | 1 
+                yaml-cpp-0.5.2 | 1 
 
-Second, it misdetects cross-compilation: it considers that if the target
-CPU and the build CPU are the same, then this is not cross-compilation.
-Of course, this is completely stupid and wrong. So, we need to patch it
-to override its insane heuristic.
+Detail of failures
+===================
 
-Third, even so, when the target CPU is the same as the build CPU, the
-resulting binaries will be dynamically linked, otherwise, they are
-statically linked. We can't even force it one way or the other...
-Instead, we mark it as requiring dynamic libraries, and let the golang
-ill buildsystem decide whether to do static or dynamic link; we can do
-so because any sane toolchain will always have the static variants of
-the libc and libpthread, which is all that golang requires anyway.
+      x86_64 |            aircrack-ng-1.2-rc1 | NOK | http://autobuild.buildroot.net/results/4fa865fcafc63482ada0f745464b64b454ed9978/
+         arc |                       atf-0.21 | NOK | http://autobuild.buildroot.net/results/1a5861da3fb6628c872f3635118bd1f5c7707893/
+         arm |                    audit-2.4.3 | NOK | http://autobuild.buildroot.net/results/ad1b15e58a83c41b92c5b66ae5b90ce189161182/
+         arm |                    audit-2.4.3 | NOK | http://autobuild.buildroot.net/results/190306767b0e86c839f48d429b51414921abb9b7/
+         arm |                    bdwgc-7.4.2 | NOK | http://autobuild.buildroot.net/results/fcdeceb59ba838ac005e5dcc285b5b21ced70deb/
+         arc |                   bonnie-1.03e | NOK | http://autobuild.buildroot.net/results/c2af14c4096424e41449c094666ffa0262f4e9f2/
+         arc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/ea427b22dc541aafcefae09710d9b30c0fa5fae2/
+       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/4f2ade79fe1e7399b1ac575e4459aa8037b12616/
+       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/411f93baf104a3b799dbf19aca45091fd822674f/
+      x86_64 |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/4288d0184e86e3acaeae3e1fcef0013c09c038f8/
+         arm |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/d87c69bdd0a9c8fea3654efced8d1d17dc65e371/
+         arm |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/1cba5b5f5796f0ad62721f3e45d812989356373d/
+         arm |                  empty-0.6.19b | NOK | http://autobuild.buildroot.net/results/ecc140527f9a5b5882d35776f0533bae60a371d4/
+        i686 |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/677fb7134ec4fb5d184e428b139fd39cf03b5144/
+       nios2 |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/794441731ba4d95d2e3ffdcf339d3e94747e65b8/
+    mips64el |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/267aaa0fc3cf3616aedc0876325d73cc93e9f261/
+    mips64el |              expect-2014-05-02 | NOK | http://autobuild.buildroot.net/results/c281d51e826d09016a10f45a7746a5a59409da6b/
+       nios2 |                   ffmpeg-2.7.2 | NOK | http://autobuild.buildroot.net/results/30bdaacd62325b56896f959586514d58ae76a6cc/
+         arm | filemq-482797b8aa30fcc9ea13... | NOK | http://autobuild.buildroot.net/results/5c591c2fe4e3e1d5c23b54a8486de741fe0e329d/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/f1d6b4e6143b508350f2791fdff8c85446aceaaa/
+      x86_64 |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/fbcf7bb071c75b19c76f8fee30688315cdb081ad/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/74e24559820d8e1ae2bd786c9f698a920ba36fc0/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/1fc9f5764dc5cb5efc36fb1e20ed8fab15b08409/
+       sparc | libatomic_ops-libatomic_ops... | NOK | http://autobuild.buildroot.net/results/7e0f5f5f863bd55b2e99102ad8279c6baf8cd32d/
+       nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/1f7ac4cfd6bb7f6a5194a78125882f3b6d42e660/
+     powerpc |                  libebml-1.3.1 | NOK | http://autobuild.buildroot.net/results/83af643e377f53feea044eb6fe1447f7ea502612/
+     powerpc |                  libebml-1.3.1 | NOK | http://autobuild.buildroot.net/results/4cc30b029b4e9a03edc66c099ac62a0604337bb3/
+     powerpc |                  libebml-1.3.1 | NOK | http://autobuild.buildroot.net/results/c4716b5458633961613e56c80ba689e14088afbc/
+       sparc |                     libev-4.19 | NOK | http://autobuild.buildroot.net/results/d8a3096ab6a6aec9ca67cf1124f041a154ed43cf/
+      x86_64 |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/14bac62e804792835a72245f77ddd6ad1c990db5/
+     powerpc |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/675df26d7b47e02bad0b22f3e1cb404076a84a91/
+         arm |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/003c4313676cc79c72a9296159ff63dce177f079/
+     powerpc |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/86bd9fd83278a5468856f4abf700df57749d8e09/
+    mips64el |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/97205d8fce8d0851208d167fc3fc7ccce40d391a/
+    mips64el |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/1764c8f7f84fc5bad950fdb41ecadff571ceb36b/
+     powerpc |                libpthsem-2.0.8 | NOK | http://autobuild.buildroot.net/results/e733cb648398df7efd7ccae6493af3c92713a9bd/
+         arc |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/9c2f09fb7b2a594c7d22fe413e8bae843e8d227c/
+         arc |              libselinux-2.1.13 | NOK | http://autobuild.buildroot.net/results/3835eeaec5b81885d5b99dcc8c0df2b30acd9ac8/
+     powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/f1fe725b2baec96fae5c613e37a938721197708e/
+     powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/b40736f2f844f7b873632f4775915f064bff4346/
+     powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/27488abdfc5d926696dd48f783747915ef7db2df/
+     powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuild.buildroot.net/results/96befa5b2dfa7db72f63ac39e3979cf5ec2ef13e/
+      x86_64 |                linux-pam-1.1.8 | NOK | http://autobuild.buildroot.net/results/01a32eb6f9c01a256ec61b6fab27a80d358f1c43/
+     powerpc |                  lrzsz-0.12.20 | NOK | http://autobuild.buildroot.net/results/1e1b55819be30450ab55adb7cf15ad1899fe71f6/
+microblazeel |       make: *** [_all] Error 2 | NOK | http://autobuild.buildroot.net/results/8d901cb07dc0a8eacaf6f70b23b4397b0b91b5ed/
+     powerpc |       make: *** [_all] Error 2 | NOK | http://autobuild.buildroot.net/results/26000c951552719165f8dfd90b6aad74f3a5266b/
+         arm |       make: *** [_all] Error 2 | NOK | http://autobuild.buildroot.net/results/e443bb5a26310be97b4e59c2a1368096a9ffedee/
+      x86_64 |                  mesa3d-10.6.2 | NOK | http://autobuild.buildroot.net/results/b516676ca0e695b3dbc3c33622d527b89a227932/
+        i686 |                   midori-0.4.6 | NOK | http://autobuild.buildroot.net/results/3581b5e9914fced0f446255ee55942281879ce6c/
+         arm |                   midori-0.4.6 | NOK | http://autobuild.buildroot.net/results/91eff951d5602982adc101c6d8ab332423b8c740/
+         arm |                   midori-0.4.6 | NOK | http://autobuild.buildroot.net/results/cb7f4dd86cbc97ad49a2812d6ea3ad7141030264/
+        i686 |                   midori-0.4.6 | NOK | http://autobuild.buildroot.net/results/572ec7a7884ec55af457acbd5184a6a13b32d9a0/
+      mipsel |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/85e53f2b30f107f486be08549ce6df08953ea499/
+       sparc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/c582d2e023906777c47f48581dfe9df886602516/
+         arm |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/31d2660f80a00e63dbf276f504345630f496f0aa/
+         arm |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/6c69153246532137c01a5aed691926d4b2f77f24/
+         arm |                      ola-0.9.6 | NOK | http://autobuild.buildroot.net/results/e3f91c833b25949b5d0ad14309bb7adb4573d6e9/
+         arm |            qt5multimedia-5.5.0 | NOK | http://autobuild.buildroot.net/results/f0819e247408438ef9a725618a3271d46365999b/
+     aarch64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/f2bed58eb841eb3b08a77ab71777b521de66a685/
+     powerpc |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/763b3c6dba73f8a594c799673a9bf2da75d0c972/
+         arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/eb1910c12c827b36953340c20fecbe8231f4cb15/
+     aarch64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/a01068fe96d1a2c57ff0b9f873bf6469781ec855/
+         sh4 |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/c59fb3093d41f53fe22693bca040f2b12d53837d/
+         sh4 |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/d8ff9c2e591c74c83b76ec3b477da4acac68707e/
+         arc |                    sudo-1.8.13 | NOK | http://autobuild.buildroot.net/results/1b77539d08ffd950317a58cef8e2a4ce624c4710/
+         arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/b5d84548fa2c14ec3aba15045f17bf04e60023f3/
+        bfin |                 yaml-cpp-0.5.2 | NOK | http://autobuild.buildroot.net/results/2ce3c6d0140696cdf73f2ad1499b779c83ad8f6e/
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-[yann.morin.1998 at free.fr:
- - add architecture-specific options
- - needs dynamic linking
- - fix tab-space indentation in patch 0003
- - fix licensing info
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
----
-
-V1: Sent from Yann
-V2: Sent from Christian
- - fixed indentation in makefile
- - removed unnecessary variable initialization
-
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/Config.in                                  |  1 +
- package/golang/0001-add-no-march-option-gccp.patch | 19 +++++
- .../0002-remove-unnecessary-march-ld-flag.patch    | 29 ++++++++
- package/golang/0003-fix-make-bash-script.patch     | 46 ++++++++++++
- package/golang/Config.in                           | 22 ++++++
- package/golang/golang.hash                         |  1 +
- package/golang/golang.mk                           | 86 ++++++++++++++++++++++
- 7 files changed, 204 insertions(+)
- create mode 100644 package/golang/0001-add-no-march-option-gccp.patch
- create mode 100644 package/golang/0002-remove-unnecessary-march-ld-flag.patch
- create mode 100644 package/golang/0003-fix-make-bash-script.patch
- create mode 100644 package/golang/Config.in
- create mode 100644 package/golang/golang.hash
- create mode 100644 package/golang/golang.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index eba74a0..2f08b99 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -460,6 +460,7 @@ menu "Erlang libraries/modules"
- 	source "package/erlang-p1-zlib/Config.in"
- endmenu
- endif
-+	source "package/golang/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
- 	source "package/jamvm/Config.in"
-diff --git a/package/golang/0001-add-no-march-option-gccp.patch b/package/golang/0001-add-no-march-option-gccp.patch
-new file mode 100644
-index 0000000..87231aa
---- /dev/null
-+++ b/package/golang/0001-add-no-march-option-gccp.patch
-@@ -0,0 +1,19 @@
-+Adds an option to not add the problematic -m parameter to GCC.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+diff -Nau golang.orig/src/cmd/cgo/gcc.go golang/src/cmd/cgo/gcc.go
-+--- golang.orig/src/cmd/cgo/gcc.go.orig	2015-07-09 15:53:55.720794139 -0700
-++++ golang/src/cmd/cgo/gcc.go	2015-07-09 17:46:43.664496374 -0700
-+@@ -736,6 +736,11 @@
-+ 
-+ // gccMachine returns the gcc -m flag to use, either "-m32", "-m64" or "-marm".
-+ func (p *Package) gccMachine() []string {
-++
-++	if os.Getenv("CGO_NO_EMULATION") == "1" {
-++		return nil
-++	}
-++
-+ 	switch goarch {
-+ 	case "amd64":
-+ 		return []string{"-m64"}
-diff --git a/package/golang/0002-remove-unnecessary-march-ld-flag.patch b/package/golang/0002-remove-unnecessary-march-ld-flag.patch
-new file mode 100644
-index 0000000..7cc20f4
---- /dev/null
-+++ b/package/golang/0002-remove-unnecessary-march-ld-flag.patch
-@@ -0,0 +1,29 @@
-+Removes defining -m parameter to LD, which is unnecessary in buildroot.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+
-+diff -Nau golang.orig/src/cmd/ld/lib.c golang/src/cmd/ld/lib.c
-+--- golang.orig/src/cmd/ld/lib.c.orig	2015-07-09 18:38:44.192359082 -0700
-++++ golang/src/cmd/ld/lib.c	2015-07-09 18:39:02.108358294 -0700
-+@@ -589,20 +589,7 @@
-+ 	if(extld == nil)
-+ 		extld = "gcc";
-+ 	argv[argc++] = extld;
-+-	switch(thechar){
-+-	case '8':
-+-		argv[argc++] = "-m32";
-+-		break;
-+-	case '6':
-+-		argv[argc++] = "-m64";
-+-		break;
-+-	case '5':
-+-		argv[argc++] = "-marm";
-+-		break;
-+-	}
-+-	if(!debug['s'] && !debug_s) {
-+-		argv[argc++] = "-gdwarf-2"; 
-+-	} else {
-++	if(debug['s'] || debug_s) {
-+ 		argv[argc++] = "-s";
-+ 	}
-+ 	if(HEADTYPE == Hdarwin)
-diff --git a/package/golang/0003-fix-make-bash-script.patch b/package/golang/0003-fix-make-bash-script.patch
-new file mode 100644
-index 0000000..c7b3587
---- /dev/null
-+++ b/package/golang/0003-fix-make-bash-script.patch
-@@ -0,0 +1,46 @@
-+make.bash: fix cross-compile when target is same arch as host
-+
-+Add options GO_NO_HOST and GO_NO_TARGET to make.bash and copy binaries
-+into specific directories depending on the target.
-+
-+Signed-off-by: Christian Stewart <christian@paral.in>
-+[yann.morin.1998 at free.fr: fix tab-space indentation issues; fix moving
-+ in the proper location using cp, not find]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN golang-1.4.2.orig/src/make.bash golang-1.4.2/src/make.bash
-+--- golang-1.4.2.orig/src/make.bash	2015-02-18 05:38:34.000000000 +0100
-++++ golang-1.4.2/src/make.bash	2015-07-28 23:00:26.375589973 +0200
-+@@ -161,18 +161,28 @@
-+ "$GOTOOLDIR"/go_bootstrap clean -i std
-+ echo
-+ 
-+-if [ "$GOHOSTARCH" != "$GOARCH" -o "$GOHOSTOS" != "$GOOS" ]; then
-++if [ -z "$GO_NO_HOST" ]; then
-+ 	echo "# Building packages and commands for host, $GOHOSTOS/$GOHOSTARCH."
-+ 	# CC_FOR_TARGET is recorded as the default compiler for the go tool. When building for the host, however,
-+ 	# use the host compiler, CC, from `cmd/dist/dist env` instead.
-+ 	CC=$CC GOOS=$GOHOSTOS GOARCH=$GOHOSTARCH \
-+ 		"$GOTOOLDIR"/go_bootstrap install -ccflags "$GO_CCFLAGS" -gcflags "$GO_GCFLAGS" -ldflags "$GO_LDFLAGS" -v std
-+ 	echo
-++
-++	# xxx buildroot patch, move to host/ subdir
-++	mkdir -p ../bin/host/
-++	find ../bin/ -maxdepth 1 -type f -exec mv -i {} ../bin/host/ \;
-+ fi
-+ 
-+-echo "# Building packages and commands for $GOOS/$GOARCH."
-+-CC=$CC_FOR_TARGET "$GOTOOLDIR"/go_bootstrap install $GO_FLAGS -ccflags "$GO_CCFLAGS" -gcflags "$GO_GCFLAGS" -ldflags "$GO_LDFLAGS" -v std
-+-echo
-++if [ -z "$GO_NO_TARGET" ]; then
-++	echo "# Building packages and commands for $GOOS/$GOARCH."
-++	CC=$CC_FOR_TARGET "$GOTOOLDIR"/go_bootstrap install $GO_FLAGS -ccflags "$GO_CCFLAGS" -gcflags "$GO_GCFLAGS" -ldflags "$GO_LDFLAGS" -v std
-++	echo
-++
-++	# xxx buildroot patch, move to target subdir
-++	mkdir -p ../bin/${GOOS}_${GOARCH}/
-++	find ../bin/ -maxdepth 1 -type f -exec mv -i {} ../bin/${GOOS}_${GOARCH}/ \;
-++fi
-+ 
-+ rm -f "$GOTOOLDIR"/go_bootstrap
-+ 
-diff --git a/package/golang/Config.in b/package/golang/Config.in
-new file mode 100644
-index 0000000..8dbd75a
---- /dev/null
-+++ b/package/golang/Config.in
-@@ -0,0 +1,22 @@
-+comment "golang needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_PACKAGE_GOLANG_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+
-+# golang only supports x86, x86_64 and ARM (LE) targets.
-+# For ARM, armv5 or above is required.
-+config BR2_PACKAGE_GOLANG_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_USE_MMU
-+	depends on BR2_i386 || BR2_x86_64 || BR2_arm
-+	depends on !BR2_ARM_CPU_ARMV4
-+
-+config BR2_PACKAGE_GOLANG
-+	bool "golang"
-+	depends on BR2_PACKAGE_GOLANG_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Go compiler and cli tool.
-+
-+	  http://golang.org/
-diff --git a/package/golang/golang.hash b/package/golang/golang.hash
-new file mode 100644
-index 0000000..146e39c
---- /dev/null
-+++ b/package/golang/golang.hash
-@@ -0,0 +1 @@
-+sha1 460caac03379f746c473814a65223397e9c9a2f6  go1.4.2.src.tar.gz
-diff --git a/package/golang/golang.mk b/package/golang/golang.mk
-new file mode 100644
-index 0000000..03ace57
---- /dev/null
-+++ b/package/golang/golang.mk
-@@ -0,0 +1,86 @@
-+################################################################################
-+#
-+# GOLANG
-+#
-+################################################################################
-+
-+GOLANG_VERSION = 1.4.2
-+GOLANG_SOURCE = go$(GOLANG_VERSION).src.tar.gz
-+GOLANG_SITE = https://storage.googleapis.com/golang
-+GOLANG_LICENSE = BSD-3c
-+GOLANG_LICENSE_FILES = LICENSE
-+
-+GOLANG = $(HOST_DIR)/usr/bin/go
-+GOLANGFMT = $(HOST_DIR)/usr/bin/gofmt
-+
-+GOLANG_ENV = \
-+	CC_FOR_TARGET="$(TARGET_CC)" \
-+	LD_FOR_TARGET="$(TARGET_LD)" \
-+	GOOS=linux
-+
-+ifeq ($(BR2_i386),y)
-+GOLANG_ARCH = 386
-+ifeq ($(BR2_X86_CPU_HAS_SSE2),y)
-+GOLANG_ENV += GO386=sse2
-+else
-+GOLANG_ENV += GO386=387
-+endif
-+endif # i386
-+
-+ifeq ($(BR2_x86_64),y)
-+GOLANG_ARCH = amd64
-+endif # x86_64
-+
-+# For ARM, the selection of the instruciton set is a bit unusual,
-+# and is decided on whether the CPU has an FPU, and which one.
-+ifeq ($(BR2_arm),y)
-+GOLANG_ARCH = arm
-+ifeq ($(BR2_ARM_CPU_HAS_VFPV3),y)
-+GOLANG_ENV += GOARM=7
-+else ifeq ($(BR2_ARM_CPU_HAS_VFPV2),y)
-+GOLANG_ENV += GOARM=6
-+else
-+GOLANG_ENV += GOARM=5
-+endif
-+endif # arm
-+
-+GOLANG_ENV += GOARCH=$(GOLANG_ARCH)
-+
-+define GOLANG_BUILD_CMDS
-+	cd $(@D)/src/; \
-+		$(GOLANG_ENV) GOROOT_FINAL="/usr/lib/go" GO_NO_HOST=1 \
-+		./make.bash --no-banner
-+endef
-+
-+# We must install both the src/ and include/ subdirs because they
-+# contain the go "runtime" and some additional binaries.
-+define GOLANG_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/linux_$(GOLANG_ARCH)/go $(TARGET_DIR)/usr/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/linux_$(GOLANG_ARCH)/gofmt $(TARGET_DIR)/usr/bin/gofmt
-+	rm -rf $(TARGET_DIR)/usr/lib/go/
-+	mkdir -p $(TARGET_DIR)/usr/lib/go/
-+	cp -a $(@D)/src $(TARGET_DIR)/usr/lib/go/
-+	cp -a $(@D)/include $(TARGET_DIR)/usr/lib/go/
-+	cp -a $(@D)/pkg $(TARGET_DIR)/usr/lib/go/
-+endef
-+
-+define HOST_GOLANG_BUILD_CMDS
-+	cd $(@D)/src/ ; \
-+		$(GOLANG_ENV) GOROOT_FINAL="$(HOST_DIR)/usr/lib/go" GO_NO_TARGET=1 \
-+		./make.bash --no-banner
-+endef
-+
-+# We must install the src/ include/ and pkg/ subdirs because they
-+# contain the go "runtime" and some additional binaries.
-+define HOST_GOLANG_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/host/go $(HOST_DIR)/usr/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/host/gofmt $(HOST_DIR)/usr/bin/gofmt
-+	rm -rf $(HOST_DIR)/usr/lib/go/
-+	mkdir -p $(HOST_DIR)/usr/lib/go/
-+	cp -a $(@D)/src $(HOST_DIR)/usr/lib/go/
-+	cp -a $(@D)/include $(HOST_DIR)/usr/lib/go/
-+	cp -a $(@D)/pkg $(HOST_DIR)/usr/lib/go/
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
 -- 
-2.1.4
+http://autobuild.buildroot.net
