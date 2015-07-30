@@ -1,40 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Jul 2015 18:31:55 +0200
-Subject: [Buildroot] [PATCH] package/golang: new package
-In-Reply-To: <CA+h8R2pvaeQ4K7szq+Dr7dYT1cjGTW3QhB4jRNhKj6NY7P289w@mail.gmail.com>
-References: <1438202101-5106-1-git-send-email-yann.morin.1998@free.fr>
- <20150729231228.0a59fcde@free-electrons.com>
- <20150729212003.GB3722@free.fr>
- <20150729233725.60512298@free-electrons.com>
- <CA+h8R2pvaeQ4K7szq+Dr7dYT1cjGTW3QhB4jRNhKj6NY7P289w@mail.gmail.com>
-Message-ID: <20150730163154.GA3744@free.fr>
+Date: Thu, 30 Jul 2015 18:37:53 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/golang: new package
+In-Reply-To: <1438209421-4625-1-git-send-email-christian@paral.in>
+References: <1438209421-4625-1-git-send-email-christian@paral.in>
+Message-ID: <20150730163753.GB3744@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, all,
+Christian, All,
 
-On 2015-07-29 22:28 +0000, Christian Stewart spake thusly:
-> > We're not doing this for any other package, so why should we be doing
-> > this for golang?
-> >
-> 
-> Because it's very critical that Go have the exact same src, include, and
-> pkg tree in that location. If we don't ensure any previous files have been
-> cleared out it WILL cause major problems down the line.
+On 2015-07-29 15:37 -0700, Christian Stewart spake thusly:
+> This patch adds golang, the Go compiler-and-interpreter.
 
-But Thomas is right: we're not doing it for other packages, even if they
-have the same requirements.
+Please, do not resend so fast.
 
-In fact, Buildroot only guarantees everything is perfect when building
-from scratch. Any cycle of build-modify-build has never been guaranteed
-to produce the same results as just the last build alone would give.
+After a review, it is usually good to wait a bit, to give others a
+chance to review, too.
 
-So, I concur with Thomas: we need not ensre cleanliness, and should
-assume that directory is clean. Hence there's no reason to remove it
-beforehand.
+Re-sending too fast means others would review the previous iteration
+(bad) but that you would also have a lot of re-spin to do. Also,
+potential reviewr (and committer) may get wary of this many respins.
+
+I know you are probably eager to see that merged soon, but re-sending
+too fast is not the best way to make that happen.
+
+Unless the committer asks for a simple fixup and a prompt respin, of
+course. Otherwise, let it settle for a day...
+
+Beside, in that case, your respin is not correct, because it does not
+address the rm-rf that Thomas pointed out, so I'll have to repin my
+version...
+
+Don't get me wrong: I too am eager to see it merged, and we all do
+appreciate your work on this! :-)
 
 Regards,
 Yann E. MORIN.
