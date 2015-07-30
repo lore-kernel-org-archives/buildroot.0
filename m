@@ -1,27 +1,38 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 30 Jul 2015 20:02:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cc-tool: fix gcc 5 issue
-In-Reply-To: <20150728231034.61147736@free-electrons.com>
-References: <1438098186-31099-1-git-send-email-joerg.krause@embedded.rocks>
- <20150728231034.61147736@free-electrons.com>
-Message-ID: <1438279377.4394.3.camel@embedded.rocks>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 30 Jul 2015 20:39:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/yaml-cpp: disable testing and parse
+	tools
+Message-ID: <1438281586-18052-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+The gmock testing framework uses fork() and therefor yaml-cpp fails to build
+for a MMU-less targets. Since we are only interested in building the yaml-cpp
+library we disable the testing and parse tools (command line tools).
 
-On Di, 2015-07-28 at 23:10 +0200, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> Applied, thanks. Did you submit the patch to upstream cc-tool?
+Fixes:
+http://autobuild.buildroot.net/results/2ce/2ce3c6d0140696cdf73f2ad1499b779c83ad8f6e/
 
-No, I didn't. The package is only available via sourceforge and it
-looks as cc-tool is not maintained anymore. There are one or two
-mirrors on github, but they are also not maintained. I can create a
-ticket on sourceforge, but the site is currently not available.
+Cc: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/yaml-cpp/yaml-cpp.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Best regards
-J?rg Krause
+diff --git a/package/yaml-cpp/yaml-cpp.mk b/package/yaml-cpp/yaml-cpp.mk
+index cea54a9..6a01b02 100644
+--- a/package/yaml-cpp/yaml-cpp.mk
++++ b/package/yaml-cpp/yaml-cpp.mk
+@@ -12,4 +12,7 @@ YAML_CPP_LICENSE_FILES = license.txt
+ 
+ YAML_CPP_DEPENDENCIES = boost
+ 
++# Disable testing and parse tools
++YAML_CPP_CONF_OPTS += -DYAML_CPP_BUILD_TOOLS=OFF
++
+ $(eval $(cmake-package))
+-- 
+2.5.0
