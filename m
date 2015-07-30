@@ -1,61 +1,38 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 30 Jul 2015 16:49:27 +0200
-Subject: [Buildroot] [PATCH] package/eudev: add libselinux dependency
-In-Reply-To: <20150730154833.416d5073@free-electrons.com>
-References: <1438262864-6073-1-git-send-email-romain.naour@openwide.fr>
- <20150730154833.416d5073@free-electrons.com>
-Message-ID: <55BA3977.80905@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 30 Jul 2015 16:50:52 +0200
+Subject: [Buildroot] [PATCH 1/2] fs/iso9660: fix hybrid image support
+In-Reply-To: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+References: <1438267651-16818-1-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <20150730165052.1eea5a29@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+Hello,
 
-Le 30/07/2015 15:48, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Thu, 30 Jul 2015 15:27:44 +0200, Romain Naour wrote:
->> Disable libselinux support with musl toolchains which doesn't have
->> struct mallinfo.
->>
->> selinux-util.c: In function ?mac_selinux_init?:
->> selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
->>          struct mallinfo before_mallinfo, after_mallinfo;
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> 
-> Thanks for the patch, however I am not sure this is really the right
-> fix. mallinfo() is only used to display some statistics about the heap
-> consumption of the SELinux database, so it could be disabled.
-> 
-> So the right fix would be to add a configure.ac check for mallinfo(),
-> and if available, use it, and if not, remove this useless debug message.
-> 
-> Like in configure.ac:
-> 
-> AC_CHECK_FUNCS([mallinfo])
-> 
-> and then use #ifdef HAVE_MALLINFO in the code.
+On Thu, 30 Jul 2015 16:47:30 +0200, No? Rubinstein wrote:
 
-Ok, I'll try that.
-It's true that my patch is a bit rude... ;-)
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index d836194..9100547 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -146,15 +146,14 @@ endif # ROOTFS_ISO9660_USE_INITRD
+>  define ROOTFS_ISO9660_CMD
+>  	$(HOST_DIR)/usr/bin/genisoimage -J -R -b $(ROOTFS_ISO9660_BOOT_IMAGE) \
+>  		-no-emul-boot -boot-load-size 4 -boot-info-table \
+> -		-o $@ $(ROOTFS_ISO9660_TARGET_DIR)
+> +		-o $@ $(ROOTFS_ISO9660_TARGET_DIR) \
+> +	$(if $(ROOTFS_ISO9660_GEN_HYBRID), && $(ROOTFS_ISO9660_GEN_HYBRID))
 
-> 
-> Now the question is whether something like that would be accepted
-> upstream. If eudev accepts its own patches that are not in systemd,
-> then I'd say yes. If however they are really only a copy of the udev
-> sources from systemd, we would have to get this upstream in systemd,
-> which has no chance to happen.
+Can you resubmit with the && thing ? It is not needed: make will
+abort automatically if genisoimage fails.
 
-I don't know, I'm adding Anthony G. Basile in Cc.
-Anthony, what do you think about Thomas's proposal ?
+Thanks,
 
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
