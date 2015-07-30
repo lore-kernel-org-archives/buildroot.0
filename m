@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 23:27:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/btrfs-progs: fix build
- issues under musl
-In-Reply-To: <1438291414-22590-1-git-send-email-brendanheading@gmail.com>
-References: <1438291414-22590-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150730232705.2ff163f6@free-electrons.com>
+Date: Thu, 30 Jul 2015 23:27:38 +0200
+Subject: [Buildroot] [git commit] package/eudev: add libselinux dependency
+Message-ID: <20150730212741.2692D81E89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=4feec7405f2284e1bb468751e663574c28db4d1d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Jul 2015 22:23:34 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/b97/b97f1e9cd459da96e3e1680bb7c43d8103ab12c2/build-end.log
-> 
-> Patches by Thomas to refactor detection of __always_inline and backtrace
-> detection. Also added #include <limits.h> for PATH_MAX.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
-> v2 - remove unneeded HAVE_ALWAYS_INLINE section.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/eudev/eudev.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 87bce3e..f587acd 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -44,6 +44,13 @@ else
+ EUDEV_CONF_OPTS += --disable-gudev
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++EUDEV_CONF_OPTS += --enable-selinux
++EUDEV_DEPENDENCIES += libselinux
++else
++EUDEV_CONF_OPTS += --disable-selinux
++endif
++
+ define EUDEV_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+ endef
