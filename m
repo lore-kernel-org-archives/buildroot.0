@@ -1,68 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 10:23:21 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-spectrum: new
-	package
-Message-ID: <20150730132259.8CE027FFC3@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:37:45 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: new package
+Message-ID: <20150730132258.D81BB7FFC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9877d90092dbadf4d868e3cd01e5346b9a75bc67
+commit: http://git.buildroot.net/buildroot/commit/?id=eaf250c17628ef7c4c52ca0f67a2a93f4d0d9d3a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Thomas:
+   - use a shorter file as the license file, client.h instead of client.cpp
    - do not pass -DCMAKE_MODULE_PATH, no longer needed.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-visualisation-spectrum/Config.in      |    6 ++++++
- .../kodi-visualisation-spectrum.mk                 |   13 +++++++++++++
- package/kodi/Config.in                             |    1 +
- 3 files changed, 20 insertions(+), 0 deletions(-)
+ Config.in.legacy                           |    1 +
+ package/kodi-pvr-vuplus/Config.in          |    7 +++++++
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk |   13 +++++++++++++
+ package/kodi/Config.in                     |    1 +
+ 4 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-visualisation-spectrum/Config.in b/package/kodi-visualisation-spectrum/Config.in
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 397b3ab..9fd211e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -124,6 +124,7 @@ config BR2_PACKAGE_KODI_PVR_ADDONS
+ 	select BR2_PACKAGE_KODI_PVR_STALKER
+ 	select BR2_PACKAGE_KODI_PVR_VBOX
+ 	select BR2_PACKAGE_KODI_PVR_VDR_VNSI
++	select BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	help
+ 	  Kodi PVR addon was split into seperate modules
+ 
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
 new file mode 100644
-index 0000000..3b2b0a2
+index 0000000..a56c4ed
 --- /dev/null
-+++ b/package/kodi-visualisation-spectrum/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_SPECTRUM
-+	bool "kodi-visualisation-spectrum"
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_PVR_VUPLUS
++	bool "kodi-pvr-vuplus"
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Spectrum visualiser for Kodi
++	  VuPlus PVR client addon for Kodi
 +
-+	  https://github.com/notspiff/visualization.spectrum
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++	  https://github.com/kodi-pvr/pvr.vuplus
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 new file mode 100644
-index 0000000..79f03c8
+index 0000000..82569fd
 --- /dev/null
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-visualisation-spectrum
++# kodi-pvr-vuplus
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_SPECTRUM_VERSION = aae1960b5bc14e50914205e2dabcb51077690a64
-+KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
-+KODI_VISUALISATION_SPECTRUM_LICENSE = GPLv2+
-+KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
-+KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = kodi
++KODI_PVR_VUPLUS_VERSION = 96115e9b8898ed6bde36874b43b2fba531cfef5c
++KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
++KODI_PVR_VUPLUS_LICENSE = GPLv2+
++KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
++KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index edc471b..73ec88e 100644
+index 951532d..79e7e60 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -298,6 +298,7 @@ endmenu
- 
- menu "Visualisations"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
-+	source "package/kodi-visualisation-spectrum/Config.in"
- 	source "package/kodi-visualisation-waveform/Config.in"
+@@ -272,6 +272,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-stalker/Config.in"
+ 	source "package/kodi-pvr-vbox/Config.in"
+ 	source "package/kodi-pvr-vdr-vnsi/Config.in"
++	source "package/kodi-pvr-vuplus/Config.in"
  endmenu
  
+ endif # BR2_PACKAGE_KODI
