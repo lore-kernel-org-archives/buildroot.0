@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:49:18 +0200
+Date: Thu, 30 Jul 2015 09:49:19 +0200
 Subject: [Buildroot] [git commit branch/next]
-	package/kodi-screensaver-greynetic: new package
-Message-ID: <20150808105651.9DD8D81904@busybox.osuosl.org>
+	package/kodi-screensaver-pingpong: new package
+Message-ID: <20150808105651.A963481904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50099a6bcd9e849ef89c264b7a54e7109356fae0
+commit: http://git.buildroot.net/buildroot/commit/?id=7498d74b1427c54e54be62d2d1f56b41d0d93da6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 [Thomas:
@@ -18,55 +18,55 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-screensaver-greynetic/Config.in       |   10 ++++++++++
- .../kodi-screensaver-greynetic.mk                  |   13 +++++++++++++
+ package/kodi-screensaver-pingpong/Config.in        |   10 ++++++++++
+ .../kodi-screensaver-pingpong.mk                   |   13 +++++++++++++
  package/kodi/Config.in                             |    1 +
  3 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
 new file mode 100644
-index 0000000..14cab18
+index 0000000..4ccf4c4
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/Config.in
++++ b/package/kodi-screensaver-pingpong/Config.in
 @@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
-+	bool "kodi-screensaver-greynetic"
++config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
++	bool "kodi-screensaver-pingpong"
 +	depends on BR2_PACKAGE_KODI_GL
 +	help
-+	  Greynetic screensaver for Kodi
++	  Ping-pong screensaver for Kodi
 +
-+	  https://github.com/notspiff/screensaver.greynetic
++	  https://github.com/notspiff/screensaver.pingpong
 +
 +comment "kodi-screensaver-greynetic needs an OpenGL backend"
 +	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 new file mode 100644
-index 0000000..0b16e32
+index 0000000..324fe3a
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-screensaver-greynetic
++# kodi-screensaver-pingpong
 +#
 +################################################################################
 +
-+KODI_SCREENSAVER_GREYNETIC_VERSION = 5f370b0f1a51e57719f605344e94824105316c17
-+KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
-+KODI_SCREENSAVER_GREYNETIC_LICENSE = GPLv2+
-+KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
-+KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
++KODI_SCREENSAVER_PINGPONG_VERSION = 00fd2a7c70d581ada1bc89829c6870530b4c65b9
++KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
++KODI_SCREENSAVER_PINGPONG_LICENSE = GPLv2+
++KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
++KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 58c8718..4fb1261 100644
+index 4fb1261..54f4d02 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -290,6 +290,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
+@@ -291,6 +291,7 @@ menu "Screensavers"
  	source "package/kodi-screensaver-biogenesis/Config.in"
  	source "package/kodi-screensaver-crystalmorph/Config.in"
-+	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
++	source "package/kodi-screensaver-pingpong/Config.in"
  endmenu
  
  endif # BR2_PACKAGE_KODI
