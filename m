@@ -1,15 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Jul 2015 09:37:45 +0200
-Subject: [Buildroot] [git commit] package/kodi-audiodecoder-modplug: new
-	package
-Message-ID: <20150730132258.EADE07FFC3@busybox.osuosl.org>
+Date: Thu, 30 Jul 2015 09:49:19 +0200
+Subject: [Buildroot] [git commit] package/kodi-screensaver-pyro: new package
+Message-ID: <20150730132259.620FF7FFC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d695a9613f61fb1f3f557f3c28f2f6ba7309d7d
+commit: http://git.buildroot.net/buildroot/commit/?id=95c854c3027359ddb01f63d2e675224e353fca1d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 [Thomas:
@@ -18,56 +17,55 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-audiodecoder-modplug/Config.in        |    8 ++++++++
- .../kodi-audiodecoder-modplug.mk                   |   13 +++++++++++++
- package/kodi/Config.in                             |    4 ++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ package/kodi-screensaver-pyro/Config.in            |   10 ++++++++++
+ .../kodi-screensaver-pyro/kodi-screensaver-pyro.mk |   13 +++++++++++++
+ package/kodi/Config.in                             |    1 +
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-modplug/Config.in b/package/kodi-audiodecoder-modplug/Config.in
+diff --git a/package/kodi-screensaver-pyro/Config.in b/package/kodi-screensaver-pyro/Config.in
 new file mode 100644
-index 0000000..0269973
+index 0000000..45432c4
 --- /dev/null
-+++ b/package/kodi-audiodecoder-modplug/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG
-+	bool "kodi-audiodecoder-modplug"
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBMODPLUG
++++ b/package/kodi-screensaver-pyro/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_PYRO
++	bool "kodi-screensaver-pyro"
++	depends on BR2_PACKAGE_KODI_GL
 +	help
-+	  Modplug decoder addon for Kodi
++	  Pyro screensaver for Kodi
 +
-+	  https://github.com/notspiff/audiodecoder.modplug
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++	  https://github.com/notspiff/screensaver.pyro
++
++comment "kodi-screensaver-pyro needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
 new file mode 100644
-index 0000000..004d89f
+index 0000000..e4c2b96
 --- /dev/null
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-audiodecoder-modplug
++# kodi-screensaver-pyro
 +#
 +################################################################################
 +
-+KODI_AUDIODECODER_MODPLUG_VERSION = 5ae7349f39a8e5552c86dfdad339fb18c7e52550
-+KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
-+KODI_AUDIODECODER_MODPLUG_LICENSE = GPLv2+
-+KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
-+KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi-platform libmodplug
++KODI_SCREENSAVER_PYRO_VERSION = 7551f3f4b6414c40c1c4170c750b9f45dd995261
++KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
++KODI_SCREENSAVER_PYRO_LICENSE = GPLv2+
++KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
++KODI_SCREENSAVER_PYRO_DEPENDENCIES = kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 6b1b9f3..68882a9 100644
+index 54f4d02..1ef8d6c 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -249,6 +249,10 @@ config BR2_PACKAGE_KODI_WAVPACK
- config BR2_PACKAGE_KODI_OPTICALDRIVE
- 	bool
+@@ -292,6 +292,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
++	source "package/kodi-screensaver-pyro/Config.in"
+ endmenu
  
-+menu "Audio decoder addons"
-+	source "package/kodi-audiodecoder-modplug/Config.in"
-+endmenu
-+
- menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-flac/Config.in"
- 	source "package/kodi-audioencoder-lame/Config.in"
+ endif # BR2_PACKAGE_KODI
