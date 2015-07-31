@@ -1,40 +1,49 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Fri, 31 Jul 2015 17:03:13 +0100
-Subject: [Buildroot] SPARC atomic fun (and libtirpc)
-Message-ID: <CA+BsyQ5NnVF1a3vigL7UrCcCsDpsaKtcrE1ERCQ5W5ks+8cyOQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 31 Jul 2015 18:59:05 +0200
+Subject: [Buildroot] [PATCH 1/3 v2] package/xserver: commonalise
+	dependency on libdrm
+In-Reply-To: <20150731075737.01ad8236@free-electrons.com>
+References: <cover.1438297123.git.yann.morin.1998@free.fr>
+ <de75aa7f5d075edcaa2c25e4d021bd5b105e2bb1.1438297123.git.yann.morin.1998@free.fr>
+ <20150731075737.01ad8236@free-electrons.com>
+Message-ID: <20150731165905.GA3751@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo, Thomas,
+Thomas, All,
 
-Back to the old atomic issue again. I've found that libtirpc uses
-__sync_add_and_fetch without checking whether or not it is supported
-in the architecture (it has done so since 2011). This in turn breaks 9
-other packages on SPARCv8 - some of them important, especially
-busybox, but also rpcbind, quota, xinetd, nfsutils and so on. In
-addition there are other packages expecting the atomic intrinsics to
-be present.
+On 2015-07-31 07:57 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 31 Jul 2015 00:59:05 +0200, Yann E. MORIN wrote:
+> >  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+> > -XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
+> > -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
+> > +XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
+> > +XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
+> > +XSERVER_XORG_SERVER_NEEDS_LIBDRM = y
+> 
+> Hum, didn't we say that this should be a hidden Config.in boolean?
 
-I think we need to look at the suggestion you made last week Thomas,
-to add intelligence in configure.ac and push this to the upstream
-packages. In the case of libtirpc I guess we should be able to detect
-the absence of the intrinsics and, based on that, add -latomic to the
-LDFLAGS which are exported by the pkgconfig .pc file.
+Yes, you suggested so; I said yes; I tried; I said no... ;-)
+    http://lists.busybox.net/pipermail/buildroot/2015-July/135100.html
 
-I am happy enough to do this (it will probably be next week at this
-stage), but I'm curious if there is much interest in trying to keep
-SPARCv8 running. This package has been broken for 4 years and nobody
-so far has noticed it. Are there people out there using buildroot with
-this configuration; and if not should we talk about deprecating it ? I
- don't have hardware to try it on which means we need to be
-extra-careful.
+Basically, all the conditional code is in the .mk , and there's almost
+no conditional in the Config.in.
 
-That said, even if we do deprecate SPARC we still need to have a fix
-for those arches which definitely do not supply those functions.
+So, I'd like not to duplicate the decision making in Config.in and keep
+all in a single place, the .mk .
 
-regards
+That's why I did not move that to a blind kconfig option.
 
-Brendan
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
