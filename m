@@ -1,49 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 31 Jul 2015 18:59:05 +0200
-Subject: [Buildroot] [PATCH 1/3 v2] package/xserver: commonalise
-	dependency on libdrm
-In-Reply-To: <20150731075737.01ad8236@free-electrons.com>
-References: <cover.1438297123.git.yann.morin.1998@free.fr>
- <de75aa7f5d075edcaa2c25e4d021bd5b105e2bb1.1438297123.git.yann.morin.1998@free.fr>
- <20150731075737.01ad8236@free-electrons.com>
-Message-ID: <20150731165905.GA3751@free.fr>
+From: David Evans <sir.dje1812@gmail.com>
+Date: Fri, 31 Jul 2015 20:02:47 +0100
+Subject: [Buildroot] Using UBI-FS with Altera SoC devices booting out of QSPI
+Message-ID: <CAC322bhR=V11FhUBGtrsaPsq1EicmAMYQwRwYyL5vxLFbd7ziQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear BuildRoot,
 
-On 2015-07-31 07:57 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 31 Jul 2015 00:59:05 +0200, Yann E. MORIN wrote:
-> >  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> > -XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
-> > -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
-> > +XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
-> > +XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
-> > +XSERVER_XORG_SERVER_NEEDS_LIBDRM = y
-> 
-> Hum, didn't we say that this should be a hidden Config.in boolean?
+I am booting a Cyclone-V SoC from QSPI using the Uboot, Kernel and JFFS2
+images all created for me by BuildRoot.
 
-Yes, you suggested so; I said yes; I tried; I said no... ;-)
-    http://lists.busybox.net/pipermail/buildroot/2015-July/135100.html
+I would like to swap out the JFFS2 for UBI-FS, but when I do this I get a
+Kernel panic.
 
-Basically, all the conditional code is in the .mk , and there's almost
-no conditional in the Config.in.
+end Kernel panic - not syncing: VFS: Unable to mount root fs on
+unknown-block(0,0)
 
-So, I'd like not to duplicate the decision making in Config.in and keep
-all in a single place, the .mk .
-
-That's why I did not move that to a blind kconfig option.
+Does anyone have any ideas on how to get this working? I have reviewed
+documentation on Free-Electrons to no avail.
 
 Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+DJE
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150731/0aa15983/attachment.html>
