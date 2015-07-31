@@ -1,32 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 31 Jul 2015 09:45:04 +0200
-Subject: [Buildroot] GNU Coreutils Cut Bug
-In-Reply-To: <CA+h8R2rKT2qWkV7nmA+EyidOZuE+vT_8cGN8eb0wXfNqoS=U-Q@mail.gmail.com>
-References: <CA+h8R2rKT2qWkV7nmA+EyidOZuE+vT_8cGN8eb0wXfNqoS=U-Q@mail.gmail.com>
-Message-ID: <20150731094504.01ea3893@free-electrons.com>
+From: =?UTF-8?q?No=C3=A9=20Rubinstein?= <noe.rubinstein@gmail.com>
+Date: Fri, 31 Jul 2015 10:23:20 +0200
+Subject: [Buildroot] [PATCH] fs/common: add <fs>_POST_GEN_HOOKS support
+Message-ID: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christian Stewart,
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Thu, 30 Jul 2015 23:13:10 +0000, Christian Stewart wrote:
+The common filesystem infrastructure already supports a
+<fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
+register some actions to be done before the root filesystem image is
+generated.
 
-> I'm using `cut (GNU coreutils) 8.24`.
-> 
-> The command: `echo "TEST=test" | cut -d"=" -f2-` outputs `Ttest`. I don't
-> think this is the intended behavior. It should output "test".
-> 
-> Am I using it wrong or is there something wrong with coreutils?
+This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
+allow filesystem makefiles to do some actions after the filesystem
+image has been generated. It will initially be used by the iso9660
+filesystem to delete the temporary directory it creates.
 
-FWIW, our oldest bug in the bug tracker is about this. Unfortunately,
-for some reason our bug tracker is down at the moment, so I can't check
-if it's exactly the same issue, but it probably is.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
+---
+Re-sending this patch to fix hybrid ISO generation as added by patch 
+5bac06e8810eb86e7bddc771fda68f0c59a3c3fa.
 
-Thomas
+ fs/common.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/fs/common.mk b/fs/common.mk
+index ad1bcf3..528e194 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -16,6 +16,9 @@
+ #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
+ #  generating the filesystem image
+ #
++#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
++#  generating the filesystem image
++#
+ #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
+ #  run after running the main filesystem target. This is useful for
+ #  initramfs, to rebuild the kernel once the initramfs is generated.
+@@ -96,6 +99,7 @@ endif
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+ endif
++	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
