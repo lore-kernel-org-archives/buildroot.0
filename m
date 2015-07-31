@@ -1,33 +1,50 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Thu, 30 Jul 2015 17:08:16 -0700
-Subject: [Buildroot] configs/marvell_ca9_armv7_le_hfp_defconfig
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD8F64@svr-wa-exch1.atg.lc>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Fri, 31 Jul 2015 08:53:02 +0800
+Subject: [Buildroot] [PATCH] freerdp: Add support for tz package
+In-Reply-To: <20150730233754.71be78d8@free-electrons.com>
+References: <1438071916-13248-1-git-send-email-fancp2007@gmail.com>
+ <20150730233754.71be78d8@free-electrons.com>
+Message-ID: <CAFkzVZbhQWUn=hPQM7hFw+e3DwC-1uo0L8iX-4eO5p5zjThUAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot mailing list,
+Thomas,
 
-My host is Ubuntu-14.04LTS which meets the Buildroot system requirements. I am using buildroot-2015.05 to build the Linux system for the Marvell ARMADA A38x DB-88F6820-GP board. The first make process issue is that the defconfig file listed on the subject line does not originally exist in the configs folder. I copied this file from Marvell's old (2012.11-2015_T1.0) Buildroot/configs folder to the buildroot-2015.05 /configs folder. My .config file has the following line:
+> Can you please submit the patch to the freerdp project?
+OK, I'll do it later on.
 
-BR2_LINUX_KERNEL_DEFCONFIG="marvell_ca9_armv7_le_hfp_defconfig"
+Scott Fan
 
-The subsequent make process passes through the above issue but stops at a new place shown as below:
+On Fri, Jul 31, 2015 at 5:37 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-tclee at Latitude-E6400:~/Downloads/jul30thu15/buildroot-2015.05$ make
-.....
-/usr/bin/install: cannot stat '/home/tclee/Downloads/jul30thu15/buildroot-2015.05/output/build/linux-4.0.4/arch/arm/configs/marvell_ca9_armv7_le_hfp_defconfig_defconfig': No such file or directory
-make: *** [/home/tclee/Downloads/jul30thu15/buildroot-2015.05/output/build/linux-4.0.4/.config] Error 1
+> Dear Scott Fan,
+>
+> On Tue, 28 Jul 2015 16:25:16 +0800, Scott Fan wrote:
+> > Fixes error message while freerdp connected the remote desktop:
+> > Unable to detect time zone
+> >
+> > Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> > ---
+> >  .../freerdp/0004-add-support-for-tz-package.patch  | 30
+> ++++++++++++++++++++++
+> >  1 file changed, 30 insertions(+)
+> >  create mode 100644 package/freerdp/0004-add-support-for-tz-package.patch
+>
+> Applied, thanks. Can you please submit the patch to the freerdp project?
 
-The interesting point is why "defconfig_defconfig" happens on the missing file name. I am resolving the new issue now. Your help or experience is definitely welcome.
 
-Tommy
-
-
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150730/b43f812b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150731/f3947b58/attachment.html>
