@@ -1,10 +1,10 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 31 Jul 2015 15:14:32 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-30
-In-Reply-To: <20150731063016.698F510159B@stock.ovh.net>
-References: <20150731063016.698F510159B@stock.ovh.net>
-Message-ID: <1438355672.4848.42.camel@synopsys.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Fri, 31 Jul 2015 16:02:37 +0000
+Subject: [Buildroot] [PATCH 1/1 v2] Build El Torito for i386 PC
+In-Reply-To: <20150729173643.18dabf28@free-electrons.com>
+References: <1438170732.2675.12.camel@intel.com>
+ <20150729173643.18dabf28@free-electrons.com>
+Message-ID: <1438358553.3808.4.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,31 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Fri, 2015-07-31 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2015-07-30
-> ===============================
-> 
->         success : 7  
->        failures : 6  
->        timeouts : 0  
->           TOTAL : 13 
-> 
-> Classification of failures by reason
-> ====================================
-> 
->              libselinux-2.1.13 | 5 
->                 gnuradio-3.7.5 | 1 
-> 
-> Detail of failures
-> ===================
-> 
->          arc |                 gnuradio-3.7.5 | NOK | 
-> http://autobuild.buildroot.net/results/4dfb0ddcdfb61908e1601506373e990abf5647b7/
+> And I tested your patch, and it fails to build. So it seems like you
+> did not test it properly.
 
-Interesting, gnuradio includes Boost and boom it fails in the same way as Boost:
-------------------------->8-----------------------
-boost::asio::detail::eventfd_select_interrupter::open_descriptors()':
-/home/buildroot/build/instance-1/output/host/usr/arc-buildroot-linux
--uclibc/sysroot/usr/include/boost/asio/detail/impl/eventfd_select_interrupter.ipp:50:50: error: '__NR_eventfd' was not
-declared in this scope
-------------------------->8-----------------------
+humble apologies, I thought it was fine - clearly I made a mistake
+somewhere. 
 
-So once Boost is fixed gnuradio will be cured as well.
+>  The reason is that the $(GRUB2_IMAGE) used by
+> your new post-install hook is not generated until the next post-install
+> hook (the existing GRUB2_IMAGE_INSTALLATION function) gets executed. But
+> this hook is afterwards.
 
--Alexey
+Moving ELTORITO to after GRUB2_IMAGE_INSTALLATION would have fixed it
+also 
+then. I originally had my code exactly like this yours then didn't want
+to 
+pollute GRUB2_IMAGE_INSTALLATION with the GRUB2_IMAGE_INSTALL_ELTORITO
+which 
+may be empty. 
+
+> 
+> So I changed the implementation to simply make the
+> GRUB2_IMAGE_INSTALLATION function call GRUB2_IMAGE_INSTALL_ELTORITO.
+
+np, small change. 
+
+Thanks,
+
+Ray K
