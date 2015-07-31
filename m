@@ -1,42 +1,88 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 31 Jul 2015 09:12:16 -0300
-Subject: [Buildroot] [PATCH 2/2] stunnel: bump to version 5.22
-In-Reply-To: <1438344736-11339-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438344736-11339-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438344736-11339-2-git-send-email-gustavo@zacarias.com.ar>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Fri, 31 Jul 2015 13:22:17 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/bdwgc: musl build failure
+Message-ID: <1438345337-2947-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes http://autobuild.buildroot.net/results/1ed/1edb5e7dab88d3fefca533ab56f7ddc7dd5411d2/
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 5e75b2e..9c2bb14 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005180.html
--sha256	2aef568b1955f5e233f6a8e17ebce3d30755f1be44c813f5a48e621f785596e3	stunnel-5.21.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005183.html
-+sha256	8ad628a6948153cdb2044283f6988384a30585ea7e14778c2ee616a6678cb83f	stunnel-5.22.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 5e9cd72..64c60b1 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).21
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).22
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+Upstream removed unused code which was causing compilation issues.
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+
+---
+v1 -> v2 - updated to use a backported change from upstream.
+---
+ package/bdwgc/0002-bdwgc-musl-compile-error.patch | 58 +++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/bdwgc/0002-bdwgc-musl-compile-error.patch
+
+diff --git a/package/bdwgc/0002-bdwgc-musl-compile-error.patch b/package/bdwgc/0002-bdwgc-musl-compile-error.patch
+new file mode 100644
+index 0000000..8f74c7c
+--- /dev/null
++++ b/package/bdwgc/0002-bdwgc-musl-compile-error.patch
+@@ -0,0 +1,58 @@
++From 212c6c87aa893e101eabbfc46158b7b562f7f21c Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Fri, 31 Jul 2015 13:00:58 +0100
++Subject: [PATCH 1/1] bdwgc: musl compile error
++
++Upstream had removed the need for sigcontext and removed the offending
++code, so backport this change here.
++
++Upstream-status: backport
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ os_dep.c | 30 ------------------------------
++ 1 file changed, 30 deletions(-)
++
++diff --git a/os_dep.c b/os_dep.c
++index 08c501d..54eed52 100644
++--- a/os_dep.c
+++++ b/os_dep.c
++@@ -16,36 +16,6 @@
++ 
++ #include "private/gc_priv.h"
++ 
++-#if defined(LINUX) && !defined(POWERPC) && !defined(NO_SIGCONTEXT_H)
++-# include <linux/version.h>
++-# if (LINUX_VERSION_CODE <= 0x10400)
++-    /* Ugly hack to get struct sigcontext_struct definition.  Required  */
++-    /* for some early 1.3.X releases.  Will hopefully go away soon.     */
++-    /* in some later Linux releases, asm/sigcontext.h may have to       */
++-    /* be included instead.                                             */
++-#   define __KERNEL__
++-#   include <asm/signal.h>
++-#   undef __KERNEL__
++-# else
++-    /* Kernels prior to 2.1.1 defined struct sigcontext_struct instead of */
++-    /* struct sigcontext.  libc6 (glibc2) uses "struct sigcontext" in     */
++-    /* prototypes, so we have to include the top-level sigcontext.h to    */
++-    /* make sure the former gets defined to be the latter if appropriate. */
++-#   include <features.h>
++-#   if 2 <= __GLIBC__
++-#     if 2 == __GLIBC__ && 0 == __GLIBC_MINOR__
++-        /* glibc 2.1 no longer has sigcontext.h.  But signal.h          */
++-        /* has the right declaration for glibc 2.1.                     */
++-#       include <sigcontext.h>
++-#     endif /* 0 == __GLIBC_MINOR__ */
++-#   else /* __GLIBC__ < 2 */
++-      /* libc5 doesn't have <sigcontext.h>: go directly with the kernel   */
++-      /* one.  Check LINUX_VERSION_CODE to see which we should reference. */
++-#     include <asm/sigcontext.h>
++-#   endif /* __GLIBC__ < 2 */
++-# endif
++-#endif /* LINUX && !POWERPC */
++-
++ #if !defined(OS2) && !defined(PCR) && !defined(AMIGA) && !defined(MACOS) \
++     && !defined(MSWINCE) && !defined(__CC_ARM)
++ # include <sys/types.h>
++-- 
++2.4.3
++
 -- 
-2.4.6
+2.4.3
