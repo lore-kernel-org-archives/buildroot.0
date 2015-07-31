@@ -1,43 +1,40 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Fri, 31 Jul 2015 16:02:37 +0000
-Subject: [Buildroot] [PATCH 1/1 v2] Build El Torito for i386 PC
-In-Reply-To: <20150729173643.18dabf28@free-electrons.com>
-References: <1438170732.2675.12.camel@intel.com>
- <20150729173643.18dabf28@free-electrons.com>
-Message-ID: <1438358553.3808.4.camel@intel.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Fri, 31 Jul 2015 17:03:13 +0100
+Subject: [Buildroot] SPARC atomic fun (and libtirpc)
+Message-ID: <CA+BsyQ5NnVF1a3vigL7UrCcCsDpsaKtcrE1ERCQ5W5ks+8cyOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Gustavo, Thomas,
 
-> And I tested your patch, and it fails to build. So it seems like you
-> did not test it properly.
+Back to the old atomic issue again. I've found that libtirpc uses
+__sync_add_and_fetch without checking whether or not it is supported
+in the architecture (it has done so since 2011). This in turn breaks 9
+other packages on SPARCv8 - some of them important, especially
+busybox, but also rpcbind, quota, xinetd, nfsutils and so on. In
+addition there are other packages expecting the atomic intrinsics to
+be present.
 
-humble apologies, I thought it was fine - clearly I made a mistake
-somewhere. 
+I think we need to look at the suggestion you made last week Thomas,
+to add intelligence in configure.ac and push this to the upstream
+packages. In the case of libtirpc I guess we should be able to detect
+the absence of the intrinsics and, based on that, add -latomic to the
+LDFLAGS which are exported by the pkgconfig .pc file.
 
->  The reason is that the $(GRUB2_IMAGE) used by
-> your new post-install hook is not generated until the next post-install
-> hook (the existing GRUB2_IMAGE_INSTALLATION function) gets executed. But
-> this hook is afterwards.
+I am happy enough to do this (it will probably be next week at this
+stage), but I'm curious if there is much interest in trying to keep
+SPARCv8 running. This package has been broken for 4 years and nobody
+so far has noticed it. Are there people out there using buildroot with
+this configuration; and if not should we talk about deprecating it ? I
+ don't have hardware to try it on which means we need to be
+extra-careful.
 
-Moving ELTORITO to after GRUB2_IMAGE_INSTALLATION would have fixed it
-also 
-then. I originally had my code exactly like this yours then didn't want
-to 
-pollute GRUB2_IMAGE_INSTALLATION with the GRUB2_IMAGE_INSTALL_ELTORITO
-which 
-may be empty. 
+That said, even if we do deprecate SPARC we still need to have a fix
+for those arches which definitely do not supply those functions.
 
-> 
-> So I changed the implementation to simply make the
-> GRUB2_IMAGE_INSTALLATION function call GRUB2_IMAGE_INSTALL_ELTORITO.
+regards
 
-np, small change. 
-
-Thanks,
-
-Ray K
+Brendan
