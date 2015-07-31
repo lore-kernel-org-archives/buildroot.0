@@ -1,93 +1,226 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Fri, 31 Jul 2015 15:05:22 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/bdwgc: musl build failure
-Message-ID: <1438351522-23373-1-git-send-email-brendanheading@gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 31 Jul 2015 16:06:11 +0200
+Subject: [Buildroot] [PATCH V4 1/1] gmock: new package
+In-Reply-To: <1438343622-6128-1-git-send-email-casantos@datacom.ind.br>
+References: <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
+ <1438343622-6128-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <55BB80D3.1090209@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/1ed/1edb5e7dab88d3fefca533ab56f7ddc7dd5411d2/
+Hi Carlos,
 
-Upstream removed unused code which was causing musl compilation issues.
+Le 31/07/2015 13:53, Carlos Santos a ?crit :
+> Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
+> specifics in mind, Google C++ Mocking Framework (or Google Mock for
+> short) is a library for writing and using C++ mock classes.
+> 
+> Google Mock:
+> 
+>   * lets you create mock classes trivially using simple macros,
+>   * supports a rich set of matchers and actions,
+>   * handles unordered, partially ordered, or completely ordered
+>     expectations,
+>   * is extensible by users, and
+>   * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
+>     Symbian.
+> 
+>   http://code.google.com/p/googlemock/
+> 
+> There are both host and target packages. The target one has include
+> files required to compile the tests and the static libraries required
+> to link/run them. The host package installs gmock_gen, a Python script
+> used to generate code mocks.
+> 
+> Notice that GMock 1.7.0 requires the Python 2 host package even if
+> Python 3 is selected as a target package.
+> 
+> Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
-v1 -> v2 - updated to use a backported change from upstream.
-v2 -> v3 
-    - format-patch the original upstream fix to properly credit author.
----
- ...include-sigcontext.h-and-asm-sigcontext.h.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
-diff --git a/package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch b/package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
-new file mode 100644
-index 0000000..40c9063
---- /dev/null
-+++ b/package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
-@@ -0,0 +1,61 @@
-+From c887470e0e3310c81ecdb7e736bc5d2ead45db2a Mon Sep 17 00:00:00 2001
-+From: Ivan Maidanski <ivmai@mail.ru>
-+Date: Mon, 6 Apr 2015 20:06:47 +0300
-+Subject: [PATCH 1/1] Do not include sigcontext.h and asm/sigcontext.h (these
-+ Linux headers define sigcontext which is no longer used as replaced with
-+ ucontext_t in GC 7.0alpha1)
-+
-+* os_dep.c: Do not include linux/version.h (do not test
-+LINUX_VERSION_CODE), asm/signal.h, sigcontext.h, asm/sigcontext.h
-+since struct sigcontext not used in GC v7+.
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+Upstream-status: backport
-+---
-+ os_dep.c | 30 ------------------------------
-+ 1 file changed, 30 deletions(-)
-+
-+diff --git a/os_dep.c b/os_dep.c
-+index f62d4ed..a1bafbd 100644
-+--- a/os_dep.c
-++++ b/os_dep.c
-+@@ -16,36 +16,6 @@
-+ 
-+ #include "private/gc_priv.h"
-+ 
-+-#if defined(LINUX) && !defined(POWERPC) && !defined(NO_SIGCONTEXT_H)
-+-# include <linux/version.h>
-+-# if (LINUX_VERSION_CODE <= 0x10400)
-+-    /* Ugly hack to get struct sigcontext_struct definition.  Required  */
-+-    /* for some early 1.3.X releases.  Will hopefully go away soon.     */
-+-    /* in some later Linux releases, asm/sigcontext.h may have to       */
-+-    /* be included instead.                                             */
-+-#   define __KERNEL__
-+-#   include <asm/signal.h>
-+-#   undef __KERNEL__
-+-# else
-+-    /* Kernels prior to 2.1.1 defined struct sigcontext_struct instead of */
-+-    /* struct sigcontext.  libc6 (glibc2) uses "struct sigcontext" in     */
-+-    /* prototypes, so we have to include the top-level sigcontext.h to    */
-+-    /* make sure the former gets defined to be the latter if appropriate. */
-+-#   include <features.h>
-+-#   if 2 <= __GLIBC__
-+-#     if 2 == __GLIBC__ && 0 == __GLIBC_MINOR__
-+-        /* glibc 2.1 no longer has sigcontext.h.  But signal.h          */
-+-        /* has the right declaration for glibc 2.1.                     */
-+-#       include <sigcontext.h>
-+-#     endif /* 0 == __GLIBC_MINOR__ */
-+-#   else /* __GLIBC__ < 2 */
-+-      /* libc5 doesn't have <sigcontext.h>: go directly with the kernel   */
-+-      /* one.  Check LINUX_VERSION_CODE to see which we should reference. */
-+-#     include <asm/sigcontext.h>
-+-#   endif /* __GLIBC__ < 2 */
-+-# endif
-+-#endif /* LINUX && !POWERPC */
-+-
-+ #if !defined(OS2) && !defined(PCR) && !defined(AMIGA) && !defined(MACOS) \
-+     && !defined(MSWINCE) && !defined(__CC_ARM)
-+ # include <sys/types.h>
-+-- 
-+2.4.3
-+
--- 
-2.4.3
+Best regards,
+Romain Naour
+
+> ---
+>  package/Config.in                          |  1 +
+>  package/gmock/0001-force-use-python2.patch | 20 ++++++++++
+>  package/gmock/Config.in                    | 32 +++++++++++++++
+>  package/gmock/gmock.hash                   |  2 +
+>  package/gmock/gmock.mk                     | 62 ++++++++++++++++++++++++++++++
+>  package/gtest/gtest.mk                     |  1 +
+>  6 files changed, 118 insertions(+)
+>  create mode 100644 package/gmock/0001-force-use-python2.patch
+>  create mode 100644 package/gmock/Config.in
+>  create mode 100644 package/gmock/gmock.hash
+>  create mode 100644 package/gmock/gmock.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 43c58ca..70593fb 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1053,6 +1053,7 @@ menu "Other"
+>  	source "package/gflags/Config.in"
+>  	source "package/glibmm/Config.in"
+>  	source "package/glm/Config.in"
+> +	source "package/gmock/Config.in"
+>  	source "package/gmp/Config.in"
+>  	source "package/gsl/Config.in"
+>  	source "package/gtest/Config.in"
+> diff --git a/package/gmock/0001-force-use-python2.patch b/package/gmock/0001-force-use-python2.patch
+> new file mode 100644
+> index 0000000..5dcb231
+> --- /dev/null
+> +++ b/package/gmock/0001-force-use-python2.patch
+> @@ -0,0 +1,20 @@
+> +Force use of Python 2 even when Python 3 is the default Python interpreter.
+> +
+> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> +
+> +--- ./gtest/scripts/fuse_gtest_files.py.orig	2013-09-18 14:48:30.000000000 -0300
+> ++++ ./gtest/scripts/fuse_gtest_files.py	2015-07-22 15:42:53.291591205 -0300
+> +@@ -1,4 +1,4 @@
+> +-#!/usr/bin/env python
+> ++#!/usr/bin/env python2
+> + #
+> + # Copyright 2009, Google Inc.
+> + # All rights reserved.
+> +--- ./scripts/generator/gmock_gen.py.orig	2013-09-18 14:50:15.000000000 -0300
+> ++++ ./scripts/generator/gmock_gen.py	2015-07-22 17:06:51.071815634 -0300
+> +@@ -1,4 +1,4 @@
+> +-#!/usr/bin/env python
+> ++#!/usr/bin/env python2
+> + #
+> + # Copyright 2008 Google Inc. All Rights Reserved.
+> + #
+> diff --git a/package/gmock/Config.in b/package/gmock/Config.in
+> new file mode 100644
+> index 0000000..ec3eb92
+> --- /dev/null
+> +++ b/package/gmock/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_PACKAGE_GMOCK
+> +	bool "gmock"
+> +	select BR2_PACKAGE_GTEST
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_MMU # fork()
+> +	help
+> +	  Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
+> +	  specifics in mind, Google C++ Mocking Framework (or Google Mock for
+> +	  short) is a library for writing and using C++ mock classes.
+> +
+> +	  Google Mock:
+> +
+> +	    * lets you create mock classes trivially using simple macros,
+> +	    * supports a rich set of matchers and actions,
+> +	    * handles unordered, partially ordered, or completely ordered
+> +	      expectations,
+> +	    * is extensible by users, and
+> +	    * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
+> +	      Symbian.
+> +
+> +	    http://code.google.com/p/googlemock/
+> +
+> +	  There are both host and target packages. The target one has include
+> +	  files required to compile the tests and the static libraries required
+> +	  to link/run them. The host package installs gmock_gen, a Python script
+> +	  used to generate code mocks.
+> +
+> +comment "gmock needs a toolchain w/ C++, wchar, threads"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/gmock/gmock.hash b/package/gmock/gmock.hash
+> new file mode 100644
+> index 0000000..2b71739
+> --- /dev/null
+> +++ b/package/gmock/gmock.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256 26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b  gmock-1.7.0.zip
+> diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
+> new file mode 100644
+> index 0000000..a0351d0
+> --- /dev/null
+> +++ b/package/gmock/gmock.mk
+> @@ -0,0 +1,62 @@
+> +################################################################################
+> +#
+> +# gmock
+> +#
+> +################################################################################
+> +
+> +# Make sure this remains the same version as the gtest one
+> +GMOCK_VERSION = 1.7.0
+> +GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
+> +GMOCK_SITE = http://googlemock.googlecode.com/files
+> +GMOCK_INSTALL_STAGING = YES
+> +GMOCK_INSTALL_TARGET = NO
+> +GMOCK_LICENSE = BSD-3c
+> +GMOCK_LICENSE_FILES = LICENSE
+> +GMOCK_DEPENDENCIES = gtest host-gmock
+> +
+> +# GMock 1.7.0 relies on Python 2.7 syntax which is NOT compatible with Python3.
+> +HOST_GMOCK_DEPENDENCIES = host-python
+> +HOST_GMOCK_PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+> +
+> +# Static linking is required in order to keep the GMock package completely
+> +# separated from GTest. According to GMock's README file:
+> +#
+> +#   "Google Mock can be used as a DLL, but the same DLL must contain Google
+> +#    Test as well.  See Google Test's README file for instructions on how to
+> +#    set up necessary compiler settings".
+> +GMOCK_CONF_OPTS = --enable-static --disable-shared
+> +
+> +define GMOCK_EXTRACT_CMDS
+> +	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(BUILD_DIR)
+> +endef
+> +
+> +# We can't use the default rule for autotools-package staging because it fails
+> +# because it tries to rebuild/install gtest stuff and fails after this error:
+> +#    "'make install' is dangerous and not supported. Instead, see README for
+> +#      how to integrate Google Test into your build system."
+> +define GMOCK_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock.a $(STAGING_DIR)/usr/lib/libgmock.a
+> +	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
+> +	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
+> +	cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
+> +endef
+> +
+> +# Unzipping inside $(@D) and moving everything from the created subdirectory is
+> +# required because unzipping directly in $(BUILD_DIR) would cause host-gmock to
+> +# overwrite the gmock subdir instead of unzipping in a host-gmock subdir.
+> +define HOST_GMOCK_EXTRACT_CMDS
+> +	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(@D)
+> +	mv $(@D)/gmock-$(GMOCK_VERSION)/* $(@D)
+> +	rmdir $(@D)/gmock-$(GMOCK_VERSION)
+> +endef
+> +
+> +define HOST_GMOCK_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/scripts/generator/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen.py
+> +	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
+> +	cp -rp $(@D)/scripts/generator/cpp $(HOST_GMOCK_PYTHONPATH)
+> +endef
+> +
+> +$(eval $(autotools-package))
+> +# The host package does not build anything, just installs gmock_gen stuff, so
+> +# it does not need to be a host-autotools-package.
+> +$(eval $(host-generic-package))
+> diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+> index 562acf0..da08621 100644
+> --- a/package/gtest/gtest.mk
+> +++ b/package/gtest/gtest.mk
+> @@ -4,6 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> +# Make sure this remains the same version as the gmock one
+>  GTEST_VERSION = 1.7.0
+>  GTEST_SOURCE = gtest-$(GTEST_VERSION).zip
+>  GTEST_SITE = http://googletest.googlecode.com/files
+> 
