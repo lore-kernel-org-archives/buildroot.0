@@ -1,46 +1,83 @@
-From: Jan Burg <_j@outlook.com>
-Date: Fri, 31 Jul 2015 13:35:07 -0600
-Subject: [Buildroot] buildroot: errors with libstdc++v3
-Message-ID: <BAY168-W73304982B636B854C06355E98A0@phx.gbl>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 31 Jul 2015 21:54:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 0.11.2
+Message-ID: <1438372456-5346-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to build a uclibc-ng toolchain for arm via buildroot in Debian. During the end of the build process, I'm getting errors with libtool linking and libstdc++v3. I searched and found that someone with similar problems just edited the Makefiles in the libstdc++v3 subfolder to force 'CPPFLAGS = -fPIC', and I tried this, but it didn't make a difference. This is the output I'm getting:
+Also:
+  * remove patch #1 -> merged upstream
 
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ .../0001-Add-conditional-check-for-__linux__.patch | 32 ----------------------
+ package/upmpdcli/upmpdcli.hash                     |  4 +--
+ package/upmpdcli/upmpdcli.mk                       |  2 +-
+ 3 files changed, 3 insertions(+), 35 deletions(-)
+ delete mode 100644 package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
 
-
-libtool: link: /mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/./gcc/xgcc -B/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/./gcc/ -B/mnt/wd/buildroot-2015.05/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/bin/ -B/mnt/wd/buildroot-2015.05/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/lib/ -isystem /mnt/wd/buildroot-2015.05/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/include -isystem /mnt/wd/buildroot-2015.05/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/sys-include    -shared  .libs/compatibility.o .libs/compatibility-debug_list.o .libs/compatibility-debug_list-2.o .libs/compatibility-c++0x.o .libs/compatibility-atomic-c++0x.o .libs/compatibility-thread-c++0x.o .libs/compatibility-chrono.o .libs/compatibility-condvar.o   .libs/libstdc++.lax/libsupc++convenience.a/array_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/atexit_arm.o .libs/libstdc++.lax/libsupc++convenience.a/atexit_thread.o .libs/libstdc++.lax/libsupc++convenience.a/bad_alloc.o .libs/libstdc++.lax/libsupc++convenience.a/bad_array_length.o .libs/libstdc++.lax/libsupc++convenience.a/bad_array_new.o .libs/libstdc++.lax/libsupc++convenience.a/bad_cast.o .libs/libstdc++.lax/libsupc++convenience.a/bad_typeid.o .libs/libstdc++.lax/libsupc++convenience.a/class_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/del_op.o .libs/libstdc++.lax/libsupc++convenience.a/del_opnt.o .libs/libstdc++.lax/libsupc++convenience.a/del_opv.o .libs/libstdc++.lax/libsupc++convenience.a/del_opvnt.o .libs/libstdc++.lax/libsupc++convenience.a/dyncast.o .libs/libstdc++.lax/libsupc++convenience.a/eh_alloc.o .libs/libstdc++.lax/libsupc++convenience.a/eh_arm.o .libs/libstdc++.lax/libsupc++convenience.a/eh_aux_runtime.o .libs/libstdc++.lax/libsupc++convenience.a/eh_call.o .libs/libstdc++.lax/libsupc++convenience.a/eh_catch.o .libs/libstdc++.lax/libsupc++convenience.a/eh_exception.o .libs/libstdc++.lax/libsupc++convenience.a/eh_globals.o .libs/libstdc++.lax/libsupc++convenience.a/eh_personality.o .libs/libstdc++.lax/libsupc++convenience.a/eh_ptr.o .libs/libstdc++.lax/libsupc++convenience.a/eh_term_handler.o .libs/libstdc++.lax/libsupc++convenience.a/eh_terminate.o .libs/libstdc++.lax/libsupc++convenience.a/eh_tm.o .libs/libstdc++.lax/libsupc++convenience.a/eh_throw.o .libs/libstdc++.lax/libsupc++convenience.a/eh_type.o .libs/libstdc++.lax/libsupc++convenience.a/eh_unex_handler.o .libs/libstdc++.lax/libsupc++convenience.a/enum_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/function_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/fundamental_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/guard.o .libs/libstdc++.lax/libsupc++convenience.a/guard_error.o .libs/libstdc++.lax/libsupc++convenience.a/hash_bytes.o .libs/libstdc++.lax/libsupc++convenience.a/nested_exception.o .libs/libstdc++.lax/libsupc++convenience.a/new_handler.o .libs/libstdc++.lax/libsupc++convenience.a/new_op.o .libs/libstdc++.lax/libsupc++convenience.a/new_opnt.o .libs/libstdc++.lax/libsupc++convenience.a/new_opv.o .libs/libstdc++.lax/libsupc++convenience.a/new_opvnt.o .libs/libstdc++.lax/libsupc++convenience.a/pbase_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/pmem_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/pointer_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/pure.o .libs/libstdc++.lax/libsupc++convenience.a/si_class_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/tinfo.o .libs/libstdc++.lax/libsupc++convenience.a/tinfo2.o .libs/libstdc++.lax/libsupc++convenience.a/vec.o .libs/libstdc++.lax/libsupc++convenience.a/vmi_class_type_info.o .libs/libstdc++.lax/libsupc++convenience.a/vterminate.o .libs/libstdc++.lax/libsupc++convenience.a/cp-demangle.o  .libs/libstdc++.lax/libc++98convenience.a/bitmap_allocator.o .libs/libstdc++.lax/libc++98convenience.a/pool_allocator.o .libs/libstdc++.lax/libc++98convenience.a/mt_allocator.o .libs/libstdc++.lax/libc++98convenience.a/codecvt.o .libs/libstdc++.lax/libc++98convenience.a/complex_io.o .libs/libstdc++.lax/libc++98convenience.a/ctype.o .libs/libstdc++.lax/libc++98convenience.a/globals_io.o .libs/libstdc++.lax/libc++98convenience.a/hash_tr1.o .libs/libstdc++.lax/libc++98convenience.a/hashtable_tr1.o .libs/libstdc++.lax/libc++98convenience.a/ios.o .libs/libstdc++.lax/libc++98convenience.a/ios_failure.o .libs/libstdc++.lax/libc++98convenience.a/ios_init.o .libs/libstdc++.lax/libc++98convenience.a/ios_locale.o .libs/libstdc++.lax/libc++98convenience.a/list.o .libs/libstdc++.lax/libc++98convenience.a/list-aux.o .libs/libstdc++.lax/libc++98convenience.a/list-aux-2.o .libs/libstdc++.lax/libc++98convenience.a/list_associated.o .libs/libstdc++.lax/libc++98convenience.a/list_associated-2.o .libs/libstdc++.lax/libc++98convenience.a/locale.o .libs/libstdc++.lax/libc++98convenience.a/locale_init.o .libs/libstdc++.lax/libc++98convenience.a/locale_facets.o .libs/libstdc++.lax/libc++98convenience.a/localename.o .libs/libstdc++.lax/libc++98convenience.a/math_stubs_float.o .libs/libstdc++.lax/libc++98convenience.a/math_stubs_long_double.o .libs/libstdc++.lax/libc++98convenience.a/stdexcept.o .libs/libstdc++.lax/libc++98convenience.a/strstream.o .libs/libstdc++.lax/libc++98convenience.a/tree.o .libs/libstdc++.lax/libc++98convenience.a/istream.o .libs/libstdc++.lax/libc++98convenience.a/streambuf.o .libs/libstdc++.lax/libc++98convenience.a/valarray.o .libs/libstdc++.lax/libc++98convenience.a/atomicity.o .libs/libstdc++.lax/libc++98convenience.a/codecvt_members.o .libs/libstdc++.lax/libc++98convenience.a/collate_members.o .libs/libstdc++.lax/libc++98convenience.a/ctype_configure_char.o .libs/libstdc++.lax/libc++98convenience.a/ctype_members.o .libs/libstdc++.lax/libc++98convenience.a/messages_members.o .libs/libstdc++.lax/libc++98convenience.a/monetary_members.o .libs/libstdc++.lax/libc++98convenience.a/numeric_members.o .libs/libstdc++.lax/libc++98convenience.a/time_members.o .libs/libstdc++.lax/libc++98convenience.a/basic_file.o .libs/libstdc++.lax/libc++98convenience.a/c++locale.o .libs/libstdc++.lax/libc++98convenience.a/allocator-inst.o .libs/libstdc++.lax/libc++98convenience.a/concept-inst.o .libs/libstdc++.lax/libc++98convenience.a/ext-inst.o .libs/libstdc++.lax/libc++98convenience.a/ios-inst.o .libs/libstdc++.lax/libc++98convenience.a/iostream-inst.o .libs/libstdc++.lax/libc++98convenience.a/istream-inst.o .libs/libstdc++.lax/libc++98convenience.a/locale-inst.o .libs/libstdc++.lax/libc++98convenience.a/misc-inst.o .libs/libstdc++.lax/libc++98convenience.a/ostream-inst.o .libs/libstdc++.lax/libc++98convenience.a/sstream-inst.o .libs/libstdc++.lax/libc++98convenience.a/streambuf-inst.o .libs/libstdc++.lax/libc++98convenience.a/wlocale-inst.o .libs/libstdc++.lax/libc++98convenience.a/parallel_settings.o  .libs/libstdc++.lax/libc++11convenience.a/chrono.o .libs/libstdc++.lax/libc++11convenience.a/condition_variable.o .libs/libstdc++.lax/libc++11convenience.a/debug.o .libs/libstdc++.lax/libc++11convenience.a/functexcept.o .libs/libstdc++.lax/libc++11convenience.a/functional.o .libs/libstdc++.lax/libc++11convenience.a/future.o .libs/libstdc++.lax/libc++11convenience.a/hash_c++0x.o .libs/libstdc++.lax/libc++11convenience.a/hashtable_c++0x.o .libs/libstdc++.lax/libc++11convenience.a/limits.o .libs/libstdc++.lax/libc++11convenience.a/mutex.o .libs/libstdc++.lax/libc++11convenience.a/placeholders.o .libs/libstdc++.lax/libc++11convenience.a/random.o .libs/libstdc++.lax/libc++11convenience.a/regex.o .libs/libstdc++.lax/libc++11convenience.a/shared_ptr.o .libs/libstdc++.lax/libc++11convenience.a/snprintf_lite.o .libs/libstdc++.lax/libc++11convenience.a/system_error.o .libs/libstdc++.lax/libc++11convenience.a/thread.o .libs/libstdc++.lax/libc++11convenience.a/fstream-inst.o .libs/libstdc++.lax/libc++11convenience.a/string-inst.o .libs/libstdc++.lax/libc++11convenience.a/wstring-inst.o   -L/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3/libsupc++/.libs -L/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3/src -L/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3/src/.libs -lm -lc  -Wl,-O1 -Wl,-z -Wl,relro -Wl,--gc-sections -Wl,--version-script=libstdc++-symbols.ver   -Wl,-soname -Wl,libstdc++.so.6 -o .libs/libstdc++.so.6.0.20
-/mnt/wd/buildroot-2015.05/output/host/usr/arm-buildroot-linux-uclibcgnueabihf/bin/ld:libstdc++-symbols.ver:1: syntax error in VERSION script
-collect2: error: ld returned 1 exit status
-Makefile:553: recipe for target 'libstdc++.la' failed
-make[6]: *** [libstdc++.la] Error 1
-make[6]: Leaving directory '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3/src'
-Makefile:583: recipe for target 'all-recursive' failed
-make[5]: *** [all-recursive] Error 1
-make[5]: Leaving directory '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3/src'
-Makefile:485: recipe for target 'all-recursive' failed
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3'
-Makefile:391: recipe for target 'all' failed
-make[3]: *** [all] Error 2
-make[3]: Leaving directory '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build/arm-buildroot-linux-uclibcgnueabihf/libstdc++-v3'
-Makefile:9595: recipe for target 'all-target-libstdc++-v3' failed
-make[2]: *** [all-target-libstdc++-v3] Error 2
-make[2]: Leaving directory '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build'
-Makefile:862: recipe for target 'all' failed
-make[1]: *** [all] Error 2
-make[1]: Leaving directory '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/build'
-package/pkg-generic.mk:156: recipe for target '/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/.stamp_built' failed
-make: *** [/mnt/wd/buildroot-2015.05/output/build/host-gcc-final-4.9.2/.stamp_built] Error 2
-
-
-
-
--Jan
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150731/916dd8ac/attachment.html>
+diff --git a/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch b/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
+deleted file mode 100644
+index 910ee3c..0000000
+--- a/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 69740cf6fe35413edc4b6adc502ba70ce8de8557 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+-Date: Sun, 19 Jul 2015 08:48:13 +0200
+-Subject: [PATCH 1/1] Add conditional check for __linux__
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-When building upmpdcli with certain toolchains using the compiler flag
+--std=c++0x let gcc not define "linux" or "__linux", but "__linux__".
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- src/closefrom.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/closefrom.cpp b/src/closefrom.cpp
+-index 4429b20..0cd7957 100644
+---- a/src/closefrom.cpp
+-+++ b/src/closefrom.cpp
+-@@ -111,7 +111,7 @@ int libclf_closefrom(int fd0)
+- }
+- 
+- /*************************************************************************/
+--#elif (defined(linux) || defined(__linux))
+-+#elif (defined(linux) || defined(__linux) || defined(__linux__))
+- 
+- /* Use /proc/self/fd directory */
+- #include <sys/types.h>
+--- 
+-2.4.6
+-
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 549945e..762b0af 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.11.0.tar.gz.sha256
+-sha256 0f064b7fe498ee56879e606f48b7bafa42381d25fda6b91ef2cb3677effc85b9  upmpdcli-0.11.0.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.11.2.tar.gz.sha256
++sha256 595865c306b0076baaff7eb4f76f779119bd8952f53a4e6662157dc83ab70d89  upmpdcli-0.11.2.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 8dde87d..c69e01c 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 0.11.0
++UPMPDCLI_VERSION = 0.11.2
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
+-- 
+2.5.0
