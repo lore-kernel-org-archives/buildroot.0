@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 31 Jul 2015 22:25:08 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libmicrohttpd: mark as broken on
-	Nios II, infamous _gp issue
-Message-ID: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 31 Jul 2015 22:25:09 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xdriver_xf86-input-synaptics:
+	depends on libevdev
+In-Reply-To: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1438374309-1902-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,56 +12,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes
-http://autobuild.buildroot.net/results/76f/76f838b2b33311897f3c2ce82a65f3b73af2c046/
-
-Propagate reverse dependency to janus-gateway. I did not propagate the
-reverse dependency to kodi, ola and systemd because they are not
-available for nios.
+http://autobuild.buildroot.net/results/05e/05ecfaf591e85a20071875ecd18068762193defa/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/janus-gateway/Config.in | 4 ++++
- package/libmicrohttpd/Config.in | 5 +++++
- 2 files changed, 9 insertions(+)
+ package/x11r7/xdriver_xf86-input-synaptics/Config.in                    | 1 +
+ .../x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 035ee6c..cafad94 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_JANUS_GATEWAY
- 	depends on BR2_USE_WCHAR # libnice -> libglib2
- 	depends on BR2_USE_MMU # libnice
- 	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305 # libmicrohttpd
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libmicrohttpd
- 	help
- 	  Janus is an open source, general purpose, WebRTC gateway
- 	  designed and developed by Meetecho.
-@@ -20,3 +22,5 @@ config BR2_PACKAGE_JANUS_GATEWAY
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index ec0b715..d9e6493 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# Triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
- 	  run an HTTP server as part of another application.
-@@ -24,3 +27,5 @@ endif
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/Config.in b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
+index 6b5e5b6..ffe1a2a 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/Config.in
++++ b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_SYNAPTICS
+ 	bool "xf86-input-synaptics"
++	select BR2_PACKAGE_LIBEVDEV
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index f180405..28663d1 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+@@ -9,6 +9,6 @@ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
++XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
  
- comment "libmicrohttpd needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ $(eval $(autotools-package))
 -- 
 2.1.4
