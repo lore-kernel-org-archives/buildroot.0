@@ -1,104 +1,217 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Fri, 31 Jul 2015 11:31:01 +0200
-Subject: [Buildroot] [PATCH] libcddb: new package
-Message-ID: <1438335061-17285-1-git-send-email-julien.boibessot@free.fr>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Fri, 31 Jul 2015 08:53:42 -0300
+Subject: [Buildroot] [PATCH V4 1/1] gmock: new package
+In-Reply-To: <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
+References: <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1438343622-6128-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
+specifics in mind, Google C++ Mocking Framework (or Google Mock for
+short) is a library for writing and using C++ mock classes.
 
+Google Mock:
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+  * lets you create mock classes trivially using simple macros,
+  * supports a rich set of matchers and actions,
+  * handles unordered, partially ordered, or completely ordered
+    expectations,
+  * is extensible by users, and
+  * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
+    Symbian.
+
+  http://code.google.com/p/googlemock/
+
+There are both host and target packages. The target one has include
+files required to compile the tests and the static libraries required
+to link/run them. The host package installs gmock_gen, a Python script
+used to generate code mocks.
+
+Notice that GMock 1.7.0 requires the Python 2 host package even if
+Python 3 is selected as a target package.
+
+Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 ---
- package/Config.in            |    1 +
- package/libcddb/Config.in    |   20 ++++++++++++++++++++
- package/libcddb/libcddb.hash |    2 ++
- package/libcddb/libcddb.mk   |   26 ++++++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 package/libcddb/Config.in
- create mode 100644 package/libcddb/libcddb.hash
- create mode 100644 package/libcddb/libcddb.mk
+ package/Config.in                          |  1 +
+ package/gmock/0001-force-use-python2.patch | 20 ++++++++++
+ package/gmock/Config.in                    | 32 +++++++++++++++
+ package/gmock/gmock.hash                   |  2 +
+ package/gmock/gmock.mk                     | 62 ++++++++++++++++++++++++++++++
+ package/gtest/gtest.mk                     |  1 +
+ 6 files changed, 118 insertions(+)
+ create mode 100644 package/gmock/0001-force-use-python2.patch
+ create mode 100644 package/gmock/Config.in
+ create mode 100644 package/gmock/gmock.hash
+ create mode 100644 package/gmock/gmock.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2528238..cbcff27 100644
+index 43c58ca..70593fb 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -694,6 +694,7 @@ menu "Audio/Sound"
- 	source "package/fdk-aac/Config.in"
- 	source "package/libao/Config.in"
- 	source "package/libcdaudio/Config.in"
-+	source "package/libcddb/Config.in"
- 	source "package/libcdio/Config.in"
- 	source "package/libcue/Config.in"
- 	source "package/libcuefile/Config.in"
-diff --git a/package/libcddb/Config.in b/package/libcddb/Config.in
+@@ -1053,6 +1053,7 @@ menu "Other"
+ 	source "package/gflags/Config.in"
+ 	source "package/glibmm/Config.in"
+ 	source "package/glm/Config.in"
++	source "package/gmock/Config.in"
+ 	source "package/gmp/Config.in"
+ 	source "package/gsl/Config.in"
+ 	source "package/gtest/Config.in"
+diff --git a/package/gmock/0001-force-use-python2.patch b/package/gmock/0001-force-use-python2.patch
 new file mode 100644
-index 0000000..f2bb827
+index 0000000..5dcb231
 --- /dev/null
-+++ b/package/libcddb/Config.in
++++ b/package/gmock/0001-force-use-python2.patch
 @@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBCDDB
-+	bool "libcddb"
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  Libcddb is a C library to access data on a CDDB server
-+	  (freedb.org). It allows you to:
-+	    * search the database for possible CD matches;
-+	    * retrieve detailed information about a specific CD;
-+	    * submit new CD entries to the database.
++Force use of Python 2 even when Python 3 is the default Python interpreter.
 +
-+	  http://libcddb.sourceforge.net/index.html
++Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 +
-+if BR2_PACKAGE_LIBCDDB
-+
-+config BR2_PACKAGE_LIBCDDB_INSTALL_CDDB_QUERY
-+	bool "install cddb_query"
-+	help
-+	  cddb_query is an optionnal libcddb test program.
-+
-+endif
-diff --git a/package/libcddb/libcddb.hash b/package/libcddb/libcddb.hash
++--- ./gtest/scripts/fuse_gtest_files.py.orig	2013-09-18 14:48:30.000000000 -0300
+++++ ./gtest/scripts/fuse_gtest_files.py	2015-07-22 15:42:53.291591205 -0300
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env python
+++#!/usr/bin/env python2
++ #
++ # Copyright 2009, Google Inc.
++ # All rights reserved.
++--- ./scripts/generator/gmock_gen.py.orig	2013-09-18 14:50:15.000000000 -0300
+++++ ./scripts/generator/gmock_gen.py	2015-07-22 17:06:51.071815634 -0300
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env python
+++#!/usr/bin/env python2
++ #
++ # Copyright 2008 Google Inc. All Rights Reserved.
++ #
+diff --git a/package/gmock/Config.in b/package/gmock/Config.in
 new file mode 100644
-index 0000000..9e60683
+index 0000000..ec3eb92
 --- /dev/null
-+++ b/package/libcddb/libcddb.hash
++++ b/package/gmock/Config.in
+@@ -0,0 +1,32 @@
++config BR2_PACKAGE_GMOCK
++	bool "gmock"
++	select BR2_PACKAGE_GTEST
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
++	help
++	  Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
++	  specifics in mind, Google C++ Mocking Framework (or Google Mock for
++	  short) is a library for writing and using C++ mock classes.
++
++	  Google Mock:
++
++	    * lets you create mock classes trivially using simple macros,
++	    * supports a rich set of matchers and actions,
++	    * handles unordered, partially ordered, or completely ordered
++	      expectations,
++	    * is extensible by users, and
++	    * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
++	      Symbian.
++
++	    http://code.google.com/p/googlemock/
++
++	  There are both host and target packages. The target one has include
++	  files required to compile the tests and the static libraries required
++	  to link/run them. The host package installs gmock_gen, a Python script
++	  used to generate code mocks.
++
++comment "gmock needs a toolchain w/ C++, wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gmock/gmock.hash b/package/gmock/gmock.hash
+new file mode 100644
+index 0000000..2b71739
+--- /dev/null
++++ b/package/gmock/gmock.hash
 @@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	35ce0ee1741ea38def304ddfe84a958901413aa829698357f0bee5bb8f0a223b	libcddb-1.3.2.tar.bz2
-diff --git a/package/libcddb/libcddb.mk b/package/libcddb/libcddb.mk
++# Locally computed
++sha256 26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b  gmock-1.7.0.zip
+diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
 new file mode 100644
-index 0000000..7ddb1e7
+index 0000000..a0351d0
 --- /dev/null
-+++ b/package/libcddb/libcddb.mk
-@@ -0,0 +1,26 @@
++++ b/package/gmock/gmock.mk
+@@ -0,0 +1,62 @@
 +################################################################################
 +#
-+# libcddb
++# gmock
 +#
 +################################################################################
 +
-+LIBCDDB_VERSION = 1.3.2
-+LIBCDDB_SOURCE = libcddb-$(LIBCDDB_VERSION).tar.bz2
-+LIBCDDB_SITE = http://downloads.sourceforge.net/libcddb/
-+LIBCDDB_LICENSE = LGPLv2+
-+LIBCDDB_LICENSE_FILES = COPYING
-+LIBCDDB_INSTALL_STAGING = YES
++# Make sure this remains the same version as the gtest one
++GMOCK_VERSION = 1.7.0
++GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
++GMOCK_SITE = http://googlemock.googlecode.com/files
++GMOCK_INSTALL_STAGING = YES
++GMOCK_INSTALL_TARGET = NO
++GMOCK_LICENSE = BSD-3c
++GMOCK_LICENSE_FILES = LICENSE
++GMOCK_DEPENDENCIES = gtest host-gmock
 +
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+LIBCDDB_DEPENDENCIES += libiconv
-+endif
++# GMock 1.7.0 relies on Python 2.7 syntax which is NOT compatible with Python3.
++HOST_GMOCK_DEPENDENCIES = host-python
++HOST_GMOCK_PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
 +
-+define LIBCDDB_REMOVE_CDDB_QUERY
-+	rm -f $(TARGET_DIR)/usr/bin/cddb_query
++# Static linking is required in order to keep the GMock package completely
++# separated from GTest. According to GMock's README file:
++#
++#   "Google Mock can be used as a DLL, but the same DLL must contain Google
++#    Test as well.  See Google Test's README file for instructions on how to
++#    set up necessary compiler settings".
++GMOCK_CONF_OPTS = --enable-static --disable-shared
++
++define GMOCK_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(BUILD_DIR)
 +endef
 +
-+ifeq ($(BR2_PACKAGE_LIBCDDB_INSTALL_CDDB_QUERY),)
-+LIBCDDB_POST_INSTALL_TARGET_HOOKS += LIBCDDB_REMOVE_CDDB_QUERY
-+endif
++# We can't use the default rule for autotools-package staging because it fails
++# because it tries to rebuild/install gtest stuff and fails after this error:
++#    "'make install' is dangerous and not supported. Instead, see README for
++#      how to integrate Google Test into your build system."
++define GMOCK_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock.a $(STAGING_DIR)/usr/lib/libgmock.a
++	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
++	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
++	cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
++endef
++
++# Unzipping inside $(@D) and moving everything from the created subdirectory is
++# required because unzipping directly in $(BUILD_DIR) would cause host-gmock to
++# overwrite the gmock subdir instead of unzipping in a host-gmock subdir.
++define HOST_GMOCK_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(@D)
++	mv $(@D)/gmock-$(GMOCK_VERSION)/* $(@D)
++	rmdir $(@D)/gmock-$(GMOCK_VERSION)
++endef
++
++define HOST_GMOCK_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/scripts/generator/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen.py
++	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
++	cp -rp $(@D)/scripts/generator/cpp $(HOST_GMOCK_PYTHONPATH)
++endef
 +
 +$(eval $(autotools-package))
++# The host package does not build anything, just installs gmock_gen stuff, so
++# it does not need to be a host-autotools-package.
++$(eval $(host-generic-package))
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index 562acf0..da08621 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# Make sure this remains the same version as the gmock one
+ GTEST_VERSION = 1.7.0
+ GTEST_SOURCE = gtest-$(GTEST_VERSION).zip
+ GTEST_SITE = http://googletest.googlecode.com/files
 -- 
-1.7.9.5
+1.8.3.1
