@@ -1,52 +1,33 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat,  1 Aug 2015 18:54:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ifplugd: add patch to fix musl
-	build error
-Message-ID: <1438448071-26514-1-git-send-email-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  1 Aug 2015 18:55:17 +0200
+Subject: [Buildroot] [PATCH 2/3] package/eflutils: needs argp-standalone
+	with musl toolchains
+In-Reply-To: <1438448118-26198-1-git-send-email-romain.naour@openwide.fr>
+References: <1438448118-26198-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1438448118-26198-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The musl C library does not define type names such as `__uint32_t`. Instead we
-use the integer types declared in the ISO C standard header file <stdint.h>.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/ifplugd/0004-musl-fix-types.patch | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 package/ifplugd/0004-musl-fix-types.patch
+ package/elfutils/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ifplugd/0004-musl-fix-types.patch b/package/ifplugd/0004-musl-fix-types.patch
-new file mode 100644
-index 0000000..174f9c8
---- /dev/null
-+++ b/package/ifplugd/0004-musl-fix-types.patch
-@@ -0,0 +1,24 @@
-+The musl C library does not define type names such as `__uint32_t`. Instead we
-+use the integer types declared in the ISO C standard header file <stdint.h>.
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+
-+diff -purN ifplugd-0.28.orig/src/ethtool-local.h ifplugd-0.28/src/ethtool-local.h
-+--- ifplugd-0.28.orig/src/ethtool-local.h	2015-08-01 18:43:47.360916834 +0200
-++++ ifplugd-0.28/src/ethtool-local.h	2015-08-01 18:44:24.256037746 +0200
-+@@ -21,10 +21,12 @@
-+  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
-+  */
-+ 
-++#include <stdint.h>
-++
-+ typedef unsigned long long u64;
-+-typedef __uint32_t u32;        
-+-typedef __uint16_t u16;        
-+-typedef __uint8_t u8;          
-++typedef uint32_t u32;
-++typedef uint16_t u16;
-++typedef uint8_t u8;
-+ 
-+ #include "ethtool-kernel.h"
-+ 
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 6c6856e..ea0ae62 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -4,7 +4,7 @@ comment "elfutils needs a toolchain w/ wchar, dynamic library"
+ 
+ config BR2_PACKAGE_ELFUTILS
+ 	bool "elfutils"
+-	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
 -- 
-2.5.0
+2.4.3
