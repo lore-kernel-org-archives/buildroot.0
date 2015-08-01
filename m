@@ -1,65 +1,51 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 1 Aug 2015 10:21:32 +0200
-Subject: [Buildroot] [PATCH 00/47] package/kodi: bump version to 15.0
- Isengard
-In-Reply-To: <20150730153431.1cb277b8@free-electrons.com>
-References: <1437597069-6448-1-git-send-email-bernd.kuhls@t-online.de>
- <20150730153431.1cb277b8@free-electrons.com>
-Message-ID: <20150801082132.GA8475@waldemar-brodkorb.de>
+Date: Sat, 1 Aug 2015 10:22:26 +0200
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-07-29
+In-Reply-To: <1438262056.5763.48.camel@synopsys.com>
+References: <20150730063016.85822101F90@stock.ovh.net>
+ <1438247167.5763.13.camel@synopsys.com>
+ <1438262056.5763.48.camel@synopsys.com>
+Message-ID: <20150801082226.GB8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hi,
+Alexey Brodkin wrote,
 
-> Bernd,
+> Hi Thomas,
 > 
-> On Wed, 22 Jul 2015 22:30:22 +0200, Bernd Kuhls wrote:
+> On Thu, 2015-07-30 at 12:06 +0300, Alexey Brodkin wrote:
+> > Hi Thomas,
+> > >          arc |                    sudo-1.8.13 | NOK | 
+> > > 
+> > > http://autobuild.buildroot.net/results/1b77539d08ffd950317a58cef8e2a4ce624c4710/
+> > ------------------------->8--------------------
+> > /home/test/autobuild/instance-0/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getenv.os): In
+> > function `__GI_getenv':
+> > getenv.c:(.text+0x0): multiple definition of `getenv'
+> > env_hooks.o:env_hooks.c:(.text+0x11c): first defined here
+> > ------------------------->8--------------------
+> > 
+> > I believe something similar to the issue Vincente fixed for Bash, see
+> > http://git.buildroot.net/buildroot/commit/?id=9623ff651f83a350819719f10705552da9793205
+> > 
+> > Will look into that and prepare a patch.
 > 
-> > Kodi 15.0 Isengard was released yesterday:
-> > http://kodi.tv/kodi-15-0-isengard-one-release-to-rule-them-all/
+> Looks like there's no simple way to resolve this issue with static building on "sudo" against uClibc.
+> There's no autoconf option to disable internal implementation of "getenv" and somehow "sudo" could be
+> built as a static binary on my x86 host (obviously with glibc).
 > 
-> Another thing: it does not build on ARM with uClibc. I get the
-> following error:
+> I'd say that this has something to do with uClibc (how it differs in implementation of "getenv")
+> compared to glibc but this is out of my scope of knowledge.
 > 
-> /home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.4/libgcc.a(linux-atomic-64bit.o): In function `__check_for_sync8_kernelhelper':
-> /opt/toolchain-build/build/host-gcc-final-4.7.4/build/arm-buildroot-linux-uclibcgnueabi/libgcc/../../../libgcc/config/arm/linux-atomic-64bit.c:59: undefined reference to `__write'
-> collect2: error: ld returned 1 exit status
-> Makefile:486: recipe for target 'kodi.bin' failed
-> 
-> This is with the toolchain configuration at
-> http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config +
-> rpi-userland as the OpenGL ES backend.
-> 
-> This error is apparently due to the fact that we're using a 64 bits
-> atomic operation implemented by libgcc, which requires assistance from
-> the kernel. libgcc has some code to print a message when the kernel
-> doesn't provide the necessary syscall, and this code calls __write().
-> This function seems to not be provided by uClibc (while it is probably
-> provided by glibc).
-> 
-> I'm Cc'ing Waldemar, maybe he has some ideas.
-> 
-> However, generally speaking I believe supporting Kodi on uClibc is a
-> bit useless: Kodi is anyway so big that the size benefits of uClibc are
-> no longer significant. So if this problem pops up in the autobuilders
-> and isn't fixed by then, I'll mark Kodi as glibc only for the moment.
-> 
-> Thanks!
+> Probably Waldemar might be interested in that issue as well.
 
-It is not useless in my point of view. When we support bigger
-applications with long runtimes with uClibc, we can be sure to have
-good quality in the C library. So even if we do not do it because of
-any space limitations it will uncover some bugs.
-
-So please do not disable it. I tried a build with Kodi and uClibc-ng
-with OpenADK and did not get a build error.
-
-May be the GCC version is problematic? 4.7.4 is rather old. Does it
-happen with gcc 4.9.3?
+I can reproduce it and will push it on my TODO list. Thanks for
+reporting this.
 
 best regards
  Waldemar
