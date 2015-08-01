@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:17:03 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libmicrohttpd: mark as broken
- on Nios II, infamous _gp issue
-In-Reply-To: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150801101703.78d142a9@free-electrons.com>
+Date: Sat, 1 Aug 2015 10:18:47 +0200
+Subject: [Buildroot] buildroot: errors with libstdc++v3
+In-Reply-To: <BAY168-W73304982B636B854C06355E98A0@phx.gbl>
+References: <BAY168-W73304982B636B854C06355E98A0@phx.gbl>
+Message-ID: <20150801101847.1c451753@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Jan Burg,
 
-On Fri, 31 Jul 2015 22:25:08 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/76f/76f838b2b33311897f3c2ce82a65f3b73af2c046/
-> 
-> Propagate reverse dependency to janus-gateway. I did not propagate the
-> reverse dependency to kodi, ola and systemd because they are not
-> available for nios.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/janus-gateway/Config.in | 4 ++++
->  package/libmicrohttpd/Config.in | 5 +++++
->  2 files changed, 9 insertions(+)
+On Fri, 31 Jul 2015 13:35:07 -0600, Jan Burg wrote:
 
-Applied, thanks.
+> I'm trying to build a uclibc-ng toolchain for arm via buildroot in
+> Debian. During the end of the build process, I'm getting errors with
+> libtool linking and libstdc++v3. I searched and found that someone
+> with similar problems just edited the Makefiles in the libstdc++v3
+> subfolder to force 'CPPFLAGS = -fPIC', and I tried this, but it
+> didn't make a difference. This is the output I'm getting:
+
+Can you please:
+
+ 1/ Retry after doing a "make clean all". See the explanation at
+    http://buildroot.org/downloads/manual/manual.html#full-rebuild.
+
+ 2/ Indicate the Buildroot version you're using, and attach your
+    complete Buildroot .config that reproduces the problem.
+
+Best regards,
 
 Thomas
 -- 
