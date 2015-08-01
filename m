@@ -1,67 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:16:31 +0200
-Subject: [Buildroot] [git commit] package/libmicrohttpd: mark as broken on
-	Nios II, infamous _gp issue
-Message-ID: <20150801081641.2CF0F7FEF2@busybox.osuosl.org>
+Date: Sat, 1 Aug 2015 10:16:06 +0200
+Subject: [Buildroot] [git commit] package/exim: bump version to 4.86
+Message-ID: <20150801081640.E5656818B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87059dd20ea68569771895e05592fed77f6f9357
+commit: http://git.buildroot.net/buildroot/commit/?id=14c4100f44d91b27cb629ed569af26e79dc42553
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes
-http://autobuild.buildroot.net/results/76f/76f838b2b33311897f3c2ce82a65f3b73af2c046/
-
-Propagate reverse dependency to janus-gateway. I did not propagate the
-reverse dependency to kodi, ola and systemd because they are not
-available for nios.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/janus-gateway/Config.in |    4 ++++
- package/libmicrohttpd/Config.in |    5 +++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/exim/exim.hash |    4 ++--
+ package/exim/exim.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 035ee6c..cafad94 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_JANUS_GATEWAY
- 	depends on BR2_USE_WCHAR # libnice -> libglib2
- 	depends on BR2_USE_MMU # libnice
- 	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305 # libmicrohttpd
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libmicrohttpd
- 	help
- 	  Janus is an open source, general purpose, WebRTC gateway
- 	  designed and developed by Meetecho.
-@@ -20,3 +22,5 @@ config BR2_PACKAGE_JANUS_GATEWAY
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index ec0b715..d9e6493 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# Triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
- 	  run an HTTP server as part of another application.
-@@ -24,3 +27,5 @@ endif
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index e29d9dc..0c0d797 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.exim.org/lurker/message/20150113.003827.4a5d30e4.en.html
+-sha256	13211f2bbc5400d095a9b4be075eb1347e0d98676fdfe4be8a3b4d56281daaa4	exim-4.85.tar.bz2
++# From https://lists.exim.org/lurker/message/20150726.143052.f70a32f0.en.html
++sha256	f1ccf2ce2ea51b7fbbf160e7e0e41d24ca401cf44a185128ad99ea04635fc456	exim-4.86.tar.bz2
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 002ffd2..62267b7 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "libmicrohttpd needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+-EXIM_VERSION = 4.85
++EXIM_VERSION = 4.86
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
+ EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPLv2+
