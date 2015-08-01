@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  1 Aug 2015 15:31:34 +0200
-Subject: [Buildroot] [PATCH 1/2] package/kodi-visualisation-goom: new package
-Message-ID: <1438435895-1751-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  1 Aug 2015 16:20:41 +0200
+Subject: [Buildroot] [PATCH 2/2] package/ffmpeg: Add optional dependencies
+In-Reply-To: <1438438841-31219-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1438438841-31219-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1438438841-31219-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,158 +12,89 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Config.in.legacy                                   |  7 ++++++
- .../0001-cross-compile.patch                       | 29 ++++++++++++++++++++++
- package/kodi-visualisation-goom/Config.in          | 10 ++++++++
- .../kodi-visualisation-goom.mk                     | 14 +++++++++++
- package/kodi/Config.in                             | 10 +-------
- package/kodi/kodi.mk                               |  7 +-----
- 6 files changed, 62 insertions(+), 15 deletions(-)
- create mode 100644 package/kodi-visualisation-goom/0001-cross-compile.patch
- create mode 100644 package/kodi-visualisation-goom/Config.in
- create mode 100644 package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+ package/ffmpeg/ffmpeg.mk | 60 ++++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 56 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3b77b34..2391e84 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.08"
- 
-+config BR2_PACKAGE_KODI_GOOM
-+	select BR2_LEGACY
-+	bool "Goom support in Kodi was moved to an addon"
-+	select BR2_PACKAGE_KODI_VISUALISATION_GOOM
-+	help
-+	  Goom support in Kodi was moved to an addon
-+
- config BR2_PACKAGE_KODI_PVR_ADDONS
- 	bool "Kodi PVR addon was split"
- 	select BR2_LEGACY
-diff --git a/package/kodi-visualisation-goom/0001-cross-compile.patch b/package/kodi-visualisation-goom/0001-cross-compile.patch
-new file mode 100644
-index 0000000..3b051f2
---- /dev/null
-+++ b/package/kodi-visualisation-goom/0001-cross-compile.patch
-@@ -0,0 +1,29 @@
-+Fix cross-compilation
-+
-+Use the cross-compiler and not the host version.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt
-+--- visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt	2014-10-31 11:34:21.000000000 +0100
-++++ visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt	2015-07-19 19:49:43.340054342 +0200
-+@@ -13,6 +13,10 @@
-+                     ${KODI_INCLUDE_DIR}
-+                     ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/src)
-+ 
-++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
-++string( REGEX REPLACE "-[^-]+$" ""
-++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
-++
-+ include(ExternalProject)
-+ set(update_command "")
-+ if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
-+@@ -20,7 +24,7 @@
-+ endif()
-+ externalproject_add(libgoom SOURCE_DIR ${PROJECT_SOURCE_DIR}/lib/goom2k4-0
-+                     "${update_command}"
-+-                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR>
-++                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR> --host=${TOOLCHAIN_NAME}
-+                     BUILD_COMMAND ${MAKE}
-+                     INSTALL_COMMAND "")
-+ 
-diff --git a/package/kodi-visualisation-goom/Config.in b/package/kodi-visualisation-goom/Config.in
-new file mode 100644
-index 0000000..c1f1751
---- /dev/null
-+++ b/package/kodi-visualisation-goom/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_GOOM
-+	bool "kodi-visualisation-goom"
-+	depends on BR2_PACKAGE_KODI_GL
-+	help
-+	  GOOM visualiser for Kodi
-+
-+	  https://github.com/notspiff/visualization.goom
-+
-+comment "goom needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-new file mode 100644
-index 0000000..6447f91
---- /dev/null
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# kodi-visualisation-goom
-+#
-+################################################################################
-+
-+KODI_VISUALISATION_GOOM_VERSION = fb5933ba5b2143d055cc7749dc60a82f6002b305
-+KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
-+KODI_VISUALISATION_GOOM_LICENSE = GPLv2+
-+KODI_VISUALISATION_GOOM_LICENSE_FILES = COPYING
-+
-+KODI_VISUALISATION_GOOM_DEPENDENCIES = kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index c3b3183..04caec3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -136,15 +136,6 @@ config BR2_PACKAGE_KODI_LIBBLURAY
- comment "libbluray support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
--config BR2_PACKAGE_KODI_GOOM
--	bool "goom screensaver"
--	depends on BR2_PACKAGE_KODI_GL
--	help
--	  Enable goom screensaver
--
--comment "goom needs an OpenGL backend"
--	depends on !BR2_PACKAGE_KODI_GL
--
- config BR2_PACKAGE_KODI_RSXS
- 	bool "rsxs screensaver"
- 	depends on BR2_PACKAGE_KODI_GL
-@@ -297,6 +288,7 @@ menu "Screensavers"
- endmenu
- 
- menu "Visualisations"
-+	source "package/kodi-visualisation-goom/Config.in"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
- 	source "package/kodi-visualisation-spectrum/Config.in"
- 	source "package/kodi-visualisation-waveforhue/Config.in"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 6399ff1..1622f7b 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -30,6 +30,7 @@ KODI_CONF_ENV = \
- 
- KODI_CONF_OPTS +=  \
- 	--with-ffmpeg=shared \
-+	--disable-goom \
- 	--disable-joystick \
- 	--disable-openmax \
- 	--disable-projectm \
-@@ -117,12 +118,6 @@ KODI_CONF_OPTS += --disable-gles
- endif
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 54c9f52..5fc2d57 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -51,13 +51,9 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libdc1394 \
+ 	--disable-libfaac \
+ 	--disable-libgsm \
+-	--disable-libmp3lame \
+ 	--disable-libnut \
+ 	--disable-libopenjpeg \
+-	--disable-librtmp \
+ 	--disable-libschroedinger \
+-	--disable-libspeex \
+-	--disable-libtheora \
+ 	--disable-libvo-aacenc \
+ 	--disable-libvo-amrwbenc \
+ 	--disable-symver \
+@@ -234,6 +230,62 @@ else
+ FFMPEG_CONF_OPTS += --disable-libvpx
  endif
  
--ifeq ($(BR2_PACKAGE_KODI_GOOM),y)
--KODI_CONF_OPTS += --enable-goom
--else
--KODI_CONF_OPTS += --disable-goom
--endif
--
- ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
- KODI_DEPENDENCIES += libusb-compat
- KODI_CONF_OPTS += --enable-libusb
++ifeq ($(BR2_PACKAGE_LIBASS),y)
++FFMPEG_CONF_OPTS += --enable-libass
++FFMPEG_DEPENDENCIES += libass
++else
++FFMPEG_CONF_OPTS += --disable-libass
++endif
++
++ifeq ($(BR2_PACKAGE_LIBBLURAY),y)
++FFMPEG_CONF_OPTS += --enable-libbluray
++FFMPEG_DEPENDENCIES += libbluray
++else
++FFMPEG_CONF_OPTS += --disable-libbluray
++endif
++
++ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
++FFMPEG_CONF_OPTS += --enable-librtmp
++FFMPEG_DEPENDENCIES += rtmpdump
++else
++FFMPEG_CONF_OPTS += --disable-librtmp
++endif
++
++ifeq ($(BR2_PACKAGE_LAME),y)
++FFMPEG_CONF_OPTS += --enable-libmp3lame
++FFMPEG_DEPENDENCIES += lame
++else
++FFMPEG_CONF_OPTS += --disable-libmp3lame
++endif
++
++ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
++FFMPEG_CONF_OPTS += --enable-libmodplug
++FFMPEG_DEPENDENCIES += libmodplug
++else
++FFMPEG_CONF_OPTS += --disable-libmodplug
++endif
++
++ifeq ($(BR2_PACKAGE_SPEEX),y)
++FFMPEG_CONF_OPTS += --enable-libspeex
++FFMPEG_DEPENDENCIES += speex
++else
++FFMPEG_CONF_OPTS += --disable-libspeex
++endif
++
++ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
++FFMPEG_CONF_OPTS += --enable-libtheora
++FFMPEG_DEPENDENCIES += libtheora
++else
++FFMPEG_CONF_OPTS += --disable-libtheora
++endif
++
++ifeq ($(BR2_PACKAGE_WAVPACK),y)
++FFMPEG_CONF_OPTS += --enable-libwavpack
++FFMPEG_DEPENDENCIES += wavpack
++else
++FFMPEG_CONF_OPTS += --disable-libwavpack
++endif
++
+ # ffmpeg freetype support require fenv.h which is only
+ # available/working on glibc.
+ # The microblaze variant doesn't provide the needed exceptions
 -- 
 2.1.4
