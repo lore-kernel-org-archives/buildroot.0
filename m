@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:15:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sudo: bump to version 1.8.14p3
-In-Reply-To: <1438415164-12441-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1438415164-12441-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150801101521.3b1ccef9@free-electrons.com>
+Date: Sat, 1 Aug 2015 10:15:47 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-hts: bump version
+Message-ID: <20150801081640.9D12A8185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=8e279fbb3660ec51c370db5c80ce1ac731e6b64a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  1 Aug 2015 09:46:04 +0200, J?rg Krause wrote:
-> Also add a patch to fix missing header include with the musl C library:
->   ../include/sudo_util.h:220:14: error: unknown type name 'id_t'
-> 
-> Reported upstream:
-> http://bugzilla.sudo.ws/show_bug.cgi?id=711
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/sudo/0001-musl-fix-missing-header.patch | 19 +++++++++++++++++++
->  package/sudo/sudo.hash                          |  4 ++--
->  package/sudo/sudo.mk                            |  2 +-
->  3 files changed, 22 insertions(+), 3 deletions(-)
->  create mode 100644 package/sudo/0001-musl-fix-missing-header.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-pvr-hts/kodi-pvr-hts.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index 05ce503..726a155 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_HTS_VERSION = 5c2244044a00ecd3320fc6ce15dd208c16578588
++KODI_PVR_HTS_VERSION = 9b05d4cbdda80d12cc8d90b6cc2c80ab6f65e4d2
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPLv2+
+ KODI_PVR_HTS_LICENSE_FILES = src/client.h
