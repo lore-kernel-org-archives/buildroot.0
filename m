@@ -1,117 +1,88 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sat, 1 Aug 2015 13:15:59 -0300
-Subject: [Buildroot] nios2 : gcc 4.9.x buildroot toolchain broken
-In-Reply-To: <20150727224816.29768dfd@free-electrons.com>
-References: <CA+BsyQ6wmo0d4iZx_vREdZw9h=hQBg4vPOLwx9cwHAJGHhoGmA@mail.gmail.com>
- <20150727224816.29768dfd@free-electrons.com>
-Message-ID: <CAAEAJfCsBHCz2fb2WQmHw+9D9PRJAEui6XDLJFcGBNxM_WO-bA@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 1 Aug 2015 18:40:49 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150801082515.GC8475@waldemar-brodkorb.de>
+References: <20150722063018.99E6B101957@stock.ovh.net>
+ <20150722094349.424e7a3e@free-electrons.com> <55AF6B19.7010702@openwide.fr>
+ <20150722162715.GC6432@waldemar-brodkorb.de> <55AFD881.6050702@openwide.fr>
+ <55BA0093.1090101@openwide.fr> <20150801082515.GC8475@waldemar-brodkorb.de>
+Message-ID: <55BCF691.80906@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(resending from a subscribed mail this time)
+Hi Waldemar,
 
-On 07/27/2015 05:48 PM, Thomas Petazzoni wrote:
-> Dear Brendan Heading,
->
-
-Hi Brendan,
-
-Thanks a lot for the report.
-
-> On Mon, 27 Jul 2015 21:28:21 +0100, Brendan Heading wrote:
->
->> While looking at the dmraid build bug on nios2 I noted that it is not
->> possible to build a buildroot toolchain based on GCC 4.9.x for that
->> platform.
+Le 01/08/2015 10:25, Waldemar Brodkorb a ?crit :
+> Hi Romain,
+> Romain Naour wrote,
+> 
+>> Hi Waldemar,
 >>
->> You can reproduce the problem using the following (one-line) defconfig :
+>> Le 22/07/2015 19:53, Romain Naour a ?crit :
+>>> Hi Waldemar,
+>>>
+>>> Le 22/07/2015 18:27, Waldemar Brodkorb a ?crit :
+>>>> Hi Romain,
+>>>> Romain Naour wrote,
+>>>>
+>>>>>>>       x86_64 |                 libedje-1.7.10 | NOK | http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
+>>>>>>
+>>>>>> Another uClibc static linking problem. Waldemar?
+>>>>>>
+>>>>>
+>>>>> Waldemar, I think you can skip this issue since I'm working on the efl bump to
+>>>>> the latest release and I had to disable the efl package for uClibc-ng.
+>>>>>
+>>>>> I had a link issue:
+>>>>> lib/eina/.libs/libeina.so: undefined reference to `mkstemps'
+>>>>> It turn out that mkstemps and mkostemps are not available in uClibc-ng.
+>>>>
 >>
->> BR2_nios2=y
+>> [snip]
 >>
->> I tested it against the commit : 5ccde01652bc41da325bf4c9a5abbf0031080784
+>>>
+>>>> May be efl developers could be convinced to use something more standard like?
+>>>> mkstemps() seems very glibc specific.
+>>>
+>>> Indeed, man pages says that mkstemps() is unstandardized.
 >>
->> The error is as follows :
+>> I built successfully the efl package with a musl toolchain yesterday.
 >>
->> =============
->> ../../../libgcc/config/nios2/linux-atomic.c:23:24: fatal error:
->> asm/unistd.h: No such file or directory
->>   #include <asm/unistd.h>
->>                          ^
->> compilation terminated.
->> =============
+>> Musl have mkostemp, mkstemps, and mkostemps functions since v0.9.10
 >>
->> The problem only occurs on GCC 4.9.x. GCC 5.x builds fine.
+>> http://git.musl-libc.org/cgit/musl/commit/?id=2cc63358cdb0309ca996ffe56ccf402c2f2f16d5
 >>
->> Someone already submitted a patch to fix this :
+>> There is a comment in WHATSNEW that mkostemp is future-POSIX
+>> http://git.musl-libc.org/cgit/musl/commit/?id=7bec92e793d4b8a349796848cf43c7329b0f2ed0
 >>
->> http://lists.busybox.net/pipermail/buildroot/2015-February/119084.html
+>> Rich Felker said about mkostemp():
+>> "Technically mkostemp is nonstandard, but it's accepted for inclusion in Issue
+>> 8, and so far the policy for such functions is to treat them as if they're
+>> already in the standard."
+>> http://www.openwall.com/lists/musl/2013/02/03/1
 >>
->> The submitter promised to do some more work but it seems to have been left
->> that way since last February.
+>> So maybe it's time for uClibc-ng to include these functions ?
 >>
+>> Thoughts ?
+> 
+> Yeah, I think this would be fine. Do you have time to develop a 
+> patch proposing the changes? I am a bit busy next week not sure if I
+> get time to this.
 
-Not entirely true :-) I actually did re-submit the patch later,
-together with the rest of the internal toolchain support (as was
-requested):
+I've sent this patch to the uclibc-ng mailing list:
+http://mailman.uclibc-ng.org/pipermail/devel/2015-August/000432.html
 
-http://patchwork.ozlabs.org/patch/440651/
+What do you think?
+I did not test at runtime yet, just build tested...
+Also, a test program could be added later.
 
->> We can either :
->> - disable GCC 4.9.x for nios2 (leaving 5.x as the only supported buildroot
->> toolchain)
->> - integrate & test the above patch
->>
->> What does everyone think ? Given that the above patch seems to be
->> considered incomplete maybe we should disable nios2 4.9.x for now until the
->> required additions have been submitted.
->
-> Hum, that's interesting. I indeed saw that gcc 4.9.3 was not building
-> properly for NIOS II. However, gcc 4.9.2 built fine for me. Look at
-> http://autobuild.buildroot.org/toolchains/tarballs/br-nios2-full-2015.05.tar.bz2:
-> it is a NIOS II gcc 4.9.2 toolchain generated by Buildroot.
->
-> So I don't really understand how Ezequiel fall into the problem of
-> <asm/unistd.h> with gcc 4.9.2. But I did indeed fall into this problem
-> with gcc 4.9.3.
->
+Best regards,
+Romain
 
-Hope I'm not being nonsense (it's been a while since February and I
-haven't touched my nios2), but maybe you didn't fall because you had
-my patch applied when you built that toolchain?
-
-> Or maybe the problem is *not* gcc version related only, but also
-> related to the kernel headers version?
->
-
-Looking through the rest of the architectures, the only
-ones that have any non-local includes are m68k and nios2:
-
-$ find libgcc/config/ -name *atomic.c
-libgcc/config/nios2/linux-atomic.c
-libgcc/config/tilepro/atomic.c
-libgcc/config/sh/linux-atomic.c
-libgcc/config/m68k/linux-atomic.c
-libgcc/config/arm/linux-atomic.c
-libgcc/config/pa/linux-atomic.c
-
-$ find libgcc/config/ -name *atomic.c | xargs grep "include <"
-libgcc/config/nios2/linux-atomic.c:#include <asm/unistd.h>
-libgcc/config/m68k/linux-atomic.c:#include <asm/unistd.h>
-libgcc/config/m68k/linux-atomic.c:#include <stdbool.h>
-
-The rest don't include anything, so I'd guess it's gcc what's wrong.
-I don't know much about gcc, so it's really just a guess.
-
-> But in any case, Ezequiel's patch seems fine to me, I'll try to apply
-> something similar.
->
-
-And maybe the GCC maintainers can manage to include this change
-in future releases (Ccing Chung-Lin Tang).
-
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+> 
+> best regards
+>  Waldemar
+> 
