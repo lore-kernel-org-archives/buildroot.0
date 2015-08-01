@@ -1,51 +1,74 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 1 Aug 2015 10:22:26 +0200
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-07-29
-In-Reply-To: <1438262056.5763.48.camel@synopsys.com>
-References: <20150730063016.85822101F90@stock.ovh.net>
- <1438247167.5763.13.camel@synopsys.com>
- <1438262056.5763.48.camel@synopsys.com>
-Message-ID: <20150801082226.GB8475@waldemar-brodkorb.de>
+Date: Sat, 1 Aug 2015 10:25:15 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <55BA0093.1090101@openwide.fr>
+References: <20150722063018.99E6B101957@stock.ovh.net>
+ <20150722094349.424e7a3e@free-electrons.com>
+ <55AF6B19.7010702@openwide.fr>
+ <20150722162715.GC6432@waldemar-brodkorb.de>
+ <55AFD881.6050702@openwide.fr> <55BA0093.1090101@openwide.fr>
+Message-ID: <20150801082515.GC8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Alexey Brodkin wrote,
+Hi Romain,
+Romain Naour wrote,
 
-> Hi Thomas,
+> Hi Waldemar,
 > 
-> On Thu, 2015-07-30 at 12:06 +0300, Alexey Brodkin wrote:
-> > Hi Thomas,
-> > >          arc |                    sudo-1.8.13 | NOK | 
-> > > 
-> > > http://autobuild.buildroot.net/results/1b77539d08ffd950317a58cef8e2a4ce624c4710/
-> > ------------------------->8--------------------
-> > /home/test/autobuild/instance-0/output/host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(getenv.os): In
-> > function `__GI_getenv':
-> > getenv.c:(.text+0x0): multiple definition of `getenv'
-> > env_hooks.o:env_hooks.c:(.text+0x11c): first defined here
-> > ------------------------->8--------------------
+> Le 22/07/2015 19:53, Romain Naour a ?crit :
+> > Hi Waldemar,
 > > 
-> > I believe something similar to the issue Vincente fixed for Bash, see
-> > http://git.buildroot.net/buildroot/commit/?id=9623ff651f83a350819719f10705552da9793205
+> > Le 22/07/2015 18:27, Waldemar Brodkorb a ?crit :
+> >> Hi Romain,
+> >> Romain Naour wrote,
+> >>
+> >>>>>       x86_64 |                 libedje-1.7.10 | NOK | http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
+> >>>>
+> >>>> Another uClibc static linking problem. Waldemar?
+> >>>>
+> >>>
+> >>> Waldemar, I think you can skip this issue since I'm working on the efl bump to
+> >>> the latest release and I had to disable the efl package for uClibc-ng.
+> >>>
+> >>> I had a link issue:
+> >>> lib/eina/.libs/libeina.so: undefined reference to `mkstemps'
+> >>> It turn out that mkstemps and mkostemps are not available in uClibc-ng.
+> >>
+> 
+> [snip]
+> 
 > > 
-> > Will look into that and prepare a patch.
+> >> May be efl developers could be convinced to use something more standard like?
+> >> mkstemps() seems very glibc specific.
+> > 
+> > Indeed, man pages says that mkstemps() is unstandardized.
 > 
-> Looks like there's no simple way to resolve this issue with static building on "sudo" against uClibc.
-> There's no autoconf option to disable internal implementation of "getenv" and somehow "sudo" could be
-> built as a static binary on my x86 host (obviously with glibc).
+> I built successfully the efl package with a musl toolchain yesterday.
 > 
-> I'd say that this has something to do with uClibc (how it differs in implementation of "getenv")
-> compared to glibc but this is out of my scope of knowledge.
+> Musl have mkostemp, mkstemps, and mkostemps functions since v0.9.10
 > 
-> Probably Waldemar might be interested in that issue as well.
+> http://git.musl-libc.org/cgit/musl/commit/?id=2cc63358cdb0309ca996ffe56ccf402c2f2f16d5
+> 
+> There is a comment in WHATSNEW that mkostemp is future-POSIX
+> http://git.musl-libc.org/cgit/musl/commit/?id=7bec92e793d4b8a349796848cf43c7329b0f2ed0
+> 
+> Rich Felker said about mkostemp():
+> "Technically mkostemp is nonstandard, but it's accepted for inclusion in Issue
+> 8, and so far the policy for such functions is to treat them as if they're
+> already in the standard."
+> http://www.openwall.com/lists/musl/2013/02/03/1
+> 
+> So maybe it's time for uClibc-ng to include these functions ?
+> 
+> Thoughts ?
 
-I can reproduce it and will push it on my TODO list. Thanks for
-reporting this.
+Yeah, I think this would be fine. Do you have time to develop a 
+patch proposing the changes? I am a bit busy next week not sure if I
+get time to this.
 
 best regards
  Waldemar
