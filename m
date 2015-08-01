@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:15:58 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: bump version
-Message-ID: <20150801081640.C70CA7FEF2@busybox.osuosl.org>
+Date: Sat, 1 Aug 2015 10:16:13 +0200
+Subject: [Buildroot] [git commit] package/kodi-pvr-dvblink: bump version
+Message-ID: <20150801081641.18D6A8185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f80abe40c418fe3d2ada40fce3121313b6f7b45a
+commit: http://git.buildroot.net/buildroot/commit/?id=14e6c8208ce88d67ba8bda897980175df9949277
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.mk |    2 +-
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 7ad725b..ec04e6f 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+index 902c7f3..88e90c1 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 8d561f11d6e3678f801803d7c69cf32d5b915ec2
-+TVHEADEND_VERSION = d9cf931f9f7242f070ae990c4765cbdd5276fd66
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-KODI_PVR_DVBLINK_VERSION = cf756e9241c58d98c3b56dfcae89da9f35e4555f
++KODI_PVR_DVBLINK_VERSION = b87e8a79a329c2f808a5d5abffe05259e365d7e6
+ KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
+ KODI_PVR_DVBLINK_LICENSE = GPLv2+
+ KODI_PVR_DVBLINK_LICENSE_FILES = src/client.h
