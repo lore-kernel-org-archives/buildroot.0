@@ -1,12 +1,15 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat,  1 Aug 2015 09:46:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sudo: bump to version 1.8.14p3
-Message-ID: <1438415164-12441-1-git-send-email-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Aug 2015 10:14:45 +0200
+Subject: [Buildroot] [git commit] package/sudo: bump to version 1.8.14p3
+Message-ID: <20150801081455.261C78180E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=d760d4f5dde33d32824f5655c43da42529bba022
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Also add a patch to fix missing header include with the musl C library:
   ../include/sudo_util.h:220:14: error: unknown type name 'id_t'
@@ -14,13 +17,13 @@ Also add a patch to fix missing header include with the musl C library:
 Reported upstream:
 http://bugzilla.sudo.ws/show_bug.cgi?id=711
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sudo/0001-musl-fix-missing-header.patch | 19 +++++++++++++++++++
- package/sudo/sudo.hash                          |  4 ++--
- package/sudo/sudo.mk                            |  2 +-
+ package/sudo/0001-musl-fix-missing-header.patch |   19 +++++++++++++++++++
+ package/sudo/sudo.hash                          |    4 ++--
+ package/sudo/sudo.mk                            |    2 +-
  3 files changed, 22 insertions(+), 3 deletions(-)
- create mode 100644 package/sudo/0001-musl-fix-missing-header.patch
 
 diff --git a/package/sudo/0001-musl-fix-missing-header.patch b/package/sudo/0001-musl-fix-missing-header.patch
 new file mode 100644
@@ -33,7 +36,7 @@ index 0000000..e3681b2
 +Patch reported as bug upstream:
 +http://bugzilla.sudo.ws/show_bug.cgi?id=711
 +
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +
 +diff -purN sudo-1.8.14p3.orig/include/sudo_util.h sudo-1.8.14p3/include/sudo_util.h
 +--- sudo-1.8.14p3.orig/include/sudo_util.h	2015-07-22 14:22:49.000000000 +0200
@@ -69,5 +72,3 @@ index 10fbc88..4327c8a 100644
  SUDO_SITE = http://www.sudo.ws/sudo/dist
  SUDO_LICENSE = ISC BSD-3c
  SUDO_LICENSE_FILES = doc/LICENSE
--- 
-2.5.0
