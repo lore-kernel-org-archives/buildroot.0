@@ -1,169 +1,230 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  2 Aug 2015 20:56:54 +0200
-Subject: [Buildroot] [PATCH] systemd: Bump version and change hosting
-Message-ID: <1438541814-20602-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun,  2 Aug 2015 20:10:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/arptables: fix musl compilation
+	issues
+Message-ID: <1438542614-2069-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd seems to do its release using their github repository up from
-the 221 version.
+Fixes http://autobuild.buildroot.net/results/841/841129b8f49df205e1dabc2c2a5be70fa266768b/
 
-Since they use the auto generated release, we can't have a hash file.
+Backported two patches from upstream which had solved this problem.
 
-Remove the patch about 'ln --relative', coreutils's version is 8.23.4 on all
-recent (starting from stable included) Debian so it as good a time as
-any to discard this patch.
-
-We need to use the autogen.sh scripts from systemd, since they don't
-provide the Makefile.in file in the 'po' directory, intltoolize which is
-called in the autogen.sh scripts will create it for us.
-Therefore, there it's no longer needed to do AUTORECONF.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 ---
- ...uild-sys-revert-use-of-ln-relative-option.patch | 84 ----------------------
- package/systemd/systemd.hash                       |  2 -
- package/systemd/systemd.mk                         | 11 +--
- 3 files changed, 7 insertions(+), 90 deletions(-)
- delete mode 100644 package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch
- delete mode 100644 package/systemd/systemd.hash
+ package/arptables/0002-src-Use-stdint-types.patch  | 129 +++++++++++++++++++++
+ .../0003-src-Remove-support-for-libc5.patch        |  64 ++++++++++
+ 2 files changed, 193 insertions(+)
+ create mode 100644 package/arptables/0002-src-Use-stdint-types.patch
+ create mode 100644 package/arptables/0003-src-Remove-support-for-libc5.patch
 
-diff --git a/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch b/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch
-deleted file mode 100644
-index 2d9b347..0000000
---- a/package/systemd/0002-build-sys-revert-use-of-ln-relative-option.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--From 582c9a734a0e976592946ff5b577f98551170a38 Mon Sep 17 00:00:00 2001
--From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
--Date: Mon, 21 Jul 2014 11:34:38 +0200
--Subject: [PATCH 1/1] build-sys: revert use of ln relative option.
--
--Systemd build system now uses the `--relative` option from `ln(1)`.
--This option was added to GNU coreutils 8.16, which is not widely
--deployed yet by GNU/Linux distributions (not available in Debian Wheezy
--for example).
--
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-----
-- Makefile.am  |   19 +++++--------------
-- configure.ac |    2 --
-- 2 files changed, 5 insertions(+), 16 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index e238cde..02b39ea 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -219,8 +219,8 @@ define move-to-rootlibdir
-- 	if test "$(libdir)" != "$(rootlibdir)"; then \
-- 		$(MKDIR_P) $(DESTDIR)$(rootlibdir) && \
-- 		so_img_name=$$(readlink $(DESTDIR)$(libdir)/$$libname) && \
---		rm -f $(DESTDIR)$(libdir)/$$libname && \
---		$(LN_S) --relative -f $(DESTDIR)$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
--+		so_img_rel_target_prefix=$$(echo $(libdir) | sed 's,\(^/\|\)[^/][^/]*,..,g') && \
--+		$(LN_S) -f $$so_img_rel_target_prefix$(rootlibdir)/$$so_img_name $(DESTDIR)$(libdir)/$$libname && \
-- 		mv $(DESTDIR)$(libdir)/$$libname.* $(DESTDIR)$(rootlibdir); \
-- 	fi
-- endef
--@@ -279,9 +279,9 @@ install-aliases-hook:
-- 	set -- $(SYSTEM_UNIT_ALIASES) && \
-- 		dir=$(systemunitdir) && $(install-aliases)
-- 	set -- $(USER_UNIT_ALIASES) && \
---		dir=$(userunitdir) && $(install-relative-aliases)
--+		dir=$(userunitdir) && $(install-aliases)
-- 	set -- $(GENERAL_ALIASES) && \
---		dir= && $(install-relative-aliases)
--+		dir= && $(install-aliases)
-- 
-- define install-aliases
-- 	while [ -n "$$1" ]; do \
--@@ -292,15 +292,6 @@ define install-aliases
-- 	done
-- endef
-- 
---define install-relative-aliases
---	while [ -n "$$1" ]; do \
---		$(MKDIR_P) `dirname $(DESTDIR)$$dir/$$2` && \
---		rm -f $(DESTDIR)$$dir/$$2 && \
---		$(LN_S) --relative $(DESTDIR)$$1 $(DESTDIR)$$dir/$$2 && \
---		shift 2 || exit $$?; \
---	done
---endef
---
-- install-touch-usr-hook:
-- 	touch -c $(DESTDIR)/$(prefix)
-- 
--@@ -2034,7 +2025,7 @@ systemd_dbus1_generator_LDADD = \
-- dbus1-generator-install-hook:
-- 	$(AM_V_at)$(MKDIR_P) $(DESTDIR)$(usergeneratordir)
-- 	$(AM_V_RM)rm -f $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
---	$(AM_V_LN)$(LN_S) --relative -f $(DESTDIR)$(systemgeneratordir)/systemd-dbus1-generator $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
--+	$(AM_V_LN)$(LN_S) -f $(systemgeneratordir)/systemd-dbus1-generator $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
-- 
-- dbus1-generator-uninstall-hook:
-- 	rm -f $(DESTDIR)$(usergeneratordir)/systemd-dbus1-generator
--diff --git a/configure.ac b/configure.ac
--index ae88382..ec220af 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -96,8 +96,6 @@ AC_PATH_PROG([KMOD], [kmod], [/usr/bin/kmod], [$PATH:/usr/sbin:/sbin])
-- 
-- AC_PATH_PROG([KEXEC], [kexec], [/usr/sbin/kexec], [$PATH:/usr/sbin:/sbin])
-- 
---AS_IF([! ln --relative --help > /dev/null 2>&1], [AC_MSG_ERROR([*** ln doesn't support --relative ***])])
---
-- M4_DEFINES=
-- 
-- # gtkdocize greps for '^GTK_DOC_CHECK', so it needs to be on its own line
---- 
--1.7.10.4
--
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-deleted file mode 100644
-index f746051..0000000
---- a/package/systemd/systemd.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f  systemd-221.tar.xz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index b62fc08..7115546 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 221
--SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
--SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
-+SYSTEMD_VERSION = 224
-+SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
- SYSTEMD_INSTALL_STAGING = YES
-@@ -18,7 +17,6 @@ SYSTEMD_DEPENDENCIES = \
- 	host-gperf
- 
- SYSTEMD_PROVIDES = udev
--SYSTEMD_AUTORECONF = YES
- 
- # Make sure that systemd will always be built after busybox so that we have
- # a consistent init setup between two builds
-@@ -51,6 +49,11 @@ SYSTEMD_CONF_ENV = \
- 	CFLAGS="$(SYSTEMD_CFLAGS)" \
- 	ac_cv_path_KMOD=/usr/bin/kmod
- 
-+define SYSTEMD_RUN_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_AUTOGEN
+diff --git a/package/arptables/0002-src-Use-stdint-types.patch b/package/arptables/0002-src-Use-stdint-types.patch
+new file mode 100644
+index 0000000..1c02697
+--- /dev/null
++++ b/package/arptables/0002-src-Use-stdint-types.patch
+@@ -0,0 +1,129 @@
++From 24957c135eaacd718f3c788285de33d64316b32e Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 10:31:24 +0200
++Subject: [PATCH 1/2] src: Use stdint types
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
- SYSTEMD_CONF_OPTS += --enable-compat-libs
- else
++Backport of upstream commit 047f37b1d5d865084a435fd7594b8c5c332ccb8d
++
++Upstream-status: backport
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ arptables.c                 | 8 ++++----
++ include/arptables.h         | 3 ++-
++ include/libarptc/libarptc.h | 7 ++++---
++ libarptc/libarptc.c         | 4 ++--
++ libarptc/libarptc_incl.c    | 2 +-
++ 5 files changed, 13 insertions(+), 11 deletions(-)
++
++diff --git a/arptables.c b/arptables.c
++index 5535ab2..6d1377f 100644
++--- a/arptables.c
+++++ b/arptables.c
++@@ -230,7 +230,7 @@ extern void dump_entries(const arptc_handle_t handle);
++    /etc/protocols */
++ struct pprot {
++ 	char *name;
++-	u_int8_t num;
+++	uint8_t num;
++ };
++ 
++ /* Primitive headers... */
++@@ -925,7 +925,7 @@ mask_to_dotted(const struct in_addr *mask)
++ {
++ 	int i;
++ 	static char buf[20];
++-	u_int32_t maskaddr, bits;
+++	uint32_t maskaddr, bits;
++ 
++ 	maskaddr = ntohl(mask->s_addr);
++ 
++@@ -967,7 +967,7 @@ string_to_number(const char *s, unsigned int min, unsigned int max,
++ }
++ 
++ static void
++-set_option(unsigned int *options, unsigned int option, u_int16_t *invflg,
+++set_option(unsigned int *options, unsigned int option, uint16_t *invflg,
++ 	   int invert)
++ {
++ 	if (*options & option)
++@@ -1107,7 +1107,7 @@ register_target(struct arptables_target *me)
++ }
++ 
++ static void
++-print_num(u_int64_t number, unsigned int format)
+++print_num(uint64_t number, unsigned int format)
++ {
++ 	if (format & FMT_KILOMEGAGIGA) {
++ 		if (number > 99999) {
++diff --git a/include/arptables.h b/include/arptables.h
++index 820b664..e6a6ba6 100644
++--- a/include/arptables.h
+++++ b/include/arptables.h
++@@ -1,6 +1,7 @@
++ #ifndef _ARPTABLES_USER_H
++ #define _ARPTABLES_USER_H
++ 
+++#include <stdint.h>
++ #include "arptables_common.h"
++ #include "libarptc/libarptc.h"
++ 
++@@ -126,7 +127,7 @@ extern char *mask_to_dotted(const struct in_addr *mask);
++ 
++ extern void parse_hostnetworkmask(const char *name, struct in_addr **addrpp,
++                       struct in_addr *maskp, unsigned int *naddrs);
++-extern u_int16_t parse_protocol(const char *s);
+++extern uint16_t parse_protocol(const char *s);
++ 
++ extern int do_command(int argc, char *argv[], char **table,
++ 		      arptc_handle_t *handle);
++diff --git a/include/libarptc/libarptc.h b/include/libarptc/libarptc.h
++index e4f1175..76fbfab 100644
++--- a/include/libarptc/libarptc.h
+++++ b/include/libarptc/libarptc.h
++@@ -6,9 +6,10 @@
++ #include <linux/netfilter_arp/arp_tables.h>
++ 
++ #ifndef ARPT_MIN_ALIGN
++-/* arpt_entry has pointers and u_int64_t's in it, so if you align to
++-   it, you'll also align to any crazy matches and targets someone
++-   might write */
+++/* arpt_entry has pointers and uint64_t's in it, so if you align to
+++ * it, you'll also align to any crazy matches and targets someone
+++ * might write.
+++ */
++ #define ARPT_MIN_ALIGN (__alignof__(struct arpt_entry))
++ #endif
++ 
++diff --git a/libarptc/libarptc.c b/libarptc/libarptc.c
++index 2dcaaef..701bae0 100644
++--- a/libarptc/libarptc.c
+++++ b/libarptc/libarptc.c
++@@ -256,8 +256,8 @@ unconditional(const struct arpt_arp *arp)
++ {
++ 	unsigned int i;
++ 
++-	for (i = 0; i < sizeof(*arp)/sizeof(u_int32_t); i++)
++-		if (((u_int32_t *)arp)[i])
+++	for (i = 0; i < sizeof(*arp) / sizeof(uint32_t); i++)
+++		if (((uint32_t *)arp)[i])
++ 			return 0;
++ 
++ 	return 1;
++diff --git a/libarptc/libarptc_incl.c b/libarptc/libarptc_incl.c
++index 2fa3d43..b41fcb2 100644
++--- a/libarptc/libarptc_incl.c
+++++ b/libarptc/libarptc_incl.c
++@@ -1706,7 +1706,7 @@ TC_COMMIT(TC_HANDLE_T *handle)
++ 		/* Kernel will think that pointer should be 64-bits, and get
++ 		   padding.  So we accomodate here (assumption: alignment of
++ 		   `counters' is on 64-bit boundary). */
++-		u_int64_t *kernptr = (u_int64_t *)&newcounters->counters;
+++		uint64_t *kernptr = (uint64_t *)&newcounters->counters;
++ 		if ((unsigned long)&newcounters->counters % 8 != 0) {
++ 			fprintf(stderr,
++ 				"counters alignment incorrect! Mail rusty!\n");
++-- 
++2.4.3
++
+diff --git a/package/arptables/0003-src-Remove-support-for-libc5.patch b/package/arptables/0003-src-Remove-support-for-libc5.patch
+new file mode 100644
+index 0000000..15e893d
+--- /dev/null
++++ b/package/arptables/0003-src-Remove-support-for-libc5.patch
+@@ -0,0 +1,64 @@
++From 5f1379ff68bfedb56309527bee266a591b27a19e Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 10:31:41 +0200
++Subject: [PATCH 2/2] src: Remove support for libc5
++
++Fixes compilation with musl libc
++
++Backport of upstream commit f4ab8f63f11a72f14687a6646d04ae1bae3fa45f
++Upstream status: backport
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ include/libarptc/arpt_kernel_headers.h | 12 ------------
++ libarptc/libarptc.c                    |  4 ----
++ 2 files changed, 16 deletions(-)
++
++diff --git a/include/libarptc/arpt_kernel_headers.h b/include/libarptc/arpt_kernel_headers.h
++index 442cc54..140e999 100644
++--- a/include/libarptc/arpt_kernel_headers.h
+++++ b/include/libarptc/arpt_kernel_headers.h
++@@ -5,7 +5,6 @@
++ 
++ #include <limits.h>
++ 
++-#if defined(__GLIBC__) && __GLIBC__ == 2
++ #include <netinet/ip.h>
++ #include <netinet/in.h>
++ #include <netinet/ip_icmp.h>
++@@ -14,16 +13,5 @@
++ #include <netinet/ether.h>
++ #include <net/if.h>
++ #include <sys/types.h>
++-#else
++-#include <sys/socket.h>
++-#include <linux/ip.h>
++-#include <linux/in.h>
++-#include <linux/if.h>
++-#include <linux/icmp.h>
++-#include <linux/tcp.h>
++-#include <linux/udp.h>
++-#include <linux/types.h>
++-#include <linux/in6.h>
++-#endif
++ 
++ #endif
++diff --git a/libarptc/libarptc.c b/libarptc/libarptc.c
++index 701bae0..9c5a5b0 100644
++--- a/libarptc/libarptc.c
+++++ b/libarptc/libarptc.c
++@@ -23,10 +23,6 @@
++ #define inline
++ #endif
++ 
++-#if !defined(__GLIBC__) || (__GLIBC__ < 2)
++-typedef unsigned int socklen_t;
++-#endif
++-
++ #include "libarptc/libarptc.h"
++ 
++ #define IP_VERSION	4
++-- 
++2.4.3
++
 -- 
-2.4.6
+2.4.3
