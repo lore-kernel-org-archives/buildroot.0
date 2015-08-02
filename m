@@ -1,7 +1,7 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 2 Aug 2015 23:39:32 +0200
-Subject: [Buildroot] [PATCH 2/3] toolchain: add mips64 for uClibc-ng
-Message-ID: <20150802213932.GA23554@waldemar-brodkorb.de>
+Date: Sun, 2 Aug 2015 23:39:58 +0200
+Subject: [Buildroot] [PATCH 3/3] uclibc: remove patch applied in 1.0.5
+Message-ID: <20150802213958.GA23634@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,21 +11,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- toolchain/toolchain-buildroot/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 --------------------
+ 1 file changed, 64 deletions(-)
+ delete mode 100644 package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 13e2b15..6d74819 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -24,7 +24,7 @@ choice
- 	prompt "C library"
- 	default BR2_TOOLCHAIN_UCLIBC
- 	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_aarch64 || BR2_aarch64_be \
--		|| BR2_microblaze || BR2_mips64 || BR2_mips64el || BR2_powerpc64
-+		|| BR2_microblaze || BR2_powerpc64
- 
- config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	bool "uClibc"
+diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
+deleted file mode 100644
+index a580a67..0000000
+--- a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Wed, 22 Jul 2015 14:54:07 +0200
+-Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
+-
+-Found via buildroot autobuilder.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
+- libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
+- 2 files changed, 12 insertions(+)
+-
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-index f38703b..ff9a784 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-@@ -70,6 +70,9 @@
+- 	.globl	__lll_lock_wait_private
+- 	.type	__lll_lock_wait_private, at function
+- 	.hidden	__lll_lock_wait_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_lock_wait_private
+-+#endif
+- 	.align	16
+- __lll_lock_wait_private:
+- 	cfi_startproc
+-@@ -320,6 +323,9 @@ __lll_timedlock_wait:
+- 	.globl	__lll_unlock_wake_private
+- 	.type	__lll_unlock_wake_private, at function
+- 	.hidden	__lll_unlock_wake_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_unlock_wake_private
+-+#endif
+- 	.align	16
+- __lll_unlock_wake_private:
+- 	cfi_startproc
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-index 50aacea..894c683 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-@@ -75,6 +75,9 @@
+- 	.globl	__lll_lock_wait_private
+- 	.type	__lll_lock_wait_private, at function
+- 	.hidden	__lll_lock_wait_private
+-+#ifndef IS_IN_libpthread
+-+	.weak   __lll_lock_wait_private
+-+#endif
+- 	.align	16
+- __lll_lock_wait_private:
+- 	cfi_startproc
+-@@ -317,6 +320,9 @@ __lll_timedlock_wait:
+- 	.globl	__lll_unlock_wake_private
+- 	.type	__lll_unlock_wake_private, at function
+- 	.hidden	__lll_unlock_wake_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_unlock_wake_private
+-+#endif
+- 	.align	16
+- __lll_unlock_wake_private:
+- 	cfi_startproc
+--- 
+-1.7.10.4
+-
 -- 
 1.7.10.4
