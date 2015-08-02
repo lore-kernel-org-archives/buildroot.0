@@ -1,53 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Aug 2015 17:29:03 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libv4l: needs argp-standalone
- with musl toolchains
-In-Reply-To: <1438448118-26198-3-git-send-email-romain.naour@openwide.fr>
-References: <1438448118-26198-1-git-send-email-romain.naour@openwide.fr>
- <1438448118-26198-3-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150802152903.GF3647@free.fr>
+Date: Sun, 2 Aug 2015 17:38:30 +0200
+Subject: [Buildroot] [PATCH] package/tz: fix incorrect timezone setting
+ for uclibc
+In-Reply-To: <1438323935-7809-1-git-send-email-fancp2007@gmail.com>
+References: <1438323935-7809-1-git-send-email-fancp2007@gmail.com>
+Message-ID: <20150802153830.GG3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Scott, All,
 
-On 2015-08-01 18:55 +0200, Romain Naour spake thusly:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/libv4l/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 2015-07-31 14:25 +0800, Scott Fan spake thusly:
+> According to the doc file from <uclibc-src>/docs/
+> Glibc_vs_uClibc_Differences.txt, the uclibc library read the
+> TZ environment variable, or the /etc/TZ file; the /etc/TZ file
+> should be a single line, ending with a newline, containing the
+> TZ setting.  For example: echo CST6CDT > /etc/TZ
 > 
-> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-> index 0437ba1..0ae12d1 100644
-> --- a/package/libv4l/Config.in
-> +++ b/package/libv4l/Config.in
-> @@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBV4L
->  	depends on !BR2_STATIC_LIBS # dlopen()
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
-> -	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-> +	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+> Whereas the tzdump cmd would output two lines like this:
+>   # Asia/Shanghai
+>   CST-8
+> 
+> This make the uclibc could not read the correct TZ setting, therefore
+> e.g. the 'busybox date' cmd always show the UTC timezone.
+> 
+> This fix remove the redundant first line from the tzdump output.
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-Ditto, you also need to adjust the build dependencies in the .mk .
-
-However, that one is doing things differently than the other two. It
-currently build-depends on argp-standalone and links with it as soon as
-the package is enabled.
-
-I'm nt sure that's the best soltuion; it should only do that if built
-against uClibc or musl, like rng-tools and elfutils currently do.
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
->  	help
->  	  libv4l is a collection of libraries which adds a thin abstraction
+> ---
+>  package/tz/tz.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/tz/tz.mk b/package/tz/tz.mk
+> index 349d73f..7a756eb 100644
+> --- a/package/tz/tz.mk
+> +++ b/package/tz/tz.mk
+> @@ -14,7 +14,7 @@ define TZ_BUILD_CMDS
+>  	(cd $(HOST_DIR)/usr/share/zoneinfo/posix/;                 \
+>  		for i in $$(find . -type f); do                    \
+>  			mkdir -p $(@D)/output/$$(dirname $$i);         \
+> -			$(TZDUMP) -p . -q $${i#./} > $(@D)/output/$$i; \
+> +			$(TZDUMP) -p . -q $${i#./} | sed '1d' > $(@D)/output/$$i; \
+>  		done                                               \
+>  	)
+>  endef
 > -- 
-> 2.4.3
+> 2.5.0
 > 
 > _______________________________________________
 > buildroot mailing list
