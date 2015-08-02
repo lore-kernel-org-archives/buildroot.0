@@ -1,71 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Aug 2015 17:38:30 +0200
-Subject: [Buildroot] [PATCH] package/tz: fix incorrect timezone setting
- for uclibc
-In-Reply-To: <1438323935-7809-1-git-send-email-fancp2007@gmail.com>
-References: <1438323935-7809-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <20150802153830.GG3647@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Aug 2015 19:17:43 +0200
+Subject: [Buildroot] [git commit] configs/raspberry2_defconfig: Fix typo
+Message-ID: <20150802171751.C72C781D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Scott, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=238a25bd02b2457731531ccb3029fcf2408275ac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-07-31 14:25 +0800, Scott Fan spake thusly:
-> According to the doc file from <uclibc-src>/docs/
-> Glibc_vs_uClibc_Differences.txt, the uclibc library read the
-> TZ environment variable, or the /etc/TZ file; the /etc/TZ file
-> should be a single line, ending with a newline, containing the
-> TZ setting.  For example: echo CST6CDT > /etc/TZ
-> 
-> Whereas the tzdump cmd would output two lines like this:
->   # Asia/Shanghai
->   CST-8
-> 
-> This make the uclibc could not read the correct TZ setting, therefore
-> e.g. the 'busybox date' cmd always show the UTC timezone.
-> 
-> This fix remove the redundant first line from the tzdump output.
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/raspberrypi2_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tz/tz.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/tz/tz.mk b/package/tz/tz.mk
-> index 349d73f..7a756eb 100644
-> --- a/package/tz/tz.mk
-> +++ b/package/tz/tz.mk
-> @@ -14,7 +14,7 @@ define TZ_BUILD_CMDS
->  	(cd $(HOST_DIR)/usr/share/zoneinfo/posix/;                 \
->  		for i in $$(find . -type f); do                    \
->  			mkdir -p $(@D)/output/$$(dirname $$i);         \
-> -			$(TZDUMP) -p . -q $${i#./} > $(@D)/output/$$i; \
-> +			$(TZDUMP) -p . -q $${i#./} | sed '1d' > $(@D)/output/$$i; \
->  		done                                               \
->  	)
->  endef
-> -- 
-> 2.5.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 7b12040..02603a2 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+-BR2_LINUX_KERNEL_ZIMAGE=yo
++BR2_LINUX_KERNEL_ZIMAGE=y
+ 
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
