@@ -1,58 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:30 -0000
-Subject: [Buildroot] [git commit branch/next] package/lame: Fix compile on
-	32bit Intel
-Message-ID: <20150808105627.591037FB5A@busybox.osuosl.org>
+Date: Sun, 2 Aug 2015 19:19:39 +0200
+Subject: [Buildroot] [git commit branch/next] configs/riotboard: bump kernel
+	to version 4.1.3
+Message-ID: <20150808105652.AFD6D807FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f512b4efdba5d9ed28c64b8980ef817ca295fcf2
+commit: http://git.buildroot.net/buildroot/commit/?id=00e3e44493364c900fdd708d96468f87878596f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In file included from xmm_quantize_sub.c:37:0:
-/home/br/br5/output/host/usr/lib/gcc/i586-buildroot-linux-uclibc/4.9.2/include/xmmintrin.h:929:1: error: inlining failed in call to always_inline '_mm_loadu_ps': target specific option mismatch
- _mm_loadu_ps (float const *__P)
- ^
-xmm_quantize_sub.c:65:18: error: called from here
-     const __m128 vec_fabs_mask = _mm_loadu_ps(&fabs_mask._float[0]);
-                  ^
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lame/0003-msse.patch |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ configs/riotboard_defconfig |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lame/0003-msse.patch b/package/lame/0003-msse.patch
-new file mode 100644
-index 0000000..ca4f65f
---- /dev/null
-+++ b/package/lame/0003-msse.patch
-@@ -0,0 +1,24 @@
-+Fix compile on 32bit Intel
-+
-+Downloaded from
-+http://anonscm.debian.org/cgit/pkg-multimedia/lame.git/tree/debian/patches/msse.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Description: Build xmm_quantize_sub.c with -msse
-+Author: Sebastian Ramacher <sramacher@debian.org>
-+Bug: http://sourceforge.net/p/lame/bugs/443/
-+Bug-Debian: https://bugs.debian.org/760047
-+Forwarded: http://sourceforge.net/p/lame/bugs/443/
-+Last-Update: 2014-08-31
-+
-+--- lame-3.99.5+repack1.orig/libmp3lame/vector/Makefile.am
-++++ lame-3.99.5+repack1/libmp3lame/vector/Makefile.am
-+@@ -20,6 +20,7 @@ xmm_sources = xmm_quantize_sub.c
-+ 
-+ if WITH_XMM
-+ liblamevectorroutines_la_SOURCES = $(xmm_sources)
-++liblamevectorroutines_la_CFLAGS = -msse
-+ endif
-+ 
-+ noinst_HEADERS = lame_intrin.h
+diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
+index 98fdd6f..79e092e 100644
+--- a/configs/riotboard_defconfig
++++ b/configs/riotboard_defconfig
+@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # kernel headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1.3"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
