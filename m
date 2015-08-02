@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Aug 2015 17:26:45 +0200
-Subject: [Buildroot] [PATCH 2/3] package/eflutils: needs argp-standalone
+Date: Sun, 2 Aug 2015 17:29:03 +0200
+Subject: [Buildroot] [PATCH 3/3] package/libv4l: needs argp-standalone
  with musl toolchains
-In-Reply-To: <1438448118-26198-2-git-send-email-romain.naour@openwide.fr>
+In-Reply-To: <1438448118-26198-3-git-send-email-romain.naour@openwide.fr>
 References: <1438448118-26198-1-git-send-email-romain.naour@openwide.fr>
- <1438448118-26198-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150802152645.GE3647@free.fr>
+ <1438448118-26198-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150802152903.GF3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,28 +17,35 @@ Romain, All,
 On 2015-08-01 18:55 +0200, Romain Naour spake thusly:
 > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/elfutils/Config.in | 2 +-
+>  package/libv4l/Config.in | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-> index 6c6856e..ea0ae62 100644
-> --- a/package/elfutils/Config.in
-> +++ b/package/elfutils/Config.in
-> @@ -4,7 +4,7 @@ comment "elfutils needs a toolchain w/ wchar, dynamic library"
->  
->  config BR2_PACKAGE_ELFUTILS
->  	bool "elfutils"
+> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+> index 0437ba1..0ae12d1 100644
+> --- a/package/libv4l/Config.in
+> +++ b/package/libv4l/Config.in
+> @@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBV4L
+>  	depends on !BR2_STATIC_LIBS # dlopen()
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
 > -	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
 > +	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
 
 Ditto, you also need to adjust the build dependencies in the .mk .
 
+However, that one is doing things differently than the other two. It
+currently build-depends on argp-standalone and links with it as soon as
+the package is enabled.
+
+I'm nt sure that's the best soltuion; it should only do that if built
+against uClibc or musl, like rng-tools and elfutils currently do.
+
 Regards,
 Yann E. MORIN.
 
->  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
->  	depends on BR2_USE_WCHAR
->  	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>  	help
+>  	  libv4l is a collection of libraries which adds a thin abstraction
 > -- 
 > 2.4.3
 > 
