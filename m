@@ -1,27 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Aug 2015 19:17:59 +0200
-Subject: [Buildroot] [PATCH] configs/raspberry2_defconfig: Fix typo
-In-Reply-To: <1438527391-31932-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1438527391-31932-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150802191759.13a7debd@free-electrons.com>
+Date: Sun, 2 Aug 2015 19:18:51 +0200
+Subject: [Buildroot] [git commit] docs/manual: fix generation of deprecated
+	list
+Message-ID: <20150802171856.766B681D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+commit: http://git.buildroot.net/buildroot/commit/?id=9d0d4c3cd2c66ab036ac809467d2be5aeb6d0f11
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Aug 2015 16:56:31 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  configs/raspberrypi2_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Since commit 5f117c3 (webkit: mark as deprecated), generation of the
+manual has been broken.
 
-Applied, thanks.
+This is because that commit added a deprecated dependency on a
+prompt-less symbol, BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS. However, the
+generation script does not check that a symbol has a prompt before
+it attempts to add it to the deprecated list. So, we end up with
+traceback:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+    Writing the virtual-packages list in:
+            /home/ymorin/dev/buildroot/O/build/docs/manual/virtual-package-list.txt
+    Traceback (most recent call last):
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 510, in <module>
+        buildroot.print_list(list_name, dry_run=args.dry_run, output=output)
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 466, in print_list
+        item_label=item_label)
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 126, in format_asciidoc_table
+        enable_choice=enable_choice))
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 350, in _format_symbol_prompt_location
+        return "| {0:<40} <| {1}\n".format(get_label_func(symbol),
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 458, in <lambda>
+        get_label = lambda x: self._get_symbol_label(x, mark_depr)
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 313, in _get_symbol_label
+        label = symbol.get_prompts()[0]
+    IndexError: list index out of range
+
+However, we can not use the existing _is_deprecated filter function to
+filter out symbols without prompts, because this function is also used
+to add a '(deprecated)' tag in the man package list (not that it would
+not work, but it does not seem /right/). Furthermore, it could also be
+used (but is currently not) to build the list of virtual packages, which
+do not have a prompt.
+
+So, introduce a filter function, aptly named _is_deprecated_feature(),
+to be used as the filter to find deprecated feature, and keep the
+existing _is_deprecated() that can be used in any context to decide
+whether a symbol is deprecated or not.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/gen-manual-lists.py |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 1e0e9bb..d231eda 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -178,7 +178,7 @@ class Buildroot:
+         'deprecated': {
+             'filename': "deprecated-list",
+             'root_menu': None,
+-            'filter': "_is_deprecated",
++            'filter': "_is_deprecated_feature",
+             'format': "_format_symbol_prompt_location",
+             'sorted': False,
+         },
+@@ -278,6 +278,9 @@ class Buildroot:
+     def _is_virtual_package(self, symbol):
+         return self._is_package(symbol, 'virtual')
+ 
++    def _is_deprecated_feature(self, symbol):
++        return symbol.get_prompts() and self._is_deprecated(symbol)
++
+     def _exists_virt_symbol(self, pkg_name):
+         """ Return True if a symbol exists that defines the package as
+         a virtual package, False otherwise
