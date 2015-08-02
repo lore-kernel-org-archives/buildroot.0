@@ -1,89 +1,46 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 2 Aug 2015 23:39:58 +0200
-Subject: [Buildroot] [PATCH 3/3] uclibc: remove patch applied in 1.0.5
-Message-ID: <20150802213958.GA23634@waldemar-brodkorb.de>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun,  2 Aug 2015 22:43:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libatomic_ops - fix compilation
+	fail on sparc
+Message-ID: <1438551830-3619-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes http://autobuild.buildroot.net/results/6d8/6d83fa5d69572cec5c96be4b7651f9b113a1a19c/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+libatomic_ops by default requires SPARC v9. buildroot's two supported
+sparc arches (SPARCv8, and leon3) are both SPARCv8-based. Unfortunately
+libatomic_ops's support for SPARCv8 is incomplete.
+
+The library includes fallbacks but these must expressly be enabled by
+defining a macro, enabled by this patch. Note that I'm testing for the
+SPARC variants rather than BR2_sparc, in case someone implements SPARCv9
+support in the future.
+
+Discussion of this workaround described by the maintainer here :
+https://github.com/ivmai/libatomic_ops/issues/9
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 ---
- .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 --------------------
- 1 file changed, 64 deletions(-)
- delete mode 100644 package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
+ package/libatomic_ops/libatomic_ops.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-deleted file mode 100644
-index a580a67..0000000
---- a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Wed, 22 Jul 2015 14:54:07 +0200
--Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
--
--Found via buildroot autobuilder.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-----
-- libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
-- libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
-- 2 files changed, 12 insertions(+)
--
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--index f38703b..ff9a784 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--@@ -70,6 +70,9 @@
-- 	.globl	__lll_lock_wait_private
-- 	.type	__lll_lock_wait_private, at function
-- 	.hidden	__lll_lock_wait_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_lock_wait_private
--+#endif
-- 	.align	16
-- __lll_lock_wait_private:
-- 	cfi_startproc
--@@ -320,6 +323,9 @@ __lll_timedlock_wait:
-- 	.globl	__lll_unlock_wake_private
-- 	.type	__lll_unlock_wake_private, at function
-- 	.hidden	__lll_unlock_wake_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_unlock_wake_private
--+#endif
-- 	.align	16
-- __lll_unlock_wake_private:
-- 	cfi_startproc
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--index 50aacea..894c683 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--@@ -75,6 +75,9 @@
-- 	.globl	__lll_lock_wait_private
-- 	.type	__lll_lock_wait_private, at function
-- 	.hidden	__lll_lock_wait_private
--+#ifndef IS_IN_libpthread
--+	.weak   __lll_lock_wait_private
--+#endif
-- 	.align	16
-- __lll_lock_wait_private:
-- 	cfi_startproc
--@@ -317,6 +320,9 @@ __lll_timedlock_wait:
-- 	.globl	__lll_unlock_wake_private
-- 	.type	__lll_unlock_wake_private, at function
-- 	.hidden	__lll_unlock_wake_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_unlock_wake_private
--+#endif
-- 	.align	16
-- __lll_unlock_wake_private:
-- 	cfi_startproc
---- 
--1.7.10.4
--
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 5f698c4..fd45726 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -19,5 +19,9 @@ LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
+ 
+ LIBATOMIC_OPS_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
++LIBATOMIC_OPS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-1.7.10.4
+2.4.3
