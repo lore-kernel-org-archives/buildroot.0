@@ -1,44 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Aug 2015 17:00:58 +0200
-Subject: [Buildroot] [PATCH] configs/raspberry2_defconfig: Fix typo
-In-Reply-To: <1438527391-31932-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1438527391-31932-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20150802150058.GB3647@free.fr>
+Date: Sun, 2 Aug 2015 17:23:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: disable for static build
+In-Reply-To: <1438506439-3096-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1438506439-3096-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150802152333.GC3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, All,
+J?rg, All,
 
-On 2015-08-02 16:56 +0200, Maxime Hadjinlian spake thusly:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+On 2015-08-02 11:07 +0200, J?rg Krause spake thusly:
+> nodejs requires dlopen(), etc.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/87d/87dab0186abd7b2737a56b2f939f3aba294e8772/
+> http://autobuild.buildroot.net/results/be1/be1010a3a31642d49ec3a118858c77fed2f762b8/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/nodejs/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index c5ec792..69063fc 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -8,17 +8,18 @@ config BR2_PACKAGE_NODEJS
+>  	depends on !BR2_ARM_CPU_ARMV4
+>  	# uses fork()
+>  	depends on BR2_USE_MMU
+> +	depends on !BR2_STATIC_LIBS # dlopen, etc.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+That's not entirely true. For armv5, nodejs 0.10 does not require
+dynamic libraries.
+
+So, maybe something like:
+
+    config BR2_PACKAGE_NODEJS
+        depends on !BR2_STATIC_LIBS if BR2_arm && !BR2_ARM_CPU_ARMV5
+
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+>  	  Event-driven I/O server-side JavaScript environment based on V8.
+>  
+>  	  http://nodejs.org/
+>  
+> -comment "nodejs needs a toolchain w/ C++, threads"
+> +comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
+>  	depends on !BR2_ARM_CPU_ARMV4
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+
+However, I don't see a simple solution here. Maybe just add a second
+comment just for the dynamic library requirement?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  configs/raspberrypi2_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index 7b12040..02603a2 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
->  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-> -BR2_LINUX_KERNEL_ZIMAGE=yo
-> +BR2_LINUX_KERNEL_ZIMAGE=y
+>  if BR2_PACKAGE_NODEJS
 >  
->  # Build the DTB from the kernel sources
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
 > -- 
-> 2.4.6
+> 2.5.0
 > 
 > _______________________________________________
 > buildroot mailing list
