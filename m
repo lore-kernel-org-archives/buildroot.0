@@ -1,67 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:16:31 +0200
-Subject: [Buildroot] [git commit branch/next] package/libmicrohttpd: mark as
-	broken on Nios II, infamous _gp issue
-Message-ID: <20150808105652.990DA7FE0E@busybox.osuosl.org>
+Date: Sun, 2 Aug 2015 19:23:04 +0200
+Subject: [Buildroot] [git commit branch/next] kodi-audioencoder-flac: bump
+	version
+Message-ID: <20150808105652.C030481830@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87059dd20ea68569771895e05592fed77f6f9357
+commit: http://git.buildroot.net/buildroot/commit/?id=7caa5b4f5aaac37b377e256f1f49d886b6a8bef5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Fixes
-http://autobuild.buildroot.net/results/76f/76f838b2b33311897f3c2ce82a65f3b73af2c046/
-
-Propagate reverse dependency to janus-gateway. I did not propagate the
-reverse dependency to kodi, ola and systemd because they are not
-available for nios.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/janus-gateway/Config.in |    4 ++++
- package/libmicrohttpd/Config.in |    5 +++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ .../kodi-audioencoder-flac.mk                      |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 035ee6c..cafad94 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_JANUS_GATEWAY
- 	depends on BR2_USE_WCHAR # libnice -> libglib2
- 	depends on BR2_USE_MMU # libnice
- 	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305 # libmicrohttpd
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libmicrohttpd
- 	help
- 	  Janus is an open source, general purpose, WebRTC gateway
- 	  designed and developed by Meetecho.
-@@ -20,3 +22,5 @@ config BR2_PACKAGE_JANUS_GATEWAY
- comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index ec0b715..d9e6493 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# Triggers the _gp link issue
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
- 	  run an HTTP server as part of another application.
-@@ -24,3 +27,5 @@ endif
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+index f386954..2de54a4 100644
+--- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "libmicrohttpd needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+-KODI_AUDIOENCODER_FLAC_VERSION = a5e2d1262de3b2de567cf0a8207636ebaacb8775
++KODI_AUDIOENCODER_FLAC_VERSION = 46038892846c29543a2127d2117460f767313111
+ KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
+ KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
