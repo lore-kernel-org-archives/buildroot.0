@@ -1,48 +1,91 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun,  2 Aug 2015 11:07:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: disable for static build
-Message-ID: <1438506439-3096-1-git-send-email-joerg.krause@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Aug 2015 11:28:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: Adjust patches after
+ last version bump
+In-Reply-To: <1438439690-11801-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1438439690-11801-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150802092847.GA3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nodejs requires dlopen(), etc.
+Bernd, all,
 
-Fixes:
-http://autobuild.buildroot.net/results/87d/87dab0186abd7b2737a56b2f939f3aba294e8772/
-http://autobuild.buildroot.net/results/be1/be1010a3a31642d49ec3a118858c77fed2f762b8/
+On 2015-08-01 16:34 +0200, Bernd Kuhls spake thusly:
+> Sorry, my repos got mixed up, so I forgot to send the updated patches.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/ddd/ddd196577643de5b4f58a0903b19a04513620693/
+> http://autobuild.buildroot.net/results/d25/d253c8c9d0773843c462fde0d5005bb14e4ce2c4/
+> http://autobuild.buildroot.net/results/b61/b61d582c7362332e0ffad645c90d95d880dacedc/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/nodejs/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: build-tested only]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index c5ec792..69063fc 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -8,17 +8,18 @@ config BR2_PACKAGE_NODEJS
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS # dlopen, etc.
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Event-driven I/O server-side JavaScript environment based on V8.
- 
- 	  http://nodejs.org/
- 
--comment "nodejs needs a toolchain w/ C++, threads"
-+comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
- 	depends on !BR2_ARM_CPU_ARMV4
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- if BR2_PACKAGE_NODEJS
- 
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/tvheadend/0001-no-check_config.patch | 6 +++---
+>  package/tvheadend/0002-remove-werror.patch   | 8 ++++----
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
+> index bc724db..c77ca76 100644
+> --- a/package/tvheadend/0001-no-check_config.patch
+> +++ b/package/tvheadend/0001-no-check_config.patch
+> @@ -12,12 +12,12 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+>  --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:47:43.780025330 +0100
+>  +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:48:40.836539093 +0100
+> -@@ -294,7 +294,7 @@
+> +@@ -516,7 +516,7 @@
+>   	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+>   
+>   # Binary
+> --${PROG}: check_config make_webui $(MO-FILES) $(OBJS)
+> -+${PROG}: make_webui $(MO-FILES) $(OBJS)
+> +-${PROG}: check_config make_webui $(OBJS)
+> ++${PROG}: make_webui $(OBJS)
+>   	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
+>   
+>   # Object
+> diff --git a/package/tvheadend/0002-remove-werror.patch b/package/tvheadend/0002-remove-werror.patch
+> index 624ca3a..d466907 100644
+> --- a/package/tvheadend/0002-remove-werror.patch
+> +++ b/package/tvheadend/0002-remove-werror.patch
+> @@ -5,10 +5,10 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>  diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+>  --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:50:48.437688482 +0100
+>  +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:54:00.411418749 +0100
+> -@@ -28,7 +28,7 @@
+> - #
+> - 
+> - CFLAGS  += -g -O2 -Wunused-result
+> +@@ -32,7 +32,7 @@
+> + ifeq ($(CONFIG_W_UNUSED_RESULT),yes)
+> + CFLAGS  += -Wunused-result
+> + endif
+>  -CFLAGS  += -Wall -Werror -Wwrite-strings -Wno-deprecated-declarations
+>  +CFLAGS  += -Wall -Wwrite-strings -Wno-deprecated-declarations
+>   CFLAGS  += -Wmissing-prototypes
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.5.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
