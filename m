@@ -1,63 +1,54 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 2 Aug 2015 16:57:43 +0200
-Subject: [Buildroot] [PATCHv2] docs/manual: fix generation of deprecated
-	list
-In-Reply-To: <1438525927-29714-1-git-send-email-yann.morin.1998@free.fr>
-References: <1438525927-29714-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAHXCMM+iQPfRcGJXnOJazWWTOvxvi0A3XQX1uey7kWCnmT+HGw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Aug 2015 17:00:58 +0200
+Subject: [Buildroot] [PATCH] configs/raspberry2_defconfig: Fix typo
+In-Reply-To: <1438527391-31932-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1438527391-31932-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150802150058.GB3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, all,
+Maxime, All,
 
-On Sun, Aug 2, 2015 at 4:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Since commit 5f117c3 (webkit: mark as deprecated), generation of the
-> manual has been broken.
->
-> This is because that commit added a deprecated dependency on a
-> prompt-less symbol, BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS. However, the
-> generation script does not check that a symbol has a prompt before
-> it attempts to add it to the deprecated list. So, we end up with
-> traceback:
->
->     Writing the virtual-packages list in:
->             /home/ymorin/dev/buildroot/O/build/docs/manual/virtual-package-list.txt
->     Traceback (most recent call last):
->       File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 510, in <module>
->         buildroot.print_list(list_name, dry_run=args.dry_run, output=output)
->       File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 466, in print_list
->         item_label=item_label)
->       File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 126, in format_asciidoc_table
->         enable_choice=enable_choice))
->       File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 350, in _format_symbol_prompt_location
->         return "| {0:<40} <| {1}\n".format(get_label_func(symbol),
->       File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 458, in <lambda>
->         get_label = lambda x: self._get_symbol_label(x, mark_depr)
->       File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 313, in _get_symbol_label
->         label = symbol.get_prompts()[0]
->     IndexError: list index out of range
->
-> However, we can not use the existing _is_deprecated filter function to
-> filter out symbols without prompts, because this function is also used
-> to add a '(deprecated)' tag in the man package list (not that it would
-> not work, but it does not seem /right/). Furthermore, it could also be
-> used (but is currently not) to build the list of virtual packages, which
-> do not have a prompt.
->
-> So, introduce a filter function, aptly named _is_deprecated_feature(),
-> to be used as the filter to find deprecated feature, and keep the
-> existing _is_deprecated() that can be used in any context to decide
-> whether a symbol is deprecated or not.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 2015-08-02 16:56 +0200, Maxime Hadjinlian spake thusly:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  configs/raspberrypi2_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> index 7b12040..02603a2 100644
+> --- a/configs/raspberrypi2_defconfig
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+> -BR2_LINUX_KERNEL_ZIMAGE=yo
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+>  
+>  # Build the DTB from the kernel sources
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -- 
+> 2.4.6
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
