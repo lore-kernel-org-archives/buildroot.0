@@ -1,45 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:06 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xdriver_xf86-video-savage: bump version to 2.3.8
-Message-ID: <20150808105636.D420580414@busybox.osuosl.org>
+Date: Sun, 2 Aug 2015 19:18:51 +0200
+Subject: [Buildroot] [git commit branch/next] docs/manual: fix generation of
+	deprecated list
+Message-ID: <20150808105652.A88237FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec3eca22e071549861f7fd67e5659998bf760192
+commit: http://git.buildroot.net/buildroot/commit/?id=9d0d4c3cd2c66ab036ac809467d2be5aeb6d0f11
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Since commit 5f117c3 (webkit: mark as deprecated), generation of the
+manual has been broken.
+
+This is because that commit added a deprecated dependency on a
+prompt-less symbol, BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS. However, the
+generation script does not check that a symbol has a prompt before
+it attempts to add it to the deprecated list. So, we end up with
+traceback:
+
+    Writing the virtual-packages list in:
+            /home/ymorin/dev/buildroot/O/build/docs/manual/virtual-package-list.txt
+    Traceback (most recent call last):
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 510, in <module>
+        buildroot.print_list(list_name, dry_run=args.dry_run, output=output)
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 466, in print_list
+        item_label=item_label)
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 126, in format_asciidoc_table
+        enable_choice=enable_choice))
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 350, in _format_symbol_prompt_location
+        return "| {0:<40} <| {1}\n".format(get_label_func(symbol),
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 458, in <lambda>
+        get_label = lambda x: self._get_symbol_label(x, mark_depr)
+      File "/home/ymorin/dev/buildroot/buildroot/support/scripts/gen-manual-lists.py", line 313, in _get_symbol_label
+        label = symbol.get_prompts()[0]
+    IndexError: list index out of range
+
+However, we can not use the existing _is_deprecated filter function to
+filter out symbols without prompts, because this function is also used
+to add a '(deprecated)' tag in the man package list (not that it would
+not work, but it does not seem /right/). Furthermore, it could also be
+used (but is currently not) to build the list of virtual packages, which
+do not have a prompt.
+
+So, introduce a filter function, aptly named _is_deprecated_feature(),
+to be used as the filter to find deprecated feature, and keep the
+existing _is_deprecated() that can be used in any context to decide
+whether a symbol is deprecated or not.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-savage.hash                 |    2 ++
- .../xdriver_xf86-video-savage.mk                   |    5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ support/scripts/gen-manual-lists.py |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-new file mode 100644
-index 0000000..25afb13
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002603.html
-+sha256	fdcea4a86532bceb50095eaf0fe2f38bbfa160e98463b815f4b549eb9985fa63	xf86-video-savage-2.3.8.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-index 676ffed..dc5644a 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 1e0e9bb..d231eda 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -178,7 +178,7 @@ class Buildroot:
+         'deprecated': {
+             'filename': "deprecated-list",
+             'root_menu': None,
+-            'filter': "_is_deprecated",
++            'filter': "_is_deprecated_feature",
+             'format': "_format_symbol_prompt_location",
+             'sorted': False,
+         },
+@@ -278,6 +278,9 @@ class Buildroot:
+     def _is_virtual_package(self, symbol):
+         return self._is_package(symbol, 'virtual')
  
--XDRIVER_XF86_VIDEO_SAVAGE_VERSION = d28cd83c7b0b4a943efbe5ddf257c8ee2646ea73
--XDRIVER_XF86_VIDEO_SAVAGE_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-savage
-+XDRIVER_XF86_VIDEO_SAVAGE_VERSION = 2.3.8
-+XDRIVER_XF86_VIDEO_SAVAGE_SOURCE = xf86-video-savage-$(XDRIVER_XF86_VIDEO_SAVAGE_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_SAVAGE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
++    def _is_deprecated_feature(self, symbol):
++        return symbol.get_prompts() and self._is_deprecated(symbol)
++
+     def _exists_virt_symbol(self, pkg_name):
+         """ Return True if a symbol exists that defines the package as
+         a virtual package, False otherwise
