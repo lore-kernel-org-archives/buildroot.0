@@ -1,45 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:30 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xproto_randrproto: bump version to 1.5.0
-Message-ID: <20150808105627.7442E7FC31@busybox.osuosl.org>
+Date: Sun, 2 Aug 2015 19:20:15 +0200
+Subject: [Buildroot] [git commit branch/next] package/tvheadend: Adjust
+	patches after last version bump
+Message-ID: <20150808105652.B7D907FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcb1ae9765cb6339766adc04783c565a12a7d6f7
+commit: http://git.buildroot.net/buildroot/commit/?id=28d8bfecba2e2d9f1647974981665c988c49a51c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Sorry, my repos got mixed up, so I forgot to send the updated patches.
+
+Fixes
+http://autobuild.buildroot.net/results/ddd/ddd196577643de5b4f58a0903b19a04513620693/
+http://autobuild.buildroot.net/results/d25/d253c8c9d0773843c462fde0d5005bb14e4ce2c4/
+http://autobuild.buildroot.net/results/b61/b61d582c7362332e0ffad645c90d95d880dacedc/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../x11r7/xproto_randrproto/xproto_randrproto.hash |    6 +++---
- .../x11r7/xproto_randrproto/xproto_randrproto.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/tvheadend/0001-no-check_config.patch |    6 +++---
+ package/tvheadend/0002-remove-werror.patch   |    8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xproto_randrproto/xproto_randrproto.hash b/package/x11r7/xproto_randrproto/xproto_randrproto.hash
-index 8b17d6e..c71df7f 100644
---- a/package/x11r7/xproto_randrproto/xproto_randrproto.hash
-+++ b/package/x11r7/xproto_randrproto/xproto_randrproto.hash
-@@ -1,3 +1,3 @@
--# From http://lists.x.org/archives/xorg-announce/2015-March/002547.html
--sha1	7cd1daf5c56336079303d675b5a6788c90204016				randrproto-1.4.1.tar.bz2
--sha256	543dcb2ebb0622d8a506dcef6470c6dd066f3e3f866552a5060b91ab6129e1dc	randrproto-1.4.1.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002605.html
-+sha1	bc420745dc4af011988e9dcabdadf8829cbc2374				randrproto-1.5.0.tar.bz2
-+sha256	4c675533e79cd730997d232c8894b6692174dce58d3e207021b8f860be498468	randrproto-1.5.0.tar.bz2
-diff --git a/package/x11r7/xproto_randrproto/xproto_randrproto.mk b/package/x11r7/xproto_randrproto/xproto_randrproto.mk
-index b94d084..f6c4878 100644
---- a/package/x11r7/xproto_randrproto/xproto_randrproto.mk
-+++ b/package/x11r7/xproto_randrproto/xproto_randrproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XPROTO_RANDRPROTO_VERSION = 1.4.1
-+XPROTO_RANDRPROTO_VERSION = 1.5.0
- XPROTO_RANDRPROTO_SOURCE = randrproto-$(XPROTO_RANDRPROTO_VERSION).tar.bz2
- XPROTO_RANDRPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_RANDRPROTO_LICENSE = MIT
+diff --git a/package/tvheadend/0001-no-check_config.patch b/package/tvheadend/0001-no-check_config.patch
+index bc724db..c77ca76 100644
+--- a/package/tvheadend/0001-no-check_config.patch
++++ b/package/tvheadend/0001-no-check_config.patch
+@@ -12,12 +12,12 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+ --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:47:43.780025330 +0100
+ +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:48:40.836539093 +0100
+-@@ -294,7 +294,7 @@
++@@ -516,7 +516,7 @@
+  	$(ROOTDIR)/configure $(CONFIGURE_ARGS)
+  
+  # Binary
+--${PROG}: check_config make_webui $(MO-FILES) $(OBJS)
+-+${PROG}: make_webui $(MO-FILES) $(OBJS)
++-${PROG}: check_config make_webui $(OBJS)
+++${PROG}: make_webui $(OBJS)
+  	$(CC) -o $@ $(OBJS) $(CFLAGS) $(LDFLAGS)
+  
+  # Object
+diff --git a/package/tvheadend/0002-remove-werror.patch b/package/tvheadend/0002-remove-werror.patch
+index 624ca3a..d466907 100644
+--- a/package/tvheadend/0002-remove-werror.patch
++++ b/package/tvheadend/0002-remove-werror.patch
+@@ -5,10 +5,10 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+ --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:50:48.437688482 +0100
+ +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:54:00.411418749 +0100
+-@@ -28,7 +28,7 @@
+- #
+- 
+- CFLAGS  += -g -O2 -Wunused-result
++@@ -32,7 +32,7 @@
++ ifeq ($(CONFIG_W_UNUSED_RESULT),yes)
++ CFLAGS  += -Wunused-result
++ endif
+ -CFLAGS  += -Wall -Werror -Wwrite-strings -Wno-deprecated-declarations
+ +CFLAGS  += -Wall -Wwrite-strings -Wno-deprecated-declarations
+  CFLAGS  += -Wmissing-prototypes
