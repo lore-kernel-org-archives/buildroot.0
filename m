@@ -1,240 +1,135 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sun,  2 Aug 2015 22:53:46 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/arptables: fix musl compilation
-	issues
-Message-ID: <1438552426-6135-1-git-send-email-brendanheading@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Aug 2015 00:14:06 +0200
+Subject: [Buildroot] [PATCH RFC 1/1] package/libpthsem: cannot be sanely
+ cross-compiled
+In-Reply-To: <1438285530-320-1-git-send-email-brendanheading@gmail.com>
+References: <1438285530-320-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <20150802221406.GL3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/841/841129b8f49df205e1dabc2c2a5be70fa266768b/
+Brendan, All,
 
-Backported two patches from upstream which had solved this problem.
-Please note that 0002-src-Use-stdint-types.patch is modified to apply
-cleanly - details in the patch file.
+On 2015-07-30 20:45 +0100, Brendan Heading spake thusly:
+> Fixes the following :
+> http://autobuild.buildroot.net/results/675df26d7b47e02bad0b22f3e1cb404076a84a91/
+> http://autobuild.buildroot.net/results/003c4313676cc79c72a9296159ff63dce177f079/
+> http://autobuild.buildroot.net/results/86bd9fd83278a5468856f4abf700df57749d8e09/
+> http://autobuild.buildroot.net/results/97205d8fce8d0851208d167fc3fc7ccce40d391a/
+> http://autobuild.buildroot.net/results/1764c8f7f84fc5bad950fdb41ecadff571ceb36b/
+> http://autobuild.buildroot.net/results/e733cb648398df7efd7ccae6493af3c92713a9bd/
+> 
+> I'm submitting this as RFC as it seems strange that I've come across this
+> only now, but I don't see how libpthsem ever cross compiled in its current
+> form.
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
-v1 -> v2 - clarified comments to show that one of the patches was
-    modified relative to the upstream commit to make it apply.
+I've tested the first reported build failure... And it builds fine for
+me... :-/
 
- package/arptables/0002-src-Use-stdint-types.patch  | 134 +++++++++++++++++++++
- .../0003-src-Remove-support-for-libc5.patch        |  64 ++++++++++
- 2 files changed, 198 insertions(+)
- create mode 100644 package/arptables/0002-src-Use-stdint-types.patch
- create mode 100644 package/arptables/0003-src-Remove-support-for-libc5.patch
+Not to say that the result is correct, just that I can't reproduce the
+build failure.
 
-diff --git a/package/arptables/0002-src-Use-stdint-types.patch b/package/arptables/0002-src-Use-stdint-types.patch
-new file mode 100644
-index 0000000..8a85e70
---- /dev/null
-+++ b/package/arptables/0002-src-Use-stdint-types.patch
-@@ -0,0 +1,134 @@
-+From 24957c135eaacd718f3c788285de33d64316b32e Mon Sep 17 00:00:00 2001
-+From: Felix Janda <felix.janda@posteo.de>
-+Date: Sat, 16 May 2015 10:31:24 +0200
-+Subject: [PATCH 1/2] src: Use stdint types
-+
-+Backport of upstream commit 047f37b1d5d865084a435fd7594b8c5c332ccb8d
-+
-+Please note that the backported patch does not include two changes
-+to arptables.h from the upstream - these modified lines added in commit
-+dbbe9f7de36aa3c7dd61dc89092c03f7902e474e which was committed after
-+the 0.0.4 release.
-+
-+Upstream-status: backport
-+Signed-off-by: Felix Janda <felix.janda@posteo.de>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+---
-+ arptables.c                 | 8 ++++----
-+ include/arptables.h         | 3 ++-
-+ include/libarptc/libarptc.h | 7 ++++---
-+ libarptc/libarptc.c         | 4 ++--
-+ libarptc/libarptc_incl.c    | 2 +-
-+ 5 files changed, 13 insertions(+), 11 deletions(-)
-+
-+diff --git a/arptables.c b/arptables.c
-+index 5535ab2..6d1377f 100644
-+--- a/arptables.c
-++++ b/arptables.c
-+@@ -230,7 +230,7 @@ extern void dump_entries(const arptc_handle_t handle);
-+    /etc/protocols */
-+ struct pprot {
-+ 	char *name;
-+-	u_int8_t num;
-++	uint8_t num;
-+ };
-+ 
-+ /* Primitive headers... */
-+@@ -925,7 +925,7 @@ mask_to_dotted(const struct in_addr *mask)
-+ {
-+ 	int i;
-+ 	static char buf[20];
-+-	u_int32_t maskaddr, bits;
-++	uint32_t maskaddr, bits;
-+ 
-+ 	maskaddr = ntohl(mask->s_addr);
-+ 
-+@@ -967,7 +967,7 @@ string_to_number(const char *s, unsigned int min, unsigned int max,
-+ }
-+ 
-+ static void
-+-set_option(unsigned int *options, unsigned int option, u_int16_t *invflg,
-++set_option(unsigned int *options, unsigned int option, uint16_t *invflg,
-+ 	   int invert)
-+ {
-+ 	if (*options & option)
-+@@ -1107,7 +1107,7 @@ register_target(struct arptables_target *me)
-+ }
-+ 
-+ static void
-+-print_num(u_int64_t number, unsigned int format)
-++print_num(uint64_t number, unsigned int format)
-+ {
-+ 	if (format & FMT_KILOMEGAGIGA) {
-+ 		if (number > 99999) {
-+diff --git a/include/arptables.h b/include/arptables.h
-+index 820b664..e6a6ba6 100644
-+--- a/include/arptables.h
-++++ b/include/arptables.h
-+@@ -1,6 +1,7 @@
-+ #ifndef _ARPTABLES_USER_H
-+ #define _ARPTABLES_USER_H
-+ 
-++#include <stdint.h>
-+ #include "arptables_common.h"
-+ #include "libarptc/libarptc.h"
-+ 
-+@@ -126,7 +127,7 @@ extern char *mask_to_dotted(const struct in_addr *mask);
-+ 
-+ extern void parse_hostnetworkmask(const char *name, struct in_addr **addrpp,
-+                       struct in_addr *maskp, unsigned int *naddrs);
-+-extern u_int16_t parse_protocol(const char *s);
-++extern uint16_t parse_protocol(const char *s);
-+ 
-+ extern int do_command(int argc, char *argv[], char **table,
-+ 		      arptc_handle_t *handle);
-+diff --git a/include/libarptc/libarptc.h b/include/libarptc/libarptc.h
-+index e4f1175..76fbfab 100644
-+--- a/include/libarptc/libarptc.h
-++++ b/include/libarptc/libarptc.h
-+@@ -6,9 +6,10 @@
-+ #include <linux/netfilter_arp/arp_tables.h>
-+ 
-+ #ifndef ARPT_MIN_ALIGN
-+-/* arpt_entry has pointers and u_int64_t's in it, so if you align to
-+-   it, you'll also align to any crazy matches and targets someone
-+-   might write */
-++/* arpt_entry has pointers and uint64_t's in it, so if you align to
-++ * it, you'll also align to any crazy matches and targets someone
-++ * might write.
-++ */
-+ #define ARPT_MIN_ALIGN (__alignof__(struct arpt_entry))
-+ #endif
-+ 
-+diff --git a/libarptc/libarptc.c b/libarptc/libarptc.c
-+index 2dcaaef..701bae0 100644
-+--- a/libarptc/libarptc.c
-++++ b/libarptc/libarptc.c
-+@@ -256,8 +256,8 @@ unconditional(const struct arpt_arp *arp)
-+ {
-+ 	unsigned int i;
-+ 
-+-	for (i = 0; i < sizeof(*arp)/sizeof(u_int32_t); i++)
-+-		if (((u_int32_t *)arp)[i])
-++	for (i = 0; i < sizeof(*arp) / sizeof(uint32_t); i++)
-++		if (((uint32_t *)arp)[i])
-+ 			return 0;
-+ 
-+ 	return 1;
-+diff --git a/libarptc/libarptc_incl.c b/libarptc/libarptc_incl.c
-+index 2fa3d43..b41fcb2 100644
-+--- a/libarptc/libarptc_incl.c
-++++ b/libarptc/libarptc_incl.c
-+@@ -1706,7 +1706,7 @@ TC_COMMIT(TC_HANDLE_T *handle)
-+ 		/* Kernel will think that pointer should be 64-bits, and get
-+ 		   padding.  So we accomodate here (assumption: alignment of
-+ 		   `counters' is on 64-bit boundary). */
-+-		u_int64_t *kernptr = (u_int64_t *)&newcounters->counters;
-++		uint64_t *kernptr = (uint64_t *)&newcounters->counters;
-+ 		if ((unsigned long)&newcounters->counters % 8 != 0) {
-+ 			fprintf(stderr,
-+ 				"counters alignment incorrect! Mail rusty!\n");
-+-- 
-+2.4.3
-+
-diff --git a/package/arptables/0003-src-Remove-support-for-libc5.patch b/package/arptables/0003-src-Remove-support-for-libc5.patch
-new file mode 100644
-index 0000000..15e893d
---- /dev/null
-+++ b/package/arptables/0003-src-Remove-support-for-libc5.patch
-@@ -0,0 +1,64 @@
-+From 5f1379ff68bfedb56309527bee266a591b27a19e Mon Sep 17 00:00:00 2001
-+From: Felix Janda <felix.janda@posteo.de>
-+Date: Sat, 16 May 2015 10:31:41 +0200
-+Subject: [PATCH 2/2] src: Remove support for libc5
-+
-+Fixes compilation with musl libc
-+
-+Backport of upstream commit f4ab8f63f11a72f14687a6646d04ae1bae3fa45f
-+Upstream status: backport
-+Signed-off-by: Felix Janda <felix.janda@posteo.de>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+---
-+ include/libarptc/arpt_kernel_headers.h | 12 ------------
-+ libarptc/libarptc.c                    |  4 ----
-+ 2 files changed, 16 deletions(-)
-+
-+diff --git a/include/libarptc/arpt_kernel_headers.h b/include/libarptc/arpt_kernel_headers.h
-+index 442cc54..140e999 100644
-+--- a/include/libarptc/arpt_kernel_headers.h
-++++ b/include/libarptc/arpt_kernel_headers.h
-+@@ -5,7 +5,6 @@
-+ 
-+ #include <limits.h>
-+ 
-+-#if defined(__GLIBC__) && __GLIBC__ == 2
-+ #include <netinet/ip.h>
-+ #include <netinet/in.h>
-+ #include <netinet/ip_icmp.h>
-+@@ -14,16 +13,5 @@
-+ #include <netinet/ether.h>
-+ #include <net/if.h>
-+ #include <sys/types.h>
-+-#else
-+-#include <sys/socket.h>
-+-#include <linux/ip.h>
-+-#include <linux/in.h>
-+-#include <linux/if.h>
-+-#include <linux/icmp.h>
-+-#include <linux/tcp.h>
-+-#include <linux/udp.h>
-+-#include <linux/types.h>
-+-#include <linux/in6.h>
-+-#endif
-+ 
-+ #endif
-+diff --git a/libarptc/libarptc.c b/libarptc/libarptc.c
-+index 701bae0..9c5a5b0 100644
-+--- a/libarptc/libarptc.c
-++++ b/libarptc/libarptc.c
-+@@ -23,10 +23,6 @@
-+ #define inline
-+ #endif
-+ 
-+-#if !defined(__GLIBC__) || (__GLIBC__ < 2)
-+-typedef unsigned int socklen_t;
-+-#endif
-+-
-+ #include "libarptc/libarptc.h"
-+ 
-+ #define IP_VERSION	4
-+-- 
-+2.4.3
-+
+> During the configure stage, libpthsem attempts to compile and run an
+> executable to detect capabilities such as which direction the stack grows,
+> behaviour of setjmp, etc. Obviously these fail to execute on non-Intel
+> architectures, leading to defaults which cause the build to fail even
+> on architectures where libpthsem is supposed to work.
+> 
+> I've tested mipsel, sparcv8 and aarch64 here but I expect it will fail
+> for all the other non-Intel architectures too.
+> 
+> There are flags to force some (but not all) of these settings to certain
+> fallbacks. It's not clear, without access to each of these architectures,
+> what the correct default fallback settings should be.
+> 
+> This patch therefore disables libpthsem and its dependents on non-Intel
+> architectures.
+
+That's definitiely not acceptable that we have to disable it.
+
+All those tests that can not be determined at build time because they
+need to run programs should be forced-guessed,with the appropriate ac_cv
+variables.
+
+See for example the atk package, which has quite a bunch of those;
+    package/atk/atk.mk
+
+Excerpt;
+
+    ATK_CONF_ENV = \
+        ac_cv_func_posix_getpwuid_r=yes \
+        glib_cv_stack_grows=no \
+        glib_cv_uscore=no \
+        ac_cv_func_strtod=yes \
+        ac_fsusage_space=yes \
+        fu_cv_sys_stat_statfs2_bsize=yes \
+        ac_cv_func_closedir_void=no \
+        [...]
+
+Which should be done in this case, too.
+
+----
+
+For the records, I've diffed the config.log from the first build failure
+with the config.log I git on my machine, and there are a few interesting
+differences ('-' is mine, '+' is the autobuild failure):
+
+First, it's not using the same awk implementation:
+
+    -configure:2743: found /usr/bin/gawk
+    -configure:2754: result: gawk
+    +configure:2757: result: no
+    +configure:2727: checking for mawk
+    +configure:2743: found /usr/bin/mawk
+    +configure:2754: result: mawk
+
+Second, running programs fail with different errors; the error on my
+machine is probably the dynamic linker /lib/ld.so whinning that it can
+not recognise the exectuable (expected, it's PPC, my machine is x86_64),
+while the error on the autobuilder is probably becasue the dynamic
+linker does not exist (probably because it is not in the same location):
+
+    -./configure: line 1828: ./conftest: cannot execute binary file: Exec format error
+    -configure:12578: $? = 126
+    -configure: program exited with status 126
+    +./configure: line 1828: ./conftest: No such file or directory
+    +configure:12578: $? = 127
+    +configure: program exited with status 127
+
+Third, and much more interesting, is the mis-detection of the sjlj to
+use:
+
+    -configure:14176: result: yes: ssjlj
+    +configure:14176: result: yes: sjljlx
+    [--SNIP--]
+    -configure:15098: result: decision on mctx implementation...  sjlj/ssjlj/sas
+    +configure:15098: result: decision on mctx implementation...  sjlj/sjljlx/none
+    [--SNIP--]
+    -PTH_MCTX_ID='sjlj/ssjlj/sas'
+    +PTH_MCTX_ID='sjlj/sjljlx/none'
+
+Ah, and my system has my login shell set to /bin/bash , not /bin/sh .
+
+Now, if you look closely (not too closely, even!), you'll see that those
+errors are all occuring on a single autobuilder, the one from Nathaniel:
+
+    http://autobuild.buildroot.org/?reason=libpthsem-2.0.8
+
+So, I guess something from the environment causes the build failures.
+
+Not to say that we should not fix them, just that probably the proposed
+fix is not the correct solution...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
