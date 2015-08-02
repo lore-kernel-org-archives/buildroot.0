@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:16:13 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-dvblink: bump
-	version
-Message-ID: <20150808105652.913227FE8F@busybox.osuosl.org>
+Date: Sun, 2 Aug 2015 19:17:43 +0200
+Subject: [Buildroot] [git commit branch/next] configs/raspberry2_defconfig:
+	Fix typo
+Message-ID: <20150808105652.A071A7FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14e6c8208ce88d67ba8bda897980175df9949277
+commit: http://git.buildroot.net/buildroot/commit/?id=238a25bd02b2457731531ccb3029fcf2408275ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk |    2 +-
+ configs/raspberrypi2_defconfig |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-index 902c7f3..88e90c1 100644
---- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-+++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 7b12040..02603a2 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -18,7 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+-BR2_LINUX_KERNEL_ZIMAGE=yo
++BR2_LINUX_KERNEL_ZIMAGE=y
  
--KODI_PVR_DVBLINK_VERSION = cf756e9241c58d98c3b56dfcae89da9f35e4555f
-+KODI_PVR_DVBLINK_VERSION = b87e8a79a329c2f808a5d5abffe05259e365d7e6
- KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
- KODI_PVR_DVBLINK_LICENSE = GPLv2+
- KODI_PVR_DVBLINK_LICENSE_FILES = src/client.h
+ # Build the DTB from the kernel sources
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
