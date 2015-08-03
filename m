@@ -1,121 +1,237 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 12:11:20 +0200
-Subject: [Buildroot] [git commit branch/next] libsigrok: depends on gcc >=
-	4.7
-Message-ID: <20150808105653.8BFC57FE0E@busybox.osuosl.org>
+Date: Mon, 3 Aug 2015 11:19:19 +0200
+Subject: [Buildroot] [git commit branch/next] package/arptables: fix musl
+	compilation issues
+Message-ID: <20150808105653.0294A7FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e01c6f08b7b1e6e9ee203eab21c33152542315f4
+commit: http://git.buildroot.net/buildroot/commit/?id=61fe902bacaca7c5fdcc7d3a68ded95a835fe2e1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Until recently, only the C++ bindings of libsigrok needed a recent
-compiler because they are written in C++11. However, now, libsigrok
-itself is written in C11, which is only available since gcc 4.7.
+Fixes http://autobuild.buildroot.net/results/841/841129b8f49df205e1dabc2c2a5be70fa266768b/
 
-So, this commit replaces the CodeSourcery-specific exclusions by a
-proper dependency on gcc >= 4.7.
+Backported two patches from upstream which had solved this problem.
+Please note that 0002-src-Use-stdint-types.patch is modified to apply
+cleanly - details in the patch file.
 
-The sigrok-cli and pulseview packages, which select libsigrok, are
-also updated accordingly.
-
-Fixes:
-  http://autobuild.buildroot.org/results/1d7/1d75497009f1e3b06236b3409fd768dcf7956b87/
-  http://autobuild.buildroot.org/results/563/563378e3f6320980153c8c972ceba5e913fe933f/
-
-[Thomas: add autobuilder references, as suggested by Yann E. Morin.]
-
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libsigrok/Config.in  |   11 ++++-------
- package/pulseview/Config.in  |    9 +++------
- package/sigrok-cli/Config.in |    6 ++++--
- 3 files changed, 11 insertions(+), 15 deletions(-)
+ package/arptables/0002-src-Use-stdint-types.patch  |  134 ++++++++++++++++++++
+ .../0003-src-Remove-support-for-libc5.patch        |   64 ++++++++++
+ 2 files changed, 198 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index 8bd7d99..6ef3776 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_LIBSIGROK
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	# std=c11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  Libsigrok is a shared library written in C, which provides
- 	  the basic hardware access drivers for logic analyzers and
-@@ -22,20 +24,15 @@ config BR2_PACKAGE_LIBSIGROKCXX
- 	bool "build C++ bindings"
- 	select BR2_PACKAGE_GLIBMM
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# CS powerpc g++ are too old. libsigrokcxx needs C++11
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	help
- 	  Build libsigrok C++ bindings as well.
- 
- comment "C++ bindings need a toolchain w/ C++"
- 	depends on BR2_PACKAGE_LIBSIGROK
- 	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 
- endif
- 
--comment "libsigrok needs a toolchain w/ wchar, threads"
-+comment "libsigrok needs a toolchain w/ wchar, threads, gcc >= 4.7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-index 2fb844b..e6ddc21 100644
---- a/package/pulseview/Config.in
-+++ b/package/pulseview/Config.in
-@@ -17,18 +17,15 @@ config BR2_PACKAGE_PULSEVIEW
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	# libsigrok
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  PulseView is a Qt based logic analyzer, oscilloscope
- 	  and MSO GUI for sigrok.
- 
- 	  http://sigrok.org/wiki/PulseView
- 
--comment "pulseview needs a toolchain w/ wchar, threads, C++"
-+comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_QT5
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
-index 4e7f137..b8eb60d 100644
---- a/package/sigrok-cli/Config.in
-+++ b/package/sigrok-cli/Config.in
-@@ -5,12 +5,14 @@ config BR2_PACKAGE_SIGROK_CLI
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	# libsigrok
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  Sigrok-cli is a command-line frontend for the sigrok
- 	  software suite.
- 
- 	  http://sigrok.org/wiki/Sigrok-cli
- 
--comment "sigrok-cli needs a toolchain w/ wchar, threads"
-+comment "sigrok-cli needs a toolchain w/ wchar, threads, gcc >= 4.7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/arptables/0002-src-Use-stdint-types.patch b/package/arptables/0002-src-Use-stdint-types.patch
+new file mode 100644
+index 0000000..8a85e70
+--- /dev/null
++++ b/package/arptables/0002-src-Use-stdint-types.patch
+@@ -0,0 +1,134 @@
++From 24957c135eaacd718f3c788285de33d64316b32e Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 10:31:24 +0200
++Subject: [PATCH 1/2] src: Use stdint types
++
++Backport of upstream commit 047f37b1d5d865084a435fd7594b8c5c332ccb8d
++
++Please note that the backported patch does not include two changes
++to arptables.h from the upstream - these modified lines added in commit
++dbbe9f7de36aa3c7dd61dc89092c03f7902e474e which was committed after
++the 0.0.4 release.
++
++Upstream-status: backport
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ arptables.c                 | 8 ++++----
++ include/arptables.h         | 3 ++-
++ include/libarptc/libarptc.h | 7 ++++---
++ libarptc/libarptc.c         | 4 ++--
++ libarptc/libarptc_incl.c    | 2 +-
++ 5 files changed, 13 insertions(+), 11 deletions(-)
++
++diff --git a/arptables.c b/arptables.c
++index 5535ab2..6d1377f 100644
++--- a/arptables.c
+++++ b/arptables.c
++@@ -230,7 +230,7 @@ extern void dump_entries(const arptc_handle_t handle);
++    /etc/protocols */
++ struct pprot {
++ 	char *name;
++-	u_int8_t num;
+++	uint8_t num;
++ };
++ 
++ /* Primitive headers... */
++@@ -925,7 +925,7 @@ mask_to_dotted(const struct in_addr *mask)
++ {
++ 	int i;
++ 	static char buf[20];
++-	u_int32_t maskaddr, bits;
+++	uint32_t maskaddr, bits;
++ 
++ 	maskaddr = ntohl(mask->s_addr);
++ 
++@@ -967,7 +967,7 @@ string_to_number(const char *s, unsigned int min, unsigned int max,
++ }
++ 
++ static void
++-set_option(unsigned int *options, unsigned int option, u_int16_t *invflg,
+++set_option(unsigned int *options, unsigned int option, uint16_t *invflg,
++ 	   int invert)
++ {
++ 	if (*options & option)
++@@ -1107,7 +1107,7 @@ register_target(struct arptables_target *me)
++ }
++ 
++ static void
++-print_num(u_int64_t number, unsigned int format)
+++print_num(uint64_t number, unsigned int format)
++ {
++ 	if (format & FMT_KILOMEGAGIGA) {
++ 		if (number > 99999) {
++diff --git a/include/arptables.h b/include/arptables.h
++index 820b664..e6a6ba6 100644
++--- a/include/arptables.h
+++++ b/include/arptables.h
++@@ -1,6 +1,7 @@
++ #ifndef _ARPTABLES_USER_H
++ #define _ARPTABLES_USER_H
++ 
+++#include <stdint.h>
++ #include "arptables_common.h"
++ #include "libarptc/libarptc.h"
++ 
++@@ -126,7 +127,7 @@ extern char *mask_to_dotted(const struct in_addr *mask);
++ 
++ extern void parse_hostnetworkmask(const char *name, struct in_addr **addrpp,
++                       struct in_addr *maskp, unsigned int *naddrs);
++-extern u_int16_t parse_protocol(const char *s);
+++extern uint16_t parse_protocol(const char *s);
++ 
++ extern int do_command(int argc, char *argv[], char **table,
++ 		      arptc_handle_t *handle);
++diff --git a/include/libarptc/libarptc.h b/include/libarptc/libarptc.h
++index e4f1175..76fbfab 100644
++--- a/include/libarptc/libarptc.h
+++++ b/include/libarptc/libarptc.h
++@@ -6,9 +6,10 @@
++ #include <linux/netfilter_arp/arp_tables.h>
++ 
++ #ifndef ARPT_MIN_ALIGN
++-/* arpt_entry has pointers and u_int64_t's in it, so if you align to
++-   it, you'll also align to any crazy matches and targets someone
++-   might write */
+++/* arpt_entry has pointers and uint64_t's in it, so if you align to
+++ * it, you'll also align to any crazy matches and targets someone
+++ * might write.
+++ */
++ #define ARPT_MIN_ALIGN (__alignof__(struct arpt_entry))
++ #endif
++ 
++diff --git a/libarptc/libarptc.c b/libarptc/libarptc.c
++index 2dcaaef..701bae0 100644
++--- a/libarptc/libarptc.c
+++++ b/libarptc/libarptc.c
++@@ -256,8 +256,8 @@ unconditional(const struct arpt_arp *arp)
++ {
++ 	unsigned int i;
++ 
++-	for (i = 0; i < sizeof(*arp)/sizeof(u_int32_t); i++)
++-		if (((u_int32_t *)arp)[i])
+++	for (i = 0; i < sizeof(*arp) / sizeof(uint32_t); i++)
+++		if (((uint32_t *)arp)[i])
++ 			return 0;
++ 
++ 	return 1;
++diff --git a/libarptc/libarptc_incl.c b/libarptc/libarptc_incl.c
++index 2fa3d43..b41fcb2 100644
++--- a/libarptc/libarptc_incl.c
+++++ b/libarptc/libarptc_incl.c
++@@ -1706,7 +1706,7 @@ TC_COMMIT(TC_HANDLE_T *handle)
++ 		/* Kernel will think that pointer should be 64-bits, and get
++ 		   padding.  So we accomodate here (assumption: alignment of
++ 		   `counters' is on 64-bit boundary). */
++-		u_int64_t *kernptr = (u_int64_t *)&newcounters->counters;
+++		uint64_t *kernptr = (uint64_t *)&newcounters->counters;
++ 		if ((unsigned long)&newcounters->counters % 8 != 0) {
++ 			fprintf(stderr,
++ 				"counters alignment incorrect! Mail rusty!\n");
++-- 
++2.4.3
++
+diff --git a/package/arptables/0003-src-Remove-support-for-libc5.patch b/package/arptables/0003-src-Remove-support-for-libc5.patch
+new file mode 100644
+index 0000000..15e893d
+--- /dev/null
++++ b/package/arptables/0003-src-Remove-support-for-libc5.patch
+@@ -0,0 +1,64 @@
++From 5f1379ff68bfedb56309527bee266a591b27a19e Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 10:31:41 +0200
++Subject: [PATCH 2/2] src: Remove support for libc5
++
++Fixes compilation with musl libc
++
++Backport of upstream commit f4ab8f63f11a72f14687a6646d04ae1bae3fa45f
++Upstream status: backport
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ include/libarptc/arpt_kernel_headers.h | 12 ------------
++ libarptc/libarptc.c                    |  4 ----
++ 2 files changed, 16 deletions(-)
++
++diff --git a/include/libarptc/arpt_kernel_headers.h b/include/libarptc/arpt_kernel_headers.h
++index 442cc54..140e999 100644
++--- a/include/libarptc/arpt_kernel_headers.h
+++++ b/include/libarptc/arpt_kernel_headers.h
++@@ -5,7 +5,6 @@
++ 
++ #include <limits.h>
++ 
++-#if defined(__GLIBC__) && __GLIBC__ == 2
++ #include <netinet/ip.h>
++ #include <netinet/in.h>
++ #include <netinet/ip_icmp.h>
++@@ -14,16 +13,5 @@
++ #include <netinet/ether.h>
++ #include <net/if.h>
++ #include <sys/types.h>
++-#else
++-#include <sys/socket.h>
++-#include <linux/ip.h>
++-#include <linux/in.h>
++-#include <linux/if.h>
++-#include <linux/icmp.h>
++-#include <linux/tcp.h>
++-#include <linux/udp.h>
++-#include <linux/types.h>
++-#include <linux/in6.h>
++-#endif
++ 
++ #endif
++diff --git a/libarptc/libarptc.c b/libarptc/libarptc.c
++index 701bae0..9c5a5b0 100644
++--- a/libarptc/libarptc.c
+++++ b/libarptc/libarptc.c
++@@ -23,10 +23,6 @@
++ #define inline
++ #endif
++ 
++-#if !defined(__GLIBC__) || (__GLIBC__ < 2)
++-typedef unsigned int socklen_t;
++-#endif
++-
++ #include "libarptc/libarptc.h"
++ 
++ #define IP_VERSION	4
++-- 
++2.4.3
++
