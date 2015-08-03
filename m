@@ -1,55 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:23:03 +0200
-Subject: [Buildroot] [git commit] package/nodejs: disable for static build
-Message-ID: <20150803092818.0F09E81DF4@busybox.osuosl.org>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Mon, 3 Aug 2015 12:31:32 +0300 (IDT)
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.1.2
+In-Reply-To: <20150803111857.69ada16f@free-electrons.com>
+References: <1438590279-25769-1-git-send-email-yba@tkos.co.il>
+ <20150803111857.69ada16f@free-electrons.com>
+Message-ID: <alpine.DEB.2.11.1508031229090.5593@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0399ed064dacf5cc9ce7214a0e660dc6d8ab8b58
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-nodejs requires dlopen(), etc.
+On Mon, 3 Aug 2015, Thomas Petazzoni wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/87d/87dab0186abd7b2737a56b2f939f3aba294e8772/
-http://autobuild.buildroot.net/results/be1/be1010a3a31642d49ec3a118858c77fed2f762b8/
+> Date: Mon, 3 Aug 2015 11:18:57 +0200
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Jonathan Ben-Avraham <yba@tkos.co.il>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.1.2
+> 
+> Dear Jonathan Ben-Avraham,
+>
+> On Mon,  3 Aug 2015 11:24:39 +0300, Jonathan Ben-Avraham wrote:
+>> From: Jonathan Ben Avraham <yba@tkos.co.il>
+>>
+>>
+>> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+>> ---
+>>  ....m4-make-kernel-specific-flags-cacheable.patch} |    0
+>>  ...isable-test_fork-if-fork-is-not-available.patch |   52 --------------------
+>>  ...-Fix-pkg-config-files-for-static-linking.patch} |    0
+>>  package/zeromq/0004-allow-without-libsodium.patch  |   38 --------------
+>
+> Could you explain in the commit log why some of the patches are being
+> removed? Like if they are now upstream, point to the upstream commit?
+>
+>> diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+>> index 729e7ea..0d33431 100644
+>> --- a/package/zeromq/zeromq.hash
+>> +++ b/package/zeromq/zeromq.hash
+>> @@ -1,2 +1,4 @@
+>>  # Locally calculated from download (no sig, hash)
+>> -sha256	3bc93c5f67370341428364ce007d448f4bb58a0eaabd0a60697d8086bc43342b	zeromq-4.0.5.tar.gz
+>> +sha256	f9162ead6d68521e5154d871bac304f88857308bb02366b81bb588497a345927	zeromq-4.1.2.tar.gz
+>> +# From http://download.zeromq.org/SHA1SUMS:
+>> +#sha1	86c17096f7f4bf46cbcd2ad242cf8fec8a7cfb7b	zeromq-4.1.2.tar.gz
+>
+> Why are you adding the SHA1, but commented out?
+>
+> Thanks a lot!
+>
+> Thomas
 
-[Thomas: add comment explaining that we could support static linking
-on ARMv5, but we don't do it since it's too much of a corner case.]
+The sha1 is the hash from From http://download.zeromq.org/SHA1SUMS
+The sha256 has is the hash that I generated after verifying the sha1 hash.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nodejs/Config.in |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+I assumed that the list prefers a sha256 hash, so I included the original 
+hash for reference.
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index c5ec792..329d270 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -8,17 +8,20 @@ config BR2_PACKAGE_NODEJS
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	# uses dlopen(). On ARMv5, we could technically support static
-+	# linking, but that's too much of a corner case to support it.
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Event-driven I/O server-side JavaScript environment based on V8.
- 
- 	  http://nodejs.org/
- 
--comment "nodejs needs a toolchain w/ C++, threads"
-+comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
- 	depends on !BR2_ARM_CPU_ARMV4
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
- 
- if BR2_PACKAGE_NODEJS
- 
+  - yba
+
+
+-- 
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
