@@ -1,83 +1,93 @@
-From: Augusto Farina <farina@datacom.ind.br>
-Date: Mon,  3 Aug 2015 17:36:59 -0300
-Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
-Message-ID: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Aug 2015 22:41:14 +0200
+Subject: [Buildroot] [PATCH v1 1/3] aufs-standalone: new package
+In-Reply-To: <1438387017-10597-1-git-send-email-christian@paral.in>
+References: <1438387017-10597-1-git-send-email-christian@paral.in>
+Message-ID: <20150803204114.GP3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Colorama is a simple cross-platform colored terminal text in Python.
+Christian, All,
 
-Tested on a PowerPC e500v2 board. Host build support is also added in
-the package makefile, as python-jinja2, because we have third-party
-software that requires it (e.g. ARM mbed build-system).
+On 2015-07-31 16:56 -0700, Christian Stewart spake thusly:
+> aufs-standalone is a metapackage that downloads the correct
+> aufs-standalone sources for patching the kernel with the aufs
+> filesystem. The package is not selectable because it does nothing but
+> download the sources on default. It is a dependency of the Aufs kernel
+> extension.
 
-Signed-off-by: Augusto Farina <farina@datacom.ind.br>
----
- package/Config.in                            |  1 +
- package/python-colorama/Config.in            |  6 ++++++
- package/python-colorama/python-colorama.hash |  3 +++
- package/python-colorama/python-colorama.mk   | 15 +++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-colorama/Config.in
- create mode 100644 package/python-colorama/python-colorama.hash
- create mode 100644 package/python-colorama/python-colorama.mk
+I've started reviewing this aufs series. I have some preliminary
+comments, but they are just that, inital comments. The series, although
+a good basis to start working, is far from being ready.
 
-diff --git a/package/Config.in b/package/Config.in
-index 1e39c74..9f043ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -597,6 +597,7 @@ menu "external python modules"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
- 	source "package/python-coherence/Config.in"
-+	source "package/python-colorama/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-diff --git a/package/python-colorama/Config.in b/package/python-colorama/Config.in
-new file mode 100644
-index 0000000..50965ae
---- /dev/null
-+++ b/package/python-colorama/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_COLORAMA
-+	bool "python-colorama"
-+	help
-+	  Simple cross-platform colored terminal text in Python.
-+
-+	  http://pypi.python.org/pypi/colorama
-diff --git a/package/python-colorama/python-colorama.hash b/package/python-colorama/python-colorama.hash
-new file mode 100644
-index 0000000..5d8598c
---- /dev/null
-+++ b/package/python-colorama/python-colorama.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=a56b8dc55158a41ab3c89c4c8feb8824, sha256 locally computed
-+md5	a56b8dc55158a41ab3c89c4c8feb8824  colorama-0.3.3.tar.gz
-+sha256	eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c  colorama-0.3.3.tar.gz
-diff --git a/package/python-colorama/python-colorama.mk b/package/python-colorama/python-colorama.mk
-new file mode 100644
-index 0000000..f9b0bae
---- /dev/null
-+++ b/package/python-colorama/python-colorama.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-colorama
-+#
-+################################################################################
-+
-+PYTHON_COLORAMA_VERSION = 0.3.3
-+PYTHON_COLORAMA_SOURCE = colorama-$(PYTHON_COLORAMA_VERSION).tar.gz
-+PYTHON_COLORAMA_SITE = https://pypi.python.org/packages/source/c/colorama
-+PYTHON_COLORAMA_SETUP_TYPE = setuptools
-+PYTHON_COLORAMA_LICENSE = BSD-3c
-+PYTHON_COLORAMA_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
+So, do not just re-send the series after fixing after my comments. Just
+hold on it for yet a little while...
+
+> Signed-off-by: Christian Stewart <christian@paral.in>
+[--SNIP--]
+> diff --git a/package/aufs-standalone/aufs-standalone.mk b/package/aufs-standalone/aufs-standalone.mk
+> new file mode 100644
+> index 0000000..ebf5ab6
+> --- /dev/null
+> +++ b/package/aufs-standalone/aufs-standalone.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# aufs-standalone
+> +#
+> +# patches for the linux kernel, used by the extension.
+> +#
+> +################################################################################
+> +
+> +# linux-headers
+> +AUFS_STANDALONE_VERSION = aufs$(call qstrip,$(BR2_PACKAGE_AUFS_STANDALONE_VERSION))
+
+BR2_PACKAGE_AUFS_STANDALONE_VERSION is defined nowhere in this patch.
+
+> +ifeq ($(BR2_PACKAGE_AUFS_STANDALONE_3X),y)
+
+Ditto BR2_PACKAGE_AUFS_STANDALONE_3X and the other similar variables...
+
+> +AUFS_STANDALONE_MAJOR_VERSION = aufs3
+> +endif
+> +ifeq ($(BR2_PACKAGE_AUFS_STANDALONE_4X),y)
+> +AUFS_STANDALONE_MAJOR_VERSION = aufs4
+> +endif
+> +ifeq ($(BR2_PACKAGE_AUFS_STANDALONE_3X),y)
+> +AUFS_STANDALONE_SITE = git://git.code.sf.net/p/aufs/aufs3-standalone
+
+No need to duplicate the conditional bloc; just move the variable
+asignment within the previos condition.
+
+> +endif
+> +ifeq ($(BR2_PACKAGE_AUFS_STANDALONE_4X),y)
+> +AUFS_STANDALONE_SITE = $(call github,sfjro,aufs4-standalone,$(AUFS_STANDALONE_VERSION))
+> +endif
+> +AUFS_STANDALONE_LICENSE = GNU
+
+'GNU' is not a known license. Probably you meant 'GPLv2'.
+
+Regards,
+Yann E. MORIN.
+
+> +AUFS_STANDALONE_LICENSE_FILES = COPYING
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
