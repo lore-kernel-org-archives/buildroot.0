@@ -1,40 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  3 Aug 2015 11:11:21 -0300
-Subject: [Buildroot] [PATCH] libidn: bump to version 1.32
-Message-ID: <1438611081-24120-1-git-send-email-gustavo@zacarias.com.ar>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 3 Aug 2015 16:11:54 +0100
+Subject: [Buildroot] [PATCH RFC 1/1] package/libpthsem: cannot be sanely
+	cross-compiled
+In-Reply-To: <CA+BsyQ7sxr2SJmeJuSod1+GbeHiMyqv=WN0DwvtkhY=dUjmyxw@mail.gmail.com>
+References: <1438285530-320-1-git-send-email-brendanheading@gmail.com>
+ <20150802221406.GL3647@free.fr>
+ <CA+BsyQ7sxr2SJmeJuSod1+GbeHiMyqv=WN0DwvtkhY=dUjmyxw@mail.gmail.com>
+Message-ID: <CA+BsyQ7vvdqgPUvFSzcF3aAyYE5UHJ-5VE8cxjAE+qs9GMwNug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libidn/libidn.hash | 4 ++--
- package/libidn/libidn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>> All those tests that can not be determined at build time because they
+>> need to run programs should be forced-guessed,with the appropriate ac_cv
+>> variables.
+>>
+>> See for example the atk package, which has quite a bunch of those;
+>>     package/atk/atk.mk
+>
+> Noted. I agree that this is a better approach.
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index 6425d55..20c844e 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,2 +1,2 @@
--# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
--sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
-+# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
-+sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index e10fb6e..9ac2600 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN_VERSION = 1.31
-+LIBIDN_VERSION = 1.32
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
--- 
-2.4.6
+Yann,
+
+[cc Thomas, list]
+
+I thought about this a bit more today.
+
+The state of play, right now, is that we can't be completely sure that
+cross-compiling libpthsem will work correctly. We know for sure that
+on several architectures it definitely does not work. In other cases
+it may appear to compile, by accident, but there's no way to be sure
+that it works at run time. Of course this isn't buildroot's fault.
+
+I don't have hardware available to test the right force-guess values,
+so I don't think I'm the right person to fix it. Moreover, even with
+the right hardware, any bugs caused by using the wrong force-guess
+value could be very subtle. Maybe someone else can solve this, but so
+far, nobody has, and these packages must have been broken for quite a
+long time now (years ?).
+
+So, given that there is no interest in the architectures, and there is
+nobody with time to fix the problems properly, isn't there a case for
+explicitly disabling libpthsem (and its dependents) for all
+cross-compiled builds ? Then, when someone comes along to complain, or
+even better proposes a patch, we can selectively re-enable the
+configurations that work ?
+
+Just my two cents .. since as things stand right now this package and
+related packages are just adding noise in the autobuild logs, and it
+might save time for people if the erroneous cases where expressly
+disabled, rather than giving the false impression that it works and is
+a supportable configuration.
+
+regards
+
+Brendan
