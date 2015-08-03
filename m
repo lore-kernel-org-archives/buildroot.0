@@ -1,68 +1,59 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 03 Aug 2015 21:23:34 +0000
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Tue, 04 Aug 2015 00:22:35 +0200
 Subject: [Buildroot] [PATCH v1 2/3] aufs: new kernel extension.
-In-Reply-To: <20150803211325.GQ3647@free.fr>
+In-Reply-To: <CA+h8R2pFkwsu+1dN=W_kjPHQq8du5MhaHjCNoP2D=K8ZMEvkug@mail.gmail.com>
 References: <1438387017-10597-1-git-send-email-christian@paral.in>
  <1438387017-10597-2-git-send-email-christian@paral.in>
  <20150803211325.GQ3647@free.fr>
-Message-ID: <CA+h8R2pFkwsu+1dN=W_kjPHQq8du5MhaHjCNoP2D=K8ZMEvkug@mail.gmail.com>
+ <CA+h8R2pFkwsu+1dN=W_kjPHQq8du5MhaHjCNoP2D=K8ZMEvkug@mail.gmail.com>
+Message-ID: <55BFE9AB.4050908@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-
-Remove this 'depends on' but enclose the options inside an if...endif
-> block.
+On 08/03/2015 11:23 PM, Christian Stewart wrote:
+> Hi Yann,
 >
-
-Done here:
-
-https://github.com/paralin/buildroot/commit/8dd9e882fac4a4512d9dcad8fe19da02ff901e45
-
-
-> +     default BR2_PACKAGE_AUFS_4X if BR2_KERNEL_HEADERS_4_0 ||
-> BR2_KERNEL_HEADERS_4.1
-> > +     default BR2_PACKAGE_AUFS_3X if !(BR2_KERNEL_HEADERS_4_0 ||
-> BR2_KERNEL_HEADERS_4.1)
+>     Remove this 'depends on' but enclose the options inside an if...endif
+>     block.
 >
-> See the comment below, about kernel version...
 >
-
-As you caught in your next email, these are *defaults*, or guesses. The
-user should still verify if the version is correct. The guess is correct a
-lot of the time and is helpful to the user because the aufs branches are
-often not obviously named.
-
-The help entry goes last (i.e. after the defaults).
+> Done here:
 >
-
-Fixed.
-
-So, this means we can't build aufs except with an internal toolchain.
+> https://github.com/paralin/buildroot/commit/8dd9e882fac4a4512d9dcad8fe19da02ff901e45 
 >
-
-No, just guesses.
-
-> +define AUFS_STANDALONE_PREPARE_KERNEL
-> > +     if test -d $(LINUX_DIR)/fs/aufs/; then \
-> > +             echo "Your kernel already supports AUFS. Not patching."; \
 >
-> This should be a hard-error.
+>     > +     default BR2_PACKAGE_AUFS_4X if BR2_KERNEL_HEADERS_4_0 ||
+>     BR2_KERNEL_HEADERS_4.1
+>     > +     default BR2_PACKAGE_AUFS_3X if !(BR2_KERNEL_HEADERS_4_0 ||
+>     BR2_KERNEL_HEADERS_4.1)
 >
-> Also, we want to check that the aufs version indeed matches that of hte
-> kernel, and error-out if not.
+>     See the comment below, about kernel version...
 >
+>
+> As you caught in your next email, these are *defaults*, or guesses. 
+> The user should still verify if the version is correct. The guess is 
+> correct a lot of the time and is helpful to the user because the aufs 
+> branches are often not obviously named.
 
-As far as I can tell this is not something the Buildroot system is capable
-of doing on its own. It's a complex process to check if the versions match.
-The aufs make system will do this on its own, so there is already a hard
-error if you have the wrong versions checked out. I vote to just let this
-error happen at build time.
+Problem is that the guess made may appear correct to the user, while it 
+is not.
 
-Christian
+Oh, I'm using Linux 3.18.19, and buildroot selected "aufs3.18", that 
+looks ok.
+While he may need "aufs3.18.1+" instead.
+
+By forcing the user to enter it manually, he would at least have to 
+figure out what branches are available.
+
+
+
+Yours sincerely,
+
+Floris Bos
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150803/6ecd8369/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150804/c7b819cf/attachment.html>
