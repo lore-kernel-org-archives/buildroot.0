@@ -1,34 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:20:03 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/arptables: fix musl
- compilation issues
-In-Reply-To: <1438552426-6135-1-git-send-email-brendanheading@gmail.com>
-References: <1438552426-6135-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150803112003.2a4ba60f@free-electrons.com>
+Date: Mon, 3 Aug 2015 11:20:42 +0200
+Subject: [Buildroot] [git commit] package/libatomic_ops: fix compilation
+	fail on sparc
+Message-ID: <20150803092057.B7E9B7FD7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=9741460eaaef510aac9b16a884374d545244fb18
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Aug 2015 22:53:46 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/841/841129b8f49df205e1dabc2c2a5be70fa266768b/
-> 
-> Backported two patches from upstream which had solved this problem.
-> Please note that 0002-src-Use-stdint-types.patch is modified to apply
-> cleanly - details in the patch file.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
-> v1 -> v2 - clarified comments to show that one of the patches was
->     modified relative to the upstream commit to make it apply.
+Fixes http://autobuild.buildroot.net/results/6d8/6d83fa5d69572cec5c96be4b7651f9b113a1a19c/
 
-Applied, thanks.
+libatomic_ops by default requires SPARC v9. buildroot's two supported
+sparc arches (SPARCv8, and leon3) are both SPARCv8-based. Unfortunately
+libatomic_ops's support for SPARCv8 is incomplete.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+The library includes fallbacks but these must expressly be enabled by
+defining a macro, enabled by this patch. Note that I'm testing for the
+SPARC variants rather than BR2_sparc, in case someone implements SPARCv9
+support in the future.
+
+Discussion of this workaround described by the maintainer here :
+https://github.com/ivmai/libatomic_ops/issues/9
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libatomic_ops/libatomic_ops.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 5f698c4..fd45726 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -19,5 +19,9 @@ LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
+ 
+ LIBATOMIC_OPS_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
++LIBATOMIC_OPS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
