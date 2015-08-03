@@ -1,50 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:03:05 +0200
-Subject: [Buildroot] [git commit branch/next] uclibc: update to latest 1.0.5
-	release
-Message-ID: <20150808105652.E31A97FE8F@busybox.osuosl.org>
+Date: Mon, 3 Aug 2015 11:21:28 +0200
+Subject: [Buildroot] [git commit branch/next] package/ifplugd: add patch to
+	fix musl build error
+Message-ID: <20150808105653.12D5E7FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7581616f5cccc12d5578268495c76f439224caf2
+commit: http://git.buildroot.net/buildroot/commit/?id=3dcbb9e56c1c712c505d4b3b67c78936d17d118b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes gcc 5.x problems on x86.
-Fixes static linking issue on sh4.
+The musl C library does not define type names such as `__uint32_t`. Instead we
+use the integer types declared in the ISO C standard header file <stdint.h>.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in   |    2 +-
- package/uclibc/uclibc.hash |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ifplugd/0004-musl-fix-types.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e1cc3a7..bf40a13 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -65,7 +65,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	string
- 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
- 	default "arc-2015.06" if BR2_UCLIBC_VERSION_ARC_GIT
--	default "1.0.4"		if BR2_UCLIBC_VERSION_NG
-+	default "1.0.5"		if BR2_UCLIBC_VERSION_NG
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index d810884..9ccf061 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -2,7 +2,7 @@
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
- 
- # From http://www.uclibc-ng.org/
--sha256  c037dbaea685380c75b112b5503778a90fa95ac524728770131aa17e29474915        uClibc-ng-1.0.4.tar.xz
-+sha256  7a16bc9ff03b8f74f1f0cf921412f08e48a15285d9d555560d5cca915a28df5f        uClibc-ng-1.0.5.tar.xz
- 
- # No hash for the ARC variant, comes from the github-helper
- none	xxx	uClibc-arc-2015.06.tar.gz
+diff --git a/package/ifplugd/0004-musl-fix-types.patch b/package/ifplugd/0004-musl-fix-types.patch
+new file mode 100644
+index 0000000..174f9c8
+--- /dev/null
++++ b/package/ifplugd/0004-musl-fix-types.patch
+@@ -0,0 +1,24 @@
++The musl C library does not define type names such as `__uint32_t`. Instead we
++use the integer types declared in the ISO C standard header file <stdint.h>.
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++
++diff -purN ifplugd-0.28.orig/src/ethtool-local.h ifplugd-0.28/src/ethtool-local.h
++--- ifplugd-0.28.orig/src/ethtool-local.h	2015-08-01 18:43:47.360916834 +0200
+++++ ifplugd-0.28/src/ethtool-local.h	2015-08-01 18:44:24.256037746 +0200
++@@ -21,10 +21,12 @@
++  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
++  */
++ 
+++#include <stdint.h>
+++
++ typedef unsigned long long u64;
++-typedef __uint32_t u32;        
++-typedef __uint16_t u16;        
++-typedef __uint8_t u8;          
+++typedef uint32_t u32;
+++typedef uint16_t u16;
+++typedef uint8_t u8;
++ 
++ #include "ethtool-kernel.h"
++ 
