@@ -1,49 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:03:05 +0200
-Subject: [Buildroot] [git commit] uclibc: update to latest 1.0.5 release
-Message-ID: <20150803090323.AB01A81E3D@busybox.osuosl.org>
+Date: Mon, 3 Aug 2015 11:03:14 +0200
+Subject: [Buildroot] [git commit] uclibc: remove patch applied in 1.0.5
+Message-ID: <20150803090323.AD13D7FB52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7581616f5cccc12d5578268495c76f439224caf2
+commit: http://git.buildroot.net/buildroot/commit/?id=c22f16317646d2d0b5f2736d641820f757422054
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes gcc 5.x problems on x86.
-Fixes static linking issue on sh4.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/Config.in   |    2 +-
- package/uclibc/uclibc.hash |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 --------------------
+ 1 files changed, 0 insertions(+), 64 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e1cc3a7..bf40a13 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -65,7 +65,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	string
- 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
- 	default "arc-2015.06" if BR2_UCLIBC_VERSION_ARC_GIT
--	default "1.0.4"		if BR2_UCLIBC_VERSION_NG
-+	default "1.0.5"		if BR2_UCLIBC_VERSION_NG
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
- config BR2_UCLIBC_CONFIG
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index d810884..9ccf061 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -2,7 +2,7 @@
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
- 
- # From http://www.uclibc-ng.org/
--sha256  c037dbaea685380c75b112b5503778a90fa95ac524728770131aa17e29474915        uClibc-ng-1.0.4.tar.xz
-+sha256  7a16bc9ff03b8f74f1f0cf921412f08e48a15285d9d555560d5cca915a28df5f        uClibc-ng-1.0.5.tar.xz
- 
- # No hash for the ARC variant, comes from the github-helper
- none	xxx	uClibc-arc-2015.06.tar.gz
+diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
+deleted file mode 100644
+index a580a67..0000000
+--- a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Wed, 22 Jul 2015 14:54:07 +0200
+-Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
+-
+-Found via buildroot autobuilder.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
+- libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
+- 2 files changed, 12 insertions(+)
+-
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-index f38703b..ff9a784 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-@@ -70,6 +70,9 @@
+- 	.globl	__lll_lock_wait_private
+- 	.type	__lll_lock_wait_private, at function
+- 	.hidden	__lll_lock_wait_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_lock_wait_private
+-+#endif
+- 	.align	16
+- __lll_lock_wait_private:
+- 	cfi_startproc
+-@@ -320,6 +323,9 @@ __lll_timedlock_wait:
+- 	.globl	__lll_unlock_wake_private
+- 	.type	__lll_unlock_wake_private, at function
+- 	.hidden	__lll_unlock_wake_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_unlock_wake_private
+-+#endif
+- 	.align	16
+- __lll_unlock_wake_private:
+- 	cfi_startproc
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-index 50aacea..894c683 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-@@ -75,6 +75,9 @@
+- 	.globl	__lll_lock_wait_private
+- 	.type	__lll_lock_wait_private, at function
+- 	.hidden	__lll_lock_wait_private
+-+#ifndef IS_IN_libpthread
+-+	.weak   __lll_lock_wait_private
+-+#endif
+- 	.align	16
+- __lll_lock_wait_private:
+- 	cfi_startproc
+-@@ -317,6 +320,9 @@ __lll_timedlock_wait:
+- 	.globl	__lll_unlock_wake_private
+- 	.type	__lll_unlock_wake_private, at function
+- 	.hidden	__lll_unlock_wake_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_unlock_wake_private
+-+#endif
+- 	.align	16
+- __lll_unlock_wake_private:
+- 	cfi_startproc
+--- 
+-1.7.10.4
+-
