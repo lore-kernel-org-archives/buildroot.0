@@ -1,77 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 10:40:29 +0200
-Subject: [Buildroot] [git commit branch/next] gcc: select the appropriate
-	BR2_TOOLCHAIN_GCC_AT_LEAST_* option
-Message-ID: <20150808105653.707CB7FE0E@busybox.osuosl.org>
+Date: Mon, 3 Aug 2015 11:03:14 +0200
+Subject: [Buildroot] [git commit branch/next] uclibc: remove patch applied
+	in 1.0.5
+Message-ID: <20150808105652.EC3F37FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c67540ef9b98139c00409b44a1bfbaff3189b8e9
+commit: http://git.buildroot.net/buildroot/commit/?id=c22f16317646d2d0b5f2736d641820f757422054
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit wires up the gcc version dependency mechanism in the
-internal toolchain backend by making the gcc version choice in the gcc
-package Config.in.host select the appropriate
-BR2_TOOLCHAIN_GCC_AT_LEAST_* option.
-
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gcc/Config.in.host |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 --------------------
+ 1 files changed, 0 insertions(+), 64 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 93c9032..baa7956 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -34,6 +34,7 @@ choice
- 		# musl patches only for gcc 4.7+
- 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 
- 	config BR2_GCC_VERSION_4_7_X
- 		bool "gcc 4.7.x"
-@@ -50,6 +51,7 @@ choice
- 		# Broken or unsupported x86 cores
- 		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 
- 	config BR2_GCC_VERSION_4_8_X
- 		bool "gcc 4.8.x"
-@@ -64,12 +66,15 @@ choice
- 		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-+		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- 	config BR2_GCC_VERSION_4_8_ARC
- 		bool "gcc 4.8-arc"
- 		# Only supported architecture
- 		depends on BR2_arc
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- 
- 	config BR2_GCC_VERSION_4_9_X
- 		bool "gcc 4.9.x"
-@@ -78,6 +83,7 @@ choice
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-+		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- 	config BR2_GCC_VERSION_5_X
- 		bool "gcc 5.x"
-@@ -85,6 +91,7 @@ choice
- 		depends on !BR2_arc
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-+		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- endchoice
- 
+diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
+deleted file mode 100644
+index a580a67..0000000
+--- a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+-Date: Wed, 22 Jul 2015 14:54:07 +0200
+-Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
+-
+-Found via buildroot autobuilder.
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
+- libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
+- 2 files changed, 12 insertions(+)
+-
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-index f38703b..ff9a784 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+-@@ -70,6 +70,9 @@
+- 	.globl	__lll_lock_wait_private
+- 	.type	__lll_lock_wait_private, at function
+- 	.hidden	__lll_lock_wait_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_lock_wait_private
+-+#endif
+- 	.align	16
+- __lll_lock_wait_private:
+- 	cfi_startproc
+-@@ -320,6 +323,9 @@ __lll_timedlock_wait:
+- 	.globl	__lll_unlock_wake_private
+- 	.type	__lll_unlock_wake_private, at function
+- 	.hidden	__lll_unlock_wake_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_unlock_wake_private
+-+#endif
+- 	.align	16
+- __lll_unlock_wake_private:
+- 	cfi_startproc
+-diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-index 50aacea..894c683 100644
+---- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+-@@ -75,6 +75,9 @@
+- 	.globl	__lll_lock_wait_private
+- 	.type	__lll_lock_wait_private, at function
+- 	.hidden	__lll_lock_wait_private
+-+#ifndef IS_IN_libpthread
+-+	.weak   __lll_lock_wait_private
+-+#endif
+- 	.align	16
+- __lll_lock_wait_private:
+- 	cfi_startproc
+-@@ -317,6 +320,9 @@ __lll_timedlock_wait:
+- 	.globl	__lll_unlock_wake_private
+- 	.type	__lll_unlock_wake_private, at function
+- 	.hidden	__lll_unlock_wake_private
+-+#ifndef IS_IN_libpthread
+-+	.weak	__lll_unlock_wake_private
+-+#endif
+- 	.align	16
+- __lll_unlock_wake_private:
+- 	cfi_startproc
+--- 
+-1.7.10.4
+-
