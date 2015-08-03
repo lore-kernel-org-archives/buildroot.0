@@ -1,42 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:21:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libatomic_ops - fix compilation
- fail on sparc
-In-Reply-To: <1438551830-3619-1-git-send-email-brendanheading@gmail.com>
-References: <1438551830-3619-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150803112100.74b52294@free-electrons.com>
+Date: Mon, 3 Aug 2015 11:21:28 +0200
+Subject: [Buildroot] [git commit] package/ifplugd: add patch to fix musl
+	build error
+Message-ID: <20150803092135.5EA4A81681@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=3dcbb9e56c1c712c505d4b3b67c78936d17d118b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  2 Aug 2015 22:43:50 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/6d8/6d83fa5d69572cec5c96be4b7651f9b113a1a19c/
-> 
-> libatomic_ops by default requires SPARC v9. buildroot's two supported
-> sparc arches (SPARCv8, and leon3) are both SPARCv8-based. Unfortunately
-> libatomic_ops's support for SPARCv8 is incomplete.
-> 
-> The library includes fallbacks but these must expressly be enabled by
-> defining a macro, enabled by this patch. Note that I'm testing for the
-> SPARC variants rather than BR2_sparc, in case someone implements SPARCv9
-> support in the future.
-> 
-> Discussion of this workaround described by the maintainer here :
-> https://github.com/ivmai/libatomic_ops/issues/9
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
->  package/libatomic_ops/libatomic_ops.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+The musl C library does not define type names such as `__uint32_t`. Instead we
+use the integer types declared in the ISO C standard header file <stdint.h>.
 
-Applied, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ifplugd/0004-musl-fix-types.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ifplugd/0004-musl-fix-types.patch b/package/ifplugd/0004-musl-fix-types.patch
+new file mode 100644
+index 0000000..174f9c8
+--- /dev/null
++++ b/package/ifplugd/0004-musl-fix-types.patch
+@@ -0,0 +1,24 @@
++The musl C library does not define type names such as `__uint32_t`. Instead we
++use the integer types declared in the ISO C standard header file <stdint.h>.
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++
++diff -purN ifplugd-0.28.orig/src/ethtool-local.h ifplugd-0.28/src/ethtool-local.h
++--- ifplugd-0.28.orig/src/ethtool-local.h	2015-08-01 18:43:47.360916834 +0200
+++++ ifplugd-0.28/src/ethtool-local.h	2015-08-01 18:44:24.256037746 +0200
++@@ -21,10 +21,12 @@
++  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
++  */
++ 
+++#include <stdint.h>
+++
++ typedef unsigned long long u64;
++-typedef __uint32_t u32;        
++-typedef __uint16_t u16;        
++-typedef __uint8_t u8;          
+++typedef uint32_t u32;
+++typedef uint16_t u16;
+++typedef uint8_t u8;
++ 
++ #include "ethtool-kernel.h"
++ 
