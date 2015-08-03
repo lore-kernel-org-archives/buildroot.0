@@ -1,21 +1,54 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Mon, 3 Aug 2015 20:08:36 +0100
-Subject: [Buildroot] libmbim - gudev dependency ?
-In-Reply-To: <20150803210149.6b0dd330@free-electrons.com>
-References: <CA+BsyQ4gPERziCh7HQO_qzKEa-O8oHg5S8uKVqsm6rGEpuMoDg@mail.gmail.com>
- <20150803210149.6b0dd330@free-electrons.com>
-Message-ID: <CA+BsyQ7=Yhv+umm3hcCLARRLs6gdQKDgAm17y1Fa0JDjjQYjqQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 3 Aug 2015 22:57:42 +0300
+Subject: [Buildroot] [PATCH 1/1] rapidxml: new package
+In-Reply-To: <1438625054-7118-1-git-send-email-yba@tkos.co.il>
+References: <1438625054-7118-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20150803195742.GJ3345@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Has anyone else looked at adding the new gudev package to buildroot
->> yet ? If not I'll go ahead and add it.
->
->         http://patchwork.ozlabs.org/patch/494070/
+Hi Yonatan,
 
-A-ha. Glad I asked. :)
+On Mon, Aug 03, 2015 at 09:04:14PM +0300, Jonathan Ben-Avraham wrote:
+> +RAPIDXML_VERSION = 1.13
+> +RAPIDXML_SOURCE = rapidxml-$(RAPIDXML_VERSION).zip
+> +
+> +#RAPIDXML_SITE = http://sourceforge.net/projects/rapidxml/files/latest/download
 
-Brendan
+Please remove.
+
+> +RAPIDXML_SITE = http://garr.dl.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/
+
+Does
+
+RAPIDXML_SITE = http://sourceforge.net/project/rapidxml/rapidxml/rapidxml%20$(RAPIDXML_VERSION)/
+
+work?
+
+> +RAPIDXML_LICENSE = MIT
+> +RAPIDXML_LICENSE_FILES = license.txt
+> +RAPIDXML_INSTALL_TARGET = NO
+
+This needs an explanation comment. Is this a header only package?
+
+> +RAPIDXML_INSTALL_STAGING = YES
+> +
+> +define RAPIDXML_EXTRACT_CMDS
+> +	$(UNZIP) -d $(@D) $(DL_DIR)/$(RAPIDXML_SOURCE)
+> +endef
+> +
+> +define RAPIDXML_INSTALL_STAGING_CMDS
+> +	cp -dpfr $(@D)/rapidxml-$(RAPIDXML_VERSION)/*hpp $(STAGING_DIR)/usr/include
+> +endef
+> +
+> +$(eval $(generic-package))
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
