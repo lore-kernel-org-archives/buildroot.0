@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:14:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: disable for static build
-In-Reply-To: <20150802152333.GC3647@free.fr>
-References: <1438506439-3096-1-git-send-email-joerg.krause@embedded.rocks>
- <20150802152333.GC3647@free.fr>
-Message-ID: <20150803111403.53eb7ffb@free-electrons.com>
+Date: Mon, 3 Aug 2015 11:15:04 +0200
+Subject: [Buildroot] [PATCH 2/3] package/eflutils: needs argp-standalone
+ with musl toolchains
+In-Reply-To: <1438448118-26198-2-git-send-email-romain.naour@openwide.fr>
+References: <1438448118-26198-1-git-send-email-romain.naour@openwide.fr>
+ <1438448118-26198-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150803111504.65278b31@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear Romain Naour,
 
-On Sun, 2 Aug 2015 17:23:33 +0200, Yann E. MORIN wrote:
-
-> > diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-> > index c5ec792..69063fc 100644
-> > --- a/package/nodejs/Config.in
-> > +++ b/package/nodejs/Config.in
-> > @@ -8,17 +8,18 @@ config BR2_PACKAGE_NODEJS
-> >  	depends on !BR2_ARM_CPU_ARMV4
-> >  	# uses fork()
-> >  	depends on BR2_USE_MMU
-> > +	depends on !BR2_STATIC_LIBS # dlopen, etc.
+On Sat,  1 Aug 2015 18:55:17 +0200, Romain Naour wrote:
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/elfutils/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> That's not entirely true. For armv5, nodejs 0.10 does not require
-> dynamic libraries.
+> diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+> index 6c6856e..ea0ae62 100644
+> --- a/package/elfutils/Config.in
+> +++ b/package/elfutils/Config.in
+> @@ -4,7 +4,7 @@ comment "elfutils needs a toolchain w/ wchar, dynamic library"
+>  
+>  config BR2_PACKAGE_ELFUTILS
+>  	bool "elfutils"
+> -	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
+> +	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
 
-Do we really care? Nodejs is a big stuff, unlikely to be used in
-static-only configurations. Plus the latest version of NodeJS, 0.12.x,
-no longer supports ARMv5. So I'm tempted to simply not support static
-linking at all, even if indeed for a very specific case it could be
-supported.
-
-What do you think?
-
-Best regards,
+This is not sufficient to get elfutils to build with musl. Lots of
+other changes are needed (TEMP_FAILURE_RETRY, <error.h>, etc.).
 
 Thomas
 -- 
