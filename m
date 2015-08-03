@@ -1,89 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:03:14 +0200
-Subject: [Buildroot] [git commit] uclibc: remove patch applied in 1.0.5
-Message-ID: <20150803090323.AD13D7FB52@busybox.osuosl.org>
+Date: Mon, 3 Aug 2015 11:03:36 +0200
+Subject: [Buildroot] [PATCH 1/3] uclibc: update to latest 1.0.5 release
+In-Reply-To: <20150802213851.GA23536@waldemar-brodkorb.de>
+References: <20150802213851.GA23536@waldemar-brodkorb.de>
+Message-ID: <20150803110336.64b34600@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c22f16317646d2d0b5f2736d641820f757422054
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Waldemar Brodkorb,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 --------------------
- 1 files changed, 0 insertions(+), 64 deletions(-)
+On Sun, 2 Aug 2015 23:38:51 +0200, Waldemar Brodkorb wrote:
+> Fixes gcc 5.x problems on x86.
+> Fixes static linking issue on sh4.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/uclibc/Config.in   |    2 +-
+>  package/uclibc/uclibc.hash |    2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-deleted file mode 100644
-index a580a67..0000000
---- a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Wed, 22 Jul 2015 14:54:07 +0200
--Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
--
--Found via buildroot autobuilder.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-----
-- libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
-- libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
-- 2 files changed, 12 insertions(+)
--
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--index f38703b..ff9a784 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--@@ -70,6 +70,9 @@
-- 	.globl	__lll_lock_wait_private
-- 	.type	__lll_lock_wait_private, at function
-- 	.hidden	__lll_lock_wait_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_lock_wait_private
--+#endif
-- 	.align	16
-- __lll_lock_wait_private:
-- 	cfi_startproc
--@@ -320,6 +323,9 @@ __lll_timedlock_wait:
-- 	.globl	__lll_unlock_wake_private
-- 	.type	__lll_unlock_wake_private, at function
-- 	.hidden	__lll_unlock_wake_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_unlock_wake_private
--+#endif
-- 	.align	16
-- __lll_unlock_wake_private:
-- 	cfi_startproc
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--index 50aacea..894c683 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--@@ -75,6 +75,9 @@
-- 	.globl	__lll_lock_wait_private
-- 	.type	__lll_lock_wait_private, at function
-- 	.hidden	__lll_lock_wait_private
--+#ifndef IS_IN_libpthread
--+	.weak   __lll_lock_wait_private
--+#endif
-- 	.align	16
-- __lll_lock_wait_private:
-- 	cfi_startproc
--@@ -317,6 +320,9 @@ __lll_timedlock_wait:
-- 	.globl	__lll_unlock_wake_private
-- 	.type	__lll_unlock_wake_private, at function
-- 	.hidden	__lll_unlock_wake_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_unlock_wake_private
--+#endif
-- 	.align	16
-- __lll_unlock_wake_private:
-- 	cfi_startproc
---- 
--1.7.10.4
--
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
