@@ -1,30 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 04 Aug 2015 09:43:31 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-08-03
-In-Reply-To: <20150804063017.1618610249D@stock.ovh.net>
-References: <20150804063017.1618610249D@stock.ovh.net>
-Message-ID: <1438674211.2172.6.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Aug 2015 10:55:37 +0200
+Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
+In-Reply-To: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+References: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+Message-ID: <20150804105537.3a5e47f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Di, 2015-08-04 at 08:30 +0200, Thomas Petazzoni wrote:
+Augusto,
 
->      powerpc | libsigrok-fe473123ba836445d... | NOK | 
-> http://autobuild.buildroot.net/results/ffc0a73012ca63f26b05bd04162a8c
-> d5cbe0b1cf/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuil
-> d.buildroot.net/results/1f348d86f6c591bed66320878b0fb8bae3d213cd/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuil
-> d.buildroot.net/results/563378e3f6320980153c8c972ceba5e913fe933f/
->      powerpc | libsigrok-fe473123ba836445d... | NOK | http://autobuil
-> d.buildroot.net/results/1d75497009f1e3b06236b3409fd768dcf7956b87/
+On Mon,  3 Aug 2015 17:36:59 -0300, Augusto Farina wrote:
+> Colorama is a simple cross-platform colored terminal text in Python.
+> 
+> Tested on a PowerPC e500v2 board. Host build support is also added in
+> the package makefile, as python-jinja2, because we have third-party
+> software that requires it (e.g. ARM mbed build-system).
 
-Too old toolchains not understand `-std=c11`. I'll prepare a patch for
-this.
+As usual, I'm a little bit reluctant to add host packages that are not
+used by any other package in Buildroot, because it means they are never
+tested.
 
-Best regards
-J?rg Krause
+Do you intend to submit some packages that will use
+host-python-colorama?
+
+Also, not your fault, but I must say it's a bit odd for a build-system
+to have a mandatory dependency on something that allows to colorize the
+terminal output :)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
