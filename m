@@ -1,133 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Aug 2015 22:08:36 +0200
-Subject: [Buildroot] [PATCH 5/9] libsigrok: depends on gcc >= 4.7
-In-Reply-To: <1438711241-31792-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Aug 2015 22:11:06 +0200
+Subject: [Buildroot] [PATCH 6/9] upmpdcli: update to use the gcc version
+ dependency mechanism
+In-Reply-To: <1438711241-31792-7-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1438711241-31792-6-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150804200835.GX3647@free.fr>
+ <1438711241-31792-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150804201106.GY3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thoms, All,
 
 On 2015-08-04 20:00 +0200, Thomas Petazzoni spake thusly:
-> Until recently, only the C++ bindings of libsigrok needed a recent
-> compiler because they are written in C++11. However, now, libsigrok
-> itself is written in C11, which is only available since gcc 4.7.
-
-Here are a few autobuild failures for this:  ;-)
-    http://autobuild.buildroot.org/results/1d7/1d75497009f1e3b06236b3409fd768dcf7956b87/
-    http://autobuild.buildroot.org/results/563/563378e3f6320980153c8c972ceba5e913fe933f/
-
-With those added to the commit log;
+> This commit updates the upmpdcli Config.in file to use the newly
+> introduced gcc version dependency mechanism to depend on gcc >= 4.6
+> instead of open-coding dependencies on specific toolchains.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Note that I have not even attempted to build it with a gcc-4.7 to
-validate. This is only a review...
 
 Regards,
 Yann E. MORIN.
 
-> So, this commit replaces the CodeSourcery-specific exclusions by a
-> proper dependency on gcc >= 4.7.
-> 
-> The sigrok-cli and pulseview packages, which select libsigrok, are
-> also updated accordingly.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/libsigrok/Config.in  | 11 ++++-------
->  package/pulseview/Config.in  |  9 +++------
->  package/sigrok-cli/Config.in |  6 ++++--
->  3 files changed, 11 insertions(+), 15 deletions(-)
+>  package/upmpdcli/Config.in | 15 +++------------
+>  1 file changed, 3 insertions(+), 12 deletions(-)
 > 
-> diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-> index 8bd7d99..6ef3776 100644
-> --- a/package/libsigrok/Config.in
-> +++ b/package/libsigrok/Config.in
-> @@ -6,6 +6,8 @@ config BR2_PACKAGE_LIBSIGROK
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU
-> +	# std=c11
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
->  	help
->  	  Libsigrok is a shared library written in C, which provides
->  	  the basic hardware access drivers for logic analyzers and
-> @@ -22,20 +24,15 @@ config BR2_PACKAGE_LIBSIGROKCXX
->  	bool "build C++ bindings"
->  	select BR2_PACKAGE_GLIBMM
+> diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+> index 0fe3d10..848c6af 100644
+> --- a/package/upmpdcli/Config.in
+> +++ b/package/upmpdcli/Config.in
+> @@ -4,11 +4,7 @@ config BR2_PACKAGE_UPMPDCLI
+>  	select BR2_PACKAGE_LIBUPNPP
 >  	depends on BR2_INSTALL_LIBSTDCPP
-> -	# CS powerpc g++ are too old. libsigrokcxx needs C++11
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
-> -		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
->  	help
->  	  Build libsigrok C++ bindings as well.
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp -> libupnp
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+>  	# libupnpp triggers the _gp link issue
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+> @@ -19,12 +15,7 @@ config BR2_PACKAGE_UPMPDCLI
 >  
->  comment "C++ bindings need a toolchain w/ C++"
->  	depends on BR2_PACKAGE_LIBSIGROK
->  	depends on !BR2_INSTALL_LIBSTDCPP
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
-> -		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+>  	  http://www.lesbonscomptes.com/upmpdcli/
 >  
->  endif
->  
-> -comment "libsigrok needs a toolchain w/ wchar, threads"
-> +comment "libsigrok needs a toolchain w/ wchar, threads, gcc >= 4.7"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-> index 2fb844b..e6ddc21 100644
-> --- a/package/pulseview/Config.in
-> +++ b/package/pulseview/Config.in
-> @@ -17,18 +17,15 @@ config BR2_PACKAGE_PULSEVIEW
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  	# libsigrok
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
-> -		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
->  	help
->  	  PulseView is a Qt based logic analyzer, oscilloscope
->  	  and MSO GUI for sigrok.
->  
->  	  http://sigrok.org/wiki/PulseView
->  
-> -comment "pulseview needs a toolchain w/ wchar, threads, C++"
-> +comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.7"
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_QT5
->  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
-> -		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-> diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
-> index 4e7f137..b8eb60d 100644
-> --- a/package/sigrok-cli/Config.in
-> +++ b/package/sigrok-cli/Config.in
-> @@ -5,12 +5,14 @@ config BR2_PACKAGE_SIGROK_CLI
->  	depends on BR2_USE_WCHAR
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU
-> +	# libsigrok
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
->  	help
->  	  Sigrok-cli is a command-line frontend for the sigrok
->  	  software suite.
->  
->  	  http://sigrok.org/wiki/Sigrok-cli
->  
-> -comment "sigrok-cli needs a toolchain w/ wchar, threads"
-> +comment "sigrok-cli needs a toolchain w/ wchar, threads, gcc >= 4.7"
->  	depends on BR2_USE_MMU
-> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> -comment "upmpdcli needs a toolchain w/ C++, threads"
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+> +comment "upmpdcli needs a toolchain w/ C++, threads, gcc >= 4.6"
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
 > -- 
 > 2.5.0
 > 
