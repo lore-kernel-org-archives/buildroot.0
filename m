@@ -1,41 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 20:07:22 +0200
-Subject: [Buildroot] [PATCH] binutils: fix buildng of Linux kernel for
- ARCv2 ISA
-In-Reply-To: <1438688562-26476-1-git-send-email-abrodkin@synopsys.com>
-References: <1438688562-26476-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150804200722.6effb8d5@free-electrons.com>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Tue,  4 Aug 2015 21:41:36 +0300
+Subject: [Buildroot] [PATCH v2 1/1] jpeg-turbo: bump version from 1.4.0 to
+	1.4.1
+Message-ID: <1438713696-30154-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+From: Jonathan Ben Avraham <yba@tkos.co.il>
 
-On Tue,  4 Aug 2015 14:42:42 +0300, Alexey Brodkin wrote:
-> With fix of missing .tdata/.tbss sections we unintentionally introduced
-> a regression for ARCv2 ISA (read ARC HS38) kernel building.
-> 
-> That's what we got on attempt to build kernel:
-> ----------------------------------->8--------------------------------------
->   LD      drivers/video/fbdev/built-in.o
-> arc-linux-ld: ERROR: Attempting to link drivers/video/fbdev/omap2/built-in.o with a binary drivers/video/fbdev/built-in.o of different architecture
-> arc-linux-ld: failed to merge target specific data of file drivers/video/fbdev/omap2/built-in.o
-> scripts/Makefile.build:337: recipe for target 'drivers/video/fbdev/built-in.o' failed
-> make[3]: *** [drivers/video/fbdev/built-in.o] Error 1
-> scripts/Makefile.build:403: recipe for target 'drivers/video/fbdev' failed
-> make[2]: *** [drivers/video/fbdev] Error 2
-> scripts/Makefile.build:403: recipe for target 'drivers/video' failed
-> make[1]: *** [drivers/video] Error 2
-> Makefile:944: recipe for target 'drivers' failed
-> make: *** [drivers] Error 2
-> ----------------------------------->8--------------------------------------
 
-I've fixed the typo in the commit title, and applied. Thanks!
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+---
+ package/jpeg-turbo/jpeg-turbo.hash |    5 ++---
+ package/jpeg-turbo/jpeg-turbo.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-Thomas
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index bbc62f2..5115f42 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,3 +1,2 @@
+-# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/
+-sha1	a9ed7a99a6090e0848836c5df8e836f300a098b9  libjpeg-turbo-1.4.0.tar.gz
+-md5	039153dabe61e1ac8d9323b5522b56b0  libjpeg-turbo-1.4.0.tar.gz
++# Locally computed
++sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index dd3ae19..25434b1 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 1.4.0
++JPEG_TURBO_VERSION = 1.4.1
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
