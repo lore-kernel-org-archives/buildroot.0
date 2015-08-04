@@ -1,50 +1,38 @@
-From: DATACOM - Farina <farina@datacom.ind.br>
-Date: Tue, 04 Aug 2015 11:23:06 -0300
-Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
-In-Reply-To: <20150804153825.3a46c00e@free-electrons.com>
-References: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>	<20150804105537.3a5e47f6@free-electrons.com>	<55C0BEC6.8040207@datacom.ind.br>
- <20150804153825.3a46c00e@free-electrons.com>
-Message-ID: <55C0CACA.4010105@datacom.ind.br>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue,  4 Aug 2015 16:53:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/empty - fix build failure
+Message-ID: <1438703581-25996-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes http://autobuild.buildroot.net/results/e07/e07aec9a839e89b7452b13bf5445164530e27414/
 
-On 04-08-2015 10:38, Thomas Petazzoni wrote:
-> Hello,
->
-> On Tue, 04 Aug 2015 10:31:50 -0300, DATACOM - Farina wrote:
->
->>> Do you intend to submit some packages that will use
->>> host-python-colorama?
->>
->> At this specific moment, no. But we are analyzing the ARM mbed package,
->> which are widely used libraries and tools for ARM microcontrollers, and
->> makes use of host-python-colorama on its build-system.
->
-> But why do you use Buildroot to build something for a micro-controller?
-> I don't really see the connection between using ARM mbed and Buildroot.
->
+"empty" fails to build if _POSIX_SEMAPHORES is not defined, which is the
+case on a toolchain with no threading support.
 
-Our boards has PowerPC/ARM/MIPS running Linux. And also has ARM 
-microcontrollers.
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ package/empty/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-So, when we build the main firmware (Linux + rootfs) with Buildroot, we 
-also build the microcontroller firmware that goes inside the rootfs 
-(using a secondary toolchain).
-
-With this way, we have just one build-system (Buildroot), with 
-everything we need integrated on it.
-
-My apologies if it is not the Buildroot idea, but this kind of 
-integration is facilitating our work.
-
-Cheers,
-
+diff --git a/package/empty/Config.in b/package/empty/Config.in
+index 7fd0877..9a77f8d 100644
+--- a/package/empty/Config.in
++++ b/package/empty/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_EMPTY
+ 	bool "empty"
+ 	depends on BR2_USE_MMU # uses fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Run processes and applications under pseudo-terminal (PTY) sessions.
+ 
+ 	  http://empty.sourceforge.net/
++
++comment "empty needs a toolchain w/ threads"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Augusto Farina
-DATACOM / R&D - Access
-www.datacom.ind.br
+2.4.3
