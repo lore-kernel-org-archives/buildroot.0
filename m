@@ -1,78 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 15:24:28 +0200
-Subject: [Buildroot] [PATCH] board: add support for ARC AXS101 and
- AXS103 Software Development Platforms
-In-Reply-To: <1438694226.22313.12.camel@synopsys.com>
-References: <1438689614-31408-1-git-send-email-abrodkin@synopsys.com>
- <20150804145738.44ad2bd3@free-electrons.com>
- <1438694226.22313.12.camel@synopsys.com>
-Message-ID: <20150804152428.0c0d4de7@free-electrons.com>
+From: DATACOM - Farina <farina@datacom.ind.br>
+Date: Tue, 04 Aug 2015 10:31:50 -0300
+Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
+In-Reply-To: <20150804105537.3a5e47f6@free-electrons.com>
+References: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+ <20150804105537.3a5e47f6@free-electrons.com>
+Message-ID: <55C0BEC6.8040207@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Hi Thomas,
 
-On Tue, 4 Aug 2015 13:17:06 +0000, Alexey Brodkin wrote:
+On 04-08-2015 05:55, Thomas Petazzoni wrote:
+> Augusto,
+>
+> On Mon,  3 Aug 2015 17:36:59 -0300, Augusto Farina wrote:
+>> Colorama is a simple cross-platform colored terminal text in Python.
+>>
+>> Tested on a PowerPC e500v2 board. Host build support is also added in
+>> the package makefile, as python-jinja2, because we have third-party
+>> software that requires it (e.g. ARM mbed build-system).
+>
+> As usual, I'm a little bit reluctant to add host packages that are not
+> used by any other package in Buildroot, because it means they are never
+> tested.
+>
 
-> Opps dummy copy-paste from Busybox's example.
-> Please pardon that silly thing.
+I've heard this :)
 
-No problem.
 
-> Agree, that's a long-standing problem and if I'm not mistaken you guys
-> advise to go for fs overlay if that kind of "feature" is required.
-> 
-> That said I'm not happy with that solution but having no other way I have to swallow
+> Do you intend to submit some packages that will use
+> host-python-colorama?
+>
 
-Yes, no problem with that.
+At this specific moment, no. But we are analyzing the ARM mbed package, 
+which are widely used libraries and tools for ARM microcontrollers, and 
+makes use of host-python-colorama on its build-system.
 
-> > Please force the version of the kernel headers, so that they match the
-> > kernel being built.
-> 
-> Well you see the problem here is we do need yet to be released Linux v4.2
-> because that's where both boards are finally exist.
-> 
-> So once v4.2 is released (in a couple of weeks now) and Buildroot is updated
-> I would assume v4.2 headers will become default version, right?
-> So then we're golden and there's no need to update these defconfigs.
 
-You're wrong. After 4.2 becomes the default version, 4.3 will become
-the default version. And then your defconfigs are broken.
+> Also, not your fault, but I must say it's a bit odd for a build-system
+> to have a mandatory dependency on something that allows to colorize the
+> terminal output :)
+>
 
-So you *must* specify a custom kernel headers version. Just use 4.1,
-this is good enough for a 4.2-rc kernel.
+I agree with you. But we are trying not to keep recipes of open-source 
+packages in our repository, and I just thought this might be useful to 
+someone else.
 
-> As for kernel version itself as of today I HAVE TO specify custom version
-> (v4.2-rc5) just to have sources with our boards supported. In case of Buildroot
-> that means these defconfigs will be build successfully.
-> 
-> Still once v4.2 gets released (and I think it will happen well between some
-> Buildroots RCs) I will send an update that will effectively remove 
-> ----->8-----
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
-> ----->8-----
 
-No, you will certainly *not* send such an update, because doing this is
-wrong. 4.2 might be the default version for a while, but then it will
-be 4.3, and you will not have tested this.
+Cheers,
 
-All defconfigs *must* use a fixed version of the kernel headers, kernel
-and bootloader, so that we are relatively sure that they will continue
-to build and boot even if we change the default kernel headers, kernel
-or bootloader versions.
-
-Please look at all other defconfigs. The qemu_* defconfigs are good
-examples of doing things right since they are nicely maintained by
-Gustavo.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Augusto Farina
+DATACOM / R&D - Access
+www.datacom.ind.br
