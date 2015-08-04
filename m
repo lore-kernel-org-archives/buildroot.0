@@ -1,30 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 11:26:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] dawgdic: new package
-In-Reply-To: <alpine.DEB.2.11.1508041223140.1726@tanhuma.tkos.co.il>
-References: <1438593363-32653-1-git-send-email-yba@tkos.co.il>
- <20150804111848.4e6c8402@free-electrons.com>
- <alpine.DEB.2.11.1508041223140.1726@tanhuma.tkos.co.il>
-Message-ID: <20150804112608.6d418a0d@free-electrons.com>
+Date: Tue, 4 Aug 2015 11:26:22 +0200
+Subject: [Buildroot] [PATCH v3 1/1] zeromq: bump to version 4.1.2
+In-Reply-To: <1438617072-9275-1-git-send-email-yba@tkos.co.il>
+References: <1438617072-9275-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20150804112622.1f163396@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan,
+Dear Jonathan Ben-Avraham,
 
-On Tue, 4 Aug 2015 12:24:29 +0300 (IDT), Jonathan Ben Avraham wrote:
+On Mon,  3 Aug 2015 18:51:12 +0300, Jonathan Ben-Avraham wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
+> 
+> In the upstream git://github.com/zeromq/libzmq.git:
+> 
+> commit 6fdafc458a776e063511bb83dc7791aabea00b05 obviated the need for
+> 0001-tests-disable-test_fork-if-fork-is-not-available.patch .
+> 
+> commit c8ee16940fff19ae3c12b4596c4bd131b2c71996 obviated the need for
+> 0004-allow-without-libsodium.patch .
+> 
+> Fixed AUTORECONF comment in zeromq.mk to refer to the correct patch,
+> 0001-acinclude.m4-make-kernel-specific-flags-cacheable.patch
+> 
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+> ---
+>  ....m4-make-kernel-specific-flags-cacheable.patch} |    0
+>  ...isable-test_fork-if-fork-is-not-available.patch |   52 --------------------
+>  ...-Fix-pkg-config-files-for-static-linking.patch} |    0
+>  package/zeromq/0004-allow-without-libsodium.patch  |   38 --------------
+>  package/zeromq/zeromq.hash                         |    4 +-
+>  package/zeromq/zeromq.mk                           |    6 +--
+>  6 files changed, 5 insertions(+), 95 deletions(-)
+>  rename package/zeromq/{0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch => 0001-acinclude.m4-make-kernel-specific-flags-cacheable.patch} (100%)
+>  delete mode 100644 package/zeromq/0001-tests-disable-test_fork-if-fork-is-not-available.patch
+>  rename package/zeromq/{0003-libzmq-Fix-pkg-config-files-for-static-linking.patch => 0002-libzmq-Fix-pkg-config-files-for-static-linking.patch} (100%)
+>  delete mode 100644 package/zeromq/0004-allow-without-libsodium.patch
 
-> Hold off on the other patches that I submitted. Baruch will provide 
-> feedback on what needs to be done and I will do the work myself from now 
-> on.
-
-Well, that's OK, I don't mind doing a bit of rework. Having perfect
-patches is indeed better, but it's perfectly fine for me that new
-contributors don't yet know all the "rules" / best practices.
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
