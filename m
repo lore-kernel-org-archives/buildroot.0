@@ -1,114 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Aug 2015 20:00:37 +0200
-Subject: [Buildroot] [PATCH 5/9] libsigrok: depends on gcc >= 4.7
+Date: Tue,  4 Aug 2015 20:00:34 +0200
+Subject: [Buildroot] [PATCH 2/9] gcc: select the appropriate
+	BR2_TOOLCHAIN_GCC_AT_LEAST_* option
 In-Reply-To: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1438711241-31792-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1438711241-31792-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until recently, only the C++ bindings of libsigrok needed a recent
-compiler because they are written in C++11. However, now, libsigrok
-itself is written in C11, which is only available since gcc 4.7.
-
-So, this commit replaces the CodeSourcery-specific exclusions by a
-proper dependency on gcc >= 4.7.
-
-The sigrok-cli and pulseview packages, which select libsigrok, are
-also updated accordingly.
+This commit wires up the gcc version dependency mechanism in the
+internal toolchain backend by making the gcc version choice in the gcc
+package Config.in.host select the appropriate
+BR2_TOOLCHAIN_GCC_AT_LEAST_* option.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigrok/Config.in  | 11 ++++-------
- package/pulseview/Config.in  |  9 +++------
- package/sigrok-cli/Config.in |  6 ++++--
- 3 files changed, 11 insertions(+), 15 deletions(-)
+ package/gcc/Config.in.host | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
-index 8bd7d99..6ef3776 100644
---- a/package/libsigrok/Config.in
-+++ b/package/libsigrok/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_LIBSIGROK
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	# std=c11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  Libsigrok is a shared library written in C, which provides
- 	  the basic hardware access drivers for logic analyzers and
-@@ -22,20 +24,15 @@ config BR2_PACKAGE_LIBSIGROKCXX
- 	bool "build C++ bindings"
- 	select BR2_PACKAGE_GLIBMM
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# CS powerpc g++ are too old. libsigrokcxx needs C++11
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	help
- 	  Build libsigrok C++ bindings as well.
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 93c9032..baa7956 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -34,6 +34,7 @@ choice
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
  
- comment "C++ bindings need a toolchain w/ C++"
- 	depends on BR2_PACKAGE_LIBSIGROK
- 	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	config BR2_GCC_VERSION_4_7_X
+ 		bool "gcc 4.7.x"
+@@ -50,6 +51,7 @@ choice
+ 		# Broken or unsupported x86 cores
+ 		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
  
- endif
+ 	config BR2_GCC_VERSION_4_8_X
+ 		bool "gcc 4.8.x"
+@@ -64,12 +66,15 @@ choice
+ 		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
  
--comment "libsigrok needs a toolchain w/ wchar, threads"
-+comment "libsigrok needs a toolchain w/ wchar, threads, gcc >= 4.7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-index 2fb844b..e6ddc21 100644
---- a/package/pulseview/Config.in
-+++ b/package/pulseview/Config.in
-@@ -17,18 +17,15 @@ config BR2_PACKAGE_PULSEVIEW
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	# libsigrok
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  PulseView is a Qt based logic analyzer, oscilloscope
- 	  and MSO GUI for sigrok.
+ 	config BR2_GCC_VERSION_4_8_ARC
+ 		bool "gcc 4.8-arc"
+ 		# Only supported architecture
+ 		depends on BR2_arc
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
  
- 	  http://sigrok.org/wiki/PulseView
+ 	config BR2_GCC_VERSION_4_9_X
+ 		bool "gcc 4.9.x"
+@@ -78,6 +83,7 @@ choice
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
--comment "pulseview needs a toolchain w/ wchar, threads, C++"
-+comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.7"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_QT5
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
--		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
-index 4e7f137..b8eb60d 100644
---- a/package/sigrok-cli/Config.in
-+++ b/package/sigrok-cli/Config.in
-@@ -5,12 +5,14 @@ config BR2_PACKAGE_SIGROK_CLI
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	# libsigrok
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  Sigrok-cli is a command-line frontend for the sigrok
- 	  software suite.
+ 	config BR2_GCC_VERSION_5_X
+ 		bool "gcc 5.x"
+@@ -85,6 +91,7 @@ choice
+ 		depends on !BR2_arc
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
  
- 	  http://sigrok.org/wiki/Sigrok-cli
+ endchoice
  
--comment "sigrok-cli needs a toolchain w/ wchar, threads"
-+comment "sigrok-cli needs a toolchain w/ wchar, threads, gcc >= 4.7"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 -- 
 2.5.0
