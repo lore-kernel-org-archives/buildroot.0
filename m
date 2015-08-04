@@ -1,44 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 15:52:22 +0200
-Subject: [Buildroot] [PATCH 2/2] i2c-tools: Adds check of i2c kernel
- option
-In-Reply-To: <96448357.4733141.1438695534642.JavaMail.root@openwide.fr>
-References: <20150804144556.58dd8978@free-electrons.com>
- <96448357.4733141.1438695534642.JavaMail.root@openwide.fr>
-Message-ID: <20150804155222.580ff18e@free-electrons.com>
+Date: Tue, 4 Aug 2015 15:55:25 +0200
+Subject: [Buildroot] [PATCH] board: add support for ARC AXS101 and
+ AXS103 Software Development Platforms
+In-Reply-To: <1438695423.22313.22.camel@synopsys.com>
+References: <1438689614-31408-1-git-send-email-abrodkin@synopsys.com>
+ <20150804145738.44ad2bd3@free-electrons.com>
+ <1438694226.22313.12.camel@synopsys.com>
+ <20150804152428.0c0d4de7@free-electrons.com>
+ <1438695423.22313.22.camel@synopsys.com>
+Message-ID: <20150804155525.58062d6e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Denis,
+Alexey,
 
-On Tue, 4 Aug 2015 15:38:54 +0200 (CEST), Denis Thulin wrote:
+On Tue, 4 Aug 2015 13:37:04 +0000, Alexey Brodkin wrote:
 
-> I understand that this is a mistake for kernel options.
-> But could patch [1/2] be useful for the other kconfig packages ?
-> I think it would be useful to know options of busybox when building
-> packages.
+> Hw, I do understand your concern with implicitly specified version of
+> kernel/headers but what I meant if I use "make savedefconfig" it eliminates
+> versions if they match today's defaults.
 
-I am not sure for what reasons other packages would need to know the
-Busybox options that are enabled.
+Not if you explicitly specify "custom version", i.e if you do:
 
-> Would it not be a better thing for all packages to provide a list
-> of kernel options they need and for LINUX_KCONFIG_FIXUP_CMDS
-> to select those options rather than using lots of if blocks ?
+	Kernel Headers (Manually specified Linux version)  ---> 
+	(4.1) linux version
 
-Could be, yes. Not sure how that would work, though. We want to keep
-this list of condition relatively short, and not encourage adding
-millions of interactions between user space dependencies and kernel
-options.
+Then you get:
 
-> That list could also be exported so that people using a custom kernel
-> would know which options Buildroot would have selected had they used
-> the default kernel.
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="4.1"
 
-People using a custom kernel "know what they are doing", so I'm not too
-interested in solving this particular use case.
+which is what we want.
+
+
+> So now if I understood you correctly you propose to insert:
+> --------->8---------
+> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
+
+Yes for kernel version.
+
+> BR2_DEFAULT_KERNEL_HEADERS="4.1.3"
+
+But no for kernel headers: see above what you should do.
+
+Again, please look at qemu_*_defconfig, they do the right thing:
+
+# Lock to 4.1 headers to avoid breaking with newer kernels
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="4.1"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+
+# Kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
 
 Best regards,
 
