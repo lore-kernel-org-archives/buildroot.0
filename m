@@ -1,50 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Aug 2015 20:00:41 +0200
-Subject: [Buildroot] [PATCH 9/9] mpd: update to use the gcc version
-	dependency mechanism
+Date: Tue,  4 Aug 2015 20:00:33 +0200
+Subject: [Buildroot] [PATCH 1/9] toolchain: add common gcc version hidden
+	config options
 In-Reply-To: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1438711241-31792-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1438711241-31792-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpd requires at least gcc 4.6, so use the newly introduced gcc version
-dependency mechanism instead of open-coded toolchain dependencies.
+This commit adds a number of hidden Config.in options, that will be
+used to handle dependencies on the gcc version. We mimic the model
+that was used for the kernel headers dependency mechanism.
+
+These hidden options will be selected by the internal and external
+toolchain backend logic respectively, in follow-up commits.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpd/Config.in | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ toolchain/toolchain-common.in | 44 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 65b46df..28962f7 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -4,9 +4,7 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_USE_WCHAR # libglib2, flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
--	# sparc & CS powerpc gcc are too old
--	depends on !BR2_sparc
--	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -297,9 +295,8 @@ config BR2_PACKAGE_MPD_UPNP
- 
- endif
- 
--comment "mpd needs a toolchain w/ C++, threads, wchar"
-+comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
--	depends on !BR2_sparc
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index b7a11a4..4be55c3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -254,3 +254,47 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	default "3.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	default "3.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	default "2.6"
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++	bool
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++# This order guarantees that the highest version is set, as kconfig
++# stops affecting a value on the first matching default.
++config BR2_TOOLCHAIN_GCC_AT_LEAST
++	string
++	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	default "4.9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	default "4.8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	default "4.7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	default "4.6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	default "4.5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	default "4.4"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++	default "4.3"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
 -- 
 2.5.0
