@@ -1,78 +1,44 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Tue, 4 Aug 2015 19:37:14 +0300 (IDT)
-Subject: [Buildroot] [PATCH 1/1] rapidxml: new package
-In-Reply-To: <20150803195742.GJ3345@tarshish>
-References: <1438625054-7118-1-git-send-email-yba@tkos.co.il>
- <20150803195742.GJ3345@tarshish>
-Message-ID: <alpine.DEB.2.02.1508041932350.7707@orcam81.orcam.lan>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Tue,  4 Aug 2015 20:39:26 +0300
+Subject: [Buildroot] [PATCH 1/1] libjpeg-turbo (turbo-jpeg): bump 1.4.0 to
+	1.4.1
+Message-ID: <1438709966-3154-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-
-On Mon, 3 Aug 2015, Baruch Siach wrote:
-
-> Date: Mon, 3 Aug 2015 22:57:42 +0300
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 1/1] rapidxml: new package
-> 
-> Hi Yonatan,
->
-> On Mon, Aug 03, 2015 at 09:04:14PM +0300, Jonathan Ben-Avraham wrote:
->> +RAPIDXML_VERSION = 1.13
->> +RAPIDXML_SOURCE = rapidxml-$(RAPIDXML_VERSION).zip
->> +
->> +#RAPIDXML_SITE = http://sourceforge.net/projects/rapidxml/files/latest/download
->
-> Please remove.
->
->> +RAPIDXML_SITE = http://garr.dl.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/
->
-> Does
->
-> RAPIDXML_SITE = http://sourceforge.net/project/rapidxml/rapidxml/rapidxml%20$(RAPIDXML_VERSION)/
->
-> work?
->
->> +RAPIDXML_LICENSE = MIT
->> +RAPIDXML_LICENSE_FILES = license.txt
->> +RAPIDXML_INSTALL_TARGET = NO
->
-> This needs an explanation comment. Is this a header only package?
->
->> +RAPIDXML_INSTALL_STAGING = YES
->> +
->> +define RAPIDXML_EXTRACT_CMDS
->> +	$(UNZIP) -d $(@D) $(DL_DIR)/$(RAPIDXML_SOURCE)
->> +endef
->> +
->> +define RAPIDXML_INSTALL_STAGING_CMDS
->> +	cp -dpfr $(@D)/rapidxml-$(RAPIDXML_VERSION)/*hpp $(STAGING_DIR)/usr/include
->> +endef
->> +
->> +$(eval $(generic-package))
->
-> baruch
-
-I removed the commented line and added the version variable to the 
-RAPIDXML_SITE value as per your request in the v2 patch submitted just 
-now.
-
-Regarding "This needs an explanation comment. Is this a header only 
-package?", you can see from RAPIDXML_INSTALL_TARGET = NO and 
-RAPIDXML_INSTALL_STAGING = YES that the answer must be "yes". I did not 
-see a need to add a comment since the precedent package "rapidjson", also 
-has no comment.
-
-  - yba
+From: Jonathan Ben Avraham <yba@tkos.co.il>
 
 
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+---
+ package/jpeg-turbo/jpeg-turbo.hash |    3 +--
+ package/jpeg-turbo/jpeg-turbo.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index bbc62f2..940802f 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,3 +1,2 @@
+ # From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/
+-sha1	a9ed7a99a6090e0848836c5df8e836f300a098b9  libjpeg-turbo-1.4.0.tar.gz
+-md5	039153dabe61e1ac8d9323b5522b56b0  libjpeg-turbo-1.4.0.tar.gz
++sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index dd3ae19..25434b1 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 1.4.0
++JPEG_TURBO_VERSION = 1.4.1
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
 -- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+1.7.9.5
