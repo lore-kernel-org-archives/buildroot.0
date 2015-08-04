@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 11:26:34 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10, 12,
-	14}.x and 4.1.x series
-Message-ID: <20150804092804.928787FCB5@busybox.osuosl.org>
+Date: Tue, 4 Aug 2015 11:27:33 +0200
+Subject: [Buildroot] [git commit] webkitgtk24: depend on x11 backend for gtk3
+Message-ID: <20150804092804.B017B81E76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05e8793225a42c304c0acf91b33b39584f26ba6e
+commit: http://git.buildroot.net/buildroot/commit/?id=ba25711e80f05819b6199ddedb983e9f2a7681a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The other rendering backends aren't supported right now, so depend on
+the X11 one to avoid build breakage. Fixes:
+http://autobuild.buildroot.net/results/1b3/1b372dd04eaccd8a9d24390d509b0a49f692746c/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/webkitgtk24/webkitgtk24.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 41ba27f..baf098a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -210,16 +210,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.84"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.85"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.45"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.48"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.49"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.19"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.3"		if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.4"		if BR2_KERNEL_HEADERS_4_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
+index 5c1bb5b..a58fed3 100644
+--- a/package/webkitgtk24/webkitgtk24.mk
++++ b/package/webkitgtk24/webkitgtk24.mk
+@@ -101,7 +101,7 @@ endif
+ # webkit1 (old API) uses gtk2, webkit2 (new API) uses gtk3
+ # Both can be built simultaneously, prefer "newer" for size/time savings
+ # gtk2 is mandatory for plugin support
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ WEBKITGTK24_CONF_OPTS += \
+ 	--with-gtk=3.0 \
+ 	--disable-webkit1
