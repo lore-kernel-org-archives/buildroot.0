@@ -1,165 +1,122 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Aug 2015 10:12:14 -0300
-Subject: [Buildroot] [PATCH 2/2] configs/p1010rdb: bump to the latest and
-	greatest versions
-In-Reply-To: <1438693934-29672-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438693934-29672-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438693934-29672-2-git-send-email-gustavo@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 4 Aug 2015 13:17:06 +0000
+Subject: [Buildroot] [PATCH] board: add support for ARC AXS101 and
+ AXS103 Software Development Platforms
+In-Reply-To: <20150804145738.44ad2bd3@free-electrons.com>
+References: <1438689614-31408-1-git-send-email-abrodkin@synopsys.com>
+ <20150804145738.44ad2bd3@free-electrons.com>
+Message-ID: <1438694226.22313.12.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../{linux-3.18.config => linux-4.1.config}        | 59 ----------------------
- configs/freescale_p1010rdb_pa_defconfig            |  8 +--
- 2 files changed, 4 insertions(+), 63 deletions(-)
- rename board/freescale/p1010rdb/{linux-3.18.config => linux-4.1.config} (51%)
+Hi Thomas,
 
-diff --git a/board/freescale/p1010rdb/linux-3.18.config b/board/freescale/p1010rdb/linux-4.1.config
-similarity index 51%
-rename from board/freescale/p1010rdb/linux-3.18.config
-rename to board/freescale/p1010rdb/linux-4.1.config
-index c48c4fb..2de430c 100644
---- a/board/freescale/p1010rdb/linux-3.18.config
-+++ b/board/freescale/p1010rdb/linux-4.1.config
-@@ -1,23 +1,11 @@
- CONFIG_PPC_85xx=y
- CONFIG_PHYS_64BIT=y
- CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_AUDIT=y
--CONFIG_IRQ_DOMAIN_DEBUG=y
- CONFIG_NO_HZ=y
- CONFIG_HIGH_RES_TIMERS=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
- CONFIG_LOG_BUF_SHIFT=14
--CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
--CONFIG_KALLSYMS_ALL=y
- CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_FORCE_UNLOAD=y
--CONFIG_MODVERSIONS=y
--# CONFIG_BLK_DEV_BSG is not set
- CONFIG_P1010_RDB=y
- CONFIG_HIGHMEM=y
- CONFIG_SWIOTLB=y
-@@ -28,26 +16,7 @@ CONFIG_RAPIDIO=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
--CONFIG_XFRM_USER=y
--CONFIG_NET_KEY=y
- CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_IP_MULTIPLE_TABLES=y
--CONFIG_IP_ROUTE_MULTIPATH=y
--CONFIG_IP_ROUTE_VERBOSE=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_IP_PNP_BOOTP=y
--CONFIG_IP_PNP_RARP=y
--CONFIG_NET_IPIP=y
--CONFIG_IP_MROUTE=y
--CONFIG_IP_PIMSM_V1=y
--CONFIG_IP_PIMSM_V2=y
--CONFIG_INET_ESP=y
--# CONFIG_INET_XFRM_MODE_BEET is not set
--CONFIG_IPV6=y
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
- CONFIG_DEVTMPFS=y
- CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
-@@ -60,20 +29,11 @@ CONFIG_MTD_PHYSMAP_OF=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_FSL_ELBC=y
- CONFIG_MTD_NAND_FSL_IFC=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_NBD=y
--CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_RAM_SIZE=131072
--CONFIG_EEPROM_LEGACY=y
- CONFIG_BLK_DEV_SD=y
--CONFIG_CHR_DEV_ST=y
--CONFIG_BLK_DEV_SR=y
- CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_LOGGING=y
- CONFIG_ATA=y
- CONFIG_SATA_FSL=y
- CONFIG_NETDEVICES=y
--CONFIG_DUMMY=y
- CONFIG_GIANFAR=y
- CONFIG_VITESSE_PHY=y
- CONFIG_FIXED_PHY=y
-@@ -91,9 +51,7 @@ CONFIG_I2C_MPC=y
- CONFIG_SPI=y
- CONFIG_SPI_FSL_SPI=y
- CONFIG_SPI_FSL_ESPI=y
--# CONFIG_HWMON is not set
- CONFIG_USB=y
--CONFIG_USB_MON=y
- CONFIG_USB_EHCI_HCD=y
- CONFIG_USB_EHCI_FSL=y
- CONFIG_USB_STORAGE=y
-@@ -101,29 +59,12 @@ CONFIG_MMC=y
- CONFIG_MMC_SDHCI=y
- CONFIG_MMC_SDHCI_PLTFM=y
- CONFIG_MMC_SDHCI_OF_ESDHC=y
--CONFIG_EDAC=y
--CONFIG_EDAC_MM_EDAC=y
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_CMOS=y
- CONFIG_DMADEVICES=y
- CONFIG_FSL_DMA=y
- CONFIG_EXT4_FS=y
--CONFIG_MSDOS_FS=m
--CONFIG_VFAT_FS=y
--CONFIG_PROC_KCORE=y
- CONFIG_TMPFS=y
- CONFIG_JFFS2_FS=y
- CONFIG_SQUASHFS=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V4=y
--CONFIG_ROOT_NFS=y
--CONFIG_NFSD=y
--CONFIG_CRC_T10DIF=y
--CONFIG_DEBUG_INFO=y
--CONFIG_DEBUG_FS=y
--CONFIG_DETECT_HUNG_TASK=y
--CONFIG_CRYPTO_PCBC=m
--CONFIG_CRYPTO_SHA256=y
--CONFIG_CRYPTO_SHA512=y
--# CONFIG_CRYPTO_ANSI_CPRNG is not set
- CONFIG_CRYPTO_DEV_FSL_CAAM=y
-diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
-index ff5ee06..699df2d 100644
---- a/configs/freescale_p1010rdb_pa_defconfig
-+++ b/configs/freescale_p1010rdb_pa_defconfig
-@@ -11,15 +11,15 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
- 
- # Lock headers version to match and avoid breakage
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.18.1"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_DEFAULT_KERNEL_VERSION="4.1.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.18.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-4.1.config"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
--- 
-2.4.6
+On Tue, 2015-08-04 at 14:57 +0200, Thomas Petazzoni wrote:
+> Alexey,
+> 
+> On Tue,  4 Aug 2015 15:00:14 +0300, Alexey Brodkin wrote:
+> 
+> > diff --git a/board/synopsys/axs10x/fs-overlay/etc/inittab b/board/synopsys/axs10x/fs-overlay/etc/inittab
+> > new file mode 100644
+> > index 0000000..de3d6e8
+> > --- /dev/null
+> > +++ b/board/synopsys/axs10x/fs-overlay/etc/inittab
+> > @@ -0,0 +1,41 @@
+> > +# /etc/inittab
+> > +#
+> > +# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
+> > +#
+> > +# Note: BusyBox init doesn't support runlevels.  The runlevels field is
+> > +# completely ignored by BusyBox init. If you want runlevels, use
+> > +# sysvinit.
+> > +#
+> > +# Format for each entry: <id>:<runlevels>:<action>:<process>
+> > +#
+> > +# id        == tty to run on, or empty for /dev/console
+> > +# runlevels == ignored
+> > +# action    == one of sysinit, respawn, askfirst, wait, and once
+> > +# process   == program to run
+> > +
+> > +# Startup the system
+> > +null::sysinit:/bin/mount -t proc proc /proc
+> > +null::sysinit:/bin/mkdir -p /dev/pts
+> > +null::sysinit:/bin/mkdir -p /dev/shm
+> > +null::sysinit:/bin/mount -a
+> > +null::sysinit:/bin/hostname -F /etc/hostname
+> > +# now run any rc scripts
+> > +::sysinit:/etc/init.d/rcS
+> > +
+> > +# Start an "askfirst" shell on the console (whatever that may be)
+> > +#::askfirst:-/bin/sh # ASKFIRST_SHELL
+> 
+> Why?
+
+Opps dummy copy-paste from Busybox's example.
+Please pardon that silly thing.
+
+> > +
+> > +# /sbin/getty invocations for selected ttys
+> > +tty0::respawn:/sbin/getty 115200 tty0
+> > +
+> > +# Put a getty on the serial port
+> > +console::respawn:/sbin/getty -L console 0 vt100
+> 
+> It's a bit annoying to have a custom inittab just for this, but I agree
+> that this is the only solution with today's Buildroot.
+
+Agree, that's a long-standing problem and if I'm not mistaken you guys
+advise to go for fs overlay if that kind of "feature" is required.
+
+That said I'm not happy with that solution but having no other way I have to swallow
+
+> > diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+> > new file mode 100644
+> > index 0000000..6af4ac3
+> > --- /dev/null
+> > +++ b/configs/snps_axs101_defconfig
+> > @@ -0,0 +1,13 @@
+> > +BR2_arcle=y
+> > +BR2_TARGET_GENERIC_HOSTNAME="axs101"
+> > +BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC Software Development Platform"
+> > +BR2_SYSTEM_DHCP="eth0"
+> > +BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+> 
+> Please force the version of the kernel headers, so that they match the
+> kernel being built.
+
+Well you see the problem here is we do need yet to be released Linux v4.2
+because that's where both boards are finally exist.
+
+So once v4.2 is released (in a couple of weeks now) and Buildroot is updated
+I would assume v4.2 headers will become default version, right?
+So then we're golden and there's no need to update these defconfigs.
+
+As for kernel version itself as of today I HAVE TO specify custom version
+(v4.2-rc5) just to have sources with our boards supported. In case of Buildroot
+that means these defconfigs will be build successfully.
+
+Still once v4.2 gets released (and I think it will happen well between some
+Buildroots RCs) I will send an update that will effectively remove 
+----->8-----
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
+----->8-----
+
+So that's a question to you if you prefer to have headers pointing to 4.2-rc5
+with right now:
+----->8-----
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="4.2-rc5"
+----->8-----
+
+or we're OK to have defconfigs as they are today (because everything builds
+anyways with headers from 4.1) and have less clean-up on v4.2 release.
+
+-Alexey
