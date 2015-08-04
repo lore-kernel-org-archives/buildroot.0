@@ -1,32 +1,49 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 4 Aug 2015 15:45:21 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150729100334.00137b70@free-electrons.com>
-References: <20150729063017.EDA6D101EBC@stock.ovh.net>
- <20150729100334.00137b70@free-electrons.com>
-Message-ID: <CA+TH9Vm3TA6T5a_7T9vGukAzbYJcC7Xii64BZeGOfq75Z6ER1A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Aug 2015 15:52:22 +0200
+Subject: [Buildroot] [PATCH 2/2] i2c-tools: Adds check of i2c kernel
+ option
+In-Reply-To: <96448357.4733141.1438695534642.JavaMail.root@openwide.fr>
+References: <20150804144556.58dd8978@free-electrons.com>
+ <96448357.4733141.1438695534642.JavaMail.root@openwide.fr>
+Message-ID: <20150804155222.580ff18e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Denis,
 
->
->>      powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/f7863af051b2b856280a944749b91ba5b552b53d/
->>          arm |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/08ec78b88abd16af8e7fc3c5e7d05eb0dbbe9613/
->>      powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/aebfbd4e7fe46edbd3798563df28b4d89903becd/
->
-> locale problem. Angelo, can you investigate ?
+On Tue, 4 Aug 2015 15:38:54 +0200 (CEST), Denis Thulin wrote:
 
-I investigate the problem and there is a redefinition of function
-vasprintf in mono. The configure script should guess if the vasprintf
-is missing and compile the internal one only in this case.
-Unfortunately, it fails to make a proper detection and compiles the
-internal also in case the function is already present.
-Actually I brutally delete form Makefile.am the inclusion of
-vasprintf.c from compilation and it works, but it's the best patch.
-Have you any hint on this matter?
+> I understand that this is a mistake for kernel options.
+> But could patch [1/2] be useful for the other kconfig packages ?
+> I think it would be useful to know options of busybox when building
+> packages.
 
-Thank you!
+I am not sure for what reasons other packages would need to know the
+Busybox options that are enabled.
+
+> Would it not be a better thing for all packages to provide a list
+> of kernel options they need and for LINUX_KCONFIG_FIXUP_CMDS
+> to select those options rather than using lots of if blocks ?
+
+Could be, yes. Not sure how that would work, though. We want to keep
+this list of condition relatively short, and not encourage adding
+millions of interactions between user space dependencies and kernel
+options.
+
+> That list could also be exported so that people using a custom kernel
+> would know which options Buildroot would have selected had they used
+> the default kernel.
+
+People using a custom kernel "know what they are doing", so I'm not too
+interested in solving this particular use case.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
