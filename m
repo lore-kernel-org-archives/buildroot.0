@@ -1,44 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 11:28:04 +0200
-Subject: [Buildroot] [PATCH] webkitgtk24: depend on x11 backend for gtk3
-In-Reply-To: <1438599982-27100-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438599982-27100-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150804112804.0e709e3f@free-electrons.com>
+From: Viallard Anthony <viallard@syscom-instruments.com>
+Date: Tue, 04 Aug 2015 11:42:58 +0200
+Subject: [Buildroot] [PATCH 1/1] gcc: make sure we don't have a copy of
+ libiberty.a in host library dir
+In-Reply-To: <55B64251.6010404@openwide.fr>
+References: <1437039568-22957-1-git-send-email-viallard@syscom-instruments.com>
+ <55B64251.6010404@openwide.fr>
+Message-ID: <55C08922.4000600@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 07/27/2015 04:38 PM, Romain Naour wrote:
+>
+> The --disable-install-libiberty option was broken, that's why the internal
+> libiberty.a was installed in HOST_DIR.
+>
+> Hopefully, the same patch apply on gcc-4.7:
+> http://patchwork.ozlabs.org/patch/500445/
+>
+> Care to test it ?
+>
 
-On Mon,  3 Aug 2015 08:06:22 -0300, Gustavo Zacarias wrote:
-> The other rendering backends aren't supported right now, so depend on
-> the X11 one to avoid build breakage. Fixes:
-> http://autobuild.buildroot.net/results/1b3/1b372dd04eaccd8a9d24390d509b0a49f692746c/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/webkitgtk24/webkitgtk24.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
-> index 5c1bb5b..a58fed3 100644
-> --- a/package/webkitgtk24/webkitgtk24.mk
-> +++ b/package/webkitgtk24/webkitgtk24.mk
-> @@ -101,7 +101,7 @@ endif
->  # webkit1 (old API) uses gtk2, webkit2 (new API) uses gtk3
->  # Both can be built simultaneously, prefer "newer" for size/time savings
->  # gtk2 is mandatory for plugin support
-> -ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-> +ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
->  WEBKITGTK24_CONF_OPTS += \
->  	--with-gtk=3.0 \
->  	--disable-webkit1
+Hi Romain,
 
+I tested the above patch but it doesn't work. The library 'libiberty.a' 
+is copied in 'output/host/usr/lib/'.
 
+Maybe I missed somethings ?
 
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I put the patch in the file 
+'package/gcc/4.7.4/920-fix-disable-install-libiberty-option.patch' and 
+add --disable-install-libiberty flag in HOST_GCC_COMMON_CONF_OPTS 
+variable of the gcc package.
+
+----
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index be242cb..c23fe40 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -93,7 +93,8 @@ HOST_GCC_COMMON_CONF_OPTS = \
+         --with-gmp=$(HOST_DIR)/usr \
+         --with-mpfr=$(HOST_DIR)/usr \
+         --with-pkgversion="Buildroot $(BR2_VERSION_FULL)" \
+-       --with-bugurl="http://bugs.buildroot.net/"
++       --with-bugurl="http://bugs.buildroot.net/" \
++       --disable-install-libiberty
+
+  # Don't build documentation. It takes up extra space / build time,
+  # and sometimes needs specific makeinfo versions to work
+----
+
+and did the following command:
+$ rm -rf output && make
+
+I see the flag --disable-install-libiberty in my log so it seems to be 
+applied but the problem is always there.
+
+Have you tried the patch on your side ?
+
+Regards,
+Anthony.
