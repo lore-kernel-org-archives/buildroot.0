@@ -1,49 +1,69 @@
-From: Denis THULIN <denis.thulin@openwide.fr>
-Date: Tue,  4 Aug 2015 14:27:07 +0200
-Subject: [Buildroot] [PATCH 2/2] i2c-tools: Adds check of i2c kernel option
-In-Reply-To: <1438691227-23379-1-git-send-email-denis.thulin@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Aug 2015 14:45:56 +0200
+Subject: [Buildroot] [PATCH 2/2] i2c-tools: Adds check of i2c kernel
+ option
+In-Reply-To: <1438691227-23379-3-git-send-email-denis.thulin@openwide.fr>
 References: <1438691227-23379-1-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <1438691227-23379-3-git-send-email-denis.thulin@openwide.fr>
+ <1438691227-23379-3-git-send-email-denis.thulin@openwide.fr>
+Message-ID: <20150804144556.58dd8978@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package will now check if i2c is enabled whithin the kernel before
-the configure step. If not, build of the package will fail.
-Also adds linux as a dependancy of i2c-tools to make sure that the kernel
-config is created before checking one of its options.
+Hello,
 
-Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
----
- package/i2c-tools/i2c-tools.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+On Tue,  4 Aug 2015 14:27:07 +0200, Denis THULIN wrote:
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 187bd09..7eb4fbb 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -10,6 +10,20 @@ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
- I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
- I2C_TOOLS_LICENSE_FILES = COPYING
- 
-+I2C_TOOLS_DEPENDENCIES += linux
-+define I2C_TOOLS_KERNEL_OPTION_MISSING
-+	echo '$(LINUX_KCONFIG_CONFIG_DEFCONFIG_LIST)'
-+	@if [ -z $(LINUX_KCONFIG_CONFIG_I2C) ]; then \
-+		echo ERROR: CONFIG_I2C is not selected in the kernel; \
-+		exit 1; \
-+	elif [ $(LINUX_KCONFIG_CONFIG_I2C) != y -a $(LINUX_KCONFIG_CONFIG_I2C) != m ]; then \
-+		echo ERROR: CONFIG_I2C is not selected in the kernel; \
-+		exit 1; \
-+	fi
-+endef
-+I2C_TOOLS_PRE_CONFIGURE_HOOKS += I2C_TOOLS_KERNEL_OPTION_MISSING
-+
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- I2C_TOOLS_DEPENDENCIES += python
- endif
+> +I2C_TOOLS_DEPENDENCIES += linux
+
+This is not acceptable: we want to allow people to build just a rootfs,
+and not necessarily the Linux kernel with Buildroot. I personally use
+Buildroot a lot to build a small initramfs that I then bundle in my
+kernel image, which is built separately from Buildroot (because I'm
+doing kernel development, so I build the kernel myself).
+
+Also, this is going completely backwards compared to what we've been
+doing until now. Currently, in linux/linux.mk, we have some logic to
+make sure a number of kernel options are enabled when certain Buildroot
+packages are enabled:
+
+        $(if $(BR2_PACKAGE_KTAP),
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
+        $(if $(BR2_PACKAGE_SYSTEMD),
+                $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_FHANDLE,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_XATTR,$(@D)/.config))
+        $(if $(BR2_PACKAGE_SMACK),
+                $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
+        $(if $(BR2_PACKAGE_IPTABLES),
+                $(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES,$(@D)/.config))
+
+However, we generally do this only when enabling the kernel option in
+question is needed to get the package to *build*. When it is necessary
+to make the thing run properly, or when the dependency is really
+obvious, we simply don't handle this.
+
+So for example in your case, it is completely obvious that i2c-tools
+needs I2C support in the kernel, otherwise it's a tool that is quite
+useless.
+
+Best regards,
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
