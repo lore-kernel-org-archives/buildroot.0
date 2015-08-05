@@ -1,52 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Aug 2015 22:48:25 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/cramfs: fix missing type
-Message-ID: <1438807705-7170-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Aug 2015 15:50:27 +0200
+Subject: [Buildroot] [git commit] Update for 2015.08-rc1
+Message-ID: <20150805210225.BD57B80770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-loff_t is guarded by _GNU_SOURCE. although already properly defined in
-cramfsck, it was not defined in mkcramfs.
+commit: http://git.buildroot.net/buildroot/commit/?id=7b1e9d5244254d23ced7ab0772f60a48a2d80c32
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes;
-    http://autobuild.buildroot.org/results/57d/57de9e838fa953e2fb5e358cd535603fb249b7d2/
-    http://autobuild.buildroot.org/results/e02/e023014934bf291add9d9dfdfc005bfec34dc1ff/
-    [...]
-
-Note: since cramfs was last released in 2002-02-24, we don't stand a
-chance to get this merged any time soon... :-(
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cramfs/0003-fix-missing-types.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
- create mode 100644 package/cramfs/0003-fix-missing-types.patch
+ CHANGES                    |    2 +-
+ Makefile                   |    2 +-
+ docs/website/download.html |   13 ++++++-------
+ docs/website/news.html     |   12 ++++++++++++
+ 4 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/package/cramfs/0003-fix-missing-types.patch b/package/cramfs/0003-fix-missing-types.patch
-new file mode 100644
-index 0000000..8961100
---- /dev/null
-+++ b/package/cramfs/0003-fix-missing-types.patch
-@@ -0,0 +1,17 @@
-+mkcramfs; loff_t is guarded by _GNU_SOURCE
+diff --git a/CHANGES b/CHANGES
+index ce16e2e..ee4aca1 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2015.08-rc1, not yet released
++2015.08-rc1, Released August, 5th 2015
+ 
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index 9059884..b4cef3f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,7 +41,7 @@ else # umask
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2015.08-git
++export BR2_VERSION := 2015.08-rc1
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 715bec9..aa4d731 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -17,17 +17,16 @@ or
+ (<a href="/downloads/buildroot-2015.05.tar.bz2.sign">PGP signature</a>).
+ 
+ <p>
+-<!--
+-The latest release candidate is <b>2015.05-rc3</b>, which can be
++The latest release candidate is <b>2015.08-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2015.05-rc3.tar.gz">buildroot-2015.05-rc3.tar.gz</a>
+-(<a href="/downloads/buildroot-2015.05-rc3.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2015.08-rc1.tar.gz">buildroot-2015.08-rc1.tar.gz</a>
++(<a href="/downloads/buildroot-2015.08-rc1.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2015.05-rc3.tar.bz2">buildroot-2015.05-rc3.tar.bz2</a>
+-(<a href="/downloads/buildroot-2015.05-rc3.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2015.08-rc1.tar.bz2">buildroot-2015.08-rc1.tar.bz2</a>
++(<a href="/downloads/buildroot-2015.08-rc1.tar.bz2.sign">PGP signature</a>).
+ <p>
+--->
 +
-+Although already properly done in cramfsck, it was missing in mkcramfs.
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 9a33b00..66edf07 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -8,6 +8,18 @@
+ <p>
+ 
+ <ul>
++  <li><b>5 August 2015 -- 2015.08-rc1 released</b>
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.08-rc1">CHANGES</a>
++    file for details.</p>
 +
-+diff -durN cramfs-1.1.orig/mkcramfs.c cramfs-1.1/mkcramfs.c
-+--- cramfs-1.1.orig/mkcramfs.c	2015-08-05 22:31:16.830543096 +0200
-++++ cramfs-1.1/mkcramfs.c	2015-08-05 22:33:33.136289744 +0200
-+@@ -22,6 +22,7 @@
-+  * If you change the disk format of cramfs, please update fs/cramfs/README.
-+  */
-+ 
-++#define _GNU_SOURCE
-+ #include <sys/types.h>
-+ #include <stdio.h>
-+ #include <sys/stat.h>
--- 
-1.9.1
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2015.08-rc1.tar.bz2">2015.08-rc1
++    release candidate</a>, and report any problems found to the
++    <a href="support.html">mailing list</a> or
++    <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+ 
+   <li><b>31 May 2015 -- 2015.05 released</b>
+ 
