@@ -1,53 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 5 Aug 2015 12:11:20 +0200
-Subject: [Buildroot] [git commit branch/next] zmqpp: update to use the gcc
-	version dependency mechanism
-Message-ID: <20150808105653.9C2A87FE0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] upmpdcli: update to use the
+	gcc version dependency mechanism
+Message-ID: <20150808105653.933907FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=634b714d972590fe095736f5833e6671da8cf02b
+commit: http://git.buildroot.net/buildroot/commit/?id=8b3fc8e07d7c4adc2c9be97850a4ef827039f2e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit updates the zmqpp Config.in file to use the newly
+This commit updates the upmpdcli Config.in file to use the newly
 introduced gcc version dependency mechanism to depend on gcc >= 4.6
 instead of open-coding dependencies on specific toolchains.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/zmqpp/Config.in |   11 ++++-------
- 1 files changed, 4 insertions(+), 7 deletions(-)
+ package/upmpdcli/Config.in |   15 +++------------
+ 1 files changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-index 0aaeda3..756c810 100644
---- a/package/zmqpp/Config.in
-+++ b/package/zmqpp/Config.in
-@@ -1,10 +1,7 @@
- config BR2_PACKAGE_ZMQPP
- 	bool "zmqpp"
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Too old gcc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Too old gcc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # c++0x support
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # c++0x support
-+	# c++0x support
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index 0fe3d10..848c6af 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -4,11 +4,7 @@ config BR2_PACKAGE_UPMPDCLI
+ 	select BR2_PACKAGE_LIBUPNPP
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-@@ -17,9 +14,9 @@ config BR2_PACKAGE_ZMQPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp -> libupnp
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	# libupnpp triggers the _gp link issue
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+@@ -19,12 +15,7 @@ config BR2_PACKAGE_UPMPDCLI
  
- 	  http://github.com/benjamg/zmqpp
+ 	  http://www.lesbonscomptes.com/upmpdcli/
  
--comment "zmqpp needs a toolchain w/ C++, wchar, threads"
-+comment "zmqpp needs a toolchain w/ C++, wchar, threads, gcc >= 4.6"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
--		BR2_TOOLCHAIN_HAS_THREADS)
-+		BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_6)
- 
- if BR2_PACKAGE_ZMQPP
- 
+-comment "upmpdcli needs a toolchain w/ C++, threads"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
++comment "upmpdcli needs a toolchain w/ C++, threads, gcc >= 4.6"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
