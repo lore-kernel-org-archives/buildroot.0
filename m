@@ -1,48 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:20:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/libatomic_ops: fix
-	compilation fail on sparc
-Message-ID: <20150808105653.0B1E27FE0E@busybox.osuosl.org>
+Date: Wed, 5 Aug 2015 12:11:20 +0200
+Subject: [Buildroot] [git commit branch/next] zmqpp: use more logical way of
+	expressing comment dependencies
+Message-ID: <20150808105653.A529B7FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9741460eaaef510aac9b16a884374d545244fb18
+commit: http://git.buildroot.net/buildroot/commit/?id=7b69cc9f184806d4a62462095475f70bd05f286a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/6d8/6d83fa5d69572cec5c96be4b7651f9b113a1a19c/
+In most packages, we use 'depends on !A || !B || !C' and not 'depends
+on !(A && B && C)' to express the dependencies of comments on missing
+toolchain features. As suggested by Yann E. Morin, let's switch zmqpp
+to this convention.
 
-libatomic_ops by default requires SPARC v9. buildroot's two supported
-sparc arches (SPARCv8, and leon3) are both SPARCv8-based. Unfortunately
-libatomic_ops's support for SPARCv8 is incomplete.
-
-The library includes fallbacks but these must expressly be enabled by
-defining a macro, enabled by this patch. Note that I'm testing for the
-SPARC variants rather than BR2_sparc, in case someone implements SPARCv9
-support in the future.
-
-Discussion of this workaround described by the maintainer here :
-https://github.com/ivmai/libatomic_ops/issues/9
-
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libatomic_ops/libatomic_ops.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/zmqpp/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index 5f698c4..fd45726 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -19,5 +19,9 @@ LIBATOMIC_OPS_LICENSE_FILES = doc/LICENSING.txt COPYING
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 756c810..a10602f 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -15,8 +15,8 @@ config BR2_PACKAGE_ZMQPP
+ 	  http://github.com/benjamg/zmqpp
  
- LIBATOMIC_OPS_INSTALL_STAGING = YES
+ comment "zmqpp needs a toolchain w/ C++, wchar, threads, gcc >= 4.6"
+-	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
+-		BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_6)
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
  
-+ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
-+LIBATOMIC_OPS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DAO_NO_SPARC_V9"
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ if BR2_PACKAGE_ZMQPP
+ 
