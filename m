@@ -1,86 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  5 Aug 2015 13:45:52 -0300
-Subject: [Buildroot] [PATCH] webkitgtk24: depends on gcc >= 4.8
-Message-ID: <1438793152-27174-1-git-send-email-gustavo@zacarias.com.ar>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Wed, 5 Aug 2015 10:04:38 -0700
+Subject: [Buildroot] configs/marvell_ca9_armv7_le_hfp_defconfig
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD9109@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Webkit 2.4.x depends on gcc being >= 4.8.x so use the new
-BR2_TOOLCHAIN_GCC_AT_LEAST_X_Y knob and drop the manual x86* external
-toolchain exclusions.
-Follow up in the midori package as well.
+Hi Buildroot mailing list,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/midori/Config.in      |  6 ++++--
- package/webkitgtk24/Config.in | 11 +++--------
- 2 files changed, 7 insertions(+), 10 deletions(-)
+Last week I resolved my building issue. The solution includes two parts:
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index b3ab8a9..11a2806 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -1,7 +1,8 @@
--comment "midori needs libgtk2 and a toolchain w/ C++, wchar, NPTL"
-+comment "midori needs libgtk2 and a toolchain w/ C++, wchar, NPTL, gcc >= 4.8"
- 	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_LIBGTK2
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_LIBGTK2 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_PACKAGE_MIDORI
- 	bool "midori"
-@@ -16,6 +17,7 @@ config BR2_PACKAGE_MIDORI
- 	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk24
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # webkitgtk24
- 	depends on BR2_USE_WCHAR # webkitgtk24
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # webkitgtk24
- 	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
- 	help
- 	  Midori is a lightweight web browser based on WebKit
-diff --git a/package/webkitgtk24/Config.in b/package/webkitgtk24/Config.in
-index d8c5e93..0a30bac 100644
---- a/package/webkitgtk24/Config.in
-+++ b/package/webkitgtk24/Config.in
-@@ -2,25 +2,19 @@ config BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
- 	bool
- 	# ARM needs BLX, so v5t+, BE completely untested so disabled
- 	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
--	# i386 / x86_64 external toolchains have issues and old gcc versions
--	# https://bugs.webkit.org/show_bug.cgi?id=132231
--	# https://stackoverflow.com/questions/9140019/yield-is-not-a-member-of-stdthis-thread
- 	default y if BR2_i386 || BR2_x86_64
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	# Disabled on MIPS big endian due to sigbus
- 	default y if BR2_mipsel || BR2_mips64el
- 	# Disabled on PowerPC pending runtime testing
- 	# Disabled on SuperH because of segfault
- 	depends on BR2_USE_MMU # libglib2
- 
--comment "webkitgtk24 needs libgtk2 and a toolchain w/ C++, wchar, NPTL"
-+comment "webkitgtk24 needs libgtk2 and a toolchain w/ C++, wchar, NPTL, gcc >=4.8"
- 	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
- 	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_PACKAGE_XORG7 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_USE_WCHAR
-+		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_WEBKITGTK24
-@@ -28,6 +22,7 @@ config BR2_PACKAGE_WEBKITGTK24
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on (BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_XORG7)
- 	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
- 	depends on BR2_ARCH_HAS_ATOMICS
--- 
-2.4.6
+
+1.      BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="../../ARMADA/ARMADAsoftware/buildroot/configs/marvell_ca9_armv7_le_uclibc_sfp_reduced_defconfig"
+
+2.      BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x00008000"
+
+Now I see one question and one issue list as below. Probably you could help answer or resolve them:
+
+Question
+The docs/manual/manual.pdf Section 3.1 (Configuration and general usage) lists a toolchain sub-folder in the output folder. My output folder does not have the such sub-folder. You probably know the reason for this missing.
+
+Issue
+The Buildroot-2015.05/configs does not have the marvell_ca9_armv7_le_uclibc_sfp_reduced_defconfig file in it. I wonder if the file needs to be added into the Buildroot-2015.08 release.
+
+Tommy
+
+From: Lee, Tommy
+Sent: Thursday, July 30, 2015 5:08 PM
+To: 'buildroot at busybox.net'
+Subject: configs/marvell_ca9_armv7_le_hfp_defconfig
+Importance: High
+
+Hi Buildroot mailing list,
+
+My host is Ubuntu-14.04LTS which meets the Buildroot system requirements. I am using buildroot-2015.05 to build the Linux system for the Marvell ARMADA A38x DB-88F6820-GP board. The first make process issue is that the defconfig file listed on the subject line does not originally exist in the configs folder. I copied this file from Marvell's old (2012.11-2015_T1.0) Buildroot/configs folder to the buildroot-2015.05 /configs folder. My .config file has the following line:
+
+BR2_LINUX_KERNEL_DEFCONFIG="marvell_ca9_armv7_le_hfp_defconfig"
+
+The subsequent make process passes through the above issue but stops at a new place shown as below:
+
+tclee at Latitude-E6400:~/Downloads/jul30thu15/buildroot-2015.05$<mailto:tclee@Latitude-E6400:~/Downloads/jul30thu15/buildroot-2015.05$> make
+.....
+/usr/bin/install: cannot stat '/home/tclee/Downloads/jul30thu15/buildroot-2015.05/output/build/linux-4.0.4/arch/arm/configs/marvell_ca9_armv7_le_hfp_defconfig_defconfig': No such file or directory
+make: *** [/home/tclee/Downloads/jul30thu15/buildroot-2015.05/output/build/linux-4.0.4/.config] Error 1
+
+The interesting point is why "defconfig_defconfig" happens on the missing file name. I am resolving the new issue now. Your help or experience is definitely welcome.
+
+Tommy
+
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150805/ffd10e54/attachment.html>
