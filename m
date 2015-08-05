@@ -1,59 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:56:53 -0000
-Subject: [Buildroot] [git commit branch/next] pkg-autotools: fix patching
-	libtool for version 2.4
-Message-ID: <20150808105623.3C59A80414@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Aug 2015 12:11:20 +0200
+Subject: [Buildroot] [git commit branch/next] docs/manual: document gcc
+	version dependencies
+Message-ID: <20150808105653.841C57FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9917e48d7eb5bc7fbbb0188872a32c11b4b67010
+commit: http://git.buildroot.net/buildroot/commit/?id=45aaa372b03f8a96837c0ca4d24a63ca1b218417
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
-end up with error messages like this one, seen when building ntp-4.2.8p3:
+This commit updates the Buildroot manual to document how to detail the
+gcc version dependencies in Config.in comments of packages, like we do
+for kernel headers version.
 
-    /bin/sh: line 0: test: 2.4: integer expression expected
-
-That's because the current sed expression "[0-9].[0-9]." only deletes content
-like "2.4.", so it leaves "2.4" (no patch level *and* no second period) intact,
-resulting in an ltmain_patchlevel of "2.4", not empty, and not "0".  Then the
-shell line goes bad, because the built in shell test -gt operates on integers
-only, and fails on floating point numbers (like "2.4").
-
-Additionally, the existing sed lines are problematic in other ways, because the
-current expression "[0-9].[0-9]" will match "234" as well as "2.4", as an unescaped
-period matches any character, not just a period.  Also, the lack of an asterisk
-after the first character may be a problem in the future, if a two digit initial
-number is used.
-
-So, this patch changes the sed regex as follows:
-
-* Match a string of digits when searching for a number.  I.e. "[0-9]*"
-* Match specifically a period in between two numbers.  I.e. "\."
-* When searching for a patch level, make the second period optional.  I.e. "\.*"
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-autotools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-directory.txt |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 1d694f0..54f5dcd 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -61,9 +61,9 @@ define LIBTOOL_PATCH_HOOK
- 	@$(call MESSAGE,"Patching libtool")
- 	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
- 		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
--		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
-+		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
- 		ltmain_patchlevel=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$i | \
--		sed -e 's/\([0-9].[0-9].\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
-+		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
- 		if test $${ltmain_version} = '1.5'; then \
- 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
- 		elif test $${ltmain_version} = "2.2"; then\
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 8f585d4..b66e447 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -277,6 +277,12 @@ use in the comment.
+ ** Comment string: +headers >= X.Y+ and/or `headers <= X.Y` (replace
+    +X.Y+ with the proper version)
+ 
++* GCC version
++** Dependency symbol: +BR2_TOOLCHAIN_GCC_AT_LEAST_X_Y+, (replace
++   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
++** Comment string: +gcc >= X.Y+ and/or `gcc <= X.Y` (replace
++   +X.Y+ with the proper version)
++
+ * C library
+ ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+    +BR2_TOOLCHAIN_USES_MUSL+, +BR2_TOOLCHAIN_USES_UCLIBC+
