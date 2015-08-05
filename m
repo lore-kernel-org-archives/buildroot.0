@@ -1,59 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Aug 2015 22:11:05 +0200
-Subject: [Buildroot] [PATCH 1/3 v2] package/xserver: commonalise
- dependency on libdrm
-In-Reply-To: <20150731165905.GA3751@free.fr>
-References: <cover.1438297123.git.yann.morin.1998@free.fr>
- <de75aa7f5d075edcaa2c25e4d021bd5b105e2bb1.1438297123.git.yann.morin.1998@free.fr>
- <20150731075737.01ad8236@free-electrons.com>
- <20150731165905.GA3751@free.fr>
-Message-ID: <20150805201104.GE3647@free.fr>
+Date: Wed,  5 Aug 2015 22:48:25 +0200
+Subject: [Buildroot] [PATCH] [autobuild] package/cramfs: fix missing type
+Message-ID: <1438807705-7170-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+loff_t is guarded by _GNU_SOURCE. although already properly defined in
+cramfsck, it was not defined in mkcramfs.
 
-On 2015-07-31 18:59 +0200, Yann E. MORIN spake thusly:
-> On 2015-07-31 07:57 +0200, Thomas Petazzoni spake thusly:
-> > On Fri, 31 Jul 2015 00:59:05 +0200, Yann E. MORIN wrote:
-> > >  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> > > -XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
-> > > -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
-> > > +XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
-> > > +XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
-> > > +XSERVER_XORG_SERVER_NEEDS_LIBDRM = y
-> > 
-> > Hum, didn't we say that this should be a hidden Config.in boolean?
-> 
-> Yes, you suggested so; I said yes; I tried; I said no... ;-)
->     http://lists.busybox.net/pipermail/buildroot/2015-July/135100.html
-> 
-> Basically, all the conditional code is in the .mk , and there's almost
-> no conditional in the Config.in.
-> 
-> So, I'd like not to duplicate the decision making in Config.in and keep
-> all in a single place, the .mk .
-> 
-> That's why I did not move that to a blind kconfig option.
+Fixes;
+    http://autobuild.buildroot.org/results/57d/57de9e838fa953e2fb5e358cd535603fb249b7d2/
+    http://autobuild.buildroot.org/results/e02/e023014934bf291add9d9dfdfc005bfec34dc1ff/
+    [...]
 
-Did you make up your mind about this?
+Note: since cramfs was last released in 2002-02-24, we don't stand a
+chance to get this merged any time soon... :-(
 
-Now that we've switched to a mdular server by default, this series is
-now fixing actual autobuild errors...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/cramfs/0003-fix-missing-types.patch | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+ create mode 100644 package/cramfs/0003-fix-missing-types.patch
 
-If you really prefer that we duplicate all the logic in Config.in , I'll
-do it.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/cramfs/0003-fix-missing-types.patch b/package/cramfs/0003-fix-missing-types.patch
+new file mode 100644
+index 0000000..8961100
+--- /dev/null
++++ b/package/cramfs/0003-fix-missing-types.patch
+@@ -0,0 +1,17 @@
++mkcramfs; loff_t is guarded by _GNU_SOURCE
++
++Although already properly done in cramfsck, it was missing in mkcramfs.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN cramfs-1.1.orig/mkcramfs.c cramfs-1.1/mkcramfs.c
++--- cramfs-1.1.orig/mkcramfs.c	2015-08-05 22:31:16.830543096 +0200
+++++ cramfs-1.1/mkcramfs.c	2015-08-05 22:33:33.136289744 +0200
++@@ -22,6 +22,7 @@
++  * If you change the disk format of cramfs, please update fs/cramfs/README.
++  */
++ 
+++#define _GNU_SOURCE
++ #include <sys/types.h>
++ #include <stdio.h>
++ #include <sys/stat.h>
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
