@@ -1,37 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 23:13:36 +0200
-Subject: [Buildroot] [git commit] docs/website: add announcement e-mail link
-	for 2015.08-rc1
-Message-ID: <20150805211349.C09878198B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  5 Aug 2015 21:17:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 8256] pointing to /usr/bin/objcopy old version
+ (x86) instead of the generated one
+In-Reply-To: <bug-8256-163@https.bugs.busybox.net/>
+References: <bug-8256-163@https.bugs.busybox.net/>
+Message-ID: <20150805211750.E3F1181E7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b804f75eba83f7d48f3be10c55da6d3ec310f7f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8256
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/website/news.html |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-08-05 21:17:50 UTC ---
+Why are you using 'gmake' instead of 'make' ? Are you perhaps building on a
+non-Linux system? If so, which one?
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 66edf07..633a83a 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -11,9 +11,10 @@
-   <li><b>5 August 2015 -- 2015.08-rc1 released</b>
- 
-     <p>We have a new release candidate! Lots of changes all over the
--    tree, see the <a
--    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.08-rc1">CHANGES</a>
--    file for details.</p>
-+    tree, see
-+    the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.08-rc1">CHANGES</a>
-+    file for details, read
-+    the <a href="http://lists.busybox.net/pipermail/buildroot/2015-August/135417.html">announcement</a>.</p>
- 
-     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2015.08-rc1.tar.bz2">2015.08-rc1
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
