@@ -1,55 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 05 Aug 2015 22:02:19 +0200
-Subject: [Buildroot] [PATCH] package/libcec: needs gcc >= 4.7
-References: <1438797957-14814-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <bn6a9cxtgu.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Aug 2015 22:11:05 +0200
+Subject: [Buildroot] [PATCH 1/3 v2] package/xserver: commonalise
+ dependency on libdrm
+In-Reply-To: <20150731165905.GA3751@free.fr>
+References: <cover.1438297123.git.yann.morin.1998@free.fr>
+ <de75aa7f5d075edcaa2c25e4d021bd5b105e2bb1.1438297123.git.yann.morin.1998@free.fr>
+ <20150731075737.01ad8236@free-electrons.com>
+ <20150731165905.GA3751@free.fr>
+Message-ID: <20150805201104.GE3647@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 05 Aug 2015 20:05:57 +0200 schrieb Yann E. MORIN:
+Thomas, All,
 
-> As per upstream, gcc-4.7 is required to build libcec:
->     https://github.com/Pulse-Eight/libcec/
-issues/78#issuecomment-91578591
+On 2015-07-31 18:59 +0200, Yann E. MORIN spake thusly:
+> On 2015-07-31 07:57 +0200, Thomas Petazzoni spake thusly:
+> > On Fri, 31 Jul 2015 00:59:05 +0200, Yann E. MORIN wrote:
+> > >  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+> > > -XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
+> > > -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
+> > > +XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
+> > > +XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
+> > > +XSERVER_XORG_SERVER_NEEDS_LIBDRM = y
+> > 
+> > Hum, didn't we say that this should be a hidden Config.in boolean?
 > 
-> Fixes:
->     http://autobuild.buildroot.org/
-results/3b5/3b5611725c13668472482ed4ad3b46886d4c63d9/
->     http://autobuild.buildroot.org/
-results/0d0/0d032cdd8dbf6d0ddef392c3e5a734881e00ee64/
->     http://autobuild.buildroot.org/results/c21/
-c21c555c38261f6911349ff9fdac6edeb4debaac/
->     [...]
+> Yes, you suggested so; I said yes; I tried; I said no... ;-)
+>     http://lists.busybox.net/pipermail/buildroot/2015-July/135100.html
 > 
-> Possibly fixes:
->     http://autobuild.buildroot.org/
-results/4a7/4a7b2af2fc3924255ac89e18f4f5c90bb8383265/
->     http://autobuild.buildroot.org/results/dd6/
-dd61c186e6d85a9b30cd32edb74a52f7a4f73cc8/
->     [...]
+> Basically, all the conditional code is in the .mk , and there's almost
+> no conditional in the Config.in.
 > 
-> Signed-off-by: "Yann E. MORIN"
-> <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi/Config.in   | 4 +++-
->  package/libcec/Config.in | 6 ++++--
->  2 files changed, 7 insertions(+), 3 deletions(-)
+> So, I'd like not to duplicate the decision making in Config.in and keep
+> all in a single place, the .mk .
 > 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in index
-> c3b3183..797f59d 100644 --- a/package/kodi/Config.in +++
-> b/package/kodi/Config.in @@ -158,13 +158,15 @@ config
-> BR2_PACKAGE_KODI_LIBCEC
->  	bool "hdmi cec"
->  	depends on !BR2_STATIC_LIBS # libcec depends on 
-BR2_PACKAGE_HAS_UDEV
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # libcec
+> That's why I did not move that to a blind kconfig option.
 
-Hi Yann,
+Did you make up your mind about this?
 
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Now that we've switched to a mdular server by default, this series is
+now fixing actual autobuild errors...
 
-Regards, Bernd
+If you really prefer that we duplicate all the logic in Config.in , I'll
+do it.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
