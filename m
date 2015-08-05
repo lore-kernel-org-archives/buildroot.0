@@ -1,41 +1,61 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  5 Aug 2015 10:43:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 8256] New: pointing to /usr/bin/objcopy old
- version (x86) instead of the generated one
-Message-ID: <bug-8256-163@https.bugs.busybox.net/>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed,  5 Aug 2015 13:58:52 +0200
+Subject: [Buildroot] [PATCH] package/mono: fixing multiple definition of
+	vasprintf
+Message-ID: <1438775932-24858-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8256
+This patch fixes the detection of an available
+vasprintf function, this way the internal vasprintf
+function is not compiled.
 
-           Summary: pointing to /usr/bin/objcopy old version (x86) instead
-                    of the generated one
-           Product: buildroot
-           Version: 2015.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: christophebricout at yahoo.fr
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Fixes http://autobuild.buildroot.net/results/3ab2b8667e5657bf07f55dd04dd857167ab4c62a/
+      http://autobuild.buildroot.net/results/3ab2b8667e5657bf07f55dd04dd857167ab4c62a/ 
 
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
 
-using the default configuration file to target MINNOWMAX board, buildroot
-unable to generate x86_64 binary as gmake process points to the host
-/usr/bin/objcopy (i586 architecture) and not the copyobj generated in the
-output directory.
+This patch was submitted upstream and merged here:
+https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
 
-Is a option available?
-Best Regards
+I submitted here to fix the bug till a new version will be released.
 
+ ...4-fixing-initialization-of-have-vasprintf.patch | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+
+diff --git a/package/mono/0004-fixing-initialization-of-have-vasprintf.patch b/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+new file mode 100644
+index 0000000..e01a6f0
+--- /dev/null
++++ b/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+@@ -0,0 +1,23 @@
++From 1c3d615d93b20d10c2729478d5104977dd9af23f Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Wed, 5 Aug 2015 12:59:45 +0200
++Subject: [PATCH] Fixing initialization of have_vasprintf
++
++This patch initialize properly have_vasprintf in case vasprint function is found.
++Solves multiple definition of `vasprintf' error in case vasprint is not properly detected.
++---
++ eglib/configure.ac | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/eglib/configure.ac b/eglib/configure.ac
++index 5281419..4bf91e5 100644
++--- a/eglib/configure.ac
+++++ b/eglib/configure.ac
++@@ -135,6 +135,7 @@ AC_CHECK_SIZEOF(void *)
++ AC_CHECK_SIZEOF(long)
++ AC_CHECK_SIZEOF(long long)
++ AC_CHECK_FUNCS(strlcpy stpcpy strtok_r rewinddir vasprintf)
+++AC_CHECK_FUNC(vasprintf, have_vasprintf=yes)
++ AC_CHECK_FUNCS(getrlimit)
++ 
++ #
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.9.1
