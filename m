@@ -1,43 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:08 -0000
-Subject: [Buildroot] [git commit branch/next] package/libva: bump version to
-	1.6.0
-Message-ID: <20150808105619.59AB07FC31@busybox.osuosl.org>
+Date: Wed, 5 Aug 2015 12:11:20 +0200
+Subject: [Buildroot] [git commit branch/next] zmqpp: update to use the gcc
+	version dependency mechanism
+Message-ID: <20150808105653.9C2A87FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5e5464b4a2037357d4d0d0208ef596a560e66bd
+commit: http://git.buildroot.net/buildroot/commit/?id=634b714d972590fe095736f5833e6671da8cf02b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libva/libva.hash |    4 ++--
- package/libva/libva.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+This commit updates the zmqpp Config.in file to use the newly
+introduced gcc version dependency mechanism to depend on gcc >= 4.6
+instead of open-coding dependencies on specific toolchains.
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index eaec0af..82802ce 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/libva/2015-March/003249.html
--sha1	b315a86fcd3bd1e073e2c1b62416550885cd7420	libva-1.5.1.tar.bz2
-+# From http://lists.freedesktop.org/archives/libva/2015-July/003404.html
-+sha1	f9d0cc8edb90a73146cc755f9e4ab94ddcdf8cd6	libva-1.6.0.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index d3b58ae..18a322c 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/zmqpp/Config.in |   11 ++++-------
+ 1 files changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 0aaeda3..756c810 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_ZMQPP
+ 	bool "zmqpp"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # c++0x support
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # c++0x support
++	# c++0x support
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+@@ -17,9 +14,9 @@ config BR2_PACKAGE_ZMQPP
  
--LIBVA_VERSION = 1.5.1
-+LIBVA_VERSION = 1.6.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
- LIBVA_LICENSE = MIT
+ 	  http://github.com/benjamg/zmqpp
+ 
+-comment "zmqpp needs a toolchain w/ C++, wchar, threads"
++comment "zmqpp needs a toolchain w/ C++, wchar, threads, gcc >= 4.6"
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
+-		BR2_TOOLCHAIN_HAS_THREADS)
++		BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_GCC_AT_LEAST_4_6)
+ 
+ if BR2_PACKAGE_ZMQPP
+ 
