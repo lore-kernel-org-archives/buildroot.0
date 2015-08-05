@@ -1,31 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 12:13:44 +0200
-Subject: [Buildroot] [PATCH 0/9] Add gcc version dependency mechanism
-In-Reply-To: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 5 Aug 2015 12:14:41 +0200
+Subject: [Buildroot] [PATCH 3/9] toolchain-external: add support for gcc
+ version dependency
+In-Reply-To: <20150804194948.GV3647@free.fr>
 References: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20150805121344.4e8ec1a1@free-electrons.com>
+ <1438711241-31792-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150804194948.GV3647@free.fr>
+Message-ID: <20150805121441.13c3a165@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Dear Yann E. MORIN,
 
-On Tue,  4 Aug 2015 20:00:32 +0200, Thomas Petazzoni wrote:
+On Tue, 4 Aug 2015 21:49:48 +0200, Yann E. MORIN wrote:
 
-> We are getting more and more packages that use C11 or C++11 support,
-> or otherwise have some dependency on features available only since
-> certain gcc versions.
+> That's not true for the BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64 toolchain:
+> 
+>     $ ./host/opt/ext-toolchain/bin/aarch64-linux-gnu-gcc --version
+>     aarch64-linux-gnu-gcc (crosstool-NG linaro-1.13.1-4.9-2014.09 -
+>     Linaro GCC 4.9-2014.09) 4.9.2 20140904 (prerelease)
+> 
+> Here's a better sed-expr that should match it too, as well as the other
+> gcc versions; we'll make the assumption that the version string is right
+> after the first closing parenthesis:
+> 
+>     sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/; s/\.[[:digit:]]+$//;'
+> 
+> Explanations;
+> 
+>   - 1!d
+>       - delete if not line 1  (i.e. your 'head -n1')
+> 
+>   - s/^[^)]+\) ([^[:space:]]+).*/\1/
+>       - eat all until the first ')' character followed by a space
+>       - match as many non-space chars as possible
+>       - eat all the remaining chars on the line
+>       - replace by the matched expression
+> 
+>   - s/\.[[:digit:]]+$//
+>       - eat a dot followed by as many digits as possible up to the end
+>         of line
+>       - replace with nothing
 
-Since having such a version dependency mechanism was quite important to
-resolve some of the build failures we have, I merged since before -rc1.
-I've applied all patches, taking into account the reviews from Yann.
-
-I have also fixed the autobuilder external toolchain configurations to
-add the corresponding options:
-
-  http://git.buildroot.net/buildroot-test/commit/?id=18e955cac54a01bab2e1ace375bd9cc7ad53a8c9
+Thanks! I've used your regexp, and also copy/pasted your explanation
+into the code. I just had to replace $ by $$ to cope with make escaping.
 
 Thomas
 -- 
