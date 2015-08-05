@@ -1,159 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Aug 2015 20:05:23 +0200
-Subject: [Buildroot] [git commit branch/next] board: add support for ARC
-	AXS101 and AXS103 Software Development Platforms
-Message-ID: <20150808105653.58CC77FE0E@busybox.osuosl.org>
+Date: Wed, 5 Aug 2015 12:11:20 +0200
+Subject: [Buildroot] [git commit branch/next] libsigrok: depends on gcc >=
+	4.7
+Message-ID: <20150808105653.8BFC57FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77e53b3d84b7dbb7d2746b1f361593a42e01c179
+commit: http://git.buildroot.net/buildroot/commit/?id=e01c6f08b7b1e6e9ee203eab21c33152542315f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The AXS10x Platform consists of a DesignWare AXC001 CPU
-Card (with ARC 770D core) in case of AXS101 or AXC003 CPU Card
-(typically with ARC HS38 core) in case of AXS103 mounted on an
-ARC Software Development Platform Mainboard with DesignWare peripherals:
- * SD/MMC contoller
- * Gigabit network contoller
- * Serial ports (8250-compatible)
- * USB 2.0
- * SPI
- * I2C
+Until recently, only the C++ bindings of libsigrok needed a recent
+compiler because they are written in C++11. However, now, libsigrok
+itself is written in C11, which is only available since gcc 4.7.
 
-It also houses HDMI output for external monitor connection.
+So, this commit replaces the CodeSourcery-specific exclusions by a
+proper dependency on gcc >= 4.7.
 
-For stand-alone usage of the board (with only keyboard, mouse and montor
-attached) kernel console and getty made available on tty0 as well as on
-serial port (ttyS3).
+The sigrok-cli and pulseview packages, which select libsigrok, are
+also updated accordingly.
 
-Note there're 2 prerequisites:
- [1] u-boot: 2015.07 - fix creation of .config
-     http://patchwork.ozlabs.org/patch/502558/
+Fixes:
+  http://autobuild.buildroot.org/results/1d7/1d75497009f1e3b06236b3409fd768dcf7956b87/
+  http://autobuild.buildroot.org/results/563/563378e3f6320980153c8c972ceba5e913fe933f/
 
- [2] binutils: fix buildng of Linux kernel for ARCv2 ISA
-     http://patchwork.ozlabs.org/patch/503550/
+[Thomas: add autobuilder references, as suggested by Yann E. Morin.]
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- board/synopsys/axs10x/fs-overlay/etc/inittab |   38 ++++++++++++++++++++++++++
- configs/snps_axs101_defconfig                |   27 ++++++++++++++++++
- configs/snps_axs103_defconfig                |   28 +++++++++++++++++++
- 3 files changed, 93 insertions(+), 0 deletions(-)
+ package/libsigrok/Config.in  |   11 ++++-------
+ package/pulseview/Config.in  |    9 +++------
+ package/sigrok-cli/Config.in |    6 ++++--
+ 3 files changed, 11 insertions(+), 15 deletions(-)
 
-diff --git a/board/synopsys/axs10x/fs-overlay/etc/inittab b/board/synopsys/axs10x/fs-overlay/etc/inittab
-new file mode 100644
-index 0000000..43bacc6
---- /dev/null
-+++ b/board/synopsys/axs10x/fs-overlay/etc/inittab
-@@ -0,0 +1,38 @@
-+# /etc/inittab
-+#
-+# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
-+#
-+# Note: BusyBox init doesn't support runlevels.  The runlevels field is
-+# completely ignored by BusyBox init. If you want runlevels, use
-+# sysvinit.
-+#
-+# Format for each entry: <id>:<runlevels>:<action>:<process>
-+#
-+# id        == tty to run on, or empty for /dev/console
-+# runlevels == ignored
-+# action    == one of sysinit, respawn, askfirst, wait, and once
-+# process   == program to run
-+
-+# Startup the system
-+null::sysinit:/bin/mount -t proc proc /proc
-+null::sysinit:/bin/mount -o remount,rw /
-+null::sysinit:/bin/mkdir -p /dev/pts
-+null::sysinit:/bin/mkdir -p /dev/shm
-+null::sysinit:/bin/mount -a
-+null::sysinit:/bin/hostname -F /etc/hostname
-+# now run any rc scripts
-+::sysinit:/etc/init.d/rcS
-+
-+# /sbin/getty invocation for tty0
-+tty0::respawn:/sbin/getty 115200 tty0
-+
-+# Put a getty on the serial port
-+console::respawn:/sbin/getty -L console 0 vt100
-+
-+# Stuff to do for the 3-finger salute
-+::ctrlaltdel:/sbin/reboot
-+
-+# Stuff to do before rebooting
-+::shutdown:/etc/init.d/rcK
-+::shutdown:/sbin/swapoff -a
-+::shutdown:/bin/umount -a -r
-diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
-new file mode 100644
-index 0000000..1f1acac
---- /dev/null
-+++ b/configs/snps_axs101_defconfig
-@@ -0,0 +1,27 @@
-+# Architecture
-+BR2_arcle=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="axs101"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC Software Development Platform"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+
-+# Headers
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.1"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
-+BR2_LINUX_KERNEL_DEFCONFIG="axs101"
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
-diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
-new file mode 100644
-index 0000000..4efdfd1
---- /dev/null
-+++ b/configs/snps_axs103_defconfig
-@@ -0,0 +1,28 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="axs103"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the ARC Software Development Platform"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+
-+# Headers
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.1"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
-+BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
-+
-+# Bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs103"
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index 8bd7d99..6ef3776 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_LIBSIGROK
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
++	# std=c11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	help
+ 	  Libsigrok is a shared library written in C, which provides
+ 	  the basic hardware access drivers for logic analyzers and
+@@ -22,20 +24,15 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	select BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# CS powerpc g++ are too old. libsigrokcxx needs C++11
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	help
+ 	  Build libsigrok C++ bindings as well.
+ 
+ comment "C++ bindings need a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_LIBSIGROK
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 
+ endif
+ 
+-comment "libsigrok needs a toolchain w/ wchar, threads"
++comment "libsigrok needs a toolchain w/ wchar, threads, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index 2fb844b..e6ddc21 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -17,18 +17,15 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	# libsigrok
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
+ 
+ 	  http://sigrok.org/wiki/PulseView
+ 
+-comment "pulseview needs a toolchain w/ wchar, threads, C++"
++comment "pulseview needs a toolchain w/ wchar, threads, C++, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
+-		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/sigrok-cli/Config.in b/package/sigrok-cli/Config.in
+index 4e7f137..b8eb60d 100644
+--- a/package/sigrok-cli/Config.in
++++ b/package/sigrok-cli/Config.in
+@@ -5,12 +5,14 @@ config BR2_PACKAGE_SIGROK_CLI
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
++	# libsigrok
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	help
+ 	  Sigrok-cli is a command-line frontend for the sigrok
+ 	  software suite.
+ 
+ 	  http://sigrok.org/wiki/Sigrok-cli
+ 
+-comment "sigrok-cli needs a toolchain w/ wchar, threads"
++comment "sigrok-cli needs a toolchain w/ wchar, threads, gcc >= 4.7"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
