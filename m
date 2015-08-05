@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:07 -0000
-Subject: [Buildroot] [git commit branch/next] lvm2: disable PIE on ARC
-Message-ID: <20150808105619.3426A7FB5A@busybox.osuosl.org>
+Date: Wed, 5 Aug 2015 12:11:20 +0200
+Subject: [Buildroot] [git commit branch/next] libupnpp: update to use the
+	gcc version dependency mechanism
+Message-ID: <20150808105653.AE5FF7FE8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c51fed1ff2e7ab66900fa26732ea63dbf148462
+commit: http://git.buildroot.net/buildroot/commit/?id=8eb98fc0c710f738a28849a5cc387dd03bd60faf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Even though ARC gcc understands "-pie" option and attempts to generate
-PIE binaries as of today PIE is not really supported for user-space
-applications.
+This commit changes the libupnp Config.in to use the gcc version
+dependency mechanism. The only reverse dependency of libupnpp is
+upmpdcli, which has already been updated, and requires >= 4.6, while
+libupnpp only requires >= 4.5.
 
-So we disable PIE detection if building for ARC.
-That first fixes http://autobuild.buildroot.net/results/988/9888a7a30538c9851f4910c16674d8dbb8edeb8f/
-and also prevents execution of non-supported PIE binary in runtime.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/lvm2/lvm2.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/libupnpp/Config.in |   11 +++--------
+ 1 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index bae0d54..6a3aec3 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -43,4 +43,8 @@ else
- LVM2_CONF_OPTS += --disable-applib
- endif
+diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
+index a0565fe..8af0cda 100644
+--- a/package/libupnpp/Config.in
++++ b/package/libupnpp/Config.in
+@@ -5,9 +5,7 @@ config BR2_PACKAGE_LIBUPNPP
+ 	select BR2_PACKAGE_LIBUPNP
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	# Triggers the _gp link issue
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+@@ -17,10 +15,7 @@ config BR2_PACKAGE_LIBUPNPP
  
-+ifeq ($(BR2_arc),y)
-+LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
-+endif
-+
- $(eval $(autotools-package))
+ 	  http://www.lesbonscomptes.com/upmpdcli/
+ 
+-comment "libupnpp needs a toolchain w/ C++, threads"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++comment "libupnpp needs a toolchain w/ C++, threads, gcc >= 4.5"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
