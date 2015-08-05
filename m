@@ -1,58 +1,76 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Wed, 5 Aug 2015 10:04:38 -0700
-Subject: [Buildroot] configs/marvell_ca9_armv7_le_hfp_defconfig
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD9109@svr-wa-exch1.atg.lc>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  5 Aug 2015 20:05:57 +0200
+Subject: [Buildroot] [PATCH] package/libcec: needs gcc >= 4.7
+Message-ID: <1438797957-14814-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot mailing list,
+As per upstream, gcc-4.7 is required to build libcec:
+    https://github.com/Pulse-Eight/libcec/issues/78#issuecomment-91578591
 
-Last week I resolved my building issue. The solution includes two parts:
+Fixes:
+    http://autobuild.buildroot.org/results/3b5/3b5611725c13668472482ed4ad3b46886d4c63d9/
+    http://autobuild.buildroot.org/results/0d0/0d032cdd8dbf6d0ddef392c3e5a734881e00ee64/
+    http://autobuild.buildroot.org/results/c21/c21c555c38261f6911349ff9fdac6edeb4debaac/
+    [...]
 
+Possibly fixes:
+    http://autobuild.buildroot.org/results/4a7/4a7b2af2fc3924255ac89e18f4f5c90bb8383265/
+    http://autobuild.buildroot.org/results/dd6/dd61c186e6d85a9b30cd32edb74a52f7a4f73cc8/
+    [...]
 
-1.      BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="../../ARMADA/ARMADAsoftware/buildroot/configs/marvell_ca9_armv7_le_uclibc_sfp_reduced_defconfig"
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in   | 4 +++-
+ package/libcec/Config.in | 6 ++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-2.      BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x00008000"
-
-Now I see one question and one issue list as below. Probably you could help answer or resolve them:
-
-Question
-The docs/manual/manual.pdf Section 3.1 (Configuration and general usage) lists a toolchain sub-folder in the output folder. My output folder does not have the such sub-folder. You probably know the reason for this missing.
-
-Issue
-The Buildroot-2015.05/configs does not have the marvell_ca9_armv7_le_uclibc_sfp_reduced_defconfig file in it. I wonder if the file needs to be added into the Buildroot-2015.08 release.
-
-Tommy
-
-From: Lee, Tommy
-Sent: Thursday, July 30, 2015 5:08 PM
-To: 'buildroot at busybox.net'
-Subject: configs/marvell_ca9_armv7_le_hfp_defconfig
-Importance: High
-
-Hi Buildroot mailing list,
-
-My host is Ubuntu-14.04LTS which meets the Buildroot system requirements. I am using buildroot-2015.05 to build the Linux system for the Marvell ARMADA A38x DB-88F6820-GP board. The first make process issue is that the defconfig file listed on the subject line does not originally exist in the configs folder. I copied this file from Marvell's old (2012.11-2015_T1.0) Buildroot/configs folder to the buildroot-2015.05 /configs folder. My .config file has the following line:
-
-BR2_LINUX_KERNEL_DEFCONFIG="marvell_ca9_armv7_le_hfp_defconfig"
-
-The subsequent make process passes through the above issue but stops at a new place shown as below:
-
-tclee at Latitude-E6400:~/Downloads/jul30thu15/buildroot-2015.05$<mailto:tclee@Latitude-E6400:~/Downloads/jul30thu15/buildroot-2015.05$> make
-.....
-/usr/bin/install: cannot stat '/home/tclee/Downloads/jul30thu15/buildroot-2015.05/output/build/linux-4.0.4/arch/arm/configs/marvell_ca9_armv7_le_hfp_defconfig_defconfig': No such file or directory
-make: *** [/home/tclee/Downloads/jul30thu15/buildroot-2015.05/output/build/linux-4.0.4/.config] Error 1
-
-The interesting point is why "defconfig_defconfig" happens on the missing file name. I am resolving the new issue now. Your help or experience is definitely welcome.
-
-Tommy
-
-
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150805/ffd10e54/attachment.html>
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index c3b3183..797f59d 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -158,13 +158,15 @@ config BR2_PACKAGE_KODI_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_STATIC_LIBS # libcec
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # libcec
+ 	select BR2_PACKAGE_LIBCEC
+ 	help
+ 	  Enable CEC (Consumer Electronics Control) support.
+ 	  Select this if you want Kodi to support HDMI CEC.
+ 
+ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
++	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ config BR2_PACKAGE_KODI_LIRC
+ 	bool "lirc"
+diff --git a/package/libcec/Config.in b/package/libcec/Config.in
+index 2cf011d..2dddc53 100644
+--- a/package/libcec/Config.in
++++ b/package/libcec/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBCEC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+ 	select BR2_PACKAGE_LIBPLATFORM
+ 	help
+ 	  libcec allows you in combination with the right hardware to
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_LIBCEC
+ 
+ 	  http://libcec.pulse-eight.com
+ 
+-comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library"
++comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR || BR2_STATIC_LIBS
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
++		BR2_STATIC_LIBS
+-- 
+1.9.1
