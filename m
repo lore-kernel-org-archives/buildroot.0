@@ -1,81 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:53 -0000
-Subject: [Buildroot] [git commit branch/next] package:sysdig: bump to
-	version 0.1.100
-Message-ID: <20150808105622.C35797FB5A@busybox.osuosl.org>
+Date: Wed, 5 Aug 2015 10:40:29 +0200
+Subject: [Buildroot] [git commit branch/next] gcc: select the appropriate
+	BR2_TOOLCHAIN_GCC_AT_LEAST_* option
+Message-ID: <20150808105653.707CB7FE0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3ec8172152352ad30ca6beacce9da89c4fd0807
+commit: http://git.buildroot.net/buildroot/commit/?id=c67540ef9b98139c00409b44a1bfbaff3189b8e9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps to version 0.1.100, removes the no more
-neded upstream included patch and adds the ENABLE_DKMS=OFF
-configure option.
+This commit wires up the gcc version dependency mechanism in the
+internal toolchain backend by making the gcc version choice in the gcc
+package Config.in.host select the appropriate
+BR2_TOOLCHAIN_GCC_AT_LEAST_* option.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- .../sysdig/0001-remove-dkms-module-updater.patch   |   31 --------------------
- package/sysdig/sysdig.mk                           |    4 +-
- 2 files changed, 2 insertions(+), 33 deletions(-)
+ package/gcc/Config.in.host |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/sysdig/0001-remove-dkms-module-updater.patch b/package/sysdig/0001-remove-dkms-module-updater.patch
-deleted file mode 100644
-index 8d5c99d..0000000
---- a/package/sysdig/0001-remove-dkms-module-updater.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Remove DKMS module updater
--
--This patch disables the in target installation of DKMS module updater
--mechanism unneeded in buildroot.
--
--Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
--
----- a/driver/CMakeLists.txt
--+++ b/driver/CMakeLists.txt
--@@ -39,21 +39,3 @@ add_custom_target(install_driver
-- 	WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-- 	VERBATIM)
-- 
---install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Makefile.dkms
---	RENAME Makefile
---	DESTINATION "src/sysdig-${SYSDIG_VERSION}")
---
---install(FILES
---	${CMAKE_CURRENT_BINARY_DIR}/dkms.conf
---	dynamic_params_table.c
---	event_table.c
---	flags_table.c
---	main.c
---	ppm.h
---	ppm_events.c
---	ppm_events.h
---	ppm_events_public.h
---	ppm_fillers.c
---	ppm_ringbuffer.h
---	syscall_table.c
---	DESTINATION "src/sysdig-${SYSDIG_VERSION}")
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index fb348ff..d07d467 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 93c9032..baa7956 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -34,6 +34,7 @@ choice
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
  
--SYSDIG_VERSION = 0.1.99
-+SYSDIG_VERSION = 0.1.100
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPLv2
- SYSDIG_LICENSE_FILES = COPYING
- SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
--	-DUSE_BUNDLED_JSONCPP=OFF
-+	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
- SYSDIG_DEPENDENCIES = zlib luajit jsoncpp linux
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+ 	config BR2_GCC_VERSION_4_7_X
+ 		bool "gcc 4.7.x"
+@@ -50,6 +51,7 @@ choice
+ 		# Broken or unsupported x86 cores
+ 		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ 	config BR2_GCC_VERSION_4_8_X
+ 		bool "gcc 4.8.x"
+@@ -64,12 +66,15 @@ choice
+ 		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ 	config BR2_GCC_VERSION_4_8_ARC
+ 		bool "gcc 4.8-arc"
+ 		# Only supported architecture
+ 		depends on BR2_arc
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ 
+ 	config BR2_GCC_VERSION_4_9_X
+ 		bool "gcc 4.9.x"
+@@ -78,6 +83,7 @@ choice
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ 	config BR2_GCC_VERSION_5_X
+ 		bool "gcc 5.x"
+@@ -85,6 +91,7 @@ choice
+ 		depends on !BR2_arc
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
++		select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ endchoice
  
