@@ -1,56 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 12:11:20 +0200
-Subject: [Buildroot] [git commit] upmpdcli: update to use the gcc version
-	dependency mechanism
-Message-ID: <20150805101202.2D67A819A0@busybox.osuosl.org>
+Date: Wed, 5 Aug 2015 10:40:19 +0200
+Subject: [Buildroot] [git commit] toolchain: add common gcc version hidden
+	config options
+Message-ID: <20150805101201.F27A6819C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b3fc8e07d7c4adc2c9be97850a4ef827039f2e5
+commit: http://git.buildroot.net/buildroot/commit/?id=8ba2a76892c5da7ffe86d06ed89d3dc3e7f7e9e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit updates the upmpdcli Config.in file to use the newly
-introduced gcc version dependency mechanism to depend on gcc >= 4.6
-instead of open-coding dependencies on specific toolchains.
+This commit adds a number of hidden Config.in options, that will be
+used to handle dependencies on the gcc version. We mimic the model
+that was used for the kernel headers dependency mechanism.
+
+These hidden options will be selected by the internal and external
+toolchain backend logic respectively, in follow-up commits.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/upmpdcli/Config.in |   15 +++------------
- 1 files changed, 3 insertions(+), 12 deletions(-)
+ toolchain/toolchain-common.in |   44 +++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index 0fe3d10..848c6af 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -4,11 +4,7 @@ config BR2_PACKAGE_UPMPDCLI
- 	select BR2_PACKAGE_LIBUPNPP
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnpp -> libupnp
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 	# libupnpp triggers the _gp link issue
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-@@ -19,12 +15,7 @@ config BR2_PACKAGE_UPMPDCLI
- 
- 	  http://www.lesbonscomptes.com/upmpdcli/
- 
--comment "upmpdcli needs a toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
-+comment "upmpdcli needs a toolchain w/ C++, threads, gcc >= 4.6"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index b7a11a4..4be55c3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -254,3 +254,47 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	default "3.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	default "3.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	default "2.6"
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++	bool
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
++# This order guarantees that the highest version is set, as kconfig
++# stops affecting a value on the first matching default.
++config BR2_TOOLCHAIN_GCC_AT_LEAST
++	string
++	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
++	default "4.9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	default "4.8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	default "4.7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	default "4.6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	default "4.5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	default "4.4"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++	default "4.3"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
