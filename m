@@ -1,48 +1,64 @@
-From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Wed,  5 Aug 2015 07:17:20 +0300
-Subject: [Buildroot] [PATCH v3 1/1] jpeg-turbo: bump version from 1.4.0 to
-	1.4.1
-Message-ID: <1438748241-22774-1-git-send-email-yba@tkos.co.il>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Date: Wed,  5 Aug 2015 00:19:40 -0400
+Subject: [Buildroot] [PATCH] ola: Add patch to fix linking issue
+Message-ID: <1438748380-5528-1-git-send-email-simon.marchi@polymtl.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jonathan Ben Avraham <yba@tkos.co.il>
+This patch fixes this autobuild failure:
 
+  http://autobuild.buildroot.net/results/e14/e14e1700d4fe359c56be57587bdb509e002e5753/build-end.log
 
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+I am not 100% sure of what happens (I am not a C++ expert at all), but
+here it is anyway.  I assume that when the definition of
+TCPSocket::ReadDescriptor is embedded in the class definition, no actual
+implementation is generated (all usages of it are inline).  When object
+libolaopenpixelcontrol.so tries to reference it somehow, it results in
+an undefined reference.  Moving the definition in the cpp retains it. If
+you have a clear explanation of what happens, I'd be happy to read it.
+
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
 ---
- package/jpeg-turbo/jpeg-turbo.hash |    8 +++++---
- package/jpeg-turbo/jpeg-turbo.mk   |    2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ ...link-ola-network-TCPSocket-ReadDescriptor.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/ola/Fix-link-ola-network-TCPSocket-ReadDescriptor.patch
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index bbc62f2..dd61b2c 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,3 +1,5 @@
--# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/
--sha1	a9ed7a99a6090e0848836c5df8e836f300a098b9  libjpeg-turbo-1.4.0.tar.gz
--md5	039153dabe61e1ac8d9323b5522b56b0  libjpeg-turbo-1.4.0.tar.gz
-+# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/
-+sha1	363a149f644211462c45138a19674f38100036d3	libjpeg-turbo-1.4.1.tar.gz
-+md5	b1f6b84859a16b8ebdcda951fa07c3f2	libjpeg-turbo-1.4.1.tar.gz
-+# Locally computed
-+sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index dd3ae19..25434b1 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JPEG_TURBO_VERSION = 1.4.0
-+JPEG_TURBO_VERSION = 1.4.1
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
+diff --git a/package/ola/Fix-link-ola-network-TCPSocket-ReadDescriptor.patch b/package/ola/Fix-link-ola-network-TCPSocket-ReadDescriptor.patch
+new file mode 100644
+index 0000000..8c9385b
+--- /dev/null
++++ b/package/ola/Fix-link-ola-network-TCPSocket-ReadDescriptor.patch
+@@ -0,0 +1,28 @@
++Index: ola-0.9.6/common/network/TCPSocket.cpp
++===================================================================
++--- ola-0.9.6.orig/common/network/TCPSocket.cpp
+++++ ola-0.9.6/common/network/TCPSocket.cpp
++@@ -163,6 +163,10 @@ TCPSocket* TCPSocket::Connect(const Sock
++   return socket;
++ }
++ 
+++ola::io::DescriptorHandle TCPSocket::ReadDescriptor() const
+++{
+++  return m_handle;
+++}
++ 
++ // TCPAcceptingSocket
++ // ------------------------------------------------
++Index: ola-0.9.6/include/ola/network/TCPSocket.h
++===================================================================
++--- ola-0.9.6.orig/include/ola/network/TCPSocket.h
+++++ ola-0.9.6/include/ola/network/TCPSocket.h
++@@ -47,7 +47,7 @@ class TCPSocket: public ola::io::Connect
++ 
++   ~TCPSocket() { Close(); }
++ 
++-  ola::io::DescriptorHandle ReadDescriptor() const { return m_handle; }
+++  ola::io::DescriptorHandle ReadDescriptor() const;
++   ola::io::DescriptorHandle WriteDescriptor() const { return m_handle; }
++   bool Close();
++ 
 -- 
-1.7.9.5
+2.4.5
