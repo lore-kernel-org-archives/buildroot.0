@@ -1,76 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  5 Aug 2015 20:05:57 +0200
-Subject: [Buildroot] [PATCH] package/libcec: needs gcc >= 4.7
-Message-ID: <1438797957-14814-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 05 Aug 2015 16:36:34 -0300
+Subject: [Buildroot] configs/marvell_ca9_armv7_le_hfp_defconfig
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD9109@svr-wa-exch1.atg.lc>
+References: <944894A3EB1D044A9003B2F944389BB20474AD9109@svr-wa-exch1.atg.lc>
+Message-ID: <55C265C2.6060608@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As per upstream, gcc-4.7 is required to build libcec:
-    https://github.com/Pulse-Eight/libcec/issues/78#issuecomment-91578591
+On 05/08/15 14:04, Lee, Tommy wrote:
 
-Fixes:
-    http://autobuild.buildroot.org/results/3b5/3b5611725c13668472482ed4ad3b46886d4c63d9/
-    http://autobuild.buildroot.org/results/0d0/0d032cdd8dbf6d0ddef392c3e5a734881e00ee64/
-    http://autobuild.buildroot.org/results/c21/c21c555c38261f6911349ff9fdac6edeb4debaac/
-    [...]
+> _Question_
+>
+> The docs/manual/manual.pdf Section 3.1 (Configuration and general usage)
+> lists a toolchain sub-folder in the output folder. My output folder does
+> not have the such sub-folder. You probably know the reason for this missing.
 
-Possibly fixes:
-    http://autobuild.buildroot.org/results/4a7/4a7b2af2fc3924255ac89e18f4f5c90bb8383265/
-    http://autobuild.buildroot.org/results/dd6/dd61c186e6d85a9b30cd32edb74a52f7a4f73cc8/
-    [...]
+Hi.
+Can you point to the exact location in the manual (say, page in the 
+online pdf) where this is so?
+Or if it's in the old (Marvell) buildroot then it likely doesn't apply 
+to current releases - new features, cleaning up and other factors can 
+change that, manuals are normally attached to explicit buildroot releases.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi/Config.in   | 4 +++-
- package/libcec/Config.in | 6 ++++--
- 2 files changed, 7 insertions(+), 3 deletions(-)
+> _Issue_
+>
+> The Buildroot-2015.05/configs does not have the
+> marvell_ca9_armv7_le_uclibc_sfp_reduced_defconfig file in it. I wonder
+> if the file needs to be added into the Buildroot-2015.08 release.
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index c3b3183..797f59d 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -158,13 +158,15 @@ config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_STATIC_LIBS # libcec
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # libcec
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want Kodi to support HDMI CEC.
- 
- comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 
- config BR2_PACKAGE_KODI_LIRC
- 	bool "lirc"
-diff --git a/package/libcec/Config.in b/package/libcec/Config.in
-index 2cf011d..2dddc53 100644
---- a/package/libcec/Config.in
-+++ b/package/libcec/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBCEC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
- 	select BR2_PACKAGE_LIBPLATFORM
- 	help
- 	  libcec allows you in combination with the right hardware to
-@@ -12,6 +13,7 @@ config BR2_PACKAGE_LIBCEC
- 
- 	  http://libcec.pulse-eight.com
- 
--comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library"
-+comment "libcec needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.7"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR || BR2_STATIC_LIBS
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || \
-+		BR2_STATIC_LIBS
--- 
-1.9.1
+That still sounds like a Marvell config from their BR, with the 
+difference between both being the floating-point strategy (i assume 
+sfp=soft, hfp=hard), which are easy configuration options in mainstream 
+buildroot.
+Regards.
