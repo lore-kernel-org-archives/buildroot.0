@@ -1,40 +1,35 @@
-From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
-Date: Thu, 6 Aug 2015 15:53:44 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20150729100334.00137b70@free-electrons.com>
-References: <20150729063017.EDA6D101EBC@stock.ovh.net>
- <20150729100334.00137b70@free-electrons.com>
-Message-ID: <55C366E8.3060207@oliseo.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 06 Aug 2015 18:31:02 +0200
+Subject: [Buildroot] Analysis of build results for 2015-08-05
+References: <20150806063016.4A0BB102D1F@stock.ovh.net>
+ <20150806113014.163c6592@free-electrons.com>
+Message-ID: <XnsA4EEBC5DFAFBFberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20150806113014.163c6592 at free-electrons.com: 
 
-Le 29/07/2015 10:03, Thomas Petazzoni a ?crit :
-> Hello,
->
-> Clayton, Guillaume, Samuel, Gwenhael, Gustavo, Brendan, Paul, Bernd,
-> Angelo, Maxime, Simon: see below, there are some questions for you.
-> Thanks!
->
-> On Wed, 29 Jul 2015 08:30:17 +0200 (CEST), Thomas Petazzoni wrote:
+> Hello all,
 
-snip...
+>>         i686 |                  mesa3d-10.6.3 | NOK |
+>>         http://autobuild.buildroot.net/results/08305f397ef523ee864827e1e
+>>         267475a9f6f397f/ 
+> checking for LIBUDEV... no
+> configure: error: gbm requires --enable-dri
+> make: ***
+> [/home/test/autobuild/instance-1/output/build/mesa3d-10.6.3/.stamp_config
+> ured] Error 1 make: Leaving directory
+> `/home/test/autobuild/instance-1/buildroot' Bernd, is this fixed by one
+> of the pending patches on mesa3d ? 
 
->>           arm |                   c-icap-0.3.5 | NOK | http://autobuild.buildroot.net/results/cb623460de30dd7c4ef3275fe13220c1ca0642a5/
-> c_icap-service.o: In function `load_c_service':
-> service.c:(.text+0x710): undefined reference to `ci_module_load'
-> service.c:(.text+0x720): undefined reference to `ci_module_sym'
-> service.c:(.text+0x774): undefined reference to `ci_module_unload'
->
-> Unknown, already happened yesterday. Guillaume, can you have a look?
+Hi Thomas,
 
-This is because HAVE_DLFCN_H is not set because dlfcn.h is not provided by the toolchain. But ./os/unix/dlib.c uses dlopen and dlclose functions.
-Apparently, this is missing on uClibc when it is configured as a static-only C library.
+yes, this patch fixes the build error:
+http://patchwork.ozlabs.org/patch/502988/
 
-What would be the best way to fix it? Maybe a "depends on !BR2_STATIC_LIBS" ?
-
-
-Guillaume
+Regards, Bernd
