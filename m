@@ -1,10 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 6 Aug 2015 10:35:44 +0200
-Subject: [Buildroot] [RFC] package/pulseaudio: fix musl build
-In-Reply-To: <20150806090425.1917eff0@free-electrons.com>
-References: <1438370022-25257-1-git-send-email-romain.naour@openwide.fr>
- <20150806090425.1917eff0@free-electrons.com>
-Message-ID: <55C31C60.6070609@openwide.fr>
+Date: Thu, 6 Aug 2015 10:37:17 +0200
+Subject: [Buildroot] [PATCH v3] package/eudev: fix build with musl +
+ libselinux
+In-Reply-To: <20150806090710.7f68171e@free-electrons.com>
+References: <1438349093-17604-1-git-send-email-romain.naour@openwide.fr>
+ <20150806090710.7f68171e@free-electrons.com>
+Message-ID: <55C31CBD.8050209@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,50 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Le 06/08/2015 09:04, Thomas Petazzoni a ?crit :
+Le 06/08/2015 09:07, Thomas Petazzoni a ?crit :
 > Dear Romain Naour,
 > 
-> On Fri, 31 Jul 2015 21:13:42 +0200, Romain Naour wrote:
->> pulseaudio doesn't build properly on musl due to
->> a OSS wrapper called padsp. It provide a software OSS
->> interface on systems without OSS.
+> On Fri, 31 Jul 2015 15:24:53 +0200, Romain Naour wrote:
+>> Add a patch to disable mallinfo statistics with musl toolchains
+>> which doesn't have struct mallinfo.
+>>
+>> Fixes:
+>> selinux-util.c: In function ?mac_selinux_init?:
+>> selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
+>>          struct mallinfo before_mallinfo, after_mallinfo;
+>>
+>> Add a second patch for strndupa() which is a GNU extension.
+>>
+>> Fixes:
+>> ./.libs/libudev-core.a(selinux-util.o): In function `mac_selinux_bind':
+>> selinux-util.c:(.text+0xd94): undefined reference to `strndupa'
+>> collect2: error: ld returned 1 exit status
 >>
 >> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
 >> ---
->> Patches not upstreamed yet.
+>> v3: Don't enclose the timestamp stuff inside HAVE_MALLINFO (ThomasP)
+>> v2: new patch
+>> ---
+>>  .../eudev/0002-build-sys-check-for-mallinfo.patch  | 93 ++++++++++++++++++++++
+>>  .../eudev/0003-build-sys-check-for-strndupa.patch  | 69 ++++++++++++++++
+>>  package/eudev/eudev.mk                             |  5 ++
+>>  3 files changed, 167 insertions(+)
+>>  create mode 100644 package/eudev/0002-build-sys-check-for-mallinfo.patch
+>>  create mode 100644 package/eudev/0003-build-sys-check-for-strndupa.patch
 > 
-> Could you send your patches upstream, and see what is upstream
-> reaction? That's quite a bit of patches, to support a fairly odd setup
-> (a big thing such as pulseaudio, with a small size C library such as
-> musl). So I'd prefer to have such patches upstreamed.
+> I've applied the patch, with the hope that the patches will be merged
+> upstream. Supporting musl+selinux is a fairly odd setup, so carrying
+> around forever patches for this specific setup would be a bit annoying.
+> 
+> Can you make sure to keep pushing the patches upstream?
 
-Sure, I'll send theses patches upstream probably this weekend.
-I've sent to the ml if our musl guys can have a look ;-)
+A pull request is pending on github:
+https://github.com/gentoo/eudev/pull/122
 
 Best regards,
 Romain
+
 > 
 > Thanks,
 > 
