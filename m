@@ -1,50 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 08:54:52 +0200
-Subject: [Buildroot] [git commit] package/poco: disable for static build
-Message-ID: <20150806065536.04CAF81E66@busybox.osuosl.org>
+Date: Thu, 6 Aug 2015 08:56:21 +0200
+Subject: [Buildroot] [PATCH 2/2] package/poco: disable for static build
+In-Reply-To: <1438682248-29767-2-git-send-email-joerg.krause@embedded.rocks>
+References: <1438682248-29767-1-git-send-email-joerg.krause@embedded.rocks>
+ <1438682248-29767-2-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150806085621.2399e5ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=073a89196a22f995c142cd11640d3cfb7cef691d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-poco requires dlopen(). There is a --no-sharedlibs option that is
-supposed to support building in a statically linked environment, but
-it doesn't do anything.
+On Tue,  4 Aug 2015 11:57:28 +0200, J?rg Krause wrote:
+> poco requires dlopen()
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/952/952f05efd245ba59991f3c5be02a0572e8b9e544/
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Fixes:
+There should be an empty line before the SoB line.
 
-  http://autobuild.buildroot.net/results/952/952f05efd245ba59991f3c5be02a0572e8b9e544/
+Also, there is a --no-sharedlibs option in poco's configure script that
+is supposed to support statically linked environment. However, it does
+not work.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/poco/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+So I've applied your patch after amending the commit log.
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 155f098..dfdc8d1 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_POCO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
- 		|| BR2_xtensa)
- 	select BR2_PACKAGE_ZLIB
-@@ -60,8 +61,8 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
- 
- endif # BR2_PACKAGE_POCO
- 
--comment "poco needs a toolchain w/ wchar, threads, C++"
-+comment "poco needs a toolchain w/ wchar, threads, C++, dynamic library"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
- 		|| BR2_xtensa)
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
