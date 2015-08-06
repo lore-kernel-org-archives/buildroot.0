@@ -1,30 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 6 Aug 2015 11:36:58 +0200
-Subject: [Buildroot] Analysis of build results for 2015-08-05
-In-Reply-To: <20150806113014.163c6592@free-electrons.com>
-References: <20150806063016.4A0BB102D1F@stock.ovh.net>
- <20150806113014.163c6592@free-electrons.com>
-Message-ID: <55C32ABA.90405@imgtec.com>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Thu,  6 Aug 2015 12:06:14 +0200
+Subject: [Buildroot] [PATCH 1/2] qt/qt5base: force gstreamer on configure
+Message-ID: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes: http://autobuild.buildroot.net/results/0ee0f879e8563954c64b3940cdec39d2e6de937a/
 
-On 06/08/15 11:30, Thomas Petazzoni wrote:
->>          mips |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/1f4eee3423650651ac37f55dafed269c6d9baa98/
->
-> MIPS problem:
->
->     fatal error: gnu/lib-names-o32_soft.h: No such file or directory
->
-> Vicente, can you comment?
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+ package/qt5/qt5base/qt5base.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-we are in conversations with Mentor to check the support for soft-float 
-in their toolchains.
-
-Regards,
-
-Vincent.
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 753b069..f04545b 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -152,6 +152,16 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
+ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
+ 
++ifeq ($(BR2_PACKAGE_GSTREAMER),y)
++QT5BASE_CONFIGURE_OPTS += -gstreamer 0.10
++QT5BASE_DEPENDENCIES   += gstreamer
++else ifeq ($(BR2_PACKAGE_GSTREAMER1),y)
++QT5BASE_CONFIGURE_OPTS += -gstreamer 1.0
++QT5BASE_DEPENDENCIES   += gstreamer1
++else
++QT5BASE_CONFIGURE_OPTS += -no-gstreamer
++endif
++
+ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES),-make,-nomake) examples
+ 
+ # Build the list of libraries to be installed on the target
+-- 
+2.1.0
