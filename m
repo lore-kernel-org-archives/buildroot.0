@@ -1,44 +1,49 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Thu,  6 Aug 2015 12:06:15 +0200
-Subject: [Buildroot] [PATCH 2/2] qt/qt5multimedia: install gsttools for
-	gstreamer1
-In-Reply-To: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
-References: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <1438855575-4767-2-git-send-email-corjon.j@ecagroup.com>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Thu, 6 Aug 2015 10:08:54 +0000
+Subject: [Buildroot] Analysis of build results for 2015-08-05
+In-Reply-To: <20150806113014.163c6592@free-electrons.com>
+References: <20150806063016.4A0BB102D1F@stock.ovh.net>
+ <20150806113014.163c6592@free-electrons.com>
+Message-ID: <55C3323C.1000004@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
- package/qt5/qt5multimedia/qt5multimedia.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Hello Thomas,
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index 763fc28..34f3a0a 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -22,6 +22,10 @@ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
- QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
-+QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
- endif
-@@ -40,7 +44,7 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
- endef
- 
- ifeq ($(BR2_STATIC_LIBS),)
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
- 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
- endef
--- 
-2.1.0
+I'm currently on holiday until beginning of September.
+
+Le 06/08/2015 11:30, Thomas Petazzoni a ?crit :
+>>           arm |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/4edecf424246204aa68c9670b4950bafcf8fe973/
+>
+> Glib auto-detection... ()
+> [...]
+> cannot find -ldl
+>
+> Julien?
+>
+> Note that the build-end.log is very very large, for some reason. I
+> recommend you to download it with wget, and look at it with less/cat,
+> instead of your web browser.
+>
+
+I'm not sure I will have the time to work on that one until then...
+
+>>       aarch64 |            qt5multimedia-5.5.0 | NOK | http://autobuild.buildroot.net/results/0ee0f879e8563954c64b3940cdec39d2e6de937a/
+>
+> Julien, any idea?
+>
+> cp -dpf /home/test/autobuild/instance-2/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libqgsttools*.so.* /home/test/autobuild/instance-2/output/target/usr/lib
+> cp: cannot stat `/home/test/autobuild/instance-2/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libqgsttools*.so.*': No such file or directory
+>
+
+The copy of libqgsttools is hard coded in the qt5multimedia.mk file but 
+the compilation of this plugin is based on an autodection in qt5base. I 
+have just submitted a patch to force gstreamer detection[1] and allow 
+gst1.0 support[2] but I didn't check all the cases. We may let autobuild 
+do that work for me if you want a quick fix of this issue.
+
+[1] https://patchwork.ozlabs.org/patch/504627/
+[2] https://patchwork.ozlabs.org/patch/504628/
