@@ -1,243 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Aug 2015 20:02:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 8266] New: mplayer build issue
-Message-ID: <bug-8266-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Aug 2015 22:48:29 +0200
+Subject: [Buildroot] [PATCH] imagemagick depends on pango even if not
+ available
+In-Reply-To: <55C3A446.8080307@mclink.it>
+References: <55C3A446.8080307@mclink.it>
+Message-ID: <20150806224829.61effbfa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8266
+Dear Mauro Condarelli,
 
-           Summary: mplayer build issue
-           Product: buildroot
-           Version: 2015.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: s.siegert at atb-online.eu
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Thanks for your contribution! See below for some comments/questions.
 
+On Thu, 6 Aug 2015 20:15:34 +0200, Mauro Condarelli wrote:
+> Hi,
+> it seems imagemagick package does not force dependency on pango, but fails if it's not found.
 
-with buildroot version 2015.05 and the following defconfig:
+Can you give more details on how it fails?
 
-BR2_arm=y
-BR2_cortex_a5=y
-BR2_ARM_FPU_VFPV4D16=y
-BR2_DL_DIR="$(TOPDIR)/buildroot_download_cache/"
-BR2_BACKUP_SITE="http://sources.buildroot.net/"
-BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
-BR2_CCACHE=y
-BR2_CCACHE_DIR="$(TOPDIR)/buildroot_ccache"
-BR2_OPTIMIZE_3=y
-BR2_PACKAGE_OVERRIDE_FILE="$(TOPDIR)/local.mk"
-BR2_KERNEL_HEADERS_3_12=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREAD_DEBUG=y
-BR2_GCC_VERSION_4_7_X=y
-BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-float=hard --with-fpu=vfpv4-d16"
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-BR2_TARGET_OPTIMIZATION=" -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard"
-BR2_TARGET_GENERIC_HOSTNAME=""
-BR2_TARGET_GENERIC_ISSUE=""
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-BR2_TARGET_GENERIC_ROOT_PASSWD="devkit"
-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-BR2_ROOTFS_OVERLAY="board/mcs/ptu4/overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/mcs/ptu4/post-build.sh"
-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-sama5d3ekdemo.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_ALSA_UTILS=y
-BR2_PACKAGE_ALSA_UTILS_AMIXER=y
-BR2_PACKAGE_ALSA_UTILS_APLAY=y  
-BR2_PACKAGE_MPG123=y   
-BR2_PACKAGE_MPLAYER=y  
-BR2_PACKAGE_GDB=y  
-BR2_PACKAGE_LSOF=y 
-BR2_PACKAGE_MEMSTAT=y
-BR2_PACKAGE_STRACE=y 
-BR2_PACKAGE_GREP=y 
-BR2_PACKAGE_SED=y  
-BR2_PACKAGE_TAR=y  
-BR2_PACKAGE_CIFS_UTILS=y
-BR2_PACKAGE_DOSFSTOOLS=y 
-BR2_PACKAGE_MTD=y    
-# BR2_PACKAGE_MTD_FLASH_LOCK is not set                                         
-# BR2_PACKAGE_MTD_FLASH_UNLOCK is not set                                       
-BR2_PACKAGE_SSHFS=y 
-BR2_PACKAGE_BITSTREAM_VERA=y  
-BR2_PACKAGE_DEJAVU=y  
-BR2_PACKAGE_LIBERATION=y  
-BR2_PACKAGE_DIRECTFB=y 
-BR2_PACKAGE_DIRECTFB_EXAMPLES=y  
-BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI=y  
-BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD=y  
-BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD=y  
-BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER=y  
-BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST=y                    
-BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX_WATER=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_PORTER=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE=y
-BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW=y
-BR2_PACKAGE_FBSET=y
-BR2_PACKAGE_QT=y
-BR2_PACKAGE_QT_LICENSE_APPROVED=y
-BR2_PACKAGE_QT_PIXEL_DEPTH_18=y
-BR2_PACKAGE_QT_PIXEL_DEPTH_24=y
-# BR2_PACKAGE_QT_FONT_MICRO is not set
-# BR2_PACKAGE_QT_FONT_FIXED is not set
-# BR2_PACKAGE_QT_FONT_HELVETICA is not set
-BR2_PACKAGE_QT_SYSTEMFREETYPE=y
-BR2_PACKAGE_QT_GIF=y
-BR2_PACKAGE_QT_LIBMNG=y
-BR2_PACKAGE_QT_SYSTEMJPEG=y
-BR2_PACKAGE_QT_SYSTEMPNG=y
-BR2_PACKAGE_QT_SYSTEMTIFF=y
-BR2_PACKAGE_QT_SQL_MODULE=y
-BR2_PACKAGE_QT_SQLITE_SYSTEM=y
-BR2_PACKAGE_QT_GFX_DIRECTFB=y
-BR2_PACKAGE_QT_MOUSE_LINUXINPUT=y
-BR2_PACKAGE_QT_MOUSE_TSLIB=y
-BR2_PACKAGE_QT_MOUSE_NO_QWS_CURSOR=y
-BR2_PACKAGE_QT_KEYBOARD_LINUXINPUT=y
-BR2_PACKAGE_QT_DBUS=y
-BR2_PACKAGE_QT_XMLPATTERNS=y
-BR2_PACKAGE_QT_MULTIMEDIA=y
-BR2_PACKAGE_QT_AUDIO_BACKEND=y
-BR2_PACKAGE_QT_WEBKIT=y
-BR2_PACKAGE_QT_STL=y
-BR2_PACKAGE_QT_OPENSSL=y
-BR2_PACKAGE_QT_SCRIPTTOOLS=y
-BR2_PACKAGE_QT_DECLARATIVE=y
-BR2_PACKAGE_QEXTSERIALPORT=y
-BR2_PACKAGE_QJSON=y
-BR2_PACKAGE_CDRKIT=y
-BR2_PACKAGE_EVTEST=y
-BR2_PACKAGE_I2C_TOOLS=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON3_PY_PYC=y
-BR2_PACKAGE_PYTHON_SERIAL=y
-BR2_PACKAGE_LIBGCRYPT=y
-BR2_PACKAGE_LIBGPGME=y
-BR2_PACKAGE_SQLITE_READLINE=y
-BR2_PACKAGE_SQLITE_STAT3=y
-BR2_PACKAGE_SQLITE_ENABLE_FTS3=y
-BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY=y
-BR2_PACKAGE_LIBUSB=y
-BR2_PACKAGE_CPPZMQ=y
-BR2_PACKAGE_CZMQ=y
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_CURL=y
-BR2_PACKAGE_ZMQPP=y
-BR2_PACKAGE_ARGP_STANDALONE=y
-BR2_PACKAGE_BOOST=y
-BR2_PACKAGE_BOOST_CHRONO=y
-BR2_PACKAGE_BOOST_CONTEXT=y
-BR2_PACKAGE_BOOST_DATE_TIME=y
-BR2_PACKAGE_BOOST_EXCEPTION=y
-BR2_PACKAGE_BOOST_FILESYSTEM=y
-BR2_PACKAGE_BOOST_GRAPH=y
-BR2_PACKAGE_BOOST_GRAPH_PARALLEL=y
-BR2_PACKAGE_BOOST_IOSTREAMS=y
-BR2_PACKAGE_BOOST_LOCALE=y
-BR2_PACKAGE_BOOST_LOG=y
-BR2_PACKAGE_BOOST_MATH=y
-BR2_PACKAGE_BOOST_MPI=y
-BR2_PACKAGE_BOOST_PROGRAM_OPTIONS=y
-BR2_PACKAGE_BOOST_RANDOM=y
-BR2_PACKAGE_BOOST_REGEX=y
-BR2_PACKAGE_BOOST_SERIALIZATION=y
-BR2_PACKAGE_BOOST_SIGNALS=y
-BR2_PACKAGE_BOOST_SYSTEM=y
-BR2_PACKAGE_BOOST_TEST=y
-BR2_PACKAGE_BOOST_THREAD=y
-BR2_PACKAGE_BOOST_TIMER=y
-BR2_PACKAGE_BOOST_WAVE=y
-BR2_PACKAGE_LIBESMTP=y
-BR2_PACKAGE_BC=y
-BR2_PACKAGE_MCRYPT=y
-BR2_PACKAGE_DHCP=y
-BR2_PACKAGE_DHCP_CLIENT=y
-BR2_PACKAGE_ETHTOOL=y
-BR2_PACKAGE_IPERF=y
-BR2_PACKAGE_IPROUTE2=y
-BR2_PACKAGE_NETCAT=y
-BR2_PACKAGE_PORTMAP=y
-BR2_PACKAGE_PPPD=y
-BR2_PACKAGE_PPPD_FILTER=y
-BR2_PACKAGE_RSYNC=y
-BR2_PACKAGE_SOCAT=y
-BR2_PACKAGE_TINYHTTPD=y
-BR2_PACKAGE_BASH=y
-BR2_PACKAGE_FILE=y
-BR2_PACKAGE_GNUPG_RSA=y
-BR2_PACKAGE_GNUPG_GPGV=y
-BR2_PACKAGE_LOGROTATE=y
-BR2_PACKAGE_TIME=y
-BR2_PACKAGE_COREUTILS=y
-BR2_PACKAGE_KMOD=y
-BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
-BR2_PACKAGE_NANO=y
-BR2_PACKAGE_VIM=y
-# BR2_PACKAGE_VIM_RUNTIME is not set
-BR2_TARGET_ROOTFS_TAR_BZIP2=y
-BR2_TARGET_ROOTFS_UBIFS=y
-BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-BR2_TARGET_BAREBOX=y
-BR2_TARGET_BAREBOX_CUSTOM_GIT=y
-BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL=""
-BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION=""
-BR2_TARGET_BAREBOX_BOARD_DEFCONFIG=""
-BR2_TARGET_BAREBOX_BAREBOXENV=y
-BR2_PACKAGE_HOST_MTD=y
-BR2_PACKAGE_HOST_SAM_BA=y
+> $ git diff
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 1594f69..e8c7ab7 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -44,6 +44,13 @@ else
+>   IMAGEMAGICK_CONF_OPTS += --without-fontconfig
+>   endif
+> 
+> +ifeq ($(BR2_PACKAGE_PANGO),y)
+> +IMAGEMAGICK_CONF_OPTS += --with-pango
+> +IMAGEMAGICK_DEPENDENCIES += pango
+> +else
+> +IMAGEMAGICK_CONF_OPTS += --without-pango
+> +endif
 
-fails to build with the following error:
+This patch is not making pango a mandatory dependency of imagemagick.
+It only makes it an optional dependency;
 
-In file included from libavcodec/dca.c:48:0:
-libavcodec/dca.c: In function 'dca_subsubframe':
-libavcodec/arm/dca.h:36:5: error: can't find a register in class 'CORE_REGS'
-while reloading 'asm'
-libavcodec/arm/dca.h:36:5: error: 'asm' operand has impossible constraints
-libavcodec/dca.c:1275: confused by earlier errors, bailing out
-CC      libavformat/options.o
-make[3]: *** [libavcodec/dca.o] Error 1
+Again, can you give more details about the problem you're seeing?
 
+The patch looks good (i.e pango is an optional dependency of
+imagemagick), but the description is not. Can you clarify?
 
-I use an OpenSuse 13.1 host to build a rootfs for an Atmel SAMA5 board. My
-defconfig is based on a working config for buildroot 2013.08
+Thanks!
 
-Please note, that the error occurs during building the mplayer included ffmpeg-
-package. Compiling the buildroot-ffmpeg-package (ffmpeg-2.6.2,
-BR2_PACKAGE_FFMPEG=y) works without problems.
+Thoma
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
