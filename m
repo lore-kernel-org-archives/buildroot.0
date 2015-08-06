@@ -1,40 +1,44 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Thu,  6 Aug 2015 12:06:14 +0200
-Subject: [Buildroot] [PATCH 1/2] qt/qt5base: force gstreamer on configure
-Message-ID: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
+Date: Thu,  6 Aug 2015 12:06:15 +0200
+Subject: [Buildroot] [PATCH 2/2] qt/qt5multimedia: install gsttools for
+	gstreamer1
+In-Reply-To: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
+References: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1438855575-4767-2-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: http://autobuild.buildroot.net/results/0ee0f879e8563954c64b3940cdec39d2e6de937a/
-
 Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/qt5base/qt5base.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/qt5/qt5multimedia/qt5multimedia.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 753b069..f04545b 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -152,6 +152,16 @@ QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_LIBGLIB2),libglib2)
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_ICU),-icu,-no-icu)
- QT5BASE_DEPENDENCIES   += $(if $(BR2_PACKAGE_QT5BASE_ICU),icu)
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 763fc28..34f3a0a 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -22,6 +22,10 @@ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
+ endif
  
-+ifeq ($(BR2_PACKAGE_GSTREAMER),y)
-+QT5BASE_CONFIGURE_OPTS += -gstreamer 0.10
-+QT5BASE_DEPENDENCIES   += gstreamer
-+else ifeq ($(BR2_PACKAGE_GSTREAMER1),y)
-+QT5BASE_CONFIGURE_OPTS += -gstreamer 1.0
-+QT5BASE_DEPENDENCIES   += gstreamer1
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-gstreamer
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
 +endif
 +
- QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES),-make,-nomake) examples
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
+ endif
+@@ -40,7 +44,7 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
+ endef
  
- # Build the list of libraries to be installed on the target
+ ifeq ($(BR2_STATIC_LIBS),)
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ endef
 -- 
 2.1.0
