@@ -1,11 +1,12 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 6 Aug 2015 10:37:17 +0200
-Subject: [Buildroot] [PATCH v3] package/eudev: fix build with musl +
- libselinux
-In-Reply-To: <20150806090710.7f68171e@free-electrons.com>
-References: <1438349093-17604-1-git-send-email-romain.naour@openwide.fr>
- <20150806090710.7f68171e@free-electrons.com>
-Message-ID: <55C31CBD.8050209@openwide.fr>
+Date: Thu, 6 Aug 2015 10:39:05 +0200
+Subject: [Buildroot] [PATCH 2/2] package/harfbuzz: fix test-unicode
+ static linking issue
+In-Reply-To: <20150723233642.4923e1cc@free-electrons.com>
+References: <1437601623-3001-1-git-send-email-romain.naour@openwide.fr>
+ <1437601623-3001-2-git-send-email-romain.naour@openwide.fr>
+ <20150723233642.4923e1cc@free-electrons.com>
+Message-ID: <55C31D29.5030704@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +15,31 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Le 06/08/2015 09:07, Thomas Petazzoni a ?crit :
+Le 23/07/2015 23:36, Thomas Petazzoni a ?crit :
 > Dear Romain Naour,
 > 
-> On Fri, 31 Jul 2015 15:24:53 +0200, Romain Naour wrote:
->> Add a patch to disable mallinfo statistics with musl toolchains
->> which doesn't have struct mallinfo.
+> On Wed, 22 Jul 2015 23:47:03 +0200, Romain Naour wrote:
+>> When linking test-unicode statically, it needs $(ICU_LIBS)
+>> which contains all required flags.
+>> Especially -lstdc++.
 >>
 >> Fixes:
->> selinux-util.c: In function ?mac_selinux_init?:
->> selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
->>          struct mallinfo before_mallinfo, after_mallinfo;
->>
->> Add a second patch for strndupa() which is a GNU extension.
->>
->> Fixes:
->> ./.libs/libudev-core.a(selinux-util.o): In function `mac_selinux_bind':
->> selinux-util.c:(.text+0xd94): undefined reference to `strndupa'
->> collect2: error: ld returned 1 exit status
+>> http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
 >>
 >> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
->> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
 >> ---
->> v3: Don't enclose the timestamp stuff inside HAVE_MALLINFO (ThomasP)
->> v2: new patch
->> ---
->>  .../eudev/0002-build-sys-check-for-mallinfo.patch  | 93 ++++++++++++++++++++++
->>  .../eudev/0003-build-sys-check-for-strndupa.patch  | 69 ++++++++++++++++
->>  package/eudev/eudev.mk                             |  5 ++
->>  3 files changed, 167 insertions(+)
->>  create mode 100644 package/eudev/0002-build-sys-check-for-mallinfo.patch
->>  create mode 100644 package/eudev/0003-build-sys-check-for-strndupa.patch
+>>  .../0001-fix-static-linking-with-icu-uc.patch      | 33 ++++++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>  create mode 100644 package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
 > 
-> I've applied the patch, with the hope that the patches will be merged
-> upstream. Supporting musl+selinux is a fairly odd setup, so carrying
-> around forever patches for this specific setup would be a bit annoying.
-> 
-> Can you make sure to keep pushing the patches upstream?
+> Applied, thanks. Please also submit upstream.
 
-A pull request is pending on github:
-https://github.com/gentoo/eudev/pull/122
+Applied upstream:
+https://github.com/behdad/harfbuzz/pull/122
 
 Best regards,
 Romain
 
-> 
-> Thanks,
 > 
 > Thomas
 > 
