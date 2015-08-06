@@ -1,65 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 08:34:06 +0200
-Subject: [Buildroot] [PATCH] package/mono: fixing multiple definition of
- vasprintf
-In-Reply-To: <1438775932-24858-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1438775932-24858-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150806083406.4c3fe36a@free-electrons.com>
+Date: Thu, 6 Aug 2015 08:35:04 +0200
+Subject: [Buildroot] [git commit] mono: add Angelo SoB + upstream status on
+	vasprintf related patch
+Message-ID: <20150806063604.0820B817F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=051dac93b3abad09a28a7f06e64a30c1d0545111
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Aug 2015 13:58:52 +0200, Angelo Compagnucci wrote:
-> This patch fixes the detection of an available
-> vasprintf function, this way the internal vasprintf
-> function is not compiled.
-> 
-> Fixes http://autobuild.buildroot.net/results/3ab2b8667e5657bf07f55dd04dd857167ab4c62a/
->       http://autobuild.buildroot.net/results/3ab2b8667e5657bf07f55dd04dd857167ab4c62a/ 
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Angelo is the author of the upstream patch, so it is safe to add his
+SoB. This commit also adds the upstream status of the patch.
 
-I've applied, but...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...4-fixing-initialization-of-have-vasprintf.patch |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-> ---
-> 
-> This patch was submitted upstream and merged here:
-> https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
-
-... this should have been mentioned in the patch itself.
-
-And your SoB was missing in the patch itself.
-
-> +diff --git a/eglib/configure.ac b/eglib/configure.ac
-> +index 5281419..4bf91e5 100644
-> +--- a/eglib/configure.ac
-> ++++ b/eglib/configure.ac
-> +@@ -135,6 +135,7 @@ AC_CHECK_SIZEOF(void *)
-> + AC_CHECK_SIZEOF(long)
-> + AC_CHECK_SIZEOF(long long)
-> + AC_CHECK_FUNCS(strlcpy stpcpy strtok_r rewinddir vasprintf)
-> ++AC_CHECK_FUNC(vasprintf, have_vasprintf=yes)
-
-And this is clearly not a very clean solution. The AC_CHECK_FUNCS()
-macro already checks for vasprintf availability, so with this new line,
-you're checking two times for the same function.
-
-And AC_CHECK_FUNCS already defines ac_cv_func_<function>=yes when the
-function is available. So a better change would be to rely on
-ac_cv_func_vasprintf=yes rather than defining this additional
-have_vasprintf=yes variable.
-
-That being said, since the patch has been accepted upstream, I've
-applied.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mono/0004-fixing-initialization-of-have-vasprintf.patch b/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+index e01a6f0..5564859 100644
+--- a/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
++++ b/package/mono/0004-fixing-initialization-of-have-vasprintf.patch
+@@ -5,6 +5,12 @@ Subject: [PATCH] Fixing initialization of have_vasprintf
+ 
+ This patch initialize properly have_vasprintf in case vasprint function is found.
+ Solves multiple definition of `vasprintf' error in case vasprint is not properly detected.
++
++Patch is upstream:
++
++   https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
++
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ ---
+  eglib/configure.ac | 1 +
+  1 file changed, 1 insertion(+)
