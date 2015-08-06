@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 09:02:36 +0200
-Subject: [Buildroot] [PATCH 2/2]
- package/x11r7/xdriver_xf86-input-synaptics: depends on libevdev
-In-Reply-To: <1438374309-1902-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
- <1438374309-1902-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150806090236.708ab993@free-electrons.com>
+Date: Thu, 6 Aug 2015 09:04:25 +0200
+Subject: [Buildroot] [RFC] package/pulseaudio: fix musl build
+In-Reply-To: <1438370022-25257-1-git-send-email-romain.naour@openwide.fr>
+References: <1438370022-25257-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150806090425.1917eff0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Romain Naour,
 
-On Fri, 31 Jul 2015 22:25:09 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/05e/05ecfaf591e85a20071875ecd18068762193defa/
+On Fri, 31 Jul 2015 21:13:42 +0200, Romain Naour wrote:
+> pulseaudio doesn't build properly on musl due to
+> a OSS wrapper called padsp. It provide a software OSS
+> interface on systems without OSS.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > ---
->  package/x11r7/xdriver_xf86-input-synaptics/Config.in                    | 1 +
->  .../x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk  | 2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
+> Patches not upstreamed yet.
 
-Applied, thanks.
+Could you send your patches upstream, and see what is upstream
+reaction? That's quite a bit of patches, to support a fairly odd setup
+(a big thing such as pulseaudio, with a small size C library such as
+musl). So I'd prefer to have such patches upstreamed.
+
+Thanks,
 
 Thomas
 -- 
