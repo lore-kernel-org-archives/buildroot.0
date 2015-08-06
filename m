@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 09:12:38 +0200
-Subject: [Buildroot] [PATCH] package/tz: fix incorrect timezone setting
- for uclibc
-In-Reply-To: <1438323935-7809-1-git-send-email-fancp2007@gmail.com>
-References: <1438323935-7809-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <20150806091238.03708da3@free-electrons.com>
+Date: Thu, 6 Aug 2015 09:16:57 +0200
+Subject: [Buildroot] [PATCH 1/2] libnfs: Without native RPC use libtirpc
+In-Reply-To: <1430052871-6235-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1430052871-6235-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20150806091657.618c4e10@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Scott Fan,
+Dear Maxime Hadjinlian,
 
-On Fri, 31 Jul 2015 14:25:35 +0800, Scott Fan wrote:
-> According to the doc file from <uclibc-src>/docs/
-> Glibc_vs_uClibc_Differences.txt, the uclibc library read the
-> TZ environment variable, or the /etc/TZ file; the /etc/TZ file
-> should be a single line, ending with a newline, containing the
-> TZ setting.  For example: echo CST6CDT > /etc/TZ
+On Sun, 26 Apr 2015 14:54:30 +0200, Maxime Hadjinlian wrote:
+> As it's done with nfs-utils, use libtirpc when no native rpc support
+> exists in the toolchain.
 > 
-> Whereas the tzdump cmd would output two lines like this:
->   # Asia/Shanghai
->   CST-8
-> 
-> This make the uclibc could not read the correct TZ setting, therefore
-> e.g. the 'busybox date' cmd always show the UTC timezone.
-> 
-> This fix remove the redundant first line from the tzdump output.
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  package/tz/tz.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libnfs/Config.in | 5 +----
+>  package/libnfs/libnfs.mk | 4 ++++
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-Applied, thanks.
+Both of your patches had comments, but you never addressed them. So
+I've marked the two patches as Changes Requested. Please address the
+comments and send an updated version. Thanks!
 
 Thomas
 -- 
