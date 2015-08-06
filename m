@@ -1,40 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 08:27:54 +0200
-Subject: [Buildroot] [PATCH] package/libcec: needs gcc >= 4.7
-In-Reply-To: <1438797957-14814-1-git-send-email-yann.morin.1998@free.fr>
-References: <1438797957-14814-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150806082754.540d2a00@free-electrons.com>
+Date: Thu, 6 Aug 2015 08:34:06 +0200
+Subject: [Buildroot] [PATCH] package/mono: fixing multiple definition of
+ vasprintf
+In-Reply-To: <1438775932-24858-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1438775932-24858-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20150806083406.4c3fe36a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Angelo Compagnucci,
 
-On Wed,  5 Aug 2015 20:05:57 +0200, Yann E. MORIN wrote:
-> As per upstream, gcc-4.7 is required to build libcec:
->     https://github.com/Pulse-Eight/libcec/issues/78#issuecomment-91578591
+On Wed,  5 Aug 2015 13:58:52 +0200, Angelo Compagnucci wrote:
+> This patch fixes the detection of an available
+> vasprintf function, this way the internal vasprintf
+> function is not compiled.
 > 
-> Fixes:
->     http://autobuild.buildroot.org/results/3b5/3b5611725c13668472482ed4ad3b46886d4c63d9/
->     http://autobuild.buildroot.org/results/0d0/0d032cdd8dbf6d0ddef392c3e5a734881e00ee64/
->     http://autobuild.buildroot.org/results/c21/c21c555c38261f6911349ff9fdac6edeb4debaac/
->     [...]
+> Fixes http://autobuild.buildroot.net/results/3ab2b8667e5657bf07f55dd04dd857167ab4c62a/
+>       http://autobuild.buildroot.net/results/3ab2b8667e5657bf07f55dd04dd857167ab4c62a/ 
 > 
-> Possibly fixes:
->     http://autobuild.buildroot.org/results/4a7/4a7b2af2fc3924255ac89e18f4f5c90bb8383265/
->     http://autobuild.buildroot.org/results/dd6/dd61c186e6d85a9b30cd32edb74a52f7a4f73cc8/
->     [...]
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
+I've applied, but...
+
 > ---
->  package/kodi/Config.in   | 4 +++-
->  package/libcec/Config.in | 6 ++++--
->  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> This patch was submitted upstream and merged here:
+> https://github.com/mono/mono/commit/40c171799b671718969ee28a02f92884d7fd181e
 
-Applied, thanks.
+... this should have been mentioned in the patch itself.
+
+And your SoB was missing in the patch itself.
+
+> +diff --git a/eglib/configure.ac b/eglib/configure.ac
+> +index 5281419..4bf91e5 100644
+> +--- a/eglib/configure.ac
+> ++++ b/eglib/configure.ac
+> +@@ -135,6 +135,7 @@ AC_CHECK_SIZEOF(void *)
+> + AC_CHECK_SIZEOF(long)
+> + AC_CHECK_SIZEOF(long long)
+> + AC_CHECK_FUNCS(strlcpy stpcpy strtok_r rewinddir vasprintf)
+> ++AC_CHECK_FUNC(vasprintf, have_vasprintf=yes)
+
+And this is clearly not a very clean solution. The AC_CHECK_FUNCS()
+macro already checks for vasprintf availability, so with this new line,
+you're checking two times for the same function.
+
+And AC_CHECK_FUNCS already defines ac_cv_func_<function>=yes when the
+function is available. So a better change would be to rely on
+ac_cv_func_vasprintf=yes rather than defining this additional
+have_vasprintf=yes variable.
+
+That being said, since the patch has been accepted upstream, I've
+applied.
+
+Thanks,
 
 Thomas
 -- 
