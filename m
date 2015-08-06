@@ -1,69 +1,37 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Thu, 6 Aug 2015 10:45:13 +0200
-Subject: [Buildroot] [RFC 00/37] efl bump to 1.14.2
-In-Reply-To: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
-References: <1437936947-17632-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <55C31E99.8010002@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Aug 2015 11:06:32 +0200
+Subject: [Buildroot] [git commit] squid: fix systemd unit file location
+Message-ID: <20150806090708.D4A48819EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+commit: http://git.buildroot.net/buildroot/commit/?id=e911e95df40dd5a93ec5876c08088790ef20244a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 26/07/2015 20:55, Romain Naour a ?crit :
-> This series bump the efl package to the latest release and also update all
-> other packages which use efl.
-> 
-> The elf related packages are no longer in package/efl directory to
-> follow the Buildroot recommendations.
-> 
-> This series has been tested under Qemu for x86 using the kernel based on
-> linux config povided in board/qemu/x86. I've enabled CONFIG_FB_CIRRUS
-> and some other video related options during testing.
-> A example defconfig will be added in a followup patch.
-> 
-> It also been builded tested with a ARM toolchain.
-> 
-> The sdl2 support has been droped in this series since some libevas gl module
-> still use sdl v1 headers.
-> Also the new efl package is no longer available for other libc than glibc due
-> to use of mkstemps() function.
-> 
-> Patches  1 to  3 add some new packages used by efl
-> Patches  4 to  8 move existing efl packages outside or package/efl directory.
->                  There is no efl package at this point.
-> Patches  9 to 20 add a new efl package updated to 1.14.2.
-> Patches 21 to 26 update all other packages which use efl.
-> Patches 27 to 36 remove old efl packages.
-> Patch 37 add a new package libemotion-generic-players
-> 
-> This is a first part, other packages which use efl are ready and will be
-> sent in a followup series:
-> 
-> * rage
-> * terminology
-> * empc
-> * ecrire
-> * python-efl
-> * econnman
-> * libetrophy
-> * elemines
-> * libcanberra
-> * e-cho
+squid.service is in tools/systemd/, not in tools/.
 
-This series is superseded since efl 1.15 is out.
-Also, efl can be build with a musl toolchain if pulseaudio is fixed for musl.
+Fixes:
 
-I've pushed an updated version on github for testing and review.
-https://github.com/RomainNaour/buildroot/tree/efl-1.15.0-v1
+  http://autobuild.buildroot.net/results/cec/cecb968172cb00281e439566e5ae154538435a51/
 
-I'll wait for the 2015.08 release before sending an updated version.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Best regards,
-Romain
-> 
-> Best regards,
-> Romain Naour
-> 
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e201673..e140773 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -90,7 +90,7 @@ define SQUID_INSTALL_INIT_SYSV
+ endef
+ 
+ define SQUID_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 0644 $(@D)/tools/squid.service \
++	$(INSTALL) -D -m 0644 $(@D)/tools/systemd/squid.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/squid.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../..//usr/lib/systemd/system/squid.service \
