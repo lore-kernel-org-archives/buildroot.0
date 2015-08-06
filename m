@@ -1,57 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 09:07:10 +0200
-Subject: [Buildroot] [PATCH v3] package/eudev: fix build with musl +
- libselinux
-In-Reply-To: <1438349093-17604-1-git-send-email-romain.naour@openwide.fr>
-References: <1438349093-17604-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150806090710.7f68171e@free-electrons.com>
+Date: Thu, 6 Aug 2015 09:08:15 +0200
+Subject: [Buildroot] [git commit] package/bdwgc: musl build failure
+Message-ID: <20150806070823.4076680429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=7df8f06d0864dd90d0c79b0215089cd25f13ff13
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Jul 2015 15:24:53 +0200, Romain Naour wrote:
-> Add a patch to disable mallinfo statistics with musl toolchains
-> which doesn't have struct mallinfo.
-> 
-> Fixes:
-> selinux-util.c: In function ?mac_selinux_init?:
-> selinux-util.c:70:25: error: storage size of ?before_mallinfo? isn?t known
->          struct mallinfo before_mallinfo, after_mallinfo;
-> 
-> Add a second patch for strndupa() which is a GNU extension.
-> 
-> Fixes:
-> ./.libs/libudev-core.a(selinux-util.o): In function `mac_selinux_bind':
-> selinux-util.c:(.text+0xd94): undefined reference to `strndupa'
-> collect2: error: ld returned 1 exit status
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Clayton Shotwell <clshotwe@rockwellcollins.com>
-> ---
-> v3: Don't enclose the timestamp stuff inside HAVE_MALLINFO (ThomasP)
-> v2: new patch
-> ---
->  .../eudev/0002-build-sys-check-for-mallinfo.patch  | 93 ++++++++++++++++++++++
->  .../eudev/0003-build-sys-check-for-strndupa.patch  | 69 ++++++++++++++++
->  package/eudev/eudev.mk                             |  5 ++
->  3 files changed, 167 insertions(+)
->  create mode 100644 package/eudev/0002-build-sys-check-for-mallinfo.patch
->  create mode 100644 package/eudev/0003-build-sys-check-for-strndupa.patch
+Fixes http://autobuild.buildroot.net/results/1ed/1edb5e7dab88d3fefca533ab56f7ddc7dd5411d2/
 
-I've applied the patch, with the hope that the patches will be merged
-upstream. Supporting musl+selinux is a fairly odd setup, so carrying
-around forever patches for this specific setup would be a bit annoying.
+Upstream removed unused code which was causing musl compilation issues.
 
-Can you make sure to keep pushing the patches upstream?
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...include-sigcontext.h-and-asm-sigcontext.h.patch |   61 ++++++++++++++++++++
+ 1 files changed, 61 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch b/package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
+new file mode 100644
+index 0000000..40c9063
+--- /dev/null
++++ b/package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
+@@ -0,0 +1,61 @@
++From c887470e0e3310c81ecdb7e736bc5d2ead45db2a Mon Sep 17 00:00:00 2001
++From: Ivan Maidanski <ivmai@mail.ru>
++Date: Mon, 6 Apr 2015 20:06:47 +0300
++Subject: [PATCH 1/1] Do not include sigcontext.h and asm/sigcontext.h (these
++ Linux headers define sigcontext which is no longer used as replaced with
++ ucontext_t in GC 7.0alpha1)
++
++* os_dep.c: Do not include linux/version.h (do not test
++LINUX_VERSION_CODE), asm/signal.h, sigcontext.h, asm/sigcontext.h
++since struct sigcontext not used in GC v7+.
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++Upstream-status: backport
++---
++ os_dep.c | 30 ------------------------------
++ 1 file changed, 30 deletions(-)
++
++diff --git a/os_dep.c b/os_dep.c
++index f62d4ed..a1bafbd 100644
++--- a/os_dep.c
+++++ b/os_dep.c
++@@ -16,36 +16,6 @@
++ 
++ #include "private/gc_priv.h"
++ 
++-#if defined(LINUX) && !defined(POWERPC) && !defined(NO_SIGCONTEXT_H)
++-# include <linux/version.h>
++-# if (LINUX_VERSION_CODE <= 0x10400)
++-    /* Ugly hack to get struct sigcontext_struct definition.  Required  */
++-    /* for some early 1.3.X releases.  Will hopefully go away soon.     */
++-    /* in some later Linux releases, asm/sigcontext.h may have to       */
++-    /* be included instead.                                             */
++-#   define __KERNEL__
++-#   include <asm/signal.h>
++-#   undef __KERNEL__
++-# else
++-    /* Kernels prior to 2.1.1 defined struct sigcontext_struct instead of */
++-    /* struct sigcontext.  libc6 (glibc2) uses "struct sigcontext" in     */
++-    /* prototypes, so we have to include the top-level sigcontext.h to    */
++-    /* make sure the former gets defined to be the latter if appropriate. */
++-#   include <features.h>
++-#   if 2 <= __GLIBC__
++-#     if 2 == __GLIBC__ && 0 == __GLIBC_MINOR__
++-        /* glibc 2.1 no longer has sigcontext.h.  But signal.h          */
++-        /* has the right declaration for glibc 2.1.                     */
++-#       include <sigcontext.h>
++-#     endif /* 0 == __GLIBC_MINOR__ */
++-#   else /* __GLIBC__ < 2 */
++-      /* libc5 doesn't have <sigcontext.h>: go directly with the kernel   */
++-      /* one.  Check LINUX_VERSION_CODE to see which we should reference. */
++-#     include <asm/sigcontext.h>
++-#   endif /* __GLIBC__ < 2 */
++-# endif
++-#endif /* LINUX && !POWERPC */
++-
++ #if !defined(OS2) && !defined(PCR) && !defined(AMIGA) && !defined(MACOS) \
++     && !defined(MSWINCE) && !defined(__CC_ARM)
++ # include <sys/types.h>
++-- 
++2.4.3
++
