@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 09:08:22 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/bdwgc: musl build failure
-In-Reply-To: <1438351522-23373-1-git-send-email-brendanheading@gmail.com>
-References: <1438351522-23373-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150806090822.4d22dc35@free-electrons.com>
+Date: Thu, 6 Aug 2015 09:10:01 +0200
+Subject: [Buildroot] [PATCH] fs/common: add <fs>_POST_GEN_HOOKS support
+In-Reply-To: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
+References: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <20150806091001.5d609ce2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Dear No? Rubinstein,
 
-On Fri, 31 Jul 2015 15:05:22 +0100, Brendan Heading wrote:
-> Fixes http://autobuild.buildroot.net/results/1ed/1edb5e7dab88d3fefca533ab56f7ddc7dd5411d2/
+On Fri, 31 Jul 2015 10:23:20 +0200, No? Rubinstein wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Upstream removed unused code which was causing musl compilation issues.
+> The common filesystem infrastructure already supports a
+> <fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
+> register some actions to be done before the root filesystem image is
+> generated.
 > 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
+> allow filesystem makefiles to do some actions after the filesystem
+> image has been generated. It will initially be used by the iso9660
+> filesystem to delete the temporary directory it creates.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
 > ---
-> v1 -> v2 - updated to use a backported change from upstream.
-> v2 -> v3 
->     - format-patch the original upstream fix to properly credit author.
-> ---
->  ...include-sigcontext.h-and-asm-sigcontext.h.patch | 61 ++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 package/bdwgc/0002-Do-not-include-sigcontext.h-and-asm-sigcontext.h.patch
+> Re-sending this patch to fix hybrid ISO generation as added by patch 
+> 5bac06e8810eb86e7bddc771fda68f0c59a3c3fa.
 
-Applied, thanks.
+Thanks, but could you submit a single patch series that does both the
+addition of POST_GEN_HOOKS (this patch) and the change to iso9660.mk to
+use POST_GEN_HOOKS to fix the hybrid image problem?
+
+Thanks!
 
 Thomas
 -- 
