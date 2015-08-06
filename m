@@ -1,38 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  6 Aug 2015 22:51:32 +0200
-Subject: [Buildroot] [PATCH 2/2] [autobuild] package/filemq: bump version
-In-Reply-To: <cover.1438894103.git.yann.morin.1998@free.fr>
-References: <cover.1438894103.git.yann.morin.1998@free.fr>
-Message-ID: <84efc4acace2de810ed91d04e236b77afaa71fa4.1438894103.git.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  6 Aug 2015 21:03:45 +0000 (UTC)
+Subject: [Buildroot] [Bug 8266] mplayer build issue
+In-Reply-To: <bug-8266-163@https.bugs.busybox.net/>
+References: <bug-8266-163@https.bugs.busybox.net/>
+Message-ID: <20150806210345.92A5B81ECB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes;
-    http://autobuild.buildroot.org/results/e09/e0907c5453dfb1df546c07869faf00ec51b49181/
-    http://autobuild.buildroot.org/results/5c5/5c591c2fe4e3e1d5c23b54a8486de741fe0e329d/
-    http://autobuild.buildroot.org/results/89f/89ffd2a03f295c810399680621440b08f7c7762f/
-    [...]
+https://bugs.busybox.net/show_bug.cgi?id=8266
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/filemq/filemq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-08-06 21:03:43 UTC ---
+Thanks for your bug report. Can you make sure that the problem still occurs
+after disabling ccache support and doing a "make clean all" ?
 
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index d3dc6da..a79e8f4 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FILEMQ_VERSION = 482797b8aa30fcc9ea1377aabdf2b0769f9f698e
-+FILEMQ_VERSION = acf6c0e003fee938994ad803aa7b78245dca57ba
- FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
- 
- FILEMQ_AUTORECONF = YES
+Also:
+
+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-float=hard --with-fpu=vfpv4-d16"
+BR2_TARGET_OPTIMIZATION=" -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard"
+
+are not needed. If you want --with-float=hard, select EABIhf instead of EABI in
+the Target options. The FPU type is already passed since you selected
+BR2_ARM_FPU_VFPV4D16=y.
+
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
