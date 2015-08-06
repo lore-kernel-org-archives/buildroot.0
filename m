@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 08:43:30 +0200
-Subject: [Buildroot] [git commit] rapidjson: Add comment for
-	"_INSTALL_TARGET = NO"
-Message-ID: <20150806064338.0EBC28008E@busybox.osuosl.org>
+Date: Thu, 6 Aug 2015 08:45:36 +0200
+Subject: [Buildroot] [PATCH 1/1] rapidjson: Add comment for
+ "_INSTALL_TARGET = NO"
+In-Reply-To: <1438750720-26979-1-git-send-email-yba@tkos.co.il>
+References: <1438750720-26979-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20150806084536.73b69373@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe500c5c5c4a4987c060667152969da0478be198
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jonathan Ben-Avraham,
 
-It is Buildroot convention to comment when "_INSTALL_TARGET = NO".
+On Wed,  5 Aug 2015 07:58:40 +0300, Jonathan Ben-Avraham wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
+> 
+> It is Buildroot convention to comment when "_INSTALL_TARGET = NO".
+> 
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+> ---
+>  package/rapidjson/rapidjson.mk |    2 ++
+>  1 file changed, 2 insertions(+)
 
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rapidjson/rapidjson.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-index 1ad9314..5da407b 100644
---- a/package/rapidjson/rapidjson.mk
-+++ b/package/rapidjson/rapidjson.mk
-@@ -8,6 +8,8 @@ RAPIDJSON_VERSION = v1.0.2
- RAPIDJSON_SITE = $(call github,miloyip,rapidjson,$(RAPIDJSON_VERSION))
- RAPIDJSON_LICENSE = MIT
- RAPIDJSON_LICENSE_FILES = license.txt
-+
-+# rapidjson is a header-only C++ library
- RAPIDJSON_INSTALL_TARGET = NO
- RAPIDJSON_INSTALL_STAGING = YES
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
