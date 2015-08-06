@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 09:01:35 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/x11r7/libepoxy: bump version
- to 1.3.1, fix OpenGL / EGL dependencies
-In-Reply-To: <1438445235-4662-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1438445235-4662-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150806090135.21f7d8f7@free-electrons.com>
+Date: Thu, 6 Aug 2015 09:02:36 +0200
+Subject: [Buildroot] [PATCH 2/2]
+ package/x11r7/xdriver_xf86-input-synaptics: depends on libevdev
+In-Reply-To: <1438374309-1902-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1438374309-1902-1-git-send-email-bernd.kuhls@t-online.de>
+ <1438374309-1902-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150806090236.708ab993@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +14,17 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat,  1 Aug 2015 18:07:14 +0200, Bernd Kuhls wrote:
-> libepoxy depends on egl, opengl is an optional dependency
-> 
+On Fri, 31 Jul 2015 22:25:09 +0200, Bernd Kuhls wrote:
 > Fixes
-> http://autobuild.buildroot.net/results/f7e/f7e6a42f53cb4ca523d2eeefde85c44770f6011e
-> http://autobuild.buildroot.net/results/025/025a3d3b4d3dd4f496dcbf09f2dd279116250207
+> http://autobuild.buildroot.net/results/05e/05ecfaf591e85a20071875ecd18068762193defa/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xdriver_xf86-input-synaptics/Config.in                    | 1 +
+>  .../x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk  | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-Could you separate the libepoxy bump from the OpenGL/EGL dependency
-fix? We're past -rc1, so I can apply fixes, but not version bumps.
-
-Also, could you get back to Yann E. Morin who asked some questions
-about this patch?
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
