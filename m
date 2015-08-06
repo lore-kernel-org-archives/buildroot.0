@@ -1,35 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 09:04:25 +0200
-Subject: [Buildroot] [RFC] package/pulseaudio: fix musl build
-In-Reply-To: <1438370022-25257-1-git-send-email-romain.naour@openwide.fr>
-References: <1438370022-25257-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150806090425.1917eff0@free-electrons.com>
+Date: Thu, 6 Aug 2015 09:02:27 +0200
+Subject: [Buildroot] [git commit]
+	package/x11r7/xdriver_xf86-input-synaptics: depends on libevdev
+Message-ID: <20150806070609.4A6D981ECE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=227ae6888f3eb0b9f4224003925ef274db788950
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Jul 2015 21:13:42 +0200, Romain Naour wrote:
-> pulseaudio doesn't build properly on musl due to
-> a OSS wrapper called padsp. It provide a software OSS
-> interface on systems without OSS.
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
-> Patches not upstreamed yet.
+Fixes
+http://autobuild.buildroot.net/results/05e/05ecfaf591e85a20071875ecd18068762193defa/
 
-Could you send your patches upstream, and see what is upstream
-reaction? That's quite a bit of patches, to support a fairly odd setup
-(a big thing such as pulseaudio, with a small size C library such as
-musl). So I'd prefer to have such patches upstreamed.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../x11r7/xdriver_xf86-input-synaptics/Config.in   |    1 +
+ .../xdriver_xf86-input-synaptics.mk                |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/Config.in b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
+index 6b5e5b6..ffe1a2a 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/Config.in
++++ b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_SYNAPTICS
+ 	bool "xf86-input-synaptics"
++	select BR2_PACKAGE_LIBEVDEV
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index f180405..28663d1 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+@@ -9,6 +9,6 @@ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
++XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
+ 
+ $(eval $(autotools-package))
