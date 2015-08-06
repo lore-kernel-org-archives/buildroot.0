@@ -1,68 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 08:47:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: add patch to fix musl gcc5
- build issue
-In-Reply-To: <1438771429-15145-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1438771429-15145-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150806084737.356ad5dc@free-electrons.com>
+Date: Thu, 6 Aug 2015 08:54:52 +0200
+Subject: [Buildroot] [git commit] package/poco: disable for static build
+Message-ID: <20150806065536.04CAF81E66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=073a89196a22f995c142cd11640d3cfb7cef691d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  5 Aug 2015 12:43:49 +0200, J?rg Krause wrote:
-> Add a patch from the Alpine Linux project [1] to fix a musl build issue with
-> gcc 5:
-> 
-> ```
-> error: temporary of non-literal type ?pthread_mutex_t? in a constant expression
->   constexpr PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
-> ```
-> 
-> Problem has been reported by the Alpine team upstream and was closed by the MPD
-> maintainer with WONTFIX:
-> http://bugs.musicpd.org/view.php?id=4387
-> http://bugs.musicpd.org/view.php?id=4110
-> 
-> However...
-> 
-> POSIX does not permit using PTHREAD_COND_INITIALIZER except for static
-> initialization, and certainly does not permit using it as a value.
-> 
-> Also POSIX does not specify the type of the object (it's opaque) so if
-> there are any types for which their code would be invalid C++, then their
-> code is invalid.
-> 
-> Also, volatile in the type is necessary. without that, LTO can break the code.
-> 
-> [1]
-> http://git.alpinelinux.org/cgit/aports/log/main/mpd/musl-gcc5-fixes.patch
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/mpd/0002-musl-gcc5-fixes.patch | 56 ++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/mpd/0002-musl-gcc5-fixes.patch
+poco requires dlopen(). There is a --no-sharedlibs option that is
+supposed to support building in a statically linked environment, but
+it doesn't do anything.
 
-Applied, thanks. To be honest, I hesitated quite a bit before applying
-this patch. A Buildroot rule is that we don't go against upstream. And
-here upstream clearly say that they don't want to do the necessary
-effort to support musl, so what we should have done instead is to also
-make mpd not available with the musl C library.
+Fixes:
 
-But the patch is quite simple, so I made an exception. However, if more
-patches are needed in mpd to fix musl build problems, I will reject
-them and mark the package as not available in musl. Unhappy users can
-go complain to the mpd developers that their decision of not supporting
-musl by doing a configure-time check is stupid.
+  http://autobuild.buildroot.net/results/952/952f05efd245ba59991f3c5be02a0572e8b9e544/
 
-Thanks!
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/poco/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 155f098..dfdc8d1 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_POCO
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # dlopen()
+ 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
+ 		|| BR2_xtensa)
+ 	select BR2_PACKAGE_ZLIB
+@@ -60,8 +61,8 @@ config BR2_PACKAGE_POCO_DATA_MYSQL
+ 
+ endif # BR2_PACKAGE_POCO
+ 
+-comment "poco needs a toolchain w/ wchar, threads, C++"
++comment "poco needs a toolchain w/ wchar, threads, C++, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_HAS_THREADS
++		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !(BR2_arc || BR2_bfin || BR2_microblaze || BR2_mipsel \
+ 		|| BR2_xtensa)
