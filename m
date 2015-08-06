@@ -1,57 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 06 Aug 2015 10:12:55 -0300
-Subject: [Buildroot] configs/marvell_ca9_armv7_le_hfp_defconfig
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD913B@svr-wa-exch1.atg.lc>
-References: <944894A3EB1D044A9003B2F944389BB20474AD9109@svr-wa-exch1.atg.lc>
- <55C265C2.6060608@zacarias.com.ar>
- <944894A3EB1D044A9003B2F944389BB20474AD913B@svr-wa-exch1.atg.lc>
-Message-ID: <55C35D57.8000501@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 6 Aug 2015 15:58:03 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <55C366E8.3060207@oliseo.fr>
+References: <20150729063017.EDA6D101EBC@stock.ovh.net>
+ <20150729100334.00137b70@free-electrons.com>
+ <55C366E8.3060207@oliseo.fr>
+Message-ID: <20150806155803.66771b6f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/08/15 17:47, Lee, Tommy wrote:
+Guillaume,
 
-> Gustavo,
->
-> Please view my replies.
->
-> Tommy
+On Thu, 6 Aug 2015 15:53:44 +0200, Guillaume GARDET - Olis?o wrote:
 
-Hi Tommy, try keeping the list on CC, someone else might be interested 
-or elaborate more.
+> >>           arm |                   c-icap-0.3.5 | NOK | http://autobuild.buildroot.net/results/cb623460de30dd7c4ef3275fe13220c1ca0642a5/
+> > c_icap-service.o: In function `load_c_service':
+> > service.c:(.text+0x710): undefined reference to `ci_module_load'
+> > service.c:(.text+0x720): undefined reference to `ci_module_sym'
+> > service.c:(.text+0x774): undefined reference to `ci_module_unload'
+> >
+> > Unknown, already happened yesterday. Guillaume, can you have a look?
+> 
+> This is because HAVE_DLFCN_H is not set because dlfcn.h is not provided by the toolchain. But ./os/unix/dlib.c uses dlopen and dlclose functions.
+> Apparently, this is missing on uClibc when it is configured as a static-only C library.
 
-> Can you point to the exact location in the manual (say, page in the
-> online pdf) where this is so?
->
-> Page 4/25.
->
-> Or if it's in the old (Marvell) buildroot then it likely doesn't apply
-> to current releases - new features, cleaning up and other factors can
-> change that, manuals are normally attached to explicit buildroot releases.
->
-> The path to the manual.pdf is ?/
-> buildroot-2015.05/docs/manual/manual.pdf. Last week I sued this PDF and
-> succeeded in the make process with the external
-> marvell_ca9_armv7_le_hfp_defconfig.
+The c-icap code seems a bit stupid: it encloses the definition of
+ci_module_{load,sym,unload} in #ifdef HAVE_DLFCN_H to not implement
+them when dlopen/dlclose are not available (which is good), but
+ci_module_{load,sym,unload} are still called unconditionally from the
+rest of the c-icap code.
 
-Hmm i'm still failing to find this in the online documentation at:
+Bottom line: the condition on HAVE_DLFCN_H is useless.
 
-http://www.buildroot.net/downloads/manual/manual.pdf
+> What would be the best way to fix it? Maybe a "depends on !BR2_STATIC_LIBS" ?
 
-Which as of this writing corresponds to the 2015.05 release.
-In fact the pdf isn't shipped with releases and according to what you 
-wrote below you've got marvell files in the 2015.05 buildroot dir so 
-maybe it's still some old manual?
+Either fix c-icap, or simpler, make it depends on !BR2_STATIC_LIBS (and
+don't forget the corresponding comment).
 
-> With the above information there might be a strategy to include those
-> defconfig files into the forthcoming BR release.
+Thanks!
 
-Normally defconfigs are submitted by contributors or companies if they 
-decide to make them clean/generic/minimal-enough for them to be 
-incorporated into buildroot releases.
-In the end it's up to someone having hardware to test submitting them, 
-maybe you can do that?
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
