@@ -1,37 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Aug 2015 11:06:32 +0200
-Subject: [Buildroot] [git commit] squid: fix systemd unit file location
-Message-ID: <20150806090708.D4A48819EC@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 6 Aug 2015 11:30:45 +0200
+Subject: [Buildroot] Analysis of build results for 2015-08-05
+In-Reply-To: <20150806113014.163c6592@free-electrons.com>
+References: <20150806063016.4A0BB102D1F@stock.ovh.net>
+ <20150806113014.163c6592@free-electrons.com>
+Message-ID: <55C32945.2000209@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e911e95df40dd5a93ec5876c08088790ef20244a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-squid.service is in tools/systemd/, not in tools/.
+On 06/08/15 11:30, Thomas Petazzoni wrote:
+>>          mips | ltrace-c22d359433b333937ee3... | NOK | http://autobuild.buildroot.net/results/79b51941ed57b0564c68112489b03cac39a04e9a/
+>
+> output.c: In function 'output_right':
+> output.c:784:3: error: size of unnamed array is negative
+>     (void)sizeof(char[1 - 2*(sizeof(unw_word_t)
+>     ^
+>
+> Vicente, J?r?me, can you have a look?
 
-Fixes:
+ltrace with libunwind support is broken for MIPS, but I'm working with 
+upstream to get it fixed. I hope to finish with it soon.
 
-  http://autobuild.buildroot.net/results/cec/cecb968172cb00281e439566e5ae154538435a51/
+Regards,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e201673..e140773 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -90,7 +90,7 @@ define SQUID_INSTALL_INIT_SYSV
- endef
- 
- define SQUID_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 $(@D)/tools/squid.service \
-+	$(INSTALL) -D -m 0644 $(@D)/tools/systemd/squid.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/squid.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -sf ../../../..//usr/lib/systemd/system/squid.service \
+Vincent.
