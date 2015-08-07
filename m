@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri,  7 Aug 2015 15:29:01 +0200
-Subject: [Buildroot] [PATCHv3 2/4] package/openpowerlink-kernel-drivers: new
+Date: Fri,  7 Aug 2015 15:29:02 +0200
+Subject: [Buildroot] [PATCHv3 3/4] package/openpowerlink-pcap-daemon: new
 	package
 In-Reply-To: <1438954143-23533-1-git-send-email-romain.naour@openwide.fr>
 References: <1438954143-23533-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1438954143-23533-3-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1438954143-23533-4-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,158 +13,117 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v3: Rename to openpowerlink-kernel-drivers
-    Fix typos in Config.in
+v3: rename to openpowerlink-pcap-daemon
     Provide a hash file via a symlink to
     openpowerlink.hash
-    Fix driver build issue due to mussing ARCH and
-    CROSS_COMPILE options
-    fix typo for i210 dirver (s/I210/i210)
     Don't use $(OPENPOWERLINK_*) since they will not
-    be set in openpowerlink-kernel-drivers.mk
-    move openpowerlink-kernel-drivers to package
+    be set in openpowerlink-pcap-daemon
+    move openpowerlink-pcap-daemon to package
     directory.
 ---
  package/Config.in                                  |  1 +
- package/openpowerlink-kernel-drivers/Config.in     | 33 +++++++++++++
- .../openpowerlink-kernel-drivers.hash              |  1 +
- .../openpowerlink-kernel-drivers.mk                | 54 ++++++++++++++++++++++
+ package/openpowerlink-pcap-daemon/Config.in        | 12 +++++++
+ .../openpowerlink-pcap-daemon.hash                 |  1 +
+ .../openpowerlink-pcap-daemon.mk                   | 38 ++++++++++++++++++++++
  package/openpowerlink/Config.in                    |  1 +
- 5 files changed, 90 insertions(+)
- create mode 100644 package/openpowerlink-kernel-drivers/Config.in
- create mode 120000 package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash
- create mode 100644 package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk
+ 5 files changed, 53 insertions(+)
+ create mode 100644 package/openpowerlink-pcap-daemon/Config.in
+ create mode 120000 package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.hash
+ create mode 100644 package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..47f7da1 100644
+index 47f7da1..830b9a2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -394,6 +394,7 @@ endif
- 	source "package/openipmi/Config.in"
+@@ -395,6 +395,7 @@ endif
  	source "package/openocd/Config.in"
  	source "package/openpowerlink/Config.in"
-+	source "package/openpowerlink-kernel-drivers/Config.in"
+ 	source "package/openpowerlink-kernel-drivers/Config.in"
++	source "package/openpowerlink-pcap-daemon/Config.in"
  	source "package/owl-linux/Config.in"
  	source "package/parted/Config.in"
  	source "package/pciutils/Config.in"
-diff --git a/package/openpowerlink-kernel-drivers/Config.in b/package/openpowerlink-kernel-drivers/Config.in
+diff --git a/package/openpowerlink-pcap-daemon/Config.in b/package/openpowerlink-pcap-daemon/Config.in
 new file mode 100644
-index 0000000..bc1e408
+index 0000000..4236a57
 --- /dev/null
-+++ b/package/openpowerlink-kernel-drivers/Config.in
-@@ -0,0 +1,33 @@
++++ b/package/openpowerlink-pcap-daemon/Config.in
+@@ -0,0 +1,12 @@
 +
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
-+	bool "openpowerlink kernel drivers"
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
++config BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON
++	bool "openpowerlink userspace (PCAP) stack"
++	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
++	select BR2_PACKAGE_LIBPCAP
 +	help
-+	  The openPOWERLINK stack is implemented as Linux kernel module.
-+	  This solution provides the best performance, but is limited to
-+	  the available openPOWERLINK network drivers.
-+
-+if BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
-+
-+choice
-+	prompt "select Ethernet Powerlink Driver"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_82573
-+	bool "Intel 82573"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_8255x
-+	bool "Intel 8255x"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_I210
-+	bool "Intel I210"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8111
-+	bool "Realtek RTL-8111/8168"
-+
-+config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8139
-+	bool "Realtek RTL-8139"
-+
-+endchoice
-+
-+endif # BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
-diff --git a/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash
++	  The Linux userspace implementation of the openPOWERLINK stack
++	  provides all functions for a software based POWERLINK solution
++	  running as Linux userspace application. The stack uses the
++	  libpcap library for accessing the network interface and is
++	  therefore totally independant of the used network card and
++	  driver.
+diff --git a/package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.hash b/package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.hash
 new file mode 120000
 index 0000000..cbbc194
 --- /dev/null
-+++ b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash
++++ b/package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.hash
 @@ -0,0 +1 @@
 +../openpowerlink/openpowerlink.hash
 \ No newline at end of file
-diff --git a/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk
+diff --git a/package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.mk b/package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.mk
 new file mode 100644
-index 0000000..3f1f420
+index 0000000..8575128
 --- /dev/null
-+++ b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk
-@@ -0,0 +1,54 @@
++++ b/package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.mk
+@@ -0,0 +1,38 @@
 +################################################################################
 +#
-+# openpowerlink-kernel-drivers
++# openpowerlink-pcap-daemon
 +#
 +################################################################################
 +
-+OPENPOWERLINK_KERNEL_DRIVERS_VERSION = V2.2.0
-+OPENPOWERLINK_KERNEL_DRIVERS_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_KERNEL_DRIVERS_VERSION)
-+OPENPOWERLINK_KERNEL_DRIVERS_SOURCE = openPOWERLINK-$(OPENPOWERLINK_KERNEL_DRIVERS_VERSION).tar.gz
-+OPENPOWERLINK_KERNEL_DRIVERS_LICENSE = BSD-2c, GPLv2
-+OPENPOWERLINK_KERNEL_DRIVERS_LICENSE_FILES = license.md
++OPENPOWERLINK_PCAP_DAEMON_VERSION = V2.2.0
++OPENPOWERLINK_PCAP_DAEMON_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_PCAP_DAEMON_VERSION)
++OPENPOWERLINK_PCAP_DAEMON_SOURCE = openPOWERLINK-$(OPENPOWERLINK_PCAP_DAEMON_VERSION).tar.gz
++OPENPOWERLINK_PCAP_DAEMON_LICENSE = BSD-2c, GPLv2
++OPENPOWERLINK_PCAP_DAEMON_LICENSE_FILES = license.md
 +
-+OPENPOWERLINK_KERNEL_DRIVERS_DEPENDENCIES = linux openpowerlink
++OPENPOWERLINK_PCAP_DAEMON_DEPENDENCIES = libpcap openpowerlink
 +
-+define OPENPOWERLINK_KERNEL_DRIVERS_EXTRACT_CMDS
++define OPENPOWERLINK_PCAP_DAEMON_EXTRACT_CMDS
 +	$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
 +		$(TAR) -C $($(PKG)_DIR) $(TAR_OPTIONS) - $($(PKG)_TAR_OPTIONS)
 +endef
 +
-+define OPENPOWERLINK_KERNEL_DRIVERS_APPLY_PATCHES
++define OPENPOWERLINK_PCAP_DAEMON_APPLY_PATCHES
 +	$(APPLY_PATCHES) $(@D) package/openpowerlink \*.patch
 +endef
 +
-+OPENPOWERLINK_KERNEL_DRIVERS_POST_PATCH_HOOKS += \
-+	OPENPOWERLINK_KERNEL_DRIVERS_APPLY_PATCHES
++OPENPOWERLINK_PCAP_DAEMON_POST_PATCH_HOOKS += \
++	OPENPOWERLINK_PCAP_DAEMON_APPLY_PATCHES
 +
-+OPENPOWERLINK_KERNEL_DRIVERS_SUBDIR = drivers/linux/drv_kernelmod_edrv
++OPENPOWERLINK_PCAP_DAEMON_SUBDIR = drivers/linux/drv_daemon_pcap
 +
 +# CFG_DEBUG_LVL is taken into account only in Debug
 +ifeq ($(BR2_ENABLE_DEBUG),y)
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS = \
++OPENPOWERLINK_PCAP_DAEMON_CONF_OPTS = \
 +	-DCFG_DEBUG_LVL="$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))"
 +endif
 +
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += \
-+	-DCFG_KERNEL_DIR="$(LINUX_DIR)" \
-+	-DCMAKE_SYSTEM_VERSION="$(LINUX_VERSION)" \
-+	-DCFG_OPLK_MN="$(OPENPOWERLINK_MN_ONOFF)" \
-+	-DMAKE_KERNEL_ARCH="$(KERNEL_ARCH)" \
-+	-DMAKE_KERNEL_CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
-+
-+ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_82573),y)
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=82573
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_8255x),y)
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=8255x
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_I210),y)
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=i210
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8139),y)
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=8139
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8111),y)
-+OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=8111
-+endif
++OPENPOWERLINK_PCAP_DAEMON_CONF_OPTS = \
++	-DCFG_OPLK_MN=$(OPENPOWERLINK_MN_ONOFF)
 +
 +$(eval $(cmake-package))
 diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-index 713fb83..93e66d2 100644
+index 93e66d2..7807fc0 100644
 --- a/package/openpowerlink/Config.in
 +++ b/package/openpowerlink/Config.in
-@@ -60,6 +60,7 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
- config BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
- 	bool "build EPL stack as linux kernelspace module."
- 	depends on BR2_LINUX_KERNEL # openpowerlink-kernel-driver
-+	select BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
+@@ -49,6 +49,7 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_MONOLITHIC_USER_STACK_LIB
+ config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
+ 	bool "build EPL stack as linux userspace pcap daemon."
+ 	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_OPENPOWERLINK_PCAP_DAEMON
  	help
  	  Compile openPOWERLINK application library which contains the
- 	  interface to a Linux kernel space driver. This will also build
+ 	  interface to a Linux user space driver, and the Linux user space
 -- 
 2.4.3
