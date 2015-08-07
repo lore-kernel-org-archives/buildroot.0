@@ -1,36 +1,33 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat,  8 Aug 2015 00:47:17 +0200
-Subject: [Buildroot] [PATCH 5/7] package/cpio: remove useless comment
+Date: Sat,  8 Aug 2015 00:47:14 +0200
+Subject: [Buildroot] [PATCH 2/7] package/libv4l: needs argp-standalone with
+	musl toolchains
 In-Reply-To: <1438987639-30593-1-git-send-email-romain.naour@openwide.fr>
 References: <1438987639-30593-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1438987639-30593-5-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1438987639-30593-2-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This comment is about host-cpio which hasn't
-been added in Buildroot.
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/cpio/cpio.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/libv4l/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-index e18af81..c29305e 100644
---- a/package/cpio/cpio.mk
-+++ b/package/cpio/cpio.mk
-@@ -16,8 +16,7 @@ CPIO_PATCH = \
- 	https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/cpio/files/cpio-2.11-stat.patch
- 
- # cpio uses argp.h which is not provided by uclibc or musl by default.
--# Use the argp-standalone package to provide this but make sure
--# the host package does not try to use the host version.
-+# Use the argp-standalone package to provide this.
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- CPIO_DEPENDENCIES += argp-standalone
- endif
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 0437ba1..0ae12d1 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBV4L
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # media headers
+-	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  libv4l is a collection of libraries which adds a thin abstraction
 -- 
 2.4.3
