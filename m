@@ -1,44 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Aug 2015 00:22:06 +0200
-Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.75
-Message-ID: <20150806222237.6B49981DFA@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 7 Aug 2015 06:07:27 +0200
+Subject: [Buildroot] Analysis of build results for 2015-08-05
+In-Reply-To: <20150806113014.163c6592@free-electrons.com>
+References: <20150806063016.4A0BB102D1F@stock.ovh.net>
+ <20150806113014.163c6592@free-electrons.com>
+Message-ID: <20150807040727.GM8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10c07b9ac19805fcdfcdbd565f25761146fd7e99
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-[Thomas: applying for 2015.08, because it fixes a regression
-introduced in dnsmasq 2.74, as reported by Gustavo.]
+> Hello all,
+> 
+> Brendan, Alexey, Vicente, J?r?me, Bernd, Max, Julien, Clayton, Gustavo, Yann, please have a look below.
+> 
+> >          arm |                    audit-2.4.3 | NOK | http://autobuild.buildroot.net/results/549492270f3f43747a96a8326aef1d7ae1d3b213/
+> 
+> Not sure what's going on:
+> 
+> cannot find Scrt1.o: No such file or directory
+> 
+> Waldemar, it seems to be a uClibc issue. Do you have some idea?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dnsmasq/dnsmasq.hash |    2 +-
- package/dnsmasq/dnsmasq.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The reason for the failure is an unsupported combination of
+PIE and static.
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 370792f..57dc4b1 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9ed484b9879d63f7a0bc1010562f17d8aaadf4261e9a126299796cb9696d93ba	dnsmasq-2.74.tar.xz
-+sha256	640c4e1d4c298e42458419cd78cfc26acc549401b1a34d271cd3e0e4226941f1	dnsmasq-2.75.tar.xz
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 0df33ca..a0db81b 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DNSMASQ_VERSION = 2.74
-+DNSMASQ_VERSION = 2.75
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+I found a thread about it here:
+https://sourceware.org/ml/binutils/2012-02/msg00260.html
+
+With Linux it seems you need dynamic linking of a PIE executable.
+
+PIE is hardcoded in audit Makefile.am, so we would either need to
+make it conditional for static builds or disable the package for
+static builds.
+
+best regards 
+ Waldemar
