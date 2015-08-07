@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Aug 2015 10:58:09 +0200
-Subject: [Buildroot] Analysis of build results for 2015-08-05
-In-Reply-To: <20150807040727.GM8475@waldemar-brodkorb.de>
-References: <20150806063016.4A0BB102D1F@stock.ovh.net>
- <20150806113014.163c6592@free-electrons.com>
- <20150807040727.GM8475@waldemar-brodkorb.de>
-Message-ID: <20150807105809.04758555@free-electrons.com>
+Date: Fri, 7 Aug 2015 11:08:12 +0200
+Subject: [Buildroot] [git commit] libsigsegv: not available on SuperH with
+	uClibc
+Message-ID: <20150807090926.C95038083A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=38454e10589993e5c7877f2fd904ba07f5865357
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 7 Aug 2015 06:07:27 +0200, Waldemar Brodkorb wrote:
+Like PowerPC, the uClibc port on SuperH doesn't implement ucontext, so
+we can't build libsigsegv in such a configuration. Therefore this
+commit marks libsigsegv as not available on SuperH/uClibc.
 
-> > Waldemar, it seems to be a uClibc issue. Do you have some idea?
-> 
-> The reason for the failure is an unsupported combination of
-> PIE and static.
-> 
-> I found a thread about it here:
-> https://sourceware.org/ml/binutils/2012-02/msg00260.html
-> 
-> With Linux it seems you need dynamic linking of a PIE executable.
-> 
-> PIE is hardcoded in audit Makefile.am, so we would either need to
-> make it conditional for static builds or disable the package for
-> static builds.
+Fixes:
 
-Thanks. I've marked the package as not available for static builds. See:
+  http://autobuild.buildroot.net/results/2128a3507e57e707ee5c726f1ccfddadb7b19112/
 
-  http://git.buildroot.net/buildroot/commit/?id=e43875916a6810b4ff8c65e27840f9da15b86c7a
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsigsegv/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
+index 35f6d67..e5224da 100644
+--- a/package/libsigsegv/Config.in
++++ b/package/libsigsegv/Config.in
+@@ -3,12 +3,12 @@ config BR2_PACKAGE_LIBSIGSEGV
+ 	depends on !BR2_xtensa
+ 	depends on !BR2_arc # no ucontext_i.sym file
+ 	depends on !BR2_microblaze
+-	# No ucontext support in uclibc for powerpc
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
++	# No ucontext support in uclibc for powerpc and superh
++	depends on !((BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	help
+ 	  Library for handling page faults in user mode.
+ 
+ 	  http://libsigsegv.sourceforge.net/
+ 
+ comment "libsigsegv needs an (e)glibc toolchain"
+-	depends on BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC
++	depends on (BR2_powerpc || BR2_sh) && BR2_TOOLCHAIN_USES_UCLIBC
