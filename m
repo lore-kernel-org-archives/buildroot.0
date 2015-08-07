@@ -1,44 +1,74 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Aug 2015 10:37:34 -0300
-Subject: [Buildroot] [PATCH next 5/5] squid: bump to version 3.5.7
-In-Reply-To: <1438954654-11777-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438954654-11777-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1438954654-11777-5-git-send-email-gustavo@zacarias.com.ar>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Fri, 07 Aug 2015 15:44:58 +0200
+Subject: [Buildroot] [PATCH 7/7 v2] mysql: add mariadb galera cluster
+ variant
+In-Reply-To: <20150710095419.1ec6da31@free-electrons.com>
+References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>	<1436458921-4199-8-git-send-email-sylvain.raybaud@green-communications.fr>	<CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+ <20150710095419.1ec6da31@free-electrons.com>
+Message-ID: <55C4B65A.3010804@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index d5738c7..472df2d 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6.tar.xz.asc
--md5  93e18bd257857e35bb634ddb8a348563  squid-3.5.6.tar.xz
--sha1  c5f3ab47e61a08fa6a8767d45befeffd7d26fd9f  squid-3.5.6.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.7.tar.xz.asc
-+md5	e24943386555ca922130a7e034badba7	squid-3.5.7.tar.xz
-+sha1	e7dcc0cbcee6fd10a8c8bf3e9bff0dc6359ccc48	squid-3.5.7.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e140773..e8fd079 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
--- 
-2.4.6
+Thomas, Samuel, all
+
+Back working on this after some time off. I've made some of the fixes
+you suggested. I've got a question about this one.
+
+On 10/07/2015 09:54, Thomas Petazzoni wrote:
+> Dear Samuel Martin,
+> 
+> On Thu, 9 Jul 2015 23:56:25 +0200, Samuel Martin wrote:
+> 
+>> Here is a partial review (inlined).
+>> 
+>> But, overall, I feel like this implementation (essentially the
+>> *.mk file) does not match the Buildroot way of doing things...
+>> :-/ Have you look at the virtual package infrastructure [1]?
+> 
+> Fully agreed. Using the same package for both MySQL and MariaDB
+> would make sense if their build system was similar. But it's
+> completely different, so it really needs to be two separate
+> packages.
+> 
+> Then, if their client libraries are compatible, so that client 
+> applications can use either MySQL or MariaDB with no change, then
+> doing a virtual package is indeed the right direction.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
+OK I can make a virtual package, that seems to make sense. However,
+according to section 17.11.6, it seems that I'll have to patch all
+packages that depend on mysql, because there is some special magic to
+add in the depender's Config.in, am I right? Is this the way to go?
+
+Cheers,
+
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJVxLZaAAoJEEkkwl4JtJ9ylCEP/Am9kDIzaEj8fEC+q9pfjq5s
+Bxo80/MJrg7jgWGK/82/aaXShAhA0q9MDDB1vwIFKz+jsDiuHcuqWWzrXl0RhNpb
+Rlwk+pcJFvBKXBHX0b7p+8etVneAdvlr0avWfkdfNKqo1ARXrpfyp0kmbIaAfjPc
+PqgxXK7DlV7inJ6dtvA4ziJ9KAb90P4dG07xmogOfJhFLRujRapaVhEobyeoMdl+
+CXUJEJakulxShHTmi7F6JYZyLx2XWsB/O1580I0PszrUniuQjPT7bDWYqX8yABki
+pSVpGA20g8k10q3Y3GIE6cY37/YtuazPNIQUZI1WvTzkIrv28qGM73BFJQ6eSrz9
+2tHCW0zSYDOZTgxSfjODxhCZJOIYqHKV2X4ZlAiOIAAGXpcOogy+ctGJkNVJF98e
+mQsBf0Mb95WZYfJt4DbIGCsSIwFnEuzs6TM7PZBtO6/z6sRFJ7/11zmD9lnezJjD
+dhYpXkfMwLTYNkpqJWoIW+KLvi9JenuGKkFW+9e9sumwjFfXSkakEIDWY+mkjUgE
+izgNoMB4CBrkwry5H+OsE5VJi+OBsfhEyG8CbV36JZphXgAqNmBde485aRnFHbeb
+CgkHklSg1PRYpuILO6CrbP6zjXbpAh/73CMJoL0Ym12ttD/7QcElQW8kiAHIN2P7
+4NQVPFV3eMZPmXXofhbu
+=2TBq
+-----END PGP SIGNATURE-----
