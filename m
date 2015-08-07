@@ -1,74 +1,68 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Fri, 07 Aug 2015 15:44:58 +0200
-Subject: [Buildroot] [PATCH 7/7 v2] mysql: add mariadb galera cluster
- variant
-In-Reply-To: <20150710095419.1ec6da31@free-electrons.com>
-References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>	<1436458921-4199-8-git-send-email-sylvain.raybaud@green-communications.fr>	<CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
- <20150710095419.1ec6da31@free-electrons.com>
-Message-ID: <55C4B65A.3010804@green-communications.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  7 Aug 2015 20:50:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/libepoxy: fix OpenGL / EGL
+	dependencies
+Message-ID: <1438973409-7174-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+libepoxy depends on egl, opengl is an optional dependency
 
-Thomas, Samuel, all
+Fixes
+http://autobuild.buildroot.net/results/f7e/f7e6a42f53cb4ca523d2eeefde85c44770f6011e
+http://autobuild.buildroot.net/results/025/025a3d3b4d3dd4f496dcbf09f2dd279116250207
 
-Back working on this after some time off. I've made some of the fixes
-you suggested. I've got a question about this one.
+---
+v3: split opengl/egl fix from version bump (Thomas)
+v3: bumped to v1.3.1, switched to pkgconf for rpi support
+v2: Add missing select lines to Config.in (Thomas)
 
-On 10/07/2015 09:54, Thomas Petazzoni wrote:
-> Dear Samuel Martin,
-> 
-> On Thu, 9 Jul 2015 23:56:25 +0200, Samuel Martin wrote:
-> 
->> Here is a partial review (inlined).
->> 
->> But, overall, I feel like this implementation (essentially the
->> *.mk file) does not match the Buildroot way of doing things...
->> :-/ Have you look at the virtual package infrastructure [1]?
-> 
-> Fully agreed. Using the same package for both MySQL and MariaDB
-> would make sense if their build system was similar. But it's
-> completely different, so it really needs to be two separate
-> packages.
-> 
-> Then, if their client libraries are compatible, so that client 
-> applications can use either MySQL or MariaDB with no change, then
-> doing a virtual package is indeed the right direction.
-> 
-> Best regards,
-> 
-> Thomas
-> 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/libepoxy/Config.in   | 10 ++++++++--
+ package/x11r7/libepoxy/libepoxy.mk |  6 +++++-
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-OK I can make a virtual package, that seems to make sense. However,
-according to section 17.11.6, it seems that I'll have to patch all
-packages that depend on mysql, because there is some special magic to
-add in the depender's Config.in, am I right? Is this the way to go?
-
-Cheers,
-
-- -- 
-Sylvain Raybaud
-www.green-communications.fr
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJVxLZaAAoJEEkkwl4JtJ9ylCEP/Am9kDIzaEj8fEC+q9pfjq5s
-Bxo80/MJrg7jgWGK/82/aaXShAhA0q9MDDB1vwIFKz+jsDiuHcuqWWzrXl0RhNpb
-Rlwk+pcJFvBKXBHX0b7p+8etVneAdvlr0avWfkdfNKqo1ARXrpfyp0kmbIaAfjPc
-PqgxXK7DlV7inJ6dtvA4ziJ9KAb90P4dG07xmogOfJhFLRujRapaVhEobyeoMdl+
-CXUJEJakulxShHTmi7F6JYZyLx2XWsB/O1580I0PszrUniuQjPT7bDWYqX8yABki
-pSVpGA20g8k10q3Y3GIE6cY37/YtuazPNIQUZI1WvTzkIrv28qGM73BFJQ6eSrz9
-2tHCW0zSYDOZTgxSfjODxhCZJOIYqHKV2X4ZlAiOIAAGXpcOogy+ctGJkNVJF98e
-mQsBf0Mb95WZYfJt4DbIGCsSIwFnEuzs6TM7PZBtO6/z6sRFJ7/11zmD9lnezJjD
-dhYpXkfMwLTYNkpqJWoIW+KLvi9JenuGKkFW+9e9sumwjFfXSkakEIDWY+mkjUgE
-izgNoMB4CBrkwry5H+OsE5VJi+OBsfhEyG8CbV36JZphXgAqNmBde485aRnFHbeb
-CgkHklSg1PRYpuILO6CrbP6zjXbpAh/73CMJoL0Ym12ttD/7QcElQW8kiAHIN2P7
-4NQVPFV3eMZPmXXofhbu
-=2TBq
------END PGP SIGNATURE-----
+diff --git a/package/x11r7/libepoxy/Config.in b/package/x11r7/libepoxy/Config.in
+index c4f5794..5628bf7 100644
+--- a/package/x11r7/libepoxy/Config.in
++++ b/package/x11r7/libepoxy/Config.in
+@@ -1,7 +1,13 @@
+ config BR2_PACKAGE_LIBEPOXY
+ 	bool "epoxy"
+-	depends on BR2_PACKAGE_MESA3D
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XUTIL_UTIL_MACROS
++	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	help
+-	  Epoxy is a library for handling OpenGL function pointer management for you.
++	  Epoxy is a library for handling OpenGL function pointer
++	  management for you.
+ 
+ 	  https://github.com/anholt/libepoxy
++
++comment "epoxy needs an OpenGL EGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBEGL
+diff --git a/package/x11r7/libepoxy/libepoxy.mk b/package/x11r7/libepoxy/libepoxy.mk
+index d908893..7570226 100644
+--- a/package/x11r7/libepoxy/libepoxy.mk
++++ b/package/x11r7/libepoxy/libepoxy.mk
+@@ -8,8 +8,12 @@ LIBEPOXY_VERSION = v1.2
+ LIBEPOXY_SITE = $(call github,anholt,libepoxy,$(LIBEPOXY_VERSION))
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_AUTORECONF = YES
+-LIBEPOXY_DEPENDENCIES = mesa3d
++LIBEPOXY_DEPENDENCIES = xlib_libX11 xutil_util-macros libegl \
++	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
+ 
++# needed for rpi-userland
++LIBEPOXY_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
++
+ $(eval $(autotools-package))
+-- 
+2.1.4
