@@ -1,45 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Aug 2015 14:13:13 +0200
-Subject: [Buildroot] Analysis of build results for 2015-08-05
-In-Reply-To: <CAMo8BfJpRhfFs39REwpq-kLUuSf+drKSRcOiRwh6bWdtMmR6bg@mail.gmail.com>
-References: <20150806063016.4A0BB102D1F@stock.ovh.net>
- <20150806113014.163c6592@free-electrons.com>
- <CAMo8BfJpRhfFs39REwpq-kLUuSf+drKSRcOiRwh6bWdtMmR6bg@mail.gmail.com>
-Message-ID: <20150807141313.4b1621dd@free-electrons.com>
+From: =?UTF-8?Q?Guillaume_GARDET_-_Olis=c3=a9o?= <guillaume.gardet@oliseo.fr>
+Date: Fri, 7 Aug 2015 14:09:04 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20150806205038.52618bea@free-electrons.com>
+References: <20150729063017.EDA6D101EBC@stock.ovh.net>
+ <20150729100334.00137b70@free-electrons.com> <55C366E8.3060207@oliseo.fr>
+ <20150806155803.66771b6f@free-electrons.com> <55C36A0E.3000707@oliseo.fr>
+ <20150806205038.52618bea@free-electrons.com>
+Message-ID: <55C49FE0.50403@oliseo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Max,
 
-On Fri, 7 Aug 2015 15:11:51 +0300, Max Filippov wrote:
-> Hi Thomas,
-> 
-> On Thu, Aug 6, 2015 at 12:30 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> >>       xtensa |                   opencv-3.0.0 | NOK | http://autobuild.buildroot.net/results/15ba0b520043b884fc7dafbb84da171072d7d3ee/
-> >
-> > Xtensa toolchain issue:
-> >
-> >    Error: operand 2 of 'l32r' has out of range value '4294705124'
-> >
-> > Max? This is affecting only OpenCV, maybe we should simply exclude it
-> > from the Xtensa build?
-> 
-> it turned out to be rather big change, in both binutils and gcc.
-> I'm still testing it. I hope to send it to binutils and gcc early next week,
-> and if all goes well to the buildroot later next week. If not, I'll send a
-> patch to disable OpenCV on Xtensa.
+Le 06/08/2015 20:50, Thomas Petazzoni a ?crit :
+> Dear Guillaume GARDET - Olis?o,
+>
+> On Thu, 6 Aug 2015 16:07:10 +0200, Guillaume GARDET - Olis?o wrote:
+>
+>>>> What would be the best way to fix it? Maybe a "depends on !BR2_STATIC_LIBS" ?
+>>> Either fix c-icap, or simpler, make it depends on !BR2_STATIC_LIBS (and
+>>> don't forget the corresponding comment).
+>> Will send a patch to depends on !BR2_STATIC_LIBS.
+>> For the comment, '# dlopen' is enough?
+> Yes, but I was actually referring to the Config.in comment to express
+> the dynamic library dependency.
+>
+> Hum, wait. Look at c-icap/Config.in:
+>
+> config BR2_PACKAGE_C_ICAP
+>          bool "c-icap"
+>          depends on !BR2_PREFER_STATIC_LIB
+>          depends on BR2_TOOLCHAIN_HAS_THREADS
+>
+> It already has the dependency, it is just wrong: it should be
+> BR2_STATIC_LIBS and not BR2_PREFER_STATIC_LIB. I'll fix that up.
 
-Great, thanks for your feedback! Let's wait until next week then to
-take a decision on this issue.
+Ok. Thanks.
 
-Thanks!
+Guillaume
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>
+> Thanks!
+>
+> Thomas
