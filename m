@@ -1,74 +1,44 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  7 Aug 2015 12:09:41 +0200
-Subject: [Buildroot] [PATCH] python-pyroute2: new package
-Message-ID: <1438942181-30466-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Aug 2015 12:20:39 +0200
+Subject: [Buildroot] [git commit] guile: fix static-only build
+Message-ID: <20150807102447.AA56781EE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=49593aba5a56c9c297c31c12fc4dc3de5679e7b1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+guile uses bdwgc, which is already compiled with GC_NO_DLOPEN in
+static-only scenarios. However, the bdwgc headers continue to include
+<dlfcn.h> if used with GC_NO_DLOPEN undefined.
+
+Therefore, to make guile link properly in a static-only scenario, we
+have to build it with GC_NO_DLOPEN defined.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/1bf/1bf73dd4c28d6607e8c24d3abf259b8032712a02/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |  1 +
- package/python-pyroute2/Config.in          |  7 +++++++
- package/python-pyroute2/python-pyroute2.mk | 20 ++++++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/python-pyroute2/Config.in
- create mode 100644 package/python-pyroute2/python-pyroute2.mk
+ package/guile/guile.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..3edd456 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -646,6 +646,7 @@ menu "external python modules"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyqt/Config.in"
- 	source "package/python-pyro/Config.in"
-+	source "package/python-pyroute2/Config.in"
- 	source "package/python-pysendfile/Config.in"
- 	source "package/python-pysnmp/Config.in"
- 	source "package/python-pysnmp-apps/Config.in"
-diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
-new file mode 100644
-index 0000000..068ecba
---- /dev/null
-+++ b/package/python-pyroute2/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYROUTE2
-+	bool "python-pyroute2"
-+	help
-+	  Python netlink library - Linux network / netns / wireless / ipset
-+	  configuration.
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index fed79a6..2bd7198 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -28,6 +28,10 @@ GUILE_CFLAGS = \
+ 	-DHAVE_GC_GET_FREE_SPACE_DIVISOR \
+ 	-DHAVE_GC_SET_FINALIZE_ON_DEMAND
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++GUILE_CFLAGS += -DGC_NO_DLOPEN
++endif
 +
-+	  https://github.com/svinota/pyroute2
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-new file mode 100644
-index 0000000..8cbefb7
---- /dev/null
-+++ b/package/python-pyroute2/python-pyroute2.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# python-pyroute2
-+#
-+#############################################################
-+
-+PYTHON_PYROUTE2_VERSION = 0.3.8
-+PYTHON_PYROUTE2_SITE = $(call github,svinota,pyroute2,$(PYTHON_PYROUTE2_VERSION))
-+PYTHON_PYROUTE2_LICENSE = Apache-2.0, GPLv2+
-+PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2, LICENSE.GPL.v2
-+PYTHON_PYROUTE2_SETUP_TYPE = distutils
-+PYTHON_PYROUTE2_DEPENDENCIES = host-gawk
-+
-+define PYTHON_PYROUTE2_CREATE_SETUP_PY
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) update-version
-+endef
-+
-+PYTHON_PYROUTE2_PRE_CONFIGURE_HOOKS += PYTHON_PYROUTE2_CREATE_SETUP_PY
-+
-+$(eval $(python-package))
--- 
-1.9.1
+ GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/usr/bin/guile \
+ 	CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
+ 
