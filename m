@@ -1,111 +1,170 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri,  7 Aug 2015 15:28:59 +0200
-Subject: [Buildroot] [PATCHv3 0/4] openpowerlink bump to v2.2
-Message-ID: <1438954143-23533-1-git-send-email-romain.naour@openwide.fr>
+Date: Fri,  7 Aug 2015 15:29:01 +0200
+Subject: [Buildroot] [PATCHv3 2/4] package/openpowerlink-kernel-drivers: new
+	package
+In-Reply-To: <1438954143-23533-1-git-send-email-romain.naour@openwide.fr>
+References: <1438954143-23533-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1438954143-23533-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From doc/openpowerlink.md:
-"The openPOWERLINK release V2.X is an evolution of the openPOWERLINK V1 stack.
-Running the kernel and user layers of openPOWERLINK on different processors in
-a multi-processor/multi-platform architecture, required fundamental changes in
-the Communication Abstraction Layer. Additionally, the existing code base was
-greatly improved so that it is easier to understand and maintain. Due to these
-reasons a new major release was started."
-
-The openpowerlink2 package archive contains several cmake projects,
-and each of them must be packaged separately in Buildroot.
-
-"With version 2.0, the source code has been cleanly split into an
-application-oriented user library and a time-critical stack driver."
-
-This complicates the packaging but it helps to refine the dependencies
-compared to openpowerlink v1 build system.
-(openpowerlink v1 requires C++ only for the qt demo)
-
-The openpowerlink package provide all patches which should be used by
-other openpowerlink-* packages by using an patch hook.
-Doing this avoids patches duplication over all sub-packages.
-
-All patches fix several issues with the cmake build system and will be
-submitted upstream.
-
-There is one project for the EPL (Ethernet PowerLink) stack
-libraries wich provides:
- * an user space EPL stack to be linked into application
- * an user space EPL stack pcap daemon
- * an kernel space EPL library interface
-
-There are two projects for the EPL network driver:
- * pcap daemon driver
- * kernel module driver.
-
-Note: On x86/x86_64 only few EPL ethernet driver are available for
-the EPL kernel stack implementation:
- * Intel 82573
- * Intel 8255x
- * Intel I210
- * Realtek RTL-8111/8168 (new since V2.1.0)
- * Realtek RTL-8139
-
-There is one project for each demo application:
- * demo_cn_embedded
- * demo_mn_embedded
- * demo_cn_console
- * demo_mn_console
- * demo_mn_qt
-
-Only demo_mn_console will be packaged in Buildroot for now.
-
-[1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/
-
-Romain Naour (4):
-  package/openpowerlink: bump to v2.2.0
-  package/openpowerlink-kernel-drivers: new package
-  package/openpowerlink-pcap-daemon: new package
-  package/openpowerlink-apps-demo-mn-console: new package
-
- package/Config.in                                  |   3 +
- .../openpowerlink-apps-demo-mn-console/Config.in   |   6 +
- .../openpowerlink-apps-demo-mn-console.hash        |   1 +
- .../openpowerlink-apps-demo-mn-console.mk          |  50 +++++++
- package/openpowerlink-kernel-drivers/Config.in     |  33 +++++
- .../openpowerlink-kernel-drivers.hash              |   1 +
- .../openpowerlink-kernel-drivers.mk                |  54 +++++++
- package/openpowerlink-pcap-daemon/Config.in        |  12 ++
- .../openpowerlink-pcap-daemon.hash                 |   1 +
- .../openpowerlink-pcap-daemon.mk                   |  38 +++++
- ...a-better-regex-for-CMAKE_SYSTEM_PROCESSOR.patch | 158 +++++++++++++++++++++
- ...a-better-regex-for-cmake-system-processor.patch |  89 ------------
- ...l-the-stack-libraries-to-lib-subdirectory.patch | 133 +++++++++++++++++
- ...-fix-user-space-stack-enable-shared-build.patch |  54 -------
- ...0003-FIX-cmake-install-oplk-headers-files.patch |  34 +++++
- ...-FIX-Fix-name-of-sched_priority-element-2.patch |  96 +++++++++++++
- .../0005-FIX-add-missing-header-sys-time.h.patch   |  47 ++++++
- package/openpowerlink/Config.in                    | 116 ++++++---------
- package/openpowerlink/openpowerlink.hash           |   3 +
- package/openpowerlink/openpowerlink.mk             | 104 +++++++-------
- 20 files changed, 763 insertions(+), 270 deletions(-)
- create mode 100644 package/openpowerlink-apps-demo-mn-console/Config.in
- create mode 120000 package/openpowerlink-apps-demo-mn-console/openpowerlink-apps-demo-mn-console.hash
- create mode 100644 package/openpowerlink-apps-demo-mn-console/openpowerlink-apps-demo-mn-console.mk
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+v3: Rename to openpowerlink-kernel-drivers
+    Fix typos in Config.in
+    Provide a hash file via a symlink to
+    openpowerlink.hash
+    Fix driver build issue due to mussing ARCH and
+    CROSS_COMPILE options
+    fix typo for i210 dirver (s/I210/i210)
+    Don't use $(OPENPOWERLINK_*) since they will not
+    be set in openpowerlink-kernel-drivers.mk
+    move openpowerlink-kernel-drivers to package
+    directory.
+---
+ package/Config.in                                  |  1 +
+ package/openpowerlink-kernel-drivers/Config.in     | 33 +++++++++++++
+ .../openpowerlink-kernel-drivers.hash              |  1 +
+ .../openpowerlink-kernel-drivers.mk                | 54 ++++++++++++++++++++++
+ package/openpowerlink/Config.in                    |  1 +
+ 5 files changed, 90 insertions(+)
  create mode 100644 package/openpowerlink-kernel-drivers/Config.in
  create mode 120000 package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash
  create mode 100644 package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk
- create mode 100644 package/openpowerlink-pcap-daemon/Config.in
- create mode 120000 package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.hash
- create mode 100644 package/openpowerlink-pcap-daemon/openpowerlink-pcap-daemon.mk
- create mode 100644 package/openpowerlink/0001-FIX-use-a-better-regex-for-CMAKE_SYSTEM_PROCESSOR.patch
- delete mode 100644 package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
- create mode 100644 package/openpowerlink/0002-FIX-install-the-stack-libraries-to-lib-subdirectory.patch
- delete mode 100644 package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch
- create mode 100644 package/openpowerlink/0003-FIX-cmake-install-oplk-headers-files.patch
- create mode 100644 package/openpowerlink/0004-FIX-Fix-name-of-sched_priority-element-2.patch
- create mode 100644 package/openpowerlink/0005-FIX-add-missing-header-sys-time.h.patch
- create mode 100644 package/openpowerlink/openpowerlink.hash
 
+diff --git a/package/Config.in b/package/Config.in
+index 47d14d7..47f7da1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -394,6 +394,7 @@ endif
+ 	source "package/openipmi/Config.in"
+ 	source "package/openocd/Config.in"
+ 	source "package/openpowerlink/Config.in"
++	source "package/openpowerlink-kernel-drivers/Config.in"
+ 	source "package/owl-linux/Config.in"
+ 	source "package/parted/Config.in"
+ 	source "package/pciutils/Config.in"
+diff --git a/package/openpowerlink-kernel-drivers/Config.in b/package/openpowerlink-kernel-drivers/Config.in
+new file mode 100644
+index 0000000..bc1e408
+--- /dev/null
++++ b/package/openpowerlink-kernel-drivers/Config.in
+@@ -0,0 +1,33 @@
++
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
++	bool "openpowerlink kernel drivers"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
++	help
++	  The openPOWERLINK stack is implemented as Linux kernel module.
++	  This solution provides the best performance, but is limited to
++	  the available openPOWERLINK network drivers.
++
++if BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
++
++choice
++	prompt "select Ethernet Powerlink Driver"
++
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_82573
++	bool "Intel 82573"
++
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_8255x
++	bool "Intel 8255x"
++
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_I210
++	bool "Intel I210"
++
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8111
++	bool "Realtek RTL-8111/8168"
++
++config BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8139
++	bool "Realtek RTL-8139"
++
++endchoice
++
++endif # BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
+diff --git a/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash
+new file mode 120000
+index 0000000..cbbc194
+--- /dev/null
++++ b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.hash
+@@ -0,0 +1 @@
++../openpowerlink/openpowerlink.hash
+\ No newline at end of file
+diff --git a/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk
+new file mode 100644
+index 0000000..3f1f420
+--- /dev/null
++++ b/package/openpowerlink-kernel-drivers/openpowerlink-kernel-drivers.mk
+@@ -0,0 +1,54 @@
++################################################################################
++#
++# openpowerlink-kernel-drivers
++#
++################################################################################
++
++OPENPOWERLINK_KERNEL_DRIVERS_VERSION = V2.2.0
++OPENPOWERLINK_KERNEL_DRIVERS_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_KERNEL_DRIVERS_VERSION)
++OPENPOWERLINK_KERNEL_DRIVERS_SOURCE = openPOWERLINK-$(OPENPOWERLINK_KERNEL_DRIVERS_VERSION).tar.gz
++OPENPOWERLINK_KERNEL_DRIVERS_LICENSE = BSD-2c, GPLv2
++OPENPOWERLINK_KERNEL_DRIVERS_LICENSE_FILES = license.md
++
++OPENPOWERLINK_KERNEL_DRIVERS_DEPENDENCIES = linux openpowerlink
++
++define OPENPOWERLINK_KERNEL_DRIVERS_EXTRACT_CMDS
++	$(INFLATE$(suffix $($(PKG)_SOURCE))) $(DL_DIR)/$($(PKG)_SOURCE) | \
++		$(TAR) -C $($(PKG)_DIR) $(TAR_OPTIONS) - $($(PKG)_TAR_OPTIONS)
++endef
++
++define OPENPOWERLINK_KERNEL_DRIVERS_APPLY_PATCHES
++	$(APPLY_PATCHES) $(@D) package/openpowerlink \*.patch
++endef
++
++OPENPOWERLINK_KERNEL_DRIVERS_POST_PATCH_HOOKS += \
++	OPENPOWERLINK_KERNEL_DRIVERS_APPLY_PATCHES
++
++OPENPOWERLINK_KERNEL_DRIVERS_SUBDIR = drivers/linux/drv_kernelmod_edrv
++
++# CFG_DEBUG_LVL is taken into account only in Debug
++ifeq ($(BR2_ENABLE_DEBUG),y)
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS = \
++	-DCFG_DEBUG_LVL="$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))"
++endif
++
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += \
++	-DCFG_KERNEL_DIR="$(LINUX_DIR)" \
++	-DCMAKE_SYSTEM_VERSION="$(LINUX_VERSION)" \
++	-DCFG_OPLK_MN="$(OPENPOWERLINK_MN_ONOFF)" \
++	-DMAKE_KERNEL_ARCH="$(KERNEL_ARCH)" \
++	-DMAKE_KERNEL_CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
++
++ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_82573),y)
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=82573
++else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_8255x),y)
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=8255x
++else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_I210),y)
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=i210
++else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8139),y)
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=8139
++else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS_RTL8111),y)
++OPENPOWERLINK_KERNEL_DRIVERS_CONF_OPTS += -DCFG_POWERLINK_EDRV=8111
++endif
++
++$(eval $(cmake-package))
+diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
+index 713fb83..93e66d2 100644
+--- a/package/openpowerlink/Config.in
++++ b/package/openpowerlink/Config.in
+@@ -60,6 +60,7 @@ config BR2_PACKAGE_OPENPOWERLINK_STACK_USERSPACE_DAEMON_LIB
+ config BR2_PACKAGE_OPENPOWERLINK_STACK_KERNEL_STACK_LIB
+ 	bool "build EPL stack as linux kernelspace module."
+ 	depends on BR2_LINUX_KERNEL # openpowerlink-kernel-driver
++	select BR2_PACKAGE_OPENPOWERLINK_KERNEL_DRIVERS
+ 	help
+ 	  Compile openPOWERLINK application library which contains the
+ 	  interface to a Linux kernel space driver. This will also build
 -- 
 2.4.3
