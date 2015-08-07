@@ -1,44 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Aug 2015 12:20:39 +0200
-Subject: [Buildroot] [git commit] guile: fix static-only build
-Message-ID: <20150807102447.AA56781EE7@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Aug 2015 10:52:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 8266] mplayer build issue
+In-Reply-To: <bug-8266-163@https.bugs.busybox.net/>
+References: <bug-8266-163@https.bugs.busybox.net/>
+Message-ID: <20150807105200.CBEEF81EE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49593aba5a56c9c297c31c12fc4dc3de5679e7b1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8266
 
-guile uses bdwgc, which is already compiled with GC_NO_DLOPEN in
-static-only scenarios. However, the bdwgc headers continue to include
-<dlfcn.h> if used with GC_NO_DLOPEN undefined.
+--- Comment #2 from Siegfried Siegert <s.siegert@atb-online.eu> 2015-08-07 10:52:00 UTC ---
+(In reply to comment #1)
+> Can you make sure that the problem still occurs
+> after disabling ccache support and doing a "make clean all" ?
 
-Therefore, to make guile link properly in a static-only scenario, we
-have to build it with GC_NO_DLOPEN defined.
+same issue again after "make clean all" without ccache.
 
-Fixes:
+> 
+> Also:
+> 
+> BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-float=hard --with-fpu=vfpv4-d16"
+> BR2_TARGET_OPTIMIZATION=" -pipe -mfpu=vfpv4-d16 -mfloat-abi=hard"
+> 
+> are not needed. If you want --with-float=hard, select EABIhf instead of EABI in
+> the Target options. The FPU type is already passed since you selected
+> BR2_ARM_FPU_VFPV4D16=y.
 
-  http://autobuild.buildroot.net/results/1bf/1bf73dd4c28d6607e8c24d3abf259b8032712a02/
+Made further tests with and without this options, also tried EABIhf instead of
+EABI (always "make clean all" after configuration change) without any different
+result.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/guile/guile.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index fed79a6..2bd7198 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -28,6 +28,10 @@ GUILE_CFLAGS = \
- 	-DHAVE_GC_GET_FREE_SPACE_DIVISOR \
- 	-DHAVE_GC_SET_FINALIZE_ON_DEMAND
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+GUILE_CFLAGS += -DGC_NO_DLOPEN
-+endif
-+
- GUILE_CONF_ENV += GUILE_FOR_BUILD=$(HOST_DIR)/usr/bin/guile \
- 	CFLAGS="$(TARGET_CFLAGS) $(GUILE_CFLAGS)"
- 
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
