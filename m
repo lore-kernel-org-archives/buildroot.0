@@ -1,46 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  7 Aug 2015 23:56:46 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/qt5quickcontrols: fix
-	licensing information
-Message-ID: <1438984606-27797-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  8 Aug 2015 00:47:17 +0200
+Subject: [Buildroot] [PATCH 5/7] package/cpio: remove useless comment
+In-Reply-To: <1438987639-30593-1-git-send-email-romain.naour@openwide.fr>
+References: <1438987639-30593-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1438987639-30593-5-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump to 5.5.0, the LGPv2.1-with-exception has been dropped,
-with only the LGPLv3 or GPLv2 as alternatives.
+This comment is about host-cpio which hasn't
+been added in Buildroot.
 
-Drop LGPLv2.1-with-exception.
-
-Add GFDL (GNU Free Documentation License) as it is explicitly referenced
-in the source tree.
-
-Fixes:
-    http://autobuild.buildroot.org/results/0dc/0dc96010cc81a34d2363eb4fe1a155db0e3769fd/
-    http://autobuild.buildroot.org/results/2b0/2b0b4c170dfa0d95c10bf030e6f249b3305dd318/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Julien CORJON <corjon.j@ecagroup.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/cpio/cpio.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-index 4aeca5b..7ad4d16 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-@@ -11,8 +11,8 @@ QT5QUICKCONTROLS_DEPENDENCIES = qt5base qt5declarative
- QT5QUICKCONTROLS_INSTALL_STAGING = YES
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index e18af81..c29305e 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -16,8 +16,7 @@ CPIO_PATCH = \
+ 	https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/cpio/files/cpio-2.11-stat.patch
  
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5QUICKCONTROLS_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
--QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-+QT5QUICKCONTROLS_LICENSE = LGPLv3, GPLv2, GFDL
-+QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.LGPLv3 LICENSE.GPLv2 LICENSE.FDL
- else
- QT5QUICKCONTROLS_LICENSE = Commercial license
- QT5QUICKCONTROLS_REDISTRIBUTE = NO
+ # cpio uses argp.h which is not provided by uclibc or musl by default.
+-# Use the argp-standalone package to provide this but make sure
+-# the host package does not try to use the host version.
++# Use the argp-standalone package to provide this.
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ CPIO_DEPENDENCIES += argp-standalone
+ endif
 -- 
-1.9.1
+2.4.3
