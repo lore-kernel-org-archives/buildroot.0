@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:08 -0000
-Subject: [Buildroot] [git commit branch/next] package/libfslparser: remove
-	autoreconf
-Message-ID: <20150808105638.933B1803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] c-icap-modules: fix license
+	typos
+Message-ID: <20150808105638.51A0480414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f2bc9d1763e4a67afcf329a571100fcc1cc9906
+commit: http://git.buildroot.net/buildroot/commit/?id=92f96564d3a5b5c4cd4e20faafb4fdc84df2707d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-autoreconf is not needed anymore with the current
-version (4.0.2).
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslparser/libfslparser.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/c-icap-modules/c-icap-modules.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index 50f0bf6..116a0a2 100644
---- a/package/libfslparser/libfslparser.mk
-+++ b/package/libfslparser/libfslparser.mk
-@@ -20,7 +20,4 @@ endef
- # The Makefile installs several versions of the libraries, but we only
- # need one of them, depending on the platform.
+diff --git a/package/c-icap-modules/c-icap-modules.mk b/package/c-icap-modules/c-icap-modules.mk
+index 27c57e1..aeab580 100644
+--- a/package/c-icap-modules/c-icap-modules.mk
++++ b/package/c-icap-modules/c-icap-modules.mk
+@@ -7,8 +7,8 @@
+ C_ICAP_MODULES_VERSION = 0.3.2
+ C_ICAP_MODULES_SOURCE = c_icap_modules-$(C_ICAP_MODULES_VERSION).tar.gz
+ C_ICAP_MODULES_SITE = http://downloads.sourceforge.net/c-icap/
+-C_ICAP_MODULES_LICENCE = GPLv2+
+-C_ICAP_MODULES_LICENCE_FILE = COPYING
++C_ICAP_MODULES_LICENSE = GPLv2+
++C_ICAP_MODULES_LICENSE_FILES = COPYING
+ C_ICAP_MODULES_DEPENDENCIES = c-icap
  
--# without AUTORECONF, configure fails to find install-sh.
--LIBFSLPARSER_AUTORECONF = YES
--
- $(eval $(autotools-package))
+ C_ICAP_MODULES_CONF_OPTS = \
