@@ -1,37 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:45 -0000
-Subject: [Buildroot] [git commit branch/next] package/rpi-userland: bump
-	version
-Message-ID: <20150808105616.6AC657F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/network-manager: bump
+	to version 1.0.2
+Message-ID: <20150808105611.12D47818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41282cbdd62dd1299be50428e436e96c45f916eb
+commit: http://git.buildroot.net/buildroot/commit/?id=bf9388563add3df498403743e143fa5cbce52c7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Misc fixes and improvements all over the place...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/network-manager/network-manager.hash |    4 ++--
+ package/network-manager/network-manager.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 20a6af0..1a1c9c6 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 401108e..f47e053 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.0.sha256sum
+-sha256  3a66afec670c975edd9832e620b725a5f16ed267a1b9e1b2d51ef27250d85947  NetworkManager-1.0.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.2.sha256sum
++sha256  359385707494bedbb48cfe0992ccfbcc4ac147dae1f7a47055c71e96439508ff  NetworkManager-1.0.2.tar.xz
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index c37c9ea..c118a92 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--RPI_USERLAND_VERSION = 8f542a1647e6f88f254eadd9ad6929301c81913b
-+RPI_USERLAND_VERSION = b834074d0c0d9d7e64c133ab14ed691999cee990
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+ NETWORK_MANAGER_VERSION_MAJOR = 1.0
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
