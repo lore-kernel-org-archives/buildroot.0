@@ -1,40 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] support: gen-manual-lists.py
-	base directory simplification
-Message-ID: <20150808105608.463AA7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sqlite: fix parallel
+	build failures
+Message-ID: <20150808105600.6A9077FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aba6fa137a1b0df876c235e63804ef81f76c5d5b
+commit: http://git.buildroot.net/buildroot/commit/?id=7541b28aa7a91c682c50cfa82d33cbb450afc53c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Buildroot doesn't use $srctree from what I could tell.
+Fixes:
+    http://autobuild.buildroot.org/results/aed/aed3690689b60844e3278626da3c3eb75f2a2586/
 
-Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/gen-manual-lists.py |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ package/sqlite/0001-fix-parallel-build.patch |   22 ++++++++++++++++++++++
+ package/sqlite/sqlite.mk                     |    3 +++
+ 2 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index ec59030..2acac2c 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -193,11 +193,9 @@ class Buildroot:
-         self.base_dir = os.environ.get("TOPDIR")
-         self.output_dir = os.environ.get("O")
-         self.package_dir = os.path.join(self.base_dir, self.package_dirname)
--        # The kconfiglib requires an environment variable named "srctree" to
--        # load the configuration, so set it.
--        os.environ.update({'srctree': self.base_dir})
-         self.config = kconfiglib.Config(os.path.join(self.base_dir,
--                                                     self.root_config))
-+                                                     self.root_config),
-+                                        self.base_dir)
-         self._deprecated = self.config.get_symbol(self.deprecated_symbol)
+diff --git a/package/sqlite/0001-fix-parallel-build.patch b/package/sqlite/0001-fix-parallel-build.patch
+new file mode 100644
+index 0000000..79d80fb
+--- /dev/null
++++ b/package/sqlite/0001-fix-parallel-build.patch
+@@ -0,0 +1,22 @@
++Use correct dependency in Makefile.am
++
++Depending on a libtool library should be done using the .la name, not on
++the object file.
++
++Fixes hard-to-reproduce parallel build failures, like so:
++    http://autobuild.buildroot.org/results/aed/aed3690689b60844e3278626da3c3eb75f2a2586/build-end.log
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN sqlite-3081000.orig/Makefile.am sqlite-3081000/Makefile.am
++--- sqlite-3081000.orig/Makefile.am	2015-05-07 16:59:22.000000000 +0200
+++++ sqlite-3081000/Makefile.am	2015-05-20 23:30:03.878784079 +0200
++@@ -7,7 +7,7 @@
++ 
++ bin_PROGRAMS = sqlite3
++ sqlite3_SOURCES = shell.c sqlite3.h
++-sqlite3_LDADD = sqlite3.$(OBJEXT) @READLINE_LIBS@
+++sqlite3_LDADD = libsqlite3.la @READLINE_LIBS@
++ 
++ include_HEADERS = sqlite3.h sqlite3ext.h
++ 
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index fff219a..b2283f0 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -10,6 +10,9 @@ SQLITE_SITE = http://www.sqlite.org/2015
+ SQLITE_LICENSE = Public domain
+ SQLITE_INSTALL_STAGING = YES
  
-         self.gen_date = datetime.datetime.utcnow()
++# Patching Makefile.am:
++SQLITE_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
+ SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
+ endif
