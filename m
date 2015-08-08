@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] fs/iso9660: get grub splash
-	from $(TARGET_DIR)
-Message-ID: <20150808105610.5AC6B7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: bump to
+	version 3.7.2
+Message-ID: <20150808105610.BB1797F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3736b9a7c1c03ce7bab6d902db579fbead909047
+commit: http://git.buildroot.net/buildroot/commit/?id=b3d4c6a6fba906bc93804c1f1f6d04e761e310b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Instead of using directly the splash image from the Buildroot source
-directory boot/grub, this commit changes the iso9660 logic to use the
-splash image installed in $(TARGET_DIR)/boot/grub.
+This patch bumps at91bootstrap3 version to 3.7.2
 
-This effectively allows a user to use a custom splash image by
-installing it to $(TARGET_DIR) through a rootfs overlay or using a
-post-build script.
-
-Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/iso9660.mk |    2 +-
+ boot/at91bootstrap3/at91bootstrap3.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index b3e6b9d..b313c65 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -11,7 +11,7 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 3ca210f..df3896e 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
- define ROOTFS_ISO9660_SPLASHSCREEN
--	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
-+	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
- 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
- endef
- else
+-AT91BOOTSTRAP3_VERSION = v3.7.1
++AT91BOOTSTRAP3_VERSION = v3.7.2
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ AT91BOOTSTRAP3_LICENSE = Atmel License
+ AT91BOOTSTRAP3_LICENSE_FILES = main.c
