@@ -1,48 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] postgresql: security bump to
-	version 9.4.2
-Message-ID: <20150808105601.C99817FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ipmiutil: openssl is an
+	optional dependency
+Message-ID: <20150808105559.004F77FDC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dffd39168af7ee419f3fe86152d36db2d1dfcc5a
+commit: http://git.buildroot.net/buildroot/commit/?id=3a07f5e4fe2543f8fbee4cdc680318bc426bd83d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-CVE-2015-3165 (denial of service)
-CVE-2015-3166 (information disclosure)
-CVE-2015-3167 (side-channel key exposure)
+So handle it as such (it is only needed for the lanplus functionality).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash |    4 ++--
- package/postgresql/postgresql.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ipmiutil/Config.in   |    1 -
+ package/ipmiutil/ipmiutil.mk |    9 +++++++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ea2be3e..2f8de30 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2.sha256
--sha256	29ddb77c820095b8f52e5455e9c6c6c20cf979b0834ed1986a8857b84888c3a6  postgresql-9.4.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.4.2/postgresql-9.4.2.tar.bz2.sha256
-+sha256	81fda191c165ba1d25d75cd0166ece5abdcb4a7f5eca01b349371e279ebb4d11  postgresql-9.4.2.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index eda547c..d4895a0 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
+index 2500583..a2a898b 100644
+--- a/package/ipmiutil/Config.in
++++ b/package/ipmiutil/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_IPMIUTIL
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_x86_64 || BR2_i386
+-	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  The ipmiutil package provides easy-to-use utilities to view
+ 	  the SEL, perform an IPMI chassis reset, set up the IPMI LAN
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index c7a8dd8..f03ad9b 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -10,10 +10,15 @@ IPMIUTIL_LICENSE = BSD-3c
+ IPMIUTIL_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ IPMIUTIL_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ # tests against distro libcrypto so it might get a false positive when
+ # the openssl version is old, so force it off
+ # SKIP_MD2 can be used only if ALLOW_GNU is defined.
+-IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2"
+-IPMIUTIL_DEPENDENCIES = openssl
++IPMIUTIL_CONF_OPTS += CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2"
++IPMIUTIL_DEPENDENCIES += openssl
++else
++IPMIUTIL_CONF_OPTS += --disable-lanplus
++endif
  
--POSTGRESQL_VERSION = 9.4.1
-+POSTGRESQL_VERSION = 9.4.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ $(eval $(autotools-package))
