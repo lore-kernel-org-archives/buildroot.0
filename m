@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:46 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain-external: fix
-	uClibc-ng 64bit dynamic loader link
-Message-ID: <20150808105635.A7D5F80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gettext: bump to version
+	0.19.5.1
+Message-ID: <20150808105636.037807FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6ec15820289808ed9a53086d1e384c8b4c5802fa
+commit: http://git.buildroot.net/buildroot/commit/?id=e6766f3e442d0396f123e2b67e50fcbd2bcc2d29
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 34f95bf9dbb0 (toolchain-external: fix support of uClibc-ng toolchains,
-2015-07-13) added the missing ld-uClibc.so.1 dynamic linker symlink that
-binaries expect when linked with uClibc-ng. However on 64bit targets the
-linker is called ld64-uClibc.so.1. Handle that case as well.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/gettext/gettext.hash |    6 +++---
+ package/gettext/gettext.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index fcb033c..ce9d79f 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -730,6 +730,9 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
- 	if test -e $(TARGET_DIR)/lib/ld-uClibc.so.1; then \
- 		ln -sf ld-uClibc.so.1 $(TARGET_DIR)/lib/ld-uClibc.so.0 ; \
- 	fi
-+	if test -e $(TARGET_DIR)/lib/ld64-uClibc.so.1; then \
-+		ln -sf ld64-uClibc.so.1 $(TARGET_DIR)/lib/ld64-uClibc.so.0 ; \
-+	fi
- endef
+diff --git a/package/gettext/gettext.hash b/package/gettext/gettext.hash
+index 9860792..8d161f6 100644
+--- a/package/gettext/gettext.hash
++++ b/package/gettext/gettext.hash
+@@ -1,3 +1,3 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2015-07/msg00004.html
+-md5	546a8458f50e146be12c215f83b9bac2	gettext-0.19.5.tar.xz
+-sha1	bfe50a885076a24d63b9d9b242a409cc16727d24	gettext-0.19.5.tar.xz
++# From https://lists.gnu.org/archive/html/info-gnu/2015-07/msg00008.html
++md5	9b7c37e410df4bd1bf854e8c897cf937	gettext-0.19.5.1.tar.xz
++sha1	668562227972d2645ac6c5930448ba74df65a53f	gettext-0.19.5.1.tar.xz
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index c9aaa6a..5ef1ac4 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+-GETTEXT_VERSION = 0.19.5
++GETTEXT_VERSION = 0.19.5.1
+ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
+ GETTEXT_INSTALL_STAGING = YES
