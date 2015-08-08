@@ -1,50 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:11 -0000
-Subject: [Buildroot] [git commit branch/next] package/nfs-utils: fix unmet
-	direct dependency
-Message-ID: <20150808105640.3F0107F8D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boost: fix build for sparc
+Message-ID: <20150808105639.B317C7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64c10ae691e230935473f23ef71ab997293adf8f
+commit: http://git.buildroot.net/buildroot/commit/?id=74461e56b371be4ca335102d5e84dd479965faab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 182520a8af734c735c4dbdff29dc07af1d615a0a adds rpcbind as a dependency
-without properly caring for the thread dependency.
+Using upstream patch, fixes:
+http://autobuild.buildroot.net/results/dd0/dd032aa7b387f3ba5b25bffcaf833ba0ea9ba199/
 
-rpcbind adds libtirpc as a dependendency which fails:
-  fatal error: pthread.h: No such file or directory
-
-Since we probably don't care much about using nfs-utils in a non-threaded
-scenario, we simply disable nfs-utils for toolchains without thread support.
-
-Fixes:
-http://autobuild.buildroot.net/results/803/80321de8d4c6c0a00439b07289a5818962128b43/
-
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfs-utils/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ ...0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch |   42 ++++++++++++++++++++
+ 1 files changed, 42 insertions(+), 0 deletions(-)
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 2806551..1273092 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -1,10 +1,10 @@
- comment "nfs-utils needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_NFS_UTILS
- 	bool "nfs-utils"
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
- 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_RPCBIND # runtime
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+new file mode 100644
+index 0000000..a4d39b3
+--- /dev/null
++++ b/package/boost/0003-Remove-bogus-c3-cpu-varant-for-SPARC.patch
+@@ -0,0 +1,42 @@
++From ec60c37295146bb80aa44a92cf416027b75b5ff7 Mon Sep 17 00:00:00 2001
++From: Vladimir Prus <vladimir@codesourcery.com>
++Date: Mon, 27 Apr 2015 19:12:54 +0300
++Subject: [PATCH] Remove bogus 'c3' cpu varant for SPARC.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/tools/gcc.jam | 3 +--
++ src/tools/gcc.py  | 3 +--
++ 2 files changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/src/tools/gcc.jam b/src/tools/gcc.jam
++index eff95ae..128ab84 100644
++--- a/tools/build/src/tools/gcc.jam
+++++ b/tools/build/src/tools/gcc.jam
++@@ -1138,8 +1138,7 @@ cpu-flags gcc OPTIONS : x86 : c3-2 : -march=c3-2 ;
++ ##
++ cpu-flags gcc OPTIONS : x86 : atom : -march=atom ;
++ # Sparc
++-cpu-flags gcc OPTIONS : sparc : c3 : -mcpu=c3 : default ;
++-cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 ;
+++cpu-flags gcc OPTIONS : sparc : v7 : -mcpu=v7 : default ;
++ cpu-flags gcc OPTIONS : sparc : cypress : -mcpu=cypress ;
++ cpu-flags gcc OPTIONS : sparc : v8 : -mcpu=v8 ;
++ cpu-flags gcc OPTIONS : sparc : supersparc : -mcpu=supersparc ;
++diff --git a/src/tools/gcc.py b/src/tools/gcc.py
++index a13ce7a..d2d3294 100644
++--- a/tools/build/src/tools/gcc.py
+++++ b/tools/build/src/tools/gcc.py
++@@ -789,8 +789,7 @@ cpu_flags('gcc', 'OPTIONS', 'x86', 'atom', ['-march=atom'])
++ # Sparc
++ flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>32'], ['-m32'])
++ flags('gcc', 'OPTIONS', ['<architecture>sparc/<address-model>64'], ['-m64'])
++-cpu_flags('gcc', 'OPTIONS', 'sparc', 'c3', ['-mcpu=c3'], default=True)
++-cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'])
+++cpu_flags('gcc', 'OPTIONS', 'sparc', 'v7', ['-mcpu=v7'], default=True)
++ cpu_flags('gcc', 'OPTIONS', 'sparc', 'cypress', ['-mcpu=cypress'])
++ cpu_flags('gcc', 'OPTIONS', 'sparc', 'v8', ['-mcpu=v8'])
++ cpu_flags('gcc', 'OPTIONS', 'sparc', 'supersparc', ['-mcpu=supersparc'])
++-- 
++2.3.6
++
