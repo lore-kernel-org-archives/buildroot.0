@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:46 -0000
-Subject: [Buildroot] [git commit branch/next] setools: Add missing bison
-	dependency
-Message-ID: <20150808105636.0BB917FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/apache: security bump
+	to version 2.4.16
+Message-ID: <20150808105635.DEF2881904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0daffc0b65aa86d6d5bc6916736e0cffcdf540cc
+commit: http://git.buildroot.net/buildroot/commit/?id=fd9abf873a5c25f34a54338a8f9afc456c09c433
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The setools package needs the yacc utility which is part of the bison
-package to build.
+Fixes CVE-2015-3183, CVE-2015-3185, CVE-2015-0253, CVE-2015-0228
+http://marc.info/?l=apache-httpd-announce&m=143704705330655&w=2
 
-Fixes http://autobuild.buildroot.net/results/8f9/8f95e83411552397ca29e9aee5c457a1a762b364/
-
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/setools/setools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/apache/apache.hash |    4 ++--
+ package/apache/apache.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index 912daf8..a2bfd42 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -7,7 +7,7 @@
- SETOOLS_VERSION = 3.3.8
- SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
- SETOOLS_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/setools3/files/dists/setools-$(SETOOLS_VERSION)/
--SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2
-+SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2 host-bison
- SETOOLS_INSTALL_STAGING = YES
- SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
- SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
-@@ -32,7 +32,7 @@ SETOOLS_CONF_OPTS = \
- 	--with-selinux-devel="$(STAGING_DIR)/usr"
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 51fd3ca..9dffe12 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,2 +1,2 @@
+-# From http://www.apache.org/dist/httpd/httpd-2.4.12.tar.bz2.sha1
+-sha1	bc4681bfd63accec8d82d3cc440fbc8264ce0f17	httpd-2.4.12.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.16.tar.bz2.sha1
++sha1	9963e7482700dd50c53e47abfe2d1c5068875a9c	httpd-2.4.16.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 296e27e..acd242d 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
--	host-libxml2 host-bzip2
-+	host-libxml2 host-bzip2 host-bison
- 
- ifeq ($(BR2_PACKAGE_PYTHON3),y)
- HOST_SETOOLS_PYTHON_VERSION=$(PYTHON3_VERSION_MAJOR)
+-APACHE_VERSION = 2.4.12
++APACHE_VERSION = 2.4.16
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
