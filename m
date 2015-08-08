@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:10 -0000
-Subject: [Buildroot] [git commit branch/next] package/qpid-proton: disable
-	languages bindings
-Message-ID: <20150808105639.CAC0A7F8D4@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:11 -0000
+Subject: [Buildroot] [git commit branch/next] libv4l: bump version to 1.6.3
+Message-ID: <20150808105620.234887FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d52c4bb9a862620d229e5af97d5df83c56f2e719
+commit: http://git.buildroot.net/buildroot/commit/?id=948cbd345db1b0d995810d8acee32f21972717ad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes (workaround):
-http://autobuild.buildroot.net/results/eff48f8a827f8b4dbbdb7cb648a6c4a3ab4ac8a5/
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qpid-proton/qpid-proton.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/libv4l/libv4l.hash |    2 +-
+ package/libv4l/libv4l.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-index 12fddb4..2e8c1d0 100644
---- a/package/qpid-proton/qpid-proton.mk
-+++ b/package/qpid-proton/qpid-proton.mk
-@@ -15,8 +15,15 @@ QPID_PROTON_DEPENDENCIES = \
- 	util-linux \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 609cfbc..3371d34 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 d3d6eb1f0204fb11f3d318bfca35d5f73cc077f88fac7665a47856a16496be7d  v4l-utils-1.6.2.tar.bz2
++sha256 164abf5c1befcd27e8e6ef824a82d4015bdfb5d99ae82daa00e77d895ff9864c  v4l-utils-1.6.3.tar.bz2
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 94c7031..b1c783d 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Language bindings are enabled when host-swig tool is present in HOST_DIR.
-+# For now, disable all of them.
- QPID_PROTON_CONF_OPTS = \
- 	-DBUILD_JAVA=OFF \
-+	-DBUILD_JAVASCRIPT=OFF \
-+	-DBUILD_PERL=OFF \
-+	-DBUILD_PHP=OFF \
-+	-DBUILD_PYTHON=OFF \
-+	-DBUILD_RUBY=OFF \
- 	-DENABLE_VALGRIND=OFF \
- 	-DENABLE_WARNING_ERROR=OFF \
- 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/usr/bin/python2
+-LIBV4L_VERSION = 1.6.2
++LIBV4L_VERSION = 1.6.3
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
