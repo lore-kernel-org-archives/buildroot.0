@@ -1,43 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:55:55 -0000
-Subject: [Buildroot] [git commit branch/next] ipmiutil: force md2 off
-Message-ID: <20150808105554.D705F818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-pyqt: fix opengl build
+	failure
+Message-ID: <20150808105555.3EC1A81801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec45eb1619da40ea97fa39dfe60cee2a9b8e78c6
+commit: http://git.buildroot.net/buildroot/commit/?id=5c95c7f84d23b527dda6e266c57a4f469f978874
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The configure test runs against LIB_DIR (which is --libdir in configure
-parlay) hence it's against the distro openssl version.
-On newish openssl versions md2 is disabled by default, and buildroot
-doesn't try to enable it (it's obsolete), but if the distro
-libcrypto/openssl has it enabled then ipmiutil tries to use it.
+Fix:
+http://autobuild.buildroot.net/results/206/2062208c171207428c9121215971e00c52bf306a/
 
-Force it off to avoid build breakage. Fixes:
-http://autobuild.buildroot.net/results/cd2/cd2e617f8e2b00581ab5936029f85e62ed3259ba/
+According to configure-ng.py, PyQt_NoOpenGLES must be added to qtdetail when
+QT_OPENGL_ES is set.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas: add comment to explain the double negation.]
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ipmiutil/ipmiutil.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/python-pyqt/python-pyqt.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index 8e281d4..c3d791c 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -10,7 +10,9 @@ IPMIUTIL_LICENSE = BSD-3c
- IPMIUTIL_LICENSE_FILES = COPYING
- # We're patching configure.ac
- IPMIUTIL_AUTORECONF = YES
--
-+# tests against distro libcrypto so it might get a false positive when
-+# the openssl version is old, so force it off
-+IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DSKIP_MD2"
- IPMIUTIL_DEPENDENCIES = openssl
+diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+index 2445567..292398d 100644
+--- a/package/python-pyqt/python-pyqt.mk
++++ b/package/python-pyqt/python-pyqt.mk
+@@ -40,6 +40,12 @@ ifeq ($(BR2_PACKAGE_QT_OPENSSL),)
+ PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_OpenSSL
+ endif
  
- $(eval $(autotools-package))
++# Yes, this looks a bit weird: when OpenGL ES is available, we have to
++# disable the feature that consists in not having OpenGL ES support.
++ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
++PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_NoOpenGLES
++endif
++
+ # PyQt_qreal_double must be disabled on a number of architectures that
+ # use float for qreal.
+ ifeq ($(BR2_PACKAGE_PYTHON_PYQT_ARCH_USES_QREAL_FLOAT),y)
