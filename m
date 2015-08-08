@@ -1,42 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] imagemagick: bump to version
-	6.9.1-4
-Message-ID: <20150808105603.01E3681778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ntp: install after busybox
+Message-ID: <20150808105559.79E1A7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3302263870d4214d798a274b984e8cf1775702c0
+commit: http://git.buildroot.net/buildroot/commit/?id=dafcb53ea493045ebda61646fbaa2b468b627a06
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Make sure that ntp installs after busybox so that it overrides the busybox
+provided ntpd applet.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ntp/ntp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index b1c9caf..7ac3298 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 8f6ebeb1a1321fd7b7d3161a66461743ea5bbc352e4339c792b3bab52c379378 ImageMagick-6.9.1-1.tar.xz
-+sha256 74973478058069ce44040ff76b61df713d70adcadfd207836cc0622cadf1e4bf ImageMagick-6.9.1-4.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 1594f69..298d0a8 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 6.9.1-1
-+IMAGEMAGICK_VERSION = 6.9.1-4
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 554094d..36fc537 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -7,7 +7,7 @@
+ NTP_VERSION_MAJOR = 4.2
+ NTP_VERSION = $(NTP_VERSION_MAJOR).8p2
+ NTP_SITE = http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
+-NTP_DEPENDENCIES = host-pkgconf libevent
++NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ NTP_LICENSE = ntp license
+ NTP_LICENSE_FILES = COPYRIGHT
+ NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
