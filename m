@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] bc: patch makeinfo logic
-Message-ID: <20150808105609.707057F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-fusion: fix
+	build for Linux >= 4.0
+Message-ID: <20150808105608.5D5057F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0db1c13559660fce92759bdb1cd225614ba5d8d1
+commit: http://git.buildroot.net/buildroot/commit/?id=ca5f11e489357d5338e728dd554b25830d6b9b85
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It uses a hardcoded "makeinfo" command invocation instead of the usual
-MAKEINFO variable with the missing logic for docs. Fixes:
-http://autobuild.buildroot.net/results/b0b/b0b9dced0014a5a8026fa972f95085e8bd16a07b/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bc/03_use_appropiate_makeinfo.patch |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+ .../0001-fix-for-linux-4-and-above.patch           |   25 ++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/package/bc/03_use_appropiate_makeinfo.patch b/package/bc/03_use_appropiate_makeinfo.patch
+diff --git a/package/linux-fusion/0001-fix-for-linux-4-and-above.patch b/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
 new file mode 100644
-index 0000000..e6f9262
+index 0000000..689d9bf
 --- /dev/null
-+++ b/package/bc/03_use_appropiate_makeinfo.patch
-@@ -0,0 +1,17 @@
-+Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
-+command directly, otherwise missing logic never works.
++++ b/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
+@@ -0,0 +1,25 @@
++Fix build for linux >= 4.x
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Instead of relying on testing for '3' as the linux kernel major verison,
++check that it is 2.x to include the proper Makefile, otherwise forcibly
++include the .26 Makefile, that is good for 3.x and 4.x too.
 +
-+diff -Nura bc-1.06.95.orig/doc/Makefile.in bc-1.06.95/doc/Makefile.in
-+--- bc-1.06.95.orig/doc/Makefile.in	2015-06-13 09:39:46.946620294 -0300
-++++ bc-1.06.95/doc/Makefile.in	2015-06-13 09:40:10.019407630 -0300
-+@@ -96,7 +96,7 @@
-+ LIBOBJS = @LIBOBJS@
-+ LIBS = @LIBS@
-+ LTLIBOBJS = @LTLIBOBJS@
-+-MAKEINFO = makeinfo --no-split
-++MAKEINFO = @MAKEINFO@ --no-split
-+ OBJEXT = @OBJEXT@
-+ PACKAGE = @PACKAGE@
-+ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN linux-fusion-9.0.2.orig/Makefile linux-fusion-9.0.2/Makefile
++--- linux-fusion-9.0.2.orig/Makefile	2013-07-15 11:58:03.000000000 +0200
+++++ linux-fusion-9.0.2/Makefile	2015-06-06 19:03:04.059842652 +0200
++@@ -62,10 +62,10 @@
++   CPPFLAGS += -DHAVE_LINUX_CONFIG_H
++ endif
++ 
++-ifeq ($(K_VERSION),3)
++-  KMAKEFILE = Makefile-2.6
++-else
+++ifeq ($(K_VERSION),2)
++   KMAKEFILE = Makefile-2.$(K_PATCHLEVEL)
+++else
+++  KMAKEFILE = Makefile-2.6
++ endif
++ 
++ check-version = $(shell expr \( $(K_VERSION) \* 65536 + $(K_PATCHLEVEL) \* 256 + $(K_SUBLEVEL) \) \>= \( $(1) \* 65536 + $(2) \* 256 + $(3) \))
