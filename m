@@ -1,27 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] package/wavpack: add hash file
-Message-ID: <20150808105600.1E2AA7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox: drop useless
+	dependencies
+Message-ID: <20150808105607.6F69C7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=065b739bf9c927d1f6dd450f708fa9ad89ee8630
+commit: http://git.buildroot.net/buildroot/commit/?id=d890098d0510b6ae6f53be34eb48d5cbc50d8bdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+xlib-libXft is only needed when building a 'standalone' matchbox, which
+means not using matchbox-lib.
+
+But we *are* building matchbox-lib, and we do not support the standalone
+mode (and probably won't, as even upstream says it is ugly, by lack of
+theming).
+
+Similarly, xlib-libXext is only used for its 'xsync' extension, for
+which support is entirely commented-out in matchbox.
+
+So, drop the dependency on xlib-libXft, and make it explicit we're not
+building either standalone modes; drop xlib-libXext.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wavpack/wavpack.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/matchbox/Config.in   |    1 -
+ package/matchbox/matchbox.mk |   11 ++++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-new file mode 100644
-index 0000000..18dcfbc
---- /dev/null
-+++ b/package/wavpack/wavpack.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 2cade379b0aba99fbc4e442ccc6dac6c609f6212e46516a083e24c8c364430a4 wavpack-4.70.0.tar.bz2
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index d42b90f..0c7e5ea 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index b1f96a6..1abcfd8 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -11,15 +11,16 @@ MATCHBOX_LICENSE = GPLv2+
+ MATCHBOX_LICENSE_FILES = COPYING
+ 
+ MATCHBOX_DEPENDENCIES = matchbox-lib
+-MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
++MATCHBOX_CONF_OPTS = \
++	--enable-expat \
++	--disable-gconf \
++	--disable-composite \
++	--disable-standalone \
++	--disable-standalone-xft
+ 
+ # Workaround bug in configure script
+ MATCHBOX_CONF_ENV = expat=yes
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+-MATCHBOX_DEPENDENCIES += xlib_libXft
+-endif
+-
+ ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+ MATCHBOX_CONF_OPTS += --enable-startup-notification
+ MATCHBOX_DEPENDENCIES += startup-notification
