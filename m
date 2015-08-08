@@ -1,60 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:09 -0000
-Subject: [Buildroot] [git commit branch/next] qt/qt5base: Fix big endian
-	image conversion
-Message-ID: <20150808105639.5E8C480414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: bump default to version
+	4.1.3
+Message-ID: <20150808105639.ED1467F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ffbcceea9148afe835d41435e4df7a7e2b2e35e
+commit: http://git.buildroot.net/buildroot/commit/?id=76a964be7192601f1f2b356ae322b5d0891a3ef9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../qt5base/0007-big_endian-fix_destformat.patch   |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/0007-big_endian-fix_destformat.patch b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
-new file mode 100644
-index 0000000..b30d220
---- /dev/null
-+++ b/package/qt5/qt5base/0007-big_endian-fix_destformat.patch
-@@ -0,0 +1,34 @@
-+From 02ab210ea9bc5ee53fa4f1db2f068ce24272a6cd Mon Sep 17 00:00:00 2001
-+From: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
-+Date: Fri, 3 Jul 2015 14:19:02 +0200
-+Subject: [PATCH] Fix compile error on big endian
-+
-+DestFormat is not defined here but should be Format_RGBX8888
-+
-+Change-Id: Ie33989a6fc31650434281a6b7b0f4806524268af
-+Reviewed-by: Konstantin Ritt <ritt.ks@gmail.com>
-+Reviewed-by: Timo Jyrinki <timo.jyrinki@canonical.com>
-+Reviewed-by: Simon Hausmann <simon.hausmann@theqtcompany.com>
-+
-+Upstream-Status: https://codereview.qt-project.org/#/c/120654/
-+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-+---
-+ src/gui/image/qimage_conversions.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/gui/image/qimage_conversions.cpp b/src/gui/image/qimage_conversions.cpp
-+index e0ca2c5..02f32aa 100644
-+--- a/src/gui/image/qimage_conversions.cpp
-++++ b/src/gui/image/qimage_conversions.cpp
-+@@ -1103,7 +1103,7 @@ static bool mask_alpha_converter_rgbx_inplace(QImageData *data, Qt::ImageConvers
-+         }
-+         rgb_data += pad;
-+     }
-+-    data->format = DestFormat;
-++    data->format = QImage::Format_RGBX8888;
-+     return true;
-+ #endif
-+ }
-+-- 
-+2.1.0
-+
+diff --git a/linux/Config.in b/linux/Config.in
+index 097cde5..74af51d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.1.2"
++	bool "4.1.3"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.1.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.1.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
