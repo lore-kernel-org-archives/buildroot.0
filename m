@@ -1,46 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] package/efl/libelementary:
-	disable on static lib only build
-Message-ID: <20150808105601.5F3B981778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qemu: Compare
+	host/target Linux version only during build phase
+Message-ID: <20150808105600.86B3081904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d5f9f4b73c3cfa2daa663a5b7789789a5a7f206
+commit: http://git.buildroot.net/buildroot/commit/?id=1b1657621668ee8160f896cddc3009fc803b25ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
-this is always the case because efl already depends on BR2_USE_MMU.
+This patch fixes an error during source-check.
 
-Fixes:
-  http://autobuild.buildroot.org/results/07c/07c97918dab24215f5c5130a9cd2788adca0a27d/
+Thanks to Thomas for the hint:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/116183
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libelementary/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/qemu/qemu.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-index c193ef1..4f62592 100644
---- a/package/efl/libelementary/Config.in
-+++ b/package/efl/libelementary/Config.in
-@@ -1,5 +1,5 @@
--comment "libelementary needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libelementary needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 04df79f..0620804 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -85,10 +85,12 @@ HOST_QEMU_COMPARE_VERSION = $(shell test $(HOST_QEMU_HOST_SYSTEM_VERSION) -ge $(
+ # built with kernel headers that are older or the same as the kernel
+ # version running on the host machine.
+ #
++ifeq ($(BR_BUILDING),y)
+ ifneq ($(HOST_QEMU_COMPARE_VERSION),OK)
+ $(error "Refusing to build qemu-user: target Linux version newer than host's.")
+ endif
+ endif
++endif
  
- config BR2_PACKAGE_LIBELEMENTARY
- 	bool "libelementary"
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBEDJE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Elementary is a widget toolkit and EFL wrapper and convenience
- 	  library to make it easy to build applications and tools with UIs
+ define HOST_QEMU_CONFIGURE_CMDS
+ 	cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure    \
