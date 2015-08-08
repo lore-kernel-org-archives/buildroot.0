@@ -1,64 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:22 -0000
-Subject: [Buildroot] [git commit branch/next] package/nodejs: drop minor
-	version in Config.in
-Message-ID: <20150808105621.D918680414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] isl: bump to version 0.14.1
+Message-ID: <20150808105620.D63F37FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb6254a5aa2e0bf539b74279828c64be6693593b
+commit: http://git.buildroot.net/buildroot/commit/?id=6b50da9ac44d89e751f9da6ff4317adf12be2fe7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop the minor version from the Kconfig symbol, so we can seamlessly
-update the versions without having to handle legacy stuff.
+Also add hash file.
 
-Note: not adding legacy handling, as we haven't had any release with
-those symbols yet.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Chris Becker <goabonga@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/Config.in |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ package/isl/isl.hash |    2 ++
+ package/isl/isl.mk   |    6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 580d9a2..5b871ea 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -24,16 +24,16 @@ if BR2_PACKAGE_NODEJS
+diff --git a/package/isl/isl.hash b/package/isl/isl.hash
+new file mode 100644
+index 0000000..e2c14ad
+--- /dev/null
++++ b/package/isl/isl.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	8882c9e36549fc757efa267706a9af733bb8d7fe3905cbfde43e17a89eea4675	isl-0.14.1.tar.xz
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+index 55cff9d..bb79039 100644
+--- a/package/isl/isl.mk
++++ b/package/isl/isl.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
- choice
- 	prompt "Node.js version"
--	default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
--	default BR2_BR2_PACKAGE_NODEJS_0_12_5
-+	default BR2_BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
-+	default BR2_BR2_PACKAGE_NODEJS_0_12_X
- 	help
- 	  Select the version of Node.js you wish to use.
- 
--config BR2_BR2_PACKAGE_NODEJS_0_10_39
-+config BR2_BR2_PACKAGE_NODEJS_0_10_X
- 	bool "v0.10.39"
- 
- # V8 included with v0.12.5 requires at least ARMv6
--config BR2_BR2_PACKAGE_NODEJS_0_12_5
-+config BR2_BR2_PACKAGE_NODEJS_0_12_X
- 	bool "v0.12.5"
- 	depends on !BR2_ARM_CPU_ARMV5
- 
-@@ -41,8 +41,8 @@ endchoice
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
--	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_5
-+	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
-+	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
- 
- menu "Module Selection"
- 
+-# The latest 0.13 version is not yet compatible with cloog 0.18.2, so
++# The latest 0.15 version is not yet compatible with cloog 0.18.3, so
+ # bumping isl is not possible until a new version of cloog is
+ # published.
+-ISL_VERSION = 0.12.2
+-ISL_SOURCE = isl-$(ISL_VERSION).tar.bz2
++ISL_VERSION = 0.14.1
++ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
+ ISL_SITE = http://isl.gforge.inria.fr
+ ISL_LICENSE = MIT
+ ISL_LICENSE_FILES = LICENSE
