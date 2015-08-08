@@ -1,46 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] powerpc: disable binutils 2.24
-	for little endian
-Message-ID: <20150808105620.155AD7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libdaemon: add hash
+	file
+Message-ID: <20150808105605.245887F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2b99fa1904988e0eeaccd4c98a8e5ec782952f3
+commit: http://git.buildroot.net/buildroot/commit/?id=b1310c43f10f98fdcf48ac024eaafd545fee3199
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Binutils 2.24 produces broken code when compiling the kernel for
-ppc64le, so prevent this combination. See:
-
-https://sourceware.org/ml/binutils/2013-12/msg00200.html
-
-The problem manifests early in the boot process with "Kernel access of
-bad area, sig: 11" in arch_match_cpu_phys_id().
-
-The fix has been merged upstream as commit
-57fa7b8c7e59e35bced580f9bcb9668af43fdbce, which is available since
-Binutils 2.25.
-
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/libdaemon/libdaemon.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 926b3d2..3fe65e0 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -18,7 +18,8 @@ choice
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24
--		depends on !BR2_nios2 # supported, but broken on Nios-II
-+		# supported, but broken on Nios-II and powerpc64le
-+		depends on !BR2_nios2 && !BR2_powerpc64le
- 		bool "binutils 2.24"
- 
- 	config BR2_BINUTILS_VERSION_2_25
+diff --git a/package/libdaemon/libdaemon.hash b/package/libdaemon/libdaemon.hash
+new file mode 100644
+index 0000000..8dbbb5a
+--- /dev/null
++++ b/package/libdaemon/libdaemon.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 fd23eb5f6f986dcc7e708307355ba3289abe03cc381fc47a80bca4a50aa6b834 libdaemon-0.14.tar.gz
