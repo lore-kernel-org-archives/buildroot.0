@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 17:16:19 +0200
-Subject: [Buildroot] [git commit] opencv: mark as not available on Xtensa
-Message-ID: <20150808151801.B5D6980E15@busybox.osuosl.org>
+Date: Sat, 8 Aug 2015 17:31:13 +0200
+Subject: [Buildroot] [git commit] netatalk: needs dynamic library
+Message-ID: <20150808153248.8866980776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d21932508e69d4ab849cba9958f953ae9342cb8c
+commit: http://git.buildroot.net/buildroot/commit/?id=af84025bc84fe56f1328bb96bb0676c22fce7c5e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-OpenCV currently does not build on Xtensa due to compiler/assembler
-issues:
+Even though netatalk checks if dlfcn.h is available and has some code
+that supposedly copes with non-dynamic library cases, it in fact does
+not build. Since there is probably little interest in using netatalk
+in pure statically linked environments, let's simply require dynamic
+library support.
 
-  Error: operand 2 of 'l32r' has out of range value '4294632228'
+Fixes:
 
-Until this gets fixed, let's disable OpenCV on Xtensa.
-
-Temporarily works around:
-
-   http://autobuild.buildroot.net/results/0be/0bed0779685d9ed83466a4d29a0281ca93043a2e/
+  http://autobuild.buildroot.net/results/79e55e64885d64392407e830560175c556953a20/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/netatalk/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 0b5d1ac..a52092d 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -5,6 +5,8 @@ menuconfig BR2_PACKAGE_OPENCV
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # include dlfcn.h
-+	# Causes some toolchain failures on Xtensa
-+	depends on !BR2_xtensa
- 	help
- 	  OpenCV (Open Source Computer Vision) is a library of programming
- 	  functions for real time computer vision.
-@@ -334,6 +336,7 @@ config BR2_PACKAGE_OPENCV_INSTALL_DATA
- endif # BR2_PACKAGE_OPENCV
+diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
+index cdb2039..ec6ec2c 100644
+--- a/package/netatalk/Config.in
++++ b/package/netatalk/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_NETATALK
+ 	bool "netatalk"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBEVENT
+@@ -13,6 +14,6 @@ config BR2_PACKAGE_NETATALK
  
- comment "opencv needs a toolchain w/ C++, NPTL, wchar, dynamic library"
-+	depends on !BR2_xtensa
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 	  http://netatalk.sourceforge.net/
+ 
+-comment "netatalk needs a toolchain w/ threads"
++comment "netatalk needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
