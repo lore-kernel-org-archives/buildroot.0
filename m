@@ -1,90 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Aug 2015 11:03:14 +0200
-Subject: [Buildroot] [git commit branch/next] uclibc: remove patch applied
-	in 1.0.5
-Message-ID: <20150808105652.EC3F37FE0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:56:53 -0000
+Subject: [Buildroot] [git commit branch/next] pkg-autotools: fix patching
+	libtool for version 2.4
+Message-ID: <20150808105623.3C59A80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c22f16317646d2d0b5f2736d641820f757422054
+commit: http://git.buildroot.net/buildroot/commit/?id=9917e48d7eb5bc7fbbb0188872a32c11b4b67010
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 --------------------
- 1 files changed, 0 insertions(+), 64 deletions(-)
+If the libtool used by the package is 2.4 (i.e. with no patchlevel), we
+end up with error messages like this one, seen when building ntp-4.2.8p3:
 
-diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-deleted file mode 100644
-index a580a67..0000000
---- a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Wed, 22 Jul 2015 14:54:07 +0200
--Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
--
--Found via buildroot autobuilder.
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-----
-- libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
-- libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
-- 2 files changed, 12 insertions(+)
--
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--index f38703b..ff9a784 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
--@@ -70,6 +70,9 @@
-- 	.globl	__lll_lock_wait_private
-- 	.type	__lll_lock_wait_private, at function
-- 	.hidden	__lll_lock_wait_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_lock_wait_private
--+#endif
-- 	.align	16
-- __lll_lock_wait_private:
-- 	cfi_startproc
--@@ -320,6 +323,9 @@ __lll_timedlock_wait:
-- 	.globl	__lll_unlock_wake_private
-- 	.type	__lll_unlock_wake_private, at function
-- 	.hidden	__lll_unlock_wake_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_unlock_wake_private
--+#endif
-- 	.align	16
-- __lll_unlock_wake_private:
-- 	cfi_startproc
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--index 50aacea..894c683 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
--@@ -75,6 +75,9 @@
-- 	.globl	__lll_lock_wait_private
-- 	.type	__lll_lock_wait_private, at function
-- 	.hidden	__lll_lock_wait_private
--+#ifndef IS_IN_libpthread
--+	.weak   __lll_lock_wait_private
--+#endif
-- 	.align	16
-- __lll_lock_wait_private:
-- 	cfi_startproc
--@@ -317,6 +320,9 @@ __lll_timedlock_wait:
-- 	.globl	__lll_unlock_wake_private
-- 	.type	__lll_unlock_wake_private, at function
-- 	.hidden	__lll_unlock_wake_private
--+#ifndef IS_IN_libpthread
--+	.weak	__lll_unlock_wake_private
--+#endif
-- 	.align	16
-- __lll_unlock_wake_private:
-- 	cfi_startproc
---- 
--1.7.10.4
--
+    /bin/sh: line 0: test: 2.4: integer expression expected
+
+That's because the current sed expression "[0-9].[0-9]." only deletes content
+like "2.4.", so it leaves "2.4" (no patch level *and* no second period) intact,
+resulting in an ltmain_patchlevel of "2.4", not empty, and not "0".  Then the
+shell line goes bad, because the built in shell test -gt operates on integers
+only, and fails on floating point numbers (like "2.4").
+
+Additionally, the existing sed lines are problematic in other ways, because the
+current expression "[0-9].[0-9]" will match "234" as well as "2.4", as an unescaped
+period matches any character, not just a period.  Also, the lack of an asterisk
+after the first character may be a problem in the future, if a two digit initial
+number is used.
+
+So, this patch changes the sed regex as follows:
+
+* Match a string of digits when searching for a number.  I.e. "[0-9]*"
+* Match specifically a period in between two numbers.  I.e. "\."
+* When searching for a patch level, make the second period optional.  I.e. "\.*"
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-autotools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 1d694f0..54f5dcd 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -61,9 +61,9 @@ define LIBTOOL_PATCH_HOOK
+ 	@$(call MESSAGE,"Patching libtool")
+ 	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+ 		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
+-		sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
++		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
+ 		ltmain_patchlevel=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$i | \
+-		sed -e 's/\([0-9].[0-9].\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
++		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
+ 		if test $${ltmain_version} = '1.5'; then \
+ 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+ 		elif test $${ltmain_version} = "2.2"; then\
