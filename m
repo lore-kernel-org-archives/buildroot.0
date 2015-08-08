@@ -1,42 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:55:55 -0000
-Subject: [Buildroot] [git commit branch/next] giflib: remove from the
-	description the reference to libungif
-Message-ID: <20150808105555.59E0781801@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:55:56 -0000
+Subject: [Buildroot] [git commit branch/next] package/at: fix glibcism
+Message-ID: <20150808105554.DEF5581801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2633f0e54645f0fc44e25e3363bb41fe03356f72
+commit: http://git.buildroot.net/buildroot/commit/?id=3b1c4349a3f18eb67772474881e1379e55bf37f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Starting from version 5.0 giflib it's no longer compatible with
-libungif, also the libungif is now deprecated so just remove the
-reference to libungif.
+at needs __isleap() which is in (e)glibc and uClibc, but not in musl.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Add a patch (from Open Embedded) that removes use of the macros, and
+directly expands the corresponding code in lieu of the macro calls.
+
+Fixes:
+    http://autobuild.buildroot.org/results/6f2/6f25e80e8aedec91323ef9b67576b550d7abee60/
+    http://autobuild.buildroot.org/results/da5/da5bb779f3077b079203fcbdb2533dd790963cd4/
+    http://autobuild.buildroot.org/results/8a6/8a6ce608c6f46d08ed77049f796e98e6e10a1709/
+    ...
+
+Thanks to J??rg for pointing to the OE patch! :-)
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: J??rg Krause <joerg.krause@embedded.rocks>
+Tested-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/giflib/Config.in |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ .../at/0008-remove-glibc-__isleap-assumption.patch |   59 ++++++++++++++++++++
+ 1 files changed, 59 insertions(+), 0 deletions(-)
 
-diff --git a/package/giflib/Config.in b/package/giflib/Config.in
-index 70368dc..fc1f85d 100644
---- a/package/giflib/Config.in
-+++ b/package/giflib/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_GIFLIB
- 	bool "giflib"
- 	help
--	  giflib is a library for reading and writing gif images. It is API and
--	  ABI compatible with libungif which was in wide use while the LZW
--	  compression algorithm was patented.
-+	  giflib is a library for reading and writing gif images.
- 
- 	  http://sourceforge.net/projects/giflib
+diff --git a/package/at/0008-remove-glibc-__isleap-assumption.patch b/package/at/0008-remove-glibc-__isleap-assumption.patch
+new file mode 100644
+index 0000000..2152249
+--- /dev/null
++++ b/package/at/0008-remove-glibc-__isleap-assumption.patch
+@@ -0,0 +1,59 @@
++From 7f811d9c4ebc9444e613e251c31d6bf537a24dc1 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Mon, 13 Apr 2015 16:35:30 -0700
++Subject: [PATCH] remove glibc assumption
++
++glibc time.h header has an undocumented __isleap macro
++that we are using anf musl is missing it.
++Since it is undocumented & does not appear
++on any other libc, stop using it and just define the macro in
++locally  instead.
++
++Upstream-Status: Pending
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++[patch from: http://patchwork.openembedded.org/patch/91893/ ]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++ parsetime.y | 11 +++++++----
++ 1 file changed, 7 insertions(+), 4 deletions(-)
++
++diff --git a/parsetime.y b/parsetime.y
++index 7005e88..324e6d3 100644
++--- a/parsetime.y
+++++ b/parsetime.y
++@@ -8,6 +8,9 @@
++ 
++ #define YYDEBUG 1
++ 
+++#define is_leap_year(y) \
+++    ((y) % 4 == 0 && ((y) % 100 != 0 || (y) % 400 == 0))
+++
++ struct tm exectm;
++ static int isgmt;
++ static int yearspec;
++@@ -217,8 +220,8 @@ date            : month_name day_number
++ 				 mnum == 12) && dnum > 31)
++ 			    || ((mnum ==  4 || mnum ==  6 || mnum ==  9 ||
++ 			         mnum == 11) && dnum > 30)
++-			    || (mnum ==  2 && dnum > 29 &&  __isleap(ynum+1900))
++-			    || (mnum ==  2 && dnum > 28 && !__isleap(ynum+1900))
+++			    || (mnum ==  2 && dnum > 29 &&  is_leap_year(ynum+1900))
+++			    || (mnum ==  2 && dnum > 28 && !is_leap_year(ynum+1900))
++ 			   )
++ 			{
++ 			    yyerror("Error in day of month");
++@@ -261,8 +264,8 @@ date            : month_name day_number
++ 				 mnum == 12) && dnum > 31)
++ 			    || ((mnum ==  4 || mnum ==  6 || mnum ==  9 ||
++ 			         mnum == 11) && dnum > 30)
++-			    || (mnum ==  2 && dnum > 29 &&  __isleap(ynum+1900))
++-			    || (mnum ==  2 && dnum > 28 && !__isleap(ynum+1900))
+++			    || (mnum ==  2 && dnum > 29 &&  is_leap_year(ynum+1900))
+++			    || (mnum ==  2 && dnum > 28 && !is_leap_year(ynum+1900))
++ 			   )
++ 			{
++ 			    yyerror("Error in day of month");
++-- 
++2.1.4
