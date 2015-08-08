@@ -1,78 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:33 -0000
-Subject: [Buildroot] [git commit branch/next] squid: bump to version 3.5.6
-Message-ID: <20150808105623.145367FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bind: Enable
+	filter-aaaa-on-v4 option
+Message-ID: <20150808105623.47ED27FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d43343c86f8d2b01c35034a2d50960bf5f6cdfe6
+commit: http://git.buildroot.net/buildroot/commit/?id=0b067e2737821204ea969f72201f73604d3cd905
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 3.5.6
-- Update hash file
-- Change configure options according to release notes
+This allows usage of the filter-aaaa-on-v4 configuration option.
+This option disables responding with AAAA records when the request
+	is made over ipv4. This may be useful on networks with
+	ipv6 inside, but no ISP ipv6 (when combined with only
+	listening on ipv4).
 
-Release notes:
+See https://kb.isc.org/article/AA-00576/
+	Filter-AAAA-option-in-BIND-9-.html
+	for more information.
 
-  http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6-RELEASENOTES.html
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    7 +++----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/bind/bind.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 64d2fac..d5738c7 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.5.tar.xz.asc
--md5	9a323a97753143ddd935aed58a0193ae	squid-3.5.5.tar.xz
--sha1	2c168e8b13251ed8050d9e780127c4de016dcb61	squid-3.5.5.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6.tar.xz.asc
-+md5  93e18bd257857e35bb634ddb8a348563  squid-3.5.6.tar.xz
-+sha1  c5f3ab47e61a08fa6a8767d45befeffd7d26fd9f  squid-3.5.6.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index adc09e5..469fb1b 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 55b5f07..9a08461 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -26,7 +26,8 @@ BIND_CONF_OPTS = \
+ 	--enable-epoll \
+ 	--with-libtool \
+ 	--with-gssapi=no \
+-	--enable-rrl
++	--enable-rrl \
++	--enable-filter-aaaa
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).5
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
-@@ -29,7 +29,7 @@ SQUID_CONF_OPTS = \
- 	--enable-removal-policies="lru,heap" \
- 	--with-filedescriptors=1024 \
- 	--disable-ident-lookups \
--	--with-krb5-config=no \
-+	--without-mit-krb5 \
- 	--enable-auth-basic="fake getpwnam" \
- 	--enable-auth-digest="file" \
- 	--enable-auth-negotiate="wrapper" \
-@@ -39,7 +39,6 @@ SQUID_CONF_OPTS = \
- 	--with-logdir=/var/log/squid/ \
- 	--with-pidfile=/var/run/squid.pid \
- 	--with-swapdir=/var/cache/squid/ \
--	--enable-icap-client \
- 	--with-default-user=squid
- 
- # Atomics in Squid use __sync_add_and_fetch_8, i.e a 64 bits atomic
-@@ -59,7 +58,7 @@ SQUID_CONF_ENV += ac_cv_search_shm_open="-lrt -lpthread"
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SQUID_CONF_OPTS += --enable-ssl
-+SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
- endif
- 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ BIND_CONF_OPTS += --enable-linux-caps
