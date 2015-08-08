@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:46 -0000
-Subject: [Buildroot] [git commit branch/next] package/apache: security bump
-	to version 2.4.16
-Message-ID: <20150808105635.DEF2881904@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/uboot: bump to version
+	2015.07
+Message-ID: <20150808105635.D7988818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd9abf873a5c25f34a54338a8f9afc456c09c433
+commit: http://git.buildroot.net/buildroot/commit/?id=e13609ddf42afc77b0b5a9145513cfdab32d75b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2015-3183, CVE-2015-3185, CVE-2015-0253, CVE-2015-0228
-http://marc.info/?l=apache-httpd-announce&m=143704705330655&w=2
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/apache/apache.hash |    4 ++--
- package/apache/apache.mk   |    2 +-
+ boot/uboot/Config.in  |    4 ++--
+ boot/uboot/uboot.hash |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 51fd3ca..9dffe12 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.12.tar.bz2.sha1
--sha1	bc4681bfd63accec8d82d3cc440fbc8264ce0f17	httpd-2.4.12.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.16.tar.bz2.sha1
-+sha1	9963e7482700dd50c53e47abfe2d1c5068875a9c	httpd-2.4.16.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 296e27e..acd242d 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1cdb2fa..f0c0094 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
--APACHE_VERSION = 2.4.12
-+APACHE_VERSION = 2.4.16
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2015.04"
++	bool "2015.07"
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -63,7 +63,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2015.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2015.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 9cc96f6..3b687d5 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	0a1a70df586655f527befa6f12e184e96ed61b126e5a567382321b17200f5d60  u-boot-2015.04.tar.bz2
++sha256	0b48c9bd717f2c322ef791f8282e14c88be942dc7d1226df7e31a812a3af94d9  u-boot-2015.07.tar.bz2
