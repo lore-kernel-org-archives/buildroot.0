@@ -1,47 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] dhcpcd: needs kernel headers
-	>= 3.1
-Message-ID: <20150808105557.034FB818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] arch/Config.in.xtensa: provide
+	BR2_ENDIAN symbol
+Message-ID: <20150808105555.00DC0818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80e651db43a9cbd4da7149d091b1ba1fdbb7d678
+commit: http://git.buildroot.net/buildroot/commit/?id=083ec2df6c38b444f0e76cd708f5600a9f149a83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-commit dfbfa6ef (dhcpcd: blacklist Sourcery PowerPC toolchains) blacklisted
-specific toolchains, but the issue is actually that the kernel headers
-before 3.1 didn't define sa_family_t, so instead require 3.1+ headers.
+Packages get hints from the buildroot at configure time, e.g.
+ac_cv_c_bigendian=yes/no. This particular hint is based on the value of
+BR2_ENDIAN and when it doesn't match actual toolchain endiannes the
+build may break.
+Provide BR2_ENDIAN for xtensa to fix this sort of build errors.
 
-The specific kernel change fixing the headers is:
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=6602a4baf4d1a73cc
+Fixes:
+  http://autobuild.buildroot.net/results/31115fe8d88f52d77ed0f2da769eb8896a1b34a2/
 
-The only reverse dependency of dhcpcd (network-manager) already needs 3.7+,
-so this dependency doesn't need to be propagated.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhcpcd/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ arch/Config.in.xtensa |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
-index f2ca099..88f2e48 100644
---- a/package/dhcpcd/Config.in
-+++ b/package/dhcpcd/Config.in
-@@ -1,9 +1,11 @@
-+comment "dhcpcd needs a toolchain w/ headers >= 3.1"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index ff71e0b..0687319 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -33,6 +33,23 @@ config BR2_XTENSA_OVERLAY_DIR
+ 	  configurations. They are provided by the processor vendor or
+ 	  directly from Tensilica.
+ 
++choice
++	prompt "Target Architecture Endianness"
++	depends on BR2_XTENSA_CUSTOM
++	default BR2_XTENSA_LITTLE_ENDIAN
 +
- config BR2_PACKAGE_DHCPCD
- 	bool "dhcpcd"
- 	# No support for AI_ADDRCONFIG
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
--	# bad headers, no sa_family_t in linux/socket.h
--	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1 # sa_family_t in linux/socket.h
- 	help
- 	  An RFC2131 compliant DHCP client
++config BR2_XTENSA_LITTLE_ENDIAN
++	bool "Little endian"
++
++config BR2_XTENSA_BIG_ENDIAN
++	bool "Big endian"
++
++endchoice
++
++config BR2_ENDIAN
++	default "LITTLE"	if BR2_XTENSA_LITTLE_ENDIAN
++	default "BIG"		if BR2_xtensa_fsf || BR2_XTENSA_BIG_ENDIAN
++
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
  
