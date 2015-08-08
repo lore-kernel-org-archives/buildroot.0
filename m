@@ -1,38 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 13:00:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: bump to version
- 2015.07
-In-Reply-To: <1438720196-28247-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1438720196-28247-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150808130023.0a48b492@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  8 Aug 2015 13:59:05 +0200
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xserver_xorg-server: Fix
+	libdrm dependency handling
+In-Reply-To: <1439035146-26080-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1439035146-26080-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1439035146-26080-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Fixes
+http://autobuild.buildroot.net/results/2e1/2e12f1a91812f027d89fcceeb41d6c88ef7b9d32/
 
-On Tue,  4 Aug 2015 22:29:56 +0200, J?rg Krause wrote:
-> Also:
->   - update patch #1
->   - remove patch #3 and #4 -> applied upstream
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../uboot-tools/0001-drop-configh-from-tools.patch | 25 +++++++-
->  package/uboot-tools/0003-Fix-musl-build.patch      | 71 ----------------------
->  ...kg-config-when-available-to-get-SSL-flags.patch | 39 ------------
->  package/uboot-tools/uboot-tools.hash               |  2 +-
->  package/uboot-tools/uboot-tools.mk                 |  2 +-
->  5 files changed, 24 insertions(+), 115 deletions(-)
->  delete mode 100644 package/uboot-tools/0003-Fix-musl-build.patch
->  delete mode 100644 package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 566d93a..c88614b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -86,6 +86,12 @@ endif
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
+ XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-libdrm
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-libdrm
++endif
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xorg
+ endif
+@@ -125,10 +131,10 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
+-XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
++XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
+ else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-libdrm --disable-glx
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
+@@ -148,8 +154,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev
+ # udev kms support depends on libdrm and dri2
+ ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_XPROTO_DRI2PROTO),yy)
+-XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms --enable-libdrm
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-config-udev-kms
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
