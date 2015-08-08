@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] freetype: bump to version 2.6.0
-Message-ID: <20150808105608.160AD7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] iproute2: disable xtables on
+	static build
+Message-ID: <20150808105600.98A1D7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdd7fa8fbcf867157e26fa661e5327af50db2b63
+commit: http://git.buildroot.net/buildroot/commit/?id=72e548a48036dce6a7ee5cfebc7cdefd9ffb8442
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+iproute2 always builds m_xt.so as a shared library.
+
+Fixes:
+http://autobuild.buildroot.net/results/f42/f42bbbf5be4594a8806d0e571586ce2bf119582d/
+http://autobuild.buildroot.net/results/3b3/3b37871bdf5766677fc20dca22c13177091d104f/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.hash |    6 +++---
- package/freetype/freetype.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/iproute2/iproute2.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index f890c7f..16450d0 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/freetype/files/freetype2/2.5.5/
--md5	2a7a314927011d5030903179cf183be0	freetype-2.5.5.tar.bz2
--sha1	7b7460ef51a8fdb17baae53c6658fc1ad000a1c2	freetype-2.5.5.tar.bz2
-+# From http://sourceforge.net/projects/freetype/files/freetype2/2.6/
-+md5	5682890cb0267f6671dd3de6eabd3e69	freetype-2.6.tar.bz2
-+sha1	cd2b144205dd2c61693e2d861069367aa3dde1bc	freetype-2.6.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 56274cb..e3c8240 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 9595165..3315d67 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -18,7 +18,7 @@ IPROUTE2_DEPENDENCIES += busybox
+ endif
  
--FREETYPE_VERSION = 2.5.5
-+FREETYPE_VERSION = 2.6
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
+ # If we've got iptables enable xtables support for tc
+-ifeq ($(BR2_PACKAGE_IPTABLES),y)
++ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
+ IPROUTE2_DEPENDENCIES += iptables
+ define IPROUTE2_WITH_IPTABLES
+ 	# Makefile is busted so it never passes IPT_LIB_DIR properly
+@@ -29,6 +29,7 @@ else
+ define IPROUTE2_WITH_IPTABLES
+ 	# em_ipset needs xtables, but configure misdetects it
+ 	echo "TC_CONFIG_IPSET:=n" >>$(IPROUTE2_DIR)/Config
++	echo "TC_CONFIG_XT:=n" >>$(IPROUTE2_DIR)/Config
+ endef
+ endif
+ 
