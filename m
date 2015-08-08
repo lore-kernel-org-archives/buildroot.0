@@ -1,122 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:25 -0000
-Subject: [Buildroot] [git commit branch/next] fcgiwrap: new package
-Message-ID: <20150808105625.45777818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
+	missing nvs file for the wl18xx firmware
+Message-ID: <20150808105625.E9FD57FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ba276de2a8f0387304e870995aa6d9a65e33e4a
+commit: http://git.buildroot.net/buildroot/commit/?id=685449372ac1dfc807906118fd918ed0a026fea4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add package fcgiwrap from https://nginx.localdomain.pl/wiki/FcgiWrap
+The wl18xx shares the same wlcore as the wl1271 and needs the
+wl1271-nvs.bin file.  Also, refactor some comments and list items.
 
-fcgiwrap is a simple server for running CGI applications over
-FastCGI. It hopes to provide clean CGI support to Nginx (and other web
-servers that may need it).
-
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Signed-off-by: Marc-Andre Chenier <mac@vrvana.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- .../fcgiwrap/0001-use-LIBS-from-configure.patch    |   22 +++++++++++++
- package/fcgiwrap/Config.in                         |   10 ++++++
- package/fcgiwrap/fcgiwrap.mk                       |   32 ++++++++++++++++++++
- 4 files changed, 65 insertions(+), 0 deletions(-)
+ package/linux-firmware/linux-firmware.mk |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9f04b54..3fce415 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1181,6 +1181,7 @@ endif
- 	source "package/ejabberd/Config.in"
- 	source "package/ethtool/Config.in"
- 	source "package/faifa/Config.in"
-+	source "package/fcgiwrap/Config.in"
- 	source "package/fmc/Config.in"
- 	source "package/foomatic-filters/Config.in"
- 	source "package/fping/Config.in"
-diff --git a/package/fcgiwrap/0001-use-LIBS-from-configure.patch b/package/fcgiwrap/0001-use-LIBS-from-configure.patch
-new file mode 100644
-index 0000000..12563c4
---- /dev/null
-+++ b/package/fcgiwrap/0001-use-LIBS-from-configure.patch
-@@ -0,0 +1,22 @@
-+Makefile.in: Use LIBS from configure rather than specifying -lfcgi manually.
-+
-+libfcgi needs libm and fcgiwrap does not use libtool or pkgconf to
-+detect libfcgi, so we need to add -lm explicitely when using static
-+libs.  Buildroot does this by providing LIBS=-lm to configure when
-+needed.  However fcgiwrap does not use Automake and its Makefile.in
-+ignores LIBS from configure.  Fix it with this patch.
-+
-+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-+
-+diff -ur a/Makefile.in b/Makefile.in
-+--- a/Makefile.in	2013-02-03 14:25:17.000000000 +0100
-++++ b/Makefile.in	2015-05-29 16:33:23.895280138 +0200
-+@@ -16,7 +16,7 @@
-+ 	install -m 644 systemd/fcgiwrap.service $(DESTDIR)@systemdsystemunitdir@
-+ endif
-+
-+-LDLIBS = -lfcgi @systemd_LIBS@
-++LDLIBS = @LIBS@ @systemd_LIBS@
-+ CFLAGS = @AM_CFLAGS@
-+
-+ fcgiwrap: fcgiwrap.c
-diff --git a/package/fcgiwrap/Config.in b/package/fcgiwrap/Config.in
-new file mode 100644
-index 0000000..c3a31fc
---- /dev/null
-+++ b/package/fcgiwrap/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_FCGIWRAP
-+	bool "fcgiwrap"
-+	depends on BR2_USE_MMU # libfcgi
-+	select BR2_PACKAGE_LIBFCGI
-+	help
-+	  fcgiwrap is a simple server for running CGI applications
-+	  over FastCGI. It hopes to provide clean CGI support to Nginx
-+	  (and other web servers that may need it).
-+
-+	  https://nginx.localdomain.pl/wiki/FcgiWrap
-diff --git a/package/fcgiwrap/fcgiwrap.mk b/package/fcgiwrap/fcgiwrap.mk
-new file mode 100644
-index 0000000..698a130
---- /dev/null
-+++ b/package/fcgiwrap/fcgiwrap.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# fcgiwrap
-+#
-+################################################################################
-+
-+FCGIWRAP_VERSION = 1.1.0
-+FCGIWRAP_SITE = $(call github,gnosek,fcgiwrap,$(FCGIWRAP_VERSION))
-+FCGIWRAP_DEPENDENCIES = host-pkgconf libfcgi
-+FCGIWRAP_LICENSE = MIT
-+FCGIWRAP_LICENSE_FILES = fcgiwrap.c
-+FCGIWRAP_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+FCGIWRAP_DEPENDENCIES += systemd
-+FCGIWRAP_CONF_OPTS += --with-systemd
-+else
-+FCGIWRAP_CONF_OPTS += --without-systemd
-+endif
-+
-+# libfcgi needs libm and fcgiwrap does not use libtool or pkgconf to
-+# detect libfcgi, so we need to add -lm explicitely when using static
-+# libs.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+FCGIWRAP_CONF_OPTS += LIBS=-lm
-+endif
-+
-+# fcgiwrap uses Autoconf, but not Automake, so we need to provide
-+# these to make.
-+FCGIWRAP_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
-+
-+$(eval $(autotools-package))
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 25a942a..87804d8 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -151,6 +151,7 @@ endif
+ 
+ # wl128x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
++# wl1271-nvs.bin and wl12xx-nvs.bin are symlinks to wl127x-nvs.bin
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl128x-fw-3.bin				\
+ 	ti-connectivity/wl128x-fw-ap.bin			\
+@@ -159,6 +160,7 @@ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl1271-nvs.bin				\
+ 	ti-connectivity/wl128x-nvs.bin				\
+ 	ti-connectivity/wl12xx-nvs.bin				\
++	ti-connectivity/wl127x-nvs.bin				\
+ 	ti-connectivity/wl128x-fw-4-mr.bin			\
+ 	ti-connectivity/wl128x-fw-4-plt.bin			\
+ 	ti-connectivity/wl128x-fw-4-sr.bin			\
+@@ -166,18 +168,19 @@ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl128x-fw-5-plt.bin			\
+ 	ti-connectivity/wl128x-fw-5-sr.bin			\
+ 	ti-connectivity/TIInit_7.2.31.bts
+-# wl12xx-nvs.bin (above) is a symlink to:
+-LINUX_FIRMWARE_FILES += ti-connectivity/wl127x-nvs.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+ endif
+ 
+ # wl18xx
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX),y)
++# wl1271-nvs.bin is a symlink to wl127x-nvs.bin
+ LINUX_FIRMWARE_FILES += \
+ 	ti-connectivity/wl18xx-fw.bin \
+ 	ti-connectivity/wl18xx-fw-2.bin \
+ 	ti-connectivity/wl18xx-fw-3.bin \
+ 	ti-connectivity/wl18xx-fw-4.bin \
++	ti-connectivity/wl1271-nvs.bin \
++	ti-connectivity/wl127x-nvs.bin \
+ 	ti-connectivity/TIInit_7.2.31.bts
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+ endif
