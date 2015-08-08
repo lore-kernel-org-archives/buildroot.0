@@ -1,41 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:40 -0000
-Subject: [Buildroot] [git commit branch/next] orc: bump version
-Message-ID: <20150808105614.72F9A7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libpciaccess: bump
+	version to 0.13.4
+Message-ID: <20150808105629.D3C027FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5aaf53de7a7cc9cf6d11bdb4709345632a39ce1
+commit: http://git.buildroot.net/buildroot/commit/?id=be6e025f5b8885052441887eb48145d6545f5a05
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/orc/orc.hash |    4 ++--
- package/orc/orc.mk   |    2 +-
+ package/libpciaccess/libpciaccess.hash |    4 ++--
+ package/libpciaccess/libpciaccess.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/orc/orc.hash b/package/orc/orc.hash
-index ce720cb..100f194 100644
---- a/package/orc/orc.hash
-+++ b/package/orc/orc.hash
+diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
+index 10efd1c..0483c4c 100644
+--- a/package/libpciaccess/libpciaccess.hash
++++ b/package/libpciaccess/libpciaccess.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050855.html
--sha256	767eaebce2941737b43368225ec54598b3055ca78b4dc50c4092f5fcdc0bdfe7  orc-0.4.23.tar.xz
-+# From http://lists.freedesktop.org/archives/gstreamer-devel/2015-June/053346.html
-+sha256	338cd493b5247300149821c6312bdf7422a3593ae98691fc75d7e4fe727bd39b  orc-0.4.24.tar.xz
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index 0d9e78c..5d84bd0 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
+-# From http://lists.x.org/archives/xorg-announce/2015-February/002528.html
+-sha256	6cd76ccae4e06eee47d3ead84a118740e9406e2a9b7adc9b08e92c69ce89c2e3	libpciaccess-0.13.3.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002590.html
++sha256	07f864654561e4ac8629a0ef9c8f07fbc1f8592d1b6c418431593e9ba2cf2fcf	libpciaccess-0.13.4.tar.bz2
+diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
+index ade4cc6..ced0786 100644
+--- a/package/libpciaccess/libpciaccess.mk
++++ b/package/libpciaccess/libpciaccess.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ORC_VERSION = 0.4.23
-+ORC_VERSION = 0.4.24
- ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
- ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
- ORC_LICENSE = BSD-2c, BSD-3c
+-LIBPCIACCESS_VERSION = 0.13.3
++LIBPCIACCESS_VERSION = 0.13.4
+ LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.bz2
+ LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ LIBPCIACCESS_LICENSE = MIT
