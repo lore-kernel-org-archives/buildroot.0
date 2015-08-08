@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:51 -0000
-Subject: [Buildroot] [git commit branch/next] linux-firmware: add brcm43143
-	support
-Message-ID: <20150808105640.1AA2E7F8D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openipmi: add homepage URL
+Message-ID: <20150808105640.892BF8190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52491db85e506aa51708496594be503930b9e322
+commit: http://git.buildroot.net/buildroot/commit/?id=17e487f74612e0123259f80a3ebba0177399b7ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+The homepage is now back online.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/linux-firmware.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/openipmi/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 674b0dc..06195c9 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -299,6 +299,7 @@ endif
- # brcm43xxx
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX),y)
- LINUX_FIRMWARE_FILES += \
-+	brcm/brcmfmac43143.bin brcm/brcmfmac43143-sdio.bin \
- 	brcm/brcmfmac43236b.bin brcm/brcmfmac43241b0-sdio.bin \
- 	brcm/brcmfmac43241b4-sdio.bin brcm/brcmfmac43362-sdio.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
+index 667efa7..da88657 100644
+--- a/package/openipmi/Config.in
++++ b/package/openipmi/Config.in
+@@ -11,6 +11,8 @@ config BR2_PACKAGE_OPENIPMI
+ 	  to interact with IPMI enabled devices. OpenIPMI also provides
+ 	  an IPMI BMC simulator.
+ 
++	  http://openipmi.sourceforge.net
++
+ comment "openipmi needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
