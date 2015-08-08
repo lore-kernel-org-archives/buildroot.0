@@ -1,256 +1,174 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:47 -0000
-Subject: [Buildroot] [git commit branch/next] nginx: bump to 1.8.0 (latest
-	stable version)
-Message-ID: <20150808105615.DA5747FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] monkey: new package
+Message-ID: <20150808105616.7AF837FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fed646f1649bb37937de12b99359863f33629e28
+commit: http://git.buildroot.net/buildroot/commit/?id=372113ff935ca0fba607c5455dbadd5f410efa24
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Patches refreshed to apply with no shift or fuzz.
+Monkey is a small, fast and lightweight open source Web Server for
+GNU/Linux.  It has been designed with focus in embedded devices,
+therefore its scalable by nature having a low memory and CPU
+consumption and an excellent performance.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+[Thomas:
+  - Add missing dependency on !BR2_STATIC_LIBS (the source code uses
+    dlopen) and BR2_USE_MMU (the source code uses fork)
+  - Slightly adjust/reword the description of the
+    BR2_PACKAGE_MONKEY_SHARED option.
+  - Remove all the complicated installation logic for the target, and
+    just use "make install" instead.
+  - Pass --no-backtrace when uClibc is used, otherwise the build fails
+    because <execinfo.h> is not available in uClibc.
+  - Pass $(TARGET_CONFIGURE_OPTS) in the environment of the configure
+    script., otherwise monkey gets built for the host and not for the
+    target.
+  - Add a post install target hook to remove a broken symlink
+    libmonkey.so installed by Monkey's Makefile when the shared
+    library is not enabled.
+  - Use TARGET_MAKE_ENV when calling make, just because we should.
+  - Pass --malloc-libc so that the libc malloc() is used instead of
+    the builtin jemalloc allocator, which requires more work to
+    cross-compile properly.
+  - Add missing empty line after the .mk header and before the first
+    variable definition.]
+
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...izeof-rework-autotest-to-be-cross-compila.patch |   12 ++++++---
- ...x_feature_run_force_result-for-each-featu.patch |   26 +++++++++++--------
- ...nix-make-sys_nerr-guessing-cross-friendly.patch |   20 +++++++++------
- package/nginx/nginx.hash                           |    2 +-
- package/nginx/nginx.mk                             |    2 +-
- 5 files changed, 37 insertions(+), 25 deletions(-)
+ package/Config.in          |    1 +
+ package/monkey/Config.in   |   23 ++++++++++++++
+ package/monkey/monkey.hash |    3 ++
+ package/monkey/monkey.mk   |   69 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 96 insertions(+), 0 deletions(-)
 
-diff --git a/package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch b/package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
-index 5b9e913..496459e 100644
---- a/package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
-+++ b/package/nginx/0001-auto-type-sizeof-rework-autotest-to-be-cross-compila.patch
-@@ -1,4 +1,4 @@
--From 81289d1d1adaf5a767a4b4d1309c286468cfd37f Mon Sep 17 00:00:00 2001
-+From fe05ccf80afe5de33d4f9c5e5545390c450bcd2d Mon Sep 17 00:00:00 2001
- From: Samuel Martin <s.martin49@gmail.com>
- Date: Thu, 24 Apr 2014 23:27:32 +0200
- Subject: [PATCH 1/5] auto/type/sizeof: rework autotest to be cross-compilation
-@@ -9,12 +9,16 @@ runtime. This way, it does not break when cross-compiling for a
- different CPU architecture.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index c2f6524..477cc47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1226,6 +1226,7 @@ endif
+ 	source "package/modem-manager/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/mongrel2/Config.in"
++	source "package/monkey/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
+ 	source "package/mtr/Config.in"
+diff --git a/package/monkey/Config.in b/package/monkey/Config.in
+new file mode 100644
+index 0000000..001c415
+--- /dev/null
++++ b/package/monkey/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_MONKEY
++	bool "monkey"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # dlopen()
++	depends on BR2_USE_MMU # fork()
++	help
++	  Monkey Server is a fast and lightweight web server for Linux platforms.
 +
-+Refresh for 1.8.0.
++	  http://monkey-project.com/
 +
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
- ---
-  auto/types/sizeof | 42 ++++++++++++++++++++++++++++--------------
-  1 file changed, 28 insertions(+), 14 deletions(-)
- 
- diff --git a/auto/types/sizeof b/auto/types/sizeof
--index 9215a54..c2c3ede 100644
-+index a5f66bb..c6f31ec 100644
- --- a/auto/types/sizeof
- +++ b/auto/types/sizeof
- @@ -14,7 +14,7 @@ END
-@@ -82,7 +86,7 @@ index 9215a54..c2c3ede 100644
- -
-  case $ngx_size in
-      4)
--         if [ "$ngx_type"="long" ]; then
-+         ngx_max_value=2147483647
- -- 
--1.9.2
-+1.9.1
- 
-diff --git a/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch b/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-index 81578a3..8320c0f 100644
---- a/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-+++ b/package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch
-@@ -1,4 +1,4 @@
--From 7d1bc0364feab22299abeeb29ae2cfdcabd7e2c0 Mon Sep 17 00:00:00 2001
-+From 71939b727a8fa9f722934700948a5b68960f6183 Mon Sep 17 00:00:00 2001
- From: Samuel Martin <s.martin49@gmail.com>
- Date: Thu, 29 May 2014 18:52:10 +0200
- Subject: [PATCH 3/5] auto/*: set ngx_feature_run_force_result for each feature
-@@ -11,6 +11,10 @@ These ngx_force_* variables are passed through the environment at configure
- time.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++if BR2_PACKAGE_MONKEY
 +
-+Refresh for 1.8.0.
++config BR2_PACKAGE_MONKEY_SHARED
++	bool "install shared library"
++	help
++	  Build Monkey as a shared library in addition to stand-alone
++	  server
 +
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
- ---
-  auto/cc/conf            | 3 +++
-  auto/cc/name            | 1 +
-@@ -73,7 +77,7 @@ index d1e484a..3724916 100644
-                        #include <atomic_ops.h>"
-      ngx_feature_path=
- diff --git a/auto/os/darwin b/auto/os/darwin
--index b97518a..30f323c 100644
-+index 1d3e3d3..11b7276 100644
- --- a/auto/os/darwin
- +++ b/auto/os/darwin
- @@ -27,6 +27,7 @@ NGX_KQUEUE_CHECKED=YES
-@@ -137,7 +141,7 @@ index 19bf832..16848b2 100644
-  ngx_feature_path=
-  ngx_feature_libs=
- diff --git a/auto/unix b/auto/unix
--index 10fd3d2..b7cc9cb 100755
-+index 6e54531..7dbf9d1 100755
- --- a/auto/unix
- +++ b/auto/unix
- @@ -99,6 +99,7 @@ if test -z "$NGX_KQUEUE_CHECKED"; then
-@@ -148,7 +152,7 @@ index 10fd3d2..b7cc9cb 100755
-          ngx_feature_incs="#include <sys/event.h>
-                            #include <sys/time.h>"
-          ngx_feature_path=
--@@ -544,6 +545,7 @@ ngx_feature_test="char buf[1]; ssize_t n; n = pwrite(1, buf, 1, 0);
-+@@ -589,6 +590,7 @@ ngx_feature_test="char buf[1]; ssize_t n; n = pwrite(1, buf, 1, 0);
-  ngx_feature="sys_nerr"
-  ngx_feature_name="NGX_SYS_NERR"
-  ngx_feature_run=value
-@@ -156,7 +160,7 @@ index 10fd3d2..b7cc9cb 100755
-  ngx_feature_incs='#include <errno.h>
-                    #include <stdio.h>'
-  ngx_feature_path=
--@@ -558,6 +560,7 @@ if [ $ngx_found = no ]; then
-+@@ -603,6 +605,7 @@ if [ $ngx_found = no ]; then
-      ngx_feature="_sys_nerr"
-      ngx_feature_name="NGX_SYS_NERR"
-      ngx_feature_run=value
-@@ -164,7 +168,7 @@ index 10fd3d2..b7cc9cb 100755
-      ngx_feature_incs='#include <errno.h>
-                        #include <stdio.h>'
-      ngx_feature_path=
--@@ -573,6 +576,7 @@ if [ $ngx_found = no ]; then
-+@@ -618,6 +621,7 @@ if [ $ngx_found = no ]; then
-      ngx_feature='maximum errno'
-      ngx_feature_name=NGX_SYS_NERR
-      ngx_feature_run=value
-@@ -172,7 +176,7 @@ index 10fd3d2..b7cc9cb 100755
-      ngx_feature_incs='#include <errno.h>
-                        #include <string.h>
-                        #include <stdio.h>'
--@@ -631,6 +635,7 @@ ngx_feature_test="void *p; p = memalign(4096, 4096);
-+@@ -676,6 +680,7 @@ ngx_feature_test="void *p; p = memalign(4096, 4096);
-  ngx_feature="mmap(MAP_ANON|MAP_SHARED)"
-  ngx_feature_name="NGX_HAVE_MAP_ANON"
-  ngx_feature_run=yes
-@@ -180,7 +184,7 @@ index 10fd3d2..b7cc9cb 100755
-  ngx_feature_incs="#include <sys/mman.h>"
-  ngx_feature_path=
-  ngx_feature_libs=
--@@ -644,6 +649,7 @@ ngx_feature_test="void *p;
-+@@ -689,6 +694,7 @@ ngx_feature_test="void *p;
-  ngx_feature='mmap("/dev/zero", MAP_SHARED)'
-  ngx_feature_name="NGX_HAVE_MAP_DEVZERO"
-  ngx_feature_run=yes
-@@ -188,7 +192,7 @@ index 10fd3d2..b7cc9cb 100755
-  ngx_feature_incs="#include <sys/mman.h>
-                    #include <sys/stat.h>
-                    #include <fcntl.h>"
--@@ -659,6 +665,7 @@ ngx_feature_test='void *p; int  fd;
-+@@ -704,6 +710,7 @@ ngx_feature_test='void *p; int  fd;
-  ngx_feature="System V shared memory"
-  ngx_feature_name="NGX_HAVE_SYSVSHM"
-  ngx_feature_run=yes
-@@ -196,7 +200,7 @@ index 10fd3d2..b7cc9cb 100755
-  ngx_feature_incs="#include <sys/ipc.h>
-                    #include <sys/shm.h>"
-  ngx_feature_path=
--@@ -673,6 +680,7 @@ ngx_feature_test="int  id;
-+@@ -718,6 +725,7 @@ ngx_feature_test="int  id;
-  ngx_feature="POSIX semaphores"
-  ngx_feature_name="NGX_HAVE_POSIX_SEM"
-  ngx_feature_run=yes
-@@ -205,5 +209,5 @@ index 10fd3d2..b7cc9cb 100755
-  ngx_feature_path=
-  ngx_feature_libs=
- -- 
--1.9.2
-+1.9.1
- 
-diff --git a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-index d02de68..6249add 100644
---- a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-+++ b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-@@ -1,4 +1,4 @@
--From 8c19cea5e667f325ececdc1678bfddf063af0da2 Mon Sep 17 00:00:00 2001
-+From 08617a8d29ee22831175697555558fec8f52772c Mon Sep 17 00:00:00 2001
- From: Samuel Martin <s.martin49@gmail.com>
- Date: Sun, 1 Jun 2014 16:05:04 +0200
- Subject: [PATCH 5/5] auto/unix: make sys_nerr guessing cross-friendly
-@@ -11,15 +11,19 @@ macro if defined, or the EHWPOISON (which is currently the last errno)
- otherwise.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++endif
 +
-+Refresh for 1.8.0.
++comment "monkey needs an toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/monkey/monkey.hash b/package/monkey/monkey.hash
+new file mode 100644
+index 0000000..6c7eada
+--- /dev/null
++++ b/package/monkey/monkey.hash
+@@ -0,0 +1,3 @@
++# md5 from http://monkey-project.com/releases/1.5/monkey-1.5.6.tar.gz.md5, sha256 locally computed:
++md5    9699e4c9ea6ce6b989907c252ae80254 				monkey-1.5.6.tar.gz
++sha256 7c3d845306aa74ee6effd7ab6169d16ac4e6450e564954d0d0baa2d1e9be1a22	monkey-1.5.6.tar.gz
+diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
+new file mode 100644
+index 0000000..2344f8c
+--- /dev/null
++++ b/package/monkey/monkey.mk
+@@ -0,0 +1,69 @@
++################################################################################
++#
++# monkey
++#
++################################################################################
 +
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
- ---
-- auto/os/sys_nerr | 77 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ auto/os/sys_nerr | 78 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  auto/unix        | 10 ++++++++
-- 2 files changed, 87 insertions(+)
-+ 2 files changed, 88 insertions(+)
-  create mode 100644 auto/os/sys_nerr
- 
- diff --git a/auto/os/sys_nerr b/auto/os/sys_nerr
- new file mode 100644
--index 0000000..25e7c22
-+index 0000000..8970f5f
- --- /dev/null
- +++ b/auto/os/sys_nerr
- @@ -0,0 +1,78 @@
-@@ -102,10 +106,10 @@ index 0000000..25e7c22
- +
- +echo " $ngx_sys_nerr"
- diff --git a/auto/unix b/auto/unix
--index b7cc9cb..1a49ba3 100755
-+index 7dbf9d1..00a7370 100755
- --- a/auto/unix
- +++ b/auto/unix
--@@ -550,6 +550,10 @@ ngx_feature_incs='#include <errno.h>
-+@@ -595,6 +595,10 @@ ngx_feature_incs='#include <errno.h>
-                    #include <stdio.h>'
-  ngx_feature_path=
-  ngx_feature_libs=
-@@ -116,7 +120,7 @@ index b7cc9cb..1a49ba3 100755
-  ngx_feature_test='printf("%d", sys_nerr);'
-  . auto/feature
-  
--@@ -598,6 +602,12 @@ if [ $ngx_found = no ]; then
-+@@ -643,6 +647,12 @@ if [ $ngx_found = no ]; then
-      . auto/feature
-  fi
-  
-@@ -130,5 +134,5 @@ index b7cc9cb..1a49ba3 100755
-  ngx_feature="localtime_r()"
-  ngx_feature_name="NGX_HAVE_LOCALTIME_R"
- -- 
--1.9.2
-+1.9.1
- 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 5306bed..7e0dc5e 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0a98e95b366e4d6042f331e1fa4d70e18fd1e49d8993e589008e70e742b7e757	nginx-1.6.3.tar.gz
-+sha256	23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5	nginx-1.8.0.tar.gz
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 502bc44..c617f68 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.6.3
-+NGINX_VERSION = 1.8.0
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2c
- NGINX_LICENSE_FILES = LICENSE
++MONKEY_VERSION_MAJOR = 1.5
++MONKEY_VERSION = $(MONKEY_VERSION_MAJOR).6
++MONKEY_SOURCE = monkey-$(MONKEY_VERSION).tar.gz
++MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)/
++MONKEY_LICENCE = Apache-2.0
++MONKEY_LICENCE_FILE = LICENSE
++
++# This package has a configure script, but it's not using
++# autoconf/automake, so we're using the generic-package
++# infrastructure.
++
++MONKEY_CONF_OPTS = \
++	--prefix=/usr \
++	--sysconfdir=/etc/monkey \
++	--datadir=/var/www \
++	--mandir=/usr/share/man \
++	--logdir=/var/log \
++	--pidfile=/var/run \
++	--plugdir=/usr/lib/monkey \
++	--malloc-libc
++
++# --uclib-mode is not a typo
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++MONKEY_CONF_OPTS += --uclib-mode --no-backtrace
++endif
++
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++MONKEY_CONF_OPTS += --musl-mode
++endif
++
++ifeq ($(BR2_PACKAGE_MONKEY_SHARED),y)
++MONKEY_CONF_OPTS += --enable-shared
++MONKEY_INSTALL_STAGING = YES
++else
++# Even without --enable-shared, the monkey build system leaves a
++# broken libmonkey.so symbolic link.
++define MONKEY_REMOVE_DANGLING_SYMLINK
++	$(RM) -f $(TARGET_DIR)/usr/lib/libmonkey.so
++endef
++MONKEY_POST_INSTALL_TARGET_HOOKS += MONKEY_REMOVE_DANGLING_SYMLINK
++endif
++
++ifeq ($(BR2_ENABLE_DEBUG),y)
++MONKEY_CONF_OPT += --debug
++endif
++
++define MONKEY_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MONKEY_CONF_OPTS))
++endef
++
++define MONKEY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MONKEY_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
++endef
++
++define MONKEY_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
