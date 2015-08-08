@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] openvpn: bump to version 2.3.7
-Message-ID: <20150808105605.DF5677FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libidn: bump to version 1.31
+Message-ID: <20150808105624.D11387FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb67b749cacacb5aaf8cf594dfb80d975982dfe2
+commit: http://git.buildroot.net/buildroot/commit/?id=43860b868c41aaf84229317fc8d0c0525a2024fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvpn/openvpn.hash |    2 +-
- package/openvpn/openvpn.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libidn/libidn.hash |    4 ++--
+ package/libidn/libidn.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 38579ab..9a917b9 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index d41443e..6425d55 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	adae2ef34c9225347a844683b88caa87cde0979b7f2390fd1776db0eb51510ed 	openvpn-2.3.6.tar.xz
-+sha256	4062ce972500f98988e9c6e9dd1040be25582f0d49aa7e69f3f4cff96e9aebee 	openvpn-2.3.7.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 74e5783..336d491 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+-# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
+-sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
++# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
++sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 13436e9..e10fb6e 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.3.6
-+OPENVPN_VERSION = 2.3.7
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
+-LIBIDN_VERSION = 1.30
++LIBIDN_VERSION = 1.31
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
