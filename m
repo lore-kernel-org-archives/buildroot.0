@@ -1,58 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:42 -0000
-Subject: [Buildroot] [git commit branch/next] libarchive: add hash and
-	enable lzma support
-Message-ID: <20150808105614.E00507FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] rpi-userland: systemd support
+Message-ID: <20150808105632.B8D9081904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eab1756c19c786480ff79a4a9df616c6b635ec8f
+commit: http://git.buildroot.net/buildroot/commit/?id=a126ed3122cd9ad6dc655181d6f58e99020a7817
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add libarchive hash. Enable lzma support.
-Both xz and lzma support are provided by the xz library.
+[Thomas: use relative path for the symbolic link.]
 
-[Thomas: explicitly pass --with-lzma when xz is available.]
-
-Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libarchive/libarchive.hash |    2 ++
- package/libarchive/libarchive.mk   |    8 +++++++-
- 2 files changed, 9 insertions(+), 1 deletions(-)
+ package/rpi-userland/rpi-userland.mk |    7 +++++++
+ package/rpi-userland/vcfiled.service |    8 ++++++++
+ 2 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-new file mode 100644
-index 0000000..5f96211
---- /dev/null
-+++ b/package/libarchive/libarchive.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  eb87eacd8fe49e8d90c8fdc189813023ccc319c5e752b01fb6ad0cc7b2c53d5e  libarchive-3.1.2.tar.gz
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 61528d9..206de3f 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -9,7 +9,6 @@ LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
- LIBARCHIVE_LICENSE_FILES = COPYING
--LIBARCHIVE_CONF_OPTS = --without-lzma
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDTAR),y)
- ifeq ($(BR2_STATIC_LIBS),y)
-@@ -86,4 +85,11 @@ else
- LIBARCHIVE_CONF_OPTS += --without-zlib
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 1a1c9c6..e2eadb2 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -19,6 +19,13 @@ define RPI_USERLAND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rpi-userland/S94vcfiled \
+ 		$(TARGET_DIR)/etc/init.d/S94vcfiled
+ endef
++define RPI_USERLAND_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/rpi-userland/vcfiled.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/vcfiled.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/vcfiled.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/vcfiled.service
++endef
  endif
  
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+LIBARCHIVE_DEPENDENCIES += xz
-+LIBARCHIVE_CONF_OPTS += --with-lzma
-+else
-+LIBARCHIVE_CONF_OPTS += --without-lzma
-+endif
+ define RPI_USERLAND_POST_TARGET_CLEANUP
+diff --git a/package/rpi-userland/vcfiled.service b/package/rpi-userland/vcfiled.service
+new file mode 100644
+index 0000000..2b8f1dc
+--- /dev/null
++++ b/package/rpi-userland/vcfiled.service
+@@ -0,0 +1,8 @@
++[Unit]
++Description=VideoCore file server daemon
 +
- $(eval $(autotools-package))
++[Service]
++ExecStart=/usr/sbin/vcfiled --foreground
++
++[Install]
++WantedBy=multi-user.target
