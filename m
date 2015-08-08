@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] gawk: bump to version 4.1.3
-Message-ID: <20150808105603.68F207FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] wireless-regdb: bump to
+	version 2015.05.15
+Message-ID: <20150808105603.418507FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e5ab5e54e3c5eed73a493bd83490b7118256f83
+commit: http://git.buildroot.net/buildroot/commit/?id=9781aa6af3b87f99bc4ab88562993f93eab2b87d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gawk/gawk.hash |    2 +-
- package/gawk/gawk.mk   |    2 +-
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
-index 8720031..7f746d8 100644
---- a/package/gawk/gawk.hash
-+++ b/package/gawk/gawk.hash
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 115b490..1afb023 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	ea8b53c5834ee27012fecba7273f97fca7104884975cf81ddae6f85c5581f481	gawk-4.1.2.tar.xz
-+sha256	e3cf55e91e31ea2845f8338bedd91e40671fc30e4d82ea147d220e687abda625	gawk-4.1.3.tar.xz
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 653a5a0..1820689 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
++sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 20b330f..8a5b6ab 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GAWK_VERSION = 4.1.2
-+GAWK_VERSION = 4.1.3
- GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
- GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
- GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
+-WIRELESS_REGDB_VERSION = 2015.04.06
++WIRELESS_REGDB_VERSION = 2015.05.15
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
