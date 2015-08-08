@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:10 -0000
-Subject: [Buildroot] [git commit branch/next] e2fsprogs: remove more busybox
-	applet links
-Message-ID: <20150808105640.2394C7F8D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nodejs: Fixes for
+	node-pre-gyp
+Message-ID: <20150808105620.B17347FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6b701c0cc983d4ea6b36d8e5de18e118c94eb9a
+commit: http://git.buildroot.net/buildroot/commit/?id=c72b8eaf21f5dc7c7cb8095357c542acb86bb356
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Following commit aa02829240b2 (e2fsprogs: remove busybox tune2fs when
-installing full version, 2015-07-08), remove the rest of Busybox e2fsprogs
-applet links. All of them are installed in different locations than upstream
-e2fsprogs.
+Many packages use node-pre-gyp as a way of deploying precompiled binary
+dependencies with fall back to compilation for other targets.  Currently
+installing node modules that use node-pre-gyp can fail to use the correct
+binary for the target.  This patch fixes this issue by correctly
+configuring node-pre-gyp.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Firstly, node-gyp uses the option --arch to determine its target
+architecture (which is already set correctly), however, node-pre-gyp uses
+--target-arch.  Without this set node.js packages that uses node-pre-gyp
+will pick the wrong target architecture.
+
+Secondly, the use of precompiled binary packages is not desirable due to
+potential security and licensing issues.  To solve this we use the
+--build-from-source option to force node-pre-gyp to always build the C++
+code.
+
+This patch passes npm_config_target_arch and npm_config_build_from_source
+to npm which causes --target-arch and --build-from-source to be passed to
+node-pre-gyp.
+
+I have tested this using the node.js package serialport which now
+successfully builds and runs.
+
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/nodejs/nodejs.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index ca54b70..c863f70 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -109,9 +109,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- E2FSPROGS_DEPENDENCIES += busybox
- 
- define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
-+	$(RM) -f $(TARGET_DIR)/bin/chattr
-+	$(RM) -f $(TARGET_DIR)/bin/lsattr
-+	$(RM) -f $(TARGET_DIR)/sbin/fsck
- 	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
- 	$(RM) -f $(TARGET_DIR)/sbin/e2label
--
- endef
- E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
- endif
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 0b3f8a5..156b151 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -107,6 +107,8 @@ define NODEJS_INSTALL_MODULES
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)" \
+ 		npm_config_arch=$(NODEJS_CPU) \
++		npm_config_target_arch=$(NODEJS_CPU) \
++		npm_config_build_from_source=true \
+ 		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+ 		$(HOST_DIR)/usr/bin/npm install \
+ 		$(NODEJS_MODULES_LIST) \
