@@ -1,111 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:57:10 -0000
-Subject: [Buildroot] [git commit branch/next] openipmi: new package
-Message-ID: <20150808105638.EA3BD803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tor: fix building if GCC's C
+	standard is not gnu99
+Message-ID: <20150808105619.9FA2C7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d84e1cc4aa7c552e310f3d44f7a557bc5fe8f8f
+commit: http://git.buildroot.net/buildroot/commit/?id=5cf5b390385fb6325485e37dc9d38e1e3ac1f091
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-OpenIPMI provides libraries and command line tools for interacting with IPMI
-enabled devices.
+Up to date tor (at least starting from 0.2.6) requires compiler with C99
+plus some extensions support.
 
-[Thomas: fix indentation.]
+If default GCC's C standard < c99 (that's the case@least for ARC)
+you'll see this on attempt to build tor:
+----------------------->8--------------------
+src/common/address.c: In function ''tor_addr_parse_PTR_name':
+src/common/address.c:502:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (int i = 0; i < 16; ++i) {
+     ^
+src/common/address.c:502:5: note: use option -std=c99 or -std=gnu99 to compile your code
+----------------------->8--------------------
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Once you follow compiler advice and enable c99 support with "-std=c99"
+you'll pass that failure but will see tons of other errors, see
+https://www.mail-archive.com/tor-dev at lists.torproject.org/msg06273.html
+
+And only g99 resolves all problems at once.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in              |    1 +
- package/openipmi/Config.in     |   16 ++++++++++++++++
- package/openipmi/openipmi.hash |    2 ++
- package/openipmi/openipmi.mk   |   36 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 55 insertions(+), 0 deletions(-)
+ package/tor/tor.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 20ecd38..9942e3a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -390,6 +390,7 @@ endif
- 	source "package/ola/Config.in"
- 	source "package/on2-8170-modules/Config.in"
- 	source "package/open2300/Config.in"
-+	source "package/openipmi/Config.in"
- 	source "package/openocd/Config.in"
- 	source "package/openpowerlink/Config.in"
- 	source "package/owl-linux/Config.in"
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
-new file mode 100644
-index 0000000..667efa7
---- /dev/null
-+++ b/package/openipmi/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_OPENIPMI
-+	bool "openipmi"
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  IPMI allows remote monitoring and remote management of
-+	  devices. OpenIPMI provides a library and command line tools
-+	  to interact with IPMI enabled devices. OpenIPMI also provides
-+	  an IPMI BMC simulator.
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 9cca011..f6d3b7f 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -32,4 +32,6 @@ else
+ TOR_CONF_OPTS += --disable-seccomp
+ endif
+ 
++TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 +
-+comment "openipmi needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-new file mode 100644
-index 0000000..3a40f60
---- /dev/null
-+++ b/package/openipmi/openipmi.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
-+sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-new file mode 100644
-index 0000000..b6abf0f
---- /dev/null
-+++ b/package/openipmi/openipmi.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# openipmi
-+#
-+################################################################################
-+
-+OPENIPMI_VERSION = 2.0.21
-+OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
-+OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-+OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
-+OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
-+OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
-+OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
-+OPENIPMI_CONF_OPTS = \
-+	--with-glib=no \
-+	--with-glib12=no \
-+	--with-tcl=no \
-+	--with-perl=no \
-+	--with-python=no \
-+	--with-swig=no
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OPENIPMI_DEPENDENCIES += openssl
-+OPENIPMI_CONF_OPTS += --with-openssl=yes
-+else
-+OPENIPMI_CONF_OPTS += --with-openssl=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+OPENIPMI_DEPENDENCIES += netsnmp
-+OPENIPMI_CONF_OPTS += --with-ucdsnmp=yes
-+else
-+OPENIPMI_CONF_OPTS += --with-ucdsnmp=no
-+endif
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
