@@ -1,26 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:53 -0000
-Subject: [Buildroot] [git commit branch/next] lm-sensors: add hash file
-Message-ID: <20150808105634.DDF1E7F97E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sdl_gfx: add hash file
+Message-ID: <20150808105634.A01087FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2142c7dc3f3167e8db99a965e962e14bd1339b3
+commit: http://git.buildroot.net/buildroot/commit/?id=1421810b8529a298177b4ac8954ee207a280d5bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Also update homepage URL.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lm-sensors/lm-sensors.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/sdl_gfx/Config.in    |    2 +-
+ package/sdl_gfx/sdl_gfx.hash |    3 +++
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.hash b/package/lm-sensors/lm-sensors.hash
+diff --git a/package/sdl_gfx/Config.in b/package/sdl_gfx/Config.in
+index 4910b2d..b5d5cac 100644
+--- a/package/sdl_gfx/Config.in
++++ b/package/sdl_gfx/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_SDL_GFX
+ 	  circles or polygons, an interpolating rotozoomer for SDL
+ 	  surfaces, framerate control and MMX image filters.
+ 
+-	  http://www.ferzkopp.net/joomla/content/view/19/14/
++	  http://cms.ferzkopp.net/index.php/software/13-sdl-gfx
+diff --git a/package/sdl_gfx/sdl_gfx.hash b/package/sdl_gfx/sdl_gfx.hash
 new file mode 100644
-index 0000000..05fd5ca
+index 0000000..8c2be96
 --- /dev/null
-+++ b/package/lm-sensors/lm-sensors.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	5dae6a665e1150159a93743c4ff1943a7efe02cd9d3bb12c4805e7d7adcf4fcf	lm_sensors-3.3.5.tar.bz2
++++ b/package/sdl_gfx/sdl_gfx.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/sdlgfx/files/
++md5	fcc3c4f2d1b4943409bf7e67dd65d03a	SDL_gfx-2.0.23.tar.gz
++sha1	aae60e7fed539f3f8a0a0bd6da3bbcf625642596	SDL_gfx-2.0.23.tar.gz
