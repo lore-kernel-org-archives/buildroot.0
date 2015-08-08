@@ -1,36 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:58:09 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.18.x and
-	4.{0, 1}.x series
-Message-ID: <20150808105639.E58677F8D4@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:58:10 -0000
+Subject: [Buildroot] [git commit branch/next] socketcand: resolve GCC5
+	related issue
+Message-ID: <20150808105640.1201F7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a00a0e6eaf288bf3513863a7867a03d6f38c317
+commit: http://git.buildroot.net/buildroot/commit/?id=8e14c76a95778c859019cb650da5356285d3387b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch removes inline keyword from header and source
+files.
+
+Fixes following autobuild failure:
+http://autobuild.buildroot.net/results/8ea/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ .../socketcand/0001-Remove-inline-keyword.patch    |   90 ++++++++++++++++++++
+ 1 files changed, 90 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ec6e64d..2fcc39b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -217,8 +217,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.18"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.19"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.8"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.2"		if BR2_KERNEL_HEADERS_4_1
-+	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
-+	default "4.1.3"		if BR2_KERNEL_HEADERS_4_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/socketcand/0001-Remove-inline-keyword.patch b/package/socketcand/0001-Remove-inline-keyword.patch
+new file mode 100644
+index 0000000..92e8737
+--- /dev/null
++++ b/package/socketcand/0001-Remove-inline-keyword.patch
+@@ -0,0 +1,90 @@
++From bdb3cd081a694f8f6924e399d944e32c1578235c Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 22 Jul 2015 11:03:27 +0200
++Subject: [PATCH] Remove inline keyword
++
++Fixes GCC5.x compilation issues related to C99 inline semantics.
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ socketcand.h    | 8 ++++----
++ state_bcm.c     | 2 +-
++ state_control.c | 2 +-
++ state_isotp.c   | 2 +-
++ state_raw.c     | 2 +-
++ 5 files changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/socketcand.h b/socketcand.h
++index a287fe2..39eef83 100644
++--- a/socketcand.h
+++++ b/socketcand.h
++@@ -27,10 +27,10 @@
++ 
++ #undef DEBUG_RECEPTION
++ 
++-inline void state_bcm();
++-inline void state_raw();
++-inline void state_isotp();
++-inline void state_control();
+++void state_bcm();
+++void state_raw();
+++void state_isotp();
+++void state_control();
++ 
++ extern int client_socket;
++ extern char **interface_names;
++diff --git a/state_bcm.c b/state_bcm.c
++index c63a0a9..0c980fa 100644
++--- a/state_bcm.c
+++++ b/state_bcm.c
++@@ -28,7 +28,7 @@ int sc = -1;
++ fd_set readfds;
++ struct timeval tv;
++ 
++-inline void state_bcm() {
+++void state_bcm() {
++ 	int i, ret;
++ 	struct sockaddr_can caddr;
++ 	socklen_t caddrlen = sizeof(caddr);
++diff --git a/state_control.c b/state_control.c
++index 5f62b74..baa9df6 100644
++--- a/state_control.c
+++++ b/state_control.c
++@@ -17,7 +17,7 @@
++ #include <netinet/in.h>
++ #include <arpa/inet.h>
++ 
++-inline void state_control() {
+++void state_control() {
++ 	char buf[MAXLEN];
++ 	int i, items;
++ 
++diff --git a/state_isotp.c b/state_isotp.c
++index ae66035..4005f94 100644
++--- a/state_isotp.c
+++++ b/state_isotp.c
++@@ -24,7 +24,7 @@
++ int si = -1;
++ fd_set readfds;
++ 
++-inline void state_isotp() {
+++void state_isotp() {
++ 	int i, items, ret;
++ 
++ 	struct sockaddr_can addr;
++diff --git a/state_raw.c b/state_raw.c
++index 1bd2ece..99111ae 100644
++--- a/state_raw.c
+++++ b/state_raw.c
++@@ -31,7 +31,7 @@ char ctrlmsg[CMSG_SPACE(sizeof(struct timeval)) + CMSG_SPACE(sizeof(__u32))];
++ struct timeval tv;
++ struct cmsghdr *cmsg;
++ 
++-inline void state_raw() {
+++void state_raw() {
++ 	char buf[MAXLEN];
++ 	int i, ret, items;
++ 
++-- 
++2.1.4
++
