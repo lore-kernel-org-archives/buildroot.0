@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] package/lttng-tools: remove
-	autoreconf
-Message-ID: <20150808105638.A5DCC803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] cpio: needs wchar support
+Message-ID: <20150808105637.6534480414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b624a193bb7c70a14774555d113cc744148391e
+commit: http://git.buildroot.net/buildroot/commit/?id=6c7d490558498888a783fe3ca53f1a3b6cef1b16
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch is gone
-with the commit fb5d605638c359d008329dd9f8fb6c2c8a2c0537.
+Spotted during package review/testing, but forgot to squash it in the
+original patch.
 
-lttng-tools-no-sync-file-range-in-uclibc.patch is gone
-with the commit ed692e2dbbf8d4751d39a636dd1119e829bd0f99.
-
-There is no need to autoreconf lttng-tools.
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-tools/lttng-tools.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/cpio/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index e218a95..0cd381c 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -17,8 +17,6 @@ LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr
- # trace format into an human readable format.
- LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
+diff --git a/package/cpio/Config.in b/package/cpio/Config.in
+index 1787f39..df40fac 100644
+--- a/package/cpio/Config.in
++++ b/package/cpio/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_CPIO
+ 	bool "cpio"
+ 	# Need argp.h support
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  cpio archive utility for creation and extraction.
  
--LTTNG_AUTORECONF = YES
--
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LTTNG_TOOLS_CONF_OPTS += --enable-lttng-ust
- LTTNG_TOOLS_DEPENDENCIES += lttng-libust
+ 	  https://www.gnu.org/software/cpio/
++
++comment "cpio needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
