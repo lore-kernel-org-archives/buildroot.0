@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:02 -0000
-Subject: [Buildroot] [git commit branch/next] pkg-generic.mk: don't depend
-	on external package permissions
-Message-ID: <20150808105630.7220D7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lighttpd: fix systemd service
+	activation symlink
+Message-ID: <20150808105631.2940D7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8810036a8714c88573983878859ed994aa8d3b3
+commit: http://git.buildroot.net/buildroot/commit/?id=c0ce66ea6f97e2d190d8b949f43dca0fc66092d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Reset permissions for rsynced packages (when using OVERRIDE_SRCDIR) to
-755/644. We do this under the assumption that source files shouldn't
-care about their permissions, except possibly for the exec bit.
-
-This guarantees that if a package uses 'rsync -a' or 'cp -p' to copy
-a file from its build dir to the target, it'll end up with the same
-permissions on the target every time.
-
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk |    2 +-
+ package/lighttpd/lighttpd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e85b4bf..beff2d7 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -102,7 +102,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
--	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-+	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 626cd69..d602556 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -88,7 +88,7 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
+ 
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 
+-	ln -fs ../../../../usr/lib/systemd/lighttpd.service \
++	ln -fs ../../../../usr/lib/systemd/system/lighttpd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
+ endef
  
