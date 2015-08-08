@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] libidn: bump to version 1.31
-Message-ID: <20150808105624.D11387FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] strongswan: security bump to
+	version 5.3.2
+Message-ID: <20150808105605.E80BB7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43860b868c41aaf84229317fc8d0c0525a2024fa
+commit: http://git.buildroot.net/buildroot/commit/?id=2965f2e4556f6e97f9907015eb6c4321cf6b7a6e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Fixes:
+
+CVE-2015-4171 - rogue servers with a valid certificate
+accepted by the client to trick it into disclosing its username and even
+password (if the client accepts EAP-GTC).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libidn/libidn.hash |    4 ++--
- package/libidn/libidn.mk   |    2 +-
+ package/strongswan/strongswan.hash |    4 ++--
+ package/strongswan/strongswan.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index d41443e..6425d55 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index e38c736..8b31de4 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
 @@ -1,2 +1,2 @@
--# From http://lists.gnu.org/archive/html/help-libidn/2015-03/msg00001.html
--sha1	557e1e37f0978e975b21bcdc243c198cb708bb75	libidn-1.30.tar.gz
-+# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
-+sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 13436e9..e10fb6e 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
+-# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
+-md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
++# From http://download.strongswan.org/strongswan-5.3.2.tar.bz2.md5
++md5	fab014be1477ef4ebf9a765e10f8802c	strongswan-5.3.2.tar.bz2
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index f165eb1..47a28a3 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN_VERSION = 1.30
-+LIBIDN_VERSION = 1.31
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+-STRONGSWAN_VERSION = 5.3.1
++STRONGSWAN_VERSION = 5.3.2
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
