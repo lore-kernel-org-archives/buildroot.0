@@ -1,41 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] php: openssl support needs to
-	link against zlib for static linking
-Message-ID: <20150808105556.4D7D6818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qemu: fix build on sh4a and
+	sh4aeb
+Message-ID: <20150808105556.6095081801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c518ff7d2fb178a4a2a97839457ac16f9b31240
+commit: http://git.buildroot.net/buildroot/commit/?id=18f998b0c5ede6ee96af96cf0039690b79d78c2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Qemu doesn't understand sh4a and sh4aeb as separate architectures, it
+only knows about sh4 and sh4eb. However, it does support sh4a, since
+it emulates the SH7785 CPU which is a SH4A.
+
+Therefore, with this commit, sh4a/sh4aeb are translated as sh4/sh4eb
+for Qemu.
+
 Fixes:
-http://autobuild.buildroot.net/results/490/490a9558635c90bf510b6f80cd0891fe322c3f46/
-http://autobuild.buildroot.net/results/bf1/bf12eb189ab35ce00a2212695d2dbf8b8a126529/
 
-Otherwise the configure script fails to detect openssl and bails out.
+  http://autobuild.buildroot.org/results/8f9/8f99a776f35d4ab0841d9fd2db509850ef603bd4/
+  and many previous similar build failures
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/qemu/qemu.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 47811ff..279ebf8 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -109,6 +109,11 @@ endif
- ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
- PHP_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += openssl
-+# openssl needs zlib, but the configure script forgets to link against
-+# it causing detection failures with static linking
-+ifeq ($(BR2_STATIC_LIBS),y)
-+PHP_CONF_ENV += LIBS='-lz'
-+endif
- endif
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index d565c88..04df79f 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -38,8 +38,8 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
+ #       sh2a            not supported
+ #       sh4             sh4
+ #       sh4eb           sh4eb
+-#       sh4a            ?
+-#       sh4aeb          ?
++#       sh4a            sh4
++#       sh4aeb          sh4eb
+ #       sh64            not supported
+ #       sparc           sparc
  
- ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+@@ -56,6 +56,12 @@ endif
+ ifeq ($(HOST_QEMU_ARCH),powerpc)
+ HOST_QEMU_ARCH = ppc
+ endif
++ifeq ($(HOST_QEMU_ARCH),sh4a)
++HOST_QEMU_ARCH = sh4
++endif
++ifeq ($(HOST_QEMU_ARCH),sh4aeb)
++HOST_QEMU_ARCH = sh4eb
++endif
+ HOST_QEMU_TARGETS = $(HOST_QEMU_ARCH)-linux-user
+ 
+ ifeq ($(BR2_PACKAGE_HOST_QEMU),y)
