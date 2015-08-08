@@ -1,47 +1,46 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Sat, 08 Aug 2015 16:53:04 +0200
-Subject: [Buildroot] [PATCH] package/dawgdic: needs gcc >= 4.7
-In-Reply-To: <1439026543-25909-1-git-send-email-romain.naour@openwide.fr>
-References: <1439026543-25909-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <55C617D0.3050800@green-communications.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Aug 2015 17:10:12 +0200
+Subject: [Buildroot] [git commit] dawgdic: enable with gcc 4.6
+Message-ID: <20150808151130.830748043B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/08/2015 11:35, Romain Naour wrote:
-> std::strtoll is only supported since C++11.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/cae/cae3cda9be779ea8359f94d13bbbca97e68495ca/
->
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->   package/dawgdic/Config.in | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/package/dawgdic/Config.in b/package/dawgdic/Config.in
-> index ce0b466..8ef9902 100644
-> --- a/package/dawgdic/Config.in
-> +++ b/package/dawgdic/Config.in
-> @@ -1,6 +1,8 @@
->   config BR2_PACKAGE_DAWGDIC
->   	bool "dawgdic"
->   	depends on BR2_INSTALL_LIBSTDCPP
-> +	# std=c11
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-The string conversion functions also exist in 4.6[1].
+commit: http://git.buildroot.net/buildroot/commit/?id=8069253ad178441521e584b02e84be9b88bc85c4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, there is another problem: If an external toolchain is built 
-using GCC and uclibc without any additional patches, then you will not 
-have them, because of a too-broad feature check in libstdc++ that checks 
-if the C library has complete support for C99[2].
+According to Nicolas Cavallari and confirmed by testing, std::strtoll
+is indeed available in gcc 4.6, so the dawgdic package can be enabled
+on gcc >= 4.6 instead of gcc >= 4.7.
 
-This problem is still unresolved even with the latest GCC. buildroot 
-patches GCC to fix this, but if an external toolchain does not ...
+Reported-by: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dawgdic/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-[1]:
-https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libstdc%2B%2B-v3/include/c_std/cstdlib;h=c3fe8aa4507d51375474c2914fb3e812b3a136e0;hb=632cb4d5f22f598d1395fbae90a10fb679e06054
-
-[2]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58393
+diff --git a/package/dawgdic/Config.in b/package/dawgdic/Config.in
+index 8ef9902..b67342b 100644
+--- a/package/dawgdic/Config.in
++++ b/package/dawgdic/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_DAWGDIC
+ 	bool "dawgdic"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# std=c11
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	# needs std::strtoll
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	help
+ 	  dawgdic provides a library for building and accessing
+ 	  dictionaries implemented with directed acyclic word graphs
+@@ -15,5 +15,5 @@ config BR2_PACKAGE_DAWGDIC
+ 
+ 	  https://github.com/stil/dawgdic
+ 
+-comment "dawgdic needs a toolchain w/ C++, gcc >= 4.7"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++comment "dawgdic needs a toolchain w/ C++, gcc >= 4.6"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
