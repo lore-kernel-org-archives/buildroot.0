@@ -1,36 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] lftp: indicate why autoreconf
-	is needed
-Message-ID: <20150808105611.44B7F8030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sqlite: Add host build support
+Message-ID: <20150808105611.4E6467F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebe2968d7056372bbfcae53fcb3ecdd636e9f32b
+commit: http://git.buildroot.net/buildroot/commit/?id=5ab7bf0bf4952be85ac1e64e62d8831798f0a8ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We no longer have any patch touching configure.ac/Makefile.am, so one
-might wonder why we're autoreconfiguring the package. The reason is
-that our libtool patch doesn't apply on the code provided by the lftp
-tarball.
+Host sqlite is required by the host build of the setools package which
+is required for SELinux support.
 
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lftp/lftp.mk |    1 +
+ package/sqlite/sqlite.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index 54b1c6c..362ad28 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -9,6 +9,7 @@ LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
- LFTP_SITE = http://lftp.yar.ru/ftp
- LFTP_LICENSE = GPLv3+
- LFTP_LICENSE_FILES = COPYING
-+# Needed so that our libtool patch applies properly
- LFTP_AUTORECONF = YES
- LFTP_DEPENDENCIES = readline zlib host-pkgconf
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 9aac8e6..e4f42af 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -53,3 +53,4 @@ SQLITE_CONF_OPTS += --disable-readline
+ endif
  
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
