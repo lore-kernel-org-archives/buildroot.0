@@ -1,61 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] Remove --{enable,
-	disable}-debug configure flags.
-Message-ID: <20150808105604.CE81F7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libtool: disable
+	makeinfo
+Message-ID: <20150808105620.52B387FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0552a367dbdc27a211daaac3359d81dd537e384f
+commit: http://git.buildroot.net/buildroot/commit/?id=9a42ba3eeba08e450762141be03156208f2b4de0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Adding this flag when BR2_ENABLE_DEBUG is activated make several
-packages to produce binaries that do not work as expected (e.g., dhcp,
-lame, nano). Moreover, the help message of BR2_ENABLE_DEBUG does not
-say it is adding this flag. It is supposed to build packages with
-debugging symbols enabled. So, let it do that only.
+host-libtool can fail to build if the host is missing makeinfo, so
+disable it.
 
-* package/Makefile.in: Do not add --{enable,disable}-debug flags.
-* package/pkg-autotools.mk: Remove ENABLE_DEBUG as it is not set
-  anymore.
-
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in      |    6 ------
- package/pkg-autotools.mk |    1 -
- 2 files changed, 0 insertions(+), 7 deletions(-)
+ package/libtool/libtool.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a0c5a7a..c02d31f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -373,12 +373,6 @@ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
- TARGET_CONFIGURE_OPTS += CXX=false
- endif
+diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
+index 28786d2..8688f8b 100644
+--- a/package/libtool/libtool.mk
++++ b/package/libtool/libtool.mk
+@@ -13,6 +13,7 @@ LIBTOOL_DEPENDENCIES = host-m4
+ LIBTOOL_LICENSE = GPLv2+
+ LIBTOOL_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_ENABLE_DEBUG),y)
--ENABLE_DEBUG := --enable-debug
--else
--ENABLE_DEBUG := --disable-debug
--endif
--
- ifeq ($(BR2_STATIC_LIBS),y)
- SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
- TARGET_CFLAGS += -static
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 9dea08a..1d694f0 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -202,7 +202,6 @@ define $(2)_CONFIGURE_CMDS
- 		--disable-dependency-tracking \
- 		--enable-ipv6 \
- 		$$(DISABLE_NLS) \
--		$$(ENABLE_DEBUG) \
- 		$$(SHARED_STATIC_LIBS_OPTS) \
- 		$$(QUIET) $$($$(PKG)_CONF_OPTS) \
- 	)
++HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
+ HOST_LIBTOOL_LIBTOOL_PATCH = NO
+ 
+ # We have a patch that affects libtool.m4, which triggers an autoreconf
