@@ -1,33 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] lua-messagepack: bump to
-	version 0.3.3
-Message-ID: <20150808105603.9C44E7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sudo: add optional pam support
+Message-ID: <20150808105613.D9A587F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aaba5c5a7ea8eafd7157c78e0fd4b393d3bec336
+commit: http://git.buildroot.net/buildroot/commit/?id=eeacb333a33d50034c1ace1bb293a9a04d76e617
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Configure the sudo utility to support PAM if the framework is enabled.
+
+[Peter: use install -D, reword commit message]
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lua-messagepack/lua-messagepack.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sudo/sudo.mk  |   13 ++++++++++++-
+ package/sudo/sudo.pam |   12 ++++++++++++
+ 2 files changed, 24 insertions(+), 1 deletions(-)
 
-diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
-index 92f7c1f..d749473 100644
---- a/package/lua-messagepack/lua-messagepack.mk
-+++ b/package/lua-messagepack/lua-messagepack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a1a8328..10fbc88 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -16,9 +16,20 @@ SUDO_CONF_OPTS = \
+ 	--without-umask \
+ 	--with-logging=syslog \
+ 	--without-interfaces \
+-	--without-pam \
+ 	--with-env-editor
  
--LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.2
-+LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.3
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_MESSAGEPACK_VERSION = lua53-$(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
- else
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define SUDO_INSTALL_PAM_CONF
++	$(INSTALL) -D -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
++endef
++
++SUDO_DEPENDENCIES += linux-pam
++SUDO_CONF_OPTS += --with-pam
++SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_INSTALL_PAM_CONF
++else
++SUDO_CONF_OPTS += --without-pam
++endif
++
+ # mksigname/mksiglist needs to run on build host to generate source files
+ define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+ 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+diff --git a/package/sudo/sudo.pam b/package/sudo/sudo.pam
+new file mode 100644
+index 0000000..c6e6f20
+--- /dev/null
++++ b/package/sudo/sudo.pam
+@@ -0,0 +1,12 @@
++auth        sufficient   pam_rootok.so
++auth        required     pam_wheel.so use_uid
++auth        required     pam_env.so
++auth        required     pam_unix.so nullok
++
++account     required     pam_unix.so
++
++password    required     pam_unix.so nullok
++
++session     required     pam_limits.so
++session     required     pam_env.so
++session     required     pam_unix.so
