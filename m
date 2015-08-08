@@ -1,68 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] libv4l: fix uclibc-ng
-	configure/compile
-Message-ID: <20150808105620.2EC517FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openvmtools: bump to
+	version 9.10.2
+Message-ID: <20150808105620.815337FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f01396a158f14c53b781c35f7ff29da0bea8c8d6
+commit: http://git.buildroot.net/buildroot/commit/?id=1d242d23b762ff8e6838ed5a1e9be4b7f06a0526
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With raspberrypi_defconfig:
-
-  libv4l2rds.c:256:2: error: 'for' loop initial declarations are only allowed in C99 or C11 mode
-    for (int i = 0; i < tuning->station_cnt; i++) {
-    ^
-  libv4l2rds.c:256:2: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
-
-From build/libv4l-1.6.2/config.log:
-
-configure:4709: checking for .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc option to accept ISO C99
-configure:4858: .../host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-conftest.c:54:9: error: unknown type name 'wchar_t'
-   const wchar_t *name;
-
-The C99 detection problem seems more related to missing wchar_t type support than the compiler option?
-
-Adding LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=c99' gives a lot of compile errors like:
-
-libv4lconvert.c: In function 'dev_ioctl':
-processing/../libv4lsyscall-priv.h:85:10: error: 'SYS_ioctl' undeclared (first use in this function)
-  syscall(SYS_ioctl, (int)(fd), (unsigned long)(cmd), (void *)(arg))
-          ^
-libv4lconvert.c:43:9: note: in expansion of macro 'SYS_IOCTL'
-  return SYS_IOCTL(fd, cmd, arg);
-         ^
-processing/../libv4lsyscall-priv.h:85:10: note: each undeclared identifier is reported only once for each function it appears in
-  syscall(SYS_ioctl, (int)(fd), (unsigned long)(cmd), (void *)(arg))
-          ^
-libv4lconvert.c:43:9: note: in expansion of macro 'SYS_IOCTL'
-  return SYS_IOCTL(fd, cmd, arg);
-         ^
-
-Adding LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99' solves all configure/compile errors.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/libv4l.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/openvmtools/openvmtools.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index b1c783d..edb2a36 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -11,6 +11,9 @@ LIBV4L_INSTALL_STAGING = YES
- LIBV4L_DEPENDENCIES = host-pkgconf
- LIBV4L_CONF_OPTS = --disable-doxygen-doc
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 57271c8..40a7dac 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# fix uclibc-ng configure/compile
-+LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-OPENVMTOOLS_VERSION = stable-9.10.0
++OPENVMTOOLS_VERSION = stable-9.10.2
+ OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
+ OPENVMTOOLS_SUBDIR = open-vm-tools
+ OPENVMTOOLS_LICENSE = LGPLv2.1
+@@ -45,6 +45,13 @@ else
+ OPENVMTOOLS_CONF_OPTS += --without-pam
+ endif
+ 
++# configure needs execution permission
++define OPENVMTOOLS_PRE_CONFIGURE_CHMOD
++	chmod 0755 $(@D)/$(OPENVMTOOLS_SUBDIR)/configure
++endef
 +
- # v4l-utils components have different licences, see v4l-utils.spec for details
- LIBV4L_LICENSE = GPLv2+ (utilities), LGPLv2.1+ (libraries)
- LIBV4L_LICENSE_FILES = COPYING COPYING.libv4l lib/libv4l1/libv4l1-kernelcode-license.txt
++OPENVMTOOLS_PRE_CONFIGURE_HOOKS += OPENVMTOOLS_PRE_CONFIGURE_CHMOD
++
+ # symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
+ # defined in lib/misc/hostinfoPosix.c
+ # /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
