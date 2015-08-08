@@ -1,81 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: add missing
-	dependencies to matchbox-lib
-Message-ID: <20150808105606.C5ED27FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bc: patch makeinfo logic
+Message-ID: <20150808105609.707057F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9a4e61087f324b7eac49c0c1f8c006119196621
+commit: http://git.buildroot.net/buildroot/commit/?id=0db1c13559660fce92759bdb1cd225614ba5d8d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Most of the matchbox packages build-depend on matchbox-lib, but were not
-selecting it from their Config.in.
+It uses a hardcoded "makeinfo" command invocation instead of the usual
+MAKEINFO variable with the missing logic for docs. Fixes:
+http://autobuild.buildroot.net/results/b0b/b0b9dced0014a5a8026fa972f95085e8bd16a07b/
 
-Fix that.
-
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-common/Config.in          |    1 +
- package/matchbox-desktop/Config.in         |    1 +
- package/matchbox-fakekey/Config.in         |    1 +
- package/matchbox-keyboard/Config.in        |    1 +
- package/matchbox-startup-monitor/Config.in |    1 +
- 5 files changed, 5 insertions(+), 0 deletions(-)
+ package/bc/03_use_appropiate_makeinfo.patch |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
-index f1c4ce3..33d6cc4 100644
---- a/package/matchbox-common/Config.in
-+++ b/package/matchbox-common/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_COMMON
- 	bool "matchbox-common"
-+	select BR2_PACKAGE_MATCHBOX_LIB
- 	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
- 	help
- 	  Common desktop folders and matchbox-session script.
-diff --git a/package/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
-index ed80c22..22c568b 100644
---- a/package/matchbox-desktop/Config.in
-+++ b/package/matchbox-desktop/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_DESKTOP
- 	bool "matchbox-desktop"
-+	select BR2_PACKAGE_MATCHBOX_LIB
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  A PDA style application launcher or 'item browser'.
-diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
-index 334f3a2..c0cde42 100644
---- a/package/matchbox-fakekey/Config.in
-+++ b/package/matchbox-fakekey/Config.in
-@@ -1,2 +1,3 @@
- config BR2_PACKAGE_MATCHBOX_FAKEKEY
- 	bool
-+	select BR2_PACKAGE_MATCHBOX_LIB
-diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
-index 056a255..8bd2a79 100644
---- a/package/matchbox-keyboard/Config.in
-+++ b/package/matchbox-keyboard/Config.in
-@@ -3,5 +3,6 @@ config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-+	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
- 	  Virtual Keyboard
-diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
-index 95af5fc..522d7f7 100644
---- a/package/matchbox-startup-monitor/Config.in
-+++ b/package/matchbox-startup-monitor/Config.in
-@@ -1,3 +1,4 @@
- config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
- 	bool
-+	select BR2_PACKAGE_MATCHBOX_LIB
- 	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
+diff --git a/package/bc/03_use_appropiate_makeinfo.patch b/package/bc/03_use_appropiate_makeinfo.patch
+new file mode 100644
+index 0000000..e6f9262
+--- /dev/null
++++ b/package/bc/03_use_appropiate_makeinfo.patch
+@@ -0,0 +1,17 @@
++Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
++command directly, otherwise missing logic never works.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura bc-1.06.95.orig/doc/Makefile.in bc-1.06.95/doc/Makefile.in
++--- bc-1.06.95.orig/doc/Makefile.in	2015-06-13 09:39:46.946620294 -0300
+++++ bc-1.06.95/doc/Makefile.in	2015-06-13 09:40:10.019407630 -0300
++@@ -96,7 +96,7 @@
++ LIBOBJS = @LIBOBJS@
++ LIBS = @LIBS@
++ LTLIBOBJS = @LTLIBOBJS@
++-MAKEINFO = makeinfo --no-split
+++MAKEINFO = @MAKEINFO@ --no-split
++ OBJEXT = @OBJEXT@
++ PACKAGE = @PACKAGE@
++ PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
