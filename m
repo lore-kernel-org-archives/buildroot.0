@@ -1,27 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] libmodbus: add hash
-Message-ID: <20150808105556.E2C95818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] vsftpd: correct openssl
+	linking after 1d046a5c (vsftpd: use pkg-config to get OpenSSL
+	link flags)
+Message-ID: <20150808105556.ED10B818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=527d119efde7e2384cb9f95283a02baaf32e55c8
+commit: http://git.buildroot.net/buildroot/commit/?id=205f07755661b64da21509469b46006ea0badcf9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+http://autobuild.buildroot.net/results/221/221c987a9657caefad54bcc2fe9d2d71189c94c5/
+http://autobuild.buildroot.net/results/90c/90cea7c4fdb3e5af923eedf96d79594d6d02e563/
+
+vsftpd directly uses symbols from libcrypto (X509_{digest,free}), so it
+needs to link against both.
+
+This doesn't trigger for static builds as libssl internally uses libcrypto
+(and lists it in Requires.private).
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodbus/libmodbus.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/vsftpd/vsftpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmodbus/libmodbus.hash b/package/libmodbus/libmodbus.hash
-new file mode 100644
-index 0000000..095164d
---- /dev/null
-+++ b/package/libmodbus/libmodbus.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	046d63f10f755e2160dc56ef681e5f5ad3862a57c1955fd82e0ce036b69471b6	libmodbus-3.0.6.tar.gz
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index ed15f00..3091f06 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -24,7 +24,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ VSFTPD_DEPENDENCIES += openssl host-pkgconf
+-VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
++VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)
+ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
+ endif
+ 
