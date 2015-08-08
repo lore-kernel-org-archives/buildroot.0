@@ -1,72 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] wine: fix sane related build
-	failure
-Message-ID: <20150808105621.B240B80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXaw:
+	bump version to 1.0.13
+Message-ID: <20150808105629.BBC347FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff89e1eb0cdb8ebe9cbd2cf944f43ed132afcb17
+commit: http://git.buildroot.net/buildroot/commit/?id=c749cdfe9953eef9142a218abc1c4cddb0805ee9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If sane is installed system-wide on the build machine, then the
-sane-config binary found is the one of the system, which returns
-incorrect library paths for cross-compilation.
-
-To fix this, this commit adds a patch to wine to make it support a
-SANE_CONFIG environment variable, and then adjusts wine.mk to
-explicitly pass the path to $(STAGING_DIR)/usr/bin/sane-config.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/8bd/8bdc1eed55075313403aa8a6c9af6a427bce198e/
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/wine/0003-sane-config-fix.patch |   21 +++++++++++++++++++++
- package/wine/wine.mk                    |    1 +
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ package/x11r7/xlib_libXaw/xlib_libXaw.hash |    4 ++--
+ package/x11r7/xlib_libXaw/xlib_libXaw.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0003-sane-config-fix.patch
-new file mode 100644
-index 0000000..d53843a
---- /dev/null
-+++ b/package/wine/0003-sane-config-fix.patch
-@@ -0,0 +1,21 @@
-+Add support for SANE_CONFIG variable
-+
-+Instead of using directly the sane-config command, allow to pass a
-+SANE_CONFIG environment variable to override where to find the
-+sane-config tool.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1375,7 +1375,7 @@
-+ if test "x$with_sane" != "xno"
-+ then
-+     ac_save_CPPFLAGS="$CPPFLAGS"
-+-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
-++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
-+     AC_CHECK_HEADER(sane/sane.h,
-+         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
-+         [SANE_CFLAGS=""])
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 1ae038e..d6fb9c6 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -174,6 +174,7 @@ endif
- ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
- WINE_CONF_OPTS += --with-sane
- WINE_DEPENDENCIES += sane-backends
-+WINE_CONF_ENV += SANE_CONFIG=$(STAGING_DIR)/usr/bin/sane-config
- else
- WINE_CONF_OPTS += --without-sane
- endif
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+index a8bb3f9..a948e8f 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/xorg/2013-September/056008.html
+-sha256	96fc314874fce9979556321d1d6ee00b5baf32fb333b7278853b4983bc3cdbf6	libXaw-1.0.12.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
++sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+index ac8684e..d78adff 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXAW_VERSION = 1.0.12
++XLIB_LIBXAW_VERSION = 1.0.13
+ XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
+ XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAW_LICENSE = MIT
