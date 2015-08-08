@@ -1,42 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:11 -0000
-Subject: [Buildroot] [git commit branch/next] audit: disable python3 support
-Message-ID: <20150808105640.50CD27F8D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt5: remove GPLv2 license from
+	qt5declarative, qt5script and qt5svg
+Message-ID: <20150808105640.365797F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a8951273a567a6bdf11f77ba40f99acf28d3bfa
+commit: http://git.buildroot.net/buildroot/commit/?id=bdd522f9213788d404540f5c016bdd431d9be04a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With the version bump to 2.4.3, python3 support was added for
-libaudit. With host machines that have python3 installed, this will
-cause build issues such as:
+Since Qt 5.5, those three modules have lost their GPLv2 licensing
+option. Remains the LGPLv2.1 with exception and LGPLv3 as the possible
+open-source licenses.
 
-  make[5]: Entering directory `/tmp/ryan/buildroot/output/build/audit-2.4.3/bindings/swig/python3'
-  swig -o audit_wrap.c -python -py3 -modern -I. -I../../.. -I../../../lib -I/usr/include/python3.4m -I/usr/include/python3.4m ./../src/auditswig.i
-  make[5]: swig: Command not found
-
-Solution is to disable python3 support such as we do with python2.7.
-
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/audit/audit.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt5/qt5declarative/qt5declarative.mk |    4 ++--
+ package/qt5/qt5script/qt5script.mk           |    4 ++--
+ package/qt5/qt5svg/qt5svg.mk                 |    4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 806bd97..61e876b 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -14,7 +14,7 @@ AUDIT_INSTALL_STAGING = YES
- # Patching Makefile.am
- AUDIT_AUTORECONF = YES
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index 30c0813..296292b 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -11,8 +11,8 @@ QT5DECLARATIVE_DEPENDENCIES = qt5base qt5xmlpatterns
+ QT5DECLARATIVE_INSTALL_STAGING = YES
  
--AUDIT_CONF_OPTS = --without-python --disable-zos-remote
-+AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5DECLARATIVE_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5DECLARATIVE_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
++QT5DECLARATIVE_LICENSE = LGPLv2.1 with exception or LGPLv3
++QT5DECLARATIVE_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+ else
+ QT5DECLARATIVE_LICENSE = Commercial license
+ QT5DECLARATIVE_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5script/qt5script.mk b/package/qt5/qt5script/qt5script.mk
+index 7f0efbb..250bdfd 100644
+--- a/package/qt5/qt5script/qt5script.mk
++++ b/package/qt5/qt5script/qt5script.mk
+@@ -11,8 +11,8 @@ QT5SCRIPT_DEPENDENCIES = qt5base
+ QT5SCRIPT_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
- AUDIT_DEPENDENCIES += libcap-ng
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5SCRIPT_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
++QT5SCRIPT_LICENSE = LGPLv2.1 with exception or LGPLv3
++QT5SCRIPT_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+ else
+ QT5SCRIPT_LICENSE = Commercial license
+ QT5SCRIPT_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index 8aaa517..5942d01 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -11,8 +11,8 @@ QT5SVG_DEPENDENCIES = qt5base
+ QT5SVG_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5SVG_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5SVG_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
++QT5SVG_LICENSE = LGPLv2.1 with exception or LGPLv3
++QT5SVG_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+ else
+ QT5SVG_LICENSE = Commercial license
+ QT5SVG_REDISTRIBUTE = NO
