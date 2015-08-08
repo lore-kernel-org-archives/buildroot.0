@@ -1,108 +1,65 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat,  8 Aug 2015 18:39:13 +0200
-Subject: [Buildroot] [PATCH] package/powertop: add missing headers for musl
-Message-ID: <1439051953-11850-1-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 8 Aug 2015 18:55:08 +0200
+Subject: [Buildroot] [PATCH] package/dawgdic: needs gcc >= 4.7
+In-Reply-To: <55C617D0.3050800@green-communications.fr>
+References: <1439026543-25909-1-git-send-email-romain.naour@openwide.fr>
+ <55C617D0.3050800@green-communications.fr>
+Message-ID: <55C6346C.40707@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reported upstream:
-https://github.com/fenrus75/powertop/pull/20
+Hi Nicolas,
 
-Fixes:
-http://autobuild.buildroot.net/results/713/713df99bebd625434e029abdf360574de879afa3/
+Le 08/08/2015 16:53, Nicolas Cavallari a ?crit :
+> On 08/08/2015 11:35, Romain Naour wrote:
+>> std::strtoll is only supported since C++11.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/cae/cae3cda9be779ea8359f94d13bbbca97e68495ca/
+>>
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>   package/dawgdic/Config.in | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/dawgdic/Config.in b/package/dawgdic/Config.in
+>> index ce0b466..8ef9902 100644
+>> --- a/package/dawgdic/Config.in
+>> +++ b/package/dawgdic/Config.in
+>> @@ -1,6 +1,8 @@
+>>   config BR2_PACKAGE_DAWGDIC
+>>       bool "dawgdic"
+>>       depends on BR2_INSTALL_LIBSTDCPP
+>> +    # std=c11
+>> +    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+> The string conversion functions also exist in 4.6[1].
+> 
+> However, there is another problem: If an external toolchain is built using GCC
+> and uclibc without any additional patches, then you will not have them, because
+> of a too-broad feature check in libstdc++ that checks if the C library has
+> complete support for C99[2].
+> 
+> This problem is still unresolved even with the latest GCC. buildroot patches GCC
+> to fix this, but if an external toolchain does not ...
+> 
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- .../0003-add-missing-sys-time.h-header.patch       | 35 ++++++++++++++++++++++
- .../powertop/0004-add-missing-stdio.h-header.patch | 35 ++++++++++++++++++++++
- 2 files changed, 70 insertions(+)
- create mode 100644 package/powertop/0003-add-missing-sys-time.h-header.patch
- create mode 100644 package/powertop/0004-add-missing-stdio.h-header.patch
+Thanks for the report.
 
-diff --git a/package/powertop/0003-add-missing-sys-time.h-header.patch b/package/powertop/0003-add-missing-sys-time.h-header.patch
-new file mode 100644
-index 0000000..7156e42
---- /dev/null
-+++ b/package/powertop/0003-add-missing-sys-time.h-header.patch
-@@ -0,0 +1,35 @@
-+From 283cab667a9ac3ae3a675b5e5d1a42191188699f Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 8 Aug 2015 18:24:48 +0200
-+Subject: [PATCH] add missing sys/time.h header
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+struct timeval is defined in sys/time.h with a musl toolchain.
-+
-+Fixes:
-+In file included from devices/devfreq.cpp:35:0:
-+devices/devfreq.h:35:18: error: field ?stamp_before? has incomplete type ?timeval?
-+  struct timeval  stamp_before, stamp_after;
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/devices/devfreq.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/devices/devfreq.h b/src/devices/devfreq.h
-+index 16a60fb..4a8983b 100644
-+--- a/src/devices/devfreq.h
-++++ b/src/devices/devfreq.h
-+@@ -27,6 +27,7 @@
-+ 
-+ #include "device.h"
-+ #include "../parameters/parameters.h"
-++#include <sys/time.h>
-+ 
-+ struct frequency;
-+ 
-+-- 
-+2.4.3
-+
-diff --git a/package/powertop/0004-add-missing-stdio.h-header.patch b/package/powertop/0004-add-missing-stdio.h-header.patch
-new file mode 100644
-index 0000000..7619cca
---- /dev/null
-+++ b/package/powertop/0004-add-missing-stdio.h-header.patch
-@@ -0,0 +1,35 @@
-+From e6cfd977c81b335664db1d5d3d6b5488c245e30f Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 8 Aug 2015 18:26:15 +0200
-+Subject: [PATCH] add missing stdio.h header
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+snprinf is defined in stdio.h.
-+
-+Fixes:
-+perf/perf_bundle.cpp: In function ?void parse_event_format(const char*)?:
-+perf/perf_bundle.cpp:141:75: error: ?sprintf? was not declared in this scope
-+  sprintf(file, "/sys/kernel/debug/tracing/events/%s/%s/format", sys, event);
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ src/perf/perf_bundle.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/perf/perf_bundle.cpp b/src/perf/perf_bundle.cpp
-+index cf1ae11..3d216ff 100644
-+--- a/src/perf/perf_bundle.cpp
-++++ b/src/perf/perf_bundle.cpp
-+@@ -31,6 +31,7 @@
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-++#include <stdio.h>
-+ 
-+ #include "perf_bundle.h"
-+ #include "perf_event.h"
-+-- 
-+2.4.3
-+
--- 
-2.4.3
+I followed the cppreference site:
+http://en.cppreference.com/w/cpp/string/byte/strtol (C++11)
+
+Since C++11 start with gcc 4.7, so I haven't looked further...
+My bad.
+
+Best regards,
+Romain Naour
+
+> [1]:
+> https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libstdc%2B%2B-v3/include/c_std/cstdlib;h=c3fe8aa4507d51375474c2914fb3e812b3a136e0;hb=632cb4d5f22f598d1395fbae90a10fb679e06054
+> 
+> 
+> [2]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58393
