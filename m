@@ -1,40 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:12 -0000
-Subject: [Buildroot] [git commit branch/next] portaudio: fix static linking
-	issue with portaudio
-Message-ID: <20150808105600.C53808190C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xfont_font-sun-misc:
+	add hash file
+Message-ID: <20150808105609.1C0B67FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dea306c78b5d4c571555c50512e212a725b594b9
+commit: http://git.buildroot.net/buildroot/commit/?id=51ff022d09759701afdbafbd1f479ec11e572ef7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/25f/25f8088ecb276ff4559a56fcc4f1b92d11f7deac/
-
-As opposed to the other audio backends, the configure script does NOT use
-pkg-config to figure out how to link with portaudio, breaking static linking
-as portaudio uses pthreads.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpg123/mpg123.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ .../xfont_font-sun-misc/xfont_font-sun-misc.hash   |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index c2d7b1f..c9acb6b 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -52,6 +52,9 @@ ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
- MPG123_AUDIO += portaudio
- MPG123_CONF_OPTS += --with-default-audio=portaudio
- MPG123_DEPENDENCIES += portaudio
-+# configure script does NOT use pkg-config to figure out how to link
-+# with portaudio, breaking static linking as portaudio uses pthreads
-+MPG123_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0)'
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL),y)
+diff --git a/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash
+new file mode 100644
+index 0000000..9d36978
+--- /dev/null
++++ b/package/x11r7/xfont_font-sun-misc/xfont_font-sun-misc.hash
+@@ -0,0 +1,2 @@
++# From http://www.x.org/archive/current/src/everything/CHECKSUMS
++sha256 481f4fcbbf7005658b080b3cf342c8c76de752e77f47958b2b383de73266d2e0 font-sun-misc-1.0.3.tar.bz2
