@@ -1,37 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:51 -0000
-Subject: [Buildroot] [git commit branch/next] package/gcc: fix typo for
-	CFLAGS_FOR_TARGET
-Message-ID: <20150808105640.D07617FFCF@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:56:52 -0000
+Subject: [Buildroot] [git commit branch/next] ntpd: drop unneeded uClibc
+	workaround for refclock_pcf.c
+Message-ID: <20150808105621.C5C0A7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc39b87e5ae9c3c167f7e2dac8e5259c4071d7f1
+commit: http://git.buildroot.net/buildroot/commit/?id=0cbe4bc52d5f1cea7d2c085e40f948a5a78183b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-CFLAGS_FOR_TARGET is initialized with GCC_COMMON_TARGET_CXXFLAGS.
+refclock_pcf.c contains code using the tm_gmtoff member of struct tm, which
+is only available on uClibc if it is built with __UCLIBC_HAS_TM_EXTENSIONS__.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This change date back to:
+
+commit 7129da009cc72575a84a30c4587bd99f745c49d4
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Sat Jan 18 21:27:22 2003 +0000
+
+    Merge a bunch of stuff over from the tuxscreen buildroot, with
+    many updates to make things be more consistant.
+     -Erik
+
+But nowadays our uClibc configs DO enable __UCLIBC_HAS_TM_EXTENSIONS__, so
+it is no longer needed and can be dropped.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ntp/ntp.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index aaeba7f..accb429 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -113,7 +113,7 @@ endif
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 93cefa1..110eaf8 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -40,10 +40,6 @@ else
+ NTP_CONF_OPTS += --disable-ATOM
  endif
  
- # Propagate options used for target software building to GCC target libs
--HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
-+HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
- 
- # libitm needs sparc V9+
+-define NTP_PATCH_FIXUPS
+-	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
+-endef
+-
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
