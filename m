@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:44 -0000
-Subject: [Buildroot] [git commit branch/next] libdvdread: add hash file
-Message-ID: <20150808105635.2FDDA7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libdvdnav: add hash file
+Message-ID: <20150808105635.384D37FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d882b3b8273362131235fbce8db0599e52eb4e8
+commit: http://git.buildroot.net/buildroot/commit/?id=b0e1b2391b02105f9f3e5f40d6c069d1a970110a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libdvdread/libdvdread.hash |    2 ++
+ package/libdvdnav/libdvdnav.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libdvdread/libdvdread.hash b/package/libdvdread/libdvdread.hash
+diff --git a/package/libdvdnav/libdvdnav.hash b/package/libdvdnav/libdvdnav.hash
 new file mode 100644
-index 0000000..11cc1ce
+index 0000000..4a0d851
 --- /dev/null
-+++ b/package/libdvdread/libdvdread.hash
++++ b/package/libdvdnav/libdvdnav.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256	af9b98f049580a6521d56c978b736d3d609562dd12955e11d50e26d97542dcd4	libdvdread-4.2.1.tar.xz
++sha256	7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372	libdvdnav-4.2.1.tar.xz
