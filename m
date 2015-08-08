@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:59 -0000
-Subject: [Buildroot] [git commit branch/next] c-icap: needs MMU support
-Message-ID: <20150808105628.82CB880414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: extract
+	package before using kconfig fragments
+Message-ID: <20150808105615.27E8F7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58f6b79334ef19fd63f9acaa27486fe8a76f14d3
+commit: http://git.buildroot.net/buildroot/commit/?id=f3938f392e33221ae2bf3ca80571eac83298f6ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
+Kconfig fragments may be present in the package, so we need to extract
+and patch it before we can use the fragments.
 
-  http://autobuild.buildroot.org/results/8c3/8c3e397eeecb2a6a39fbae1d8665bff92ef3e3bb/
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/c-icap/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/pkg-kconfig.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/c-icap/Config.in b/package/c-icap/Config.in
-index f949c16..8121a26 100644
---- a/package/c-icap/Config.in
-+++ b/package/c-icap/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_C_ICAP
- 	bool "c-icap"
- 	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  c-icap is an implementation of an ICAP server. It can be
- 	  used with HTTP proxies that support the ICAP protocol to
-@@ -13,4 +14,5 @@ config BR2_PACKAGE_C_ICAP
- 	  http://c-icap.sourceforge.net/
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 7a00fff..e65c6f9 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -37,9 +37,9 @@ $(2)_KCONFIG_OPTS ?=
+ $(2)_KCONFIG_FIXUP_CMDS ?=
+ $(2)_KCONFIG_FRAGMENT_FILES ?=
  
- comment "c-icap needs a toolchain w/ threads and dynamic library"
-+	depends on BR2_USE_MMU
- 	depends on BR2_PREFER_STATIC_LIB  || !BR2_TOOLCHAIN_HAS_THREADS
+-# The config file could be in-tree, so before depending on it the package should
+-# be extracted (and patched) first
+-$$($(2)_KCONFIG_FILE): | $(1)-patch
++# The config file as well as the fragments could be in-tree, so before
++# depending on them the package should be extracted (and patched) first
++$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
