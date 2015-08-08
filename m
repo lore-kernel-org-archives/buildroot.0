@@ -1,33 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] netcat-openbsd: fix license
-	typo
-Message-ID: <20150808105604.3505C7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] stunnel: add
+	STUNNEL_VERSION_MAJOR variable
+Message-ID: <20150808105606.29DD37FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e00f6846ae14bd2b77560aa3f4e50f67d73c862
+commit: http://git.buildroot.net/buildroot/commit/?id=670a833b57cb14e1f519bc23e94c939c48ebe2cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netcat-openbsd/netcat-openbsd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/stunnel/stunnel.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index bf5c4b7..5abfc7e 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -7,7 +7,7 @@
- NETCAT_OPENBSD_VERSION = debian/1.105-7
- NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
- NETCAT_OPENBSD_LICENSE = BSD-3c
--NETCAT_OPENBSD_LICENSE_FILE = debian/copyright
-+NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
- NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 2d35e75..3f5b9aa 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
- # Ensure Busybox gets built/installed before, so that this package
+-STUNNEL_VERSION = 5.17
+-STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/5.x
++STUNNEL_VERSION_MAJOR = 5
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).17
++STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ 	--disable-libwrap
