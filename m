@@ -1,34 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] arch: aarch64 always has a MMU
-Message-ID: <20150808105629.0378B7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox: wrap long
+	lines
+Message-ID: <20150808105607.8DAD27FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f410de414072f1aea6ed32f4e6aef8769f2ae665
+commit: http://git.buildroot.net/buildroot/commit/?id=12a9e85f031626fa2b557e78c0db834dcdc99d1e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Following the addition of AArch64 big endian, the AArch64 little
-endian option had lost its 'select BR2_ARCH_HAS_MMU_MANDATORY', so
-let's reintroduce it.
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/matchbox-keyboard/matchbox-keyboard.mk |    3 ++-
+ package/matchbox-lib/matchbox-lib.mk           |    3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 39ce046..875f412 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -61,6 +61,7 @@ config BR2_armeb
- config BR2_aarch64
- 	bool "AArch64 (little endian)"
- 	select BR2_ARCH_IS_64
-+	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
- 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
+diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
+index ba524c0..3ffaca6 100644
+--- a/package/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox-keyboard/matchbox-keyboard.mk
+@@ -15,7 +15,8 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
+ MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+ 
+ define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+-	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
++	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
++		$(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
+ endef
+ 
+ MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
+index 3b697bb..d43e2b8 100644
+--- a/package/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox-lib/matchbox-lib.mk
+@@ -15,7 +15,8 @@ MATCHBOX_LIB_CONF_OPTS = --enable-expat --disable-doxygen-docs
+ MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
+ 
+ define MATCHBOX_LIB_POST_INSTALL_FIXES
+-	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
++	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
+ endef
+ 
+ MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
