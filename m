@@ -1,38 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] nginx: fix nginx.old clean-up
-Message-ID: <20150808105615.CF2657FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] glog: disable on blackfin
+	external toolchains
+Message-ID: <20150808105615.B57E17FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6d1d1518c192b4e33b736528a68d4d1f20b10e8
+commit: http://git.buildroot.net/buildroot/commit/?id=3b198722a5cfdf2ad5fd5a243aaa5f9f730b0101
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The bin path for nginx is configured for /usr/sbin, so deleting
-the nginx.old back-up from /usr/bin never works.  Fix path, and
-also use "$(RM)" instead of "-$(RM)", as "rm -f" never fails.
+With following blackfin toolchains
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Samuel Martin <s.martin49@gmail.com>
+BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+
+when BR2_BINFMT_FDPIC=y
+
+../usr/include/bits/elf-fdpic.h: In function 'void* __reloc_pointer(void*, const elf32_fdpic_loadmap*)':
+../usr/include/bits/elf-fdpic.h:95: error: invalid use of 'void'
+
+code snippet at line 95 in elf-fdpic.h
+-------------------------------------------------------
+unsigned long offset = p - (void*)map->segs[c].p_vaddr;
+-------------------------------------------------------
+
+void pointer addition and subtraction is not allowed in C++ as it has undetermined size,
+however in C with language extension it is possible because sizeof void is treated
+as one byte.
+
+This is toolchain-specific issue. So disable package on these external toolchains.
+
+fixes:
+http://autobuild.buildroot.net/results/c70/c704c70ae2f066f85dd6a5fa6a73789bc358d368/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nginx/nginx.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/glog/Config.in |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 90ebbcc..502bc44 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -222,7 +222,7 @@ endef
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index 534997a..3f54020 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -3,11 +3,18 @@ config BR2_PACKAGE_GLOG
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	# build issues with these external toolchains
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	help
+ 	  C++ implementation of the Google logging module
  
- define NGINX_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
--	-$(RM) $(TARGET_DIR)/usr/bin/nginx.old
-+	$(RM) $(TARGET_DIR)/usr/sbin/nginx.old
- 	$(INSTALL) -D -m 0664 package/nginx/nginx.logrotate \
- 		$(TARGET_DIR)/etc/logrotate.d/nginx
- endef
+ 	  https://github.com/google/glog
+ 
+ comment "glog needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
