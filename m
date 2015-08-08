@@ -1,33 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:17 -0000
-Subject: [Buildroot] [git commit branch/next] squid: explicitly disable
-	openssl support when BR2_PACKAGE_OPENSSL != y
-Message-ID: <20150808105623.30EE27FC31@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:57:19 -0000
+Subject: [Buildroot] [git commit branch/next] lvm2: bump to version 2.02.125
+Message-ID: <20150808105623.A97437FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=057dad9c5ff04ff1ea322e049276951d549bf898
+commit: http://git.buildroot.net/buildroot/commit/?id=f64f18938877a8b4cdbbf22874ce2da9917e69e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 80235a4..e201673 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -60,6 +60,8 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- SQUID_CONF_OPTS += --with-openssl
- SQUID_DEPENDENCIES += openssl
-+else
-+SQUID_CONF_OPTS += --without-openssl
- endif
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 982cfc7..eda465d 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  da8d81a6a2ea235025795d9e001a6ae3  LVM2.2.02.124.tgz
++md5  2d24ba982c8a85e8c837210f087a6a51  LVM2.2.02.125.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index c112b97..0930a10 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-LVM2_VERSION = 2.02.124
++LVM2_VERSION = 2.02.125
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
