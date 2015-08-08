@@ -1,63 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:06 -0000
-Subject: [Buildroot] [git commit branch/next] uboot-tools: fix dynamic
-	linking against OpenSSL
-Message-ID: <20150808105558.9752381778@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:07 -0000
+Subject: [Buildroot] [git commit branch/next] package/wsapi: add hash file
+Message-ID: <20150808105600.282627F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66a3f7a240d8804306c1eafa354c2de319097b36
+commit: http://git.buildroot.net/buildroot/commit/?id=fad2721d900004a919cc635ed0a4567f15701c3f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 95f9a5c3df8e4226b99438efccf0bf21eecb573d fixed the static
-linking issue of uboot-tools mkimage against OpenSSL, but in the
-process broke the dynamic linking case. This commit adjusts the
-uboot-tools patch to make sure both static and dynamic linking work.
-
-An updated version of the patch has been submitted upstream.
-
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...kg-config-when-available-to-get-SSL-flags.patch |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/wsapi/wsapi.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch b/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
-index db038ff..9eb7483 100644
---- a/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
-+++ b/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
-@@ -1,4 +1,4 @@
--From 7f47f7f8c1a0d634e9febad61504f095476fccc0 Mon Sep 17 00:00:00 2001
-+From 99bc38ac6ebdd3b5d741cb9e50d842fa13d409f7 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Tue, 12 May 2015 22:54:29 +0200
- Subject: [PATCH] tools: use pkg-config when available to get SSL flags
-@@ -13,7 +13,7 @@ We gracefully fallback on the previous behavior of hardcoding -lssl
- -lcrypto if pkg-config is not available or fails with an error.
- 
- Patch submitted upstream at
--http://lists.denx.de/pipermail/u-boot/2015-May/214068.html.
-+http://lists.denx.de/pipermail/u-boot/2015-May/214489.html
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-@@ -21,7 +21,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/tools/Makefile b/tools/Makefile
--index 4bbb153..e1bcd59 100644
-+index 4bbb153..8ff9c2e 100644
- --- a/tools/Makefile
- +++ b/tools/Makefile
- @@ -122,7 +122,8 @@ endif
-@@ -30,7 +30,7 @@ index 4bbb153..e1bcd59 100644
-  ifneq ($(CONFIG_MX23)$(CONFIG_MX28)$(CONFIG_FIT_SIGNATURE),)
- -HOSTLOADLIBES_mkimage += -lssl -lcrypto
- +HOSTLOADLIBES_mkimage += \
--+	$(shell pkg-config --libs libssl 2> /dev/null || echo "-lssl -lcrypto")
-++	$(shell pkg-config --libs libssl libcrypto 2> /dev/null || echo "-lssl -lcrypto")
-  endif
-  
-  HOSTLOADLIBES_dumpimage := $(HOSTLOADLIBES_mkimage)
+diff --git a/package/wsapi/wsapi.hash b/package/wsapi/wsapi.hash
+new file mode 100644
+index 0000000..3abbfc9
+--- /dev/null
++++ b/package/wsapi/wsapi.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 f7f1b0ddc68c257965c42ac7155904d8ff7c2b7256f65ef1b82fda0039137d61 wsapi-1.6.1-1.src.rock
