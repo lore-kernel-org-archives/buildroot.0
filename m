@@ -1,38 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] libstrophe: install into target
-Message-ID: <20150808105601.EE8A47FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fio: disable for static build
+Message-ID: <20150808105601.DA193818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb7d670e8e35da3bd1d2322f4a74312f2344e9da
+commit: http://git.buildroot.net/buildroot/commit/?id=c636687f71f16cac6b55b8e073527a7a647285b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since a7134ce6745 (libstrophe: bump version), the package does in fact build
-and install a shared library, so ensure it also ends up in target so it can
-be found at runtime.
+Fixes:
+http://autobuild.buildroot.net/results/275/275dc359d72513fd567b7ccbbd4061dffd8a5266/
+http://autobuild.buildroot.net/results/5e8/5e8cc28da6a17dcb142eb6d8a8cada735b211e2e/
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libstrophe/libstrophe.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/fio/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index d7202d7..8493692 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
-@@ -10,11 +10,7 @@ LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
- LIBSTROPHE_AUTORECONF = YES
- LIBSTROPHE_LICENSE = MIT or GPLv3
- LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
--
--# This package does not build a dynamic library, so there is nothing
--# to be installed to the target.
- LIBSTROPHE_INSTALL_STAGING = YES
--LIBSTROPHE_INSTALL_TARGET = NO
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index 75af6a7..b1f9045 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_FIO
+ 	bool "fio"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# fio uses posix_madvise(), which is not part of any official
+ 	# release of uClibc, but is part of uClibc Git, and backported
+@@ -17,7 +18,7 @@ config BR2_PACKAGE_FIO
  
- ifeq ($(BR2_PACKAGE_EXPAT),y)
- # Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
+ 	  http://git.kernel.dk/?p=fio.git;a=summary
+ 
+-comment "fio needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "fio needs a toolchain w/ dynamic library, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
