@@ -1,50 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] package/ipmiutil: disable
-	parallel build
-Message-ID: <20150808105601.3DB577FF82@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:02 -0000
+Subject: [Buildroot] [git commit branch/next] package/protobuf: autoreconf
+	is now needed
+Message-ID: <20150808105600.ED9DD8190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da4b584f86e0a068547eb3222cf6cb4ffde3e557
+commit: http://git.buildroot.net/buildroot/commit/?id=754f0015c89e9d17e09f073259ecbc1bd64a0ef6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-ipmiutil has a race when generating the object files and the executable,
-because it uses very odd (to say the least) constructs in its
-Makefile.am, leading to improper dependency-tracking.
-
-Since impmiutil is pretty small, and because it is just mindbloggingly
-complex to fix its Makefile.am, just disable parallel build.
+Since its update, the *_SITE points to the git repository, so configure
+script is not generated in this tarball.
 
 Fixes:
-    http://autobuild.buildroot.org/results/661/661373306d0440aaea67e394fbbfc47fd4481589/
-    http://autobuild.buildroot.org/results/a6c/a6c5f9d8e0e0bad27b8ca1fa217bfda4216f2cd8/
-    http://autobuild.buildroot.org/results/f0b/f0bbbd54349b5239872d6de185e16c1d90b3f779/
-    http://autobuild.buildroot.org/results/20c/20c09695481c3d1030852330c1d1f1f9489f1f41/
-    ...
+  http://autobuild.buildroot.org/results/ccb/ccba6d8c73b5e826b86065b77b3fe5077db7b99c/
+  http://autobuild.buildroot.org/results/57e/57ea34e9b48293075e10f0dd2331de2785730827/
+  and many more...
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Cc Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: drop redundant HOST_*_AUTORECONF]
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipmiutil/ipmiutil.mk |    2 ++
+ package/protobuf/protobuf.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index 011c0b6..736e430 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -11,6 +11,8 @@ IPMIUTIL_LICENSE_FILES = COPYING
- # We're patching configure.ac
- IPMIUTIL_AUTORECONF = YES
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index b426873..0426fce 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -8,6 +8,8 @@ PROTOBUF_VERSION = v2.5.0
+ PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
+ PROTOBUF_LICENSE = BSD-3c
+ PROTOBUF_LICENSE_FILES = COPYING.txt
++# no configure script
++PROTOBUF_AUTORECONF = YES
  
-+IPMIUTIL_MAKE = $(MAKE1)
-+
- # forgets to link against libcrypto dependencies breaking static link
- ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
- # tests against distro libcrypto so it might get a false positive when
+ # N.B. Need to use host protoc during cross compilation.
+ PROTOBUF_DEPENDENCIES = host-protobuf
