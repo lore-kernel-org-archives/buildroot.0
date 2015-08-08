@@ -1,36 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:56:12 -0000
-Subject: [Buildroot] [git commit branch/next] exim: enable plaintext and
-	cram-md5 authenticators
-Message-ID: <20150808105600.B54BF7FF82@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:13 -0000
+Subject: [Buildroot] [git commit branch/next] neardal: properly quote output
+	of pkg-config
+Message-ID: <20150808105600.D22577FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41793eabfd2efc13bc86622fb139b14d8a45bd89
+commit: http://git.buildroot.net/buildroot/commit/?id=1ae0e16afd1eb3e48c9b49de87f8b1a382a95112
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes #8126
+Commit 5504039c4e (neardal: fix readline/libedit detection with static
+linking) added the output of pkg-config to the LIBS shell variable without
+adding quotes around it, breaking the logic if the output would ever consist
+of more than 1 word.
 
-Signed-off-by: Mirko Langisch <pud@nerdpunx.net>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Now, pkg-config --libs ncurses currently only outputs '-lncurses', so
+nothing is really broken (for now atleast), but lets add the quotes before
+it does or the syntax gets copied somewhere else where it does.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/neardal/neardal.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index ed309de..b852793 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -46,6 +46,8 @@ define EXIM_USE_DEFAULT_CONFIG_FILE
- 	$(call exim-config-change,PCRE_CONFIG,no)
- 	$(call exim-config-change,HAVE_ICONV,no)
- 	$(call exim-config-unset,EXIM_MONITOR)
-+	$(call exim-config-change,AUTH_PLAINTEXT,yes)
-+	$(call exim-config-change,AUTH_CRAM_MD5,yes)
- endef
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index c65a5e6..ddaecbe 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -25,7 +25,7 @@ endif
+ # forgets to take that into account, causing the detection to fail
+ # when linking statically
+ ifeq ($(BR2_STATIC_LIBS),y)
+-NEARDAL_CONF_ENV += LIBS=$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)
++NEARDAL_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)'
+ endif
  
- ifeq ($(BR2_PACKAGE_DOVECOT),y)
+ define NEARDAL_INSTALL_NCL
