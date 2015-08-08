@@ -1,54 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/gstreamer1/gst1-plugins-bad: disable opencv plugin
-	with opencv-3
-Message-ID: <20150808105614.9CEE07FC68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/i2c-tools: bump to
+	version 3.1.2
+Message-ID: <20150808105618.A90CB7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e238a87eacf2a0c62736c4123961651afb1ba87
+commit: http://git.buildroot.net/buildroot/commit/?id=140d66a80fb422e83e7c8d67ce8cb31dc8d1ee4b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The opencv plugin uses stuff from the now removed opencv's legacy module.
-Note that the configure script already correctly check the opencv version
-and disable the opencv plugin with opencv-3.x.
+This patch bumps version to 3.1.2 and adds support for the recently
+introduced python3 support for py-smbus.
 
-Also remove 'select ...' to prevent kconfig from complaining about
-recursive dependencies.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in |   14 +-------------
- 1 files changed, 1 insertions(+), 13 deletions(-)
+ package/i2c-tools/i2c-tools.hash |    2 +-
+ package/i2c-tools/i2c-tools.mk   |   13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 76a601a..bc99527 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -559,19 +559,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	bool "opencv"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_PACKAGE_OPENCV
--	# Remove the following opencv modules when gstreamer fixes the
--	# problem of including the old "cv.h" header
--	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
--	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
--	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
--	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
--	select BR2_PACKAGE_OPENCV_LIB_FLANN
--	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV_LIB_LEGACY
--	select BR2_PACKAGE_OPENCV_LIB_ML
--	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
--	select BR2_PACKAGE_OPENCV_LIB_VIDEO
-+	depends on BROKEN # gst1-plugin-opencv does not (yet) support opencv >=3.x
- 	help
- 	  GStreamer OpenCV Plugins
+diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
+index a6c376f..c12ffe8 100644
+--- a/package/i2c-tools/i2c-tools.hash
++++ b/package/i2c-tools/i2c-tools.hash
+@@ -1,2 +1,2 @@
+ # locally computed hash
+-sha256	14d4d7d60d1c12e43f2befe239c682a5c44c27682f153d4b58c1e392d2db1700  i2c-tools-3.1.1.tar.bz2
++sha256	db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441  i2c-tools-3.1.2.tar.bz2
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index 6c156ca..187bd09 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,16 +4,23 @@
+ #
+ ################################################################################
  
+-I2C_TOOLS_VERSION = 3.1.1
++I2C_TOOLS_VERSION = 3.1.2
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+ I2C_TOOLS_LICENSE_FILES = COPYING
+ 
+-# Build/install steps mirror the distutil python package type in the python package
+-# infrastructure
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ I2C_TOOLS_DEPENDENCIES += python
++endif
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++I2C_TOOLS_DEPENDENCIES += python3
++endif
++
++# Build/install steps mirror the distutil python package type in the python package
++# infrastructure
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+ # BASE_ENV taken from PKG_PYTHON_DISTUTILS_ENV in package/pkg-python.mk
+ I2C_TOOLS_PYTHON_BASE_ENV = \
+ 	$(PKG_PYTHON_DISTUTILS_ENV) \
