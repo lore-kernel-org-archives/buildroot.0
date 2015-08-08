@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] package/mplayer: Add
-	additional X11 dependencies
-Message-ID: <20150808105625.B16617FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.4.x
+	series
+Message-ID: <20150808105611.F0F677F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df8bfa3f8c0c825655fac68a22b6b95039c5bd14
+commit: http://git.buildroot.net/buildroot/commit/?id=9eda4b423c261db151b7c462cded7baa99e2df92
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Proposed fix for https://bugs.busybox.net/show_bug.cgi?id=8206
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mplayer/mplayer.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index 3a61b8f..5a46aa3 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -220,7 +220,10 @@ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
-+MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXEXT),xlib_libXext)
-+MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXINERAMA),xlib_libXinerama)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXV),xlib_libXv)
-+MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXXF86VM),xlib_libXxf86vm)
- 
- # ARM optimizations
- ifeq ($(BR2_ARM_CPU_ARMV5),y)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 28b8929..9bad7f0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -200,7 +200,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
