@@ -1,52 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:48 -0000
-Subject: [Buildroot] [git commit branch/next] boot/uboot: Add support for
-	dtb.img format
-Message-ID: <20150808105633.9B74F80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual: Fix trivial typo
+Message-ID: <20150808105633.8B4A780414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=920b50b7e0d7535899ccba77b85d3df57e2c2a2a
+commit: http://git.buildroot.net/buildroot/commit/?id=c99a0deec78cc0e444332c341ba687b567abd79f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Allow to generate u-boot-dtb.img. This is the same format
-as u-boot.img, however, it contains a built-in device-tree.
-This file is being loaded by the U-Boot SPL.
 
 Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in |    3 +++
- boot/uboot/uboot.mk  |    2 ++
- 2 files changed, 5 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-python.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index fa1741c..1cdb2fa 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -106,6 +106,9 @@ config BR2_TARGET_UBOOT_FORMAT_AIS
- config BR2_TARGET_UBOOT_FORMAT_BIN
- 	bool "u-boot.bin"
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index f81d625..588dbf8 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -143,7 +143,7 @@ therefore only use a few of them, or none.
+ * +HOST_PYTHON_FOO_NEEDS_HOST_PYTHON+, to define the host python
+   interpreter. The usage of this variable is limited to host
+   packages. The two supported value are +python2+ and +python3+. It
+-  will ensures the right host python package is available and will
++  will ensure the right host python package is available and will
+   invoke it for the build. If some build steps are overloaded, the
+   right python interpreter must be explicitly called in the commands.
  
-+config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
-+	bool "u-boot-dtb.img"
-+
- config BR2_TARGET_UBOOT_FORMAT_IMG
- 	bool "u-boot.img"
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 2cfff28..8053678 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -45,6 +45,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
- UBOOT_BIN = u-boot.ldr
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
- UBOOT_BIN = u-boot-nand.bin
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMG),y)
-+UBOOT_BIN = u-boot-dtb.img
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
- UBOOT_BIN = u-boot.img
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
