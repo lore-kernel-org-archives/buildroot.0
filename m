@@ -1,78 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xserver_xorg-server: Fix sdksyms.sh to cope with gcc5
-Message-ID: <20150808105609.B6EC17F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/iso9660: change the
+	location of the splash image
+Message-ID: <20150808105610.527807F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=409c496e9ac3787cc0472ac722ac0f7bdacc83fa
+commit: http://git.buildroot.net/buildroot/commit/?id=61db081ca1c4dddb37489a135964af953d2afd57
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...sdksyms.sh-Make-sdksyms.sh-work-with-gcc5.patch |   52 ++++++++++++++++++++
- 1 files changed, 52 insertions(+), 0 deletions(-)
+In order to simplify the introduction of the support for using ISO9660
+as the real root filesystem, this commit changes the location of the
+grub splash image. This makes it match where the splash image is
+located in $(TARGET_DIR), so that regardless of whether the
+initrd/initramfs solution or the real iso9660 filesystem solution are
+used, the splash image is installed at the same location.
 
-diff --git a/package/x11r7/xserver_xorg-server/1.17.1/0002-sdksyms.sh-Make-sdksyms.sh-work-with-gcc5.patch b/package/x11r7/xserver_xorg-server/1.17.1/0002-sdksyms.sh-Make-sdksyms.sh-work-with-gcc5.patch
-new file mode 100644
-index 0000000..01eefe5
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.17.1/0002-sdksyms.sh-Make-sdksyms.sh-work-with-gcc5.patch
-@@ -0,0 +1,52 @@
-+backported from upstream
-+http://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/sdksyms.sh?id=21b896939c5bb242f3aacc37baf12379e43254b6
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 21b896939c5bb242f3aacc37baf12379e43254b6 Mon Sep 17 00:00:00 2001
-+From: Egbert Eich <eich@freedesktop.org>
-+Date: Tue, 3 Mar 2015 16:27:05 +0100
-+Subject: symbols: Fix sdksyms.sh to cope with gcc5
-+
-+Gcc5 adds additional lines stating line numbers before and
-+after __attribute__() which need to be skipped.
-+
-+Signed-off-by: Egbert Eich <eich@freedesktop.org>
-+Tested-by: Daniel Stone <daniels@collabora.com>
-+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
-+
-+diff --git a/hw/xfree86/sdksyms.sh b/hw/xfree86/sdksyms.sh
-+index 2305073..05ac410 100755
-+--- a/hw/xfree86/sdksyms.sh
-++++ b/hw/xfree86/sdksyms.sh
-+@@ -350,13 +350,25 @@ BEGIN {
-+     if (sdk) {
-+ 	n = 3;
-+ 
-++        # skip line numbers GCC 5 adds before __attribute__
-++        while ($n == "" || $0 ~ /^# [0-9]+ "/) {
-++           getline;
-++           n = 1;
-++        }
-++
-+ 	# skip attribute, if any
-+ 	while ($n ~ /^(__attribute__|__global)/ ||
-+ 	    # skip modifiers, if any
-+ 	    $n ~ /^\*?(unsigned|const|volatile|struct|_X_EXPORT)$/ ||
-+ 	    # skip pointer
-+-	    $n ~ /^[a-zA-Z0-9_]*\*$/)
-++	    $n ~ /^[a-zA-Z0-9_]*\*$/) {
-+ 	    n++;
-++            # skip line numbers GCC 5 adds after __attribute__
-++            while ($n == "" || $0 ~ /^# [0-9]+ "/) {
-++               getline;
-++               n = 1;
-++            }
-++        }
-+ 
-+ 	# type specifier may not be set, as in
-+ 	#   extern _X_EXPORT unsigned name(...)
-+-- 
-+cgit v0.10.2
-+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ fs/iso9660/iso9660.mk |    2 +-
+ fs/iso9660/menu.lst   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 54b1653..b3e6b9d 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -12,7 +12,7 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ define ROOTFS_ISO9660_SPLASHSCREEN
+ 	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
+-		$(ROOTFS_ISO9660_TARGET_DIR)/splash.xpm.gz
++		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
+ endef
+ else
+ define ROOTFS_ISO9660_SPLASHSCREEN
+diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
+index c0bbff6..fd5c76a 100644
+--- a/fs/iso9660/menu.lst
++++ b/fs/iso9660/menu.lst
+@@ -5,7 +5,7 @@ timeout		10
+ color 		cyan/blue white/blue
+ 
+ # Gets enabled/disabled depending on Grub support for splashimage
+-splashimage	/splash.xpm.gz
++splashimage	/boot/grub/splash.xpm.gz
+ 
+ # Used when a splashimage is enabled
+ foreground 	000000
