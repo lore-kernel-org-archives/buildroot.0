@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:37 -0000
-Subject: [Buildroot] [git commit branch/next] a10disp: bump to version v0.6.1
-Message-ID: <20150808105612.84B58818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-video-ati: Re-wrap dependencies,
+	no code change
+Message-ID: <20150808105636.F359E7F97E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=444652de233a1a52665c76d22192de0e8469a7a4
+commit: http://git.buildroot.net/buildroot/commit/?id=81a2b4d67275ace8ee2894b289a76d0cd7777c7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/a10disp/a10disp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-ati.mk                      |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
 
-diff --git a/package/a10disp/a10disp.mk b/package/a10disp/a10disp.mk
-index 066e988..7353ede 100644
---- a/package/a10disp/a10disp.mk
-+++ b/package/a10disp/a10disp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index e392ef1..ce47e49 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -9,6 +9,16 @@ XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION)
+ XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_ATI_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
++XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
++	libdrm \
++	xproto_fontsproto \
++	xproto_glproto \
++	xproto_randrproto \
++	xproto_videoproto \
++	xproto_xextproto \
++	xproto_xf86driproto \
++	xproto_xineramaproto \
++	xproto_xproto \
++	xserver_xorg-server
  
--A10DISP_VERSION = a899cc6dcf909360aac00482ede5369f3656f226
-+A10DISP_VERSION = v0.6.1
- A10DISP_SITE = $(call github,hglm,a10disp,$(A10DISP_VERSION))
- A10DISP_LICENSE = MIT
- 
+ $(eval $(autotools-package))
