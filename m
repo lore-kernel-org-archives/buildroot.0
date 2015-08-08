@@ -1,48 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] qt: enable Script and WebKit
-	modules for ARC
-Message-ID: <20150808105637.5BD4380414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] olimex_a20_olinuxino_lime:
+	rename board dir to remove _lime suffix
+Message-ID: <20150808105618.692157F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eba4aaf053b718965fd0fb886dea753a47777f8f
+commit: http://git.buildroot.net/buildroot/commit/?id=6d3b77e9703d9a71fa4d9dc1565709a0bcb6194d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now when ARC toolchain also supports NPTL both Qt's Script and WebKit
-modules could be successfully built and then executed on ARC.
+The files in board/olimex/a20_olinuxino_lime/ work with minimal or no
+modifications for the Olimex A20-OLinuXino-Micro board, whose support is
+going to be added in a later commit.
 
-[Thomas: fix alphabetic ordering.]
+Rename the directory to clarify it's not restricted to the Lime anymore.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ .../boot-mali.cmd                                  |    0
+ .../{a20_olinuxino_lime => a20_olinuxino}/boot.cmd |    0
+ .../post-build.sh                                  |    0
+ .../readme.txt                                     |    0
+ configs/olimex_a20_olinuxino_lime_defconfig        |    4 ++--
+ configs/olimex_a20_olinuxino_lime_mali_defconfig   |    4 ++--
+ 6 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 306fe1f..418248a 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -409,7 +409,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	bool
- 	# see src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
- 	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
--	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
-+	default y if BR2_arc || BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
- 		BR2_microblazebe || BR2_mips || BR2_mipsel || \
- 		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
- 		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64
-@@ -455,7 +455,7 @@ config BR2_PACKAGE_QT_OPENSSL
- config BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT
- 	bool
- 	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
--	default y if BR2_arm || BR2_armeb || aarch64 || BR2_i386 || \
-+	default y if BR2_arc || BR2_arm || BR2_armeb || aarch64 || BR2_i386 || \
- 		BR2_microblazeel || BR2_microblazebe || BR2_mips || BR2_mipsel || \
- 		BR2_mips64 || BR2_mips64el || BR2_nios2 || BR2_powerpc || \
- 		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || \
+diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino/boot-mali.cmd
+similarity index 100%
+rename from board/olimex/a20_olinuxino_lime/boot-mali.cmd
+rename to board/olimex/a20_olinuxino/boot-mali.cmd
+diff --git a/board/olimex/a20_olinuxino_lime/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
+similarity index 100%
+rename from board/olimex/a20_olinuxino_lime/boot.cmd
+rename to board/olimex/a20_olinuxino/boot.cmd
+diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
+similarity index 100%
+rename from board/olimex/a20_olinuxino_lime/post-build.sh
+rename to board/olimex/a20_olinuxino/post-build.sh
+diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+similarity index 100%
+rename from board/olimex/a20_olinuxino_lime/readme.txt
+rename to board/olimex/a20_olinuxino/readme.txt
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 62f0a4c..33bc10e 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -13,8 +13,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index dde39ad..2a9fa2b 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -13,8 +13,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
