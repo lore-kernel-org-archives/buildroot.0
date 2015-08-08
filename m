@@ -1,46 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] libnftnl: needs kernel headers
-	>= 3.1
-Message-ID: <20150808105557.0E4CB81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libmemcached: don't use -fPIE
+	and -pie when linking statically
+Message-ID: <20150808105556.7E05F818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8bef8038dfd43ca24a5f65bbb5c4990890b1b07
+commit: http://git.buildroot.net/buildroot/commit/?id=b9fcc83fbe9bcf7a3d58f82c532f36462ba21267
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Contrary to what commit f5866484f (libnftnl: exclude for CS PPC toolchains)
-stated, a missing sa_family_t definition IS specific to the kernel headers
-version, and not something particular to the CS toolchains, so instead
-require 3.1+ headers.
+These compiler options shouldn't be used when linking statically, and in
+particular FLAT binaries cannot use -fPIE and -pie code, so let's teach
+libmemcached to not use such flags in those setups.
 
-The specific kernel change fixing the headers is:
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=6602a4baf4d1a73cc
+Fixes:
 
-The only reverse dependency of libnftnl (nftables) already needs 3.4+, so
-this dependency doesn't need to be propagated.
+  http://autobuild.buildroot.org/results/8cb/8cbf57f9136cb42be31c88e0f1f32d3d2353e5ff/
+  and many previous similar build failures
 
+[Peter: rework/reword to do this based on BR2_STATIC_LIBS]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Tested-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnftnl/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/libmemcached/libmemcached.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
-index dcbfde0..365ab10 100644
---- a/package/libnftnl/Config.in
-+++ b/package/libnftnl/Config.in
-@@ -1,7 +1,9 @@
-+comment "libnftnl needs a toolchain w/ headers >= 3.1"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
+index d442b3c..a5ea4f5 100644
+--- a/package/libmemcached/libmemcached.mk
++++ b/package/libmemcached/libmemcached.mk
+@@ -18,4 +18,14 @@ LIBMEMCACHED_AUTORECONF = YES
+ LIBMEMCACHED_LICENSE = BSD-3c
+ LIBMEMCACHED_LICENSE_FILES = COPYING
+ 
++# Help libmemcached to understand that -fPIE and -pie should not be
++# used when linking statically.
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBMEMCACHED_CONF_ENV += \
++	ax_cv_check_cflags__Werror__fPIE=no \
++	ax_cv_check_cflags__Werror__pie=no \
++	ax_cv_check_cxxflags__Werror__fPIE=no \
++	ax_cv_check_cxxflags__Werror__pie=no
++endif
 +
- config BR2_PACKAGE_LIBNFTNL
- 	bool "libnftnl"
--	# bad headers, no sa_family_t in linux/socket.h
--	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
- 	select BR2_PACKAGE_LIBMNL
- 	help
- 	  libnftnl is a userspace library providing a low-level
+ $(eval $(autotools-package))
