@@ -1,54 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] xlib_libXfont: work around
-	missing __ELF__ symbol on microblaze
-Message-ID: <20150808105555.CEF84818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] mongoose: fix static build
+	issue
+Message-ID: <20150808105557.993EB818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51136ebd1dc653bda8dfa4e1b708a03ffae37341
+commit: http://git.buildroot.net/buildroot/commit/?id=9e67d499f14efd24dd3179ddc40f15aadb4d200a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes:
-http://autobuild.buildroot.net/results/688/688a839ec57e7bc83b490535871b2dac0b1309ff/
-http://autobuild.buildroot.net/results/75c/75c676b1baed6f39657578caf7fc213ce71c1089/
-http://autobuild.buildroot.net/results/2b9/2b9e9ebaaabe4880e7d258d88f12ce90738ca779/
-http://autobuild.buildroot.net/results/988/988022e559af81d9b7dfc716dfb84bd0fa3698f2/
+http://autobuild.buildroot.net/results/372/372515ba0a09a23237ae34024658f21c2625d6e7/
 
-And many more.
-
-The microblaze toolchains don't define the __ELF__ preprocessor symbol even
-though they do use the elf format.  LibXfont checks for this symbol to know
-if weak symbols are supported, and otherwise falls back to emulation code
-using dlopen - Causing linker issues for stuff using libXfont.
-
-Work around it by defining the symbol here as well.
+Disable the shared library support in mongoose, as the only thing it does is
+including dlfcn.h - So it is useless.  Also remove the unneeded -ldl from
+the web server linker flags.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXfont/xlib_libXfont.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ package/mongoose/mongoose.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 5b6de1f..adc22b4 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -16,5 +16,15 @@ XLIB_LIBXFONT_CONF_OPTS = --disable-devel-docs
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index e31b099..6797e58 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -10,7 +10,7 @@ MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
+ MONGOOSE_INSTALL_STAGING = YES
  
- HOST_XLIB_LIBXFONT_CONF_OPTS = --disable-devel-docs
+-MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
++MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -DMONGOOSE_NO_DL
  
-+ifeq ($(BR2_microblaze),y)
-+# The microblaze toolchains don't define the __ELF__ preprocessor
-+# symbol even though they do use the elf format. LibXfont checks for
-+# this symbol to know if weak symbols are supported, and otherwise
-+# falls back to emulation code using dlopen - Causing linker issues
-+# for stuff using libXfont.
-+# Work around it by defining the symbol here as well.
-+XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MONGOOSE_DEPENDENCIES += openssl
+@@ -21,7 +21,7 @@ endif
+ define MONGOOSE_BUILD_CMDS
+ 	$(TARGET_CC) $(@D)/examples/web_server/web_server.c $(@D)/mongoose.c \
+ 		-I$(@D) -o $(@D)/examples/web_server/web_server \
+-		$(MONGOOSE_CFLAGS) -pthread -ldl
++		$(MONGOOSE_CFLAGS) -pthread
+ 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
+ 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
+ endef
