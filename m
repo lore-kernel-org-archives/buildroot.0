@@ -1,34 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:09 -0000
-Subject: [Buildroot] [git commit branch/next] rapidjson: bump to version
-	1.0.2
-Message-ID: <20150808105619.CB88C818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pkg-infra: munging .la files
+	is not limited to autotools packages
+Message-ID: <20150808105637.F39AB80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9186ed6ea9a5ba708943b510abee718ba5ede764
+commit: http://git.buildroot.net/buildroot/commit/?id=67f8138a46388f28d00dc8711b64d04ac7ebb464
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Currently, we're only fixing libtool's .la files for autotools packages,
+and even more so, only for those that do not define their own
+_INSTALL_STAGING_CMDS.
+
+However, .la files might also be installed by non-autotools packages,
+like the NVidia GPU binary blob (libGL.la).
+
+So, move that code into the global build rule, so all packages get their
+.la files fixed, whether they be autotools packages or not, and whether
+they define their own _INSTALL_STAGING_CMDS or not.
+
+Also print a message.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rapidjson/rapidjson.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pkg-autotools.mk |   27 ---------------------------
+ package/pkg-generic.mk   |   30 ++++++++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 27 deletions(-)
 
-diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
-index 6658da2..1ad9314 100644
---- a/package/rapidjson/rapidjson.mk
-+++ b/package/rapidjson/rapidjson.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index b630ec9..4787914 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -294,36 +294,9 @@ endif
+ # Staging installation step. Only define it if not already defined by
+ # the package .mk file.
  #
- ################################################################################
+-# Most autotools packages install libtool .la files alongside any
+-# installed libraries. These .la files sometimes refer to paths
+-# relative to the sysroot, which libtool will interpret as absolute
+-# paths to host libraries instead of the target libraries. Since this
+-# is not what we want, these paths are fixed by prefixing them with
+-# $(STAGING_DIR).  As we configure with --prefix=/usr, this fix
+-# needs to be applied to any path that starts with /usr.
+-#
+-# To protect against the case that the output or staging directories
+-# or the pre-installed external toolchain themselves are under /usr,
+-# we first substitute away any occurrences of these directories as
+-# @BASE_DIR@, @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
+-# Note that STAGING_DIR can be outside BASE_DIR when the user sets
+-# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
+-# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be empty
+-# when we use an internal toolchain.
+-#
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_SRCDIR)
+-	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
+-		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+-			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
+-			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+-				-e "s:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
+-			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+-			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
+-				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
+-			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+-			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
+ endef
+ endif
  
--RAPIDJSON_VERSION = 39f5eeb764c6d1e1cbff1717410d9710bf943009
-+RAPIDJSON_VERSION = v1.0.2
- RAPIDJSON_SITE = $(call github,miloyip,rapidjson,$(RAPIDJSON_VERSION))
- RAPIDJSON_LICENSE = MIT
- RAPIDJSON_LICENSE_FILES = license.txt
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d1d6711..75dc8b7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -172,6 +172,25 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ 	@$(call step_end,install-host)
+ 
+ # Install to staging dir
++#
++# Some packages install libtool .la files alongside any installed
++# libraries. These .la files sometimes refer to paths relative to the
++# sysroot, which libtool will interpret as absolute paths to host
++# libraries instead of the target libraries. Since this is not what we
++# want, these paths are fixed by prefixing them with $(STAGING_DIR).
++# As we configure with --prefix=/usr, this fix needs to be applied to
++# any path that starts with /usr.
++#
++# To protect against the case that the output or staging directories or
++# the pre-installed external toolchain themselves are under /usr, we first
++# substitute away any occurrences of these directories with @BASE_DIR@,
++# @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
++#
++# Note that STAGING_DIR can be outside BASE_DIR when the user sets
++# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
++# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be
++# empty when we use an internal toolchain.
++#
+ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
+@@ -189,6 +208,17 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
++	@$(call MESSAGE,"Fixing libtool files")
++	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
++		$(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
++			-e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
++			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
++			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
++				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
++			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
++			-e "s:@BASE_DIR@:$(BASE_DIR):g"
+ 	$(Q)touch $@
+ 	@$(call step_end,install-staging)
+ 
