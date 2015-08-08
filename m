@@ -1,47 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] package/openvmtools: bump to
-	version 9.10.2
-Message-ID: <20150808105620.815337FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ltrace: enable for mips/mipsel
+Message-ID: <20150808105620.967127FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d242d23b762ff8e6838ed5a1e9be4b7f06a0526
+commit: http://git.buildroot.net/buildroot/commit/?id=d23cce19c299e3010ba2dca84ab4ad35eff3cdbb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+ltrace was disabled for MIPS due to a build failure on this
+architecture. Now that problem has been fixed so we can enable this
+package again.
+
+Related:
+http://git.buildroot.net/buildroot/commit/?id=dfaa18af00dfcff71a0159adaafb0880e58fa6a1
+http://anonscm.debian.org/cgit/collab-maint/ltrace.git/commit/?id=a8ff0ff2b6e6c229f8a9242828fb47f1a5a78967
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvmtools/openvmtools.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+ package/ltrace/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 57271c8..40a7dac 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVMTOOLS_VERSION = stable-9.10.0
-+OPENVMTOOLS_VERSION = stable-9.10.2
- OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
- OPENVMTOOLS_SUBDIR = open-vm-tools
- OPENVMTOOLS_LICENSE = LGPLv2.1
-@@ -45,6 +45,13 @@ else
- OPENVMTOOLS_CONF_OPTS += --without-pam
- endif
- 
-+# configure needs execution permission
-+define OPENVMTOOLS_PRE_CONFIGURE_CHMOD
-+	chmod 0755 $(@D)/$(OPENVMTOOLS_SUBDIR)/configure
-+endef
-+
-+OPENVMTOOLS_PRE_CONFIGURE_HOOKS += OPENVMTOOLS_PRE_CONFIGURE_CHMOD
-+
- # symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
- # defined in lib/misc/hostinfoPosix.c
- # /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index af932df..2b42a84 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LTRACE
+ 	# broken (error: 'struct ltelf' has no member named
+ 	# 'relplt_count'). Issue reported upstream at
+ 	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
+-	depends on (BR2_i386 || BR2_arm \
++	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
+ 		|| BR2_powerpc || BR2_sparc || BR2_x86_64 || BR2_xtensa)
+ 	select BR2_PACKAGE_ELFUTILS
+ 	depends on BR2_USE_WCHAR # elfutils
