@@ -1,40 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] ltrace: enable for mips/mipsel
-Message-ID: <20150808105620.967127FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] cryptsetup: remove e2fsprogs
+	dependency
+Message-ID: <20150808105620.699947FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d23cce19c299e3010ba2dca84ab4ad35eff3cdbb
+commit: http://git.buildroot.net/buildroot/commit/?id=0d67ffe596dc195ea5389485f5ca5b374a943611
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-ltrace was disabled for MIPS due to a build failure on this
-architecture. Now that problem has been fixed so we can enable this
-package again.
+cryptsetup does not actually depend on e2fsprogs, but on libuuid that is a
+dependency of e2fsprogs. Remove the e2fsprogs dependency, and add a direct
+dependency on util-linux (libuuid provider).
 
-Related:
-http://git.buildroot.net/buildroot/commit/?id=dfaa18af00dfcff71a0159adaafb0880e58fa6a1
-http://anonscm.debian.org/cgit/collab-maint/ltrace.git/commit/?id=a8ff0ff2b6e6c229f8a9242828fb47f1a5a78967
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltrace/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/cryptsetup/Config.in     |    5 +++--
+ package/cryptsetup/cryptsetup.mk |    2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index af932df..2b42a84 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LTRACE
- 	# broken (error: 'struct ltelf' has no member named
- 	# 'relplt_count'). Issue reported upstream at
- 	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
--	depends on (BR2_i386 || BR2_arm \
-+	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
- 		|| BR2_powerpc || BR2_sparc || BR2_x86_64 || BR2_xtensa)
- 	select BR2_PACKAGE_ELFUTILS
- 	depends on BR2_USE_WCHAR # elfutils
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index 13b0184..d7ccd37 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -2,10 +2,11 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	bool "cryptsetup"
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_LVM2
+-	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
+-	depends on BR2_USE_MMU # lvm2, e2fsprogs
++	depends on BR2_USE_MMU # lvm2
+ 	depends on !BR2_STATIC_LIBS # lvm2
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	# Triggers the _gp link issue
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 754bea5..3655d5d 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -8,7 +8,7 @@ CRYPTSETUP_VERSION_MAJOR = 1.6
+ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).7
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+-CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs host-pkgconf \
++CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
