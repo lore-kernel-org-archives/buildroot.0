@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:04 -0000
-Subject: [Buildroot] [git commit branch/next] bmon: bump to version 3.7
-Message-ID: <20150808105633.0185680414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qpid-proton: needs
+	host-python2
+Message-ID: <20150808105632.EE3FA7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f64210b30f6e6b717e2279298daca8a990daaa17
+commit: http://git.buildroot.net/buildroot/commit/?id=f1d3472d8dec088e2186e83991cb9f34fdca0138
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+qpid-proton is using constructs that are not valid in python3, so we
+must use a host python2 interpreter. To make this happen this commit
+adds a dependency on host-python and explicitly tells CMake to use
+$(HOST_DIR)/usr/bin/python2.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bmon/bmon.hash |    2 +-
- package/bmon/bmon.mk   |    3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/qpid-proton/qpid-proton.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/bmon/bmon.hash b/package/bmon/bmon.hash
-index 65747b4..810a0b9 100644
---- a/package/bmon/bmon.hash
-+++ b/package/bmon/bmon.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  62c8c20d00572a7670891d4c112924786cb69ec4ca92d5052951566f000d1514  bmon-3.6.tar.gz
-+sha256  a9f3d7010074a3190038a8d95df5d47aaf2046b47d872590336b5f93be084685  bmon-3.7.tar.gz
-diff --git a/package/bmon/bmon.mk b/package/bmon/bmon.mk
-index e430bf6..0939609 100644
---- a/package/bmon/bmon.mk
-+++ b/package/bmon/bmon.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
+diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
+index eae4589..12fddb4 100644
+--- a/package/qpid-proton/qpid-proton.mk
++++ b/package/qpid-proton/qpid-proton.mk
+@@ -11,12 +11,15 @@ QPID_PROTON_LICENSE = Apache-2.0
+ QPID_PROTON_LICENSE_FILES = LICENSE
+ QPID_PROTON_INSTALL_STAGING = YES
+ QPID_PROTON_DEPENDENCIES = \
++	host-python \
+ 	util-linux \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
++
+ QPID_PROTON_CONF_OPTS = \
+ 	-DBUILD_JAVA=OFF \
+ 	-DENABLE_VALGRIND=OFF \
+-	-DENABLE_WARNING_ERROR=OFF
++	-DENABLE_WARNING_ERROR=OFF \
++	-DPYTHON_EXECUTABLE=$(HOST_DIR)/usr/bin/python2
  
--BMON_VERSION = 3.6
-+BMON_VERSION = 3.7
- BMON_SITE = https://github.com/tgraf/bmon/releases/download/v$(BMON_VERSION)
- BMON_DEPENDENCIES = host-pkgconf libconfuse libnl ncurses
-+BMON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- BMON_LICENSE = BSD-2c, MIT
- BMON_LICENSE_FILES = LICENSE.BSD LICENSE.MIT
- 
+ define QPID_PROTON_REMOVE_USELESS_FILES
+ 	rm -fr $(TARGET_DIR)/usr/share/proton-*/
