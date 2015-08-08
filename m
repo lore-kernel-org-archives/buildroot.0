@@ -1,26 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:45 -0000
-Subject: [Buildroot] [git commit branch/next] gesftpserver: add hash file
-Message-ID: <20150808105635.7499880414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rpi-userland: bump
+	version
+Message-ID: <20150808105616.6AC657F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=853b7d13941edbccc9976ae213de7a275d3b36ee
+commit: http://git.buildroot.net/buildroot/commit/?id=41282cbdd62dd1299be50428e436e96c45f916eb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gesftpserver/gesftpserver.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Misc fixes and improvements all over the place...
 
-diff --git a/package/gesftpserver/gesftpserver.hash b/package/gesftpserver/gesftpserver.hash
-new file mode 100644
-index 0000000..b952cf0
---- /dev/null
-+++ b/package/gesftpserver/gesftpserver.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	1db183e2d4cca5cc3ef10526f417ddef28e0402d0119030a06227bf925e63872	sftpserver-0.1.tar.gz
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-userland/rpi-userland.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 20a6af0..1a1c9c6 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 8f542a1647e6f88f254eadd9ad6929301c81913b
++RPI_USERLAND_VERSION = b834074d0c0d9d7e64c133ab14ed691999cee990
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
