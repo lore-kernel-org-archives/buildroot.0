@@ -1,48 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] ofono: needs dynamic library
-	support
-Message-ID: <20150808105605.6A4C07F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] mtd: Add xattr support
+Message-ID: <20150808105622.9C12D7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=86cd99aa958e12e82c83da34d77b81f7c0bdd4d9
+commit: http://git.buildroot.net/buildroot/commit/?id=b09f8f01c7d295ef195b1c7699343972fd2649ec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The only package selection ofono, connman, requires dynamic library already.
+Adding extended attribute support for the mtd tools when the attr
+package is selected. This is needed for SELinux support.
 
-Fixes:
-http://autobuild.buildroot.net/results/c5b/c5bb44c192c076b42538f805062a465318051df4/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ofono/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/mtd/mtd.mk |   13 ++++++++++++-
+ 1 files changed, 12 insertions(+), 1 deletions(-)
 
-diff --git a/package/ofono/Config.in b/package/ofono/Config.in
-index eb1856f..f709b04 100644
---- a/package/ofono/Config.in
-+++ b/package/ofono/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_OFONO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -15,7 +16,7 @@ config BR2_PACKAGE_OFONO
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 3397ebc..535e580 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -24,6 +24,17 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ MTD_DEPENDENCIES += busybox
+ endif
  
- 	  http://ofono.org/
++MTD_MAKE_OPTS = WITHOUT_LARGEFILE=1
++
++# If extended attributes are required, the acl package must
++# also be enabled which will also include the attr package.
++ifeq ($(BR2_PACKAGE_ACL),y)
++MTD_DEPENDENCIES += acl
++MTD_MAKE_OPTS += WITHOUT_XATTR=0
++else
++MTD_MAKE_OPTS += WITHOUT_XATTR=1
++endif
++
+ HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-e2fsprogs
  
--comment "ofono needs a toolchain w/ wchar, threads"
-+comment "ofono needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ define HOST_MTD_BUILD_CMDS
+@@ -84,7 +95,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSUBIFS) += mkfs.ubifs/mkfs.ubifs
+ 
+ define MTD_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE1) CROSS=$(TARGET_CROSS) \
+-		BUILDDIR=$(@D) WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 -C $(@D) \
++		BUILDDIR=$(@D) $(MTD_MAKE_OPTS) -C $(@D) \
+ 		$(addprefix $(@D)/,$(MTD_TARGETS_y)) \
+ 		$(addprefix $(@D)/,$(MTD_STAGING_y))
+ endef
