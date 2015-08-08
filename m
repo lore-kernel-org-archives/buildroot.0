@@ -1,44 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] package/nodejs: Bump version
-	to 0.10.39
-Message-ID: <20150808105615.1E0767F9A6@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:21 -0000
+Subject: [Buildroot] [git commit branch/next] configs/acmesystems_aria_g25:
+	new configs
+Message-ID: <20150808105620.EFC6E7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96b6427de50ffef1c14cc9ad16c11f52ae1b4c6d
+commit: http://git.buildroot.net/buildroot/commit/?id=2e52be798276fe0c28949f4a16fce0ca20e52153
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/nodejs.hash |    4 ++--
- package/nodejs/nodejs.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/acmesystems/aria-g25/readme.txt        |   51 ++++++++++++++++++++++++++
+ configs/acmesystems_aria_g25_128mb_defconfig |   23 ++++++++++++
+ configs/acmesystems_aria_g25_256mb_defconfig |   23 ++++++++++++
+ 3 files changed, 97 insertions(+), 0 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 792ebc1..bc1f15f 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,2 +1,2 @@
--# From upstream URL: http://nodejs.org/dist/v0.10.38/SHASUMS256.txt
--sha256	513da8ed5e48abefdfab664f1cabc160238d314a0481148804aff8fc6552b78b  node-v0.10.38.tar.gz
-+# From upstream URL: http://nodejs.org/dist/v0.10.39/SHASUMS256.txt
-+sha256	68f8d8f9515c4e77e2a06034b742e19e9848c1fee5bcadedc1d68f3e4302df37  node-v0.10.39.tar.gz
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 5ee7714..4293c70 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 0.10.38
-+NODEJS_VERSION = 0.10.39
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+diff --git a/board/acmesystems/aria-g25/readme.txt b/board/acmesystems/aria-g25/readme.txt
+new file mode 100644
+index 0000000..734ccd2
+--- /dev/null
++++ b/board/acmesystems/aria-g25/readme.txt
+@@ -0,0 +1,51 @@
++Build instructions
++==================
++
++As a regular user configure and then build:
++
++$ make acmesystems_aria_g25_128mb_defconfig (128MB RAM variant)
++  or...
++$ make acmesystems_aria_g25_256mb_defconfig (256MB RAM variant)
++
++$ make
++
++Writing to the MicroSD card
++===========================
++
++Assuming your Aria G25 baseboard has a MicroSD socket, for example with
++the Terra baseboard, you'll need a blank MicroSD (obviously) initialized
++in a particular way to be able to boot from it.
++
++Assuming the card is seen as /dev/sdb in your PC/laptop/other device
++you'll need to run the following commands as root or via sudo.
++
++Make sure all of the card partitions are unmounted before starting.
++
++First we'll need to create two partitions:
++
++# sfdisk -uM /dev/sdb <<EOF
++,32,6
++;
++EOF
++
++Then we'll need to create the empty filesystems:
++
++# mkdosfs -n SD_BOOT /dev/sdb1
++# mkfs.ext4 -L SD_ROOT /dev/sdb2
++
++We'll populate the first partition (boot) with the relevant files:
++
++# mount /dev/sdb1 /mnt
++# cp output/images/at91bootstrap.bin /mnt/BOOT.BIN
++# cp output/images/zImage /mnt
++# cp output/images/at91-ariag25.dtb /mnt
++# umount /mnt
++
++And the root filesystem afterwards:
++
++# mount /dev/sdb2 /mnt
++# tar -C /mnt output/images/rootfs.tar
++# umount /mnt
++
++You're done, insert the MicroSD card in the slot and enjoy.
++
+diff --git a/configs/acmesystems_aria_g25_128mb_defconfig b/configs/acmesystems_aria_g25_128mb_defconfig
+new file mode 100644
+index 0000000..91865f5
+--- /dev/null
++++ b/configs/acmesystems_aria_g25_128mb_defconfig
+@@ -0,0 +1,23 @@
++# Architecture
++BR2_arm=y
++
++# Toolchain
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.1.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
++BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
++
++# Bootloader
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-128m"
+diff --git a/configs/acmesystems_aria_g25_256mb_defconfig b/configs/acmesystems_aria_g25_256mb_defconfig
+new file mode 100644
+index 0000000..936b4f4
+--- /dev/null
++++ b/configs/acmesystems_aria_g25_256mb_defconfig
+@@ -0,0 +1,23 @@
++# Architecture
++BR2_arm=y
++
++# Toolchain
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.1.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
++BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
++
++# Bootloader
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="3f957cec253abc80fd10c733e5e596f46e1aef56"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="aria-256m"
