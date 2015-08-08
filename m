@@ -1,54 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:45 -0000
-Subject: [Buildroot] [git commit branch/next] triggerhappy: systemd support
-Message-ID: <20150808105632.B0A85818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] glib-networking: bump to
+	version 2.44.0
+Message-ID: <20150808105632.E74CE818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ee5eb933d9d148d31598adafc41cf7fd4c76c9a
+commit: http://git.buildroot.net/buildroot/commit/?id=8900980efb41403502ba62f2ef879704afffbd0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: use a relative symbolic link.]
-
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/triggerhappy/triggerhappy.mk      |    8 ++++++++
- package/triggerhappy/triggerhappy.service |    9 +++++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+ package/glib-networking/glib-networking.hash |    4 ++--
+ package/glib-networking/glib-networking.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
-index d3dfc6a..3a68e50 100644
---- a/package/triggerhappy/triggerhappy.mk
-+++ b/package/triggerhappy/triggerhappy.mk
-@@ -34,4 +34,12 @@ define TRIGGERHAPPY_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S10triggerhappy
- endef
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 0d85782..03ed3ae 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.42/glib-networking-2.42.1.sha256sum
+-sha256	c06bf76da3353695fcc791b7b02e5d60c01c379e554f7841dc6cbca32f65f3a0	glib-networking-2.42.1.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.44/glib-networking-2.44.0.sha256sum
++sha256	8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346	glib-networking-2.44.0.tar.xz
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 43536d9..0ef69c4 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+define TRIGGERHAPPY_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/triggerhappy/triggerhappy.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/triggerhappy.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/triggerhappy.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/triggerhappy.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/triggerhappy/triggerhappy.service b/package/triggerhappy/triggerhappy.service
-new file mode 100644
-index 0000000..8449c1c
---- /dev/null
-+++ b/package/triggerhappy/triggerhappy.service
-@@ -0,0 +1,9 @@
-+[Unit]
-+Description=Triggerhappy daemon
-+
-+[Service]
-+ExecStart=/usr/sbin/thd --triggers /etc/triggerhappy/triggers.d --socket /var/run/thd.socket --user nobody /dev/input/event*
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+-GLIB_NETWORKING_VERSION_MAJOR = 2.42
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
++GLIB_NETWORKING_VERSION_MAJOR = 2.44
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
