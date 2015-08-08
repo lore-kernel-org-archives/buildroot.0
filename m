@@ -1,42 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:37 -0000
-Subject: [Buildroot] [git commit branch/next] docs/manual: document
-	<PKG>_STRIP_COMPONENTS
-Message-ID: <20150808105627.C871380414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] cpio: new package
+Message-ID: <20150808105637.53F3880414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62803be844b19e32c952cfff995354cf263d0f5d
+commit: http://git.buildroot.net/buildroot/commit/?id=03d3df31f82019e8f7de732f0e0c3a633c5d4918
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Adding the cpio archive utility for the target and host. Patches have
+been pulled from ArchLinux and Gentoo to fix CVE issues and compile
+issues.
+
+[Thomas: remove host variant of the package, as discussed during the
+review of earlier version.]
+
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-generic.txt |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/cpio/Config.in |    8 ++++++++
+ package/cpio/cpio.hash |    9 +++++++++
+ package/cpio/cpio.mk   |   25 +++++++++++++++++++++++++
+ 4 files changed, 43 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index bc07667..4c12b42 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -303,6 +303,15 @@ information is (assuming the package name is +libfoo+) :
-      the package source code. Buildroot copies the contents of the
-      source directory into the package's build directory.
- 
-+* +LIBFOO_STRIP_COMPONENTS+ is the number of leading components
-+  (directories) that tar must strip from file names on extraction.
-+  The tarball for most packages has one leading component named
-+  "<pkg-name>-<pkg-version>", thus Buildroot passes
-+  --strip-components=1 to tar to remove it.
-+  For non-standard packages that don't have this component, or
-+  that have more than one leading component to strip, set this
-+  variable with the value to be passed to tar. Default: 1.
+diff --git a/package/Config.in b/package/Config.in
+index 86a53c8..5974855 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -150,6 +150,7 @@ endmenu
+ menu "Filesystem and flash utilities"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
++	source "package/cpio/Config.in"
+ 	source "package/cramfs/Config.in"
+ 	source "package/curlftpfs/Config.in"
+ 	source "package/dosfstools/Config.in"
+diff --git a/package/cpio/Config.in b/package/cpio/Config.in
+new file mode 100644
+index 0000000..1787f39
+--- /dev/null
++++ b/package/cpio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CPIO
++	bool "cpio"
++	# Need argp.h support
++	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
++	help
++	  cpio archive utility for creation and extraction.
 +
- * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
-   name) that are required for the current target package to
-   compile. These dependencies are guaranteed to be compiled and
++	  https://www.gnu.org/software/cpio/
+diff --git a/package/cpio/cpio.hash b/package/cpio/cpio.hash
+new file mode 100644
+index 0000000..c52e86a
+--- /dev/null
++++ b/package/cpio/cpio.hash
+@@ -0,0 +1,9 @@
++# Locally calculated after checking pgp signature
++sha256	601b1d774cd6e4cd39416203c91ec59dbd65dd27d79d75e1a9b89497ea643978	cpio-2.11.tar.gz
++
++# Locally calculated
++sha256 903fb87e00813daf257be5d1680ad93770d320c707ab2ec345486958b2e8a21f cpio-2.11-stdio.in.patch
++sha256 6b6505a97dda75d24627d9ba461b45ab9ea4764e1a2788d6986eb2978434f25d cpio-2.11-CVE-2014-9112.patch
++sha256 0cf7c9749f1c1610aaf46e17eacd6614c5ef8c2114236bcdd08d53e929020ae5 cpio-2.11-testsuite-CVE-2014-9112.patch
++sha256 f1f587f70a38363691cbd4dfe89f962c8c57266277f0fbc781910c6a7065be7e cpio-2.11-check_for_symlinks-CVE-2015-1197.patch
++sha256 b3d317e3c5705d7f9e503f56540baf3cb6dd1d0e9be0261151a5b08378c2d98c cpio-2.11-stat.patch
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+new file mode 100644
+index 0000000..aa9dace
+--- /dev/null
++++ b/package/cpio/cpio.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# cpio
++#
++################################################################################
++
++CPIO_VERSION = 2.11
++CPIO_SITE = http://ftp.gnu.org/gnu/cpio
++CPIO_LICENSE = GPLv3+
++CPIO_LICENSE_FILES = COPYING
++CPIO_PATCH = \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-stdio.in.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-CVE-2014-9112.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-testsuite-CVE-2014-9112.patch \
++	https://projects.archlinux.org/svntogit/packages.git/plain/cpio/trunk/cpio-2.11-check_for_symlinks-CVE-2015-1197.patch \
++	https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/cpio/files/cpio-2.11-stat.patch
++
++# cpio uses argp.h which is not provided by uclibc by default.
++# Use the argp-standalone package to provide this but make sure
++# the host package does not try to use the host version.
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++CPIO_DEPENDENCIES += argp-standalone
++endif
++
++$(eval $(autotools-package))
