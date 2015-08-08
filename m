@@ -1,82 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:38 -0000
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXt: bump
-	version to 1.1.5
-Message-ID: <20150808105629.AAE607FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-video-r128: bump version to 6.10.0
+Message-ID: <20150808105629.DDD467FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53b53eca323472520cce8f413a993ff1b3ff19cc
+commit: http://git.buildroot.net/buildroot/commit/?id=b40509c7d80d6610b3f54e6da0dc1265bf6e9e22
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Remove part of 0001-util-don-t-link-makestrs-with-target-cflags.patch
-because it was applied upstream:
-http://cgit.freedesktop.org/xorg/lib/libXt/commit/util/makestrs.c?id=f9baaf55ff8cbd4bf018a34f181eda30d03b20dc
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...il-don-t-link-makestrs-with-target-cflags.patch |   17 -----------------
- package/x11r7/xlib_libXt/xlib_libXt.hash           |    4 ++--
- package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
- 3 files changed, 3 insertions(+), 20 deletions(-)
+ .../0001-cross-compile.patch                       |   23 ++++++++++++++++++++
+ .../xdriver_xf86-video-r128.hash                   |    2 +
+ .../xdriver_xf86-video-r128.mk                     |    5 ++-
+ 3 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch b/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch
-index 692d03b..ccc684f 100644
---- a/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch
-+++ b/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch
-@@ -11,11 +11,6 @@ in util/Makefile.am is wrong because it adds target cflags to the
- compilation of makestrs, which is built for the build machine, which
- leads to build failures when cross-compiling.
- 
--We also remove the inclusion of <X11/Xos.h> from makestrs.c, because
--it was the only non-standard header being included (and therefore
--possibly requiring special cflags), but it was in reality not useful
--at all to build makestrs.c.
--
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  util/Makefile.am |    1 -
-@@ -34,17 +29,5 @@ index dedfa6b..cc6f3fc 100644
-  makestrs_SOURCES = makestrs.c
+diff --git a/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch b/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch
+index d276176..7b2ebd4 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch
++++ b/package/x11r7/xdriver_xf86-video-r128/0001-cross-compile.patch
+@@ -1,3 +1,12 @@
++Fix cross-compile
++
++Original patch for DRI
++http://git.buildroot.net/buildroot/commit/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128-cross-compile.patch?id=c0726391523da6a17ffa8e62681ffa0cc895da8e
++
++Signed-off-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
++(Added exa.h fix)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
+ --- a/configure.ac	2008-06-23 10:39:28.000000000 -0400
+ +++ b/configure.ac	2008-06-23 10:40:46.000000000 -0400
+ @@ -85,14 +85,20 @@ sdkdir=$(pkg-config --variable=sdkdir xo
+@@ -25,3 +34,17 @@
+  fi
   
-  
--diff --git a/util/makestrs.c b/util/makestrs.c
--index a52866a..00c861f 100644
----- a/util/makestrs.c
--+++ b/util/makestrs.c
--@@ -27,7 +27,6 @@ in this Software without prior written authorization from The Open Group.
-- /* Constructs string definitions */
-- 
-- #include <stdio.h>
---#include <X11/Xos.h>
-- #include <stdlib.h>
-- #include <unistd.h>
-- 
- -- 
- 1.7.9.5
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.hash b/package/x11r7/xlib_libXt/xlib_libXt.hash
-index 651cf4b..751c370 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.hash
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2013-May/002234.html
--sha256	843a97a988f5654872682a4120486d987d853a71651515472f55519ffae2dd57	libXt-1.1.4.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002594.html
-+sha256	46eeb6be780211fdd98c5109286618f6707712235fdd19df4ce1e6954f349f1a	libXt-1.1.5.tar.bz2
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
-index 45f1885..4715ac6 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.mk
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
-@@ -4,7 +4,7 @@
+  AC_MSG_CHECKING([whether to include DRI support])
++@@ -121,7 +127,12 @@
++ AC_MSG_CHECKING([whether to enable EXA support])
++ if test "x$EXA" = xyes; then
++         AC_MSG_RESULT(yes)
++-        AC_CHECK_FILE(${sdkdir}/exa.h, [have_exa_h="yes"], [have_exa_h="no"])
+++	if test "$cross_compiling" = "no" ; then
+++		AC_CHECK_FILE(${sdkdir}/exa.h,
+++                      [have_exa_h="yes"], [have_exa_h="no"])
+++	else
+++		have_exa_h="yes"
+++	fi
++ else
++         AC_MSG_RESULT(no)
++ fi
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+new file mode 100644
+index 0000000..976521a
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2015-May/002598.html
++sha256	80d531a07168230a408b88809a5440cfd48f9098666d12702d0012148a0d353d	xf86-video-r128-6.10.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+index d4294ad..f9fcfdb 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXT_VERSION = 1.1.4
-+XLIB_LIBXT_VERSION = 1.1.5
- XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
- XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXT_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_R128_VERSION = fcee44e469b22934a04bd3ee19ed101aaa176a54
+-XDRIVER_XF86_VIDEO_R128_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-r128
++XDRIVER_XF86_VIDEO_R128_VERSION = 6.10.0
++XDRIVER_XF86_VIDEO_R128_SOURCE = xf86-video-r128-$(XDRIVER_XF86_VIDEO_R128_VERSION).tar.bz2
++XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_R128_AUTORECONF = YES
