@@ -1,110 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:32 -0000
-Subject: [Buildroot] [git commit branch/next] kyua: new package
-Message-ID: <20150808105608.C43E57FB02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] glog: new package
+Message-ID: <20150808105608.DFFC97F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=315e92c6920cfb4b19d727f58810aea0cf8072e5
+commit: http://git.buildroot.net/buildroot/commit/?id=082b6f2d92510a37e386b4a651137f3276353521
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Kyua is a testing framework for infrastructure software, originally
-designed to equip BSD-based operating systems with a test suite. This
-means that Kyua is lightweight and simple, and that Kyua integrates
-well with various build systems and continuous integration frameworks.
-
-https://github.com/jmmv/kyua
-
-[Thomas: fix typo in hash file.]
-
-Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Reviewed-by: Abhimanyu Vishwakarma <abhimanyu.v@imgtec.com>
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/Config.in      |    1 +
- package/kyua/Config.in |   20 ++++++++++++++++++++
- package/kyua/kyua.hash |    2 ++
- package/kyua/kyua.mk   |   27 +++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 0 deletions(-)
+ package/glog/Config.in |   11 +++++++++++
+ package/glog/glog.hash |    2 ++
+ package/glog/glog.mk   |   17 +++++++++++++++++
+ 4 files changed, 31 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 0286630..6810bd6 100644
+index 6810bd6..6dbc32d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -72,6 +72,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kexec/Config.in"
- 	source "package/kexec-lite/Config.in"
- 	source "package/ktap/Config.in"
-+	source "package/kyua/Config.in"
- 	source "package/latencytop/Config.in"
- 	source "package/lmbench/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/kyua/Config.in b/package/kyua/Config.in
+@@ -896,6 +896,7 @@ menu "JSON/XML"
+ endmenu
+ 
+ menu "Logging"
++	source "package/glog/Config.in"
+ 	source "package/liblog4c-localtime/Config.in"
+ 	source "package/liblogging/Config.in"
+ 	source "package/log4cplus/Config.in"
+diff --git a/package/glog/Config.in b/package/glog/Config.in
 new file mode 100644
-index 0000000..e1bcd48
+index 0000000..aed0a3e
 --- /dev/null
-+++ b/package/kyua/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_KYUA
-+	bool "kyua"
++++ b/package/glog/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_GLOG
++	bool "glog"
 +	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # lutok
-+	depends on !BR2_PACKAGE_LUAJIT # lutok
-+	select BR2_PACKAGE_ATF
-+	select BR2_PACKAGE_LUTOK
-+	select BR2_PACKAGE_SQLITE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	help
-+	  Kyua is a testing framework for infrastructure software,
-+	  originally designed to equip BSD-based operating systems
-+	  with a test suite. This means that Kyua is lightweight
-+	  and simple, and that Kyua integrates well with various build
-+	  systems and continuous integration frameworks.
++	  C++ implementation of the Google logging module
 +
-+	  https://github.com/jmmv/kyua
++	  https://github.com/google/glog
 +
-+comment "kyua needs a toolchain w/ C++ and full Lua"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-diff --git a/package/kyua/kyua.hash b/package/kyua/kyua.hash
++comment "glog needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/glog/glog.hash b/package/glog/glog.hash
 new file mode 100644
-index 0000000..298d0d8
+index 0000000..dad1543
 --- /dev/null
-+++ b/package/kyua/kyua.hash
++++ b/package/glog/glog.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 2b8b64a458b642df75086eeb73e8073d105b8d9cff04c9b1a905b68bc8502560 kyua-0.11.tar.gz
-diff --git a/package/kyua/kyua.mk b/package/kyua/kyua.mk
++# No hash for v0.3.4, comes from the github-helper:
++none	xxx	glog-v0.3.4.tar.gz
+diff --git a/package/glog/glog.mk b/package/glog/glog.mk
 new file mode 100644
-index 0000000..c75a09f
+index 0000000..8a84094
 --- /dev/null
-+++ b/package/kyua/kyua.mk
-@@ -0,0 +1,27 @@
++++ b/package/glog/glog.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# kyua
++# glog
 +#
 +################################################################################
 +
-+KYUA_VERSION = 0.11
-+KYUA_SITE = https://github.com/jmmv/kyua/releases/download/kyua-$(KYUA_VERSION)
-+KYUA_DEPENDENCIES = host-pkgconf atf lutok sqlite
-+KYUA_CONF_OPTS = --without-doxygen --without-atf
-+KYUA_LICENSE = BSD-3c
-+KYUA_LICENSE_FILES = COPYING
-+KYUA_CONF_ENV = \
-+	kyua_cv_attribute_noreturn=yes \
-+	kyua_cv_getcwd_dyn=yes \
-+	kyua_cv_lchmod_works=no \
-+	kyua_cv_getopt_gnu=yes \
-+	kyua_cv_getopt_optind_reset_value=0 \
-+	kyua_cv_signals_lastno=15
++GLOG_VERSION = v0.3.4
++GLOG_SITE = $(call github,google,glog,$(GLOG_VERSION))
++GLOG_INSTALL_STAGING = YES
++GLOG_LICENSE = BSD-3c
++GLOG_LICENSE_FILES = COPYING
 +
-+define KYUA_INSTALL_CONFIG
-+	$(INSTALL) -D -m 644 $(@D)/examples/kyua.conf $(TARGET_DIR)/etc/kyua/kyua.conf
-+endef
-+
-+KYUA_POST_INSTALL_HOOKS += KYUA_INSTALL_CONFIG
++ifeq ($(BR2_PACKAGE_GFLAGS),y)
++GLOG_DEPENDENCIES = gflags
++endif
 +
 +$(eval $(autotools-package))
