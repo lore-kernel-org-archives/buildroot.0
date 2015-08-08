@@ -1,42 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] wireless-regdb: bump to
-	version 2015.05.15
-Message-ID: <20150808105603.418507FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] dado: bump to version 1.6.0
+Message-ID: <20150808105603.7C62F7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9781aa6af3b87f99bc4ab88562993f93eab2b87d
+commit: http://git.buildroot.net/buildroot/commit/?id=94adefb19d2686f007effa1fda7bbb84563c0165
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless-regdb/wireless-regdb.hash |    2 +-
- package/wireless-regdb/wireless-regdb.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dado/dado.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 115b490..1afb023 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	4c4a10b3aa97ac494dda5bc13a045bda211437aab24341fe11d78530e640f133	wireless-regdb-2015.04.06.tar.xz
-+sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 20b330f..8a5b6ab 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/dado/dado.mk b/package/dado/dado.mk
+index 3a58215..a09dd6d 100644
+--- a/package/dado/dado.mk
++++ b/package/dado/dado.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2015.04.06
-+WIRELESS_REGDB_VERSION = 2015.05.15
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-DADO_VERSION = 1.5.2-1
++DADO_VERSION = 1.6.0-1
+ DADO_LICENSE = MIT
+ 
+ $(eval $(luarocks-package))
