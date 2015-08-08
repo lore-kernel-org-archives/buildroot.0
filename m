@@ -1,101 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:21 -0000
-Subject: [Buildroot] [git commit branch/next] xdriver_xf86-video-qxl: new
-	package
-Message-ID: <20150808105624.3A8567FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libunistring: bump to version
+	0.9.6
+Message-ID: <20150808105624.DA1997FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d1316d87d847526d3a252490aab86a49cc95467
+commit: http://git.buildroot.net/buildroot/commit/?id=72688a00d501f9c6809e6c054562aa7625600d10
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Add the QEMU paravirt QXL video driver.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xdriver_xf86-video-qxl/Config.in     |   12 +++++++
- .../xdriver_xf86-video-qxl.hash                    |    2 +
- .../xdriver_xf86-video-qxl.mk                      |   32 ++++++++++++++++++++
- 4 files changed, 47 insertions(+), 0 deletions(-)
+ package/libunistring/libunistring.hash |    2 +-
+ package/libunistring/libunistring.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 24316a4..859e895 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -174,6 +174,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-video-neomagic/Config.in
- 		source package/x11r7/xdriver_xf86-video-nv/Config.in
- 		source package/x11r7/xdriver_xf86-video-openchrome/Config.in
-+		source package/x11r7/xdriver_xf86-video-qxl/Config.in
- 		source package/x11r7/xdriver_xf86-video-r128/Config.in
- 		source package/x11r7/xdriver_xf86-video-savage/Config.in
- 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/Config.in b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-new file mode 100644
-index 0000000..5f05f68
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_QXL
-+	bool "xf86-video-qxl"
-+	depends on (BR2_i386 || BR2_x86_64)
-+	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_UDEV # for KMS
-+	select BR2_PACKAGE_LIBPCIACCESS
-+	select BR2_PACKAGE_SPICE_PROTOCOL
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
-+	help
-+	  QEMU QXL paravirt video driver
-+
-+	  http://www.spice-space.org/page/XorgQXL
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
-new file mode 100644
-index 0000000..1648c29
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.freedesktop.org/archives/spice-devel/2015-April/019356.html
-+sha256	e57ad22f0b1daf8979e722be0cc38d351bfcc2e41568edc566d2bade5a621105	xf86-video-qxl-0.1.4.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-new file mode 100644
-index 0000000..ddc4191
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-@@ -0,0 +1,32 @@
-+################################################################################
-+#
-+# xdriver_xf86-video-qxl
-+#
-+################################################################################
-+
-+XDRIVER_XF86_VIDEO_QXL_VERSION = 0.1.4
-+XDRIVER_XF86_VIDEO_QXL_SOURCE = xf86-video-qxl-$(XDRIVER_XF86_VIDEO_QXL_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_QXL_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_QXL_LICENSE = MIT
-+XDRIVER_XF86_VIDEO_QXL_LICENSE_FILES = COPYING
-+
-+XDRIVER_XF86_VIDEO_QXL_CONF_OPTS = \
-+	--enable-xspice=no
-+
-+XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES = \
-+	libpciaccess \
-+	spice-protocol \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+# configure doesn't look for drm headers in the appropiate place, so help it
-+# libdrm is only useful with udev for KMS
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+XDRIVER_XF86_VIDEO_QXL_CONF_ENV += REQUIRED_MODULES=libdrm
-+XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES += libdrm
-+else
-+XDRIVER_XF86_VIDEO_QXL_CONF_OPTS += --disable-kms
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index e272997..ba4b642 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
++sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 0060518..bb1641e 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUNISTRING_VERSION = 0.9.5
++LIBUNISTRING_VERSION = 0.9.6
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
