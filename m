@@ -1,50 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:01 -0000
-Subject: [Buildroot] [git commit branch/next] configs: add defconfig for
-	Atmel at91sam9rlek
-Message-ID: <20150808105617.3F9A17F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] CHANGES: add release note for
+	the permissions
+Message-ID: <20150808105630.325917FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c4842e6143f78093f57a07276ce59ab62660dc9
+commit: http://git.buildroot.net/buildroot/commit/?id=439296501d544251a9a5d9b117ea3d29b7dbe559
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Since the rsync of skeleton or rootfs now changes the permissions of
+the copied files and directories, this may break existing setups that
+rely on these permissions being kept. So add a release note explaining
+how it should be done.
+
+[Thomas: fixup commit log as suggested by Baruch.]
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91sam9rlek_defconfig |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ CHANGES |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/configs/at91sam9rlek_defconfig b/configs/at91sam9rlek_defconfig
-new file mode 100644
-index 0000000..23f1ebd
---- /dev/null
-+++ b/configs/at91sam9rlek_defconfig
-@@ -0,0 +1,24 @@
-+BR2_arm=y
-+BR2_arm926t=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9rlek"
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9rleknf_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="at91sam9rlek_nandflash"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
-+BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/CHANGES b/CHANGES
+index 3f5162e..1e94929 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,14 @@
++2015.08-rc1, not yet released
++
++	Fixes all over the tree and new features.
++
++	Infrastructure: Buildroot takes better care now of generating
++	predictable permissions in the target filesystem. However,
++	existing permissions on a custom skeleton or rootfs overlay
++	will no longer be preserved. Therefore, it is necessary to
++	add a permission table (BR2_ROOTFS_DEVICE_TABLE) to set
++	the required permissions.
++
+ 2015.05, Released May 31st, 2015
+ 
+ 	Minor fixes.
