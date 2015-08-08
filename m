@@ -1,49 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:52 -0000
-Subject: [Buildroot] [git commit branch/next] samba4: install systemd files
-Message-ID: <20150808105621.A9C2D7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv: add a choice
+	for selecting gstreamer support
+Message-ID: <20150808105621.6FE717FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae0d54ab77a1dcb4af3b5515d3e3a99203e100f2
+commit: http://git.buildroot.net/buildroot/commit/?id=97daf3a08a746f8889c88a0c5baf02d6b9a86bad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The package comes with usable .service files for smbd, nmbd and
-winbind, but does not install them.
+OpenCV 3.0 support both gstreamer-0.10 and gstreamer-1.x, but only one
+is used at the time.
 
-[Thomas: use relative paths for the symbolic links.]
+This patch turns the gstreamer support into a choice, in order to prepare
+adding the support for gstreamer-1 in a following patch.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/samba4.mk |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ package/opencv/Config.in |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index d7d5299..7d10a0c 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -155,4 +155,20 @@ define SAMBA4_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S91smb
- endef
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 576f667..4838a0c 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -173,8 +173,14 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
+ 	help
+ 	  Use ffmpeg from the target system.
  
-+define SAMBA4_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/nmb.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/nmb.service
-+	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/smb.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/smb.service
-+	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/winbind.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/winbind.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/nmb.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmb.service
-+	ln -sf ../../../../usr/lib/systemd/system/smb.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smb.service
-+	ln -sf ../../../../usr/lib/systemd/system/winbind.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbind.service
-+endef
++choice
++	prompt "gstreamer support"
 +
- $(eval $(generic-package))
++config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
++	bool "none"
++
+ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+-	bool "gstreamer support"
++	bool "gstreamer-0.10"
+ 	depends on BR2_USE_MMU # gstreamer -> libglib2
+ 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
+@@ -182,10 +188,12 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ 
+-comment "gstreamer support needs a toolchain w/ wchar, threads"
++comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
++endchoice
++
+ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	bool "gtk support"
+ 	depends on BR2_PACKAGE_XORG7
