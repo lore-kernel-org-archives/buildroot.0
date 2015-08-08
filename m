@@ -1,36 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:03 -0000
-Subject: [Buildroot] [git commit branch/next] nginx: activate the systemd
-	service
-Message-ID: <20150808105631.685527FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sdl_sound: add hash file
+Message-ID: <20150808105634.727FF7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=112ab5f40467f8d8b89cdba99d864f33a7618054
+commit: http://git.buildroot.net/buildroot/commit/?id=a59362a9f22238129ef081cc05a91cea92744215
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nginx/nginx.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/sdl_sound/sdl_sound.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index c617f68..32a337c 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -230,6 +230,11 @@ endef
- define NGINX_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 package/nginx/nginx.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/nginx.service
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -fs ../../../../usr/lib/systemd/system/nginx.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nginx.service
- endef
- 
- define NGINX_INSTALL_INIT_SYSV
+diff --git a/package/sdl_sound/sdl_sound.hash b/package/sdl_sound/sdl_sound.hash
+new file mode 100644
+index 0000000..a548627
+--- /dev/null
++++ b/package/sdl_sound/sdl_sound.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	3999fd0bbb485289a52be14b2f68b571cb84e380cc43387eadf778f64c79e6df	SDL_sound-1.0.3.tar.gz
