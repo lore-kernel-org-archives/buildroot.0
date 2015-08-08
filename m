@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/xdriver_xf86-video-cirrus: remove autoreconf
-Message-ID: <20150808105638.B5F79803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/glibc: enable lock
+	elision on x86_64 hosts
+Message-ID: <20150808105638.C6F77803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=022953e77dce2d1c96dc7e0d6f964f5291011bb6
+commit: http://git.buildroot.net/buildroot/commit/?id=d3ff6cbb4205d7382fc4b2f728ea8bcf6345f8de
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-xdriver_xf86-video-cirrus no longer use the git repository.
-
-commit: e45edc34fadcd6e666a123a4ab32a13b37dc3f74
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-cirrus.mk                   |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/glibc/glibc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-index f2523db..78e8a9c 100644
---- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS
- XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_CIRRUS_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_CIRRUS_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
- 
- $(eval $(autotools-package))
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0a37bb3..cbfbf32 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -90,6 +90,7 @@ define GLIBC_CONFIGURE_CMDS
+ 		--prefix=/usr \
+ 		--enable-shared \
+ 		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
++		$(if $(BR2_x86_64),--enable-lock-elision) \
+ 		--with-pkgversion="Buildroot" \
+ 		--without-cvs \
+ 		--disable-profile \
