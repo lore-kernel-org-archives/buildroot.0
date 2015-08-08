@@ -1,51 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] newt: not available for static
-	only builds
-Message-ID: <20150808105600.E531D7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/iso9660: get grub splash
+	from $(TARGET_DIR)
+Message-ID: <20150808105610.5AC6B7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bee6ae663f592f53d71f4dfb031281cb46dabb8
+commit: http://git.buildroot.net/buildroot/commit/?id=3736b9a7c1c03ce7bab6d902db579fbead909047
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/a40/a400e1fe7291d3bd3171ad04ce5fd7ba235d39af/
-http://autobuild.buildroot.net/results/ec3/ec38d0f1d1faa2a87321bab10f87772eb819adc9/
-http://autobuild.buildroot.net/results/7cb/7cbc8cd265d527c7b56d57e511903b23a4a84489/
+Instead of using directly the splash image from the Buildroot source
+directory boot/grub, this commit changes the iso9660 logic to use the
+splash image installed in $(TARGET_DIR)/boot/grub.
 
-newt uses autoconf but not automake, and unconditionally tries to build a
-.so file - So it doesn't work in static only builds.
+This effectively allows a user to use a custom splash image by
+installing it to $(TARGET_DIR) through a rootfs overlay or using a
+post-build script.
 
-The only reverse dependency is network-manager, which already depends on
-glibc.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/newt/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ fs/iso9660/iso9660.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/newt/Config.in b/package/newt/Config.in
-index 1b3068a..a221615 100644
---- a/package/newt/Config.in
-+++ b/package/newt/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_NEWT
- 	bool "newt"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # slang
-+	depends on !BR2_STATIC_LIBS # unconditionally creates .so
- 	select BR2_PACKAGE_SLANG
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-@@ -10,6 +11,6 @@ config BR2_PACKAGE_NEWT
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index b3e6b9d..b313c65 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -11,7 +11,7 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
  
- 	  http://www.redhat.com/
- 
--comment "newt needs a toolchain w/ wchar"
-+comment "newt needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
+ define ROOTFS_ISO9660_SPLASHSCREEN
+-	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
++	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
+ 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
+ endef
+ else
