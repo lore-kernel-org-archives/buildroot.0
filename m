@@ -1,91 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next] sysvinit: added libselinux
-	dependency
-Message-ID: <20150808105637.3AB9480428@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-video-siliconmotion: remove autoreconf
+Message-ID: <20150808105638.BDF6A803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8fb454db64477491da9df9860f473d7decf268e
+commit: http://git.buildroot.net/buildroot/commit/?id=2fb4ed378444793875de2c9fc34efd6536f7e21f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas:
-  - remove the patch from Matthew Weber that did a lot of changes that
-    were not needed: the CFLAGS would not get overridden by Buildroot
-    ones if the Buildroot TARGET_CONFIGURE_OPTS is passed on the left
-    hand-side of make, and the SULOGINLIBS hack needs to be replaced
-    by a proper handling of the libcrypt detection.
-  - added a patch that changes the libcrypt detection logic to accept
-    a SYSROOT variable. Instead of search for /usr/lib/libcrypt.a, it
-    search for $(SYSROOT)/usr/lib/libcrypt.a. This avoids the need for
-    overriding SULOGINLIBS.
-  - don't modify TARGET_CONFIGURE_OPTS in sysvinit.mk, this is
-    completely forbidden and broken.
-  - don't pass ROOT= since we don't use 'make install' anyway.]
+xdriver_xf86-video-siliconmotion no longer use the git repository.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+commit: b343bc690e0004ab916eda09d88be9f4210e867b
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysvinit/0001-fix-libcrypt-test.patch |   17 +++++++++++++++++
- package/sysvinit/sysvinit.mk                  |    9 ++++++++-
- 2 files changed, 25 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-siliconmotion.mk            |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
-new file mode 100644
-index 0000000..207270d
---- /dev/null
-+++ b/package/sysvinit/0001-fix-libcrypt-test.patch
-@@ -0,0 +1,17 @@
-+Make the libcrypt test somewhat cross-compilation compliant
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/Makefile
-+===================================================================
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -78,7 +78,7 @@
-+ endif
-+ 
-+ # Additional libs for GNU libc.
-+-ifneq ($(wildcard /usr/lib*/libcrypt.a),)
-++ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
-+   SULOGINLIBS	+= -lcrypt
-+ endif
-+ 
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index 2460dd9..faefd5c 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -11,11 +11,18 @@ SYSVINIT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/
- SYSVINIT_LICENSE = GPLv2+
- SYSVINIT_LICENSE_FILES = COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+index 37e87a5..2aa22ae 100644
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
++++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+@@ -9,7 +9,6 @@ XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF8
+ XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_SILICONMOTION_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
  
-+SYSVINIT_MAKE_OPTS = SYSROOT=$(STAGING_DIR)
-+
- # Override BusyBox implementations if BusyBox is enabled.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSVINIT_DEPENDENCIES = busybox
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+SYSVINIT_DEPENDENCIES += libselinux
-+SYSVINIT_MAKE_OPTS += WITH_SELINUX="yes"
-+endif
-+
- define SYSVINIT_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
- 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
-@@ -27,7 +34,7 @@ SYSVINIT_POST_PATCH_HOOKS = SYSVINIT_DEBIAN_PATCHES
- define SYSVINIT_BUILD_CMDS
- 	# Force sysvinit to link against libcrypt as it otherwise
- 	# use an incorrect test to see if it's available
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) SULOGINLIBS="-lcrypt" -C $(@D)/src
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(SYSVINIT_MAKE_OPTS) -C $(@D)/src
- endef
- 
- define SYSVINIT_INSTALL_TARGET_CMDS
+ $(eval $(autotools-package))
