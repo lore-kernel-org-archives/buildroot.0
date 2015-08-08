@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] vsftpd: correct openssl
-	linking after 1d046a5c (vsftpd: use pkg-config to get OpenSSL
-	link flags)
-Message-ID: <20150808105556.ED10B818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libnftnl: needs kernel headers
+	>= 3.1
+Message-ID: <20150808105557.0E4CB81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=205f07755661b64da21509469b46006ea0badcf9
+commit: http://git.buildroot.net/buildroot/commit/?id=d8bef8038dfd43ca24a5f65bbb5c4990890b1b07
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/221/221c987a9657caefad54bcc2fe9d2d71189c94c5/
-http://autobuild.buildroot.net/results/90c/90cea7c4fdb3e5af923eedf96d79594d6d02e563/
+Contrary to what commit f5866484f (libnftnl: exclude for CS PPC toolchains)
+stated, a missing sa_family_t definition IS specific to the kernel headers
+version, and not something particular to the CS toolchains, so instead
+require 3.1+ headers.
 
-vsftpd directly uses symbols from libcrypto (X509_{digest,free}), so it
-needs to link against both.
+The specific kernel change fixing the headers is:
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=6602a4baf4d1a73cc
 
-This doesn't trigger for static builds as libssl internally uses libcrypto
-(and lists it in Requires.private).
+The only reverse dependency of libnftnl (nftables) already needs 3.4+, so
+this dependency doesn't need to be propagated.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vsftpd/vsftpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libnftnl/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index ed15f00..3091f06 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -24,7 +24,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- VSFTPD_DEPENDENCIES += openssl host-pkgconf
--VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
-+VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)
- VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
- endif
- 
+diff --git a/package/libnftnl/Config.in b/package/libnftnl/Config.in
+index dcbfde0..365ab10 100644
+--- a/package/libnftnl/Config.in
++++ b/package/libnftnl/Config.in
+@@ -1,7 +1,9 @@
++comment "libnftnl needs a toolchain w/ headers >= 3.1"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
++
+ config BR2_PACKAGE_LIBNFTNL
+ 	bool "libnftnl"
+-	# bad headers, no sa_family_t in linux/socket.h
+-	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 	select BR2_PACKAGE_LIBMNL
+ 	help
+ 	  libnftnl is a userspace library providing a low-level
