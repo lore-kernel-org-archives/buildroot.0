@@ -1,64 +1,158 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:18 -0000
-Subject: [Buildroot] [git commit branch/next] dosfstools: bump to version
-	3.0.28
-Message-ID: <20150808105614.5A93A7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libsemanage: cleanup python
+	use and license definition
+Message-ID: <20150808105617.F12807F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7171a0e7a016ef68ee19420593f9097b4aa37cae
+commit: http://git.buildroot.net/buildroot/commit/?id=7742abe0487a29aeaf3db8e6751eec272e9a27f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Change to new homepage since maintainer changed as well.
-Add hash file based on tarball signature file.
+The original package supported python on target, now we just use
+it as part of the host tools.  The license was also mis-assigned.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas: add removed option to Config.in.legacy.]
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dosfstools/Config.in       |    2 +-
- package/dosfstools/dosfstools.hash |    2 ++
- package/dosfstools/dosfstools.mk   |    4 ++--
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ Config.in.legacy                   |    7 ++++
+ package/libsemanage/Config.in      |   10 ------
+ package/libsemanage/libsemanage.mk |   54 ++++++++++++++---------------------
+ 3 files changed, 29 insertions(+), 42 deletions(-)
 
-diff --git a/package/dosfstools/Config.in b/package/dosfstools/Config.in
-index 7f3481c..33c64b3 100644
---- a/package/dosfstools/Config.in
-+++ b/package/dosfstools/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_DOSFSTOOLS
- 	help
- 	  Tools for creating and checking DOS FAT filesystems.
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d86d585..90e1339 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.08"
  
--	  http://www.daniel-baumann.ch/software/dosfstools/
-+	  https://github.com/dosfstools/dosfstools
++config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
++	depends on BR2_PACKAGE_PYTHON
++	bool "libsemanage python bindings removed"
++	help
++	  This option has been removed, since the libsemanage Python
++	  bindings on the target were not useful.
++
+ config BR2_TARGET_UBOOT_NETWORK
+ 	bool "U-Boot custom network settings removed"
+ 	select BR2_LEGACY
+diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
+index 130fd82..78b6315 100644
+--- a/package/libsemanage/Config.in
++++ b/package/libsemanage/Config.in
+@@ -16,15 +16,5 @@ config BR2_PACKAGE_LIBSEMANAGE
  
- if BR2_PACKAGE_DOSFSTOOLS
+ 	  http://selinuxproject.org/page/Main_Page
  
-diff --git a/package/dosfstools/dosfstools.hash b/package/dosfstools/dosfstools.hash
-new file mode 100644
-index 0000000..f852195
---- /dev/null
-+++ b/package/dosfstools/dosfstools.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	ee95913044ecf2719b63ea11212917649709a6e53209a72d622135aaa8517ee2	dosfstools-3.0.28.tar.xz
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 88c4fe8..b7f7d96 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-if BR2_PACKAGE_LIBSEMANAGE
+-
+-config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
+-	depends on BR2_PACKAGE_PYTHON
+-	bool "python bindings"
+-	help
+-	  Enable building python bindings
+-
+-endif
+-
+ comment "libsemanage needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index 17e8fea..197c14e 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -6,66 +6,56 @@
  
--DOSFSTOOLS_VERSION = 3.0.26
-+DOSFSTOOLS_VERSION = 3.0.28
- DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.xz
--DOSFSTOOLS_SITE = http://daniel-baumann.ch/files/software/dosfstools
-+DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(DOSFSTOOLS_VERSION)
- DOSFSTOOLS_LICENSE = GPLv3+
- DOSFSTOOLS_LICENSE_FILES = COPYING
+ LIBSEMANAGE_VERSION = 2.1.10
+ LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
+-LIBSEPOL_LICENSE = LGPLv2.1+
+-LIBSEPOL_LICENSE_FILES = COPYING
+-
++LIBSEMANAGE_LICENSE = LGPLv2.1+
++LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex libselinux ustr bzip2
+-
+ LIBSEMANAGE_INSTALL_STAGING = YES
  
+ LIBSEMANAGE_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
+ 
+-ifeq ($(BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS),y)
+-
+-LIBSEMANAGE_DEPENDENCIES += python host-swig
+-LIBSEMANAGE_MAKE_OPTS += \
+-	PYINC="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYTHONLIBDIR="-L$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
+-	PYLIBVER="python$(PYTHON_VERSION_MAJOR)" \
+-	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
+-
+-define LIBSEMANAGE_PYTHON_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) swigify pywrap
+-endef
+-
+-define LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install-pywrap
+-endef
+-
+-define LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install-pywrap
+-endef
+-
+-endif # End of BR2_PACKAGE_PYTHON
+-
+ define LIBSEMANAGE_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all
+-	$(LIBSEMANAGE_PYTHON_BUILD_CMDS)
+ endef
+ 
+ define LIBSEMANAGE_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+-	$(LIBSEMANAGE_PYTHON_INSTALL_STAGING_CMDS)
+ endef
+ 
+ define LIBSEMANAGE_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) $(LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+-	$(LIBSEMANAGE_PYTHON_INSTALL_TARGET_CMDS)
+ endef
+ 
+-HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol \
+-	host-libselinux host-ustr host-bzip2
++HOST_LIBSEMANAGE_DEPENDENCIES = host-bison host-libsepol host-libselinux \
++				host-ustr host-bzip2 host-swig
++HOST_LIBSEMANAGE_MAKE_OPTS += $(HOST_CONFIGURE_OPTS) \
++	SWIG_LIB="$(HOST_DIR)/usr/share/swig/$(SWIG_VERSION)/"
++
++ifeq ($(BR2_PACKAGE_PYTHON3),y)
++HOST_LIBSEMANAGE_DEPENDENCIES += host-python3
++HOST_LIBSEMANAGE_MAKE_OPTS += \
++	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m/" \
++	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
++else
++HOST_LIBSEMANAGE_DEPENDENCIES += host-python
++HOST_LIBSEMANAGE_MAKE_OPTS += \
++	PYINC="-I$(HOST_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)/" \
++	PYTHONLIBDIR="-L$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/" \
++	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
++endif
+ 
+ define HOST_LIBSEMANAGE_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+ 	# header paths.
+ 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) all
++	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) swigify pywrap
+ endef
+ 
+ define HOST_LIBSEMANAGE_INSTALL_CMDS
+ 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) install
++	$(MAKE) -C $(@D) $(HOST_LIBSEMANAGE_MAKE_OPTS) DESTDIR=$(HOST_DIR) install-pywrap
+ endef
+ 
+ $(eval $(generic-package))
