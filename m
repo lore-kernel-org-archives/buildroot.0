@@ -1,47 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] package/leafnode2: Update
-	upstream URL
-Message-ID: <20150808105600.736947F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pppd: install pon,
+	poff scripts
+Message-ID: <20150808105608.646DC81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3372fb39f07543f9f31e4c2fecc92f57f3bd710
+commit: http://git.buildroot.net/buildroot/commit/?id=8e05d4ffe08af3b1489548176dadce1ca352e21c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream URL has changed:
-http://article.gmane.org/gmane.network.leafnode/4773
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/leafnode2/Config.in    |    2 +-
- package/leafnode2/leafnode2.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pppd/pppd.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
-index ec5fa80..348e6da 100644
---- a/package/leafnode2/Config.in
-+++ b/package/leafnode2/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_LEAFNODE2
- 	  For example, you can add this line to inetd.conf:
- 	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 0f9945f..554b830 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -98,6 +98,8 @@ define PPPD_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/openl2tp.so
+ 	$(INSTALL) -D $(PPPD_DIR)/pppd/plugins/pppol2tp/pppol2tp.so \
+ 		$(TARGET_DIR)/usr/lib/pppd/$(PPPD_VERSION)/pppol2tp.so
++	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/pon $(TARGET_DIR)/usr/bin/pon
++	$(INSTALL) -D -m 0755 $(PPPD_DIR)/scripts/poff $(TARGET_DIR)/usr/bin/poff
+ 	$(PPPD_INSTALL_RADIUS)
+ endef
  
--	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
-+	  http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
-diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
-index 0fc2a8d..5b9b854 100644
---- a/package/leafnode2/leafnode2.mk
-+++ b/package/leafnode2/leafnode2.mk
-@@ -6,7 +6,7 @@
- 
- LEAFNODE2_VERSION = 2.0.0.alpha20140727b
- LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
--LEAFNODE2_SITE = http://home.pages.de/~mandree/leafnode/beta
-+LEAFNODE2_SITE = http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
- LEAFNODE2_LICENSE = LGPLv2.1
- LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
- LEAFNODE2_DEPENDENCIES = host-pcre pcre
