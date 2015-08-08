@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:44 -0000
-Subject: [Buildroot] [git commit branch/next] package: fix fallout from
-	checking kconfig config files
-Message-ID: <20150808105632.67980818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/openswan: fix parallel
+	build
+Message-ID: <20150808105632.79058818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cdcd83f31ded1dbf6d13d16b4aafdf594b964d94
+commit: http://git.buildroot.net/buildroot/commit/?id=931ee9c1ae2f4e3507d16e394c34c719803c294f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Those checks should only be done when the package is actually enabled.
+Fixes:
+    http://autobuild.buildroot.org/results/2ec/2ecb098b01bd44d75182b15f98c1fd2a8c927438/
+    http://autobuild.buildroot.org/results/18f/18f0166f3fa831f321818e286d9c2e9037f8c8d0/
+    ...
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/busybox.mk |    2 +-
- package/uclibc/uclibc.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openswan/openswan.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d8c8bad..6b2abca 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -225,7 +225,7 @@ endef
- 
- # Checks to give errors that the user can understand
- # Must be before we call to kconfig-package
--ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_PACKAGE_BUSYBOX)$(BR_BUILDING),yy)
- ifeq ($(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),)
- $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 6c6a8a7..b7689c1 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -29,12 +29,12 @@ endif
  endif
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 3aceae3..9dfafad 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -476,7 +476,7 @@ endef
  
- # Checks to give errors that the user can understand
- # Must be before we call to kconfig-package
--ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_PACKAGE_UCLIBC)$(BR_BUILDING),yy)
- ifeq ($(call qstrip,$(BR2_UCLIBC_CONFIG)),)
- $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG setting)
- endif
+ define OPENSWAN_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+ 		$(OPENSWAN_MAKE_OPTS) programs
+ endef
+ 
+ define OPENSWAN_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+ 		$(OPENSWAN_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
