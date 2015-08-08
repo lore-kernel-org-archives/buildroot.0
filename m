@@ -1,61 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:38 -0000
-Subject: [Buildroot] [git commit branch/next] Makefile: don't depend on the
-	umask
-Message-ID: <20150808105630.0EED47FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libXt: bump
+	version to 1.1.5
+Message-ID: <20150808105629.AAE607FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bee5745ccc20be6dbba243b1f8af0d5c522923e8
+commit: http://git.buildroot.net/buildroot/commit/?id=53b53eca323472520cce8f413a993ff1b3ff19cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Some packages and BR itself create files and directories on the target
-with cp/mkdir/etc which depend on the umask at the time of building.
+Remove part of 0001-util-don-t-link-makestrs-with-target-cflags.patch
+because it was applied upstream:
+http://cgit.freedesktop.org/xorg/lib/libXt/commit/util/makestrs.c?id=f9baaf55ff8cbd4bf018a34f181eda30d03b20dc
 
-To fix this, use a trick inside the Makefile which wraps all rules when
-the umask is not 0022. This sets the umask at the top level, and then
-the building process continues as usual.
-
-[Thomas: add --no-print-directory, as suggested by Arnout.]
-
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ ...il-don-t-link-makestrs-with-target-cflags.patch |   17 -----------------
+ package/x11r7/xlib_libXt/xlib_libXt.hash           |    4 ++--
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
+ 3 files changed, 3 insertions(+), 20 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index daf692e..55b1d45 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,6 +24,19 @@
- # You shouldn't need to mess with anything beyond this point...
- #--------------------------------------------------------------
+diff --git a/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch b/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch
+index 692d03b..ccc684f 100644
+--- a/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch
++++ b/package/x11r7/xlib_libXt/0001-util-don-t-link-makestrs-with-target-cflags.patch
+@@ -11,11 +11,6 @@ in util/Makefile.am is wrong because it adds target cflags to the
+ compilation of makestrs, which is built for the build machine, which
+ leads to build failures when cross-compiling.
  
-+# Trick for always running with a fixed umask
-+UMASK=0022
-+ifneq ($(shell umask),$(UMASK))
-+.PHONY: all $(MAKECMDGOALS)
-+
-+all:
-+	@umask $(UMASK) && $(MAKE) --no-print-directory
-+
-+$(MAKECMDGOALS):
-+	@umask $(UMASK) && $(MAKE) --no-print-directory $@
-+
-+else # umask
-+
- # This is our default rule, so must come first
- all:
+-We also remove the inclusion of <X11/Xos.h> from makestrs.c, because
+-it was the only non-standard header being included (and therefore
+-possibly requiring special cflags), but it was in reality not useful
+-at all to build makestrs.c.
+-
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+  util/Makefile.am |    1 -
+@@ -34,17 +29,5 @@ index dedfa6b..cc6f3fc 100644
+  makestrs_SOURCES = makestrs.c
+  
+  
+-diff --git a/util/makestrs.c b/util/makestrs.c
+-index a52866a..00c861f 100644
+---- a/util/makestrs.c
+-+++ b/util/makestrs.c
+-@@ -27,7 +27,6 @@ in this Software without prior written authorization from The Open Group.
+- /* Constructs string definitions */
+- 
+- #include <stdio.h>
+--#include <X11/Xos.h>
+- #include <stdlib.h>
+- #include <unistd.h>
+- 
+ -- 
+ 1.7.9.5
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.hash b/package/x11r7/xlib_libXt/xlib_libXt.hash
+index 651cf4b..751c370 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.hash
++++ b/package/x11r7/xlib_libXt/xlib_libXt.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002234.html
+-sha256	843a97a988f5654872682a4120486d987d853a71651515472f55519ffae2dd57	libXt-1.1.4.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-April/002594.html
++sha256	46eeb6be780211fdd98c5109286618f6707712235fdd19df4ce1e6954f349f1a	libXt-1.1.5.tar.bz2
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index 45f1885..4715ac6 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -937,3 +950,5 @@ include docs/manual/manual.mk
- -include $(BR2_EXTERNAL)/docs/*/*.mk
- 
- .PHONY: $(noconfig_targets)
-+
-+endif #umask
+-XLIB_LIBXT_VERSION = 1.1.4
++XLIB_LIBXT_VERSION = 1.1.5
+ XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
+ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_LICENSE = MIT
