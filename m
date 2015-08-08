@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:35 -0000
-Subject: [Buildroot] [git commit branch/next] file: bump to version 5.24
-Message-ID: <20150808105624.E30567FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:36 -0000
+Subject: [Buildroot] [git commit branch/next] bootutils: update website URL
+Message-ID: <20150808105625.6F14E7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a35ee875f92dfbf8a9e81d28969dc5e9c9968b8
+commit: http://git.buildroot.net/buildroot/commit/?id=55dd510bcb2b2c552e72536de7b02745a6fbee81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The original homepage seems to be down. Use the sourceforge intro page
+instead.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/file/file.hash |    2 +-
- package/file/file.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bootutils/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index a061783..28f071d 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	2c8ab3ff143e2cdfb5ecee381752f80a79e0b4cfe9ca4cc6e1c3e5ec15e6157c	file-5.23.tar.gz
-+sha256	802cb3de2e49e88ef97cdcb52cd507a0f25458112752e398445cea102bc750ce	file-5.24.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 4baa393..f3b09ec 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bootutils/Config.in b/package/bootutils/Config.in
+index 308db24..370da0d 100644
+--- a/package/bootutils/Config.in
++++ b/package/bootutils/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_BOOTUTILS
+ 	  either by label or explicit label= on the kernel command line,
+ 	  mounting it, and 'switchroot'ing is automated.
  
--FILE_VERSION = 5.23
-+FILE_VERSION = 5.24
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- FILE_INSTALL_STAGING = YES
+-	  http://bootutils.pr.linuxrulz.org/
++	  http://bootutils.sourceforge.net/
