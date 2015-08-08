@@ -1,51 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] pure-ftpd: fix hash and use
-	.bz2 tarball
-Message-ID: <20150808105616.84BDC7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] postgresql: bump to version
+	9.4.3
+Message-ID: <20150808105605.D6B607FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84f6eb9fe3467abbd94a6b481ae5106679d61e24
+commit: http://git.buildroot.net/buildroot/commit/?id=233862860cfd4474dcc2d298d54b1f058b624e8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For some reason, the hash file added in commit
-ee6c9f5a1bc1995d968214345c011a44a3c145c8 by Gustavo turns out to be
-wrong, so this commit replaces it with the proper hash, also added
-after checking the GPG signature.
-
-While at it, we switch to using a .bz2 tarball.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/c44/c441f35119191f47dd5fae96fd76827024e50329/
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pure-ftpd/pure-ftpd.hash |    2 +-
- package/pure-ftpd/pure-ftpd.mk   |    1 +
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/postgresql/postgresql.hash |    4 ++--
+ package/postgresql/postgresql.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
-index d0d35ac..d1f812e 100644
---- a/package/pure-ftpd/pure-ftpd.hash
-+++ b/package/pure-ftpd/pure-ftpd.hash
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 2f8de30..d0d40a1 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b72456def52c71baf8d0367ca6b7aba10796e2883a76eeb41f58f2f06f7087ba	pure-ftpd-1.0.41.tar.gz
-+sha256	1d48f650f366b8151d86b86c79f4bb874e95143bdac0e767038eda832d28a010	pure-ftpd-1.0.41.tar.bz2
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 3c59bb1..8269327 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -6,6 +6,7 @@
+-# From https://ftp.postgresql.org/pub/source/v9.4.2/postgresql-9.4.2.tar.bz2.sha256
+-sha256	81fda191c165ba1d25d75cd0166ece5abdcb4a7f5eca01b349371e279ebb4d11  postgresql-9.4.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.4.3/postgresql-9.4.3.tar.bz2.sha256
++sha256	734acfd2ac352dd0cd353d226f3199c2e1a2730200998aea5b38cf685136d755  postgresql-9.4.3.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index d4895a0..c4fa36c 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- PURE_FTPD_VERSION = 1.0.41
- PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
-+PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
- PURE_FTPD_LICENSE_FILES = COPYING
- PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-POSTGRESQL_VERSION = 9.4.2
++POSTGRESQL_VERSION = 9.4.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
