@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:54 -0000
-Subject: [Buildroot] [git commit branch/next] libevdev: bump version to 1.4.3
-Message-ID: <20150808105623.58B587FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pkg-autotools: fix whitespace
+	regex in libtool patch hook
+Message-ID: <20150808105623.DD4327FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34c416d5b5baaeeee602b13020d7d05aced25bce
+commit: http://git.buildroot.net/buildroot/commit/?id=5eb23c9b88001b31a9a5b46d091ceb0c3bb621f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-From [1]:
-- tools: widen frequency resolution to ??s in the DPI tool
-- tools: complain about devices that don't have abs x/y axes in the edge detector
-- include: update to 4.1 header
+The first sed line for ltmain_version attempts to match whitespace before
+VERSION with [ space_character tab_character ]. The second sed line used to
+make ltmain_patchlevel has only space characters in the whitespace expression,
+possibly due to a smart editor automatically converting tabs to spaces. Make
+these lines consistent with each other and more resilient against accidental
+loss of tab characters by replacing the tabs with '\t'.
 
-[1] http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libevdev/libevdev.hash |    4 ++--
- package/libevdev/libevdev.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-autotools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 535490b..1b7897d 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
--sha256 7c77b213f075706d428a2af54b66bf86b03a68e9fb390e7ec48cf55065970643 libevdev-1.4.2.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
-+sha256 1c418b26fd78b0e9900872be2f77fb5311c877b34ec5c75efd1b670ed627969b libevdev-1.4.3.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 3ed7ba0..082a7cc 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.4.2
-+LIBEVDEV_VERSION = 1.4.3
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 54f5dcd..c748c78 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -60,9 +60,9 @@ endef
+ define LIBTOOL_PATCH_HOOK
+ 	@$(call MESSAGE,"Patching libtool")
+ 	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
+-		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
++		ltmain_version=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
+ 		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
+-		ltmain_patchlevel=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$i | \
++		ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
+ 		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
+ 		if test $${ltmain_version} = '1.5'; then \
+ 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
