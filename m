@@ -1,93 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: ensure
-	kconfig base and fragment files exist
-Message-ID: <20150808105615.304028030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sdl_net: add hash file
+Message-ID: <20150808105634.7D5E47FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7148361652c5b40f32e1474119cc8be1fe0d66a9
+commit: http://git.buildroot.net/buildroot/commit/?id=6efc0b89b6ba1e3d1a2a405cc76a5b0e67a3436a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Even though we do have a dependency chain back to each of the kconfig
-base and fragment files:
-
-    $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-
-we can't rely on it to ensure they are all present, because they all have
-this rule:
-
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-
-but since this rule has no prerequisite (only build-order, but that does
-not count in this case) and no recipe, make will believe each missing
-file to be a PHONY target, and will always run targets that depend on
-it:
-    https://www.gnu.org/software/make/manual/make.html#Force-Targets
-
-So, that means a missing kconfig base or fragment file would always
-cause the rule to generate .config to be run at each invocation, which
-in turn would cause a rebuild of the kernel, which is clearly not what
-we want.
-
-Since this is expected make behaviour, we can well end up with a missing
-Kconfig base or fragment. To avoid continuously rebuilding the kernel in
-that case, we must check those files exist by ourselves, and error out
-if any one of them is missing.
-
-One would expect we check for them right in their dependency rule, like
-so:
-
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-        [ -f $(@) ] || {echo Missing $(@) >&2; exit 1; }
-
-but that does not work, as only the first target is tested for. That
-check msut be turned into a loop explicitly testing all files, like so:
-
-    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-        for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
-            [ -f $(@) ] || {echo Missing $$$${f} >&2; exit 1; }; \
-        done
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pkg-kconfig.mk |   18 +++++++++++++++++-
- 1 files changed, 17 insertions(+), 1 deletions(-)
+ package/sdl_net/sdl_net.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index e65c6f9..e441548 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -38,8 +38,24 @@ $(2)_KCONFIG_FIXUP_CMDS ?=
- $(2)_KCONFIG_FRAGMENT_FILES ?=
- 
- # The config file as well as the fragments could be in-tree, so before
--# depending on them the package should be extracted (and patched) first
-+# depending on them the package should be extracted (and patched) first.
-+#
-+# Since those files only have a order-only dependency, make would treat
-+# any missing one as a "force" target:
-+#   https://www.gnu.org/software/make/manual/make.html#Force-Targets
-+# and would forcibly any rule that depend on those files, causing a
-+# rebuild of the kernel each time make is called.
-+#
-+# So, we provide a recipe that checks all of those files exist, to
-+# overcome that standard make behaviour.
-+#
- $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
-+	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
-+		if [ ! -f "$$$${f}" ]; then \
-+			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
-+			exit 1; \
-+		fi; \
-+	done
- 
- # The specified source configuration file and any additional configuration file
- # fragments are merged together to .config, after the package has been patched.
+diff --git a/package/sdl_net/sdl_net.hash b/package/sdl_net/sdl_net.hash
+new file mode 100644
+index 0000000..56a7484
+--- /dev/null
++++ b/package/sdl_net/sdl_net.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	5f4a7a8bb884f793c278ac3f3713be41980c5eedccecff0260411347714facb4	SDL_net-1.2.8.tar.gz
