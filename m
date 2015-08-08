@@ -1,176 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] tinyxml2: fix line-endings of
-	patches
-Message-ID: <20150808105558.8EA26818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] wireshark: security bump to
+	version 1.12.5
+Message-ID: <20150808105602.BE4057F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ecea41003003bed3f3ecf6fd991077b225f625f5
+commit: http://git.buildroot.net/buildroot/commit/?id=c1aa0bb1097892bc4c5743bc6149668300c451cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit fixes the line endings of the tinyxml2 patches added in
-commits 22f5be171c6f9bb2611e7b87197e9faeabcaab18 and
-0fa452df185545d3781b3015195bee9431496b5d. Thanks to Romain Naour for
-providing the correct version of the patches.
+Fixes:
+CVE-2015-3808 CVE-2015-3809 - The LBMR dissector could go into an
+infinite loop.
+CVE-2015-3811 - The WCP dissector could crash while decompressing data.
+CVE-2015-3812 - The X11 dissector could leak memory.
+CVE-2015-3813 - The packet reassembly code could leak memory.
+CVE-2015-3814 - The IEEE 802.11 dissector could go into an infinite
+loop.
+CVE-2015-3815 - The Android Logcat file parser could crash.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Patch upstream so drop and disable autoreconf.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch |   86 ++++++++++----------
- .../0002-Rename-test-fixed-cmake-warning.patch     |   38 +++++-----
- 2 files changed, 62 insertions(+), 62 deletions(-)
+ ...001-fix-wrong-cflags-for-build-assumption.patch |   38 --------------------
+ package/wireshark/wireshark.hash                   |    6 ++--
+ package/wireshark/wireshark.mk                     |    4 +--
+ 3 files changed, 4 insertions(+), 44 deletions(-)
 
-diff --git a/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
-index fec1abe..52288c5 100644
---- a/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
-+++ b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
-@@ -13,53 +13,53 @@ index 91c61a4..4375bb9 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
- @@ -10,8 +10,8 @@ include(GNUInstallDirs)
-- ################################
-- # set lib version here
-- 
-+ ################################
-+ # set lib version here
-+ 
- -set(GENERIC_LIB_VERSION "2.2.0")
- -set(GENERIC_LIB_SOVERSION "2")
--+set(GENERIC_LIB_VERSION "2.2.0")
--+set(GENERIC_LIB_SOVERSION "2")
-- 
-- 
-- ################################
-++set(GENERIC_LIB_VERSION "2.2.0")
-++set(GENERIC_LIB_SOVERSION "2")
-+ 
-+ 
-+ ################################
- @@ -46,12 +46,8 @@ endif(MSVC)
-- 
-- ################################
-- # Add targets
---set(BUILD_STATIC_LIBS ON CACHE BOOL "Set to ON to build static libraries")
---if(BUILD_STATIC_LIBS)
---	add_library(tinyxml2static STATIC tinyxml2.cpp tinyxml2.h)
---	set_target_properties(tinyxml2static PROPERTIES OUTPUT_NAME tinyxml2)
---endif(BUILD_STATIC_LIBS)
---add_library(tinyxml2 SHARED tinyxml2.cpp tinyxml2.h)
--+option(BUILD_SHARED_LIBS "build shared or static libraries" ON)
--+add_library(tinyxml2 tinyxml2.cpp tinyxml2.h)
-- set_target_properties(tinyxml2 PROPERTIES
--         COMPILE_DEFINITIONS "TINYXML2_EXPORT"
-- 	VERSION "${GENERIC_LIB_VERSION}"
-+ 
-+ ################################
-+ # Add targets
-+-set(BUILD_STATIC_LIBS ON CACHE BOOL "Set to ON to build static libraries")
-+-if(BUILD_STATIC_LIBS)
-+-	add_library(tinyxml2static STATIC tinyxml2.cpp tinyxml2.h)
-+-	set_target_properties(tinyxml2static PROPERTIES OUTPUT_NAME tinyxml2)
-+-endif(BUILD_STATIC_LIBS)
-+-add_library(tinyxml2 SHARED tinyxml2.cpp tinyxml2.h)
-++option(BUILD_SHARED_LIBS "build shared or static libraries" ON)
-++add_library(tinyxml2 tinyxml2.cpp tinyxml2.h)
-+ set_target_properties(tinyxml2 PROPERTIES
-+         COMPILE_DEFINITIONS "TINYXML2_EXPORT"
-+ 	VERSION "${GENERIC_LIB_VERSION}"
- @@ -63,16 +59,11 @@ add_dependencies(test ${TARGET_DATA_COPY})
-- target_link_libraries(test tinyxml2)
-- 
-- 
---if(BUILD_STATIC_LIBS)
---	install(TARGETS tinyxml2 tinyxml2static
---		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
---		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
---		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
---else(BUILD_STATIC_LIBS)
---	install(TARGETS tinyxml2
---		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
---		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
---endif(BUILD_STATIC_LIBS)
--+install(TARGETS tinyxml2
--+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
--+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
--+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
--+
-- install(FILES tinyxml2.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-- 
-- foreach(p LIB INCLUDE)
-+ target_link_libraries(test tinyxml2)
-+ 
-+ 
-+-if(BUILD_STATIC_LIBS)
-+-	install(TARGETS tinyxml2 tinyxml2static
-+-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-+-		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-+-		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+-else(BUILD_STATIC_LIBS)
-+-	install(TARGETS tinyxml2
-+-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-+-		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+-endif(BUILD_STATIC_LIBS)
-++install(TARGETS tinyxml2
-++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++
-+ install(FILES tinyxml2.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-+ 
-+ foreach(p LIB INCLUDE)
- -- 
- 1.9.3
+diff --git a/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch b/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch
+deleted file mode 100644
+index 14cb957..0000000
+--- a/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-AC_WIRESHARK_GCC_CFLAGS_CHECK checks for valid CFLAGS against CC and pushes
+-them into CFLAGS and CFLAGS_FOR_BUILD.
+-This is wrong since CC_FOR_BUILD might be wildly different and older than CC
+-leading to build errors.
+-
+-Upstream status: reported in tracker
+-https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9507
+-
+-Patch status: Interim to fix:
+-http://autobuild.buildroot.net/results/2b1/2b1a0654b649618422d65edf370b82476ba84491/
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura wireshark-1.12.0.orig/acinclude.m4 wireshark-1.12.0/acinclude.m4
+---- wireshark-1.12.0.orig/acinclude.m4	2014-09-04 15:45:38.365255309 -0300
+-+++ wireshark-1.12.0/acinclude.m4	2014-09-04 15:46:23.349810353 -0300
+-@@ -1755,10 +1755,6 @@
+-               # just the new option.
+-               #
+-               CFLAGS="$CFLAGS_saved $GCC_OPTION"
+--              #
+--              # Add it to the flags we use when building build tools.
+--              #
+--              CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
+-             ],
+-             [
+-               AC_MSG_RESULT(yes)
+-@@ -1771,10 +1767,6 @@
+-           # just the new option.
+-           #
+-           CFLAGS="$CFLAGS_saved $GCC_OPTION"
+--          #
+--          # Add it to the flags we use when building build tools.
+--          #
+--          CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
+-         fi
+-       ],
+-       [
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index fa4cf18..35eb1a2 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,3 +1,3 @@
+-# From https://www.wireshark.org/download/SIGNATURES-1.12.4.txt
+-md5	acfa156fd35cb66c867b1ace992e4b5b	wireshark-1.12.4.tar.bz2
+-sha1	dbbd4090c02fe170f35b26fa26d8aba0b399c659	wireshark-1.12.4.tar.bz2
++# From https://www.wireshark.org/download/SIGNATURES-1.12.5.txt
++md5	9ee199dde4f36a3d71f7b81dd6764e93	wireshark-1.12.5.tar.bz2
++sha1	379686f0b6355ae2e6b3f7055578317a07ce5590	wireshark-1.12.5.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 434687c..eb56808 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
  
-diff --git a/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch b/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
-index b712f68..409269a 100644
---- a/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
-+++ b/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
-@@ -13,26 +13,26 @@ index 4375bb9..4a8f91d 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
- @@ -53,10 +53,10 @@ set_target_properties(tinyxml2 PROPERTIES
-- 	VERSION "${GENERIC_LIB_VERSION}"
-- 	SOVERSION "${GENERIC_LIB_SOVERSION}")
-- 
---add_executable(test xmltest.cpp)
---add_dependencies(test tinyxml2)
---add_dependencies(test ${TARGET_DATA_COPY})
---target_link_libraries(test tinyxml2)
--+add_executable(xmltest xmltest.cpp)
--+add_dependencies(xmltest tinyxml2)
--+add_dependencies(xmltest ${TARGET_DATA_COPY})
--+target_link_libraries(xmltest tinyxml2)
-- 
-- 
-- install(TARGETS tinyxml2
-+ 	VERSION "${GENERIC_LIB_VERSION}"
-+ 	SOVERSION "${GENERIC_LIB_SOVERSION}")
-+ 
-+-add_executable(test xmltest.cpp)
-+-add_dependencies(test tinyxml2)
-+-add_dependencies(test ${TARGET_DATA_COPY})
-+-target_link_libraries(test tinyxml2)
-++add_executable(xmltest xmltest.cpp)
-++add_dependencies(xmltest tinyxml2)
-++add_dependencies(xmltest ${TARGET_DATA_COPY})
-++target_link_libraries(xmltest tinyxml2)
-+ 
-+ 
-+ install(TARGETS tinyxml2
- @@ -76,4 +76,4 @@ endforeach()
-- configure_file(tinyxml2.pc.in tinyxml2.pc @ONLY)
-- install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tinyxml2.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-- 
---#add_test(test ${SAMPLE_NAME} COMMAND $<TARGET_FILE:${SAMPLE_NAME}>)
--+#add_test(xmltest ${SAMPLE_NAME} COMMAND $<TARGET_FILE:${SAMPLE_NAME}>)
-+ configure_file(tinyxml2.pc.in tinyxml2.pc @ONLY)
-+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tinyxml2.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-+ 
-+-#add_test(test ${SAMPLE_NAME} COMMAND $<TARGET_FILE:${SAMPLE_NAME}>)
-++#add_test(xmltest ${SAMPLE_NAME} COMMAND $<TARGET_FILE:${SAMPLE_NAME}>)
- -- 
- 1.9.3
- 
+-WIRESHARK_VERSION = 1.12.4
++WIRESHARK_VERSION = 1.12.5
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+ WIRESHARK_LICENSE_FILES = COPYING
+ WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
+-# For wrong cflags patch
+-WIRESHARK_AUTORECONF = YES
+ WIRESHARK_CONF_ENV = \
+ 	LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+ 	ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
