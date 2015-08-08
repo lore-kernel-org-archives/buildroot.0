@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 12:06:50 +0200
-Subject: [Buildroot] [PATCH] package/dawgdic: needs gcc >= 4.7
-In-Reply-To: <1439026543-25909-1-git-send-email-romain.naour@openwide.fr>
-References: <1439026543-25909-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150808120650.3511a2e5@free-electrons.com>
+Date: Sat, 8 Aug 2015 12:12:58 +0200
+Subject: [Buildroot] [git commit] fan-ctrl: re-enable package
+Message-ID: <20150808101404.B21B5816A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: http://git.buildroot.net/buildroot/commit/?id=39f3f4a00ad029624238b500cf9d9843bfa416eb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  8 Aug 2015 11:35:43 +0200, Romain Naour wrote:
-> std::strtoll is only supported since C++11.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/cae/cae3cda9be779ea8359f94d13bbbca97e68495ca/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  package/dawgdic/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+SourceForge is working again, and Peter has copied the file to
+fan-ctrl.c on sources.buildroot.org so that it gets found if
+SourceForge breaks again. Therefore this commit re-enables the
+fan-ctrl package.
 
-Applied, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fan-ctrl/Config.in |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/fan-ctrl/Config.in b/package/fan-ctrl/Config.in
+index fa23aed..8696316 100644
+--- a/package/fan-ctrl/Config.in
++++ b/package/fan-ctrl/Config.in
+@@ -1,9 +1,6 @@
+ config BR2_PACKAGE_FAN_CTRL
+ 	bool "fan-ctrl"
+ 	depends on BR2_USE_MMU # fork()
+-	# SourceForge is down, not backup location, let's disable for
+-	# now.
+-	depends on BR2_BROKEN
+ 	help
+ 	  Fan-ctrl is a little daemon that controls the speed of one
+ 	  or more system or CPU fans. It does so by monitoring
