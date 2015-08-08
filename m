@@ -1,42 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] stunnel: bump to version 5.18
-Message-ID: <20150808105608.8A7E27FB02@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv: add qt5 support
+Message-ID: <20150808105622.0E5F07FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b5962523bb47c551c24c386460ca0043f821ba4
+commit: http://git.buildroot.net/buildroot/commit/?id=a2afd565947b22e36046026f2334da3d6af42b66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Starting with the 2.4.6 release, OpenCV supports either Qt4 or Qt5 as GUI
+toolkit, so add Qt5 in the GUI toolkit choice.
+
+When Qt4 is enabled (and thus Qt5 is hidden and disabled), no need to
+show a comment stating "Qt5 support needs Qt5", because Qt5 is not
+selectable.
+
+Conversely, when Qt5 is enabled and Qt4 is not, then no need to show a
+comment stating "Qt4 support needs Qt4", because enabling Qt4 would
+disable Qt5.
+
+So, we only show the comments when neither toolkit is enabled.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: split-out the Qt5 hunk from the
+ switch-selects-to-depends hunk]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.hash |    4 ++--
- package/stunnel/stunnel.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/opencv/Config.in |   16 +++++++++++++++-
+ package/opencv/opencv.mk |   11 +++++++++--
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index e45e691..91b297c 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000100.html
--sha256	c3e79e582621a0827125e35e1c00450190104fc02dc3c5274cb02b05859fd472	stunnel-5.17.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-June/005094.html
-+sha256	0532c0a2f8de3da1ab625e384146501ce5936fac63d01561c3a9bf652b692317	stunnel-5.18.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 3f5b9aa..4674694 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 5dd39ca..5e8f189 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -81,7 +81,21 @@ config BR2_PACKAGE_OPENCV_WITH_QT
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).17
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).18
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ comment "qt4 support needs qt"
+ 	depends on BR2_USE_MMU # qt
+-	depends on !BR2_PACKAGE_QT
++	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
++
++config BR2_PACKAGE_OPENCV_WITH_QT5
++	bool "qt5"
++	depends on BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE
++	select BR2_PACKAGE_QT5BASE_CONCURRENT
++	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_WIDGETS
++	help
++	  Use Qt5 with base, concurrent, test, gui and widgets components, as GUI
++	  toolkit.
++
++comment "qt5 support needs qt5"
++	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
+ 
+ endchoice
+ 
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 0e5cf77..98e1614 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -266,11 +266,18 @@ else
+ OPENCV_CONF_OPTS += -DWITH_PNG=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT)$(BR2_PACKAGE_OPENCV_WITH_QT5),)
++OPENCV_CONF_OPTS += -DWITH_QT=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+ OPENCV_CONF_OPTS += -DWITH_QT=4
+ OPENCV_DEPENDENCIES += qt
+-else
+-OPENCV_CONF_OPTS += -DWITH_QT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT5),y)
++OPENCV_CONF_OPTS += -DWITH_QT=5
++OPENCV_DEPENDENCIES += qt5base
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_TIFF),y)
