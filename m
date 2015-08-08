@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:37 -0000
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libFS: bump
-	version to 1.0.7
-Message-ID: <20150808105629.C3E157FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] binutils: use binutils 2.24 by
+	default on the target
+Message-ID: <20150808105630.897337FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=804d46d0c7559a4ae7a516b20f0d2973f5daeace
+commit: http://git.buildroot.net/buildroot/commit/?id=cc8d59ad4eac7b1e16ed21846415b3d79adbec99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xlib_libFS/xlib_libFS.hash |    4 ++--
- package/x11r7/xlib_libFS/xlib_libFS.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+When binutils is not built for the host, binutils.mk decides of the
+version to be used when building binutils for the target. We're still
+using the old 2.22 binutils version, but it's time to bump up to 2.24,
+which we already use as the default version for the host.
 
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.hash b/package/x11r7/xlib_libFS/xlib_libFS.hash
-index 390aa0c..786d147 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.hash
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2014-March/056484.html
--sha256	9007fcfbd37bfa6ede4000ec4b5c2dc6dc0f52789358361b43f68e9ae4d6aed7	libFS-1.0.6.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002588.html
-+sha256	2e9d4c07026a7401d4fa4ffae86e6ac7fec83f50f3268fa85f52718e479dc4f3	libFS-1.0.7.tar.bz2
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index 18b3fd2..a3c58b9 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/binutils/binutils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 4ce11da..009a900 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+ BINUTILS_VERSION = arc-2015.06-rc1
+ else
+-BINUTILS_VERSION = 2.22
++BINUTILS_VERSION = 2.24
+ endif
+ endif # BINUTILS_VERSION
  
--XLIB_LIBFS_VERSION = 1.0.6
-+XLIB_LIBFS_VERSION = 1.0.7
- XLIB_LIBFS_SOURCE = libFS-$(XLIB_LIBFS_VERSION).tar.bz2
- XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFS_LICENSE = MIT
