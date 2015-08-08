@@ -1,41 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] libgpgme: bump to version 1.5.5
-Message-ID: <20150808105605.CDD447FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pure-ftpd: fix hash and use
+	.bz2 tarball
+Message-ID: <20150808105616.84BDC7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb3c787a5cb3571774e70fc7ce28c43cb02cc41b
+commit: http://git.buildroot.net/buildroot/commit/?id=84f6eb9fe3467abbd94a6b481ae5106679d61e24
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+For some reason, the hash file added in commit
+ee6c9f5a1bc1995d968214345c011a44a3c145c8 by Gustavo turns out to be
+wrong, so this commit replaces it with the proper hash, also added
+after checking the GPG signature.
+
+While at it, we switch to using a .bz2 tarball.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/c44/c441f35119191f47dd5fae96fd76827024e50329/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgpgme/libgpgme.hash |    2 +-
- package/libgpgme/libgpgme.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pure-ftpd/pure-ftpd.hash |    2 +-
+ package/pure-ftpd/pure-ftpd.mk   |    1 +
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index a6d2d44..a7efbf6 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
+diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
+index d0d35ac..d1f812e 100644
+--- a/package/pure-ftpd/pure-ftpd.hash
++++ b/package/pure-ftpd/pure-ftpd.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	bb38c0ec8815c9e94e6047b484984808a8dad9d6bec8df33dc5339fd55ffea6c	gpgme-1.5.4.tar.bz2
-+sha256	0b3d3d5107680c594777aae65882a1ff6dd1ba629a83432e719c8b82a743c207	gpgme-1.5.5.tar.bz2
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 79b44bd..ec64d37 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256	b72456def52c71baf8d0367ca6b7aba10796e2883a76eeb41f58f2f06f7087ba	pure-ftpd-1.0.41.tar.gz
++sha256	1d48f650f366b8151d86b86c79f4bb874e95143bdac0e767038eda832d28a010	pure-ftpd-1.0.41.tar.bz2
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 3c59bb1..8269327 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -6,6 +6,7 @@
  
--LIBGPGME_VERSION = 1.5.4
-+LIBGPGME_VERSION = 1.5.5
- LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPLv2.1+
+ PURE_FTPD_VERSION = 1.0.41
+ PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
++PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
+ PURE_FTPD_LICENSE = ISC
+ PURE_FTPD_LICENSE_FILES = COPYING
+ PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
