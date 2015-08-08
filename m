@@ -1,42 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] imagemagick: bump to version
-	6.9.1-6
-Message-ID: <20150808105613.43BF67F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] directfb: add an option for
+	debugging support
+Message-ID: <20150808105612.C42927F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02e217d67262c8b8ac514004a20aa8326e98b83d
+commit: http://git.buildroot.net/buildroot/commit/?id=b488f356ed1a8ed9bd84d7e32203fe6730f261b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+DirectFB provides two options for debug:
+* --enable-debug-support (default is yes)
+* --enable-debug (default is no)
+The first one provides the functions to print debug information. These
+functions can be called inside DirectFB, or by an external DirectFB
+driver in another package.
+The second one enables verbose mode in DirectFB, using these functions.
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 7ac3298..a9803a0 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 74973478058069ce44040ff76b61df713d70adcadfd207836cc0622cadf1e4bf ImageMagick-6.9.1-4.tar.xz
-+sha256	8d83934df129833f9e8696017182d8bbca8189842bbd2705c24729fed8db3358	ImageMagick-6.9.1-6.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 298d0a8..a1860df 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Buildroot currently provides an option for the second one only. The
+first one - which is necessary for the second one - is always enabled,
+because this is the default value.
+
+The new option (BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT) makes it possible
+to disable debugging support (--disable-debug-support) in order to
+build the library with no debug feature at all.
+
+When debugging support is disabled, the target installation path of
+drivers (/usr/lib/directfb-<version>) is suffixed with -pure. The
+public library (/usr/lib/libdirectfb.so) remains unchanged.
+
+Some external DirectFB drivers will install into
+/usr/lib/directfb-<version>-pure in release mode. For that reason, it
+is important that DirectFB can be configured to use this directory.
+
+Signed-off-by: C??dric Marie <cedric.marie@openmailbox.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/directfb/Config.in   |   14 ++++++++++++++
+ package/directfb/directfb.mk |    5 +++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
+
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 7759f8f..2b0d5c7 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -20,8 +20,22 @@ config BR2_PACKAGE_DIRECTFB_MULTI
+ comment "directfb multi application needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
  
--IMAGEMAGICK_VERSION = 6.9.1-4
-+IMAGEMAGICK_VERSION = 6.9.1-6
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
++config BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
++	bool "directfb debugging support"
++	default y
++	help
++	  Compile DirectFB with debugging support. It provides
++	  functions to print debug information, for DirectFB as well as
++	  external DirectFB drivers.
++
++	  When disabled, DirectFB does not print any debug information.
++	  The drivers will be installed to and loaded from
++	  /usr/lib/directfb-<version>-pure instead of
++	  /usr/lib/directfb-<version>.
++
+ config BR2_PACKAGE_DIRECTFB_DEBUG
+ 	bool "directfb debugging"
++	depends on BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT
+ 	help
+ 	  Compile DirectFB with lots of debug output
+ 
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index e3dc506..ad1dd18 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -39,9 +39,14 @@ DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
+ DIRECTFB_DEPENDENCIES += linux-fusion
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
++DIRECTFB_CONF_OPTS += --enable-debug-support
+ ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG),y)
+ DIRECTFB_CONF_OPTS += --enable-debug
+ endif
++else
++DIRECTFB_CONF_OPTS += --disable-debug-support
++endif
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
+ DIRECTFB_CONF_OPTS += --enable-trace
