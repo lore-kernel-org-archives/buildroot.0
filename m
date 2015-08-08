@@ -1,62 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] openssl: support building the
-	binary without MMU
-Message-ID: <20150808105618.1A3E5818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libpng: bump to version 1.6.17
+Message-ID: <20150808105604.C565F7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8937ade4bc29fd8a502b8e9cd0b392a7e76fa30
+commit: http://git.buildroot.net/buildroot/commit/?id=65b25d11df7b3f17121a28e486fbec3a14fdfdb5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The commit 720893b62510438237b9923d744dd079ddb4f67d "openssl: disable
-apps for NOMMU" prevented the openssl binary from being built without
-MMU in order to fix a build failure without fork(). However, openssl is
-designed to support the lack of fork() with -DHAVE_FORK=0, so allow the
-openssl binary to be enabled without MMU thanks to this option.
-
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssl/Config.in  |    3 ---
- package/openssl/openssl.mk |    4 ++++
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libpng/libpng.hash |    6 +++---
+ package/libpng/libpng.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 07859ca..d147c07 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -13,15 +13,12 @@ if BR2_PACKAGE_OPENSSL
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index d0027c7..dd4af06 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.16/
+-md5	23b7286b5d4a86de950fd2ffc5cac742	libpng-1.6.16.tar.xz
+-sha1	31855a8438ae795d249574b0da15b34eb0922e13	libpng-1.6.16.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.17/
++md5	430a9b76b78533235cd4b9b26ce75c7e	libpng-1.6.17.tar.xz
++sha1	6394f3c0847c3b9ea69f4f972dddae3786592050	libpng-1.6.17.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 2f53a95..08d8196 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_OPENSSL_BIN
- 	bool "openssl binary"
--	# uses fork()
--	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  Install the openssl binary to the target file system. This is a
- 	  command line tool for doing various crypthographic stuff.
- 
- comment "openssl binary needs a toolchain w/ dynamic library"
--	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_OPENSSL_ENGINES
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index fd8904d..34a9830 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -22,6 +22,10 @@ endef
- OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
- endif
- 
-+ifeq ($(BR2_USE_MMU),)
-+OPENSSL_CFLAGS += -DHAVE_FORK=0
-+endif
-+
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
- OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
- OPENSSL_DEPENDENCIES += cryptodev-linux
+-LIBPNG_VERSION = 1.6.16
++LIBPNG_VERSION = 1.6.17
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
