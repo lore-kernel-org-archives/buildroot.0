@@ -1,40 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{12,
-	18}.x series
-Message-ID: <20150808105611.6FBCD8030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-netifaces: add hash file
+Message-ID: <20150808105611.80F467F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8528b892dfe3fd399473036070cbf8b83232c4cd
+commit: http://git.buildroot.net/buildroot/commit/?id=af8d0a6399807a91564530a9e0376162bf6d40d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-netifaces/python-netifaces.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 043a3c7..28b8929 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -203,13 +203,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
+new file mode 100644
+index 0000000..aebfdf6
+--- /dev/null
++++ b/package/python-netifaces/python-netifaces.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=36da76e2cfadd24cc7510c2c0012eb1e, sha256 locally computed
++md5     36da76e2cfadd24cc7510c2c0012eb1e                                  netifaces-0.10.4.tar.gz
++sha256  9656a169cb83da34d732b0eb72b39373d48774aee009a3d1272b7ea2ce109cde  netifaces-0.10.4.tar.gz
