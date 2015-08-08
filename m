@@ -1,47 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] libupnpp: fix static linking
-	issue with libcurl
-Message-ID: <20150808105557.555A6818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openldap: fix static link with
+	openssl
+Message-ID: <20150808105557.2B99681778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7638ca23229bc9dfe3696f562afc63bda6bd1f0
+commit: http://git.buildroot.net/buildroot/commit/?id=660dff80f854b05f6c7e28e2e9059d8f58fb6a13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Use pkg-config to get openssl link dependencies.
+
 Fixes:
-http://autobuild.buildroot.net/results/f38/f383bf4d7572a7dd59d382cd06a9baeb37e9161c/
-http://autobuild.buildroot.net/results/d93/d934871d1b192706cd9163715c5ebcd96deff2b8/
+http://autobuild.buildroot.net/results/dd3/dd3821e713b7da7cde0f059409fba46371c8bc40/
+http://autobuild.buildroot.net/results/d60/d60c8b4522e99cf385ee41aa20a1d49deb59c5fb/
+http://autobuild.buildroot.net/results/b41/b41c043fb3b2fad1d9cea0a95b512fb4942b5b19/
 
-Libcurl optionally links to a number of libraries that have to be taken into
-consideration when linking statically.
+and more.
 
-Use pkg-config to get the correct libcurl link line, and also use it for
-libupnp instead of the hardcoded list.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnpp/libupnpp.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/openldap/openldap.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index 853a724..defc16a 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -12,9 +12,11 @@ LIBUPNPP_INSTALL_STAGING = YES
- LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 991d369..68464ab 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -10,6 +10,7 @@ OPENLDAP_SITE = ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+ OPENLDAP_LICENSE_FILES = LICENSE
+ OPENLDAP_INSTALL_STAGING = YES
++OPENLDAP_DEPENDENCIES = host-pkgconf
  
- # configure script fails to link against the dependencies of libupnp
--# causing upnp detection to fail when statically linking
-+# and libcurl causing detection to fail when statically linking
- ifeq ($(BR2_STATIC_LIBS),y)
--LIBUPNPP_CONF_ENV += LIBS='-lthreadutil -lixml -pthread'
-+LIBUPNPP_DEPENDENCIES += host-pkgconf
-+LIBUPNPP_CONF_ENV += \
-+	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libupnp libcurl)'
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+@@ -30,6 +31,7 @@ endif
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_MP = bignum
+ OPENLDAP_DEPENDENCIES += openssl
++OPENLDAP_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)"
+ else ifeq ($(BR2_PACKAGE_GMP),y)
+ OPENLDAP_MP = gmp
+ OPENLDAP_DEPENDENCIES += gmp
+@@ -37,7 +39,7 @@ else
+ OPENLDAP_MP = longlong
  endif
  
- $(eval $(autotools-package))
+-OPENLDAP_CONF_ENV = ac_cv_func_memcmp_working=yes
++OPENLDAP_CONF_ENV += ac_cv_func_memcmp_working=yes
+ 
+ OPENLDAP_CONF_OPTS += \
+ 	--enable-syslog \
