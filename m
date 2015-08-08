@@ -1,33 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] system/device_table.txt:
-	/etc/random-seed is no more
-Message-ID: <20150808105623.E916B7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] system/skeleton: don't use
+	random-seed from a read-only fs
+Message-ID: <20150808105623.D30FA7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b47c7f095fbb545ce38654ed276bfdcf73e5913
+commit: http://git.buildroot.net/buildroot/commit/?id=f33f766860a9ff6a62b474343d7859b702b2d713
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-So don't try to set the permissions of it.
+A random-seed from a read-only filesystem is useless.
 
+Also, drop the check for /etc/random-seed existence; it must exist after a
+touch.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/device_table.txt |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ system/skeleton/etc/init.d/S20urandom |   17 +++++++----------
+ 1 files changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/system/device_table.txt b/system/device_table.txt
-index f018e63..dc1af51 100644
---- a/system/device_table.txt
-+++ b/system/device_table.txt
-@@ -11,7 +11,6 @@
- /etc					d	755	0	0	-	-	-	-	-
- /root					d	700	0	0	-	-	-	-	-
- /var/www				d	755	33	33	-	-	-	-	-
--/etc/random-seed			f	600	0	0	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
- /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+diff --git a/system/skeleton/etc/init.d/S20urandom b/system/skeleton/etc/init.d/S20urandom
+index f73cea5..36277ba 100755
+--- a/system/skeleton/etc/init.d/S20urandom
++++ b/system/skeleton/etc/init.d/S20urandom
+@@ -11,22 +11,19 @@
+ 
+ case "$1" in
+ 	start|"")
+-		if [ "$VERBOSE" != no ]
+-		then
+-			echo -n "Initializing random number generator... "
+-		fi
+-		# Load and then save 512 bytes,
+-		# which is the size of the entropy pool
+-		if [ -f /etc/random-seed ]
+-		then
+-			cat /etc/random-seed >/dev/urandom
+-		fi
+ 		# check for read only file system
+ 		if ! touch /etc/random-seed 2>/dev/null
+ 		then
+ 			echo "read-only file system detected...done"
+ 			exit
+ 		fi
++		if [ "$VERBOSE" != no ]
++		then
++			echo -n "Initializing random number generator... "
++		fi
++		# Load and then save 512 bytes,
++		# which is the size of the entropy pool
++		cat /etc/random-seed >/dev/urandom
+ 		rm -f /etc/random-seed
+ 		umask 077
+ 		dd if=/dev/urandom of=/etc/random-seed count=1 \
