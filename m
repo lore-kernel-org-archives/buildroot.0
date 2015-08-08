@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:06 -0000
-Subject: [Buildroot] [git commit branch/next] jasper: Disable debugging when
-	building for xtensa
-Message-ID: <20150808105559.8E0527FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libgtk2: bump to version
+	2.24.28
+Message-ID: <20150808105604.97FF57F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71d9b0c1f06896f113b09e941aa84d979bff5710
+commit: http://git.buildroot.net/buildroot/commit/?id=3541591546314a07183c5bc7fe90395d841fbfef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-xtensa gcc is not able to generate correct code when compiling with -O0
-enabled by --enable-debug. Instead of disabling package build it with
---disable-debug.
-
-Fixes:
-  http://autobuild.buildroot.net/results/5d17055027055ffd33fcd28b208130afb26343c9/
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/libgtk2/libgtk2.hash |    4 ++--
+ package/libgtk2/libgtk2.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index b2da07d..db86ae8 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -14,4 +14,10 @@ JASPER_LICENSE_FILES = LICENSE
- # needed to fix rpath issue (http://autobuild.buildroot.net/results/307/307cac65287420252a5bb64715d9a1edd90e72fa/)
- JASPER_AUTORECONF = YES
+diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
+index c2189f8..21e8eb7 100644
+--- a/package/libgtk2/libgtk2.hash
++++ b/package/libgtk2/libgtk2.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.27.sha256sum
+-sha256	20cb10cae43999732a9af2e9aac4d1adebf2a9c2e1ba147050976abca5cd24f4	gtk+-2.24.27.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.28.sha256sum
++sha256	b2c6441e98bc5232e5f9bba6965075dcf580a8726398f7374d39f90b88ed4656	gtk+-2.24.28.tar.xz
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index fbc0d08..0617b9e 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# Xtensa gcc is unable to generate correct code with -O0 enabled by
-+# --enable-debug. Allow package build but disable debug.
-+ifeq ($(BR2_xtensa)$(BR2_ENABLE_DEBUG),yy)
-+JASPER_CONF_OPTS += --disable-debug
-+endif
-+
- $(eval $(autotools-package))
+ LIBGTK2_VERSION_MAJOR = 2.24
+-LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).27
++LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).28
+ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_INSTALL_STAGING = YES
