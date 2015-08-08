@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:02 -0000
-Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.3.16
-Message-ID: <20150808105630.55F317FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pkg-generic.mk: don't depend
+	on external package permissions
+Message-ID: <20150808105630.7220D7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adddac455894545fd0152d37669910ac51b38c2b
+commit: http://git.buildroot.net/buildroot/commit/?id=e8810036a8714c88573983878859ed994aa8d3b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reset permissions for rsynced packages (when using OVERRIDE_SRCDIR) to
+755/644. We do this under the assumption that source files shouldn't
+care about their permissions, except possibly for the exec bit.
+
+This guarantees that if a package uses 'rsync -a' or 'cp -p' to copy
+a file from its build dir to the target, it'll end up with the same
+permissions on the target every time.
+
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnutls/gnutls.hash |    2 +-
- package/gnutls/gnutls.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 3009478..620caae 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8961227852911a1974e15bc017ddbcd4779876c867226d199f06648d8b27ba4b	gnutls-3.3.15.tar.xz
-+sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 9ccc23e..4593034 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index e85b4bf..beff2d7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -102,7 +102,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+-	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
++	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
