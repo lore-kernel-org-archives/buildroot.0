@@ -1,35 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] package/shairport-sync: bump
-	to version 2.2.4
-Message-ID: <20150808105609.7AA4D7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox: make
+	matchbox-common a real package
+Message-ID: <20150808105606.74BB37F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=678f386f927226bb7604c968e812ca77b1bc16a5
+commit: http://git.buildroot.net/buildroot/commit/?id=599f03372593e203a797005d1c25d45f564c3419
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Amongst other things, the new release fixes the build with musl.
+Currently, matchbox-common is treated as if it were an option of the
+matchbox package.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+But that's not true, since it is a real package all by itself, with its
+own archive and its own buildsystem.
+
+So, make it a real package.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/shairport-sync/shairport-sync.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/matchbox/Config.in                 |   11 +----------
+ package/matchbox/matchbox-common/Config.in |    9 +++++++++
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index bfcdb35..881cced 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 39aff3c..ead2649 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -23,16 +23,7 @@ source "package/matchbox/matchbox-lib/Config.in"
+ source "package/matchbox/matchbox-wm/Config.in"
+ source "package/matchbox/matchbox-panel/Config.in"
+ source "package/matchbox/matchbox-desktop/Config.in"
+-
+-config BR2_PACKAGE_MATCHBOX_COMMON
+-	bool "Matchbox session common files"
+-	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
+-	help
+-	  Common desktop folders and matchbox-session script.
+-
+-config BR2_PACKAGE_MATCHBOX_COMMON_PDA
+-	bool "PDA style desktop folders"
+-	depends on BR2_PACKAGE_MATCHBOX_COMMON
++source "package/matchbox/matchbox-common/Config.in"
  
--SHAIRPORT_SYNC_VERSION = 2.2.3
-+SHAIRPORT_SYNC_VERSION = 2.2.4
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "Matchbox Virtual Keyboard"
+diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox/matchbox-common/Config.in
+new file mode 100644
+index 0000000..7d22d05
+--- /dev/null
++++ b/package/matchbox/matchbox-common/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_MATCHBOX_COMMON
++	bool "Matchbox session common files"
++	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
++	help
++	  Common desktop folders and matchbox-session script.
++
++config BR2_PACKAGE_MATCHBOX_COMMON_PDA
++	bool "PDA style desktop folders"
++	depends on BR2_PACKAGE_MATCHBOX_COMMON
