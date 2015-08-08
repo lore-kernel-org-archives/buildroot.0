@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] nbd: security bump to version
-	3.11
-Message-ID: <20150808105602.032A77FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] janus-gateway: disable for
+	static build
+Message-ID: <20150808105601.E2D947F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65a7964716855aff9e7071074a44c58c89d481fa
+commit: http://git.buildroot.net/buildroot/commit/?id=f2888955ed21c54a3a887d5757b35ef18ba5e669
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-CVE-2015-0847 nbd-server denial of service due to unsafe signal handlers
+janus-gateway requires dlopen().
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/092/092aac2b8abe0edd868a7e0cc59cdaaf28ca4ad5/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nbd/nbd.hash |    5 +++--
- package/nbd/nbd.mk   |    2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/janus-gateway/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-index 1136050..306e11b 100644
---- a/package/nbd/nbd.hash
-+++ b/package/nbd/nbd.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  48a223770eb136603dc266587d9a37ed5024132e09e2c8484096d4c46cfed3e2  nbd-3.8.tar.xz
-+# From http://sourceforge.net/projects/nbd/files/nbd/3.11/
-+md5	73d11644a28b9f335292cdb3bdc4b74b	nbd-3.11.tar.xz
-+sha1	a9823a656ef3411c7a14f3c1ae843d92a9141476	nbd-3.11.tar.xz
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index f512f7a..fee2cf8 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
+index 6ba5f6a..035ee6c 100644
+--- a/package/janus-gateway/Config.in
++++ b/package/janus-gateway/Config.in
+@@ -10,12 +10,13 @@ config BR2_PACKAGE_JANUS_GATEWAY
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libmicrohttpd
+ 	depends on BR2_USE_WCHAR # libnice -> libglib2
+ 	depends on BR2_USE_MMU # libnice
++	depends on !BR2_STATIC_LIBS # dlopen
+ 	help
+ 	  Janus is an open source, general purpose, WebRTC gateway
+ 	  designed and developed by Meetecho.
  
--NBD_VERSION = 3.8
-+NBD_VERSION = 3.11
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPTS = --enable-lfs
+ 	  https://github.com/meetecho/janus-gateway
+ 
+-comment "janus-gateway needs a toolchain w/ threads, wchar"
++comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
