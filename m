@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] libcurl: bump to version 7.43.0
-Message-ID: <20150808105611.903B77F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libfslparser: bump version to
+	4.0.2
+Message-ID: <20150808105626.CE83C7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc91ffa2f90b759dfa5f438145f8acf55f6db0d8
+commit: http://git.buildroot.net/buildroot/commit/?id=91883109285bc9799bf4320a089b7022b8259ebc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 7.43.0
-- Update hash file
+New feature for 4.0.2 version:
+* Enhanced Metadata supporting in MP4, MKV, AVI, ASF parser.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/550fb2de655f3bdbb057c41b55328b0ce2919bb9
+
+This package has been implicitely tested through gstreamer as the 0.10 plugin
+relies on it:
+ # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcurl/libcurl.hash |    2 +-
- package/libcurl/libcurl.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libfslparser/libfslparser.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 59a458e..ee68922 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	e2905973391ec2dfd7743a8034ad10eeb58dab8b3a297e7892a41a7999cac887	curl-7.42.1.tar.bz2
-+sha256  baa654a1122530483ccc1c58cc112fec3724a82c11c6a389f1e6a37dc8858df9  curl-7.43.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 0ce2dfd..29a888c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
+index 706a10e..50f0bf6 100644
+--- a/package/libfslparser/libfslparser.mk
++++ b/package/libfslparser/libfslparser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.42.1
-+LIBCURL_VERSION = 7.43.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-LIBFSLPARSER_VERSION = 3.0.11
++LIBFSLPARSER_VERSION = 4.0.2
+ LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+ LIBFSLPARSER_INSTALL_STAGING = YES
