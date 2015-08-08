@@ -1,51 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:05 -0000
-Subject: [Buildroot] [git commit branch/next] docs/website: link to the Free
-	Electrons training materials
-Message-ID: <20150808105604.629CF7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gpsd: requires shared library
+	support
+Message-ID: <20150808105559.675667FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97f6d7dcb5f6e74420008edb0875288331a29329
+commit: http://git.buildroot.net/buildroot/commit/?id=db989f89c9fb1ebc3997d8a3c517948392611d77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/docs.html |   20 +++++++++++++++++++-
- 1 files changed, 19 insertions(+), 1 deletions(-)
+gpsd always tries to build a shared library, so make it 'depends on
+!BR2_STATIC_LIBS'. We also propagate this to the only gpsd reverse
+dependency, the location support of sconeserver. While we're at it, we
+add a comment indicating the dependencies of this location support,
+which was missing.
 
-diff --git a/docs/website/docs.html b/docs/website/docs.html
-index c44ad8b..3bd3172 100644
---- a/docs/website/docs.html
-+++ b/docs/website/docs.html
-@@ -24,7 +24,25 @@ things. It is available as:</p>
- </ul>
+Fixes:
+
+  http://autobuild.buildroot.org/results/f52/f5261a0933f9b5449d1f4e5cab1bb02e7154e683/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gpsd/Config.in        |    6 ++++--
+ package/sconeserver/Config.in |    6 ++++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index fac8756..fa8b8f6 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -1,6 +1,6 @@
+-comment "gpsd needs a toolchain w/ threads"
++comment "gpsd needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on !BR2_microblaze
  
- <p>If you find any errors (factual, grammatical, whatever) please
--report them to us.</p>
-+  report them to us.</p>
-+
-+<h2>Training</h2>
-+
-+<p><a href="http://www.free-electrons.com">Free Electrons</a> offers a
-+complete <a href="http://free-electrons.com/training/buildroot/">3-days
-+training course on Buildroot</a>. They also make the training
-+materials freely available:</p>
-+
-+<ul>
-+  <li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf">slides
-+      (PDF)</a></li>
-+  <li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf">practical
-+      labs (PDF)</a></li>
-+  <li><a href="http://free-electrons.com/doc/training/buildroot/buildroot-labs.tar.xz">practical
-+      labs data (.tar.xz)</a></li>
-+</ul>
-+
-+<h2>Getting support</h2>
+ config BR2_PACKAGE_GPSD
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_GPSD
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# Always tries to build a shared library
++	depends on !BR2_STATIC_LIBS
+ 	# triggers gcc ice
+ 	depends on !BR2_microblaze
+ 	help
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index c7d602f..f16e683 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -64,10 +64,16 @@ config BR2_PACKAGE_SCONESERVER_LOCATION
+ 	depends on BR2_USE_MMU # gpsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
+ 	depends on !BR2_microblaze # gpsd
++	depends on !BR2_STATIC_LIBS # gpsd
+ 	select BR2_PACKAGE_GPSD
+ 	help
+ 	  Location module for Sconeserver
  
- <p>If you find that you need help with Buildroot, you can ask for
- help:</p>
++comment "location support needs a toolchain w/ theads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBRARY
++	depends on !BR2_microblaze
++
+ config BR2_PACKAGE_SCONESERVER_LETTUCE
+ 	bool "lettuce"
+ 	help
