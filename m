@@ -1,43 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:40 -0000
-Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: don't
-	enforce check for config file when not building
-Message-ID: <20150808105632.10EC1818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] skeleton: apply locale
+	settings in user shells
+Message-ID: <20150808105631.794457FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61ca162f5bf052f70c6ac356358120329e4b1c6d
+commit: http://git.buildroot.net/buildroot/commit/?id=d3c8da4dd4a0094f7ffd337a1d874d3deae77693
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, this is triggering the error message:
-    make randconfig
-    make source
+Add /etc/profile.d/locale.sh script from Arch Linux to /etc/profile.
+This script looks for locale.conf, sources it, and exports the LANG and
+LC_* variables.
 
-Only limit the check to enforce a config file being set to when we are
-actually building, like is done in the various kconfig-using packages.
+[Arnout: put in /etc/profile in the skeleton rather than making it
+ systemd specific.]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-kconfig.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ system/skeleton/etc/profile |   23 +++++++++++++++++++++++
+ 1 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index c86c340..f708875 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -90,9 +90,11 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index 3812dda..c7438fe 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -35,6 +35,29 @@ if [ "$PS1" ]; then
  
- # FOO_KCONFIG_FILE is required
-+ifeq ($$(BR_BUILDING),y)
- ifeq ($$($(2)_KCONFIG_FILE),)
- $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
- endif
-+endif
+ fi;
  
- # Configuration editors (menuconfig, ...)
- #
++if [ -z "$LANG" ]; then
++  if [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
++    . "$HOME/.config/locale.conf"
++  elif [ -r /etc/locale.conf ]; then
++    . /etc/locale.conf
++  fi
++fi
++
++LANG=${LANG:-C}
++export LANG
++[ -n "$LC_CTYPE" ]          && export LC_CTYPE
++[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
++[ -n "$LC_TIME" ]           && export LC_TIME
++[ -n "$LC_COLLATE" ]        && export LC_COLLATE
++[ -n "$LC_MONETARY" ]       && export LC_MONETARY
++[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
++[ -n "$LC_PAPER" ]          && export LC_PAPER
++[ -n "$LC_NAME" ]           && export LC_NAME
++[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
++[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
++[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
++[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
++
+ # Source configuration files from /etc/profile.d
+ for i in /etc/profile.d/*.sh ; do
+     if [ -r "$i" ]; then
