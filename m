@@ -1,50 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 12:11:20 +0200
-Subject: [Buildroot] [git commit branch/next] mpd: update to use the gcc
-	version dependency mechanism
-Message-ID: <20150808105653.B74AD7FE8F@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:31 -0000
+Subject: [Buildroot] [git commit branch/next] python-pygame: remove python
+	dependency
+Message-ID: <20150808105627.9357580414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd1e9c96e56b0e49153e750ca33142c61e9cf525
+commit: http://git.buildroot.net/buildroot/commit/?id=6874f5bac94c9cefbf09f3ded4cf4bce66c70e25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mpd requires at least gcc 4.6, so use the newly introduced gcc version
-dependency mechanism instead of open-coded toolchain dependencies.
+With the dependency on BR2_PACKAGE_PYTHON it was only possible to
+build the package with python2. However, python-pygame works with
+python3 so enable it to be built with it.
 
+Signed-off-by: Peter Bouda <pbouda@cidles.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/mpd/Config.in |    9 +++------
- 1 files changed, 3 insertions(+), 6 deletions(-)
+ package/python-pygame/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 65b46df..28962f7 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -4,9 +4,7 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_USE_WCHAR # libglib2, flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
--	# sparc & CS powerpc gcc are too old
--	depends on !BR2_sparc
--	depends on !(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 || BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009)
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -297,9 +295,8 @@ config BR2_PACKAGE_MPD_UPNP
- 
- endif
- 
--comment "mpd needs a toolchain w/ C++, threads, wchar"
-+comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
--	depends on !BR2_sparc
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
+index f72ee31..932b0f1 100644
+--- a/package/python-pygame/Config.in
++++ b/package/python-pygame/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_PYGAME
+ 	bool "python-pygame"
+-	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_SDL
+ 	help
+ 	  Pygame is a cross-platfrom library designed to make it easy to write
