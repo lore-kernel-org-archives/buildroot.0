@@ -1,92 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: forcibly
-	disable support for compositing
-Message-ID: <20150808105607.472977FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tor: needs NPTL threads
+Message-ID: <20150808105621.2DC417FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f413dd2a660d044659fb1eafe1a7e425016d7c80
+commit: http://git.buildroot.net/buildroot/commit/?id=bfe2ba7453e1b5005267a6bfcab920cc4facc9aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Building with the experimental support for compositing is broken:
+Fixes:
 
-    /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gnueabihf-gcc
-    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-    -Os -o matchbox-window-manager main.o wm.o base_client.o main_client.o
-    toolbar_client.o toolbar_client_alt.o dockbar_client.o dialog_client.o
-    select_client.o desktop_client.o ewmh.o misc.o client_common.o keys.o
-    list.o stack.o composite-engine.o session.o mbtheme.o xml.o
-    -lmb -lX11
-    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-    -lXext -lXcomposite -lXdamage -lXfixes -lXrender
-    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-    -lX11 -lexpat
-    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-    -lXfixes
-    composite-engine.o: In function `gaussian':
-    /home/ymorin/dev/buildroot/O/build/matchbox-1.2/src/composite-engine.c:65:
-    undefined reference to `exp'
+  http://autobuild.buildroot.org/results/f09/f09af8dd0d85bc6137a0c2f26cbe62686767b957/
 
-That's because it forgets to link with -lm.
-
-However, adding "MATCHBOX_CONF_ENV = -lm" does not solve the issue, as
-it still does not link with -lm at all.
-
-Furthermore, the package does not autoreconf, since it is missing the
-gconf m4 macros, and Buildroot does not have a package for gconf, hence
-we can not even patch Makefile.am and autoreconf.
-
-Patching Makefile.in (in addition to .am) could be a solution, but
-support for compositing is explicitly marked as being experimental.
-
-So, just forcibly disable it altogether.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/Config.in   |    1 -
- package/matchbox/matchbox.mk |   10 +---------
- 2 files changed, 1 insertions(+), 10 deletions(-)
+ package/tor/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 344635c..d850a39 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_MATCHBOX
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index 0899208..43f6b4b 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -11,19 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
- MATCHBOX_LICENSE_FILES = COPYING
+diff --git a/package/tor/Config.in b/package/tor/Config.in
+index 3400dce..5200926 100644
+--- a/package/tor/Config.in
++++ b/package/tor/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_TOR
+ 	bool "tor"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+@@ -14,6 +14,6 @@ config BR2_PACKAGE_TOR
  
- MATCHBOX_DEPENDENCIES = matchbox-lib
--MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf
-+MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
+ 	  https://www.torproject.org
  
- # Workaround bug in configure script
- MATCHBOX_CONF_ENV = expat=yes
- 
--ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
--ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
--MATCHBOX_CONF_OPTS += --enable-composite
--MATCHBOX_DEPENDENCIES += xlib_libXcomposite
--MATCHBOX_DEPENDENCIES += xlib_libXpm
--endif
--endif
--
- ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
- MATCHBOX_DEPENDENCIES += xlib_libXft
- endif
+-comment "tor needs a toolchain w/ threads"
++comment "tor needs a toolchain w/ NPTL"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
