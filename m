@@ -1,44 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] qemu/configs: enable DRM+QXL
-	for x86 and x86_64
-Message-ID: <20150808105624.48E637FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pure-ftpd: add patch that
+	fixes build if HAVE_EXPLICIT_BZERO is defined
+Message-ID: <20150808105624.255EC7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68152fea9b30a58c520c1501c0fdd33e13e16a1a
+commit: http://git.buildroot.net/buildroot/commit/?id=701e75bf3d46405956d2641af187854ae6330790
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Allows for nicer framebuffer emulation under Qemu with the QXL xorg
-driver.
+This patch was already merged upstream and once bumping version of that
+package this patch must be removed.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+See this change upstream:
+https://github.com/jedisct1/pure-ftpd/commit/2d34799585dc65c8c314a2f09a281874dd9b3d55
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/x86/linux-4.1.config    |    2 ++
- board/qemu/x86_64/linux-4.1.config |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ ...x-building-in-case-of-HAVE_EXPLICIT_BZERO.patch |   40 ++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/board/qemu/x86/linux-4.1.config b/board/qemu/x86/linux-4.1.config
-index ce19f81..5b64416 100644
---- a/board/qemu/x86/linux-4.1.config
-+++ b/board/qemu/x86/linux-4.1.config
-@@ -18,3 +18,5 @@ CONFIG_SND_HDA_INTEL=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_DRM=y
-+CONFIG_DRM_QXL=y
-diff --git a/board/qemu/x86_64/linux-4.1.config b/board/qemu/x86_64/linux-4.1.config
-index ce19f81..5b64416 100644
---- a/board/qemu/x86_64/linux-4.1.config
-+++ b/board/qemu/x86_64/linux-4.1.config
-@@ -18,3 +18,5 @@ CONFIG_SND_HDA_INTEL=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_DRM=y
-+CONFIG_DRM_QXL=y
+diff --git a/package/pure-ftpd/0002-Fix-building-in-case-of-HAVE_EXPLICIT_BZERO.patch b/package/pure-ftpd/0002-Fix-building-in-case-of-HAVE_EXPLICIT_BZERO.patch
+new file mode 100644
+index 0000000..8117f88
+--- /dev/null
++++ b/package/pure-ftpd/0002-Fix-building-in-case-of-HAVE_EXPLICIT_BZERO.patch
+@@ -0,0 +1,40 @@
++From f70c363b633229368ed352ce4f599da033cbbdf1 Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <abrodkin@synopsys.com>
++Date: Thu, 9 Jul 2015 09:38:25 +0300
++Subject: [PATCH] Fix building in case of HAVE_EXPLICIT_BZERO
++
++Currently if toolchain has implementation of explicit_bzero() and so
++HAVE_EXPLICIT_BZERO gets defined during configuration compilation will
++fail that way:
++------------------------------------>8------------------------------
++utils.c: In function 'pure_memzero':
++utils.c:49:1: error: expected declaration or statement at end of input
++ }
++ ^
++------------------------------------>8------------------------------
++
++That happens because closing "#endif" is put 1 line below than really
++meant.
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++---
++ src/utils.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/utils.c b/src/utils.c
++index 228a8dc..f41492d 100644
++--- a/src/utils.c
+++++ b/src/utils.c
++@@ -25,8 +25,8 @@ void pure_memzero(void * const pnt, const size_t len)
++     while (i < len) {
++         pnt_[i++] = 0U;
++     }
++-}
++ # endif
+++}
++ 
++ int pure_memcmp(const void * const b1_, const void * const b2_, size_t len)
++ {
++-- 
++2.4.3
++
