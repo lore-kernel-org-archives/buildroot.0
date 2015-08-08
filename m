@@ -1,53 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] exim: systemd support
-Message-ID: <20150808105631.038867FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Makefile: don't depend on
+	current skeleton/overlay permissions
+Message-ID: <20150808105630.29CB67FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b52d96ab4ed5e3ea8e993283a14cd2999aea10ad
+commit: http://git.buildroot.net/buildroot/commit/?id=361d3573f5373618b2c566e250430269dd7200e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+We use 'rsync -a' to copy the skeleton and overlays, so the target ends
+up with the exact same permissions as on the repo. The problem is we
+don't track these permissions, since Git doesn't allow for that (except
+for the exec bit). This means users with different umasks at the time of
+cloning could end up with different target permissions.
+
+Fix this by using --chmod on rsync calls so we don't depend on the
+current permission set for the skeleton and overlays. We do depend on
+the exec bit, but that's fine since that one is tracked by Git.
+
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exim/exim.mk      |    8 ++++++++
- package/exim/exim.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 8ad0328..d8f41b0 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -133,4 +133,12 @@ define EXIM_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S86exim
- endef
+diff --git a/Makefile b/Makefile
+index 55b1d45..546bcd3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -473,7 +473,7 @@ RSYNC_VCS_EXCLUSIONS = \
+ $(BUILD_DIR)/.root:
+ 	mkdir -p $(TARGET_DIR)
+ 	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+-		--chmod=Du+w --exclude .empty --exclude '*~' \
++		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
+ 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+@@ -617,7 +617,7 @@ endif
+ 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+-			--chmod=Du+w --exclude .empty --exclude '*~' \
++			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ 			$(d)/ $(TARGET_DIR)$(sep))
  
-+define EXIM_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/exim/exim.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/exim.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/exim.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/exim.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/exim/exim.service b/package/exim/exim.service
-new file mode 100644
-index 0000000..26daabc
---- /dev/null
-+++ b/package/exim/exim.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Exim MTA
-+After=syslog.target network.target
-+
-+[Service]
-+ExecStart=/usr/bin/exim -bdf
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
