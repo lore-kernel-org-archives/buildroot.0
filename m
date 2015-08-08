@@ -1,65 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: run the
-	kconfig fixups after exiting configurators
-Message-ID: <20150808105615.42DB77FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/iso9660: change the name of
+	the tmp dir to be consistent
+Message-ID: <20150808105631.C0DDD7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31b70a487fdfe9859c21755236e7e856d86f585f
+commit: http://git.buildroot.net/buildroot/commit/?id=4d1a9d8cd8f4722ecb059552ebb837eef53f7a95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-After we exit the configurators, we need to re-run the kconfig fixups to
-ensure the user is not able to override them in the configurators.
+Currently, the generated rootfs will be called rootfs.iso9660, but the
+temporary directory we create while building it is called
+rootfs-iso9660.tmp. They are in different directories so it's not so
+obvious, but still to be consistent it's better to call the temp dir
+rootfs.iso9660.tmp.
 
-Currently, we schedule that "for later", by removing the corresponding
-stamp file, so make will run the fixups "later".
-
-This means the user has access to the un-fixed .config file, which he
-might decide to copy and use as a reference (not too bad, since we'd run
-the fixups anyway; but not clean either).
-
-Note that we still remove the stamp file before running the fixups, in
-case any one of those fixups breaks, so we don't want to believe the
-fixups have been applied; the fixup macro will touch that file anyway.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-kconfig.mk |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
+ fs/iso9660/iso9660.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index d27b819..126c5a0 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -95,11 +95,24 @@ $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 6ed979c..d836194 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -35,7 +35,7 @@ ROOTFS_ISO9660_USE_INITRD = YES
  endif
  
- # Configuration editors (menuconfig, ...)
-+#
-+# Apply the kconfig fixups right after exiting the configurators, so
-+# that the user always sees a .config file that is clean wrt. our
-+# requirements.
-+#
-+# Because commands in $(1)_FIXUP_KCONFIG are probably using $(@D), we
-+# fake it for the configurators (otherwise it is set to just '.', i.e.
-+# the current directory where make is run, which happens to be in
-+# $(TOPDIR), because the target of the rule is not an actual file, so
-+# does not have any path component).
-+#
-+$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): @D=$$($(2)_DIR)
- $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
- 		$$($(2)_KCONFIG_OPTS) $$(subst $(1)-,,$$@)
- 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
- 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
-+	$$(call $(2)_FIXUP_DOT_CONFIG)
- 
- $(1)-savedefconfig: $$($(2)_DIR)/.stamp_kconfig_fixup_done
- 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
+-ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs-iso9660.tmp
++ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs.iso9660.tmp
+ define ROOTFS_ISO9660_CREATE_TEMPDIR
+ 	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
+ 	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
