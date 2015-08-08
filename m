@@ -1,51 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:35 -0000
-Subject: [Buildroot] [git commit branch/next] package/openvmtools: move to
-	GitHub
-Message-ID: <20150808105610.DC22D7F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/modem-manager: bump to
+	version 1.4.8
+Message-ID: <20150808105611.1AC088030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8560118e6bd0bddddaceec696427e56f4646d173
+commit: http://git.buildroot.net/buildroot/commit/?id=f57ac06c6590b40a2862ebbe560fab116998b14d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Open-vm-tools project is moved to GitHub.
-Hash file removed.
-Major version variable removed.
-
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvmtools/openvmtools.hash |    3 ---
- package/openvmtools/openvmtools.mk   |    6 ++----
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ package/modem-manager/modem-manager.hash |    2 +-
+ package/modem-manager/modem-manager.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvmtools/openvmtools.hash b/package/openvmtools/openvmtools.hash
-deleted file mode 100644
-index 80eb99f..0000000
---- a/package/openvmtools/openvmtools.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# From http://sourceforge.net/projects/open-vm-tools/files/open-vm-tools/stable-9.10.0/
--md5	d19439b499f0cbc7001e0cc65aa1a5a7	open-vm-tools-9.10.0-2476743.tar.gz
--sha1	5954c2a3eb66f7ffe4be1861f3bf6b43a2b3c6fc	open-vm-tools-9.10.0-2476743.tar.gz
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 92ecd36..822bbf1 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -4,10 +4,8 @@
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 7ee5dc8..5935cba 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  0cedabf46310f8c56630b116944f54ee64369c76c2f35f5f460ca19a8bb5a5cd  ModemManager-1.4.6.tar.xz
++sha256  d951eaffbe513bcde54f90602c6c423a49593f656d6485ba95f6fcb4bc1e8003  ModemManager-1.4.8.tar.xz
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 3eeb475..9cd630c 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVMTOOLS_VERSION_MAJOR = 9.10.0
--OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-2476743
--OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
--OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-$(OPENVMTOOLS_VERSION_MAJOR)
-+OPENVMTOOLS_VERSION = stable-9.10.0
-+OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
- OPENVMTOOLS_LICENSE = LGPLv2.1
- OPENVMTOOLS_LICENSE_FILES = COPYING
- # Autoreconf needed or config/missing will run configure again at buildtime
+-MODEM_MANAGER_VERSION = 1.4.6
++MODEM_MANAGER_VERSION = 1.4.8
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
