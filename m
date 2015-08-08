@@ -1,43 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
-	to 2.4.61
-Message-ID: <20150808105605.8C4F67FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] nginx: fix nginx.old clean-up
+Message-ID: <20150808105615.CF2657FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cdd831e651a5c7c11e5e9d10f0f6122670a8a21
+commit: http://git.buildroot.net/buildroot/commit/?id=f6d1d1518c192b4e33b736528a68d4d1f20b10e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libdrm/libdrm.hash |    4 ++--
- package/libdrm/libdrm.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The bin path for nginx is configured for /usr/sbin, so deleting
+the nginx.old back-up from /usr/bin never works.  Fix path, and
+also use "$(RM)" instead of "-$(RM)", as "rm -f" never fails.
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 42675bb..99889ea 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/dri-devel/2015-March/079617.html
--sha256	99575fc6c8e31f59193f5320fd4db7a5478e2641b5266147caab9aa875b59889	libdrm-2.4.60.tar.bz2
-+# From http://lists.freedesktop.org/archives/dri-devel/2015-May/082348.html
-+sha256	8b549092c8961a393a7e1d9a1bccddcea8e2af67c0d7d7c67babb9fc3b47699c	libdrm-2.4.61.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index a804ee8..3c3de1d 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nginx/nginx.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 90ebbcc..502bc44 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -222,7 +222,7 @@ endef
  
--LIBDRM_VERSION = 2.4.60
-+LIBDRM_VERSION = 2.4.61
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ define NGINX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+-	-$(RM) $(TARGET_DIR)/usr/bin/nginx.old
++	$(RM) $(TARGET_DIR)/usr/sbin/nginx.old
+ 	$(INSTALL) -D -m 0664 package/nginx/nginx.logrotate \
+ 		$(TARGET_DIR)/etc/logrotate.d/nginx
+ endef
