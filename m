@@ -1,47 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] core: fix download menu
-Message-ID: <20150808105631.E9FBE7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] glog: add dependency on
+	dynamic library
+Message-ID: <20150808105615.AD4BF7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3318a5a798a37bd2b55feb619f8d0a90b9c7ddd2
+commit: http://git.buildroot.net/buildroot/commit/?id=d980db91dfd15385e1e25c88f14da67a88fef82a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, when one enables the "Only allow downloads from primary"
-option, all the other mirror options are hidden (expected!) but the
-LuaRocks and CPAN mirrors (bad!).
+when BR2_STATIC_LIBS=y
 
-Fix that.
+src/symbolize.cc:110:19: error: dlfcn.h: No such file or directory
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+glog requires dlfcn.h header. So add dependency on dynamic library
+
+fixes:
+http://autobuild.buildroot.net/results/75d/75d17ceb764c2c1136047c089a0c554770ca98a4/
+
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/glog/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index e10427f..8b1bd8d 100644
---- a/Config.in
-+++ b/Config.in
-@@ -218,8 +218,6 @@ config BR2_GNU_MIRROR
- 	     http://ftp.gnu.org/pub/gnu
- 	     http://mirror.aarnet.edu.au/pub/gnu
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index aed0a3e..534997a 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -2,10 +2,12 @@ config BR2_PACKAGE_GLOG
+ 	bool "glog"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  C++ implementation of the Google logging module
  
--endif
--
- config BR2_LUAROCKS_MIRROR
- 	string "LuaRocks mirror"
- 	default "http://rocks.moonscript.org"
-@@ -239,6 +237,8 @@ config BR2_CPAN_MIRROR
- 	  The list of mirrors is available at:
- 	  http://search.cpan.org/mirror
+ 	  https://github.com/google/glog
  
-+endif
-+
- endmenu
- 
- config BR2_JLEVEL
+-comment "glog needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "glog needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
