@@ -1,147 +1,164 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:21 -0000
-Subject: [Buildroot] [git commit branch/next] opkg: bump to version 0.3.0
-Message-ID: <20150808105604.E6E6A818F0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:56:22 -0000
+Subject: [Buildroot] [git commit branch/next] gpsd: bump to version 3.15
+Message-ID: <20150808105604.A92017FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2f9bbe6599233a99ab819f865ad09946b7998590
+commit: http://git.buildroot.net/buildroot/commit/?id=583edd3f865e1ba298d7e8fe765e27a0a0eb7069
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove "Disable tests and manpages" patch because opkg no longer
-builds C tests into libopkg as of commit
-ef8ae066cfa898b6366198e429cbeb4c94c92939.
+Drop upstream patches #1 and #3. Drop the no longer needed patch #2.
 
-Remove "Fix libtool issue with recent libtool" patch because the patch
-comments indicate that it is no longer required with opkg version
-0.3.0.
-
-Select libarchive package dependency, as opkg requires it as of
-release opkg-0.3.0-rc0 (see the opkg NEWS file).
-
-[Thomas: add missing wchar dependency inherited from libarchive.]
-
-Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg/0001-Disable-tests-and-manpages.patch |   35 --------------------
- ...002-Fix-libtool-issue-with-recent-libtool.patch |   35 --------------------
- package/opkg/Config.in                             |    6 +++
- package/opkg/opkg.mk                               |    2 +-
- 4 files changed, 7 insertions(+), 71 deletions(-)
+ ...0001-Fix-build-error-when-ntpshm-is-false.patch |   39 ------------------
+ package/gpsd/0002-sconstruct-disable-rpath.patch   |   18 --------
+ ...apping-of-ntpshm_latch-function-in-ifdef-.patch |   43 --------------------
+ package/gpsd/gpsd.hash                             |    2 +-
+ package/gpsd/gpsd.mk                               |    2 +-
+ 5 files changed, 2 insertions(+), 102 deletions(-)
 
-diff --git a/package/opkg/0001-Disable-tests-and-manpages.patch b/package/opkg/0001-Disable-tests-and-manpages.patch
+diff --git a/package/gpsd/0001-Fix-build-error-when-ntpshm-is-false.patch b/package/gpsd/0001-Fix-build-error-when-ntpshm-is-false.patch
 deleted file mode 100644
-index b816766..0000000
---- a/package/opkg/0001-Disable-tests-and-manpages.patch
+index 9c444c4..0000000
+--- a/package/gpsd/0001-Fix-build-error-when-ntpshm-is-false.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 1c8e21e220ed0af6de3ab776d3edf8f0be69e779 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Mon, 22 Dec 2014 09:45:08 +0100
--Subject: [PATCH 1/2] Disable tests and manpages
+@@ -1,39 +0,0 @@
+-From 8e081f1bd5c82b842ee317cd55e70f646ae31f05 Mon Sep 17 00:00:00 2001
+-From: Simon Dawson <spdawson@gmail.com>
+-Date: Mon, 25 Aug 2014 10:26:11 +0100
+-Subject: [PATCH] Fix build error when ntpshm is false
+-To: gpsd-dev at nongnu.org
 -
--Tests are forcibly statically linked to libopkg, which does not work in
--a shared-only build.
+-The build fails as follows
 -
--Since Buildroot does not care about testsuites, just disable building the
--tests. Disable manpages at the same time for the same reason.
+-libgpsd_core.c: In function 'ntpshm_latch':
+-libgpsd_core.c:1660:24: error: 'const struct gps_type_t' has no member named 'time_offset'
+-  || device->device_type->time_offset == NULL)
+-                        ^
+-libgpsd_core.c:1663:33: error: 'const struct gps_type_t' has no member named 'time_offset'
+-  fix_time += device->device_type->time_offset(device);
+-                                 ^
+-scons: *** [libgpsd_core.os] Error 1
 -
--Note: dynamically linking with libopkg is also possible, but that would
--not be upstreamable (too much changes already in upstream).
+-The solution is to wrap #ifdef NTPSHM_ENABLE around the ntpshm_latch function
 -
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ----
-- Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 8baa62c..497b774 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -1,6 +1,6 @@
-- ACLOCAL_AMFLAGS = -I shave -I m4
+-diff -Nurp a/libgpsd_core.c b/libgpsd_core.c
+---- a/libgpsd_core.c	2014-08-22 21:33:55.000000000 +0100
+-+++ b/libgpsd_core.c	2014-09-03 18:48:34.184931741 +0100
+-@@ -1642,6 +1642,7 @@ void gpsd_zero_satellites( /*@out@*/ str
+- #endif
+- }
 - 
---SUBDIRS = libbb libopkg src tests utils man
--+SUBDIRS = libbb libopkg src utils
+-+#ifdef NTPSHM_ENABLE
+- void ntpshm_latch(struct gps_device_t *device, struct timedrift_t /*@out@*/*td)
+- /* latch the fact that we've saved a fix */
+- {
+-@@ -1672,5 +1673,6 @@ void ntpshm_latch(struct gps_device_t *d
+-     device->last_fixtime.clock = td->clock.tv_sec + td->clock.tv_nsec / 1e9;
+- #endif /* S_SPLINT_S */
+- }
+-+#endif /* NTPSHM_ENABLE */
 - 
-- 
-- HOST_CPU=@host_cpu@
---- 
--2.1.0
--
-diff --git a/package/opkg/0002-Fix-libtool-issue-with-recent-libtool.patch b/package/opkg/0002-Fix-libtool-issue-with-recent-libtool.patch
+- /* end */
+diff --git a/package/gpsd/0002-sconstruct-disable-rpath.patch b/package/gpsd/0002-sconstruct-disable-rpath.patch
 deleted file mode 100644
-index 4ba2bd3..0000000
---- a/package/opkg/0002-Fix-libtool-issue-with-recent-libtool.patch
+index 8251cfc..0000000
+--- a/package/gpsd/0002-sconstruct-disable-rpath.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 932bf10f259a82ffc17060c032bfdddd0436ca2d Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 22 Dec 2014 09:45:33 +0100
--Subject: [PATCH 2/2] Fix libtool issue with recent libtool
+@@ -1,18 +0,0 @@
+-Disable addition of RPATH to the generated libraries
 -
--With recent libtool versions, autoreconf complains that the set of
--directories in AC_CONFIG_MACRO_DIR doesn't match the ones passed in
--ACLOCAL_AMFLAGS. This patch fixes that by using AC_CONFIG_MACRO_DIRS
--instead.
--
--Note that this patch will no longer be needed once we bump to opkg
--0.3.0, since the shave/ macro directory has been removed.
--
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-diff -Nurp a/SConstruct b/SConstruct
+---- a/SConstruct	2014-08-23 18:41:09.000000000 +0100
+-+++ b/SConstruct	2014-08-25 09:46:53.754364989 +0100
+-@@ -300,9 +300,6 @@ if env["sysroot"]:
+- 
+- # Don't hack RPATH unless libdir points somewhere that is not on the
+- # minimum default load path.
+--if env["shared"]:
+--    if env["libdir"] not in ["/usr/lib", "/lib"]:
+--        env.Prepend(RPATH=[installdir('libdir')])
+- 
+- # Give deheader a way to set compiler flags
+- if 'MORECFLAGS' in os.environ:
+diff --git a/package/gpsd/0003-Complete-wrapping-of-ntpshm_latch-function-in-ifdef-.patch b/package/gpsd/0003-Complete-wrapping-of-ntpshm_latch-function-in-ifdef-.patch
+deleted file mode 100644
+index 2d21690..0000000
+--- a/package/gpsd/0003-Complete-wrapping-of-ntpshm_latch-function-in-ifdef-.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 519314d488624885a73f6204e3113aab850a36a0 Mon Sep 17 00:00:00 2001
+-From: Simon Dawson <spdawson@gmail.com>
+-Date: Wed, 3 Sep 2014 18:39:22 +0100
+-Subject: [PATCH] Complete wrapping of ntpshm_latch function in #ifdef
+- NTPSHM_ENABLE
+-To: gpsd-dev at nongnu.org
+-
+-Currently, the build fails as follows
+-
+-gpsmon.o: In function `gpsmon_hook':
+-gpsmon.c:(.text+0x8b0): undefined reference to `ntpshm_latch'
+-collect2: error: ld returned 1 exit status
+-scons: *** [gpsmon] Error 1
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ----
-- configure.ac | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 1ea2e78..0e3964d 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -3,8 +3,7 @@ AC_INIT([opkg], [0.2.4])
-- AC_CONFIG_SRCDIR([libopkg/pkg.c])
+-diff -Nurp a/gpsd.h-tail b/gpsd.h-tail
+---- a/gpsd.h-tail	2014-08-22 21:35:56.000000000 +0100
+-+++ b/gpsd.h-tail	2014-09-03 18:52:04.048627518 +0100
+-@@ -842,7 +842,9 @@ extern unsigned int ais_binary_encode(st
+- extern void ntpshm_context_init(struct gps_context_t *);
+- extern void ntpshm_session_init(struct gps_device_t *);
+- extern int ntpshm_put(struct gps_device_t *, int, struct timedrift_t *);
+-+#ifdef NTPSHM_ENABLE
+- extern void ntpshm_latch(struct gps_device_t *device,  /*@out@*/struct timedrift_t *td);
+-+#endif /* NTPSHM_ENABLE */
+- extern void ntpshm_link_deactivate(struct gps_device_t *);
+- extern void ntpshm_link_activate(struct gps_device_t *);
 - 
-- AC_CONFIG_AUX_DIR([conf])
---AC_CONFIG_MACRO_DIR([m4])
---AC_CONFIG_MACRO_DIR([shave])
--+AC_CONFIG_MACRO_DIRS([shave m4])
+-diff -Nurp a/gpsmon.c b/gpsmon.c
+---- a/gpsmon.c	2014-08-22 21:06:58.000000000 +0100
+-+++ b/gpsmon.c	2014-09-03 18:52:23.172628059 +0100
+-@@ -778,8 +778,10 @@ static void gpsmon_hook(struct gps_devic
 - 
-- AM_INIT_AUTOMAKE
-- AC_CONFIG_HEADERS(config.h)
---- 
--2.1.0
--
-diff --git a/package/opkg/Config.in b/package/opkg/Config.in
-index afc13f2..df6ebff 100644
---- a/package/opkg/Config.in
-+++ b/package/opkg/Config.in
-@@ -1,6 +1,12 @@
-+comment "opkg needs a toolchain w/ wchar"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR
-+
- config BR2_PACKAGE_OPKG
- 	bool "opkg"
-+	select BR2_PACKAGE_LIBARCHIVE
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # libarchive
- 	help
- 	  Opkg is a lightweight package management system, based on ipkg. It is
- 	  written in C and resembles apt/dpkg in operation. It is intended for
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index dcc625a..5c79fc7 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
+-     report_unlock();
+- 
+-+#ifdef NTPSHM_ENABLE
+-     /* Update the last fix time seen for PPS. FIXME: do this here? */
+-     ntpshm_latch(device, &td);
+-+#endif /* NTPSHM_ENABLE */
+- }
+- /*@+observertrans +nullpass +globstate +compdef +uniondef@*/
+- 
+diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+index 80703c1..8e27ff0 100644
+--- a/package/gpsd/gpsd.hash
++++ b/package/gpsd/gpsd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ed66c6b6b1e2b4951de2c0b2399c22f77fe9f5927ef6b948dd8eb023ff53b7ee	gpsd-3.11.tar.gz
++sha256	81c89e271ae112313e68655ab30d227bc38fe7841ffbff0f1860b12a9d7696ea	gpsd-3.15.tar.gz
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 1bf4415..2199e31 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPKG_VERSION = v0.2.4
-+OPKG_VERSION = v0.3.0
- OPKG_SITE = http://git.yoctoproject.org/git/opkg
- OPKG_SITE_METHOD = git
- # Uses PKG_CHECK_MODULES() in configure.ac
+-GPSD_VERSION = 3.11
++GPSD_VERSION = 3.15
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
