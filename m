@@ -1,76 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] package/rpi-firmware: add
-	option to install vcdbg
-Message-ID: <20150808105619.447BA7FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:20 -0000
+Subject: [Buildroot] [git commit branch/next] package/eudev: bump version to
+	3.1.2
+Message-ID: <20150808105619.802847FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d16b32a40164f6bb2a9334ad7dcb6ab8ba95e172
+commit: http://git.buildroot.net/buildroot/commit/?id=7de0ff0ed49892f5c791c99f83198932a8708111
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-vcdbg is a tool to help debug the communication with the GPU.
-It comes as a binary-only, and in two flavours: one for the hard
-floating point ABI, one for the software floating point ABI.
+[Thomas: added locally calculated sha256 hash, as suggested by Yann.]
 
-Unfortunately, we have no source code for that tool, only a binary that
-was dynamically linked with glibc and libraries from rpi-userland.
-
-So, just install that executable, and let's hope there is no symbol
-issue at runtime.
-
-Note: vcdbg needs glibc, threads and !static. Since glibc already
-implies threads and !static, we only need to depend on glibc.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc; Floris Bos <bos@je-eigen-domein.nl>
-Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-firmware/Config.in       |   11 +++++++++++
- package/rpi-firmware/rpi-firmware.mk |    7 +++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ package/eudev/eudev.hash |    4 +++-
+ package/eudev/eudev.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index a060b4e..405674f 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -65,4 +65,15 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- 	  Say 'y' here if you need to load one or more of the DTB overlays,
- 	  to support HATs (Hardware Attached on Top, add-on modules).
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index 7c750a9..d54c8cf 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,2 +1,4 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5	d8d6b2ae5c9a740967b1ae2dccbae95b	eudev-3.1.1.tar.gz
++md5	07ab33fe310d250f06fc28f010e3fde2	eudev-3.1.2.tar.gz
++# Locally calculated
++sha256 4393b69e93dd8117defde6519b199d479f9d051f52061157a1a7a41b8fe10273 eudev-3.1.2.tar.gz
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index a97154c..87bce3e 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG
-+	bool "vcdbg"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP # rpi-userland
-+	select BR2_PACKAGE_RPI_USERLAND
-+	help
-+	  Install vcdbg, to help debug communication with the GPU.
-+
-+comment "vcdbg needs an (e)glibc toolchain w/ C++"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP
-+
- endif # BR2_PACKAGE_RPI_FIRMWARE
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 56d6925..1ef15aa 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -29,6 +29,13 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
-+define RPI_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
-+		$(TARGET_DIR)/usr/sbin/vcdbg
-+endef
-+endif # INSTALL_VCDBG
-+
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
- 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-EUDEV_VERSION = 3.1.1
++EUDEV_VERSION = 3.1.2
+ EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
