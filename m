@@ -1,50 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] sunxi-mali: bump version
-Message-ID: <20150808105615.87BEF7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perf: if slang is
+	enabled, depend on it
+Message-ID: <20150808105633.2F14F7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8906f272ab41e0373f392cc7a04cc97320dd8382
+commit: http://git.buildroot.net/buildroot/commit/?id=15f2cc5f81ea4ee9e6e219426d469f50d49b98d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+[Romain:
+  - fix coding style]
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sunxi-mali/Config.in     |    1 +
- package/sunxi-mali/sunxi-mali.mk |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/perf/perf.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/sunxi-mali/Config.in b/package/sunxi-mali/Config.in
-index 95f91ab..f0c1b35 100644
---- a/package/sunxi-mali/Config.in
-+++ b/package/sunxi-mali/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_SUNXI_MALI
- 	bool "sunxi-mali"
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_LIBUMP
- 	# The egl/gles mali libraries are provided as a git submodule of the
- 	# sunxi-mali repo and are downloaded by the sunxi-mali-prop package.
- 	select BR2_PACKAGE_SUNXI_MALI_PROP
-diff --git a/package/sunxi-mali/sunxi-mali.mk b/package/sunxi-mali/sunxi-mali.mk
-index c6900c8..3e5443b 100644
---- a/package/sunxi-mali/sunxi-mali.mk
-+++ b/package/sunxi-mali/sunxi-mali.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index 36989fc..dee05c3 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -32,6 +32,10 @@ ifeq ($(BR2_arc),y)
+ PERF_MAKE_FLAGS += NO_BACKTRACE=1
+ endif
  
--SUNXI_MALI_VERSION = c2491fe952354ba44538064e534ed7c731cedb1e
-+SUNXI_MALI_VERSION = d343311efc8db166d8371b28494f0f27b6a58724
- SUNXI_MALI_SITE = $(call github,linux-sunxi,sunxi-mali,$(SUNXI_MALI_VERSION))
- 
- SUNXI_MALI_INSTALL_STAGING = YES
--SUNXI_MALI_DEPENDENCIES = sunxi-mali-prop
-+SUNXI_MALI_DEPENDENCIES = libump sunxi-mali-prop
- SUNXI_MALI_PROVIDES = libegl libgles
- 
- # The options below must be provided in the environment.  Providing these
++ifeq ($(BR2_PACKAGE_SLANG),y)
++PERF_DEPENDENCIES += slang
++endif
++
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ PERF_DEPENDENCIES += elfutils
+ else
