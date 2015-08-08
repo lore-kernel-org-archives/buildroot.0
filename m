@@ -1,63 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] docs/manual/br2-external:
-	remove superfluous leading space in code blocks
-Message-ID: <20150808105601.B5F8A81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lftp: bump version to 4.6.2
+Message-ID: <20150808105611.3447D7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=188025e69195476f3fc07cee32e20660ffe0c8c2
+commit: http://git.buildroot.net/buildroot/commit/?id=0a0a7d3f4a34806f3d2b17efb8d8390e0dab37eb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-They are not needed, and other code blocks in the same file are not
-indented either.
+0001-Remove-unused-libraries-path.patch has now been applied upstream,
+so remove it from Buildroot.
 
-Remove those leading spaces, so all our code blocks look the same.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-outside-br.txt |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ .../lftp/0001-Remove-unused-libraries-path.patch   |   46 --------------------
+ package/lftp/lftp.hash                             |    2 +-
+ package/lftp/lftp.mk                               |    2 +-
+ 3 files changed, 2 insertions(+), 48 deletions(-)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index aac9a43..99a942c 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -33,27 +33,27 @@ to the Buildroot output directory.
- Some examples:
+diff --git a/package/lftp/0001-Remove-unused-libraries-path.patch b/package/lftp/0001-Remove-unused-libraries-path.patch
+deleted file mode 100644
+index 3521ec8..0000000
+--- a/package/lftp/0001-Remove-unused-libraries-path.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 30e575f18416d67732be1e0350ee727b72b2d225 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sat, 27 Dec 2014 20:56:56 +0100
+-Subject: [PATCH] Remove unused libraries path
+-
+-When building proto modules the path to library files is
+-specified with -L$(DESTDIR)$(pkgverlibdir) which point to
+-directory that doesn't exist.
+-
+-Also, when cross-compiling and $(DESTDIR) is empty,
+-$(pkgverlibdir) contains a path to the host libraries
+-(/usr/lib/lftp/4.5.5) which is considered unsafe.
+-
+-Anyway, those -L are not needed: by the time where
+-proto modules gets built/linked, no libraries are
+-installed in this location.
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- src/Makefile.am | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/src/Makefile.am b/src/Makefile.am
+-index d715d0a..0e221cf 100644
+---- a/src/Makefile.am
+-+++ b/src/Makefile.am
+-@@ -59,11 +59,11 @@ liblftp_pty_la_LDFLAGS     = -avoid-version -rpath $(pkgverlibdir)
+- liblftp_network_la_LDFLAGS = -avoid-version -rpath $(pkgverlibdir) $(OPENSSL_LDFLAGS)
+- liblftp_network_la_LIBADD  = $(SOCKSLIBS) $(OPENSSL_LIBS) $(LIBGNUTLS_LIBS) $(GNULIB)
+- 
+--proto_ftp_la_LIBADD  = -L$(DESTDIR)$(pkgverlibdir) liblftp-network.la
+--proto_http_la_LIBADD = -L$(DESTDIR)$(pkgverlibdir) liblftp-network.la $(EXPAT_LIBS) $(ZLIB)
+--proto_fish_la_LIBADD = -L$(DESTDIR)$(pkgverlibdir) liblftp-network.la liblftp-pty.la
+--proto_sftp_la_LIBADD = -L$(DESTDIR)$(pkgverlibdir) liblftp-network.la liblftp-pty.la
+--cmd_torrent_la_LIBADD  = -L$(DESTDIR)$(pkgverlibdir) liblftp-network.la
+-+proto_ftp_la_LIBADD  = liblftp-network.la
+-+proto_http_la_LIBADD = liblftp-network.la $(EXPAT_LIBS) $(ZLIB)
+-+proto_fish_la_LIBADD = liblftp-network.la liblftp-pty.la
+-+proto_sftp_la_LIBADD = liblftp-network.la liblftp-pty.la
+-+cmd_torrent_la_LIBADD  = liblftp-network.la
+- 
+- liblftp_tasks_la_SOURCES = PollVec.cc PollVec.h SMTask.cc SMTask.h ProcWait.cc\
+-  ProcWait.h GetPass.cc GetPass.h ConnectionSlot.cc ConnectionSlot.h\
+--- 
+-1.9.3
+-
+diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
+index 328d545..a832087 100644
+--- a/package/lftp/lftp.hash
++++ b/package/lftp/lftp.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  d1eea1ed98d05e050b909d5a90e8c7f345c84781b91af36d944fb2f33eba35bf  lftp-4.6.1.tar.xz
++sha256  1e61d5c94b06c333309185e86cfce0729e45e3f69f7496c58d61093b135c8bb9  lftp-4.6.2.tar.xz
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 7494ea2..54b1c6c 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- -----
-- buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
-+buildroot/ $ make BR2_EXTERNAL=/path/to/foobar menuconfig
- -----
- 
- From now on, external definitions from the +/path/to/foobar+
- directory will be used:
- 
- -----
-- buildroot/ $ make
-- buildroot/ $ make legal-info
-+buildroot/ $ make
-+buildroot/ $ make legal-info
- -----
- 
- We can switch to another external definitions directory at any time:
- 
- -----
-- buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
-+buildroot/ $ make BR2_EXTERNAL=/where/we/have/barfoo xconfig
- -----
- 
- Or disable the usage of external definitions:
- 
- -----
-- buildroot/ $ make BR2_EXTERNAL= xconfig
-+buildroot/ $ make BR2_EXTERNAL= xconfig
- -----
- 
- +BR2_EXTERNAL+ allows three different things:
+-LFTP_VERSION = 4.6.1
++LFTP_VERSION = 4.6.2
+ LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
+ LFTP_SITE = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPLv3+
