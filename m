@@ -1,56 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:07 -0000
-Subject: [Buildroot] [git commit branch/next] package/freerdp: fix build
-	with gstreamer support
-Message-ID: <20150808105559.EC9EE7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt5base: remove never set
+	QT5BASE_CONFIGURE_ENV
+Message-ID: <20150808105600.12E967FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffee06d2e3c81db0dde4c29ea6ddb047116d3296
+commit: http://git.buildroot.net/buildroot/commit/?id=d38b6b2e1aecb80594236405a7662466749fdc43
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-FreeRDP with gstreamer support enabled needs gstreamer and gst-plugins-base
-with gstapp.
+Since 1b54fbc925f4 (qt5base: fix postgresql plugin compile, 2015-02-19)
+QT5BASE_CONFIGURE_ENV is never set. Remove it.
 
-Fixes:
-  http://autobuild.buildroot.net/results/937/9373d4238bc3f027e571581bd3531018c4faed91/
-  http://autobuild.buildroot.org/results/f77/f77a2c9eea7973b54a22e12ab33ee8964adaddfd/
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freerdp/Config.in  |    2 ++
- package/freerdp/freerdp.mk |    3 ++-
- 2 files changed, 4 insertions(+), 1 deletions(-)
+ package/qt5/qt5base/qt5base.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 2e879b4..f7d6550 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_FREERDP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_GST_PLUGINS_BASE if BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP if BR2_PACKAGE_GSTREAMER
- 	help
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index c7c933e..0d10ef8 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -17,7 +17,8 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
- 
- ifeq ($(BR2_PACKAGE_GSTREAMER),y)
- FREERDP_CONF_OPTS += -DWITH_GSTREAMER=ON
--FREERDP_DEPENDENCIES += gstreamer
-+# freerdp needs gstinterface and gstapp from gst-plugins-base
-+FREERDP_DEPENDENCIES += gstreamer gst-plugins-base
- else
- FREERDP_CONF_OPTS += -DWITH_GSTREAMER=OFF
- endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 3de824f..e2db5d1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -174,7 +174,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
+-		$(QT5BASE_CONFIGURE_ENV) \
+ 		./configure \
+ 		-v \
+ 		-prefix /usr \
