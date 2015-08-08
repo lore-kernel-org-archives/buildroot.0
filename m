@@ -1,98 +1,114 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] acl,
-	attr: fix libdir variable in .la files
-Message-ID: <20150808105558.6049481778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Update for 2015.05-rc2
+Message-ID: <20150808105556.4453281801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5be059c5ae7061de71b8f6c67fe5e66d50f5e6f6
+commit: http://git.buildroot.net/buildroot/commit/?id=f2435f6ddb52ad4bb21885dbf7d9395ff6428de2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The acl and attr packages are using autoconf and libtool, but not
-automake, which causes all sort of troubles. Some of them are already
-worked around in acl.mk and attr.mk, but there is another one: the
-libdir variable in the .la file remains empty, which causes libtool to
-sometimes be confused about where the acl and attr libraries are
-installed.
-
-This was causing build issues with libarchive, but interestingly only
-in situations where we had zlib *and* libxml2 also part of the build,
-which maybe affects how libtool in libarchive behaves since libarchive
-can use zlib and libxml2 as optional dependencies.
-
-So what this patch does is to mungle the libattr.la and libacl.la
-files to make sure they contain the right libdir values. Yocto is
-doing exactly the same thing.
-
-Upstream attr and acl have been converted fully to automake, so
-hopefully the upcoming upstream release will allow us to get rid of
-those hacks, but in the mean time, it seems to be the most appropriate
-solution.
-
-Here is a minimal defconfig that exhibits the problem, and which
-allows to show that this patch fixes it:
-
-BR2_bfin=y
-BR2_BINFMT_FLAT=y
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-BR2_INIT_NONE=y
-BR2_PACKAGE_LIBARCHIVE=y
-BR2_PACKAGE_LIBARCHIVE_BSDCPIO=y
-BR2_PACKAGE_ZLIB=y
-BR2_PACKAGE_LIBXML2=y
-BR2_PACKAGE_ACL=y
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/e96/e96c8bec1039d9fe8c6c51fd48b6be0dc8be51d7/
-  (and many, many similar build failures)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acl/acl.mk   |   10 ++++++++++
- package/attr/attr.mk |   10 ++++++++++
- 2 files changed, 20 insertions(+), 0 deletions(-)
+ CHANGES                    |   24 ++++++++++++++++++++++++
+ Makefile                   |    2 +-
+ docs/website/download.html |   10 +++++-----
+ docs/website/news.html     |   13 +++++++++++++
+ 4 files changed, 43 insertions(+), 6 deletions(-)
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index 31bd079..62e5d15 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -27,4 +27,14 @@ ACL_INSTALL_TARGET_OPTS = 			\
- 	exec_prefix=$(TARGET_DIR)/usr 		\
- 	install install-lib
+diff --git a/CHANGES b/CHANGES
+index e28eef7..11895e6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,27 @@
++2015.05-rc2, Released May 11th, 2015
++
++	Minor fixes.
++
++	Toolchain: PR56780 backport to GCC 4.8.4 to fix GDB linking
++	issues. Context functions enabled for uClibc snapshot /
++	uClibc-NG.
++
++	Architectures: Endian handling symbol for Xtensa, binutils
++	fixes.
++
++	Infrastructure: Fix for kernel module stripping when
++	localversion contains spaces.
++
++	Updated/fixed packages: at, autoconf-archive, binutils,
++	cc-tool, cryptsetup, dstat, expedite, freerdp, giflib,
++	gnuchess, guile, ipmiutil, iproute2, mono, monolite, neard,
++	ola, poppler, postgresql, python-qt, qt, sqlite, valgrind,
++	xlib_libXfont
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#8086: Cannot select systemd as init with Linaro 2014.09...
++
+ 2015.05-rc1, Released May 4th, 2015
  
-+# The libdir variable in libacl.la is empty, so let's fix it. This is
-+# probably due to acl not using automake, and not doing fully the
-+# right thing with libtool.
-+define ACL_FIX_LIBTOOL_LA_LIBDIR
-+	$(SED) "s,libdir=.*,libdir='$(STAGING_DIR)'," \
-+		$(STAGING_DIR)/usr/lib/libacl.la
-+endef
-+
-+ACL_POST_INSTALL_STAGING_HOOKS += ACL_FIX_LIBTOOL_LA_LIBDIR
-+
- $(eval $(autotools-package))
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
-index 2cbcc6e..a66891b 100644
---- a/package/attr/attr.mk
-+++ b/package/attr/attr.mk
-@@ -26,4 +26,14 @@ ATTR_INSTALL_TARGET_OPTS = 			\
- 	exec_prefix=$(TARGET_DIR)/usr 		\
- 	install install-lib
+ 	Fixes all over the tree and new features.
+diff --git a/Makefile b/Makefile
+index b0e6915..5c4293b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@
+ all:
  
-+# The libdir variable in libattr.la is empty, so let's fix it. This is
-+# probably due to attr not using automake, and not doing fully the
-+# right thing with libtool.
-+define ATTR_FIX_LIBTOOL_LA_LIBDIR
-+	$(SED) "s,libdir=.*,libdir='$(STAGING_DIR)'," \
-+		$(STAGING_DIR)/usr/lib/libattr.la
-+endef
+ # Set and export the version string
+-export BR2_VERSION := 2015.05-rc1
++export BR2_VERSION := 2015.05-rc2
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 6a880c6..9362ccf 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -18,14 +18,14 @@ or
+ 
+ <p>
+ 
+-The latest release candidate is <b>2015.05-rc1</b>, which can be
++The latest release candidate is <b>2015.05-rc2</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2015.05-rc1.tar.gz">buildroot-2015.05-rc1.tar.gz</a>
+-(<a href="/downloads/buildroot-2015.05-rc1.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2015.05-rc2.tar.gz">buildroot-2015.05-rc2.tar.gz</a>
++(<a href="/downloads/buildroot-2015.05-rc2.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2015.05-rc1.tar.bz2">buildroot-2015.05-rc1.tar.bz2</a>
+-(<a href="/downloads/buildroot-2015.05-rc1.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2015.05-rc2.tar.bz2">buildroot-2015.05-rc2.tar.bz2</a>
++(<a href="/downloads/buildroot-2015.05-rc2.tar.bz2.sign">PGP signature</a>).
+ <p>
+ 
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 91bafd4..6ca5647 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -8,6 +8,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>11 May 2015 -- 2015.05-rc2 released</b>
 +
-+ATTR_POST_INSTALL_STAGING_HOOKS += ATTR_FIX_LIBTOOL_LA_LIBDIR
++    <p>Another week, another release candidate with more cleanups and
++    build fixes. See the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc2">CHANGES</a>
++    file for details.</p>
 +
- $(eval $(autotools-package))
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2015.05-rc2.tar.bz2">2015.05-rc2
++    release candidate</a>, and report any problems found to the <a
++    href="support.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>4 May 2015 -- 2015.05-rc1 released</b>
+ 
+     <p>We have a new release candidate! Lots of changes all over the
