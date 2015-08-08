@@ -1,78 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] configs/qemu: update mips*
-	malta configurations
-Message-ID: <20150808105604.8443981778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	package/gstreamer1/gst1-plugins-bad: disable opencv plugin
+	with opencv-3
+Message-ID: <20150808105614.9CEE07FC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4d666beae250e5c702bb6c2a0d48665b4cc90e2
+commit: http://git.buildroot.net/buildroot/commit/?id=5e238a87eacf2a0c62736c4123961651afb1ba87
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Enable USB UHCI to be able to use usb mouse emulation for graphic
-application tests.
+The opencv plugin uses stuff from the now removed opencv's legacy module.
+Note that the configure script already correctly check the opencv version
+and disable the opencv plugin with opencv-3.x.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Also remove 'select ...' to prevent kconfig from complaining about
+recursive dependencies.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/mips-malta/linux-4.0.config     |    2 ++
- board/qemu/mips64-malta/linux-4.0.config   |    2 ++
- board/qemu/mips64el-malta/linux-4.0.config |    2 ++
- board/qemu/mipsel-malta/linux-4.0.config   |    2 ++
- 4 files changed, 8 insertions(+), 0 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in |   14 +-------------
+ 1 files changed, 1 insertions(+), 13 deletions(-)
 
-diff --git a/board/qemu/mips-malta/linux-4.0.config b/board/qemu/mips-malta/linux-4.0.config
-index 60fcd70..3a26ac8 100644
---- a/board/qemu/mips-malta/linux-4.0.config
-+++ b/board/qemu/mips-malta/linux-4.0.config
-@@ -23,6 +23,8 @@ CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_FB=y
- CONFIG_FB_CIRRUS=y
-+CONFIG_USB=y
-+CONFIG_USB_UHCI_HCD=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/mips64-malta/linux-4.0.config b/board/qemu/mips64-malta/linux-4.0.config
-index 9b5d4e6..cd0b560 100644
---- a/board/qemu/mips64-malta/linux-4.0.config
-+++ b/board/qemu/mips64-malta/linux-4.0.config
-@@ -27,6 +27,8 @@ CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_FB=y
- CONFIG_FB_CIRRUS=y
-+CONFIG_USB=y
-+CONFIG_USB_UHCI_HCD=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/mips64el-malta/linux-4.0.config b/board/qemu/mips64el-malta/linux-4.0.config
-index 8877a2e..c6b46d4 100644
---- a/board/qemu/mips64el-malta/linux-4.0.config
-+++ b/board/qemu/mips64el-malta/linux-4.0.config
-@@ -28,6 +28,8 @@ CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_FB=y
- CONFIG_FB_CIRRUS=y
-+CONFIG_USB=y
-+CONFIG_USB_UHCI_HCD=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/mipsel-malta/linux-4.0.config b/board/qemu/mipsel-malta/linux-4.0.config
-index b9a743f..79d7352 100644
---- a/board/qemu/mipsel-malta/linux-4.0.config
-+++ b/board/qemu/mipsel-malta/linux-4.0.config
-@@ -24,6 +24,8 @@ CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_FB=y
- CONFIG_FB_CIRRUS=y
-+CONFIG_USB=y
-+CONFIG_USB_UHCI_HCD=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 76a601a..bc99527 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -559,19 +559,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	bool "opencv"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_PACKAGE_OPENCV
+-	# Remove the following opencv modules when gstreamer fixes the
+-	# problem of including the old "cv.h" header
+-	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
+-	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+-	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
+-	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+-	select BR2_PACKAGE_OPENCV_LIB_FLANN
+-	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+-	select BR2_PACKAGE_OPENCV_LIB_LEGACY
+-	select BR2_PACKAGE_OPENCV_LIB_ML
+-	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+-	select BR2_PACKAGE_OPENCV_LIB_VIDEO
++	depends on BROKEN # gst1-plugin-opencv does not (yet) support opencv >=3.x
+ 	help
+ 	  GStreamer OpenCV Plugins
+ 
