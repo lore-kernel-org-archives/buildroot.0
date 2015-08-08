@@ -1,96 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:22 -0000
-Subject: [Buildroot] [git commit branch/next] packages: fix and improve
-	support for top-level parallel make
-Message-ID: <20150808105621.0F31880414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nodejs: drop minor
+	version in Config.in
+Message-ID: <20150808105621.D918680414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1668e1da390c3320ed7bcf0377ba57ed2280b38d
+commit: http://git.buildroot.net/buildroot/commit/?id=eb6254a5aa2e0bf539b74279828c64be6693593b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The boost and jack2 packages fail to build when PARALLEL_JOBS is empty
-so instead of using an empty PARALLEL_JOBS don't use it in the MAKE
-variable when top-level parallel make is being used.
+Drop the minor version from the Kconfig symbol, so we can seamlessly
+update the versions without having to handle legacy stuff.
 
-To simplify the use of top-level parallel make, check the MAKEFLAGS
-variable to know automatically if the -j option is being used, also use
-the "=" operator instead of the ":=" operator because the MAKEFLAGS
-variable can be checked only in a "recursively expanded variable".
-The "override" keyword must be used in order to change the automatic
-variable "MAKE".
+Note: not adding legacy handling, as we haven't had any release with
+those symbols yet.
 
-When the top-parallel make is being used the sub-make are called without
-specifying the "-j" option in order to let GNU make share the job slots
-specified in the top make. This is done because GNU make is able
-to share the job slots available between each instance of make so if you
-want to increase the number of jobs you just need to increase the <jobs>
-value in the top make -j<jobs> command.
-
-If we specify the -j<jobs> option in each instance of make, it is less
-efficient, e.g. in a processor with 8 cores we specify -j9 in each instance:
-the number of processes goes up to 81 because each sub-make can execute
-9 processes. The excessive number of processes is not a good thing
-because in my tests even -j16 is slower than -j9.
-Instead if we don't specify the -j<jobs> option in the sub-make, the top
-make share the job slots automatically between each instance, so the
-number of process in this examples goes up to 9 that is faster than
-using up to 81 processes.
-
-e.g. when the -j3 option is specified only in the top make:
-
-possible state n. 1:
-process 1 - <packagea>-build
-process 2 - <packagea>-build
-process 3 - <packagea>-build
-
-possible state n. 2:
-process 1 - <packagea>-extract
-process 2 - <packageb>-configure
-process 3 - <packagec>-build
-
-possible state n. 3:
-process 1 - <packagea>-build make -j1
-process 2 - <packageb>-build make -j1
-process 3 - <packagec>-build make -j1
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Chris Becker <goabonga@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile            |    4 ++--
- package/Makefile.in |    3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/nodejs/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 8eb21d4..b1bcf78 100644
---- a/Makefile
-+++ b/Makefile
-@@ -58,8 +58,8 @@ export HOSTARCH := $(shell uname -m | \
- #
- # Taking into account the above considerations, if you still want to execute
- # this top-level Makefile in parallel comment the ".NOTPARALLEL" line and
--# build using the following command:
--#	make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))
-+# use the -j<jobs> option when building, e.g:
-+#      make -j$((`getconf _NPROCESSORS_ONLN`+1))
- .NOTPARALLEL:
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 580d9a2..5b871ea 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -24,16 +24,16 @@ if BR2_PACKAGE_NODEJS
  
- # absolute path
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c02d31f..2ed7cf7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -18,7 +18,8 @@ PARALLEL_JOBS := $(BR2_JLEVEL)
- endif
+ choice
+ 	prompt "Node.js version"
+-	default BR2_BR2_PACKAGE_NODEJS_0_10_39 if BR2_ARM_CPU_ARMV5
+-	default BR2_BR2_PACKAGE_NODEJS_0_12_5
++	default BR2_BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
++	default BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 	help
+ 	  Select the version of Node.js you wish to use.
  
- MAKE1 := $(HOSTMAKE) -j1
--MAKE := $(HOSTMAKE) $(if $(PARALLEL_JOBS),-j$(PARALLEL_JOBS))
-+override MAKE = $(HOSTMAKE) \
-+	$(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+-config BR2_BR2_PACKAGE_NODEJS_0_10_39
++config BR2_BR2_PACKAGE_NODEJS_0_10_X
+ 	bool "v0.10.39"
  
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- TARGET_VENDOR = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_VENDOR))
+ # V8 included with v0.12.5 requires at least ARMv6
+-config BR2_BR2_PACKAGE_NODEJS_0_12_5
++config BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 	bool "v0.12.5"
+ 	depends on !BR2_ARM_CPU_ARMV5
+ 
+@@ -41,8 +41,8 @@ endchoice
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
+-	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_5
++	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
++	default "0.12.5"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
+ 
+ menu "Module Selection"
+ 
