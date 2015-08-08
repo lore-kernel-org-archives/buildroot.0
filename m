@@ -1,44 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:46 -0000
-Subject: [Buildroot] [git commit branch/next] gcc: bump 5.x series to
-	version 5.2.0
-Message-ID: <20150808105636.4818A7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs: update
+	at91sam9g45m10ek defconfig
+Message-ID: <20150808105617.13F9D7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c51697185fdb5d165531f3adf3e8c4cd75509513
+commit: http://git.buildroot.net/buildroot/commit/?id=402960808a0b7fb7cc5566e98bcf3e2bab8056e4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also rename the BR2_GCC_VERSION_5_1_X symbol to BR2_GCC_VERSION_5_X to
-reflect this change to match the new versioning scheme.
+Use kernel (3.18) and u-boot (2015.01) from Atmel's repositories.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/{5.1.0 => 5.2.0}/100-uclibc-conf.patch |    0
- .../200-gcc-poison-system-directories.patch        |    0
- .../201-libgcc-remove-unistd-header.patch          |    0
- .../{5.1.0 => 5.2.0}/301-missing-execinfo_h.patch  |    0
- .../810-arm-softfloat-libgcc.patch                 |    0
- .../{5.1.0 => 5.2.0}/830-arm_unbreak_armv4t.patch  |    0
- .../840-microblaze-enable-dwarf-eh-support.patch   |    0
- .../850-libstdcxx-uclibc-c99.patch                 |    0
- package/gcc/{5.1.0 => 5.2.0}/860-cilk-wchar.patch  |    0
- .../900-libitm-fixes-for-musl-support.patch        |    0
- .../901-fixincludes-update-for-musl-support.patch  |    0
- .../{5.1.0 => 5.2.0}/902-unwind-fix-for-musl.patch |    0
- ...dc++-libgfortran-gthr-workaround-for-musl.patch |    0
- .../{5.1.0 => 5.2.0}/904-musl-libc-config.patch    |    0
- .../905-add-musl-support-to-gcc.patch              |    0
- .../{5.1.0 => 5.2.0}/906-mips-musl-support.patch   |    0
- .../{5.1.0 => 5.2.0}/907-x86-musl-support.patch    |    0
- .../{5.1.0 => 5.2.0}/908-arm-musl-support.patch    |    0
- .../909-aarch64-musl-support.patch                 |    0
- package/gcc/Config.in.host                         |    6 +++---
- package/gcc/gcc.hash                               |    4 ++--
- 21 files changed, 5 insertions(+), 5 deletions(-)
+ configs/at91sam9g45m10ek_defconfig |   25 ++++++++++++++++++++-----
+ 1 files changed, 20 insertions(+), 5 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
+index c958859..d03b453 100644
+--- a/configs/at91sam9g45m10ek_defconfig
++++ b/configs/at91sam9g45m10ek_defconfig
+@@ -1,9 +1,24 @@
+ BR2_arm=y
+ BR2_arm926t=y
+-BR2_PACKAGE_HOST_SAM_BA=y
+-BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9m10g45ek"
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.18"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
++BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9m10g45ek"
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9m10g45eknf_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91sam9g45"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
++BR2_PACKAGE_HOST_SAM_BA=y
