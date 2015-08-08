@@ -1,124 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:37 -0000
-Subject: [Buildroot] [git commit branch/next] core/skeleton: drop
-	/etc/securetty
-Message-ID: <20150808105630.182787FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:38 -0000
+Subject: [Buildroot] [git commit branch/next] Makefile: don't depend on the
+	umask
+Message-ID: <20150808105630.0EED47FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1c7e8b7885263b3ffca466ef40f3264198ea509
+commit: http://git.buildroot.net/buildroot/commit/?id=bee5745ccc20be6dbba243b1f8af0d5c522923e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-securetty is supposed to restrict the terminals root is allowed to
-login from. As it happens, login from busybox (w/ securetty support)
-is actually enforcing use of securetty, while login from util-linux
-is completely ignoring securetty altogether.
+Some packages and BR itself create files and directories on the target
+with cp/mkdir/etc which depend on the umask at the time of building.
 
-Remove securetty from our skeleton altogether and stop worrying about
-it.
+To fix this, use a trick inside the Makefile which wraps all rules when
+the umask is not 0022. This sets the umask at the top level, and then
+the building process continues as usual.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas: add --no-print-directory, as suggested by Arnout.]
+
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/login.pam  |    1 -
- system/skeleton/etc/securetty |   57 -----------------------------------------
- system/system.mk              |    8 ------
- 3 files changed, 0 insertions(+), 66 deletions(-)
+ Makefile |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/util-linux/login.pam b/package/util-linux/login.pam
-index 1d9cd70..01f5632 100644
---- a/package/util-linux/login.pam
-+++ b/package/util-linux/login.pam
-@@ -1,4 +1,3 @@
--auth		required	pam_securetty.so
- auth		required	pam_unix.so nullok
+diff --git a/Makefile b/Makefile
+index daf692e..55b1d45 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,6 +24,19 @@
+ # You shouldn't need to mess with anything beyond this point...
+ #--------------------------------------------------------------
  
- account		required	pam_unix.so
-diff --git a/system/skeleton/etc/securetty b/system/skeleton/etc/securetty
-deleted file mode 100644
-index 0722677..0000000
---- a/system/skeleton/etc/securetty
-+++ /dev/null
-@@ -1,57 +0,0 @@
--tty1
--tty2
--tty3
--tty4
--tty5
--tty6
--tty7
--tty8
--ttyS0
--ttyS1
--ttyS2
--ttyS3
--ttyAMA0
--ttyAMA1
--ttyAMA2
--ttyAMA3
--ttySAC0
--ttySAC1
--ttySAC2
--ttySAC3
--ttyUL0
--ttyUL1
--ttyUL2
--ttyUL3
--ttyPS0
--ttyPS1
--ttyPSC0
--ttyPSC1
--ttyPSC2
--ttyPSC3
--ttyCPM0
--ttyCPM1
--ttyCPM2
--ttyCPM3
--ttymxc0
--ttymxc1
--ttymxc2
--ttyO0
--ttyO1
--ttyO2
--ttyO3
--ttyAM0
--ttyAM1
--ttyAM2
--ttySC0
--ttySC1
--ttySC2
--ttySC3
--ttySC4
--ttySC5
--ttySC6
--ttySC7
--ttyGS0
--hvc0
--hvc1
--hvc2
--hvc3
-diff --git a/system/system.mk b/system/system.mk
-index 2794667..fd94e03 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -8,14 +8,6 @@ TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRAT
- TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
- TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
++# Trick for always running with a fixed umask
++UMASK=0022
++ifneq ($(shell umask),$(UMASK))
++.PHONY: all $(MAKECMDGOALS)
++
++all:
++	@umask $(UMASK) && $(MAKE) --no-print-directory
++
++$(MAKECMDGOALS):
++	@umask $(UMASK) && $(MAKE) --no-print-directory $@
++
++else # umask
++
+ # This is our default rule, so must come first
+ all:
  
--ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
--define SYSTEM_SECURETTY
--	grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
--		echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
--endef
--TARGET_FINALIZE_HOOKS += SYSTEM_SECURETTY
--endif
--
- ifneq ($(TARGET_GENERIC_HOSTNAME),)
- define SYSTEM_HOSTNAME
- 	mkdir -p $(TARGET_DIR)/etc
+@@ -937,3 +950,5 @@ include docs/manual/manual.mk
+ -include $(BR2_EXTERNAL)/docs/*/*.mk
+ 
+ .PHONY: $(noconfig_targets)
++
++endif #umask
