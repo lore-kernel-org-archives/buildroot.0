@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:28 -0000
-Subject: [Buildroot] [git commit branch/next] package/dovecot-pigeonhole:
-	bump version to 0.4.8
-Message-ID: <20150808105627.6C0617FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gcc: fix ARC failure
+	to build in 2 phases.
+Message-ID: <20150808105619.DEBF58190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c413cb9480b06839df05e413908ecb62dd5d864c
+commit: http://git.buildroot.net/buildroot/commit/?id=ba0cbd021c63ec32c537bb9e207ab9d0b548bf4d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+When working with GCC initial at override source dir mode the
+HOST_GCC_INITIAL_POST_PATCH_HOOKS is not called and compilation failes.
+The solution is to use HOST_GCC_INITIAL_POST_RSYNC_HOOKS since this hook
+is being called at override source dir mode.
+
+Signed-off-by: Tal Zilcer <talz@ezchip.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash |    2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/gcc-initial/gcc-initial.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 6353a86..ac94e41 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	04a13ec11652cbff812519eacf4db7dda648ab5c4c5f63b43a437d1fb0cc8d2a	dovecot-2.2-pigeonhole-0.4.7.tar.gz
-+sha256	d73c1c5a11cdfdcb58304a1c1272cce6c8e1868e3f61d393b3b8a725f3bf665b	dovecot-2.2-pigeonhole-0.4.8.tar.gz
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index fde95e8..5e6504e 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 0fa2353..6bb7997 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -34,6 +34,7 @@ define HOST_GCC_INITIAL_DISABLE_LIBGMON
+ 		$(@D)/libgcc/config.host
+ endef
+ HOST_GCC_INITIAL_POST_PATCH_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
++HOST_GCC_INITIAL_POST_RSYNC_HOOKS += HOST_GCC_INITIAL_DISABLE_LIBGMON
+ endif
  
--DOVECOT_PIGEONHOLE_VERSION = 0.4.7
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.8
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+ HOST_GCC_INITIAL_CONF_OPTS = \
