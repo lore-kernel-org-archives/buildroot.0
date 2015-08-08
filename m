@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:46 -0000
-Subject: [Buildroot] [git commit branch/next] configs: update
-	at91sam9g45m10ek defconfig
-Message-ID: <20150808105617.13F9D7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs: add defconfig for
+	Atmel sama5d4ek
+Message-ID: <20150808105617.754907F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=402960808a0b7fb7cc5566e98bcf3e2bab8056e4
+commit: http://git.buildroot.net/buildroot/commit/?id=d679bac90bb4a2bc0fb92dcd7042431b9e468905
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Use kernel (3.18) and u-boot (2015.01) from Atmel's repositories.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/at91sam9g45m10ek_defconfig |   25 ++++++++++++++++++++-----
- 1 files changed, 20 insertions(+), 5 deletions(-)
+ configs/atmel_sama5d4ek_defconfig |   33 +++++++++++++++++++++++++++++++++
+ 1 files changed, 33 insertions(+), 0 deletions(-)
 
-diff --git a/configs/at91sam9g45m10ek_defconfig b/configs/at91sam9g45m10ek_defconfig
-index c958859..d03b453 100644
---- a/configs/at91sam9g45m10ek_defconfig
-+++ b/configs/at91sam9g45m10ek_defconfig
-@@ -1,9 +1,24 @@
- BR2_arm=y
- BR2_arm926t=y
--BR2_PACKAGE_HOST_SAM_BA=y
--BR2_TARGET_AT91BOOTSTRAP=y
--BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9m10g45ek"
+diff --git a/configs/atmel_sama5d4ek_defconfig b/configs/atmel_sama5d4ek_defconfig
+new file mode 100644
+index 0000000..36b625b
+--- /dev/null
++++ b/configs/atmel_sama5d4ek_defconfig
+@@ -0,0 +1,33 @@
++BR2_arm=y
++BR2_cortex_a5=y
++BR2_ARM_EABIHF=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_FPU_VFPV4D16=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
 +BR2_KERNEL_HEADERS_VERSION=y
 +BR2_DEFAULT_KERNEL_VERSION="3.18"
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
@@ -37,20 +37,23 @@ index c958859..d03b453 100644
 +BR2_LINUX_KERNEL_CUSTOM_GIT=y
 +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
 +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_DEFCONFIG="sama5"
 +BR2_LINUX_KERNEL_ZIMAGE=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9m10g45ek"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4ek"
 +BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2047
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
++BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
++BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
 +BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
 +BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9m10g45eknf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91sam9m10g45ek_nandflash"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_DEFCONFIG="at91sam9g45"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4eknf_uboot_secure"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="sama5d4ek_nandflash"
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
++BR2_TARGET_UBOOT_SPL=y
 +BR2_PACKAGE_HOST_SAM_BA=y
