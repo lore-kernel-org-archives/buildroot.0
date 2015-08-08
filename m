@@ -1,27 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:20 -0000
-Subject: [Buildroot] [git commit branch/next] popt: add hash file
-Message-ID: <20150808105624.935987FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] quagga: disable PIE on ARC
+Message-ID: <20150808105624.2FB1F7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c9598e023bd78de9a7a6acd154db0da4c8a86dc
+commit: http://git.buildroot.net/buildroot/commit/?id=a3b44fa70cb336604f47ad6c6e1b720b4ac4dd12
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Even though ARC gcc understands "-pie" option and attempts to generate
+PIE binaries as of today PIE is not really supported for user-space
+applications.
+
+So we disable PIE detection if building for ARC.
+That fixes http://autobuild.buildroot.net/results/ca0/ca0b1e271f29d7639b6a6e895472a35e2c1d8aba
+and also prevents execution of non-supported PIE binary in runtime.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/popt/popt.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/quagga/quagga.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/popt/popt.hash b/package/popt/popt.hash
-new file mode 100644
-index 0000000..4d93e47
---- /dev/null
-+++ b/package/popt/popt.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated based on http://anduin.linuxfromscratch.org/sources/BLFS/svn/p/popt-1.16.tar.gz.md5sum
-+sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 756d6e0..ce1d34b 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -39,4 +39,8 @@ else
+ QUAGGA_CONF_OPTS += --disable-vtysh
+ endif
+ 
++ifeq ($(BR2_arc),y)
++QUAGGA_CONF_OPTS += --disable-pie
++endif
++
+ $(eval $(autotools-package))
