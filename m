@@ -1,35 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] package/libdvbsi: remove
-	autoreconf
-Message-ID: <20150808105638.9D498803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gst1-plugins-bad: fix egl
+	detection
+Message-ID: <20150808105613.33C887F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca607498a6bc96f55765c985bad46095143e3691
+commit: http://git.buildroot.net/buildroot/commit/?id=bff865186434554e357ecdf6b2b3da4fd9cc2053
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-A configure script is bundled with the archive
-of the current version.
+Some egl implementations needs special compiler flags or defines (E.G.
+mesa3d for wayland needs to pass -DMESA_EGL_NO_X11_HEADERS to not try to
+include X11 headers).  This is correctly included in the .pc file, but the
+configure logic doesn't use pkg-config so help it along.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Likewise, some implementations may need to link against other libraries, so
+also pass LIBS.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libdvbsi/libdvbsi.mk |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libdvbsi/libdvbsi.mk b/package/libdvbsi/libdvbsi.mk
-index ed8b382..f6469f9 100644
---- a/package/libdvbsi/libdvbsi.mk
-+++ b/package/libdvbsi/libdvbsi.mk
-@@ -11,7 +11,4 @@ LIBDVBSI_INSTALL_STAGING = YES
- LIBDVBSI_LICENSE = LGPLv2.1
- LIBDVBSI_LICENSE_FILES = COPYING
- 
--# sometimes no Makefile is in the archive, just (re)generate
--LIBDVBSI_AUTORECONF = YES
--
- $(eval $(autotools-package))
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index db323b9..faf0e2a 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -118,6 +118,9 @@ endif
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-egl
+ GST1_PLUGINS_BAD_DEPENDENCIES += libegl
++GST1_PLUGINS_BAD_CONF_ENV += \
++	CPPFLAGS="$(TARGET_CPPFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs egl)"
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-egl
+ endif
