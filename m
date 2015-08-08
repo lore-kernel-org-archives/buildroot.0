@@ -1,58 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] openldap: fix static link with
-	openssl
-Message-ID: <20150808105557.2B99681778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/boost: stop on the
+	first error during install to staging
+Message-ID: <20150808105558.1CE1181904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=660dff80f854b05f6c7e28e2e9059d8f58fb6a13
+commit: http://git.buildroot.net/buildroot/commit/?id=e94a9531590609d1530837c2009d96d29cc148b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use pkg-config to get openssl link dependencies.
+-q option is missing in BOOST_INSTALL_STAGING_CMDS,
+so the build doesn't stop on the first error.
+This help to see what happened.
 
-Fixes:
-http://autobuild.buildroot.net/results/dd3/dd3821e713b7da7cde0f059409fba46371c8bc40/
-http://autobuild.buildroot.net/results/d60/d60c8b4522e99cf385ee41aa20a1d49deb59c5fb/
-http://autobuild.buildroot.net/results/b41/b41c043fb3b2fad1d9cea0a95b512fb4942b5b19/
-
-and more.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openldap/openldap.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/boost/boost.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index 991d369..68464ab 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -10,6 +10,7 @@ OPENLDAP_SITE = ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
- OPENLDAP_LICENSE_FILES = LICENSE
- OPENLDAP_INSTALL_STAGING = YES
-+OPENLDAP_DEPENDENCIES = host-pkgconf
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 7060591..3fe44e3 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -148,7 +148,7 @@ define HOST_BOOST_INSTALL_CMDS
+ endef
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_TLS = openssl
-@@ -30,6 +31,7 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_MP = bignum
- OPENLDAP_DEPENDENCIES += openssl
-+OPENLDAP_CONF_ENV = LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto)"
- else ifeq ($(BR2_PACKAGE_GMP),y)
- OPENLDAP_MP = gmp
- OPENLDAP_DEPENDENCIES += gmp
-@@ -37,7 +39,7 @@ else
- OPENLDAP_MP = longlong
- endif
- 
--OPENLDAP_CONF_ENV = ac_cv_func_memcmp_working=yes
-+OPENLDAP_CONF_ENV += ac_cv_func_memcmp_working=yes
- 
- OPENLDAP_CONF_OPTS += \
- 	--enable-syslog \
+ define BOOST_INSTALL_STAGING_CMDS
+-	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
++	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -q -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPTS) \
+ 	--prefix=$(STAGING_DIR)/usr \
