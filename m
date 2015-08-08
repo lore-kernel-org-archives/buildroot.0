@@ -1,69 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:38 -0000
-Subject: [Buildroot] [git commit branch/next] gst-fsl-plugins: bump version
-	to 4.0.2
-Message-ID: <20150808105626.D6B7C7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] xdriver_xf86-video-imx-viv:
+	bump to version 3.10.53-1.1.0 GA
+Message-ID: <20150808105627.17EE37FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf448c4fe500b18c4c3315baa134c26f7bf239a6
+commit: http://git.buildroot.net/buildroot/commit/?id=73930a6bb02a2f6a77beba4ffd760096007ed526
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/730b7ca5d2f13083f4e44636308a2f55a8d346f2
+Previous patch for the LoadExtension call isn't needed any more.
 
-This package has been tested using the following commands:
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-0.10  filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! vpudec ! autovideosink
- # gst-launch-0.10  filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! vpudec ! mfw_isink
- # gst-launch-0.10 imxv4l2src ! autovideosink
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/f0440193ddb3eafa1b00aed294ed6dbd3e4d604d
+
+Switched back to use FREESCALE_IMX_VERSION.
+
+The following xorg.conf was used in order to force the use of the
+vivante module:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-Fix-bashism-in-configure-script.patch     |    4 +---
- .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    2 +-
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ .../0001-Fix-LoadExtenions.patch                   |   15 ---------------
+ .../xdriver_xf86-video-imx-viv.mk                  |    2 +-
+ 2 files changed, 1 insertions(+), 16 deletions(-)
 
-diff --git a/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch b/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
-index 35617cd..471c483 100644
---- a/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
-+++ b/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
-@@ -25,7 +25,7 @@ index 5968eb6..1a31a06 100755
-  fi
-  AC_SUBST(VPU_LIBS)
-  
--@@ -176,15 +176,15 @@ AC_SUBST(RT_CFLAGS)
-+@@ -176,14 +176,14 @@ AC_SUBST(RT_CFLAGS)
-  AC_SUBST(RT_LIBS)
-  
-  FSL_MM_CORE_CFLAGS=`$PKG_CONFIG --cflags libfslaudiocodec 2>/dev/null`
-@@ -40,10 +40,8 @@ index 5968eb6..1a31a06 100755
-  FSL_MM_CORE_LIBS=`$PKG_CONFIG --libs libfslaudiocodec 2>/dev/null`
- -FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslvideocodec 2>/dev/null`
- -FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslparser 2>/dev/null`
---FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslvpuwrap 2>/dev/null`
- +FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslvideocodec 2>/dev/null`"
- +FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslparser 2>/dev/null`"
--+FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslvpuwrap 2>/dev/null`"
-  AC_SUBST(FSL_MM_CORE_LIBS)
-  
-  EXTRAPLATFORMCFLAGS="-DARM -D_GNUC_"
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index 8d8b8b4..a7dea0f 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
+deleted file mode 100644
+index 3e2d47c..0000000
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Fix compilation with Xorg xserver 1.16.
+-
+-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+-
+---- a/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-07-25 15:38:24.000000000 +0200
+-+++ b/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-10-02 21:00:58.755409342 +0200
+-@@ -261,7 +261,7 @@
+-         setupDone = TRUE;
+-         xf86AddDriver(&FBDEV, module, HaveDriverFuncs);
+-         if(gVivFb)
+--            LoadExtension(&VIVExt, FALSE);
+-+            LoadExtensionList(&VIVExt, 1, FALSE);
+- 		return (pointer)1;
+-     } else {
+-         if (errmaj) *errmaj = LDR_ONCEONLY;
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index fbd7325..f5cb946 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST_FSL_PLUGINS_VERSION = 3.0.11
-+GST_FSL_PLUGINS_VERSION = 4.0.2
- GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
- 
- # Most is LGPLv2+, but some sources are copied from upstream and are
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
