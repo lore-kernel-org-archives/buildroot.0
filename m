@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:04 -0000
-Subject: [Buildroot] [git commit branch/next] mplayer: add hash file
-Message-ID: <20150808105634.D542D80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] spice-protocol: add hash file
+Message-ID: <20150808105634.4AD877FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a1d1c11a3b6fb9e4bc2ee812ffa37a760f006f5
+commit: http://git.buildroot.net/buildroot/commit/?id=efc0e7e1c7edb4ccd37f3840f3ee58911787be40
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mplayer/mplayer.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/spice-protocol/spice-protocol.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mplayer/mplayer.hash b/package/mplayer/mplayer.hash
+diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
 new file mode 100644
-index 0000000..f1f9aca
+index 0000000..2e88855
 --- /dev/null
-+++ b/package/mplayer/mplayer.hash
-@@ -0,0 +1,4 @@
-+# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz.md5
-+md5	39dd55f30eb5403f219a606e79a6648a	MPlayer-1.1.1.tar.xz
-+# From http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz.sha1
-+sha1	ba2f3bd1442d04b17b0143680850273d928689c1	MPlayer-1.1.1.tar.xz
++++ b/package/spice-protocol/spice-protocol.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	9d4745602eb2ab1d1c1ab98b4babf587574870993b4faefe354ac57bb5e8259b	spice-protocol-0.12.6.tar.bz2
