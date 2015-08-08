@@ -1,59 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:46 -0000
-Subject: [Buildroot] [git commit branch/next] configs: add defconfig for
-	Atmel sama5d4 Xplained Ultra
-Message-ID: <20150808105617.7BE6C7F9A6@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:47 -0000
+Subject: [Buildroot] [git commit branch/next] busybox: added linux-pam
+	support
+Message-ID: <20150808105637.33160818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00273c54bed995ac8551978bedf8d980b26830af
+commit: http://git.buildroot.net/buildroot/commit/?id=083aeac94e19cde6abd4b29cf29db589327d8c49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d4_xplained_defconfig |   33 ++++++++++++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-new file mode 100644
-index 0000000..84b6518
---- /dev/null
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -0,0 +1,33 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_FPU_VFPV4D16=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
-+BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=2082
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="sama5d4_xplained_nandflash"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 65ce7ef..ce6652b 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -141,6 +141,13 @@ define BUSYBOX_SET_INIT
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define BUSYBOX_LINUX_PAM
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
++BUSYBOX_DEPENDENCIES += linux-pam
++endif
++
+ ifeq ($(BR2_PACKAGE_BUSYBOX_SELINUX),y)
+ BUSYBOX_DEPENDENCIES += host-pkgconf libselinux libsepol
+ define BUSYBOX_SET_SELINUX
