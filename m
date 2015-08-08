@@ -1,27 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:07 -0000
-Subject: [Buildroot] [git commit branch/next] package/ushare: add hash file
-Message-ID: <20150808105600.45E7D7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	package/matchbox-startup-monitor: invert dependency chain
+Message-ID: <20150808105607.3322081778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0dd68ea1b0acd0f6ef4840750f6beb43247a5848
+commit: http://git.buildroot.net/buildroot/commit/?id=fbb13a764387af71bb8a7937bdd37445c9cac6b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Previously, matchbox-startup-monitor was forcibly enabled whenever
+startup-notification was. Now that it has a prompt, it merely defaults
+to 'y' in this case, leaving the user the possibility to disable it.
+This is not very logical.
+
+Instead, invert the logic, and select startup-notification from
+matchbox-startup-monitor.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ushare/ushare.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/matchbox-startup-monitor/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ushare/ushare.hash b/package/ushare/ushare.hash
-new file mode 100644
-index 0000000..77f0f0f
---- /dev/null
-+++ b/package/ushare/ushare.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 7b9b85c79968d4f4560f02a99e33c6a33ff58f9d41d8faea79e31cce2ee78665 ushare-1.1a.tar.bz2
+diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
+index 15dac60..9dce60e 100644
+--- a/package/matchbox-startup-monitor/Config.in
++++ b/package/matchbox-startup-monitor/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
+ 	bool "matchbox-startup-monitor"
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+-	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
++	select BR2_PACKAGE_STARTUP_NOTIFICATION
+ 	help
+ 	  Matchbox Panel Startup Monitor Applet.
