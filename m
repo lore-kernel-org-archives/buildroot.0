@@ -1,43 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:54 -0000
-Subject: [Buildroot] [git commit branch/next] pkg-autotools: fix whitespace
-	regex in libtool patch hook
-Message-ID: <20150808105623.DD4327FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual/beyond-buildroot:
+	additional minor fixes
+Message-ID: <20150808105624.B43837FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5eb23c9b88001b31a9a5b46d091ceb0c3bb621f0
+commit: http://git.buildroot.net/buildroot/commit/?id=821f30c82c41b15ca432c01ec7dfb8060941b08d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The first sed line for ltmain_version attempts to match whitespace before
-VERSION with [ space_character tab_character ]. The second sed line used to
-make ltmain_patchlevel has only space characters in the whitespace expression,
-possibly due to a smart editor automatically converting tabs to spaces. Make
-these lines consistent with each other and more resilient against accidental
-loss of tab characters by replacing the tabs with '\t'.
+Those issues were noticed by Thomas De Schampheleire during the
+review, but they were forgotten when applying the patch.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |    4 ++--
+ docs/manual/beyond-buildroot.txt |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 54f5dcd..c748c78 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -60,9 +60,9 @@ endef
- define LIBTOOL_PATCH_HOOK
- 	@$(call MESSAGE,"Patching libtool")
- 	$(Q)for i in `find $($(PKG)_SRCDIR) -name ltmain.sh`; do \
--		ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$i | \
-+		ltmain_version=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
- 		sed -e 's/\([0-9]*\.[0-9]*\).*/\1/' -e 's/\"//'`; \
--		ltmain_patchlevel=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$i | \
-+		ltmain_patchlevel=`sed -n '/^[ \t]*VERSION=/{s/^[ \t]*VERSION=//;p;q;}' $$i | \
- 		sed -e 's/\([0-9]*\.[0-9]*\.*\)\([0-9]*\).*/\2/' -e 's/\"//'`; \
- 		if test $${ltmain_version} = '1.5'; then \
- 			$(APPLY_PATCHES) $${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+index 63b0c1f..eefea1f 100644
+--- a/docs/manual/beyond-buildroot.txt
++++ b/docs/manual/beyond-buildroot.txt
+@@ -38,13 +38,13 @@ You can test your live CD image using QEMU:
+ qemu-system-i386 -cdrom output/images/rootfs.iso9660
+ -------------------
+ 
+-Or use it as a hard-drive image if it is an hybrid ISO:
++Or use it as a hard-drive image if it is a hybrid ISO:
+ 
+ -------------------
+ qemu-system-i386 -hda output/images/rootfs.iso9660
+ -------------------
+ 
+-It can be easily flashed to an USB drive with +dd+:
++It can be easily flashed to a USB drive with +dd+:
+ 
+ -------------------
+ dd if=output/images/rootfs.iso9660 of=/dev/sdb
