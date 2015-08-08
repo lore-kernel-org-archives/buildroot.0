@@ -1,57 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] cryptsetup: remove e2fsprogs
-	dependency
-Message-ID: <20150808105620.699947FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] systemd: fix some coding style
+	issues
+Message-ID: <20150808105628.B83017FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d67ffe596dc195ea5389485f5ca5b374a943611
+commit: http://git.buildroot.net/buildroot/commit/?id=b5c763c490dc1ef42149468910aaaacf4710f049
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-cryptsetup does not actually depend on e2fsprogs, but on libuuid that is a
-dependency of e2fsprogs. Remove the e2fsprogs dependency, and add a direct
-dependency on util-linux (libuuid provider).
+[Thomas: adjust commit title, some additioanl coding style fixes.]
 
-Cc: Martin Hicks <mort@bork.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptsetup/Config.in     |    5 +++--
- package/cryptsetup/cryptsetup.mk |    2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/systemd/systemd.mk |   15 +++++++--------
+ 1 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index 13b0184..d7ccd37 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -2,10 +2,11 @@ config BR2_PACKAGE_CRYPTSETUP
- 	bool "cryptsetup"
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LVM2
--	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lvm2
--	depends on BR2_USE_MMU # lvm2, e2fsprogs
-+	depends on BR2_USE_MMU # lvm2
- 	depends on !BR2_STATIC_LIBS # lvm2
- 	depends on BR2_USE_WCHAR # util-linux
- 	# Triggers the _gp link issue
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 754bea5..3655d5d 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -8,7 +8,7 @@ CRYPTSETUP_VERSION_MAJOR = 1.6
- CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).7
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
--CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs host-pkgconf \
-+CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- CRYPTSETUP_LICENSE = GPLv2+ (programs), LGPLv2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 0a1f00f..7eb7abe 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -72,16 +72,14 @@ SYSTEMD_CONF_OPTS += --disable-seccomp
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
+-SYSTEMD_DEPENDENCIES += \
+-	xz 		\
+-	libgcrypt
+-SYSTEMD_CONF_OPTS += 	\
+-	--enable-xz 	\
++SYSTEMD_DEPENDENCIES += xz libgcrypt
++SYSTEMD_CONF_OPTS += \
++	--enable-xz \
+ 	--enable-gcrypt	\
+ 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+-SYSTEMD_CONF_OPTS += 	\
+-	--disable-xz 	\
++SYSTEMD_CONF_OPTS += \
++	--disable-xz \
+ 	--disable-gcrypt
+ endif
+ 
+@@ -143,7 +141,8 @@ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
+ 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
+ 
+-	ln -fs ../../../lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
++	ln -fs ../../../lib/systemd/system/multi-user.target \
++		$(TARGET_DIR)/etc/systemd/system/default.target
+ endef
+ 
+ define SYSTEMD_INSTALL_MACHINEID_HOOK
