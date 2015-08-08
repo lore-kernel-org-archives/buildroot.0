@@ -1,124 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:09 -0000
-Subject: [Buildroot] [git commit branch/next] pkg-infra: munging .la files
-	is not limited to autotools packages
-Message-ID: <20150808105637.F39AB80414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:10 -0000
+Subject: [Buildroot] [git commit branch/next] openipmi: new package
+Message-ID: <20150808105638.EA3BD803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67f8138a46388f28d00dc8711b64d04ac7ebb464
+commit: http://git.buildroot.net/buildroot/commit/?id=2d84e1cc4aa7c552e310f3d44f7a557bc5fe8f8f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, we're only fixing libtool's .la files for autotools packages,
-and even more so, only for those that do not define their own
-_INSTALL_STAGING_CMDS.
+OpenIPMI provides libraries and command line tools for interacting with IPMI
+enabled devices.
 
-However, .la files might also be installed by non-autotools packages,
-like the NVidia GPU binary blob (libGL.la).
+[Thomas: fix indentation.]
 
-So, move that code into the global build rule, so all packages get their
-.la files fixed, whether they be autotools packages or not, and whether
-they define their own _INSTALL_STAGING_CMDS or not.
-
-Also print a message.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |   27 ---------------------------
- package/pkg-generic.mk   |   30 ++++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+), 27 deletions(-)
+ package/Config.in              |    1 +
+ package/openipmi/Config.in     |   16 ++++++++++++++++
+ package/openipmi/openipmi.hash |    2 ++
+ package/openipmi/openipmi.mk   |   36 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 55 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index b630ec9..4787914 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -294,36 +294,9 @@ endif
- # Staging installation step. Only define it if not already defined by
- # the package .mk file.
- #
--# Most autotools packages install libtool .la files alongside any
--# installed libraries. These .la files sometimes refer to paths
--# relative to the sysroot, which libtool will interpret as absolute
--# paths to host libraries instead of the target libraries. Since this
--# is not what we want, these paths are fixed by prefixing them with
--# $(STAGING_DIR).  As we configure with --prefix=/usr, this fix
--# needs to be applied to any path that starts with /usr.
--#
--# To protect against the case that the output or staging directories
--# or the pre-installed external toolchain themselves are under /usr,
--# we first substitute away any occurrences of these directories as
--# @BASE_DIR@, @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
--# Note that STAGING_DIR can be outside BASE_DIR when the user sets
--# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
--# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be empty
--# when we use an internal toolchain.
--#
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_SRCDIR)
--	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
--		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
--			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
--			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
--				-e "s:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
--			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
--			$$(if $$(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
--				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
--			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
--			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
- endef
- endif
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d1d6711..75dc8b7 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -172,6 +172,25 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call step_end,install-host)
- 
- # Install to staging dir
+diff --git a/package/Config.in b/package/Config.in
+index 20ecd38..9942e3a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -390,6 +390,7 @@ endif
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+ 	source "package/open2300/Config.in"
++	source "package/openipmi/Config.in"
+ 	source "package/openocd/Config.in"
+ 	source "package/openpowerlink/Config.in"
+ 	source "package/owl-linux/Config.in"
+diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
+new file mode 100644
+index 0000000..667efa7
+--- /dev/null
++++ b/package/openipmi/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_OPENIPMI
++	bool "openipmi"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlopen()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_POPT
++	select BR2_PACKAGE_NCURSES
++	help
++	  IPMI allows remote monitoring and remote management of
++	  devices. OpenIPMI provides a library and command line tools
++	  to interact with IPMI enabled devices. OpenIPMI also provides
++	  an IPMI BMC simulator.
++
++comment "openipmi needs a toolchain w/ dynamic library, threads"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
+new file mode 100644
+index 0000000..3a40f60
+--- /dev/null
++++ b/package/openipmi/openipmi.hash
+@@ -0,0 +1,2 @@
++# From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
++sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
+diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+new file mode 100644
+index 0000000..b6abf0f
+--- /dev/null
++++ b/package/openipmi/openipmi.mk
+@@ -0,0 +1,36 @@
++################################################################################
 +#
-+# Some packages install libtool .la files alongside any installed
-+# libraries. These .la files sometimes refer to paths relative to the
-+# sysroot, which libtool will interpret as absolute paths to host
-+# libraries instead of the target libraries. Since this is not what we
-+# want, these paths are fixed by prefixing them with $(STAGING_DIR).
-+# As we configure with --prefix=/usr, this fix needs to be applied to
-+# any path that starts with /usr.
++# openipmi
 +#
-+# To protect against the case that the output or staging directories or
-+# the pre-installed external toolchain themselves are under /usr, we first
-+# substitute away any occurrences of these directories with @BASE_DIR@,
-+# @STAGING_DIR@ and @TOOLCHAIN_EXTERNAL_INSTALL_DIR@ respectively.
-+#
-+# Note that STAGING_DIR can be outside BASE_DIR when the user sets
-+# BR2_HOST_DIR to a custom value. Note that TOOLCHAIN_EXTERNAL_INSTALL_DIR
-+# can be under @BASE_DIR@ when it's a downloaded toolchain, and can be
-+# empty when we use an internal toolchain.
-+#
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call step_start,install-staging)
- 	@$(call MESSAGE,"Installing to staging directory")
-@@ -189,6 +208,17 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
- 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
- 	fi
-+	@$(call MESSAGE,"Fixing libtool files")
-+	$(Q)find $(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
-+		$(SED) "s:$(BASE_DIR):@BASE_DIR@:g" \
-+			-e "s:$(STAGING_DIR):@STAGING_DIR@:g" \
-+			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
-+				-e "s:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:g") \
-+			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-+			$(if $(TOOLCHAIN_EXTERNAL_INSTALL_DIR),\
-+				-e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
-+			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
-+			-e "s:@BASE_DIR@:$(BASE_DIR):g"
- 	$(Q)touch $@
- 	@$(call step_end,install-staging)
- 
++################################################################################
++
++OPENIPMI_VERSION = 2.0.21
++OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
++OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
++OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
++OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
++OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
++OPENIPMI_CONF_ENV = ac_cv_path_pkgprog="$(PKG_CONFIG_HOST_BINARY)"
++OPENIPMI_CONF_OPTS = \
++	--with-glib=no \
++	--with-glib12=no \
++	--with-tcl=no \
++	--with-perl=no \
++	--with-python=no \
++	--with-swig=no
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++OPENIPMI_DEPENDENCIES += openssl
++OPENIPMI_CONF_OPTS += --with-openssl=yes
++else
++OPENIPMI_CONF_OPTS += --with-openssl=no
++endif
++
++ifeq ($(BR2_PACKAGE_NETSNMP),y)
++OPENIPMI_DEPENDENCIES += netsnmp
++OPENIPMI_CONF_OPTS += --with-ucdsnmp=yes
++else
++OPENIPMI_CONF_OPTS += --with-ucdsnmp=no
++endif
++
++$(eval $(autotools-package))
