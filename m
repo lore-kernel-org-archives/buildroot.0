@@ -1,60 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:07 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: make
-	matchbox-panel a real package
-Message-ID: <20150808105606.633077F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libmatroska: add host-pkgconf
+	dependency
+Message-ID: <20150808105558.68B9781778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd36de6918030598cbf3c4e01fbe877b4abd8b60
+commit: http://git.buildroot.net/buildroot/commit/?id=c69bafe0aef71b9846866270da9462c3492d9508
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, matchbox-panel is treated as if it were an option of the
-matchbox package.
+libmatroska configure.ac uses PKG_CHECK_MODULES(), so this package
+needs to depend on host-pkgconf.
 
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
+Fixes:
 
-So, make it a real package.
+  http://autobuild.buildroot.org/results/80a/80a9f0f5594ab833600ea8514dc184e50d2bf08c/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox/Config.in                |    7 +------
- package/matchbox/matchbox-panel/Config.in |    6 ++++++
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/libmatroska/libmatroska.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 15b1017..e791cea 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -21,12 +21,7 @@ if BR2_PACKAGE_MATCHBOX
+diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
+index 1086e87..5e2d9b1 100644
+--- a/package/libmatroska/libmatroska.mk
++++ b/package/libmatroska/libmatroska.mk
+@@ -10,6 +10,6 @@ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
+ LIBMATROSKA_INSTALL_STAGING = YES
+ LIBMATROSKA_LICENSE = LGPLv2.1+
+ LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
+-LIBMATROSKA_DEPENDENCIES = libebml
++LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
  
- source "package/matchbox/matchbox-lib/Config.in"
- source "package/matchbox/matchbox-wm/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_PANEL
--	bool "Matchbox Panel"
--	help
--	  A flexible always present 'window bar' for holding
--	  application launchers.
-+source "package/matchbox/matchbox-panel/Config.in"
- 
- config BR2_PACKAGE_MATCHBOX_DESKTOP
- 	bool "Matchbox Desktop"
-diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox/matchbox-panel/Config.in
-new file mode 100644
-index 0000000..e3daaf5
---- /dev/null
-+++ b/package/matchbox/matchbox-panel/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_MATCHBOX_PANEL
-+	bool "Matchbox Panel"
-+	select BR2_PACKAGE_MATCHBOX_LIB
-+	help
-+	  A flexible always present 'window bar' for holding
-+	  application launchers.
+ $(eval $(autotools-package))
