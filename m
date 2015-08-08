@@ -1,63 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] package/nodejs: Define NPM
-	command for other packages to use
-Message-ID: <20150808105620.B96BC7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] arch: aarch64 always has a MMU
+Message-ID: <20150808105629.0378B7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c50256b6d2c4357cfea39350fa6f5496995e200d
+commit: http://git.buildroot.net/buildroot/commit/?id=f410de414072f1aea6ed32f4e6aef8769f2ae665
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Other nodejs-related packages will need to call npm with the same set of
-arguments as is currently used by the nodejs package itself.
+Following the addition of AArch64 big endian, the AArch64 little
+endian option had lost its 'select BR2_ARCH_HAS_MMU_MANDATORY', so
+let's reintroduce it.
 
-To avoid duplicating this code, set the NPM variable so those packages can
-re-use it.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/nodejs.mk |   18 ++++++++++--------
- 1 files changed, 10 insertions(+), 8 deletions(-)
+ arch/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 156b151..414f3f3 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -95,6 +95,15 @@ NODEJS_MODULES_LIST= $(call qstrip,\
- 	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
- 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
- 
-+# Define NPM for other packages to use
-+NPM = $(TARGET_CONFIGURE_OPTS) \
-+	LD="$(TARGET_CXX)" \
-+	npm_config_arch=$(NODEJS_CPU) \
-+	npm_config_target_arch=$(NODEJS_CPU) \
-+	npm_config_build_from_source=true \
-+	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
-+	$(HOST_DIR)/usr/bin/npm
-+
- #
- # We can only call NPM if there's something to install.
- #
-@@ -104,14 +113,7 @@ define NODEJS_INSTALL_MODULES
- 	# npm install call below and setting npm_config_rollback=false can both
- 	# help in diagnosing the problem.
- 	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
--		$(TARGET_CONFIGURE_OPTS) \
--		LD="$(TARGET_CXX)" \
--		npm_config_arch=$(NODEJS_CPU) \
--		npm_config_target_arch=$(NODEJS_CPU) \
--		npm_config_build_from_source=true \
--		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
--		$(HOST_DIR)/usr/bin/npm install \
--		$(NODEJS_MODULES_LIST) \
-+		$(NPM) install $(NODEJS_MODULES_LIST) \
- 	)
- 
- 	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
+diff --git a/arch/Config.in b/arch/Config.in
+index 39ce046..875f412 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -61,6 +61,7 @@ config BR2_armeb
+ config BR2_aarch64
+ 	bool "AArch64 (little endian)"
+ 	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+ 	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
