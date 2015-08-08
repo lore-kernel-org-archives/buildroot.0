@@ -1,50 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: wrap long
-	lines
-Message-ID: <20150808105607.8DAD27FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt5base: add option for custom
+	qconfig file
+Message-ID: <20150808105629.4683E7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=12a9e85f031626fa2b557e78c0db834dcdc99d1e
+commit: http://git.buildroot.net/buildroot/commit/?id=b5fcf958276fdc92bd041bc07438d6e4a7d2c59a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Add in support for a custom qconfig file in the same way it is
+already present for the Qt4 package
+
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-keyboard/matchbox-keyboard.mk |    3 ++-
- package/matchbox-lib/matchbox-lib.mk           |    3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/Config.in  |   13 +++++++++++++
+ package/qt5/qt5base/qt5base.mk |   13 +++++++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
-index ba524c0..3ffaca6 100644
---- a/package/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox-keyboard/matchbox-keyboard.mk
-@@ -15,7 +15,8 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index df1d3dc..106517f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -28,6 +28,19 @@ config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
  
- define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
--	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
-+	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh \
-+		$(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
- endef
+ 	  See also http://doc.qt.io/qt-5/licensing.html
  
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
-diff --git a/package/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
-index 3b697bb..d43e2b8 100644
---- a/package/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox-lib/matchbox-lib.mk
-@@ -15,7 +15,8 @@ MATCHBOX_LIB_CONF_OPTS = --enable-expat --disable-doxygen-docs
- MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
++config BR2_PACKAGE_QT5BASE_CONFIG_FILE
++	string "Config file"
++	help
++	  Configure options allow to set which modules are being
++	  compiled or not in Qt, but Qt also provide a more
++	  fine-grained mechanism to configure which features should be
++	  enabled or disabled, through a header file. Examples of such
++	  header files can be found in src/corelib/global/qconfig-*.h
++	  in the Qt sources.
++
++	  This option allows to set the path of such a configuration
++	  file, which Buildroot will give to Qt at compile time.
++
+ config BR2_PACKAGE_QT5BASE_EXAMPLES
+ 	bool "Compile and install examples (with code)"
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 2eebb5b..31247dd 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -53,6 +53,12 @@ QT5BASE_LICENSE = Commercial license
+ QT5BASE_REDISTRIBUTE = NO
+ endif
  
- define MATCHBOX_LIB_POST_INSTALL_FIXES
--	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
-+	$(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
- endef
++QT5BASE_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_QT5BASE_CONFIG_FILE))
++
++ifneq ($(QT5BASE_CONFIG_FILE),)
++QT5BASE_CONFIGURE_OPTS += -qconfig buildroot
++endif
++
+ # Qt5 SQL Plugins
+ ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
+ ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
+@@ -168,7 +174,14 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
  
- MATCHBOX_LIB_POST_INSTALL_STAGING_HOOKS += MATCHBOX_LIB_POST_INSTALL_FIXES
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
+ 
++ifneq ($(QT5BASE_CONFIG_FILE),)
++define QT5BASE_CONFIGURE_CONFIG_FILE
++	cp $(QT5BASE_CONFIG_FILE) $(@D)/src/corelib/global/qconfig-buildroot.h
++endef
++endif
++
+ define QT5BASE_CONFIGURE_CMDS
++	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+ 	(cd $(@D); \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
