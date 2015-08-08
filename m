@@ -1,46 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] samba4: enable for uclibc-ng
-Message-ID: <20150808105603.F0F4E7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{10,
+	14}.x and 4.0.x series
+Message-ID: <20150808105606.33AF07FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=110a8d43c16390f949ec9131b30c24381757b1bf
+commit: http://git.buildroot.net/buildroot/commit/?id=65ac66892d54b0352a7a839c75b87ece91e3f98b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-uClibc-ng has the required functionality for samba 4.2.x without the
-need for any special tricks.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/Config.in |   12 +++++++++---
- 1 files changed, 9 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 57adadd..db8c91d 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -1,10 +1,16 @@
--comment "samba4 needs an (e)glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+comment "samba4 needs an (e)glibc or uClibc-ng toolchain w/ RPC, wchar"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_UCLIBC_VERSION_NG
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_SAMBA4
- 	bool "samba4"
- 	depends on !BR2_PACKAGE_SAMBA
--	depends on BR2_TOOLCHAIN_USES_GLIBC # needs $ORIGIN support
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # e2fsprogs
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	# needs $ORIGIN support
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_UCLIBC_VERSION_NG
- 	depends on !BR2_nios2 # binary too large, relocations don't fit
- 	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_POPT
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 653209e..043a3c7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.79"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.43"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+-	default "4.0.4"		if BR2_KERNEL_HEADERS_4_0
++	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
