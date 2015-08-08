@@ -1,42 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] cryptsetup: bump to version
-	1.6.7
-Message-ID: <20150808105619.B7B7A7FB5A@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:49 -0000
+Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
+	to 2.4.62
+Message-ID: <20150808105619.753A77FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd5aa60abd5cdb57ad9f51ad643555b6299cf84a
+commit: http://git.buildroot.net/buildroot/commit/?id=da3805186a582fc42ec1b935da0ef87529284c6a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Added support for newly added optional valgrind support:
+http://cgit.freedesktop.org/mesa/drm/commit/?id=47a2de27a0f087908e3063fdd6dfdececd2db75b
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptsetup/cryptsetup.hash |    2 +-
- package/cryptsetup/cryptsetup.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libdrm/libdrm.hash |    4 ++--
+ package/libdrm/libdrm.mk   |    9 ++++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index f288082..a418081 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 99889ea..05944c5 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
--sha256	2d2ce28e4e1137dd599d87884b62ef6dbf14fd7848b2a2bf7d61cf125fbd8e6f	cryptsetup-1.6.6.tar.xz
-+sha256	c23c24c8d662032da8650c1c84985221be8bbedf4737c1540bba7e4517dfe820	cryptsetup-1.6.7.tar.xz
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 88ddc37..754bea5 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
+-# From http://lists.freedesktop.org/archives/dri-devel/2015-May/082348.html
+-sha256	8b549092c8961a393a7e1d9a1bccddcea8e2af67c0d7d7c67babb9fc3b47699c	libdrm-2.4.61.tar.bz2
++# From http://lists.freedesktop.org/archives/dri-devel/2015-June/085375.html
++sha256	906c294bdbe1c94c3ca084305d61a6e5a8367f3b4986e6cc13b1e9b3f75931dc	libdrm-2.4.62.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 3c3de1d..4cca645 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CRYPTSETUP_VERSION_MAJOR = 1.6
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).6
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).7
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt e2fsprogs host-pkgconf \
+-LIBDRM_VERSION = 2.4.61
++LIBDRM_VERSION = 2.4.62
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+@@ -69,6 +69,13 @@ else
+ LIBDRM_CONF_OPTS += --disable-udev
+ endif
+ 
++ifeq ($(BR2_PACKAGE_VALGRIND),y)
++LIBDRM_CONF_OPTS += --enable-valgrind
++LIBDRM_DEPENDENCIES += valgrind
++else
++LIBDRM_CONF_OPTS += --disable-valgrind
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
+ LIBDRM_CONF_OPTS += --enable-install-test-programs
+ endif
