@@ -1,50 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] gptfdisk: fix static linking
-	issue with iconv
-Message-ID: <20150808105601.2930781778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] zedboard: Upgrade to Linux
+	xilinx-v2015.1 (3.18)
+Message-ID: <20150808105611.A2DBE7F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6fe42d07fa6f5ab4ff175be5f8014734954c5b52
+commit: http://git.buildroot.net/buildroot/commit/?id=fc0345a9a24e92d86b212c54aae0e7670307c831
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/e89/e891a5bab72690a530781ad87d5804a53a209b5c/
-
-Similar to libintl, some of the gptfdisk dependencies may link against
-libiconv, so we need to do so as well when linking statically.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gptfdisk/gptfdisk.mk |   10 +++++++---
- 1 files changed, 7 insertions(+), 3 deletions(-)
+ configs/zedboard_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
-index c11b1d9..e84e3d3 100644
---- a/package/gptfdisk/gptfdisk.mk
-+++ b/package/gptfdisk/gptfdisk.mk
-@@ -21,13 +21,17 @@ ifeq ($(BR2_PACKAGE_GPTFDISK_CGDISK),y)
- GPTFDISK_DEPENDENCIES += ncurses
- endif
- 
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE)$(BR2_STATIC_LIBS),yy)
--GPTFDISK_MAKE_OPTS += LDLIBS=-lintl
-+ifeq ($(BR2_STATIC_LIBS),y)
-+# gptfdisk dependencies may link against libintl/libiconv, so we need
-+# to do so as well when linking statically
-+GPTFDISK_LDLIBS = \
-+	$(if $(BR2_PACKAGE_GETTEXT),-lintl) \
-+	$(if $(BR2_PACKAGE_LIBICONV),-liconv)
- endif
- 
- define GPTFDISK_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		$(GPTFDISK_MAKE_OPTS) $(GPTFDISK_TARGETS_y)
-+		LDLIBS='$(GPTFDISK_LDLIBS)' $(GPTFDISK_TARGETS_y)
- endef
- 
- define GPTFDISK_INSTALL_TARGET_CMDS
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+index e0e7760..76688e9 100644
+--- a/configs/zedboard_defconfig
++++ b/configs/zedboard_defconfig
+@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.1"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
