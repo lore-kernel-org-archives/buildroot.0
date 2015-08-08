@@ -1,44 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] lvm2: bump to version 2.02.121
-Message-ID: <20150808105611.E7CF08030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] hdparm: bump to 9.48
+Message-ID: <20150808105611.784C57F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e64549e6f1838621ed5937e185058ead54d31e83
+commit: http://git.buildroot.net/buildroot/commit/?id=349d5d93f78f0f5fe1cc93de2feedf901f773946
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 2.02.121
-- Update hash file
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/hdparm/hdparm.hash |    4 ++--
+ package/hdparm/hdparm.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index e7f7b2d..6137108 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5  ab5889dae7924b44ed2444161058a419  LVM2.2.02.117.tgz
-+md5  702c61bf07a8fc6dc0db6e9d323d9f6d  LVM2.2.02.121.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 6e324eb..a2db504 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
+index 12f8e07..7d70f0b 100644
+--- a/package/hdparm/hdparm.hash
++++ b/package/hdparm/hdparm.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/hdparm/files/hdparm/
+-md5	1c75d0751a44928b6c4bc81fb16d7fe8	hdparm-9.45.tar.gz
+-sha1	232855a97df0a28ddeeff9325814517668877f6c	hdparm-9.45.tar.gz
++md5	213efdbe7471fad3408198918e164354		hdparm-9.48.tar.gz
++sha1	1efce086ef47667cf8016861d3ce958969e70dfc	hdparm-9.48.tar.gz
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index 2a113d2..a2b3e8c 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.117
-+LVM2_VERSION = 2.02.121
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+-HDPARM_VERSION = 9.45
++HDPARM_VERSION = 9.48
+ HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
+ HDPARM_LICENSE = BSD-Style
+ HDPARM_LICENSE_FILES = LICENSE.TXT
