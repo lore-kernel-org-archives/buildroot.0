@@ -1,44 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] fluxbox: fix build against
-	xlib_libXpm
-Message-ID: <20150808105611.88FDE8030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] config/raspberrypi: remove
+	non-DT defconfig
+Message-ID: <20150808105616.E7CEC7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f1ddefda19f2883ddc9e1fe35d7ce347ea1ee72
+commit: http://git.buildroot.net/buildroot/commit/?id=8f49a5069ab541ce8ec43765fe7e7b99d7ad8438
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Explicitly configure XPM support based on the library selection provided
-(BR2_PACKAGE_XLIB_LIBXPM). It has been observed on different hosts that
-XPM support may or may not be included based off the state of the host's
-system. One can validate XPM support is included in Fluxbox by using the
-command `fluxbox -info`.
+The RPi is slowly but surely dropping support for booting without a DTB,
+so just ditch our old defconfig now that we have up-to-date DT-enabled
+defconfigs for all RPi models (save for the compute module).
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fluxbox/fluxbox.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ configs/raspberrypi_defconfig |   21 ---------------------
+ 1 files changed, 0 insertions(+), 21 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index c8e4289..d2e8c89 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -22,6 +22,13 @@ else
- FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
-+FLUXBOX_CONF_OPTS += --enable-xpm --with-xpm-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_DEPENDENCIES += xlib_libXpm
-+else
-+FLUXBOX_CONF_OPTS += --disable-xpm
-+endif
-+
- define FLUXBOX_INSTALL_XSESSION_FILE
- 	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
- 		$(TARGET_DIR)/root/.xsession
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+deleted file mode 100644
+index f9b8a1c..0000000
+--- a/configs/raspberrypi_defconfig
++++ /dev/null
+@@ -1,21 +0,0 @@
+-BR2_arm=y
+-BR2_arm1176jzf_s=y
+-
+-BR2_TOOLCHAIN_BUILDROOT_CXX=y
+-
+-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+-
+-BR2_PACKAGE_RPI_FIRMWARE=y
+-
+-# Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.28"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+-
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="c256eb9968c8997dce47350d2075e42f1b3991d3"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+-BR2_LINUX_KERNEL_ZIMAGE=y
