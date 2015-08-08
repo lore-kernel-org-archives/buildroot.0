@@ -1,66 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:04 -0000
-Subject: [Buildroot] [git commit branch/next] package/libmemcached: disable
-	documentation
-Message-ID: <20150808105633.E59697FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] systemd: fix license according
+	to README file
+Message-ID: <20150808105618.731C77F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5eb5f2710c2451d7e35dd600e6ced835efb9dda5
+commit: http://git.buildroot.net/buildroot/commit/?id=4ee0ef4ab576e59fcb741fbbf1a419af76599177
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libmemcached fail to build the documentation/man due to
-an python sphinx error.
+Fixes:
+  http://autobuild.buildroot.org/results/6e3/6e3dace5892a589225a93c896917833ebc8028f3
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../libmemcached/0004-disable-doc-and-man.patch    |   37 ++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
+ package/systemd/systemd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmemcached/0004-disable-doc-and-man.patch b/package/libmemcached/0004-disable-doc-and-man.patch
-new file mode 100644
-index 0000000..9605095
---- /dev/null
-+++ b/package/libmemcached/0004-disable-doc-and-man.patch
-@@ -0,0 +1,37 @@
-+From 6c01bd3562cc18fbafdf950bbeb73a399c1adcdd Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Tue, 12 May 2015 00:00:02 +0200
-+Subject: [PATCH] disable doc and man
-+
-+WARNING: master file /home/naourr/git/buildroot/test/libmemcached-bfin/build/libmemcached-1.0.18/docs/index.rst not found
-+
-+Exception occurred:
-+  File "/usr/lib/python2.7/site-packages/sphinx/environment.py", line 1213, in get_doctree
-+    f = open(doctree_filename, 'rb')
-+IOError: [Errno 2] No such file or directory: '/home/naourr/buildroot-test/test/libmemcached-bfin/build/libmemcached-1.0.18/man/.doctrees/hashkit_create.doctree'
-+The full traceback has been saved in /tmp/sphinx-err-JCIsnB.log, if you want to report the issue to the developers.
-+Please also report this if it was a user error, so that a better error message can be provided next time.
-+Either send bugs to the mailing list at <http://groups.google.com/group/sphinx-dev/>,
-+or report them in the tracker at <http://bitbucket.org/birkenfeld/sphinx/issues/>. Thanks!
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ Makefile.am | 2 --
-+ 1 file changed, 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 7f44102..cb7d058 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -55,8 +55,6 @@ endif
-+ include libmemcachedutil-1.0/include.am
-+ 
-+ include clients/include.am
-+-include docs/include.am
-+-include man/include.am
-+ 
-+ if BUILD_LIBMEMCACHED_PROTOCOL
-+ include example/include.am
-+-- 
-+1.9.3
-+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index ee17bc8..0a1f00f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -7,8 +7,8 @@
+ SYSTEMD_VERSION = 221
+ SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+ SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+-SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
+-SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 LICENSE.MIT
++SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
++SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+ SYSTEMD_INSTALL_STAGING = YES
+ SYSTEMD_DEPENDENCIES = \
+ 	host-intltool \
