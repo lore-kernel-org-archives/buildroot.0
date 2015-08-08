@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:02 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain/helpers.mk: use
-	--chmod on rsync
-Message-ID: <20150808105630.68D417FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] nfs-utils: Create missing
+	directory sm.bak
+Message-ID: <20150808105630.4C4D580414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40b28322b378da087a795e4e544d8700001d28ea
+commit: http://git.buildroot.net/buildroot/commit/?id=a23d336fbdba575321cfddadf7d671810559b056
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This makes sure we don't have any weird permissions on the staging dir,
-which could affect the target.
-
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/nfs-utils/S60nfs |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 0dc1864..895f3f1 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -139,7 +139,7 @@ copy_toolchain_sysroot = \
- 	SUPPORT_LIB_DIR="$(strip $5)" ; \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
--			rsync -au --chmod=Du+w --exclude 'usr/lib/locale' \
-+			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
- 				--exclude lib --exclude lib32 --exclude lib64 \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index 5e2a2c9..e163d80 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -10,6 +10,7 @@
+ 
+ mkdir -p /var/lock/subsys
+ mkdir -p /run/nfs/sm
++mkdir -p /run/nfs/sm.bak
+ touch /run/nfs/rmtab
+ 
+ start() {
