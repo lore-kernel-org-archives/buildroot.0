@@ -1,43 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] openssh: bump to version 6.9p1
-Message-ID: <20150808105619.02F3C7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-networkmanager: bump to
+	version 0.9.13
+Message-ID: <20150808105619.E88227FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad460e4930166df9163ab811475de1028d4cc589
+commit: http://git.buildroot.net/buildroot/commit/?id=558caf4e05b06dcbdd209da9a69192c41785ea28
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: fix upstream hash link]
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash |    4 ++--
- package/openssh/openssh.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../python-networkmanager.hash                     |    6 +++---
+ .../python-networkmanager/python-networkmanager.mk |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 3af72ff..76d0be8 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
+diff --git a/package/python-networkmanager/python-networkmanager.hash b/package/python-networkmanager/python-networkmanager.hash
+index 6c6f697..1438daa 100644
+--- a/package/python-networkmanager/python-networkmanager.hash
++++ b/package/python-networkmanager/python-networkmanager.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-6.8 (sha256 is base64 encoded)
--sha256	3ff64ce73ee124480b5bf767b9830d7d3c03bbcb6abe716b78f0192c37ce160e	openssh-6.8p1.tar.gz
-+# Also from http://www.openssh.com/txt/release-6.9 (sha256 is base64 encoded)
-+sha256	6e074df538f357d440be6cf93dc581a21f22d39e236f217fcd8eacbb6c896cfe	openssh-6.9p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 24af079..11a844e 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2cd400a7ca4dcd1ea98c864007032494, sha256 locally computed
+-md5	2cd400a7ca4dcd1ea98c864007032494  python-networkmanager-0.9.12.tar.gz
+-sha256	a4c7bbae8a1ee3cf370ff0cd2ba2e0f1fb7f8e8f99f8f48a1df624c19a11166f  python-networkmanager-0.9.12.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=fbae1f2b0140c560222fed95a259753d, sha256 locally computed
++md5	fbae1f2b0140c560222fed95a259753d  python-networkmanager-0.9.13.tar.gz
++sha256	9a61abded027b723ff929196180dc5ea3b4c17182863837d0b88d6a58fd03ea3  python-networkmanager-0.9.13.tar.gz
+diff --git a/package/python-networkmanager/python-networkmanager.mk b/package/python-networkmanager/python-networkmanager.mk
+index c043edb..b3b1e67 100644
+--- a/package/python-networkmanager/python-networkmanager.mk
++++ b/package/python-networkmanager/python-networkmanager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 6.8p1
-+OPENSSH_VERSION = 6.9p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-PYTHON_NETWORKMANAGER_VERSION = 0.9.12
++PYTHON_NETWORKMANAGER_VERSION = 0.9.13
+ PYTHON_NETWORKMANAGER_SITE = http://pypi.python.org/packages/source/p/python-networkmanager
+ PYTHON_NETWORKMANAGER_SETUP_TYPE = distutils
+ PYTHON_NETWORKMANAGER_LICENSE = GPLv3+
