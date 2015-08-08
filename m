@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{10,
-	14}.x and 4.0.x series
-Message-ID: <20150808105606.33AF07FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] erlang-p1-tls: bump to version
+	b070004
+Message-ID: <20150808105626.52BB17FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65ac66892d54b0352a7a839c75b87ece91e3f98b
+commit: http://git.buildroot.net/buildroot/commit/?id=c0ca053e509c2af134b4c0a704e7d4cfacb21c34
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/erlang-p1-tls/erlang-p1-tls.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 653209e..043a3c7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -201,15 +201,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.79"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.43"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.4"		if BR2_KERNEL_HEADERS_4_0
-+	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
+index d6e5801..d706797 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-tls/erlang-p1-tls.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_P1_TLS_VERSION = 53f0478
++ERLANG_P1_TLS_VERSION = b070004
+ ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
+ ERLANG_P1_TLS_LICENSE = GPLv2+
+ ERLANG_P1_TLS_LICENSE_FILES = COPYING
