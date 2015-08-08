@@ -1,44 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:03 -0000
-Subject: [Buildroot] [git commit branch/next] package/mono: bump to version
-	4.0.2.5
-Message-ID: <20150808105637.8A1D480414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bluez5_utils: add ability to
+	build sixaxis plugin
+Message-ID: <20150808105637.92D5F80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b4c260ef3fb8798105e0e3549448fb4a1ea2f17
+commit: http://git.buildroot.net/buildroot/commit/?id=de33b1940dc77ccb487ece73bf038bea415caf93
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps mono to version 4.0.2.5
+[Thomas: add missing udev dependency.]
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Eric Limpens <limpens@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mono/mono.hash |    2 +-
- package/mono/mono.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bluez5_utils/Config.in       |    9 +++++++++
+ package/bluez5_utils/bluez5_utils.mk |    7 +++++++
+ 2 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index c1d0c6e..cf8e0d5 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 4485d8b44a939bef64b3b1b6a7f0388761cfe6803e149aa1e56aab023cfb267e  mono-4.0.0.tar.bz2
-+sha256 b074584eea5bbaaf29362486a69d70abe53d0d2feb334f231fa9c841cf6fd651  mono-4.0.2.5.tar.bz2
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 63026f1..9cb8564 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 472432b..80c3830 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -58,6 +58,15 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
+ 	help
+ 	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
  
--MONO_VERSION = 4.0.0
-+MONO_VERSION = 4.0.2.5
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
++config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
++	bool "build sixaxis plugin"
++	depends on BR2_PACKAGE_HAS_UDEV
++	help
++	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock controller)
++
++comment "sixaxis plugin needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
++
+ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+ 	bool "build tests"
+ 	help
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index a1adbe1..4c50e53 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -41,6 +41,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
+ endif
+ 
++# enable sixaxis plugin
++ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
++endif
++
+ # install gatttool (For some reason upstream choose not to do it by default)
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
+ define BLUEZ5_UTILS_INSTALL_GATTTOOL
