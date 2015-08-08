@@ -1,109 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] wireshark: security bump to
-	version 1.12.5
-Message-ID: <20150808105602.BE4057F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] strongswan: security bump to
+	version 5.3.1
+Message-ID: <20150808105603.164967FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1aa0bb1097892bc4c5743bc6149668300c451cc
+commit: http://git.buildroot.net/buildroot/commit/?id=373031bfd82c1386f5abb0f2ca49376571917cc5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes:
-CVE-2015-3808 CVE-2015-3809 - The LBMR dissector could go into an
-infinite loop.
-CVE-2015-3811 - The WCP dissector could crash while decompressing data.
-CVE-2015-3812 - The X11 dissector could leak memory.
-CVE-2015-3813 - The packet reassembly code could leak memory.
-CVE-2015-3814 - The IEEE 802.11 dissector could go into an infinite
-loop.
-CVE-2015-3815 - The Android Logcat file parser could crash.
 
-Patch upstream so drop and disable autoreconf.
+CVE-2015-3991 - denial-of-service and potential remote code execution
+vulnerability triggered by IKEv1/IKEv2 messages that contain payloads
+for the respective other IKE version.
+other IKE version
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...001-fix-wrong-cflags-for-build-assumption.patch |   38 --------------------
- package/wireshark/wireshark.hash                   |    6 ++--
- package/wireshark/wireshark.mk                     |    4 +--
- 3 files changed, 4 insertions(+), 44 deletions(-)
+ package/strongswan/strongswan.hash |    4 ++--
+ package/strongswan/strongswan.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch b/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch
-deleted file mode 100644
-index 14cb957..0000000
---- a/package/wireshark/0001-fix-wrong-cflags-for-build-assumption.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--AC_WIRESHARK_GCC_CFLAGS_CHECK checks for valid CFLAGS against CC and pushes
--them into CFLAGS and CFLAGS_FOR_BUILD.
--This is wrong since CC_FOR_BUILD might be wildly different and older than CC
--leading to build errors.
--
--Upstream status: reported in tracker
--https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=9507
--
--Patch status: Interim to fix:
--http://autobuild.buildroot.net/results/2b1/2b1a0654b649618422d65edf370b82476ba84491/
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura wireshark-1.12.0.orig/acinclude.m4 wireshark-1.12.0/acinclude.m4
----- wireshark-1.12.0.orig/acinclude.m4	2014-09-04 15:45:38.365255309 -0300
--+++ wireshark-1.12.0/acinclude.m4	2014-09-04 15:46:23.349810353 -0300
--@@ -1755,10 +1755,6 @@
--               # just the new option.
--               #
--               CFLAGS="$CFLAGS_saved $GCC_OPTION"
---              #
---              # Add it to the flags we use when building build tools.
---              #
---              CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
--             ],
--             [
--               AC_MSG_RESULT(yes)
--@@ -1771,10 +1767,6 @@
--           # just the new option.
--           #
--           CFLAGS="$CFLAGS_saved $GCC_OPTION"
---          #
---          # Add it to the flags we use when building build tools.
---          #
---          CFLAGS_FOR_BUILD="$CFLAGS_FOR_BUILD $GCC_OPTION"
--         fi
--       ],
--       [
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index fa4cf18..35eb1a2 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,3 +1,3 @@
--# From https://www.wireshark.org/download/SIGNATURES-1.12.4.txt
--md5	acfa156fd35cb66c867b1ace992e4b5b	wireshark-1.12.4.tar.bz2
--sha1	dbbd4090c02fe170f35b26fa26d8aba0b399c659	wireshark-1.12.4.tar.bz2
-+# From https://www.wireshark.org/download/SIGNATURES-1.12.5.txt
-+md5	9ee199dde4f36a3d71f7b81dd6764e93	wireshark-1.12.5.tar.bz2
-+sha1	379686f0b6355ae2e6b3f7055578317a07ce5590	wireshark-1.12.5.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 434687c..eb56808 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,14 +4,12 @@
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index 626356a..e38c736 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,2 +1,2 @@
+-# From http://download.strongswan.org/strongswan-5.3.0.tar.bz2.md5
+-md5	c52d4228231c2025d9c320d0e9990327	strongswan-5.3.0.tar.bz2
++# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
++md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index af21dda..f165eb1 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 1.12.4
-+WIRESHARK_VERSION = 1.12.5
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
- WIRESHARK_LICENSE_FILES = COPYING
- WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
--# For wrong cflags patch
--WIRESHARK_AUTORECONF = YES
- WIRESHARK_CONF_ENV = \
- 	LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
- 	ac_cv_path_PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+-STRONGSWAN_VERSION = 5.3.0
++STRONGSWAN_VERSION = 5.3.1
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPLv2+
