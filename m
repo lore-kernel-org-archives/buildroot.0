@@ -1,42 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] libmicrohttpd: bump to version
-	0.9.42
-Message-ID: <20150808105603.5E7497FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] wvstreams: not available for
+	static only builds
+Message-ID: <20150808105559.490B6818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27adf529d7f1fd2e2608e1deaf56a2dd9fe19c8f
+commit: http://git.buildroot.net/buildroot/commit/?id=be1287e7e5ca2a11cd6dea84ac481d10eaa48edb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Also propagated to wvdial as it selects wvstreams.
+
+Fixes:
+ http://autobuild.buildroot.org/results/0cd/0cd5e0263b42e6845504d97688632e16206bd000/
+ http://autobuild.buildroot.org/results/4e0/4e0ab461ea7ed7a288303741eec89156abd49864/
+
+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash |    2 +-
- package/libmicrohttpd/libmicrohttpd.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wvdial/Config.in    |    5 +++--
+ package/wvstreams/Config.in |    5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 931eaad..d5fb7da 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9798be637d4a1d76a377e1d805d142e6edcfd3ec99c443926448f647af1a7a7c	libmicrohttpd-0.9.41.tar.gz
-+sha256	00352073367003da40607319e4090a6a8308748b59246ae80e9871f34dad7d5b	libmicrohttpd-0.9.42.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index e2ff1cf..a6662a7 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
+index e57f975..5d415b1 100644
+--- a/package/wvdial/Config.in
++++ b/package/wvdial/Config.in
+@@ -2,12 +2,13 @@ config BR2_PACKAGE_WVDIAL
+ 	bool "wvdial"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # wvstreams
++	depends on !BR2_STATIC_LIBS # wvstreams
+ 	select BR2_PACKAGE_WVSTREAMS
+ 	help
+ 	  wvdial is an intelligent Point-to-Point Protocol dialer
  
--LIBMICROHTTPD_VERSION = 0.9.41
-+LIBMICROHTTPD_VERSION = 0.9.42
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+ 	  http://wvdial.googlecode.com/
+ 
+-comment "wvdial needs a toolchain w/ C++"
++comment "wvdial needs a toolchain w/ C++, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
+index 3080dc7..0cbe60a 100644
+--- a/package/wvstreams/Config.in
++++ b/package/wvstreams/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_WVSTREAMS
+ 	bool "wvstreams"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+@@ -9,6 +10,6 @@ config BR2_PACKAGE_WVSTREAMS
+ 
+ 	  http://wvstreams.googlecode.com/
+ 
+-comment "wvstreams needs a toolchain w/ C++"
++comment "wvstreams needs a toolchain w/ C++, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
