@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next] package/nodejs: symlink
-	/usr/lib/node_modules/.bin/* to /usr/bin
-Message-ID: <20150808105620.A7A367FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt/qt5base: reorder patches
+Message-ID: <20150808105639.24DF6803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9aab65f304ed18ecb93d25de497e4f2fef75973d
+commit: http://git.buildroot.net/buildroot/commit/?id=b122e7d37fe4f9b5976f849c2e867ba220461af3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch symlinks all executables in /usr/lib/node_modules/.bin
-to /usr/bin so that node.js modules installed using
-BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL are accessible from the command line.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/nodejs.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ ...kspecs-files.patch => 0002-mkspecs-files.patch} |    0
+ ...cb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} |    0
+ ...ch => 0004-no-gold-linker-for-host-build.patch} |    0
+ ...=> 0005-forkd-disable-eventfd-for-uclibc.patch} |    0
+ 4 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 59e03b0..0b3f8a5 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -111,6 +111,14 @@ define NODEJS_INSTALL_MODULES
- 		$(HOST_DIR)/usr/bin/npm install \
- 		$(NODEJS_MODULES_LIST) \
- 	)
-+
-+	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
-+	# $(TARGET_DIR)/usr/bin so they are accessible from the command line
-+	cd $(TARGET_DIR)/usr/bin; \
-+	for f in ../../usr/lib/node_modules/.bin/*; do \
-+		[ -f "$${f}" -a -x "$${f}" ] || continue; \
-+		ln -sf "$${f}" "$${f##*/}" || exit 1; \
-+	done
- endef
- endif
- 
+diff --git a/package/qt5/qt5base/0003-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
+similarity index 100%
+rename from package/qt5/qt5base/0003-mkspecs-files.patch
+rename to package/qt5/qt5base/0002-mkspecs-files.patch
+diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+similarity index 100%
+rename from package/qt5/qt5base/0004-xcb-egl-fixes.patch
+rename to package/qt5/qt5base/0003-xcb-egl-fixes.patch
+diff --git a/package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch b/package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
+similarity index 100%
+rename from package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
+rename to package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
+diff --git a/package/qt5/qt5base/0008-forkd-disable-eventfd-for-uclibc.patch b/package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
+similarity index 100%
+rename from package/qt5/qt5base/0008-forkd-disable-eventfd-for-uclibc.patch
+rename to package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
