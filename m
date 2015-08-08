@@ -1,51 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain/external: better
-	report RPC error for custom toolchains
-Message-ID: <20150808105555.1BE5681801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] postgresql: avoid AC_TRY_RUN
+	when testing snprintf()
+Message-ID: <20150808105557.404FA81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=808c3fb8d2271642afca9a82a51d24fa03a235f6
+commit: http://git.buildroot.net/buildroot/commit/?id=3d3f70b567718ae308b5704ddd7d107c4849309e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, we instruct users to enable/disable BR2_TOOLCHAIN_HAS_NATIVE_RPC
-but that is a blind option. The only option users can set/unset is
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC.
+A few snprintf() compatibility tests in config/c-library.m4 use AC_TRY_RUN
+that doesn't work for cross compilation. As a result configure.in decides to
+build a bundled implementation of snprintf(). This implementation calls
+isnan(), but -lm is missing. This breaks link with libpq.so. Preseed the
+correct values to make the configure script happy, and fix rsyslog build.
 
-Use that in the error message.
+Fixes:
+http://autobuild.buildroot.net/results/e76/e769982e3131581b38698c109c9bc5215e3d5b11/
+http://autobuild.buildroot.net/results/2b9/2b9d3edc8341675455bc3b74d1e84c8c0c24c521/
+http://autobuild.buildroot.net/results/2a8/2a80357237ed7225823a008b5ff02bab01269814/
 
-Notes: the only way for this message to appear is for a custom external
-toolchain, either downloaded or pre-installed, so even though we check
-the validity of the toolchain with BR2_TOOLCHAIN_HAS_NATIVE_RPC, we do
-report on BR2_TOOLCHAIN_EXTERNAL_INET_RPC.
+and many more.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Gergely Imreh <imrehg@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/helpers.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index cb3b61a..30eb065 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -197,11 +197,11 @@ check_glibc_feature = \
- check_glibc_rpc_feature = \
- 	IS_IN_LIBC=`test -f $(1)/usr/include/rpc/rpc.h && echo y` ; \
- 	if [ "$(BR2_TOOLCHAIN_HAS_NATIVE_RPC)" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
--		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
-+		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_EXTERNAL_INET_RPC" ; \
- 		exit 1 ; \
- 	fi ; \
- 	if [ "$(BR2_TOOLCHAIN_HAS_NATIVE_RPC)" = "y" -a "$${IS_IN_LIBC}" != "y" ] ; then \
--		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
-+		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_EXTERNAL_INET_RPC" ; \
- 		exit 1 ; \
- 	fi
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 1a6aa88..eda547c 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -11,7 +11,9 @@ POSTGRESQL_LICENSE = PostgreSQL
+ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+-POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes
++POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
++		      pgac_cv_snprintf_long_long_int_format="%lld" \
++		      pgac_cv_snprintf_size_t_support=yes
+ POSTGRESQL_AUTORECONF = YES
  
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
