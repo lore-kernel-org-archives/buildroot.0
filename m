@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:58:10 -0000
-Subject: [Buildroot] [git commit branch/next] netperf: bump to version 2.7.0
-Message-ID: <20150808105639.D323D7F8D4@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:58:11 -0000
+Subject: [Buildroot] [git commit branch/next] audit: disable python3 support
+Message-ID: <20150808105640.50CD27F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2aa1f9c715c1aab3b7747f45fd62c1c97ba303cb
+commit: http://git.buildroot.net/buildroot/commit/?id=5a8951273a567a6bdf11f77ba40f99acf28d3bfa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also add hash file.
-And work around gcc 5+ defaulting to gnu99, fixes:
+With the version bump to 2.4.3, python3 support was added for
+libaudit. With host machines that have python3 installed, this will
+cause build issues such as:
 
-http://autobuild.buildroot.net/results/077/077714a0ee67057abcff680b244228a409243bbf/
+  make[5]: Entering directory `/tmp/ryan/buildroot/output/build/audit-2.4.3/bindings/swig/python3'
+  swig -o audit_wrap.c -python -py3 -modern -I. -I../../.. -I../../../lib -I/usr/include/python3.4m -I/usr/include/python3.4m ./../src/auditswig.i
+  make[5]: swig: Command not found
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Solution is to disable python3 support such as we do with python2.7.
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netperf/netperf.hash |    2 ++
- package/netperf/netperf.mk   |    8 ++++++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/audit/audit.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/netperf/netperf.hash b/package/netperf/netperf.hash
-new file mode 100644
-index 0000000..f972740
---- /dev/null
-+++ b/package/netperf/netperf.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	842af17655835c8be7203808c3393e6cb327a8067f3ed1f1053eb78b4e40375a	netperf-2.7.0.tar.bz2
-diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
-index 13d44fe..8b22808 100644
---- a/package/netperf/netperf.mk
-+++ b/package/netperf/netperf.mk
-@@ -4,9 +4,13 @@
- #
- ################################################################################
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 806bd97..61e876b 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -14,7 +14,7 @@ AUDIT_INSTALL_STAGING = YES
+ # Patching Makefile.am
+ AUDIT_AUTORECONF = YES
  
--NETPERF_VERSION = 2.6.0
-+NETPERF_VERSION = 2.7.0
- NETPERF_SITE = ftp://ftp.netperf.org/netperf
--NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
-+NETPERF_SOURCE = netperf-$(NETPERF_VERSION).tar.bz2
-+# gcc 5+ defaults to gnu99 which breaks netperf
-+NETPERF_CONF_ENV = \
-+	ac_cv_func_setpgrp_void=set \
-+	CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
- NETPERF_CONF_OPTS = --enable-demo=yes
- NETPERF_LICENSE = netperf license
- NETPERF_LICENSE_FILES = COPYING
+-AUDIT_CONF_OPTS = --without-python --disable-zos-remote
++AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ AUDIT_DEPENDENCIES += libcap-ng
