@@ -1,26 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:04 -0000
-Subject: [Buildroot] [git commit branch/next] spice-protocol: add hash file
-Message-ID: <20150808105634.4AD877FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perf: use correct
+	definition of ARCH on x86_64
+Message-ID: <20150808105633.4917B7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efc0e7e1c7edb4ccd37f3840f3ee58911787be40
+commit: http://git.buildroot.net/buildroot/commit/?id=1b787822fbf3cda83eb7ef28c1187af6f6247781
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/spice-protocol/spice-protocol.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+LINUX_MAKE_FLAGS defines ARCH=$(KERNEL_ARCH), and KERNEL_ARCH is x86_64 on
+a 64-bit x86 kernel build. The perf Makefiles expect that the ARCH will be
+"x86" on both 32-bit x86 and 64-bit x86.
 
-diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
-new file mode 100644
-index 0000000..2e88855
---- /dev/null
-+++ b/package/spice-protocol/spice-protocol.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	9d4745602eb2ab1d1c1ab98b4babf587574870993b4faefe354ac57bb5e8259b	spice-protocol-0.12.6.tar.bz2
+I didn't experience issues with the Linux 3.14.x version of perf, but this
+issue cropped up once I started building 3.19.x.
+
+Signed-off-by: Steven Noonan <steven@uplinklabs.net>
+[Romain:
+  - fix coding style]
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perf/perf.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index 42fbe24..2bdd555 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -10,8 +10,15 @@ PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+ 
+ PERF_DEPENDENCIES = linux host-flex host-bison
+ 
++ifeq ($(KERNEL_ARCH),x86_64)
++PERF_ARCH=x86
++else
++PERF_ARCH=$(KERNEL_ARCH)
++endif
++
+ PERF_MAKE_FLAGS = \
+ 	$(LINUX_MAKE_FLAGS) \
++	ARCH=$(PERF_ARCH) \
+ 	NO_LIBAUDIT=1 \
+ 	NO_NEWT=1 \
+ 	NO_GTK2=1 \
