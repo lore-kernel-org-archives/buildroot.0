@@ -1,54 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:41 -0000
-Subject: [Buildroot] [git commit branch/next] olsr: systemd support
-Message-ID: <20150808105632.4899F818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ptpd: systemd support
+Message-ID: <20150808105632.579A4818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b39faff8c5d425fe5f9fa64baf4b9ceb77b432f0
+commit: http://git.buildroot.net/buildroot/commit/?id=9ad7b47c5ee1a69dc3540f1da75dce8b07f2c234
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: use relative symlink instead of absolute symlink]
+[Thomas:
+   - use relative symbolic link instead of absolute one
+   - remove the -S option, since redirecting stdout is not needed,
+     it's already taken care of by systemd. Suggested by Maxime
+     Hadjinlian.]
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/olsr/olsr.mk      |    8 ++++++++
- package/olsr/olsr.service |   10 ++++++++++
+ package/ptpd/ptpd.mk      |    8 ++++++++
+ package/ptpd/ptpd.service |   10 ++++++++++
  2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 7e28b1e..0dec8dc 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -40,4 +40,12 @@ define OLSR_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50olsr
+diff --git a/package/ptpd/ptpd.mk b/package/ptpd/ptpd.mk
+index ac9ab98..dad8ccf 100644
+--- a/package/ptpd/ptpd.mk
++++ b/package/ptpd/ptpd.mk
+@@ -22,4 +22,12 @@ define PTPD_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S65ptpd
  endef
  
-+define OLSR_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/olsr/olsr.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/olsr.service
++define PTPD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/ptpd/ptpd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/ptpd.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/olsr.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/olsr.service
++	ln -sf ../../../../usr/lib/systemd/system/ptpd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptpd.service
 +endef
 +
  $(eval $(generic-package))
-diff --git a/package/olsr/olsr.service b/package/olsr/olsr.service
+diff --git a/package/ptpd/ptpd.service b/package/ptpd/ptpd.service
 new file mode 100644
-index 0000000..9ec8930
+index 0000000..c9da3f4
 --- /dev/null
-+++ b/package/olsr/olsr.service
++++ b/package/ptpd/ptpd.service
 @@ -0,0 +1,10 @@
 +[Unit]
-+Description=Ad-hoc wireless mesh routing daemon
-+After=network.target
++Description=Precision Time Protocol daemon
++After=syslog.target network.target
 +
 +[Service]
-+ExecStart=/usr/sbin/olsrd -nofork
++ExecStart=/usr/sbin/ptpd -c
 +Restart=always
 +
 +[Install]
