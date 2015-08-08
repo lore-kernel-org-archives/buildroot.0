@@ -1,117 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 18:08:22 +0200
-Subject: [Buildroot] [git commit] zyre: backport fix to build with recent
-	versions of ZeroMQ
-Message-ID: <20150808160931.BF76F800D6@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  8 Aug 2015 18:39:13 +0200
+Subject: [Buildroot] [PATCH] package/powertop: add missing headers for musl
+Message-ID: <1439051953-11850-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6364c770ed250aa39474be3c2eaa5c1e579cd136
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Reported upstream:
+https://github.com/fenrus75/powertop/pull/20
 
-Since the recent bump of ZeroMQ, Zyre failed to build, due to the
-const qualifier being dropped in a number of functions.
+Fixes:
+http://autobuild.buildroot.net/results/713/713df99bebd625434e029abdf360574de879afa3/
 
-A backport from the upstream Github repository fixes the problem, and
-therefore fixes the following build failure:
-
-  http://autobuild.buildroot.org/results/d24/d24d7ccb878151bd81003763ba1a6bcd91d41dc9/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- ...inconsistent-use-of-const-on-some-methods.patch |   84 ++++++++++++++++++++
- 1 files changed, 84 insertions(+), 0 deletions(-)
+ .../0003-add-missing-sys-time.h-header.patch       | 35 ++++++++++++++++++++++
+ .../powertop/0004-add-missing-stdio.h-header.patch | 35 ++++++++++++++++++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 package/powertop/0003-add-missing-sys-time.h-header.patch
+ create mode 100644 package/powertop/0004-add-missing-stdio.h-header.patch
 
-diff --git a/package/zyre/0001-Problem-inconsistent-use-of-const-on-some-methods.patch b/package/zyre/0001-Problem-inconsistent-use-of-const-on-some-methods.patch
+diff --git a/package/powertop/0003-add-missing-sys-time.h-header.patch b/package/powertop/0003-add-missing-sys-time.h-header.patch
 new file mode 100644
-index 0000000..8e38ad0
+index 0000000..7156e42
 --- /dev/null
-+++ b/package/zyre/0001-Problem-inconsistent-use-of-const-on-some-methods.patch
-@@ -0,0 +1,84 @@
-+From f450770ea81682323a3c1704b6eafcb88d44a175 Mon Sep 17 00:00:00 2001
-+From: Pieter Hintjens <ph@imatix.com>
-+Date: Sat, 2 May 2015 14:54:11 +0200
-+Subject: [PATCH] Problem: inconsistent use of 'const' on some methods
++++ b/package/powertop/0003-add-missing-sys-time.h-header.patch
+@@ -0,0 +1,35 @@
++From 283cab667a9ac3ae3a675b5e5d1a42191188699f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 8 Aug 2015 18:24:48 +0200
++Subject: [PATCH] add missing sys/time.h header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Solution: any method that returns a managed string (i.e. not a fresh
-+string that the caller must free) should return 'const char *'.
++struct timeval is defined in sys/time.h with a musl toolchain.
 +
-+Fixes #319
++Fixes:
++In file included from devices/devfreq.cpp:35:0:
++devices/devfreq.h:35:18: error: field ?stamp_before? has incomplete type ?timeval?
++  struct timeval  stamp_before, stamp_after;
 +
-+Backported from:
-+https://github.com/zeromq/zyre/commit/463d2a63e5e92f8028577c350a3badfcafc9c2cb
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+ src/zyre_peer.c | 6 +++---
-+ src/zyre_peer.h | 6 +++---
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
++ src/devices/devfreq.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/zyre_peer.c b/src/zyre_peer.c
-+index 0497424..8b60c86 100644
-+--- a/src/zyre_peer.c
-++++ b/src/zyre_peer.c
-+@@ -190,7 +190,7 @@ zyre_peer_connected (zyre_peer_t *self)
-+ //  ---------------------------------------------------------------------
-+ //  Return peer identity string
++diff --git a/src/devices/devfreq.h b/src/devices/devfreq.h
++index 16a60fb..4a8983b 100644
++--- a/src/devices/devfreq.h
+++++ b/src/devices/devfreq.h
++@@ -27,6 +27,7 @@
 + 
-+-char *
-++const char *
-+ zyre_peer_identity (zyre_peer_t *self)
-+ {
-+     assert (self);
-+@@ -201,7 +201,7 @@ zyre_peer_identity (zyre_peer_t *self)
-+ //  ---------------------------------------------------------------------
-+ //  Return peer connection endpoint
++ #include "device.h"
++ #include "../parameters/parameters.h"
+++#include <sys/time.h>
 + 
-+-char *
-++const char *
-+ zyre_peer_endpoint (zyre_peer_t *self)
-+ {
-+     assert (self);
-+@@ -295,7 +295,7 @@ zyre_peer_set_ready (zyre_peer_t *self, bool ready)
-+ //  ---------------------------------------------------------------------
-+ //  Get peer header value
++ struct frequency;
 + 
-+-char *
-++const char *
-+ zyre_peer_header (zyre_peer_t *self, char *key, char *default_value)
-+ {
-+     assert (self);
-+diff --git a/src/zyre_peer.h b/src/zyre_peer.h
-+index d5a8060..f6a01b9 100644
-+--- a/src/zyre_peer.h
-++++ b/src/zyre_peer.h
-+@@ -54,7 +54,7 @@ bool
-+     zyre_peer_connected (zyre_peer_t *self);
-+ 
-+ //  Return peer connection endpoint
-+-char *
-++const char *
-+     zyre_peer_endpoint (zyre_peer_t *self);
-+ 
-+ //  Send message to peer
-+@@ -62,7 +62,7 @@ int
-+     zyre_peer_send (zyre_peer_t *self, zre_msg_t **msg_p);
-+ 
-+ //  Return peer identity string
-+-char *
-++const char *
-+     zyre_peer_identity (zyre_peer_t *self);
-+     
-+ //  Register activity at peer
-+@@ -94,7 +94,7 @@ void
-+     zyre_peer_set_ready (zyre_peer_t *self, bool ready);
-+ 
-+ //  Get peer header value
-+-char *
-++const char *
-+     zyre_peer_header (zyre_peer_t *self, char *key, char *default_value);
-+ 
-+ //  Set peer headers from provided dictionary
 +-- 
-+2.5.0
++2.4.3
 +
+diff --git a/package/powertop/0004-add-missing-stdio.h-header.patch b/package/powertop/0004-add-missing-stdio.h-header.patch
+new file mode 100644
+index 0000000..7619cca
+--- /dev/null
++++ b/package/powertop/0004-add-missing-stdio.h-header.patch
+@@ -0,0 +1,35 @@
++From e6cfd977c81b335664db1d5d3d6b5488c245e30f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 8 Aug 2015 18:26:15 +0200
++Subject: [PATCH] add missing stdio.h header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++snprinf is defined in stdio.h.
++
++Fixes:
++perf/perf_bundle.cpp: In function ?void parse_event_format(const char*)?:
++perf/perf_bundle.cpp:141:75: error: ?sprintf? was not declared in this scope
++  sprintf(file, "/sys/kernel/debug/tracing/events/%s/%s/format", sys, event);
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/perf/perf_bundle.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/perf/perf_bundle.cpp b/src/perf/perf_bundle.cpp
++index cf1ae11..3d216ff 100644
++--- a/src/perf/perf_bundle.cpp
+++++ b/src/perf/perf_bundle.cpp
++@@ -31,6 +31,7 @@
++ #include <sys/stat.h>
++ #include <fcntl.h>
++ #include <unistd.h>
+++#include <stdio.h>
++ 
++ #include "perf_bundle.h"
++ #include "perf_event.h"
++-- 
++2.4.3
++
+-- 
+2.4.3
