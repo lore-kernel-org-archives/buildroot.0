@@ -1,281 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] package/gcc (arc): backport
-	PR56780 patches
-Message-ID: <20150808105556.6A95D818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] c-periphery: new package
+Message-ID: <20150808105558.B30DC818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0268c3cbf2273eabcf045be535018698e3458199
+commit: http://git.buildroot.net/buildroot/commit/?id=416e35b44a107316532bdde416128dcffaed49ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
---disable-install-libiberty configure option is broken
-in gcc 4.8.x, so libiberty.a is always installed in HOST_DIR.
+This package is needed as a dependency of lua-periphery. Currently,
+c-periphery is automatically cloned by lua-periphery, which causes two
+problems:
 
-This library broke the host-gdb build due to a fpic/fPIC issue.
+ 1/ It does not integrate properly with the download infrastructure of
+    Buildroot, making offline builds impossible since not the entire
+    source code is downloaded by Buildroot.
 
-Note: host-binutils-arc-2014.12 install libiberty.a in HOST_DIR
-but it was overwritten by the gcc one. The host-binutils's
-libiberty.a also broke the host-gdb build. This should be
-fixed in a followup patch.
+ 2/ It does not use the latest version of c-periphery, which has some
+    fixes contributed by Vicente to fix c-periphery on MIPS.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Introducing this package is needed as part of the fix for the
+following build failure:
+
+  http://autobuild.buildroot.org/results/0ad/0ad656970b3cbc84b5531b28155ba2f747715fe3/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/arc-2014.12/851-PR-other-56780.patch |  244 ++++++++++++++++++++++
- 1 files changed, 244 insertions(+), 0 deletions(-)
+ package/Config.in                  |    1 +
+ package/c-periphery/Config.in      |   16 ++++++++++++++++
+ package/c-periphery/c-periphery.mk |   27 +++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/arc-2014.12/851-PR-other-56780.patch b/package/gcc/arc-2014.12/851-PR-other-56780.patch
+diff --git a/package/Config.in b/package/Config.in
+index af4d2b7..e0c2e2a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -811,6 +811,7 @@ menu "Graphics"
+ endmenu
+ 
+ menu "Hardware handling"
++	source "package/c-periphery/Config.in"
+ 	source "package/ccid/Config.in"
+ 	source "package/dtc/Config.in"
+ 	source "package/gnu-efi/Config.in"
+diff --git a/package/c-periphery/Config.in b/package/c-periphery/Config.in
 new file mode 100644
-index 0000000..feb4339
+index 0000000..0bfb4b1
 --- /dev/null
-+++ b/package/gcc/arc-2014.12/851-PR-other-56780.patch
-@@ -0,0 +1,244 @@
-+From afe990251bd9b3a063f03da31a3b8d139d033bc3 Mon Sep 17 00:00:00 2001
-+From: ian <ian@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Sat, 1 Jun 2013 00:20:49 +0000
-+Subject: [PATCH] PR other/56780
++++ b/package/c-periphery/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_C_PERIPHERY
++	bool "c-periphery"
++	help
++	  c-periphery is a set of C wrapper functions for GPIO, SPI,
++	  I2C, MMIO, and Serial peripheral I/O interface access in
++	  userspace Linux. The c-periphery wrappers simplify and
++	  consolidate the native Linux APIs to these
++	  interfaces. c-periphery is useful in embedded Linux
++	  environments (including BeagleBone, Raspberry Pi,
++	  etc. platforms) for interfacing with external
++	  peripherals. c-periphery is re-entrant, uses static
++	  allocations, has no dependencies outside the standard C
++	  library and Linux, compiles into a static library for easy
++	  integration with other projects, and is MIT licensed.
 +
-+* libiberty/configure.ac: Move test for --enable-install-libiberty
-+outside of the 'with_target_subdir' test so that it actually gets
-+run.  Add output messages to show the test result.
-+* libiberty/configure: Regenerate.
-+* libiberty/Makefile.in (install_to_libdir): Place the
-+installation of the libiberty library in the same guard as that
-+used for the headers to prevent it being installed unless
-+requested via --enable-install-libiberty.
++	  https://github.com/vsergeev/c-periphery
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+new file mode 100644
+index 0000000..68193d7
+--- /dev/null
++++ b/package/c-periphery/c-periphery.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# c-periphery
++#
++################################################################################
 +
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 199570 138bc75d-0d04-0410-961f-82ee72b054a4
++C_PERIPHERY_VERSION = 0fdfac3264f1dce32991f4ec30d084e34b35181d
++C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,$(C_PERIPHERY_VERSION))
++C_PERIPHERY_INSTALL_STAGING = YES
++# only a static library
++C_PERIPHERY_INSTALL_TARGET = NO
++C_PERIPHERY_LICENSE = MIT
++C_PERIPHERY_LICENSE_FILES = LICENSE
 +
-+libiberty: fix --enable-install-libiberty flag [PR 56780]
++define C_PERIPHERY_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
 +
-+Commit 199570 fixed the --disable-install-libiberty behavior, but it also
-+added a bug where the enable path never works because the initial clear
-+of target_header_dir wasn't deleted.  So we end up initializing properly
-+at the top only to reset it at the end all the time.
++# There is no 'install' rule in the Makefile, so we handle things
++# manually.
++define C_PERIPHERY_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/periphery.a $(STAGING_DIR)/usr/lib/libc-periphery.a
++	mkdir -p $(STAGING_DIR)/usr/include/c-periphery/
++	cp -dpfr $(@D)/src/*.h $(STAGING_DIR)/usr/include/c-periphery/
++endef
 +
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 206367 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+[Romain
-+  squash the two upstream commits
-+  Remove the ChangeLog]
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ libiberty/Makefile.in  | 24 ++++++++++-----------
-+ libiberty/configure    | 57 +++++++++++++++++++++++++++-----------------------
-+ libiberty/configure.ac | 47 ++++++++++++++++++++++-------------------
-+ 3 files changed, 68 insertions(+), 60 deletions(-)
-+
-+diff --git a/libiberty/Makefile.in b/libiberty/Makefile.in
-+index f6a3ebd..75ff82d 100644
-+--- a/libiberty/Makefile.in
-++++ b/libiberty/Makefile.in
-+@@ -355,19 +355,19 @@ install-strip: install
-+ # since it will be passed the multilib flags.
-+ MULTIOSDIR = `$(CC) $(CFLAGS) -print-multi-os-directory`
-+ install_to_libdir: all
-+-	${mkinstalldirs} $(DESTDIR)$(libdir)/$(MULTIOSDIR)
-+-	$(INSTALL_DATA) $(TARGETLIB) $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n
-+-	( cd $(DESTDIR)$(libdir)/$(MULTIOSDIR) ; chmod 644 $(TARGETLIB)n ;$(RANLIB) $(TARGETLIB)n )
-+-	mv -f $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)
-+ 	if test -n "${target_header_dir}"; then \
-+-	  case "${target_header_dir}" in \
-+-	    /*)    thd=${target_header_dir};; \
-+-	    *)     thd=${includedir}/${target_header_dir};; \
-+-	  esac; \
-+-	  ${mkinstalldirs} $(DESTDIR)$${thd}; \
-+-	  for h in ${INSTALLED_HEADERS}; do \
-+-	    ${INSTALL_DATA} $$h $(DESTDIR)$${thd}; \
-+-	  done; \
-++		${mkinstalldirs} $(DESTDIR)$(libdir)/$(MULTIOSDIR); \
-++		$(INSTALL_DATA) $(TARGETLIB) $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n; \
-++		( cd $(DESTDIR)$(libdir)/$(MULTIOSDIR) ; chmod 644 $(TARGETLIB)n ;$(RANLIB) $(TARGETLIB)n ); \
-++		mv -f $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB)n $(DESTDIR)$(libdir)/$(MULTIOSDIR)/$(TARGETLIB); \
-++		case "${target_header_dir}" in \
-++		  /*)    thd=${target_header_dir};; \
-++		  *)     thd=${includedir}/${target_header_dir};; \
-++		esac; \
-++		${mkinstalldirs} $(DESTDIR)$${thd}; \
-++		for h in ${INSTALLED_HEADERS}; do \
-++		  ${INSTALL_DATA} $$h $(DESTDIR)$${thd}; \
-++		done; \
-+ 	fi
-+ 	@$(MULTIDO) $(FLAGS_TO_PASS) multi-do DO=install
-+ 
-+diff --git a/libiberty/configure b/libiberty/configure
-+index 5367027..4feb95a 100755
-+--- a/libiberty/configure
-++++ b/libiberty/configure
-+@@ -675,8 +675,8 @@ with_cross_host
-+ with_newlib
-+ enable_maintainer_mode
-+ enable_multilib
-+-enable_largefile
-+ enable_install_libiberty
-++enable_largefile
-+ '
-+       ac_precious_vars='build_alias
-+ host_alias
-+@@ -1303,8 +1303,8 @@ Optional Features:
-+                           enable make rules and dependencies not useful
-+                           (and sometimes confusing) to the casual installer
-+   --enable-multilib       build many library versions (default)
-++  --enable-install-libiberty       Install headers and library for end users
-+   --disable-largefile     omit support for large files
-+-  --enable-install-libiberty       Install headers for end users
-+ 
-+ Optional Packages:
-+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-+@@ -2784,6 +2784,35 @@ if test $cross_compiling = no && test $multilib = yes \
-+    cross_compiling=maybe
-+ fi
-+ 
-++# We may wish to install the target headers somewhere.
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to install libiberty headers and static library" >&5
-++$as_echo_n "checking whether to install libiberty headers and static library... " >&6; }
-++
-++# Check whether --enable-install-libiberty was given.
-++if test "${enable_install_libiberty+set}" = set; then :
-++  enableval=$enable_install_libiberty; enable_install_libiberty=$enableval
-++else
-++  enable_install_libiberty=no
-++fi
-++
-++# Option parsed, now set things appropriately.
-++case x"$enable_install_libiberty" in
-++  xyes|x)
-++    target_header_dir=libiberty
-++    ;;
-++  xno)
-++    target_header_dir=
-++    ;;
-++  *)
-++    # This could be sanity-checked in various ways...
-++    target_header_dir="${enable_install_libiberty}"
-++    ;;
-++esac
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_install_libiberty" >&5
-++$as_echo "$enable_install_libiberty" >&6; }
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: target_header_dir = $target_header_dir" >&5
-++$as_echo "$as_me: target_header_dir = $target_header_dir" >&6;}
-++
-+ 
-+ ac_ext=c
-+ ac_cpp='$CPP $CPPFLAGS'
-+@@ -5476,7 +5505,6 @@ fi
-+ 
-+ setobjs=
-+ CHECK=
-+-target_header_dir=
-+ if test -n "${with_target_subdir}"; then
-+ 
-+   # We are being configured as a target library.  AC_REPLACE_FUNCS
-+@@ -5759,29 +5787,6 @@ _ACEOF
-+ 
-+   esac
-+ 
-+-  # We may wish to install the target headers somewhere.
-+-  # Check whether --enable-install-libiberty was given.
-+-if test "${enable_install_libiberty+set}" = set; then :
-+-  enableval=$enable_install_libiberty; enable_install_libiberty=$enableval
-+-else
-+-  enable_install_libiberty=no
-+-fi
-+-
-+-  # Option parsed, now set things appropriately.
-+-  case x"$enable_install_libiberty" in
-+-    xyes|x)
-+-      target_header_dir=libiberty
-+-      ;;
-+-    xno)
-+-      target_header_dir=
-+-      ;;
-+-    *)
-+-      # This could be sanity-checked in various ways...
-+-      target_header_dir="${enable_install_libiberty}"
-+-      ;;
-+-  esac
-+-
-+-
-+ else
-+ 
-+    # Not a target library, so we set things up to run the test suite.
-+diff --git a/libiberty/configure.ac b/libiberty/configure.ac
-+index c763894..f17e6b6 100644
-+--- a/libiberty/configure.ac
-++++ b/libiberty/configure.ac
-+@@ -128,6 +128,31 @@ if test $cross_compiling = no && test $multilib = yes \
-+    cross_compiling=maybe
-+ fi
-+ 
-++# We may wish to install the target headers somewhere.
-++AC_MSG_CHECKING([whether to install libiberty headers and static library])
-++dnl install-libiberty is disabled by default
-++
-++AC_ARG_ENABLE(install-libiberty,
-++[  --enable-install-libiberty       Install headers and library for end users],
-++enable_install_libiberty=$enableval,
-++enable_install_libiberty=no)dnl
-++
-++# Option parsed, now set things appropriately.
-++case x"$enable_install_libiberty" in
-++  xyes|x)
-++    target_header_dir=libiberty
-++    ;;
-++  xno)   
-++    target_header_dir=
-++    ;;
-++  *) 
-++    # This could be sanity-checked in various ways...
-++    target_header_dir="${enable_install_libiberty}"
-++    ;;
-++esac
-++AC_MSG_RESULT($enable_install_libiberty)
-++AC_MSG_NOTICE([target_header_dir = $target_header_dir])
-++
-+ GCC_NO_EXECUTABLES
-+ AC_PROG_CC
-+ AC_SYS_LARGEFILE
-+@@ -380,7 +405,6 @@ fi
-+ 
-+ setobjs=
-+ CHECK=
-+-target_header_dir=
-+ if test -n "${with_target_subdir}"; then
-+ 
-+   # We are being configured as a target library.  AC_REPLACE_FUNCS
-+@@ -492,27 +516,6 @@ if test -n "${with_target_subdir}"; then
-+ 
-+   esac
-+ 
-+-  # We may wish to install the target headers somewhere.
-+-  AC_ARG_ENABLE(install-libiberty,
-+-  [  --enable-install-libiberty       Install headers for end users],
-+-  enable_install_libiberty=$enableval,
-+-  enable_install_libiberty=no)dnl
-+-  
-+-  # Option parsed, now set things appropriately.
-+-  case x"$enable_install_libiberty" in
-+-    xyes|x)
-+-      target_header_dir=libiberty
-+-      ;;
-+-    xno)   
-+-      target_header_dir=
-+-      ;;
-+-    *) 
-+-      # This could be sanity-checked in various ways...
-+-      target_header_dir="${enable_install_libiberty}"
-+-      ;;
-+-  esac
-+-
-+-
-+ else
-+ 
-+    # Not a target library, so we set things up to run the test suite.
-+-- 
-+1.9.3
-+
++$(eval $(generic-package))
