@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:16 -0000
-Subject: [Buildroot] [git commit branch/next] agentpp: bump to 4.0.4
-Message-ID: <20150808105612.97DDA7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain: allow for stupid
+	toolchains
+Message-ID: <20150808105615.5AA5B8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50e57ec0e865fc3736e8defcaa313438dbc43c24
+commit: http://git.buildroot.net/buildroot/commit/?id=375bc18850f0f8fec90e1e478c0e9d2159377a64
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+check_arm_abi builds a test C file to check that the toolchain is
+working correctly, with the output redirected to /dev/null.
+
+However, some toolchains (OSELAS 2014.12.0, for instance) foolishly
+append ".gdb" to the output filename for an intermediate file, causing
+an attempt to write to /dev/null.gdb, which obviously fails.
+
+Fix this by adding changing the output to a temporary file, which is
+later removed along with any other "suffixed" files.
+
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/agentpp/agentpp.hash |    2 +-
- package/agentpp/agentpp.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/helpers.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/agentpp/agentpp.hash b/package/agentpp/agentpp.hash
-index 7c48044..6b992f9 100644
---- a/package/agentpp/agentpp.hash
-+++ b/package/agentpp/agentpp.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha512 636e19a7bbc3cfbf6f1ac10d29ddd378ca81b5525be1bd09c26a1cbd20ff9cfc3d4406329147bf20994f0d59bbdb675e99e82de3837eb898a145439c5054ef96 agent++-4.0.3.tar.gz
-+sha256 d473b98d5f08e572b474c375c11ff1c4c5323824eb721c3979b6c5258b72949d agent++-4.0.4.tar.gz
-diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
-index 29d809e..7b1edec 100644
---- a/package/agentpp/agentpp.mk
-+++ b/package/agentpp/agentpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 30eb065..0dc1864 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -308,12 +308,14 @@ check_arm_abi = \
+ 		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - ; then \
++	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - ; then \
++		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
+ 		abistr_$(BR2_ARM_EABI)='EABI'; \
+ 		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
+ 		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
+ 		exit 1 ; \
+-	fi
++	fi ; \
++	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
  
--AGENTPP_VERSION = 4.0.3
-+AGENTPP_VERSION = 4.0.4
- AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
- AGENTPP_SITE = http://www.agentpp.com/download
- AGENTPP_LICENSE = Apache-2.0
+ #
+ # Check that the external toolchain supports C++
