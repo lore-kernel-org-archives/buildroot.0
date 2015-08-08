@@ -1,79 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:00 -0000
-Subject: [Buildroot] [git commit branch/next] systemd: bump to version 221
-Message-ID: <20150808105616.3FE377F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] packages: do not use
+	TAR_STRIP_COMPONENTS, but directly --strip-components
+Message-ID: <20150808105628.A57A880414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac0a31090ad44531fd14a3e3b1bb7e23c1577f68
+commit: http://git.buildroot.net/buildroot/commit/?id=22ed697d11e033914cab7631fba899ba436a5a5b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 221
-- Update hash file
-
-- Add --disable-gnuefi to configure options to avoid a failure like this
-  one:
-
-  checking for /usr/lib/gnuefi/elf_ia32_efi.lds... configure: error:
-  cannot check for file existence when cross compiling
-
-- Remove gudev logic since it has been removed from the systemd tree and
-  it is now an external project.
-
-Announcement URL:
-
-  http://lists.freedesktop.org/archives/systemd-devel/2015-June/033170.html
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.hash |    2 +-
- package/systemd/systemd.mk   |   10 ++--------
- 2 files changed, 3 insertions(+), 9 deletions(-)
+ package/gcc/gcc.mk                                 |    2 +-
+ package/lsof/lsof.mk                               |    2 +-
+ .../nvidia-tegra23-binaries.mk                     |    4 ++--
+ .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk |    4 ++--
+ package/perl/perl.mk                               |    2 +-
+ toolchain/toolchain-external/toolchain-external.mk |    6 +++---
+ 6 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index d2ac740..f746051 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  5c57113454e37c040d0cb481bd960ae7cf3a3fe0a231ff4945259bc74503f2d9  systemd-219.tar.xz
-+sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f  systemd-221.tar.xz
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 98bda02..ee17bc8 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index be242cb..d1693d5 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -53,7 +53,7 @@ endef
  
--SYSTEMD_VERSION = 219
-+SYSTEMD_VERSION = 221
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
- SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
-@@ -39,6 +39,7 @@ SYSTEMD_CONF_OPTS += \
- 	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
- 	--enable-split-usr \
- 	--disable-efi \
-+	--disable-gnuefi \
- 	--disable-tests \
- 	--disable-dbus \
- 	--without-python
-@@ -63,13 +64,6 @@ else
- SYSTEMD_CONF_OPTS += --disable-acl
+ define HOST_GCC_EXTRACT_CMDS
+ 	$(call suitable-extractor,$(GCC_SOURCE)) $(DL_DIR)/$(GCC_SOURCE) | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
++		$(TAR) --strip-components=1 -C $(@D) \
+ 		--exclude='libjava/*' \
+ 		--exclude='libgo/*' \
+ 		--exclude='gcc/testsuite/*' \
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 19b303b..f9b7661 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -34,7 +34,7 @@ endif
+ define LSOF_EXTRACT_CMDS
+ 	$(call suitable-extractor,$(LSOF_SOURCE)) $(DL_DIR)/$(LSOF_SOURCE) | \
+ 		$(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
++	$(TAR) --strip-components=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+ endef
+ 
+ define LSOF_CONFIGURE_CMDS
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+index 7b6029e..4f7cdcf 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
++++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
+@@ -37,11 +37,11 @@ define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
+ 	$(INSTALL) -d $(@D)/nv_tegra/nvidia_drivers
+ 	$(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
+ 		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
++	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
+ 	$(INSTALL) -d $(@D)/nv_tegra/nv_sample_apps/nvgstapps
+ 	$(call suitable-extractor,$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2) \
+ 		$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2 | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
++	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
+ endef
+ NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS += NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
+ 
+diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+index 18f083d..5514643 100644
+--- a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
++++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
+@@ -16,11 +16,11 @@ define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
+ 	$(INSTALL) -d $(@D)
+ 	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
+ 		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
++	$(TAR) --strip-components=0 -C $(@D) $(TAR_OPTIONS) -
+ 	$(INSTALL) -d $(@D)/restricted_codecs
+ 	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
+ 		$(@D)/restricted_codecs.tbz2 | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
++	$(TAR) --strip-components=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
+ endef
+ 
+ define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 6794eef..091c032 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -28,7 +28,7 @@ PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
+ # together with perl
+ define PERL_CROSS_EXTRACT
+ 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
++	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
+ endef
+ PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 22f8118..070f068 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -417,16 +417,16 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_
+ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+ 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
++		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
++		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ endef
+ else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
+ # Normal handling of toolchain tarball extraction.
+ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+ 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+ 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+-		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
++		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+ 	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
+ endef
  endif
- 
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--SYSTEMD_CONF_OPTS += --enable-gudev
--SYSTEMD_DEPENDENCIES += libglib2
--else
--SYSTEMD_CONF_OPTS += --disable-gudev
--endif
--
- ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
- SYSTEMD_CONF_OPTS += --enable-seccomp
- SYSTEMD_DEPENDENCIES += libseccomp
