@@ -1,57 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] qt: fix webkit dependencies
-Message-ID: <20150808105558.DFCD07FDC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/efl/libelementary:
+	disable on static lib only build
+Message-ID: <20150808105601.5F3B981778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d496bdddb44c6f8f97d0f573a7220ebf0ec41eb
+commit: http://git.buildroot.net/buildroot/commit/?id=4d5f9f4b73c3cfa2daa663a5b7789789a5a7f206
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-fix:
-http://autobuild.buildroot.net/results/ce8/ce89ad1ca6aec9f7bb5549301bf4c0dcba9e0e37/
+libelementary sources include dlfcn.h header when HAVE_FORK symbol is defined;
+this is always the case because efl already depends on BR2_USE_MMU.
 
-qtwebkit includes qscript headers.
-For packages like python-pyqt if webkit is available but not qscript, the
-compilation fails with :
-buildroot/output/build/python-pyqt-4.11.3/sip/QtWebKit/qwebframe.sip:79:0:
-../../../host/usr/i686-buildroot-linux-gnu/sysroot/usr/include/QtWebKit/qwebframe.h:28:36:
-	fatal error: QtScript/qscriptengine.h: No such file or directory
+Fixes:
+  http://autobuild.buildroot.org/results/07c/07c97918dab24215f5c5130a9cd2788adca0a27d/
 
-This problem is not seen with Qt compilation because some relative include
-directly from sources are added.
-
-[Peter: also adjust comment]
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/efl/libelementary/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 43f5a0f..67d5561 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -417,6 +417,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+index c193ef1..4f62592 100644
+--- a/package/efl/libelementary/Config.in
++++ b/package/efl/libelementary/Config.in
+@@ -1,5 +1,5 @@
+-comment "libelementary needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "libelementary needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
  
- config BR2_PACKAGE_QT_WEBKIT
- 	bool "WebKit Module"
-+	depends on BR2_PACKAGE_QT_SCRIPT
- 	depends on BR2_PACKAGE_QT_SHARED
- 	depends on BR2_PACKAGE_QT_GUI_MODULE
- 	depends on BR2_PACKAGE_QT_NETWORK
-@@ -426,8 +427,9 @@ config BR2_PACKAGE_QT_WEBKIT
- 	  Build the WebKit module.
- 	  If unsure, say n.
- 
--comment "WebKit needs shared library/NPTL toolchain/gui/network support"
--	depends on !(BR2_PACKAGE_QT_SHARED && BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
-+comment "WebKit needs shared library/NPTL toolchain/script/gui/network support"
-+	depends on !(BR2_PACKAGE_QT_SCRIPT && BR2_PACKAGE_QT_SHARED && \
-+		BR2_PACKAGE_QT_GUI_MODULE && BR2_PACKAGE_QT_NETWORK)
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 
+ config BR2_PACKAGE_LIBELEMENTARY
+ 	bool "libelementary"
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBELEMENTARY
+ 	select BR2_PACKAGE_LIBECORE
+ 	select BR2_PACKAGE_LIBEDJE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Elementary is a widget toolkit and EFL wrapper and convenience
+ 	  library to make it easy to build applications and tools with UIs
