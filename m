@@ -1,66 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:38 -0000
-Subject: [Buildroot] [git commit branch/next] xdriver_xf86-video-imx-viv:
-	bump to version 3.10.53-1.1.0 GA
-Message-ID: <20150808105627.17EE37FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/igh-ethercat: use
+	kernel-module helper
+Message-ID: <20150808105628.332A47FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73930a6bb02a2f6a77beba4ffd760096007ed526
+commit: http://git.buildroot.net/buildroot/commit/?id=95f52a7b7eac7696a6f627ba0cd68de11b12cfce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Previous patch for the LoadExtension call isn't needed any more.
+igh-ethercat's Makefile just contains calls to the Linux buildsystem,
+that do exactly what we now do with our kernel-module infra.
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/f0440193ddb3eafa1b00aed294ed6dbd3e4d604d
-
-Switched back to use FREESCALE_IMX_VERSION.
-
-The following xorg.conf was used in order to force the use of the
-vivante module:
-https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Fix-LoadExtenions.patch                   |   15 ---------------
- .../xdriver_xf86-video-imx-viv.mk                  |    2 +-
- 2 files changed, 1 insertions(+), 16 deletions(-)
+ package/igh-ethercat/igh-ethercat.mk |   14 +-------------
+ 1 files changed, 1 insertions(+), 13 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch b/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-deleted file mode 100644
-index 3e2d47c..0000000
---- a/package/x11r7/xdriver_xf86-video-imx-viv/0001-Fix-LoadExtenions.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Fix compilation with Xorg xserver 1.16.
--
--Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
--
----- a/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-07-25 15:38:24.000000000 +0200
--+++ b/EXA/src/vivante_fbdev/vivante_fbdev_driver.c	2014-10-02 21:00:58.755409342 +0200
--@@ -261,7 +261,7 @@
--         setupDone = TRUE;
--         xf86AddDriver(&FBDEV, module, HaveDriverFuncs);
--         if(gVivFb)
---            LoadExtension(&VIVExt, FALSE);
--+            LoadExtensionList(&VIVExt, 1, FALSE);
-- 		return (pointer)1;
--     } else {
--         if (errmaj) *errmaj = LDR_ONCEONLY;
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index fbd7325..f5cb946 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+index b5221f8..32c49a3 100644
+--- a/package/igh-ethercat/igh-ethercat.mk
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -10,7 +10,6 @@ IGH_ETHERCAT_SOURCE = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
+ IGH_ETHERCAT_LICENSE = GPLv2 (IgH EtherCAT master), LGPLv2.1 (libraries)
+ IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
  
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 3.10.17-1.0.1
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
- XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
- XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
+-IGH_ETHERCAT_DEPENDENCIES = linux
+ IGH_ETHERCAT_INSTALL_STAGING = YES
+ 
+ IGH_ETHERCAT_CONF_OPTS = \
+@@ -22,16 +21,5 @@ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,
+ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
+ IGH_ETHERCAT_CONF_OPTS += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+ 
+-define IGH_ETHERCAT_BUILD_MODULES
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+-endef
+-
+-IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
+-
+-define IGH_ETHERCAT_INSTALL_MODULES
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
+-endef
+-
+-IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
+-
++$(eval $(kernel-module))
+ $(eval $(autotools-package))
