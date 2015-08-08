@@ -1,44 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] whois: bump to version 5.2.9
-Message-ID: <20150808105607.E99D6818F0@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:31 -0000
+Subject: [Buildroot] [git commit branch/next] package/matchbox: make
+	matchbox-keyboard a real package
+Message-ID: <20150808105606.830D77F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc816d4cefd6f7ef1bb6bccbc3d5342f46bed2c0
+commit: http://git.buildroot.net/buildroot/commit/?id=4be826c225ed803b9794391feb1d37f0026e0f81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Currently, matchbox-keyboard is treated as if it were an option of the
+matchbox package.
+
+But that's not true, since it is a real package all by itself, with its
+own archive and its own buildsystem.
+
+So, make it a real package.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/whois/whois.hash |    4 ++--
- package/whois/whois.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/matchbox/Config.in                   |    9 +--------
+ package/matchbox/matchbox-keyboard/Config.in |    7 +++++++
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index fc8366f..79c9aca 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.5.dsc
--sha256	1a84fb9c1190dc37df396ea1f24aae56a1beb846257ee692c9d4b44337135d10	whois_5.2.5.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.9.dsc
-+sha256	eee5446bf76ca7d38052767d6e2c542297d3a54ce928cada0ff24d2f1749d359	whois_5.2.9.tar.xz
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index fee0425..274349f 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 8d4ebc7..9b27d4d 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -25,13 +25,6 @@ source "package/matchbox/matchbox-panel/Config.in"
+ source "package/matchbox/matchbox-desktop/Config.in"
+ source "package/matchbox/matchbox-common/Config.in"
+ source "package/matchbox/matchbox-fakekey/Config.in"
+-
+-config BR2_PACKAGE_MATCHBOX_KEYBOARD
+-	bool "Matchbox Virtual Keyboard"
+-	select BR2_PACKAGE_XLIB_LIBXTST
+-	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+-	select BR2_PACKAGE_MATCHBOX_FAKEKEY
+-	help
+-	  Virtual Keyboard
++source "package/matchbox/matchbox-keyboard/Config.in"
  
--WHOIS_VERSION = 5.2.5
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150303T100910Z/pool/main/w/whois
-+WHOIS_VERSION = 5.2.9
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150608T042724Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ endif
+diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox/matchbox-keyboard/Config.in
+new file mode 100644
+index 0000000..e017358
+--- /dev/null
++++ b/package/matchbox/matchbox-keyboard/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_MATCHBOX_KEYBOARD
++	bool "Matchbox Virtual Keyboard"
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_MATCHBOX_FAKEKEY
++	help
++	  Virtual Keyboard
