@@ -1,58 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:40 -0000
-Subject: [Buildroot] [git commit branch/next] Document the 72 char limit on
-	package description.
-Message-ID: <20150808105629.EF4A17FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ulogd: bump to version 2.0.5
+Message-ID: <20150808105614.12B63818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5284dcf7de769e8612da3d4f1c4d12b4582870d5
+commit: http://git.buildroot.net/buildroot/commit/?id=77d7cfdc91a5f535d5f6de613dabb8a0558c33ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-While describing a package I though that the tab and 2 spaces was
-already doing the margin for wrapping the help test (ie 70 char when
-wrapping to 80) but apparently the full text need to fit 72 columns.
+Remove kernel headers check since it now implements local definitions to
+keep working with newer versions.
 
-So this patch propose to document that fact in the two places where
-the Config.in format is described.
-
-Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-directory.txt |    5 +++--
- docs/manual/writing-rules.txt             |    2 ++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/ulogd/Config.in  |    3 ---
+ package/ulogd/ulogd.hash |    6 +++---
+ package/ulogd/ulogd.mk   |    2 +-
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 3d0982f..8f585d4 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -35,8 +35,9 @@ config BR2_PACKAGE_LIBFOO
+diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
+index bcd7d0d..dc36c0b 100644
+--- a/package/ulogd/Config.in
++++ b/package/ulogd/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_ULOGD
+ 	bool "ulogd"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+-	# ulog support removed for kernels >= 3.17
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+ 	select BR2_PACKAGE_LIBMNL
+ 	select BR2_PACKAGE_LIBNETFILTER_ACCT
+ 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+@@ -17,4 +15,3 @@ config BR2_PACKAGE_ULOGD
+ comment "ulogd needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/package/ulogd/ulogd.hash b/package/ulogd/ulogd.hash
+index 0e050e4..16186c1 100644
+--- a/package/ulogd/ulogd.hash
++++ b/package/ulogd/ulogd.hash
+@@ -1,3 +1,3 @@
+-# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.4.tar.bz2.{md5sum,sha1sum}
+-md5	7c71ec460dfea5287eba27472c521ebc	ulogd-2.0.4.tar.bz2
+-sha1	f5e09d9e9a6c7ab8966d22ed8d6e90196aab3fb3	ulogd-2.0.4.tar.bz2
++# From ftp://ftp.netfilter.org/pub/ulogd/ulogd-2.0.5.tar.bz2.{md5sum,sha1sum}
++md5	f0f8fe1371fa28b5e06cb16aaa0111dd	ulogd-2.0.5.tar.bz2
++sha1	828db7849d6788674ecf36b178f107c20e9ac1f0	ulogd-2.0.5.tar.bz2
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 8f763fa..7ff5b73 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- The +bool+ line, +help+ line and other metadata information about the
- configuration option must be indented with one tab. The help text
--itself should be indented with one tab and two spaces, and it must
--mention the upstream URL of the project.
-+itself should be indented with one tab and two spaces, lines should
-+not be longer than 72 columns, and it must mention the upstream URL
-+of the project.
- 
- You can add other sub-options into a +if
- BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
-index e6401a4..ec1ddb1 100644
---- a/docs/manual/writing-rules.txt
-+++ b/docs/manual/writing-rules.txt
-@@ -40,6 +40,8 @@ config BR2_PACKAGE_LIBFOO
- * The help text itself should be indented with one tab and two
-   spaces.
- 
-+* The help text should be wrapped to fit 72 columns.
-+
- The +Config.in+ files are the input for the configuration tool
- used in Buildroot, which is the regular _Kconfig_. For further
- details about the _Kconfig_ language, refer to
+-ULOGD_VERSION = 2.0.4
++ULOGD_VERSION = 2.0.5
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+ ULOGD_CONF_OPTS = --with-dbi=no --with-pgsql=no
