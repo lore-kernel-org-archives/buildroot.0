@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] wireless-regdb: bump to
-	version 2015.06.05
-Message-ID: <20150808105607.F1D877F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support: update Kconfiglib to
+	the latest version
+Message-ID: <20150808105608.3E1917FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=187997ebb9d9b800f7c8360b0015d18819e508f9
+commit: http://git.buildroot.net/buildroot/commit/?id=00cc2431701929728df5b616f2e51268053cfd2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Corresponds to a95f477 in https://github.com/ulfalizer/Kconfiglib.
+
+Fixes:
+
+ - Unset user values when loading a zero-byte .config. (5e54e2c)
+
+ - Ignore indented .config assignments. (f8a7510)
+
+ - Do not require $srctree to be set for non-kernel projects. (d56e9c1)
+
+ - Allow digits in $-references to symbols. (ecacdd5)
+
+ - Add Symbol.is_allnoconfig_y(). (deaa624)
+
+ - Fix small output issue with Comments inside Choices.
+
+Also adds Python 3 support and has a lot of internal cleanup and
+optimization.
+
+Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireless-regdb/wireless-regdb.hash |    2 +-
- package/wireless-regdb/wireless-regdb.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/kconfiglib.py     | 2225 +++++++++++++++++--------------------
+ support/scripts/readme.kconfiglib |    2 +-
+ 2 files changed, 998 insertions(+), 1229 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 1afb023..250f4d8 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
-+sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 8a5b6ab..92068a6 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2015.05.15
-+WIRELESS_REGDB_VERSION = 2015.06.05
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+Patch is too large, so refusing to show it
