@@ -1,55 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] package/nmap: Fix static
-	linking
-Message-ID: <20150808105602.506667FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vlc: install vlc
+	libraries in staging
+Message-ID: <20150808105614.E8F747F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58af3f27dff51c19a97e850ea53fcf4d7bb650c5
+commit: http://git.buildroot.net/buildroot/commit/?id=45ea3228a1fd7669bfe5ad0937958b49bb62a035
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/040/040129539257d88d9437d113752bc8634fd9b2b2/
-http://autobuild.buildroot.net/results/73a/73a562a3a1f356c1a39b2fb57f0848c4b99fe8b1/
-http://autobuild.buildroot.net/results/767/767b8eafe7a204327eaa182c065ca5cfff18096f/
-http://autobuild.buildroot.net/results/0f7/0f7f3a56815dc6422a466fe9b4357ace98f78e11/
+Although no package seems to link against vlc libraries right now, these
+libraries will be necessary for upcoming new efl emotion-generic-players
+package.
 
-[Peter: add host-pkgconf to _DEPENDENCIES]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nmap/nmap.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/vlc/vlc.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index c8c16e6..d46d58b 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -14,6 +14,13 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- NMAP_LICENSE = GPLv2
- NMAP_LICENSE_FILES = COPYING
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index acd67ee..bc2966e 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -12,6 +12,9 @@ VLC_LICENSE_FILES = COPYING COPYING.LIB
+ VLC_DEPENDENCIES = host-pkgconf
+ VLC_AUTORECONF = YES
  
-+# needed by libpcap
-+NMAP_LIBS_FOR_STATIC_LINK += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++# Install vlc libraries in staging.
++VLC_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_STATIC_LIBS),y)
-+NMAP_CONF_ENV += LIBS='$(NMAP_LIBS_FOR_STATIC_LINK)'
-+endif
-+
- # for 0001-libdnet-wrapper-configure.patch
- define NMAP_WRAPPER_EXEC
- 	chmod +x $(@D)/libdnet-stripped/configure.gnu
-@@ -22,7 +29,8 @@ NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
--NMAP_DEPENDENCIES += openssl
-+NMAP_DEPENDENCIES += host-pkgconf openssl
-+NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
- else
- NMAP_CONF_OPTS += --without-openssl
- endif
+ # VLC defines two autoconf functions which are also defined by our own pkg.m4
+ # from pkgconf. Unfortunately, they are defined in a different way: VLC adds
+ # --enable- options, but pkg.m4 adds --with- options. To make sure we use
