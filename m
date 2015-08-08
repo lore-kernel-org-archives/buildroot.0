@@ -1,94 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:53 -0000
-Subject: [Buildroot] [git commit branch/next] package/libtirpc: bump to
-	version 0.3.2
-Message-ID: <20150808105640.AEE5D7FFCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/redis: Install
+	/etc/redis.conf to target
+Message-ID: <20150808105640.DF2977FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c4767fa9d8c19b52824b1c10e0e25f413111f2d
+commit: http://git.buildroot.net/buildroot/commit/?id=a26dd768366452283f749a2f1560b3be3b525dcb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump version, update hash and update patch.
+Copy redis.conf from the redis release package but adjust some values to
+sensible defaults using 0003-redis.conf-sane-defaults.patch
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+The file 0003-redis.conf-sane-defaults.patch originates from the redis
+package in Arch Linux.
+
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...able-parts-of-TIRPC-requiring-NIS-support.patch |   21 ++++++++++++-------
- package/libtirpc/libtirpc.hash                     |    4 +-
- package/libtirpc/libtirpc.mk                       |    2 +-
- 3 files changed, 16 insertions(+), 11 deletions(-)
+ package/redis/0003-redis.conf-sane-defaults.patch |   37 +++++++++++++++++++++
+ package/redis/redis.mk                            |    2 +
+ 2 files changed, 39 insertions(+), 0 deletions(-)
 
-diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-index 2835ee1..12771f3 100644
---- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-+++ b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-@@ -1,28 +1,33 @@
--From 9ab72f908af734b5a940fb459394072cfa9fc3a8 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 23 Jun 2012 21:57:39 +0200
--Subject: [PATCH] Disable parts of TIRPC requiring NIS support
-+From fc53290b7f2be918856883cd174cf18f06a085cf Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 20 Jul 2015 20:30:11 +0200
-+Subject: [PATCH 1/1] Disable parts of TIRPC requiring NIS support
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/redis/0003-redis.conf-sane-defaults.patch b/package/redis/0003-redis.conf-sane-defaults.patch
+new file mode 100644
+index 0000000..6ee3f21
+--- /dev/null
++++ b/package/redis/0003-redis.conf-sane-defaults.patch
+@@ -0,0 +1,37 @@
++Taken from archlinux redis package
++See https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=5b2491ea61b746f289acebd12bc66e337d7e5b88
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++
++=========================================================================
++diff --git a/redis.conf b/redis.conf
++index 6efb6ac..344e021 100644
++--- a/redis.conf
+++++ b/redis.conf
++@@ -61,7 +61,7 @@ tcp-backlog 511
++ # Examples:
++ #
++ # bind 192.168.1.100 10.0.0.1
++-# bind 127.0.0.1
+++bind 127.0.0.1
++ 
++ # Specify the path for the Unix socket that will be used to listen for
++ # incoming connections. There is no default, so Redis will not listen
++@@ -87,7 +87,7 @@ timeout 0
++ # On other kernels the period depends on the kernel configuration.
++ #
++ # A reasonable value for this option is 60 seconds.
++-tcp-keepalive 0
+++tcp-keepalive 60
++ 
++ # Specify the server verbosity level.
++ # This can be one of:
++@@ -184,7 +184,7 @@ dbfilename dump.rdb
++ # The Append Only File will also be created inside this directory.
++ # 
++ # Note that you must specify a directory here, not a file name.
++-dir ./
+++dir /var/lib/redis/
++ 
++ ################################# REPLICATION #################################
++ 
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 0135cf9..04c2d6a 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -26,6 +26,8 @@ endef
+ define REDIS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
+ 		LDCONFIG=true install
++	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
++		$(TARGET_DIR)/etc/redis.conf
+ endef
  
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [yann.morin.1998 at free.fr: update for 0.3.1]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+[joerg.krause at embedded.rocks: update for 0.3.2]
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
- ---
-  src/Makefile.am | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/src/Makefile.am b/src/Makefile.am
--index 75bd4bf..7428e92 100644
-+index 6cc567a..cf8a8ca 100644
- --- a/src/Makefile.am
- +++ b/src/Makefile.am
--@@ -52,7 +52,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
-+@@ -51,7 +51,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
-          rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
-          rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
-          svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
---        auth_time.c debug.c
-+-        auth_time.c auth_des.c authdes_prot.c debug.c
- +        debug.c
-  
-  ## XDR
-  libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
- -- 
--1.9.1
-+2.4.6
- 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 0a1cc98..f171870 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,4 +1,4 @@
- # From sourceforge's info on download page:
--sha1   0e0ef9123cf28cd0940148fabd23952476a8fcd6  libtirpc-0.3.1.tar.bz2
-+sha1   af9b74d0c4d1499a7b1a43e396e5b7d62180ea65  libtirpc-0.3.2.tar.bz2
- # Locally computed
--sha256 a8838fe180deb8a6f6e491ee665325a28dee4100ec6b1f0b86d611dbfe3a2bb8  libtirpc-0.3.1.tar.bz2
-+sha256 2008a379f37f2c5d5a87a568b06707422cc3e4f5da305f7fb71f3f4c6d473ffc  libtirpc-0.3.2.tar.bz2
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 494650c..8f49356 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTIRPC_VERSION = 0.3.1
-+LIBTIRPC_VERSION = 0.3.2
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3c
+ $(eval $(generic-package))
