@@ -1,45 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:35 -0000
-Subject: [Buildroot] [git commit branch/next] package/e2fsprogs: make
-	/sbin/fsck available
-Message-ID: <20150808105624.C09467FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual/beyond-buildroot:
+	building and testing live-CDs
+Message-ID: <20150808105624.AAC2F7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a93fc3455a46ba118a332fcda17809a14d020f60
+commit: http://git.buildroot.net/buildroot/commit/?id=618346836ede2f6945899209744aafbd38a84c82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-systemd looks for fsck in /sbin, so make symlink:
-/sbin/fsck -> /usr/sbin/fsck
+[Thomas: reworked a bit the phrasing, plus mention that Grub 2 is
+supported.]
 
-[Thomas: add comment.]
-
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ docs/manual/beyond-buildroot.txt |   29 +++++++++++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index e0c4ee2..0537521 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -118,5 +118,14 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_FINDFS),y)
- E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FINDFS_SYMLINK
- endif
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+index b8b1973..63b0c1f 100644
+--- a/docs/manual/beyond-buildroot.txt
++++ b/docs/manual/beyond-buildroot.txt
+@@ -21,6 +21,35 @@ Remember to add this path to +/etc/exports+.
  
-+# systemd really wants to have fsck in /sbin
-+define E2FSPROGS_TARGET_FSCK_SYMLINK
-+	ln -sf ../usr/sbin/fsck $(TARGET_DIR)/sbin/fsck
-+endef
+ Then, you can execute a NFS-boot from your target.
+ 
++==== Live CD
 +
-+ifeq ($(BR2_PACKAGE_E2FSPROGS_FSCK),y)
-+E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_FSCK_SYMLINK
-+endif
++To build a live CD image, enable the _iso image_ option in the
++_Filesystem images_ menu. Note that this option is only available on
++the x86 and x86-64 architectures, and if you are building your kernel
++with Buildroot.
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++You can build a live CD image with either IsoLinux, Grub or Grub 2 as
++a bootloader, but only Isolinux supports making this image usable both
++as a live CD and live USB (through the _Build hybrid image_ option).
++
++You can test your live CD image using QEMU:
++
++-------------------
++qemu-system-i386 -cdrom output/images/rootfs.iso9660
++-------------------
++
++Or use it as a hard-drive image if it is an hybrid ISO:
++
++-------------------
++qemu-system-i386 -hda output/images/rootfs.iso9660
++-------------------
++
++It can be easily flashed to an USB drive with +dd+:
++
++-------------------
++dd if=output/images/rootfs.iso9660 of=/dev/sdb
++-------------------
++
+ === Chroot
+ 
+ If you want to chroot in a generated image, then there are few thing
