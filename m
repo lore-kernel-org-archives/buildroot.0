@@ -1,177 +1,139 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] package/opencv: define modules
-	inter-dependencies
-Message-ID: <20150808105614.A5A027FC68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	configs/olimex_a20_olinuxino_micro: new board
+Message-ID: <20150808105619.16CAF7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a49f97b007aee8f4c6b90ce105d96e10484368c
+commit: http://git.buildroot.net/buildroot/commit/?id=6bcc75d73f3d565500d555ee17beafc098dddd12
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-OpenCV allows to enable/disable the selection of modules (a.k.a.
-opencv libraries). These modules depend one on the others; these
-dependencies are already handled by the build-system (CMake).
+Add a defconfig for the Olimex A20-OLinuXino-Micro board, reusing most
+of the A20-OLinuXino-Lime files.
 
-However, the way we handled them in Buildroot was not really clean.
-For each opencv module, there is a kconfig option, but we forced the
-corresponding CMake config option without checking for the modules'
-dependencies.
-
-This patch replicates the modules' dependency relations in the
-Config.in, so that the selection of the user will actually be built.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/Config.in |   39 ++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 38 insertions(+), 1 deletions(-)
+ board/olimex/a20_olinuxino/readme.txt        |   31 ++++++++++++------
+ configs/olimex_a20_olinuxino_micro_defconfig |   46 ++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 10 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index b327864..6b1ffcf 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -22,54 +22,70 @@ comment "OpenCV modules"
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	bool "calib3d"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_calib3d module into the OpenCV build.
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 6b83914..7e9af84 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -1,10 +1,22 @@
+-A20-OLinuXino-LIME
++A20-OLinuXino-LIME and A20-OLinuXino-MICRO
  
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_ML
- 	help
- 	  Include opencv_features2d module into the OpenCV build.
+ Intro
+ =====
  
- config BR2_PACKAGE_OPENCV_LIB_FLANN
- 	bool "flann"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_flann module into the OpenCV build.
+-This is a open hardware board,
+-see https://www.olimex.com/Products/OLinuXino/open-source-hardware
++These are open hardware boards, both based an the AllWinners A20 SoC.
++
++for more details about the boards see the following pages:
++ - https://www.olimex.com/Products/OLinuXino/open-source-hardware
++ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
++ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
++
++The following defconfigs are available:
++ - olimex_a20_olinuxino_micro_defconfig
++   for the A20-OLinuXino-MICRO board using mainline kernel
++ - olimex_a20_olinuxino_lime_defconfig
++   for the A20-OLinuXino-LIME board using mainline kernel
++ - olimex_a20_olinuxino_lime_mali_defconfig
++   for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel
  
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	help
- 	  Include opencv_highgui module into the OpenCV build.
+ The legacy linux-sunxi kernels are based on the vendor code drops.
+ They are only useful when accelerated 3D graphics and multimedia support
+@@ -20,11 +32,9 @@ the users who do not need fancy 3D graphics or video playback acceleration.
+ How to build it
+ ===============
  
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_imgcodecs module into the OpenCV build.
+-    $ make olimex_a20_olinuxino_lime_defconfig
+-
+-or
++Configure Buildroot:
  
- config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	bool "imgproc"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_imgproc module into the OpenCV build.
+-    $ make olimex_a20_olinuxino_lime_mali_defconfig
++    $ make <board>_defconfig
  
- config BR2_PACKAGE_OPENCV_LIB_ML
- 	bool "ml"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_ml module into the OpenCV build.
+ Compile everything and build the rootfs image:
  
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_ML
- 	help
- 	  Include opencv_objdetect module into the OpenCV build.
+@@ -38,8 +48,9 @@ After building, you should get a tree like this:
+     output/images/
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+-    +-- script.bin (mali)
+-    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
++    +-- script.bin (lime_mali)
++    +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
++    +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+     +-- u-boot.bin
+     +-- u-boot-sunxi-with-spl.bin
+     `-- zImage
+@@ -98,5 +109,5 @@ Copy images on the SD card
+ Finish
+ ======
  
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_photo module into the OpenCV build.
+-Eject the SD card, insert it in the A20-OLinuXino-LIME board, and power it up.
++Eject the SD card, insert it in the A20-OLinuXino board, and power it up.
  
-@@ -78,44 +94,65 @@ comment "opencv_python module requires numpy which is not yet available."
- config BR2_PACKAGE_OPENCV_LIB_SHAPE
- 	bool "shape (shape descriptors and matchers)"
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_shape module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_STITCHING
- 	bool "stitching"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	help
- 	  Include opencv_stitching module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_SUPERRES
- 	bool "superres"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_superres "super resolution" - module into the OpenCV
- 	  build.
- 
- config BR2_PACKAGE_OPENCV_LIB_TS
- 	bool "ts (touchscreen)"
--	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	help
- 	  Include opencv_ts module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
- 	bool "videoio (media i/o)"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_videoio module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	bool "video"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_video module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
- 	bool "videostab"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_videostab module into the OpenCV build.
- 
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+new file mode 100644
+index 0000000..23dd0f0
+--- /dev/null
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -0,0 +1,46 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_NEON_VFPV4=y
++
++# Lock to 4.0 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.0.5"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Additional tools
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
