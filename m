@@ -1,159 +1,146 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:00 -0000
-Subject: [Buildroot] [git commit branch/next] package-infra: add helper to
-	build kernel modules
-Message-ID: <20150808105628.18FC17FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	configs/olimex_a20_olinuxino_lime_mali_defconfig: new board
+Message-ID: <20150808105615.A496D8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b525dc934f18631a42e34d010530b9217d390f3
+commit: http://git.buildroot.net/buildroot/commit/?id=53369fbcf45054ebc24da0a55462d17ac1eb7965
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Linux kernel offers a nice and easy-to-use infra to build
-out-of-tree kernel modules.
+This commit adds a new defconfig for the Olimex A20 OLinuxino Lime
+board, based on the 3.4.x vendor specific kernel, which allows to use
+the Mali 3D acceleration for OpenGL support.
 
-Currently, we have quite a few packages that build kernel modules, and
-most duplicate (or rewrite) the same code over-and-over again.
-
-Introduce a new infrastructure that provides helpers to build kernel
-modules, so packages do not have to duplicate/rewrite that.
-
-The infrastructure, unlike any other package infra, is not standalone.
-It needs another package infra to be used. This is so that packages that
-provide both userland and kernel modules can be built easily. So, this
-infra only defines post-build and post-install hooks, that will build
-the kernel modules after the rest of the package.
-
-We need to override PWD, because some packages will use it to find their
-own includes (and other helper files). PWD is inherited from the
-environment, so it gets whatever value it had when make was launched,
-which happens to be Buildroot's own top source tree. So, we just force
-PWD to the proper value, rather than cd-ing first.
-
-Also, no host version is provided, since it does not make sense to build
-kernel modules for the host.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in          |    1 +
- package/pkg-kernel-module.mk |   96 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+), 0 deletions(-)
+ board/olimex/a20_olinuxino_lime/boot-mali.cmd    |    5 ++
+ board/olimex/a20_olinuxino_lime/post-build.sh    |    4 ++
+ board/olimex/a20_olinuxino_lime/readme.txt       |   16 +++++++-
+ configs/olimex_a20_olinuxino_lime_mali_defconfig |   50 ++++++++++++++++++++++
+ 4 files changed, 74 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 2ed7cf7..545694f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -399,3 +399,4 @@ include package/pkg-virtual.mk
- include package/pkg-generic.mk
- include package/pkg-kconfig.mk
- include package/pkg-rebar.mk
-+include package/pkg-kernel-module.mk
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
 new file mode 100644
-index 0000000..5fb19be
+index 0000000..9fa5d65
 --- /dev/null
-+++ b/package/pkg-kernel-module.mk
-@@ -0,0 +1,96 @@
-+################################################################################
-+# kernel module infrastructure for building Linux kernel modules
-+#
-+# This file implements an infrastructure that eases development of package
-+# .mk files for out-of-tree Linux kernel modules. It should be used for all
-+# packages that build a Linux kernel module using the kernel's out-of-tree
-+# buildsystem, unless they use a complex custom buildsystem.
-+#
-+# The kernel-module infrastructure requires the packages that use it to also
-+# use another package infrastructure. kernel-module only defines post-build
-+# and post-install hooks. This allows the package to build both kernel
-+# modules and/or user-space components (with any of the other *-package
-+# infra).
-+#
-+# As such, it is to be used in conjunction with another *-package infra,
-+# like so:
-+#
-+#   $(eval $(kernel-module))
-+#   $(eval $(generic-package))
-+#
-+# Note: if the caller needs access to the kernel modules (either after they
-+# are built or after they are installed), it will have to define its own
-+# post-build/install hooks *after* calling kernel-module, but *before*
-+# calling the other *-package infra, like so:
-+#
-+#   $(eval $(kernel-module))
-+#   define FOO_MOD_TWEAK
-+#   	# do something
-+#   endef
-+#   FOO_POST_BUILD_HOOKS += FOO_MOD_TWEAK
-+#   $(eval $(generic-package))
-+#
-+# Note: this infra does not check that the kernel is enabled; it is expected
-+# to be enforced at the Kconfig level with proper 'depends on'.
-+################################################################################
++++ b/board/olimex/a20_olinuxino_lime/boot-mali.cmd
+@@ -0,0 +1,5 @@
++setenv bootm_boot_mode sec
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
++ext4load mmc 0 0x43000000 /boot/script.bin
++ext4load mmc 0 0x48000000 /boot/zImage
++bootz 0x48000000
+diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino_lime/post-build.sh
+index 4e6fbec..ac8d4df 100755
+--- a/board/olimex/a20_olinuxino_lime/post-build.sh
++++ b/board/olimex/a20_olinuxino_lime/post-build.sh
+@@ -6,3 +6,7 @@
+ MKIMAGE=$HOST_DIR/usr/bin/mkimage
+ 
+ $MKIMAGE -A arm -O linux -T script -C none -d $2 $3/boot.scr
 +
-+################################################################################
-+# inner-kernel-module -- generates the make targets needed to support building
-+# a kernel module
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name
-+################################################################################
++if [ -e $BINARIES_DIR/script.bin ]; then
++	cp $BINARIES_DIR/script.bin $3/script.bin
++fi
+diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
+index 3fc9c02..92ee24a 100644
+--- a/board/olimex/a20_olinuxino_lime/readme.txt
++++ b/board/olimex/a20_olinuxino_lime/readme.txt
+@@ -6,11 +6,24 @@ Intro
+ This is a open hardware board,
+ see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+ 
++The legacy linux-sunxi kernels are based on the vendor code drops.
++It is only useful when accelerated 3D graphics and multimedia support
++is strictly necessary.
 +
-+define inner-kernel-module
++The Mainline Kernel is already a much better choice for a headless server.
++And also the mainline kernel works fine even for a basic Linux desktop
++system running on top of a simple framebuffer, which may be good enough for
++the users who do not need fancy 3D graphics or video playback acceleration.
 +
-+# The kernel must be built first.
-+$(2)_DEPENDENCIES += linux
+ How to build it
+ ===============
+ 
+     $ make olimex_a20_olinuxino_lime_defconfig
+ 
++or
 +
-+# This is only defined in some infrastructures (e.g. autotools, cmake),
-+# but not in others (e.g. generic). So define it here as well.
-+$(2)_MAKE ?= $$(MAKE)
++    $ make olimex_a20_olinuxino_lime_mali_defconfig
 +
-+# If not specified, consider the source of the kernel module to be at
-+# the root of the package.
-+$(2)_MODULE_SUBDIRS ?= .
+ Compile everything and build the rootfs image:
+ 
+     $ make
+@@ -23,7 +36,8 @@ After building, you should get a tree like this:
+     output/images/
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+-    +-- sun7i-a20-olinuxino-lime.dtb
++    +-- script.bin (mali)
++    +-- sun7i-a20-olinuxino-lime.dtb (mainline)
+     +-- u-boot.bin
+     +-- u-boot-sunxi-with-spl.bin
+     `-- zImage
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+new file mode 100644
+index 0000000..dde39ad
+--- /dev/null
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -0,0 +1,50 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
 +
-+# Build the kernel module(s)
-+# Force PWD for those packages that want to use it to find their
-+# includes and other support files (Booo!)
-+define $(2)_KERNEL_MODULES_BUILD
-+	@$$(call MESSAGE,"Building kernel module(s)")
-+	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-+		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
-+			-C $$(LINUX_DIR) \
-+			$$(LINUX_MAKE_FLAGS) \
-+			$$($(2)_MODULE_MAKE_OPTS) \
-+			PWD=$$(@D)/$$(d) \
-+			M=$$(@D)/$$(d) \
-+			modules$$(sep))
-+endef
-+$(2)_POST_BUILD_HOOKS += $(2)_KERNEL_MODULES_BUILD
++# Lock to 3.4 headers as the sunxi kernel is based off the 3.4 branch
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.4.108"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4=y
 +
-+# Install the kernel module(s)
-+# Force PWD for those packages that want to use it to find their
-+# includes and other support files (Booo!)
-+define $(2)_KERNEL_MODULES_INSTALL
-+	@$$(call MESSAGE,"Installing kernel module(s)")
-+	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
-+		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
-+			-C $$(LINUX_DIR) \
-+			$$(LINUX_MAKE_FLAGS) \
-+			$$($(2)_MODULE_MAKE_OPTS) \
-+			PWD=$$(@D)/$$(d) \
-+			M=$$(@D)/$$(d) \
-+			modules_install$$(sep))
-+endef
-+$(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
 +
-+endef
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux-sunxi,linux-sunxi,sunxi-v3.4.103-r1)/sunxi-v3.4.103-r1.tar.gz"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sun7i"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +
-+################################################################################
-+# kernel-module -- the target generator macro for kernel module packages
-+################################################################################
++# sunxi packages
++BR2_PACKAGE_SUNXI_TOOLS=y
++BR2_PACKAGE_SUNXI_BOARDS=y
++BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
++BR2_PACKAGE_SUNXI_MALI=y
++BR2_PACKAGE_SUNXI_MALI_DBG=y
 +
-+kernel-module = $(call inner-kernel-module,$(pkgname),$(call UPPERCASE,$(pkgname)))
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++
++# Additional tools
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
