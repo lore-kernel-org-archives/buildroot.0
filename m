@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] sdl_mixer: add hash file
-Message-ID: <20150808105634.882EC7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libsndfile: add hash file
+Message-ID: <20150808105634.F0F0D7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64a9e7d332441f6af1a8c09312e3bab321abda1a
+commit: http://git.buildroot.net/buildroot/commit/?id=5d30841f86fbb722a863a42abef9b7e79b89d86f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sdl_mixer/sdl_mixer.hash |    2 ++
+ package/libsndfile/libsndfile.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sdl_mixer/sdl_mixer.hash b/package/sdl_mixer/sdl_mixer.hash
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
 new file mode 100644
-index 0000000..cfe8b07
+index 0000000..a19c262
 --- /dev/null
-+++ b/package/sdl_mixer/sdl_mixer.hash
++++ b/package/libsndfile/libsndfile.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	1644308279a975799049e4826af2cfc787cad2abb11aa14562e402521f86992a	SDL_mixer-1.2.12.tar.gz
++# Locally calculated after checking pgp signature
++sha256	59016dbd326abe7e2366ded5c344c853829bebfd1702ef26a07ef662d6aa4882	libsndfile-1.0.25.tar.gz
