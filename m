@@ -1,28 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] python-netifaces: add hash file
-Message-ID: <20150808105611.80F467F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] postgresql: bump to version
+	9.4.4
+Message-ID: <20150808105612.5976B8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af8d0a6399807a91564530a9e0376162bf6d40d5
+commit: http://git.buildroot.net/buildroot/commit/?id=0b9d184ddde036af7c1af786ff413387e221a2b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+- Bump to version 9.4.4
+- Update hash file
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-netifaces/python-netifaces.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/postgresql/postgresql.hash |    4 ++--
+ package/postgresql/postgresql.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
-new file mode 100644
-index 0000000..aebfdf6
---- /dev/null
-+++ b/package/python-netifaces/python-netifaces.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=36da76e2cfadd24cc7510c2c0012eb1e, sha256 locally computed
-+md5     36da76e2cfadd24cc7510c2c0012eb1e                                  netifaces-0.10.4.tar.gz
-+sha256  9656a169cb83da34d732b0eb72b39373d48774aee009a3d1272b7ea2ce109cde  netifaces-0.10.4.tar.gz
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index d0d40a1..5f415af 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.4.3/postgresql-9.4.3.tar.bz2.sha256
+-sha256	734acfd2ac352dd0cd353d226f3199c2e1a2730200998aea5b38cf685136d755  postgresql-9.4.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.4.4/postgresql-9.4.4.tar.bz2.sha256
++sha256	538ed99688d6fdbec6fd166d1779cf4588bf2f16c52304e5ef29f904c43b0013  postgresql-9.4.4.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c4fa36c..382f320 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.4.3
++POSTGRESQL_VERSION = 9.4.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
