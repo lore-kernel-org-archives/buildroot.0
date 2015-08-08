@@ -1,40 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:50 -0000
-Subject: [Buildroot] [git commit branch/next] package/linux: trash stderr in
-	LINUX_VERSION_PROBED
-Message-ID: <20150808105640.09CAE80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] e2fsprogs: remove busybox
+	tune2fs when installing full version
+Message-ID: <20150808105639.8B49F803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c95dc64c294614c1d9bebb0931301b30abaaca26
+commit: http://git.buildroot.net/buildroot/commit/?id=aa02829240b2927b2cb379eb904b6f40ff751237
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Linux buildsystem tries to run the compiler even just for
-'kernelrelease' (which we store in LINUX_VERSION_PROBED) and we
-sometimes need to use it before the toolchain is available; thus
-we get spurious errors on stderr.
+Currently, busybox installs a version of tune2fs in /sbin/ while
+e2fsprogs installs at /usr/sbin/. This causes issues if a user is
+expecting the to use the full version from a prompt via 'tune2fs'
+since busybox's tune2fs will be found first from the default path
+search.
 
-Consign stderr to oblivion when computing the 'kernelrelease'.
+Fix this by removing the busybox version of tune2fs when a user has
+selected the option to install tune2fs from e2fsprogs.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: don't hijack E2FSPROGS_TARGET_TUNE2FS_SYMLINK for the removal
+and instead introduce a separate E2FSPROGS_REMOVE_BUSYBOX_APPLETS post
+install target hook, and do related code re-organization.]
+
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 375a9e1..d91dbb2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -76,7 +76,7 @@ LINUX_MAKE_ENV = \
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 0537521..ca54b70 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -102,6 +102,20 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
+ E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
+ endif
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
--LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease`
-+LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
- KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
++# Remove busybox tune2fs and e2label, since we want the e2fsprogs full
++# blown variants to take precedence, but they are not installed in the
++# same location.
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++E2FSPROGS_DEPENDENCIES += busybox
++
++define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
++	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
++	$(RM) -f $(TARGET_DIR)/sbin/e2label
++
++endef
++E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
++endif
++
+ define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
+ 	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
+ endef
