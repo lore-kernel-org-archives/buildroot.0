@@ -1,32 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] dado: bump to version 1.6.0
-Message-ID: <20150808105603.7C62F7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lzop: add hash file
+Message-ID: <20150808105604.113767F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94adefb19d2686f007effa1fda7bbb84563c0165
+commit: http://git.buildroot.net/buildroot/commit/?id=8ea6b6047e8172490997a2303b0a05710d4de7fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dado/dado.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/lzop/lzop.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dado/dado.mk b/package/dado/dado.mk
-index 3a58215..a09dd6d 100644
---- a/package/dado/dado.mk
-+++ b/package/dado/dado.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DADO_VERSION = 1.5.2-1
-+DADO_VERSION = 1.6.0-1
- DADO_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+diff --git a/package/lzop/lzop.hash b/package/lzop/lzop.hash
+new file mode 100644
+index 0000000..a484e7f
+--- /dev/null
++++ b/package/lzop/lzop.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 c1425b8c77d49f5a679d5a126c90ea6ad99585a55e335a613cae59e909dbb2c9 lzop-1.03.tar.gz
