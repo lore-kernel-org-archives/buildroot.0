@@ -1,28 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:22 -0000
-Subject: [Buildroot] [git commit branch/next] package/xfsprogs: add hash file
-Message-ID: <20150808105605.57CA97F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] btrfs-progs: bump to version
+	4.0.1
+Message-ID: <20150808105603.725927FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfecdaa5098a385bfc6fb5fb9e5dc5e85e3bc2a9
+commit: http://git.buildroot.net/buildroot/commit/?id=ba933337bbe100a04f61578fd2d78d242d30fa30
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xfsprogs/xfsprogs.hash |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash |    2 +-
+ package/btrfs-progs/btrfs-progs.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-new file mode 100644
-index 0000000..3fb02df
---- /dev/null
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated after checking pgp signature:
-+#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-3.1.11.tar.gz.sig
-+sha256 adf4980177b5c890c1ca86b9c0e3e4d69a3f95bfc01746844280c2393cf4d6be xfsprogs-3.1.11.tar.gz
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 86ab34c..1ffb662 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256	179cf1acc1b0061548b8f1d9cf973a8338bf96f192cecad99ecdace9ae065a1f	btrfs-progs-v4.0.tar.xz
++sha256	2c2e10e79edd16a92effe8619c527fd130bc272fbca67896e1705bb2ec0293cb	btrfs-progs-v4.0.1.tar.xz
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index ce5c27e..d111352 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 4.0
++BTRFS_PROGS_VERSION = 4.0.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf acl attr e2fsprogs lzo util-linux zlib
