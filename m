@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:10 -0000
-Subject: [Buildroot] [git commit branch/next] package/libdrm: fix building
-	if GCC's C standard is not gnu99
-Message-ID: <20150808105620.718CD80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] e2fsprogs: remove more busybox
+	applet links
+Message-ID: <20150808105640.2394C7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24147efb21de3f38d919ee45cf997434b096539c
+commit: http://git.buildroot.net/buildroot/commit/?id=b6b701c0cc983d4ea6b36d8e5de18e118c94eb9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-checking for /home/fli4l/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc option to accept ISO C99... unsupported
-configure: error: Building libdrm requires C99 enabled compiler
+Following commit aa02829240b2 (e2fsprogs: remove busybox tune2fs when
+installing full version, 2015-07-08), remove the rest of Busybox e2fsprogs
+applet links. All of them are installed in different locations than upstream
+e2fsprogs.
 
-using this defconfig
-BR2_KERNEL_HEADERS_4_0=y
-BR2_BINUTILS_VERSION_2_25=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_LIBDRM=y
-
-Patch inspired by
-http://git.buildroot.net/buildroot/commit/?id=5cf5b390385fb6325485e37dc9d38e1e3ac1f091
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdrm/libdrm.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 4cca645..1768214 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -19,6 +19,8 @@ LIBDRM_CONF_OPTS = \
- 	--disable-cairo-tests \
- 	--disable-manpages
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index ca54b70..c863f70 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -109,9 +109,11 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ E2FSPROGS_DEPENDENCIES += busybox
  
-+LIBDRM_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+
- ifeq ($(BR2_PACKAGE_LIBDRM_INTEL),y)
- LIBDRM_CONF_OPTS += --enable-intel
- LIBDRM_DEPENDENCIES += libatomic_ops libpciaccess
+ define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
++	$(RM) -f $(TARGET_DIR)/bin/chattr
++	$(RM) -f $(TARGET_DIR)/bin/lsattr
++	$(RM) -f $(TARGET_DIR)/sbin/fsck
+ 	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
+ 	$(RM) -f $(TARGET_DIR)/sbin/e2label
+-
+ endef
+ E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
+ endif
