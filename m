@@ -1,42 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] libuv: not available for
-	static only builds
-Message-ID: <20150808105559.404697FDC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Kickoff 2015.08 cycle
+Message-ID: <20150808105602.A89597F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5eff8b850c6031e74e51461f00012ae9de9bdea
+commit: http://git.buildroot.net/buildroot/commit/?id=841d3ac7e04fe3c2d8f4ccbc063db5650ec4779e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Fixes:
-http://autobuild.buildroot.net/results/031/031c2c005f4946af5012be7432b55d11ca891d60/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libuv/Config.in b/package/libuv/Config.in
-index 66cd3f2..26cb97e 100644
---- a/package/libuv/Config.in
-+++ b/package/libuv/Config.in
-@@ -2,12 +2,13 @@ config BR2_PACKAGE_LIBUV
- 	bool "libuv"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  libuv is a multi-platform support library with a focus
- 	  on asynchronous I/O.
+diff --git a/Makefile b/Makefile
+index e490871..43b5ba5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@
+ all:
  
- 	  https://github.com/libuv/libuv
+ # Set and export the version string
+-export BR2_VERSION := 2015.05
++export BR2_VERSION := 2015.08-git
  
--comment "libuv needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libuv needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
