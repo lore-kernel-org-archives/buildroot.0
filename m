@@ -1,72 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] libnl: remove patch to fix
-	bmon breakage
-Message-ID: <20150808105633.08CCB7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: add linux-tools infra
+Message-ID: <20150808105633.50EDF80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7ca4e81163700146e39f3b9aba90225bad86b45
+commit: http://git.buildroot.net/buildroot/commit/?id=f3a23945a283422ce07b3ca4df5398911c77b3a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream decided that programs should be fixed, so so be it.
+This commit add an infrastructure to build linux kernel
+tools available in the kernel sources.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Currently, the only linux kernel tool packaged in Buildroot
+is perf and it's packaged as a separate generic package.
+This is a problem for licence information raised in this
+thread [1].
+
+Since these tools require to build a Linux kernel, we can
+use some hooks in linux package like we did for linux
+extensions [2] and remove the perf package.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
+[2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
+
+[Thomas: fix minor typos in comments.]
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...remove-unnecessary-include-of-private-lin.patch |   44 --------------------
- 1 files changed, 0 insertions(+), 44 deletions(-)
+ linux/linux.mk |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch b/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
-deleted file mode 100644
-index 3520899..0000000
---- a/package/libnl/0001-Revert-route-remove-unnecessary-include-of-private-lin.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 61310ce3f2b6c5c21be8c788848f083e4c58d138 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Fri, 17 Apr 2015 07:20:48 -0300
--Subject: [PATCH] Revert "route: remove unnecessary include of private
-- linux/if.h"
--
--It breaks rtnl_link_get_flags() checks against IFF_* defines that aren't
--defined.
--
--This reverts commit 50a76998ac36ace3716d3c979b352fac73cfc80a.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- include/netlink/route/link.h | 1 +
-- src/nl-link-set.c            | 1 -
-- 2 files changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/netlink/route/link.h b/include/netlink/route/link.h
--index 8f74f42..a7aa88b 100644
----- a/include/netlink/route/link.h
--+++ b/include/netlink/route/link.h
--@@ -15,6 +15,7 @@
-- #include <netlink/netlink.h>
-- #include <netlink/cache.h>
-- #include <netlink/addr.h>
--+#include <linux/if.h>
-- #include <sys/types.h>
-- 
-- #ifdef __cplusplus
--diff --git a/src/nl-link-set.c b/src/nl-link-set.c
--index 6a6bac8..bbb60f9 100644
----- a/src/nl-link-set.c
--+++ b/src/nl-link-set.c
--@@ -9,7 +9,6 @@
--  * Copyright (c) 2003-2010 Thomas Graf <tgraf@suug.ch>
--  */
-- 
---#include <linux/if.h>
-- #include <netlink/cli/utils.h>
-- #include <netlink/cli/link.h>
-- 
---- 
--2.0.5
--
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 8c535f3..3ea564f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -313,6 +313,8 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+ 
++# Include all our extensions and tools definitions.
++#
+ # Note: our package infrastructure uses the full-path of the last-scanned
+ # Makefile to determine what package we're currently defining, using the
+ # last directory component in the path. As such, including other Makefile,
+@@ -322,6 +324,7 @@ endef
+ # the current Makefile, we are OK. But this is a hard requirement: files
+ # included here *must* be in the same directory!
+ include $(sort $(wildcard linux/linux-ext-*.mk))
++include $(sort $(wildcard linux/linux-tool-*.mk))
+ 
+ LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+ 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+@@ -330,6 +333,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
+ 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
+ 		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
+ 
++# Install Linux kernel tools in the staging directory since some tools
++# may install shared libraries and headers (e.g. cpupower). The kernel
++# image is NOT installed in the staging directory.
++LINUX_INSTALL_STAGING = YES
++
++LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
++	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
++		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
++
++LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
++	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
++		$(call UPPERCASE,$(tool))_BUILD_CMDS))
++
++LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
++	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
++		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
++
++LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
++	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
++		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
++
+ # Checks to give errors that the user can understand
+ ifeq ($(BR_BUILDING),y)
+ 
