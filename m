@@ -1,65 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] system: fix BR2_INIT_NONE /
-	BR2_INIT_SYSTEMD build
-Message-ID: <20150808105632.078FE80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dropbear: fix
+	generating keys on RO file systems
+Message-ID: <20150808105631.B81177FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ddc63be5294af5418207564ffb5ab1ecc3f9b055
+commit: http://git.buildroot.net/buildroot/commit/?id=e7d04dd2df8bb935c61f7c814ee88eba7e75b5e4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Following the introduction of the initscripts package in commit
-89d39fc7a392530be043bac541ade0bef746edb6 ("initscripts: new package"),
-the /etc/inittab file is no longer part of the skeleton, and therefore
-is not always installed.
+dropbear generates its keys at the first connection, and wants to save
+them in /etc/dropbear (not configurable).
 
-However, system/system.mk tweaks the inittab for getty and filesystem
-remount as rw, without taking the precautions of whether the init
-system is Busybox or SysV. This commit fixes that by adding the
-necessary conditions around the code adjusting the inittab file.
+Currently, our /etc/dropbear is a directory.
 
+When the filesystem is read-only, dropbear can't save its keys, so
+refuses all connections.
+
+Fix that with:
+
+  - at build time, create /etc/dropbear as a symlink to
+    /var/run/dropbear
+
+  - at runtime, if the filesystem is RW (we can rm /etc/dropbear),
+    we replace the symlink with an actual directory; otherwise,
+    when the filesystem is RO (we can't rm /etc/dropbear), we create
+    /var/run/dropbear so the symlink points to an existing directory
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/system.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/dropbear/S50dropbear      |   14 ++++++++++++++
+ package/dropbear/dropbear.mk      |    2 +-
+ package/dropbear/dropbear.service |   13 +++++++++++++
+ 3 files changed, 28 insertions(+), 1 deletions(-)
 
-diff --git a/system/system.mk b/system/system.mk
-index fd94e03..e44f64c 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -89,14 +89,14 @@ endif
- TARGET_FINALIZE_HOOKS += SYSTEM_BIN_SH
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index 2694931..af50ccf 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -11,6 +11,20 @@ start() {
  
- ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
--ifeq ($(BR2_PACKAGE_SYSVINIT),y)
-+ifeq ($(BR2_INIT_SYSV),y)
- # In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
- # skip the "tty" part and keep only the remaining.
- define SYSTEM_GETTY
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
- 		$(TARGET_DIR)/etc/inittab
+ 	echo -n "Starting dropbear sshd: "
+ 	umask 077
++
++	# If /etc/dropbear is not a directory, and
++	#   - the filesystem is RO (i.e. we can not rm the symlink),
++	#     create the directory pointed to by the symlink.
++	#   - the filesystem is RW (i.e. we can rm the symlink),
++	#     replace the symlink with an actual directory
++	if ! [ -d /etc/dropbear ]; then
++		if rm -f /etc/dropbear; then
++			mkdir -p /etc/dropbear
++		else
++			mkdir -p $(readlink /etc/dropbear)
++		fi
++	fi
++
+ 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+ 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bc65d69..5bbe864 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -93,7 +93,7 @@ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+ 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
+ 	done
+-	mkdir -p $(TARGET_DIR)/etc/dropbear
++	ln -snf ../var/run/dropbear $(TARGET_DIR)/etc/dropbear
  endef
--else
-+else ifeq ($(BR2_INIT_BUSYBOX),y)
- # Add getty to busybox inittab
- define SYSTEM_GETTY
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
-@@ -106,6 +106,7 @@ endif
- TARGET_FINALIZE_HOOKS += SYSTEM_GETTY
- endif
  
-+ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
- # Find commented line, if any, and remove leading '#'s
- define SYSTEM_REMOUNT_RW
-@@ -118,5 +119,6 @@ define SYSTEM_REMOUNT_RW
- endef
- endif
- TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
-+endif
+ $(eval $(autotools-package))
+diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
+index 4e6c879..0e2cf54 100644
+--- a/package/dropbear/dropbear.service
++++ b/package/dropbear/dropbear.service
+@@ -3,6 +3,19 @@ Description=Dropbear SSH daemon
+ After=syslog.target network.target auditd.service
  
- endif # BR2_ROOTFS_SKELETON_DEFAULT
+ [Service]
++# If /etc/dropbear is not a directory, and
++#   - the filesystem is RO (i.e. we can not rm the symlink),
++#     create the directory pointed to by the symlink.
++#   - the filesystem is RW (i.e. we can rm the symlink),
++#     replace the symlink with an actual directory
++ExecStartPre=/bin/sh -c '\
++if ! [ -d /etc/dropbear ]; then \
++    if rm -f /etc/dropbear; then \
++        mkdir -p /etc/dropbear; \
++    else \
++        mkdir -p $(readlink /etc/dropbear); \
++    fi; \
++fi'
+ ExecStart=/usr/sbin/dropbear -F -R
+ ExecReload=/bin/kill -HUP $MAINPID
+ 
