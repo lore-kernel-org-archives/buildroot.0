@@ -1,43 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:00 -0000
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xproto_xproto:
-	bump version to 7.0.28
-Message-ID: <20150808105636.A0F6F7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.6.2
+Message-ID: <20150808105636.B2E4F80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7845548d89b644672f22ffca3e15f6682f6d56d
+commit: http://git.buildroot.net/buildroot/commit/?id=3f035f39af9faedc7694a5410bd98f8fef1b2a04
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xproto_xproto/xproto_xproto.hash |    4 ++--
- package/x11r7/xproto_xproto/xproto_xproto.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ package/mesa3d/mesa3d.hash               |    4 ++--
+ package/mesa3d/mesa3d.mk                 |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.hash b/package/x11r7/xproto_xproto/xproto_xproto.hash
-index 6c5a24d..333ac6d 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.hash
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index c5f2dba..74ce8ae 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.6.1
++MESA3D_HEADERS_VERSION = 10.6.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 5c34a9e..4ba94ea 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,2 +1,2 @@
--# From http://comments.gmane.org/gmane.comp.freedesktop.xorg.announce/2243
--sha256	246f23a6b235c8008183deeb1dcd76d529a099f93600b648b399811b10ea110c	xproto-7.0.27.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-July/002618.html
-+sha256	29e85568d1f68ceef8a2c081dad9bc0e5500a53cfffde24b564dc43d46ddf6ca	xproto-7.0.28.tar.bz2
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
-index 99d63f5..7357b8c 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.mk
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000161.html
+-sha256	6c80a2b647e57c85dc36e609d9aed17f878f0d8e0cf9ace86d14cf604101e1eb	mesa-10.6.1.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-July/000163.html
++sha256	05753d3db4212900927b9894221a1669a10f56786e86a7e818b6e18a0817dca9	mesa-10.6.2.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 118f071..e5afed2 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XPROTO_XPROTO_VERSION = 7.0.27
-+XPROTO_XPROTO_VERSION = 7.0.28
- XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
- XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_XPROTO_LICENSE = MIT
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.6.1
++MESA3D_VERSION = 10.6.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
