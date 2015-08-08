@@ -1,120 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] package/opencv: add a choice
-	for selecting the gui toolkit
-Message-ID: <20150808105621.ED34C80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox: make
+	match-startup-monitor a real package
+Message-ID: <20150808105606.8A7EA7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5117b9776370dad62082e3842c09c8cf3b670c89
+commit: http://git.buildroot.net/buildroot/commit/?id=cbb8096076cad57293ea9ad334750227e8d4b9ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In OpenCV, only one GUI toolkit may be used at any one time, so group
-the two existing options into a choice to make this situation explicit.
+Currently, matchbox-startup-monitor is missing a Kconfig entry, but is
+so far solely a build-time dependency of matchbox-panel.
 
-This will also be useful when we later add support for Qt5 and gtk3.
+So, make it a real package, and only build-depend on it when enabled.
+Fix the condition to build-depend on it.
 
-Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: tweak commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+To keep the existing behaviour, default to 'y' when startup-notification
+is enabled.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/Config.in |   67 ++++++++++++++++++++++++++++++----------------
- 1 files changed, 44 insertions(+), 23 deletions(-)
+ package/matchbox/Config.in                         |    1 +
+ package/matchbox/matchbox-panel/matchbox-panel.mk  |    4 ++--
+ .../matchbox/matchbox-startup-monitor/Config.in    |    3 +++
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 079730e..c3542c4 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -52,6 +52,50 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	  Include opencv_highgui (high-level gui and media i/o) module into the
- 	  OpenCV build.
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 9b27d4d..2f9b73d 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -26,5 +26,6 @@ source "package/matchbox/matchbox-desktop/Config.in"
+ source "package/matchbox/matchbox-common/Config.in"
+ source "package/matchbox/matchbox-fakekey/Config.in"
+ source "package/matchbox/matchbox-keyboard/Config.in"
++source "package/matchbox/matchbox-startup-monitor/Config.in"
  
-+choice
-+	prompt "gui toolkit"
-+	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	help
-+	  GUI toolkit to be used by the opencv_highgui module.
-+
-+config BR2_PACKAGE_OPENCV_GUI_NONE
-+	bool "none"
-+
-+config BR2_PACKAGE_OPENCV_WITH_GTK
-+	bool "gtk2"
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-+	depends on BR2_USE_MMU # libgtk2 -> libglib2
-+	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBGTK2
-+
-+comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU # libgtk2 -> glib2
-+	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
-+	depends on !BR2_PACKAGE_XORG7 || \
-+		!BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_OPENCV_WITH_QT
-+	bool "qt4"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # qt
-+	select BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_QT_GUI_MODULE
-+	select BR2_PACKAGE_QT_TEST
-+	help
-+	  Use Qt with QtTest module and STL support
-+
-+comment "qt4 needs a toolchain w/ C++"
-+	depends on BR2_USE_MMU # qt
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+endchoice
-+
- config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
- 	bool "imgcodecs"
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-@@ -209,17 +253,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
+ endif
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+index d3efed9..f7d699b 100644
+--- a/package/matchbox/matchbox-panel/matchbox-panel.mk
++++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+@@ -13,9 +13,9 @@ MATCHBOX_PANEL_LICENSE_FILES = COPYING
+ MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
+ MATCHBOX_PANEL_CONF_OPTS = --enable-expat
  
- endchoice
- 
--config BR2_PACKAGE_OPENCV_WITH_GTK
--	bool "gtk support"
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # libgtk2 -> glib2
--	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
--	select BR2_PACKAGE_LIBGTK2
--
- config BR2_PACKAGE_OPENCV_WITH_JASPER
- 	bool "jpeg2000 support"
- 	select BR2_PACKAGE_JASPER
-@@ -242,18 +275,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
- 	help
- 	  Use shared libpng from the target system.
- 
--config BR2_PACKAGE_OPENCV_WITH_QT
--	bool "qt backend support"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_MMU # qt
--	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
--	select BR2_PACKAGE_QT
--	select BR2_PACKAGE_QT_STL
--	select BR2_PACKAGE_QT_GUI_MODULE
--	select BR2_PACKAGE_QT_TEST
--	help
--	  Use Qt with QtTest module and STL support
--
- config BR2_PACKAGE_OPENCV_WITH_TIFF
- 	bool "tiff support"
- 	select BR2_PACKAGE_TIFF
+-ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
++ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
+ MATCHBOX_PANEL_CONF_OPTS += --enable-startup-notification
+-MATCHBOX_PANEL_DEPENDENCIES += startup-notification matchbox-startup-monitor
++MATCHBOX_PANEL_DEPENDENCIES += matchbox-startup-monitor
+ else
+ MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+ endif
+diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox/matchbox-startup-monitor/Config.in
+new file mode 100644
+index 0000000..95af5fc
+--- /dev/null
++++ b/package/matchbox/matchbox-startup-monitor/Config.in
+@@ -0,0 +1,3 @@
++config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
++	bool
++	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
