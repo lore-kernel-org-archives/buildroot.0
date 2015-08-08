@@ -1,45 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:55 -0000
-Subject: [Buildroot] [git commit branch/next] python-pyqt: fix opengl build
-	failure
-Message-ID: <20150808105555.3EC1A81801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ola: depend on python for
+	bindings instead of selecting it
+Message-ID: <20150808105555.6B791818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5c95c7f84d23b527dda6e266c57a4f469f978874
+commit: http://git.buildroot.net/buildroot/commit/?id=1f751579945792d6127ffa239fd803d996709e18
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix:
-http://autobuild.buildroot.net/results/206/2062208c171207428c9121215971e00c52bf306a/
+Most likely people have already enabled python if they want to use the
+bindings for ola, so use depends on instead of select so we don't need to
+propagate the dependencies here.
 
-According to configure-ng.py, PyQt_NoOpenGLES must be added to qtdetail when
-QT_OPENGL_ES is set.
+Python already depends on mmu, so drop that here.
 
-[Thomas: add comment to explain the double negation.]
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyqt/python-pyqt.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/ola/Config.in |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
-index 2445567..292398d 100644
---- a/package/python-pyqt/python-pyqt.mk
-+++ b/package/python-pyqt/python-pyqt.mk
-@@ -40,6 +40,12 @@ ifeq ($(BR2_PACKAGE_QT_OPENSSL),)
- PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_OpenSSL
- endif
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index 1c4b8d8..f587db5 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -32,9 +32,8 @@ config BR2_PACKAGE_OLA_WEB
  
-+# Yes, this looks a bit weird: when OpenGL ES is available, we have to
-+# disable the feature that consists in not having OpenGL ES support.
-+ifeq ($(BR2_PACKAGE_QT_OPENGL_ES),y)
-+PYTHON_PYQT_QTDETAIL_DISABLE_FEATURES += PyQt_NoOpenGLES
-+endif
-+
- # PyQt_qreal_double must be disabled on a number of architectures that
- # use float for qreal.
- ifeq ($(BR2_PACKAGE_PYTHON_PYQT_ARCH_USES_QREAL_FLOAT),y)
+ config BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	bool "python bindings"
+-	select BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON_PROTOBUF
+-	depends on BR2_USE_MMU
+ 	help
+ 	  Build OLA with support for the Python language.
+ 
+@@ -55,8 +54,7 @@ config BR2_PACKAGE_OLA_EXAMPLES
+ 
+ config BR2_PACKAGE_OLA_RDM_TESTS
+ 	bool "rdm tests"
+-	select BR2_PACKAGE_OLA_PYTHON_BINDINGS
+-	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	help
+ 	  Build OLA RDM tests.
+ 
