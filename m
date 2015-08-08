@@ -1,36 +1,167 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:40 -0000
-Subject: [Buildroot] [git commit branch/next] scripts: mkmakefile: set umask
-	before calling BR's makefile
-Message-ID: <20150808105630.798377FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rpi-userland: drop
+	-Werror
+Message-ID: <20150808105629.0E4C47FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd13247a22884880fd759796dfdfad728590d5d4
+commit: http://git.buildroot.net/buildroot/commit/?id=34ee471f2a96af1f1415f2e854ddf67175615ce9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Small optimization so we don't have another 'make' level (caused by the
-umask fix) when running the generated makefile.
+Fixes:
+    http://autobuild.buildroot.org/results/501/5012affec6c85fe7749ac86d18d3c191f4e74bdf/
 
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/mkmakefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rpi-userland/0004-no-Werror.patch |  138 +++++++++++++++++++++++++++++
+ 1 files changed, 138 insertions(+), 0 deletions(-)
 
-diff --git a/support/scripts/mkmakefile b/support/scripts/mkmakefile
-index 27b1507..974e2c0 100755
---- a/support/scripts/mkmakefile
-+++ b/support/scripts/mkmakefile
-@@ -35,7 +35,7 @@ MAKEFLAGS += --no-print-directory
- all	:= \$(filter-out Makefile,\$(MAKECMDGOALS))
- 
- _all:
--	\$(MAKE) \$(MAKEARGS) \$(all)
-+	umask 0022 && \$(MAKE) \$(MAKEARGS) \$(all)
- 
- Makefile:;
- 
+diff --git a/package/rpi-userland/0004-no-Werror.patch b/package/rpi-userland/0004-no-Werror.patch
+new file mode 100644
+index 0000000..18a23b3
+--- /dev/null
++++ b/package/rpi-userland/0004-no-Werror.patch
+@@ -0,0 +1,138 @@
++Disable Werror everywhere
++
++With gcc-5.1, some constructs that were previously accepted (but wrong)
++are now considered warnings, and thus -Werror makes them errors.
++
++Ditch -Werror altoghether.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/android/apps/vidtex/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/android/apps/vidtex/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/android/apps/vidtex/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/android/apps/vidtex/CMakeLists.txt	2015-07-12 16:53:29.528491231 +0200
++@@ -1,6 +1,6 @@
++ cmake_minimum_required(VERSION 2.8)
++ 
++-SET(COMPILE_DEFINITIONS -Werror -Wall)
+++SET(COMPILE_DEFINITIONS  -Wall)
++ include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
++ 
++ set (VIDTEX_SOURCES
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/apps/gencmd/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/apps/gencmd/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/apps/gencmd/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/apps/gencmd/CMakeLists.txt	2015-07-12 16:53:29.512491038 +0200
++@@ -4,7 +4,7 @@
++    set(VCOS_PLATFORM win32)
++ else ()
++    set(VCOS_PLATFORM pthreads)
++-   add_definitions(-Wall -Werror)
+++   add_definitions(-Wall )
++ endif ()
++ 
++ include_directories( ../../../.. 
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/apps/raspicam/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/apps/raspicam/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/apps/raspicam/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/apps/raspicam/CMakeLists.txt	2015-07-12 16:50:54.422624640 +0200
++@@ -1,7 +1,7 @@
++ 
++ # raspistill/raspivid/raspiyuv
++ 
++-SET(COMPILE_DEFINITIONS -Werror)
+++SET(COMPILE_DEFINITIONS )
++ 
++ include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/libs/bcm_host/include)
++ include_directories(${PROJECT_SOURCE_DIR}/host_applications/linux/apps/raspicam/)
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/apps/smem/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/apps/smem/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/apps/smem/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/apps/smem/CMakeLists.txt	2015-07-12 16:53:29.516491086 +0200
++@@ -4,7 +4,7 @@
++ include (${VIDEOCORE_ROOT}/makefiles/cmake/global_settings.cmake)
++ 
++ if (NOT WIN32)
++-   add_definitions(-Wall -Werror)
+++   add_definitions(-Wall )
++ endif ()
++ 
++ include_directories (
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/libs/bcm_host/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/libs/bcm_host/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/libs/bcm_host/CMakeLists.txt	2015-07-12 16:48:03.768570937 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/libs/bcm_host/CMakeLists.txt	2015-07-12 16:53:29.520491135 +0200
++@@ -3,7 +3,7 @@
++    set(VCOS_PLATFORM win32)
++ else ()
++    set(VCOS_PLATFORM pthreads)
++-   add_definitions(-Wall -Werror)
+++   add_definitions(-Wall )
++ endif ()
++ 
++ include_directories( ../../../.. 
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/libs/sm/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/libs/sm/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/host_applications/linux/libs/sm/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/host_applications/linux/libs/sm/CMakeLists.txt	2015-07-12 16:53:29.524491183 +0200
++@@ -3,7 +3,7 @@
++    set(VCOS_PLATFORM win32)
++ else ()
++    set(VCOS_PLATFORM pthreads)
++-   add_definitions(-Wall -Werror)
+++   add_definitions(-Wall )
++ endif ()
++ 
++ include_directories( ../../../..
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/mmal/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/mmal/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/mmal/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/mmal/CMakeLists.txt	2015-07-12 16:53:29.536491327 +0200
++@@ -3,7 +3,7 @@
++ set(LIBRARY_TYPE SHARED)
++ endif (NOT DEFINED LIBRARY_TYPE)
++ 
++-add_definitions(-Wall -Werror)
+++add_definitions(-Wall )
++ 
++ add_library(mmal SHARED util/mmal_util.c)
++ 
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vcos/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vcos/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vcos/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vcos/CMakeLists.txt	2015-07-12 16:53:29.540491375 +0200
++@@ -43,7 +43,7 @@
++ endforeach ()
++ 
++ if (CMAKE_COMPILER_IS_GNUCC)
++-   add_definitions (-ggdb -Werror -Wall)
+++   add_definitions (-ggdb  -Wall)
++ endif ()
++ 
++ if (CMAKE_COMPILER_2005)
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vcos/pthreads/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vcos/pthreads/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vcos/pthreads/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vcos/pthreads/CMakeLists.txt	2015-07-12 16:53:29.540491375 +0200
++@@ -1,7 +1,7 @@
++ # MSVC5 does not fully support C99, enabling declaration-after-statement
++ # warnings allows a common MSVC5 build error to be detected in Linux builds.
++ if (CMAKE_COMPILER_IS_GNUCC)
++-   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wdeclaration-after-statement")
+++   set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall  -Wdeclaration-after-statement")
++    add_definitions (-D_GNU_SOURCE)
++ endif ()
++ 
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vmcs_host/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vmcs_host/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vmcs_host/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vmcs_host/CMakeLists.txt	2015-07-12 16:53:29.528491231 +0200
++@@ -2,7 +2,7 @@
++ # interface/vmcs_host
++ 
++ # not working in release build
++-# add_definitions(-Werror)
+++# add_definitions()
++ 
++ # vc_vchi_gencmd.c has a type-punning problem in vc_gencmd_read_response
++ add_definitions(-fno-strict-aliasing)
++diff -durN rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vmcs_host/linux/vcfiled/CMakeLists.txt rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vmcs_host/linux/vcfiled/CMakeLists.txt
++--- rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990.orig/interface/vmcs_host/linux/vcfiled/CMakeLists.txt	2015-05-30 15:53:53.000000000 +0200
+++++ rpi-userland-b834074d0c0d9d7e64c133ab14ed691999cee990/interface/vmcs_host/linux/vcfiled/CMakeLists.txt	2015-07-12 16:53:29.532491279 +0200
++@@ -1,5 +1,5 @@
++ 
++-add_definitions(-Werror)
+++add_definitions()
++ 
++ # vcfiled - serves files to videocore. used for media handlers from
++ # OpenMAX/IL and loading VLLs.
