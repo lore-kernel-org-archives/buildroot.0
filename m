@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:21 -0000
-Subject: [Buildroot] [git commit branch/next] packages/xscreensaver: add
-	hash file
-Message-ID: <20150808105605.4E85B7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lua-csnappy: bump to version
+	0.1.3
+Message-ID: <20150808105603.93A747FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=83bda3dcbde9a3fd1c9bc3a6b5fb08bf825a893f
+commit: http://git.buildroot.net/buildroot/commit/?id=b9d84ce80166eb671a0bc116c0ea352186c52624
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xscreensaver/xscreensaver.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/lua-csnappy/lua-csnappy.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
-new file mode 100644
-index 0000000..2217f82
---- /dev/null
-+++ b/package/xscreensaver/xscreensaver.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 47b703ed22dce46a08f11ddd7d67d52e4f7ad8df844bdf956431069a0db36797 xscreensaver-5.22.tar.gz
+diff --git a/package/lua-csnappy/lua-csnappy.mk b/package/lua-csnappy/lua-csnappy.mk
+index b739abc..60b92ac 100644
+--- a/package/lua-csnappy/lua-csnappy.mk
++++ b/package/lua-csnappy/lua-csnappy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.2
++LUA_CSNAPPY_VERSION_UPSTREAM = 0.1.3
+ LUA_CSNAPPY_VERSION = $(LUA_CSNAPPY_VERSION_UPSTREAM)-1
+ LUA_CSNAPPY_SUBDIR = lua-csnappy-$(LUA_CSNAPPY_VERSION_UPSTREAM)
+ LUA_CSNAPPY_LICENSE = BSD-3c
