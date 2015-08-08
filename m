@@ -1,47 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] iproute2: disable xtables on
-	static build
-Message-ID: <20150808105600.98A1D7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lutok: new package
+Message-ID: <20150808105608.BA9597FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=72e548a48036dce6a7ee5cfebc7cdefd9ffb8442
+commit: http://git.buildroot.net/buildroot/commit/?id=7c8744a2095a46b86f9b00a6346bba108036fe58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-iproute2 always builds m_xt.so as a shared library.
+Lutok is a lightweight C++ API library for Lua.
 
-Fixes:
-http://autobuild.buildroot.net/results/f42/f42bbbf5be4594a8806d0e571586ce2bf119582d/
-http://autobuild.buildroot.net/results/3b3/3b37871bdf5766677fc20dca22c13177091d104f/
+https://github.com/jmmv/lutok
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas:
+ - move lutok inclusion in package/Config.in after including the Lua
+   external modules
+ - add a comment explaining why we are passing --without-atf
+ - remove the logic around -ldl, it seems to build just fine without it.]
+
+Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iproute2/iproute2.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/Config.in        |    1 +
+ package/lutok/Config.in  |   13 +++++++++++++
+ package/lutok/lutok.hash |    2 ++
+ package/lutok/lutok.mk   |   16 ++++++++++++++++
+ 4 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 9595165..3315d67 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -18,7 +18,7 @@ IPROUTE2_DEPENDENCIES += busybox
+diff --git a/package/Config.in b/package/Config.in
+index d111a82..0286630 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -499,6 +499,7 @@ menu "Lua libraries/modules"
+ 	source "package/xavante/Config.in"
+ endmenu
  endif
- 
- # If we've got iptables enable xtables support for tc
--ifeq ($(BR2_PACKAGE_IPTABLES),y)
-+ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
- IPROUTE2_DEPENDENCIES += iptables
- define IPROUTE2_WITH_IPTABLES
- 	# Makefile is busted so it never passes IPT_LIB_DIR properly
-@@ -29,6 +29,7 @@ else
- define IPROUTE2_WITH_IPTABLES
- 	# em_ipset needs xtables, but configure misdetects it
- 	echo "TC_CONFIG_IPSET:=n" >>$(IPROUTE2_DIR)/Config
-+	echo "TC_CONFIG_XT:=n" >>$(IPROUTE2_DIR)/Config
- endef
- endif
- 
++	source "package/lutok/Config.in"
+ 	source "package/moarvm/Config.in"
+ 	source "package/mono/Config.in"
+ 	source "package/nodejs/Config.in"
+diff --git a/package/lutok/Config.in b/package/lutok/Config.in
+new file mode 100644
+index 0000000..d6c87cf
+--- /dev/null
++++ b/package/lutok/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LUTOK
++	bool "lutok"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUAJIT
++	help
++	  Lutok is a lightweight C++ API library for Lua.
++
++	  https://github.com/jmmv/lutok
++
++comment "lutok needs a toolchain w/ C++ and full Lua"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PACKAGE_LUAJIT
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
+diff --git a/package/lutok/lutok.hash b/package/lutok/lutok.hash
+new file mode 100644
+index 0000000..0ec8988
+--- /dev/null
++++ b/package/lutok/lutok.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 2cec51efa0c8d65ace8b21eaa08384b77abc5087b46e785f78de1c21fb754cd5 lutok-0.4.tar.gz
+diff --git a/package/lutok/lutok.mk b/package/lutok/lutok.mk
+new file mode 100644
+index 0000000..6ee198b
+--- /dev/null
++++ b/package/lutok/lutok.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# lutok
++#
++################################################################################
++
++LUTOK_VERSION = 0.4
++LUTOK_SITE = https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
++LUTOK_INSTALL_STAGING = YES
++LUTOK_DEPENDENCIES = host-pkgconf lua
++# --without-atf disables the atf-based lutok tests
++LUTOK_CONF_OPTS = --without-doxygen --without-atf
++LUTOK_LICENSE = BSD-3c
++LUTOK_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
