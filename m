@@ -1,89 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] package/musl: bump to version
-	1.1.10
-Message-ID: <20150808105609.833328030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] flite: use
+	FLITE_STRIP_COMPONENTS and FLITE_SUBDIR
+Message-ID: <20150808105628.DBFFE7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48b6fc2dbc0bd90be61e8f2b907e70f466379581
+commit: http://git.buildroot.net/buildroot/commit/?id=dd4bcebd7c43212650cccc2494527dc3d69024d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-A new regression in uselocale made it into this release. As suggested [1] by the
-musl maintainers add a patch from upstream [2] to avoid breaking programs that
-call uselocale.
+So far, to overcome the buggy way the flite tarball is made, we had to
+override the extract commands in a rather ugly way.
 
-[1]
-http://www.musl-libc.org/download.html
+The newly introduced <PKG>_STRIP_COMPONENTS, along with <PKG>_SUBDIR and a
+little edit to the patches, allow to remove the custom FLITE_EXTRACT_CMDS,
+slightly simplifying the flite.mk code.
 
-[2]
-http://git.musl-libc.org/cgit/musl/patch/?id=63f4b9f18f3674124d8bcb119739fec85e6da005
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/musl/0001-fix-uselocale.patch |   30 ++++++++++++++++++++++++++++++
- package/musl/musl.hash                |    2 +-
- package/musl/musl.mk                  |    2 +-
- 3 files changed, 32 insertions(+), 2 deletions(-)
+ .../flite/0001-now-honor-DESTDIR-env.-var.patch    |    4 +-
+ package/flite/0002-fix-alsa-static.patch           |    4 +-
+ package/flite/flite.mk                             |   35 ++++++++-----------
+ 3 files changed, 19 insertions(+), 24 deletions(-)
 
-diff --git a/package/musl/0001-fix-uselocale.patch b/package/musl/0001-fix-uselocale.patch
-new file mode 100644
-index 0000000..03a4c6e
---- /dev/null
-+++ b/package/musl/0001-fix-uselocale.patch
-@@ -0,0 +1,30 @@
-+From 63f4b9f18f3674124d8bcb119739fec85e6da005 Mon Sep 17 00:00:00 2001
-+From: Timo Ter??s <timo.teras@iki.fi>
-+Date: Fri, 05 Jun 2015 07:39:42 +0000
-+Subject: fix uselocale((locale_t)0) not to modify locale
-+
-+commit 68630b55c0c7219fe9df70dc28ffbf9efc8021d8 made the new locale to
-+be assigned unconditonally resulting in crashes later on.
-+
-+Backported from: 63f4b9f18f3674124d8bcb119739fec85e6da005
-+
-+Signed-off-by: Timo Ter??s <timo.teras@iki.fi>
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+diff --git a/src/locale/uselocale.c b/src/locale/uselocale.c
-+index b70a0c1..0fc5ecb 100644
-+--- a/src/locale/uselocale.c
-++++ b/src/locale/uselocale.c
-+@@ -8,9 +8,7 @@ locale_t __uselocale(locale_t new)
-+ 	locale_t old = self->locale;
-+ 	locale_t global = &libc.global_locale;
-+ 
-+-	if (new == LC_GLOBAL_LOCALE) new = global;
-+-
-+-	self->locale = new;
-++	if (new) self->locale = new == LC_GLOBAL_LOCALE ? global : new;
-+ 
-+ 	return old == global ? LC_GLOBAL_LOCALE : old;
-+ }
-+--
-+cgit v0.9.0.3-65-g4555
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index d6b28e2..88415b0 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	00bf7173caf972c88cd07cb0d420c082a2f35efcccc1a81f8909bec2d030283e  musl-1.1.9.tar.gz
-+sha256	45bbe9b1c7f7a0f743477af1e103b6889bfe4dd9815e16f6c89f6c90831c8b7c  musl-1.1.10.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index a089327..d8c0c6e 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/flite/0001-now-honor-DESTDIR-env.-var.patch b/package/flite/0001-now-honor-DESTDIR-env.-var.patch
+index 5972f34..2d5fb68 100644
+--- a/package/flite/0001-now-honor-DESTDIR-env.-var.patch
++++ b/package/flite/0001-now-honor-DESTDIR-env.-var.patch
+@@ -13,8 +13,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
  
--MUSL_VERSION = 1.1.9
-+MUSL_VERSION = 1.1.10
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+ diff --git a/config/config.in b/config/config.in
+ index 914d2bf..43f1a56 100644
+---- a/config/config.in
+-+++ b/config/config.in
++--- a/flite-1.4-release/config/config.in
+++++ b/flite-1.4-release/config/config.in
+ @@ -49,6 +49,6 @@ include $(TOP)/config/$(langvox).lv
+  prefix        = @prefix@
+  exec_prefix   = @exec_prefix@
+diff --git a/package/flite/0002-fix-alsa-static.patch b/package/flite/0002-fix-alsa-static.patch
+index 7ed4899..12adb9e 100644
+--- a/package/flite/0002-fix-alsa-static.patch
++++ b/package/flite/0002-fix-alsa-static.patch
+@@ -3,8 +3,8 @@ Use pkg-config to determine alsa link flags. This fixes static linking.
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ 
+ diff -Nuar flite-1.4-release.orig/configure.in flite-1.4-release/configure.in
+---- flite-1.4-release.orig/configure.in	2009-08-14 23:46:38.000000000 +0300
+-+++ flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
++--- flite-1.4-release.orig/flite-1.4-release/configure.in	2009-08-14 23:46:38.000000000 +0300
+++++ flite-1.4-release/flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
+ @@ -275,7 +275,10 @@
+                  #endif],
+                [AUDIODRIVER="alsa"
+diff --git a/package/flite/flite.mk b/package/flite/flite.mk
+index ead73fe..07ec473 100644
+--- a/package/flite/flite.mk
++++ b/package/flite/flite.mk
+@@ -7,18 +7,6 @@
+ FLITE_VERSION = 1.4
+ FLITE_SOURCE = flite-$(FLITE_VERSION)-release.tar.bz2
+ FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
+-FLITE_LICENSE = BSD-4c
+-FLITE_LICENSE_FILES = COPYING
+-
+-FLITE_INSTALL_STAGING = YES
+-# Patching configure.in
+-FLITE_AUTORECONF = YES
+-FLITE_DEPENDENCIES = host-pkgconf
+-
+-# Sadly, Flite does not support parallel build, especially when building its
+-# shared libraries.
+-FLITE_MAKE = $(MAKE1)
+-
+ # $ tar tf flite-1.4-release.tar.bz2
+ # ...
+ # flite-1.4-release//install-sh
+@@ -32,14 +20,21 @@ FLITE_MAKE = $(MAKE1)
+ # flite-1.4-release/config/config.in
+ # flite-1.4-release/config/system.mak.in
+ #
+-# So, the strip-component trick does not work at all.
+-# Let's redefine the extract command.
+-define FLITE_EXTRACT_CMDS
+-	$(INFLATE$(suffix $(FLITE_SOURCE))) $(DL_DIR)/$(FLITE_SOURCE) | \
+-		$(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	rsync -ar $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))/* $(FLITE_DIR)/
+-	$(RM) -rf $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))
+-endef
++# So, we set FLITE_STRIP_COMPONENTS=0 to avoid writing to "/", and then
++# build in flite-1.4-release/
++FLITE_STRIP_COMPONENTS = 0
++FLITE_SUBDIR = flite-$(FLITE_VERSION)-release
++FLITE_LICENSE = BSD-4c
++FLITE_LICENSE_FILES = COPYING
++
++FLITE_INSTALL_STAGING = YES
++# Patching configure.in
++FLITE_AUTORECONF = YES
++FLITE_DEPENDENCIES = host-pkgconf
++
++# Sadly, Flite does not support parallel build, especially when building its
++# shared libraries.
++FLITE_MAKE = $(MAKE1)
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ FLITE_DEPENDENCIES += alsa-lib
