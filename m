@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] git: bump to version 2.4.5
-Message-ID: <20150808105619.215847FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] dnsmasq: bump to version 2.73
+Message-ID: <20150808105612.2AC858030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=614c287a6cd58b5ce7bfba3dba4fa396cb9b301c
+commit: http://git.buildroot.net/buildroot/commit/?id=333002cffa66b85dcf3ba192234157caa8a4c137
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
+ package/dnsmasq/dnsmasq.hash |    2 +-
+ package/dnsmasq/dnsmasq.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index cb4ce13..81caf39 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index d5e5740..2d6e78c 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  f873b15d42281474fcba5921295d01e48a3cd3cddcbeb3d60176bf30f5f30260  git-2.4.4.tar.xz
-+sha256  c31a5f5f72e025f8fe26845032a06683c7e5c1a73236c2353b5606ddd22e0494  git-2.4.5.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 50e5d7b..e2d04aa 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+ # Locally calculated after checking pgp signature
+-sha256	7d0bd23f5d74b3a6b26a75d5ffcf9db81d461b47cbe578cb65a83a98008600b1	dnsmasq-2.72.tar.xz
++sha256	0bff81103e53fcab3a3c4d0fd6df1882f9446dca4fa74ff8270e1d2ab872d8f6	dnsmasq-2.73.tar.xz
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 4b0999b..13352a9 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.4.4
-+GIT_VERSION = 2.4.5
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+-DNSMASQ_VERSION = 2.72
++DNSMASQ_VERSION = 2.73
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
