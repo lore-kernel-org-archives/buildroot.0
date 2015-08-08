@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] package/exim: use libnsl only
-	with glibc
-Message-ID: <20150808105618.82BA97F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] git: bump to version 2.4.5
+Message-ID: <20150808105619.215847FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00e98e69b4a0134823bcc4b626eafb16e77ae4b1
+commit: http://git.buildroot.net/buildroot/commit/?id=614c287a6cd58b5ce7bfba3dba4fa396cb9b301c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Only (e)glibc provides libnsl, uclibc provides only a stub, and musl
-doesn't implement it at all.
-
-Fixes compilation using this defconfig
-
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_STATIC_LIBS=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_OPENSSL=y
-    BR2_PACKAGE_EXIM=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/exim/exim.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index b852793..8ad0328 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -72,6 +72,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
- endef
- endif
+diff --git a/package/git/git.hash b/package/git/git.hash
+index cb4ce13..81caf39 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  f873b15d42281474fcba5921295d01e48a3cd3cddcbeb3d60176bf30f5f30260  git-2.4.4.tar.xz
++sha256  c31a5f5f72e025f8fe26845032a06683c7e5c1a73236c2353b5606ddd22e0494  git-2.4.5.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 50e5d7b..e2d04aa 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# only (e)glibc provides libnsl, remove -lnsl for all other toolchains
-+# http://bugs.exim.org/show_bug.cgi?id=1564
-+ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
-+define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
-+	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
-+endef
-+endif
-+
- define EXIM_CONFIGURE_TOOLCHAIN
- 	$(call exim-config-add,CC,$(TARGET_CC))
- 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
+-GIT_VERSION = 2.4.4
++GIT_VERSION = 2.4.5
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
