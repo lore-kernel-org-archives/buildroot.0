@@ -1,57 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.6.1
-Message-ID: <20150808105619.4D8817FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: move the
+	kconfig fixups to a macro
+Message-ID: <20150808105615.3982B818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=341fec69e428e05c5b2b1dfed79c24ccd8e0b432
+commit: http://git.buildroot.net/buildroot/commit/?id=0e0903645e960b2a2106126368ee796b6b830eb1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The same fixups will have to be done after leaving the configurators,
+so we want to commonalise that code.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- package/mesa3d/mesa3d.hash               |    4 ++--
- package/mesa3d/mesa3d.mk                 |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/pkg-kconfig.mk |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 07340f7..c5f2dba 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index e441548..d27b819 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -70,11 +70,15 @@ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.6.0
-+MESA3D_HEADERS_VERSION = 10.6.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 456348f..5c34a9e 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000158.html
--sha256	f37e2633978deed02ff0522abc36c709586e2b555fd439a82ab71dce2c866c76	mesa-10.6.0.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000161.html
-+sha256	6c80a2b647e57c85dc36e609d9aed17f878f0d8e0cf9ace86d14cf604101e1eb	mesa-10.6.1.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 486a665..051aac7 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ # In order to get a usable, consistent configuration, some fixup may be needed.
+ # The exact rules are specified by the package .mk file.
+-$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
++define $(2)_FIXUP_DOT_CONFIG
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+ 	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) oldconfig
+-	$$(Q)touch $$@
++	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
++endef
++
++$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
++	$$(call $(2)_FIXUP_DOT_CONFIG)
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.6.0
-+MESA3D_VERSION = 10.6.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+ # Before running configure, the configuration file should be present and fixed
+ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
