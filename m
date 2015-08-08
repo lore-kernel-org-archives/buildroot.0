@@ -1,78 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] package/mono: fix install with
-	parallel builds
-Message-ID: <20150808105558.C4B6B81904@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ipmiutil: disable
+	parallel build
+Message-ID: <20150808105601.3DB577FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f28af782655c8c4ccc2d9180d6c9f3ac36d71d00
+commit: http://git.buildroot.net/buildroot/commit/?id=da4b584f86e0a068547eb3222cf6cb4ffde3e557
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Due to a race in the 'install' utility, installing the same file twice
-in parallel often results in one of the install calls to fail.
+ipmiutil has a race when generating the object files and the executable,
+because it uses very odd (to say the least) constructs in its
+Makefile.am, leading to improper dependency-tracking.
 
-Ensure proper ordering of conflicting rules.
+Since impmiutil is pretty small, and because it is just mindbloggingly
+complex to fix its Makefile.am, just disable parallel build.
 
 Fixes:
-    http://autobuild.buildroot.org/results/c32/c3288c5d1fb94474f14a4a889e76135878d403bc/
-    http://autobuild.buildroot.org/results/f70/f708e89f613ec0b42cdf49ccbef39b02f4a271fb/
-    http://autobuild.buildroot.org/results/3cb/3cb99e5c5672cbaa2a86020129a05dfde47cdb8f/
+    http://autobuild.buildroot.org/results/661/661373306d0440aaea67e394fbbfc47fd4481589/
+    http://autobuild.buildroot.org/results/a6c/a6c5f9d8e0e0bad27b8ca1fa217bfda4216f2cd8/
+    http://autobuild.buildroot.org/results/f0b/f0bbbd54349b5239872d6de185e16c1d90b3f779/
+    http://autobuild.buildroot.org/results/20c/20c09695481c3d1030852330c1d1f1f9489f1f41/
     ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Cc Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mono/0003-fix-parallel-install.patch |   40 ++++++++++++++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+ package/ipmiutil/ipmiutil.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mono/0003-fix-parallel-install.patch b/package/mono/0003-fix-parallel-install.patch
-new file mode 100644
-index 0000000..c151173
---- /dev/null
-+++ b/package/mono/0003-fix-parallel-install.patch
-@@ -0,0 +1,40 @@
-+mcs: fix installation with parallel make
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 011c0b6..736e430 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -11,6 +11,8 @@ IPMIUTIL_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ IPMIUTIL_AUTORECONF = YES
+ 
++IPMIUTIL_MAKE = $(MAKE1)
 +
-+In mcs/ the install of xbuild_12 and xbuild_14 will end-up installing
-+the same files:
-+    ${NETFRAMEWORK_DIR}/v2.0/RedistList/FrameworkList.xml
-+    ${NETFRAMEWORK_DIR}/v3.0/RedistList/FrameworkList.xml
-+    ${NETFRAMEWORK_DIR}/v3.5/RedistList/FrameworkList.xml
-+    ${NETFRAMEWORK_DIR}/v4.0/Profile/Client/RedistList/FrameworkList.xml
-+    ${NETFRAMEWORK_DIR}/v4.0/RedistList/FrameworkList.xml
-+    ${NETFRAMEWORK_DIR}/v4.5.1/RedistList/FrameworkList.xml
-+    ${NETFRAMEWORK_DIR}/v4.5/RedistList/FrameworkList.xml
-+
-+This is because there is no atomicity when installing each file, and
-+xbuild_12 and xbuild_14 may well run in parallel, each trying to install
-+each of those files; but the 'install' utility will first check if the
-+target file exists or not, and behaves differently if it does than if it
-+does not, thus leading to build failures like so:
-+    http://autobuild.buildroot.org/results/c32/c3288c5d1fb94474f14a4a889e76135878d403bc/build-end.log
-+
-+So, ensure ordering of the install of xbuild_12 and xbuild_14 (the
-+ordering is completely arbitrary, either way gives the same installed
-+files).
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+
-+diff -durN host-mono-4.0.0.orig/mcs/Makefile host-mono-4.0.0/mcs/Makefile
-+--- host-mono-4.0.0.orig/mcs/Makefile	2015-04-09 16:55:53.000000000 +0200
-++++ host-mono-4.0.0/mcs/Makefile	2015-05-16 17:25:44.475542483 +0200
-+@@ -43,6 +43,10 @@
-+ profile-do--%:
-+ 	$(MAKE) PROFILE=$(subst --, ,$*)
-+ 
-++# xbuild_12 and xbuild_14 will try to install the same files, so they need
-++# to be ordered
-++profile-do--xbuild_14--install: profile-do--xbuild_12--install
-++
-+ # We don't want to run the tests in parallel.  We want behaviour like -k.
-+ profiles-do--run-test:
-+ 	ret=:; $(foreach p,$(PROFILES), { $(MAKE) PROFILE=$(p) run-test || ret=false; }; ) $$ret
+ # forgets to link against libcrypto dependencies breaking static link
+ ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
+ # tests against distro libcrypto so it might get a false positive when
