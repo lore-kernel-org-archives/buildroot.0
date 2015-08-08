@@ -1,248 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 12:40:22 +0200
-Subject: [Buildroot] [git commit] package/czmq: bump version
-Message-ID: <20150808104048.88F1B81869@busybox.osuosl.org>
+Date: Sat, 8 Aug 2015 12:44:45 +0200
+Subject: [Buildroot] [PATCH] ola: Add patch to fix linking issue
+In-Reply-To: <1438748380-5528-1-git-send-email-simon.marchi@polymtl.ca>
+References: <1438748380-5528-1-git-send-email-simon.marchi@polymtl.ca>
+Message-ID: <20150808124445.79092e05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5aae95764d42b07ae2364beb31abcbac6419aa41
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Simon Marchi,
 
-Drop the patch that no longer applies, and has instead been done
-differently by upstream.
+On Wed,  5 Aug 2015 00:19:40 -0400, Simon Marchi wrote:
+> This patch fixes this autobuild failure:
+> 
+>   http://autobuild.buildroot.net/results/e14/e14e1700d4fe359c56be57587bdb509e002e5753/build-end.log
+> 
+> I am not 100% sure of what happens (I am not a C++ expert at all), but
+> here it is anyway.  I assume that when the definition of
+> TCPSocket::ReadDescriptor is embedded in the class definition, no actual
+> implementation is generated (all usages of it are inline).  When object
+> libolaopenpixelcontrol.so tries to reference it somehow, it results in
+> an undefined reference.  Moving the definition in the cpp retains it. If
+> you have a clear explanation of what happens, I'd be happy to read it.
+> 
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...igure.ac-to-prevent-contradictory-discove.patch |  206 --------------------
- package/czmq/czmq.mk                               |    2 +-
- 2 files changed, 1 insertions(+), 207 deletions(-)
+Could you report the problem to the upstream ola project and see what
+they say? Also, they have a 0.9.7 release, maybe you want to try it?
 
-diff --git a/package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch b/package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch
-deleted file mode 100644
-index 556a8df..0000000
---- a/package/czmq/0001-Simply-configure.ac-to-prevent-contradictory-discove.patch
-+++ /dev/null
-@@ -1,206 +0,0 @@
--From 23591404610b1eeffb69712d93c77c2327b9ef7a Mon Sep 17 00:00:00 2001
--From: Phillip Mienk <mienkphi@gmail.com>
--Date: Fri, 31 Oct 2014 00:55:35 -0700
--Subject: [PATCH] Simply configure.ac to prevent contradictory discovery of
-- libzmq.
--
--[Romain: rebase on top of 3.0.0]
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- Makefile.am                   |  3 ++-
-- addons/Makefile.am.supplement |  3 ++-
-- configure.ac                  | 46 ++-----------------------------------------
-- model/build-autoconf.gsl      | 28 ++++++++++++++++++++++++++
-- model/project.xml             |  3 +++
-- src/Makefile.am.supplement    | 12 ++++++++++-
-- 6 files changed, 48 insertions(+), 47 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 10f21fb..187c62b 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -1,7 +1,8 @@
-- ACLOCAL_AMFLAGS = -I config
-- 
-- AM_CPPFLAGS = \
---    -I$(srcdir)/include
--+	${zmq_CFLAGS} \
--+	-I$(srcdir)/include
-- 
-- EXTRA_DIST = \
-- 	version.sh \
--diff --git a/addons/Makefile.am.supplement b/addons/Makefile.am.supplement
--index 8800db4..74f0c60 100644
----- a/addons/Makefile.am.supplement
--+++ b/addons/Makefile.am.supplement
--@@ -4,7 +4,8 @@ EXTRA_DIST += \
-- bin_PROGRAMS += makecert
-- 
-- makecert_LDADD = \
---    libczmq.la
--+    libczmq.la \
--+    ${zmq_LIBS}
-- 
-- makecert_SOURCES = \
--     addons/makecert.c
--diff --git a/configure.ac b/configure.ac
--index 1a4667e..1ccae06 100755
----- a/configure.ac
--+++ b/configure.ac
--@@ -74,50 +74,8 @@ if test "x${CZMQ_GCOV}" == "xyes"; then
--     fi
-- fi
-- 
---# Check for libzmq library
---libzmq_prefix=detect
---AC_ARG_WITH([libzmq], 
---    [AS_HELP_STRING([--with-libzmq=PREFIX], 
---        [build with ZeroMQ library installed in PREFIX [default=autodetect]])],
---    [case "x$withval" in
---        xno)
---            AC_MSG_ERROR([CZMQ requires the ZeroMQ library])
---            ;;
---        xyes|x)
---            ;;
---        *)
---            CPPFLAGS="$CPPFLAGS -I${withval}/include"
---            LDFLAGS="$LDFLAGS -L${withval}/lib"
---            zeromq_prefix=${withval}
---            ;;
---    esac ]
---)
---if test "x$libzmq_prefix" = "xdetect"; then
---    PKG_CHECK_MODULES(
---        [ZeroMQ], [libzmq], [libzmq_prefix=pkgconfig], [libzmq_prefix=])
---        if test "x$libzmq_prefix" = "xpkgconfig"; then
---            CPPFLAGS="$CPPFLAGS ${ZeroMQ_CFLAGS}"
---            LDFLAGS="$LDFLAGS ${ZeroMQ_LIBS}"
---        fi
---fi
---
---if test "x$czmq_search_libzmq" = "xyes"; then
---    if test -r "${with_libzmq}/include/zmq.h"; then
---        CFLAGS="-I${with_libzmq}/include ${CFLAGS}"
---        LDFLAGS="-L${with_libzmq}/lib ${LDFLAGS}"
---    fi
---fi
---
---AC_CHECK_HEADER([zmq.h], [], [AC_MSG_ERROR([cannot find zmq.h])])
---
---AC_CHECK_LIB(zmq, zmq_init, ,[AC_MSG_ERROR([cannot link with -lzmq, install libzmq.])])
---
---AC_MSG_CHECKING([whether libzmq installation works])
---AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <zmq.h>],
---                                [zmq_init(1);])
---               ],
---               [AC_MSG_RESULT([yes])],
---               [AC_MSG_ERROR([no. Please specify libzmq installation prefix using --with-libzmq])])
--+# Check for libzmq
--+PKG_CHECK_MODULES([zmq], [libzmq])
-- 
-- # Platform specific checks
-- czmq_on_mingw32="no"
--diff --git a/model/build-autoconf.gsl b/model/build-autoconf.gsl
--index d012a3c..30aff14 100644
----- a/model/build-autoconf.gsl
--+++ b/model/build-autoconf.gsl
--@@ -46,12 +46,39 @@ lib$(project.name)_la_SOURCES = \\
-- 
-- bin_PROGRAMS = $(project.name)_selftest
-- 
--+$(project.name)_selftest_CPPFLAGS = \\
--+.for package_dependency where defined (package_dependency.for_test)
--+    \${$(package_dependency.name)_CFLAGS} \\
--+.endfor
--+    \${lib$(project.name)_la_CFLAGS}
--+
-- $(project.name)_selftest_LDADD = \\
--+.if count (package_dependency, defined (count.for_lib) | defined (count.for_test) | defined (count.for_all)) > 0
--+    lib$(project.name).la \\
--+.else
--     lib$(project.name).la
--+.endif
--+.for package_dependency where defined (package_dependency.for_lib) | defined (package_dependency.for_test) | defined (package_dependency.for_all)
--+.   if last()
--+    \${$(package_dependency.name)_LIBS}
--+.   else
--+    \${$(package_dependency.name)_LIBS} \\
--+.endif
--+.endfor
-- 
-- $(project.name)_selftest_SOURCES = \\
--     src/$(project.name)_selftest.c
-- 
--+lib$(project.name)_la_CPPFLAGS = \\
--+.for package_dependency where defined (package_dependency.for_lib)
--+.   if last()
--+    \${$(package_dependency.name)_CFLAGS}
--+.   else
--+    \${$(package_dependency.name)_CFLAGS} \\
--+.   endif
--+.endfor
--+    ${AM_CPPFLAGS}
--+
-- lib$(project.name)_la_LDFLAGS = \\
--     -version-info @LTVER@
-- 
--@@ -62,6 +89,7 @@ lib$(project.name)_la_LDFLAGS += \\
-- endif
-- 
-- TESTS = $(project.name)_selftest
--+
-- .for model
-- .   if first ()
-- 
--diff --git a/model/project.xml b/model/project.xml
--index 91306cf..b7bab4a 100644
----- a/model/project.xml
--+++ b/model/project.xml
--@@ -2,6 +2,9 @@
--     name = "czmq"
--     script = "project.gsl"
--     >
--+
--+    <package_dependency name="zmq" pkg_name="libzmq" for_all="1" />
--+
--     <header name = "czmq" />
--     <header name = "czmq_prelude" />
-- 
--diff --git a/src/Makefile.am.supplement b/src/Makefile.am.supplement
--index 91e5b62..929aa07 100644
----- a/src/Makefile.am.supplement
--+++ b/src/Makefile.am.supplement
--@@ -95,12 +95,19 @@ libczmq_la_SOURCES = \
-- 
-- bin_PROGRAMS = czmq_selftest
-- 
--+czmq_selftest_CPPFLAGS = \
--+    ${src_libczmq_la_CFLAGS}
--+
-- czmq_selftest_LDADD = \
---    libczmq.la
--+    libczmq.la \
--+    ${zmq_LIBS}
-- 
-- czmq_selftest_SOURCES = \
--     src/czmq_selftest.c
-- 
--+libczmq_la_CPPFLAGS = \
--+    ${AM_CPPFLAGS}
--+
-- libczmq_la_LDFLAGS = \
--     -version-info @LTVER@
-- 
--@@ -112,6 +119,9 @@ endif
-- 
-- TESTS = czmq_selftest
-- 
--+# define custom target for all products of /src
--+src: src/libczmq.la src/czmq_selftest
--+
-- # Produce generated models; do this manually in src directory
-- code:
-- 	gsl -q src/sockopts.xml
---- 
--1.9.3
--
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 3d82095..0060c89 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CZMQ_VERSION = v3.0.0
-+CZMQ_VERSION = v3.0.2
- CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
- 
- # Autoreconf required as we use the git tree
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
