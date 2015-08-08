@@ -1,33 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 1 Aug 2015 10:15:47 +0200
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-hts: bump
-	version
-Message-ID: <20150808105652.797BC7FE0E@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:06 -0000
+Subject: [Buildroot] [git commit branch/next] dbus: selinux file context
+	support
+Message-ID: <20150808105637.439A47F97E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e279fbb3660ec51c370db5c80ce1ac731e6b64a
+commit: http://git.buildroot.net/buildroot/commit/?id=53bf4f72ebab7df29f53d8fd684ff3b61a6c93f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: remove S30dbus changes.]
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-pvr-hts/kodi-pvr-hts.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dbus/dbus.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 05ce503..726a155 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+old mode 100755
+new mode 100644
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 7deae11..e9c9aaf 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -44,6 +44,20 @@ ifeq ($(BR2_microblaze),y)
+ DBUS_CONF_OPTS += --disable-inotify
+ endif
  
--KODI_PVR_HTS_VERSION = 5c2244044a00ecd3320fc6ce15dd208c16578588
-+KODI_PVR_HTS_VERSION = 9b05d4cbdda80d12cc8d90b6cc2c80ab6f65e4d2
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPLv2+
- KODI_PVR_HTS_LICENSE_FILES = src/client.h
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++DBUS_CONF_OPTS += --enable-selinux
++DBUS_DEPENDENCIES += libselinux
++else
++DBUS_CONF_OPTS += --disable-selinux
++endif
++
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++DBUS_CONF_OPTS += --enable-libaudit
++DBUS_DEPENDENCIES += audit libcap-ng
++else
++DBUS_CONF_OPTS += --disable-libaudit
++endif
++
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ DBUS_CONF_OPTS += --with-x
+ DBUS_DEPENDENCIES += xlib_libX11
