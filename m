@@ -1,61 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:58:03 -0000
-Subject: [Buildroot] [git commit branch/next] bluez5_utils: add ability to
-	build sixaxis plugin
-Message-ID: <20150808105637.92D5F80414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:58:04 -0000
+Subject: [Buildroot] [git commit branch/next] zedboard: Generate BOOT.BIN
+	automatically
+Message-ID: <20150808105637.B6C9080414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de33b1940dc77ccb487ece73bf038bea415caf93
+commit: http://git.buildroot.net/buildroot/commit/?id=46d6a561be418e67c3f859f7d3e7461b2a663749
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: add missing udev dependency.]
+The U-Boot v2015.07 builds working SPL without a manual
+intervention. The BOOT.BIN is generated from the standard
+SPL so no BR2_TARGET_UBOOT_SPL_NAME redefinition is needed.
+The SPL requires the u-boot-dtb.img file to boot properly.
 
-Signed-off-by: Eric Limpens <limpens@gmail.com>
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bluez5_utils/Config.in       |    9 +++++++++
- package/bluez5_utils/bluez5_utils.mk |    7 +++++++
- 2 files changed, 16 insertions(+), 0 deletions(-)
+ configs/zedboard_defconfig |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
-index 472432b..80c3830 100644
---- a/package/bluez5_utils/Config.in
-+++ b/package/bluez5_utils/Config.in
-@@ -58,6 +58,15 @@ config BR2_PACKAGE_BLUEZ5_UTILS_EXPERIMENTAL
- 	help
- 	  Build BlueZ 5.x experimental plugins (SAP, NFC, ...).
- 
-+config BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS
-+	bool "build sixaxis plugin"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	help
-+	  Build BlueZ 5.x sixaxis plugin (support Sony Dualshock controller)
-+
-+comment "sixaxis plugin needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
- config BR2_PACKAGE_BLUEZ5_UTILS_TEST
- 	bool "build tests"
- 	help
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index a1adbe1..4c50e53 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -41,6 +41,13 @@ else
- BLUEZ5_UTILS_CONF_OPTS += --disable-experimental
- endif
- 
-+# enable sixaxis plugin
-+ifeq ($(BR2_PACKAGE_BLUEZ5_PLUGINS_SIXAXIS),y)
-+BLUEZ5_UTILS_CONF_OPTS += --enable-sixaxis
-+else
-+BLUEZ5_UTILS_CONF_OPTS += --disable-sixaxis
-+endif
-+
- # install gatttool (For some reason upstream choose not to do it by default)
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL),y)
- define BLUEZ5_UTILS_INSTALL_GATTTOOL
+diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
+index 76688e9..cd6436c 100644
+--- a/configs/zedboard_defconfig
++++ b/configs/zedboard_defconfig
+@@ -19,8 +19,8 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
++BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
++BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
