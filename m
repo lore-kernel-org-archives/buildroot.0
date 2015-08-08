@@ -1,71 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:38 -0000
-Subject: [Buildroot] [git commit branch/next] package/luajit: disable for
-	static build
-Message-ID: <20150808105637.6E20F80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] quazip: new package
+Message-ID: <20150808105637.D129280414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2e8f28efac7125a6a8cf1db9087b3710101b487
+commit: http://git.buildroot.net/buildroot/commit/?id=40f0c0c122bd93fc835a44d804096f7022f833be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-luajit requires dlopen().
+[Thomas:
+ - fix indentation of select BR2_PACKAGE_ZLIB in Config.in
+ - rewrap Config.in help text, lines were too long
+ - remove depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5, since
+   quazip/Config.in is already only included if one of Qt4 or Qt5 is
+   enabled.
+ - remove QUAZIP_SOURCE definition, since its value was the default
+ - add the missing zlib dependency in the .mk file
+ - add spaces around '=' signs when setting QUAZIP_QMAKE
+ - pass $(TARGET_MAKE_ENV) at install time]
 
-Fixes:
-http://autobuild.buildroot.net/results/20d/20dfb10198f3688f92208591960192ca08280987/
-http://autobuild.buildroot.net/results/c3c/c3cfdf8dfb315bf64caa9ed0f362016111fd93ac/
-http://autobuild.buildroot.net/results/8cb/8cbf6207ecf7b254aeccd9ec5c07376a044e1f8f/
-
-[Thomas: propagate the new dependency to the sysdig package, which
-selects luajit.]
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luajit/Config.in |    4 ++++
- package/sysdig/Config.in |    5 +++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/Config.in          |    1 +
+ package/quazip/Config.in   |    9 +++++++++
+ package/quazip/quazip.hash |    2 ++
+ package/quazip/quazip.mk   |   39 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 51 insertions(+), 0 deletions(-)
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index f6995e2..8ce528b 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- config BR2_PACKAGE_LUAJIT
- 	bool "luajit"
- 	select BR2_PACKAGE_HAS_LUAINTERPRETER
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	# Luajit is only available for some target architectures, and
- 	# has some complexity wrt 32/64. See luajit.mk for details.
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-@@ -32,3 +33,6 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	default "5.1"
- 
+diff --git a/package/Config.in b/package/Config.in
+index ddbf180..20ecd38 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -265,6 +265,7 @@ comment "QT libraries and helper libraries"
+ 	source "package/qextserialport/Config.in"
+ 	source "package/qjson/Config.in"
+ 	source "package/qtuio/Config.in"
++	source "package/quazip/Config.in"
+ 	source "package/qwt/Config.in"
  endif
+ 	source "package/weston/Config.in"
+diff --git a/package/quazip/Config.in b/package/quazip/Config.in
+new file mode 100644
+index 0000000..83537d4
+--- /dev/null
++++ b/package/quazip/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_QUAZIP
++	bool "quazip"
++	select BR2_PACKAGE_ZLIB
++	help
++	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
++	  ZIP/UNZIP package that can be used to access ZIP
++	  archives. It uses the Qt toolkit.
 +
-+comment "luajit needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 3d7ee67..36d35fb 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # luajit
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux instance,
-@@ -15,6 +16,6 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  http://sysdig.org
- 
--comment "sysdig needs a toolchain w/ C++ and a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP
-+comment "sysdig needs a toolchain w/ C++, dynamibc library and a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
++	  http://quazip.sourceforge.net
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+new file mode 100644
+index 0000000..84b56c7
+--- /dev/null
++++ b/package/quazip/quazip.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 78c984103555c51e6f7ef52e3a2128e2beb9896871b2cc4d4dbd4d64bff132de quazip-0.7.1.tar.gz
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+new file mode 100644
+index 0000000..178a531
+--- /dev/null
++++ b/package/quazip/quazip.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# quazip
++#
++################################################################################
++
++QUAZIP_VERSION = 0.7.1
++QUAZIP_SITE = http://sourceforge.net/projects/quazip/files/quazip/$(QUAZIP_VERSION)/
++QUAZIP_INSTALL_STAGING = YES
++QUAZIP_DEPENDENCIES = \
++	zlib \
++	$(if $(BR2_PACKAGE_QT),qt) \
++	$(if $(BR2_PACKAGE_QT5),qt5base)
++QUAZIP_LICENSE = LGPLv2.1
++QUAZIP_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_QT5),y)
++QUAZIP_QMAKE = $(QT5_QMAKE)
++else
++QUAZIP_QMAKE = $(QT_QMAKE)
++endif
++
++define QUAZIP_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QUAZIP_QMAKE) PREFIX=/usr)
++endef
++
++define QUAZIP_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QUAZIP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
++endef
++
++define QUAZIP_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
++endef
++
++$(eval $(generic-package))
