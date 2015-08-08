@@ -1,34 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:51 -0000
-Subject: [Buildroot] [git commit branch/next] openipmi: add homepage URL
-Message-ID: <20150808105640.892BF8190C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain: add 4.1.x choice
+	for headers
+Message-ID: <20150808105613.130C67F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=17e487f74612e0123259f80a3ebba0177399b7ed
+commit: http://git.buildroot.net/buildroot/commit/?id=dae7d8aa5db31c4f2a7d7e370d98b88a169de62c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The homepage is now back online.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openipmi/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ toolchain/toolchain-common.in          |    5 +++++
+ toolchain/toolchain-external/Config.in |    4 ++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/package/openipmi/Config.in b/package/openipmi/Config.in
-index 667efa7..da88657 100644
---- a/package/openipmi/Config.in
-+++ b/package/openipmi/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_OPENIPMI
- 	  to interact with IPMI enabled devices. OpenIPMI also provides
- 	  an IPMI BMC simulator.
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 4f411c3..b7a11a4 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -223,10 +223,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
  
-+	  http://openipmi.sourceforge.net
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
 +
- comment "openipmi needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
+ 	default "4.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ 	default "3.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+ 	default "3.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 017e913..e70989e 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -981,6 +981,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
++	bool "4.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
+ 	bool "4.0.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
