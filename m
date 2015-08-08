@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:28 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: make
-	matchbox-fakekey a real package
-Message-ID: <20150808105606.7BD8F81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dovecot-pigeonhole:
+	bump version to 0.4.8
+Message-ID: <20150808105627.6C0617FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1dcf21ae7abe8de752473f3ebb4eac09bb1c0709
+commit: http://git.buildroot.net/buildroot/commit/?id=c413cb9480b06839df05e413908ecb62dd5d864c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, matchbox-fakekey is missing a Kconfig entry, but is so far
-solely a build-time dependency of matchbox-keyboard.
-
-So, make it a real package, and select it from matchbox-keyboard.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/Config.in                  |    2 ++
- package/matchbox/matchbox-fakekey/Config.in |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash |    2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index ead2649..8d4ebc7 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -24,11 +24,13 @@ source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
- source "package/matchbox/matchbox-desktop/Config.in"
- source "package/matchbox/matchbox-common/Config.in"
-+source "package/matchbox/matchbox-fakekey/Config.in"
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 6353a86..ac94e41 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	04a13ec11652cbff812519eacf4db7dda648ab5c4c5f63b43a437d1fb0cc8d2a	dovecot-2.2-pigeonhole-0.4.7.tar.gz
++sha256	d73c1c5a11cdfdcb58304a1c1272cce6c8e1868e3f61d393b3b8a725f3bf665b	dovecot-2.2-pigeonhole-0.4.8.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index fde95e8..5e6504e 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "Matchbox Virtual Keyboard"
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_MATCHBOX_FAKEKEY
- 	help
- 	  Virtual Keyboard
- 
-diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
-new file mode 100644
-index 0000000..334f3a2
---- /dev/null
-+++ b/package/matchbox/matchbox-fakekey/Config.in
-@@ -0,0 +1,2 @@
-+config BR2_PACKAGE_MATCHBOX_FAKEKEY
-+	bool
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.7
++DOVECOT_PIGEONHOLE_VERSION = 0.4.8
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
