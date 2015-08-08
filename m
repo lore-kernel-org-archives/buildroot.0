@@ -1,27 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] package/knock: add hash file
-Message-ID: <20150808105601.6EA1881778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lzo: add hash file
+Message-ID: <20150808105604.0780F7F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bd5cfab61ba04a79c4ce67c66d9d9f0797a1f85
+commit: http://git.buildroot.net/buildroot/commit/?id=7b946f73859238b8aa73ca1556edfda6afc0c45b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/knock/knock.hash |    2 ++
+ package/lzo/lzo.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/knock/knock.hash b/package/knock/knock.hash
+diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
 new file mode 100644
-index 0000000..ae152db
+index 0000000..8d7c666
 --- /dev/null
-+++ b/package/knock/knock.hash
++++ b/package/lzo/lzo.hash
 @@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 9938479c321066424f74c61f6bee46dfd355a828263dc89561a1ece3f56578a4 knock-0.7.tar.gz
++# Locally calculated
++sha256 ac1b3e4dee46febe9fd28737eb7f5692d3232ef1a01da10444394c3d47536614 lzo-2.08.tar.gz
