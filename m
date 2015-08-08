@@ -1,47 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] package/ca-certificates: bump
-	version to 20150426
-Message-ID: <20150808105605.C56257FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] rp-pppoe: add hash file
+Message-ID: <20150808105624.7B6637FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09071d4a039ef332bfaa148e1f210a18a8d5ee82
+commit: http://git.buildroot.net/buildroot/commit/?id=2cc15322e72af643f64dac165a5ac74207673f36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ca-certificates/ca-certificates.hash |    4 ++--
- package/ca-certificates/ca-certificates.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/rp-pppoe/rp-pppoe.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 0165cb5..06120f5 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,3 +1,3 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   6013ce6a3bf13e73a7e1feddcd17f5b2c09e5bd3                         ca-certificates_20141019.tar.xz
--sha256 684902d3f4e9ad27829f4af0d9d2d588afed03667997579b9c2be86fcd1eb73a ca-certificates_20141019.tar.xz
-+sha1   c2d7ae81e28ff1f8a6b9ef7602c4e756ff08503c                         ca-certificates_20150426.tar.xz
-+sha256 37dbaa93ed64cc4ae93ac295f9248fbc741bd51376438cfb1257f17efab5494f ca-certificates_20150426.tar.xz
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 8fe26c9..b64120e 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20141019
-+CA_CERTIFICATES_VERSION = 20150426
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20150528T221654Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
- CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+diff --git a/package/rp-pppoe/rp-pppoe.hash b/package/rp-pppoe/rp-pppoe.hash
+new file mode 100644
+index 0000000..ab162ee
+--- /dev/null
++++ b/package/rp-pppoe/rp-pppoe.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	86a1a4d92fcea74fa6dd45516c5975933fa978b36fafe71f76ea70b4b4747720	rp-pppoe-3.11.tar.gz
