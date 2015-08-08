@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:57 -0000
-Subject: [Buildroot] [git commit branch/next] tzdata: use
-	<PKG>_STRIP_COMPONENTS
-Message-ID: <20150808105627.E4B1F7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+	package/x11r7/xdriver_xf86-input-libinput: bump version to 0.11.0
+Message-ID: <20150808105628.038607FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8fe6ee1631cc3713247d29d5f45dfe280e176b16
+commit: http://git.buildroot.net/buildroot/commit/?id=98573709465cd0cf27f31e219cc51f8e5535ff11
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tzdata/tzdata.mk |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+ .../xdriver_xf86-input-libinput.hash               |    5 ++---
+ .../xdriver_xf86-input-libinput.mk                 |    2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index eb6da6c..c38d4fe 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -7,6 +7,7 @@
- TZDATA_VERSION = 2015e
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
-+TZDATA_STRIP_COMPONENTS = 0
- TZDATA_DEPENDENCIES = host-tzdata
- HOST_TZDATA_DEPENDENCIES = host-zic
- TZDATA_LICENSE = Public domain
-@@ -45,11 +46,6 @@ define TZDATA_INSTALL_TARGET_CMDS
- 	fi
- endef
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+index 9b5219f..05e119e 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
+@@ -1,3 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002586.html
+-sha1	cfb19cc863bfc0a419df6b14287891ad54bc86a2				xf86-input-libinput-0.9.0.tar.bz2
+-sha256	37f623b7869c700156049fa9204bafd6027bf5c3acd9017919e42199bcc666da	xf86-input-libinput-0.9.0.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-June/002610.html
++sha256	56babf46c13d15fbd15c9d43815e9220e63acd9ed28095e7d68ad03f9148bbda	xf86-input-libinput-0.11.0.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 28371a2..722e700 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--define HOST_TZDATA_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
--		| $(TAR) --strip-components=0 -C $(@D) -xf -
--endef
--
- define HOST_TZDATA_BUILD_CMDS
- 	(cd $(@D); \
- 		for zone in $(TZDATA_ZONELIST); do \
+-XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.9.0
++XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.11.0
+ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
