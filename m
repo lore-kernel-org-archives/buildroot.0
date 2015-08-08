@@ -1,81 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] libaio: introduce a
-	BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS option
-Message-ID: <20150808105615.910F97FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vlc: Add libsidplay2
+	as optional dependency
+Message-ID: <20150808105615.C66E18030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8fee6382430f36470a12b84ebb696dcf2a13ae7
+commit: http://git.buildroot.net/buildroot/commit/?id=b59567b38ece8de4c23fb04f55ab7c6d086b1fc5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In order to allow other packages to easily select libaio without
-duplicating its complicated architecture dependencies, this commit
-introduces a BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS blind option.
+vlc has a sid plugin:
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
+  output/target/usr/lib/vlc/plugins/demux/libsid_plugin.so |
+  grep NEEDED | grep sid
+ 0x00000001 (NEEDED)     Shared library: [libsidplay2.so.1]
+ 0x00000001 (NEEDED)     Shared library: [libresid-builder.so.0]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/blktrace/Config.in      |    6 +-----
- package/gadgetfs-test/Config.in |    6 +-----
- package/libaio/Config.in        |   11 +++++++----
- 3 files changed, 9 insertions(+), 14 deletions(-)
+ package/vlc/vlc.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
-index 09c95eb..ed5d78a 100644
---- a/package/blktrace/Config.in
-+++ b/package/blktrace/Config.in
-@@ -2,11 +2,7 @@ config BR2_PACKAGE_BLKTRACE
- 	bool "blktrace"
- 	# Uses posix_spawn()
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
--	# Because of libaio arch depends
--	depends on \
--		BR2_arm   || BR2_armeb || BR2_i386   || \
--		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
--		BR2_sparc || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBAIO
- 	help
- 	  blktrace is a block layer IO tracing mechanism which provides
-diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
-index 38358f2..9a60306 100644
---- a/package/gadgetfs-test/Config.in
-+++ b/package/gadgetfs-test/Config.in
-@@ -8,12 +8,8 @@ if BR2_PACKAGE_GADGETFS_TEST
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index bc2966e..4ef69aa 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -206,6 +206,13 @@ else
+ VLC_CONF_OPTS += --disable-svg --disable-svgdec
+ endif
  
- config BR2_PACKAGE_GADGETFS_TEST_USE_AIO
- 	bool "use asynchronous i/o"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	select BR2_PACKAGE_LIBAIO
--	# libaio is available only on few architectures
--	depends on \
--		BR2_arm   || BR2_armeb || BR2_i386   || \
--		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
--		BR2_sparc || BR2_x86_64
- 	help
- 	  Select this to have gadgetfs-test do asynchronous I/O using
- 	  the libaio library.
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index 622fd55..cc44cb6 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -1,8 +1,11 @@
-+config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm || BR2_armeb || BR2_i386 || \
-+		BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
-+		BR2_sparc || BR2_x86_64
++ifeq ($(BR2_PACKAGE_LIBSIDPLAY2),y)
++VLC_CONF_OPTS += --enable-sid
++VLC_DEPENDENCIES += libsidplay2
++else
++VLC_CONF_OPTS += --disable-sid
++endif
 +
- config BR2_PACKAGE_LIBAIO
- 	bool "libaio"
--	depends on \
--		BR2_arm   || BR2_armeb || BR2_i386   || \
--		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
--		BR2_sparc || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	help
- 	  Library for doing asynchronous I/O
+ ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
+ VLC_CONF_OPTS += --enable-theora
+ VLC_DEPENDENCIES += libtheora
