@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:32 -0000
-Subject: [Buildroot] [git commit branch/next] zic: use <PKG>_STRIP_COMPONENTS
-Message-ID: <20150808105627.EDA127FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] nanocom: use
+	<PKG>_STRIP_COMPONENTS
+Message-ID: <20150808105627.DBD357FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10a2b798a45ca13099091760a78408172e1164b2
+commit: http://git.buildroot.net/buildroot/commit/?id=6c0188d7a578ae7294e50f6c19b033ac150e914c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zic/zic.mk |    7 +------
- 1 files changed, 1 insertions(+), 6 deletions(-)
+ package/nanocom/nanocom.mk |    6 +-----
+ 1 files changed, 1 insertions(+), 5 deletions(-)
 
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index a768ac6..03e023a 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -7,14 +7,9 @@
- ZIC_VERSION = 2015e
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = ftp://ftp.iana.org/tz/releases
-+ZIC_STRIP_COMPONENTS = 0
- ZIC_LICENSE = Public domain
+diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
+index f723951..293dd09 100644
+--- a/package/nanocom/nanocom.mk
++++ b/package/nanocom/nanocom.mk
+@@ -7,14 +7,10 @@
+ NANOCOM_VERSION = 1.0
+ NANOCOM_SOURCE = nanocom.tar.gz
+ NANOCOM_SITE = http://downloads.sourceforge.net/project/nanocom/nanocom/v$(NANOCOM_VERSION)
++NANOCOM_STRIP_COMPONENTS = 0
+ NANOCOM_LICENSE = GPLv2+
+ NANOCOM_LICENSE_FILES = COPYING
  
--# Don't strip any path components during extraction.
--define HOST_ZIC_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(ZIC_SOURCE) \
--		| $(TAR) --strip-components=0 -C $(@D) -xf -
+-# N.B. Don't strip any path components during extraction.
+-define NANOCOM_EXTRACT_CMDS
+-	gzip -d -c $(DL_DIR)/$(NANOCOM_SOURCE) | tar --strip-components=0 -C $(NANOCOM_DIR) -xf -
 -endef
 -
- define HOST_ZIC_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
+ define NANOCOM_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D)
  endef
