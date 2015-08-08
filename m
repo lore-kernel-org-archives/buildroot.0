@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] Makefile: don't depend on
-	current skeleton/overlay permissions
-Message-ID: <20150808105630.29CB67FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] stunnel: bump to version 5.18
+Message-ID: <20150808105608.8A7E27FB02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=361d3573f5373618b2c566e250430269dd7200e5
+commit: http://git.buildroot.net/buildroot/commit/?id=9b5962523bb47c551c24c386460ca0043f821ba4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We use 'rsync -a' to copy the skeleton and overlays, so the target ends
-up with the exact same permissions as on the repo. The problem is we
-don't track these permissions, since Git doesn't allow for that (except
-for the exec bit). This means users with different umasks at the time of
-cloning could end up with different target permissions.
-
-Fix this by using --chmod on rsync calls so we don't depend on the
-current permission set for the skeleton and overlays. We do depend on
-the exec bit, but that's fine since that one is tracked by Git.
-
-Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.hash |    4 ++--
+ package/stunnel/stunnel.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 55b1d45..546bcd3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -473,7 +473,7 @@ RSYNC_VCS_EXCLUSIONS = \
- $(BUILD_DIR)/.root:
- 	mkdir -p $(TARGET_DIR)
- 	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--		--chmod=Du+w --exclude .empty --exclude '*~' \
-+		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 		$(TARGET_SKELETON)/ $(TARGET_DIR)/
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
- 	@ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
-@@ -617,7 +617,7 @@ endif
- 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
--			--chmod=Du+w --exclude .empty --exclude '*~' \
-+			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 			$(d)/ $(TARGET_DIR)$(sep))
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index e45e691..91b297c 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,2 +1,2 @@
+-# From https://www.stunnel.org/pipermail/stunnel-announce/2015-April/000100.html
+-sha256	c3e79e582621a0827125e35e1c00450190104fc02dc3c5274cb02b05859fd472	stunnel-5.17.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-users/2015-June/005094.html
++sha256	0532c0a2f8de3da1ab625e384146501ce5936fac63d01561c3a9bf652b692317	stunnel-5.18.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 3f5b9aa..4674694 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).17
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).18
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
