@@ -1,53 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:57 -0000
-Subject: [Buildroot] [git commit branch/next] qmx6_defconfig: bump version
-	to 3.10.53_1.1.0
-Message-ID: <20150808105627.379BD7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv: add python
+	support
+Message-ID: <20150808105614.CCD167FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49f9efc4a6bad3e4307c6e8eb160d40d0620e7c1
+commit: http://git.buildroot.net/buildroot/commit/?id=c96fb31aa1fa1cd0ee7e4546c11d0a18a3bca044
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+opencv_python module needs python-numpy because it uses some numpy
+headers in this wrapper.
+
+From its 2.4 release, OpenCV offers python bindings, but they required
+most of the OpenCV modules to be enabled.
+
+Since OpenCV-3.0.0, python bindings have been reworked:
+- it now supports both python2 and python3
+- only built modules supporting wrapped in python will be included in
+  the bindings.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/qmx6_defconfig |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/opencv/Config.in |   12 +++++++++++-
+ package/opencv/opencv.mk |   33 +++++++++++++++++++++++++++++++--
+ 2 files changed, 42 insertions(+), 3 deletions(-)
 
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-index ff035a9..d693d82 100644
---- a/configs/qmx6_defconfig
-+++ b/configs/qmx6_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.17"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.53"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 877ddda..576f667 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -85,7 +85,17 @@ config BR2_PACKAGE_OPENCV_LIB_PHOTO
+ 	  Include opencv_photo (computational photography) module into the OpenCV
+ 	  build.
  
-@@ -10,8 +10,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
--# Last version of branch cgt_imx_3.10.17_1.0.0
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9bafbcba67f7bb2a48a5e05998cecb1165aa444f"
-+# Last version of branch cgt_imx_3.10.53_1.1.0
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cea0de46e2c8f0a5c67f46005e84ae1d418731bc"
- BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="6388c474189b42c07bb865dd604c74483da099f3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30ba236ef6df04e4cca58c3e06c4f63c2db12115"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
+-comment "opencv_python module requires numpy which is not yet available."
++config BR2_PACKAGE_OPENCV_LIB_PYTHON
++	bool "python"
++	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
++		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
++		|| BR2_sh || BR2_x86_64 # python-numpy
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
++	select BR2_PACKAGE_PYTHON_NUMPY
++	help
++	  Include opencv_python module into the OpenCV build.
++	  No python example is installed.
  
+ config BR2_PACKAGE_OPENCV_LIB_SHAPE
+ 	bool "shape"
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 7211c18..a43de0c 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -78,8 +78,6 @@ OPENCV_CONF_OPTS += \
+ 	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF) \
+ 	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
+ 	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF) \
+-	-DBUILD_opencv_python2=OFF \
+-	-DBUILD_opencv_python3=OFF \
+ 	-DBUILD_opencv_shape=$(if $(BR2_PACKAGE_OPENCV_LIB_SHAPE),ON,OFF) \
+ 	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
+ 	-DBUILD_opencv_superres=$(if $(BR2_PACKAGE_OPENCV_LIB_SUPERRES),ON,OFF) \
+@@ -282,6 +280,37 @@ else
+ OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV_LIB_PYTHON),y)
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++OPENCV_CONF_OPTS += \
++	-DBUILD_opencv_python2=ON \
++	-DBUILD_opencv_python3=OFF \
++	-DPYTHON2_EXECUTABLE=$(HOST_DIR)/usr/bin/python2 \
++	-DPYTHON2_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR) \
++	-DPYTHON2_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR).so \
++	-DPYTHON2_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/numpy/core/include \
++	-DPYTHON2_PACKAGES_PATH=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
++	-DPYTHON2_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
++OPENCV_DEPENDENCIES += python
++else
++OPENCV_CONF_OPTS += \
++	-DBUILD_opencv_python2=OFF \
++	-DBUILD_opencv_python3=ON \
++	-DPYTHON3_EXECUTABLE=$(HOST_DIR)/usr/bin/python3 \
++	-DPYTHON3_INCLUDE_PATH=$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)m \
++	-DPYTHON3_LIBRARIES=$(STAGING_DIR)/usr/lib/libpython$(PYTHON3_VERSION_MAJOR)m.so \
++	-DPYTHON3_NUMPY_INCLUDE_DIRS=$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/include \
++	-DPYTHON3_PACKAGES_PATH=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages \
++	-DPYTHON3_NUMPY_VERSION=$(PYTHON_NUMPY_VERSION)
++OPENCV_DEPENDENCIES += python3
++endif
++OPENCV_DEPENDENCIES += python-numpy
++else
++OPENCV_CONF_OPTS += \
++	-DBUILD_opencv_python2=OFF \
++	-DBUILD_opencv_python3=OFF
++endif
++
+ # Installation hooks:
+ define OPENCV_CLEAN_INSTALL_DOC
+ 	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
