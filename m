@@ -1,68 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] wvstreams: not available for
-	static only builds
-Message-ID: <20150808105559.490B6818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gawk: bump to version 4.1.3
+Message-ID: <20150808105603.68F207FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be1287e7e5ca2a11cd6dea84ac481d10eaa48edb
+commit: http://git.buildroot.net/buildroot/commit/?id=4e5ab5e54e3c5eed73a493bd83490b7118256f83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also propagated to wvdial as it selects wvstreams.
-
-Fixes:
- http://autobuild.buildroot.org/results/0cd/0cd5e0263b42e6845504d97688632e16206bd000/
- http://autobuild.buildroot.org/results/4e0/4e0ab461ea7ed7a288303741eec89156abd49864/
-
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wvdial/Config.in    |    5 +++--
- package/wvstreams/Config.in |    5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/gawk/gawk.hash |    2 +-
+ package/gawk/gawk.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
-index e57f975..5d415b1 100644
---- a/package/wvdial/Config.in
-+++ b/package/wvdial/Config.in
-@@ -2,12 +2,13 @@ config BR2_PACKAGE_WVDIAL
- 	bool "wvdial"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # wvstreams
-+	depends on !BR2_STATIC_LIBS # wvstreams
- 	select BR2_PACKAGE_WVSTREAMS
- 	help
- 	  wvdial is an intelligent Point-to-Point Protocol dialer
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index 8720031..7f746d8 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	ea8b53c5834ee27012fecba7273f97fca7104884975cf81ddae6f85c5581f481	gawk-4.1.2.tar.xz
++sha256	e3cf55e91e31ea2845f8338bedd91e40671fc30e4d82ea147d220e687abda625	gawk-4.1.3.tar.xz
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 653a5a0..1820689 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://wvdial.googlecode.com/
- 
--comment "wvdial needs a toolchain w/ C++"
-+comment "wvdial needs a toolchain w/ C++, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
-index 3080dc7..0cbe60a 100644
---- a/package/wvstreams/Config.in
-+++ b/package/wvstreams/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_WVSTREAMS
- 	bool "wvstreams"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -9,6 +10,6 @@ config BR2_PACKAGE_WVSTREAMS
- 
- 	  http://wvstreams.googlecode.com/
- 
--comment "wvstreams needs a toolchain w/ C++"
-+comment "wvstreams needs a toolchain w/ C++, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+-GAWK_VERSION = 4.1.2
++GAWK_VERSION = 4.1.3
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk $(if $(BR2_PACKAGE_MPFR),mpfr)
