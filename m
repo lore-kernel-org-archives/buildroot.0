@@ -1,56 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:51 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain: add 4.1.x choice
-	for headers
-Message-ID: <20150808105613.130C67F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openvmtools: fix legal info
+Message-ID: <20150808105613.0B79D7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dae7d8aa5db31c4f2a7d7e370d98b88a169de62c
+commit: http://git.buildroot.net/buildroot/commit/?id=260d4461479f99baaeff802867ee6977e48a95ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+In ab71dff0 it was moved to SUBDIR, but this was never reflected for the
+legal-info files, update this to fix:
+http://autobuild.buildroot.net/results/836/8363943cc9c967713f585209408ea087a052a12d/
+
+[Thomas: put OPENVMTOOLS_SUBDIR before OPENVMTOOLS_LICENSE_FILES, as
+suggested by Yann.]
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Karoly Kasza <kaszak@gmail.com>
+Tested-by: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-common.in          |    5 +++++
- toolchain/toolchain-external/Config.in |    4 ++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/openvmtools/openvmtools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 4f411c3..b7a11a4 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -223,10 +223,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 9819640..57271c8 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -6,11 +6,11 @@
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
- 	default "4.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
- 	default "3.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
- 	default "3.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 017e913..e70989e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -981,6 +981,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1
-+	bool "4.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_0
- 	bool "4.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+ OPENVMTOOLS_VERSION = stable-9.10.0
+ OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
++OPENVMTOOLS_SUBDIR = open-vm-tools
+ OPENVMTOOLS_LICENSE = LGPLv2.1
+-OPENVMTOOLS_LICENSE_FILES = COPYING
++OPENVMTOOLS_LICENSE_FILES = $(OPENVMTOOLS_SUBDIR)/COPYING
+ # Autoreconf needed or config/missing will run configure again at buildtime
+ OPENVMTOOLS_AUTORECONF = YES
+-OPENVMTOOLS_SUBDIR = open-vm-tools
+ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+ 	--without-icu --without-x --without-gtk2 \
+ 	--without-gtkmm --without-kernel-modules \
