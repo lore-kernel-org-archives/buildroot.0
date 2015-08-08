@@ -1,73 +1,151 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: drop useless
-	dependencies
-Message-ID: <20150808105607.6F69C7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gcc: fix PR 65730 (ICE on
+	xtensa cores w/o hardware multiplication)
+Message-ID: <20150808105600.0A09B7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d890098d0510b6ae6f53be34eb48d5cbc50d8bdf
+commit: http://git.buildroot.net/buildroot/commit/?id=086537a5097993dd5fcf64b1b719bb13943217ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-xlib-libXft is only needed when building a 'standalone' matchbox, which
-means not using matchbox-lib.
-
-But we *are* building matchbox-lib, and we do not support the standalone
-mode (and probably won't, as even upstream says it is ugly, by lack of
-theming).
-
-Similarly, xlib-libXext is only used for its 'xsync' extension, for
-which support is entirely commented-out in matchbox.
-
-So, drop the dependency on xlib-libXft, and make it explicit we're not
-building either standalone modes; drop xlib-libXext.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/Config.in   |    1 -
- package/matchbox/matchbox.mk |   11 ++++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/gcc/4.7.4/111-pr65730.patch |   37 +++++++++++++++++++++++++++++++++++
+ package/gcc/4.8.4/111-pr65730.patch |   37 +++++++++++++++++++++++++++++++++++
+ package/gcc/4.9.2/111-pr65730.patch |   37 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 111 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index d42b90f..0c7e5ea 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	help
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index b1f96a6..1abcfd8 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -11,15 +11,16 @@ MATCHBOX_LICENSE = GPLv2+
- MATCHBOX_LICENSE_FILES = COPYING
- 
- MATCHBOX_DEPENDENCIES = matchbox-lib
--MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
-+MATCHBOX_CONF_OPTS = \
-+	--enable-expat \
-+	--disable-gconf \
-+	--disable-composite \
-+	--disable-standalone \
-+	--disable-standalone-xft
- 
- # Workaround bug in configure script
- MATCHBOX_CONF_ENV = expat=yes
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
--MATCHBOX_DEPENDENCIES += xlib_libXft
--endif
--
- ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
- MATCHBOX_CONF_OPTS += --enable-startup-notification
- MATCHBOX_DEPENDENCIES += startup-notification
+diff --git a/package/gcc/4.7.4/111-pr65730.patch b/package/gcc/4.7.4/111-pr65730.patch
+new file mode 100644
+index 0000000..f195e30
+--- /dev/null
++++ b/package/gcc/4.7.4/111-pr65730.patch
+@@ -0,0 +1,37 @@
++From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 Apr 2015 17:46:30 +0300
++Subject: [PATCH] Fix PR target/65730
++
++2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
++	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
++Changes to ChangeLog are dropped.
++
++ gcc/config/xtensa/xtensa.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index eb039ba..7296e36 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
++   if (ac->shift != NULL_RTX)
++     {
++       /* Shift is the byte count, but we need the bitcount.  */
++-      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
++-				       GEN_INT (BITS_PER_UNIT),
+++      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+++      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+++				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
++ 				       NULL_RTX, 1, OPTAB_DIRECT);
++       ac->modemask = expand_simple_binop (SImode, ASHIFT,
++ 					  GEN_INT (GET_MODE_MASK (mode)),
++-- 
++1.8.1.4
++
+diff --git a/package/gcc/4.8.4/111-pr65730.patch b/package/gcc/4.8.4/111-pr65730.patch
+new file mode 100644
+index 0000000..f195e30
+--- /dev/null
++++ b/package/gcc/4.8.4/111-pr65730.patch
+@@ -0,0 +1,37 @@
++From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 Apr 2015 17:46:30 +0300
++Subject: [PATCH] Fix PR target/65730
++
++2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
++	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
++Changes to ChangeLog are dropped.
++
++ gcc/config/xtensa/xtensa.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index eb039ba..7296e36 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
++   if (ac->shift != NULL_RTX)
++     {
++       /* Shift is the byte count, but we need the bitcount.  */
++-      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
++-				       GEN_INT (BITS_PER_UNIT),
+++      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+++      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+++				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
++ 				       NULL_RTX, 1, OPTAB_DIRECT);
++       ac->modemask = expand_simple_binop (SImode, ASHIFT,
++ 					  GEN_INT (GET_MODE_MASK (mode)),
++-- 
++1.8.1.4
++
+diff --git a/package/gcc/4.9.2/111-pr65730.patch b/package/gcc/4.9.2/111-pr65730.patch
+new file mode 100644
+index 0000000..f195e30
+--- /dev/null
++++ b/package/gcc/4.9.2/111-pr65730.patch
+@@ -0,0 +1,37 @@
++From b9a7775674d91c7af8043a83211ffeaa576327d7 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 Apr 2015 17:46:30 +0300
++Subject: [PATCH] Fix PR target/65730
++
++2015-05-20  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config/xtensa/xtensa.c (init_alignment_context): Replace MULT
++	by BITS_PER_UNIT with ASHIFT by exact_log2 (BITS_PER_UNIT).
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 223452
++Changes to ChangeLog are dropped.
++
++ gcc/config/xtensa/xtensa.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
++index eb039ba..7296e36 100644
++--- a/gcc/config/xtensa/xtensa.c
+++++ b/gcc/config/xtensa/xtensa.c
++@@ -1461,8 +1461,9 @@ init_alignment_context (struct alignment_context *ac, rtx mem)
++   if (ac->shift != NULL_RTX)
++     {
++       /* Shift is the byte count, but we need the bitcount.  */
++-      ac->shift = expand_simple_binop (SImode, MULT, ac->shift,
++-				       GEN_INT (BITS_PER_UNIT),
+++      gcc_assert (exact_log2 (BITS_PER_UNIT) >= 0);
+++      ac->shift = expand_simple_binop (SImode, ASHIFT, ac->shift,
+++				       GEN_INT (exact_log2 (BITS_PER_UNIT)),
++ 				       NULL_RTX, 1, OPTAB_DIRECT);
++       ac->modemask = expand_simple_binop (SImode, ASHIFT,
++ 					  GEN_INT (GET_MODE_MASK (mode)),
++-- 
++1.8.1.4
++
