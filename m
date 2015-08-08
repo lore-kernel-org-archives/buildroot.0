@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] nano: bump to version 2.4.2
-Message-ID: <20150808105623.0BB517FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bind: security bump to version
+	9.9.7-P1
+Message-ID: <20150808105623.A03CB7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9b7ccb8de87c8edc16e2756d86e5d8ce4ecef30
+commit: http://git.buildroot.net/buildroot/commit/?id=f70f45a43c486d04bc9aeb5a82f1ce778cf607bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nano/nano.hash |    2 +-
- package/nano/nano.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+CVE-2015-4620 - On servers configured to perform DNSSEC validation an
+assertion failure could be triggered on answers from a specially
+configured server.
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index cb5d5b8..8ad1497 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.hash |    4 ++--
+ package/bind/bind.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 6bbd00f..e74c773 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	6a0ceb5e1b9b9bea72d5d1f46488ace4782b1f198ea6ba558480a86d994f29d2	nano-2.4.1.tar.gz
-+sha256  c8cd7f18fcf5696d9df3364ee2a840e0ab7b6bdbd22abf850bbdc951db7f65b9  nano-2.4.2.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 4d47fdb..b030818 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7/bind-9.9.7.tar.gz.sha256.asc
+-sha256	3f23e7fcb363a2594ed1f065868c2c1080a93636a4fcb4c47f9e164e2cd74c66	bind-9.9.7.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P1/bind-9.9.7-P1.tar.gz.sha256.asc
++sha256	bd086ff58afaf03cfb8dc695c79b6bd6d0217ef56750a78ff0668b2b3acda34d	bind-9.9.7-P1.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 9a08461..98a19ea 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION = 2.4.1
-+NANO_VERSION = 2.4.2
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+-BIND_VERSION = 9.9.7
++BIND_VERSION = 9.9.7-P1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
