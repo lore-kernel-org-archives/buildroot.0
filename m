@@ -1,42 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:57:14 -0000
-Subject: [Buildroot] [git commit branch/next] imagemagick: bump to version
-	6.9.1-7
-Message-ID: <20150808105621.CF2497FC31@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 08 Aug 2015 10:57:15 -0000
+Subject: [Buildroot] [git commit branch/next] upmpdcli: use relative path
+	for systemd service symlink
+Message-ID: <20150808105621.A0B7D7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82da9aa8308a0f8e27053d83045aa2986ee0ffe5
+commit: http://git.buildroot.net/buildroot/commit/?id=63b1fec279500eb8e8827f6db228709c1dcde566
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/upmpdcli/upmpdcli.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index a9803a0..92cceb0 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256	8d83934df129833f9e8696017182d8bbca8189842bbd2705c24729fed8db3358	ImageMagick-6.9.1-6.tar.xz
-+sha256 b610e5261c01664e19c91e513e21b3c2d76d583b497ee3c7cf2f20876d742328 ImageMagick-6.9.1-7.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index a1860df..33f12e5 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 69a0ab3..9531b61 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -35,7 +35,7 @@ define UPMPDCLI_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 $(@D)/systemd/upmpdcli.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/upmpdcli.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf /usr/lib/systemd/system/upmpdcli.service \
++	ln -sf ../../../../usr/lib/systemd/system/upmpdcli.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/upmpdcli.service
+ endef
  
--IMAGEMAGICK_VERSION = 6.9.1-6
-+IMAGEMAGICK_VERSION = 6.9.1-7
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
