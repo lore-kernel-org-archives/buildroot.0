@@ -1,94 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:10 -0000
-Subject: [Buildroot] [git commit branch/next] uclibc: fix static linking of
-	pthread apps for x86/x86_64
-Message-ID: <20150808105640.2CFF77F8D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] netperf: bump to version 2.7.0
+Message-ID: <20150808105639.D323D7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b146a0225809be236995aa4e102d30352eb2274
+commit: http://git.buildroot.net/buildroot/commit/?id=2aa1f9c715c1aab3b7747f45fd62c1c97ba303cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/182424bd2fea36af95eea31f7dd53f0399433616/
-http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
+Also add hash file.
+And work around gcc 5+ defaulting to gnu99, fixes:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+http://autobuild.buildroot.net/results/077/077714a0ee67057abcff680b244228a409243bbf/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 ++++++++++++++++++++
- 1 files changed, 64 insertions(+), 0 deletions(-)
+ package/netperf/netperf.hash |    2 ++
+ package/netperf/netperf.mk   |    8 ++++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
+diff --git a/package/netperf/netperf.hash b/package/netperf/netperf.hash
 new file mode 100644
-index 0000000..a580a67
+index 0000000..f972740
 --- /dev/null
-+++ b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
-@@ -0,0 +1,64 @@
-+From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+Date: Wed, 22 Jul 2015 14:54:07 +0200
-+Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
-+
-+Found via buildroot autobuilder.
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+ libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
-+ libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
-+ 2 files changed, 12 insertions(+)
-+
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
-+index f38703b..ff9a784 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
-+@@ -70,6 +70,9 @@
-+ 	.globl	__lll_lock_wait_private
-+ 	.type	__lll_lock_wait_private, at function
-+ 	.hidden	__lll_lock_wait_private
-++#ifndef IS_IN_libpthread
-++	.weak	__lll_lock_wait_private
-++#endif
-+ 	.align	16
-+ __lll_lock_wait_private:
-+ 	cfi_startproc
-+@@ -320,6 +323,9 @@ __lll_timedlock_wait:
-+ 	.globl	__lll_unlock_wake_private
-+ 	.type	__lll_unlock_wake_private, at function
-+ 	.hidden	__lll_unlock_wake_private
-++#ifndef IS_IN_libpthread
-++	.weak	__lll_unlock_wake_private
-++#endif
-+ 	.align	16
-+ __lll_unlock_wake_private:
-+ 	cfi_startproc
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
-+index 50aacea..894c683 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
-+@@ -75,6 +75,9 @@
-+ 	.globl	__lll_lock_wait_private
-+ 	.type	__lll_lock_wait_private, at function
-+ 	.hidden	__lll_lock_wait_private
-++#ifndef IS_IN_libpthread
-++	.weak   __lll_lock_wait_private
-++#endif
-+ 	.align	16
-+ __lll_lock_wait_private:
-+ 	cfi_startproc
-+@@ -317,6 +320,9 @@ __lll_timedlock_wait:
-+ 	.globl	__lll_unlock_wake_private
-+ 	.type	__lll_unlock_wake_private, at function
-+ 	.hidden	__lll_unlock_wake_private
-++#ifndef IS_IN_libpthread
-++	.weak	__lll_unlock_wake_private
-++#endif
-+ 	.align	16
-+ __lll_unlock_wake_private:
-+ 	cfi_startproc
-+-- 
-+1.7.10.4
-+
++++ b/package/netperf/netperf.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	842af17655835c8be7203808c3393e6cb327a8067f3ed1f1053eb78b4e40375a	netperf-2.7.0.tar.bz2
+diff --git a/package/netperf/netperf.mk b/package/netperf/netperf.mk
+index 13d44fe..8b22808 100644
+--- a/package/netperf/netperf.mk
++++ b/package/netperf/netperf.mk
+@@ -4,9 +4,13 @@
+ #
+ ################################################################################
+ 
+-NETPERF_VERSION = 2.6.0
++NETPERF_VERSION = 2.7.0
+ NETPERF_SITE = ftp://ftp.netperf.org/netperf
+-NETPERF_CONF_ENV = ac_cv_func_setpgrp_void=set
++NETPERF_SOURCE = netperf-$(NETPERF_VERSION).tar.bz2
++# gcc 5+ defaults to gnu99 which breaks netperf
++NETPERF_CONF_ENV = \
++	ac_cv_func_setpgrp_void=set \
++	CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
+ NETPERF_CONF_OPTS = --enable-demo=yes
+ NETPERF_LICENSE = netperf license
+ NETPERF_LICENSE_FILES = COPYING
