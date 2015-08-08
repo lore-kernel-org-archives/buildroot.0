@@ -1,32 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] libsoc: bump to 0.6.4
-Message-ID: <20150808105610.ECB497F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download/cvs: add
+	support to use a date instead of a tag
+Message-ID: <20150808105624.52C827FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9badabae854bf7560f737478e92e0d5873e4d31f
+commit: http://git.buildroot.net/buildroot/commit/?id=6c0d6592f400a48150d7d4e068d110ca2ed903c1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsoc/libsoc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This is useful when a tag is not avaiable.
 
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-index 3253c50..99bea17 100644
---- a/package/libsoc/libsoc.mk
-+++ b/package/libsoc/libsoc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Also fix support for Fedora where the command "cvs -r :<version>" doesn't work.
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/cvs |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
+
+diff --git a/support/download/cvs b/support/download/cvs
+index 2c3a666..bfac73b 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -26,7 +26,16 @@ rev="${3}"
+ rawname="${4}"
+ basename="${5}"
  
--LIBSOC_VERSION = 0.6.3
-+LIBSOC_VERSION = 0.6.4
- LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
- LIBSOC_LICENSE = LGPLv2.1
- LIBSOC_LICENSE_FILES = COPYING
++if [[ ${rev} =~ ^[0-9] ]]; then
++    # Date, because a tag or a branch cannot begin with a number
++    select="-D"
++else
++    # Tag or branch
++    select="-r"
++fi
++
++export TZ=UTC
+ ${CVS} ${verbose} -z3 -d":pserver:anonymous@${repo}" \
+-       co -d "${basename}" -r ":${rev}" -P "${rawname}"
++       co -d "${basename}" ${select} "${rev}" -P "${rawname}"
+ 
+ tar czf "${output}" "${basename}"
