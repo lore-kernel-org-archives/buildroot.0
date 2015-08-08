@@ -1,31 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] sqlite: Add host build support
-Message-ID: <20150808105611.4E6467F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/directfb: add hash file
+Message-ID: <20150808105601.766C87FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ab7bf0bf4952be85ac1e64e62d8831798f0a8ee
+commit: http://git.buildroot.net/buildroot/commit/?id=f12d5da0dde3b661e4d397efd47d3b187fe57d68
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Host sqlite is required by the host build of the setools package which
-is required for SELinux support.
-
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/directfb/directfb.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9aac8e6..e4f42af 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -53,3 +53,4 @@ SQLITE_CONF_OPTS += --disable-readline
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+diff --git a/package/directfb/directfb.hash b/package/directfb/directfb.hash
+new file mode 100644
+index 0000000..a577cba
+--- /dev/null
++++ b/package/directfb/directfb.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 7a96aced0f69b2ec0810e9923068e61c21e6b19dd593e09394c872414df75e70 DirectFB-1.6.3.tar.gz
