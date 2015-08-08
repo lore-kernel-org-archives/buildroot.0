@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:15 -0000
-Subject: [Buildroot] [git commit branch/next] lvm2: bump to version 2.02.124
-Message-ID: <20150808105623.013F67FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] berkeleydb: accommodate
+	threads presence/absence
+Message-ID: <20150808105622.EA3257FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2bef06197af4108f522d8c139d509eca19c1416
+commit: http://git.buildroot.net/buildroot/commit/?id=145e0d9f57f4f67973bddc8908ceacb3131b858f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+In BerkeleyDB the most convenient implementation of mutexes on Linux is
+via POSIX mutex, and that requires pthread library.
+
+Still it is possible to build (and hopefully use) BerkeleyDB without
+mutexes. For this we pass "--disable-mutexsupport" during configuration
+of the package.
+
+Fixes:
+http://autobuild.buildroot.net/results/717f3b37600a56262badc6f7cb64d7949fdacb67/
+http://autobuild.buildroot.net/results/80ebf0382992b277fd94743815bbf0c7426a3654/
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/berkeleydb/berkeleydb.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index e6047bb..982cfc7 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5  5ae469f1a021729d3db9d269077ad4fe  LVM2.2.02.123.tgz
-+md5  da8d81a6a2ea235025795d9e001a6ae3  LVM2.2.02.124.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 6a3aec3..c112b97 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index 30fc518..e5c11bd 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -40,6 +40,7 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		--with-pic \
+ 		--enable-o_direct \
++		$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-mutexsupport,--disable-mutexsupport) \
+ 	)
+ endef
  
--LVM2_VERSION = 2.02.123
-+LVM2_VERSION = 2.02.124
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
