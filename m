@@ -1,260 +1,216 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:37 -0000
-Subject: [Buildroot] [git commit branch/next] fs/iso9660: support building a
-	real iso9660 filesystem
-Message-ID: <20150808105610.6A9E87F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox-common: move
+	one directory higher
+Message-ID: <20150808105606.AED6F7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7080eef9b878069c5eb8c52ee520e98b92120d15
+commit: http://git.buildroot.net/buildroot/commit/?id=3b468acbb4ec2aca748fc022ff0d53a530b3264b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Until now, the iso9660 filesystem handling only supported using an
-initrd/initramfs to store the root filesystem, which is very different
-from what we do with the other filesystems.
+We usually do not have a sub-directory for a family of related
+packages, so move matchbox packages one directory higher, so they
+all are in packages/
 
-This commit changes the iso9660 logic to also allow using directly an
-iso9660 filesystem to store the root filesystem. A new option,
-BR2_TARGET_ROOTFS_ISO9660_INITRD, is created to tell the iso9660 that
-we want to use an initrd and not directly the root filesystem in
-iso9660 format. This option defaults to 'y' to preserve the existing
-behavior.
+Also re-order packages alphabetically.
 
-After this commit, we therefore have three possibilities:
-
- * BR2_TARGET_ROOTFS_ISO9660=y, with BR2_TARGET_ROOTFS_INITRAMFS and
-   BR2_TARGET_ROOTFS_ISO9660_INITRD disabled. In this case, the
-   iso9660 filesystem is directly the contents of the root filesystem
-   (since is possible thanks to the Rockridge extensions that were
-   already enabled using the -R option of genisoimage). Obviously, it
-   means that the root filesystem is read-only.
-
- * BR2_TARGET_ROOTFS_ISO9660=y and BR2_TARGET_ROOTFS_INITRAMFS=y (the
-   value of BR2_TARGET_ROOTFS_ISO9660_INITRD doesn't matter). In this
-   case, the root filesystem is already linked into the kernel image
-   itself, as an initramfs. So the iso9660 filesystem doesn't contain
-   the root filesystem as is, but just the bootloader and the kernel
-   image.
-
- * BR2_TARGET_ROOTFS_ISO9660=y, BR2_TARGET_ROOTFS_ISO9660_INITRD=y and
-   BR2_TARGET_ROOTFS_INITRAMFS disabled. In this case, a separate
-   initrd is used. The iso9660 filesystem only contains the
-   bootloader, the kernel and the initrd.
-
-In order to support the first case out of the box, root=/dev/sr0 is
-added on the kernel command line in the example Grub configuration
-file, so that the kernel knows where the root filesystem is
-located. This argument is ignored when initrd/initramfs are used.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/Config.in  |   27 +++++++++++-
- fs/iso9660/iso9660.mk |  109 +++++++++++++++++++++++++++++++++++++-----------
- fs/iso9660/menu.lst   |    2 +-
- 3 files changed, 110 insertions(+), 28 deletions(-)
+ package/{matchbox => }/matchbox-common/Config.in   |    0
+ .../matchbox-common/matchbox-common.hash           |    0
+ .../matchbox-common/matchbox-common.mk             |    0
+ package/{matchbox => }/matchbox-desktop/Config.in  |    0
+ .../matchbox-desktop/matchbox-desktop.hash         |    0
+ .../matchbox-desktop/matchbox-desktop.mk           |    0
+ package/{matchbox => }/matchbox-fakekey/Config.in  |    0
+ .../matchbox-fakekey/matchbox-fakekey.hash         |    0
+ .../matchbox-fakekey/matchbox-fakekey.mk           |    0
+ package/{matchbox => }/matchbox-keyboard/Config.in |    0
+ .../matchbox-keyboard/matchbox-keyboard.hash       |    0
+ .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
+ .../matchbox-keyboard/mb-applet-kbd-wrapper.sh     |    0
+ .../matchbox-lib/0001-index-is-legacy.patch        |    0
+ .../matchbox-lib/0002-libpng15.patch               |    0
+ .../matchbox-lib/0003-include-setjmp-h.patch       |    0
+ package/{matchbox => }/matchbox-lib/Config.in      |    0
+ .../{matchbox => }/matchbox-lib/matchbox-lib.hash  |    0
+ .../{matchbox => }/matchbox-lib/matchbox-lib.mk    |    0
+ .../matchbox-panel/0001-index-is-legacy.patch      |    0
+ .../matchbox-panel/0002-mb-applet-wireless.patch   |    0
+ package/{matchbox => }/matchbox-panel/Config.in    |    0
+ .../matchbox-panel/matchbox-panel.hash             |    0
+ .../matchbox-panel/matchbox-panel.mk               |    0
+ .../matchbox-startup-monitor/0001-true-false.patch |    0
+ .../matchbox-startup-monitor/Config.in             |    0
+ .../matchbox-startup-monitor.hash                  |    0
+ .../matchbox-startup-monitor.mk                    |    0
+ package/matchbox/Config.in                         |   14 +++++++-------
+ package/matchbox/matchbox.mk                       |    3 ---
+ 30 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 111158b..e300fdb 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -2,11 +2,23 @@ config BR2_TARGET_ROOTFS_ISO9660
- 	bool "iso image"
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_LINUX_KERNEL
--	select BR2_TARGET_ROOTFS_CPIO
-+	select BR2_LINUX_KERNEL_INSTALL_TARGET \
-+	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
- 	select BR2_TARGET_GRUB
- 	select BR2_TARGET_GRUB_FS_ISO9660
- 	help
--	  Build a bootable iso9660 image
-+	  Build a bootable ISO9660 image. By default, the root
-+	  filesystem is directly packed as the ISO9660 filesystem,
-+	  which means the root filesystem will be read-only. It
-+	  requires ISO9660 filesystem support and CDROM support in the
-+	  kernel.
-+
-+	  However, if BR2_TARGET_ROOTFS_INITRAMFS or
-+	  BR2_TARGET_ROOTFS_ISO9660_INITRD have been enabled, the
-+	  ISO9660 filesystem will only contain a kernel image and
-+	  optionally an external initrd image. In this case, the
-+	  filesystem being in RAM, it will be read/write. No ISO9660
-+	  or CDROM support is needed in the kernel.
+diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox-common/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-common/Config.in
+rename to package/matchbox-common/Config.in
+diff --git a/package/matchbox/matchbox-common/matchbox-common.hash b/package/matchbox-common/matchbox-common.hash
+similarity index 100%
+rename from package/matchbox/matchbox-common/matchbox-common.hash
+rename to package/matchbox-common/matchbox-common.hash
+diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox-common/matchbox-common.mk
+similarity index 100%
+rename from package/matchbox/matchbox-common/matchbox-common.mk
+rename to package/matchbox-common/matchbox-common.mk
+diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-desktop/Config.in
+rename to package/matchbox-desktop/Config.in
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.hash b/package/matchbox-desktop/matchbox-desktop.hash
+similarity index 100%
+rename from package/matchbox/matchbox-desktop/matchbox-desktop.hash
+rename to package/matchbox-desktop/matchbox-desktop.hash
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox-desktop/matchbox-desktop.mk
+similarity index 100%
+rename from package/matchbox/matchbox-desktop/matchbox-desktop.mk
+rename to package/matchbox-desktop/matchbox-desktop.mk
+diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-fakekey/Config.in
+rename to package/matchbox-fakekey/Config.in
+diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.hash b/package/matchbox-fakekey/matchbox-fakekey.hash
+similarity index 100%
+rename from package/matchbox/matchbox-fakekey/matchbox-fakekey.hash
+rename to package/matchbox-fakekey/matchbox-fakekey.hash
+diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox-fakekey/matchbox-fakekey.mk
+similarity index 100%
+rename from package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
+rename to package/matchbox-fakekey/matchbox-fakekey.mk
+diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-keyboard/Config.in
+rename to package/matchbox-keyboard/Config.in
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.hash b/package/matchbox-keyboard/matchbox-keyboard.hash
+similarity index 100%
+rename from package/matchbox/matchbox-keyboard/matchbox-keyboard.hash
+rename to package/matchbox-keyboard/matchbox-keyboard.hash
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox-keyboard/matchbox-keyboard.mk
+similarity index 88%
+rename from package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+rename to package/matchbox-keyboard/matchbox-keyboard.mk
+index 2017730..fcdd8b1 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox-keyboard/matchbox-keyboard.mk
+@@ -15,7 +15,7 @@ MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expa
+ MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
  
- if BR2_TARGET_ROOTFS_ISO9660
+ define MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+-	$(INSTALL) -D -m 0755 package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
++	$(INSTALL) -D -m 0755 package/matchbox-keyboard/mb-applet-kbd-wrapper.sh $(TARGET_DIR)/usr/bin/mb-applet-kbd-wrapper.sh
+ endef
  
-@@ -19,6 +31,17 @@ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	  automatically be replaced by the path to the kernel and
- 	  initrd images respectively.
+ MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
+diff --git a/package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh b/package/matchbox-keyboard/mb-applet-kbd-wrapper.sh
+similarity index 100%
+rename from package/matchbox/matchbox-keyboard/mb-applet-kbd-wrapper.sh
+rename to package/matchbox-keyboard/mb-applet-kbd-wrapper.sh
+diff --git a/package/matchbox/matchbox-lib/0001-index-is-legacy.patch b/package/matchbox-lib/0001-index-is-legacy.patch
+similarity index 100%
+rename from package/matchbox/matchbox-lib/0001-index-is-legacy.patch
+rename to package/matchbox-lib/0001-index-is-legacy.patch
+diff --git a/package/matchbox/matchbox-lib/0002-libpng15.patch b/package/matchbox-lib/0002-libpng15.patch
+similarity index 100%
+rename from package/matchbox/matchbox-lib/0002-libpng15.patch
+rename to package/matchbox-lib/0002-libpng15.patch
+diff --git a/package/matchbox/matchbox-lib/0003-include-setjmp-h.patch b/package/matchbox-lib/0003-include-setjmp-h.patch
+similarity index 100%
+rename from package/matchbox/matchbox-lib/0003-include-setjmp-h.patch
+rename to package/matchbox-lib/0003-include-setjmp-h.patch
+diff --git a/package/matchbox/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-lib/Config.in
+rename to package/matchbox-lib/Config.in
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.hash b/package/matchbox-lib/matchbox-lib.hash
+similarity index 100%
+rename from package/matchbox/matchbox-lib/matchbox-lib.hash
+rename to package/matchbox-lib/matchbox-lib.hash
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox-lib/matchbox-lib.mk
+similarity index 100%
+rename from package/matchbox/matchbox-lib/matchbox-lib.mk
+rename to package/matchbox-lib/matchbox-lib.mk
+diff --git a/package/matchbox/matchbox-panel/0001-index-is-legacy.patch b/package/matchbox-panel/0001-index-is-legacy.patch
+similarity index 100%
+rename from package/matchbox/matchbox-panel/0001-index-is-legacy.patch
+rename to package/matchbox-panel/0001-index-is-legacy.patch
+diff --git a/package/matchbox/matchbox-panel/0002-mb-applet-wireless.patch b/package/matchbox-panel/0002-mb-applet-wireless.patch
+similarity index 100%
+rename from package/matchbox/matchbox-panel/0002-mb-applet-wireless.patch
+rename to package/matchbox-panel/0002-mb-applet-wireless.patch
+diff --git a/package/matchbox/matchbox-panel/Config.in b/package/matchbox-panel/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-panel/Config.in
+rename to package/matchbox-panel/Config.in
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.hash b/package/matchbox-panel/matchbox-panel.hash
+similarity index 100%
+rename from package/matchbox/matchbox-panel/matchbox-panel.hash
+rename to package/matchbox-panel/matchbox-panel.hash
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
+similarity index 100%
+rename from package/matchbox/matchbox-panel/matchbox-panel.mk
+rename to package/matchbox-panel/matchbox-panel.mk
+diff --git a/package/matchbox/matchbox-startup-monitor/0001-true-false.patch b/package/matchbox-startup-monitor/0001-true-false.patch
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/0001-true-false.patch
+rename to package/matchbox-startup-monitor/0001-true-false.patch
+diff --git a/package/matchbox/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/Config.in
+rename to package/matchbox-startup-monitor/Config.in
+diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.hash b/package/matchbox-startup-monitor/matchbox-startup-monitor.hash
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.hash
+rename to package/matchbox-startup-monitor/matchbox-startup-monitor.hash
+diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox-startup-monitor/matchbox-startup-monitor.mk
+similarity index 100%
+rename from package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
+rename to package/matchbox-startup-monitor/matchbox-startup-monitor.mk
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 7d06bb2..3d771d3 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -18,12 +18,12 @@ config BR2_PACKAGE_MATCHBOX
  
-+config BR2_TARGET_ROOTFS_ISO9660_INITRD
-+	bool "Use initrd"
-+	default y
-+	select BR2_TARGET_ROOTFS_CPIO
-+	help
-+	  Enable this option to have the root filesystem bundled as an
-+	  initrd/initramfs rather than directly as the ISO9660
-+	  filesystem. With this option enabled, the ISO9660 will only
-+	  contain a kernel image, an initrd image (unless an initramfs
-+	  linked into the kernel is used) and the bootloader.
-+
+ if BR2_PACKAGE_MATCHBOX
+ 
+-source "package/matchbox/matchbox-lib/Config.in"
+-source "package/matchbox/matchbox-panel/Config.in"
+-source "package/matchbox/matchbox-desktop/Config.in"
+-source "package/matchbox/matchbox-common/Config.in"
+-source "package/matchbox/matchbox-fakekey/Config.in"
+-source "package/matchbox/matchbox-keyboard/Config.in"
+-source "package/matchbox/matchbox-startup-monitor/Config.in"
++source "package/matchbox-common/Config.in"
++source "package/matchbox-desktop/Config.in"
++source "package/matchbox-fakekey/Config.in"
++source "package/matchbox-keyboard/Config.in"
++source "package/matchbox-lib/Config.in"
++source "package/matchbox-panel/Config.in"
++source "package/matchbox-startup-monitor/Config.in"
+ 
+ endif
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 100a633..29e240e 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -36,6 +36,3 @@ MATCHBOX_CONF_OPTS += --disable-startup-notification
  endif
  
- comment "iso image needs a Linux kernel to be built"
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 035561d..723fe94 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -4,51 +4,110 @@
- #
- ################################################################################
- 
--ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs-iso9660.tmp
-+#
-+# We need to handle three cases:
-+#
-+#  1. The ISO9660 filesystem will really be the real root filesystem
-+#     itself. This is when BR2_TARGET_ROOTFS_ISO9660_INITRD is
-+#     disabled.
-+#
-+#  2. The ISO9660 filesystem will be a filesystem with just a kernel
-+#     image, initrd and grub. This is when
-+#     BR2_TARGET_ROOTFS_ISO9660_INITRD is enabled, but
-+#     BR2_TARGET_ROOTFS_INITRAMFS is disabled.
-+#
-+#  3. The ISO9660 filesystem will be a filesystem with just a kernel
-+#     image and grub. This is like (2), except that the initrd is
-+#     built into the kernel image. This is when
-+#     BR2_TARGET_ROOTFS_INITRAMFS is enabled (regardless of the value
-+#     of BR2_TARGET_ROOTFS_ISO9660_INITRD).
-+
- ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
- 
--ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
-+ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux
- 
--ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
--define ROOTFS_ISO9660_SPLASHSCREEN
--	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
-+ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-+ROOTFS_ISO9660_USE_INITRD = YES
-+endif
-+
-+ifeq ($(BR2_TARGET_ROOTFS_ISO9660_INITRD),y)
-+ROOTFS_ISO9660_USE_INITRD = YES
-+endif
-+
-+ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
-+ROOTFS_ISO9660_TARGET_DIR = $(BUILD_DIR)/rootfs-iso9660.tmp
-+define ROOTFS_ISO9660_CREATE_TEMPDIR
-+	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
-+	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
- endef
- else
--define ROOTFS_ISO9660_SPLASHSCREEN
-+ROOTFS_ISO9660_TARGET_DIR = $(TARGET_DIR)
-+endif
-+
-+define ROOTFS_ISO9660_PREPARATION
-+	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
-+	$(INSTALL) -D -m 0644 $(ROOTFS_ISO9660_BOOT_MENU) \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
-+endef
-+
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
-+
-+# Splash screen disabling
-+ifeq ($(BR2_TARGET_GRUB_SPLASH),)
-+define ROOTFS_ISO9660_DISABLE_SPLASHSCREEN
- 	$(SED) '/^splashimage/d' $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
- endef
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_SPLASHSCREEN
- endif
- 
--ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
--define ROOTFS_ISO9660_INITRD
-+define ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
- 	$(SED) '/__INITRD_PATH__/d'  $(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
- endef
-+
-+ifeq ($(ROOTFS_ISO9660_USE_INITRD),YES)
-+
-+# Copy splashscreen to temporary filesystem
-+ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
-+define ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
-+	$(INSTALL) -D -m 0644 $(TARGET_DIR)/boot/grub/splash.xpm.gz \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
-+endef
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_INSTALL_SPLASHSCREEN
-+endif
-+
-+# Copy the kernel to temporary filesystem
-+define ROOTFS_ISO9660_COPY_KERNEL
-+	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
-+endef
-+
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_COPY_KERNEL
-+
-+# If initramfs is used, disable loading the initrd as the rootfs is
-+# already inside the kernel image. Otherwise, make sure a cpio is
-+# generated and use it as the initrd.
-+ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
- else
--define ROOTFS_ISO9660_INITRD
-+ROOTFS_ISO9660_DEPENDENCIES += rootfs-cpio
-+define ROOTFS_ISO9660_COPY_INITRD
- 	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/rootfs.cpio$(ROOTFS_CPIO_COMPRESS_EXT) \
- 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/initrd
- 	$(SED) "s%__INITRD_PATH__%/boot/initrd%" \
- 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
- endef
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_COPY_INITRD
- endif
- 
--define ROOTFS_ISO9660_PREPARATION
--	$(RM) -rf $(ROOTFS_ISO9660_TARGET_DIR)
--	mkdir -p $(ROOTFS_ISO9660_TARGET_DIR)
--	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
--	$(INSTALL) -D -m 0644 $(ROOTFS_ISO9660_BOOT_MENU) \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
--	$(INSTALL) -D -m 0644 $(LINUX_IMAGE_PATH) \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
--	$(SED) "s%__KERNEL_PATH__%/boot/$(LINUX_IMAGE_NAME)%" \
--		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/menu.lst
--	$(ROOTFS_ISO9660_SPLASHSCREEN)
--	$(ROOTFS_ISO9660_INITRD)
--endef
-+else # ROOTFS_ISO9660_USE_INITRD
-+
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_DISABLE_EXTERNAL_INITRD
-+
-+endif # ROOTFS_ISO9660_USE_INITRD
- 
--ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_PREPARATION
- 
- define ROOTFS_ISO9660_CMD
- 	$(HOST_DIR)/usr/bin/genisoimage -J -R -b boot/grub/stage2_eltorito \
-diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
-index 8e8309f..eb1ecef 100644
---- a/fs/iso9660/menu.lst
-+++ b/fs/iso9660/menu.lst
-@@ -12,7 +12,7 @@ foreground 	000000
- background 	cccccc
- 
- title		Buildroot ISO9660 image
--kernel		__KERNEL_PATH__
-+kernel		__KERNEL_PATH__ root=/dev/sr0
- initrd		__INITRD_PATH__
- 
- title		Hard Drive (first partition)
+ $(eval $(autotools-package))
+-
+-# After we called a package infra, we can include more files
+-include $(sort $(wildcard package/matchbox/*/*.mk))
