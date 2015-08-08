@@ -1,68 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] glog: disable on blackfin
-	external toolchains
-Message-ID: <20150808105615.B57E17FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libaio: introduce a
+	BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS option
+Message-ID: <20150808105615.910F97FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b198722a5cfdf2ad5fd5a243aaa5f9f730b0101
+commit: http://git.buildroot.net/buildroot/commit/?id=e8fee6382430f36470a12b84ebb696dcf2a13ae7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With following blackfin toolchains
+In order to allow other packages to easily select libaio without
+duplicating its complicated architecture dependencies, this commit
+introduces a BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS blind option.
 
-BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
-
-when BR2_BINFMT_FDPIC=y
-
-../usr/include/bits/elf-fdpic.h: In function 'void* __reloc_pointer(void*, const elf32_fdpic_loadmap*)':
-../usr/include/bits/elf-fdpic.h:95: error: invalid use of 'void'
-
-code snippet at line 95 in elf-fdpic.h
--------------------------------------------------------
-unsigned long offset = p - (void*)map->segs[c].p_vaddr;
--------------------------------------------------------
-
-void pointer addition and subtraction is not allowed in C++ as it has undetermined size,
-however in C with language extension it is possible because sizeof void is treated
-as one byte.
-
-This is toolchain-specific issue. So disable package on these external toolchains.
-
-fixes:
-http://autobuild.buildroot.net/results/c70/c704c70ae2f066f85dd6a5fa6a73789bc358d368/
-
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/glog/Config.in |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/blktrace/Config.in      |    6 +-----
+ package/gadgetfs-test/Config.in |    6 +-----
+ package/libaio/Config.in        |   11 +++++++----
+ 3 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/package/glog/Config.in b/package/glog/Config.in
-index 534997a..3f54020 100644
---- a/package/glog/Config.in
-+++ b/package/glog/Config.in
-@@ -3,11 +3,18 @@ config BR2_PACKAGE_GLOG
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	# build issues with these external toolchains
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+diff --git a/package/blktrace/Config.in b/package/blktrace/Config.in
+index 09c95eb..ed5d78a 100644
+--- a/package/blktrace/Config.in
++++ b/package/blktrace/Config.in
+@@ -2,11 +2,7 @@ config BR2_PACKAGE_BLKTRACE
+ 	bool "blktrace"
+ 	# Uses posix_spawn()
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+-	# Because of libaio arch depends
+-	depends on \
+-		BR2_arm   || BR2_armeb || BR2_i386   || \
+-		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
+-		BR2_sparc || BR2_x86_64
++	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBAIO
  	help
- 	  C++ implementation of the Google logging module
+ 	  blktrace is a block layer IO tracing mechanism which provides
+diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
+index 38358f2..9a60306 100644
+--- a/package/gadgetfs-test/Config.in
++++ b/package/gadgetfs-test/Config.in
+@@ -8,12 +8,8 @@ if BR2_PACKAGE_GADGETFS_TEST
  
- 	  https://github.com/google/glog
- 
- comment "glog needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
+ config BR2_PACKAGE_GADGETFS_TEST_USE_AIO
+ 	bool "use asynchronous i/o"
++	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBAIO
+-	# libaio is available only on few architectures
+-	depends on \
+-		BR2_arm   || BR2_armeb || BR2_i386   || \
+-		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
+-		BR2_sparc || BR2_x86_64
+ 	help
+ 	  Select this to have gadgetfs-test do asynchronous I/O using
+ 	  the libaio library.
+diff --git a/package/libaio/Config.in b/package/libaio/Config.in
+index 622fd55..cc44cb6 100644
+--- a/package/libaio/Config.in
++++ b/package/libaio/Config.in
+@@ -1,8 +1,11 @@
++config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb || BR2_i386 || \
++		BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
++		BR2_sparc || BR2_x86_64
++
+ config BR2_PACKAGE_LIBAIO
+ 	bool "libaio"
+-	depends on \
+-		BR2_arm   || BR2_armeb || BR2_i386   || \
+-		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
+-		BR2_sparc || BR2_x86_64
++	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	help
+ 	  Library for doing asynchronous I/O
