@@ -1,55 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] fs/iso9660: change the
-	location of the splash image
-Message-ID: <20150808105610.527807F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/upmpdcli: bump to
+	version 0.11.0
+Message-ID: <20150808105610.1B1017F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61db081ca1c4dddb37489a135964af953d2afd57
+commit: http://git.buildroot.net/buildroot/commit/?id=1b601a2f3db80521c87a841ca74e609183e3428a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In order to simplify the introduction of the support for using ISO9660
-as the real root filesystem, this commit changes the location of the
-grub splash image. This makes it match where the splash image is
-located in $(TARGET_DIR), so that regardless of whether the
-initrd/initramfs solution or the real iso9660 filesystem solution are
-used, the splash image is installed at the same location.
+upmpdcli 0.11.0 requires libupnpp 0.11.0 and does not build with the previous
+version 0.8.6 of libupnpp.
 
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/iso9660.mk |    2 +-
- fs/iso9660/menu.lst   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/upmpdcli/upmpdcli.hash |    4 ++--
+ package/upmpdcli/upmpdcli.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 54b1653..b3e6b9d 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -12,7 +12,7 @@ ROOTFS_ISO9660_DEPENDENCIES = grub host-cdrkit host-fakeroot linux rootfs-cpio
- ifeq ($(BR2_TARGET_GRUB_SPLASH),y)
- define ROOTFS_ISO9660_SPLASHSCREEN
- 	$(INSTALL) -D -m 0644 boot/grub/splash.xpm.gz \
--		$(ROOTFS_ISO9660_TARGET_DIR)/splash.xpm.gz
-+		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/splash.xpm.gz
- endef
- else
- define ROOTFS_ISO9660_SPLASHSCREEN
-diff --git a/fs/iso9660/menu.lst b/fs/iso9660/menu.lst
-index c0bbff6..fd5c76a 100644
---- a/fs/iso9660/menu.lst
-+++ b/fs/iso9660/menu.lst
-@@ -5,7 +5,7 @@ timeout		10
- color 		cyan/blue white/blue
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index b3a793b..549945e 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.8.6.tar.gz.sha256
+-sha256 118d30d7c8ca9f9e94cebdec5cf8c7c619b71252a0dbac2afe30d5c9ff5bda87  upmpdcli-0.8.6.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.11.0.tar.gz.sha256
++sha256 0f064b7fe498ee56879e606f48b7bafa42381d25fda6b91ef2cb3677effc85b9  upmpdcli-0.11.0.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index a5c6370..5e4d6a8 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Gets enabled/disabled depending on Grub support for splashimage
--splashimage	/splash.xpm.gz
-+splashimage	/boot/grub/splash.xpm.gz
- 
- # Used when a splashimage is enabled
- foreground 	000000
+-UPMPDCLI_VERSION = 0.8.6
++UPMPDCLI_VERSION = 0.11.0
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
