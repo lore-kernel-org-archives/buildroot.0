@@ -1,41 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] modem-manager: bump to 1.4.10
-Message-ID: <20150808105637.E3B1A80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/exim: use libnsl only
+	with glibc
+Message-ID: <20150808105618.82BA97F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f582da2851ee3cab862dc512738f907b416132a
+commit: http://git.buildroot.net/buildroot/commit/?id=00e98e69b4a0134823bcc4b626eafb16e77ae4b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Only (e)glibc provides libnsl, uclibc provides only a stub, and musl
+doesn't implement it at all.
+
+Fixes compilation using this defconfig
+
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_STATIC_LIBS=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_OPENSSL=y
+    BR2_PACKAGE_EXIM=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/modem-manager/modem-manager.hash |    2 +-
- package/modem-manager/modem-manager.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/exim/exim.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 5935cba..e3b6ae6 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  d951eaffbe513bcde54f90602c6c423a49593f656d6485ba95f6fcb4bc1e8003  ModemManager-1.4.8.tar.xz
-+sha256  107ba0b4d0749aebb0347691a39f60891cc6004aeca8b2128d69c50557049a63  ModemManager-1.4.10.tar.xz
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 97dddfe..0e6b36a 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index b852793..8ad0328 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -72,6 +72,14 @@ define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
+ endef
+ endif
  
--MODEM_MANAGER_VERSION = 1.4.8
-+MODEM_MANAGER_VERSION = 1.4.10
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
++# only (e)glibc provides libnsl, remove -lnsl for all other toolchains
++# http://bugs.exim.org/show_bug.cgi?id=1564
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
++define EXIM_REMOVE_LIBNSL_FROM_MAKEFILE
++	$(SED) 's/-lnsl//g' $(@D)/OS/Makefile-Linux
++endef
++endif
++
+ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,CC,$(TARGET_CC))
+ 	$(call exim-config-add,CFLAGS,$(TARGET_CFLAGS))
