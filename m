@@ -1,74 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:23 -0000
-Subject: [Buildroot] [git commit branch/next] libsodium: new package
-Message-ID: <20150808105625.298837FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libfcgi: link with libm when
+	needed
+Message-ID: <20150808105625.3BB9880414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03b5b63c248e9532c80b4363c6825a3f36c73167
+commit: http://git.buildroot.net/buildroot/commit/?id=51c9ee06553a533e1404ee512c998b15f4b73fa2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+libfcgi uses frexp() and thus should link with libm, but fails to do
+so.  Thus link errors with programs that use libfcgi (the bug does
+appear only with uClibc, because the GNU libc provides frexp()
+directly in libc.so).  Modify 0003-link-against-math.patch so libfcgi
+links against math, instead of programs that need it.
+
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |    1 +
- package/libsodium/Config.in      |    6 ++++++
- package/libsodium/libsodium.hash |    2 ++
- package/libsodium/libsodium.mk   |   13 +++++++++++++
- 4 files changed, 22 insertions(+), 0 deletions(-)
+ package/libfcgi/0003-link-against-math.patch |   36 ++++++++-----------------
+ 1 files changed, 12 insertions(+), 24 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4df5cdb..9f04b54 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -730,6 +730,7 @@ menu "Crypto"
- 	source "package/libnss/Config.in"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
-+	source "package/libsodium/Config.in"
- 	source "package/libssh2/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-diff --git a/package/libsodium/Config.in b/package/libsodium/Config.in
-new file mode 100644
-index 0000000..47b9bb3
---- /dev/null
-+++ b/package/libsodium/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBSODIUM
-+	bool "libsodium"
-+	help
-+	  A modern and easy-to-use crypto library.
-+
-+	  http://libsodium.org/
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-new file mode 100644
-index 0000000..089dc03
---- /dev/null
-+++ b/package/libsodium/libsodium.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	cbcfc63cc90c05d18a20f229a62c7e7054a73731d0aa858c0517152c549b1288	libsodium-1.0.3.tar.gz
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-new file mode 100644
-index 0000000..c032863
---- /dev/null
-+++ b/package/libsodium/libsodium.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libsodium
-+#
-+################################################################################
-+
-+LIBSODIUM_VERSION = 1.0.3
-+LIBSODIUM_SITE = https://github.com/jedisct1/libsodium/releases/download/$(LIBSODIUM_VERSION)
-+LIBSODIUM_LICENSE = ISC
-+LIBSODIUM_LICENSE_FILES = LICENSE
-+LIBSODIUM_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+diff --git a/package/libfcgi/0003-link-against-math.patch b/package/libfcgi/0003-link-against-math.patch
+index 4c87ea6..c60c6d5 100644
+--- a/package/libfcgi/0003-link-against-math.patch
++++ b/package/libfcgi/0003-link-against-math.patch
+@@ -1,28 +1,16 @@
+-Link against math libraries when needed
++Link libfcgi against the math library.
+ 
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ 
+-Index: b/cgi-fcgi/Makefile.am
++Index: b/libfcgi/Makefile.am
+ ===================================================================
+---- a/cgi-fcgi/Makefile.am
+-+++ b/cgi-fcgi/Makefile.am
+-@@ -11,5 +11,5 @@
+- LIBDIR      = ../libfcgi
+- LIBFCGI     = $(LIBDIR)/libfcgi.la
++--- a/libfcgi/Makefile.am
+++++ b/libfcgi/Makefile.am
++@@ -18,6 +18,7 @@
++                      os_ at SYSTEM@.c
++ libfcgi_la_CC      = @PTHREAD_CC@
++ libfcgi_la_CFLAGS  = @PTHREAD_CFLAGS@
+++libfcgi_la_LIBADD  = -lm
+  
+--LDADD = $(LIBFCGI)
+-+LDADD = $(LIBFCGI) -lm
+- cgi_fcgi_SOURCES = $(INCLUDE_FILES) cgi-fcgi.c
+-Index: b/examples/Makefile.am
+-===================================================================
+---- a/examples/Makefile.am
+-+++ b/examples/Makefile.am
+-@@ -21,7 +21,7 @@
+- LIBDIR      = ../libfcgi
+- LIBFCGI     = $(LIBDIR)/libfcgi.la
+- 
+--LDADD = $(LIBFCGI)
+-+LDADD = $(LIBFCGI) -lm
+- 
+- echo_SOURCES       = $(INCLUDE_FILES) echo.c
+- echo_x_SOURCES     = $(INCLUDE_FILES) echo-x.c
++ libfcgi___la_SOURCES = $(INCLUDE_FILES)       \
++                        $(INCLUDEDIR)/fcgio.h  \
