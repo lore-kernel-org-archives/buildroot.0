@@ -1,58 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:18 -0000
-Subject: [Buildroot] [git commit branch/next] configs: add defconfig for
-	Atmel at91sam9x5ek
-Message-ID: <20150808105617.66CA87F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] iproute2: drop unneeded Werror
+	handling
+Message-ID: <20150808105601.AEA677F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed9f7bca81fc5a24e2304b8c3850ab5f4996e217
+commit: http://git.buildroot.net/buildroot/commit/?id=8e881e2def46b20b5e60bae0c3afe6dd1f02ecb4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This supports:
- - at91sam9g15ek
- - at91sam9g25ek
- - at91sam9g35ek
- - at91sam9x25ek
- - at91sam9x35ek
+Upstream has dropped -Werror since the 3.12 release, so there's no point in
+us sed'ing it away:
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+https://git.kernel.org/cgit/linux/kernel/git/shemminger/iproute2.git/commit/?id=3140e9a3a343d37a8d828ee27e16ad9f3f9ab389
+
+Reported-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/at91sam9x5ek_defconfig |   25 +++++++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/configs/at91sam9x5ek_defconfig b/configs/at91sam9x5ek_defconfig
-new file mode 100644
-index 0000000..98c5a3e
---- /dev/null
-+++ b/configs/at91sam9x5ek_defconfig
-@@ -0,0 +1,25 @@
-+BR2_arm=y
-+BR2_arm926t=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.18"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91sam9g15ek at91sam9g25ek at91sam9g35ek at91sam9x25ek at91sam9x35ek"
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="at91sam9x5eknf_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="at91sam9x5ek_nandflash"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
-+BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 49b1fdc..a8f4400 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -51,7 +51,6 @@ endif
+ define IPROUTE2_CONFIGURE_CMDS
+ 	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+-	$(SED) 's/-Werror//' $(IPROUTE2_DIR)/Makefile
+ 	$(IPROUTE2_DISABLE_ARPD)
+ 	$(IPROUTE2_WITH_IPTABLES)
+ endef
