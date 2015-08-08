@@ -1,69 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: finally add
-	prompts to all sub-packages
-Message-ID: <20150808105607.2AF167F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tzdata: bump version
+	to 2015e
+Message-ID: <20150808105609.E4A4D7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7cfcf4c1aefda0f03db945e3fb0f39e3d5d8da4
+commit: http://git.buildroot.net/buildroot/commit/?id=fb69379a9ca9567d029837e68790aa4fbe30f315
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We currently do not have that many packages without a prompt, and when
-we do, they are limited to system-related packages that can't be
-selected or are forcibly selected under various system-specific
-conditions.
-
-This is clearly not the case for the matchbox sub-packages, so just give
-them a prompt, even when they are forcibly selected by the main matchbox
-package, and can't be selected without it.
-
-That will at least tell the user those packages exist and are to be
-built.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox-fakekey/Config.in         |    4 +++-
- package/matchbox-lib/Config.in             |    4 +++-
- package/matchbox-startup-monitor/Config.in |    4 +++-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ package/tzdata/tzdata.hash |    4 ++--
+ package/tzdata/tzdata.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
-index 97413ab..1a1f134 100644
---- a/package/matchbox-fakekey/Config.in
-+++ b/package/matchbox-fakekey/Config.in
-@@ -1,4 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_FAKEKEY
--	bool
-+	bool "matchbox-fakekey"
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	select BR2_PACKAGE_XLIB_LIBXTST
-+	help
-+	  Library for simulating key press events under X11.
-diff --git a/package/matchbox-lib/Config.in b/package/matchbox-lib/Config.in
-index 480e6fe..e50a543 100644
---- a/package/matchbox-lib/Config.in
-+++ b/package/matchbox-lib/Config.in
-@@ -1,2 +1,4 @@
- config BR2_PACKAGE_MATCHBOX_LIB
--	bool
-+	bool "matchbox-lib"
-+	help
-+	  Matchbox common functionality library.
-diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
-index 522d7f7..15dac60 100644
---- a/package/matchbox-startup-monitor/Config.in
-+++ b/package/matchbox-startup-monitor/Config.in
-@@ -1,4 +1,6 @@
- config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
--	bool
-+	bool "matchbox-startup-monitor"
- 	select BR2_PACKAGE_MATCHBOX_LIB
- 	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
-+	help
-+	  Matchbox Panel Startup Monitor Applet.
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index d02829a..091f57c 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,2 @@
+-# Locally computed
+-sha256  860fac5f5f57f7a2dfc1ba682dbd1f5c0f0b597f761571277b6ed6561e22365a  tzdata2015c.tar.gz
++# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
++sha512  86498190a20c5c67827aa75f7e9c6aa6c19d58a88a70425ce70d5ae7cea42dc7386eb2867fa455fcfcdedc6a105ad70fbbdc7c27c7a58a51bd21d76a135983ce  tzdata2015e.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index d8512a3..eb6da6c 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2015c
++TZDATA_VERSION = 2015e
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+ TZDATA_DEPENDENCIES = host-tzdata
