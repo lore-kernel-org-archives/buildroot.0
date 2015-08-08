@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] tor: needs thread support
-Message-ID: <20150808105615.EA3BF7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] olsr: needs dynamic library
+	support
+Message-ID: <20150808105605.ABC8F7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49565a282ad6a9f6f04a184407ce04f9c4772e9c
+commit: http://git.buildroot.net/buildroot/commit/?id=07c170dc794a9dcf720854b98fbc7496d318392f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes:
+http://autobuild.buildroot.net/results/08a/08a29bc48667f10d6dce4cb5cbb1ae6bec009e2c/
+http://autobuild.buildroot.net/results/33e/33e69998d152f819176c7aa3028a962dd32c1daf/
+http://autobuild.buildroot.net/results/e7a/e7aabfc9e80bd36958c6deeb5b02d5ef97629ae4/
 
-  http://autobuild.buildroot.org/results/4f7/4f758978f6820ecceaad57385f3c104011180c4d/
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tor/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/olsr/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/Config.in b/package/tor/Config.in
-index d44bd9f..3400dce 100644
---- a/package/tor/Config.in
-+++ b/package/tor/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TOR
- 	bool "tor"
+diff --git a/package/olsr/Config.in b/package/olsr/Config.in
+index 70e5a48..a49c4e0 100644
+--- a/package/olsr/Config.in
++++ b/package/olsr/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OLSR
+ 	bool "olsrd"
  	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -12,3 +13,7 @@ config BR2_PACKAGE_TOR
- 	  state security.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  The Optimized Link State Routing protocol (OLSR) is a
+ 	  routing protocol that is optimised for mobile ad-hoc
+@@ -12,6 +13,6 @@ config BR2_PACKAGE_OLSR
  
- 	  https://www.torproject.org
-+
-+comment "tor needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 	  http://www.olsr.org/
+ 
+-comment "olsr needs a toolchain w/ threads"
++comment "olsr needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
