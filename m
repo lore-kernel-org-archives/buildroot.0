@@ -1,74 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:38 -0000
-Subject: [Buildroot] [git commit branch/next] package/owl-linux: use
+Subject: [Buildroot] [git commit branch/next] package/sysdig: use
 	kernel-module helper
-Message-ID: <20150808105628.60D7C7FC31@busybox.osuosl.org>
+Message-ID: <20150808105628.71E9A7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b5c2e658f3c35a6378a02736d1057ed1bef464b
+commit: http://git.buildroot.net/buildroot/commit/?id=6391bfd76b3733a49e1bfd96e22ffaaf36db509a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The owl-linux' Makefile is only calling the Linux buildsystem, so switch
-do using the new kernel-module infra.
+sysdig's Makefile was already calling the Linux buildsystem to build its
+modules, so switch to using the new kernel-module infra.
 
-Get rid of first patch, no longer needed; rename remaining patch.
+This has the benefit of making sysdig actually buildable, otherwise it
+fails because it tries to use the kernel headers from the host:
+
+    make: *** /lib/modules/3.13.0-53-generic/build: No such file or directory.  Stop.
+    make[5]: *** [all] Error 2
+    make[4]: *** [driver/CMakeFiles/driver] Error 2
+    make[3]: *** [driver/CMakeFiles/driver.dir/all] Error 2
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-CROSS_COMPILE-usage-in-Makefile.patch |   16 ----------------
- ...-3.3.x.patch => 0001-fix-for-linux-3.3.x.patch} |    0
- package/owl-linux/owl-linux.mk                     |   11 +----------
- 3 files changed, 1 insertions(+), 26 deletions(-)
+ package/sysdig/sysdig.mk |   22 ++++++++++++++++++----
+ 1 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch b/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
-deleted file mode 100644
-index 14b4631..0000000
---- a/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Fix the owl-linux Makefile so that it protects spaces in the CROSS_COMPILE
--variable. For example, this variable will contain spaces if ccache is used.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--diff -Nurp a/Makefile b/Makefile
----- a/Makefile	2012-06-14 10:51:45.000000000 +0100
--+++ b/Makefile	2012-07-20 10:46:41.636752148 +0100
--@@ -35,7 +35,7 @@ else
-- 	PWD := $(shell pwd)
-- 
-- default:
---	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) M=$(PWD) MODE=$(MODE) modules
--+	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" M=$(PWD) MODE=$(MODE) modules
-- 
-- clean: 
-- 	-rm -f *.o *.mod.c *.ko modules.order Module.symvers
-diff --git a/package/owl-linux/0002-fix-for-linux-3.3.x.patch b/package/owl-linux/0001-fix-for-linux-3.3.x.patch
-similarity index 100%
-rename from package/owl-linux/0002-fix-for-linux-3.3.x.patch
-rename to package/owl-linux/0001-fix-for-linux-3.3.x.patch
-diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
-index 371cc02..1262425 100644
---- a/package/owl-linux/owl-linux.mk
-+++ b/package/owl-linux/owl-linux.mk
-@@ -10,14 +10,5 @@ OWL_LINUX_LICENSE = PROPRIETARY
- OWL_LINUX_LICENSE_FILES = LICENSE
- OWL_LINUX_REDISTRIBUTE = NO
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index d07d467..85d16a4 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -10,13 +10,27 @@ SYSDIG_LICENSE = GPLv2
+ SYSDIG_LICENSE_FILES = COPYING
+ SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
+ 	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF
+-SYSDIG_DEPENDENCIES = zlib luajit jsoncpp linux
++SYSDIG_DEPENDENCIES = zlib luajit jsoncpp
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
  
--OWL_LINUX_DEPENDENCIES = linux
--
--define OWL_LINUX_BUILD_CMDS
--	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
--endef
--
--define OWL_LINUX_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
--endef
--
+-define SYSDIG_INSTALL_DRIVER
+-	$(MAKE) -C $(SYSDIG_BUILDDIR) $(LINUX_MAKE_FLAGS) KERNELDIR="$(LINUX_DIR)" install_driver
++# sysdig creates the module Makefile from a template, which contains a
++# single place-holder, KBUILD_FLAGS, wich is only replaced with two
++# things:
++#   - debug flags, which we don't care about here,
++#   - 'sysdig-feature' flags, which are never set, so always empty
++# So, just replace the place-holder with the only meaningful value: nothing.
++define SYSDIG_MODULE_GEN_MAKEFILE
++	$(INSTALL) -m 0644 $(@D)/driver/Makefile.in $(@D)/driver/Makefile
++	$(SED) 's/@KBUILD_FLAGS@//;' $(@D)/driver/Makefile
+ endef
++SYSDIG_POST_PATCH_HOOKS += SYSDIG_MODULE_GEN_MAKEFILE
+ 
+-SYSDIG_POST_INSTALL_TARGET_HOOKS += SYSDIG_INSTALL_DRIVER
++# Don't build the driver as part of the 'standard' procedure, we'll
++# build it on our own with the kernel-module infra.
++SYSDIG_CONF_OPTS += -DBUILD_DRIVER=OFF
+ 
++SYSDIG_MODULE_SUBDIRS = driver
++SYSDIG_MODULE_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
++
 +$(eval $(kernel-module))
- $(eval $(generic-package))
+ $(eval $(cmake-package))
