@@ -1,87 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:40 -0000
-Subject: [Buildroot] [git commit branch/next] libucl: new package
-Message-ID: <20150808105614.7E1807F9A6@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:41 -0000
+Subject: [Buildroot] [git commit branch/next] toolchain-external: improve
+	lib subdirectory matching
+Message-ID: <20150808105630.811FA7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da27b28838b287c263f3c7818195bc62f22967da
+commit: http://git.buildroot.net/buildroot/commit/?id=bacf2157193c1565f37c260685a03426a1be5656
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Libucl is a high performance and flexible JSON/YAML/etc. parser for C.
+The toolchain from the Cavium Networks Octeon SDK provides a sysroot
+with library directories lib32, lib32-fp, lib64 and lib64-fp. The -fp
+variants are used for processors with hardware floating point unit, such
+as the Octeon III variants.
 
-https://github.com/vstakhov/libucl
+When specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, the toolchain
+will use lib32-fp, but currently Buildroot does not accept that pattern.
 
-[Thomas:
-  - remove hash file, should not be used for github downloads
-  - rewrap Config.in help text
-  - remove trailing white space in Config.in.
-  - add missing host-pkgconf dependency, without which the package
-    doesn't autoreconf properly.
-  - fix license: it is BSD-2c, not just BSD.]
+This patch improves the matching by accepting lib(32|64)?([^/]*)? as lib
+directory name.
 
-Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+Signed-off-by: Bai Yingjie <byj.tea@gmail.com>
+[ThomasDS: update commit message]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+[Thomas: add comment above the function being modified to illustrate
+the various cases we try to handle.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in        |    1 +
- package/libucl/Config.in |   15 +++++++++++++++
- package/libucl/libucl.mk |   15 +++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk |   17 ++++++++++++++---
+ 1 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fac632f..9dbc98f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -881,6 +881,7 @@ menu "JSON/XML"
- 	source "package/jsoncpp/Config.in"
- 	source "package/libjson/Config.in"
- 	source "package/libroxml/Config.in"
-+	source "package/libucl/Config.in"
- 	source "package/libxml2/Config.in"
- 	source "package/libxmlpp/Config.in"
- 	source "package/libxmlrpc/Config.in"
-diff --git a/package/libucl/Config.in b/package/libucl/Config.in
-new file mode 100644
-index 0000000..a94701e
---- /dev/null
-+++ b/package/libucl/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBUCL
-+	bool "libucl"
-+	help
-+	  Universal configuration library parser
-+
-+	  Libucl is a parser and C API to parse and generate ucl
-+	  objects. Libucl consist of several groups of functions:
-+	  parser, emitting, conversion, generation, iteration,
-+	  validation, and utility. These functions can be used to work
-+	  with several formats: JSON, compact JSON, configuration
-+	  (nginx like), and YAML. Libucl has clear design that should
-+	  be very convenient for reading and writing and makes for an
-+	  ideal parser with high performance.
-+
-+	  https://github.com/vstakhov/libucl
-diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
-new file mode 100644
-index 0000000..3530bbe
---- /dev/null
-+++ b/package/libucl/libucl.mk
-@@ -0,0 +1,15 @@
-+################################################################################
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 070f068..c8dd98f 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -436,15 +436,26 @@ define toolchain_find_libc_a
+ $$(readlink -f $$(LANG=C $(1) -print-file-name=libc.a))
+ endef
+ 
+-# Returns the sysroot location for the given compiler + flags
++# Returns the sysroot location for the given compiler + flags. We need
++# to handle cases where libc.a is in:
 +#
-+# libucl
++#  - lib/
++#  - usr/lib/
++#  - lib32/
++#  - lib64/
++#  - lib32-fp/ (Cavium toolchain)
++#  - lib64-fp/ (Cavium toolchain)
++#  - usr/lib/<tuple>/ (Linaro toolchain)
 +#
-+################################################################################
-+
-+LIBUCL_VERSION = 0.7.3
-+LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
-+LIBUCL_INSTALL_STAGING = YES
-+LIBUCL_AUTORECONF = YES
-+LIBUCL_LICENSE = BSD-2c
-+LIBUCL_LICENSE_FILES = COPYING
-+LIBUCL_DEPENDENCIES = host-pkgconf
-+
-+$(eval $(autotools-package))
++# And variations on these.
+ define toolchain_find_sysroot
+-$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::')
++$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::')
+ endef
+ 
+ # Returns the lib subdirectory for the given compiler + flags (i.e
+ # typically lib32 or lib64 for some toolchains)
+ define toolchain_find_libdir
+-$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:')
++$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?([^/]*)?)/([^/]*/)?libc.a:\2:')
+ endef
+ 
+ # Checks for an already installed toolchain: check the toolchain
