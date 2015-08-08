@@ -1,44 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:47 -0000
-Subject: [Buildroot] [git commit branch/next] vala: bump to version 0.28.0
-Message-ID: <20150808105633.7C29B80414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:48 -0000
+Subject: [Buildroot] [git commit branch/next] rsyslog: Fix systemd service
+	creation
+Message-ID: <20150808105633.9352180414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fb117800f5256e3bc5fb7e096e1a4e2c7ee9e3c
+commit: http://git.buildroot.net/buildroot/commit/?id=0b8e10c2ed913b53646c26424893f43dc42cfa15
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The rsyslog.service is installed by rsyslog, but the link is not created
+so the service is not enabled.
+In order to install the service file, use the correct configure flag.
+
+So the INSTALL_INIT_SYSTEMD will create the link, it will also create
+another link which is due to the fact that the rsyslog.service contains
+an Alias=
+
+If we were to use systemctl enable to enable the service, it would
+create both,so we mimic that.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala.hash |    4 ++--
- package/vala/vala.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/rsyslog/rsyslog.mk |   23 +++++++++++++++++++----
+ 1 files changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index fcaa0e1..063ec21 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
-@@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.26/vala-0.26.2.sha256sum
--sha256	37f13f430c56a93b6dac85239084681fd8f31c407d386809c43bc2f2836e03c4	vala-0.26.2.tar.xz
-+# From https://download.gnome.org/sources/vala/0.28/vala-0.28.0.sha256sum
-+sha256	0d9e3bd3f82145664875f7c29b2f544ba92d2814f75412948f774c0727fc977f	vala-0.28.0.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 573e1e4..9dedd8f 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 261f59d..1de481f 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -57,17 +57,32 @@ else
+ RSYSLOG_CONF_OPTS += --disable-uuid
+ endif
  
--VALA_VERSION_MAJOR = 0.26
--VALA_VERSION = $(VALA_VERSION_MAJOR).2
-+VALA_VERSION_MAJOR = 0.28
-+VALA_VERSION = $(VALA_VERSION_MAJOR).0
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
++ifeq ($(BR2_INIT_SYSTEMD),y)
++RSYSLOG_CONF_OPTS += \
++	--enable-systemd \
++	--with-systemdsystemunitdir=/usr/lib/systemd/system
++RSYSLOG_DEPENDENCIES += systemd
++else
++RSYSLOG_CONF_OPTS += --disable-systemd
++endif
++
+ define RSYSLOG_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rsyslog/S01logging \
+ 		$(TARGET_DIR)/etc/init.d/S01logging
+ endef
+ 
++# The rsyslog.service is installed by rsyslog, but the link is not created
++# so the service is not enabled.
++# We need to create another link which is due to the fact that the
++# rsyslog.service contains an Alias=
++# If we were to use systemctl enable to enable the service, it would
++# create both, so we mimic that.
+ define RSYSLOG_INSTALL_INIT_SYSTEMD
+-	ln -sf /lib/systemd/system/rsyslog.service \
+-		$(TARGET_DIR)/etc/systemd/system/syslog.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -sf ../syslog.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/syslog.service
++	ln -sf ../../../../usr/lib/systemd/system/rsyslog.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/rsyslog.service
++	ln -sf ../../../../usr/lib/systemd/system/rsyslog.service \
++		$(TARGET_DIR)/etc/systemd/system/syslog.service
+ endef
+ 
+ define RSYSLOG_INSTALL_CONF
