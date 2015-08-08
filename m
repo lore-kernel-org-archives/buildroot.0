@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:12 -0000
-Subject: [Buildroot] [git commit branch/next] fs/iso9660: use if ... endif
-	block instead of depends on
-Message-ID: <20150808105610.248077F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] atf: needs mmu
+Message-ID: <20150808105609.575B77F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48229662ce5f01e0765823eca5b53db106ace41a
+commit: http://git.buildroot.net/buildroot/commit/?id=b75c9c13566ad2b89f0b700d71c271ec8c6629a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In preparation to the addition of numerous additional options to the
-iso9660 filesystem logic, use a if ... endif block instead of a
-depends on for the only option that currently exists.
+Fixes:
+http://autobuild.buildroot.net/results/950/95069436dd5b2004e59851b8c731d534b86062a5/
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/iso9660/Config.in |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/atf/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 50b4377..9d00ab8 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -8,11 +8,14 @@ config BR2_TARGET_ROOTFS_ISO9660
+diff --git a/package/atf/Config.in b/package/atf/Config.in
+index 59712ab..43a5d4f 100644
+--- a/package/atf/Config.in
++++ b/package/atf/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_ATF
+ 	bool "atf"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
  	help
- 	  Build a bootable iso9660 image
+ 	  ATF, or Automated Testing Framework, is a collection of
+ 	  libraries to write test programs in C, C++ and POSIX shell.
+@@ -9,3 +10,4 @@ config BR2_PACKAGE_ATF
  
-+if BR2_TARGET_ROOTFS_ISO9660
-+
- config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	string "Boot menu.lst file"
--	depends on BR2_TARGET_ROOTFS_ISO9660
- 	default "fs/iso9660/menu.lst"
- 
-+endif
-+
- comment "iso image needs a Linux kernel to be built"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_LINUX_KERNEL
+ comment "atf needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU
