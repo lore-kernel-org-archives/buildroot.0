@@ -1,116 +1,112 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] Update for 2015.05-rc3
-Message-ID: <20150808105601.204117FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/iso9660: add support for
+	grub2
+Message-ID: <20150808105610.A246D7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6ce119cb060941da65d254c1344aa123baf541c
+commit: http://git.buildroot.net/buildroot/commit/?id=795df97093a0cb027bc0c844f06778c936084abe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                    |   27 +++++++++++++++++++++++++++
- Makefile                   |    2 +-
- docs/website/download.html |   10 +++++-----
- docs/website/news.html     |   12 ++++++++++++
- 4 files changed, 45 insertions(+), 6 deletions(-)
+After having extended the iso9660 support to allow isolinux as an
+alternative to grub, this commit adds grub2 as a third
+alternative. With the previous work done to support isolinux, adding
+support for grub2 is fairly trivial.
 
-diff --git a/CHANGES b/CHANGES
-index 11895e6..e554d57 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,30 @@
-+2015.05-rc3, Released May 22nd, 2015
-+
-+	Several fixes, mainly related to static linking.
-+
-+	Updated/fixed packages: acl, alsa-utils, apr, armadillo, attr,
-+	autoconf-archive, binutils, boost, czmq, dhcpcd, duma,
-+	enlightenment, exim, fbterm, freerdp, gcc, gdk-pixbuf,
-+	google-breakpad, gpsd, heirloom-mailx, hwloc, ipmiutil,
-+	iproute2, jack2, jasper, kmod, lcdproc, leafnode2, libcap-ng,
-+	libftdi1, libmatroska, libmemcached, libmodbus, libnftnl,
-+	libsigrok, libupnpp, libuv, libxml-parser-perl, linux,
-+	linux-headers, lirc-tools, lua-periphery, lxc, mongoose, mono,
-+	mpg123, mosquitto, neardal, newt, ntp, ola, openldap, opencv,
-+	php, postgresql, protobuf, pulseaudio, python-pyqt, qemu, qt,
-+	qt5base, rpi-userland, rsyslog, snmppp, sqlite, tiff,
-+	tinyxml2, uboot-tools, unionfs, ux5000-firmware, usbredir,
-+	ushare, vpnc, vsftpd, wavpack, wireless_tools, wsapi,
-+	wvstreams, xmlstarlet, zeromq, zmqpp
-+
-+	New packages: c-periphery
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#8106: mkfs.jffs2 uses the --pagesize parameter incorrectly
-+	#8111: 2015.05.rc2 LIBFOO_CONF_OPTS not working
-+	#8126: exim lacks plaintext and cram-md5 auth
-+
- 2015.05-rc2, Released May 11th, 2015
+[Thomas: set timeout to 10 seconds and not 5 seconds, in order to
+match the configuration used for grub.]
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ fs/iso9660/Config.in  |   18 +++++++++++++++---
+ fs/iso9660/grub.cfg   |    7 +++++++
+ fs/iso9660/iso9660.mk |    9 +++++++++
+ 3 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 6f057ea..7e1ddd6 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -2,7 +2,9 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	bool "iso image"
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_LINUX_KERNEL
+-	depends on BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX
++	depends on BR2_TARGET_GRUB || \
++		BR2_TARGET_GRUB2 || \
++		BR2_TARGET_SYSLINUX_ISOLINUX
+ 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
+ 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
+ 	help
+@@ -29,6 +31,15 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB
+ 	depends on BR2_TARGET_GRUB
+ 	select BR2_TARGET_GRUB_FS_ISO9660
  
- 	Minor fixes.
-diff --git a/Makefile b/Makefile
-index 5c4293b..cf244d7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -28,7 +28,7 @@
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2015.05-rc2
-+export BR2_VERSION := 2015.05-rc3
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION = 3.81
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 9362ccf..640800e 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -18,14 +18,14 @@ or
- 
- <p>
- 
--The latest release candidate is <b>2015.05-rc2</b>, which can be
-+The latest release candidate is <b>2015.05-rc3</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2015.05-rc2.tar.gz">buildroot-2015.05-rc2.tar.gz</a>
--(<a href="/downloads/buildroot-2015.05-rc2.tar.gz.sign">PGP signature</a>)
-+<a href="/downloads/buildroot-2015.05-rc3.tar.gz">buildroot-2015.05-rc3.tar.gz</a>
-+(<a href="/downloads/buildroot-2015.05-rc3.tar.gz.sign">PGP signature</a>)
- or
--<a href="/downloads/buildroot-2015.05-rc2.tar.bz2">buildroot-2015.05-rc2.tar.bz2</a>
--(<a href="/downloads/buildroot-2015.05-rc2.tar.bz2.sign">PGP signature</a>).
-+<a href="/downloads/buildroot-2015.05-rc3.tar.bz2">buildroot-2015.05-rc3.tar.bz2</a>
-+(<a href="/downloads/buildroot-2015.05-rc3.tar.bz2.sign">PGP signature</a>).
- <p>
- 
- This and earlier releases (and their PGP signatures) can always be downloaded from
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 6ca5647..39fe693 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -8,6 +8,18 @@
- <p>
- 
- <ul>
-+ <li><b>22 May 2015 -- 2015.05-rc3 released</b>
++config BR2_TARGET_ROOTFS_ISO9660_GRUB2
++	bool "grub2"
++	depends on BR2_TARGET_GRUB2
++	help
++	  Use Grub 2 as the bootloader for the ISO9660 image. Make
++	  sure to enable the 'iso9660' module in
++	  BR2_TARGET_GRUB2_BUILTIN_MODULES and to use 'cd' as the boot
++	  partition in BR2_TARGET_GRUB2_BOOT_PARTITION=.
 +
-+    <p>Release candidate 3 is out with more cleanups and security / build fixes. See the <a
-+    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc3">CHANGES</a>
-+    file for details.</p>
-+
-+    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2015.02-rc5.tar.bz2">2015.05-rc3
-+    release candidate</a>, and report any problems found to the <a
-+    href="lists.html">mailing list</a> or <a
-+    href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>11 May 2015 -- 2015.05-rc2 released</b>
+ config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+ 	bool "isolinux"
+ 	depends on BR2_TARGET_SYSLINUX_ISOLINUX
+@@ -38,6 +49,7 @@ endchoice
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	string "Boot menu.lst file"
+ 	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
++	default "fs/iso9660/grub.cfg" if BR2_TARGET_ROOTFS_ISO9660_GRUB2
+ 	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+ 	help
+ 	  Use this option to provide a custom bootloader configuration
+@@ -69,7 +81,7 @@ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
  
-     <p>Another week, another release candidate with more cleanups and
+ endif
+ 
+-comment "iso image needs a Linux kernel and one of grub or isolinux to be built"
++comment "iso image needs a Linux kernel and one of grub, grub2 or isolinux to be built"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_LINUX_KERNEL || \
+-		!(BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX)
++		!(BR2_TARGET_GRUB || BR2_TARGET_GRUB2 || BR2_TARGET_SYSLINUX_ISOLINUX)
+diff --git a/fs/iso9660/grub.cfg b/fs/iso9660/grub.cfg
+new file mode 100644
+index 0000000..5a74b23
+--- /dev/null
++++ b/fs/iso9660/grub.cfg
+@@ -0,0 +1,7 @@
++set default="0"
++set timeout="10"
++
++menuentry "Buildroot" {
++	linux __KERNEL_PATH__ root=/dev/sr0
++	initrd __INITRD_PATH__
++}
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 4f4abea..6ed979c 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -53,6 +53,15 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+ 	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
+ 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
+ endef
++else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_GRUB2),y)
++ROOTFS_ISO9660_DEPENDENCIES += grub2
++ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
++	$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub.cfg
++ROOTFS_ISO9660_BOOT_IMAGE = boot/grub/grub-eltorito.img
++define ROOTFS_ISO9660_INSTALL_BOOTLOADER
++	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/grub-eltorito.img \
++		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/grub-eltorito.img
++endef
+ else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
+ ROOTFS_ISO9660_DEPENDENCIES += syslinux
+ ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
