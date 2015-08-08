@@ -1,114 +1,169 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] Update for 2015.05-rc2
-Message-ID: <20150808105556.4453281801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] binutils: fix xtensa gas
+	trampolines regression
+Message-ID: <20150808105555.E0296818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f2435f6ddb52ad4bb21885dbf7d9395ff6428de2
+commit: http://git.buildroot.net/buildroot/commit/?id=af863a3bc0d3528031cad59dbf8a981f030d4be8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+xtensa trampolines relaxation optimization caused the following build
+errors:
+  Error: operand 1 of 'j' has out of range value '131643'
+  Error: operand 1 of 'j' has out of range value '4294836162'
+  Error: operand 1 of 'j' has out of range value '4294836072'
+
+Extra condition 'abs (addr - trampaddr) < J_RANGE / 2' for trampoline
+selection results in regressions: when relaxable jump is little longer
+than J_RANGE so that single trampoline makes two new jumps, one longer
+than J_RANGE / 2 and one shorter, correct trampoline cannot be found.
+
+Drop that condition.
+
+Upstream status: patch submitted.
+Fix squashed into the optimization patch.
+Fixes:
+  http://autobuild.buildroot.net/results/5ba7d18262ce6a2dfd69db07d064a971267f1128/
+
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES                    |   24 ++++++++++++++++++++++++
- Makefile                   |    2 +-
- docs/website/download.html |   10 +++++-----
- docs/website/news.html     |   13 +++++++++++++
- 4 files changed, 43 insertions(+), 6 deletions(-)
+ ...10-xtensa-optimize-trampolines-relaxation.patch |   17 ++++++++---------
+ ...10-xtensa-optimize-trampolines-relaxation.patch |   17 ++++++++---------
+ 2 files changed, 16 insertions(+), 18 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index e28eef7..11895e6 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,27 @@
-+2015.05-rc2, Released May 11th, 2015
-+
-+	Minor fixes.
-+
-+	Toolchain: PR56780 backport to GCC 4.8.4 to fix GDB linking
-+	issues. Context functions enabled for uClibc snapshot /
-+	uClibc-NG.
-+
-+	Architectures: Endian handling symbol for Xtensa, binutils
-+	fixes.
-+
-+	Infrastructure: Fix for kernel module stripping when
-+	localversion contains spaces.
-+
-+	Updated/fixed packages: at, autoconf-archive, binutils,
-+	cc-tool, cryptsetup, dstat, expedite, freerdp, giflib,
-+	gnuchess, guile, ipmiutil, iproute2, mono, monolite, neard,
-+	ola, poppler, postgresql, python-qt, qt, sqlite, valgrind,
-+	xlib_libXfont
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#8086: Cannot select systemd as init with Linaro 2014.09...
-+
- 2015.05-rc1, Released May 4th, 2015
+diff --git a/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch b/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
+index 852974b..043ff4d 100644
+--- a/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
++++ b/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
+@@ -64,11 +64,11 @@ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ Backported from: b76f99d702c3501ac320396ea06bc7f9237173c3
+ Changes to ChangeLog are dropped.
  
- 	Fixes all over the tree and new features.
-diff --git a/Makefile b/Makefile
-index b0e6915..5c4293b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -28,7 +28,7 @@
- all:
+- gas/config/tc-xtensa.c | 221 +++++++++++++++++++++++++++++++++++++++++++------
+- 1 file changed, 194 insertions(+), 27 deletions(-)
++ gas/config/tc-xtensa.c | 220 +++++++++++++++++++++++++++++++++++++++++++------
++ 1 file changed, 194 insertions(+), 26 deletions(-)
  
- # Set and export the version string
--export BR2_VERSION := 2015.05-rc1
-+export BR2_VERSION := 2015.05-rc2
+ diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 3e85b69..b1827fa 100644
++index 3e85b69..31c0b6b 100644
+ --- a/gas/config/tc-xtensa.c
+ +++ b/gas/config/tc-xtensa.c
+ @@ -8785,6 +8785,154 @@ static long relax_frag_for_align (fragS *, long);
+@@ -226,7 +226,7 @@ index 3e85b69..b1827fa 100644
+  
+  /* Return the number of bytes added to this fragment, given that the
+     input has been stretched already by "stretch".  */
+-@@ -8896,35 +9044,43 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -8896,35 +9044,42 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+      case RELAX_TRAMPOLINE:
+        if (fragP->tc_frag_data.relax_seen)
+          {
+@@ -279,8 +279,7 @@ index 3e85b69..b1827fa 100644
+ +
+ +	      trampaddr = fragP->fr_address + fragP->fr_fix;
+ +
+-+	      if ((addr + J_RANGE < trampaddr) ||
+-+		  abs (addr - trampaddr) < J_RANGE / 2)
+++	      if (addr + J_RANGE < trampaddr)
+  		continue;
+ -              target = S_GET_VALUE (s);
+ -              addr = fixP->fx_frag->fr_address;
+@@ -295,7 +294,7 @@ index 3e85b69..b1827fa 100644
+                if (delta > J_RANGE  || delta < -1 * J_RANGE)
+                  { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+  		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+-@@ -8978,14 +9134,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -8978,14 +9133,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+  		    }
+  		  if (tf->fragP == fragP)
+  		    {
+@@ -311,7 +310,7 @@ index 3e85b69..b1827fa 100644
+  
+  			  new_stretch += init_trampoline_frag (tf);
+  			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+-@@ -9009,10 +9164,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -9009,10 +9163,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+  			  newfixP->tc_fix_data.X_add_symbol = lsym;
+  			  newfixP->tc_fix_data.X_add_number = offset;
+  			  newfixP->tc_fix_data.slot = slot;
+@@ -332,7 +331,7 @@ index 3e85b69..b1827fa 100644
+  			  /* Adjust the jump around this trampoline (if present).  */
+  			  if (tf->fixP != NULL)
+  			    {
+-@@ -9027,6 +9192,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -9027,6 +9191,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+  			      fragP->fr_subtype = 0;
+  			      /* Remove from the trampoline_list.  */
+  			      prev->next = tf->next;
+diff --git a/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch b/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
+index 852974b..043ff4d 100644
+--- a/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
++++ b/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
+@@ -64,11 +64,11 @@ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ Backported from: b76f99d702c3501ac320396ea06bc7f9237173c3
+ Changes to ChangeLog are dropped.
  
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION = 3.81
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 6a880c6..9362ccf 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -18,14 +18,14 @@ or
+- gas/config/tc-xtensa.c | 221 +++++++++++++++++++++++++++++++++++++++++++------
+- 1 file changed, 194 insertions(+), 27 deletions(-)
++ gas/config/tc-xtensa.c | 220 +++++++++++++++++++++++++++++++++++++++++++------
++ 1 file changed, 194 insertions(+), 26 deletions(-)
  
- <p>
- 
--The latest release candidate is <b>2015.05-rc1</b>, which can be
-+The latest release candidate is <b>2015.05-rc2</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2015.05-rc1.tar.gz">buildroot-2015.05-rc1.tar.gz</a>
--(<a href="/downloads/buildroot-2015.05-rc1.tar.gz.sign">PGP signature</a>)
-+<a href="/downloads/buildroot-2015.05-rc2.tar.gz">buildroot-2015.05-rc2.tar.gz</a>
-+(<a href="/downloads/buildroot-2015.05-rc2.tar.gz.sign">PGP signature</a>)
- or
--<a href="/downloads/buildroot-2015.05-rc1.tar.bz2">buildroot-2015.05-rc1.tar.bz2</a>
--(<a href="/downloads/buildroot-2015.05-rc1.tar.bz2.sign">PGP signature</a>).
-+<a href="/downloads/buildroot-2015.05-rc2.tar.bz2">buildroot-2015.05-rc2.tar.bz2</a>
-+(<a href="/downloads/buildroot-2015.05-rc2.tar.bz2.sign">PGP signature</a>).
- <p>
- 
- This and earlier releases (and their PGP signatures) can always be downloaded from
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 91bafd4..6ca5647 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -8,6 +8,19 @@
- <p>
- 
- <ul>
-+  <li><b>11 May 2015 -- 2015.05-rc2 released</b>
-+
-+    <p>Another week, another release candidate with more cleanups and
-+    build fixes. See the <a
-+    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc2">CHANGES</a>
-+    file for details.</p>
-+
-+    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2015.05-rc2.tar.bz2">2015.05-rc2
-+    release candidate</a>, and report any problems found to the <a
-+    href="support.html">mailing list</a> or <a
-+    href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>4 May 2015 -- 2015.05-rc1 released</b>
- 
-     <p>We have a new release candidate! Lots of changes all over the
+ diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 3e85b69..b1827fa 100644
++index 3e85b69..31c0b6b 100644
+ --- a/gas/config/tc-xtensa.c
+ +++ b/gas/config/tc-xtensa.c
+ @@ -8785,6 +8785,154 @@ static long relax_frag_for_align (fragS *, long);
+@@ -226,7 +226,7 @@ index 3e85b69..b1827fa 100644
+  
+  /* Return the number of bytes added to this fragment, given that the
+     input has been stretched already by "stretch".  */
+-@@ -8896,35 +9044,43 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -8896,35 +9044,42 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+      case RELAX_TRAMPOLINE:
+        if (fragP->tc_frag_data.relax_seen)
+          {
+@@ -279,8 +279,7 @@ index 3e85b69..b1827fa 100644
+ +
+ +	      trampaddr = fragP->fr_address + fragP->fr_fix;
+ +
+-+	      if ((addr + J_RANGE < trampaddr) ||
+-+		  abs (addr - trampaddr) < J_RANGE / 2)
+++	      if (addr + J_RANGE < trampaddr)
+  		continue;
+ -              target = S_GET_VALUE (s);
+ -              addr = fixP->fx_frag->fr_address;
+@@ -295,7 +294,7 @@ index 3e85b69..b1827fa 100644
+                if (delta > J_RANGE  || delta < -1 * J_RANGE)
+                  { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
+  		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
+-@@ -8978,14 +9134,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -8978,14 +9133,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+  		    }
+  		  if (tf->fragP == fragP)
+  		    {
+@@ -311,7 +310,7 @@ index 3e85b69..b1827fa 100644
+  
+  			  new_stretch += init_trampoline_frag (tf);
+  			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
+-@@ -9009,10 +9164,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -9009,10 +9163,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+  			  newfixP->tc_fix_data.X_add_symbol = lsym;
+  			  newfixP->tc_fix_data.X_add_number = offset;
+  			  newfixP->tc_fix_data.slot = slot;
+@@ -332,7 +331,7 @@ index 3e85b69..b1827fa 100644
+  			  /* Adjust the jump around this trampoline (if present).  */
+  			  if (tf->fixP != NULL)
+  			    {
+-@@ -9027,6 +9192,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++@@ -9027,6 +9191,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
+  			      fragP->fr_subtype = 0;
+  			      /* Remove from the trampoline_list.  */
+  			      prev->next = tf->next;
