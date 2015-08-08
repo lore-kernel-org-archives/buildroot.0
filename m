@@ -1,68 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next] host-zynq-boot-bin: new package
-Message-ID: <20150808105637.A5BE080414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mono-gtksharp3: new
+	package
+Message-ID: <20150808105637.8111680414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee845a46e2e7d60ac52c38555c183020ce8cd711
+commit: http://git.buildroot.net/buildroot/commit/?id=a4e7176a4005830ce8a2709b09066c26a06de255
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The package provides a Python script that can create the file BOOT.BIN
-to boot Xilinx Zynq based boards.
+This patch adds mono gtksharp3 package for mono.
 
-The script zynq-boot-bin.py is contained in the Xilinx repository of
-U-Boot (it is not in upstream).
-
-[Thomas:
- - remove appearance of the package in menuconfig, U-Boot will depend
-   on it directly, so there's no need for it to appear in menuconfig
- - use $(INSTALL) instead of cp for the installation
- - remove @ before the extract and install commands.]
-
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zynq-boot-bin/zynq-boot-bin.hash |    2 ++
- package/zynq-boot-bin/zynq-boot-bin.mk   |   22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 0 deletions(-)
+ package/Config.in                          |    5 +++++
+ package/mono-gtksharp3/Config.in           |    8 ++++++++
+ package/mono-gtksharp3/mono-gtksharp3.hash |    2 ++
+ package/mono-gtksharp3/mono-gtksharp3.mk   |   17 +++++++++++++++++
+ 4 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.hash b/package/zynq-boot-bin/zynq-boot-bin.hash
+diff --git a/package/Config.in b/package/Config.in
+index 5974855..ddbf180 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -509,6 +509,11 @@ endif
+ 	source "package/lutok/Config.in"
+ 	source "package/moarvm/Config.in"
+ 	source "package/mono/Config.in"
++if BR2_PACKAGE_MONO
++menu "Mono libraries/modules"
++	source "package/mono-gtksharp3/Config.in"
++endmenu
++endif
+ 	source "package/nodejs/Config.in"
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+diff --git a/package/mono-gtksharp3/Config.in b/package/mono-gtksharp3/Config.in
 new file mode 100644
-index 0000000..0bc23de
+index 0000000..570b62c
 --- /dev/null
-+++ b/package/zynq-boot-bin/zynq-boot-bin.hash
++++ b/package/mono-gtksharp3/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MONO_GTKSHARP3
++	bool "gtk# 3"
++	depends on BR2_PACKAGE_LIBGTK3
++	help
++	  Gtk# is a .NET language binding for the GTK+ toolkit.
++	  This package provides version 3 of the bindings.
++
++	  http://www.mono-project.com/docs/gui/gtksharp/
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
+new file mode 100644
+index 0000000..4005051
+--- /dev/null
++++ b/package/mono-gtksharp3/mono-gtksharp3.hash
 @@ -0,0 +1,2 @@
-+# From https://raw.githubusercontent.com/Xilinx/u-boot-xlnx
-+sha1	940331ee02b0007099effa61e382fe7ea4174054	zynq-boot-bin.py
-diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
++# sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
++sha256 6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2	gtk-sharp-2.99.3.tar.xz
+diff --git a/package/mono-gtksharp3/mono-gtksharp3.mk b/package/mono-gtksharp3/mono-gtksharp3.mk
 new file mode 100644
-index 0000000..46051fb
+index 0000000..fa63d66
 --- /dev/null
-+++ b/package/zynq-boot-bin/zynq-boot-bin.mk
-@@ -0,0 +1,22 @@
++++ b/package/mono-gtksharp3/mono-gtksharp3.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# zynq-boot-bin
++# gtksharp3
 +#
 +################################################################################
 +
-+ZYNQ_BOOT_BIN_VERSION = xilinx-v2015.1
-+ZYNQ_BOOT_BIN_SOURCE = zynq-boot-bin.py
-+ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/$(ZYNQ_BOOT_BIN_VERSION)/tools
-+ZYNQ_BOOT_BIN_LICENSE = GPLv3+
++MONO_GTKSHARP3_VERSION_MAJOR = 2.99
++MONO_GTKSHARP3_VERSION = $(MONO_GTKSHARP3_VERSION_MAJOR).3
++MONO_GTKSHARP3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP3_VERSION_MAJOR)/
++MONO_GTKSHARP3_SOURCE = gtk-sharp-$(MONO_GTKSHARP3_VERSION).tar.xz
++MONO_GTKSHARP3_LICENSE = LGPLv2, MIT (cairo)
++MONO_GTKSHARP3_LICENSE_FILES = COPYING
++MONO_GTKSHARP3_INSTALL_STAGING = YES
++MONO_GTKSHARP3_DEPENDENCIES = mono libgtk3
++MONO_GTKSHARP3_CONF_OPTS += CSC=$(HOST_DIR)/usr/bin/mcs
 +
-+HOST_ZYNQ_BOOT_BIN_DEPENDENCIES = host-python
-+
-+define HOST_ZYNQ_BOOT_BIN_EXTRACT_CMDS
-+	cp $(DL_DIR)/$(ZYNQ_BOOT_BIN_SOURCE) $(@D)
-+endef
-+
-+define HOST_ZYNQ_BOOT_BIN_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/$(ZYNQ_BOOT_BIN_SOURCE) $(HOST_DIR)/usr/bin/$(ZYNQ_BOOT_BIN_SOURCE)
-+endef
-+
-+$(eval $(host-generic-package))
++$(eval $(autotools-package))
