@@ -1,35 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:31 -0000
-Subject: [Buildroot] [git commit branch/next] python-pygame: remove python
-	dependency
-Message-ID: <20150808105627.9357580414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pkg-generic: Fix host
+	_DL_VERSION corner case
+Message-ID: <20150808105627.B37BE81904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6874f5bac94c9cefbf09f3ded4cf4bce66c70e25
+commit: http://git.buildroot.net/buildroot/commit/?id=4837354fff8cc56916fa10e5ac5f8da73d0cc405
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With the dependency on BR2_PACKAGE_PYTHON it was only possible to
-build the package with python2. However, python-pygame works with
-python3 so enable it to be built with it.
+In the case when a package has a host version, the package is dependent
+on the host version, and the version contains a '/', the host version
+does not evaluate properly. The host version will contain a '_' instead
+of a '/', resulting in a failed download. To solve this corner case, add
+a check to see if the _DL_VERSION of the package has been defined before
+defining the host _DL_VERSION. If the package _DL_VERSION has not been
+defined yet, then the version string has not been formatted yet and is
+still good to use.
 
-Signed-off-by: Peter Bouda <pbouda@cidles.eu>
+[Arnout: further simplify things by lifting the override over _VERSION
+out of the condition - it is always the same.]
+
+This error occured on a package in a BR2_EXTERNAL that uses a git repo
+for its remote storage with '/' in the tag names. I do not believe this
+affects any packages in the Buildroot mainline but it could in the
+future.
+
+[Arnout: rebase on master, fix existing whitespace error in the else
+branch.]
+
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pygame/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/pkg-generic.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
-index f72ee31..932b0f1 100644
---- a/package/python-pygame/Config.in
-+++ b/package/python-pygame/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_PYGAME
- 	bool "python-pygame"
--	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_SDL
- 	help
- 	  Pygame is a cross-platfrom library designed to make it easy to write
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9fe01b8..5f630e4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -298,17 +298,17 @@ $(2)_RAWNAME			=  $$(patsubst host-%,%,$(1))
+ # Similar for spaces and colons (:) that may appear in date-based revisions for
+ # CVS.
+ ifndef $(2)_VERSION
+- ifdef $(3)_VERSION
+-  $(2)_DL_VERSION := $$(strip $$($(3)_VERSION))
+-  $(2)_VERSION := $$(call sanitize,$$($(3)_VERSION))
++ ifdef $(3)_DL_VERSION
++  $(2)_DL_VERSION := $$($(3)_DL_VERSION)
++ else ifdef $(3)_VERSION
++  $(2)_DL_VERSION := $$($(3)_VERSION)
+  else
+-  $(2)_VERSION = undefined
+   $(2)_DL_VERSION = undefined
+  endif
+ else
+-  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+-  $(2)_VERSION := $$(call sanitize,$$($(2)_VERSION))
++ $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+ endif
++$(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
+ 
+ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
