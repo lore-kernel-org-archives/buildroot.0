@@ -1,41 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:08 -0000
-Subject: [Buildroot] [git commit branch/next] samba: bump to version 4.2.2
-Message-ID: <20150808105603.E5AAE81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/snmppp: Update site url
+Message-ID: <20150808105600.61AA87FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb1256c4011949541c1566d653ba98ff95f8c2a3
+commit: http://git.buildroot.net/buildroot/commit/?id=f7f978c7c3ac764b7d11cee7523e1320b2579a86
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/samba4.hash |    2 +-
- package/samba4/samba4.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/snmppp/snmppp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 42bfb93..11c15b7 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	37eaa239c116dc2c22c29c5a2931eb178ed22e48b594687247446703119b4ac3	samba-4.2.1.tar.gz
-+sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index e5971fb..d7d5299 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 74acee4..147af60 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -6,7 +6,7 @@
  
--SAMBA4_VERSION = 4.2.1
-+SAMBA4_VERSION = 4.2.2
- SAMBA4_SITE = http://ftp.samba.org/pub/samba
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ SNMPPP_VERSION = 3.3.4
+ SNMPPP_SOURCE = snmp++-$(SNMPPP_VERSION).tar.gz
+-SNMPPP_SITE = http://www.agentpp.com
++SNMPPP_SITE = http://www.agentpp.com/download
+ SNMPPP_DEPENDENCIES = host-pkgconf
+ SNMPPP_INSTALL_STAGING = YES
+ # no configure script in tarball
