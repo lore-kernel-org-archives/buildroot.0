@@ -1,97 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:06 -0000
-Subject: [Buildroot] [git commit branch/next] package/tinyxml2: Use
-	BUILD_SHARED_LIBS cmake standard
-Message-ID: <20150808105557.DEC6581778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] uboot-tools: fix dynamic
+	linking against OpenSSL
+Message-ID: <20150808105558.9752381778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22f5be171c6f9bb2611e7b87197e9faeabcaab18
+commit: http://git.buildroot.net/buildroot/commit/?id=66a3f7a240d8804306c1eafa354c2de319097b36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Backport an upstream patch to fix the static build:
-c8ec6fcab4eb501cc5bd328c19dcbd4b30722d52
+Commit 95f9a5c3df8e4226b99438efccf0bf21eecb573d fixed the static
+linking issue of uboot-tools mkimage against OpenSSL, but in the
+process broke the dynamic linking case. This commit adjusts the
+uboot-tools patch to make sure both static and dynamic linking work.
 
-Fixes:
-http://autobuild.buildroot.net/results/e56/e568d81030087f66f8ac4ccd4f496b550930cbae/
+An updated version of the patch has been submitted upstream.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch |   65 ++++++++++++++++++++
- 1 files changed, 65 insertions(+), 0 deletions(-)
+ ...kg-config-when-available-to-get-SSL-flags.patch |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
-new file mode 100644
-index 0000000..fec1abe
---- /dev/null
-+++ b/package/tinyxml2/0001-Use-BUILD_SHARED_LIBS-cmake-standard.patch
-@@ -0,0 +1,65 @@
-+From 69acf13fa679628259063c4d0cd17e59b8bb0b75 Mon Sep 17 00:00:00 2001
-+From: xantares <xantares09@hotmail.com>
-+Date: Fri, 14 Nov 2014 19:40:58 +0100
-+Subject: [PATCH] Use BUILD_SHARED_LIBS cmake standard.
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ CMakeLists.txt | 27 +++++++++------------------
-+ 1 file changed, 9 insertions(+), 18 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 91c61a4..4375bb9 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -10,8 +10,8 @@ include(GNUInstallDirs)
-+ ################################
-+ # set lib version here
-+ 
-+-set(GENERIC_LIB_VERSION "2.2.0")
-+-set(GENERIC_LIB_SOVERSION "2")
-++set(GENERIC_LIB_VERSION "2.2.0")
-++set(GENERIC_LIB_SOVERSION "2")
-+ 
-+ 
-+ ################################
-+@@ -46,12 +46,8 @@ endif(MSVC)
-+ 
-+ ################################
-+ # Add targets
-+-set(BUILD_STATIC_LIBS ON CACHE BOOL "Set to ON to build static libraries")
-+-if(BUILD_STATIC_LIBS)
-+-	add_library(tinyxml2static STATIC tinyxml2.cpp tinyxml2.h)
-+-	set_target_properties(tinyxml2static PROPERTIES OUTPUT_NAME tinyxml2)
-+-endif(BUILD_STATIC_LIBS)
-+-add_library(tinyxml2 SHARED tinyxml2.cpp tinyxml2.h)
-++option(BUILD_SHARED_LIBS "build shared or static libraries" ON)
-++add_library(tinyxml2 tinyxml2.cpp tinyxml2.h)
-+ set_target_properties(tinyxml2 PROPERTIES
-+         COMPILE_DEFINITIONS "TINYXML2_EXPORT"
-+ 	VERSION "${GENERIC_LIB_VERSION}"
-+@@ -63,16 +59,11 @@ add_dependencies(test ${TARGET_DATA_COPY})
-+ target_link_libraries(test tinyxml2)
-+ 
-+ 
-+-if(BUILD_STATIC_LIBS)
-+-	install(TARGETS tinyxml2 tinyxml2static
-+-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-+-		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-+-		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+-else(BUILD_STATIC_LIBS)
-+-	install(TARGETS tinyxml2
-+-		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-+-		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+-endif(BUILD_STATIC_LIBS)
-++install(TARGETS tinyxml2
-++        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-++        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++
-+ install(FILES tinyxml2.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-+ 
-+ foreach(p LIB INCLUDE)
-+-- 
-+1.9.3
-+
+diff --git a/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch b/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
+index db038ff..9eb7483 100644
+--- a/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
++++ b/package/uboot-tools/0004-tools-use-pkg-config-when-available-to-get-SSL-flags.patch
+@@ -1,4 +1,4 @@
+-From 7f47f7f8c1a0d634e9febad61504f095476fccc0 Mon Sep 17 00:00:00 2001
++From 99bc38ac6ebdd3b5d741cb9e50d842fa13d409f7 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Tue, 12 May 2015 22:54:29 +0200
+ Subject: [PATCH] tools: use pkg-config when available to get SSL flags
+@@ -13,7 +13,7 @@ We gracefully fallback on the previous behavior of hardcoding -lssl
+ -lcrypto if pkg-config is not available or fails with an error.
+ 
+ Patch submitted upstream at
+-http://lists.denx.de/pipermail/u-boot/2015-May/214068.html.
++http://lists.denx.de/pipermail/u-boot/2015-May/214489.html
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ ---
+@@ -21,7 +21,7 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  1 file changed, 2 insertions(+), 1 deletion(-)
+ 
+ diff --git a/tools/Makefile b/tools/Makefile
+-index 4bbb153..e1bcd59 100644
++index 4bbb153..8ff9c2e 100644
+ --- a/tools/Makefile
+ +++ b/tools/Makefile
+ @@ -122,7 +122,8 @@ endif
+@@ -30,7 +30,7 @@ index 4bbb153..e1bcd59 100644
+  ifneq ($(CONFIG_MX23)$(CONFIG_MX28)$(CONFIG_FIT_SIGNATURE),)
+ -HOSTLOADLIBES_mkimage += -lssl -lcrypto
+ +HOSTLOADLIBES_mkimage += \
+-+	$(shell pkg-config --libs libssl 2> /dev/null || echo "-lssl -lcrypto")
+++	$(shell pkg-config --libs libssl libcrypto 2> /dev/null || echo "-lssl -lcrypto")
+  endif
+  
+  HOSTLOADLIBES_dumpimage := $(HOSTLOADLIBES_mkimage)
