@@ -1,67 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] sudo: add optional pam support
-Message-ID: <20150808105613.D9A587F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fluxbox: fix build against
+	xlib_libXpm
+Message-ID: <20150808105611.88FDE8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eeacb333a33d50034c1ace1bb293a9a04d76e617
+commit: http://git.buildroot.net/buildroot/commit/?id=3f1ddefda19f2883ddc9e1fe35d7ce347ea1ee72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Configure the sudo utility to support PAM if the framework is enabled.
+Explicitly configure XPM support based on the library selection provided
+(BR2_PACKAGE_XLIB_LIBXPM). It has been observed on different hosts that
+XPM support may or may not be included based off the state of the host's
+system. One can validate XPM support is included in Fluxbox by using the
+command `fluxbox -info`.
 
-[Peter: use install -D, reword commit message]
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sudo/sudo.mk  |   13 ++++++++++++-
- package/sudo/sudo.pam |   12 ++++++++++++
- 2 files changed, 24 insertions(+), 1 deletions(-)
+ package/fluxbox/fluxbox.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index a1a8328..10fbc88 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -16,9 +16,20 @@ SUDO_CONF_OPTS = \
- 	--without-umask \
- 	--with-logging=syslog \
- 	--without-interfaces \
--	--without-pam \
- 	--with-env-editor
+diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
+index c8e4289..d2e8c89 100644
+--- a/package/fluxbox/fluxbox.mk
++++ b/package/fluxbox/fluxbox.mk
+@@ -22,6 +22,13 @@ else
+ FLUXBOX_CONF_OPTS += --disable-imlib2
+ endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define SUDO_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 0644 package/sudo/sudo.pam $(TARGET_DIR)/etc/pam.d/sudo
-+endef
-+
-+SUDO_DEPENDENCIES += linux-pam
-+SUDO_CONF_OPTS += --with-pam
-+SUDO_POST_INSTALL_TARGET_HOOKS += SUDO_INSTALL_PAM_CONF
++ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
++FLUXBOX_CONF_OPTS += --enable-xpm --with-xpm-prefix=$(STAGING_DIR)/usr
++FLUXBOX_DEPENDENCIES += xlib_libXpm
 +else
-+SUDO_CONF_OPTS += --without-pam
++FLUXBOX_CONF_OPTS += --disable-xpm
 +endif
 +
- # mksigname/mksiglist needs to run on build host to generate source files
- define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
-diff --git a/package/sudo/sudo.pam b/package/sudo/sudo.pam
-new file mode 100644
-index 0000000..c6e6f20
---- /dev/null
-+++ b/package/sudo/sudo.pam
-@@ -0,0 +1,12 @@
-+auth        sufficient   pam_rootok.so
-+auth        required     pam_wheel.so use_uid
-+auth        required     pam_env.so
-+auth        required     pam_unix.so nullok
-+
-+account     required     pam_unix.so
-+
-+password    required     pam_unix.so nullok
-+
-+session     required     pam_limits.so
-+session     required     pam_env.so
-+session     required     pam_unix.so
+ define FLUXBOX_INSTALL_XSESSION_FILE
+ 	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
+ 		$(TARGET_DIR)/root/.xsession
