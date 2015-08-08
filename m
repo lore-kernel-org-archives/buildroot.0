@@ -1,185 +1,138 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:00 -0000
-Subject: [Buildroot] [git commit branch/next] docs/manual: add kernel-module
-Message-ID: <20150808105628.211BC7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] aarch64: add big
+	endian(aarch64_be) support
+Message-ID: <20150808105628.EF72C7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e8857d05ae7ac8074e90ec690ed080601ca9ae5
+commit: http://git.buildroot.net/buildroot/commit/?id=827ba46556b7c2dddb0e881879bacf3283fc2c3f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Add aarch64_be support. Note that CONFIG_CPU_BIG_ENDIAN should be
+defined in kernel config when building a big endian kernel.
+
+Signed-off-by: Zhang Jian(Bamvor) <bamvor.zhangjian@huawei.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-kernel-module.txt |  142 +++++++++++++++++++++++++
- docs/manual/adding-packages.txt               |    2 +
- 2 files changed, 144 insertions(+), 0 deletions(-)
+ Makefile                                |    2 +-
+ arch/Config.in                          |   12 ++++++++++--
+ arch/Config.in.aarch64                  |    4 +++-
+ toolchain/toolchain-buildroot/Config.in |   27 ++++++++++++++-------------
+ 4 files changed, 28 insertions(+), 17 deletions(-)
 
-diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
-new file mode 100644
-index 0000000..39575f7
---- /dev/null
-+++ b/docs/manual/adding-packages-kernel-module.txt
-@@ -0,0 +1,142 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
-+
-+=== Infrastructure for packages building kernel modules
-+
-+Buildroot offers a helper infrastructure to make it easy to write packages that
-+build and install Linux kernel modules. Some packages only contain a kernel
-+module, other packages contain programs and libraries in addition to kernel
-+modules. Buildroot's helper infrastructure supports either case.
-+
-+[[kernel-module-tutorial]]
-+==== +kernel-module+ tutorial
-+
-+Let's start with an example on how to prepare a simple package that only
-+builds a kernel module, and no other component:
-+
-+----
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06: 
-+07: FOO_VERSION = 1.2.3
-+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
-+09: FOO_SITE = http://www.foosoftware.org/download
-+10: FOO_LICENSE = GPLv2
-+11: FOO_LICENSE_FILES = COPYING
-+12: 
-+13: $(eval $(kernel-module))
-+14: $(eval $(generic-package))
-+----
-+
-+Lines 7-11 define the usual meta-data to specify the version, archive name,
-+remote URI where to find the package source, licensing information.
-+
-+On line 13, we invoke the +kernel-module+ helper infrastructure, that
-+generates all the appropriate Makefile rules and variables to build
-+that kernel module.
-+
-+Finally, on line 14, we invoke the
-+xref:generic-package-tutorial[+generic-package+ infrastructure].
-+
-+The dependency on +linux+ is automatically added, so it is not needed to
-+specify it in +FOO_DEPENDENCIES+.
-+
-+What you may have noticed is that, unlike other package infrastructures,
-+we explicitly invoke a second infrastructure. This allows a package to
-+build a kernel module, but also, if needed, use any one of other package
-+infrastructures to build normal userland components (libraries,
-+executables...). Using the +kernel-module+ infrastructure on its own is
-+not sufficient; another package infrastructure *must* be used.
-+
-+Let's look at a more complex example:
-+
-+----
-+01: ################################################################################
-+02: #
-+03: # foo
-+04: #
-+05: ################################################################################
-+06: 
-+07: FOO_VERSION = 1.2.3
-+08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
-+09: FOO_SITE = http://www.foosoftware.org/download
-+10: FOO_LICENSE = GPLv2
-+11: FOO_LICENSE_FILES = COPYING
-+12: 
-+13: FOO_MODULE_SUBDIRS = driver/base
-+14: FOO_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
-+15: 
-+16: ifeq ($(BR2_PACKAGE_LIBBAR),y)
-+17: FOO_DEPENDENCIES = libbar
-+18: FOO_CONF_OPTS = --enable-bar
-+19: FOO_MODULE_SUBDIRS += driver/bar
-+20: else
-+21: FOO_CONF_OPTS = --disable-bar
-+22: endif
-+23: 
-+24: $(eval $(kernel-module))
-+26: $(eval $(autotools-package))
-+----
-+
-+Here, we see that we have an autotools-based package, that also builds
-+the kernel module located in sub-directory +driver/base+ and, if libbar
-+is enabled, the kernel module located in sub-directory +driver/bar+, and
-+defines the variable +KVERSION+ to be passed to the Linux buildsystem
-+when building the module(s).
-+
-+
-+[[kernel-module-reference]]
-+==== +kernel-module+ reference
-+
-+The main macro for the  kernel module infrastructure is +kernel-module+.
-+Unlike other package infrastructures, it is not stand-alone, and requires
-+any of the other +*-package+ macros be called after it.
-+
-+The +kernel-module+ macro defines post-build and post-target-install
-+hooks to build the kernel modules. If the package's +.mk+ needs access
-+to the built kernel modules, it should do so in a post-build hook,
-+*registered after* the call to +kernel-module+. Similarly, if the
-+package's +.mk+ needs access to the kernel module after it has been
-+installed, it should do so in a post-install hook, *registered after*
-+the call to +kernel-module+. Here's an example:
-+
-+----
-+$(eval $(kernel-module))
-+
-+define FOO_DO_STUFF_WITH_KERNEL_MODULE
-+    # Do something with it...
-+endef
-+FOO_POST_BUILD_HOOKS += FOO_DO_STUFF_WITH_KERNEL_MODULE
-+
-+$(eval $(generic-package))
-+----
-+
-+Finally, unlike the other package infrastructures, there is no
-++host-kernel-module+ variant to build a host kernel module.
-+
-+The following additional variables can optionally be defined to further
-+configure the build of the kernel module:
-+
-+* +FOO_MODULE_SUBDIRS+ may be set to one or more sub-directories (relative
-+  to the package source top-directory) where the kernel module sources are.
-+  If empty or not set, the sources for the kernel module(s) are considered
-+  to be located at the top of the package source tree.
-+
-+* +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
-+  to pass to the Linux buildsystem.
-+
-+Yo may also reference (but you may *not* set!) those variables:
-+
-+ * +LINUX_DIR+ contains the path to where the Linux kernel has been
-+   extracted and built.
-+
-+ * +LINUX_VERSION+ contains the version string as configured by the user.
-+
-+ * +LINUX_VERSION_PROBED+ contains the real version string of the kernel,
-+   retrieved with running `make -C $(LINUX_DIR) kernelrelease`
-+
-+ * +KERNEL_ARCH+ contains the name of the current architecture, like `arm`,
-+   `mips`...
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index b8674f8..721fe39 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
+diff --git a/Makefile b/Makefile
+index b1bcf78..35818f0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -329,7 +329,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/arcle/arc/ \
+ 	-e s/arceb/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+-	-e s/aarch64/arm64/ \
++	-e s/aarch64.*/arm64/ \
+ 	-e s/bfin/blackfin/ \
+ 	-e s/parisc64/parisc/ \
+ 	-e s/powerpc64.*/powerpc/ \
+diff --git a/arch/Config.in b/arch/Config.in
+index 94397b3..39ce046 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -59,7 +59,15 @@ config BR2_armeb
+ 	  http://en.wikipedia.org/wiki/ARM
  
- include::adding-packages-rebar.txt[]
- 
-+include::adding-packages-kernel-module.txt[]
+ config BR2_aarch64
+-	bool "AArch64"
++	bool "AArch64 (little endian)"
++	select BR2_ARCH_IS_64
++	help
++	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
++	  http://www.arm.com/products/processors/instruction-set-architectures/armv8-architecture.php
++	  http://en.wikipedia.org/wiki/ARM
 +
- include::adding-packages-asciidoc.txt[]
++config BR2_aarch64_be
++	bool "AArch64 (big endian)"
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+ 	help
+@@ -347,7 +355,7 @@ if BR2_arm || BR2_armeb
+ source "arch/Config.in.arm"
+ endif
  
- include::adding-packages-hooks.txt[]
+-if BR2_aarch64
++if BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.aarch64"
+ endif
+ 
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+index 2e79870..325bccc 100644
+--- a/arch/Config.in.aarch64
++++ b/arch/Config.in.aarch64
+@@ -1,8 +1,10 @@
+ config BR2_ARCH
+ 	default "aarch64"	if BR2_aarch64
++	default "aarch64_be"	if BR2_aarch64_be
+ 
+ config BR2_ENDIAN
+-	default "LITTLE"
++	default "LITTLE" if BR2_aarch64
++	default "BIG"	 if BR2_aarch64_be
+ 
+ config BR2_ARCH_HAS_ATOMICS
+ 	default y
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 77a197e..13e2b15 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -23,8 +23,8 @@ source "package/linux-headers/Config.in.host"
+ choice
+ 	prompt "C library"
+ 	default BR2_TOOLCHAIN_UCLIBC
+-	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_aarch64 || BR2_microblaze \
+-		|| BR2_mips64 || BR2_mips64el || BR2_powerpc64
++	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_aarch64 || BR2_aarch64_be \
++		|| BR2_microblaze || BR2_mips64 || BR2_mips64el || BR2_powerpc64
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc"
+@@ -42,11 +42,12 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	bool "eglibc"
+-	depends on BR2_arm    || BR2_armeb    || BR2_aarch64 || \
+-		   BR2_i386   || BR2_mips     || BR2_mipsel  || \
+-		   BR2_mips64 || BR2_mips64el || BR2_powerpc || \
+-		   BR2_sh     || BR2_sh64     || BR2_sparc   || \
+-		   BR2_x86_64 || BR2_microblaze || BR2_powerpc64
++	depends on BR2_arm        || BR2_armeb    || BR2_aarch64    || \
++		   BR2_aarch64_be || BR2_i386     || BR2_mips       || \
++		   BR2_mipsel     || BR2_mips64   || BR2_mips64el   || \
++		   BR2_powerpc    || BR2_sh       || BR2_sh64       || \
++		   BR2_sparc      || BR2_x86_64   || BR2_microblaze || \
++		   BR2_powerpc64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_DEPRECATED_SINCE_2015_08
+@@ -61,12 +62,12 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	bool "glibc"
+-	depends on BR2_arm         || BR2_armeb    || BR2_aarch64 || \
+-		   BR2_i386        || BR2_mips     || BR2_mipsel  || \
+-		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
+-		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
+-		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \
+-		   BR2_microblaze  || BR2_nios2
++	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
++		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
++		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
++		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
++		   BR2_sh          || BR2_sh64       || BR2_sparc   || \
++		   BR2_x86_64      || BR2_microblaze || BR2_nios2
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_powerpc_SPE
