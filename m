@@ -1,41 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Aug 2015 12:11:20 +0200
-Subject: [Buildroot] [git commit branch/next] docs/manual: document gcc
-	version dependencies
-Message-ID: <20150808105653.841C57FE0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:56:54 -0000
+Subject: [Buildroot] [git commit branch/next] Makefile: Don't export VERBOSE
+	unless V=1 (for CMake)
+Message-ID: <20150808105614.088E7818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45aaa372b03f8a96837c0ca4d24a63ca1b218417
+commit: http://git.buildroot.net/buildroot/commit/?id=307029867b0384446cd74b232b45a7b4f40cf0d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit updates the Buildroot manual to document how to detail the
-gcc version dependencies in Config.in comments of packages, like we do
-for kernel headers version.
+CMake verbose mode is based on VERBOSE environment variable.
+* If VERBOSE is exported but empty, only "Dependee ... is newer than
+depender ..." messages are shown.
+* If VERBOSE is exported and set (whatever the value), all compilation
+commands are shown.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+VERBOSE is currently systematically exported by Buildroot, even if it
+is empty, in the root Makefile, which implies that the "light" verbose
+mode - with "Dependee ... is newer than depender ..." messages - is
+always enabled.
+
+VERBOSE should only be exported when V=1, which is the standard way to
+enable verbose mode in Buildroot.
+
+Signed-off-by: C??dric Marie <cedric.marie@openmailbox.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-directory.txt |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Makefile |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 8f585d4..b66e447 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -277,6 +277,12 @@ use in the comment.
- ** Comment string: +headers >= X.Y+ and/or `headers <= X.Y` (replace
-    +X.Y+ with the proper version)
+diff --git a/Makefile b/Makefile
+index d3f80c4..8eb21d4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -215,6 +215,7 @@ ifeq ($(KBUILD_VERBOSE),1)
+ ifndef VERBOSE
+   VERBOSE = 1
+ endif
++export VERBOSE
+ else
+   quiet = quiet_
+   Q = @
+@@ -228,7 +229,7 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+ # kconfig uses CONFIG_SHELL
+ CONFIG_SHELL := $(SHELL)
  
-+* GCC version
-+** Dependency symbol: +BR2_TOOLCHAIN_GCC_AT_LEAST_X_Y+, (replace
-+   +X_Y+ with the proper version, see +toolchain/toolchain-common.in+)
-+** Comment string: +gcc >= X.Y+ and/or `gcc <= X.Y` (replace
-+   +X.Y+ with the proper version)
-+
- * C library
- ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
-    +BR2_TOOLCHAIN_USES_MUSL+, +BR2_TOOLCHAIN_USES_UCLIBC+
+-export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
++export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE
+ 
+ ifndef HOSTAR
+ HOSTAR := ar
