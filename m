@@ -1,33 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.4.x
-	series
-Message-ID: <20150808105611.F0F677F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lvm2: bump to version 2.02.121
+Message-ID: <20150808105611.E7CF08030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9eda4b423c261db151b7c462cded7baa99e2df92
+commit: http://git.buildroot.net/buildroot/commit/?id=e64549e6f1838621ed5937e185058ead54d31e83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+- Bump to version 2.02.121
+- Update hash file
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 28b8929..9bad7f0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -200,7 +200,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index e7f7b2d..6137108 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  ab5889dae7924b44ed2444161058a419  LVM2.2.02.117.tgz
++md5  702c61bf07a8fc6dc0db6e9d323d9f6d  LVM2.2.02.121.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 6e324eb..a2db504 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.117
++LVM2_VERSION = 2.02.121
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
