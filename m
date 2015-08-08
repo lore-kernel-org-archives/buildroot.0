@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:41 -0000
-Subject: [Buildroot] [git commit branch/next] package/redis: Add redis
-	system user
-Message-ID: <20150808105640.D7DC67FFCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] c-icap: fix config script
+Message-ID: <20150808105640.C8C147FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb1dae2da8f7488d0a8603793310a0ad58c4be1d
+commit: http://git.buildroot.net/buildroot/commit/?id=6c73215493335f1ede26cad2d3898ef543d871d6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a redis system user and set the home directory to /var/lib/redis
+This commit adjusts the c-icap config script by removing a bogus
+-L$LIBDIR which was expanded to -L/usr/lib, which is wrong for
+cross-compilation. It fixes the build of c-icap-modules:
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+  http://autobuild.buildroot.org/results/b05/b05141a6d450c94669c6a0a5a0f5b799c2c248f2/
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Guillaume GARDET <guillaume.gardet@oliseo.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/redis/redis.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/c-icap/c-icap.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 51c1f9c..0135cf9 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -9,6 +9,10 @@ REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 0f42b6c..0e27cc4 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -57,6 +57,7 @@ define C_ICAP_TUNE_INSTALLATION
+ 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
+ 	$(SED) 's%INCDIR2=.*%INCDIR2=$(STAGING_DIR)/usr/include/c_icap%' \
+ 		$(STAGING_DIR)/usr/bin/{c-icap,c-icap-libicapapi}-config
++	$(SED) 's%-L$$LIBDIR %%' $(STAGING_DIR)/usr/bin/c-icap-libicapapi-config
+ endef
  
-+define REDIS_USERS
-+	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
-+endef
-+
- # Redis doesn't support DESTDIR (yet, see
- # https://github.com/antirez/redis/pull/609).  We set PREFIX
- # instead.
+ C_ICAP_POST_INSTALL_TARGET_HOOKS += C_ICAP_TUNE_INSTALLATION
