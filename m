@@ -1,45 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] janus-gateway: disable for
-	static build
-Message-ID: <20150808105601.E2D947F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] duma: not available for static
+	only builds
+Message-ID: <20150808105559.247987FDC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f2888955ed21c54a3a887d5757b35ef18ba5e669
+commit: http://git.buildroot.net/buildroot/commit/?id=648e791768ca0937b9b85d5e5650e4d4e000b960
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-janus-gateway requires dlopen().
-
 Fixes:
-http://autobuild.buildroot.net/results/092/092aac2b8abe0edd868a7e0cc59cdaaf28ca4ad5/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  http://autobuild.buildroot.net/results/ccfc79586516a6ebb05badfad258aad0b6b9d2a2/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/janus-gateway/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/duma/Config.in |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/janus-gateway/Config.in b/package/janus-gateway/Config.in
-index 6ba5f6a..035ee6c 100644
---- a/package/janus-gateway/Config.in
-+++ b/package/janus-gateway/Config.in
-@@ -10,12 +10,13 @@ config BR2_PACKAGE_JANUS_GATEWAY
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libmicrohttpd
- 	depends on BR2_USE_WCHAR # libnice -> libglib2
- 	depends on BR2_USE_MMU # libnice
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	help
- 	  Janus is an open source, general purpose, WebRTC gateway
- 	  designed and developed by Meetecho.
- 
- 	  https://github.com/meetecho/janus-gateway
- 
--comment "janus-gateway needs a toolchain w/ threads, wchar"
-+comment "janus-gateway needs a toolchain w/ dynamic library, threads, wchar"
+diff --git a/package/duma/Config.in b/package/duma/Config.in
+index 7679e64..b1f55fa 100644
+--- a/package/duma/Config.in
++++ b/package/duma/Config.in
+@@ -6,6 +6,9 @@ config BR2_PACKAGE_DUMA
+ 	# allocations. Non-MMU platforms cannot perform such
+ 	# things.
  	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	# duma works using LD_PRELOAD, so it always needs to build a
++	# shared library
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  D.U.M.A. - Detect Unintended Memory Access. A fork of the
+ 	  Electric Fence library. Detects buffer overflow and
+@@ -20,6 +23,7 @@ config BR2_PACKAGE_DUMA_NO_LEAKDETECTION
+ 
+ endif # BR2_PACKAGE_DUMA
+ 
+-comment "duma needs a toolchain w/ C++, threads"
++comment "duma needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
