@@ -1,57 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:52 -0000
-Subject: [Buildroot] [git commit branch/next] barebox: bump to version
-	2015.07.0
-Message-ID: <20150808105621.5FC3380414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux-headers: add 4.1.x series
+Message-ID: <20150808105613.1A86A8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7314eaa01709b148214994e7e15cd870b41f8d16
+commit: http://git.buildroot.net/buildroot/commit/?id=3f8bd6be9f63ff415da67646dd858faef4a92fe0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/barebox/Config.in    |    4 ++--
- boot/barebox/barebox.hash |    7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/linux-headers/Config.in.host |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index ffac979..f6f8f15 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9bad7f0..059075c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,7 +5,7 @@ comment "Kernel Header Options"
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.05.0"
-+	bool "2015.07.0"
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_4_0
++	default BR2_KERNEL_HEADERS_4_1
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -86,6 +86,10 @@ choice
+ 		bool "Linux 4.0.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
++	config BR2_KERNEL_HEADERS_4_1
++		bool "Linux 4.1.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -107,6 +111,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
  
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index aa0f12e..ee09f8d 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,6 +1,5 @@
--
--# http://www.barebox.org/download/barebox-2015.05.0.tar.bz2.md5
--md5 3b4f2c72ec3b7cc2f1f294fd2baf0c4d barebox-2015.05.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
-+md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
- 
- # Locally calculated
--sha256 f650e15c7a6da8cb779bb1787829fa4184b3189baf604c8af3af4e0deefa5e8e barebox-2015.05.0.tar.bz2
-+sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1
++	bool "4.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0
+ 	bool "4.0.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
+@@ -212,4 +220,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
++	default "4.1"		if BR2_KERNEL_HEADERS_4_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
