@@ -1,47 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 11:15:37 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/elfutils: does not
- build with musl
-In-Reply-To: <1438983471-26367-1-git-send-email-yann.morin.1998@free.fr>
-References: <1438983471-26367-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150808111537.18bbf886@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat,  8 Aug 2015 11:35:43 +0200
+Subject: [Buildroot] [PATCH] package/dawgdic: needs gcc >= 4.7
+Message-ID: <1439026543-25909-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+std::strtoll is only supported since C++11.
 
-On Fri,  7 Aug 2015 23:37:51 +0200, Yann E. MORIN wrote:
+Fixes:
+http://autobuild.buildroot.net/results/cae/cae3cda9be779ea8359f94d13bbbca97e68495ca/
 
-> diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-> index 6c6856e..19ab8fc 100644
-> --- a/package/elfutils/Config.in
-> +++ b/package/elfutils/Config.in
-> @@ -1,6 +1,7 @@
-> -comment "elfutils needs a toolchain w/ wchar, dynamic library"
-> +comment "elfutils needs a uClibc or (e)glibc toolchain w/ wchar, dynamic library"
->  	depends on !BR2_bfin
->  	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC && !BR2_TOOLCHAIN_USES_GLIBC
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/dawgdic/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Now that I read this again, I believe this is wrong. It should be:
-
-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-
-with your version, the comment can only be visible when a toolchain
-that is *not* uclibc and *not* glibc is used. I.e, the comment is now
-only visible when musl is used. Which is not what we want.
-
-Can you send a follow-up patch to fix this (I already pushed and
-applied your patch).
-
-Thanks!
-
-Thomas
+diff --git a/package/dawgdic/Config.in b/package/dawgdic/Config.in
+index ce0b466..8ef9902 100644
+--- a/package/dawgdic/Config.in
++++ b/package/dawgdic/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_DAWGDIC
+ 	bool "dawgdic"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# std=c11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	help
+ 	  dawgdic provides a library for building and accessing
+ 	  dictionaries implemented with directed acyclic word graphs
+@@ -13,5 +15,5 @@ config BR2_PACKAGE_DAWGDIC
+ 
+ 	  https://github.com/stil/dawgdic
+ 
+-comment "dawgdic needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "dawgdic needs a toolchain w/ C++, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
