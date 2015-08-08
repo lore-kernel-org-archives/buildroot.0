@@ -1,38 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 12:46:22 +0200
-Subject: [Buildroot] [PATCH] empty: fix compile with toolchain w/o
- threads
-In-Reply-To: <20150709093140.GA8600@waldemar-brodkorb.de>
-References: <20150709093140.GA8600@waldemar-brodkorb.de>
-Message-ID: <20150808124622.7837de9c@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:55:55 -0000
+Subject: [Buildroot] [git commit branch/next] Revert "qt:
+	QT_COORD_TYPE_DOUBLE should only be set on soft float"
+Message-ID: <20150808105554.B039D81801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+commit: http://git.buildroot.net/buildroot/commit/?id=ed8c73a47404f61a955d2fc26896b986d353b9dc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 9 Jul 2015 11:31:40 +0200, Waldemar Brodkorb wrote:
-> As found via autobuilders and discussed on the list, the
-> ifdef is wrong, as empty uses SysV semaphores and not POSIX
-> semaphores.
-> 
-> Tested with glibc/uclibc-ng builds. And with uclibc-ng without
-> threads.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/empty/0002-fix-non-thread-build.patch |   49 +++++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/empty/0002-fix-non-thread-build.patch
+This reverts commit e07ec136ee3dd4bf16b18571623ac57f99136faa.
 
-Applied, thanks. Could you submit the patch upstream?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 9568b70..83fdeec 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -121,7 +121,6 @@ config BR2_PACKAGE_QT_CONFIG_FILE
+ 	  file, which Buildroot will give to Qt at compile time.
+ 
+ config BR2_PACKAGE_QT_QT_COORD_TYPE_DOUBLE
+-	depends on BR2_SOFT_FLOAT
+ 	bool "QT_COORD_TYPE to double"
+ 	help
+ 	  Set QT_COORD_TYPE to double. On ARM-based platforms, qreal
