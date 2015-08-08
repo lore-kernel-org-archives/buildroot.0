@@ -1,39 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:42 -0000
-Subject: [Buildroot] [git commit branch/next] package/opencv: add openmp
-	support
-Message-ID: <20150808105614.D58AE7FB5A@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:10 -0000
+Subject: [Buildroot] [git commit branch/next] package/libsigrok: blacklist
+	CS powerpc toolchains
+Message-ID: <20150808105600.01A7A7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a76c358fae668db53de13e9ace6f90e03ef3d3a
+commit: http://git.buildroot.net/buildroot/commit/?id=914c950df3df6f4436ef43c235d970e009cdd2b1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Note that this situation is not ideal because it only add openmp support
-to the Buildroot toolchain, not the external ones; but a couple of
-packages already are in this situation.
+Even though BR2_PACKAGE_LIBSIGROKCXX is selected, the C++
+binding is disabled due to lack of C++11 support in the toolchain.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Configure output:
+Enabled language bindings:
+ - C++............................. no (C++11 compiler required)
+
+So disable libsigrok C++ binding and pulseview for CS powerpc toolchains.
+
+Fixes:
+http://autobuild.buildroot.net/results/737/737453011ac0d13ab197258171ffa0f81bc4c368/
+
+[Thomas: use 'depends on !foo && !bar' instead of 'depends on !(foo ||
+bar)', seems it looks more logical in this situation.]
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/opencv/opencv.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libsigrok/Config.in |    5 +++++
+ package/pulseview/Config.in |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index a43de0c..633c2bf 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -250,6 +250,8 @@ else
- OPENCV_CONF_OPTS += -DWITH_JPEG=OFF
+diff --git a/package/libsigrok/Config.in b/package/libsigrok/Config.in
+index 93bd06f..8bd7d99 100644
+--- a/package/libsigrok/Config.in
++++ b/package/libsigrok/Config.in
+@@ -22,12 +22,17 @@ config BR2_PACKAGE_LIBSIGROKCXX
+ 	bool "build C++ bindings"
+ 	select BR2_PACKAGE_GLIBMM
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# CS powerpc g++ are too old. libsigrokcxx needs C++11
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	help
+ 	  Build libsigrok C++ bindings as well.
+ 
+ comment "C++ bindings need a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_LIBSIGROK
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 
  endif
  
-+OPENCV_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
-+
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_PNG),y)
- OPENCV_CONF_OPTS += -DWITH_PNG=ON
- OPENCV_DEPENDENCIES += libpng
+diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
+index df27cde..2fb844b 100644
+--- a/package/pulseview/Config.in
++++ b/package/pulseview/Config.in
+@@ -16,6 +16,9 @@ config BR2_PACKAGE_PULSEVIEW
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	# libsigrok
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	help
+ 	  PulseView is a Qt based logic analyzer, oscilloscope
+ 	  and MSO GUI for sigrok.
+@@ -27,3 +30,5 @@ comment "pulseview needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
