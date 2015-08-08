@@ -1,82 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox-panel: use
-	ACPI for the battery applet
-Message-ID: <20150808105607.A95B37F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gflags: define NO_THREADS if
+	toolchain doesn't support threads
+Message-ID: <20150808105608.2552981778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=302f28de8011fb462dd119ffbc89686862da0a2b
+commit: http://git.buildroot.net/buildroot/commit/?id=33d1e7cf0faf0f334f9c48c724d97d1051624c8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It is possible to use ACPI to monitor the battery with the battery
-mini-applet. If ACPI is not explicitly enabled, then APM is used if
-available; if ACPI is not explcitly enabled and APM is not available,
-then the battery applet is not built.
+Fixes:
+http://autobuild.buildroot.net/results/a42/a4288ed5050ce0d14e589745bf26c0a95acf645e/
 
-However, APM is not really current nowadays, and possibly missing for a
-bunch of architecture...
-
-What is a pity is that there is no way to explicitly enable or disable
-the applet; it only relies on auto-detection... :-(
-
-So, forcibly use ACPI on platforms that have it, that is x86 (32- and
-64-bit) and AArch64.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../matchbox-panel/0003-mb-applet-battery.patch    |   21 ++++++++++++++++++++
- package/matchbox-panel/matchbox-panel.mk           |    7 ++++++
- 2 files changed, 28 insertions(+), 0 deletions(-)
+ package/gflags/gflags.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/matchbox-panel/0003-mb-applet-battery.patch b/package/matchbox-panel/0003-mb-applet-battery.patch
-new file mode 100644
-index 0000000..585eb39
---- /dev/null
-+++ b/package/matchbox-panel/0003-mb-applet-battery.patch
-@@ -0,0 +1,21 @@
-+mb-applet-battery: don't declare line_parse as static
-+
-+Fix this build failure:
-+    mb-applet-battery.c: In function 'read_apm':
-+    mb-applet-battery.c:181:2: error: invalid storage class for function 'line_parse'
-+
-+Reported-by: Arnout Vandecappelle <arnout@mind.be>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN matchbox-panel-0.9.3.orig/applets/mb-applet-battery.c matchbox-panel-0.9.3/applets/mb-applet-battery.c
-+--- matchbox-panel-0.9.3.orig/applets/mb-applet-battery.c	2006-02-07 23:27:24.000000000 +0100
-++++ matchbox-panel-0.9.3/applets/mb-applet-battery.c	2015-05-02 17:13:00.843578796 +0200
-+@@ -177,7 +177,7 @@
-+ 		unsigned long	present_rate;
-+ 	};
-+ 
-+-	static int
-++	int
-+ 	line_parse(char *line, struct entry *e)
-+ 	{
-+ 		char *ptr;
-diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
-index f7d699b..a5da780 100644
---- a/package/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox-panel/matchbox-panel.mk
-@@ -20,6 +20,13 @@ else
- MATCHBOX_PANEL_CONF_OPTS += --disable-startup-notification
+diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
+index 661dad8..9dc4e15 100644
+--- a/package/gflags/gflags.mk
++++ b/package/gflags/gflags.mk
+@@ -11,7 +11,7 @@ GFLAGS_LICENSE = BSD-3c
+ GFLAGS_LICENSE_FILES = COPYING.txt
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+-GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF
++GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF -DCMAKE_CXX_FLAGS=-DNO_THREADS
  endif
  
-+# Using ACPI is only possible on x86 (32- or 64-bit) or AArch64
-+ifeq ($(BR2_aarch64)$(BR2_i386)$(BR2_x86_64),y)
-+MATCHBOX_PANEL_CONF_OPTS += --enable-acpi-linux
-+else
-+MATCHBOX_PANEL_CONF_OPTS += --disable-acpi-linux
-+endif
-+
- ifeq ($(BR2_PACKAGE_WIRELESS_TOOLS),y)
- MATCHBOX_PANEL_DEPENDENCIES += wireless_tools
- endif
+ $(eval $(cmake-package))
