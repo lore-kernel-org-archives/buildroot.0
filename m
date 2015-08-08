@@ -1,130 +1,599 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:21 -0000
-Subject: [Buildroot] [git commit branch/next] package/network-manager: add
-	patches to build with kernel headers 3.2
-Message-ID: <20150808105618.9A2E57FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qemu/configs: update to latest
+	kernel
+Message-ID: <20150808105613.5E9E48030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52282828f06dc8aa3f721727f68a5096b9ed8b49
+commit: http://git.buildroot.net/buildroot/commit/?id=0767b48c216b8591da3da8c00d7244fc137ef32b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-+ lower kernel headers dependency
+Update most of the configs to the latest kernel version (4.1) except for
+arm-nuri which is stuck.
 
-According to upstream [1], there is no known minimal kernel-version, nor
-minimal required feature-set.
-
-Experimentally tested, that 1.0.2 is works with 3.2 kernel headers, even
-some features will be missing [2].
-
-[1] https://mail.gnome.org/archives/networkmanager-list/2015-April/msg00039.html
-[2] https://mail.gnome.org/archives/networkmanager-list/2015-April/msg00041.html
-
-[Thomas: add comment in Config.in to indicate that it may work with
-earlier kernel versions.]
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...anager-fix-build-with-Linux-3.2.0-headers.patch |   30 ++++++++++++++++
- ...d-dhcp-fix-build-with-Linux-3.2.0-headers.patch |   37 ++++++++++++++++++++
- package/network-manager/Config.in                  |    3 +-
- 3 files changed, 69 insertions(+), 1 deletions(-)
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../sh4-r2d/{linux-4.0.config => linux-4.1.config} |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ .../x86/{linux-4.0.config => linux-4.1.config}     |    0
+ .../x86_64/{linux-4.0.config => linux-4.1.config}  |    0
+ .../{linux-4.0.config => linux-4.1.config}         |    0
+ configs/qemu_aarch64_virt_defconfig                |   10 +++++-----
+ configs/qemu_arm_nuri_defconfig                    |    4 ++--
+ configs/qemu_arm_versatile_defconfig               |   10 +++++-----
+ configs/qemu_arm_vexpress_defconfig                |    8 ++++----
+ configs/qemu_microblazebe_mmu_defconfig            |   10 +++++-----
+ configs/qemu_microblazeel_mmu_defconfig            |   10 +++++-----
+ configs/qemu_mips64_malta_defconfig                |   10 +++++-----
+ configs/qemu_mips64el_malta_defconfig              |   10 +++++-----
+ configs/qemu_mips_malta_defconfig                  |   10 +++++-----
+ configs/qemu_mipsel_malta_defconfig                |   10 +++++-----
+ configs/qemu_ppc64_pseries_defconfig               |    8 ++++----
+ configs/qemu_ppc_g3beige_defconfig                 |   10 +++++-----
+ configs/qemu_ppc_mpc8544ds_defconfig               |    8 ++++----
+ configs/qemu_ppc_virtex_ml507_defconfig            |   10 +++++-----
+ configs/qemu_sh4_r2d_defconfig                     |   10 +++++-----
+ configs/qemu_sparc_ss10_defconfig                  |   10 +++++-----
+ configs/qemu_x86_64_defconfig                      |   10 +++++-----
+ configs/qemu_x86_defconfig                         |   10 +++++-----
+ configs/qemu_xtensa_lx60_defconfig                 |   10 +++++-----
+ 34 files changed, 89 insertions(+), 89 deletions(-)
 
-diff --git a/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
-new file mode 100644
-index 0000000..49c1996
---- /dev/null
-+++ b/package/network-manager/0001-ppp-manager-fix-build-with-Linux-3.2.0-headers.patch
-@@ -0,0 +1,30 @@
-+From 22b99e3bbb2ca33963e839f12ab95314ab8d9ba9 Mon Sep 17 00:00:00 2001
-+From: Lubomir Rintel <lkundrak@v3.sk>
-+Date: Fri, 15 May 2015 16:37:20 +0200
-+Subject: [PATCH] ppp-manager: fix build with Linux 3.2.0 headers
-+
-+Fixes build with Ubuntu 12.04.
-+
-+In file included from ppp-manager/nm-ppp-manager.c:42:0:
-+/usr/include/linux/if_ppp.h:103:16: error: field 'b' has incomplete type
-+/usr/include/linux/if_ppp.h:108:21: error: field 'b' has incomplete type
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ src/ppp-manager/nm-ppp-manager.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
-+index e27c82b..d410ebf 100644
-+--- a/src/ppp-manager/nm-ppp-manager.c
-++++ b/src/ppp-manager/nm-ppp-manager.c
-+@@ -39,6 +39,7 @@
-+ #ifndef aligned_u64
-+ #define aligned_u64 unsigned long long __attribute__((aligned(8)))
-+ #endif
-++#include <linux/if.h>
-+ #include <linux/if_ppp.h>
-+
-+ #include "NetworkManagerUtils.h"
-+--
-+2.1.4
-diff --git a/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
-new file mode 100644
-index 0000000..01eefec
---- /dev/null
-+++ b/package/network-manager/0002-systemd-dhcp-fix-build-with-Linux-3.2.0-headers.patch
-@@ -0,0 +1,37 @@
-+From 7f84150e9f6aa7e900d70178e0fc0acc6cfba651 Mon Sep 17 00:00:00 2001
-+From: Lubomir Rintel <lkundrak@v3.sk>
-+Date: Fri, 15 May 2015 16:38:10 +0200
-+Subject: [PATCH] systemd-dhcp: fix build with Linux 3.2.0 headers
-+
-+Fixes build on Ubuntu 12.04.
-+
-+systemd/src/libsystemd-network/dhcp-network.c: In function '_bind_raw_socket':
-+systemd/src/libsystemd-network/dhcp-network.c:75:17: error: 'BPF_XOR' undeclared (first use in this function)
-+systemd/src/libsystemd-network/dhcp-network.c:75:17: note: each undeclared identifier is reported only once for each function it appears in
-+make[4]: *** [libsystemd_nm_la-dhcp-network.lo] Error 1
-+
-+(cherry picked from commit 3811a68389b9277533f2eee8372927ca6238653e)
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
-+index 6d500f4..f8856a1 100644
-+--- a/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
-++++ b/src/dhcp-manager/systemd-dhcp/nm-sd-adapt.h
-+@@ -38,6 +38,11 @@
-+
-+ #include "nm-logging.h"
-+
-++/* Missing in Linux 3.2.0, in Ubuntu 12.04 */
-++#ifndef BPF_XOR
-++#define BPF_XOR 0xa0
-++#endif
-++
-+ static inline guint32
-+ _slog_level_to_nm (int slevel)
-+ {
-+--
-+2.1.4
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index f6d8564..bcf8f90 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	bool "networkmanager"
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_PACKAGE_HAS_UDEV
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	# Tested with 3.2, but may even work with earlier versions
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
- 	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
- 	select BR2_PACKAGE_DBUS
+diff --git a/board/qemu/aarch64-virt/linux-4.0.config b/board/qemu/aarch64-virt/linux-4.1.config
+similarity index 100%
+rename from board/qemu/aarch64-virt/linux-4.0.config
+rename to board/qemu/aarch64-virt/linux-4.1.config
+diff --git a/board/qemu/arm-versatile/linux-4.0.config b/board/qemu/arm-versatile/linux-4.1.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-4.0.config
+rename to board/qemu/arm-versatile/linux-4.1.config
+diff --git a/board/qemu/microblazebe-mmu/linux-4.0.config b/board/qemu/microblazebe-mmu/linux-4.1.config
+similarity index 100%
+rename from board/qemu/microblazebe-mmu/linux-4.0.config
+rename to board/qemu/microblazebe-mmu/linux-4.1.config
+diff --git a/board/qemu/microblazeel-mmu/linux-4.0.config b/board/qemu/microblazeel-mmu/linux-4.1.config
+similarity index 100%
+rename from board/qemu/microblazeel-mmu/linux-4.0.config
+rename to board/qemu/microblazeel-mmu/linux-4.1.config
+diff --git a/board/qemu/mips-malta/linux-4.0.config b/board/qemu/mips-malta/linux-4.1.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-4.0.config
+rename to board/qemu/mips-malta/linux-4.1.config
+diff --git a/board/qemu/mips64-malta/linux-4.0.config b/board/qemu/mips64-malta/linux-4.1.config
+similarity index 100%
+rename from board/qemu/mips64-malta/linux-4.0.config
+rename to board/qemu/mips64-malta/linux-4.1.config
+diff --git a/board/qemu/mips64el-malta/linux-4.0.config b/board/qemu/mips64el-malta/linux-4.1.config
+similarity index 100%
+rename from board/qemu/mips64el-malta/linux-4.0.config
+rename to board/qemu/mips64el-malta/linux-4.1.config
+diff --git a/board/qemu/mipsel-malta/linux-4.0.config b/board/qemu/mipsel-malta/linux-4.1.config
+similarity index 100%
+rename from board/qemu/mipsel-malta/linux-4.0.config
+rename to board/qemu/mipsel-malta/linux-4.1.config
+diff --git a/board/qemu/ppc-g3beige/linux-4.0.config b/board/qemu/ppc-g3beige/linux-4.1.config
+similarity index 100%
+rename from board/qemu/ppc-g3beige/linux-4.0.config
+rename to board/qemu/ppc-g3beige/linux-4.1.config
+diff --git a/board/qemu/ppc-virtex-ml507/linux-4.0.config b/board/qemu/ppc-virtex-ml507/linux-4.1.config
+similarity index 100%
+rename from board/qemu/ppc-virtex-ml507/linux-4.0.config
+rename to board/qemu/ppc-virtex-ml507/linux-4.1.config
+diff --git a/board/qemu/sh4-r2d/linux-4.0.config b/board/qemu/sh4-r2d/linux-4.1.config
+similarity index 100%
+rename from board/qemu/sh4-r2d/linux-4.0.config
+rename to board/qemu/sh4-r2d/linux-4.1.config
+diff --git a/board/qemu/sparc-ss10/linux-4.0.config b/board/qemu/sparc-ss10/linux-4.1.config
+similarity index 100%
+rename from board/qemu/sparc-ss10/linux-4.0.config
+rename to board/qemu/sparc-ss10/linux-4.1.config
+diff --git a/board/qemu/x86/linux-4.0.config b/board/qemu/x86/linux-4.1.config
+similarity index 100%
+rename from board/qemu/x86/linux-4.0.config
+rename to board/qemu/x86/linux-4.1.config
+diff --git a/board/qemu/x86_64/linux-4.0.config b/board/qemu/x86_64/linux-4.1.config
+similarity index 100%
+rename from board/qemu/x86_64/linux-4.0.config
+rename to board/qemu/x86_64/linux-4.1.config
+diff --git a/board/qemu/xtensa-lx60/linux-4.0.config b/board/qemu/xtensa-lx60/linux-4.1.config
+similarity index 100%
+rename from board/qemu/xtensa-lx60/linux-4.0.config
+rename to board/qemu/xtensa-lx60/linux-4.1.config
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 81b183e..9ae5050 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -8,16 +8,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-4.1.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+index 7a270ed..56090d4 100644
+--- a/configs/qemu_arm_nuri_defconfig
++++ b/configs/qemu_arm_nuri_defconfig
+@@ -16,12 +16,12 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Lock to 3.10 headers to avoid breaking with newer kernels
+ # Stuck at 3.10.x because there's no Nuri DTS
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.74"
++BR2_DEFAULT_KERNEL_VERSION="3.10.80"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.74"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.80"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 0c3399e..ae088c2 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -10,15 +10,15 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.1.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 7c62ebc..42a506d 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -13,15 +13,15 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 098688b..190d65e 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-4.1.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 021018c..0662841 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -9,16 +9,16 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-4.1.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 35761ff..cc37fe3 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_MIPS_NABI64=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-4.1.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index 923cccd..6f7bcaf 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_MIPS_NABI64=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-4.1.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index d09a16b..53245b1 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-4.1.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index f345d71..d9053a1 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-4.1.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+index 5fe5e6a..801d6d1 100644
+--- a/configs/qemu_ppc64_pseries_defconfig
++++ b/configs/qemu_ppc64_pseries_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+ BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+index 3e3438c..060435c 100644
+--- a/configs/qemu_ppc_g3beige_defconfig
++++ b/configs/qemu_ppc_g3beige_defconfig
+@@ -6,17 +6,17 @@ BR2_powerpc_750=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux-4.1.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
+diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+index 52bc320..0583075 100644
+--- a/configs/qemu_ppc_mpc8544ds_defconfig
++++ b/configs/qemu_ppc_mpc8544ds_defconfig
+@@ -6,15 +6,15 @@ BR2_powerpc_8548=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index fd53483..0b3332e 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -6,10 +6,10 @@ BR2_powerpc_440=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Use soft float
+ BR2_SOFT_FLOAT=y
+@@ -17,9 +17,9 @@ BR2_SOFT_FLOAT=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux-4.1.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 8509e8e..c2b88e0 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -10,15 +10,15 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-4.1.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 1fff720..05fdb3e 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -8,15 +8,15 @@ BR2_GLOBAL_PATCH_DIR="board/qemu/sparc-ss10"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux-4.1.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+index 01ffcc0..d5162ea 100644
+--- a/configs/qemu_x86_64_defconfig
++++ b/configs/qemu_x86_64_defconfig
+@@ -9,14 +9,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-4.1.config"
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 0892d39..a15eff3 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.1.config"
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index b3ac6b3..b83d7e4 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -14,17 +14,17 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
+-# Lock to 4.0 headers to avoid breaking with newer kernels
++# Lock to 4.1 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.1.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
