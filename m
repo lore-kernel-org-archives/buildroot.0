@@ -1,89 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] hwloc: fix race condition in
-	make install
-Message-ID: <20150808105556.748E4818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tinyxml2: fix cmake
+	warning
+Message-ID: <20150808105558.087A181778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1dfad6bce30e59dc1416952bfd383c2af4b8bce
+commit: http://git.buildroot.net/buildroot/commit/?id=0fa452df185545d3781b3015195bee9431496b5d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/983/98364cdbffa06f151ab34b301762321b2a251ec6/
-http://autobuild.buildroot.net/results/414/41403f8ce4751a27dd1bb9c43f5a97895dea3980/
-http://autobuild.buildroot.net/results/d97/d979624843d2d2020cf43770350a8b9a63dcd04f/
+CMake complains about Policy CMP0037 that reserve some
+target name such "test".
+So remove the warning by renaming test to xmltest.
 
-Make install contains a race condition in utils/hwloc, as both
-install-exec-hook (through intall-exec) and install-data trigger
-install-man.
+Backport an upstream patch:
+0b2c22bd46be95b08f234b8b4cb262f72ab3f0e8
 
-The install-exec-hook target doesn't do anything with the manual pages, so
-fix the race condition by dropping the dependency.
-
-Patch sent upstream:
-https://www.open-mpi.org/community/lists/hwloc-devel/2015/05/4442.php
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-Makefile.am-fix-install-man-race-conditi.patch |   35 ++++++++++++++++++++
- package/hwloc/hwloc.mk                             |    2 +
- 2 files changed, 37 insertions(+), 0 deletions(-)
+ .../0002-Rename-test-fixed-cmake-warning.patch     |   38 ++++++++++++++++++++
+ 1 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/package/hwloc/0001-utils-hwloc-Makefile.am-fix-install-man-race-conditi.patch b/package/hwloc/0001-utils-hwloc-Makefile.am-fix-install-man-race-conditi.patch
+diff --git a/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch b/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
 new file mode 100644
-index 0000000..c27bdd4
+index 0000000..b712f68
 --- /dev/null
-+++ b/package/hwloc/0001-utils-hwloc-Makefile.am-fix-install-man-race-conditi.patch
-@@ -0,0 +1,35 @@
-+From d5e802c9c2ed8dbe5c937e84bc3ab440218aa8de Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Tue, 12 May 2015 16:03:14 +0200
-+Subject: [PATCH] utils/hwloc/Makefile.am: fix install-man race condition
++++ b/package/tinyxml2/0002-Rename-test-fixed-cmake-warning.patch
+@@ -0,0 +1,38 @@
++From 77631a9cf500a578338a83bc230c419bf2a05b50 Mon Sep 17 00:00:00 2001
++From: xantares <xantares09@hotmail.com>
++Date: Fri, 14 Nov 2014 19:46:18 +0100
++Subject: [PATCH] Rename test, fixed cmake warning.
 +
-+Make install contains a race condition in utils/hwloc, as both
-+install-exec-hook (through intall-exec) and install-data trigger
-+install-man:
-+
-+http://autobuild.buildroot.net/results/414/41403f8ce4751a27dd1bb9c43f5a97895dea3980/build-end.log
-+
-+The install-exec-hook target doesn't do anything with the manual pages, so
-+fix the race condition by dropping the dependency.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+ utils/hwloc/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ CMakeLists.txt | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
 +
-+diff --git a/utils/hwloc/Makefile.am b/utils/hwloc/Makefile.am
-+index 7ca8027..8bbee86 100644
-+--- a/utils/hwloc/Makefile.am
-++++ b/utils/hwloc/Makefile.am
-+@@ -108,7 +108,7 @@ endif HWLOC_HAVE_LINUX
-+ 	  -e 's/#HWLOC_DATE#/@HWLOC_RELEASE_DATE@/g' \
-+ 	  > $@ < $<
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 4375bb9..4a8f91d 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -53,10 +53,10 @@ set_target_properties(tinyxml2 PROPERTIES
++ 	VERSION "${GENERIC_LIB_VERSION}"
++ 	SOVERSION "${GENERIC_LIB_SOVERSION}")
 + 
-+-install-exec-hook: install-man
-++install-exec-hook:
-+ 	$(SED) -e 's/HWLOC_top_builddir\/utils\/hwloc/bindir/' -e 's/HWLOC_top_builddir\/utils\/lstopo/bindir/' -e '/HWLOC_top_builddir/d' $(DESTDIR)$(bindir)/hwloc-assembler-remote > $(DESTDIR)$(bindir)/hwloc-assembler-remote.tmp && mv -f $(DESTDIR)$(bindir)/hwloc-assembler-remote.tmp $(DESTDIR)$(bindir)/hwloc-assembler-remote
-+ 	$(SED) -e 's/HWLOC_top_builddir\/utils\/hwloc/bindir/' -e 's/HWLOC_top_builddir\/utils\/lstopo/bindir/' -e '/HWLOC_top_builddir/d' $(DESTDIR)$(bindir)/hwloc-compress-dir > $(DESTDIR)$(bindir)/hwloc-compress-dir.tmp && mv -f $(DESTDIR)$(bindir)/hwloc-compress-dir.tmp $(DESTDIR)$(bindir)/hwloc-compress-dir
-+ 	chmod +x $(DESTDIR)$(bindir)/hwloc-assembler-remote $(DESTDIR)$(bindir)/hwloc-compress-dir
++-add_executable(test xmltest.cpp)
++-add_dependencies(test tinyxml2)
++-add_dependencies(test ${TARGET_DATA_COPY})
++-target_link_libraries(test tinyxml2)
+++add_executable(xmltest xmltest.cpp)
+++add_dependencies(xmltest tinyxml2)
+++add_dependencies(xmltest ${TARGET_DATA_COPY})
+++target_link_libraries(xmltest tinyxml2)
++ 
++ 
++ install(TARGETS tinyxml2
++@@ -76,4 +76,4 @@ endforeach()
++ configure_file(tinyxml2.pc.in tinyxml2.pc @ONLY)
++ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tinyxml2.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
++ 
++-#add_test(test ${SAMPLE_NAME} COMMAND $<TARGET_FILE:${SAMPLE_NAME}>)
+++#add_test(xmltest ${SAMPLE_NAME} COMMAND $<TARGET_FILE:${SAMPLE_NAME}>)
 +-- 
-+2.1.4
++1.9.3
 +
-diff --git a/package/hwloc/hwloc.mk b/package/hwloc/hwloc.mk
-index c1f6fea..9b5eae8 100644
---- a/package/hwloc/hwloc.mk
-+++ b/package/hwloc/hwloc.mk
-@@ -11,6 +11,8 @@ HWLOC_SITE = http://www.open-mpi.org/software/hwloc/v$(HWLOC_VERSION_MAJOR)/down
- HWLOC_LICENSE = BSD-3c
- HWLOC_LICENSE_FILES = COPYING
- HWLOC_DEPENDENCIES = host-pkgconf
-+# 0001-utils-hwloc-Makefile.am-fix-install-man-race-conditi.patch touches Makefile.am
-+HWLOC_AUTORECONF = YES
- 
- HWLOC_CONF_OPTS = \
- 	--disable-opencl \
