@@ -1,45 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:44 -0000
-Subject: [Buildroot] [git commit branch/next] package/openswan: fix parallel
-	build
-Message-ID: <20150808105632.79058818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] heimdal: needs host-ncurses
+Message-ID: <20150808105632.818DE818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=931ee9c1ae2f4e3507d16e394c34c719803c294f
+commit: http://git.buildroot.net/buildroot/commit/?id=b0e5bef3e3ee881ef2a1916c18ab95fef86dd7ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-    http://autobuild.buildroot.org/results/2ec/2ecb098b01bd44d75182b15f98c1fd2a8c927438/
-    http://autobuild.buildroot.org/results/18f/18f0166f3fa831f321818e286d9c2e9037f8c8d0/
-    ...
+Otherwise it will fail with an error like this one:
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+checking for tgetent in -lcurses... no
+checking for tgetent in -lncurses... no
+configure: error: libcurses or libncurses are required!
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openswan/openswan.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/heimdal/heimdal.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index 6c6a8a7..b7689c1 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
-@@ -29,12 +29,12 @@ endif
- endif
+diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
+index 6260f8c..19bca5e 100644
+--- a/package/heimdal/heimdal.mk
++++ b/package/heimdal/heimdal.mk
+@@ -6,7 +6,7 @@
  
- define OPENSWAN_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
- 		$(OPENSWAN_MAKE_OPTS) programs
- endef
- 
- define OPENSWAN_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
- 		$(OPENSWAN_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- endef
- 
+ HEIMDAL_VERSION = 1.6rc2
+ HEIMDAL_SITE = http://www.h5l.org/dist/src
+-HEIMDAL_DEPENDENCIES = host-e2fsprogs host-pkgconf
++HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
+ HEIMDAL_INSTALL_STAGING = YES
+ # static because of -fPIC issues with e2fsprogs on x86_64 host
+ HOST_HEIMDAL_CONF_OPTS = \
