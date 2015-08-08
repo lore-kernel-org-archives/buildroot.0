@@ -1,63 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:42 -0000
-Subject: [Buildroot] [git commit branch/next] ptpd2: systemd support
-Message-ID: <20150808105632.5FBED818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux: don't enforce
+	check for DTS when not building
+Message-ID: <20150808105632.18DBD81904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e060b9c83228e81ce61a8f326970e064982fa50
+commit: http://git.buildroot.net/buildroot/commit/?id=ce2b7face01acab42e67c5ddf9f075445fe77693
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Following package and sysv initscript naming scheme,
-the service is "ptpd2" instead of just "ptpd" version 2.
+Currently, this is triggering the error message:
+    make randconfig
+    make source
 
-[Thomas:
-  - use relative symlink instead of an absolute symlink
-  - remove the -s option, which redirects stdout, since systemd will
-    take care of it
-  - add the -g option, to be consistent with what the init script is
-    using.]
+Limit the checks that enforce a DTS is set and at most one DTB is
+appended to when we are actually building, like is done for the
+configuration-file variables.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ptpd2/ptpd2.mk      |    8 ++++++++
- package/ptpd2/ptpd2.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ linux/linux.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
-index e1d4f27..6b2e6bc 100644
---- a/package/ptpd2/ptpd2.mk
-+++ b/package/ptpd2/ptpd2.mk
-@@ -29,4 +29,12 @@ define PTPD2_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S65ptpd2
- endef
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b602a04..cd32652 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -88,6 +88,8 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+ KERNEL_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+ endif
  
-+define PTPD2_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/ptpd2/ptpd2.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/ptpd2.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/ptpd2.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ptpd2.service
-+endef
++ifeq ($(BR_BUILDING),y)
 +
- $(eval $(autotools-package))
-diff --git a/package/ptpd2/ptpd2.service b/package/ptpd2/ptpd2.service
-new file mode 100644
-index 0000000..66e71ce
---- /dev/null
-+++ b/package/ptpd2/ptpd2.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Precision Time Protocol daemon
-+After=syslog.target network.target
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT)$(KERNEL_DTS_NAME),y)
+ $(error No kernel device tree source specified, check your \
+ BR2_LINUX_KERNEL_USE_INTREE_DTS / BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings)
+@@ -100,6 +102,8 @@ $(error Kernel with appended device tree needs exactly one DTS source. \
+ endif
+ endif
+ 
++endif # BR_BUILDING
 +
-+[Service]
-+ExecStart=/usr/sbin/ptpd2 -C -g
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
