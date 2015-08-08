@@ -1,49 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:00 -0000
-Subject: [Buildroot] [git commit branch/next] boost: do not allow boost-log
-	on PowerPC with uClibc
-Message-ID: <20150808105558.25B7D81904@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ipmiutil: really force
+	md2 off
+Message-ID: <20150808105558.56CBD81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7aaa9bee2e6009c6c00fa2a356b8f014999e9a54
+commit: http://git.buildroot.net/buildroot/commit/?id=25e15fd17fa51a79b40159629dea1eea7b5f8d96
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The build of boost-log with a uClibc toolchain on PowerPC fails with
-some weird C++ issues. Since nobody ever looked into this problem,
-let's "fix" the autobuilder issue by not allowing to select boost-log
-in such a situation.
+If ALLOW_GNU is not defined, SKIP_MD2 is a nop.
 
 Fixes:
+http://autobuild.buildroot.net/results/f606ec1fff4cea257a4c6274bc5603efdfc439ad/
 
-   http://autobuild.buildroot.net/results/13b43105caf4d3952de70030b51f8d96cf6604ee/
-   (and many, many similar build failures)
-
-[Peter: also add dependency to comment]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/ipmiutil/ipmiutil.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 0ed8dd2..92d59c2 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -99,9 +99,13 @@ comment "boost-locale needs a toolchain w/ wchar"
- config BR2_PACKAGE_BOOST_LOG
- 	bool "boost-log"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	# for some reason, uClibc on PowerPC fails to build the boost
-+	# log module
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index c3d791c..c7a8dd8 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -12,7 +12,8 @@ IPMIUTIL_LICENSE_FILES = COPYING
+ IPMIUTIL_AUTORECONF = YES
+ # tests against distro libcrypto so it might get a false positive when
+ # the openssl version is old, so force it off
+-IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DSKIP_MD2"
++# SKIP_MD2 can be used only if ALLOW_GNU is defined.
++IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2"
+ IPMIUTIL_DEPENDENCIES = openssl
  
- comment "boost-log needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 
- config BR2_PACKAGE_BOOST_MATH
- 	bool "boost-math"
+ $(eval $(autotools-package))
