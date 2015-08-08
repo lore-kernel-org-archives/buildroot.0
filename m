@@ -1,45 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] vsftpd: use pkg-config to get
-	OpenSSL link flags
-Message-ID: <20150808105556.BB129818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tiff: add hash
+Message-ID: <20150808105601.0CFF67FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d046a5c3d9c92a3b7a69e7474b05cc9e52ffce5
+commit: http://git.buildroot.net/buildroot/commit/?id=e8f4f052b14e21d617234a3705a1bee0f9c1dd36
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Instead of hardcoding -lssl -lcrypto as the linker flags to link with
-OpenSSL, use pkg-config to fetch those flags. This allows to behave
-properly when doing static linking, since pkg-config returns the
-entire set of libraries we should link against.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/d71/d710ecfa9ed0a8e3f97d2010d3dabb372485c7f2/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vsftpd/vsftpd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/tiff/tiff.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index b94328d..ed15f00 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -23,8 +23,8 @@ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--VSFTPD_DEPENDENCIES += openssl
--VSFTPD_LIBS += -lssl -lcrypto
-+VSFTPD_DEPENDENCIES += openssl host-pkgconf
-+VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
- VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
- endif
- 
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+new file mode 100644
+index 0000000..361b5e1
+--- /dev/null
++++ b/package/tiff/tiff.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 ea1aebe282319537fb2d4d7805f478dd4e0e05c33d0928baba76a7c963684872	tiff-4.0.3.tar.gz
