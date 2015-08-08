@@ -1,27 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] package/udpcast: add hash file
-Message-ID: <20150808105601.673277FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] automake: use whenever
+	possible the ACLOCAL_HOST_DIR variable
+Message-ID: <20150808105610.AAB888030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc20ce9edffd7916e1115606ac42e42d939b97bd
+commit: http://git.buildroot.net/buildroot/commit/?id=29b146cafd44d5adc6ea342add2dd03a853b5249
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/udpcast/udpcast.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Use the ACLOCAL_HOST_DIR in the GTK_DOC_M4_INSTALL hook.
 
-diff --git a/package/udpcast/udpcast.hash b/package/udpcast/udpcast.hash
-new file mode 100644
-index 0000000..133e1db
---- /dev/null
-+++ b/package/udpcast/udpcast.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 ce9090ef80b6035a744a9b5ac335e61c99baa92c39ff53277266fbfcb836445a udpcast-20120424.tar.gz
+Move the ACLOCAL_HOST_DIR definition at the beginning so the definition
+is ahead the utilization.
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/automake/automake.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index a3fd18c..84f05dc 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
+ 
+ HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ 
++ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
++
+ define GTK_DOC_M4_INSTALL
+-	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
++	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
++		$(ACLOCAL_HOST_DIR)/gtk-doc.m4
+ endef
+ 
+ # ensure staging aclocal dir exists
+@@ -29,5 +32,4 @@ $(eval $(host-autotools-package))
+ # variables used by other packages
+ AUTOMAKE = $(HOST_DIR)/usr/bin/automake
+ ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
+-ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
+ ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
