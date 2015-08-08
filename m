@@ -1,34 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:18 -0000
-Subject: [Buildroot] [git commit branch/next] libgcrypt: allow optimization
-Message-ID: <20150808105602.1BCB57F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs: add defconfig for
+	Atmel sama5d3xek
+Message-ID: <20150808105617.6D2F97F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32e4bceaebdd40f5ab482243cc17930a2aa673a9
+commit: http://git.buildroot.net/buildroot/commit/?id=ef85f464323cdc03f0753e5e3a33a2df3fa20d9e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop the --disable-optimization option, which makes the libgcrypt configure
-remove buildroot's optimization setting passed in from CFLAGS.
+This supports:
+ - sama5d31ek
+ - sama5d33ek
+ - sama5d34ek
+ - sama5d35ek
+ - sama5d36ek
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+with or without the PDA4 or PDA7 screens.
+
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgcrypt/libgcrypt.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ configs/atmel_sama5d3xek_defconfig |   29 +++++++++++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 57c5ab1..9153fb8 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -16,7 +16,6 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
- LIBGCRYPT_CONF_ENV = \
- 	ac_cv_sys_symbol_underscore=no
- LIBGCRYPT_CONF_OPTS = \
--	--disable-optimization \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- 
- # Code doesn't build in thumb mode
+diff --git a/configs/atmel_sama5d3xek_defconfig b/configs/atmel_sama5d3xek_defconfig
+new file mode 100644
+index 0000000..cc34bf9
+--- /dev/null
++++ b/configs/atmel_sama5d3xek_defconfig
+@@ -0,0 +1,29 @@
++BR2_arm=y
++BR2_cortex_a5=y
++BR2_ARM_EABIHF=y
++BR2_ARM_FPU_VFPV4D16=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.18"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
++BR2_LINUX_KERNEL_DEFCONFIG="sama5"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sama5d31ek sama5d31ek_pda4 sama5d31ek_pda7 sama5d31ek_revc sama5d31ek_revc_pda4 sama5d31ek_revc_pda7 sama5d33ek sama5d33ek_pda4 sama5d33ek_pda7 sama5d33ek_revc sama5d33ek_revc_pda4 sama5d33ek_revc_pda7 sama5d34ek sama5d34ek_pda4 sama5d34ek_pda7 sama5d34ek_revc sama5d34ek_revc_pda4 sama5d34ek_revc_pda7 sama5d35ek sama5d35ek_revc sama5d36ek sama5d36ek_pda4 sama5d36ek_pda7 sama5d36ek_revc sama5d36ek_revc_pda4 sama5d36ek_revc_pda7"
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
++BR2_TARGET_ROOTFS_UBI=y
++BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3xeknf_uboot"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="sama5d3xek_nandflash"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
++BR2_TARGET_UBOOT_SPL=y
++BR2_PACKAGE_HOST_SAM_BA=y
