@@ -1,99 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:56 -0000
-Subject: [Buildroot] [git commit branch/next] package/at: fix glibcism
-Message-ID: <20150808105554.DEF5581801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] cc-tool: fix static build
+	problem with boost regex
+Message-ID: <20150808105555.8FFD1818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b1c4349a3f18eb67772474881e1379e55bf37f6
+commit: http://git.buildroot.net/buildroot/commit/?id=4051756ad45452a5a949835fb39544d4e425721a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-at needs __isleap() which is in (e)glibc and uClibc, but not in musl.
-
-Add a patch (from Open Embedded) that removes use of the macros, and
-directly expands the corresponding code in lieu of the macro calls.
+The boost.m4 logic is a bit crappy, and needs some help to know that
+boost_regex needs the pthread library.
 
 Fixes:
-    http://autobuild.buildroot.org/results/6f2/6f25e80e8aedec91323ef9b67576b550d7abee60/
-    http://autobuild.buildroot.org/results/da5/da5bb779f3077b079203fcbdb2533dd790963cd4/
-    http://autobuild.buildroot.org/results/8a6/8a6ce608c6f46d08ed77049f796e98e6e10a1709/
-    ...
 
-Thanks to J??rg for pointing to the OE patch! :-)
+  http://autobuild.buildroot.org/results/69a/69aff0b9d0ac8fe08e1d2f7ffb691f6a8fc8693b/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: J??rg Krause <joerg.krause@embedded.rocks>
-Tested-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../at/0008-remove-glibc-__isleap-assumption.patch |   59 ++++++++++++++++++++
- 1 files changed, 59 insertions(+), 0 deletions(-)
+ package/cc-tool/cc-tool.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/at/0008-remove-glibc-__isleap-assumption.patch b/package/at/0008-remove-glibc-__isleap-assumption.patch
-new file mode 100644
-index 0000000..2152249
---- /dev/null
-+++ b/package/at/0008-remove-glibc-__isleap-assumption.patch
-@@ -0,0 +1,59 @@
-+From 7f811d9c4ebc9444e613e251c31d6bf537a24dc1 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Mon, 13 Apr 2015 16:35:30 -0700
-+Subject: [PATCH] remove glibc assumption
+diff --git a/package/cc-tool/cc-tool.mk b/package/cc-tool/cc-tool.mk
+index 7312bd3..3a3f85a 100644
+--- a/package/cc-tool/cc-tool.mk
++++ b/package/cc-tool/cc-tool.mk
+@@ -14,4 +14,10 @@ CC_TOOL_DEPENDENCIES = boost libusb
+ # Configure script "discovers" boost in /usr/local if not given explicitly
+ CC_TOOL_CONF_OPTS = --with-boost=$(STAGING_DIR)/usr
+ 
++# Help boost.m4 find the Boost Regex library, which needs the pthread
++# library, but isn't detected using a modern (pkg-config) mechanism.
++ifeq ($(BR2_STATIC_LIBS),y)
++CC_TOOL_CONF_ENV += LIBS="-lpthread"
++endif
 +
-+glibc time.h header has an undocumented __isleap macro
-+that we are using anf musl is missing it.
-+Since it is undocumented & does not appear
-+on any other libc, stop using it and just define the macro in
-+locally  instead.
-+
-+Upstream-Status: Pending
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[patch from: http://patchwork.openembedded.org/patch/91893/ ]
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+ parsetime.y | 11 +++++++----
-+ 1 file changed, 7 insertions(+), 4 deletions(-)
-+
-+diff --git a/parsetime.y b/parsetime.y
-+index 7005e88..324e6d3 100644
-+--- a/parsetime.y
-++++ b/parsetime.y
-+@@ -8,6 +8,9 @@
-+ 
-+ #define YYDEBUG 1
-+ 
-++#define is_leap_year(y) \
-++    ((y) % 4 == 0 && ((y) % 100 != 0 || (y) % 400 == 0))
-++
-+ struct tm exectm;
-+ static int isgmt;
-+ static int yearspec;
-+@@ -217,8 +220,8 @@ date            : month_name day_number
-+ 				 mnum == 12) && dnum > 31)
-+ 			    || ((mnum ==  4 || mnum ==  6 || mnum ==  9 ||
-+ 			         mnum == 11) && dnum > 30)
-+-			    || (mnum ==  2 && dnum > 29 &&  __isleap(ynum+1900))
-+-			    || (mnum ==  2 && dnum > 28 && !__isleap(ynum+1900))
-++			    || (mnum ==  2 && dnum > 29 &&  is_leap_year(ynum+1900))
-++			    || (mnum ==  2 && dnum > 28 && !is_leap_year(ynum+1900))
-+ 			   )
-+ 			{
-+ 			    yyerror("Error in day of month");
-+@@ -261,8 +264,8 @@ date            : month_name day_number
-+ 				 mnum == 12) && dnum > 31)
-+ 			    || ((mnum ==  4 || mnum ==  6 || mnum ==  9 ||
-+ 			         mnum == 11) && dnum > 30)
-+-			    || (mnum ==  2 && dnum > 29 &&  __isleap(ynum+1900))
-+-			    || (mnum ==  2 && dnum > 28 && !__isleap(ynum+1900))
-++			    || (mnum ==  2 && dnum > 29 &&  is_leap_year(ynum+1900))
-++			    || (mnum ==  2 && dnum > 28 && !is_leap_year(ynum+1900))
-+ 			   )
-+ 			{
-+ 			    yyerror("Error in day of month");
-+-- 
-+2.1.4
+ $(eval $(autotools-package))
