@@ -1,56 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:54 -0000
-Subject: [Buildroot] [git commit branch/next] Makefile: Don't export VERBOSE
-	unless V=1 (for CMake)
-Message-ID: <20150808105614.088E7818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libevdev: bump version to 1.4.3
+Message-ID: <20150808105623.58B587FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=307029867b0384446cd74b232b45a7b4f40cf0d1
+commit: http://git.buildroot.net/buildroot/commit/?id=34c416d5b5baaeeee602b13020d7d05aced25bce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-CMake verbose mode is based on VERBOSE environment variable.
-* If VERBOSE is exported but empty, only "Dependee ... is newer than
-depender ..." messages are shown.
-* If VERBOSE is exported and set (whatever the value), all compilation
-commands are shown.
+From [1]:
+- tools: widen frequency resolution to ??s in the DPI tool
+- tools: complain about devices that don't have abs x/y axes in the edge detector
+- include: update to 4.1 header
 
-VERBOSE is currently systematically exported by Buildroot, even if it
-is empty, in the root Makefile, which implies that the "light" verbose
-mode - with "Dependee ... is newer than depender ..." messages - is
-always enabled.
+[1] http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
 
-VERBOSE should only be exported when V=1, which is the standard way to
-enable verbose mode in Buildroot.
-
-Signed-off-by: C??dric Marie <cedric.marie@openmailbox.org>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/libevdev/libevdev.hash |    4 ++--
+ package/libevdev/libevdev.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d3f80c4..8eb21d4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -215,6 +215,7 @@ ifeq ($(KBUILD_VERBOSE),1)
- ifndef VERBOSE
-   VERBOSE = 1
- endif
-+export VERBOSE
- else
-   quiet = quiet_
-   Q = @
-@@ -228,7 +229,7 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
- # kconfig uses CONFIG_SHELL
- CONFIG_SHELL := $(SHELL)
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 535490b..1b7897d 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-April/001167.html
+-sha256 7c77b213f075706d428a2af54b66bf86b03a68e9fb390e7ec48cf55065970643 libevdev-1.4.2.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
++sha256 1c418b26fd78b0e9900872be2f77fb5311c877b34ec5c75efd1b670ed627969b libevdev-1.4.3.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 3ed7ba0..082a7cc 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE VERBOSE
-+export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE
- 
- ifndef HOSTAR
- HOSTAR := ar
+-LIBEVDEV_VERSION = 1.4.2
++LIBEVDEV_VERSION = 1.4.3
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
