@@ -1,123 +1,185 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:00 -0000
-Subject: [Buildroot] [git commit branch/next] packages: do not use
-	TAR_STRIP_COMPONENTS, but directly --strip-components
-Message-ID: <20150808105628.A57A880414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual: add kernel-module
+Message-ID: <20150808105628.211BC7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22ed697d11e033914cab7631fba899ba436a5a5b
+commit: http://git.buildroot.net/buildroot/commit/?id=9e8857d05ae7ac8074e90ec690ed080601ca9ae5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/gcc.mk                                 |    2 +-
- package/lsof/lsof.mk                               |    2 +-
- .../nvidia-tegra23-binaries.mk                     |    4 ++--
- .../nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk |    4 ++--
- package/perl/perl.mk                               |    2 +-
- toolchain/toolchain-external/toolchain-external.mk |    6 +++---
- 6 files changed, 10 insertions(+), 10 deletions(-)
+ docs/manual/adding-packages-kernel-module.txt |  142 +++++++++++++++++++++++++
+ docs/manual/adding-packages.txt               |    2 +
+ 2 files changed, 144 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index be242cb..d1693d5 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -53,7 +53,7 @@ endef
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+new file mode 100644
+index 0000000..39575f7
+--- /dev/null
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -0,0 +1,142 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
++
++=== Infrastructure for packages building kernel modules
++
++Buildroot offers a helper infrastructure to make it easy to write packages that
++build and install Linux kernel modules. Some packages only contain a kernel
++module, other packages contain programs and libraries in addition to kernel
++modules. Buildroot's helper infrastructure supports either case.
++
++[[kernel-module-tutorial]]
++==== +kernel-module+ tutorial
++
++Let's start with an example on how to prepare a simple package that only
++builds a kernel module, and no other component:
++
++----
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06: 
++07: FOO_VERSION = 1.2.3
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv2
++11: FOO_LICENSE_FILES = COPYING
++12: 
++13: $(eval $(kernel-module))
++14: $(eval $(generic-package))
++----
++
++Lines 7-11 define the usual meta-data to specify the version, archive name,
++remote URI where to find the package source, licensing information.
++
++On line 13, we invoke the +kernel-module+ helper infrastructure, that
++generates all the appropriate Makefile rules and variables to build
++that kernel module.
++
++Finally, on line 14, we invoke the
++xref:generic-package-tutorial[+generic-package+ infrastructure].
++
++The dependency on +linux+ is automatically added, so it is not needed to
++specify it in +FOO_DEPENDENCIES+.
++
++What you may have noticed is that, unlike other package infrastructures,
++we explicitly invoke a second infrastructure. This allows a package to
++build a kernel module, but also, if needed, use any one of other package
++infrastructures to build normal userland components (libraries,
++executables...). Using the +kernel-module+ infrastructure on its own is
++not sufficient; another package infrastructure *must* be used.
++
++Let's look at a more complex example:
++
++----
++01: ################################################################################
++02: #
++03: # foo
++04: #
++05: ################################################################################
++06: 
++07: FOO_VERSION = 1.2.3
++08: FOO_SOURCE = foo-$(FOO_VERSION).tar.xz
++09: FOO_SITE = http://www.foosoftware.org/download
++10: FOO_LICENSE = GPLv2
++11: FOO_LICENSE_FILES = COPYING
++12: 
++13: FOO_MODULE_SUBDIRS = driver/base
++14: FOO_MODULE_MAKE_OPTS = KVERSION=$(LINUX_VERSION_PROBED)
++15: 
++16: ifeq ($(BR2_PACKAGE_LIBBAR),y)
++17: FOO_DEPENDENCIES = libbar
++18: FOO_CONF_OPTS = --enable-bar
++19: FOO_MODULE_SUBDIRS += driver/bar
++20: else
++21: FOO_CONF_OPTS = --disable-bar
++22: endif
++23: 
++24: $(eval $(kernel-module))
++26: $(eval $(autotools-package))
++----
++
++Here, we see that we have an autotools-based package, that also builds
++the kernel module located in sub-directory +driver/base+ and, if libbar
++is enabled, the kernel module located in sub-directory +driver/bar+, and
++defines the variable +KVERSION+ to be passed to the Linux buildsystem
++when building the module(s).
++
++
++[[kernel-module-reference]]
++==== +kernel-module+ reference
++
++The main macro for the  kernel module infrastructure is +kernel-module+.
++Unlike other package infrastructures, it is not stand-alone, and requires
++any of the other +*-package+ macros be called after it.
++
++The +kernel-module+ macro defines post-build and post-target-install
++hooks to build the kernel modules. If the package's +.mk+ needs access
++to the built kernel modules, it should do so in a post-build hook,
++*registered after* the call to +kernel-module+. Similarly, if the
++package's +.mk+ needs access to the kernel module after it has been
++installed, it should do so in a post-install hook, *registered after*
++the call to +kernel-module+. Here's an example:
++
++----
++$(eval $(kernel-module))
++
++define FOO_DO_STUFF_WITH_KERNEL_MODULE
++    # Do something with it...
++endef
++FOO_POST_BUILD_HOOKS += FOO_DO_STUFF_WITH_KERNEL_MODULE
++
++$(eval $(generic-package))
++----
++
++Finally, unlike the other package infrastructures, there is no
+++host-kernel-module+ variant to build a host kernel module.
++
++The following additional variables can optionally be defined to further
++configure the build of the kernel module:
++
++* +FOO_MODULE_SUBDIRS+ may be set to one or more sub-directories (relative
++  to the package source top-directory) where the kernel module sources are.
++  If empty or not set, the sources for the kernel module(s) are considered
++  to be located at the top of the package source tree.
++
++* +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
++  to pass to the Linux buildsystem.
++
++Yo may also reference (but you may *not* set!) those variables:
++
++ * +LINUX_DIR+ contains the path to where the Linux kernel has been
++   extracted and built.
++
++ * +LINUX_VERSION+ contains the version string as configured by the user.
++
++ * +LINUX_VERSION_PROBED+ contains the real version string of the kernel,
++   retrieved with running `make -C $(LINUX_DIR) kernelrelease`
++
++ * +KERNEL_ARCH+ contains the name of the current architecture, like `arm`,
++   `mips`...
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index b8674f8..721fe39 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -29,6 +29,8 @@ include::adding-packages-kconfig.txt[]
  
- define HOST_GCC_EXTRACT_CMDS
- 	$(call suitable-extractor,$(GCC_SOURCE)) $(DL_DIR)/$(GCC_SOURCE) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
-+		$(TAR) --strip-components=1 -C $(@D) \
- 		--exclude='libjava/*' \
- 		--exclude='libgo/*' \
- 		--exclude='gcc/testsuite/*' \
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 19b303b..f9b7661 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -34,7 +34,7 @@ endif
- define LSOF_EXTRACT_CMDS
- 	$(call suitable-extractor,$(LSOF_SOURCE)) $(DL_DIR)/$(LSOF_SOURCE) | \
- 		$(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
- endef
+ include::adding-packages-rebar.txt[]
  
- define LSOF_CONFIGURE_CMDS
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-index 7b6029e..4f7cdcf 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-@@ -37,11 +37,11 @@ define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
- 	$(INSTALL) -d $(@D)/nv_tegra/nvidia_drivers
- 	$(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
- 		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
- 	$(INSTALL) -d $(@D)/nv_tegra/nv_sample_apps/nvgstapps
- 	$(call suitable-extractor,$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2) \
- 		$(@D)/nv_tegra/nv_sample_apps/nvgstapps.tbz2 | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nv_sample_apps/nvgstapps/ $(TAR_OPTIONS) -
- endef
- NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS += NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
++include::adding-packages-kernel-module.txt[]
++
+ include::adding-packages-asciidoc.txt[]
  
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-index 18f083d..5514643 100644
---- a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-+++ b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-@@ -16,11 +16,11 @@ define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
- 	$(INSTALL) -d $(@D)
- 	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
- 		$(DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D) $(TAR_OPTIONS) -
- 	$(INSTALL) -d $(@D)/restricted_codecs
- 	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
- 		$(@D)/restricted_codecs.tbz2 | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
- endef
- 
- define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 6794eef..091c032 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -28,7 +28,7 @@ PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
- # together with perl
- define PERL_CROSS_EXTRACT
- 	$(call suitable-extractor,$(PERL_CROSS_SOURCE)) $(DL_DIR)/$(PERL_CROSS_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 22f8118..070f068 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -417,16 +417,16 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_
- define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- endef
- else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
- # Normal handling of toolchain tarball extraction.
- define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
- 	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
-+		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
- 	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
- endef
- endif
+ include::adding-packages-hooks.txt[]
