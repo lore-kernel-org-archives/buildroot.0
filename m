@@ -1,26 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:35 -0000
-Subject: [Buildroot] [git commit branch/next] jasper: add hash file
-Message-ID: <20150808105635.570B97FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox:
+	xlib-libXcursor is an optional dependency
+Message-ID: <20150808105607.9686B7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a4bf69188360a76c6bc38183c3d0651a7297214
+commit: http://git.buildroot.net/buildroot/commit/?id=fe13eac8c8a5c5af84a8bbbc8f08a5e39543272a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/jasper/jasper.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+matchbox selects xlib-libXcursor, but does not build-depend on it.
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-new file mode 100644
-index 0000000..4d9ed74
---- /dev/null
-+++ b/package/jasper/jasper.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	6e9a959bf4f8cb02f77f42d1b9880b8e85d021ac51f43d8787b5438fd2b7a1c5	jasper-1.900.1.tar.bz2
+But xlib-libXcursor is only an optional dependency.
+
+Fix that by removing the select, and properly build-depend on it when
+it is enabled.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/matchbox/Config.in   |    1 -
+ package/matchbox/matchbox.mk |    4 ++++
+ 2 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 0c7e5ea..3a9f118 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -4,7 +4,6 @@ menuconfig BR2_PACKAGE_MATCHBOX
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  Matchbox is an Open Source base environment for the X Window
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 1abcfd8..3b6a0eb 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -35,4 +35,8 @@ else
+ MATCHBOX_CONF_OPTS += --disable-session
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++MATCHBOX_DEPENDENCIES += xlib_libXcursor
++endif
++
+ $(eval $(autotools-package))
