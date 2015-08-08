@@ -1,48 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{2, 10,
-	12, 14, 18, 19}.x / 4.0.x stable versions
-Message-ID: <20150808105557.1821481778@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:55:58 -0000
+Subject: [Buildroot] [git commit branch/next] armadillo: bump versin to
+	5.100.2
+Message-ID: <20150808105557.6F7D0818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c36e122304a1d2855656e200ccbce7c475ac8a45
+commit: http://git.buildroot.net/buildroot/commit/?id=f7d2c99afb0010d65407ab9df4f398d7e9430bb9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+This is the most recent version of the package.
+
+Also it fixes static builds (see
+http://autobuild.buildroot.net/results/1cc/1ccf0829c13896c000aed1956155a34844207b2f)
+with commit http://sourceforge.net/p/arma/code/3569/ that was made right
+before 4.400.0 release.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
+ package/armadillo/armadillo.hash |    2 +-
+ package/armadillo/armadillo.mk   |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 47a8922..3e8956b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -198,17 +198,17 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.2.68"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.76"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.78"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.41"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.42"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.40"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.42"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.12"	if BR2_KERNEL_HEADERS_3_18
--	default "3.19.6"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.1"		if BR2_KERNEL_HEADERS_4_0
-+	default "3.18.13"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
-+	default "4.0.3"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index d74d6b0..0046c56 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  0664caca9a9be410ba467a3f4fd7d4556ccda62a9e061f2935904be2afe22132  armadillo-4.000.4.tar.gz
++sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 58b8fc1..607103c 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION_MAJOR = 4.000
+-ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).4
++ARMADILLO_VERSION_MAJOR = 5.100
++ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).2
+ ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
