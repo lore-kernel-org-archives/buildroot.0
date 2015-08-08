@@ -1,39 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:55 -0000
-Subject: [Buildroot] [git commit branch/next] qt: fix missing target
-Message-ID: <20150808105555.35DD281801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ipmiutil: force md2 off
+Message-ID: <20150808105554.D705F818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7ac95b8db400e766acdcfe9b1da1c92fed3ace5
+commit: http://git.buildroot.net/buildroot/commit/?id=ec45eb1619da40ea97fa39dfe60cee2a9b8e78c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix :
- http://autobuild.buildroot.net/results/093/09302c153418c3af6dc4cdd12a0149505cfbca0b/
- http://autobuild.buildroot.net/results/96f/96f8a9758f0116aec999028fde1b9c983c143809/
+The configure test runs against LIB_DIR (which is --libdir in configure
+parlay) hence it's against the distro openssl version.
+On newish openssl versions md2 is disabled by default, and buildroot
+doesn't try to enable it (it's obsolete), but if the distro
+libcrypto/openssl has it enabled then ipmiutil tries to use it.
 
-sh target must be provided instead of generic to have the correct QT_NO_FPU
-behaviour.
+Force it off to avoid build breakage. Fixes:
+http://autobuild.buildroot.net/results/cd2/cd2e617f8e2b00581ab5936029f85e62ed3259ba/
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt/qt.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/ipmiutil/ipmiutil.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index d1615ae..035ca3a 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -219,6 +219,8 @@ else ifeq ($(BR2_mips)$(BR2_mipsel),y)
- QT_EMB_PLATFORM = mips
- else ifeq ($(BR2_powerpc),y)
- QT_EMB_PLATFORM = powerpc
-+else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
-+QT_EMB_PLATFORM = sh
- else
- QT_EMB_PLATFORM = generic
- endif
+diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
+index 8e281d4..c3d791c 100644
+--- a/package/ipmiutil/ipmiutil.mk
++++ b/package/ipmiutil/ipmiutil.mk
+@@ -10,7 +10,9 @@ IPMIUTIL_LICENSE = BSD-3c
+ IPMIUTIL_LICENSE_FILES = COPYING
+ # We're patching configure.ac
+ IPMIUTIL_AUTORECONF = YES
+-
++# tests against distro libcrypto so it might get a false positive when
++# the openssl version is old, so force it off
++IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DSKIP_MD2"
+ IPMIUTIL_DEPENDENCIES = openssl
+ 
+ $(eval $(autotools-package))
