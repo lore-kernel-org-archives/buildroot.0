@@ -1,28 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] package/lzop: add hash file
-Message-ID: <20150808105604.113767F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Config.in: Add
+	BR2_DEPRECATED_SINCE_2015_08
+Message-ID: <20150808105603.B09B37FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8ea6b6047e8172490997a2303b0a05710d4de7fe
+commit: http://git.buildroot.net/buildroot/commit/?id=602692a225d48f01c3c50eb3a09f8b4c0a81c6bf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+In preparation for the deprecation of certain features in 2015.08, add
+the BR2_DEPRECATED_SINCE_2015_08 symbol.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lzop/lzop.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/lzop/lzop.hash b/package/lzop/lzop.hash
-new file mode 100644
-index 0000000..a484e7f
---- /dev/null
-+++ b/package/lzop/lzop.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 c1425b8c77d49f5a679d5a126c90ea6ad99585a55e335a613cae59e909dbb2c9 lzop-1.03.tar.gz
+diff --git a/Config.in b/Config.in
+index 2b39d6a..bdff7df 100644
+--- a/Config.in
++++ b/Config.in
+@@ -312,6 +312,10 @@ config BR2_DEPRECATED_SINCE_2015_05
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2015_08
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
