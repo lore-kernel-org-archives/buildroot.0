@@ -1,26 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:45 -0000
-Subject: [Buildroot] [git commit branch/next] findutils: add hash file
-Message-ID: <20150808105635.8D47A80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] binutils: update to the latest
+	ARC version by default
+Message-ID: <20150808105616.9931E7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8957c13c36681bca80b76ed1eb53c4e67599043b
+commit: http://git.buildroot.net/buildroot/commit/?id=89d4a209f5abf71194325a9b91ee561673d31e92
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/findutils/findutils.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Following commit 36555b4c8dce27822ecbbed58798f887ad452b18 ("ARC:
+switch to RC1 of upcoming arc-2015.06 tools"), the binutils package
+only contains the hash information for the 2015.06-rc1 ARC version of
+binutils (which is in fact no hash). However, when an external
+toolchain is used, and binutils is built for the target, it's still
+the old 2014.11 binutils version that gets used in binutils.mk,
+causing a build failure because there is no hash available for this
+version.
 
-diff --git a/package/findutils/findutils.hash b/package/findutils/findutils.hash
-new file mode 100644
-index 0000000..66f1fcc
---- /dev/null
-+++ b/package/findutils/findutils.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	434f32d171cbc0a5e72cfc5372c6fc4cb0e681f8dce566a0de5b6fccd702b62a	findutils-4.4.2.tar.gz
+This commit fixes that by using 2015.06-rc1 as the default binutils
+version on ARC, which is used when no host-binutils has been built.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/8f7/8f772e6fccb4f918120a7bb814da2224432d1c09/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/binutils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 4111583..4ce11da 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -9,7 +9,7 @@
+ BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+ ifeq ($(BINUTILS_VERSION),)
+ ifeq ($(BR2_arc),y)
+-BINUTILS_VERSION = arc-2014.12
++BINUTILS_VERSION = arc-2015.06-rc1
+ else
+ BINUTILS_VERSION = 2.22
+ endif
