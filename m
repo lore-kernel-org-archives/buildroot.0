@@ -1,56 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:51 -0000
-Subject: [Buildroot] [git commit branch/next] skeleton: use backtick instead
-	of $(shell ...) make function
-Message-ID: <20150808105633.DBAB780414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:52 -0000
+Subject: [Buildroot] [git commit branch/next] sdl_ttf: add hash file
+Message-ID: <20150808105634.670207FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0291f7c22015a1c04bbddeaf71c75bad38b5e317
+commit: http://git.buildroot.net/buildroot/commit/?id=add53670e09bedb2ad6904375870caa62cb308f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Only the instance for setting the root password is changed. The
-instance in SYSTEM_GETTY is harmless since it just uses echo and tail.
-
-If SKELETON_TARGET_GENERIC_ROOT_PASSWD is passed as a hashed password
-by the user, it contains $, so the '-quotes are needed. If it is not,
-we need the backtick to be expanded so "-quotes are needed. Therefore,
-the quoting is moved to the definition of SYSTEM_ROOT_PASSWORD.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/skeleton/skeleton.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/sdl_ttf/sdl_ttf.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 70d1258..48e7085 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -95,19 +95,19 @@ ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
- ifeq ($(SKELETON_TARGET_GENERIC_ROOT_PASSWD),)
- SYSTEM_ROOT_PASSWORD =
- else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)),)
--SYSTEM_ROOT_PASSWORD = $(SKELETON_TARGET_GENERIC_ROOT_PASSWD)
-+SYSTEM_ROOT_PASSWORD = '$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)'
- else
- SKELETON_DEPENDENCIES += host-mkpasswd
- # This variable will only be evaluated in the finalize stage, so we can
- # be sure that host-mkpasswd will have already been built by that time.
--SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)")
-+SYSTEM_ROOT_PASSWORD = "`$(MKPASSWD) -m "$(SKELETON_TARGET_GENERIC_PASSWD_METHOD)" "$(SKELETON_TARGET_GENERIC_ROOT_PASSWD)"`"
- endif
- else # !BR2_TARGET_ENABLE_ROOT_LOGIN
--SYSTEM_ROOT_PASSWORD = *
-+SYSTEM_ROOT_PASSWORD = "*"
- endif
- 
- define SKELETON_SYSTEM_SET_ROOT_PASSWD
--	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
-+	$(SED) s,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):, $(TARGET_DIR)/etc/shadow
- endef
- TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_SET_ROOT_PASSWD
- 
+diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
+new file mode 100644
+index 0000000..ac7d6a6
+--- /dev/null
++++ b/package/sdl_ttf/sdl_ttf.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7	SDL_ttf-2.0.11.tar.gz
