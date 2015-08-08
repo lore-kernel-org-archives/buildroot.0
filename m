@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] gflags: define NO_THREADS if
-	toolchain doesn't support threads
-Message-ID: <20150808105608.2552981778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support: remove outdated note
+	re. Python 3 support
+Message-ID: <20150808105608.6B6D17FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33d1e7cf0faf0f334f9c48c724d97d1051624c8e
+commit: http://git.buildroot.net/buildroot/commit/?id=954c09ae62374d0917ce65581d60e50df8747191
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/a42/a4288ed5050ce0d14e589745bf26c0a95acf645e/
+Kconfiglib now runs as either Python 2 or Python 3.
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gflags/gflags.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ support/scripts/gen-manual-lists.py |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-index 661dad8..9dc4e15 100644
---- a/package/gflags/gflags.mk
-+++ b/package/gflags/gflags.mk
-@@ -11,7 +11,7 @@ GFLAGS_LICENSE = BSD-3c
- GFLAGS_LICENSE_FILES = COPYING.txt
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index d45810b..1e0e9bb 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -24,11 +24,6 @@
+ ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ ##
  
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
--GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF
-+GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF -DCMAKE_CXX_FLAGS=-DNO_THREADS
- endif
+-## Note about python2.
+-##
+-## This script can currently only be run using python2 interpreter due to
+-## its kconfiglib dependency (which is not yet python3 friendly).
+-
+ from __future__ import print_function
+ from __future__ import unicode_literals
  
- $(eval $(cmake-package))
