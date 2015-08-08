@@ -1,56 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:56 -0000
-Subject: [Buildroot] [git commit branch/next] package/gnuchess: add gettext
-	dependency
-Message-ID: <20150808105555.F2B3C818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] iproute2: fix static build
+Message-ID: <20150808105555.7D569818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96e89e4a69500a99e129777439b80af7df56cb8d
+commit: http://git.buildroot.net/buildroot/commit/?id=cebea9a0f482516e634ead0fce155b7d3af48230
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-gnuchess check for libintl library if BR2_NEEDS_GETTEXT_IF_LOCALE is set.
+Fixes:
+http://autobuild.buildroot.net/results/a10/a107ac3252ad48732069ec0de6ff8692b32c6a71/
+http://autobuild.buildroot.net/results/e27/e2785a35bc6bc63d5da77e406e589889e7d39055/
 
-checking for GNU gettext in libintl... yes
-checking whether to use NLS... yes
-checking where the gettext function comes from... external libintl
-checking how to link with libintl... -lintl
-
-But the dependency on gettext package is missing to ensures
-reproducible builds.
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuchess/Config.in   |    1 +
- package/gnuchess/gnuchess.mk |    3 ++-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/iproute2/iproute2.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/gnuchess/Config.in b/package/gnuchess/Config.in
-index aa446f4..4993b1a 100644
---- a/package/gnuchess/Config.in
-+++ b/package/gnuchess/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_GNUCHESS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FLEX
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  GNU Chess lets most modern computers play a full game of chess.
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 102a222..9595165 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -61,7 +61,8 @@ define IPROUTE2_BUILD_CMDS
+ 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
+ 	$(TARGET_MAKE_ENV) $(MAKE) \
+ 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
+-		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
++		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
++		SHARED_LIBS="$(if $(BR2_STATIC_LIBS),n,y)" -C $(@D)
+ endef
  
-diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
-index 48e8bc8..0555cb1 100644
---- a/package/gnuchess/gnuchess.mk
-+++ b/package/gnuchess/gnuchess.mk
-@@ -10,6 +10,7 @@ GNUCHESS_LICENSE = GPLv2+
- GNUCHESS_LICENSE_FILES = COPYING
- 
- GNUCHESS_DEPENDENCIES = host-flex flex
--GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline)
-+GNUCHESS_DEPENDENCIES += $(if $(BR2_PACKAGE_READLINE),readline) \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
- $(eval $(autotools-package))
+ define IPROUTE2_INSTALL_TARGET_CMDS
