@@ -1,45 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] fbterm: fix linking issue when
-	static linking and a toolchain with threads
-Message-ID: <20150808105556.5734981801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain/external: better
+	report RPC error for custom toolchains
+Message-ID: <20150808105555.1BE5681801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1951143a366920e33c6fe487c2d96272510e2cae
+commit: http://git.buildroot.net/buildroot/commit/?id=808c3fb8d2271642afca9a82a51d24fa03a235f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/899/899eb7e36dc31b7dcb51c0dd23d91965111d22c4/
-http://autobuild.buildroot.net/results/43a/43a34d8b64f536caa579709508bb5e00633ba6e7/
-http://autobuild.buildroot.net/results/f34/f343d015b127f29d614e7ea38b173d3a5c270d84/
-http://autobuild.buildroot.net/results/da8/da88f40dfc51aea122c146e5bfee19b031cfaab6/
+Currently, we instruct users to enable/disable BR2_TOOLCHAIN_HAS_NATIVE_RPC
+but that is a blind option. The only option users can set/unset is
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC.
 
-And many more.
+Use that in the error message.
 
-Fontconfig uses pthreads if available, but fbterm forgets to link with it
-breaking static builds.
+Notes: the only way for this message to appear is for a custom external
+toolchain, either downloaded or pre-installed, so even though we check
+the validity of the toolchain with BR2_TOOLCHAIN_HAS_NATIVE_RPC, we do
+report on BR2_TOOLCHAIN_EXTERNAL_INET_RPC.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fbterm/fbterm.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ toolchain/helpers.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
-index 7e9d324..d78d6b7 100644
---- a/package/fbterm/fbterm.mk
-+++ b/package/fbterm/fbterm.mk
-@@ -10,4 +10,10 @@ FBTERM_LICENSE = GPLv2+
- FBTERM_LICENSE_FILES = COPYING
- FBTERM_DEPENDENCIES = fontconfig liberation
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index cb3b61a..30eb065 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -197,11 +197,11 @@ check_glibc_feature = \
+ check_glibc_rpc_feature = \
+ 	IS_IN_LIBC=`test -f $(1)/usr/include/rpc/rpc.h && echo y` ; \
+ 	if [ "$(BR2_TOOLCHAIN_HAS_NATIVE_RPC)" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
+-		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
++		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_EXTERNAL_INET_RPC" ; \
+ 		exit 1 ; \
+ 	fi ; \
+ 	if [ "$(BR2_TOOLCHAIN_HAS_NATIVE_RPC)" = "y" -a "$${IS_IN_LIBC}" != "y" ] ; then \
+-		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
++		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_EXTERNAL_INET_RPC" ; \
+ 		exit 1 ; \
+ 	fi
  
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+# fontconfig uses pthreads if available, but fbterm forgets to link
-+# with it breaking static builds
-+FBTERM_CONF_ENV += LIBS='-lpthread'
-+endif
-+
- $(eval $(autotools-package))
