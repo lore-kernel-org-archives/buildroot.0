@@ -1,56 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] uclibc-ng/uclibc: enable
-	context functions
-Message-ID: <20150808105556.394CC81801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] acl,
+	attr: fix libdir variable in .la files
+Message-ID: <20150808105558.6049481778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d01aaa7035c558258205380f7cf4c81311d018e7
+commit: http://git.buildroot.net/buildroot/commit/?id=5be059c5ae7061de71b8f6c67fe5e66d50f5e6f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For mongrel2/libsigsegv we need to enable this in the uClibc-ng/uClibc-snapshot config.
-Tested with ARM:
+The acl and attr packages are using autoconf and libtool, but not
+automake, which causes all sort of troubles. Some of them are already
+worked around in acl.mk and attr.mk, but there is another one: the
+libdir variable in the .la file remains empty, which causes libtool to
+sometimes be confused about where the acl and attr libraries are
+installed.
 
-file output/target/usr/bin/mongrel2
-output/target/usr/bin/mongrel2: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), stripped
+This was causing build issues with libarchive, but interestingly only
+in situations where we had zlib *and* libxml2 also part of the build,
+which maybe affects how libtool in libarchive behaves since libarchive
+can use zlib and libxml2 as optional dependencies.
 
-Should fix:
-http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
-http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
-http://autobuild.buildroot.net/results/5ee7e83ebcfa43f6ee0a2a8b9f40f1ae84664aca/
+So what this patch does is to mungle the libattr.la and libacl.la
+files to make sure they contain the right libdir values. Yocto is
+doing exactly the same thing.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Upstream attr and acl have been converted fully to automake, so
+hopefully the upcoming upstream release will allow us to get rid of
+those hacks, but in the mean time, it seems to be the most appropriate
+solution.
+
+Here is a minimal defconfig that exhibits the problem, and which
+allows to show that this patch fixes it:
+
+BR2_bfin=y
+BR2_BINFMT_FLAT=y
+BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+BR2_INIT_NONE=y
+BR2_PACKAGE_LIBARCHIVE=y
+BR2_PACKAGE_LIBARCHIVE_BSDCPIO=y
+BR2_PACKAGE_ZLIB=y
+BR2_PACKAGE_LIBXML2=y
+BR2_PACKAGE_ACL=y
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/e96/e96c8bec1039d9fe8c6c51fd48b6be0dc8be51d7/
+  (and many, many similar build failures)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uClibc-ng.config       |    1 +
- package/uclibc/uClibc-snapshot.config |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+ package/acl/acl.mk   |   10 ++++++++++
+ package/attr/attr.mk |   10 ++++++++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-index c6e7ff9..b1f039a 100644
---- a/package/uclibc/uClibc-ng.config
-+++ b/package/uclibc/uClibc-ng.config
-@@ -117,6 +117,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
- # COMPAT_ATEXIT is not set
- UCLIBC_SUSV2_LEGACY=y
- UCLIBC_SUSV3_LEGACY=y
-+UCLIBC_HAS_CONTEXT_FUNCS=y
- # UCLIBC_SUSV3_LEGACY_MACROS is not set
- UCLIBC_SUSV4_LEGACY=y
- # UCLIBC_STRICT_HEADERS is not set
-diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-index ac3d9b0..d8ed726 100644
---- a/package/uclibc/uClibc-snapshot.config
-+++ b/package/uclibc/uClibc-snapshot.config
-@@ -117,6 +117,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
- # COMPAT_ATEXIT is not set
- UCLIBC_SUSV2_LEGACY=y
- UCLIBC_SUSV3_LEGACY=y
-+UCLIBC_HAS_CONTEXT_FUNCS=y
- # UCLIBC_SUSV3_LEGACY_MACROS is not set
- UCLIBC_SUSV4_LEGACY=y
- # UCLIBC_STRICT_HEADERS is not set
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 31bd079..62e5d15 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -27,4 +27,14 @@ ACL_INSTALL_TARGET_OPTS = 			\
+ 	exec_prefix=$(TARGET_DIR)/usr 		\
+ 	install install-lib
+ 
++# The libdir variable in libacl.la is empty, so let's fix it. This is
++# probably due to acl not using automake, and not doing fully the
++# right thing with libtool.
++define ACL_FIX_LIBTOOL_LA_LIBDIR
++	$(SED) "s,libdir=.*,libdir='$(STAGING_DIR)'," \
++		$(STAGING_DIR)/usr/lib/libacl.la
++endef
++
++ACL_POST_INSTALL_STAGING_HOOKS += ACL_FIX_LIBTOOL_LA_LIBDIR
++
+ $(eval $(autotools-package))
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 2cbcc6e..a66891b 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -26,4 +26,14 @@ ATTR_INSTALL_TARGET_OPTS = 			\
+ 	exec_prefix=$(TARGET_DIR)/usr 		\
+ 	install install-lib
+ 
++# The libdir variable in libattr.la is empty, so let's fix it. This is
++# probably due to attr not using automake, and not doing fully the
++# right thing with libtool.
++define ATTR_FIX_LIBTOOL_LA_LIBDIR
++	$(SED) "s,libdir=.*,libdir='$(STAGING_DIR)'," \
++		$(STAGING_DIR)/usr/lib/libattr.la
++endef
++
++ATTR_POST_INSTALL_STAGING_HOOKS += ATTR_FIX_LIBTOOL_LA_LIBDIR
++
+ $(eval $(autotools-package))
