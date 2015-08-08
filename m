@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] ntfs-3g: fix incorrect comment
-	dependency
-Message-ID: <20150808105631.81C9B7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox-common: fix
+	dependencies
+Message-ID: <20150808105606.E13357F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01d389191f461dc170b2dff7538520f83e33923d
+commit: http://git.buildroot.net/buildroot/commit/?id=595c84d464ea1bda24b3c0322dfca14ba760e457
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The comment for ntfs-3g displays even when the package has met its
-necessary dependencies.
+matchbox-common can be used by both matchbox-desktop and matchbox-panel,
+so it needs to depend on either, not both.
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ntfs-3g/Config.in |    2 +-
+ package/matchbox-common/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index a860498..d6d1481 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -32,4 +32,4 @@ endif
+diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
+index 33d6cc4..5a038e1 100644
+--- a/package/matchbox-common/Config.in
++++ b/package/matchbox-common/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MATCHBOX_COMMON
+ 	bool "matchbox-common"
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+-	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
++	depends on BR2_PACKAGE_MATCHBOX_PANEL || BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	help
+ 	  Common desktop folders and matchbox-session script.
  
- comment "ntfs-3g needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS)
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
