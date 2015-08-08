@@ -1,37 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] cpio: needs wchar support
-Message-ID: <20150808105637.6534480414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt: enable Script and WebKit
+	modules for ARC
+Message-ID: <20150808105637.5BD4380414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c7d490558498888a783fe3ca53f1a3b6cef1b16
+commit: http://git.buildroot.net/buildroot/commit/?id=eba4aaf053b718965fd0fb886dea753a47777f8f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Spotted during package review/testing, but forgot to squash it in the
-original patch.
+Now when ARC toolchain also supports NPTL both Qt's Script and WebKit
+modules could be successfully built and then executed on ARC.
 
+[Thomas: fix alphabetic ordering.]
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cpio/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/qt/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cpio/Config.in b/package/cpio/Config.in
-index 1787f39..df40fac 100644
---- a/package/cpio/Config.in
-+++ b/package/cpio/Config.in
-@@ -2,7 +2,11 @@ config BR2_PACKAGE_CPIO
- 	bool "cpio"
- 	# Need argp.h support
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_USE_WCHAR
- 	help
- 	  cpio archive utility for creation and extraction.
- 
- 	  https://www.gnu.org/software/cpio/
-+
-+comment "cpio needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 306fe1f..418248a 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -409,7 +409,7 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	bool
+ 	# see src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
+ 	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
+-	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
++	default y if BR2_arc || BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips || BR2_mipsel || \
+ 		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
+ 		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64
+@@ -455,7 +455,7 @@ config BR2_PACKAGE_QT_OPENSSL
+ config BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT
+ 	bool
+ 	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
+-	default y if BR2_arm || BR2_armeb || aarch64 || BR2_i386 || \
++	default y if BR2_arc || BR2_arm || BR2_armeb || aarch64 || BR2_i386 || \
+ 		BR2_microblazeel || BR2_microblazebe || BR2_mips || BR2_mipsel || \
+ 		BR2_mips64 || BR2_mips64el || BR2_nios2 || BR2_powerpc || \
+ 		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || \
