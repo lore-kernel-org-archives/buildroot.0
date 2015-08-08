@@ -1,50 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:52 -0000
-Subject: [Buildroot] [git commit branch/next] ntpd: drop unneeded uClibc
-	workaround for refclock_pcf.c
-Message-ID: <20150808105621.C5C0A7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] barebox: bump to version
+	2015.07.0
+Message-ID: <20150808105621.5FC3380414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cbe4bc52d5f1cea7d2c085e40f948a5a78183b9
+commit: http://git.buildroot.net/buildroot/commit/?id=7314eaa01709b148214994e7e15cd870b41f8d16
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-refclock_pcf.c contains code using the tm_gmtoff member of struct tm, which
-is only available on uClibc if it is built with __UCLIBC_HAS_TM_EXTENSIONS__.
-
-This change date back to:
-
-commit 7129da009cc72575a84a30c4587bd99f745c49d4
-Author: Eric Andersen <andersen@codepoet.org>
-Date:   Sat Jan 18 21:27:22 2003 +0000
-
-    Merge a bunch of stuff over from the tuxscreen buildroot, with
-    many updates to make things be more consistant.
-     -Erik
-
-But nowadays our uClibc configs DO enable __UCLIBC_HAS_TM_EXTENSIONS__, so
-it is no longer needed and can be dropped.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ntp/ntp.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ boot/barebox/Config.in    |    4 ++--
+ boot/barebox/barebox.hash |    7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 93cefa1..110eaf8 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -40,10 +40,6 @@ else
- NTP_CONF_OPTS += --disable-ATOM
- endif
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index ffac979..f6f8f15 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--define NTP_PATCH_FIXUPS
--	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
--endef
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.05.0"
++	bool "2015.07.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index aa0f12e..ee09f8d 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,6 +1,5 @@
 -
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_WAIT) += scripts/ntp-wait/ntp-wait
- NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+-# http://www.barebox.org/download/barebox-2015.05.0.tar.bz2.md5
+-md5 3b4f2c72ec3b7cc2f1f294fd2baf0c4d barebox-2015.05.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
++md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 f650e15c7a6da8cb779bb1787829fa4184b3189baf604c8af3af4e0deefa5e8e barebox-2015.05.0.tar.bz2
++sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
