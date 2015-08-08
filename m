@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:02 -0000
-Subject: [Buildroot] [git commit branch/next] nfs-utils: Create missing
-	directory sm.bak
-Message-ID: <20150808105630.4C4D580414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dovecot: Add optional
+	support for icu
+Message-ID: <20150808105630.ED5877FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a23d336fbdba575321cfddadf7d671810559b056
+commit: http://git.buildroot.net/buildroot/commit/?id=61a9a4cb29bd115b6255db682ef10442f1309682
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Optional dependency added to fts plugin since Dovecot 2.2.17:
+http://hg.dovecot.org/dovecot-2.2/diff/b179bbd226e5/configure.ac
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfs-utils/S60nfs |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/dovecot/dovecot.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-index 5e2a2c9..e163d80 100755
---- a/package/nfs-utils/S60nfs
-+++ b/package/nfs-utils/S60nfs
-@@ -10,6 +10,7 @@
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 3b4f6d1..58666d0 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -40,6 +40,13 @@ else
+ DOVECOT_CONF_OPTS += --without-bzlib
+ endif
  
- mkdir -p /var/lock/subsys
- mkdir -p /run/nfs/sm
-+mkdir -p /run/nfs/sm.bak
- touch /run/nfs/rmtab
- 
- start() {
++ifeq ($(BR2_PACKAGE_ICU),y)
++DOVECOT_CONF_OPTS += --with-icu
++DOVECOT_DEPENDENCIES += icu
++else
++DOVECOT_CONF_OPTS += --without-icu
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ DOVECOT_CONF_OPTS += --with-libcap
+ DOVECOT_DEPENDENCIES += libcap
