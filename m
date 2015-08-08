@@ -1,40 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] Revert "kmod: disable
-	--gc-sections ld option when building for xtensa"
-Message-ID: <20150808105558.84D55818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] czmq: unbreak static linking
+Message-ID: <20150808105556.872E9818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e678b07bad96595d9ed88dc4e3b74c566d75f3a4
+commit: http://git.buildroot.net/buildroot/commit/?id=aa5254f1a2bc0ea3181d51990c18681b3071b9db
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This reverts commit 55c83179c4b30c9ec715a75297849abd74a63e05.
-Now that binutils bug with --gc-section is fixed this workaroud is no
-longer needed.
+Fixes:
+http://autobuild.buildroot.net/results/faf/faf0bb00fccb1350afaef55f6cf14c11a5f5dc3c/
+http://autobuild.buildroot.net/results/8d2/8d279baa4c8bffbb01f897119092c7b736942df4/
+http://autobuild.buildroot.net/results/4d3/4d3dea604da9a5a1e7fe20548813f8de474ae33f/
+http://autobuild.buildroot.net/results/fd6/fd602617839817352763e51754553960b7f795ac/
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+And many more.
+
+Zeromq uses C++, but czmq forgets to explicitly link with libstdc++
+(or use g++ to link), breaking static linking.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kmod/kmod.mk |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+ package/czmq/czmq.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 1ac83ea..98d9998 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -39,11 +39,6 @@ KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
- KMOD_CONF_OPTS += --enable-python
- endif
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index d25bf01..789e700 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -18,6 +18,12 @@ CZMQ_LICENSE_FILES = LICENSE
+ # host-python, so disable asciidoc entirely.
+ CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
  
--# --gc-sections triggers a bug in the current Xtensa binutils
--ifeq ($(BR2_xtensa),y)
--KMOD_CONF_ENV += cc_cv_LDFLAGS__Wl___gc_sections=no
--endif
--
- ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
- 
- # add license info for kmod tools
++# zeromq uses C++, but czmq forgets to explicitly link with libstdc++
++# (or use g++ to link), breaking static linking.
++ifeq ($(BR2_STATIC_LIBS),y)
++CZMQ_CONF_ENV += LIBS='-lstdc++'
++endif
++
+ define CZMQ_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
+ endef
