@@ -1,35 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:50 -0000
-Subject: [Buildroot] [git commit branch/next] mpg123: replace $(shell ...)
-	call with $(subst ...)
-Message-ID: <20150808105633.D1FA080414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:51 -0000
+Subject: [Buildroot] [git commit branch/next] boost: use backtick instead of
+	$(shell ...) make function
+Message-ID: <20150808105633.C83FA80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d1530f46727c198a688fc4c69e29d22596b0c3b
+commit: http://git.buildroot.net/buildroot/commit/?id=e77354d28f8087fed75b2fe66fbd50799e68eca7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-There's no reason to use a shell here.
+Also remove the variables TARGET_CC_VERSION and HOST_CC_VERSION which
+lack the BOOST_ prefix and are used only once.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpg123/mpg123.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/boost/boost.mk |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 4c534e2..171cbde 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -69,7 +69,7 @@ MPG123_CONF_OPTS += --with-default-audio=alsa
- MPG123_DEPENDENCIES += alsa-lib
- endif
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index dbb5de5..cc3ba9e 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -11,9 +11,6 @@ BOOST_INSTALL_STAGING = YES
+ BOOST_LICENSE = Boost Software License 1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
  
--MPG123_CONF_OPTS += --with-audio=$(shell echo $(MPG123_AUDIO) | tr ' ' ,)
-+MPG123_CONF_OPTS += --with-audio=$(subst $(space),$(comma),$(MPG123_AUDIO))
+-TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+-HOST_CC_VERSION = $(shell $(HOSTCC) -dumpversion)
+-
+ HOST_BOOST_DEPENDENCIES =
  
- ifeq ($(BR2_PACKAGE_LIBTOOL),y)
- MPG123_DEPENDENCIES += libtool
+ # keep host variant as minimal as possible
+@@ -111,13 +108,13 @@ BOOST_LAYOUT = $(call qstrip, $(BR2_PACKAGE_BOOST_LAYOUT))
+ 
+ define BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(BOOST_FLAGS))
+-	echo "using gcc : $(TARGET_CC_VERSION) : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "using gcc : `$(TARGET_CC) -dumpversion` : $(TARGET_CXX) : <cxxflags>\"$(BOOST_TARGET_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	echo "" >> $(@D)/user-config.jam
+ endef
+ 
+ define HOST_BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
+-	echo "using gcc : $(HOST_CC_VERSION) : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
++	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	echo "" >> $(@D)/user-config.jam
+ endef
+ 
