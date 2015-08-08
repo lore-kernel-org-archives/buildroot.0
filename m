@@ -1,105 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] fluxbox: explicitly configure
-	optional dependencies
-Message-ID: <20150808105612.4804C7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] zedboard: Update readme.txt to
+	reflect BOOT.BIN generation
+Message-ID: <20150808105637.C5AC480414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5465107eef24de1b64383b579d66b03695cb9c4c
+commit: http://git.buildroot.net/buildroot/commit/?id=c139f0cce7d78e21b67f4649541a25ae8b5251f4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The following commit explicitly configures optional dependencies based
-off the respective package selections for a given configuration.
-
-In addition, this commit also cleans up some obsolete/incorrect
-arguments. With the introduction of (at least) Fluxbox 1.3.7, the
-'--with-imlib2-prefix' argument no longer exists. The argument
-'--with-xpm-prefix' has never existed; it was accidentally committed
-mimicking the configuration used to provide imlib2.
-
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fluxbox/fluxbox.mk |   53 ++++++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 51 insertions(+), 2 deletions(-)
+ board/avnet/zedboard/readme.txt |   84 +++++++++++++++++---------------------
+ 1 files changed, 38 insertions(+), 46 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index d2e8c89..305dd9a 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -15,20 +15,69 @@ FLUXBOX_CONF_OPTS = \
- 	--x-libraries=$(STAGING_DIR)/usr/lib
- FLUXBOX_DEPENDENCIES = xlib_libX11 $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+index a3f1f3e..e0ce024 100644
+--- a/board/avnet/zedboard/readme.txt
++++ b/board/avnet/zedboard/readme.txt
+@@ -5,68 +5,60 @@ System-On-Chip.
+ Zedboard information including schematics, reference designs, and manuals are
+ available from http://www.zedboard.org .
  
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+FLUXBOX_CONF_OPTS += --enable-freetype2
-+FLUXBOX_DEPENDENCIES += freetype
-+else
-+FLUXBOX_CONF_OPTS += --disable-freetype2
-+endif
-+
- ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
--FLUXBOX_CONF_OPTS += --enable-imlib2 --with-imlib2-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_CONF_OPTS += --enable-imlib2
- FLUXBOX_DEPENDENCIES += imlib2
- else
- FLUXBOX_CONF_OPTS += --disable-imlib2
- endif
+-The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
+-on some proprietary code. This dependency consists of a pair of
+-files are available from the Xilinx SDK installation.
++Steps to create a working system for Zedboard:
  
-+ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
-+FLUXBOX_CONF_OPTS += --enable-fribidi
-+FLUXBOX_DEPENDENCIES += libfribidi
-+else
-+FLUXBOX_CONF_OPTS += --disable-fribidi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
-+FLUXBOX_CONF_OPTS += --enable-xft
-+FLUXBOX_DEPENDENCIES += xlib_libXft
-+else
-+FLUXBOX_CONF_OPTS += --disable-xft
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
-+FLUXBOX_CONF_OPTS += --enable-xrender
-+FLUXBOX_DEPENDENCIES += xlib_libXrender
-+else
-+FLUXBOX_CONF_OPTS += --disable-xrender
-+endif
-+
- ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
--FLUXBOX_CONF_OPTS += --enable-xpm --with-xpm-prefix=$(STAGING_DIR)/usr
-+FLUXBOX_CONF_OPTS += --enable-xpm
- FLUXBOX_DEPENDENCIES += xlib_libXpm
- else
- FLUXBOX_CONF_OPTS += --disable-xpm
- endif
+-You will need these files from Xilinx SDK installation to generate
+-the U-Boot firmware:
+-	ps7_init.c
+-	ps7_init.h
++1) make zedboard_defconfig
++2) make
++3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
++	uImage, zynq-zed.dtb into your SD card
++4) boot your Zedboard
  
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+FLUXBOX_CONF_OPTS += --enable-xinerama
-+FLUXBOX_DEPENDENCIES += xlib_libXinerama
-+else
-+FLUXBOX_CONF_OPTS += --disable-xinerama
-+endif
+-Buildroot will create the following files and place them in the
+-<output>/images directory.
+-	zynq-zed.dtb
+-	rootfs.cpio.uboot
+-	uImage
+-	u-boot.img
+-	boot.bin
++The expected output:
+ 
++ U-Boot SPL 2015.07-rc2 (Jun 18 2015 - 16:42:58)
++ mmc boot
++ reading system.dtb
++ spl_load_image_fat_os: error reading image system.dtb, err - -1
++ reading u-boot-dtb.img
++ reading u-boot-dtb.img
+ 
+-uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+----------------------------------------------------
++ U-Boot 2015.07-rc2 (Jun 18 2015 - 16:42:58 +0200)
+ 
+-Due to licensing issues, the files ps7_init.c/h are not able to be
+-distributed with the U-Boot source code.  These files are required to make a
+-boot.bin file.
+-
+-If you already have the Xilinx tools installed, the following sequence will
+-unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+-
+-make zedboard_defconfig
+-make uboot-patch
+-cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
+-output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+-
+-After copying these files into the U-Boot source tree, you can
+-continue the build with:
+-
+-make
+-
+-*Notice*
+-While the build will successfully complete without the ps7_init.*
+-files,  the uboot.bin file generated by this configuration will not
+-function properly on the Zedboard.  Therefore, it is imperative that
+-the ps7_init.* files be copied into the U-Boot source tree any time
+-the clean, or uboot-dirclean targets are made.
++ Model: Zynq ZED Board
++ I2C:   ready
++ DRAM:  ECC disabled 512 MiB
++ MMC:   zynq_sdhci: 0
++ Using default environment
++ ...
+ 
++When using an older U-Boot then 2015.07, a working ps7_init.c
++file is required to be installed into the U-Boot directory
++structure. From 2015.07, the major Zynq-based boards are
++supported without any manual intervention.
+ 
+ Resulting system
+ ----------------
+ A FAT32 partition should be created at the beginning of the SD Card
+ and the following files should be installed:
+-	/boot.bin
+-	/devicetree.dtb
++	/BOOT.BIN
++	/zynq-zed.dtb
+ 	/uImage
+-	/uramdisk.image.gz
+-	/u-boot.img
++	/rootfs-cpio.uboot
++	/u-boot-dtb.img
+ 
+ 
+ All needed files can be taken from output/images/
+ 
+-boot.bin, uImage and u-boot.img are direct copies of the same files
++BOOT.BIN, uImage and u-boot-dtb.img are direct copies of the same files
+ available on output/images/
+ 
+-devicetree.dtb is just zynq-zed.dtb renamed.
++There is a patch attached that redefines the U-Boot's environment
++to work with Buildroot out-of-the-box.
 +
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
-+FLUXBOX_CONF_OPTS += --enable-xext
-+FLUXBOX_DEPENDENCIES += xlib_libXext
-+else
-+FLUXBOX_CONF_OPTS += --disable-xext
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+FLUXBOX_CONF_OPTS += --enable-xrandr
-+FLUXBOX_DEPENDENCIES += xlib_libXrandr
-+else
-+FLUXBOX_CONF_OPTS += --disable-xrandr
-+endif
-+
- define FLUXBOX_INSTALL_XSESSION_FILE
- 	$(INSTALL) -m 0755 -D package/fluxbox/xsession \
- 		$(TARGET_DIR)/root/.xsession
++You can alter the booting procedure by creating a file uEnv.txt
++in the root of the SD card. It is a plain text file in format
++<key>=<value> one per line:
+ 
+-uramdisk.image.gz is rootfs.cpio.uboot renamed
++kernel_image=myimage
++modeboot=myboot
++myboot=...
