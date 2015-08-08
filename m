@@ -1,148 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:56 -0000
-Subject: [Buildroot] [git commit branch/next] uclibc: add libgcc_s_resume fix
-Message-ID: <20150808105613.E22F37F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] zeromq: depend on libsodium if
+	available
+Message-ID: <20150808105625.328FC80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cd083a4a914fb55ce29d0f5c503e002b36d2405
+commit: http://git.buildroot.net/buildroot/commit/?id=6272583956ebd659f40cd5e7ef89367abaa83539
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds a fix for building uClibc 0.9.33.2 and uClibc-ng
-1.0.3 with gcc 5.1 on ARM, since we're about to add support for gcc
-5.1.
+ZeroMQ doesn't require libsodium, but will enable CURVE security if it's
+available. This patch adds the optional dependency.
 
+[Thomas: pass --without-libsodium explicitly when libsodium is not
+enabled, and to achieve this, backport a patch from upstream zeromq.]
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch  |   56 ++++++++++++++++++++
- .../1.0.3/0001-Fix-libgcc_s_resume-issue.patch     |   56 ++++++++++++++++++++
- 2 files changed, 112 insertions(+), 0 deletions(-)
+ package/zeromq/0004-allow-without-libsodium.patch |   38 +++++++++++++++++++++
+ package/zeromq/zeromq.mk                          |    9 +++++
+ 2 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
+diff --git a/package/zeromq/0004-allow-without-libsodium.patch b/package/zeromq/0004-allow-without-libsodium.patch
 new file mode 100644
-index 0000000..287405d
+index 0000000..19850ba
 --- /dev/null
-+++ b/package/uclibc/0.9.33.2/0071-Fix-libgcc_s_resume-issue.patch
-@@ -0,0 +1,56 @@
-+From 7ed8bacef45a2537646e7235092bd2e5408cd0b5 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 14 Jun 2015 15:14:22 +0200
-+Subject: [PATCH] Fix libgcc_s_resume issue
++++ b/package/zeromq/0004-allow-without-libsodium.patch
+@@ -0,0 +1,38 @@
++From c561766ab4ee4b3420b72e33fac4a75fb9194430 Mon Sep 17 00:00:00 2001
++From: Min RK <benjaminrk@gmail.com>
++Date: Mon, 16 Feb 2015 14:59:54 -0800
++Subject: [PATCH] allow `--without-libsodium`
 +
-+When built with gcc 5.1, uClibc fails to build with the following
-+issue:
++and `--with-libsodium=no` to disable linking against libsodium.
 +
-+    LD librt-0.9.33.2.so
-+  librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
-+  rt-unwind-resume.c:(.text+0x3c): undefined reference to `libgcc_s_resume'
-+  collect2: error: ld returned 1 exit status
-+  make[2]: *** [lib/librt.so] Error 1
++Without this patch, it is not possible to disable linking with libsodium present on the default path.
 +
-+This commit fixes the code in a way similar to what was done in glibc
-+in commit:
-+
-+   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
++Backport from upstream commit
++faaf4550263395b84e6a80d3f9d7ba8816cdd714.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
++ configure.ac | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
 +
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+index f4d6f41..a6a0515 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+@@ -27,7 +27,8 @@
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
++diff --git a/configure.ac b/configure.ac
++index 194fcb2..3d5f6d6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -257,7 +257,12 @@ esac
++ # Checks for libraries
++ AC_CHECK_LIB([pthread], [pthread_create])
++ AC_CHECK_LIB([rt], [clock_gettime])
++-AC_CHECK_LIB([sodium], [sodium_init],,AC_MSG_WARN(libsodium is needed for CURVE security))
+++
+++if test "x$with_libsodium" != "xno"; then
+++    AC_CHECK_LIB([sodium], [sodium_init],,AC_MSG_WARN(libsodium is needed for CURVE security))
+++else
+++    AC_MSG_WARN(libsodium is needed for CURVE security)
+++fi
 + 
-+ static void *libgcc_s_handle;
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+index f9a4ffb..e2e2e0b 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+@@ -25,7 +25,8 @@
-+ #define __libc_dlclose          dlclose
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ 
++ #
++ # Check if the compiler supports -fvisibility=hidden flag. MinGW32 uses __declspec
 +-- 
-+2.1.0
++2.4.5
 +
-diff --git a/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
-new file mode 100644
-index 0000000..2d64b98
---- /dev/null
-+++ b/package/uclibc/1.0.3/0001-Fix-libgcc_s_resume-issue.patch
-@@ -0,0 +1,56 @@
-+From 8f3bfd31864c28bf5901fc92e0405c729c2204c9 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 14 Jun 2015 13:19:43 +0200
-+Subject: [PATCH] Fix libgcc_s_resume issue
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 7e9ed19..623a12e 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -12,6 +12,7 @@ ZEROMQ_LICENSE = LGPLv3+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+ # For 0001-tests-disable-test_fork-if-fork-is-not-available.patch
+ # and 0002-acinclude.m4-make-kernel-specific-flags-cacheable.patch
++# and 0004-allow-without-libsodium.patch
+ ZEROMQ_AUTORECONF = YES
+ 
+ # Assume these flags are always available. It is true, at least for
+@@ -34,4 +35,12 @@ ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
+ ZEROMQ_CONF_OPTS += --with-system-pgm
+ endif
+ 
++# ZeroMQ uses libsodium if it's available.
++ifeq ($(BR2_PACKAGE_LIBSODIUM), y)
++ZEROMQ_DEPENDENCIES += libsodium
++ZEROMQ_CONF_OPTS += --with-libsodium="$(STAGING_DIR)/usr"
++else
++ZEROMQ_CONF_OPTS += --without-libsodium
++endif
 +
-+When built with gcc 5.1, uClibc-ng fails to build with the following
-+issue:
-+
-+    LD librt-0.9.33.2.so
-+  librt/librt_so.a(rt-unwind-resume.oS): In function `_Unwind_Resume':
-+  rt-unwind-resume.c:(.text+0x3c): undefined reference to `libgcc_s_resume'
-+  collect2: error: ld returned 1 exit status
-+  make[2]: *** [lib/librt.so] Error 1
-+
-+This commit fixes the code in a way similar to what was done in glibc
-+in commit:
-+
-+   https://sourceware.org/git/gitweb.cgi?p=glibc.git;a=commitdiff;h=175cef4163dd60f95106cfd5f593b8a4e09d02c9
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c | 3 ++-
-+ libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c       | 3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+index f4d6f41..a6a0515 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-forcedunwind.c
-+@@ -27,7 +27,8 @@
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+ static void *libgcc_s_handle;
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ static _Unwind_Reason_Code (*libgcc_s_forcedunwind)
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+index f9a4ffb..e2e2e0b 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/arm/unwind-resume.c
-+@@ -25,7 +25,8 @@
-+ #define __libc_dlclose          dlclose
-+ #define __libc_fatal(x)         {/*write(STDERR_FILENO, x, strlen(x));*/ abort();}
-+ 
-+-static void (*libgcc_s_resume) (struct _Unwind_Exception *exc);
-++static void (*libgcc_s_resume) (struct _Unwind_Exception *exc)
-++  __attribute_used__;
-+ static _Unwind_Reason_Code (*libgcc_s_personality)
-+   (_Unwind_State, struct _Unwind_Exception *, struct _Unwind_Context *);
-+ 
-+-- 
-+2.1.0
-+
+ $(eval $(autotools-package))
