@@ -1,83 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:53 -0000
-Subject: [Buildroot] [git commit branch/next] package/redis: Install
-	/etc/redis.conf to target
-Message-ID: <20150808105640.DF2977FFCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libconfig: bump to 1.5
+Message-ID: <20150808105614.32F8281904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a26dd768366452283f749a2f1560b3be3b525dcb
+commit: http://git.buildroot.net/buildroot/commit/?id=5a89f1c759dbad494a6abf921970b879eabae8d9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Copy redis.conf from the redis release package but adjust some values to
-sensible defaults using 0003-redis.conf-sane-defaults.patch
+Add hash file.
 
-The file 0003-redis.conf-sane-defaults.patch originates from the redis
-package in Arch Linux.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/0003-redis.conf-sane-defaults.patch |   37 +++++++++++++++++++++
- package/redis/redis.mk                            |    2 +
- 2 files changed, 39 insertions(+), 0 deletions(-)
+ package/libconfig/libconfig.hash |    2 ++
+ package/libconfig/libconfig.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/redis/0003-redis.conf-sane-defaults.patch b/package/redis/0003-redis.conf-sane-defaults.patch
+diff --git a/package/libconfig/libconfig.hash b/package/libconfig/libconfig.hash
 new file mode 100644
-index 0000000..6ee3f21
+index 0000000..30110cb
 --- /dev/null
-+++ b/package/redis/0003-redis.conf-sane-defaults.patch
-@@ -0,0 +1,37 @@
-+Taken from archlinux redis package
-+See https://projects.archlinux.org/svntogit/community.git/tree/trunk/redis.conf-sane-defaults.patch?h=packages/redis&id=5b2491ea61b746f289acebd12bc66e337d7e5b88
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+
-+=========================================================================
-+diff --git a/redis.conf b/redis.conf
-+index 6efb6ac..344e021 100644
-+--- a/redis.conf
-++++ b/redis.conf
-+@@ -61,7 +61,7 @@ tcp-backlog 511
-+ # Examples:
-+ #
-+ # bind 192.168.1.100 10.0.0.1
-+-# bind 127.0.0.1
-++bind 127.0.0.1
-+ 
-+ # Specify the path for the Unix socket that will be used to listen for
-+ # incoming connections. There is no default, so Redis will not listen
-+@@ -87,7 +87,7 @@ timeout 0
-+ # On other kernels the period depends on the kernel configuration.
-+ #
-+ # A reasonable value for this option is 60 seconds.
-+-tcp-keepalive 0
-++tcp-keepalive 60
-+ 
-+ # Specify the server verbosity level.
-+ # This can be one of:
-+@@ -184,7 +184,7 @@ dbfilename dump.rdb
-+ # The Append Only File will also be created inside this directory.
-+ # 
-+ # Note that you must specify a directory here, not a file name.
-+-dir ./
-++dir /var/lib/redis/
-+ 
-+ ################################# REPLICATION #################################
-+ 
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 0135cf9..04c2d6a 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -26,6 +26,8 @@ endef
- define REDIS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(REDIS_BUILDOPTS) -C $(@D) \
- 		LDCONFIG=true install
-+	$(INSTALL) -D -m 0644 $(@D)/redis.conf \
-+		$(TARGET_DIR)/etc/redis.conf
- endef
++++ b/package/libconfig/libconfig.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  e31daa390d8e4461c8830512fe2e13ba1a3d6a02a2305a02429eec61e68703f6  libconfig-1.5.tar.gz
+diff --git a/package/libconfig/libconfig.mk b/package/libconfig/libconfig.mk
+index a70ff94..f11937c 100644
+--- a/package/libconfig/libconfig.mk
++++ b/package/libconfig/libconfig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(generic-package))
+-LIBCONFIG_VERSION = 1.4.9
++LIBCONFIG_VERSION = 1.5
+ LIBCONFIG_SITE = http://www.hyperrealm.com/libconfig
+ LIBCONFIG_LICENSE = LGPLv2.1+
+ LIBCONFIG_LICENSE_FILES = COPYING.LIB
