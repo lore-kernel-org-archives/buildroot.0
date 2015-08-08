@@ -1,41 +1,109 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] neardal: properly quote output
-	of pkg-config
-Message-ID: <20150808105600.D22577FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/iso9660: add isolinux
+	support
+Message-ID: <20150808105610.898867F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ae0e16afd1eb3e48c9b49de87f8b1a382a95112
+commit: http://git.buildroot.net/buildroot/commit/?id=f9ac784ee68057715ce2f61ad8156228b4e0ddf4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 5504039c4e (neardal: fix readline/libedit detection with static
-linking) added the output of pkg-config to the LIBS shell variable without
-adding quotes around it, breaking the logic if the output would ever consist
-of more than 1 word.
+After all the preparation commits, this commit finally adds the
+iso9660 support itself. Besides adding a new Config.in entry, a little
+bit of .mk code and the isolinux.cfg default configuration, not much
+is needed.
 
-Now, pkg-config --libs ncurses currently only outputs '-lncurses', so
-nothing is really broken (for now atleast), but lets add the quotes before
-it does or the syntax gets copied somewhere else where it does.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/neardal/neardal.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ fs/iso9660/Config.in    |   20 ++++++++++++++------
+ fs/iso9660/iso9660.mk   |   11 +++++++++++
+ fs/iso9660/isolinux.cfg |    5 +++++
+ 3 files changed, 30 insertions(+), 6 deletions(-)
 
-diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
-index c65a5e6..ddaecbe 100644
---- a/package/neardal/neardal.mk
-+++ b/package/neardal/neardal.mk
-@@ -25,7 +25,7 @@ endif
- # forgets to take that into account, causing the detection to fail
- # when linking statically
- ifeq ($(BR2_STATIC_LIBS),y)
--NEARDAL_CONF_ENV += LIBS=$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)
-+NEARDAL_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)'
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index cd7b175..97925b9 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -2,7 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	bool "iso image"
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_LINUX_KERNEL
+-	depends on BR2_TARGET_GRUB
++	depends on BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX
+ 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
+ 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
+ 	help
+@@ -29,15 +29,22 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB
+ 	depends on BR2_TARGET_GRUB
+ 	select BR2_TARGET_GRUB_FS_ISO9660
+ 
++config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
++	bool "isolinux"
++	depends on BR2_TARGET_SYSLINUX_ISOLINUX
++
+ endchoice
+ 
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+ 	string "Boot menu.lst file"
+ 	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
++	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+ 	help
+-	  Use this option to provide a custom Grub menu.lst file. Note
+-	  that the strings __KERNEL_PATH__ and __INITRD_PATH__ will
+-	  automatically be replaced by the path to the kernel and
++	  Use this option to provide a custom bootloader configuration
++	  file (menu.lst for Grub, isolinux.cfg for isolinux).
++
++	  Note that the strings __KERNEL_PATH__ and __INITRD_PATH__
++	  will automatically be replaced by the path to the kernel and
+ 	  initrd images respectively.
+ 
+ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+@@ -53,6 +60,7 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+ 
  endif
  
- define NEARDAL_INSTALL_NCL
+-comment "iso image needs a Linux kernel and grub to be built"
++comment "iso image needs a Linux kernel and one of grub or isolinux to be built"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_LINUX_KERNEL || !BR2_TARGET_GRUB
++	depends on !BR2_LINUX_KERNEL || \
++		!(BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 6a1b214..588e07b 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -53,6 +53,17 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
+ 	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
+ 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
+ endef
++else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
++ROOTFS_ISO9660_DEPENDENCIES += syslinux
++ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
++	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
++ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
++define ROOTFS_ISO9660_INSTALL_BOOTLOADER
++	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/isolinux.bin \
++		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.bin
++	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
++		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
++endef
+ endif
+ 
+ define ROOTFS_ISO9660_PREPARATION
+diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
+new file mode 100644
+index 0000000..28be4fa
+--- /dev/null
++++ b/fs/iso9660/isolinux.cfg
+@@ -0,0 +1,5 @@
++default 1
++label 1
++      kernel __KERNEL_PATH__
++      initrd __INITRD_PATH__
++      append root=/dev/sr0
