@@ -1,114 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] flite: use
-	FLITE_STRIP_COMPONENTS and FLITE_SUBDIR
-Message-ID: <20150808105628.DBFFE7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] netsnmp: fix static build
+Message-ID: <20150808105638.E0C8C803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd4bcebd7c43212650cccc2494527dc3d69024d9
+commit: http://git.buildroot.net/buildroot/commit/?id=3c59cfaf291f22ec96531ec1595d339c9b4aa9bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-So far, to overcome the buggy way the flite tarball is made, we had to
-override the extract commands in a rather ugly way.
+Exclude the ucd-snmp/dlmod MIB module when building statically.
 
-The newly introduced <PKG>_STRIP_COMPONENTS, along with <PKG>_SUBDIR and a
-little edit to the patches, allow to remove the custom FLITE_EXTRACT_CMDS,
-slightly simplifying the flite.mk code.
+Fixes:
+http://autobuild.buildroot.net/results/782/7829e74f83c3c4a1f45e049ec9f9d6b00e002c1c/
+http://autobuild.buildroot.net/results/5df/5df28482dfa3d7c54d1e4ae3e1d373bd8e9a2265/
+http://autobuild.buildroot.net/results/4b7/4b7f3c15a4f4c4f4457e78767f5526c044d6dc1d/
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../flite/0001-now-honor-DESTDIR-env.-var.patch    |    4 +-
- package/flite/0002-fix-alsa-static.patch           |    4 +-
- package/flite/flite.mk                             |   35 ++++++++-----------
- 3 files changed, 19 insertions(+), 24 deletions(-)
+ package/netsnmp/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/flite/0001-now-honor-DESTDIR-env.-var.patch b/package/flite/0001-now-honor-DESTDIR-env.-var.patch
-index 5972f34..2d5fb68 100644
---- a/package/flite/0001-now-honor-DESTDIR-env.-var.patch
-+++ b/package/flite/0001-now-honor-DESTDIR-env.-var.patch
-@@ -13,8 +13,8 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 47a53d7..57cc6b9 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -31,7 +31,8 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
  
- diff --git a/config/config.in b/config/config.in
- index 914d2bf..43f1a56 100644
----- a/config/config.in
--+++ b/config/config.in
-+--- a/flite-1.4-release/config/config.in
-++++ b/flite-1.4-release/config/config.in
- @@ -49,6 +49,6 @@ include $(TOP)/config/$(langvox).lv
-  prefix        = @prefix@
-  exec_prefix   = @exec_prefix@
-diff --git a/package/flite/0002-fix-alsa-static.patch b/package/flite/0002-fix-alsa-static.patch
-index 7ed4899..12adb9e 100644
---- a/package/flite/0002-fix-alsa-static.patch
-+++ b/package/flite/0002-fix-alsa-static.patch
-@@ -3,8 +3,8 @@ Use pkg-config to determine alsa link flags. This fixes static linking.
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ config BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES
+ 	string "Build with these MIB modules"
+-	default "host ucd-snmp/dlmod agentx"
++	default "host ucd-snmp/dlmod agentx" if !BR2_STATIC_LIBS
++	default "host agentx" if BR2_STATIC_LIBS
+ 	help
+ 	  Specify which MIB modules to include.
  
- diff -Nuar flite-1.4-release.orig/configure.in flite-1.4-release/configure.in
----- flite-1.4-release.orig/configure.in	2009-08-14 23:46:38.000000000 +0300
--+++ flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
-+--- flite-1.4-release.orig/flite-1.4-release/configure.in	2009-08-14 23:46:38.000000000 +0300
-++++ flite-1.4-release/flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
- @@ -275,7 +275,10 @@
-                  #endif],
-                [AUDIODRIVER="alsa"
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index ead73fe..07ec473 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -7,18 +7,6 @@
- FLITE_VERSION = 1.4
- FLITE_SOURCE = flite-$(FLITE_VERSION)-release.tar.bz2
- FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
--FLITE_LICENSE = BSD-4c
--FLITE_LICENSE_FILES = COPYING
--
--FLITE_INSTALL_STAGING = YES
--# Patching configure.in
--FLITE_AUTORECONF = YES
--FLITE_DEPENDENCIES = host-pkgconf
--
--# Sadly, Flite does not support parallel build, especially when building its
--# shared libraries.
--FLITE_MAKE = $(MAKE1)
--
- # $ tar tf flite-1.4-release.tar.bz2
- # ...
- # flite-1.4-release//install-sh
-@@ -32,14 +20,21 @@ FLITE_MAKE = $(MAKE1)
- # flite-1.4-release/config/config.in
- # flite-1.4-release/config/system.mak.in
- #
--# So, the strip-component trick does not work at all.
--# Let's redefine the extract command.
--define FLITE_EXTRACT_CMDS
--	$(INFLATE$(suffix $(FLITE_SOURCE))) $(DL_DIR)/$(FLITE_SOURCE) | \
--		$(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	rsync -ar $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))/* $(FLITE_DIR)/
--	$(RM) -rf $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))
--endef
-+# So, we set FLITE_STRIP_COMPONENTS=0 to avoid writing to "/", and then
-+# build in flite-1.4-release/
-+FLITE_STRIP_COMPONENTS = 0
-+FLITE_SUBDIR = flite-$(FLITE_VERSION)-release
-+FLITE_LICENSE = BSD-4c
-+FLITE_LICENSE_FILES = COPYING
-+
-+FLITE_INSTALL_STAGING = YES
-+# Patching configure.in
-+FLITE_AUTORECONF = YES
-+FLITE_DEPENDENCIES = host-pkgconf
-+
-+# Sadly, Flite does not support parallel build, especially when building its
-+# shared libraries.
-+FLITE_MAKE = $(MAKE1)
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- FLITE_DEPENDENCIES += alsa-lib
