@@ -1,29 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] python-pyxml: rename the
-	package file
-Message-ID: <20150808105608.A21217FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv: add a choice
+	for selecting the gui toolkit
+Message-ID: <20150808105621.ED34C80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d9ea56a38c9ca7673e8b4273e93113ff387c798
+commit: http://git.buildroot.net/buildroot/commit/?id=5117b9776370dad62082e3842c09c8cf3b670c89
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+In OpenCV, only one GUI toolkit may be used at any one time, so group
+the two existing options into a choice to make this situation explicit.
+
+This will also be useful when we later add support for Qt5 and gtk3.
+
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: tweak commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{python-xml.hash => python-pyxml.hash}         |    0
- .../{python-xml.mk => python-pyxml.mk}             |    0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+ package/opencv/Config.in |   67 ++++++++++++++++++++++++++++++----------------
+ 1 files changed, 44 insertions(+), 23 deletions(-)
 
-diff --git a/package/python-pyxml/python-xml.hash b/package/python-pyxml/python-pyxml.hash
-similarity index 100%
-rename from package/python-pyxml/python-xml.hash
-rename to package/python-pyxml/python-pyxml.hash
-diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-pyxml.mk
-similarity index 100%
-rename from package/python-pyxml/python-xml.mk
-rename to package/python-pyxml/python-pyxml.mk
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 079730e..c3542c4 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -52,6 +52,50 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	  Include opencv_highgui (high-level gui and media i/o) module into the
+ 	  OpenCV build.
+ 
++choice
++	prompt "gui toolkit"
++	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++	help
++	  GUI toolkit to be used by the opencv_highgui module.
++
++config BR2_PACKAGE_OPENCV_GUI_NONE
++	bool "none"
++
++config BR2_PACKAGE_OPENCV_WITH_GTK
++	bool "gtk2"
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_USE_MMU # libgtk2 -> libglib2
++	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBGTK2
++
++comment "gtk2 needs X.org and a toolchain w/ wchar, threads, C++"
++	depends on BR2_USE_MMU # libgtk2 -> glib2
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on !BR2_PACKAGE_XORG7 || \
++		!BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_OPENCV_WITH_QT
++	bool "qt4"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # qt
++	select BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT_STL
++	select BR2_PACKAGE_QT_GUI_MODULE
++	select BR2_PACKAGE_QT_TEST
++	help
++	  Use Qt with QtTest module and STL support
++
++comment "qt4 needs a toolchain w/ C++"
++	depends on BR2_USE_MMU # qt
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++endchoice
++
+ config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+ 	bool "imgcodecs"
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+@@ -209,17 +253,6 @@ comment "gstreamer-1.x support needs a toolchain w/ wchar, threads"
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_OPENCV_WITH_GTK
+-	bool "gtk support"
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # libgtk2 -> glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+-	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	select BR2_PACKAGE_LIBGTK2
+-
+ config BR2_PACKAGE_OPENCV_WITH_JASPER
+ 	bool "jpeg2000 support"
+ 	select BR2_PACKAGE_JASPER
+@@ -242,18 +275,6 @@ config BR2_PACKAGE_OPENCV_WITH_PNG
+ 	help
+ 	  Use shared libpng from the target system.
+ 
+-config BR2_PACKAGE_OPENCV_WITH_QT
+-	bool "qt backend support"
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # qt
+-	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	select BR2_PACKAGE_QT
+-	select BR2_PACKAGE_QT_STL
+-	select BR2_PACKAGE_QT_GUI_MODULE
+-	select BR2_PACKAGE_QT_TEST
+-	help
+-	  Use Qt with QtTest module and STL support
+-
+ config BR2_PACKAGE_OPENCV_WITH_TIFF
+ 	bool "tiff support"
+ 	select BR2_PACKAGE_TIFF
