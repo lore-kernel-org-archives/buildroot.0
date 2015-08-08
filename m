@@ -1,64 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] google-breakpad: add patch to
-	fix AArch64 build issue
-Message-ID: <20150808105556.CDA58818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] uclibc-ng/uclibc: enable
+	context functions
+Message-ID: <20150808105556.394CC81801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=901fec315d0eb5ceb96f32a318494b9907350a72
+commit: http://git.buildroot.net/buildroot/commit/?id=d01aaa7035c558258205380f7cf4c81311d018e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
+For mongrel2/libsigsegv we need to enable this in the uClibc-ng/uClibc-snapshot config.
+Tested with ARM:
 
-  http://autobuild.buildroot.org/results/b2b/b2bfbcc922b3041ab3a1892d5c1469ec68476682/
+file output/target/usr/bin/mongrel2
+output/target/usr/bin/mongrel2: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), stripped
 
-[Peter: fix s/wiht/with/ typo as pointed out by Romain]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
+Should fix:
+http://autobuild.buildroot.net/results/a144bc6024415a5272c3cbe60ff636d078d0a555/
+http://autobuild.buildroot.net/results/00195d89a115a314bf4916af127407f61cd1b418/
+http://autobuild.buildroot.net/results/5ee7e83ebcfa43f6ee0a2a8b9f40f1ae84664aca/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-add-missing-asm-ptrace-include.patch      |   31 ++++++++++++++++++++
- 1 files changed, 31 insertions(+), 0 deletions(-)
+ package/uclibc/uClibc-ng.config       |    1 +
+ package/uclibc/uClibc-snapshot.config |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch b/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
-new file mode 100644
-index 0000000..281c7a0
---- /dev/null
-+++ b/package/google-breakpad/0001-add-missing-asm-ptrace-include.patch
-@@ -0,0 +1,31 @@
-+Include <asm/ptrace.h> to get necessary definitions on AArch64
-+
-+In glibc commit
-+https://sourceware.org/git/?p=glibc.git;a=commit;h=7d05a8168b45c0580e1f9a79c2dd26c8f0d31fca,
-+including <asm/ptrace.h> from <sys/user.h> on AArch64 has been
-+removed. So the Google Breakpad code, which used to build fine on
-+glibc 2.18 (CodeSourcery toolchain for example), no longer builds with
-+glibc 2.19 (Linaro toolchain for example).
-+
-+To fix this, this patch adds the missing <asm/ptrace.h> include (for
-+AArch64 only, to be conservative).
-+
-+This patch has not been submitted upstream, since more recent versions
-+of Google Breakpad have completely changed this part of the code.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/src/client/linux/minidump_writer/linux_dumper.h
-+===================================================================
-+--- a/src/client/linux/minidump_writer/linux_dumper.h
-++++ b/src/client/linux/minidump_writer/linux_dumper.h
-+@@ -43,6 +43,9 @@
-+ #include <stdint.h>
-+ #include <sys/types.h>
-+ #include <sys/user.h>
-++#if defined(__aarch64__)
-++#include <asm/ptrace.h>
-++#endif
-+ 
-+ #include "common/memory.h"
-+ #include "google_breakpad/common/minidump_format.h"
+diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+index c6e7ff9..b1f039a 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -117,6 +117,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
+ # COMPAT_ATEXIT is not set
+ UCLIBC_SUSV2_LEGACY=y
+ UCLIBC_SUSV3_LEGACY=y
++UCLIBC_HAS_CONTEXT_FUNCS=y
+ # UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
+ # UCLIBC_STRICT_HEADERS is not set
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index ac3d9b0..d8ed726 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -117,6 +117,7 @@ UCLIBC_DYNAMIC_ATEXIT=y
+ # COMPAT_ATEXIT is not set
+ UCLIBC_SUSV2_LEGACY=y
+ UCLIBC_SUSV3_LEGACY=y
++UCLIBC_HAS_CONTEXT_FUNCS=y
+ # UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
+ # UCLIBC_STRICT_HEADERS is not set
