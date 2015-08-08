@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] package/linux-fusion: fix
-	build for Linux >= 4.0
-Message-ID: <20150808105608.5D5057F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sysstat: bump to version 11.0.5
+Message-ID: <20150808105608.9AB267FB02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca5f11e489357d5338e728dd554b25830d6b9b85
+commit: http://git.buildroot.net/buildroot/commit/?id=4321bc464f660db4ea83cbd7e23ec3f46425572f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-fix-for-linux-4-and-above.patch           |   25 ++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ package/sysstat/sysstat.hash |    2 +-
+ package/sysstat/sysstat.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-fusion/0001-fix-for-linux-4-and-above.patch b/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
-new file mode 100644
-index 0000000..689d9bf
---- /dev/null
-+++ b/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
-@@ -0,0 +1,25 @@
-+Fix build for linux >= 4.x
-+
-+Instead of relying on testing for '3' as the linux kernel major verison,
-+check that it is 2.x to include the proper Makefile, otherwise forcibly
-+include the .26 Makefile, that is good for 3.x and 4.x too.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN linux-fusion-9.0.2.orig/Makefile linux-fusion-9.0.2/Makefile
-+--- linux-fusion-9.0.2.orig/Makefile	2013-07-15 11:58:03.000000000 +0200
-++++ linux-fusion-9.0.2/Makefile	2015-06-06 19:03:04.059842652 +0200
-+@@ -62,10 +62,10 @@
-+   CPPFLAGS += -DHAVE_LINUX_CONFIG_H
-+ endif
-+ 
-+-ifeq ($(K_VERSION),3)
-+-  KMAKEFILE = Makefile-2.6
-+-else
-++ifeq ($(K_VERSION),2)
-+   KMAKEFILE = Makefile-2.$(K_PATCHLEVEL)
-++else
-++  KMAKEFILE = Makefile-2.6
-+ endif
-+ 
-+ check-version = $(shell expr \( $(K_VERSION) \* 65536 + $(K_PATCHLEVEL) \* 256 + $(K_SUBLEVEL) \) \>= \( $(1) \* 65536 + $(2) \* 256 + $(3) \))
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index 226ff06..a170f81 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,2 +1,2 @@
+ # From http://sebastien.godard.pagesperso-orange.fr/download.html
+-md5	df1ed75656eb06320088d54247f0e803	sysstat-11.0.4.tar.xz
++md5	4d8e6e72d057189a1660462a678d9ada	sysstat-11.0.5.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index 6bdd3b8..b28c029 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSSTAT_VERSION = 11.0.4
++SYSSTAT_VERSION = 11.0.5
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
