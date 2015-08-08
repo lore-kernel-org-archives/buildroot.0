@@ -1,61 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] python3: add patch to fix
-	logic to get gcc paths
-Message-ID: <20150808105602.75C5581778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl: Fix typos in
+	HOSTCC specification
+Message-ID: <20150808105613.B4F7F7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4433c7d647f4c9385d9a7e3f0ce912d61edfd519
+commit: http://git.buildroot.net/buildroot/commit/?id=f2aabda7d05a9af9dba81e976042bafdd2bf5d69
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Python setup.py has a function called add_gcc_paths(), which
-executes gcc -E -v to get the list of header paths searched by
-gcc. However, the logic of setup.py is only valid with the normal
-english output of gcc: it doesn't work if a non-english locale is
-set. This causes setup.py to not find certain headers (such as zlib.h)
-and therefore disabling the build of such extensions.
-
-Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Albert Lee <trisk@omniti.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/019-fix-add-gcc-paths-logic.patch |   27 +++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ package/perl/perl.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/019-fix-add-gcc-paths-logic.patch b/package/python3/019-fix-add-gcc-paths-logic.patch
-new file mode 100644
-index 0000000..179a29a
---- /dev/null
-+++ b/package/python3/019-fix-add-gcc-paths-logic.patch
-@@ -0,0 +1,27 @@
-+Override system locale and set to default when adding gcc paths
-+
-+Forces the use of the default locale in the function
-+add_gcc_paths, which is called when cross compiling to add the
-+include and library paths. This is necessary because otherwise
-+the gcc output is localized and the output parsing fails, which
-+results in no paths added and detect_modules not able to find
-+any system library (eg. libz, libssl, etc.)
-+
-+[Thomas: patch taken from https://bugs.python.org/issue23767.]
-+
-+Signed-off-by: Samuel Cabrero <samuelcabrero@gmail.com>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/setup.py
-+===================================================================
-+--- a/setup.py
-++++ b/setup.py
-+@@ -423,7 +423,7 @@
-+         tmpfile = os.path.join(self.build_temp, 'gccpaths')
-+         if not os.path.exists(self.build_temp):
-+             os.makedirs(self.build_temp)
-+-        ret = os.system('%s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
-++        ret = os.system('LC_ALL=C %s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
-+         is_gcc = False
-+         in_incdirs = False
-+         inc_dirs = []
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 93efc57..c3569a9 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -75,7 +75,7 @@ PERL_CONF_OPTS += --only-mod=$(subst $(space),$(comma),$(PERL_MODULES))
+ endif
+ 
+ define PERL_CONFIGURE_CMDS
+-	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPTS))
++	(cd $(@D); HOSTCC='$(HOSTCC_NOCCACHE)' ./configure $(PERL_CONF_OPTS))
+ 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
+ endef
+ 
+@@ -101,7 +101,7 @@ HOST_PERL_CONF_OPTS = \
+ 	-Dcc="$(HOSTCC)"
+ 
+ define HOST_PERL_CONFIGURE_CMDS
+-	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./Configure $(HOST_PERL_CONF_OPTS))
++	(cd $(@D); HOSTCC='$(HOSTCC_NOCCACHE)' ./Configure $(HOST_PERL_CONF_OPTS))
+ endef
+ 
+ define HOST_PERL_BUILD_CMDS
