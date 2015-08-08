@@ -1,35 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] iproute2: ensure
-	TARGET_LDFLAGS are used
-Message-ID: <20150808105600.AA7E17FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support: gen-manual-lists.py
+	base directory simplification
+Message-ID: <20150808105608.463AA7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc587bf92c238e7d497bc1d4d9658923ada5c7be
+commit: http://git.buildroot.net/buildroot/commit/?id=aba6fa137a1b0df876c235e63804ef81f76c5d5b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Otherwise we can end up with various linker issues (E.G. linking shared
-against libc for a static build, ..).
+Buildroot doesn't use $srctree from what I could tell.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iproute2/iproute2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ support/scripts/gen-manual-lists.py |    6 ++----
+ 1 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index ab374e1..49b1fdc 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -58,7 +58,7 @@ endef
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index ec59030..2acac2c 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -193,11 +193,9 @@ class Buildroot:
+         self.base_dir = os.environ.get("TOPDIR")
+         self.output_dir = os.environ.get("O")
+         self.package_dir = os.path.join(self.base_dir, self.package_dirname)
+-        # The kconfiglib requires an environment variable named "srctree" to
+-        # load the configuration, so set it.
+-        os.environ.update({'srctree': self.base_dir})
+         self.config = kconfiglib.Config(os.path.join(self.base_dir,
+-                                                     self.root_config))
++                                                     self.root_config),
++                                        self.base_dir)
+         self._deprecated = self.config.get_symbol(self.deprecated_symbol)
  
- define IPROUTE2_BUILD_CMDS
- 	$(SED) 's/$$(CCOPTS)//' $(@D)/netem/Makefile
--	$(TARGET_MAKE_ENV) $(MAKE) \
-+	$(TARGET_MAKE_ENV) LDFLAGS="$(TARGET_LDFLAGS)" $(MAKE) \
- 		DBM_INCLUDE="$(STAGING_DIR)/usr/include" \
- 		CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
- 		SHARED_LIBS="$(if $(BR2_STATIC_LIBS),n,y)" -C $(@D)
+         self.gen_date = datetime.datetime.utcnow()
