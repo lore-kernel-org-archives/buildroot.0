@@ -1,83 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] host-autoconf-archive: install
-	to a non-standard location
-Message-ID: <20150808105557.A73D1818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libftdi1: fix typos in config
+	options and comments
+Message-ID: <20150808105557.CF5AE81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c490f00c8d8a7d34ed6da9130cef8a5e97cef56
+commit: http://git.buildroot.net/buildroot/commit/?id=142311fe33886dc96e27404938749824e2a998f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The host-autoconf-archive package was added to provide the necessary
-autoconf macros for the libsigrok package, and later also used for the
-thrift package.
+It is ftdi1, not tfdi1.
 
-However, it installs its autoconf macro in
-$(HOST_DIR)/usr/share/aclocal, which is part of the include directory
-of autoconf macros used for all autoreconf invocations. Unfortunately,
-using those macros for all packages is causing a number of
-regressions: one on host-ola fixed in commit
-884af65fd5ddc548f19a26162f905a32ef0b53b3, and one in snmpp. Those
-packages are autoreconf'ed, but if they are autoreconf'ed with the
-autoconf-archive macros installed, they no longer work.
+As this is a new package for 2015.05 no legacy handling has been added.
 
-To solve this problem, this commit implements a simple solution that
-makes using host-autoconf-archive macros an opt-in mechanism. To
-achieve this, the autoconf-archive package is modified to install its
-macros in a special directory, and only the packages that really want
-to use those macros will have to pass a -I flag pointing to this
-directory in their <pkg>_AUTORECONF_OPTS variable.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/712/712c8083b9eeafa41b60790961028c40b28f59ad/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/autoconf-archive/autoconf-archive.mk |    1 +
- package/libsigrok/libsigrok.mk               |    1 +
- package/thrift/thrift.mk                     |    1 +
- 3 files changed, 3 insertions(+), 0 deletions(-)
+ package/libftdi1/Config.in   |   10 +++++-----
+ package/libftdi1/libftdi1.mk |    6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
-index bd3b0c8..673a57f 100644
---- a/package/autoconf-archive/autoconf-archive.mk
-+++ b/package/autoconf-archive/autoconf-archive.mk
-@@ -9,5 +9,6 @@ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
- AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
- AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
- AUTOCONF_ARCHIVE_LICENSE_FILES = COPYING COPYING.EXCEPTION
-+HOST_AUTOCONF_ARCHIVE_INSTALL_OPTS = aclocaldir=$(HOST_DIR)/usr/share/autoconf-archive install
+diff --git a/package/libftdi1/Config.in b/package/libftdi1/Config.in
+index e41dd91..4a490a5 100644
+--- a/package/libftdi1/Config.in
++++ b/package/libftdi1/Config.in
+@@ -9,8 +9,8 @@ config BR2_PACKAGE_LIBFTDI1
  
- $(eval $(host-autotools-package))
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 7394f64..21d8259 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -48,6 +48,7 @@ endif
+ if BR2_PACKAGE_LIBFTDI1
  
- ifeq ($(BR2_PACKAGE_LIBSIGROKCXX),y)
- LIBSIGROK_CONF_OPTS += --enable-cxx
-+LIBSIGROK_AUTORECONF_OPTS += -I $(HOST_DIR)/usr/share/autoconf-archive
- LIBSIGROK_DEPENDENCIES += \
- 	host-autoconf-archive \
- 	glibmm \
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index b4b3a2c..a40ddad 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -21,6 +21,7 @@ HOST_THRIFT_CONF_OPTS = --with-sysroot=$(HOST_DIR) \
- 	--disable-tests \
- 	--disable-tutorial
- THRIFT_AUTORECONF = YES
-+THRIFT_AUTORECONF_OPTS = -I $(HOST_DIR)/usr/share/autoconf-archive
- THRIFT_LICENSE = Apache-2.0
- THRIFT_LICENSE_FILES = LICENSE
+-config BR2_PACKAGE_LIBTFDI1_LIBFTDIPP1
+-	bool "libfdtipp1"
++config BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1
++	bool "libftdipp1"
+ 	select BR2_PACKAGE_BOOST
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+@@ -18,17 +18,17 @@ config BR2_PACKAGE_LIBTFDI1_LIBFTDIPP1
+ 	help
+ 	  C++ bindings for libftdi
  
+-comment "libfdtipp1 needs a toolchain w/ C++"
++comment "libftdipp1 needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+-config BR2_PACKAGE_LIBTFDI1_PYTHON_BINDINGS
++config BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS
+ 	bool "python bindings"
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Python bindings for libftdi
+ 
+-config BR2_PACKAGE_LIBTFDI1_FDTI_EEPROM
++config BR2_PACKAGE_LIBFTDI1_FDTI_EEPROM
+ 	select BR2_PACKAGE_LIBCONFUSE
+ 	bool "ftdi_eeprom tool"
+ 
+diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
+index 45bb4a5..201feb7 100644
+--- a/package/libftdi1/libftdi1.mk
++++ b/package/libftdi1/libftdi1.mk
+@@ -13,21 +13,21 @@ LIBFTDI1_LICENSE = LGPLv2 (libftdi1), GPLv2 with exception (ftdipp1)
+ LIBFTDI1_LICENSE_FILES = LICENSE COPYING.GPL COPYING.LIB
+ LIBFTDI1_CONF_OPTS = -DDOCUMENTATION=OFF -DEXAMPLES=OFF
+ 
+-ifeq ($(BR2_PACKAGE_LIBTFDI1_LIBFTDIPP1),y)
++ifeq ($(BR2_PACKAGE_LIBFTDI1_LIBFTDIPP1),y)
+ LIBFTDI1_DEPENDENCIES += boost
+ LIBFTDI1_CONF_OPTS += -DFTDIPP=ON
+ else
+ LIBFTDI1_CONF_OPTS += -DFTDIPP=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBTFDI1_PYTHON_BINDINGS),y)
++ifeq ($(BR2_PACKAGE_LIBFTDI1_PYTHON_BINDINGS),y)
+ LIBFTDI1_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3) host-swig
+ LIBFTDI1_CONF_OPTS += -DPYTHON_BINDINGS=ON
+ else
+ LIBFTDI1_CONF_OPTS += -DPYTHON_BINDINGS=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBTFDI1_FDTI_EEPROM),y)
++ifeq ($(BR2_PACKAGE_LIBFTDI1_FDTI_EEPROM),y)
+ # ftdi_eeprom optionally depends on libintl, so make sure gettext is built
+ # _before_ libfitdi1 when gettext is enbaled.
+ LIBFTDI1_DEPENDENCIES += libconfuse $(if $(BR2_PACKAGE_GETTEXT),gettext)
