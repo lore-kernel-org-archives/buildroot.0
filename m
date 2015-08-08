@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:11 -0000
-Subject: [Buildroot] [git commit branch/next] libv4l: bump version to 1.6.3
-Message-ID: <20150808105620.234887FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nfs-utils: fix unmet
+	direct dependency
+Message-ID: <20150808105640.3F0107F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=948cbd345db1b0d995810d8acee32f21972717ad
+commit: http://git.buildroot.net/buildroot/commit/?id=64c10ae691e230935473f23ef71ab997293adf8f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Commit 182520a8af734c735c4dbdff29dc07af1d615a0a adds rpcbind as a dependency
+without properly caring for the thread dependency.
+
+rpcbind adds libtirpc as a dependendency which fails:
+  fatal error: pthread.h: No such file or directory
+
+Since we probably don't care much about using nfs-utils in a non-threaded
+scenario, we simply disable nfs-utils for toolchains without thread support.
+
+Fixes:
+http://autobuild.buildroot.net/results/803/80321de8d4c6c0a00439b07289a5818962128b43/
+
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libv4l/libv4l.hash |    2 +-
- package/libv4l/libv4l.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nfs-utils/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index 609cfbc..3371d34 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 d3d6eb1f0204fb11f3d318bfca35d5f73cc077f88fac7665a47856a16496be7d  v4l-utils-1.6.2.tar.bz2
-+sha256 164abf5c1befcd27e8e6ef824a82d4015bdfb5d99ae82daa00e77d895ff9864c  v4l-utils-1.6.3.tar.bz2
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 94c7031..b1c783d 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index 2806551..1273092 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -1,10 +1,10 @@
+ comment "nfs-utils needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
--LIBV4L_VERSION = 1.6.2
-+LIBV4L_VERSION = 1.6.3
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
+ config BR2_PACKAGE_NFS_UTILS
+ 	bool "nfs-utils"
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
+ 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_RPCBIND # runtime
+ 	depends on BR2_USE_MMU # fork()
