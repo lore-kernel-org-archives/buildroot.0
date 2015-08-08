@@ -1,50 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] expect: bump to version 5.45.3
-Message-ID: <20150808105624.67B9B7FC31@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 08 Aug 2015 10:56:35 -0000
+Subject: [Buildroot] [git commit branch/next] package/lxc: bump version to
+	1.1.2
+Message-ID: <20150808105608.1DA437FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7859f892e52d9c88c8bee67447132130f78790a
+commit: http://git.buildroot.net/buildroot/commit/?id=4b8b6d670b2924a069d0e189f781b1dcafbf9ce3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Download it from the cvs repository because it is not availabe as a
-downloadable file. Also because a tag isn't available use the date.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Hoang Tran <hoang.tran@vnoss.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expect/expect.hash |    2 --
- package/expect/expect.mk   |    6 +++---
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/lxc/lxc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/expect/expect.hash b/package/expect/expect.hash
-deleted file mode 100644
-index 09e68e7..0000000
---- a/package/expect/expect.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed:
--sha256  b28dca90428a3b30e650525cdc16255d76bb6ccd65d448be53e620d95d5cc040  expect5.45.tar.gz
-diff --git a/package/expect/expect.mk b/package/expect/expect.mk
-index 8ef7e90..d78ff6c 100644
---- a/package/expect/expect.mk
-+++ b/package/expect/expect.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 11a89f2..c7ebda4 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXPECT_VERSION = 5.45
--EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
--EXPECT_SITE = http://downloads.sourceforge.net/project/expect/Expect/$(EXPECT_VERSION)
-+# Version 5.45.3
-+EXPECT_VERSION = 2014-05-02
-+EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
- EXPECT_LICENSE = Public domain
- EXPECT_LICENSE_FILES = README
- 
+-LXC_VERSION = 1.0.6
++LXC_VERSION = 1.1.2
+ LXC_SITE = https://linuxcontainers.org/downloads
+ LXC_LICENSE = LGPLv2.1+
+ LXC_LICENSE_FILES = COPYING
