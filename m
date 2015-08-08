@@ -1,116 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:02 -0000
-Subject: [Buildroot] [git commit branch/next] busybox: improve support for
-	telnetd
-Message-ID: <20150808105630.2160B7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 3.3.16
+Message-ID: <20150808105630.55F317FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b98dd2355780c732bf440042fb8faafe731efc94
+commit: http://git.buildroot.net/buildroot/commit/?id=adddac455894545fd0152d37669910ac51b38c2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If target has connection to the network it might be pretty useful to
-have telnet connection to it instead of serial console or even in
-addition to serial console.
-
-This changes makes the busybox package automatically install an init
-script, and tune the securetty file to make telnetd work when
-CONFIG_FEATURE_TELNETD_STANDALONE is enabled in the Busybox
-configuration.
-
-[Thomas:
-  - don't create a new Buildroot Config.in option, just test if
-    CONFIG_FEATURE_TELNETD_STANDALONE is enabled or not in the Busybox
-    configuration
-  - move the securetty tuning in busybox.mk instead of system.mk
-  - use start-stop-daemon in the init script, in order to properly
-    implement the stop and restart actions
-  - misc other minor improvements in the init script.]
-[yann.morin.1998 at free.fr:
-  - don't use securetty
-  - drop stray variable BUSYBOX_SET_STANDALONE_TELNETD]
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/busybox/S50telnet  |   36 ++++++++++++++++++++++++++++++++++++
- package/busybox/busybox.mk |    9 +++++++++
- 2 files changed, 45 insertions(+), 0 deletions(-)
+ package/gnutls/gnutls.hash |    2 +-
+ package/gnutls/gnutls.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
-new file mode 100755
-index 0000000..463a772
---- /dev/null
-+++ b/package/busybox/S50telnet
-@@ -0,0 +1,36 @@
-+#!/bin/sh
-+#
-+# Start telnet....
-+#
-+
-+start() {
-+      echo -n "Starting telnetd: "
-+      start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
-+			-x /usr/sbin/telnetd -- -F
-+      [ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+stop() {
-+	echo -n "Stopping telnetd: "
-+	start-stop-daemon -K -q -p /var/run/telnetd.pid \
-+			  -x /usr/sbin/telnetd
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+case "$1" in
-+    start)
-+	start
-+	;;
-+    stop)
-+	stop
-+	;;
-+    restart|reload)
-+	stop
-+	start
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 92874cd..9289e0a 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -168,6 +168,14 @@ endef
- BUSYBOX_DEPENDENCIES += linux-pam
- endif
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 3009478..620caae 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	8961227852911a1974e15bc017ddbcd4779876c867226d199f06648d8b27ba4b	gnutls-3.3.15.tar.xz
++sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 9ccc23e..4593034 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# Telnet support
-+define BUSYBOX_INSTALL_TELNET_SCRIPT
-+	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
-+		$(INSTALL) -m 0755 -D package/busybox/S50telnet \
-+			$(TARGET_DIR)/etc/init.d/S50telnet ; \
-+	fi
-+endef
-+
- # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
- # full-blown versions of apps installed by other packages with sym/hard links.
- define BUSYBOX_NOCLOBBER_INSTALL
-@@ -205,6 +213,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
-+	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
- endef
- 
- $(eval $(kconfig-package))
+ GNUTLS_VERSION_MAJOR = 3.3
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
