@@ -1,53 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] dcron: systemd support
-Message-ID: <20150808105630.B74997FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-pyxml: rename the
+	package file
+Message-ID: <20150808105608.A21217FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ab06dd1e95abf1b9c8b0ee38bae25b8a305b5e8
+commit: http://git.buildroot.net/buildroot/commit/?id=1d9ea56a38c9ca7673e8b4273e93113ff387c798
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dcron/dcron.mk      |    8 ++++++++
- package/dcron/dcron.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ .../{python-xml.hash => python-pyxml.hash}         |    0
+ .../{python-xml.mk => python-pyxml.mk}             |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
-index fcb585d..840471f 100644
---- a/package/dcron/dcron.mk
-+++ b/package/dcron/dcron.mk
-@@ -33,4 +33,12 @@ define DCRON_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/dcron/S90dcron $(TARGET_DIR)/etc/init.d/S90dcron
- endef
- 
-+define DCRON_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/dcron/dcron.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/dcron.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dcron.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/dcron/dcron.service b/package/dcron/dcron.service
-new file mode 100644
-index 0000000..b9fa489
---- /dev/null
-+++ b/package/dcron/dcron.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Task scheduler daemon
-+After=syslog.target
-+
-+[Service]
-+ExecStart=/usr/sbin/crond -f -S
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/package/python-pyxml/python-xml.hash b/package/python-pyxml/python-pyxml.hash
+similarity index 100%
+rename from package/python-pyxml/python-xml.hash
+rename to package/python-pyxml/python-pyxml.hash
+diff --git a/package/python-pyxml/python-xml.mk b/package/python-pyxml/python-pyxml.mk
+similarity index 100%
+rename from package/python-pyxml/python-xml.mk
+rename to package/python-pyxml/python-pyxml.mk
