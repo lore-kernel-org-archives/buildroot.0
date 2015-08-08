@@ -1,32 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] docs/manual: fix typo
-Message-ID: <20150808105630.5F8C17FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:40 -0000
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.6.0
+Message-ID: <20150808105613.00E0F7FC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7701e2bf754c773a9d6ef89923316413d09d5287
+commit: http://git.buildroot.net/buildroot/commit/?id=3adb887e3ff984ec2cce1f424af698374ba2ec30
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Mesa3d 10.6 adds optional support for SHA-1:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=a24bdce46f95cbe9efd3b26f157d1eb36584861f
+
+Adding "--without-sha1" will cause this failure during configure:
+
+configure: error: Illegal value for --with-sha1: no
+
+so I did not add the else-clause when no SHA-1 provider is enabled.
+
+[Thomas: simplify else ifeq.]
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-kernel-module.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ package/mesa3d/mesa3d.hash               |    4 ++--
+ package/mesa3d/mesa3d.mk                 |   10 +++++++++-
+ 3 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
-index 39575f7..0a5ec5b 100644
---- a/docs/manual/adding-packages-kernel-module.txt
-+++ b/docs/manual/adding-packages-kernel-module.txt
-@@ -128,7 +128,7 @@ configure the build of the kernel module:
- * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
-   to pass to the Linux buildsystem.
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 0979406..07340f7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
--Yo may also reference (but you may *not* set!) those variables:
-+You may also reference (but you may *not* set!) those variables:
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.5.7
++MESA3D_HEADERS_VERSION = 10.6.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b026245..456348f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000157.html
+-sha256	04d06890cd69af8089d6ca76f40e46dcf9cacfe4a9788b32be620574d4638818	mesa-10.5.7.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000158.html
++sha256	f37e2633978deed02ff0522abc36c709586e2b555fd439a82ab71dce2c866c76	mesa-10.6.0.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 2a7e48c..486a665 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-  * +LINUX_DIR+ contains the path to where the Linux kernel has been
-    extracted and built.
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.5.7
++MESA3D_VERSION = 10.6.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -20,6 +20,14 @@ MESA3D_DEPENDENCIES = \
+ 	expat \
+ 	libdrm
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++MESA3D_DEPENDENCIES += openssl
++MESA3D_CONF_OPTS += --with-sha1=libcrypto
++else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++MESA3D_DEPENDENCIES += libgcrypt
++MESA3D_CONF_OPTS += --with-sha1=libgcrypt
++endif
++
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
