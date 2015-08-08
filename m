@@ -1,26 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] statserial: add hash file
-Message-ID: <20150808105634.356417FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openssl: drop !static
+	dependency from OPENSSL_BIN option
+Message-ID: <20150808105624.074947FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebe54b2795d9dd0182b24ac93f29f7e6c61575be
+commit: http://git.buildroot.net/buildroot/commit/?id=ecd8e9b238fdac958a9174984c8e64e79c866ebe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/statserial/statserial.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+The dependency doesn't make sense now that the option only controls if the
+built binary gets installed into the target or not, so drop it.
 
-diff --git a/package/statserial/statserial.hash b/package/statserial/statserial.hash
-new file mode 100644
-index 0000000..3cdb17d
---- /dev/null
-+++ b/package/statserial/statserial.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	40cf3bd506852942aa98f468c90ed4ea66dbd343b93efacd40d617b55caf3967	statserial-1.1.tar.gz
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openssl/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
+
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index 0785253..e08b648 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -15,15 +15,11 @@ if BR2_PACKAGE_OPENSSL
+ 
+ config BR2_PACKAGE_OPENSSL_BIN
+ 	bool "openssl binary"
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Install the openssl binary and the associated helper scripts to the
+ 	  target file system. This is a command line tool for doing various
+ 	  cryptographic stuff.
+ 
+-comment "openssl binary needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_OPENSSL_ENGINES
+ 	bool "openssl additional engines"
+ 	help
