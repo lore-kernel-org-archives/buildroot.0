@@ -1,46 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] package/vlc: Add libsidplay2
-	as optional dependency
-Message-ID: <20150808105615.C66E18030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] stress: add hash file
+Message-ID: <20150808105605.A2AEE7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b59567b38ece8de4c23fb04f55ab7c6d086b1fc5
+commit: http://git.buildroot.net/buildroot/commit/?id=a7a927cde5a356f7b66454b99591fc73504c3c27
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-vlc has a sid plugin:
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
-  output/target/usr/lib/vlc/plugins/demux/libsid_plugin.so |
-  grep NEEDED | grep sid
- 0x00000001 (NEEDED)     Shared library: [libsidplay2.so.1]
- 0x00000001 (NEEDED)     Shared library: [libresid-builder.so.0]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vlc/vlc.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/stress/stress.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index bc2966e..4ef69aa 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -206,6 +206,13 @@ else
- VLC_CONF_OPTS += --disable-svg --disable-svgdec
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBSIDPLAY2),y)
-+VLC_CONF_OPTS += --enable-sid
-+VLC_DEPENDENCIES += libsidplay2
-+else
-+VLC_CONF_OPTS += --disable-sid
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
- VLC_CONF_OPTS += --enable-theora
- VLC_DEPENDENCIES += libtheora
+diff --git a/package/stress/stress.hash b/package/stress/stress.hash
+new file mode 100644
+index 0000000..24cf043
+--- /dev/null
++++ b/package/stress/stress.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256 057e4fc2a7706411e1014bf172e4f94b63a12f18412378fca8684ca92408825b stress-1.0.4.tar.gz
