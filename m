@@ -1,44 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 09 Aug 2015 22:35:10 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to
-	1.6.5
-References: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
- <20150809145443.GB2570@tarshish>
- <1439143511.12501.11.camel@embedded.rocks>
- <d6ok9cxek9.ln2@ID-313208.user.individual.net>
- <20150809201327.GF2570@tarshish>
-Message-ID: <u4qk9cxek9.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 8 Aug 2015 14:33:13 +0200
+Subject: [Buildroot] [PATCH 3/9] toolchain-external: add support for gcc
+ version dependency
+In-Reply-To: <1439036584.12501.5.camel@embedded.rocks>
+References: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1438711241-31792-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150804194948.GV3647@free.fr>
+ <20150805121441.13c3a165@free-electrons.com>
+ <1439036584.12501.5.camel@embedded.rocks>
+Message-ID: <20150808143313.2a5d6fff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 09 Aug 2015 23:13:27 +0300 schrieb Baruch Siach:
+Dear J?rg Krause,
 
-> Hi Bernd,
+On Sat, 08 Aug 2015 14:23:04 +0200, J?rg Krause wrote:
+
+> > Thanks! I've used your regexp, and also copy/pasted your explanation
+> > into the code. I just had to replace $ by $$ to cope with make 
+> > escaping.
 > 
-> On Sun, Aug 09, 2015 at 10:01:49PM +0200, Bernd Kuhls wrote:
->> Am Sun, 09 Aug 2015 20:05:11 +0200 schrieb J?rg Krause:
->> > I already submitted a patch for jsoncpp version bump and removing the
->> > snprintf-patch:
->> > http://patchwork.ozlabs.org/patch/502324/
->> 
->> sorry, I did not notice. I think your patch is better because it takes
->> care of the non-c11 toolchains but, as discussed, could you please keep
->> the snprintf patch? Therefore I marked my patch as superseded ;)
+> This regex does not produce the version string 5 for my GCC 5.2
+> toolchain built with BR and included as external toolchain.
 > 
-> Where has this been discussed? I must have missed something.
+> $ output/host/usr/bin/arm-linux-gcc --version
+>     arm-linux-gcc (Buildroot 2015.08-rc1-01365-gec8cd42) 5.2.0
+>     Copyright (C) 2015 Free Software Foundation, Inc.
+>     This is free software; see the source for copying conditions.  There
+>     is NO
+>     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+>     PURPOSE.
+> 
+> $ output/host/usr/bin/arm-linux-gcc --version | sed -r -e '1!d;
+> s/^[^)]+\) ([^[:space:]]+).*/\1/; s/\.[[:digit:]]+$$//;'
+>     5.2
 
-Hi Baruch,
+Hum, that's because the version number if 5.2.0, and we're removing
+only one digit at the end. It's weird, because I'm pretty sure I tested
+with a gcc 5.x toolchain, and I remember it was working fine. But the
+version reported by gcc was 5.1, not 5.1.0.
 
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/124666
+Did maybe gcc 5.1 report 5.1, while gcc 5.2 reports 5.2.0 ?
 
-jsoncpp 1.6.5 still fails to compile on x86 without the snprintf patch 
-using this defconfig:
+If that's the case, then I don't see any other possibilities than
+having a different case for gcc 4.x and gcc >= 5.x.
 
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_JSONCPP=y
+Yann ?
 
-Regards, Bernd
+Thanks for the report,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
