@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next] qt/qt5base: reorder patches
-Message-ID: <20150808105639.24DF6803C1@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:50 -0000
+Subject: [Buildroot] [git commit branch/next] connman: bump to version 1.29
+Message-ID: <20150808105639.0742B803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b122e7d37fe4f9b5976f849c2e867ba220461af3
+commit: http://git.buildroot.net/buildroot/commit/?id=ebeac236a4ef856ab1779885bc99aee63688f4c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...kspecs-files.patch => 0002-mkspecs-files.patch} |    0
- ...cb-egl-fixes.patch => 0003-xcb-egl-fixes.patch} |    0
- ...ch => 0004-no-gold-linker-for-host-build.patch} |    0
- ...=> 0005-forkd-disable-eventfd-for-uclibc.patch} |    0
- 4 files changed, 0 insertions(+), 0 deletions(-)
+ package/connman/connman.hash |    2 +-
+ package/connman/connman.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5base/0003-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
-similarity index 100%
-rename from package/qt5/qt5base/0003-mkspecs-files.patch
-rename to package/qt5/qt5base/0002-mkspecs-files.patch
-diff --git a/package/qt5/qt5base/0004-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-similarity index 100%
-rename from package/qt5/qt5base/0004-xcb-egl-fixes.patch
-rename to package/qt5/qt5base/0003-xcb-egl-fixes.patch
-diff --git a/package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch b/package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
-similarity index 100%
-rename from package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
-rename to package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
-diff --git a/package/qt5/qt5base/0008-forkd-disable-eventfd-for-uclibc.patch b/package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
-similarity index 100%
-rename from package/qt5/qt5base/0008-forkd-disable-eventfd-for-uclibc.patch
-rename to package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index 35654ec..3f266f5 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	b1d5e7dd2652725906e220a8b0206477e97080e835272971e3b2fd10943c5c94    connman-1.28.tar.xz
++sha256	2a5a69693566f7fd59b2e677fa89356ada6d709998aa665caef8707b1e7a8594  connman-1.29.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 016eff7..5250c20 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.28
++CONNMAN_VERSION = 1.29
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
