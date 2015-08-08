@@ -1,51 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] ffmpeg: fix dependencies
-Message-ID: <20150808105608.72EDD7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package: indentation cleanup
+Message-ID: <20150808105611.CFEA37F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=316a0a43a5577c5977984654bb1de3b86260e056
+commit: http://git.buildroot.net/buildroot/commit/?id=c2c993c31dbeb2774d7c1eabeadf787831d38cf6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The ffmpeg binary does not require swscale, but ffplay needs it.
-
-ffserver needs fork().
-
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/ejabberd/ejabberd.mk   |    2 +-
+ package/libxmlrpc/libxmlrpc.mk |    2 +-
+ package/odhcp6c/odhcp6c.mk     |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 00163ba..e5981fe 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -25,7 +25,6 @@ config BR2_PACKAGE_FFMPEG_NONFREE
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index 07ce78e..650dc0e 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -40,7 +40,7 @@ endef
+ EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
  
- config BR2_PACKAGE_FFMPEG_FFMPEG
- 	bool "Build ffmpeg (the command line application)"
--	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	default y
- 	help
- 	  FFmpeg is a very fast video and audio converter.
-@@ -36,6 +35,7 @@ config BR2_PACKAGE_FFMPEG_FFMPEG
+ define EJABBERD_USERS
+-ejabberd -1 ejabberd -1 * /var/lib/ejabberd /bin/sh - ejabberd daemon
++	ejabberd -1 ejabberd -1 * /var/lib/ejabberd /bin/sh - ejabberd daemon
+ endef
  
- config BR2_PACKAGE_FFMPEG_FFPLAY
- 	bool "Build ffplay"
-+	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_SDL
- 	help
- 	  FFplay is a very simple and portable media player using the
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_FFMPEG_FFPLAY
+ define EJABBERD_INSTALL_INIT_SYSV
+diff --git a/package/libxmlrpc/libxmlrpc.mk b/package/libxmlrpc/libxmlrpc.mk
+index c3788d6..7d11205 100644
+--- a/package/libxmlrpc/libxmlrpc.mk
++++ b/package/libxmlrpc/libxmlrpc.mk
+@@ -16,7 +16,7 @@ LIBXMLRPC_MAKE = $(MAKE1)
  
- config BR2_PACKAGE_FFMPEG_FFSERVER
- 	bool "Build ffserver"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  FFserver is a streaming server for both audio and video.
+ # Using autoconf, not automake, so we cannot use AUTORECONF = YES.
+ define LIBXMLRPC_RUN_AUTOCONF
+-       cd $(@D); $(HOST_DIR)/usr/bin/autoconf
++	cd $(@D); $(HOST_DIR)/usr/bin/autoconf
+ endef
+ 
+ LIBXMLRPC_PRE_CONFIGURE_HOOKS += LIBXMLRPC_RUN_AUTOCONF
+diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
+index 8102c26..47944f1 100644
+--- a/package/odhcp6c/odhcp6c.mk
++++ b/package/odhcp6c/odhcp6c.mk
+@@ -10,7 +10,7 @@ ODHCP6C_LICENSE = GPLv2
+ ODHCP6C_LICENSE_FILES = COPYING
+ 
+ define ODHCP6C_INSTALL_SCRIPT
+-        $(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
++	$(INSTALL) -m 0755 -D $(@D)/odhcp6c-example-script.sh \
+ 		$(TARGET_DIR)/usr/sbin/odhcp6c-update
+ endef
  
