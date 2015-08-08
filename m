@@ -1,33 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] bootutils: update website URL
-Message-ID: <20150808105625.6F14E7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] scripts/mkusers: allow users
+	with no password value set
+Message-ID: <20150808105607.C40A0818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=55dd510bcb2b2c552e72536de7b02745a6fbee81
+commit: http://git.buildroot.net/buildroot/commit/?id=8d972df185de6e841a1752b67e466e8ffc95bfac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The original homepage seems to be down. Use the sourceforge intro page
-instead.
+The following allows a user definition to specify that a created user
+entry should not have a password value set. Original implementation
+allowed a user definition to provide a password value of "=" (no quotes)
+to generate a crypt-encoded empty string value. In some cases, it may be
+desired to have no value specified for a user's password. By using a
+value "-" for a password, no value will be set in the shadow value.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+An example when this can be used is when logging into a terminal.
+Logging into a session with an encoded empty password will prompt a user
+to enter a password since it does not know the password is empty. If the
+password field blank, a login session will not prompt for a password.
+
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bootutils/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ docs/manual/makeusers-syntax.txt |    3 ++-
+ support/scripts/mkusers          |    3 +++
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/bootutils/Config.in b/package/bootutils/Config.in
-index 308db24..370da0d 100644
---- a/package/bootutils/Config.in
-+++ b/package/bootutils/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_BOOTUTILS
- 	  either by label or explicit label= on the kernel command line,
- 	  mounting it, and 'switchroot'ing is automated.
- 
--	  http://bootutils.pr.linuxrulz.org/
-+	  http://bootutils.sourceforge.net/
+diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
+index ffdb961..467e596 100644
+--- a/docs/manual/makeusers-syntax.txt
++++ b/docs/manual/makeusers-syntax.txt
+@@ -31,7 +31,8 @@ Where:
+   then login is disabled. If prefixed with +=+, then it is interpreted
+   as clear-text, and will be crypt-encoded (using MD5). If prefixed with
+   +!=+, then the password will be crypt-encoded (using MD5) and login
+-  will be disabled. If set to +*+, then login is not allowed.
++  will be disabled. If set to +*+, then login is not allowed. If set to 
++  +-+, then no password value will be set.
+ - +home+ is the desired home directory for the user. If set to '-', no
+   home directory will be created, and the user's home will be +/+.
+   Explicitly setting +home+ to +/+ is not allowed.
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 026519e..9c5c4dc 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -318,6 +318,9 @@ add_one_user() {
+         *)  fail "home must be an absolute path\n";;
+     esac
+     case "${passwd}" in
++        -)
++            _passwd=""
++            ;;
+         !=*)
+             _passwd='!'"$( encode_password "${passwd#!=}" )"
+             ;;
