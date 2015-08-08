@@ -1,55 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:41 -0000
-Subject: [Buildroot] [git commit branch/next] netplug: systemd support
-Message-ID: <20150808105631.A69EB7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/at91boostrap3: check for
+	config file before calling kconfig-package
+Message-ID: <20150808105632.28115818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b8da356e5d81d4e87c74c093a7d27d4dc030b87f
+commit: http://git.buildroot.net/buildroot/commit/?id=5e94388c57546aa8eff1f7c3cb29ddde052e0b4b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: use relative symlink instead of absolute symlink.]
+If we check that the user provides a config file after we call to the
+kconfig-package infra, the error message we get is the one for the
+kconfig-package infra, not the custom error message we want to show to
+the user.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+So, only call kconfig-package after we do the check.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netplug/netplug.mk      |    8 ++++++++
- package/netplug/netplug.service |   10 ++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ boot/at91bootstrap3/at91bootstrap3.mk |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
-index 0bd7c78..aeebcad 100644
---- a/package/netplug/netplug.mk
-+++ b/package/netplug/netplug.mk
-@@ -23,4 +23,12 @@ define NETPLUG_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S29netplug
- endef
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 1c68094..fa67ea6 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -49,10 +49,11 @@ endif
+ AT91BOOTSTRAP3_KCONFIG_FILE = $(AT91BOOTSTRAP3_SOURCE_CONFIG)
+ AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
+-$(eval $(kconfig-package))
  
-+define NETPLUG_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/netplug/netplug.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/netplug.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/netplug.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/netplug.service
-+endef
+ # Checks to give errors that the user can understand
++# Must be before we call to kconfig-package
+ ifeq ($(BR_BUILDING),y)
 +
- $(eval $(generic-package))
-diff --git a/package/netplug/netplug.service b/package/netplug/netplug.service
-new file mode 100644
-index 0000000..017a21f
---- /dev/null
-+++ b/package/netplug/netplug.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Network cable hotplug management daemon
-+After=syslog.target network.target
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
+ ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
+ $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
+@@ -74,4 +75,6 @@ $(error No custom at91bootstrap3 repository version specified. Check your BR2_TA
+ endif
+ endif
+ 
+-endif
++endif # BR_BUILDING
 +
-+[Service]
-+ExecStart=/sbin/netplugd -F
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
++$(eval $(kconfig-package))
