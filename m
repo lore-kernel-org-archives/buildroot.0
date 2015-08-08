@@ -1,67 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: make
-	matchbox-common a real package
-Message-ID: <20150808105606.74BB37F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support: get prompts via
+	official Kconfiglib APIs
+Message-ID: <20150808105608.540EE7F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=599f03372593e203a797005d1c25d45f564c3419
+commit: http://git.buildroot.net/buildroot/commit/?id=b4250efb2f5f4a56f4b073a8679f399fab603586
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, matchbox-common is treated as if it were an option of the
-matchbox package.
+These weren't available when gen-manual-lists.py was first written.
 
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
-
-So, make it a real package.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/Config.in                 |   11 +----------
- package/matchbox/matchbox-common/Config.in |    9 +++++++++
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ support/scripts/gen-manual-lists.py |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 39aff3c..ead2649 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -23,16 +23,7 @@ source "package/matchbox/matchbox-lib/Config.in"
- source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
- source "package/matchbox/matchbox-desktop/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_COMMON
--	bool "Matchbox session common files"
--	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
--	help
--	  Common desktop folders and matchbox-session script.
--
--config BR2_PACKAGE_MATCHBOX_COMMON_PDA
--	bool "PDA style desktop folders"
--	depends on BR2_PACKAGE_MATCHBOX_COMMON
-+source "package/matchbox/matchbox-common/Config.in"
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 2acac2c..d45810b 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -99,7 +99,7 @@ def get_symbol_parents(item, root=None, enable_choice=False):
+         if parent.is_menu():
+             parents.append(parent.get_title())
+         elif enable_choice and parent.is_choice():
+-            parents.append(parent.prompts[0][0])
++            parents.append(parent.get_prompts()[0])
+         parent = parent.get_parent()
+     if isinstance(root, kconfiglib.Menu) or \
+             (enable_choice and isinstance(root, kconfiglib.Choice)):
+@@ -234,9 +234,9 @@ class Buildroot:
+         """
+         if not symbol.is_symbol():
+             return False
+-        if type == 'real' and not symbol.prompts:
++        if type == 'real' and not symbol.get_prompts():
+             return False
+-        if type == 'virtual' and symbol.prompts:
++        if type == 'virtual' and symbol.get_prompts():
+             return False
+         if not self.re_pkg_prefix.match(symbol.get_name()):
+             return False
+@@ -315,7 +315,7 @@ class Buildroot:
+         :param mark_deprecated: Append a 'deprecated' to the label
  
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "Matchbox Virtual Keyboard"
-diff --git a/package/matchbox/matchbox-common/Config.in b/package/matchbox/matchbox-common/Config.in
-new file mode 100644
-index 0000000..7d22d05
---- /dev/null
-+++ b/package/matchbox/matchbox-common/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_MATCHBOX_COMMON
-+	bool "Matchbox session common files"
-+	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
-+	help
-+	  Common desktop folders and matchbox-session script.
-+
-+config BR2_PACKAGE_MATCHBOX_COMMON_PDA
-+	bool "PDA style desktop folders"
-+	depends on BR2_PACKAGE_MATCHBOX_COMMON
+         """
+-        label = symbol.prompts[0][0]
++        label = symbol.get_prompts()[0]
+         if self._is_deprecated(symbol) and mark_deprecated:
+             label += " *(deprecated)*"
+         return label
+@@ -394,7 +394,7 @@ class Buildroot:
+                     continue
+                 for s in selects:
+                     if s == symbol:
+-                        if sym.prompts:
++                        if sym.get_prompts():
+                             l = self._get_symbol_label(sym,False)
+                             parent_pkg = _get_parent_package(sym)
+                             if parent_pkg is not None:
