@@ -1,33 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:52 -0000
-Subject: [Buildroot] [git commit branch/next] ntp: drop unused
-	POST_PATCH_HOOKS handling
-Message-ID: <20150808105622.B75BC7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] samba4: install systemd files
+Message-ID: <20150808105621.A9C2D7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f2bb5504fdf6fb61823463271a0efcf783a5866
+commit: http://git.buildroot.net/buildroot/commit/?id=ae0d54ab77a1dcb4af3b5515d3e3a99203e100f2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that NTP_PATCH_FIXUPS is gone.
+The package comes with usable .service files for smbd, nmbd and
+winbind, but does not install them.
 
-Reported-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas: use relative paths for the symbolic links.]
+
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ntp/ntp.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/samba4/samba4.mk |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 110eaf8..5997247 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -69,6 +69,4 @@ define NTP_INSTALL_INIT_SYSTEMD
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index d7d5299..7d10a0c 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -155,4 +155,20 @@ define SAMBA4_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S91smb
  endef
- endif
  
--NTP_POST_PATCH_HOOKS += NTP_PATCH_FIXUPS
--
- $(eval $(autotools-package))
++define SAMBA4_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/nmb.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/nmb.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/smb.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/smb.service
++	$(INSTALL) -D -m 644 $(@D)/packaging/systemd/winbind.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/winbind.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/nmb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nmb.service
++	ln -sf ../../../../usr/lib/systemd/system/smb.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/smb.service
++	ln -sf ../../../../usr/lib/systemd/system/winbind.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/winbind.service
++endef
++
+ $(eval $(generic-package))
