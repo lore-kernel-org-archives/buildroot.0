@@ -1,121 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] boards/raspberrypi: update
-	instructions
-Message-ID: <20150808105617.09F5A818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] squashfs: Add xattr support
+Message-ID: <20150808105625.E010080414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f999784b8b6ccb564a5670b950b8bc6ea7c5730
+commit: http://git.buildroot.net/buildroot/commit/?id=a409d76e8375fdc8db30e4009cb282ed96d790fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that we have a sanitised set of defconfig files, and we no longer
-support non-DT setups, update and simplify the board readme file.
+Adding extended attribute support for the squashfs tools when the attr
+package is selected. This is needed for SELinux support.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/raspberrypi/readme.txt |   48 +++++++++++++++++++----------------------
- 1 files changed, 22 insertions(+), 26 deletions(-)
+ package/squashfs/squashfs.mk |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 4ead046..cf95879 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -22,17 +22,14 @@ How to build it
- Configure Buildroot
- -------------------
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 8ca9e2e..3204d05 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -10,8 +10,12 @@ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squas
+ SQUASHFS_LICENSE = GPLv2+
+ SQUASHFS_LICENSE_FILES = COPYING
  
--The raspberrypi_defconfig configuration is a minimal configuration with
--all that is required to bring the Raspberry Pi up. You should base your
--work on this defconfig:
-+There are two RaspberryPi defconfig files in Buildroot, one for each
-+major variant, which you should base your work on:
+-# no libattr in BR
+-SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
++ifeq ($(BR2_PACKAGE_ATTR),y)
++SQUASHFS_DEPENDENCIES += attr
++SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=1
++else
++SQUASHFS_MAKE_ARGS += XATTR_SUPPORT=0
++endif
  
--  $ make raspberrypi_defconfig
--
--Alternatively, if you want to test support for the Device Tree:
-+For models A, B, A+ or B+:
- 
--  $ make raspberrypi_dt_defconfig
-+  $ make raspberrypi_defconfig
- 
--For Raspberry Pi 2 use a different defconfig:
-+And for model 2 B:
- 
-   $ make raspberrypi2_defconfig
- 
-@@ -64,20 +61,23 @@ Result of the build
- After building, you should obtain this tree:
- 
-     output/images/
--    +-- rootfs.tar                              [0]
-+    +-- rootfs.tar                  [0]
-     +-- rpi-firmware/
--    |   +-- bcm2708-rpi-b.dtb
--    |   +-- bcm2708-rpi-b-plus.dtb
--    |   +-- bcm2709-rpi-2-b.dtb
-     |   +-- bootcode.bin
-     |   +-- config.txt
-     |   +-- fixup.dat
-     |   `-- start.elf
-+    +-- bcm2708-rpi-b.dtb           [1]
-+    +-- bcm2708-rpi-b-plus.dtb      [1]
-+    +-- bcm2709-rpi-2-b.dtb         [1]
-     `-- zImage
- 
- [0] Note for Volatile: rootfs.tar will only be there if you kept
-     "tar the root filesystem" option selected in "Filesystem images".
- 
-+[1] Not all of them will be present, depending on the RaspberryPi
-+    model you are using.
-+
- Prepare you SDCard
- ==================
- 
-@@ -105,30 +105,26 @@ Install the binaries to the SDCard
- At the root of the boot partition, the Raspberry Pi must find the following
- files:
- 
--    * bcm2708-rpi-b.dtb         [1]
--    * bcm2708-rpi-b-plus.dtb    [2]
--    * bcm2709-rpi-2-b.dtb       [3]
-+    * bcm2708-rpi-b.dtb         [2]
-+    * bcm2708-rpi-b-plus.dtb    [3]
-+    * bcm2709-rpi-2-b.dtb       [4]
-     * bootcode.bin
-     * config.txt
-     * fixup.dat
-     * start.elf
-     * zImage
- 
--[1] For models A and B
--[2] For models A+ and B+
--[3] For model 2
-+[2] For models A and B
-+[3] For models A+ and B+
-+[4] For model 2
- 
- For example:
- 
-- $ cp output/images/rpi-firmware/* /mnt/mountpointboot
--
--If your kernel does *not* have support for the Device Tree, then install
--it with:
--
-- $ cp output/images/zImage /mnt/mountpointboot
-+  $ cp output/images/rpi-firmware/* /mnt/mountpointboot
-+  $ cp output/images/*.dtb /mnt/mountpointboot
- 
--If your kernel *does* have support for the Device Tree, then install it
--with:
-+The kernel image must be marked with a special header so that the
-+bootloader of the RaspberryPi knows it supports Device Tree:
- 
-   $ ./output/host/usr/bin/mkknlimg output/images/zImage /mnt/mountpointboot/zImage
- 
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
+ SQUASHFS_DEPENDENCIES += lz4
