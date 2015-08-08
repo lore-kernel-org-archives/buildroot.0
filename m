@@ -1,33 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] czmq: needs host-pkgconf
-Message-ID: <20150808105556.A75EF818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] rsyslog: drop autoreconf
+Message-ID: <20150808105557.4978F818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=daa8485bc12d44c6bf697f7a1bde488250486ea2
+commit: http://git.buildroot.net/buildroot/commit/?id=7e624b3638420bb688f1f46a63cb78eb88430884
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It uses pkg-config to find zeromq, so ensure it is available.
+The patches touching configure.ac were dropped in 9d9bbf9b7935 (rsyslog: bump
+to version 8.8.0, 2015-02-25). Remove autoreconf as well.
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/czmq/czmq.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rsyslog/rsyslog.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index d25bf01..3d82095 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -10,7 +10,7 @@ CZMQ_SITE = $(call github,zeromq,czmq,$(CZMQ_VERSION))
- # Autoreconf required as we use the git tree
- CZMQ_AUTORECONF = YES
- CZMQ_INSTALL_STAGING = YES
--CZMQ_DEPENDENCIES = zeromq
-+CZMQ_DEPENDENCIES = zeromq host-pkgconf
- CZMQ_LICENSE = MPLv2.0
- CZMQ_LICENSE_FILES = LICENSE
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 99e6eba..261f59d 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -16,8 +16,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+ 	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
+ RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+ 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+-# For mysql and pgsql support patches
+-RSYSLOG_AUTORECONF = YES
  
+ # Build after BusyBox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
