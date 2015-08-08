@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:40 -0000
-Subject: [Buildroot] [git commit branch/next] purge-locales: further
-	refactoring after removing man paths
-Message-ID: <20150808105631.D1A7580414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: don't
+	enforce check for config file when not building
+Message-ID: <20150808105632.10EC1818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=805240bae841c221c1dc6d42b07fca31d595e298
+commit: http://git.buildroot.net/buildroot/commit/?id=61ca162f5bf052f70c6ac356358120329e4b1c6d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the man paths have been removed, it is no longer necessary to
-grep them out and the loop can be simplified.
+Currently, this is triggering the error message:
+    make randconfig
+    make source
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Only limit the check to enforce a config file being set to when we are
+actually building, like is done in the various kconfig-using packages.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-kconfig.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 02a1032..f764ae5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -546,9 +546,9 @@ define PURGE_LOCALES
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index c86c340..f708875 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -90,9 +90,11 @@ $$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
  
- 	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale)); \
- 	do \
--		for lang in $$(cd $$dir; ls .|grep -v man); \
-+		for langdir in $$dir/*; \
- 		do \
--			grep -qx $$lang $(LOCALE_WHITELIST) || rm -rf $$dir/$$lang; \
-+			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
- 		done; \
- 	done
- endef
+ # FOO_KCONFIG_FILE is required
++ifeq ($$(BR_BUILDING),y)
+ ifeq ($$($(2)_KCONFIG_FILE),)
+ $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+ endif
++endif
+ 
+ # Configuration editors (menuconfig, ...)
+ #
