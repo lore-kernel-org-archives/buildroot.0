@@ -1,26 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:44 -0000
-Subject: [Buildroot] [git commit branch/next] nasm: add hash file
-Message-ID: <20150808105634.CB8CC7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libtirpc: bump version
+Message-ID: <20150808105610.D3B9A7F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=072222da7029674e8635a73a154d9713f32a2943
+commit: http://git.buildroot.net/buildroot/commit/?id=f44f95dd9807f167ca373d9d23f1970a22c88b82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nasm/nasm.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Bump to version 0.3.1:
+  - update our patches
+  - rename patches for proper numbering
+  - drop patch 0007, applied upstream
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-new file mode 100644
-index 0000000..a92ba3c
---- /dev/null
-+++ b/package/nasm/nasm.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	233c574f2c068c0256f9b3653220ceb247c72b671085595259529156c6cfa55d	nasm-2.11.02.tar.xz
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |   64 ++++----------------
+ ...out-RPC-support-does-not-install-rpcent.h.patch |   16 +++--
+ ...dd-rpcgen-program-from-nfs-utils-sources.patch} |   17 +++--
+ ...y-generate-XDR-header-files-from-.x-sour.patch} |   49 +++++++--------
+ ...-files-needed-to-build-rpcbind-on-top-of.patch} |   24 ++++----
+ ...g-config-needs-pthread-as-private-library.patch |   36 -----------
+ package/libtirpc/libtirpc.hash                     |    4 +-
+ package/libtirpc/libtirpc.mk                       |    2 +-
+ 8 files changed, 70 insertions(+), 142 deletions(-)
+
+Patch is too large, so refusing to show it
