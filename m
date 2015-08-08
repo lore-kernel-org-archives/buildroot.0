@@ -1,53 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] python-pyqt: fix install
-Message-ID: <20150808105558.D79F77FDC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] vsftpd: use pkg-config to get
+	OpenSSL link flags
+Message-ID: <20150808105556.BB129818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=348be778ff683491e99d00a5c235110fbec05584
+commit: http://git.buildroot.net/buildroot/commit/?id=1d046a5c3d9c92a3b7a69e7474b05cc9e52ffce5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-PyQt4 provides two version for some py files: one for python2.x and one for
-python3.x. This two versions are installed in TARGET_DIR.
-After installing files, python is used to generate all .pyc files, but fails
-like :
-class ProxyBase(metaclass=ProxyMetaclass):
-                             ^
-							 SyntaxError: invalid syntax
+Instead of hardcoding -lssl -lcrypto as the linker flags to link with
+OpenSSL, use pkg-config to fetch those flags. This allows to behave
+properly when doing static linking, since pkg-config returns the
+entire set of libraries we should link against.
 
-This is not a package build failure and this fix is only cosmetic.
-This patch suppress directory for not targeted python version.
+Fixes:
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+  http://autobuild.buildroot.org/results/d71/d710ecfa9ed0a8e3f97d2010d3dabb372485c7f2/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyqt/python-pyqt.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/vsftpd/vsftpd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
-index 292398d..fa298c4 100644
---- a/package/python-pyqt/python-pyqt.mk
-+++ b/package/python-pyqt/python-pyqt.mk
-@@ -14,8 +14,10 @@ PYTHON_PYQT_DEPENDENCIES = python-sip host-python-sip qt
- 
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- PYTHON_PYQT_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
-+PYTHON_PYQT_RM_PORT_BASE = port_v3
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- PYTHON_PYQT_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
-+PYTHON_PYQT_RM_PORT_BASE = port_v2
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index b94328d..ed15f00 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -23,8 +23,8 @@ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_DISABLE_UTMPX
  endif
  
- ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
-@@ -105,6 +107,7 @@ endef
- define PYTHON_PYQT_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
- 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
-+	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
- 	PYTHONPATH="$(PYTHON_PATH)" \
- 		$(HOST_DIR)/usr/bin/python -c "import compileall; \
- 		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-VSFTPD_DEPENDENCIES += openssl
+-VSFTPD_LIBS += -lssl -lcrypto
++VSFTPD_DEPENDENCIES += openssl host-pkgconf
++VSFTPD_LIBS += $(shell $(PKG_CONFIG_HOST_BINARY) --libs libssl)
+ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
+ endif
+ 
