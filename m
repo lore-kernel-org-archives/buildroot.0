@@ -1,84 +1,53 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat,  8 Aug 2015 12:57:02 +0200
-Subject: [Buildroot] [PATCHv2] package/wvstreams: disable for musl toolchains
-Message-ID: <1439031422-24117-1-git-send-email-romain.naour@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 08 Aug 2015 10:57:38 -0000
+Subject: [Buildroot] [git commit branch/next] input-event-daemon: systemd
+	support
+Message-ID: <20150808105631.1F9197FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The project seems not maintained anymore since there
-is no commit since 2011:
-https://github.com/wlach/wvstreams
+commit: http://git.buildroot.net/buildroot/commit/?id=030fc25c9200cf48a5fd68aaea8d8decde443360
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-After fixing the first build issue by adding a missing limit.h header...
-xplc/modulemgr.cc:90:14: error: ?PATH_MAX? was not declared in this scope
-   char fname[PATH_MAX];
-
-and fixing a basename() conflict between the gnu and posix version,
-the build fail due to missing __libc_stack_end.
-
-wvtask.cc:(.test+0xb08): undefined reference to `__libc_stack_end'
-
-There is a configure test for __libc_stack_end support but it
-doesn't work properly with a musl toolchain.
-
-Since we already have several fixes for uClibc, let's mark wvstreams
-as not available for musl toolchains, until someone interested
-enough fixes it.
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: improve the commit log
-    fix indentation in Config.in
-    propagates the dependency to wvdial
----
- package/wvdial/Config.in    | 5 +++--
- package/wvstreams/Config.in | 6 ++++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/input-event-daemon/input-event-daemon.mk   |    8 ++++++++
+ .../input-event-daemon/input-event-daemon.service  |    9 +++++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/wvdial/Config.in b/package/wvdial/Config.in
-index 5d415b1..3b09927 100644
---- a/package/wvdial/Config.in
-+++ b/package/wvdial/Config.in
-@@ -3,12 +3,13 @@ config BR2_PACKAGE_WVDIAL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # wvstreams
- 	depends on !BR2_STATIC_LIBS # wvstreams
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # wvstreams
- 	select BR2_PACKAGE_WVSTREAMS
- 	help
- 	  wvdial is an intelligent Point-to-Point Protocol dialer
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index 67b8cc4..0d23037 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -27,4 +27,12 @@ define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S99input-event-daemon
+ endef
  
- 	  http://wvdial.googlecode.com/
- 
--comment "wvdial needs a toolchain w/ C++, dynamic library"
-+comment "wvdial needs a (e)glibc or uClibc-ng toolchain w/ C++, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/wvstreams/Config.in b/package/wvstreams/Config.in
-index 0cbe60a..257340e 100644
---- a/package/wvstreams/Config.in
-+++ b/package/wvstreams/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_WVSTREAMS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU # fork()
-+	# musl not supported and no upstream activity since 2011.
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -10,6 +12,6 @@ config BR2_PACKAGE_WVSTREAMS
- 
- 	  http://wvstreams.googlecode.com/
- 
--comment "wvstreams needs a toolchain w/ C++, dynamic library"
-+comment "wvstreams needs a (e)glibc or uClibc-ng toolchain w/ C++, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
--- 
-2.4.3
++define INPUT_EVENT_DAEMON_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/input-event-daemon/input-event-daemon.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/input-event-daemon.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/input-event-daemon.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/input-event-daemon.service
++endef
++
+ $(eval $(generic-package))
+diff --git a/package/input-event-daemon/input-event-daemon.service b/package/input-event-daemon/input-event-daemon.service
+new file mode 100644
+index 0000000..d91e655
+--- /dev/null
++++ b/package/input-event-daemon/input-event-daemon.service
+@@ -0,0 +1,9 @@
++[Unit]
++Description=Input Event Daemon
++
++[Service]
++ExecStart=/usr/bin/input-event-daemon --no-daemon
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
