@@ -1,64 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:27 -0000
+Date: Sat, 08 Aug 2015 10:56:28 -0000
 Subject: [Buildroot] [git commit branch/next] package/matchbox: make
-	matchbox-wm a real package
-Message-ID: <20150808105606.5B0107F8ED@busybox.osuosl.org>
+	matchbox-fakekey a real package
+Message-ID: <20150808105606.7BD8F81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cee70bd948e0b66668214e6996ade1db728497c1
+commit: http://git.buildroot.net/buildroot/commit/?id=1dcf21ae7abe8de752473f3ebb4eac09bb1c0709
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Similarly to what we just did for matchbox-lib, we make matchbox-wm a
-real package.
+Currently, matchbox-fakekey is missing a Kconfig entry, but is so far
+solely a build-time dependency of matchbox-keyboard.
+
+So, make it a real package, and select it from matchbox-keyboard.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/matchbox/Config.in             |    2 ++
- package/matchbox/matchbox-wm/Config.in |    3 +++
- package/matchbox/matchbox.mk           |    1 -
- 3 files changed, 5 insertions(+), 1 deletions(-)
+ package/matchbox/Config.in                  |    2 ++
+ package/matchbox/matchbox-fakekey/Config.in |    2 ++
+ 2 files changed, 4 insertions(+), 0 deletions(-)
 
 diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 70cc168..15b1017 100644
+index ead2649..8d4ebc7 100644
 --- a/package/matchbox/Config.in
 +++ b/package/matchbox/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_MATCHBOX
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 	select BR2_PACKAGE_MATCHBOX_LIB
-+	select BR2_PACKAGE_MATCHBOX_WM
+@@ -24,11 +24,13 @@ source "package/matchbox/matchbox-wm/Config.in"
+ source "package/matchbox/matchbox-panel/Config.in"
+ source "package/matchbox/matchbox-desktop/Config.in"
+ source "package/matchbox/matchbox-common/Config.in"
++source "package/matchbox/matchbox-fakekey/Config.in"
+ 
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "Matchbox Virtual Keyboard"
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_MATCHBOX_FAKEKEY
  	help
- 	  Matchbox is an Open Source base environment for the X Window
- 	  System running on non-desktop embedded platforms such as
-@@ -19,6 +20,7 @@ config BR2_PACKAGE_MATCHBOX
- if BR2_PACKAGE_MATCHBOX
+ 	  Virtual Keyboard
  
- source "package/matchbox/matchbox-lib/Config.in"
-+source "package/matchbox/matchbox-wm/Config.in"
- 
- config BR2_PACKAGE_MATCHBOX_PANEL
- 	bool "Matchbox Panel"
-diff --git a/package/matchbox/matchbox-wm/Config.in b/package/matchbox/matchbox-wm/Config.in
+diff --git a/package/matchbox/matchbox-fakekey/Config.in b/package/matchbox/matchbox-fakekey/Config.in
 new file mode 100644
-index 0000000..6ad5dfc
+index 0000000..334f3a2
 --- /dev/null
-+++ b/package/matchbox/matchbox-wm/Config.in
-@@ -0,0 +1,3 @@
-+config BR2_PACKAGE_MATCHBOX_WM
++++ b/package/matchbox/matchbox-fakekey/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_MATCHBOX_FAKEKEY
 +	bool
-+	select BR2_PACKAGE_MATCHBOX_LIB
-diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
-index e367df2..17d89d8 100644
---- a/package/matchbox/matchbox.mk
-+++ b/package/matchbox/matchbox.mk
-@@ -1,4 +1,3 @@
- ifeq ($(BR2_PACKAGE_MATCHBOX),y)
- include $(sort $(wildcard package/matchbox/*/*.mk))
--PACKAGES += matchbox-wm
- endif
