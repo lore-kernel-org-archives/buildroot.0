@@ -1,40 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:00 -0000
-Subject: [Buildroot] [git commit branch/next] package/ipmiutil: really force
-	md2 off
-Message-ID: <20150808105558.56CBD81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] neardal: fix readline/libedit
+	detection with static linking
+Message-ID: <20150808105558.A8A74818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25e15fd17fa51a79b40159629dea1eea7b5f8d96
+commit: http://git.buildroot.net/buildroot/commit/?id=5504039c4e42ef9fc2b0b5c199f859da6930c9cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If ALLOW_GNU is not defined, SKIP_MD2 is a nop.
-
 Fixes:
-http://autobuild.buildroot.net/results/f606ec1fff4cea257a4c6274bc5603efdfc439ad/
+http://autobuild.buildroot.net/results/c3e/c3ea67d9b341749b9591451da3f3b0cb4a9fbb74/
+http://autobuild.buildroot.net/results/586/586fa95149aa37df7ef430e3a47a3418e6f7ed97/
+http://autobuild.buildroot.net/results/3ea/3eabd3a2cea0d5863b1c0dd8f55c73f34a684f79/
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Both readline and libedit link with ncurses but the configure script forgets
+to take that into account, causing the detection to fail when linking
+statically.
+
+Fix it by using pkg-config to add the needed linker options for ncurses.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipmiutil/ipmiutil.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/neardal/neardal.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index c3d791c..c7a8dd8 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -12,7 +12,8 @@ IPMIUTIL_LICENSE_FILES = COPYING
- IPMIUTIL_AUTORECONF = YES
- # tests against distro libcrypto so it might get a false positive when
- # the openssl version is old, so force it off
--IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DSKIP_MD2"
-+# SKIP_MD2 can be used only if ALLOW_GNU is defined.
-+IPMIUTIL_CONF_OPTS = CPPFLAGS="$(TARGET_CPPFLAGS) -DALLOW_GNU -DSKIP_MD2"
- IPMIUTIL_DEPENDENCIES = openssl
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index 382c42e..c65a5e6 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -21,6 +21,13 @@ else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ NEARDAL_DEPENDENCIES += libedit
+ endif
  
- $(eval $(autotools-package))
++# Both readline and libedit link with ncurses but the configure script
++# forgets to take that into account, causing the detection to fail
++# when linking statically
++ifeq ($(BR2_STATIC_LIBS),y)
++NEARDAL_CONF_ENV += LIBS=$(shell $(PKG_CONFIG_HOST_BINARY) --libs ncurses)
++endif
++
+ define NEARDAL_INSTALL_NCL
+ 	$(INSTALL) -m 0755 -D $(@D)/ncl/ncl $(TARGET_DIR)/usr/bin/ncl
+ endef
