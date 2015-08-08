@@ -1,33 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:55:56 -0000
-Subject: [Buildroot] [git commit branch/next] fix typo in package install
-	suggestion for dependencies
-Message-ID: <20150808105555.BC916818CF@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:55:57 -0000
+Subject: [Buildroot] [git commit branch/next] package/efl/expedite:
+	x-includes and x-libraries must be set for cross-compiling
+Message-ID: <20150808105555.A164F818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=965e3b96b6e2d5fe7ee5f0db7249242b098baddd
+commit: http://git.buildroot.net/buildroot/commit/?id=131c520da84824e7f682b26cfd916fea2147e49d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+If those flags are not explicitly passed, the libecore configure
+script will include -I/usr/X11R6/include and -L/usr/X11R6/lib in the
+compile flags, which are obviously unsafe for cross-compilation.
+
+The fix is similar to 0d9d8984a9240a27f5ed2e15f1977ada67266906 and
+da50b6b61c4a566fd28888f5a3a6dcb06fe1b495.
+
+Fixes:
+http://autobuild.buildroot.org/results/24b/24b578a28455409b7bcc0277abc6b478c51ae67f
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/efl/expedite/expedite.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 52305e1..01ad828 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -217,7 +217,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 		echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
- 		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
- 		echo "library."
--		echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
-+		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
- 		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
- 		echo "libstdc++6:i386, and zlib1g:i386)."
- 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
+index f0361bf..02a4ca0 100644
+--- a/package/efl/expedite/expedite.mk
++++ b/package/efl/expedite/expedite.mk
+@@ -11,4 +11,10 @@ EXPEDITE_LICENSE_FILES = COPYING
+ 
+ EXPEDITE_DEPENDENCIES = libevas libeina libeet
+ 
++ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
++EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
++endif
++
+ $(eval $(autotools-package))
