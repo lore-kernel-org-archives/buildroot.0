@@ -1,37 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:07 -0000
-Subject: [Buildroot] [git commit branch/next] qt5base: remove never set
-	QT5BASE_CONFIGURE_ENV
-Message-ID: <20150808105600.12E967FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/vpnc: add hash file
+Message-ID: <20150808105600.30EE67F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d38b6b2e1aecb80594236405a7662466749fdc43
+commit: http://git.buildroot.net/buildroot/commit/?id=d024ca3e047dd0bf0662e495a90087d3b13455dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since 1b54fbc925f4 (qt5base: fix postgresql plugin compile, 2015-02-19)
-QT5BASE_CONFIGURE_ENV is never set. Remove it.
-
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/qt5base.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/vpnc/vpnc.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 3de824f..e2db5d1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -174,7 +174,6 @@ define QT5BASE_CONFIGURE_CMDS
- 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
- 		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
--		$(QT5BASE_CONFIGURE_ENV) \
- 		./configure \
- 		-v \
- 		-prefix /usr \
+diff --git a/package/vpnc/vpnc.hash b/package/vpnc/vpnc.hash
+new file mode 100644
+index 0000000..a79df8f
+--- /dev/null
++++ b/package/vpnc/vpnc.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 46cea3bd02f207c62c7c6f2f22133382602baeda1dc320747809e94881414884 vpnc-0.5.3.tar.gz
