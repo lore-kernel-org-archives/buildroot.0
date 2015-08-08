@@ -1,65 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] support: get prompts via
-	official Kconfiglib APIs
-Message-ID: <20150808105608.540EE7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-pyxml: add
+	PYTHON_PYXML_VERSION variable to url address
+Message-ID: <20150808105608.AA2B37FB02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4250efb2f5f4a56f4b073a8679f399fab603586
+commit: http://git.buildroot.net/buildroot/commit/?id=efb58de1804b3dcc42cb963590ff9da54db65f0e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-These weren't available when gen-manual-lists.py was first written.
-
-Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/gen-manual-lists.py |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyxml/python-pyxml.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index 2acac2c..d45810b 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -99,7 +99,7 @@ def get_symbol_parents(item, root=None, enable_choice=False):
-         if parent.is_menu():
-             parents.append(parent.get_title())
-         elif enable_choice and parent.is_choice():
--            parents.append(parent.prompts[0][0])
-+            parents.append(parent.get_prompts()[0])
-         parent = parent.get_parent()
-     if isinstance(root, kconfiglib.Menu) or \
-             (enable_choice and isinstance(root, kconfiglib.Choice)):
-@@ -234,9 +234,9 @@ class Buildroot:
-         """
-         if not symbol.is_symbol():
-             return False
--        if type == 'real' and not symbol.prompts:
-+        if type == 'real' and not symbol.get_prompts():
-             return False
--        if type == 'virtual' and symbol.prompts:
-+        if type == 'virtual' and symbol.get_prompts():
-             return False
-         if not self.re_pkg_prefix.match(symbol.get_name()):
-             return False
-@@ -315,7 +315,7 @@ class Buildroot:
-         :param mark_deprecated: Append a 'deprecated' to the label
+diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
+index 77863f5..40435f4 100644
+--- a/package/python-pyxml/python-pyxml.mk
++++ b/package/python-pyxml/python-pyxml.mk
+@@ -6,7 +6,7 @@
  
-         """
--        label = symbol.prompts[0][0]
-+        label = symbol.get_prompts()[0]
-         if self._is_deprecated(symbol) and mark_deprecated:
-             label += " *(deprecated)*"
-         return label
-@@ -394,7 +394,7 @@ class Buildroot:
-                     continue
-                 for s in selects:
-                     if s == symbol:
--                        if sym.prompts:
-+                        if sym.get_prompts():
-                             l = self._get_symbol_label(sym,False)
-                             parent_pkg = _get_parent_package(sym)
-                             if parent_pkg is not None:
+ PYTHON_PYXML_VERSION = 0.8.4
+ PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
+-PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
++PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)/
+ PYTHON_PYXML_LICENSE = BSD-3c
+ PYTHON_PYXML_LICENSE_FILES = LICENCE
+ PYTHON_PYXML_SETUP_TYPE = distutils
