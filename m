@@ -1,86 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] gflags: new package
-Message-ID: <20150808105608.0664C7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] freetype: bump to version 2.6.0
+Message-ID: <20150808105608.160AD7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97b7fd055dcbdbf9064aff30641742d4f488e134
+commit: http://git.buildroot.net/buildroot/commit/?id=fdd7fa8fbcf867157e26fa661e5327af50db2b63
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Reviewed-by: Abhimanyu Vishwakarma <abhimanyu.v@imgtec.com>
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in          |    1 +
- package/gflags/Config.in   |   13 +++++++++++++
- package/gflags/gflags.hash |    2 ++
- package/gflags/gflags.mk   |   17 +++++++++++++++++
- 4 files changed, 33 insertions(+), 0 deletions(-)
+ package/freetype/freetype.hash |    6 +++---
+ package/freetype/freetype.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index e8a7d0a..a17901f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1015,6 +1015,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
-+	source "package/gflags/Config.in"
- 	source "package/glibmm/Config.in"
- 	source "package/glm/Config.in"
- 	source "package/gmp/Config.in"
-diff --git a/package/gflags/Config.in b/package/gflags/Config.in
-new file mode 100644
-index 0000000..ed05944
---- /dev/null
-+++ b/package/gflags/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_GFLAGS
-+	bool "gflags"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  The gflags package contains a C++ library that implements
-+	  commandline flags processing. It includes built-in support for
-+	  standard types such as string and the ability to define flags
-+	  in the source file in which they are used.
-+
-+	  https://github.com/gflags/gflags
-+
-+comment "gflags needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gflags/gflags.hash b/package/gflags/gflags.hash
-new file mode 100644
-index 0000000..9c8b27a
---- /dev/null
-+++ b/package/gflags/gflags.hash
-@@ -0,0 +1,2 @@
-+# No hash for v2.1.2, comes from the github-helper:
-+none	xxx	gflags-v2.1.2.tar.gz
-diff --git a/package/gflags/gflags.mk b/package/gflags/gflags.mk
-new file mode 100644
-index 0000000..661dad8
---- /dev/null
-+++ b/package/gflags/gflags.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# gflags
-+#
-+################################################################################
-+
-+GFLAGS_VERSION = v2.1.2
-+GFLAGS_SITE = $(call github,gflags,gflags,$(GFLAGS_VERSION))
-+GFLAGS_INSTALL_STAGING = YES
-+GFLAGS_LICENSE = BSD-3c
-+GFLAGS_LICENSE_FILES = COPYING.txt
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+GFLAGS_CONF_OPTS = -DBUILD_gflags_LIB=OFF
-+endif
-+
-+$(eval $(cmake-package))
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index f890c7f..16450d0 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.5.5/
+-md5	2a7a314927011d5030903179cf183be0	freetype-2.5.5.tar.bz2
+-sha1	7b7460ef51a8fdb17baae53c6658fc1ad000a1c2	freetype-2.5.5.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6/
++md5	5682890cb0267f6671dd3de6eabd3e69	freetype-2.6.tar.bz2
++sha1	cd2b144205dd2c61693e2d861069367aa3dde1bc	freetype-2.6.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 56274cb..e3c8240 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREETYPE_VERSION = 2.5.5
++FREETYPE_VERSION = 2.6
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
