@@ -1,59 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:50 -0000
-Subject: [Buildroot] [git commit branch/next] e2fsprogs: remove busybox
-	tune2fs when installing full version
-Message-ID: <20150808105639.8B49F803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] upmpdcli: systemd support
+Message-ID: <20150808105621.8E7E47FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa02829240b2927b2cb379eb904b6f40ff751237
+commit: http://git.buildroot.net/buildroot/commit/?id=2154063a38cffbcf189af3bb7fec2288cdc6fe82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, busybox installs a version of tune2fs in /sbin/ while
-e2fsprogs installs at /usr/sbin/. This causes issues if a user is
-expecting the to use the full version from a prompt via 'tune2fs'
-since busybox's tune2fs will be found first from the default path
-search.
+Usable .service file is provided in the package.
 
-Fix this by removing the busybox version of tune2fs when a user has
-selected the option to install tune2fs from e2fsprogs.
-
-[Thomas: don't hijack E2FSPROGS_TARGET_TUNE2FS_SYMLINK for the removal
-and instead introduce a separate E2FSPROGS_REMOVE_BUSYBOX_APPLETS post
-install target hook, and do related code re-organization.]
-
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/e2fsprogs/e2fsprogs.mk |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+ package/upmpdcli/upmpdcli.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0537521..ca54b70 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -102,6 +102,20 @@ ifeq ($(BR2_PACKAGE_E2FSPROGS_E2FSCK),y)
- E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_TARGET_E2FSCK_SYMLINKS
- endif
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 5e4d6a8..69a0ab3 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -31,6 +31,14 @@ define UPMPDCLI_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/S99upmpdcli
+ endef
  
-+# Remove busybox tune2fs and e2label, since we want the e2fsprogs full
-+# blown variants to take precedence, but they are not installed in the
-+# same location.
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+E2FSPROGS_DEPENDENCIES += busybox
-+
-+define E2FSPROGS_REMOVE_BUSYBOX_APPLETS
-+	$(RM) -f $(TARGET_DIR)/sbin/tune2fs
-+	$(RM) -f $(TARGET_DIR)/sbin/e2label
-+
++define UPMPDCLI_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(@D)/systemd/upmpdcli.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/upmpdcli.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf /usr/lib/systemd/system/upmpdcli.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/upmpdcli.service
 +endef
-+E2FSPROGS_POST_INSTALL_TARGET_HOOKS += E2FSPROGS_REMOVE_BUSYBOX_APPLETS
-+endif
 +
- define E2FSPROGS_TARGET_TUNE2FS_SYMLINK
- 	ln -sf e2label $(TARGET_DIR)/usr/sbin/tune2fs
+ define UPMPDCLI_INSTALL_CONF_FILE
+ 	$(INSTALL) -D -m 0755 $(@D)/src/upmpdcli.conf $(TARGET_DIR)/etc/upmpdcli.conf
  endef
