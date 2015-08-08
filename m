@@ -1,43 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libxkbfile:
-	bump version to 1.0.9
-Message-ID: <20150808105629.9A04E7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox: forcibly
+	disable support for compositing
+Message-ID: <20150808105607.472977FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e47ac2d8dd4323d11615e8bb50e66e4b182b2f7
+commit: http://git.buildroot.net/buildroot/commit/?id=f413dd2a660d044659fb1eafe1a7e425016d7c80
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Building with the experimental support for compositing is broken:
+
+    /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gnueabihf-gcc
+    -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+    -Os -o matchbox-window-manager main.o wm.o base_client.o main_client.o
+    toolbar_client.o toolbar_client_alt.o dockbar_client.o dialog_client.o
+    select_client.o desktop_client.o ewmh.o misc.o client_common.o keys.o
+    list.o stack.o composite-engine.o session.o mbtheme.o xml.o
+    -lmb -lX11
+    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+    -lXext -lXcomposite -lXdamage -lXfixes -lXrender
+    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+    -lX11 -lexpat
+    -L/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+    -lXfixes
+    composite-engine.o: In function `gaussian':
+    /home/ymorin/dev/buildroot/O/build/matchbox-1.2/src/composite-engine.c:65:
+    undefined reference to `exp'
+
+That's because it forgets to link with -lm.
+
+However, adding "MATCHBOX_CONF_ENV = -lm" does not solve the issue, as
+it still does not link with -lm at all.
+
+Furthermore, the package does not autoreconf, since it is missing the
+gconf m4 macros, and Buildroot does not have a package for gconf, hence
+we can not even patch Makefile.am and autoreconf.
+
+Patching Makefile.in (in addition to .am) could be a solution, but
+support for compositing is explicitly marked as being experimental.
+
+So, just forcibly disable it altogether.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash |    4 ++--
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/matchbox/Config.in   |    1 -
+ package/matchbox/matchbox.mk |   10 +---------
+ 2 files changed, 1 insertions(+), 10 deletions(-)
 
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-index 83431cb..759b2ae 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/pipermail/xorg/2012-March/054011.html
--sha256	8aa94e19c537c43558f30906650cea6e15fa012591445d9f927658c3b32a8f3a	libxkbfile-1.0.8.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002592.html
-+sha256	51817e0530961975d9513b773960b4edd275f7d5c72293d5a151ed4f42aeb16a	libxkbfile-1.0.9.tar.bz2
-diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-index 2d5e574..51c58c0 100644
---- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-+++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 344635c..d850a39 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_MATCHBOX
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 0899208..43f6b4b 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -11,19 +11,11 @@ MATCHBOX_LICENSE = GPLv2+
+ MATCHBOX_LICENSE_FILES = COPYING
  
--XLIB_LIBXKBFILE_VERSION = 1.0.8
-+XLIB_LIBXKBFILE_VERSION = 1.0.9
- XLIB_LIBXKBFILE_SOURCE = libxkbfile-$(XLIB_LIBXKBFILE_VERSION).tar.bz2
- XLIB_LIBXKBFILE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXKBFILE_LICENSE = MIT
+ MATCHBOX_DEPENDENCIES = matchbox-lib
+-MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf
++MATCHBOX_CONF_OPTS = --enable-expat --disable-gconf --disable-composite
+ 
+ # Workaround bug in configure script
+ MATCHBOX_CONF_ENV = expat=yes
+ 
+-ifeq ($(BR2_PACKAGE_X11R7_LIBXCOMPOSITE),y)
+-ifeq ($(BR2_PACKAGE_X11R7_LIBXPM),y)
+-MATCHBOX_CONF_OPTS += --enable-composite
+-MATCHBOX_DEPENDENCIES += xlib_libXcomposite
+-MATCHBOX_DEPENDENCIES += xlib_libXpm
+-endif
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXFT),y)
+ MATCHBOX_DEPENDENCIES += xlib_libXft
+ endif
