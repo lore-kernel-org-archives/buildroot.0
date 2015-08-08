@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:35 -0000
-Subject: [Buildroot] [git commit branch/next] btrfs-progs: bump to version
-	4.1.1
-Message-ID: <20150808105625.5B58B7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] file: bump to version 5.24
+Message-ID: <20150808105624.E30567FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed1d98daa114cb6fec12cb1cc655f17b221eefc6
+commit: http://git.buildroot.net/buildroot/commit/?id=4a35ee875f92dfbf8a9e81d28969dc5e9c9968b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/btrfs-progs/btrfs-progs.hash |    2 +-
- package/btrfs-progs/btrfs-progs.mk   |    2 +-
+ package/file/file.hash |    2 +-
+ package/file/file.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 0f07f69..10118cc 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
+diff --git a/package/file/file.hash b/package/file/file.hash
+index a061783..28f071d 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256	abc6ff9dbbf948e7358edd34db32103cba8b86c5cb9e3ed7eb3b5630e2feb7e8	btrfs-progs-v4.1.tar.xz
-+sha256	b7f2698fd6629a1ece1422638e776d619f41d342db4d82c29dd05a57a27001b4	btrfs-progs-v4.1.1.tar.xz
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index b8833a7..aac0257 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
+ # Locally calculated
+-sha256	2c8ab3ff143e2cdfb5ecee381752f80a79e0b4cfe9ca4cc6e1c3e5ec15e6157c	file-5.23.tar.gz
++sha256	802cb3de2e49e88ef97cdcb52cd507a0f25458112752e398445cea102bc750ce	file-5.24.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 4baa393..f3b09ec 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.1
-+BTRFS_PROGS_VERSION = 4.1.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
+-FILE_VERSION = 5.23
++FILE_VERSION = 5.24
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ FILE_INSTALL_STAGING = YES
