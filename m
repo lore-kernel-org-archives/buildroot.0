@@ -1,39 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:12 -0000
-Subject: [Buildroot] [git commit branch/next] atf: needs mmu
-Message-ID: <20150808105609.575B77F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openssl: bump to version 1.0.2c
+Message-ID: <20150808105608.E96817F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b75c9c13566ad2b89f0b700d71c271ec8c6629a2
+commit: http://git.buildroot.net/buildroot/commit/?id=e4f2d3b12acf9f056d6cbbfab2e60c14f755bb88
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/950/95069436dd5b2004e59851b8c731d534b86062a5/
+Fixes HMAC ABI breakage from 1.0.2b
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/atf/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/openssl/openssl.hash |    8 ++++----
+ package/openssl/openssl.mk   |    2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/atf/Config.in b/package/atf/Config.in
-index 59712ab..43a5d4f 100644
---- a/package/atf/Config.in
-+++ b/package/atf/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_ATF
- 	bool "atf"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  ATF, or Automated Testing Framework, is a collection of
- 	  libraries to write test programs in C, C++ and POSIX shell.
-@@ -9,3 +10,4 @@ config BR2_PACKAGE_ATF
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 673f99f..4b212fb 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.2b.tar.gz.sha1
+-md5	7729b259e2dea7d60b32fc3934d6984b	openssl-1.0.2b.tar.gz
+-sha1	9006e53ca56a14d041e3875320eedfa63d82aba7	openssl-1.0.2b.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.md5
++# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.sha1
++md5	8c8d81a9ae7005276e486702edbcd4b6	openssl-1.0.2c.tar.gz
++sha1	6e4a5e91159eb32383296c7c83ac0e59b83a0a44	openssl-1.0.2c.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 8051a9b..fd8904d 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "atf needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU
+-OPENSSL_VERSION = 1.0.2b
++OPENSSL_VERSION = 1.0.2c
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
