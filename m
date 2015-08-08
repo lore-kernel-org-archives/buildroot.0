@@ -1,37 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:18 -0000
-Subject: [Buildroot] [git commit branch/next] iproute2: drop unneeded Werror
-	handling
-Message-ID: <20150808105601.AEA677F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libgcrypt: allow optimization
+Message-ID: <20150808105602.1BCB57F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e881e2def46b20b5e60bae0c3afe6dd1f02ecb4
+commit: http://git.buildroot.net/buildroot/commit/?id=32e4bceaebdd40f5ab482243cc17930a2aa673a9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream has dropped -Werror since the 3.12 release, so there's no point in
-us sed'ing it away:
+Drop the --disable-optimization option, which makes the libgcrypt configure
+remove buildroot's optimization setting passed in from CFLAGS.
 
-https://git.kernel.org/cgit/linux/kernel/git/shemminger/iproute2.git/commit/?id=3140e9a3a343d37a8d828ee27e16ad9f3f9ab389
-
-Reported-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iproute2/iproute2.mk |    1 -
+ package/libgcrypt/libgcrypt.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 49b1fdc..a8f4400 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -51,7 +51,6 @@ endif
- define IPROUTE2_CONFIGURE_CMDS
- 	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
- 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
--	$(SED) 's/-Werror//' $(IPROUTE2_DIR)/Makefile
- 	$(IPROUTE2_DISABLE_ARPD)
- 	$(IPROUTE2_WITH_IPTABLES)
- endef
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 57c5ab1..9153fb8 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -16,7 +16,6 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
+ LIBGCRYPT_CONF_ENV = \
+ 	ac_cv_sys_symbol_underscore=no
+ LIBGCRYPT_CONF_OPTS = \
+-	--disable-optimization \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ 
+ # Code doesn't build in thumb mode
