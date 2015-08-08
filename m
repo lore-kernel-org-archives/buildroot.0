@@ -1,58 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] systemd: fix some coding style
-	issues
-Message-ID: <20150808105628.B83017FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox:
+	xlib_libXfixes is an optional dependency
+Message-ID: <20150808105607.A00B27FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b5c763c490dc1ef42149468910aaaacf4710f049
+commit: http://git.buildroot.net/buildroot/commit/?id=890bfa58d5b26459b3d43d5998906f9ee0178d05
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: adjust commit title, some additioanl coding style fixes.]
+matchbox can use xlib_libXfixes to completely and really hide the
+cursor, so build-depend on it if enabled.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/systemd.mk |   15 +++++++--------
- 1 files changed, 7 insertions(+), 8 deletions(-)
+ package/matchbox/matchbox.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 0a1f00f..7eb7abe 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -72,16 +72,14 @@ SYSTEMD_CONF_OPTS += --disable-seccomp
+diff --git a/package/matchbox/matchbox.mk b/package/matchbox/matchbox.mk
+index 3b6a0eb..9094b1e 100644
+--- a/package/matchbox/matchbox.mk
++++ b/package/matchbox/matchbox.mk
+@@ -39,4 +39,8 @@ ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+ MATCHBOX_DEPENDENCIES += xlib_libXcursor
  endif
  
- ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
--SYSTEMD_DEPENDENCIES += \
--	xz 		\
--	libgcrypt
--SYSTEMD_CONF_OPTS += 	\
--	--enable-xz 	\
-+SYSTEMD_DEPENDENCIES += xz libgcrypt
-+SYSTEMD_CONF_OPTS += \
-+	--enable-xz \
- 	--enable-gcrypt	\
- 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
- else
--SYSTEMD_CONF_OPTS += 	\
--	--disable-xz 	\
-+SYSTEMD_CONF_OPTS += \
-+	--disable-xz \
- 	--disable-gcrypt
- endif
- 
-@@ -143,7 +141,8 @@ define SYSTEMD_INSTALL_INIT_HOOK
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/poweroff
- 	ln -fs ../bin/systemctl $(TARGET_DIR)/sbin/reboot
- 
--	ln -fs ../../../lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
-+	ln -fs ../../../lib/systemd/system/multi-user.target \
-+		$(TARGET_DIR)/etc/systemd/system/default.target
- endef
- 
- define SYSTEMD_INSTALL_MACHINEID_HOOK
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++MATCHBOX_DEPENDENCIES += xlib_libXfixes
++endif
++
+ $(eval $(autotools-package))
