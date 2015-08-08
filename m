@@ -1,46 +1,177 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] conntrack-tools: uses dlopen(),
-	not available on static builds
-Message-ID: <20150808105602.5F9757FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv: define modules
+	inter-dependencies
+Message-ID: <20150808105614.A5A027FC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3afbc4f378bf9ba9a5ccc774df6128343e6d4a70
+commit: http://git.buildroot.net/buildroot/commit/?id=1a49f97b007aee8f4c6b90ce105d96e10484368c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/fff/fff4865c9bb8ca42d3cece903d0fc3daea504f67/
-http://autobuild.buildroot.net/results/742/74222a44ad168148c18af479878d8f848d3d6a73/
-http://autobuild.buildroot.net/results/470/470197fad2402be9222b8abf96dd45c341a850e9/
-http://autobuild.buildroot.net/results/ab1/ab1ae40f1862300cd7667b7bd03cc59d7455a769/
+OpenCV allows to enable/disable the selection of modules (a.k.a.
+opencv libraries). These modules depend one on the others; these
+dependencies are already handled by the build-system (CMake).
 
-And many more.
+However, the way we handled them in Buildroot was not really clean.
+For each opencv module, there is a kconfig option, but we forced the
+corresponding CMake config option without checking for the modules'
+dependencies.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This patch replicates the modules' dependency relations in the
+Config.in, so that the selection of the user will actually be built.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/conntrack-tools/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/opencv/Config.in |   39 ++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 38 insertions(+), 1 deletions(-)
 
-diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
-index 84d3fd4..03e3ed9 100644
---- a/package/conntrack-tools/Config.in
-+++ b/package/conntrack-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_CONNTRACK_TOOLS
- 	bool "conntrack-tools"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
- 	select BR2_PACKAGE_LIBNETFILTER_CTHELPER
- 	select BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT
-@@ -17,4 +18,5 @@ config BR2_PACKAGE_CONNTRACK_TOOLS
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index b327864..6b1ffcf 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -22,54 +22,70 @@ comment "OpenCV modules"
+ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
+ 	bool "calib3d"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	help
+ 	  Include opencv_calib3d module into the OpenCV build.
  
- comment "conntrack-tools needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
-+	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC) || \
-+		BR2_STATIC_LIBS
+ config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+ 	bool "features2d"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_FLANN
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_ML
+ 	help
+ 	  Include opencv_features2d module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_FLANN
+ 	bool "flann"
+ 	default y
++	# opencv_core dependency is already enabled
+ 	help
+ 	  Include opencv_flann module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	bool "highgui"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+ 	help
+ 	  Include opencv_highgui module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_IMGCODECS
+ 	bool "imgcodecs"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	help
+ 	  Include opencv_imgcodecs module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	bool "imgproc"
+ 	default y
++	# opencv_core dependency is already enabled
+ 	help
+ 	  Include opencv_imgproc module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_ML
+ 	bool "ml"
+ 	default y
++	# opencv_core dependency is already enabled
+ 	help
+ 	  Include opencv_ml module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+ 	bool "objdetect"
+ 	default y
++	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_ML
+ 	help
+ 	  Include opencv_objdetect module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_PHOTO
+ 	bool "photo"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	help
+ 	  Include opencv_photo module into the OpenCV build.
+ 
+@@ -78,44 +94,65 @@ comment "opencv_python module requires numpy which is not yet available."
+ config BR2_PACKAGE_OPENCV_LIB_SHAPE
+ 	bool "shape (shape descriptors and matchers)"
+ 	default y
++	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	help
+ 	  Include opencv_shape module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_STITCHING
+ 	bool "stitching"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+ 	help
+ 	  Include opencv_stitching module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_SUPERRES
+ 	bool "superres"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	help
+ 	  Include opencv_superres "super resolution" - module into the OpenCV
+ 	  build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_TS
+ 	bool "ts (touchscreen)"
+-	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	default y
++	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+ 	help
+ 	  Include opencv_ts module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_VIDEOIO
+ 	bool "videoio (media i/o)"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_IMGCODECS
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	help
+ 	  Include opencv_videoio module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	bool "video"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+ 	help
+ 	  Include opencv_video module into the OpenCV build.
+ 
+ config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
+ 	bool "videostab"
+ 	default y
++	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_PHOTO
++	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+ 	help
+ 	  Include opencv_videostab module into the OpenCV build.
+ 
