@@ -1,47 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:33 -0000
-Subject: [Buildroot] [git commit branch/next] package/on2-8170-modules: use
-	kernel-module helper
-Message-ID: <20150808105628.575FF80414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:34 -0000
+Subject: [Buildroot] [git commit branch/next] c-icap: disable Perl support
+Message-ID: <20150808105628.8AE6E80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=731c71d23f4dc747a3542c7ccbd163f9e073b9d3
+commit: http://git.buildroot.net/buildroot/commit/?id=5ec154fa413c991290a5661cc9bfc679ef997440
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We were already using the Linux buildsystem to build on2-8170-modules,
-so just switch to the new kernel-module infra.
+The Perl support in c-icap does not build properly, because it queries
+the system-installed Perl for cflags/ldflags, which returns things
+like -I/usr/local/include causing build failures since those are
+invalid paths when cross-compiling.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Since there is no easy way to fix that without changing c-icap
+configure.in, let's disable the Perl support for now, until someone is
+interested enough to fix this up.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/f60/f6011ab8211589fe8e1e8932db9f8be81768d3e6/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/on2-8170-modules/on2-8170-modules.mk |   11 +----------
- 1 files changed, 1 insertions(+), 10 deletions(-)
+ package/c-icap/c-icap.mk |    8 +-------
+ 1 files changed, 1 insertions(+), 7 deletions(-)
 
-diff --git a/package/on2-8170-modules/on2-8170-modules.mk b/package/on2-8170-modules/on2-8170-modules.mk
-index 209bcb5..b40ed86 100644
---- a/package/on2-8170-modules/on2-8170-modules.mk
-+++ b/package/on2-8170-modules/on2-8170-modules.mk
-@@ -7,17 +7,8 @@
- ON2_8170_MODULES_VERSION = 73b08061d30789178e692bc332b73d1d9922bf39
- ON2_8170_MODULES_SITE = $(call github,alexandrebelloni,on2-8170-modules,$(ON2_8170_MODULES_VERSION))
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 51c0f5f..0f42b6c 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -14,6 +14,7 @@ C_ICAP_CONFIG_SCRIPTS = c-icap-config c-icap-libicapapi-config
+ C_ICAP_CONF_OPTS = \
+ 	--with-process-mutexes=posix \
+ 	--without-ldap \
++	--without-perl \
+ 	--enable-large-files \
+ 	--enable-ipv6
  
--ON2_8170_MODULES_DEPENDENCIES = linux
--
- ON2_8170_MODULES_LICENSE = GPLv2+
- #There is no license file
+@@ -31,13 +32,6 @@ else
+ C_ICAP_CONF_OPTS += --without-bzip2
+ endif
  
--define ON2_8170_MODULES_BUILD_CMDS
--	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
--endef
+-ifeq ($(BR2_PACKAGE_PERL),y)
+-C_ICAP_CONF_OPTS += --with-perl
+-C_ICAP_DEPENDENCIES += perl
+-else
+-C_ICAP_CONF_OPTS += --without-perl
+-endif
 -
--define ON2_8170_MODULES_INSTALL_TARGET_CMDS
--	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
--endef
--
-+$(eval $(kernel-module))
- $(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ C_ICAP_CONF_OPTS += --with-zlib
+ C_ICAP_DEPENDENCIES += zlib
