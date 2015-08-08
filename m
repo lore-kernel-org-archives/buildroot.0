@@ -1,47 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] docs/manual/br2-external: use
-	proper .Note sections
-Message-ID: <20150808105601.BEAE67FF82@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:16 -0000
+Subject: [Buildroot] [git commit branch/next] lua: bump to version 5.3.1
+Message-ID: <20150808105611.BE31B7F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=162290e1f383cc0aa95c43364fcd4888f2bfae4f
+commit: http://git.buildroot.net/buildroot/commit/?id=0778c99e478f23e88761c381a73aa85e385622c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/customize-outside-br.txt |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ package/lua/{5.3.0 => 5.3.1}/0001-root-path.patch  |    2 +-
+ .../0002-shared-libs-for-lua.patch                 |    0
+ package/lua/{5.3.0 => 5.3.1}/0004-lua-pc.patch     |    0
+ package/lua/{5.3.0 => 5.3.1}/0011-linenoise.patch  |    8 ++++----
+ package/lua/lua.hash                               |    4 ++--
+ package/lua/lua.mk                                 |    2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 99a942c..9ad177d 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -25,7 +25,8 @@ there is no need to pass +BR2_EXTERNAL+ at every +make+ invocation. It
- can however be changed at any time by passing a new value, and can be
- removed by passing an empty value.
+diff --git a/package/lua/5.3.0/0001-root-path.patch b/package/lua/5.3.1/0001-root-path.patch
+similarity index 95%
+rename from package/lua/5.3.0/0001-root-path.patch
+rename to package/lua/5.3.1/0001-root-path.patch
+index 660bc15..d8ef8d0 100644
+--- a/package/lua/5.3.0/0001-root-path.patch
++++ b/package/lua/5.3.1/0001-root-path.patch
+@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -175,7 +175,7 @@
++@@ -188,7 +188,7 @@
  
--*Note:* the +BR2_EXTERNAL+ path can be either an absolute or a relative path,
-+.Note
-+The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
- but if it's passed as a relative path, it is important to note that it
- is interpreted relative to the main Buildroot source directory, *not*
- to the Buildroot output directory.
-@@ -75,7 +76,10 @@ buildroot/ $ make BR2_EXTERNAL= xconfig
-    logic. Buildroot automatically includes +$(BR2_EXTERNAL)/Config.in+ to
-    make it appear in the top-level configuration menu, and includes
-    +$(BR2_EXTERNAL)/external.mk+ with the rest of the makefile logic.
--   Providing those two files is mandatory, but they can be empty.
-++
-+.Note
-+Providing +Config.in+ and +external.mk+ is mandatory, but they can be
-+   empty.
+  #else			/* }{ */
+ 
+diff --git a/package/lua/5.3.0/0002-shared-libs-for-lua.patch b/package/lua/5.3.1/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.3.0/0002-shared-libs-for-lua.patch
+rename to package/lua/5.3.1/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.3.0/0004-lua-pc.patch b/package/lua/5.3.1/0004-lua-pc.patch
+similarity index 100%
+rename from package/lua/5.3.0/0004-lua-pc.patch
+rename to package/lua/5.3.1/0004-lua-pc.patch
+diff --git a/package/lua/5.3.0/0011-linenoise.patch b/package/lua/5.3.1/0011-linenoise.patch
+similarity index 88%
+rename from package/lua/5.3.0/0011-linenoise.patch
+rename to package/lua/5.3.1/0011-linenoise.patch
+index b2e5695..ccdd3fd 100644
+--- a/package/lua/5.3.0/0011-linenoise.patch
++++ b/package/lua/5.3.1/0011-linenoise.patch
+@@ -8,10 +8,10 @@ Index: b/src/lua.c
+ ===================================================================
+ --- a/src/lua.c
+ +++ b/src/lua.c
+-@@ -85,6 +85,15 @@
+-           add_history(lua_tostring(L, idx));  /* add it to history */
++@@ -83,6 +83,15 @@
++ #define lua_saveline(L,line)	((void)L, add_history(line))
+  #define lua_freeline(L,b)	((void)L, free(b))
+-
++ 
+ +#elif defined(LUA_USE_LINENOISE)
  +
- The main usage of this is to store package recipes. The recommended
-    way to do this is to write a +$(BR2_EXTERNAL)/Config.in+ file that
+ +#include <linenoise.h>
+@@ -22,5 +22,5 @@ Index: b/src/lua.c
+ +#define lua_freeline(L,b)	((void)L, free(b))
+ +
+  #else				/* }{ */
+-
++ 
+  #define lua_readline(L,b,p) \
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+index fe36dcd..f0fa87d 100644
+--- a/package/lua/lua.hash
++++ b/package/lua/lua.hash
+@@ -1,6 +1,6 @@
+ # Hashes from: http://www.lua.org/ftp/
+-md5 a1b0a7e92d0c85bbff7a8d27bf29f8af           lua-5.3.0.tar.gz
+-sha1 1c46d1c78c44039939e820126b86a6ae12dadfba  lua-5.3.0.tar.gz
++md5 797adacada8d85761c079390ff1d9961           lua-5.3.1.tar.gz
++sha1 1676c6a041d90b6982db8cef1e5fb26000ab6dee  lua-5.3.1.tar.gz
+ 
+ md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
+ sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index cdcf47b..1279b76 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+-LUA_VERSION = 5.3.0
++LUA_VERSION = 5.3.1
+ else
+ ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ LUA_VERSION = 5.2.4
