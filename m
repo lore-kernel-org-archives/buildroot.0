@@ -1,113 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:38 -0000
-Subject: [Buildroot] [git commit branch/next] quazip: new package
-Message-ID: <20150808105637.D129280414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/owl-linux: use
+	kernel-module helper
+Message-ID: <20150808105628.60D7C7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40f0c0c122bd93fc835a44d804096f7022f833be
+commit: http://git.buildroot.net/buildroot/commit/?id=7b5c2e658f3c35a6378a02736d1057ed1bef464b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas:
- - fix indentation of select BR2_PACKAGE_ZLIB in Config.in
- - rewrap Config.in help text, lines were too long
- - remove depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5, since
-   quazip/Config.in is already only included if one of Qt4 or Qt5 is
-   enabled.
- - remove QUAZIP_SOURCE definition, since its value was the default
- - add the missing zlib dependency in the .mk file
- - add spaces around '=' signs when setting QUAZIP_QMAKE
- - pass $(TARGET_MAKE_ENV) at install time]
+The owl-linux' Makefile is only calling the Linux buildsystem, so switch
+do using the new kernel-module infra.
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Get rid of first patch, no longer needed; rename remaining patch.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/quazip/Config.in   |    9 +++++++++
- package/quazip/quazip.hash |    2 ++
- package/quazip/quazip.mk   |   39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+), 0 deletions(-)
+ .../0001-fix-CROSS_COMPILE-usage-in-Makefile.patch |   16 ----------------
+ ...-3.3.x.patch => 0001-fix-for-linux-3.3.x.patch} |    0
+ package/owl-linux/owl-linux.mk                     |   11 +----------
+ 3 files changed, 1 insertions(+), 26 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ddbf180..20ecd38 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -265,6 +265,7 @@ comment "QT libraries and helper libraries"
- 	source "package/qextserialport/Config.in"
- 	source "package/qjson/Config.in"
- 	source "package/qtuio/Config.in"
-+	source "package/quazip/Config.in"
- 	source "package/qwt/Config.in"
- endif
- 	source "package/weston/Config.in"
-diff --git a/package/quazip/Config.in b/package/quazip/Config.in
-new file mode 100644
-index 0000000..83537d4
---- /dev/null
-+++ b/package/quazip/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QUAZIP
-+	bool "quazip"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  QuaZIP is a simple C++ wrapper over Gilles Vollant's
-+	  ZIP/UNZIP package that can be used to access ZIP
-+	  archives. It uses the Qt toolkit.
-+
-+	  http://quazip.sourceforge.net
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-new file mode 100644
-index 0000000..84b56c7
---- /dev/null
-+++ b/package/quazip/quazip.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 78c984103555c51e6f7ef52e3a2128e2beb9896871b2cc4d4dbd4d64bff132de quazip-0.7.1.tar.gz
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-new file mode 100644
-index 0000000..178a531
---- /dev/null
-+++ b/package/quazip/quazip.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# quazip
-+#
-+################################################################################
-+
-+QUAZIP_VERSION = 0.7.1
-+QUAZIP_SITE = http://sourceforge.net/projects/quazip/files/quazip/$(QUAZIP_VERSION)/
-+QUAZIP_INSTALL_STAGING = YES
-+QUAZIP_DEPENDENCIES = \
-+	zlib \
-+	$(if $(BR2_PACKAGE_QT),qt) \
-+	$(if $(BR2_PACKAGE_QT5),qt5base)
-+QUAZIP_LICENSE = LGPLv2.1
-+QUAZIP_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_QT5),y)
-+QUAZIP_QMAKE = $(QT5_QMAKE)
-+else
-+QUAZIP_QMAKE = $(QT_QMAKE)
-+endif
-+
-+define QUAZIP_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QUAZIP_QMAKE) PREFIX=/usr)
-+endef
-+
-+define QUAZIP_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QUAZIP_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
-+endef
-+
-+define QUAZIP_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch b/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
+deleted file mode 100644
+index 14b4631..0000000
+--- a/package/owl-linux/0001-fix-CROSS_COMPILE-usage-in-Makefile.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Fix the owl-linux Makefile so that it protects spaces in the CROSS_COMPILE
+-variable. For example, this variable will contain spaces if ccache is used.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-diff -Nurp a/Makefile b/Makefile
+---- a/Makefile	2012-06-14 10:51:45.000000000 +0100
+-+++ b/Makefile	2012-07-20 10:46:41.636752148 +0100
+-@@ -35,7 +35,7 @@ else
+- 	PWD := $(shell pwd)
+- 
+- default:
+--	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) M=$(PWD) MODE=$(MODE) modules
+-+	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" M=$(PWD) MODE=$(MODE) modules
+- 
+- clean: 
+- 	-rm -f *.o *.mod.c *.ko modules.order Module.symvers
+diff --git a/package/owl-linux/0002-fix-for-linux-3.3.x.patch b/package/owl-linux/0001-fix-for-linux-3.3.x.patch
+similarity index 100%
+rename from package/owl-linux/0002-fix-for-linux-3.3.x.patch
+rename to package/owl-linux/0001-fix-for-linux-3.3.x.patch
+diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
+index 371cc02..1262425 100644
+--- a/package/owl-linux/owl-linux.mk
++++ b/package/owl-linux/owl-linux.mk
+@@ -10,14 +10,5 @@ OWL_LINUX_LICENSE = PROPRIETARY
+ OWL_LINUX_LICENSE_FILES = LICENSE
+ OWL_LINUX_REDISTRIBUTE = NO
+ 
+-OWL_LINUX_DEPENDENCIES = linux
+-
+-define OWL_LINUX_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
+-endef
+-
+-define OWL_LINUX_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
+-endef
+-
++$(eval $(kernel-module))
+ $(eval $(generic-package))
