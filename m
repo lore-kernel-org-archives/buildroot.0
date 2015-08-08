@@ -1,66 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:39 -0000
-Subject: [Buildroot] [git commit branch/next] lua-iconv: new package
-Message-ID: <20150808105631.3D4477FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] atftp: fix build with gcc5
+Message-ID: <20150808105631.70A887FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07f92eeb108d94a7018740c109093838e67f15ac
+commit: http://git.buildroot.net/buildroot/commit/?id=aac3f315d9f4ec08728778e08a633f3b193522ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+gcc5 defaults to -std=gnu11 which changes the inline semantics. This leads to
+multiple definition error with 'extern inline'. See
+https://gcc.gnu.org/gcc-5/porting_to.html for the details.
+
+Fixes:
+http://autobuild.buildroot.net/results/762/762bce2bbc1f994cc796f0442bfa73b7ad64e272/
+http://autobuild.buildroot.net/results/28b/28bf6018dcf91ddacfb76f54a92313da8bf182e1/
+http://autobuild.buildroot.net/results/fde/fdee23ecd0c5c66fda1ed38efe43048ce934b733/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/lua-iconv/Config.in    |    7 +++++++
- package/lua-iconv/lua-iconv.mk |   14 ++++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ package/atftp/atftp.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c5769d6..9dbb284 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -481,6 +481,7 @@ menu "Lua libraries/modules"
- 	source "package/lua-coatpersistent/Config.in"
- 	source "package/lua-csnappy/Config.in"
- 	source "package/lua-ev/Config.in"
-+	source "package/lua-iconv/Config.in"
- 	source "package/lua-messagepack/Config.in"
- 	source "package/lua-msgpack-native/Config.in"
- 	source "package/lua-periphery/Config.in"
-diff --git a/package/lua-iconv/Config.in b/package/lua-iconv/Config.in
-new file mode 100644
-index 0000000..e76019d
---- /dev/null
-+++ b/package/lua-iconv/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LUA_ICONV
-+	bool "lua-iconv"
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  Lua binding to the POSIX 'iconv' library
-+
-+	  http://ittner.github.io/lua-iconv/
-diff --git a/package/lua-iconv/lua-iconv.mk b/package/lua-iconv/lua-iconv.mk
-new file mode 100644
-index 0000000..f0afa2b
---- /dev/null
-+++ b/package/lua-iconv/lua-iconv.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# lua-iconv
-+#
-+################################################################################
-+
-+LUA_ICONV_VERSION_UPSTREAM = 7
-+LUA_ICONV_VERSION = $(LUA_ICONV_VERSION_UPSTREAM)-1
-+LUA_ICONV_SUBDIR  = lua-iconv-$(LUA_ICONV_VERSION_UPSTREAM)
-+LUA_ICONV_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LUA_ICONV_LICENSE = MIT
-+LUA_ICONV_LICENSE_FILES = $(LUA_ICONV_SUBDIR)/COPYING
-+
-+$(eval $(luarocks-package))
+diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
+index 4d9a71b..615b6ea 100644
+--- a/package/atftp/atftp.mk
++++ b/package/atftp/atftp.mk
+@@ -11,7 +11,12 @@ ATFTP_LICENSE_FILES = LICENSE
+ ATFTP_CONF_OPTS = --disable-libwrap --disable-mtftp
+ # For static we need to explicitly link against libpthread
+ ATFTP_LIBS = -lpthread
+-ATFTP_CONF_ENV = LIBS="$(ATFTP_LIBS)"
++# We use CPPFLAGS for -fgnu89-inline even though it's a compiler flag
++# because atftp discards configure environment CFLAGS. -fgnu89-inline
++# is needed to avoid multiple definition error with gcc 5. See
++# https://gcc.gnu.org/gcc-5/porting_to.html.
++ATFTP_CONF_ENV = LIBS="$(ATFTP_LIBS)" \
++	CPPFLAGS="$(TARGET_CPPFLAGS) -fgnu89-inline"
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ ATFTP_DEPENDENCIES += readline
