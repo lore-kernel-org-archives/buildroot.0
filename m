@@ -1,48 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] libfuse: security bump to
-	version 2.9.4
-Message-ID: <20150808105603.0C6177FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ethtool: bump to version 4.0
+Message-ID: <20150808105602.CEFDF7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b6d8ec4e930c7a7884d8a5363b448078cf1972a
+commit: http://git.buildroot.net/buildroot/commit/?id=57a5e6547e3dedb90cd96a6541d1f3b7d209c42e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Fixes:
-
-CVE-2015-3202 - fix exec environment for mount and umount.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfuse/libfuse.hash |    5 +++--
- package/libfuse/libfuse.mk   |    2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/ethtool/ethtool.hash |    2 +-
+ package/ethtool/ethtool.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
-index d37c521..b1bbee3 100644
---- a/package/libfuse/libfuse.hash
-+++ b/package/libfuse/libfuse.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  0beb83eaf2c5e50730fc553406ef124d77bc02c64854631bdfc86bfd6437391c  fuse-2.9.3.tar.gz
-+# From http://sourceforge.net/projects/fuse/files/fuse-2.X/2.9.4/
-+md5	ecb712b5ffc6dffd54f4a405c9b372d8	fuse-2.9.4.tar.gz
-+sha1	c8b25419f33624dc5240af6a5d26f2c04367ca71	fuse-2.9.4.tar.gz
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 000d2b4..7a28a81 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index f383037..5fde687 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	813ffe59fddd2db423c578448b10e33e2e2d4cc2ba780f1f0c603642b20342f6	ethtool-3.18.tar.xz
++sha256	904887acc7d2f9c35dec04eb0e8a727a3205f346af4f4c95560ea3798de5ecff	ethtool-4.0.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 24e0f59..c358c62 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFUSE_VERSION = 2.9.3
-+LIBFUSE_VERSION = 2.9.4
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPLv2 LGPLv2.1
+-ETHTOOL_VERSION = 3.18
++ETHTOOL_VERSION = 4.0
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
