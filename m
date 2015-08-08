@@ -1,41 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:19 -0000
-Subject: [Buildroot] [git commit branch/next] lvm2: bump to version 2.02.125
-Message-ID: <20150808105623.A97437FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libtirpc: remove
+	host-pkgconf dependency
+Message-ID: <20150808105623.7552180414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f64f18938877a8b4cdbbf22874ce2da9917e69e6
+commit: http://git.buildroot.net/buildroot/commit/?id=aee57627b09d0955270a562b8adaa0ff88ef523b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lvm2/lvm2.hash |    2 +-
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+configure.ac does not contain PKG_CHECK_MODULES anymore.
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 982cfc7..eda465d 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5  da8d81a6a2ea235025795d9e001a6ae3  LVM2.2.02.124.tgz
-+md5  2d24ba982c8a85e8c837210f087a6a51  LVM2.2.02.125.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index c112b97..0930a10 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libtirpc/libtirpc.mk |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
+
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index f1ad395..494650c 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -18,12 +18,4 @@ LIBTIRPC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DGQ"
  
--LVM2_VERSION = 2.02.124
-+LVM2_VERSION = 2.02.125
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ LIBTIRPC_CONF_OPTS = --disable-gssapi
+ 
+-# We need host-pkgconf because the configure.ac contains a
+-# PKG_CHECK_MODULES macro call, and since we're autoreconfiguring this
+-# package, we need the source for this PKG_CHECK_MODULES macro, which
+-# comes from host-pkgconf. Other than that, pkgconf is only used to
+-# find if there is a gss implementation somewhere, which we don't
+-# support in Buildroot yet.
+-LIBTIRPC_DEPENDENCIES = host-pkgconf
+-
+ $(eval $(autotools-package))
