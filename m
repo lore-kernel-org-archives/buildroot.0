@@ -1,47 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] package/eudev: bump version to
-	3.1.2
-Message-ID: <20150808105619.802847FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gnupg: add option for AES
+	cipher
+Message-ID: <20150808105619.960917FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7de0ff0ed49892f5c791c99f83198932a8708111
+commit: http://git.buildroot.net/buildroot/commit/?id=a6a2962d998c82f888957fb19bd2933bbf73f92d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: added locally calculated sha256 hash, as suggested by Yann.]
+Similar to our RSA option. Enabling this adds ~17K to the gpg binary (ARMv7):
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ls -lah output/target/usr/bin/gpg{.orig,}
+-rwxr-xr-x 1 peko peko 532K Jul  2 17:29 output/target/usr/bin/gpg
+-rwxr-xr-x 1 peko peko 515K Jul  2 17:29 output/target/usr/bin/gpg.orig
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eudev/eudev.hash |    4 +++-
- package/eudev/eudev.mk   |    2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/gnupg/Config.in |    5 +++++
+ package/gnupg/gnupg.mk  |    6 ++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 7c750a9..d54c8cf 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,2 +1,4 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5	d8d6b2ae5c9a740967b1ae2dccbae95b	eudev-3.1.1.tar.gz
-+md5	07ab33fe310d250f06fc28f010e3fde2	eudev-3.1.2.tar.gz
-+# Locally calculated
-+sha256 4393b69e93dd8117defde6519b199d479f9d051f52061157a1a7a41b8fe10273 eudev-3.1.2.tar.gz
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index a97154c..87bce3e 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gnupg/Config.in b/package/gnupg/Config.in
+index 1dc27a4..30f215f 100644
+--- a/package/gnupg/Config.in
++++ b/package/gnupg/Config.in
+@@ -16,6 +16,11 @@ config BR2_PACKAGE_GNUPG
  
--EUDEV_VERSION = 3.1.1
-+EUDEV_VERSION = 3.1.2
- EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+ if BR2_PACKAGE_GNUPG
+ 
++config BR2_PACKAGE_GNUPG_AES
++	bool "AES support"
++	help
++	  Support for the AES cipher
++
+ config BR2_PACKAGE_GNUPG_RSA
+ 	bool "RSA support"
+ 	help
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 94f5d89..f358fa3 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -31,6 +31,12 @@ else
+ GNUPG_CONF_OPTS += --without-readline
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNUPG_AES),y)
++GNUPG_CONF_OPTS += --enable-aes
++else
++GNUPG_CONF_OPTS += --disable-aes
++endif
++
+ ifeq ($(BR2_PACKAGE_GNUPG_RSA),y)
+ GNUPG_CONF_OPTS += --enable-rsa
+ else
