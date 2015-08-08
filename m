@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:59 -0000
-Subject: [Buildroot] [git commit branch/next] busybox: added linux-pam
-	support
-Message-ID: <20150808105615.BDD487FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] arm: update processor types
+Message-ID: <20150808105615.536167FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f21b2558a097d07b53b6f20a47770468e9e4f7ed
+commit: http://git.buildroot.net/buildroot/commit/?id=9971ebfe9d17efeddec76b40bf4b3714d175680b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
----
- package/busybox/busybox.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+Add the Cortex M3 variant. These microcontrollers don't support regular
+ARM instructions and don't have an MMU.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 090e174..34eb1f3 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -152,6 +152,13 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define BUSYBOX_LINUX_PAM
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+BUSYBOX_DEPENDENCIES += linux-pam
-+endif
-+
- # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
- # full-blown versions of apps installed by other packages with sym/hard links.
- define BUSYBOX_NOCLOBBER_INSTALL
-@@ -165,6 +172,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_PREFER_STATIC)
- 	$(BUSYBOX_SET_MDEV)
- 	$(BUSYBOX_SET_CRYPT_SHA)
-+	$(BUSYBOX_LINUX_PAM)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index a2f00d2..9aa23a3 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -146,6 +146,10 @@ config BR2_cortex_a15
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_cortex_m3
++	bool "cortex-M3"
++	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_HAS_THUMB2
+ config BR2_fa526
+ 	bool "fa526/626"
+ 	select BR2_ARM_CPU_HAS_ARM
+@@ -408,6 +412,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a9"	if BR2_cortex_a9
+ 	default "cortex-a12"	if BR2_cortex_a12
+ 	default "cortex-a15"	if BR2_cortex_a15
++	default "cortex-m3"	if BR2_cortex_m3
+ 	default "fa526"		if BR2_fa526
+ 	default "marvell-pj4"	if BR2_pj4
+ 	default "strongarm"	if BR2_strongarm
