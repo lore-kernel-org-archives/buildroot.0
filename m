@@ -1,51 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:58:05 -0000
-Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: do not
-	always silence oldconfig
-Message-ID: <20150808105638.60C7880414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:58:06 -0000
+Subject: [Buildroot] [git commit branch/next] package/neard: remove
+	autoreconf
+Message-ID: <20150808105638.83126803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58bb6ca3b197624a22b7269329729762dc9e54d0
+commit: http://git.buildroot.net/buildroot/commit/?id=a91e289630e6f1cee8b8b722151a7f6d8a50bb2d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When debugging packages that use the pkg-kconfig infrastructure, it
-is sometime interesting to see the exact command line that is being
-executed when running oldconfig.
+neard have been bumped several time since autoreconf
+was added in neard.mk.
+autoreconf seems not needed anymore.
 
-But currently, those command lines are prefixed with '@' which makes
-them silent, always.
-
-Instead, use $(Q) so they are silent by default, and verbose with V=1.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-kconfig.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/neard/neard.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index f708875..3e17a70 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -65,14 +65,14 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
- 	support/kconfig/merge_config.sh -m -O $$(@D) \
- 		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
- 		$$($(2)_KCONFIG_OPTS) oldconfig
+diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+index fc92421..ed2c6b1 100644
+--- a/package/neard/neard.mk
++++ b/package/neard/neard.mk
+@@ -10,7 +10,6 @@ NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
+ NEARD_LICENSE = GPLv2
+ NEARD_LICENSE_FILES = COPYING
  
- # In order to get a usable, consistent configuration, some fixup may be needed.
- # The exact rules are specified by the package .mk file.
- define $(2)_FIXUP_DOT_CONFIG
- 	$$($(2)_KCONFIG_FIXUP_CMDS)
--	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
- 		$$($(2)_KCONFIG_OPTS) oldconfig
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
+-NEARD_AUTORECONF = YES
+ NEARD_DEPENDENCIES = host-pkgconf dbus libglib2 libnl
+ NEARD_CONF_OPTS = --disable-traces
+ 
