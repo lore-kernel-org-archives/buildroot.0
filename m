@@ -1,73 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:16 -0000
-Subject: [Buildroot] [git commit branch/next] keyutils: uses dl*,
-	disable for static build
-Message-ID: <20150808105602.4899C7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] weston: bump to version 1.8.0
+Message-ID: <20150808105612.72DCF8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15ab99a7f189ccd532b5f2a518c4efffc49b1cb8
+commit: http://git.buildroot.net/buildroot/commit/?id=dca75e36c93eaa46e974d498d728a87c69a52eab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-And drop the unused static handling from the .mk file.
+- Bump to version 1.8.0
+- Update hash file
 
-Fixes:
-http://autobuild.buildroot.net/results/8a2/8a2ff0af4faeda4d2d224dcaf543a574d7eba30c/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ecryptfs-utils/Config.in |    2 +-
- package/keyutils/Config.in       |    6 ++++++
- package/keyutils/keyutils.mk     |    4 ----
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/weston/weston.hash |    4 ++--
+ package/weston/weston.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index d243da6..cb70e00 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
--	depends on !BR2_STATIC_LIBS # libnss
-+	depends on !BR2_STATIC_LIBS # libnss, keyutils
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-index fcb075f..6f0758f 100644
---- a/package/keyutils/Config.in
-+++ b/package/keyutils/Config.in
-@@ -2,8 +2,14 @@ config BR2_PACKAGE_KEYUTILS
- 	bool "keyutils"
- 	depends on !BR2_microblaze
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	help
- 	  These tools are used to control the key management system
- 	  built into the Linux kernel.
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index 8df6f07..e7bc2bb 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/wayland-devel/2015-February/019977.html
+-sha256  1c4511945f3f476c24af712e82a7b500ae91a99cbc0fe2e381da1449125166cd  weston-1.7.0.tar.xz
++# From http://lists.freedesktop.org/archives/wayland-devel/2015-June/022416.html
++sha256  8963e69f328e815cec42c58046c4af721476c7541bb7d9edc71740fada5ad312  weston-1.8.0.tar.xz
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index bf49436..4ad89ce 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://people.redhat.com/~dhowells/keyutils/
-+
-+comment "keyutils needs a toolchain w/ dynamic library"
-+	depends on !BR2_microblaze
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
-index 36588e6..3d6697e 100644
---- a/package/keyutils/keyutils.mk
-+++ b/package/keyutils/keyutils.mk
-@@ -19,10 +19,6 @@ KEYUTILS_MAKE_PARAMS =                    \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) -I." \
- 	LNS="$(HOSTLN) -sf"
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--KEYUTILS_MAKE_PARAMS += NO_SOLIB=1
--endif
--
- ifeq ($(BR2_SHARED_LIBS),y)
- KEYUTILS_MAKE_PARAMS += NO_ARLIB=1
- endif
+-WESTON_VERSION = 1.7.0
++WESTON_VERSION = 1.8.0
+ WESTON_SITE = http://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
