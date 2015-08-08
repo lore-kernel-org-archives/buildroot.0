@@ -1,49 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] automake: use whenever
-	possible the ACLOCAL_HOST_DIR variable
-Message-ID: <20150808105610.AAB888030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] git: bump to version 2.4.4
+Message-ID: <20150808105611.D78857F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29b146cafd44d5adc6ea342add2dd03a853b5249
+commit: http://git.buildroot.net/buildroot/commit/?id=c7fec23eccc9a84dddc45fc47149599d125b870f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use the ACLOCAL_HOST_DIR in the GTK_DOC_M4_INSTALL hook.
+- Bump to version 2.4.4
+- Update hash file
 
-Move the ACLOCAL_HOST_DIR definition at the beginning so the definition
-is ahead the utilization.
-
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/automake/automake.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index a3fd18c..84f05dc 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -12,8 +12,11 @@ AUTOMAKE_LICENSE_FILES = COPYING
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 8cc7be7..cb4ce13 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  18eb8462026a55ab34a657282e894bdaad331ea59bfebeba5eb45b27b58cf825  git-2.3.2.tar.xz
++sha256  f873b15d42281474fcba5921295d01e48a3cd3cddcbeb3d60176bf30f5f30260  git-2.4.4.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 845c24e..50e5d7b 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
- 
-+ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
-+
- define GTK_DOC_M4_INSTALL
--	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 $(HOST_DIR)/usr/share/aclocal/gtk-doc.m4
-+	$(INSTALL) -D -m 0644 package/automake/gtk-doc.m4 \
-+		$(ACLOCAL_HOST_DIR)/gtk-doc.m4
- endef
- 
- # ensure staging aclocal dir exists
-@@ -29,5 +32,4 @@ $(eval $(host-autotools-package))
- # variables used by other packages
- AUTOMAKE = $(HOST_DIR)/usr/bin/automake
- ACLOCAL_DIR = $(STAGING_DIR)/usr/share/aclocal
--ACLOCAL_HOST_DIR = $(HOST_DIR)/usr/share/aclocal
- ACLOCAL = $(HOST_DIR)/usr/bin/aclocal -I $(ACLOCAL_DIR)
+-GIT_VERSION = 2.3.2
++GIT_VERSION = 2.4.4
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
