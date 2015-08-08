@@ -1,169 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:58 -0000
-Subject: [Buildroot] [git commit branch/next] binutils: fix xtensa gas
-	trampolines regression
-Message-ID: <20150808105555.E0296818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Revert "package/ola: fix
+	autoreconf issue for host-ola"
+Message-ID: <20150808105557.B4B2A818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af863a3bc0d3528031cad59dbf8a981f030d4be8
+commit: http://git.buildroot.net/buildroot/commit/?id=69964d8180332e219b68992b80a4600e151529ad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-xtensa trampolines relaxation optimization caused the following build
-errors:
-  Error: operand 1 of 'j' has out of range value '131643'
-  Error: operand 1 of 'j' has out of range value '4294836162'
-  Error: operand 1 of 'j' has out of range value '4294836072'
+This reverts commit 884af65fd5ddc548f19a26162f905a32ef0b53b3. Thanks
+to the change of the installation path of host-autoconf-archive
+macros, host-ola will no longer see them when doing its autoreconf, so
+the patch that was added by the commit being reverted here is no
+longer needed.
 
-Extra condition 'abs (addr - trampaddr) < J_RANGE / 2' for trampoline
-selection results in regressions: when relaxable jump is little longer
-than J_RANGE so that single trampoline makes two new jumps, one longer
-than J_RANGE / 2 and one shorter, correct trampoline cannot be found.
-
-Drop that condition.
-
-Upstream status: patch submitted.
-Fix squashed into the optimization patch.
-Fixes:
-  http://autobuild.buildroot.net/results/5ba7d18262ce6a2dfd69db07d064a971267f1128/
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...10-xtensa-optimize-trampolines-relaxation.patch |   17 ++++++++---------
- ...10-xtensa-optimize-trampolines-relaxation.patch |   17 ++++++++---------
- 2 files changed, 16 insertions(+), 18 deletions(-)
+ ...on-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch |   51 --------------------
+ 1 files changed, 0 insertions(+), 51 deletions(-)
 
-diff --git a/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch b/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
-index 852974b..043ff4d 100644
---- a/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
-+++ b/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
-@@ -64,11 +64,11 @@ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
- Backported from: b76f99d702c3501ac320396ea06bc7f9237173c3
- Changes to ChangeLog are dropped.
- 
-- gas/config/tc-xtensa.c | 221 +++++++++++++++++++++++++++++++++++++++++++------
-- 1 file changed, 194 insertions(+), 27 deletions(-)
-+ gas/config/tc-xtensa.c | 220 +++++++++++++++++++++++++++++++++++++++++++------
-+ 1 file changed, 194 insertions(+), 26 deletions(-)
- 
- diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
--index 3e85b69..b1827fa 100644
-+index 3e85b69..31c0b6b 100644
- --- a/gas/config/tc-xtensa.c
- +++ b/gas/config/tc-xtensa.c
- @@ -8785,6 +8785,154 @@ static long relax_frag_for_align (fragS *, long);
-@@ -226,7 +226,7 @@ index 3e85b69..b1827fa 100644
-  
-  /* Return the number of bytes added to this fragment, given that the
-     input has been stretched already by "stretch".  */
--@@ -8896,35 +9044,43 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -8896,35 +9044,42 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-      case RELAX_TRAMPOLINE:
-        if (fragP->tc_frag_data.relax_seen)
-          {
-@@ -279,8 +279,7 @@ index 3e85b69..b1827fa 100644
- +
- +	      trampaddr = fragP->fr_address + fragP->fr_fix;
- +
--+	      if ((addr + J_RANGE < trampaddr) ||
--+		  abs (addr - trampaddr) < J_RANGE / 2)
-++	      if (addr + J_RANGE < trampaddr)
-  		continue;
- -              target = S_GET_VALUE (s);
- -              addr = fixP->fx_frag->fr_address;
-@@ -295,7 +294,7 @@ index 3e85b69..b1827fa 100644
-                if (delta > J_RANGE  || delta < -1 * J_RANGE)
-                  { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
-  		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
--@@ -8978,14 +9134,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -8978,14 +9133,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-  		    }
-  		  if (tf->fragP == fragP)
-  		    {
-@@ -311,7 +310,7 @@ index 3e85b69..b1827fa 100644
-  
-  			  new_stretch += init_trampoline_frag (tf);
-  			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
--@@ -9009,10 +9164,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -9009,10 +9163,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-  			  newfixP->tc_fix_data.X_add_symbol = lsym;
-  			  newfixP->tc_fix_data.X_add_number = offset;
-  			  newfixP->tc_fix_data.slot = slot;
-@@ -332,7 +331,7 @@ index 3e85b69..b1827fa 100644
-  			  /* Adjust the jump around this trampoline (if present).  */
-  			  if (tf->fixP != NULL)
-  			    {
--@@ -9027,6 +9192,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -9027,6 +9191,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-  			      fragP->fr_subtype = 0;
-  			      /* Remove from the trampoline_list.  */
-  			      prev->next = tf->next;
-diff --git a/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch b/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
-index 852974b..043ff4d 100644
---- a/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
-+++ b/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
-@@ -64,11 +64,11 @@ Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
- Backported from: b76f99d702c3501ac320396ea06bc7f9237173c3
- Changes to ChangeLog are dropped.
- 
-- gas/config/tc-xtensa.c | 221 +++++++++++++++++++++++++++++++++++++++++++------
-- 1 file changed, 194 insertions(+), 27 deletions(-)
-+ gas/config/tc-xtensa.c | 220 +++++++++++++++++++++++++++++++++++++++++++------
-+ 1 file changed, 194 insertions(+), 26 deletions(-)
- 
- diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
--index 3e85b69..b1827fa 100644
-+index 3e85b69..31c0b6b 100644
- --- a/gas/config/tc-xtensa.c
- +++ b/gas/config/tc-xtensa.c
- @@ -8785,6 +8785,154 @@ static long relax_frag_for_align (fragS *, long);
-@@ -226,7 +226,7 @@ index 3e85b69..b1827fa 100644
-  
-  /* Return the number of bytes added to this fragment, given that the
-     input has been stretched already by "stretch".  */
--@@ -8896,35 +9044,43 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -8896,35 +9044,42 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-      case RELAX_TRAMPOLINE:
-        if (fragP->tc_frag_data.relax_seen)
-          {
-@@ -279,8 +279,7 @@ index 3e85b69..b1827fa 100644
- +
- +	      trampaddr = fragP->fr_address + fragP->fr_fix;
- +
--+	      if ((addr + J_RANGE < trampaddr) ||
--+		  abs (addr - trampaddr) < J_RANGE / 2)
-++	      if (addr + J_RANGE < trampaddr)
-  		continue;
- -              target = S_GET_VALUE (s);
- -              addr = fixP->fx_frag->fr_address;
-@@ -295,7 +294,7 @@ index 3e85b69..b1827fa 100644
-                if (delta > J_RANGE  || delta < -1 * J_RANGE)
-                  { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
-  		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
--@@ -8978,14 +9134,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -8978,14 +9133,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-  		    }
-  		  if (tf->fragP == fragP)
-  		    {
-@@ -311,7 +310,7 @@ index 3e85b69..b1827fa 100644
-  
-  			  new_stretch += init_trampoline_frag (tf);
-  			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
--@@ -9009,10 +9164,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -9009,10 +9163,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-  			  newfixP->tc_fix_data.X_add_symbol = lsym;
-  			  newfixP->tc_fix_data.X_add_number = offset;
-  			  newfixP->tc_fix_data.slot = slot;
-@@ -332,7 +331,7 @@ index 3e85b69..b1827fa 100644
-  			  /* Adjust the jump around this trampoline (if present).  */
-  			  if (tf->fixP != NULL)
-  			    {
--@@ -9027,6 +9192,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-+@@ -9027,6 +9191,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
-  			      fragP->fr_subtype = 0;
-  			      /* Remove from the trampoline_list.  */
-  			      prev->next = tf->next;
+diff --git a/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch b/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
+deleted file mode 100644
+index 80d21bc..0000000
+--- a/package/ola/0002-autotools-don-t-overwrite-CC-and-CXX-with-ACX_PTHREA.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 991eef9f84a5ef58eaab8ea0a85f3b4bce7b00a3 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sat, 2 May 2015 01:50:14 +0200
+-Subject: [PATCH] autotools: don't overwrite CC and CXX with ACX_PTHREAD
+- success
+-
+-If ACX_PTHREAD sucess, CC and CXX value are overwriten respectively
+-to PTHREAD_CC and PTHREAD_CXX. But ACX_PTHREAD has been hacked to
+-set PTHREAD_CXX variable for the C++ compiler and configure.ac has
+-been modified accordingly.
+-
+-If ax_pthread.m4 wich provide standard AX_PTHREAD macro (and it's
+-alias ACX_PTHREAD and AX_PTHREAD), is installed on the system by
+-autoconf-archive package, then ax_pthread.m4 is used during
+-autoreconf instread of acx_pthread.m4 bundled with ola.
+-
+-AX_PTHREAD macro from ax_pthread.m4 check only the thread support
+-with the C compiler. As a result, the C++ compiler variable
+-PTHREAD_CXX is not initialized, so CXX become empy and the build
+-fail during resolv.h check.
+-
+-configure:19945: checking for 2-arg pthread_setname_np
+-configure:19965:  -o conftest -O2 [snip -I and -L] conftest.cpp  -ldl  >&5
+-./configure: line 2037: -o: command not found
+-
+-In the Buildroot use case, it's safe to remove CC and CXX overwrite
+-since only gcc/g++ compiler are used.
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- configure.ac | 4 +---
+- 1 file changed, 1 insertion(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index b1946b6..ef85af5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -303,9 +303,7 @@ AM_CONDITIONAL([HAVE_NCURSES], [test "x$have_ncurses" = xyes])
+- ACX_PTHREAD([
+-              LIBS="$PTHREAD_LIBS $LIBS"
+-              CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+--             CXXFLAGS="$CXXFLAGS $PTHREAD_CXXFLAGS"
+--             CC="$PTHREAD_CC"
+--             CXX="$PTHREAD_CXX"],
+-+             CXXFLAGS="$CXXFLAGS $PTHREAD_CXXFLAGS"],
+-             [AC_MSG_ERROR([Missing pthread, please install it])])
+- 
+- # pthread_setname_np can take either 1 or 2 arguments.
+--- 
+-1.9.3
+-
