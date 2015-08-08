@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] icu: update icudata generator
-	URL
-Message-ID: <20150808105628.D26C27FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version
+	0.9.41
+Message-ID: <20150808105620.DEB057FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ae93873e3d783ac59cbd4c5744f507d2792333b
+commit: http://git.buildroot.net/buildroot/commit/?id=ed10829e3336420608232b10b8021c735f37be74
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It was pointing to version 51.x which wouldn't work well with 55.x.
-
-Point it to the latest version that matches the current buildroot
-version (55). When a new ICU major version is released a link for the
-"old" 55 version will be available below as is it currently for
-previous versions such as 54, 53 and so on.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/icu/Config.in |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ package/harfbuzz/harfbuzz.hash |    4 ++--
+ package/harfbuzz/harfbuzz.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index d7bf2fe..4d47c32 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -19,9 +19,10 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
- 	string "Path to custom data library file"
- 	help
- 	  This option allows to define the path to a custom data
--	  library generated with
--	  http://apps.icu-project.org/datacustom/ICUData51.html. Leave
--	  empty to not use this functionality.
-+	  library generated with http://apps.icu-project.org/datacustom/
-+	  Make sure you select the appropiate version to match the one
-+	  provided by buildroot.
-+	  Leave empty to not use this functionality.
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 131e8d3..26f4688 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.40.tar.bz2.sha256
+-sha256	1771d53583be6d91ca961854b2a24fb239ef0545eed221ae3349abae0ab8321f	harfbuzz-0.9.40.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.41.tar.bz2.sha256
++sha256	d81aa53d0c02b437beeaac159d7fc16394d676bbce0860fb6f6a10b587dc057c	harfbuzz-0.9.41.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 9cfd613..0adfb53 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
+-HARFBUZZ_VERSION = 0.9.40
++HARFBUZZ_VERSION = 0.9.41
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
