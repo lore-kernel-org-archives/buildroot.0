@@ -1,37 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:42 -0000
-Subject: [Buildroot] [git commit branch/next] purge-locales: skip /usr/man
-	and /usr/share/man
-Message-ID: <20150808105631.AEB4B7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pure-ftpd: bump to version
+	1.0.41
+Message-ID: <20150808105615.09E0A7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36480eab8f64846004cf5c16daff9d55f8f7e31d
+commit: http://git.buildroot.net/buildroot/commit/?id=ee6c9f5a1bc1995d968214345c011a44a3c145c8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-These directories are going to be removed anyway, so no point purging
-their locales.
+Also add hash file.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pure-ftpd/pure-ftpd.hash |    2 ++
+ package/pure-ftpd/pure-ftpd.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 546bcd3..02a1032 100644
---- a/Makefile
-+++ b/Makefile
-@@ -544,7 +544,7 @@ define PURGE_LOCALES
- 	rm -f $(LOCALE_WHITELIST)
- 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
+new file mode 100644
+index 0000000..d0d35ac
+--- /dev/null
++++ b/package/pure-ftpd/pure-ftpd.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking pgp signature
++sha256	b72456def52c71baf8d0367ca6b7aba10796e2883a76eeb41f58f2f06f7087ba	pure-ftpd-1.0.41.tar.gz
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 5dbcaae..3c59bb1 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
-+	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/lib/locale)); \
- 	do \
- 		for lang in $$(cd $$dir; ls .|grep -v man); \
- 		do \
+-PURE_FTPD_VERSION = 1.0.36
++PURE_FTPD_VERSION = 1.0.41
+ PURE_FTPD_SITE = http://download.pureftpd.org/pub/pure-ftpd/releases
+ PURE_FTPD_LICENSE = ISC
+ PURE_FTPD_LICENSE_FILES = COPYING
