@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:27 -0000
-Subject: [Buildroot] [git commit branch/next] erlang-p1-stun: bump to
-	version a3dce07
-Message-ID: <20150808105626.6E9EB7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: bump default to version
+	4.0.5
+Message-ID: <20150808105606.3D5DF7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3789597275f7557110b572f492ece3c084932bc8
+commit: http://git.buildroot.net/buildroot/commit/?id=952ccff35710dc0ea60198ba6446a81db9204723
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-stun/erlang-p1-stun.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1-stun/erlang-p1-stun.mk
-index 7b4b1a9..7920347 100644
---- a/package/erlang-p1-stun/erlang-p1-stun.mk
-+++ b/package/erlang-p1-stun/erlang-p1-stun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index b564085..7951aff 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--ERLANG_P1_STUN_VERSION = a7c07b6
-+ERLANG_P1_STUN_VERSION = a3dce07
- ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
- ERLANG_P1_STUN_LICENSE = GPLv2+
- ERLANG_P1_STUN_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.0.4"
++	bool "4.0.5"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.0.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.0.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
