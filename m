@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] postgresql: init script: wait
-	till server has started
-Message-ID: <20150808105625.C1F767FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mplayer: Add
+	additional X11 dependencies
+Message-ID: <20150808105625.B16617FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7d515d00e5d36e1260da3768178d2364db1ef90
+commit: http://git.buildroot.net/buildroot/commit/?id=df8bfa3f8c0c825655fac68a22b6b95039c5bd14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Adds "-w" option to init script to wait till the database server
-has fully started and accepts connections before continuing.
+Proposed fix for https://bugs.busybox.net/show_bug.cgi?id=8206
 
-Prevents other applications that depend on PostgreSQL from
-failing to start, if the database server is not ready yet.
-Times out after 60 seconds by default.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/S50postgresql |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mplayer/mplayer.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
-index 86a8d83..a895bcf 100644
---- a/package/postgresql/S50postgresql
-+++ b/package/postgresql/S50postgresql
-@@ -13,7 +13,7 @@ fi
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 3a61b8f..5a46aa3 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -220,7 +220,10 @@ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
++MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXEXT),xlib_libXext)
++MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXINERAMA),xlib_libXinerama)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXV),xlib_libXv)
++MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXXF86VM),xlib_libXxf86vm)
  
- start() {
- 	echo -n "Starting postgresql: "
--	su - postgres -c '/usr/bin/pg_ctl start -D /var/lib/pgsql -l logfile'
-+	su - postgres -c '/usr/bin/pg_ctl start -w -D /var/lib/pgsql -l logfile'
- 	echo "OK"
- }
- stop() {
+ # ARM optimizations
+ ifeq ($(BR2_ARM_CPU_ARMV5),y)
