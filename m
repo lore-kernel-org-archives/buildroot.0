@@ -1,77 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] olimex_a20_olinuxino_lime:
-	rename board dir to remove _lime suffix
-Message-ID: <20150808105618.692157F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libva-intel-driver:
+	bump version to 1.6.0
+Message-ID: <20150808105619.62B657FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d3b77e9703d9a71fa4d9dc1565709a0bcb6194d
+commit: http://git.buildroot.net/buildroot/commit/?id=860b3a7b9aeae64f43e5f45054ae8dfd74666c14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The files in board/olimex/a20_olinuxino_lime/ work with minimal or no
-modifications for the Olimex A20-OLinuXino-Micro board, whose support is
-going to be added in a later commit.
+Upstream hash is in sha1 format, like before. It is wrongly announced
+as md5 in the release mail, so I added a note to the hash file.
 
-Rename the directory to clarify it's not restricted to the Lime anymore.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../boot-mali.cmd                                  |    0
- .../{a20_olinuxino_lime => a20_olinuxino}/boot.cmd |    0
- .../post-build.sh                                  |    0
- .../readme.txt                                     |    0
- configs/olimex_a20_olinuxino_lime_defconfig        |    4 ++--
- configs/olimex_a20_olinuxino_lime_mali_defconfig   |    4 ++--
- 6 files changed, 4 insertions(+), 4 deletions(-)
+ package/libva-intel-driver/libva-intel-driver.hash |    4 ++--
+ package/libva-intel-driver/libva-intel-driver.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/olimex/a20_olinuxino_lime/boot-mali.cmd b/board/olimex/a20_olinuxino/boot-mali.cmd
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/boot-mali.cmd
-rename to board/olimex/a20_olinuxino/boot-mali.cmd
-diff --git a/board/olimex/a20_olinuxino_lime/boot.cmd b/board/olimex/a20_olinuxino/boot.cmd
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/boot.cmd
-rename to board/olimex/a20_olinuxino/boot.cmd
-diff --git a/board/olimex/a20_olinuxino_lime/post-build.sh b/board/olimex/a20_olinuxino/post-build.sh
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/post-build.sh
-rename to board/olimex/a20_olinuxino/post-build.sh
-diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-similarity index 100%
-rename from board/olimex/a20_olinuxino_lime/readme.txt
-rename to board/olimex/a20_olinuxino/readme.txt
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 62f0a4c..33bc10e 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -13,8 +13,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
+index b03bb1d..57010bc 100644
+--- a/package/libva-intel-driver/libva-intel-driver.hash
++++ b/package/libva-intel-driver/libva-intel-driver.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/libva/2015-March/003250.html
+-sha1	98b670517cbd2d0e5e2ef3f171b805815dff9057	libva-intel-driver-1.5.1.tar.bz2
++# From http://lists.freedesktop.org/archives/libva/2015-July/003405.html, checked locally
++sha1	8d9da76883429a155511ee0e71a737aea07ad217	libva-intel-driver-1.6.0.tar.bz2
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+index 8469314..a61f55e 100644
+--- a/package/libva-intel-driver/libva-intel-driver.mk
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Kernel
- BR2_LINUX_KERNEL=y
-diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-index dde39ad..2a9fa2b 100644
---- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
-@@ -13,8 +13,8 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino_lime/post-build.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino_lime/boot-mali.cmd $(TARGET_DIR)/boot"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
- 
- # Kernel
- BR2_LINUX_KERNEL=y
+-LIBVA_INTEL_DRIVER_VERSION = 1.5.1
++LIBVA_INTEL_DRIVER_VERSION = 1.6.0
+ LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
+ LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
+ LIBVA_INTEL_DRIVER_LICENSE = MIT
