@@ -1,44 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] mpg123: bump to version 1.22.2
-Message-ID: <20150808105603.4F52E81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/knock: add hash file
+Message-ID: <20150808105601.6EA1881778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74d585b49cb7ae9849fcff7b381a6afa35580df8
+commit: http://git.buildroot.net/buildroot/commit/?id=9bd5cfab61ba04a79c4ce67c66d9d9f0797a1f85
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.hash |    6 +++---
- package/mpg123/mpg123.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/knock/knock.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index e9f04b4..bf81f2a 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.1/
--md5	abf310c716d56c283561eff0903bcb69	mpg123-1.22.1.tar.bz2
--sha1	c3193902b1cf923a625ed94360c91e28d84753d3	mpg123-1.22.1.tar.bz2
-+# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.2/
-+md5	6f6d2178c354f39207bf97e062936110	mpg123-1.22.2.tar.bz2
-+sha1	9125b4eabf6327c71a439e07e16eb39b712085e2	mpg123-1.22.2.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index c9acb6b..a16e400 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.22.1
-+MPG123_VERSION = 1.22.2
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+diff --git a/package/knock/knock.hash b/package/knock/knock.hash
+new file mode 100644
+index 0000000..ae152db
+--- /dev/null
++++ b/package/knock/knock.hash
+@@ -0,0 +1,2 @@
++# locally computed hash
++sha256 9938479c321066424f74c61f6bee46dfd355a828263dc89561a1ece3f56578a4 knock-0.7.tar.gz
