@@ -1,45 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:16 -0000
-Subject: [Buildroot] [git commit branch/next] weston: bump to version 1.8.0
-Message-ID: <20150808105612.72DCF8030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ipset: bump to version 6.25.1
+Message-ID: <20150808105614.6166C7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dca75e36c93eaa46e974d498d728a87c69a52eab
+commit: http://git.buildroot.net/buildroot/commit/?id=34f5f2f301c842c2b6b3ee742e10744d78b886bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 1.8.0
-- Update hash file
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/weston.hash |    4 ++--
- package/weston/weston.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ipset/ipset.hash |    6 ++++--
+ package/ipset/ipset.mk   |    2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 8df6f07..e7bc2bb 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-February/019977.html
--sha256  1c4511945f3f476c24af712e82a7b500ae91a99cbc0fe2e381da1449125166cd  weston-1.7.0.tar.xz
-+# From http://lists.freedesktop.org/archives/wayland-devel/2015-June/022416.html
-+sha256  8963e69f328e815cec42c58046c4af721476c7541bb7d9edc71740fada5ad312  weston-1.8.0.tar.xz
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index bf49436..4ad89ce 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
+diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
+index 9a79180..e0f11d9 100644
+--- a/package/ipset/ipset.hash
++++ b/package/ipset/ipset.hash
+@@ -1,2 +1,4 @@
+-# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.24.tar.bz2.md5sum.txt
+-md5	8831b8f01458bf2abacc222884195a62	ipset-6.24.tar.bz2
++# From ftp://ftp.netfilter.org/pub/ipset/ipset-6.25.1.tar.bz2.md5sum.txt
++md5	e58262af2d53bda271f43883eebc8d54	ipset-6.25.1.tar.bz2
++# Calculated based on the hash above
++sha256	658e15d0d0d6a7160137ef1c2bc2c8669cfee996eb9e049df8d7313e34795e7b	ipset-6.25.1.tar.bz2
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index be327ec..e5e9218 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WESTON_VERSION = 1.7.0
-+WESTON_VERSION = 1.8.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
+-IPSET_VERSION = 6.24
++IPSET_VERSION = 6.25.1
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
