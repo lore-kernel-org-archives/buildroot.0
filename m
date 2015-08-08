@@ -1,69 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:41 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain-external: improve
-	lib subdirectory matching
-Message-ID: <20150808105630.811FA7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] mpd-mpc: bump to version 0.27
+Message-ID: <20150808105614.4D0257FC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bacf2157193c1565f37c260685a03426a1be5656
+commit: http://git.buildroot.net/buildroot/commit/?id=2b26c657b5e04e21b22be321d4c99856139b1393
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The toolchain from the Cavium Networks Octeon SDK provides a sysroot
-with library directories lib32, lib32-fp, lib64 and lib64-fp. The -fp
-variants are used for processors with hardware floating point unit, such
-as the Octeon III variants.
-
-When specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, the toolchain
-will use lib32-fp, but currently Buildroot does not accept that pattern.
-
-This patch improves the matching by accepting lib(32|64)?([^/]*)? as lib
-directory name.
-
-Signed-off-by: Bai Yingjie <byj.tea@gmail.com>
-[ThomasDS: update commit message]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-[Thomas: add comment above the function being modified to illustrate
-the various cases we try to handle.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk |   17 ++++++++++++++---
- 1 files changed, 14 insertions(+), 3 deletions(-)
+ package/mpd-mpc/mpd-mpc.hash |    2 +-
+ package/mpd-mpc/mpd-mpc.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 070f068..c8dd98f 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -436,15 +436,26 @@ define toolchain_find_libc_a
- $$(readlink -f $$(LANG=C $(1) -print-file-name=libc.a))
- endef
+diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
+index 4f348d5..b400386 100644
+--- a/package/mpd-mpc/mpd-mpc.hash
++++ b/package/mpd-mpc/mpd-mpc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 20735f7173cce56bec50c1d8b4633751052dc68365b29a6113206dc1cdc6e242 mpc-0.26.tar.xz
++sha256	45a2be0a6dea65ed43f631294c24e74b83c8ee66d1ba6ab47d0744ddb1e62064	mpc-0.27.tar.xz
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index 4e08c65..f5e9599 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--# Returns the sysroot location for the given compiler + flags
-+# Returns the sysroot location for the given compiler + flags. We need
-+# to handle cases where libc.a is in:
-+#
-+#  - lib/
-+#  - usr/lib/
-+#  - lib32/
-+#  - lib64/
-+#  - lib32-fp/ (Cavium toolchain)
-+#  - lib64-fp/ (Cavium toolchain)
-+#  - usr/lib/<tuple>/ (Linaro toolchain)
-+#
-+# And variations on these.
- define toolchain_find_sysroot
--$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::')
-+$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::')
- endef
- 
- # Returns the lib subdirectory for the given compiler + flags (i.e
- # typically lib32 or lib64 for some toolchains)
- define toolchain_find_libdir
--$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?)/([^/]*/)?libc.a:\2:')
-+$$(echo -n $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64)?([^/]*)?)/([^/]*/)?libc.a:\2:')
- endef
- 
- # Checks for an already installed toolchain: check the toolchain
+ MPD_MPC_VERSION_MAJOR = 0
+-MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).26
++MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).27
+ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPLv2+
