@@ -1,43 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:06 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xkeyboard-config: bump version to 2.15
-Message-ID: <20150808105636.994827FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Makefile: fix performance
+	regression caused by the umask handling
+Message-ID: <20150808105636.792E480414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81e4955f5b5769d94d699af1dba1b5b1bd16556d
+commit: http://git.buildroot.net/buildroot/commit/?id=1e9f60471622ec48f4df9ffe09e6cbca3a3ca6aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Commit bee5745c introduced an extra level of 'make' when the umask is
+different from 0022. However, when several targets were specified on
+the command line, a new make instance would be called for each target.
+This introduces a huge performance overhead when many targets are
+specified on the command line.
+
+To fix this, use the same approach as used in the mkmakefile script:
+an addition target on which the MAKECMDGOALS depend, so that this
+target is run only once.
+
+Note that the mkmakefile script contains a special exception for
+Makefile, because the Makefile in the output directory is generated.
+Since the top-level Makefile is not generated, this exception is not
+needed here.
+
+While we're at it, also fix the whitespace in the UMASK assignment.
+
+Signed-off-by: Guido Mart??nez <guido@vanguardiasur.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[yann.morin.1998 at free.fr: aggregate patches from Arnout and Guido]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../x11r7/xkeyboard-config/xkeyboard-config.hash   |    4 ++--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Makefile |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 68213a6..c9bdca2 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-January/002527.html
--sha256	dc91458a214c56a35727f9e523fc647615de64137057ca6ee4d4d4474a4bb2ae	xkeyboard-config-2.14.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002609.html
-+sha256	0e443cf7ca2f0b40846472c029647a05933fc705d611e1478c4db8a48a6f38bf	xkeyboard-config-2.15.tar.bz2
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 96a769e..f88686b 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 168d62a..8b9c5d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,15 +25,15 @@
+ #--------------------------------------------------------------
  
--XKEYBOARD_CONFIG_VERSION = 2.14
-+XKEYBOARD_CONFIG_VERSION = 2.15
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+ # Trick for always running with a fixed umask
+-UMASK=0022
++UMASK = 0022
+ ifneq ($(shell umask),$(UMASK))
+-.PHONY: all $(MAKECMDGOALS)
++.PHONY: _all $(MAKECMDGOALS)
+ 
+-all:
+-	@umask $(UMASK) && $(MAKE) --no-print-directory
++$(MAKECMDGOALS): _all
++	@:
+ 
+-$(MAKECMDGOALS):
+-	@umask $(UMASK) && $(MAKE) --no-print-directory $@
++_all:
++	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+ 
+ else # umask
+ 
