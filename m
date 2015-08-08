@@ -1,154 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:38 -0000
-Subject: [Buildroot] [git commit branch/next] libiio: Bump version to 0.5
-Message-ID: <20150808105637.771F080414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gst-fsl-plugins: bump version
+	to 4.0.2
+Message-ID: <20150808105626.D6B7C7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=edce14d6d1d8a2f6ee295514a9d99fd6bc393e31
+commit: http://git.buildroot.net/buildroot/commit/?id=cf448c4fe500b18c4c3315baa134c26f7bf239a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The package now offers the possibility to install Python and/or C#
-bindings if the Python and Mono packages are detected.
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/730b7ca5d2f13083f4e44636308a2f55a8d346f2
 
-v2: Patch generated with 'git format-patch -M' and fix indentation in libiio.mk
-v3: Updated libiio.hash file
+This package has been tested using the following commands:
+ # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-0.10  filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! vpudec ! autovideosink
+ # gst-launch-0.10  filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! vpudec ! mfw_isink
+ # gst-launch-0.10 imxv4l2src ! autovideosink
 
-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...UILD_SHARED_LIBS-drive-the-type-of-librar.patch |   29 ------------------
- ...2-detection-try-first-the-CMake-module-f.patch} |    0
- package/libiio/Config.in                           |   12 +++++++
- package/libiio/libiio.hash                         |    4 +-
- package/libiio/libiio.mk                           |   32 ++++++++++++++++++--
- 5 files changed, 43 insertions(+), 34 deletions(-)
+ .../0002-Fix-bashism-in-configure-script.patch     |    4 +---
+ .../gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch b/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
-deleted file mode 100644
-index 9ee0299..0000000
---- a/package/libiio/0001-cmake-let-BUILD_SHARED_LIBS-drive-the-type-of-librar.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 4d036f3708f1f427bf91c5925394d39ef76ad96a Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sat, 27 Dec 2014 16:36:50 +0100
--Subject: [PATCH] cmake: let BUILD_SHARED_LIBS drive the type of library built
--
--Do not force the type of library because some architectures (such as
--BlackFin from AnalogDevice) do not support shared object.
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index cd82a96..393fee3 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -115,7 +115,7 @@ install(FILES ${LIBIIO_PC} DESTINATION "${INSTALL_PKGCONFIG_DIR}")
-- #set(SETUP_PY ${CMAKE_CURRENT_SOURCE_DIR}/bindings/python/setup.py)
-- #configure_file(python/setup.py.in ${SETUP_PY} @ONLY)
-- 
---add_library(iio SHARED ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
--+add_library(iio ${LIBIIO_CFILES} ${LIBIIO_HEADERS})
-- set_target_properties(iio PROPERTIES VERSION ${VERSION} SOVERSION ${LIBIIO_VERSION_MAJOR})
-- target_link_libraries(iio LINK_PRIVATE ${LIBS_TO_LINK})
-- 
---- 
--2.2.1
--
-diff --git a/package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
-similarity index 100%
-rename from package/libiio/0002-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
-rename to package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-index 680d5dc..21496ed 100644
---- a/package/libiio/Config.in
-+++ b/package/libiio/Config.in
-@@ -40,4 +40,16 @@ config BR2_PACKAGE_LIBIIO_TESTS
- 	help
- 	  Install the test programs (iio_info, iio_genxml, iio_readdev).
- 
-+config BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP
-+	bool "Install C# bindings"
-+	depends on BR2_PACKAGE_MONO
-+	help
-+	  Install the C# bindings.
-+
-+config BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON
-+	bool "Install Python bindings"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Install the Python bindings.
-+
- endif
-diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
-index bbca4c8..28b9c63 100644
---- a/package/libiio/libiio.hash
-+++ b/package/libiio/libiio.hash
-@@ -1,2 +1,2 @@
--# From https://github.com/analogdevicesinc/libiio/archive/v0.3/
--sha256	a3571bbf7e80b9e0a8d6bd4b39a5bcd18f80a3d36c4a6f2092dfeefc98e20e07	libiio-v0.3.tar.gz
-+# From https://github.com/analogdevicesinc/libiio/archive/v0.5/
-+sha256	c41cdcfeae8717e72f1100b4dac9d7cc9d86f4e0731da3354149cb7e051666f3	libiio-0.5.tar.gz
-diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
-index 9b63e12..0e92b73 100644
---- a/package/libiio/libiio.mk
-+++ b/package/libiio/libiio.mk
-@@ -4,15 +4,16 @@
+diff --git a/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch b/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
+index 35617cd..471c483 100644
+--- a/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
++++ b/package/gstreamer/gst-fsl-plugins/0002-Fix-bashism-in-configure-script.patch
+@@ -25,7 +25,7 @@ index 5968eb6..1a31a06 100755
+  fi
+  AC_SUBST(VPU_LIBS)
+  
+-@@ -176,15 +176,15 @@ AC_SUBST(RT_CFLAGS)
++@@ -176,14 +176,14 @@ AC_SUBST(RT_CFLAGS)
+  AC_SUBST(RT_LIBS)
+  
+  FSL_MM_CORE_CFLAGS=`$PKG_CONFIG --cflags libfslaudiocodec 2>/dev/null`
+@@ -40,10 +40,8 @@ index 5968eb6..1a31a06 100755
+  FSL_MM_CORE_LIBS=`$PKG_CONFIG --libs libfslaudiocodec 2>/dev/null`
+ -FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslvideocodec 2>/dev/null`
+ -FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslparser 2>/dev/null`
+--FSL_MM_CORE_LIBS+=`$PKG_CONFIG --libs libfslvpuwrap 2>/dev/null`
+ +FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslvideocodec 2>/dev/null`"
+ +FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslparser 2>/dev/null`"
+-+FSL_MM_CORE_LIBS="$FSL_MM_CORE_LIBS `$PKG_CONFIG --libs libfslvpuwrap 2>/dev/null`"
+  AC_SUBST(FSL_MM_CORE_LIBS)
+  
+  EXTRAPLATFORMCFLAGS="-DARM -D_GNUC_"
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+index 8d8b8b4..a7dea0f 100644
+--- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIIO_VERSION = v0.3
--LIBIIO_SITE = $(call github,analogdevicesinc,libiio,$(LIBIIO_VERSION))
-+LIBIIO_VERSION = 0.5
-+LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
- LIBIIO_INSTALL_STAGING = YES
- LIBIIO_LICENSE = LGPLv2.1+
- LIBIIO_LICENSE_FILES = COPYING
+-GST_FSL_PLUGINS_VERSION = 3.0.11
++GST_FSL_PLUGINS_VERSION = 4.0.2
+ GST_FSL_PLUGINS_SITE = $(FREESCALE_IMX_SITE)
  
- LIBIIO_CONF_OPTS = -DENABLE_IPV6=ON \
- 	-DWITH_LOCAL_BACKEND=$(if $(BR2_PACKAGE_LIBIIO_LOCAL_BACKEND),ON,OFF) \
--	-DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF)
-+	-DWITH_TESTS=$(if $(BR2_PACKAGE_LIBIIO_TESTS),ON,OFF) \
-+	-DWITH_DOC=OFF
- 
- ifeq ($(BR2_PACKAGE_LIBIIO_NETWORK_BACKEND),y)
- LIBIIO_DEPENDENCIES += libxml2
-@@ -33,6 +34,31 @@ ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
- LIBIIO_DEPENDENCIES += avahi
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_PYTHON),y)
-+LIBIIO_DEPENDENCIES += python
-+LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=ON
-+else
-+LIBIIO_CONF_OPTS += -DPYTHON_BINDINGS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP),y)
-+define LIBIIO_INSTALL_CSHARP_BINDINGS_TO_TARGET
-+	rm $(TARGET_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll.mdb
-+	$(HOST_DIR)/usr/bin/gacutil -root $(TARGET_DIR)/usr/lib -i \
-+		$(TARGET_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll
-+endef
-+define LIBIIO_INSTALL_CSHARP_BINDINGS_TO_STAGING
-+	$(HOST_DIR)/usr/bin/gacutil -root $(STAGING_DIR)/usr/lib -i \
-+		$(STAGING_DIR)/usr/lib/cli/libiio-sharp-$(LIBIIO_VERSION)/libiio-sharp.dll
-+endef
-+LIBIIO_POST_INSTALL_TARGET_HOOKS += LIBIIO_INSTALL_CSHARP_BINDINGS_TO_TARGET
-+LIBIIO_POST_INSTALL_STAGING_HOOKS += LIBIIO_INSTALL_CSHARP_BINDINGS_TO_STAGING
-+LIBIIO_DEPENDENCIES += mono
-+LIBIIO_CONF_OPTS += -DCSHARP_BINDINGS=ON
-+else
-+LIBIIO_CONF_OPTS += -DCSHARP_BINDINGS=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBIIO_IIOD),y)
- define LIBIIO_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/libiio/S99iiod \
+ # Most is LGPLv2+, but some sources are copied from upstream and are
