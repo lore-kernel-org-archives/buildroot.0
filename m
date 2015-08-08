@@ -1,43 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:33 -0000
-Subject: [Buildroot] [git commit branch/next] package/x11r7/xlib_libfontenc:
-	bump version to 1.1.3
-Message-ID: <20150808105629.A2B277FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/on2-8170-modules: use
+	kernel-module helper
+Message-ID: <20150808105628.575FF80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1aa1d38c6a37d0db045cf2fa5a3dd1fdd6dfc739
+commit: http://git.buildroot.net/buildroot/commit/?id=731c71d23f4dc747a3542c7ccbd163f9e073b9d3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+We were already using the Linux buildsystem to build on2-8170-modules,
+so just switch to the new kernel-module infra.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xlib_libfontenc/xlib_libfontenc.hash |    4 ++--
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/on2-8170-modules/on2-8170-modules.mk |   11 +----------
+ 1 files changed, 1 insertions(+), 10 deletions(-)
 
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-index c8b91b9..251a1d6 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/xorg/2013-April/055627.html
--sha256	a9a4efed3359b2e80161bb66b65038fac145137fa134e71335264cbc23b02f62	libfontenc-1.1.2.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002589.html
-+sha256	70588930e6fc9542ff38e0884778fbc6e6febf21adbab92fd8f524fe60aefd21	libfontenc-1.1.3.tar.bz2
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-index fd7a6fb..aff1f1a 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/on2-8170-modules/on2-8170-modules.mk b/package/on2-8170-modules/on2-8170-modules.mk
+index 209bcb5..b40ed86 100644
+--- a/package/on2-8170-modules/on2-8170-modules.mk
++++ b/package/on2-8170-modules/on2-8170-modules.mk
+@@ -7,17 +7,8 @@
+ ON2_8170_MODULES_VERSION = 73b08061d30789178e692bc332b73d1d9922bf39
+ ON2_8170_MODULES_SITE = $(call github,alexandrebelloni,on2-8170-modules,$(ON2_8170_MODULES_VERSION))
  
--XLIB_LIBFONTENC_VERSION = 1.1.2
-+XLIB_LIBFONTENC_VERSION = 1.1.3
- XLIB_LIBFONTENC_SOURCE = libfontenc-$(XLIB_LIBFONTENC_VERSION).tar.bz2
- XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFONTENC_LICENSE = MIT
+-ON2_8170_MODULES_DEPENDENCIES = linux
+-
+ ON2_8170_MODULES_LICENSE = GPLv2+
+ #There is no license file
+ 
+-define ON2_8170_MODULES_BUILD_CMDS
+-	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D)
+-endef
+-
+-define ON2_8170_MODULES_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
+-endef
+-
++$(eval $(kernel-module))
+ $(eval $(generic-package))
