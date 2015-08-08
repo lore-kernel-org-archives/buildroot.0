@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:07 -0000
-Subject: [Buildroot] [git commit branch/next] package/usbredir: add hash file
-Message-ID: <20150808105600.4E84C7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ux500-firmware: add
+	hash file
+Message-ID: <20150808105600.3D5157F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c9ccbeb18ba07b3bb3e2a859750771e12a581d85
+commit: http://git.buildroot.net/buildroot/commit/?id=c4da7ca088b62368181a2d7bd32a07f4ffa39608
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/usbredir/usbredir.hash |    2 ++
+ package/ux500-firmware/ux500-firmware.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/usbredir/usbredir.hash b/package/usbredir/usbredir.hash
+diff --git a/package/ux500-firmware/ux500-firmware.hash b/package/ux500-firmware/ux500-firmware.hash
 new file mode 100644
-index 0000000..8328bb5
+index 0000000..1028cc0
 --- /dev/null
-+++ b/package/usbredir/usbredir.hash
++++ b/package/ux500-firmware/ux500-firmware.hash
 @@ -0,0 +1,2 @@
 +# locally computed hash
-+sha256 028184960044ea4124030000b3c55a35c3238835116e3a0fbcaff449df2c8edf usbredir-0.6.tar.bz2
++sha256 81633274a9157c076e5e09b5addd81fbcef504b829fc801041cea50eea774bcd ux500-firmware_1.1.3-6linaro1.tar.gz
