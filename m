@@ -1,43 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] package/zic: bump version to
-	2015e
-Message-ID: <20150808105609.ED6C87F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] newt: not available for static
+	only builds
+Message-ID: <20150808105600.E531D7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee871967b644ac4a65fb6a95ad11afb069e524ca
+commit: http://git.buildroot.net/buildroot/commit/?id=8bee6ae663f592f53d71f4dfb031281cb46dabb8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/zic/zic.hash |    4 ++--
- package/zic/zic.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/a40/a400e1fe7291d3bd3171ad04ce5fd7ba235d39af/
+http://autobuild.buildroot.net/results/ec3/ec38d0f1d1faa2a87321bab10f87772eb819adc9/
+http://autobuild.buildroot.net/results/7cb/7cbc8cd265d527c7b56d57e511903b23a4a84489/
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 6f7911a..3ddd6f8 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256  7feeb1a60dff8b179c884f6e3aa7684606f4eaeb7f7ecc61a6bb81e3e38af42e  tzcode2015c.tar.gz
-+# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
-+sha512  fdc568a68f4876b967b39e21fa53f063dc5756e886e2a273cc046d5a014eb517e9c91eb6e03d18c94a89ce48578868aed710790415c500188fce4e4add0ce7ca  tzcode2015e.tar.gz
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 5e84567..a768ac6 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+newt uses autoconf but not automake, and unconditionally tries to build a
+.so file - So it doesn't work in static only builds.
+
+The only reverse dependency is network-manager, which already depends on
+glibc.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/newt/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/newt/Config.in b/package/newt/Config.in
+index 1b3068a..a221615 100644
+--- a/package/newt/Config.in
++++ b/package/newt/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_NEWT
+ 	bool "newt"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # slang
++	depends on !BR2_STATIC_LIBS # unconditionally creates .so
+ 	select BR2_PACKAGE_SLANG
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_NEWT
  
--ZIC_VERSION = 2015c
-+ZIC_VERSION = 2015e
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = ftp://ftp.iana.org/tz/releases
- ZIC_LICENSE = Public domain
+ 	  http://www.redhat.com/
+ 
+-comment "newt needs a toolchain w/ wchar"
++comment "newt needs a toolchain w/ wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
