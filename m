@@ -1,29 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:56 -0000
-Subject: [Buildroot] [git commit branch/next] package/mono: adding hash file
-Message-ID: <20150808105556.26C5D818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fix typo in package install
+	suggestion for dependencies
+Message-ID: <20150808105555.BC916818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f238461622b5cb7285cb6aa7da046c212539061
+commit: http://git.buildroot.net/buildroot/commit/?id=965e3b96b6e2d5fe7ee5f0db7249242b098baddd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch adds the hash file for mono 4.0.0.
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mono/mono.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ support/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-new file mode 100644
-index 0000000..c1d0c6e
---- /dev/null
-+++ b/package/mono/mono.hash
-@@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 4485d8b44a939bef64b3b1b6a7f0388761cfe6803e149aa1e56aab023cfb267e  mono-4.0.0.tar.bz2
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 52305e1..01ad828 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -217,7 +217,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 		echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
+ 		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
+ 		echo "library."
+-		echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
++		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
+ 		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
+ 		echo "libstdc++6:i386, and zlib1g:i386)."
+ 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
