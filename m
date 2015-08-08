@@ -1,32 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:18 -0000
-Subject: [Buildroot] [git commit branch/next] qt5cinex: fix license typo
-Message-ID: <20150808105604.3EB8A7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openswan: bump to version
+	2.6.43
+Message-ID: <20150808105614.541EA7FC68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0606cf10be3ed9934c90e8c752fe931918f55d15
+commit: http://git.buildroot.net/buildroot/commit/?id=626f5aa4f01334cc612ddbde0ff680f9dcb0e854
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5cinex/qt5cinex.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/openswan/openswan.hash |    2 +-
+ package/openswan/openswan.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5cinex/qt5cinex.mk b/package/qt5cinex/qt5cinex.mk
-index a79df7b..bfe14ce 100644
---- a/package/qt5cinex/qt5cinex.mk
-+++ b/package/qt5cinex/qt5cinex.mk
-@@ -15,7 +15,7 @@ QT5CINEX_SOURCE = Qt5_CinematicExperience_$(QT5CINEX_HD)$(QT5CINEX_VERSION).tgz
- QT5CINEX_DEPENDENCIES = qt5base qt5declarative
+diff --git a/package/openswan/openswan.hash b/package/openswan/openswan.hash
+index 724a935..4853b3f 100644
+--- a/package/openswan/openswan.hash
++++ b/package/openswan/openswan.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	1be58b684dedd4bf00946ac5c7c6e9fbf8ac5db849feea2360c42c5e87cb565a	openswan-2.6.42.tar.gz
++sha256	ac7ef1d78766801f23c458cc7c3b080ca6e20c5144a1979598c319bc3bc7c88b	openswan-2.6.43.tar.gz
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+index 335a72a..6c6a8a7 100644
+--- a/package/openswan/openswan.mk
++++ b/package/openswan/openswan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- QT5CINEX_LICENSE = CC-BY-3.0
--QT5CINEX_LICENSE_FILE = README
-+QT5CINEX_LICENSE_FILES = README
- 
- define QT5CINEX_CONFIGURE_CMDS
- 	cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake
+-OPENSWAN_VERSION = 2.6.42
++OPENSWAN_VERSION = 2.6.43
+ OPENSWAN_SITE = http://download.openswan.org/openswan
+ OPENSWAN_LICENSE = GPLv2+, BSD-3c
+ OPENSWAN_LICENSE_FILES = COPYING LICENSE
