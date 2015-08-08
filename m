@@ -1,59 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:27 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: make
-	matchbox-desktop a real package
-Message-ID: <20150808105606.6C6A381778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tor: explain why we use
+	-std=gnu99
+Message-ID: <20150808105620.028767FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29e7cf4ed2a3520ccc257430ab240f3f43f4af6f
+commit: http://git.buildroot.net/buildroot/commit/?id=86ae63af0529327df6aad8b1acd5c9af0bc28a32
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, matchbox-desktop is treated as if it were an option of the
-matchbox package.
-
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
-
-So, make it a real package.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Missed from 5cf5b390 (fix building if GCC's C standard is not gnu99)]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/matchbox/Config.in                  |    7 +------
- package/matchbox/matchbox-desktop/Config.in |    5 +++++
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/tor/tor.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index e791cea..39aff3c 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -22,12 +22,7 @@ if BR2_PACKAGE_MATCHBOX
- source "package/matchbox/matchbox-lib/Config.in"
- source "package/matchbox/matchbox-wm/Config.in"
- source "package/matchbox/matchbox-panel/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_DESKTOP
--	bool "Matchbox Desktop"
--	select BR2_PACKAGE_ZLIB
--	help
--	  A PDA style application launcher or 'item browser'.
-+source "package/matchbox/matchbox-desktop/Config.in"
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index f6d3b7f..a464391 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -32,6 +32,7 @@ else
+ TOR_CONF_OPTS += --disable-seccomp
+ endif
  
- config BR2_PACKAGE_MATCHBOX_COMMON
- 	bool "Matchbox session common files"
-diff --git a/package/matchbox/matchbox-desktop/Config.in b/package/matchbox/matchbox-desktop/Config.in
-new file mode 100644
-index 0000000..c9fd196
---- /dev/null
-+++ b/package/matchbox/matchbox-desktop/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_MATCHBOX_DESKTOP
-+	bool "Matchbox Desktop"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  A PDA style application launcher or 'item browser'.
++# uses gnu extensions
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
+ $(eval $(autotools-package))
