@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] package/libva-intel-driver:
-	bump version to 1.6.0
-Message-ID: <20150808105619.62B657FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lvm2: bump to version 2.02.123
+Message-ID: <20150808105619.2C7787FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=860b3a7b9aeae64f43e5f45054ae8dfd74666c14
+commit: http://git.buildroot.net/buildroot/commit/?id=4549cad8b35b846f8c14b590dd2b11e18f9e7ed4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream hash is in sha1 format, like before. It is wrongly announced
-as md5 in the release mail, so I added a note to the hash file.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva-intel-driver/libva-intel-driver.hash |    4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash |    2 +-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index b03bb1d..57010bc 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 6137108..e6047bb 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/libva/2015-March/003250.html
--sha1	98b670517cbd2d0e5e2ef3f171b805815dff9057	libva-intel-driver-1.5.1.tar.bz2
-+# From http://lists.freedesktop.org/archives/libva/2015-July/003405.html, checked locally
-+sha1	8d9da76883429a155511ee0e71a737aea07ad217	libva-intel-driver-1.6.0.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index 8469314..a61f55e 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  702c61bf07a8fc6dc0db6e9d323d9f6d  LVM2.2.02.121.tgz
++md5  5ae469f1a021729d3db9d269077ad4fe  LVM2.2.02.123.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index a2db504..bae0d54 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_INTEL_DRIVER_VERSION = 1.5.1
-+LIBVA_INTEL_DRIVER_VERSION = 1.6.0
- LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
- LIBVA_INTEL_DRIVER_LICENSE = MIT
+-LVM2_VERSION = 2.02.121
++LVM2_VERSION = 2.02.123
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
