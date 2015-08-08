@@ -1,60 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] libpcap: fix noMMU build
-Message-ID: <20150808105603.DC39C7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] a20_olinuxino_lime/readme.txt:
+	fix a typo
+Message-ID: <20150808105618.40C1A7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=715f7b98c862e3ae1652effb90586a61ac4f8b6d
+commit: http://git.buildroot.net/buildroot/commit/?id=8ff2882fcd63ca917d58ac71a86f79cca3d1219e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a "uClinux is also Linux" patch to fix build for Blackfin.
-
-Fixes:
-http://autobuild.buildroot.net/results/e19/e19e8ebb46560050029576baa040f2c6928e6424/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ....in-fix-detect-of-if_bonding.h-on-uclinux.patch |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ board/olimex/a20_olinuxino_lime/readme.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libpcap/0002-configure.in-fix-detect-of-if_bonding.h-on-uclinux.patch b/package/libpcap/0002-configure.in-fix-detect-of-if_bonding.h-on-uclinux.patch
-new file mode 100644
-index 0000000..7838c6f
---- /dev/null
-+++ b/package/libpcap/0002-configure.in-fix-detect-of-if_bonding.h-on-uclinux.patch
-@@ -0,0 +1,30 @@
-+From 5b8dc4eaeab60d5effc33055e5bce9ac0d98d339 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 2 Jun 2015 21:39:15 +0300
-+Subject: [PATCH] configure.in: fix detect of if_bonding.h on uclinux
-+
-+noMMU Linux (uClinux) is also Linux
-+
-+Upstream status: https://github.com/the-tcpdump-group/libpcap/pull/440
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ configure.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.in b/configure.in
-+index be4b29e2f8ba..31287d0dbe61 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -149,7 +149,7 @@ struct rtentry;
-+ fi
-+ 
-+ case "$host_os" in
-+-linux*)
-++linux*|uclinux*)
-+ 	AC_CHECK_HEADERS(linux/sockios.h linux/if_bonding.h,,,
-+ 	[
-+ #include <sys/socket.h>
-+-- 
-+2.1.4
-+
+diff --git a/board/olimex/a20_olinuxino_lime/readme.txt b/board/olimex/a20_olinuxino_lime/readme.txt
+index 92ee24a..4a5853b 100644
+--- a/board/olimex/a20_olinuxino_lime/readme.txt
++++ b/board/olimex/a20_olinuxino_lime/readme.txt
+@@ -7,7 +7,7 @@ This is a open hardware board,
+ see https://www.olimex.com/Products/OLinuXino/open-source-hardware
+ 
+ The legacy linux-sunxi kernels are based on the vendor code drops.
+-It is only useful when accelerated 3D graphics and multimedia support
++They are only useful when accelerated 3D graphics and multimedia support
+ is strictly necessary.
+ 
+ The Mainline Kernel is already a much better choice for a headless server.
