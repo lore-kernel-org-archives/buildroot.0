@@ -1,134 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] postgresql: mark as not
-	available for static linking
-Message-ID: <20150808105558.7214280163@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{12,
+	18}.x series
+Message-ID: <20150808105601.D1FE67F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9f709e4200c8e2e1c2d34a010897601f7e5c808
+commit: http://git.buildroot.net/buildroot/commit/?id=496561179ed488f8360e850ede51aa5994150d9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-postgresql currently does not build in BR2_STATIC_LIBS=y
-configurations, and since there is little interest in using such a big
-piece of software in statically linked configuration, this commit
-makes postgresql depends on !BR2_STATIC_LIBS.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/f9ed96d22e91cdba9ad92c4d4ea52e422bf1f1c9/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bandwidthd/Config.in  |    4 ++++
- package/php/Config.ext        |    5 +++++
- package/postgresql/Config.in  |    7 +++++++
- package/qt/Config.sql.in      |    4 ++++
- package/qt5/qt5base/Config.in |    5 +++++
- 5 files changed, 25 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-index 0d51f5e..b4a47f2 100644
---- a/package/bandwidthd/Config.in
-+++ b/package/bandwidthd/Config.in
-@@ -33,12 +33,16 @@ if BR2_PACKAGE_BANDWIDTHD
- config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
- 	bool "enable postgresql log target support"
- 	select BR2_PACKAGE_POSTGRESQL
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Enable support for logging the bandwidthd data to a remote
- 	  (or local) postgresql server. This data can then be viewed
- 	  through a php site. See README in the source code
- 	  (github.com/nroach44/bandwidthd) for more information.
- 
-+comment "postgresql support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_BANDWIDTHD_SQLITE3
- 	bool "enable sqlite3 log storage"
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 4995090..5324e79 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -159,9 +159,14 @@ config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
- 	bool "PostgreSQL"
- 	select BR2_PACKAGE_POSTGRESQL
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  PDO driver for PostgreSQL
- 
-+comment "PostgreSQL drivers need a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
- 	bool "SQLite3"
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 4c53703..e9b8f48 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_POSTGRESQL
- 	bool "postgresql"
- 	depends on BR2_USE_MMU # fork()
-+	# fails to build in a pure static linking scenario, and
-+	# postgresql is unlikely to be used in a pure statically
-+	# linked environment.
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  PostgreSQL is a powerful, open source object-relational
- 	  database system.
-@@ -13,3 +17,6 @@ config BR2_PACKAGE_POSTGRESQL
- 	  archives with pg_dump and pg_restore.
- 
- 	  http://www.postgresql.org
-+
-+comment "postgresql needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/qt/Config.sql.in b/package/qt/Config.sql.in
-index 037837f..452edd5 100644
---- a/package/qt/Config.sql.in
-+++ b/package/qt/Config.sql.in
-@@ -31,10 +31,14 @@ config BR2_PACKAGE_QT_ODBC
- config BR2_PACKAGE_QT_PSQL
- 	bool "PostgreSQL Driver"
- 	select BR2_PACKAGE_POSTGRESQL
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Build PostgreSQL driver
- 	  If unsure, say n.
- 
-+comment "PostgreSQL driver needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- choice
- 	prompt "SQLite 3 support"
- 	default BR2_PACKAGE_QT_SQLITE_NONE
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 20fd905..df1d3dc 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -61,10 +61,15 @@ config BR2_PACKAGE_QT5BASE_PSQL
- 	bool "PostgreSQL Plugin"
- 	select BR2_PACKAGE_POSTGRESQL
- 	depends on BR2_USE_MMU # postgresql
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Build PostgreSQL plugin
- 	  If unsure, say n.
- 
-+comment "PostgreSQL plugin needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-+
- choice
- 	prompt "SQLite 3 support"
- 	default BR2_PACKAGE_QT5BASE_SQLITE_NONE
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index cf38c80..d81cd36 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -202,13 +202,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.79"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.42"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.43"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.13"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.4"		if BR2_KERNEL_HEADERS_4_0
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
