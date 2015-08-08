@@ -1,59 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] system/skeleton: don't use
-	random-seed from a read-only fs
-Message-ID: <20150808105623.D30FA7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tor: needs thread support
+Message-ID: <20150808105615.EA3BF7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f33f766860a9ff6a62b474343d7859b702b2d713
+commit: http://git.buildroot.net/buildroot/commit/?id=49565a282ad6a9f6f04a184407ce04f9c4772e9c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-A random-seed from a read-only filesystem is useless.
+Fixes:
 
-Also, drop the check for /etc/random-seed existence; it must exist after a
-touch.
+  http://autobuild.buildroot.org/results/4f7/4f758978f6820ecceaad57385f3c104011180c4d/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/skeleton/etc/init.d/S20urandom |   17 +++++++----------
- 1 files changed, 7 insertions(+), 10 deletions(-)
+ package/tor/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/system/skeleton/etc/init.d/S20urandom b/system/skeleton/etc/init.d/S20urandom
-index f73cea5..36277ba 100755
---- a/system/skeleton/etc/init.d/S20urandom
-+++ b/system/skeleton/etc/init.d/S20urandom
-@@ -11,22 +11,19 @@
+diff --git a/package/tor/Config.in b/package/tor/Config.in
+index d44bd9f..3400dce 100644
+--- a/package/tor/Config.in
++++ b/package/tor/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TOR
+ 	bool "tor"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
+@@ -12,3 +13,7 @@ config BR2_PACKAGE_TOR
+ 	  state security.
  
- case "$1" in
- 	start|"")
--		if [ "$VERBOSE" != no ]
--		then
--			echo -n "Initializing random number generator... "
--		fi
--		# Load and then save 512 bytes,
--		# which is the size of the entropy pool
--		if [ -f /etc/random-seed ]
--		then
--			cat /etc/random-seed >/dev/urandom
--		fi
- 		# check for read only file system
- 		if ! touch /etc/random-seed 2>/dev/null
- 		then
- 			echo "read-only file system detected...done"
- 			exit
- 		fi
-+		if [ "$VERBOSE" != no ]
-+		then
-+			echo -n "Initializing random number generator... "
-+		fi
-+		# Load and then save 512 bytes,
-+		# which is the size of the entropy pool
-+		cat /etc/random-seed >/dev/urandom
- 		rm -f /etc/random-seed
- 		umask 077
- 		dd if=/dev/urandom of=/etc/random-seed count=1 \
+ 	  https://www.torproject.org
++
++comment "tor needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
