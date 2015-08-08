@@ -1,49 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] strongswan: security bump to
-	version 5.3.2
-Message-ID: <20150808105605.E80BB7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] enlightment: xtensa workaround
+	no longer required
+Message-ID: <20150808105625.1E8537FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2965f2e4556f6e97f9907015eb6c4321cf6b7a6e
+commit: http://git.buildroot.net/buildroot/commit/?id=0b056944f5878304f51af3e9edb6d596f24fc370
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
+With the update to uClibc-ng 1.0.3, this is no longer needed,
+as the problem is fixed upstream.
 
-CVE-2015-4171 - rogue servers with a valid certificate
-accepted by the client to trick it into disclosing its username and even
-password (if the client accepts EAP-GTC).
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/strongswan/strongswan.hash |    4 ++--
- package/strongswan/strongswan.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/enlightenment/enlightenment.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index e38c736..8b31de4 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,2 +1,2 @@
--# From http://download.strongswan.org/strongswan-5.3.1.tar.bz2.md5
--md5	66f258901a3d6c271da1a0c7fb3e5013	strongswan-5.3.1.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.3.2.tar.bz2.md5
-+md5	fab014be1477ef4ebf9a765e10f8802c	strongswan-5.3.2.tar.bz2
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index f165eb1..47a28a3 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index ac15642..ddebe06 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -34,11 +34,6 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_powerpc)$(BR2_sparc),yy)
+ ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
+ endif
  
--STRONGSWAN_VERSION = 5.3.1
-+STRONGSWAN_VERSION = 5.3.2
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPLv2+
+-# uClibc-ng has an old incomplete sys/ptrace.h for xtensa
+-ifeq ($(BR2_UCLIBC_VERSION_NG)$(BR2_xtensa),yy)
+-ENLIGHTENMENT_CONF_ENV += ac_cv_header_sys_ptrace_h=no
+-endif
+-
+ # alsa backend needs mixer support
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ ENLIGHTENMENT_DEPENDENCIES += alsa-lib
