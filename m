@@ -1,34 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:04 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: mark EOL
-	versions deprecated
-Message-ID: <20150808105603.B92F281778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] imagemagick: bump to version
+	6.9.1-4
+Message-ID: <20150808105603.01E3681778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3eb61964640bc40b3a2106aaa525f62926920ef6
+commit: http://git.buildroot.net/buildroot/commit/?id=3302263870d4214d798a274b984e8cf1775702c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Follow the upstream EOL cycle and mark 3.19 as deprecated for 2015.08.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.hash |    2 +-
+ package/imagemagick/imagemagick.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index d81cd36..653209e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -79,6 +79,7 @@ choice
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index b1c9caf..7ac3298 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256 8f6ebeb1a1321fd7b7d3161a66461743ea5bbc352e4339c792b3bab52c379378 ImageMagick-6.9.1-1.tar.xz
++sha256 74973478058069ce44040ff76b61df713d70adcadfd207836cc0622cadf1e4bf ImageMagick-6.9.1-4.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 1594f69..298d0a8 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	config BR2_KERNEL_HEADERS_3_19
- 		bool "Linux 3.19.x kernel headers"
-+		depends on BR2_DEPRECATED_SINCE_2015_08
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
- 
- 	config BR2_KERNEL_HEADERS_4_0
+-IMAGEMAGICK_VERSION = 6.9.1-1
++IMAGEMAGICK_VERSION = 6.9.1-4
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
