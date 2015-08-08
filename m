@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] hdparm: bump to 9.48
-Message-ID: <20150808105611.784C57F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] release: remove manual build
+	files from release tarballs
+Message-ID: <20150808105636.1C03A7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=349d5d93f78f0f5fe1cc93de2feedf901f773946
+commit: http://git.buildroot.net/buildroot/commit/?id=15cb98769e462ca0707870418baa68e7e3e10197
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+The Buildroot release tarballs inadvertently contain a build/docs directory,
+containing the manual sources, the generated lists, and manual.text and
+manual.pdf (but excluding manual.html).
+
+This directory is populated as $(BUILD_DIR) (==$(O)/build), while O is
+set explicitly from the release target to a subdirectory
+buildroot-xxxx.yy-git/ which was populated with 'git archive'.
+
+Since the generated manuals are available in docs/manual, which is
+also referred to from the README, the build directory is not needed and
+should be removed from the release tarball.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/hdparm/hdparm.hash |    4 ++--
- package/hdparm/hdparm.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/hdparm/hdparm.hash b/package/hdparm/hdparm.hash
-index 12f8e07..7d70f0b 100644
---- a/package/hdparm/hdparm.hash
-+++ b/package/hdparm/hdparm.hash
-@@ -1,3 +1,3 @@
- # From http://sourceforge.net/projects/hdparm/files/hdparm/
--md5	1c75d0751a44928b6c4bc81fb16d7fe8	hdparm-9.45.tar.gz
--sha1	232855a97df0a28ddeeff9325814517668877f6c	hdparm-9.45.tar.gz
-+md5	213efdbe7471fad3408198918e164354		hdparm-9.48.tar.gz
-+sha1	1efce086ef47667cf8016861d3ce958969e70dfc	hdparm-9.48.tar.gz
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index 2a113d2..a2b3e8c 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HDPARM_VERSION = 9.45
-+HDPARM_VERSION = 9.48
- HDPARM_SITE = http://downloads.sourceforge.net/project/hdparm/hdparm
- HDPARM_LICENSE = BSD-Style
- HDPARM_LICENSE_FILES = LICENSE.TXT
+diff --git a/Makefile b/Makefile
+index 531ac5d..168d62a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -936,6 +936,7 @@ release: OUT = buildroot-$(BR2_VERSION)
+ release:
+ 	git archive --format=tar --prefix=$(OUT)/ HEAD > $(OUT).tar
+ 	$(MAKE) O=$(OUT) manual-html manual-text manual-pdf
++	$(MAKE) O=$(OUT) manual-clean
+ 	tar rf $(OUT).tar $(OUT)
+ 	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
+ 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
