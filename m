@@ -1,61 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:52 -0000
-Subject: [Buildroot] [git commit branch/next] package/opencv: add a choice
-	for selecting gstreamer support
-Message-ID: <20150808105621.6FE717FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ntp: drop uselss patch fixup
+	which sometimes breaks rebuild
+Message-ID: <20150808105621.BCAFF7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97daf3a08a746f8889c88a0c5baf02d6b9a86bad
+commit: http://git.buildroot.net/buildroot/commit/?id=7917152f1353d670f5ada4a2f68397c339106d2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-OpenCV 3.0 support both gstreamer-0.10 and gstreamer-1.x, but only one
-is used at the time.
+Drop sed line which no longer changes anything as upstream has changed to
+use strrchr.  Worse, it bumps each ntpd/*.c file's modification time, which
+sometimes triggers a strange dependency path causing the makefile to attempt
+to run the ntpd keyword-gen app, which fails, because it's been
+cross-compiled.
 
-This patch turns the gstreamer support into a choice, in order to prepare
-adding the support for gstreamer-1 in a following patch.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv/Config.in |   12 ++++++++++--
- 1 files changed, 10 insertions(+), 2 deletions(-)
+ package/ntp/ntp.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 576f667..4838a0c 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -173,8 +173,14 @@ config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	help
- 	  Use ffmpeg from the target system.
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 5f05508..93cefa1 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -42,7 +42,6 @@ endif
  
-+choice
-+	prompt "gstreamer support"
-+
-+config BR2_PACKAGE_OPENCV_WITHOUT_GSTREAMER
-+	bool "none"
-+
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
--	bool "gstreamer support"
-+	bool "gstreamer-0.10"
- 	depends on BR2_USE_MMU # gstreamer -> libglib2
- 	depends on BR2_USE_WCHAR # gstreamer -> libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer -> libglib2
-@@ -182,10 +188,12 @@ config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ define NTP_PATCH_FIXUPS
+ 	$(SED) "s,^#if.*__GLIBC__.*_BSD_SOURCE.*$$,#if 0," $(@D)/ntpd/refclock_pcf.c
+-	$(SED) '/[[:space:](]rindex[[:space:]]*(/s/[[:space:]]*rindex[[:space:]]*(/ strrchr(/g' $(@D)/ntpd/*.c
+ endef
  
--comment "gstreamer support needs a toolchain w/ wchar, threads"
-+comment "gstreamer-0.10 support needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
-+endchoice
-+
- config BR2_PACKAGE_OPENCV_WITH_GTK
- 	bool "gtk support"
- 	depends on BR2_PACKAGE_XORG7
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTP_KEYGEN) += util/ntp-keygen
