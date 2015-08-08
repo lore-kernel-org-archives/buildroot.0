@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:05 -0000
-Subject: [Buildroot] [git commit branch/next] tar: add missing hash for host
-	variant
-Message-ID: <20150808105635.C92917FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] kmod: remove unnecessary
+	autoreconf
+Message-ID: <20150808105636.26B8C7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3788ad02cb7eb7e8384168a07e84223ae19e6f2d
+commit: http://git.buildroot.net/buildroot/commit/?id=51bdd8134c0d3ddf5dca327e896e3b8b941ab425
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This fixes a very early error in a fresh build:
-"ERROR: No hash found for tar-1.28.cpio.gz"
+Commit 047fea1d4fa33c4c934272a05649907a59186015 removed a patch on kmod that
+was the reason for autoreconfiguring kmod, but autoreconf itself was not
+removed.
 
-[Thomas: adjust commit title.]
-
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tar/tar.hash |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/kmod/kmod.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index ffad2d2..5d2f1db 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking signature
- sha256	64ee8d88ec1b47a0961033493f919d27218c41b580138fd6802327462aff22f2	tar-1.28.tar.xz
-+sha256	a3906a862f83dac1dfaf0ed200c62bd21f6d00f184a7f42b91978593a8553104	tar-1.28.cpio.gz
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index ae09330..e07e601 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -8,8 +8,6 @@ KMOD_VERSION = 20
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
+-# For kmod-0002-add-backup-implementation-of-be32toh.patch
+-KMOD_AUTORECONF = YES
+ KMOD_DEPENDENCIES = host-pkgconf
+ HOST_KMOD_DEPENDENCIES = host-pkgconf
+ 
