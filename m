@@ -1,154 +1,621 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:12 -0000
-Subject: [Buildroot] [git commit branch/next] system: allow/disallow root
-	login, accept encoded passwords
-Message-ID: <20150808105620.60DFD7FB5A@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:13 -0000
+Subject: [Buildroot] [git commit branch/next] uclibc: run snapshot and ng
+	configs through "savedefconfig"
+Message-ID: <20150808105637.9C74380414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18fa4a32a67372aa8f3949b5273d7b43dd4ad4f9
+commit: http://git.buildroot.net/buildroot/commit/?id=0773991694359905338ced70fb295ddbdf3a01bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, there are only two possibilities regarding the root account:
-  - it is enabled with no password (the default)
-  - it is enabled, using a clear-text, user-provided password
+Recently uClibc got support of "savedefconfig" target that allows
+generation of compact configuration description which only lists
+differences from default options.
 
-This is deemed insufficient in many cases, especially when the .config
-file has to be published (e.g. for the GPL compliance, or any other
-reason.).
+That's uClibc commit -
+http://git.uclibc.org/uClibc/commit/?id=e286a674419d31cb0757dd2f8307d8b4756cf1f9
 
-Fix that in two ways:
+This change represents post-processing of "uClibc-snapshot.defconfig"
+and "uClibc-ng.config" with "make savedefconfig" made on current
+uClibc/master and uClibc-ng/1.0 branches accordingly.
 
-  - add a boolean option that allows/disallows root login altogether,
-    which defaults to 'y' to keep backward compatibility;
+Unfortunately the most recent stable uClibc version 0.9.33.2 doesn't
+have "savedefconfig" target so I'm leaving uClibc-0.9.33.config as it
+is.
 
-  - accept already-encoded passwords, which we recognise as starting
-    with either of $1$, $5$ or $6$ (resp. for md5, sha256 or sha512).
-
-Signed-off-by: Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
-[yann.morin.1998 at free.fr:
-  - don't add a choice to select between clear-text/encoded password,
-    use a single prompt;
-  - differentiate in the password hook itself;
-  - rewrite parts of the help entry;
-  - rewrite and expand the commit log
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
-Acked-by: "Lorenzo M. Catucci" <lorenzo@sancho.ccd.uniroma2.it>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/Config.in |   35 ++++++++++++++++++++++++++---------
- system/system.mk |   27 ++++++++++++++++++---------
- 2 files changed, 44 insertions(+), 18 deletions(-)
+ package/uclibc/uClibc-ng.config       |  246 +--------------------------------
+ package/uclibc/uClibc-snapshot.config |  247 +--------------------------------
+ 2 files changed, 4 insertions(+), 489 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 15f0515..b72aa17 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -176,26 +176,43 @@ endif
- 
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
-+config BR2_TARGET_ENABLE_ROOT_LOGIN
-+	bool "Enable root login with password"
-+	default y
-+	help
-+	  Allow root to log in with a password.
-+
-+	  If not enabled, root will not be able to log in with a password.
-+	  However, if you have an ssh server and you add an ssh key, you
-+	  can still allow root to log in. Alternatively, you can use sudo
-+	  to become root.
-+
- config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	string "Root password"
- 	default ""
-+	depends on BR2_TARGET_ENABLE_ROOT_LOGIN
- 	help
--	  Set the initial root password (in clear). It will be md5-encrypted.
-+	  Set the initial root password.
- 
- 	  If set to empty (the default), then no root password will be set,
- 	  and root will need no password to log in.
- 
--	  WARNING! WARNING!
--	  Although pretty strong, MD5 is now an old hash function, and
--	  suffers from some weaknesses, which makes it susceptible to attacks.
--	  It is showing its age, so this root password should not be trusted
--	  to properly secure any product that can be shipped to the wide,
--	  hostile world.
-+	  If the password starts with any of $1$, $5$ or $6$, it is considered
-+	  to be already crypt-encoded with respectively md5, sha256 or sha512.
-+	  Any other value is taken to be a clear-text value, and is crypt-encoded
-+	  as per the "Passwords encoding" scheme, above.
-+
-+	  Note: "$" signs in the hashed password must be doubled. For example,
-+	  if the hashed password is "$1$longsalt$v35DIIeMo4yUfI23yditq0",
-+	  then you must enter it as "$$1$$longsalt$$v35DIIeMo4yUfI23yditq0"
-+	  (this is necessary otherwise make would attempt to interpret the $
-+	  as a variable expansion).
- 
- 	  WARNING! WARNING!
--	  The password appears in clear in the .config file, and may appear
-+	  The password appears as-is in the .config file, and may appear
- 	  in the build log! Avoid using a valuable password if either the
--	  .config file or the build log may be distributed!
-+	  .config file or the build log may be distributed, or at the
-+	  very least use a strong cryptographic hash for your password!
- 
- choice
- 	bool "/bin/sh"
-diff --git a/system/system.mk b/system/system.mk
-index c95e436..2794667 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -34,10 +34,6 @@ endef
- TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
- endif
- 
--ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
--PACKAGES += host-mkpasswd
--endif
+diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+index b1f039a..6523585 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -1,283 +1,41 @@
+-#
+-# Automatically generated make config: don't edit
+-# Version: 1.0.2
+-#
+-# TARGET_alpha is not set
+-# TARGET_arc is not set
+-# TARGET_arm is not set
+-# TARGET_avr32 is not set
+-# TARGET_bfin is not set
+-# TARGET_cris is not set
+-# TARGET_e1 is not set
+-# TARGET_frv is not set
+-# TARGET_h8300 is not set
+-# TARGET_hppa is not set
+-# TARGET_i386 is not set
+-# TARGET_i960 is not set
+-# TARGET_ia64 is not set
+-# TARGET_m68k is not set
+-# TARGET_metag is not set
+-# TARGET_microblaze is not set
+-# TARGET_mips is not set
+-# TARGET_nios is not set
+-# TARGET_nios2 is not set
+-# TARGET_powerpc is not set
+-# TARGET_sh is not set
+-# TARGET_sh64 is not set
+-# TARGET_sparc is not set
+-# TARGET_v850 is not set
+-# TARGET_vax is not set
+-# TARGET_x86_64 is not set
+-# TARGET_xtensa is not set
+-# TARGET_c6x is not set
 -
- define SET_NETWORK_LOCALHOST
- 	( \
- 		echo "# interface file auto-generated by buildroot"; \
-@@ -69,12 +65,25 @@ TARGET_FINALIZE_HOOKS += SET_NETWORK
- 
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- 
--define SYSTEM_ROOT_PASSWD
--	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
--		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
--	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
-+ifeq ($(BR2_TARGET_ENABLE_ROOT_LOGIN),y)
-+ifeq ($(TARGET_GENERIC_ROOT_PASSWD),)
-+SYSTEM_ROOT_PASSWORD =
-+else ifneq ($(filter $$1$$% $$5$$% $$6$$%,$(TARGET_GENERIC_ROOT_PASSWD)),)
-+SYSTEM_ROOT_PASSWORD = $(TARGET_GENERIC_ROOT_PASSWD)
-+else
-+PACKAGES += host-mkpasswd
-+# This variable will only be evaluated in the finalize stage, so we can
-+# be sure that host-mkpasswd will have already been built by that time.
-+SYSTEM_ROOT_PASSWORD = $(shell $(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
-+endif
-+else # !BR2_TARGET_ENABLE_ROOT_LOGIN
-+SYSTEM_ROOT_PASSWORD = *
-+endif
-+
-+define SYSTEM_SET_ROOT_PASSWD
-+	$(SED) 's,^root:[^:]*:,root:$(SYSTEM_ROOT_PASSWORD):,' $(TARGET_DIR)/etc/shadow
- endef
--TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
-+TARGET_FINALIZE_HOOKS += SYSTEM_SET_ROOT_PASSWD
- 
- ifeq ($(BR2_SYSTEM_BIN_SH_NONE),y)
- define SYSTEM_BIN_SH
+-# CONFIG_GENERIC_ARM is not set
+-# CONFIG_ARM610 is not set
+-# CONFIG_ARM710 is not set
+-# CONFIG_ARM7TDMI is not set
+-# CONFIG_ARM720T is not set
+-# CONFIG_ARM920T is not set
+-# CONFIG_ARM922T is not set
+-# CONFIG_ARM926T is not set
+-# CONFIG_ARM10T is not set
+-# CONFIG_ARM1136JF_S is not set
+-# CONFIG_ARM1176JZ_S is not set
+-# CONFIG_ARM1176JZF_S is not set
+-# CONFIG_ARM_CORTEX_M3 is not set
+-# CONFIG_ARM_CORTEX_M1 is not set
+-# CONFIG_ARM_SA110 is not set
+-# CONFIG_ARM_SA1100 is not set
+-# CONFIG_ARM_XSCALE is not set
+-# CONFIG_ARM_IWMMXT is not set
+-
+-# COMPILE_IN_THUMB_MODE is not set
+-USE_BX=y
+-
+-TARGET_SUBARCH=""
+-#
+-# Target Architecture Features and Options
+-#
+-TARGET_ARCH="none"
+-FORCE_OPTIONS_FOR_ARCH=y
+-#
+-# Using ELF file format
+-#
+-# ARCH_LITTLE_ENDIAN is not set
+-# ARCH_BIG_ENDIAN is not set
+-# ARCH_WANTS_LITTLE_ENDIAN is not set
+-# ARCH_WANTS_BIG_ENDIAN is not set
+-ARCH_HAS_MMU=y
+-ARCH_USE_MMU=y
+-UCLIBC_HAS_FLOATS=y
+-UCLIBC_HAS_FPU=y
+ DO_C99_MATH=y
+-# DO_XSI_MATH is not set
+-# UCLIBC_HAS_FENV is not set
+-UCLIBC_HAS_LONG_DOUBLE_MATH=y
+ KERNEL_HEADERS="/usr/src/linux/include"
+-HAVE_DOT_CONFIG=y
+-
+-#
+-# General Library Settings
+-#
+-# HAVE_NO_PIC is not set
+-DOPIC=y
+-# ARCH_HAS_NO_SHARED is not set
+-# ARCH_HAS_NO_LDSO is not set
+-# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+-LDSO_LDD_SUPPORT=y
+ # LDSO_CACHE_SUPPORT is not set
+-LDSO_PRELOAD_ENV_SUPPORT=y
+-# LDSO_PRELOAD_FILE_SUPPORT is not set
+-# LDSO_STANDALONE_SUPPORT is not set
+-# LDSO_PRELINK_SUPPORT is not set
+ # UCLIBC_STATIC_LDCONFIG is not set
+ LDSO_RUNPATH=y
+ LDSO_RUNPATH_OF_EXECUTABLE=y
+-LDSO_SAFE_RUNPATH=y
+-LDSO_SEARCH_INTERP_PATH=y
+-LDSO_LD_LIBRARY_PATH=y
+-# LDSO_NO_CLEANUP is not set
+-UCLIBC_CTOR_DTOR=y
+-# LDSO_GNU_HASH_SUPPORT is not set
+-# HAS_NO_THREADS is not set
+-LINUXTHREADS_OLD=y
+-# LINUXTHREADS_NEW is not set
+-# UCLIBC_HAS_THREADS_NATIVE is not set
+-UCLIBC_HAS_THREADS=y
+-# PTHREADS_DEBUG_SUPPORT is not set
+-UCLIBC_HAS_SYSLOG=y
+-UCLIBC_HAS_LFS=y
+-# MALLOC is not set
+-# MALLOC_SIMPLE is not set
+-MALLOC_STANDARD=y
+ MALLOC_GLIBC_COMPAT=y
+ UCLIBC_HAS_OBSTACK=y
+-UCLIBC_DYNAMIC_ATEXIT=y
+-# COMPAT_ATEXIT is not set
++UCLIBC_HAS_UTMPX=y
++UCLIBC_HAS_UTMP=y
+ UCLIBC_SUSV2_LEGACY=y
+ UCLIBC_SUSV3_LEGACY=y
+ UCLIBC_HAS_CONTEXT_FUNCS=y
+-# UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
+-# UCLIBC_STRICT_HEADERS is not set
+-# UCLIBC_HAS_STUBS is not set
+-UCLIBC_HAS_SHADOW=y
+ UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+-UCLIBC_HAS___PROGNAME=y
+-UCLIBC_HAS_PTY=y
+-ASSUME_DEVPTS=y
+-UNIX98PTY_ONLY=y
+ UCLIBC_HAS_GETPT=y
+ UCLIBC_HAS_LIBUTIL=y
+-UCLIBC_HAS_TM_EXTENSIONS=y
+-UCLIBC_HAS_TZ_CACHING=y
+-UCLIBC_HAS_TZ_FILE=y
+-UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
+-UCLIBC_FALLBACK_TO_ETC_LOCALTIME=y
+-
+-#
+-# Advanced Library Settings
+-#
+-UCLIBC_PWD_BUFFER_SIZE=256
+-UCLIBC_GRP_BUFFER_SIZE=256
+-
+-#
+-# Support various families of functions
+-#
+-UCLIBC_LINUX_MODULE_26=y
+-# UCLIBC_LINUX_MODULE_24 is not set
+-UCLIBC_LINUX_SPECIFIC=y
+-UCLIBC_HAS_GNU_ERROR=y
+-UCLIBC_BSD_SPECIFIC=y
+-UCLIBC_HAS_BSD_ERR=y
+ UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
+-# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
+-# UCLIBC_NTP_LEGACY is not set
+-# UCLIBC_SV4_DEPRECATED is not set
+-UCLIBC_HAS_REALTIME=y
+-UCLIBC_HAS_ADVANCED_REALTIME=y
+-UCLIBC_HAS_EPOLL=y
+-UCLIBC_HAS_XATTR=y
+-UCLIBC_HAS_PROFILING=y
+-UCLIBC_HAS_CRYPT_IMPL=y
+-# UCLIBC_HAS_SHA256_CRYPT_IMPL is not set
+-# UCLIBC_HAS_SHA512_CRYPT_IMPL is not set
+-UCLIBC_HAS_CRYPT=y
+-UCLIBC_HAS_NETWORK_SUPPORT=y
+-UCLIBC_HAS_SOCKET=y
+-UCLIBC_HAS_IPV4=y
+-# UCLIBC_HAS_IPV6 is not set
+-# UCLIBC_HAS_RPC is not set
+-# UCLIBC_HAS_FULL_RPC is not set
+-# UCLIBC_HAS_REENTRANT_RPC is not set
+ UCLIBC_USE_NETLINK=y
+ UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+-# UCLIBC_HAS_BSD_RES_CLOSE is not set
+-UCLIBC_HAS_COMPAT_RES_STATE=y
+-# UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
+ UCLIBC_HAS_RESOLVER_SUPPORT=y
+ UCLIBC_HAS_LIBRESOLV_STUB=y
+ UCLIBC_HAS_LIBNSL_STUB=y
+-
+-#
+-# String and Stdio Support
+-#
+-UCLIBC_HAS_STRING_GENERIC_OPT=y
+-UCLIBC_HAS_STRING_ARCH_OPT=y
+-UCLIBC_HAS_CTYPE_TABLES=y
+-UCLIBC_HAS_CTYPE_SIGNED=y
+-# UCLIBC_HAS_CTYPE_UNSAFE is not set
+ UCLIBC_HAS_CTYPE_CHECKED=y
+-# UCLIBC_HAS_CTYPE_ENFORCED is not set
+-# UCLIBC_HAS_WCHAR is not set
+-# UCLIBC_HAS_LOCALE is not set
+ UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+-# UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
+ UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+-# USE_OLD_VFPRINTF is not set
+-UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
+-UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
+-UCLIBC_HAS_STDIO_BUFSIZ_4096=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
+-UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
+-# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
+ # UCLIBC_HAS_STDIO_GETC_MACRO is not set
+ # UCLIBC_HAS_STDIO_PUTC_MACRO is not set
+-UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
+-# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
+ UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+-# UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE is not set
+ UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+ UCLIBC_HAS_PRINTF_M_SPEC=y
+-UCLIBC_HAS_ERRNO_MESSAGES=y
+-# UCLIBC_HAS_SYS_ERRLIST is not set
+-UCLIBC_HAS_SIGNUM_MESSAGES=y
+-# UCLIBC_HAS_SYS_SIGLIST is not set
+-UCLIBC_HAS_GNU_GETOPT=y
+-UCLIBC_HAS_GNU_GETSUBOPT=y
+-
+-#
+-# Big and Tall
+-#
+-UCLIBC_HAS_REGEX=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+-UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+-# UCLIBC_HAS_FTS is not set
+-UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
+-UCLIBC_HAS_UTMP=y
+-UCLIBC_HAS_UTMPX=y
+-
+-#
+-# Library Installation Options
+-#
+ RUNTIME_PREFIX="/"
+ DEVEL_PREFIX="/usr/"
+-MULTILIB_DIR="lib"
+-HARDWIRED_ABSPATH=y
+-
+-#
+-# Security options
+-#
+-# UCLIBC_BUILD_PIE is not set
+-# UCLIBC_HAS_ARC4RANDOM is not set
+-# HAVE_NO_SSP is not set
+ UCLIBC_HAS_SSP=y
+-# UCLIBC_HAS_SSP_COMPAT is not set
+-# SSP_QUICK_CANARY is not set
+-PROPOLICE_BLOCK_ABRT=y
+-# PROPOLICE_BLOCK_SEGV is not set
+-# UCLIBC_BUILD_SSP is not set
+-UCLIBC_BUILD_RELRO=y
+ UCLIBC_BUILD_NOW=y
+-UCLIBC_BUILD_NOEXECSTACK=y
+-
+-#
+-# uClibc development/debugging options
+-#
+-CROSS_COMPILER_PREFIX=""
+-UCLIBC_EXTRA_CFLAGS=""
+-# DODEBUG is not set
+-# DODEBUG_PT is not set
+ # DOSTRIP is not set
+-# DOASSERTS is not set
+-# SUPPORT_LD_DEBUG is not set
+-# SUPPORT_LD_DEBUG_EARLY is not set
+-# UCLIBC_MALLOC_DEBUGGING is not set
+-# UCLIBC_HAS_BACKTRACE is not set
+-WARNINGS="-Wall"
+-# EXTRA_WARNINGS is not set
+-# DOMULTI is not set
+diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
+index d8ed726..f999a75 100644
+--- a/package/uclibc/uClibc-snapshot.config
++++ b/package/uclibc/uClibc-snapshot.config
+@@ -1,284 +1,41 @@
+-#
+-# Automatically generated make config: don't edit
+-# Version: 0.9.32-git
+-# Fri Jul  9 22:31:59 2010
+-#
+-# TARGET_alpha is not set
+-# TARGET_arc is not set
+-# TARGET_arm is not set
+-# TARGET_avr32 is not set
+-# TARGET_bfin is not set
+-# TARGET_cris is not set
+-# TARGET_e1 is not set
+-# TARGET_frv is not set
+-# TARGET_h8300 is not set
+-# TARGET_hppa is not set
+-# TARGET_i386 is not set
+-# TARGET_i960 is not set
+-# TARGET_ia64 is not set
+-# TARGET_m68k is not set
+-# TARGET_metag is not set
+-# TARGET_microblaze is not set
+-# TARGET_mips is not set
+-# TARGET_nios is not set
+-# TARGET_nios2 is not set
+-# TARGET_powerpc is not set
+-# TARGET_sh is not set
+-# TARGET_sh64 is not set
+-# TARGET_sparc is not set
+-# TARGET_v850 is not set
+-# TARGET_vax is not set
+-# TARGET_x86_64 is not set
+-# TARGET_xtensa is not set
+-# TARGET_c6x is not set
+-
+-# CONFIG_GENERIC_ARM is not set
+-# CONFIG_ARM610 is not set
+-# CONFIG_ARM710 is not set
+-# CONFIG_ARM7TDMI is not set
+-# CONFIG_ARM720T is not set
+-# CONFIG_ARM920T is not set
+-# CONFIG_ARM922T is not set
+-# CONFIG_ARM926T is not set
+-# CONFIG_ARM10T is not set
+-# CONFIG_ARM1136JF_S is not set
+-# CONFIG_ARM1176JZ_S is not set
+-# CONFIG_ARM1176JZF_S is not set
+-# CONFIG_ARM_CORTEX_M3 is not set
+-# CONFIG_ARM_CORTEX_M1 is not set
+-# CONFIG_ARM_SA110 is not set
+-# CONFIG_ARM_SA1100 is not set
+-# CONFIG_ARM_XSCALE is not set
+-# CONFIG_ARM_IWMMXT is not set
+-
+-# COMPILE_IN_THUMB_MODE is not set
+-USE_BX=y
+-
+-TARGET_SUBARCH=""
+-#
+-# Target Architecture Features and Options
+-#
+-TARGET_ARCH="none"
+-FORCE_OPTIONS_FOR_ARCH=y
+-#
+-# Using ELF file format
+-#
+-# ARCH_LITTLE_ENDIAN is not set
+-# ARCH_BIG_ENDIAN is not set
+-# ARCH_WANTS_LITTLE_ENDIAN is not set
+-# ARCH_WANTS_BIG_ENDIAN is not set
+-ARCH_HAS_MMU=y
+-ARCH_USE_MMU=y
+-UCLIBC_HAS_FLOATS=y
+-UCLIBC_HAS_FPU=y
+ DO_C99_MATH=y
+-# DO_XSI_MATH is not set
+-# UCLIBC_HAS_FENV is not set
+-UCLIBC_HAS_LONG_DOUBLE_MATH=y
+ KERNEL_HEADERS="/usr/src/linux/include"
+-HAVE_DOT_CONFIG=y
+-
+-#
+-# General Library Settings
+-#
+-# HAVE_NO_PIC is not set
+-DOPIC=y
+-# ARCH_HAS_NO_SHARED is not set
+-# ARCH_HAS_NO_LDSO is not set
+-# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+-LDSO_LDD_SUPPORT=y
+ # LDSO_CACHE_SUPPORT is not set
+-LDSO_PRELOAD_ENV_SUPPORT=y
+-# LDSO_PRELOAD_FILE_SUPPORT is not set
+-# LDSO_STANDALONE_SUPPORT is not set
+-# LDSO_PRELINK_SUPPORT is not set
+ # UCLIBC_STATIC_LDCONFIG is not set
+ LDSO_RUNPATH=y
+-LDSO_SAFE_RUNPATH=y
+-LDSO_SEARCH_INTERP_PATH=y
+-LDSO_LD_LIBRARY_PATH=y
+-# LDSO_NO_CLEANUP is not set
+-UCLIBC_CTOR_DTOR=y
+-# LDSO_GNU_HASH_SUPPORT is not set
+-# HAS_NO_THREADS is not set
+ LINUXTHREADS_OLD=y
+-# LINUXTHREADS_NEW is not set
+-# UCLIBC_HAS_THREADS_NATIVE is not set
+-UCLIBC_HAS_THREADS=y
+-# PTHREADS_DEBUG_SUPPORT is not set
+-UCLIBC_HAS_SYSLOG=y
+-UCLIBC_HAS_LFS=y
+-# MALLOC is not set
+-# MALLOC_SIMPLE is not set
+-MALLOC_STANDARD=y
+ MALLOC_GLIBC_COMPAT=y
+ UCLIBC_HAS_OBSTACK=y
+-UCLIBC_DYNAMIC_ATEXIT=y
+-# COMPAT_ATEXIT is not set
++UCLIBC_HAS_UTMPX=y
++UCLIBC_HAS_UTMP=y
+ UCLIBC_SUSV2_LEGACY=y
+ UCLIBC_SUSV3_LEGACY=y
+ UCLIBC_HAS_CONTEXT_FUNCS=y
+-# UCLIBC_SUSV3_LEGACY_MACROS is not set
+ UCLIBC_SUSV4_LEGACY=y
+-# UCLIBC_STRICT_HEADERS is not set
+-# UCLIBC_HAS_STUBS is not set
+-UCLIBC_HAS_SHADOW=y
+ UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+-UCLIBC_HAS___PROGNAME=y
+-UCLIBC_HAS_PTY=y
+-ASSUME_DEVPTS=y
+-UNIX98PTY_ONLY=y
+ UCLIBC_HAS_GETPT=y
+ UCLIBC_HAS_LIBUTIL=y
+-UCLIBC_HAS_TM_EXTENSIONS=y
+-UCLIBC_HAS_TZ_CACHING=y
+-UCLIBC_HAS_TZ_FILE=y
+-UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
+-UCLIBC_FALLBACK_TO_ETC_LOCALTIME=y
+-
+-#
+-# Advanced Library Settings
+-#
+-UCLIBC_PWD_BUFFER_SIZE=256
+-UCLIBC_GRP_BUFFER_SIZE=256
+-
+-#
+-# Support various families of functions
+-#
+-UCLIBC_LINUX_MODULE_26=y
+-# UCLIBC_LINUX_MODULE_24 is not set
+-UCLIBC_LINUX_SPECIFIC=y
+-UCLIBC_HAS_GNU_ERROR=y
+-UCLIBC_BSD_SPECIFIC=y
+-UCLIBC_HAS_BSD_ERR=y
+ UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
+-# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
+-# UCLIBC_NTP_LEGACY is not set
+-# UCLIBC_SV4_DEPRECATED is not set
+-UCLIBC_HAS_REALTIME=y
+-UCLIBC_HAS_ADVANCED_REALTIME=y
+-UCLIBC_HAS_EPOLL=y
+-UCLIBC_HAS_XATTR=y
+-UCLIBC_HAS_PROFILING=y
+-UCLIBC_HAS_CRYPT_IMPL=y
+-# UCLIBC_HAS_SHA256_CRYPT_IMPL is not set
+-# UCLIBC_HAS_SHA512_CRYPT_IMPL is not set
+-UCLIBC_HAS_CRYPT=y
+-UCLIBC_HAS_NETWORK_SUPPORT=y
+-UCLIBC_HAS_SOCKET=y
+-UCLIBC_HAS_IPV4=y
+-# UCLIBC_HAS_IPV6 is not set
+-# UCLIBC_HAS_RPC is not set
+-# UCLIBC_HAS_FULL_RPC is not set
+-# UCLIBC_HAS_REENTRANT_RPC is not set
+ UCLIBC_USE_NETLINK=y
+ UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+-# UCLIBC_HAS_BSD_RES_CLOSE is not set
+-UCLIBC_HAS_COMPAT_RES_STATE=y
+-# UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
+ UCLIBC_HAS_RESOLVER_SUPPORT=y
+ UCLIBC_HAS_LIBRESOLV_STUB=y
+ UCLIBC_HAS_LIBNSL_STUB=y
+-
+-#
+-# String and Stdio Support
+-#
+-UCLIBC_HAS_STRING_GENERIC_OPT=y
+-UCLIBC_HAS_STRING_ARCH_OPT=y
+-UCLIBC_HAS_CTYPE_TABLES=y
+-UCLIBC_HAS_CTYPE_SIGNED=y
+-# UCLIBC_HAS_CTYPE_UNSAFE is not set
+ UCLIBC_HAS_CTYPE_CHECKED=y
+-# UCLIBC_HAS_CTYPE_ENFORCED is not set
+-# UCLIBC_HAS_WCHAR is not set
+-# UCLIBC_HAS_LOCALE is not set
+ UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+-# UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
+ UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+-# USE_OLD_VFPRINTF is not set
+-UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
+-UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
+-UCLIBC_HAS_STDIO_BUFSIZ_4096=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
+-UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
+-# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
+ # UCLIBC_HAS_STDIO_GETC_MACRO is not set
+ # UCLIBC_HAS_STDIO_PUTC_MACRO is not set
+-UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
+-# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
+ UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+-# UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE is not set
+ UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+ UCLIBC_HAS_PRINTF_M_SPEC=y
+-UCLIBC_HAS_ERRNO_MESSAGES=y
+-# UCLIBC_HAS_SYS_ERRLIST is not set
+-UCLIBC_HAS_SIGNUM_MESSAGES=y
+-# UCLIBC_HAS_SYS_SIGLIST is not set
+-UCLIBC_HAS_GNU_GETOPT=y
+-UCLIBC_HAS_GNU_GETSUBOPT=y
+-
+-#
+-# Big and Tall
+-#
+-UCLIBC_HAS_REGEX=y
+ # UCLIBC_HAS_REGEX_OLD is not set
+-UCLIBC_HAS_FNMATCH=y
+ # UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
+ UCLIBC_HAS_NFTW=y
+ UCLIBC_HAS_FTW=y
+-# UCLIBC_HAS_FTS is not set
+-UCLIBC_HAS_GLOB=y
+ UCLIBC_HAS_GNU_GLOB=y
+-UCLIBC_HAS_UTMP=y
+-UCLIBC_HAS_UTMPX=y
+-
+-#
+-# Library Installation Options
+-#
+ RUNTIME_PREFIX="/"
+ DEVEL_PREFIX="/usr/"
+-MULTILIB_DIR="lib"
+-HARDWIRED_ABSPATH=y
+-
+-#
+-# Security options
+-#
+-# UCLIBC_BUILD_PIE is not set
+-# UCLIBC_HAS_ARC4RANDOM is not set
+-# HAVE_NO_SSP is not set
+ UCLIBC_HAS_SSP=y
+-# UCLIBC_HAS_SSP_COMPAT is not set
+-# SSP_QUICK_CANARY is not set
+-PROPOLICE_BLOCK_ABRT=y
+-# PROPOLICE_BLOCK_SEGV is not set
+-# UCLIBC_BUILD_SSP is not set
+-UCLIBC_BUILD_RELRO=y
+ UCLIBC_BUILD_NOW=y
+-UCLIBC_BUILD_NOEXECSTACK=y
+-
+-#
+-# uClibc development/debugging options
+-#
+-CROSS_COMPILER_PREFIX=""
+-UCLIBC_EXTRA_CFLAGS=""
+-# DODEBUG is not set
+-# DODEBUG_PT is not set
+ # DOSTRIP is not set
+-# DOASSERTS is not set
+-# SUPPORT_LD_DEBUG is not set
+-# SUPPORT_LD_DEBUG_EARLY is not set
+-# UCLIBC_MALLOC_DEBUGGING is not set
+-# UCLIBC_HAS_BACKTRACE is not set
+-WARNINGS="-Wall"
+-# EXTRA_WARNINGS is not set
+-# DOMULTI is not set
+-# UCLIBC_MJN3_ONLY is not set
