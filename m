@@ -1,41 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] valgrind: install to staging
-Message-ID: <20150808105619.AE0A97FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] conntrack-tools: adjust
+	comment to match conditional
+Message-ID: <20150808105602.9158E7F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20bf3fd33ef93b3c6164f93c36ea24f913f9bfd6
+commit: http://git.buildroot.net/buildroot/commit/?id=5bcd317740f5601923370c555cb3c953a2e5e8af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is necessary for some packages depending on valgrind, such as
-libdrm which will fail with an error like this one:
+Commit 3afbc4f3 (conntrack-tools: uses dlopen(), not available on static
+builds) adjusted the dependencies for the comment, but forgot to update the
+comment itself.
 
-checking for VALGRIND... no
-checking whether to enable Valgrind support... configure: error:
-Valgrind support required but not present
-package/pkg-generic.mk:146: recipe for target
-'/br/output/build/libdrm-2.4.62/.stamp_configured' failed
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/valgrind/valgrind.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/conntrack-tools/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index cfce8da..f8f205e 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -11,6 +11,7 @@ VALGRIND_LICENSE = GPLv2 GFDLv1.2
- VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
- VALGRIND_CONF_OPTS = --disable-tls
- VALGRIND_AUTORECONF = YES
-+VALGRIND_INSTALL_STAGING = YES
+diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
+index 03e3ed9..87bf2d0 100644
+--- a/package/conntrack-tools/Config.in
++++ b/package/conntrack-tools/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_CONNTRACK_TOOLS
  
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
+ 	  http://www.netfilter.org/projects/conntrack-tools/
+ 
+-comment "conntrack-tools needs a toolchain w/ threads"
++comment "conntrack-tools needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC) || \
+ 		BR2_STATIC_LIBS
