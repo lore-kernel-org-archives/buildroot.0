@@ -1,44 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:14 -0000
-Subject: [Buildroot] [git commit branch/next] python-pyinotify: bump to 0.9.6
-Message-ID: <20150808105611.C6BA48030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual/br2-external: use
+	proper .Note sections
+Message-ID: <20150808105601.BEAE67FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6f3f3e6dd0887b8315e84795f7d2b2516c9d766
+commit: http://git.buildroot.net/buildroot/commit/?id=162290e1f383cc0aa95c43364fcd4888f2bfae4f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove hash file as the project doesn't provide manual tarballs
-on GitHub.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyinotify/python-pyinotify.hash |    2 --
- package/python-pyinotify/python-pyinotify.mk   |    2 +-
- 2 files changed, 1 insertions(+), 3 deletions(-)
+ docs/manual/customize-outside-br.txt |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyinotify/python-pyinotify.hash b/package/python-pyinotify/python-pyinotify.hash
-deleted file mode 100644
-index a51718d..0000000
---- a/package/python-pyinotify/python-pyinotify.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed:
--sha256  d22d94e5f1dfd19ff2f98b9bb9b31a869892652389b8f5c0a27c7de77550b1e4  python-pyinotify-0.9.5.tar.gz
-diff --git a/package/python-pyinotify/python-pyinotify.mk b/package/python-pyinotify/python-pyinotify.mk
-index e43dcd0..b4ea662 100644
---- a/package/python-pyinotify/python-pyinotify.mk
-+++ b/package/python-pyinotify/python-pyinotify.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+index 99a942c..9ad177d 100644
+--- a/docs/manual/customize-outside-br.txt
++++ b/docs/manual/customize-outside-br.txt
+@@ -25,7 +25,8 @@ there is no need to pass +BR2_EXTERNAL+ at every +make+ invocation. It
+ can however be changed at any time by passing a new value, and can be
+ removed by passing an empty value.
  
--PYTHON_PYINOTIFY_VERSION = 0.9.5
-+PYTHON_PYINOTIFY_VERSION = 0.9.6
- PYTHON_PYINOTIFY_SITE = $(call github,seb-m,pyinotify,$(PYTHON_PYINOTIFY_VERSION))
- PYTHON_PYINOTIFY_SETUP_TYPE = setuptools
- PYTHON_PYINOTIFY_LICENSE = MIT
+-*Note:* the +BR2_EXTERNAL+ path can be either an absolute or a relative path,
++.Note
++The +BR2_EXTERNAL+ path can be either an absolute or a relative path,
+ but if it's passed as a relative path, it is important to note that it
+ is interpreted relative to the main Buildroot source directory, *not*
+ to the Buildroot output directory.
+@@ -75,7 +76,10 @@ buildroot/ $ make BR2_EXTERNAL= xconfig
+    logic. Buildroot automatically includes +$(BR2_EXTERNAL)/Config.in+ to
+    make it appear in the top-level configuration menu, and includes
+    +$(BR2_EXTERNAL)/external.mk+ with the rest of the makefile logic.
+-   Providing those two files is mandatory, but they can be empty.
+++
++.Note
++Providing +Config.in+ and +external.mk+ is mandatory, but they can be
++   empty.
+ +
+ The main usage of this is to store package recipes. The recommended
+    way to do this is to write a +$(BR2_EXTERNAL)/Config.in+ file that
