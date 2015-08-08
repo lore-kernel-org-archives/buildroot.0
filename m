@@ -1,45 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] package/efl/expedite:
-	x-includes and x-libraries must be set for cross-compiling
-Message-ID: <20150808105555.A164F818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Makefile: Handle whitespace
+	when stripping .ko
+Message-ID: <20150808105555.D6E86818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=131c520da84824e7f682b26cfd916fea2147e49d
+commit: http://git.buildroot.net/buildroot/commit/?id=e4dde2536acfb72f0933cbcf6ac21f8d57ff40da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If those flags are not explicitly passed, the libecore configure
-script will include -I/usr/X11R6/include and -L/usr/X11R6/lib in the
-compile flags, which are obviously unsafe for cross-compilation.
+It is possible to end up with a path containing spaces if the kernel
+localversion contains spaces.
+Be it good practice or not, there are third party vendors which
+distribute kernel configuration files for reference platforms which have
+quoted strings containing whitespaces in the localversion.
 
-The fix is similar to 0d9d8984a9240a27f5ed2e15f1977ada67266906 and
-da50b6b61c4a566fd28888f5a3a6dcb06fe1b495.
+There was already a fix to handle paths with whitespaces or other
+special characters when running strip, which consists of using the find
+-print0 and xargs -0 pair of arguments, but the kernel module stripping
+wasn't included in the fix.
+This commit includes the same fix to the kernel module stripping line.
 
-Fixes:
-http://autobuild.buildroot.org/results/24b/24b578a28455409b7bcc0277abc6b478c51ae67f
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Erico Nunes <erico.nunes@datacom.ind.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/expedite/expedite.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
-index f0361bf..02a4ca0 100644
---- a/package/efl/expedite/expedite.mk
-+++ b/package/efl/expedite/expedite.mk
-@@ -11,4 +11,10 @@ EXPEDITE_LICENSE_FILES = COPYING
+diff --git a/Makefile b/Makefile
+index 282c7ea..b0e6915 100644
+--- a/Makefile
++++ b/Makefile
+@@ -562,8 +562,8 @@ endif
+ 	-rmdir $(TARGET_DIR)/usr/share 2>/dev/null
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+ 	if test -d $(TARGET_DIR)/lib/modules; then \
+-		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+-		xargs -r $(KSTRIPCMD); fi
++		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' -print0 | \
++		xargs -0 -r $(KSTRIPCMD); fi
  
- EXPEDITE_DEPENDENCIES = libevas libeina libeet
- 
-+ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
-+EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib
-+endif
-+
- $(eval $(autotools-package))
+ # See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+ # besides the one in which crash occurred; or SIGTRAP kills my program when
