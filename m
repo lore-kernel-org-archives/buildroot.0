@@ -1,44 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] git: bump to version 2.4.4
-Message-ID: <20150808105611.D78857F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tmux: bump to 2.0
+Message-ID: <20150808105611.AB12C8030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7fec23eccc9a84dddc45fc47149599d125b870f
+commit: http://git.buildroot.net/buildroot/commit/?id=3e7904ac7232c8daf241052c56078b8d7a49b389
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 2.4.4
-- Update hash file
+Add new location as tmux moved to GitHub.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Remove the patch as it was already merged upstream.
+Remove related AUTORECONF as well.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...01-Makefile.am-remove-unsafe-headers-path.patch |   35 --------------------
+ package/tmux/tmux.hash                             |    2 +-
+ package/tmux/tmux.mk                               |    7 +---
+ 3 files changed, 3 insertions(+), 41 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 8cc7be7..cb4ce13 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch b/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
+deleted file mode 100644
+index 4a20945..0000000
+--- a/package/tmux/0001-Makefile.am-remove-unsafe-headers-path.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 4095ee95141063ff3f91153e84bd029b019b8dad Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Fri, 26 Dec 2014 17:44:15 +0100
+-Subject: [PATCH] Makefile.am: remove unsafe headers path
+-
+-/usr/local/include is probably not needed and it's unsafe for
+-cross-compilation.
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index a9ad5b9..0109e5d 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -38,12 +38,12 @@ else
+- CFLAGS += -O2
+- endif
+- if IS_GCC4
+--CPPFLAGS += -iquote. -I/usr/local/include
+-+CPPFLAGS += -iquote.
+- if IS_DEBUG
+- CFLAGS += -Wno-pointer-sign
+- endif
+- else
+--CPPFLAGS += -I. -I- -I/usr/local/include
+-+CPPFLAGS += -I. -I-
+- endif
+- endif
+- 
+--- 
+-1.9.3
+-
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index eb9f4fd..ab7c4d3 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  18eb8462026a55ab34a657282e894bdaad331ea59bfebeba5eb45b27b58cf825  git-2.3.2.tar.xz
-+sha256  f873b15d42281474fcba5921295d01e48a3cd3cddcbeb3d60176bf30f5f30260  git-2.4.4.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 845c24e..50e5d7b 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256  c5e3b22b901cf109b20dab54a4a651f0471abd1f79f6039d79b250d21c2733f5  tmux-1.9a.tar.gz
++sha256  795f4b4446b0ea968b9201c25e8c1ef8a6ade710ebca4657dd879c35916ad362  tmux-2.0.tar.gz
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 9c8921e..c9abbf7 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,13 +4,10 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.3.2
-+GIT_VERSION = 2.4.4
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+-TMUX_VERSION = 1.9a
+-TMUX_SITE = http://downloads.sourceforge.net/tmux
++TMUX_VERSION = 2.0
++TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = README
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+ 
+-# we patch Makefile.am
+-TMUX_AUTORECONF = YES
+-
+ $(eval $(autotools-package))
