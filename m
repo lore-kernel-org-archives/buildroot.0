@@ -1,295 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] binutils: fix xtensa ld bug
-	triggered by --gc-sections
-Message-ID: <20150808105558.7AE2C818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libupnpp: fix static linking
+	issue with libcurl
+Message-ID: <20150808105557.555A6818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=384c919321a53bdb74539cd1c8e0f098e49e8f8e
+commit: http://git.buildroot.net/buildroot/commit/?id=f7638ca23229bc9dfe3696f562afc63bda6bd1f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-elf_xtensa_gc_sweep_hook doesn't correctly unreference symbols that were
-made local, that results in link failure with the following message:
-
-  BFD (GNU Binutils) 2.24 internal error, aborting at elf32-xtensa.c line
-  3372 in elf_xtensa_finish_dynamic_sections
-
-elf_xtensa_gc_sweep_hook determines symbol reference type (PLT or GOT) by
-relocation type. Relocation types are not changed when symbol becomes
-local, but its PLT references are added to GOT references and
-plt.refcount is set to 0. Such symbol cannot be unreferences in the
-elf_xtensa_gc_sweep_hook and its extra references make calculated GOT
-relocations section size not match number of GOT relocations.
-
-Fix it by treating PLT reference as GOT reference when plt.refcount is
-not positive.
-
 Fixes:
-  http://autobuild.buildroot.net/results/3e2e24f697e26c93d4d95782b1cb7799fa620a7a/
-  http://autobuild.buildroot.org/results/97d4c96d6f6cdc1ed4007456f4ab70be9dfa41b5/
+http://autobuild.buildroot.net/results/f38/f383bf4d7572a7dd59d382cd06a9baeb37e9161c/
+http://autobuild.buildroot.net/results/d93/d934871d1b192706cd9163715c5ebcd96deff2b8/
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Libcurl optionally links to a number of libraries that have to be taken into
+consideration when linking statically.
+
+Use pkg-config to get the correct libcurl link line, and also use it for
+libupnp instead of the hardcoded list.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...localized-symbol-refcounting-with-gc-sect.patch |   57 ++++++++++++++++++++
- ...localized-symbol-refcounting-with-gc-sect.patch |   57 ++++++++++++++++++++
- ...localized-symbol-refcounting-with-gc-sect.patch |   57 ++++++++++++++++++++
- ...localized-symbol-refcounting-with-gc-sect.patch |   57 ++++++++++++++++++++
- 4 files changed, 228 insertions(+), 0 deletions(-)
+ package/libupnpp/libupnpp.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch b/package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-new file mode 100644
-index 0000000..9ad6b3b
---- /dev/null
-+++ b/package/binutils/2.22/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-@@ -0,0 +1,57 @@
-+From 8ec76b16f62d1bf386fb2c39af5f66c3afddc5cb Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 14 May 2015 05:22:55 +0300
-+Subject: [PATCH] xtensa: fix localized symbol refcounting with --gc-sections
-+
-+elf_xtensa_gc_sweep_hook doesn't correctly unreference symbols that were
-+made local, that results in link failure with the following message:
-+
-+  BFD (GNU Binutils) 2.24 internal error, aborting at elf32-xtensa.c line
-+  3372 in elf_xtensa_finish_dynamic_sections
-+
-+elf_xtensa_gc_sweep_hook determines symbol reference type (PLT or GOT) by
-+relocation type. Relocation types are not changed when symbol becomes
-+local, but its PLT references are added to GOT references and
-+plt.refcount is set to 0. Such symbol cannot be unreferences in the
-+elf_xtensa_gc_sweep_hook and its extra references make calculated GOT
-+relocations section size not match number of GOT relocations.
-+
-+Fix it by treating PLT reference as GOT reference when plt.refcount is
-+not positive.
-+
-+2015-05-14  Max Filippov  <jcmvbkbc@gmail.com>
-+bfd/
-+	* elf32-xtensa.c (elf_xtensa_gc_sweep_hook): Treat PLT reference
-+	as GOT reference when plt.refcount is not positive.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: e6c9a083ec5ae7a45bd71682b26aae1939849388
-+Changes to ChangeLog are dropped.
-+
-+ bfd/elf32-xtensa.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 53af1c6..2523670 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -1360,10 +1360,14 @@ elf_xtensa_gc_sweep_hook (bfd *abfd,
-+ 	{
-+ 	  if (is_plt)
-+ 	    {
-++	      /* If the symbol has been localized its plt.refcount got moved
-++	         to got.refcount.  Handle it as GOT.  */
-+ 	      if (h->plt.refcount > 0)
-+ 		h->plt.refcount--;
-++	      else
-++		is_got = TRUE;
-+ 	    }
-+-	  else if (is_got)
-++	  if (is_got)
-+ 	    {
-+ 	      if (h->got.refcount > 0)
-+ 		h->got.refcount--;
-+-- 
-+1.8.1.4
-+
-diff --git a/package/binutils/2.23.2/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch b/package/binutils/2.23.2/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-new file mode 100644
-index 0000000..9ad6b3b
---- /dev/null
-+++ b/package/binutils/2.23.2/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-@@ -0,0 +1,57 @@
-+From 8ec76b16f62d1bf386fb2c39af5f66c3afddc5cb Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 14 May 2015 05:22:55 +0300
-+Subject: [PATCH] xtensa: fix localized symbol refcounting with --gc-sections
-+
-+elf_xtensa_gc_sweep_hook doesn't correctly unreference symbols that were
-+made local, that results in link failure with the following message:
-+
-+  BFD (GNU Binutils) 2.24 internal error, aborting at elf32-xtensa.c line
-+  3372 in elf_xtensa_finish_dynamic_sections
-+
-+elf_xtensa_gc_sweep_hook determines symbol reference type (PLT or GOT) by
-+relocation type. Relocation types are not changed when symbol becomes
-+local, but its PLT references are added to GOT references and
-+plt.refcount is set to 0. Such symbol cannot be unreferences in the
-+elf_xtensa_gc_sweep_hook and its extra references make calculated GOT
-+relocations section size not match number of GOT relocations.
-+
-+Fix it by treating PLT reference as GOT reference when plt.refcount is
-+not positive.
-+
-+2015-05-14  Max Filippov  <jcmvbkbc@gmail.com>
-+bfd/
-+	* elf32-xtensa.c (elf_xtensa_gc_sweep_hook): Treat PLT reference
-+	as GOT reference when plt.refcount is not positive.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: e6c9a083ec5ae7a45bd71682b26aae1939849388
-+Changes to ChangeLog are dropped.
-+
-+ bfd/elf32-xtensa.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 53af1c6..2523670 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -1360,10 +1360,14 @@ elf_xtensa_gc_sweep_hook (bfd *abfd,
-+ 	{
-+ 	  if (is_plt)
-+ 	    {
-++	      /* If the symbol has been localized its plt.refcount got moved
-++	         to got.refcount.  Handle it as GOT.  */
-+ 	      if (h->plt.refcount > 0)
-+ 		h->plt.refcount--;
-++	      else
-++		is_got = TRUE;
-+ 	    }
-+-	  else if (is_got)
-++	  if (is_got)
-+ 	    {
-+ 	      if (h->got.refcount > 0)
-+ 		h->got.refcount--;
-+-- 
-+1.8.1.4
-+
-diff --git a/package/binutils/2.24/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch b/package/binutils/2.24/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-new file mode 100644
-index 0000000..9ad6b3b
---- /dev/null
-+++ b/package/binutils/2.24/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-@@ -0,0 +1,57 @@
-+From 8ec76b16f62d1bf386fb2c39af5f66c3afddc5cb Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 14 May 2015 05:22:55 +0300
-+Subject: [PATCH] xtensa: fix localized symbol refcounting with --gc-sections
-+
-+elf_xtensa_gc_sweep_hook doesn't correctly unreference symbols that were
-+made local, that results in link failure with the following message:
-+
-+  BFD (GNU Binutils) 2.24 internal error, aborting at elf32-xtensa.c line
-+  3372 in elf_xtensa_finish_dynamic_sections
-+
-+elf_xtensa_gc_sweep_hook determines symbol reference type (PLT or GOT) by
-+relocation type. Relocation types are not changed when symbol becomes
-+local, but its PLT references are added to GOT references and
-+plt.refcount is set to 0. Such symbol cannot be unreferences in the
-+elf_xtensa_gc_sweep_hook and its extra references make calculated GOT
-+relocations section size not match number of GOT relocations.
-+
-+Fix it by treating PLT reference as GOT reference when plt.refcount is
-+not positive.
-+
-+2015-05-14  Max Filippov  <jcmvbkbc@gmail.com>
-+bfd/
-+	* elf32-xtensa.c (elf_xtensa_gc_sweep_hook): Treat PLT reference
-+	as GOT reference when plt.refcount is not positive.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: e6c9a083ec5ae7a45bd71682b26aae1939849388
-+Changes to ChangeLog are dropped.
-+
-+ bfd/elf32-xtensa.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 53af1c6..2523670 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -1360,10 +1360,14 @@ elf_xtensa_gc_sweep_hook (bfd *abfd,
-+ 	{
-+ 	  if (is_plt)
-+ 	    {
-++	      /* If the symbol has been localized its plt.refcount got moved
-++	         to got.refcount.  Handle it as GOT.  */
-+ 	      if (h->plt.refcount > 0)
-+ 		h->plt.refcount--;
-++	      else
-++		is_got = TRUE;
-+ 	    }
-+-	  else if (is_got)
-++	  if (is_got)
-+ 	    {
-+ 	      if (h->got.refcount > 0)
-+ 		h->got.refcount--;
-+-- 
-+1.8.1.4
-+
-diff --git a/package/binutils/2.25/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch b/package/binutils/2.25/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-new file mode 100644
-index 0000000..9ad6b3b
---- /dev/null
-+++ b/package/binutils/2.25/911-xtensa-fix-localized-symbol-refcounting-with-gc-sect.patch
-@@ -0,0 +1,57 @@
-+From 8ec76b16f62d1bf386fb2c39af5f66c3afddc5cb Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 14 May 2015 05:22:55 +0300
-+Subject: [PATCH] xtensa: fix localized symbol refcounting with --gc-sections
-+
-+elf_xtensa_gc_sweep_hook doesn't correctly unreference symbols that were
-+made local, that results in link failure with the following message:
-+
-+  BFD (GNU Binutils) 2.24 internal error, aborting at elf32-xtensa.c line
-+  3372 in elf_xtensa_finish_dynamic_sections
-+
-+elf_xtensa_gc_sweep_hook determines symbol reference type (PLT or GOT) by
-+relocation type. Relocation types are not changed when symbol becomes
-+local, but its PLT references are added to GOT references and
-+plt.refcount is set to 0. Such symbol cannot be unreferences in the
-+elf_xtensa_gc_sweep_hook and its extra references make calculated GOT
-+relocations section size not match number of GOT relocations.
-+
-+Fix it by treating PLT reference as GOT reference when plt.refcount is
-+not positive.
-+
-+2015-05-14  Max Filippov  <jcmvbkbc@gmail.com>
-+bfd/
-+	* elf32-xtensa.c (elf_xtensa_gc_sweep_hook): Treat PLT reference
-+	as GOT reference when plt.refcount is not positive.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+Backported from: e6c9a083ec5ae7a45bd71682b26aae1939849388
-+Changes to ChangeLog are dropped.
-+
-+ bfd/elf32-xtensa.c | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
-+index 53af1c6..2523670 100644
-+--- a/bfd/elf32-xtensa.c
-++++ b/bfd/elf32-xtensa.c
-+@@ -1360,10 +1360,14 @@ elf_xtensa_gc_sweep_hook (bfd *abfd,
-+ 	{
-+ 	  if (is_plt)
-+ 	    {
-++	      /* If the symbol has been localized its plt.refcount got moved
-++	         to got.refcount.  Handle it as GOT.  */
-+ 	      if (h->plt.refcount > 0)
-+ 		h->plt.refcount--;
-++	      else
-++		is_got = TRUE;
-+ 	    }
-+-	  else if (is_got)
-++	  if (is_got)
-+ 	    {
-+ 	      if (h->got.refcount > 0)
-+ 		h->got.refcount--;
-+-- 
-+1.8.1.4
-+
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 853a724..defc16a 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -12,9 +12,11 @@ LIBUPNPP_INSTALL_STAGING = YES
+ LIBUPNPP_DEPENDENCIES = expat libcurl libupnp
+ 
+ # configure script fails to link against the dependencies of libupnp
+-# causing upnp detection to fail when statically linking
++# and libcurl causing detection to fail when statically linking
+ ifeq ($(BR2_STATIC_LIBS),y)
+-LIBUPNPP_CONF_ENV += LIBS='-lthreadutil -lixml -pthread'
++LIBUPNPP_DEPENDENCIES += host-pkgconf
++LIBUPNPP_CONF_ENV += \
++	LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs libupnp libcurl)'
+ endif
+ 
+ $(eval $(autotools-package))
