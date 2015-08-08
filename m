@@ -1,103 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] openssl: always build apps
-Message-ID: <20150808105622.DF5CA80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ca-certificates: bump
+	version to 20150426
+Message-ID: <20150808105605.C56257FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7bc0b96233900a4f36cbb333c12ad64b03f8db9
+commit: http://git.buildroot.net/buildroot/commit/?id=09071d4a039ef332bfaa148e1f210a18a8d5ee82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that building the openssl binary without MMU is supported, the only
-reason left for not building apps if the openssl binary is disabled is
-to save build time. Moreover, the commit
-720893b62510438237b9923d744dd079ddb4f67d "openssl: disable apps for
-NOMMU", which added this behavior, had a side effect: the scripts from
-apps (CA.pl, CA.sh and tsget) and the default configuration file
-(openssl.cnf) were no longer installed, which is not advertized by the
-BR2_PACKAGE_OPENSSL_BIN option. CA.pl and CA.sh use the openssl binary,
-so not installing them without the latter makes sense. But tsget does
-not use the openssl binary, and openssl.cnf can be used by libcrypto, so
-it is preferable to handle BR2_PACKAGE_OPENSSL_BIN like before the
-commit mentioned above, i.e. to always build and install apps and to
-just remove the openssl binary afterwards if needed.
-
-This is what the current commit does, but installing only the helper
-scripts having their dependencies (perl or the openssl binary)
-satisfied. The help text is updated accordingly.
-
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/Config.in  |    7 +++++--
- package/openssl/openssl.mk |   23 +++++++++++++++--------
- 2 files changed, 20 insertions(+), 10 deletions(-)
+ package/ca-certificates/ca-certificates.hash |    4 ++--
+ package/ca-certificates/ca-certificates.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index d147c07..0785253 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -9,14 +9,17 @@ config BR2_PACKAGE_OPENSSL
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 0165cb5..06120f5 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   6013ce6a3bf13e73a7e1feddcd17f5b2c09e5bd3                         ca-certificates_20141019.tar.xz
+-sha256 684902d3f4e9ad27829f4af0d9d2d588afed03667997579b9c2be86fcd1eb73a ca-certificates_20141019.tar.xz
++sha1   c2d7ae81e28ff1f8a6b9ef7602c4e756ff08503c                         ca-certificates_20150426.tar.xz
++sha256 37dbaa93ed64cc4ae93ac295f9248fbc741bd51376438cfb1257f17efab5494f ca-certificates_20150426.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 8fe26c9..b64120e 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	  http://www.openssl.org/
- 
-+	  Note: Some helper scripts need perl.
-+
- if BR2_PACKAGE_OPENSSL
- 
- config BR2_PACKAGE_OPENSSL_BIN
- 	bool "openssl binary"
- 	depends on !BR2_STATIC_LIBS
- 	help
--	  Install the openssl binary to the target file system. This is a
--	  command line tool for doing various crypthographic stuff.
-+	  Install the openssl binary and the associated helper scripts to the
-+	  target file system. This is a command line tool for doing various
-+	  cryptographic stuff.
- 
- comment "openssl binary needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 34a9830..4068cf1 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -14,14 +14,6 @@ HOST_OPENSSL_DEPENDENCIES = host-zlib
- OPENSSL_TARGET_ARCH = generic32
- OPENSSL_CFLAGS = $(TARGET_CFLAGS)
- 
--ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
--define OPENSSL_DISABLE_APPS
--	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
--	$(SED) '/^DIRS=/ s/apps//' $(@D)/Makefile.org
--endef
--OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
--endif
--
- ifeq ($(BR2_USE_MMU),)
- OPENSSL_CFLAGS += -DHAVE_FORK=0
- endif
-@@ -140,6 +132,21 @@ endef
- OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS_SHARED
- endif
- 
-+ifeq ($(BR2_PACKAGE_PERL),)
-+define OPENSSL_REMOVE_PERL_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.pl,tsget}
-+endef
-+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_PERL_SCRIPTS
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL_BIN),)
-+define OPENSSL_REMOVE_BIN
-+	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
-+	$(RM) -f $(TARGET_DIR)/etc/ssl/misc/{CA.*,c_*}
-+endef
-+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_REMOVE_BIN
-+endif
-+
- ifneq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
- define OPENSSL_REMOVE_OPENSSL_ENGINES
- 	rm -rf $(TARGET_DIR)/usr/lib/engines
+-CA_CERTIFICATES_VERSION = 20141019
++CA_CERTIFICATES_VERSION = 20150426
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20150528T221654Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
