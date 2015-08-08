@@ -1,48 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] duma: not available for static
-	only builds
-Message-ID: <20150808105559.247987FDC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gptfdisk: propagate
+	ncurses reverse dependency
+Message-ID: <20150808105602.0B2AC81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=648e791768ca0937b9b85d5e5650e4d4e000b960
+commit: http://git.buildroot.net/buildroot/commit/?id=a4a7aeed539631a91cae2c00dec4d20ccc6dda31
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+gptfdisk cgdisk select nucurses wchar support which is disabled
+on bfin with FLAT binary format.
+
+Add the ncurses's reverse dependency to gptfdisk.
+
 Fixes:
+http://autobuild.buildroot.net/results/ce3/ce35c072f0b7c3a7a1918cb865a2eecbba8a1b23/
 
-  http://autobuild.buildroot.net/results/ccfc79586516a6ebb05badfad258aad0b6b9d2a2/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/duma/Config.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ package/gptfdisk/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/duma/Config.in b/package/duma/Config.in
-index 7679e64..b1f55fa 100644
---- a/package/duma/Config.in
-+++ b/package/duma/Config.in
-@@ -6,6 +6,9 @@ config BR2_PACKAGE_DUMA
- 	# allocations. Non-MMU platforms cannot perform such
- 	# things.
- 	depends on BR2_USE_MMU
-+	# duma works using LD_PRELOAD, so it always needs to build a
-+	# shared library
-+	depends on !BR2_STATIC_LIBS
+diff --git a/package/gptfdisk/Config.in b/package/gptfdisk/Config.in
+index 61692f6..befdf77 100644
+--- a/package/gptfdisk/Config.in
++++ b/package/gptfdisk/Config.in
+@@ -38,6 +38,7 @@ config BR2_PACKAGE_GPTFDISK_CGDISK
+ 	bool "ncurses cgdisk"
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_NCURSES_WCHAR # needed because of UTF-16
++	depends on !(BR2_bfin && BR2_BINFMT_FLAT) # ncurses wchar support
  	help
- 	  D.U.M.A. - Detect Unintended Memory Access. A fork of the
- 	  Electric Fence library. Detects buffer overflow and
-@@ -20,6 +23,7 @@ config BR2_PACKAGE_DUMA_NO_LEAKDETECTION
- 
- endif # BR2_PACKAGE_DUMA
- 
--comment "duma needs a toolchain w/ C++, threads"
-+comment "duma needs a toolchain w/ C++, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
+ 	  Install the ncurses-based GUID partition table (GPT)
+ 	  manipulator /usr/sbin/cgdisk.
