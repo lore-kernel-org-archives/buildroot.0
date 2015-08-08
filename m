@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] sqlite: bump to version
-	3.8.10.2
-Message-ID: <20150808105603.1F4E07FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libpcap: bump to version 1.7.3
+Message-ID: <20150808105602.D95EE81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0c6a2f866e428e5de3e04f6edcfd78304e0d742
+commit: http://git.buildroot.net/buildroot/commit/?id=c452f2b1fcfe11fa64e29ea9669e742fe2cbe94a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash |    2 +-
- package/sqlite/sqlite.mk   |    2 +-
+ package/libpcap/libpcap.hash |    2 +-
+ package/libpcap/libpcap.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index d524dbe..85e9709 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index 967f2dd..eea87d9 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
 @@ -1,2 +1,2 @@
- # From http://www.sqlite.org/download.html
--sha1	7e92b4f78d4648fb2a97a4dc721490cc08653a0b	sqlite-autoconf-3081000.tar.gz
-+sha1	c2f2c17d3dc4c4e179d35cc04e4420636d48a152	sqlite-autoconf-3081002.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index b2283f0..9aac8e6 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+ # Locally calculated after checking pgp signature
+-sha256	1a4abc1f268b68f97e69a497f53695c9acc7a13f1d522a4d940dea276e6698ae	libpcap-1.7.2.tar.gz
++sha256	dd9f85213dc8e948068405b55dd20f8b32e3083e9e0e186f833bd0372e559e2f	libpcap-1.7.3.tar.gz
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 68d6614..eb64641 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3081000
-+SQLITE_VERSION = 3081002
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2015
- SQLITE_LICENSE = Public domain
+-LIBPCAP_VERSION = 1.7.2
++LIBPCAP_VERSION = 1.7.3
+ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
