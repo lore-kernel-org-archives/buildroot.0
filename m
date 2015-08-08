@@ -1,61 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:56 -0000
-Subject: [Buildroot] [git commit branch/next] docs/manual: add list of
-	instrumentation steps
-Message-ID: <20150808105555.2472181801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] expedite: fix dependencies
+	comment logic
+Message-ID: <20150808105555.73DC1818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8548238e95491b98c2b6565c9bf31ee07cae13f3
+commit: http://git.buildroot.net/buildroot/commit/?id=4ec088dceccee0c090fe77b53e62d415b738b8ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The names of steps are not obvious, so add this list to the manual.
-
-Small formatting fix at the same time.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/debugging-buildroot.txt |   17 ++++++++++++++---
- 1 files changed, 14 insertions(+), 3 deletions(-)
+ package/efl/expedite/Config.in |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
-index b97f633..f575fc4 100644
---- a/docs/manual/debugging-buildroot.txt
-+++ b/docs/manual/debugging-buildroot.txt
-@@ -12,8 +12,8 @@ space-separated list, you want called before and after each step. The
- scripts are called in sequence, with three parameters:
+diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
+index ddbf020..1e12108 100644
+--- a/package/efl/expedite/Config.in
++++ b/package/efl/expedite/Config.in
+@@ -12,5 +12,4 @@ config BR2_PACKAGE_EXPEDITE
+ 	  reproduce real world usage cases.
  
-   - +start+ or +end+ to denote the start (resp. the end) of a step;
--  - the name of the step about to be started, or which just ended.
--  - the name of the package
-+  - the name of the step about to be started, or which just ended;
-+  - the name of the package.
- 
- For example :
- 
-@@ -21,7 +21,18 @@ For example :
- make BR2_INSTRUMENTATION_SCRIPTS="/path/to/my/script1 /path/to/my/script2"
- ----
- 
--That script has access to the following variables:
-+The list of steps is:
-+
-+  - +extract+
-+  - +patch+
-+  - +configure+
-+  - +build+
-+  - +install-host+, when a host-package is installed in +$(HOST_DIR)+
-+  - +install-target+, when a target-package is installed in +$(TARGET_DIR)+
-+  - +install-staging+, when a target-package is installed in +$(STAGING_DIR)+
-+  - +install-image+, when a target-package installs files in +$(BINARIES_DIR)+
-+
-+The script has access to the following variables:
- 
-   - +BR2_CONFIG+: the path to the Buildroot .config file
-   - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+ comment "expedite needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
