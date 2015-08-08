@@ -1,26 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:04 -0000
-Subject: [Buildroot] [git commit branch/next] libcap-ng: add hash file
-Message-ID: <20150808105635.423FB7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libmemcached: disable
+	documentation
+Message-ID: <20150808105633.E59697FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10c143561e7d0cc3551e59225a634eaa89a112aa
+commit: http://git.buildroot.net/buildroot/commit/?id=5eb5f2710c2451d7e35dd600e6ced835efb9dda5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcap-ng/libcap-ng.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+libmemcached fail to build the documentation/man due to
+an python sphinx error.
 
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../libmemcached/0004-disable-doc-and-man.patch    |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
+
+diff --git a/package/libmemcached/0004-disable-doc-and-man.patch b/package/libmemcached/0004-disable-doc-and-man.patch
 new file mode 100644
-index 0000000..d8dde23
+index 0000000..9605095
 --- /dev/null
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	48a2083276f9820cb92dcb05d001b30733bcbf48c14c230303cac3cd08b45b6b	libcap-ng-0.7.4.tar.gz
++++ b/package/libmemcached/0004-disable-doc-and-man.patch
+@@ -0,0 +1,37 @@
++From 6c01bd3562cc18fbafdf950bbeb73a399c1adcdd Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Tue, 12 May 2015 00:00:02 +0200
++Subject: [PATCH] disable doc and man
++
++WARNING: master file /home/naourr/git/buildroot/test/libmemcached-bfin/build/libmemcached-1.0.18/docs/index.rst not found
++
++Exception occurred:
++  File "/usr/lib/python2.7/site-packages/sphinx/environment.py", line 1213, in get_doctree
++    f = open(doctree_filename, 'rb')
++IOError: [Errno 2] No such file or directory: '/home/naourr/buildroot-test/test/libmemcached-bfin/build/libmemcached-1.0.18/man/.doctrees/hashkit_create.doctree'
++The full traceback has been saved in /tmp/sphinx-err-JCIsnB.log, if you want to report the issue to the developers.
++Please also report this if it was a user error, so that a better error message can be provided next time.
++Either send bugs to the mailing list at <http://groups.google.com/group/sphinx-dev/>,
++or report them in the tracker at <http://bitbucket.org/birkenfeld/sphinx/issues/>. Thanks!
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ Makefile.am | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 7f44102..cb7d058 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -55,8 +55,6 @@ endif
++ include libmemcachedutil-1.0/include.am
++ 
++ include clients/include.am
++-include docs/include.am
++-include man/include.am
++ 
++ if BUILD_LIBMEMCACHED_PROTOCOL
++ include example/include.am
++-- 
++1.9.3
++
