@@ -1,38 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:57:46 -0000
-Subject: [Buildroot] [git commit branch/next] package/perf: if numactl
-	(libnuma) is enabled, depend on it
-Message-ID: <20150808105633.382E27FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:57:47 -0000
+Subject: [Buildroot] [git commit branch/next] graph-depends: Strip skeleton
+	from dependency
+Message-ID: <20150808105633.1937980414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1bc36855ca5efbca00035d3f157b0dd51e28687d
+commit: http://git.buildroot.net/buildroot/commit/?id=f53d69614e58661877de74131f574e7f56226b45
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Steven Noonan <steven@uplinklabs.net>
-[Romain:
-  - fix coding style]
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+skeleton being a mandatory dependency, we don't want all our packages to
+have a link back to that node, the graph would be awful.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perf/perf.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ support/scripts/graph-depends |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index dee05c3..9fdce95 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -36,6 +36,10 @@ ifeq ($(BR2_PACKAGE_SLANG),y)
- PERF_DEPENDENCIES += slang
- endif
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index c26e1e0..5f77038 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -271,16 +271,17 @@ def remove_transitive_deps(pkg,deps):
+             new_d.append(d[i])
+     return new_d
  
-+ifeq ($(BR2_PACKAGE_NUMACTL),y)
-+PERF_DEPENDENCIES += numactl
-+endif
-+
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- PERF_DEPENDENCIES += elfutils
- else
+-# This function removes the dependency on the 'toolchain' package
+-def remove_toolchain_deps(pkg,deps):
+-    return [p for p in deps[pkg] if not p == 'toolchain']
++# This function removes the dependency on some 'mandatory' package, like the
++# 'toolchain' package, or the 'skeleton' package
++def remove_mandatory_deps(pkg,deps):
++    return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
+ 
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+ def remove_extra_deps(deps):
+     for pkg in list(deps.keys()):
+         if not pkg == 'all':
+-            deps[pkg] = remove_toolchain_deps(pkg,deps)
++            deps[pkg] = remove_mandatory_deps(pkg,deps)
+     for pkg in list(deps.keys()):
+         if not transitive or pkg == 'all':
+             deps[pkg] = remove_transitive_deps(pkg,deps)
