@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] czmq: unbreak static linking
-Message-ID: <20150808105556.872E9818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fbterm: fix linking issue when
+	static linking and a toolchain with threads
+Message-ID: <20150808105556.5734981801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa5254f1a2bc0ea3181d51990c18681b3071b9db
+commit: http://git.buildroot.net/buildroot/commit/?id=1951143a366920e33c6fe487c2d96272510e2cae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes:
-http://autobuild.buildroot.net/results/faf/faf0bb00fccb1350afaef55f6cf14c11a5f5dc3c/
-http://autobuild.buildroot.net/results/8d2/8d279baa4c8bffbb01f897119092c7b736942df4/
-http://autobuild.buildroot.net/results/4d3/4d3dea604da9a5a1e7fe20548813f8de474ae33f/
-http://autobuild.buildroot.net/results/fd6/fd602617839817352763e51754553960b7f795ac/
+http://autobuild.buildroot.net/results/899/899eb7e36dc31b7dcb51c0dd23d91965111d22c4/
+http://autobuild.buildroot.net/results/43a/43a34d8b64f536caa579709508bb5e00633ba6e7/
+http://autobuild.buildroot.net/results/f34/f343d015b127f29d614e7ea38b173d3a5c270d84/
+http://autobuild.buildroot.net/results/da8/da88f40dfc51aea122c146e5bfee19b031cfaab6/
 
 And many more.
 
-Zeromq uses C++, but czmq forgets to explicitly link with libstdc++
-(or use g++ to link), breaking static linking.
+Fontconfig uses pthreads if available, but fbterm forgets to link with it
+breaking static builds.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/czmq/czmq.mk |    6 ++++++
+ package/fbterm/fbterm.mk |    6 ++++++
  1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index d25bf01..789e700 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -18,6 +18,12 @@ CZMQ_LICENSE_FILES = LICENSE
- # host-python, so disable asciidoc entirely.
- CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
+diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
+index 7e9d324..d78d6b7 100644
+--- a/package/fbterm/fbterm.mk
++++ b/package/fbterm/fbterm.mk
+@@ -10,4 +10,10 @@ FBTERM_LICENSE = GPLv2+
+ FBTERM_LICENSE_FILES = COPYING
+ FBTERM_DEPENDENCIES = fontconfig liberation
  
-+# zeromq uses C++, but czmq forgets to explicitly link with libstdc++
-+# (or use g++ to link), breaking static linking.
-+ifeq ($(BR2_STATIC_LIBS),y)
-+CZMQ_CONF_ENV += LIBS='-lstdc++'
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# fontconfig uses pthreads if available, but fbterm forgets to link
++# with it breaking static builds
++FBTERM_CONF_ENV += LIBS='-lpthread'
 +endif
 +
- define CZMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
- endef
+ $(eval $(autotools-package))
