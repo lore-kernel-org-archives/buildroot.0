@@ -1,109 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] fs/iso9660: add isolinux
-	support
-Message-ID: <20150808105610.898867F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/protobuf: Update site
+	url
+Message-ID: <20150808105600.8F21E7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9ac784ee68057715ce2f61ad8156228b4e0ddf4
+commit: http://git.buildroot.net/buildroot/commit/?id=6f68dca626a8273f0b704bbcea512dc9f5aa9960
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-After all the preparation commits, this commit finally adds the
-iso9660 support itself. Besides adding a new Config.in entry, a little
-bit of .mk code and the isolinux.cfg default configuration, not much
-is needed.
+Package moved to github:
+https://developers.google.com/protocol-buffers/docs/downloads
+"Our old Google Code repositiory is: https://code.google.com/p/protobuf/.
+ We moved to github on Aug 26, 2014 [...]"
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/iso9660/Config.in    |   20 ++++++++++++++------
- fs/iso9660/iso9660.mk   |   11 +++++++++++
- fs/iso9660/isolinux.cfg |    5 +++++
- 3 files changed, 30 insertions(+), 6 deletions(-)
+ package/protobuf/Config.in   |    2 +-
+ package/protobuf/protobuf.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index cd7b175..97925b9 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -2,7 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
- 	bool "iso image"
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_LINUX_KERNEL
--	depends on BR2_TARGET_GRUB
-+	depends on BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX
- 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
- 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
- 	help
-@@ -29,15 +29,22 @@ config BR2_TARGET_ROOTFS_ISO9660_GRUB
- 	depends on BR2_TARGET_GRUB
- 	select BR2_TARGET_GRUB_FS_ISO9660
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 6015b13..bbb927f 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_PROTOBUF
+ 	  Protocol buffers are Google's language-neutral, platform-neutral,
+ 	  extensible mechanism for serializing structured data.
  
-+config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
-+	bool "isolinux"
-+	depends on BR2_TARGET_SYSLINUX_ISOLINUX
-+
- endchoice
+-	  http://code.google.com/p/protobuf/
++	  https://developers.google.com/protocol-buffers
  
- config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
- 	string "Boot menu.lst file"
- 	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
-+	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
- 	help
--	  Use this option to provide a custom Grub menu.lst file. Note
--	  that the strings __KERNEL_PATH__ and __INITRD_PATH__ will
--	  automatically be replaced by the path to the kernel and
-+	  Use this option to provide a custom bootloader configuration
-+	  file (menu.lst for Grub, isolinux.cfg for isolinux).
-+
-+	  Note that the strings __KERNEL_PATH__ and __INITRD_PATH__
-+	  will automatically be replaced by the path to the kernel and
- 	  initrd images respectively.
+ comment "protobuf needs a toolchain w/ C++, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 9043f98..b426873 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_ROOTFS_ISO9660_INITRD
-@@ -53,6 +60,7 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+-PROTOBUF_VERSION = 2.5.0
+-PROTOBUF_SITE = http://protobuf.googlecode.com/files
++PROTOBUF_VERSION = v2.5.0
++PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
+ PROTOBUF_LICENSE = BSD-3c
+ PROTOBUF_LICENSE_FILES = COPYING.txt
  
- endif
- 
--comment "iso image needs a Linux kernel and grub to be built"
-+comment "iso image needs a Linux kernel and one of grub or isolinux to be built"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on !BR2_LINUX_KERNEL || !BR2_TARGET_GRUB
-+	depends on !BR2_LINUX_KERNEL || \
-+		!(BR2_TARGET_GRUB || BR2_TARGET_SYSLINUX_ISOLINUX)
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index 6a1b214..588e07b 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -53,6 +53,17 @@ define ROOTFS_ISO9660_INSTALL_BOOTLOADER
- 	$(INSTALL) -D -m 0644 $(GRUB_DIR)/stage2/stage2_eltorito \
- 		$(ROOTFS_ISO9660_TARGET_DIR)/boot/grub/stage2_eltorito
- endef
-+else ifeq ($(BR2_TARGET_ROOTFS_ISO9660_ISOLINUX),y)
-+ROOTFS_ISO9660_DEPENDENCIES += syslinux
-+ROOTFS_ISO9660_BOOTLOADER_CONFIG_PATH = \
-+	$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.cfg
-+ROOTFS_ISO9660_BOOT_IMAGE = isolinux/isolinux.bin
-+define ROOTFS_ISO9660_INSTALL_BOOTLOADER
-+	$(INSTALL) -D -m 0644 $(BINARIES_DIR)/syslinux/isolinux.bin \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/isolinux.bin
-+	$(INSTALL) -D -m 0644 $(HOST_DIR)/usr/share/syslinux/ldlinux.c32 \
-+		$(ROOTFS_ISO9660_TARGET_DIR)/isolinux/ldlinux.c32
-+endef
- endif
- 
- define ROOTFS_ISO9660_PREPARATION
-diff --git a/fs/iso9660/isolinux.cfg b/fs/iso9660/isolinux.cfg
-new file mode 100644
-index 0000000..28be4fa
---- /dev/null
-+++ b/fs/iso9660/isolinux.cfg
-@@ -0,0 +1,5 @@
-+default 1
-+label 1
-+      kernel __KERNEL_PATH__
-+      initrd __INITRD_PATH__
-+      append root=/dev/sr0
