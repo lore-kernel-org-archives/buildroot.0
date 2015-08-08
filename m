@@ -1,52 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] package/php: fix build without
-	threads and pcre
-Message-ID: <20150808105601.573F27FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] postgresql: security bump to
+	version 9.4.2
+Message-ID: <20150808105601.C99817FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f1542782c66ccd47e096ea00ddf9f1451f964ba
+commit: http://git.buildroot.net/buildroot/commit/?id=dffd39168af7ee419f3fe86152d36db2d1dfcc5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The pcre library bundled in php is not configurable through the usual
---enable/disable options, but wants to be thread-safe by default, so it
-wants to use pthreads (uncludes pthread.h and uses pthread_* functions).
-
-So, just override the default configuration to explicitly require the
-bundled pcre library be single-threaded when we have no thread and are
-not using the external pcre library.
-
 Fixes:
-    http://autobuild.buildroot.org/results/f50/f50f4e569466ad74e49a3eac9ea2e6cfc4dd30e3/
+CVE-2015-3165 (denial of service)
+CVE-2015-3166 (information disclosure)
+CVE-2015-3167 (side-channel key exposure)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Floris Bos <bos@je-eigen-domein.nl>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/postgresql/postgresql.hash |    4 ++--
+ package/postgresql/postgresql.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 6492747..448b7ef 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -213,6 +213,13 @@ endif
- ifeq ($(BR2_PACKAGE_PCRE),y)
- PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += pcre
-+else
-+# The bundled pcre library is not configurable through ./configure options,
-+# and by default is configured to be thread-safe, so it wants pthreads. So
-+# we must explicitly tell it when we don't have threads.
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
-+endif
- endif
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ea2be3e..2f8de30 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.4.1/postgresql-9.4.1.tar.bz2.sha256
+-sha256	29ddb77c820095b8f52e5455e9c6c6c20cf979b0834ed1986a8857b84888c3a6  postgresql-9.4.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.4.2/postgresql-9.4.2.tar.bz2.sha256
++sha256	81fda191c165ba1d25d75cd0166ece5abdcb4a7f5eca01b349371e279ebb4d11  postgresql-9.4.2.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index eda547c..d4895a0 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
+-POSTGRESQL_VERSION = 9.4.1
++POSTGRESQL_VERSION = 9.4.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
