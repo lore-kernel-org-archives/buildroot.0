@@ -1,41 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] gst1-plugins-bad: fix egl
-	detection
-Message-ID: <20150808105613.33C887F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dbus: fix machine-id
+	when using systemd
+Message-ID: <20150808105629.4DE887FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bff865186434554e357ecdf6b2b3da4fd9cc2053
+commit: http://git.buildroot.net/buildroot/commit/?id=6921f45d0a919c3c3635db74d5323a52d9542c75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Some egl implementations needs special compiler flags or defines (E.G.
-mesa3d for wayland needs to pass -DMESA_EGL_NO_X11_HEADERS to not try to
-include X11 headers).  This is correctly included in the .pc file, but the
-configure logic doesn't use pkg-config so help it along.
+When systemd is used, /var/lib/dbus becomes dangling symlink, because
+nobody does mkdir /tmp/dbus, so /var/lib/dbus/machine-id could not be
+written. On SysVinit systems there is init script that creates
+/tmp/dbus.
 
-Likewise, some implementations may need to link against other libraries, so
-also pass LIBS.
+This patch preserves old behavior for SysVinit systems, and introduces
+new one for systemd-booted systems: /var/lib/dbus is a persistent
+directory, it holds symlink /var/lib/dbus/machine-id -> /etc/machine-id
+as machine-id(5) suggests, and /etc/machine-id is managed by systemd.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gst1-plugins-bad/gst1-plugins-bad.mk           |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/dbus/dbus.mk |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index db323b9..faf0e2a 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -118,6 +118,9 @@ endif
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-egl
- GST1_PLUGINS_BAD_DEPENDENCIES += libegl
-+GST1_PLUGINS_BAD_CONF_ENV += \
-+	CPPFLAGS="$(TARGET_CPPFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
-+	LIBS="$(shell $(PKG_CONFIG_HOST_BINARY) --libs egl)"
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-egl
- endif
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index c810800..7deae11 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -73,17 +73,18 @@ endef
+ 
+ DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
+ 
+-define DBUS_INSTALL_TARGET_FIXUP
++define DBUS_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/dbus/S30dbus \
++		$(TARGET_DIR)/etc/init.d/S30dbus
++
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	rm -rf $(TARGET_DIR)/var/lib/dbus
+ 	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
+ endef
+ 
+-DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
+-
+-define DBUS_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 -D package/dbus/S30dbus \
+-		$(TARGET_DIR)/etc/init.d/S30dbus
++define DBUS_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/var/lib/dbus
++	ln -sf /etc/machine-id $(TARGET_DIR)/var/lib/dbus/machine-id
+ endef
+ 
+ HOST_DBUS_DEPENDENCIES = host-pkgconf host-expat
