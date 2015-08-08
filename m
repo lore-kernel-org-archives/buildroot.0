@@ -1,62 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] package/matchbox: make
-	matchbox-keyboard a real package
-Message-ID: <20150808105606.830D77F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] wine: fix sane related build
+	failure
+Message-ID: <20150808105621.B240B80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4be826c225ed803b9794391feb1d37f0026e0f81
+commit: http://git.buildroot.net/buildroot/commit/?id=ff89e1eb0cdb8ebe9cbd2cf944f43ed132afcb17
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, matchbox-keyboard is treated as if it were an option of the
-matchbox package.
+If sane is installed system-wide on the build machine, then the
+sane-config binary found is the one of the system, which returns
+incorrect library paths for cross-compilation.
 
-But that's not true, since it is a real package all by itself, with its
-own archive and its own buildsystem.
+To fix this, this commit adds a patch to wine to make it support a
+SANE_CONFIG environment variable, and then adjusts wine.mk to
+explicitly pass the path to $(STAGING_DIR)/usr/bin/sane-config.
 
-So, make it a real package.
+Fixes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  http://autobuild.buildroot.org/results/8bd/8bdc1eed55075313403aa8a6c9af6a427bce198e/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/matchbox/Config.in                   |    9 +--------
- package/matchbox/matchbox-keyboard/Config.in |    7 +++++++
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/wine/0003-sane-config-fix.patch |   21 +++++++++++++++++++++
+ package/wine/wine.mk                    |    1 +
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 8d4ebc7..9b27d4d 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -25,13 +25,6 @@ source "package/matchbox/matchbox-panel/Config.in"
- source "package/matchbox/matchbox-desktop/Config.in"
- source "package/matchbox/matchbox-common/Config.in"
- source "package/matchbox/matchbox-fakekey/Config.in"
--
--config BR2_PACKAGE_MATCHBOX_KEYBOARD
--	bool "Matchbox Virtual Keyboard"
--	select BR2_PACKAGE_XLIB_LIBXTST
--	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_MATCHBOX_FAKEKEY
--	help
--	  Virtual Keyboard
-+source "package/matchbox/matchbox-keyboard/Config.in"
- 
- endif
-diff --git a/package/matchbox/matchbox-keyboard/Config.in b/package/matchbox/matchbox-keyboard/Config.in
+diff --git a/package/wine/0003-sane-config-fix.patch b/package/wine/0003-sane-config-fix.patch
 new file mode 100644
-index 0000000..e017358
+index 0000000..d53843a
 --- /dev/null
-+++ b/package/matchbox/matchbox-keyboard/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MATCHBOX_KEYBOARD
-+	bool "Matchbox Virtual Keyboard"
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_MATCHBOX_FAKEKEY
-+	help
-+	  Virtual Keyboard
++++ b/package/wine/0003-sane-config-fix.patch
+@@ -0,0 +1,21 @@
++Add support for SANE_CONFIG variable
++
++Instead of using directly the sane-config command, allow to pass a
++SANE_CONFIG environment variable to override where to find the
++sane-config tool.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1375,7 +1375,7 @@
++ if test "x$with_sane" != "xno"
++ then
++     ac_save_CPPFLAGS="$CPPFLAGS"
++-    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`])
+++    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`])
++     AC_CHECK_HEADER(sane/sane.h,
++         [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
++         [SANE_CFLAGS=""])
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 1ae038e..d6fb9c6 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -174,6 +174,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SANE_BACKENDS),y)
+ WINE_CONF_OPTS += --with-sane
+ WINE_DEPENDENCIES += sane-backends
++WINE_CONF_ENV += SANE_CONFIG=$(STAGING_DIR)/usr/bin/sane-config
+ else
+ WINE_CONF_OPTS += --without-sane
+ endif
