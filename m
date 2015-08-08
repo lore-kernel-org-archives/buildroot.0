@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] gcc: bump 4.9.x series to
-	version 4.9.3
-Message-ID: <20150808105615.01CD57F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gcc/gcc-final: install
+	libatomic via HOST_GCC_FINAL_GCC_LIB_DIR
+Message-ID: <20150808105605.0712E7F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fed00ea1eaeca952f872120af79a46f39b0868c
+commit: http://git.buildroot.net/buildroot/commit/?id=e1cf34a39538e58ecf50d091482b2304c2f7e6d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop 110-pr64896.patch and 920-libgcc-remove-unistd-header.patch since
-they're upstream.
-
-Tweak 850-libstdcxx-uclibc-c99.patch for this new release.
+Otherwise it's a no-op for sh4.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/4.9.2/110-pr64896.patch                |   59 -----
- package/gcc/4.9.2/850-libstdcxx-uclibc-c99.patch   |  273 --------------------
- .../4.9.2/920-libgcc-remove-unistd-header.patch    |   12 -
- package/gcc/{4.9.2 => 4.9.3}/100-uclibc-conf.patch |    0
- ...00-powerpc-link-with-math-lib.patch.conditional |    0
- package/gcc/{4.9.2 => 4.9.3}/111-pr65730.patch     |    0
- .../{4.9.2 => 4.9.3}/301-missing-execinfo_h.patch  |    0
- .../810-arm-softfloat-libgcc.patch                 |    0
- .../{4.9.2 => 4.9.3}/830-arm_unbreak_armv4t.patch  |    0
- .../840-microblaze-enable-dwarf-eh-support.patch   |    0
- package/gcc/4.9.3/850-libstdcxx-uclibc-c99.patch   |  255 ++++++++++++++++++
- package/gcc/{4.9.2 => 4.9.3}/860-cilk-wchar.patch  |    0
- .../gcc/{4.9.2 => 4.9.3}/900-musl-support.patch    |    0
- .../910-gcc-poison-system-directories.patch        |    0
- package/gcc/Config.in.host                         |    2 +-
- package/gcc/gcc.hash                               |    4 +-
- 16 files changed, 258 insertions(+), 347 deletions(-)
+ package/gcc/gcc-final/gcc-final.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 8d7009b..16bf4ee 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -131,9 +131,9 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_LIBGCC
+ 
+ define HOST_GCC_FINAL_INSTALL_LIBATOMIC
+-	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
++	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libatomic* \
+ 		$(STAGING_DIR)/lib/
+-	-cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/libatomic* \
++	-cp -dpf $(HOST_GCC_FINAL_GCC_LIB_DIR)/libatomic* \
+ 		$(TARGET_DIR)/lib/
+ endef
+ 
