@@ -1,54 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:13 -0000
-Subject: [Buildroot] [git commit branch/next] package/protobuf: Update site
-	url
-Message-ID: <20150808105600.8F21E7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/apr: Add libuuid as
+	optional dependency
+Message-ID: <20150808105600.7E12A7F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f68dca626a8273f0b704bbcea512dc9f5aa9960
+commit: http://git.buildroot.net/buildroot/commit/?id=fd25b0128945aa118cb5f66e665d445d0da1d7dd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Package moved to github:
-https://developers.google.com/protocol-buffers/docs/downloads
-"Our old Google Code repositiory is: https://code.google.com/p/protobuf/.
- We moved to github on Aug 26, 2014 [...]"
+libuuid is picked up by apr when present:
+
+Checking for OS UUID Support...
+checking uuid/uuid.h usability... yes
+checking uuid/uuid.h presence... yes
+checking for uuid/uuid.h... yes
+checking for library containing uuid_generate... -luuid
+checking for uuid_generate... yes
+checking for os uuid usability... yes
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libapr-1.so | grep libuuid
+ 0x00000001 (NEEDED)                     Shared library: [libuuid.so.1]
+
+[Thomas: move the added chunk a bit further down, and use += instead
+of =.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/protobuf/Config.in   |    2 +-
- package/protobuf/protobuf.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/apr/apr.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 6015b13..bbb927f 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_PROTOBUF
- 	  Protocol buffers are Google's language-neutral, platform-neutral,
- 	  extensible mechanism for serializing structured data.
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 69524a6..0fed19c 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -12,6 +12,7 @@ APR_INSTALL_STAGING = YES
+ # We have a patch touching configure.in and Makefile.in,
+ # so we need to autoreconf:
+ APR_AUTORECONF = YES
++
+ APR_CONF_ENV = \
+ 	CC_FOR_BUILD="$(HOSTCC)" \
+ 	CFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+@@ -34,6 +35,10 @@ endif
+ # Fix lfs detection when cross compiling
+ APR_CONF_ENV += apr_cv_use_lfs64=yes
  
--	  http://code.google.com/p/protobuf/
-+	  https://developers.google.com/protocol-buffers
- 
- comment "protobuf needs a toolchain w/ C++, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 9043f98..b426873 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PROTOBUF_VERSION = 2.5.0
--PROTOBUF_SITE = http://protobuf.googlecode.com/files
-+PROTOBUF_VERSION = v2.5.0
-+PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
- PROTOBUF_LICENSE = BSD-3c
- PROTOBUF_LICENSE_FILES = COPYING.txt
- 
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++APR_DEPENDENCIES += util-linux
++endif
++
+ define APR_CLEANUP_UNNEEDED_FILES
+ 	$(RM) -rf $(TARGET_DIR)/usr/build-1/
+ endef
