@@ -1,34 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] gcc: bump 4.8.x version
-Message-ID: <20150808105614.00EB28030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/manual: fix typo
+Message-ID: <20150808105630.5F8C17FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7654d687b2de8c7764e4b4cb060e1c7946b19727
+commit: http://git.buildroot.net/buildroot/commit/?id=7701e2bf754c773a9d6ef89923316413d09d5287
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/{4.8.4 => 4.8.5}/100-uclibc-conf.patch |    0
- ...00-powerpc-link-with-math-lib.patch.conditional |    0
- package/gcc/{4.8.4 => 4.8.5}/111-pr65730.patch     |    0
- .../{4.8.4 => 4.8.5}/301-missing-execinfo_h.patch  |    0
- .../305-libmudflap-susv3-legacy.patch              |    0
- .../810-arm-softfloat-libgcc.patch                 |    0
- .../{4.8.4 => 4.8.5}/830-arm_unbreak_armv4t.patch  |    0
- .../gcc/{4.8.4 => 4.8.5}/841-PR57717-E500v2.patch  |    0
- package/gcc/{4.8.4 => 4.8.5}/842-PR60155.patch     |    0
- .../843-aarch64-vmlaq_lane_s32-typo.patch          |    0
- .../850-libstdcxx-uclibc-c99.patch                 |    0
- .../gcc/{4.8.4 => 4.8.5}/851-PR-other-56780.patch  |    0
- .../gcc/{4.8.4 => 4.8.5}/900-musl-support.patch    |    0
- .../910-gcc-poison-system-directories.patch        |    0
- package/gcc/Config.in.host                         |    2 +-
- package/gcc/gcc.hash                               |    4 ++--
- 16 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-kernel-module.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/docs/manual/adding-packages-kernel-module.txt b/docs/manual/adding-packages-kernel-module.txt
+index 39575f7..0a5ec5b 100644
+--- a/docs/manual/adding-packages-kernel-module.txt
++++ b/docs/manual/adding-packages-kernel-module.txt
+@@ -128,7 +128,7 @@ configure the build of the kernel module:
+ * +FOO_MODULE_MAKE_OPTS+ may be set to contain extra variable definitions
+   to pass to the Linux buildsystem.
+ 
+-Yo may also reference (but you may *not* set!) those variables:
++You may also reference (but you may *not* set!) those variables:
+ 
+  * +LINUX_DIR+ contains the path to where the Linux kernel has been
+    extracted and built.
