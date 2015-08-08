@@ -1,49 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:22 -0000
-Subject: [Buildroot] [git commit branch/next] isl: bump to version 0.14.1
-Message-ID: <20150808105620.D63F37FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencv: add gtk3
+	support
+Message-ID: <20150808105622.178E67FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b50da9ac44d89e751f9da6ff4317adf12be2fe7
+commit: http://git.buildroot.net/buildroot/commit/?id=70c7d468937b1c56be46504fdc8aa4d9146d2f84
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also add hash file.
+OpenCV now also supports gtk3 as a GUI toolkit, in addition to gtk2,
+but only one may be enabled at a time.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+So, add gtk3 in the choice to select the GUI toolkit.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: drop the superfluous depends-on for the
+ kconfig symbol, since they're no longer needed now we depend-on rather
+ than select]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/isl/isl.hash |    2 ++
- package/isl/isl.mk   |    6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/opencv/Config.in |    9 +++++++++
+ package/opencv/opencv.mk |   11 +++++++++--
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/package/isl/isl.hash b/package/isl/isl.hash
-new file mode 100644
-index 0000000..e2c14ad
---- /dev/null
-+++ b/package/isl/isl.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	8882c9e36549fc757efa267706a9af733bb8d7fe3905cbfde43e17a89eea4675	isl-0.14.1.tar.xz
-diff --git a/package/isl/isl.mk b/package/isl/isl.mk
-index 55cff9d..bb79039 100644
---- a/package/isl/isl.mk
-+++ b/package/isl/isl.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 5e8f189..6ae74b4 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -70,6 +70,15 @@ comment "gtk2 support needs libgtk2"
+ 	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
+ 	depends on !BR2_PACKAGE_LIBGTK2
  
--# The latest 0.13 version is not yet compatible with cloog 0.18.2, so
-+# The latest 0.15 version is not yet compatible with cloog 0.18.3, so
- # bumping isl is not possible until a new version of cloog is
- # published.
--ISL_VERSION = 0.12.2
--ISL_SOURCE = isl-$(ISL_VERSION).tar.bz2
-+ISL_VERSION = 0.14.1
-+ISL_SOURCE = isl-$(ISL_VERSION).tar.xz
- ISL_SITE = http://isl.gforge.inria.fr
- ISL_LICENSE = MIT
- ISL_LICENSE_FILES = LICENSE
++config BR2_PACKAGE_OPENCV_WITH_GTK3
++	bool "gtk3"
++	depends on BR2_PACKAGE_LIBGTK3
++
++comment "gtk3 support needs libgtk3"
++	depends on BR2_USE_MMU # libgtk3 -> glib2
++	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
++	depends on !BR2_PACKAGE_LIBGTK3
++
+ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	bool "qt4"
+ 	depends on BR2_PACKAGE_QT
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 98e1614..c788aeb 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -236,11 +236,18 @@ else
+ OPENCV_CONF_OPTS += -DWITH_GSTREAMER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK)$(BR2_PACKAGE_OPENCV_WITH_GTK3),)
++OPENCV_CONF_OPTS += -DWITH_GTK=OFF -DWITH_GTK_2_X=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK),y)
+ OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=ON
+ OPENCV_DEPENDENCIES += libgtk2
+-else
+-OPENCV_CONF_OPTS += -DWITH_GTK=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENCV_WITH_GTK3),y)
++OPENCV_CONF_OPTS += -DWITH_GTK=ON -DWITH_GTK_2_X=OFF
++OPENCV_DEPENDENCIES += libgtk3
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
