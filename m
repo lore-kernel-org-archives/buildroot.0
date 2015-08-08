@@ -1,62 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:40 -0000
-Subject: [Buildroot] [git commit branch/next] skeleton: apply locale
-	settings in user shells
-Message-ID: <20150808105631.794457FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] purge-locales: fix handling of
+	X11 locale.dir
+Message-ID: <20150808105631.D90AA7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3c8da4dd4a0094f7ffd337a1d874d3deae77693
+commit: http://git.buildroot.net/buildroot/commit/?id=b791571c030f0be004bdb180013ca6650dfe6b09
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add /etc/profile.d/locale.sh script from Arch Linux to /etc/profile.
-This script looks for locale.conf, sources it, and exports the LANG and
-LC_* variables.
+The /usr/share/X11/locale/locale.dir file is needed by libX11.
+Removing it breaks locale support in X11. However, make removes
+not only directories but also all files, which are not listed
+in the BR2_ENABLE_LOCALE_WHITELIST.
 
-[Arnout: put in /etc/profile in the skeleton rather than making it
- systemd specific.]
+This re-creates locale.dir database file where needed.
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Arnout: use a separate loop, and add some explanatory comments]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/skeleton/etc/profile |   23 +++++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+ Makefile |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index 3812dda..c7438fe 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -35,6 +35,29 @@ if [ "$PS1" ]; then
+diff --git a/Makefile b/Makefile
+index f764ae5..8eb8c6d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -540,6 +540,11 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
+ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
  
- fi;
- 
-+if [ -z "$LANG" ]; then
-+  if [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
-+    . "$HOME/.config/locale.conf"
-+  elif [ -r /etc/locale.conf ]; then
-+    . /etc/locale.conf
-+  fi
-+fi
-+
-+LANG=${LANG:-C}
-+export LANG
-+[ -n "$LC_CTYPE" ]          && export LC_CTYPE
-+[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
-+[ -n "$LC_TIME" ]           && export LC_TIME
-+[ -n "$LC_COLLATE" ]        && export LC_COLLATE
-+[ -n "$LC_MONETARY" ]       && export LC_MONETARY
-+[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
-+[ -n "$LC_PAPER" ]          && export LC_PAPER
-+[ -n "$LC_NAME" ]           && export LC_NAME
-+[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
-+[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
-+[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
-+[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
-+
- # Source configuration files from /etc/profile.d
- for i in /etc/profile.d/*.sh ; do
-     if [ -r "$i" ]; then
++# This piece of junk does the following:
++# First collect the whitelist in a file.
++# Then go over all the locale dirs and for each subdir, check if it exists
++# in the whitelist file. If it doesn't, kill it.
++# Finally, specifically for X11, regenerate locale.dir from the whitelist.
+ define PURGE_LOCALES
+ 	rm -f $(LOCALE_WHITELIST)
+ 	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+@@ -551,6 +556,16 @@ define PURGE_LOCALES
+ 			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
+ 		done; \
+ 	done
++	if [ -d $(TARGET_DIR)/usr/share/X11/locale ]; \
++	then \
++		for lang in $(LOCALE_NOPURGE); \
++		do \
++			if [ -f $(TARGET_DIR)/usr/share/X11/locale/$$lang/XLC_LOCALE ]; \
++			then \
++				echo "$$lang/XLC_LOCALE: $$lang"; \
++			fi \
++		done > $(TARGET_DIR)/usr/share/X11/locale/locale.dir; \
++	fi
+ endef
+ TARGET_FINALIZE_HOOKS += PURGE_LOCALES
+ endif
