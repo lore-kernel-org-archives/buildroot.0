@@ -1,86 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next] package/mono-gtksharp3: new
-	package
-Message-ID: <20150808105637.8111680414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] sysvinit: added libselinux
+	dependency
+Message-ID: <20150808105637.3AB9480428@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4e7176a4005830ce8a2709b09066c26a06de255
+commit: http://git.buildroot.net/buildroot/commit/?id=e8fb454db64477491da9df9860f473d7decf268e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch adds mono gtksharp3 package for mono.
+[Thomas:
+  - remove the patch from Matthew Weber that did a lot of changes that
+    were not needed: the CFLAGS would not get overridden by Buildroot
+    ones if the Buildroot TARGET_CONFIGURE_OPTS is passed on the left
+    hand-side of make, and the SULOGINLIBS hack needs to be replaced
+    by a proper handling of the libcrypt detection.
+  - added a patch that changes the libcrypt detection logic to accept
+    a SYSROOT variable. Instead of search for /usr/lib/libcrypt.a, it
+    search for $(SYSROOT)/usr/lib/libcrypt.a. This avoids the need for
+    overriding SULOGINLIBS.
+  - don't modify TARGET_CONFIGURE_OPTS in sysvinit.mk, this is
+    completely forbidden and broken.
+  - don't pass ROOT= since we don't use 'make install' anyway.]
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |    5 +++++
- package/mono-gtksharp3/Config.in           |    8 ++++++++
- package/mono-gtksharp3/mono-gtksharp3.hash |    2 ++
- package/mono-gtksharp3/mono-gtksharp3.mk   |   17 +++++++++++++++++
- 4 files changed, 32 insertions(+), 0 deletions(-)
+ package/sysvinit/0001-fix-libcrypt-test.patch |   17 +++++++++++++++++
+ package/sysvinit/sysvinit.mk                  |    9 ++++++++-
+ 2 files changed, 25 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5974855..ddbf180 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -509,6 +509,11 @@ endif
- 	source "package/lutok/Config.in"
- 	source "package/moarvm/Config.in"
- 	source "package/mono/Config.in"
-+if BR2_PACKAGE_MONO
-+menu "Mono libraries/modules"
-+	source "package/mono-gtksharp3/Config.in"
-+endmenu
-+endif
- 	source "package/nodejs/Config.in"
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/mono-gtksharp3/Config.in b/package/mono-gtksharp3/Config.in
+diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
 new file mode 100644
-index 0000000..570b62c
+index 0000000..207270d
 --- /dev/null
-+++ b/package/mono-gtksharp3/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MONO_GTKSHARP3
-+	bool "gtk# 3"
-+	depends on BR2_PACKAGE_LIBGTK3
-+	help
-+	  Gtk# is a .NET language binding for the GTK+ toolkit.
-+	  This package provides version 3 of the bindings.
-+
-+	  http://www.mono-project.com/docs/gui/gtksharp/
-diff --git a/package/mono-gtksharp3/mono-gtksharp3.hash b/package/mono-gtksharp3/mono-gtksharp3.hash
-new file mode 100644
-index 0000000..4005051
---- /dev/null
-+++ b/package/mono-gtksharp3/mono-gtksharp3.hash
-@@ -0,0 +1,2 @@
-+# sha256 from https://download.gnome.org/sources/gtk-sharp/2.99/gtk-sharp-2.99.3.sha256sum
-+sha256 6440f571416267ae0cb5698071d087b31e3084693fa2c829b1db37ca7ea2c3a2	gtk-sharp-2.99.3.tar.xz
-diff --git a/package/mono-gtksharp3/mono-gtksharp3.mk b/package/mono-gtksharp3/mono-gtksharp3.mk
-new file mode 100644
-index 0000000..fa63d66
---- /dev/null
-+++ b/package/mono-gtksharp3/mono-gtksharp3.mk
++++ b/package/sysvinit/0001-fix-libcrypt-test.patch
 @@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# gtksharp3
-+#
-+################################################################################
++Make the libcrypt test somewhat cross-compilation compliant
 +
-+MONO_GTKSHARP3_VERSION_MAJOR = 2.99
-+MONO_GTKSHARP3_VERSION = $(MONO_GTKSHARP3_VERSION_MAJOR).3
-+MONO_GTKSHARP3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk-sharp/$(MONO_GTKSHARP3_VERSION_MAJOR)/
-+MONO_GTKSHARP3_SOURCE = gtk-sharp-$(MONO_GTKSHARP3_VERSION).tar.xz
-+MONO_GTKSHARP3_LICENSE = LGPLv2, MIT (cairo)
-+MONO_GTKSHARP3_LICENSE_FILES = COPYING
-+MONO_GTKSHARP3_INSTALL_STAGING = YES
-+MONO_GTKSHARP3_DEPENDENCIES = mono libgtk3
-+MONO_GTKSHARP3_CONF_OPTS += CSC=$(HOST_DIR)/usr/bin/mcs
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+$(eval $(autotools-package))
++Index: b/src/Makefile
++===================================================================
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -78,7 +78,7 @@
++ endif
++ 
++ # Additional libs for GNU libc.
++-ifneq ($(wildcard /usr/lib*/libcrypt.a),)
+++ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
++   SULOGINLIBS	+= -lcrypt
++ endif
++ 
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 2460dd9..faefd5c 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -11,11 +11,18 @@ SYSVINIT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/
+ SYSVINIT_LICENSE = GPLv2+
+ SYSVINIT_LICENSE_FILES = COPYING
+ 
++SYSVINIT_MAKE_OPTS = SYSROOT=$(STAGING_DIR)
++
+ # Override BusyBox implementations if BusyBox is enabled.
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ SYSVINIT_DEPENDENCIES = busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++SYSVINIT_DEPENDENCIES += libselinux
++SYSVINIT_MAKE_OPTS += WITH_SELINUX="yes"
++endif
++
+ define SYSVINIT_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+@@ -27,7 +34,7 @@ SYSVINIT_POST_PATCH_HOOKS = SYSVINIT_DEBIAN_PATCHES
+ define SYSVINIT_BUILD_CMDS
+ 	# Force sysvinit to link against libcrypt as it otherwise
+ 	# use an incorrect test to see if it's available
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) SULOGINLIBS="-lcrypt" -C $(@D)/src
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(SYSVINIT_MAKE_OPTS) -C $(@D)/src
+ endef
+ 
+ define SYSVINIT_INSTALL_TARGET_CMDS
