@@ -1,32 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:51 -0000
-Subject: [Buildroot] [git commit branch/next] lua-ev: bump to version 1.4
-Message-ID: <20150808105640.989277FFCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gcc: explicitly use
+	C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace
+Message-ID: <20150808105640.4812C7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f31b93a85a0634472b64f9ab58c9caac72622bb
+commit: http://git.buildroot.net/buildroot/commit/?id=0fe633cdff66febadc50bab3e0af4b3be53811c8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+The gcc.mk file is passing --enable-target-optspace to gcc configure
+script, to ask for space-optimized (-Os) target libraries. However,
+passing this option has the effect of overriding any custom
+CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
+
+These are some situations when it is required to pass custom flags on
+buildong
+of libgcc:
+ * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
+(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
+ * Particular CPU requires specific instructions for HW support
+ * Deep optimizations
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua-ev/lua-ev.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gcc/gcc.mk |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-ev/lua-ev.mk b/package/lua-ev/lua-ev.mk
-index 745d6ed..68f7fc7 100644
---- a/package/lua-ev/lua-ev.mk
-+++ b/package/lua-ev/lua-ev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index d1693d5..aaeba7f 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -100,16 +100,22 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ HOST_GCC_COMMON_CONF_ENV = \
+ 	MAKEINFO=missing
  
--LUA_EV_VERSION = 458165bdfe0c6eadc788813925f11a0e6a823845
-+LUA_EV_VERSION = v1.4
- LUA_EV_SITE = $(call github,brimworks,lua-ev,$(LUA_EV_VERSION))
- LUA_EV_DEPENDENCIES = luainterpreter libev
- LUA_EV_LICENSE = MIT
++GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
++GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
++
+ # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+ # Workaround until it's fixed in 4.5.4 or later
+ ifeq ($(ARCH),powerpc)
+ ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-HOST_GCC_COMMON_CONF_OPTS += --disable-target-optspace
++GCC_COMMON_TARGET_CFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
++GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
+ endif
+-else
+-HOST_GCC_COMMON_CONF_OPTS += --enable-target-optspace
+ endif
+ 
++# Propagate options used for target software building to GCC target libs
++HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
++HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
++
+ # libitm needs sparc V9+
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
