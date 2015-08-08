@@ -1,35 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:01 -0000
-Subject: [Buildroot] [git commit branch/next] rsyslog: drop autoreconf
-Message-ID: <20150808105557.4978F818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-pyqt: fix install
+Message-ID: <20150808105558.D79F77FDC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e624b3638420bb688f1f46a63cb78eb88430884
+commit: http://git.buildroot.net/buildroot/commit/?id=348be778ff683491e99d00a5c235110fbec05584
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patches touching configure.ac were dropped in 9d9bbf9b7935 (rsyslog: bump
-to version 8.8.0, 2015-02-25). Remove autoreconf as well.
+PyQt4 provides two version for some py files: one for python2.x and one for
+python3.x. This two versions are installed in TARGET_DIR.
+After installing files, python is used to generate all .pyc files, but fails
+like :
+class ProxyBase(metaclass=ProxyMetaclass):
+                             ^
+							 SyntaxError: invalid syntax
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This is not a package build failure and this fix is only cosmetic.
+This patch suppress directory for not targeted python version.
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsyslog/rsyslog.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/python-pyqt/python-pyqt.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 99e6eba..261f59d 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -16,8 +16,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- 	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
- RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
- 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
--# For mysql and pgsql support patches
--RSYSLOG_AUTORECONF = YES
+diff --git a/package/python-pyqt/python-pyqt.mk b/package/python-pyqt/python-pyqt.mk
+index 292398d..fa298c4 100644
+--- a/package/python-pyqt/python-pyqt.mk
++++ b/package/python-pyqt/python-pyqt.mk
+@@ -14,8 +14,10 @@ PYTHON_PYQT_DEPENDENCIES = python-sip host-python-sip qt
  
- # Build after BusyBox
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON_PYQT_PYTHON_DIR = python$(PYTHON_VERSION_MAJOR)
++PYTHON_PYQT_RM_PORT_BASE = port_v3
+ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ PYTHON_PYQT_PYTHON_DIR = python$(PYTHON3_VERSION_MAJOR)
++PYTHON_PYQT_RM_PORT_BASE = port_v2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT_EMBEDDED),y)
+@@ -105,6 +107,7 @@ endef
+ define PYTHON_PYQT_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install
+ 	touch $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/__init__.py
++	$(RM) -rf $(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4/uic/$(PYTHON_PYQT_RM_PORT_BASE)
+ 	PYTHONPATH="$(PYTHON_PATH)" \
+ 		$(HOST_DIR)/usr/bin/python -c "import compileall; \
+ 		compileall.compile_dir('$(TARGET_DIR)/usr/lib/$(PYTHON_PYQT_PYTHON_DIR)/site-packages/PyQt4')"
