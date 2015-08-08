@@ -1,47 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:09 -0000
-Subject: [Buildroot] [git commit branch/next] fs: build host-mkpasswd when
-	BR2_ROOTFS_USERS_TABLES is used
-Message-ID: <20150808105638.F2ECD803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] rapidjson: bump to version
+	1.0.2
+Message-ID: <20150808105619.CB88C818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95bd0ad351fe03450f28699f80434539f3764438
+commit: http://git.buildroot.net/buildroot/commit/?id=9186ed6ea9a5ba708943b510abee718ba5ede764
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The code in fs/common.mk properly triggers the build of host-mkpasswd
-when at least one package specifies a <pkg>_USERS variable. However,
-when no selected package specifies a <pkg>_USERS variable but the user
-uses a custom users table through BR2_ROOTFS_USERS_TABLES, then we
-forget to build host-mkpasswd, leading to build failures if you don't
-have mkpasswd installed in your machine.
-
-This commit fixes that by taking into account both the package users
-table and the custom users table when deciding to depend or not on
-host-mkpasswd.
-
-Reported-by: Auke Willem Oosterhoff <oosterhoff@baopt.nl>
-Cc: Auke Willem Oosterhoff <oosterhoff@baopt.nl>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- fs/common.mk |    2 +-
+ package/rapidjson/rapidjson.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 4387d06..ad1bcf3 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -41,7 +41,7 @@ define ROOTFS_TARGET_INTERNAL
+diff --git a/package/rapidjson/rapidjson.mk b/package/rapidjson/rapidjson.mk
+index 6658da2..1ad9314 100644
+--- a/package/rapidjson/rapidjson.mk
++++ b/package/rapidjson/rapidjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # extra deps
- ROOTFS_$(2)_DEPENDENCIES += host-fakeroot host-makedevs \
--	$$(if $$(PACKAGES_USERS),host-mkpasswd)
-+	$$(if $$(PACKAGES_USERS)$$(ROOTFS_USERS_TABLES),host-mkpasswd)
- 
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- ROOTFS_$(2)_COMPRESS_EXT = .gz
+-RAPIDJSON_VERSION = 39f5eeb764c6d1e1cbff1717410d9710bf943009
++RAPIDJSON_VERSION = v1.0.2
+ RAPIDJSON_SITE = $(call github,miloyip,rapidjson,$(RAPIDJSON_VERSION))
+ RAPIDJSON_LICENSE = MIT
+ RAPIDJSON_LICENSE_FILES = license.txt
