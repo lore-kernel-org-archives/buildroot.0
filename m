@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:06 -0000
-Subject: [Buildroot] [git commit branch/next] php: fpm: remove sample status
-	page
-Message-ID: <20150808105559.B5D207FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] php: enable opcache extension
+	in php.ini if selected
+Message-ID: <20150808105559.A98027FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d21090dcef02b568cbf441b1cc2576fedf13774d
+commit: http://git.buildroot.net/buildroot/commit/?id=ccbeeb8a8cf1157eaf01550d4d6b479883bbcae7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-php-fpm installs a sample status page to $datadir/fpm/status.html
-It is not of any use in that directory, so remove it from target.
-If someone wants to use it, he can copy it to webroot manually.
+Add a line to load the opcache extension in php.ini, at the
+bottom of the "dynamic extensions" section.
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/php/php.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 6e0e216..3e4601e 100644
+index bc3794a..6e0e216 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -280,6 +280,8 @@ define PHP_INSTALL_FPM_CONF
- 	$(INSTALL) -D -m 0644 package/php/php-fpm.conf \
- 		$(TARGET_DIR)/etc/php-fpm.conf
- 	rm -f $(TARGET_DIR)/etc/php-fpm.conf.default
-+	# remove unused sample status page /usr/php/php/fpm/status.html
-+	rm -rf $(TARGET_DIR)/usr/php
+@@ -301,6 +301,9 @@ define PHP_INSTALL_FIXUP
+ 		$(TARGET_DIR)/etc/php.ini
+ 	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
+ 		$(TARGET_DIR)/etc/php.ini
++	$(if $(BR2_PACKAGE_PHP_EXT_OPCACHE),
++		$(SED) '/;extension=php_xsl.dll/azend_extension=opcache.so' \
++		$(TARGET_DIR)/etc/php.ini)
  endef
  
- PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FPM_CONF
+ PHP_POST_INSTALL_TARGET_HOOKS += PHP_INSTALL_FIXUP
