@@ -1,41 +1,116 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:02 -0000
-Subject: [Buildroot] [git commit branch/next] package/dovecot: Add optional
-	support for icu
-Message-ID: <20150808105630.ED5877FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] busybox: improve support for
+	telnetd
+Message-ID: <20150808105630.2160B7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61a9a4cb29bd115b6255db682ef10442f1309682
+commit: http://git.buildroot.net/buildroot/commit/?id=b98dd2355780c732bf440042fb8faafe731efc94
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Optional dependency added to fts plugin since Dovecot 2.2.17:
-http://hg.dovecot.org/dovecot-2.2/diff/b179bbd226e5/configure.ac
+If target has connection to the network it might be pretty useful to
+have telnet connection to it instead of serial console or even in
+addition to serial console.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This changes makes the busybox package automatically install an init
+script, and tune the securetty file to make telnetd work when
+CONFIG_FEATURE_TELNETD_STANDALONE is enabled in the Busybox
+configuration.
+
+[Thomas:
+  - don't create a new Buildroot Config.in option, just test if
+    CONFIG_FEATURE_TELNETD_STANDALONE is enabled or not in the Busybox
+    configuration
+  - move the securetty tuning in busybox.mk instead of system.mk
+  - use start-stop-daemon in the init script, in order to properly
+    implement the stop and restart actions
+  - misc other minor improvements in the init script.]
+[yann.morin.1998 at free.fr:
+  - don't use securetty
+  - drop stray variable BUSYBOX_SET_STANDALONE_TELNETD]
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dovecot/dovecot.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/busybox/S50telnet  |   36 ++++++++++++++++++++++++++++++++++++
+ package/busybox/busybox.mk |    9 +++++++++
+ 2 files changed, 45 insertions(+), 0 deletions(-)
 
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 3b4f6d1..58666d0 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -40,6 +40,13 @@ else
- DOVECOT_CONF_OPTS += --without-bzlib
+diff --git a/package/busybox/S50telnet b/package/busybox/S50telnet
+new file mode 100755
+index 0000000..463a772
+--- /dev/null
++++ b/package/busybox/S50telnet
+@@ -0,0 +1,36 @@
++#!/bin/sh
++#
++# Start telnet....
++#
++
++start() {
++      echo -n "Starting telnetd: "
++      start-stop-daemon -S -q -m -b -p /var/run/telnetd.pid \
++			-x /usr/sbin/telnetd -- -F
++      [ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++stop() {
++	echo -n "Stopping telnetd: "
++	start-stop-daemon -K -q -p /var/run/telnetd.pid \
++			  -x /usr/sbin/telnetd
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++    start)
++	start
++	;;
++    stop)
++	stop
++	;;
++    restart|reload)
++	stop
++	start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 92874cd..9289e0a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -168,6 +168,14 @@ endef
+ BUSYBOX_DEPENDENCIES += linux-pam
  endif
  
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+DOVECOT_CONF_OPTS += --with-icu
-+DOVECOT_DEPENDENCIES += icu
-+else
-+DOVECOT_CONF_OPTS += --without-icu
-+endif
++# Telnet support
++define BUSYBOX_INSTALL_TELNET_SCRIPT
++	if grep -q CONFIG_FEATURE_TELNETD_STANDALONE=y $(@D)/.config; then \
++		$(INSTALL) -m 0755 -D package/busybox/S50telnet \
++			$(TARGET_DIR)/etc/init.d/S50telnet ; \
++	fi
++endef
 +
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- DOVECOT_CONF_OPTS += --with-libcap
- DOVECOT_DEPENDENCIES += libcap
+ # Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+ # full-blown versions of apps installed by other packages with sym/hard links.
+ define BUSYBOX_NOCLOBBER_INSTALL
+@@ -205,6 +213,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
++	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
+ endef
+ 
+ $(eval $(kconfig-package))
