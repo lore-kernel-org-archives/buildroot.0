@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:57 -0000
-Subject: [Buildroot] [git commit branch/next] Revert "czmq: unbreak static
-	linking"
-Message-ID: <20150808105556.9DD8B818CF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mono: fixing mono
+	version
+Message-ID: <20150808105556.1A5F7818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=878b9aaba9c0bd77c0964cdc78c63cc07aaf96cf
+commit: http://git.buildroot.net/buildroot/commit/?id=dd31e75c0935b375a3a9b090214a37f6092d7d8d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This reverts commit aa5254f1a2bc0ea3181d51990c18681b3071b9db.
+This patch fixes to the correct mono version 4.0.0 as stated on
+the download page.
 
-Now that zeromq's pkg-config file is fixed, we no longer need this
-workaround for static linking.
+Fixes:
+http://autobuild.buildroot.net/results/227/227f942107e4fcbc14bb1e7d97e1e2758d6f3f2d/
 
+[Peter: add autobuilder reference]
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/czmq/czmq.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ package/mono/mono.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 789e700..d25bf01 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -18,12 +18,6 @@ CZMQ_LICENSE_FILES = LICENSE
- # host-python, so disable asciidoc entirely.
- CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index c0a0827..63026f1 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# zeromq uses C++, but czmq forgets to explicitly link with libstdc++
--# (or use g++ to link), breaking static linking.
--ifeq ($(BR2_STATIC_LIBS),y)
--CZMQ_CONF_ENV += LIBS='-lstdc++'
--endif
--
- define CZMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
- endef
+-MONO_VERSION = 4.0.1
++MONO_VERSION = 4.0.0
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
