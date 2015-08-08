@@ -1,313 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:28 -0000
-Subject: [Buildroot] [git commit branch/next]
-	package/x11r7/xdriver_xf86-video-geode: bump version to 2.11.17
-Message-ID: <20150808105628.0E87E7FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:29 -0000
+Subject: [Buildroot] [git commit branch/next] pkg-generic: fix fallout of
+	<pkg>_STRIP_COMPONENTS introduction
+Message-ID: <20150808105628.935AD7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=628de86c996c77d9d66acf33d93384faccc59a3e
+commit: http://git.buildroot.net/buildroot/commit/?id=ef7cc99c7a432aa3929015183f7c7476b7cd1b68
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Removed patch applied upstream.
+The introduction of <pkg>_STRIP_COMPONENTS broke the build of the
+target tar package, because support/dependencies/check-host-tar.mk
+defines TAR_STRIP_COMPONENTS to --strip-components. Which leads to
+have the package infrastructure do:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ $$(TAR_STRIP_COMPONENTS)=$$($(2)_STRIP_COMPONENTS)
+
+which for the tar package evaluates to:
+
+ $$(TAR_STRIP_COMPONENTS)=$$(TAR_STRIP_COMPONENTS)
+
+which evalutes to:
+
+ --strip-components=--strip-components
+
+Which obviously doesn't work really well. And in fact the
+TAR_STRIP_COMPONENTS definition in
+support/dependencies/check-host-tar.mk is no longer necessary: it was
+needed in the days where we were trying to support old tar versions
+that did not support --strip-components. But nowadays, when such an
+old tar version is encountered, we build our own host-tar which
+supports --strip-components.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/ae2/ae20df67f99f75b1ba5d5b7316ad265d66f3aa66/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-xserver_1_17.patch                        |  261 --------------------
- .../xdriver_xf86-video-geode.hash                  |    4 +-
- .../xdriver_xf86-video-geode.mk                    |    2 +-
- 3 files changed, 3 insertions(+), 264 deletions(-)
+ package/pkg-generic.mk                 |    2 +-
+ support/dependencies/check-host-tar.mk |    3 ---
+ 2 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-geode/0001-xserver_1_17.patch b/package/x11r7/xdriver_xf86-video-geode/0001-xserver_1_17.patch
-deleted file mode 100644
-index 8c8ba52..0000000
---- a/package/x11r7/xdriver_xf86-video-geode/0001-xserver_1_17.patch
-+++ /dev/null
-@@ -1,261 +0,0 @@
--Downloaded from upstream commit
--http://cgit.freedesktop.org/xorg/driver/xf86-video-geode/patch/?id=f98301ad73b84915358ce6f6d2522b36c4b603d9
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From f98301ad73b84915358ce6f6d2522b36c4b603d9 Mon Sep 17 00:00:00 2001
--From: Maarten Lankhorst <maarten.lankhorst@ubuntu.com>
--Date: Thu, 12 Mar 2015 10:50:57 +0100
--Subject: Fix building Geode against xserver 1.17
--
--The xf86MapVidMem API is gone. Use pciaccess calls where applicable and mmap for XpressROMPtr.
--
--Signed-off-by: Maarten Lankhorst <maarten.lankhorst@ubuntu.com>
--
--diff --git a/src/gx_driver.c b/src/gx_driver.c
--index 7f44e19..ab57df1 100644
----- a/src/gx_driver.c
--+++ b/src/gx_driver.c
--@@ -32,6 +32,9 @@
-- #endif
-- 
-- #include <stdio.h>
--+#include <fcntl.h>
--+#include <unistd.h>
--+#include <sys/mman.h>
-- 
-- #include "xf86.h"
-- #include "xf86_OSproc.h"
--@@ -322,7 +325,6 @@ map_pci_mem(ScrnInfoPtr pScrni, int vram,
--             struct pci_device *dev, int bar, int size)
-- {
--     void *ptr;
---    void **result = (void **) &ptr;
--     int map_size = size ? size : dev->regions[bar].size;
-- 
--     int err = pci_device_map_range(dev,
--@@ -330,12 +332,18 @@ map_pci_mem(ScrnInfoPtr pScrni, int vram,
--                                    map_size,
--                                    PCI_DEV_MAP_FLAG_WRITABLE |
--                                    (vram ? PCI_DEV_MAP_FLAG_WRITE_COMBINE : 0),
---                                   result);
--+                                   &ptr);
-- 
--     if (err)
--         return NULL;
--     return ptr;
-- }
--+
--+static inline int
--+unmap_pci_mem(ScrnInfoPtr pScrni, struct pci_device *dev, void *ptr, int size)
--+{
--+    return pci_device_unmap_range(dev, ptr, size);
--+}
-- #endif
-- 
-- extern unsigned long gfx_gx2_scratch_base;
--@@ -373,8 +381,19 @@ GXMapMem(ScrnInfoPtr pScrni)
-- 
--     gfx_gx2_scratch_base = pGeode->FBAvail - 0x4000;
-- 
--+#ifndef XSERVER_LIBPCIACCESS
--     XpressROMPtr = xf86MapVidMem(index, VIDMEM_FRAMEBUFFER, 0xF0000, 0x10000);
---
--+#else
--+    {
--+        int fd = open("/dev/mem", O_RDWR);
--+        if (fd < 0) {
--+            xf86DrvMsg(index, X_ERROR, "Failed to open /dev/mem: %m\n");
--+            return FALSE;
--+        }
--+        XpressROMPtr = mmap(NULL, 0x10000, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0xF0000);
--+        close(fd);
--+    }
--+#endif
--     pGeode->FBBase = gfx_virt_fbptr;
-- 
--     if ((!gfx_virt_regptr) || (!gfx_virt_gpptr) ||
--@@ -395,9 +414,9 @@ GXMapMem(ScrnInfoPtr pScrni)
-- */
-- 
-- static Bool
---GXCheckVGA(ScrnInfoPtr pScrni)
--+GXCheckVGA(ScrnInfoPtr pScrni, EntityInfoPtr pEnt)
-- {
---
--+#ifndef XSERVER_LIBPCIACCESS
--     unsigned char *ptr;
--     const char *vgasig = "IBM VGA Compatible";
--     int ret;
--@@ -413,6 +432,11 @@ GXCheckVGA(ScrnInfoPtr pScrni)
--     xf86UnMapVidMem(pScrni->scrnIndex, (pointer) ptr, strlen(vgasig));
-- 
--     return ret ? FALSE : TRUE;
--+#else
--+    pciVideoPtr pci = xf86GetPciInfoForEntity(pEnt->index);
--+
--+    return pci_device_is_boot_vga(pci);
--+#endif
-- }
-- 
-- static Bool
--@@ -443,7 +467,7 @@ GXPreInit(ScrnInfoPtr pScrni, int flags)
--     if (pGeode == NULL)
--         return FALSE;
-- 
---    useVGA = GXCheckVGA(pScrni);
--+    useVGA = GXCheckVGA(pScrni, pEnt);
-- 
--     if (flags & PROBE_DETECT) {
--         GeodeProbeDDC(pScrni, pEnt->index);
--@@ -591,12 +615,18 @@ GXPreInit(ScrnInfoPtr pScrni, int flags)
--     panelgeo = xf86GetOptValString(GeodeOptions, GX_OPTION_PANEL_GEOMETRY);
-- 
--     if ((s = xf86GetOptValString(GeodeOptions, GX_OPTION_ACCEL_METHOD))) {
--+#if defined(XF86XAA) && defined(XF86EXA)
--         if (!xf86NameCmp(s, "XAA"))
--             pGeode->useEXA = FALSE;
--         else if (xf86NameCmp(s, "EXA"))
--             xf86DrvMsg(pScrni->scrnIndex, X_ERROR,
--                        "Unknown accleration method %s.  Defaulting to XAA.\n",
--                        s);
--+#elif defined(XF86EXA)
--+        pGeode->useEXA = TRUE;
--+#else
--+        pGeode->useEXA = FALSE;
--+#endif
--     }
-- 
--     xf86DrvMsg(pScrni->scrnIndex, X_INFO,
--@@ -752,11 +782,21 @@ GXUnmapMem(ScrnInfoPtr pScrni)
--     GeodeRec *pGeode = GEODEPTR(pScrni);
-- 
--     /* unmap all the memory map's */
---
--+#ifndef XSERVER_LIBPCIACCESS
--     xf86UnMapVidMem(pScrni->scrnIndex, gfx_virt_regptr, GX_CPU_REG_SIZE);
--     xf86UnMapVidMem(pScrni->scrnIndex, gfx_virt_gpptr, GX_GP_REG_SIZE);
--     xf86UnMapVidMem(pScrni->scrnIndex, gfx_virt_vidptr, GX_VID_REG_SIZE);
--     xf86UnMapVidMem(pScrni->scrnIndex, gfx_virt_fbptr, pGeode->FBAvail);
--+#else
--+    pciVideoPtr pci = xf86GetPciInfoForEntity(pGeode->pEnt->index);
--+
--+    unmap_pci_mem(pScrni, pci, gfx_virt_regptr, GX_CPU_REG_SIZE);
--+    unmap_pci_mem(pScrni, pci, gfx_virt_gpptr, GX_GP_REG_SIZE);
--+    unmap_pci_mem(pScrni, pci, gfx_virt_vidptr, GX_VID_REG_SIZE);
--+    unmap_pci_mem(pScrni, pci, gfx_virt_fbptr, pGeode->FBAvail);
--+
--+    munmap(XpressROMPtr, 0x10000);
--+#endif
--     return TRUE;
-- }
-- 
--diff --git a/src/lx_driver.c b/src/lx_driver.c
--index 146578e..c68f715 100644
----- a/src/lx_driver.c
--+++ b/src/lx_driver.c
--@@ -33,6 +33,9 @@
-- 
-- #include <stdio.h>
-- #include <string.h>
--+#include <fcntl.h>
--+#include <unistd.h>
--+#include <sys/mman.h>
-- 
-- #include "xf86.h"
-- #include "xf86_OSproc.h"
--@@ -155,7 +158,6 @@ map_pci_mem(ScrnInfoPtr pScrni, int vram,
--             struct pci_device *dev, int bar, int size)
-- {
--     void *ptr;
---    void **result = (void **) &ptr;
--     int map_size = size ? size : dev->regions[bar].size;
-- 
--     int err = pci_device_map_range(dev,
--@@ -163,7 +165,7 @@ map_pci_mem(ScrnInfoPtr pScrni, int vram,
--                                    map_size,
--                                    PCI_DEV_MAP_FLAG_WRITABLE |
--                                    (vram ? PCI_DEV_MAP_FLAG_WRITE_COMBINE : 0),
---                                   result);
--+                                   &ptr);
-- 
--     if (err)
--         return NULL;
--@@ -235,7 +237,19 @@ LXMapMem(ScrnInfoPtr pScrni)
--                              pGeode->FBAvail);
--     gp_set_command_buffer_base(cmd_bfr_phys, 0, pGeode->CmdBfrSize);
-- 
--+#ifndef XSERVER_LIBPCIACCESS
--     XpressROMPtr = xf86MapVidMem(index, VIDMEM_FRAMEBUFFER, 0xF0000, 0x10000);
--+#else
--+    {
--+        int fd = open("/dev/mem", O_RDWR);
--+        if (fd < 0) {
--+            xf86DrvMsg(index, X_ERROR, "Failed to open /dev/mem: %m\n");
--+            return FALSE;
--+        }
--+        XpressROMPtr = mmap(NULL, 0x10000, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0xF0000);
--+        close(fd);
--+    }
--+#endif
-- 
--     pGeode->FBBase = cim_fb_ptr;
-- 
--@@ -253,9 +267,9 @@ LXMapMem(ScrnInfoPtr pScrni)
-- */
-- 
-- static Bool
---LXCheckVGA(ScrnInfoPtr pScrni)
--+LXCheckVGA(ScrnInfoPtr pScrni, EntityInfoPtr pEnt)
-- {
---
--+#ifndef XSERVER_LIBPCIACCESS
--     unsigned char *ptr;
--     const char *vgasig = "IBM VGA Compatible";
--     int ret;
--@@ -271,6 +285,11 @@ LXCheckVGA(ScrnInfoPtr pScrni)
--     xf86UnMapVidMem(pScrni->scrnIndex, (pointer) ptr, strlen(vgasig));
-- 
--     return ret ? FALSE : TRUE;
--+#else
--+    pciVideoPtr pci = xf86GetPciInfoForEntity(pEnt->index);
--+
--+    return pci_device_is_boot_vga(pci);
--+#endif
-- }
-- 
-- static Bool
--@@ -310,7 +329,7 @@ LXPreInit(ScrnInfoPtr pScrni, int flags)
--     if (pGeode == NULL)
--         return FALSE;
-- 
---    pGeode->useVGA = LXCheckVGA(pScrni);
--+    pGeode->useVGA = LXCheckVGA(pScrni, pEnt);
--     pGeode->VGAActive = FALSE;
--     pGeode->pEnt = pEnt;
-- 
--@@ -611,6 +630,8 @@ LXUnmapMem(ScrnInfoPtr pScrni)
--     xf86UnMapVidMem(pScrni->scrnIndex, (pointer) cim_vg_ptr, LX_VG_REG_SIZE);
--     xf86UnMapVidMem(pScrni->scrnIndex, (pointer) cim_vid_ptr, LX_VID_REG_SIZE);
--     xf86UnMapVidMem(pScrni->scrnIndex, (pointer) cim_vip_ptr, LX_VIP_REG_SIZE);
--+
--+    xf86UnMapVidMem(pScrni->scrnIndex, XpressROMPtr, 0x10000);
-- #else
--     GeodeRec *pGeode = GEODEPTR(pScrni);
--     pciVideoPtr pci = xf86GetPciInfoForEntity(pGeode->pEnt->index);
--@@ -620,9 +641,9 @@ LXUnmapMem(ScrnInfoPtr pScrni)
--     unmap_pci_mem(pScrni, pci, cim_vid_ptr, LX_VID_REG_SIZE);
--     unmap_pci_mem(pScrni, pci, cim_vip_ptr, LX_VIP_REG_SIZE);
--     unmap_pci_mem(pScrni, pci, cim_fb_ptr, pGeode->FBAvail + CIM_CMD_BFR_SZ);
---#endif
-- 
---    xf86UnMapVidMem(pScrni->scrnIndex, XpressROMPtr, 0x10000);
--+    munmap(XpressROMPtr, 0x10000);
--+#endif
-- 
--     return TRUE;
-- }
---- 
--cgit v0.10.2
--
-diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-index 0c77a26..991cf6b 100644
---- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-+++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-July/002459.html
--sha256	38fc1f55e29fb7985b90c9021a4b7e5295d42888bd669174f42f3b7f681fc1a7	xf86-video-geode-2.11.16.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-May/002607.html
-+sha256	07b4d42623e71e592b77c52a75cf230f8e711c8a0c1b26cecb06e9231d333c41	xf86-video-geode-2.11.17.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-index 52e7358..ae5bc0b 100644
---- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-+++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 7000975..82376df 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -439,7 +439,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ # default extract command
+ $(2)_EXTRACT_CMDS ?= \
+ 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
+-	$$(TAR) $$(TAR_STRIP_COMPONENTS)=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
++	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
  
--XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.16
-+XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.17
- XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
+ # pre/post-steps hooks
+ $(2)_PRE_DOWNLOAD_HOOKS         ?=
+diff --git a/support/dependencies/check-host-tar.mk b/support/dependencies/check-host-tar.mk
+index 9729507..9840a55 100644
+--- a/support/dependencies/check-host-tar.mk
++++ b/support/dependencies/check-host-tar.mk
+@@ -4,6 +4,3 @@ ifeq (,$(call suitable-host-package,tar,$(TAR)))
+ DEPENDENCIES_HOST_PREREQ += host-tar
+ TAR = $(HOST_DIR)/usr/bin/tar
+ endif
+-
+-# Since TAR is at least 1.17, it will certainly support --strip-components
+-TAR_STRIP_COMPONENTS = --strip-components
