@@ -1,44 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:33 -0000
-Subject: [Buildroot] [git commit branch/next] package/bind: Enable
-	filter-aaaa-on-v4 option
-Message-ID: <20150808105623.47ED27FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lua-periphery: add hash file
+Message-ID: <20150808105623.86B1E7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b067e2737821204ea969f72201f73604d3cd905
+commit: http://git.buildroot.net/buildroot/commit/?id=5fe3e0c8c4921c94462a6dcb2314ac61a1f120cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This allows usage of the filter-aaaa-on-v4 configuration option.
-This option disables responding with AAAA records when the request
-	is made over ipv4. This may be useful on networks with
-	ipv6 inside, but no ISP ipv6 (when combined with only
-	listening on ipv4).
-
-See https://kb.isc.org/article/AA-00576/
-	Filter-AAAA-option-in-BIND-9-.html
-	for more information.
-
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bind/bind.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/lua-periphery/lua-periphery.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 55b5f07..9a08461 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -26,7 +26,8 @@ BIND_CONF_OPTS = \
- 	--enable-epoll \
- 	--with-libtool \
- 	--with-gssapi=no \
--	--enable-rrl
-+	--enable-rrl \
-+	--enable-filter-aaaa
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- BIND_CONF_OPTS += --enable-linux-caps
+diff --git a/package/lua-periphery/lua-periphery.hash b/package/lua-periphery/lua-periphery.hash
+new file mode 100644
+index 0000000..39209df
+--- /dev/null
++++ b/package/lua-periphery/lua-periphery.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  f94f4af342e531ff25b037b8b7c127db50b7464c0bbce4c5ea3b49fd215ada60    lua-periphery-1.0.5-2.src.rock
