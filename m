@@ -1,43 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:06 -0000
-Subject: [Buildroot] [git commit branch/next] ntfs-3g: uses dlopen(),
-	not available on static builds
-Message-ID: <20150808105604.4774E7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gnupg2: bump to version 2.0.28
+Message-ID: <20150808105604.7399881778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=174b8469029cb8018200516a00a5b890ec7cd1a8
+commit: http://git.buildroot.net/buildroot/commit/?id=90687cc72aa439e17484442ba372ae08932617bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/722/7227d5f01755affa2a234eedd8d1fc8c826395c7/
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ntfs-3g/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/gnupg2/gnupg2.hash |    4 ++--
+ package/gnupg2/gnupg2.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index 36e8ab8..a860498 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_NTFS_3G
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  The NTFS-3G driver is an open source, freely available
- 	  read/write NTFS driver for Linux, FreeBSD, Mac OS X, NetBSD,
-@@ -29,6 +30,6 @@ config BR2_PACKAGE_NTFS_3G_NTFSPROGS
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 404c40b..2a2305c 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000362.html
+-sha1	d065be185f5bac8ea07b210ab7756e79b83b63d4	gnupg-2.0.27.tar.bz2
++# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q2/000367.html
++sha1	9a1050f72b6c9afe2b4a0a3f2e9dca2abba8e4ef	gnupg-2.0.28.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index aa35c36..ab3a59a 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
--comment "ntfs-3g needs a toolchain w/ wchar, threads"
-+comment "ntfs-3g needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && BR2_STATIC_LIBS)
+-GNUPG2_VERSION = 2.0.27
++GNUPG2_VERSION = 2.0.28
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPLv3+
