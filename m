@@ -1,52 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:41 -0000
-Subject: [Buildroot] [git commit branch/next] boot/at91boostrap3: check for
-	config file before calling kconfig-package
-Message-ID: <20150808105632.28115818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/busybox: check for
+	config file
+Message-ID: <20150808105632.37443818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e94388c57546aa8eff1f7c3cb29ddde052e0b4b
+commit: http://git.buildroot.net/buildroot/commit/?id=3ff5f63e48237cf569aaba6be35e179bf8556a19
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If we check that the user provides a config file after we call to the
-kconfig-package infra, the error message we get is the one for the
-kconfig-package infra, not the custom error message we want to show to
-the user.
-
-So, only call kconfig-package after we do the check.
+Add a check (before we call kconfig-package) that ensures the user has
+set a kconfig-file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/at91bootstrap3/at91bootstrap3.mk |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index 1c68094..fa67ea6 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -49,10 +49,11 @@ endif
- AT91BOOTSTRAP3_KCONFIG_FILE = $(AT91BOOTSTRAP3_SOURCE_CONFIG)
- AT91BOOTSTRAP3_KCONFIG_EDITORS = menuconfig xconfig gconfig
- AT91BOOTSTRAP3_KCONFIG_OPTS = $(AT91BOOTSTRAP3_MAKE_OPTS)
--$(eval $(kconfig-package))
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index aab7f5d..d8c8bad 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -223,4 +223,12 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
+ endef
  
- # Checks to give errors that the user can understand
++# Checks to give errors that the user can understand
 +# Must be before we call to kconfig-package
- ifeq ($(BR_BUILDING),y)
++ifeq ($(BR_BUILDING),y)
++ifeq ($(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG)),)
++$(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_CONFIG setting)
++endif
++endif
 +
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
- ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG)),)
- $(error No at91bootstrap3 defconfig name specified, check your BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG setting)
-@@ -74,4 +75,6 @@ $(error No custom at91bootstrap3 repository version specified. Check your BR2_TA
- endif
- endif
- 
--endif
-+endif # BR_BUILDING
-+
-+$(eval $(kconfig-package))
+ $(eval $(kconfig-package))
