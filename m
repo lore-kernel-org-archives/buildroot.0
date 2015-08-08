@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] ruby: enable parallel build
-Message-ID: <20150808105624.C7D977FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] build: remove deprecated
+	sstrip option
+Message-ID: <20150808105603.CB9467FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08138dd13060563733f4c7bd9daebcfdb458840e
+commit: http://git.buildroot.net/buildroot/commit/?id=106f5b8c509352dc64249ca941dabb34ccc31f8e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Re-enable parallel builds, it doesn't seem to be affected by the issue
-worked around in 9332a1ad4 any more.
+It's been deprecated since the 2014.05 release (a year).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ Config.in |   13 -------------
+ 1 files changed, 0 insertions(+), 13 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 552da07..2fa6b4e 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -12,7 +12,6 @@ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-pkgconf
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
--RUBY_MAKE = $(MAKE1)
- RUBY_CONF_OPTS = --disable-install-doc --disable-rpath --disable-rubygems
- HOST_RUBY_CONF_OPTS = \
- 	--disable-install-doc \
+diff --git a/Config.in b/Config.in
+index bdff7df..eaf47dd 100644
+--- a/Config.in
++++ b/Config.in
+@@ -372,19 +372,6 @@ config BR2_STRIP_strip
+ 	  symbols on the target are needed for native debugging, but
+ 	  not when remote debugging is used.
+ 
+-config BR2_STRIP_sstrip
+-	bool "sstrip"
+-	select BR2_PACKAGE_SSTRIP_HOST
+-	depends on !BR2_PACKAGE_HOST_ELF2FLT
+-	depends on BR2_DEPRECATED_SINCE_2014_05
+-	help
+-	  Binaries and libraries in the target filesystem will be
+-	  stripped using the 'sstrip' command, which strips a little
+-	  bit more than the traditional 'strip' command. This allows to
+-	  save space, mainly by removing debugging symbols. Debugging
+-	  symbols on the target are needed for native debugging, but
+-	  not when remote debugging is used.
+-
+ config BR2_STRIP_none
+ 	bool "none"
+ 	help
