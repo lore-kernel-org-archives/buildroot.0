@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] support: remove outdated note
-	re. Python 3 support
-Message-ID: <20150808105608.6B6D17FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] wireless-regdb: bump to
+	version 2015.06.05
+Message-ID: <20150808105607.F1D877F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=954c09ae62374d0917ce65581d60e50df8747191
+commit: http://git.buildroot.net/buildroot/commit/?id=187997ebb9d9b800f7c8360b0015d18819e508f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Kconfiglib now runs as either Python 2 or Python 3.
-
-Signed-off-by: Ulf Magnusson <ulfalizer@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/gen-manual-lists.py |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+ package/wireless-regdb/wireless-regdb.hash |    2 +-
+ package/wireless-regdb/wireless-regdb.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index d45810b..1e0e9bb 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -24,11 +24,6 @@
- ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- ##
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index 1afb023..250f4d8 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	fe5b5fae4934b29f2d15e018fbecae013fda44cf023c10285a669c86c5a33da3	wireless-regdb-2015.05.15.tar.xz
++sha256	69306cfd5ae97ae5f905e0e1e167b6ac8d28e49b58880621ad0024b59f4f8564	wireless-regdb-2015.06.05.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 8a5b6ab..92068a6 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--## Note about python2.
--##
--## This script can currently only be run using python2 interpreter due to
--## its kconfiglib dependency (which is not yet python3 friendly).
--
- from __future__ import print_function
- from __future__ import unicode_literals
- 
+-WIRELESS_REGDB_VERSION = 2015.05.15
++WIRELESS_REGDB_VERSION = 2015.06.05
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
