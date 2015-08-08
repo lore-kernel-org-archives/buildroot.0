@@ -1,86 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:00 -0000
-Subject: [Buildroot] [git commit branch/next] libcap-ng: cannot be built
-	with nios2 CS 2014.05 toolchain
-Message-ID: <20150808105557.8C11E818D9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] zeromq: fix pkg-config file
+	for static linking
+Message-ID: <20150808105556.90486818CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3038d061e541aef0bc449149bf72c6f458d6942
+commit: http://git.buildroot.net/buildroot/commit/?id=a9876fb0990cc8232eb21f5aaf34f442b3bb5667
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Fixes:
-http://autobuild.buildroot.net/results/d13/d136f763ca3389cdc6a404db7a4fc0cd18329955/
-http://autobuild.buildroot.net/results/e00/e002e2a3bd52a3cc3b0d06625de61315d86de524/
-http://autobuild.buildroot.net/results/bba/bba9f7130315c9d97cc060a73663276d0fa2c1b3/
-http://autobuild.buildroot.net/results/fc7/fc7bc050ef769716dedb0ad81a51e33a12deec47/
+http://autobuild.buildroot.net/results/faf/faf0bb00fccb1350afaef55f6cf14c11a5f5dc3c/
+http://autobuild.buildroot.net/results/8d2/8d279baa4c8bffbb01f897119092c7b736942df4/
+http://autobuild.buildroot.net/results/4d3/4d3dea604da9a5a1e7fe20548813f8de474ae33f/
+http://autobuild.buildroot.net/results/fd6/fd602617839817352763e51754553960b7f795ac/
 
 And many more.
 
-Building libcap-ng with that toolchain triggers an internal compiler /
-assembler bug, so blacklist that combination and propagate to the reverse
-dependencies.
+Libzmq uses C++ standard library features, so users of it should link
+against that as well when statically linking.
+
+Add it to Libs.private so users using pkg-config automatically gets the
+correct linker flags.
+
+Patch is upstream:
+https://github.com/zeromq/libzmq/pull/1398
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/Config.in    |    1 +
- package/libcap-ng/Config.in  |    1 +
- package/ofono/Config.in      |    2 ++
- package/util-linux/Config.in |    1 +
- 4 files changed, 5 insertions(+), 0 deletions(-)
+ ...q-Fix-pkg-config-files-for-static-linking.patch |   29 ++++++++++++++++++++
+ 1 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index a887c2f..ba238af 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -52,6 +52,7 @@ config BR2_PACKAGE_CONNMAN_NEARD
- 
- config BR2_PACKAGE_CONNMAN_OFONO
- 	bool "enable ofono support"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
- 	select BR2_PACKAGE_OFONO
- 
- config BR2_PACKAGE_CONNMAN_DEBUG
-diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
-index d1663cd..a52d230 100644
---- a/package/libcap-ng/Config.in
-+++ b/package/libcap-ng/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBCAP_NG
- 	bool "libcap-ng"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # triggers compiler bug
- 	help
- 	  The libcap-ng library is intended to make programming with
- 	  posix capabilities much easier than the traditional libcap
-diff --git a/package/ofono/Config.in b/package/ofono/Config.in
-index b26b5e7..eb1856f 100644
---- a/package/ofono/Config.in
-+++ b/package/ofono/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_OFONO
- 	depends on BR2_USE_WCHAR # gettext, libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
- 	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -17,3 +18,4 @@ config BR2_PACKAGE_OFONO
- comment "ofono needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 8ed56b0..39df11c 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -214,6 +214,7 @@ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
- 
- config BR2_PACKAGE_UTIL_LINUX_SETPRIV
- 	bool "setpriv"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
- 	select BR2_PACKAGE_LIBCAP_NG
- 	help
- 	  Run a program with different Linux privilege settings
+diff --git a/package/zeromq/0003-libzmq-Fix-pkg-config-files-for-static-linking.patch b/package/zeromq/0003-libzmq-Fix-pkg-config-files-for-static-linking.patch
+new file mode 100644
+index 0000000..11acec2
+--- /dev/null
++++ b/package/zeromq/0003-libzmq-Fix-pkg-config-files-for-static-linking.patch
+@@ -0,0 +1,29 @@
++From e89577d30c278fba0f9e40266ceb6fb2821907d5 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Wed, 13 May 2015 08:01:34 +0200
++Subject: [PATCH] libzmq: Fix pkg-config files for static linking
++
++Libzmq uses C++ standard library features, so users of it should link
++against that as well when statically linking.
++
++Add it to Libs.private so users using pkg-config automatically gets the
++correct linker flags.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/libzmq.pc.in       | 1 +
++ 1 file changed, 1 insertions(+)
++
++diff --git a/src/libzmq.pc.in b/src/libzmq.pc.in
++index ba155a3..52a39f7 100644
++--- a/src/libzmq.pc.in
+++++ b/src/libzmq.pc.in
++@@ -7,4 +7,5 @@ Name: libzmq
++ Description: 0MQ c++ library
++ Version: @VERSION@
++ Libs: -L${libdir} -lzmq
+++Libs.private: -lstdc++
++ Cflags: -I${includedir}
++-- 
++2.1.4
++
