@@ -1,52 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:31 -0000
-Subject: [Buildroot] [git commit branch/next] inadyn: systemd support
-Message-ID: <20150808105631.0DA897FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] exim: systemd support
+Message-ID: <20150808105631.038867FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0719dd240f35c44967ea63f8ffd60734dfefb56a
+commit: http://git.buildroot.net/buildroot/commit/?id=b52d96ab4ed5e3ea8e993283a14cd2999aea10ad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/inadyn/inadyn.mk      |    8 ++++++++
- package/inadyn/inadyn.service |   10 ++++++++++
+ package/exim/exim.mk      |    8 ++++++++
+ package/exim/exim.service |   10 ++++++++++
  2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index b002f94..5c3b0e3 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -30,4 +30,12 @@ define INADYN_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S70inadyn
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 8ad0328..d8f41b0 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -133,4 +133,12 @@ define EXIM_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S86exim
  endef
  
-+define INADYN_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/inadyn/inadyn.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/inadyn.service
++define EXIM_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/exim/exim.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/exim.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf /usr/lib/systemd/system/inadyn.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/inadyn.service
++	ln -sf /usr/lib/systemd/system/exim.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/exim.service
 +endef
 +
- $(eval $(autotools-package))
-diff --git a/package/inadyn/inadyn.service b/package/inadyn/inadyn.service
+ $(eval $(generic-package))
+diff --git a/package/exim/exim.service b/package/exim/exim.service
 new file mode 100644
-index 0000000..abc0a1e
+index 0000000..26daabc
 --- /dev/null
-+++ b/package/inadyn/inadyn.service
++++ b/package/exim/exim.service
 @@ -0,0 +1,10 @@
 +[Unit]
-+Description=DDNS client
++Description=Exim MTA
 +After=syslog.target network.target
 +
 +[Service]
-+ExecStart=/usr/bin/inadyn
++ExecStart=/usr/bin/exim -bdf
 +Restart=always
 +
 +[Install]
