@@ -1,40 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:56:02 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{12,
-	18}.x series
-Message-ID: <20150808105601.D1FE67F8ED@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:03 -0000
+Subject: [Buildroot] [git commit branch/next] nbd: security bump to version
+	3.11
+Message-ID: <20150808105602.032A77FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=496561179ed488f8360e850ede51aa5994150d9f
+commit: http://git.buildroot.net/buildroot/commit/?id=65a7964716855aff9e7071074a44c58c89d481fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Fixes:
+CVE-2015-0847 nbd-server denial of service due to unsafe signal handlers
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/nbd/nbd.hash |    5 +++--
+ package/nbd/nbd.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index cf38c80..d81cd36 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -202,13 +202,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.107"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.79"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.42"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.43"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.43"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.13"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.14"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.4"		if BR2_KERNEL_HEADERS_4_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
+index 1136050..306e11b 100644
+--- a/package/nbd/nbd.hash
++++ b/package/nbd/nbd.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  48a223770eb136603dc266587d9a37ed5024132e09e2c8484096d4c46cfed3e2  nbd-3.8.tar.xz
++# From http://sourceforge.net/projects/nbd/files/nbd/3.11/
++md5	73d11644a28b9f335292cdb3bdc4b74b	nbd-3.11.tar.xz
++sha1	a9823a656ef3411c7a14f3c1ae843d92a9141476	nbd-3.11.tar.xz
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index f512f7a..fee2cf8 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NBD_VERSION = 3.8
++NBD_VERSION = 3.11
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
