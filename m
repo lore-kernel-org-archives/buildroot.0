@@ -1,52 +1,181 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:50 -0000
-Subject: [Buildroot] [git commit branch/next] perl: only run finalize hook
-	when necessary
-Message-ID: <20150808105639.36195803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gnuradio: add processing blocks
+Message-ID: <20150808105612.3F8AB7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c30dd5de91404744bbe2a5ffece0d00ce68f1f64
+commit: http://git.buildroot.net/buildroot/commit/?id=accaa7f4879c0868bc6b9c975444758e47ddb68e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The PERL_FINALIZE_TARGET always runs, even if perl is not installed.
-This results in errors from the find command when it fails to find
-anything, even when doing "make -s":
+GNURadio provides a set of processing blocks like analog or digital
+communication, filters, ...
 
->>>   Finalizing target directory
-find: `...../output/target/usr/lib/perl5/': No such file or directory
-find: `...../output/target/usr/lib/perl5/': No such file or directory
-find: `...../output/target/usr/lib/perl5/': No such file or directory
-
-This is not helpful for projects that do not select Perl.  Silence this
-by making the hook conditional on package selection.
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[build-tested only]
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl/perl.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnuradio/Config.in   |   60 ++++++++++++++++++++++++++++++++++++++++++
+ package/gnuradio/gnuradio.mk |   55 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 115 insertions(+), 0 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 091c032..1e6a054 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -115,6 +115,7 @@ endef
- $(eval $(generic-package))
- $(eval $(host-generic-package))
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index 574eab4..e264a21 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -37,6 +37,12 @@ config BR2_PACKAGE_GNURADIO_BLOCKS
+ 	help
+ 	  GNU Radio basic block library
  
-+ifeq ($(BR2_PACKAGE_PERL),y)
- define PERL_FINALIZE_TARGET
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
-@@ -122,6 +123,5 @@ define PERL_FINALIZE_TARGET
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
- endef
--
- TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
--
++config BR2_PACKAGE_GNURADIO_FEC
++	bool "gr-fec support"
++	select BR2_PACKAGE_GNURADIO_BLOCKS
++	help
++	  FEC signal processing blocks
++
+ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	bool "python support"
+ 	select BR2_PACKAGE_BOOST_PYTHON
+@@ -44,4 +50,58 @@ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	help
+ 	  Enable python component
+ 
++config BR2_PACKAGE_GNURADIO_UTILS
++	bool "gr-utils support"
++	select BR2_PACKAGE_GNURADIO_PYTHON
++	help
++	  Misc python utilities
++
++comment "gr-fft, -filter, -analog, -channels, -digital, -trellis, -pager depends fftw's single precision"
++	depends on !BR2_PACKAGE_FFTW_PRECISION_SINGLE
++
++if BR2_PACKAGE_FFTW_PRECISION_SINGLE
++
++config BR2_PACKAGE_GNURADIO_ANALOG
++	bool "gr-analog support"
++	select BR2_PACKAGE_GNURADIO_FILTER
++	help
++	  Analog communications blocks
++
++config BR2_PACKAGE_GNURADIO_CHANNELS
++	bool "gr-channels support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	help
++	  Channel model blocks
++
++config BR2_PACKAGE_GNURADIO_DIGITAL
++	bool "gr-digital support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	help
++	  Digital communications blocks
++
++config BR2_PACKAGE_GNURADIO_FFT
++	bool "gr-fft support"
++	select BR2_PACKAGE_GNURADIO_BLOCKS
++	help
++	  FFT signal processing blocks
++
++config BR2_PACKAGE_GNURADIO_FILTER
++	bool "gr-filter support"
++	select BR2_PACKAGE_GNURADIO_FFT
++	help
++	  Filter signal processing blocks
++
++config BR2_PACKAGE_GNURADIO_PAGER
++	bool "gr-flex support"
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	help
++	  FLEX pager decoder implementation blocks
++
++config BR2_PACKAGE_GNURADIO_TRELLIS
++	bool "gr-trellis support"
++	select BR2_PACKAGE_GNURADIO_DIGITAL
++	help
++	  Trellis coded modulation blocks
++
 +endif
+ endif
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index e58c7dc..fc5cd1f 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -42,12 +42,49 @@ ifeq ($(BR2_ARM_CPU_HAS_NEON),)
+ GNURADIO_CONF_OPTS += -Dhave_mfpu_neon=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_ANALOG),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_ANALOG=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_GNURADIO_BLOCKS),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=ON
+ else
+ GNURADIO_CONF_OPTS += -DENABLE_GR_BLOCKS=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_CHANNELS),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_CHANNELS=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_CHANNELS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_DIGITAL),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_DIGITAL=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_DIGITAL=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_FEC),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_FEC=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_FFT),y)
++GNURADIO_DEPENDENCIES += fftw
++GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_FFT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_FILTER),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+ GNURADIO_DEPENDENCIES += python
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+@@ -55,4 +92,22 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_PAGER),y)
++GNURADIO_CONF_OPTS += -DENABLE_PAGER=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_PAGER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_TRELLIS),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GNURADIO_UTILS),y)
++GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=OFF
++endif
++
+ $(eval $(cmake-package))
