@@ -1,70 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:10 -0000
-Subject: [Buildroot] [git commit branch/next] package/python-can: new package
-Message-ID: <20150808105607.D7A2F81904@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/leafnode2: Update
+	upstream URL
+Message-ID: <20150808105600.736947F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30d076be237cc2bce8d397deb318a91593d3089b
+commit: http://git.buildroot.net/buildroot/commit/?id=d3372fb39f07543f9f31e4c2fecc92f57f3bd710
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch provides controller area network support for Python.
+Upstream URL has changed:
+http://article.gmane.org/gmane.network.leafnode/4773
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |    1 +
- package/python-can/Config.in     |    6 ++++++
- package/python-can/python-can.mk |   15 +++++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ package/leafnode2/Config.in    |    2 +-
+ package/leafnode2/leafnode2.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 00c9ce3..e8a7d0a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -573,6 +573,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-bottle/Config.in"
-+	source "package/python-can/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-cheetah/Config.in"
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-new file mode 100644
-index 0000000..6b4e0fa
---- /dev/null
-+++ b/package/python-can/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_CAN
-+	bool "python-can"
-+	help
-+	  This module provides controller area network support for Python.
-+
-+	  https://bitbucket.org/hardbyte/python-can
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-new file mode 100644
-index 0000000..8db5732
---- /dev/null
-+++ b/package/python-can/python-can.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-can
-+#
-+################################################################################
-+
-+PYTHON_CAN_VERSION = ae5b6cf
-+PYTHON_CAN_SITE = https://bitbucket.org/hardbyte/python-can/get/
-+PYTHON_CAN_SOURCE = $(PYTHON_CAN_VERSION).tar.bz2
-+PYTHON_CAN_LICENSE = LGPLv3
-+PYTHON_CAN_LICENSE_FILES = LICENSE.txt
-+PYTHON_CAN_DEPENDENCIES = python
-+PYTHON_CAN_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/leafnode2/Config.in b/package/leafnode2/Config.in
+index ec5fa80..348e6da 100644
+--- a/package/leafnode2/Config.in
++++ b/package/leafnode2/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_LEAFNODE2
+ 	  For example, you can add this line to inetd.conf:
+ 	  nntp    stream  tcp     nowait  news    /usr/sbin/leafnode
+ 
+-	  http://www.dt.e-technik.uni-dortmund.de/~ma/leafnode/beta/
++	  http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
+diff --git a/package/leafnode2/leafnode2.mk b/package/leafnode2/leafnode2.mk
+index 0fc2a8d..5b9b854 100644
+--- a/package/leafnode2/leafnode2.mk
++++ b/package/leafnode2/leafnode2.mk
+@@ -6,7 +6,7 @@
+ 
+ LEAFNODE2_VERSION = 2.0.0.alpha20140727b
+ LEAFNODE2_SOURCE = leafnode-$(LEAFNODE2_VERSION).tar.bz2
+-LEAFNODE2_SITE = http://home.pages.de/~mandree/leafnode/beta
++LEAFNODE2_SITE = http://www.dt.e-technik.tu-dortmund.de/~ma/leafnode/beta
+ LEAFNODE2_LICENSE = LGPLv2.1
+ LEAFNODE2_LICENSE_FILES = COPYING COPYING.LGPL
+ LEAFNODE2_DEPENDENCIES = host-pcre pcre
