@@ -1,44 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:24 -0000
-Subject: [Buildroot] [git commit branch/next] mc: change tarball compression
-	to xz
-Message-ID: <20150808105605.B4CF37FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.5.7
+Message-ID: <20150808105605.966217FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c281673065ea8983b714e8845d942b3d2b3b8698
+commit: http://git.buildroot.net/buildroot/commit/?id=b6af043843ac4a67cc9eb320cd36b0c5d43e99ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The hash file is updated accordingly.
-
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mc/mc.hash |    2 +-
- package/mc/mc.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ package/mesa3d/mesa3d.hash               |    4 ++--
+ package/mesa3d/mesa3d.mk                 |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 588bbaa..7ae1c3b 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 67cdf70..0979406 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.5.4
++MESA3D_HEADERS_VERSION = 10.5.7
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 9b63e4d..b026245 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
 @@ -1,2 +1,2 @@
- # Hash from http://ftp.midnight-commander.org/mc-4.8.14.sha256:
--sha256  61fd0fd2280c3d09d7e0aec8ab001fc89dad8e4fd9941f386414667b55152ec5  mc-4.8.14.tar.bz2
-+sha256  6b1f74efbdf394bfab084f4d2ea2e72173de5f12cd42be2533ca2c3b72edb8e6  mc-4.8.14.tar.xz
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index f96d396..742b8e8 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-April/000151.html
+-sha256	b51e723f3a20d842c88a92d809435b229fc4744ca0dbec0317d9d4a3ac4c6803	mesa-10.5.4.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-June/000157.html
++sha256	04d06890cd69af8089d6ca76f40e46dcf9cacfe4a9788b32be620574d4638818	mesa-10.5.7.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f1c38bf..2a7e48c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- MC_VERSION = 4.8.14
--MC_SOURCE = mc-$(MC_VERSION).tar.bz2
-+MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE =  GPLv3+
- MC_LICENSE_FILES = COPYING
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.5.4
++MESA3D_VERSION = 10.5.7
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
