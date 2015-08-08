@@ -1,43 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] gcc/gcc-final: pass TARGET_ABI
-	flags to configure with --enable-cxx-flags
-Message-ID: <20150808105602.89DC37F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python: add patch to fix logic
+	to get gcc paths
+Message-ID: <20150808105602.6D9FB81778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2dcab526a97d1dbcb73c3cd578e5bf2853853a10
+commit: http://git.buildroot.net/buildroot/commit/?id=238bf198cf4f31a3301b81a924d5e22044945955
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libstdc++ is in all regards a normal library, it needs to be built with
-TARGET_ABI flags, otherwise linking it with other C++ code may fail.
+The Python setup.py has a function called add_gcc_paths(), which
+executes gcc -E -v to get the list of header paths searched by
+gcc. However, the logic of setup.py is only valid with the normal
+english output of gcc: it doesn't work if a non-english locale is
+set. This causes setup.py to not find certain headers (such as zlib.h)
+and therefore disabling the build of such extensions.
 
-Pass TARGET_ABI flags to gcc-final configure script in the
---enable-cxx-flags parameter.
-
-Fixes:
-  http://autobuild.buildroot.net/results/81a3bca5cbcf789c7ce1aa221a6a4154dd7c3917/
-  http://autobuild.buildroot.net/results/4943b214c29951ecc7af0a1f360b6454485c0b9b/
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Reported-by: Bruno Coudoin <bruno.coudoin@gcompris.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/gcc-final/gcc-final.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/python/018-fix-add-gcc-paths-logic.patch |   27 ++++++++++++++++++++++
+ 1 files changed, 27 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index d873aa6..8d7009b 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -185,4 +185,8 @@ endef
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
- endif
- 
-+ifeq ($(BR2_xtensa),y)
-+HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
-+endif
+diff --git a/package/python/018-fix-add-gcc-paths-logic.patch b/package/python/018-fix-add-gcc-paths-logic.patch
+new file mode 100644
+index 0000000..af6efcc
+--- /dev/null
++++ b/package/python/018-fix-add-gcc-paths-logic.patch
+@@ -0,0 +1,27 @@
++Override system locale and set to default when adding gcc paths
 +
- $(eval $(host-autotools-package))
++Forces the use of the default locale in the function
++add_gcc_paths, which is called when cross compiling to add the
++include and library paths. This is necessary because otherwise
++the gcc output is localized and the output parsing fails, which
++results in no paths added and detect_modules not able to find
++any system library (eg. libz, libssl, etc.)
++
++[Thomas: patch taken from https://bugs.python.org/issue23767.]
++
++Signed-off-by: Samuel Cabrero <samuelcabrero@gmail.com>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -414,7 +414,7 @@
++         tmpfile = os.path.join(self.build_temp, 'gccpaths')
++         if not os.path.exists(self.build_temp):
++             os.makedirs(self.build_temp)
++-        ret = os.system('%s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
+++        ret = os.system('LC_ALL=C %s -E -v - </dev/null 2>%s 1>/dev/null' % (gcc, tmpfile))
++         is_gcc = False
++         in_incdirs = False
++         inc_dirs = []
