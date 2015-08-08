@@ -1,61 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:56:00 -0000
-Subject: [Buildroot] [git commit branch/next] qt5base: add patch to fix gold
-	linker issue
-Message-ID: <20150808105558.48B0C81778@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:01 -0000
+Subject: [Buildroot] [git commit branch/next] package/heirloom-mailx: fix
+	link issue with getopt
+Message-ID: <20150808105558.CE8D2818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a138be5d701685a6e3122fb61f267c28f18c0771
+commit: http://git.buildroot.net/buildroot/commit/?id=d4171c5192e44f2733ccd217222680e597e6397d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The newly added patch makes sure that gold linker functionality is not
-used when doing host builds, since qt5 only tests the availability of
-this feature with the target compiler.
+With NIOS2 toolchain, heirloom-mailx fail to build
+due to missing -fPIC when linking with its own getopt.
+
+Since static build for heirloom-mailx is disabled,
+always pass -fPIC in CFLAGS.
 
 Fixes:
+http://autobuild.buildroot.net/results/333/33346f4555ed403bab7b739dd5d47814efa8eb4c
 
-  http://autobuild.buildroot.net/results/f403a76ac0abbf8488373c0dffb4487f5d98c55d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0005-no-gold-linker-for-host-build.patch       |   27 ++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ package/heirloom-mailx/heirloom-mailx.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch b/package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
-new file mode 100644
-index 0000000..99d5928
---- /dev/null
-+++ b/package/qt5/qt5base/0005-no-gold-linker-for-host-build.patch
-@@ -0,0 +1,27 @@
-+Use the gold linker only for target builds
-+
-+Availability of the gold linker is only tested with the
-+cross-compiler, not the host compiler, so Qt shouldn't assume it's
-+available when doing host builds.
-+
-+This fixes build failures occuring when cross-compiling Qt5 with a
-+gold capable cross-compiler, on a host that has a too old compiler to
-+support gold.
-+
-+Bug reported upstream at https://bugreports.qt.io/browse/QTBUG-46125.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/mkspecs/features/default_post.prf
-+===================================================================
-+--- a/mkspecs/features/default_post.prf
-++++ b/mkspecs/features/default_post.prf
-+@@ -62,7 +62,7 @@
-+     QMAKE_LIBFLAGS += $$QMAKE_LIBFLAGS_RELEASE
-+ }
-+ 
-+-use_gold_linker: QMAKE_LFLAGS += $$QMAKE_LFLAGS_USE_GOLD
-++!host_build: use_gold_linker: QMAKE_LFLAGS += $$QMAKE_LFLAGS_USE_GOLD
-+ 
-+ dll:win32: QMAKE_LFLAGS += $$QMAKE_LFLAGS_DLL
-+ static:mac: QMAKE_LFLAGS += $$QMAKE_LFLAGS_STATIC_LIB
+diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
+index 7343479..044cd8c 100644
+--- a/package/heirloom-mailx/heirloom-mailx.mk
++++ b/package/heirloom-mailx/heirloom-mailx.mk
+@@ -18,8 +18,11 @@ define HEIRLOOM_MAILX_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(SHELL) ./makeconfig)
+ endef
+ 
++# -fPIC is needed to build with NIOS2 toolchains.
+ define HEIRLOOM_MAILX_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		CFLAGS="$(TARGET_CFLAGS) -fPIC" \
++		-C $(@D)
+ endef
+ 
+ define HEIRLOOM_MAILX_INSTALL_TARGET_CMDS
