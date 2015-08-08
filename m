@@ -1,55 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] lxc: mark as not available in
-	BR2_STATIC_LIBS configs
-Message-ID: <20150808105556.C46D3818CF@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:00 -0000
+Subject: [Buildroot] [git commit branch/next] libcap-ng: cannot be built
+	with nios2 CS 2014.05 toolchain
+Message-ID: <20150808105557.8C11E818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29a6df448dd6b4e70594254803412350111be091
+commit: http://git.buildroot.net/buildroot/commit/?id=a3038d061e541aef0bc449149bf72c6f458d6942
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Even though lxc uses the autotools, it does not use libtool to build
-its libraries, and does it manually. It forces building a shared
-library. So let's comply with this decision, and mark lxc as not
-available in BR2_STATIC_LIBS configurations.
-
 Fixes:
+http://autobuild.buildroot.net/results/d13/d136f763ca3389cdc6a404db7a4fc0cd18329955/
+http://autobuild.buildroot.net/results/e00/e002e2a3bd52a3cc3b0d06625de61315d86de524/
+http://autobuild.buildroot.net/results/bba/bba9f7130315c9d97cc060a73663276d0fa2c1b3/
+http://autobuild.buildroot.net/results/fc7/fc7bc050ef769716dedb0ad81a51e33a12deec47/
 
-  http://autobuild.buildroot.org/results/588/588dc28315a9114374f148bbc64c4ec3d7b4e295/
+And many more.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Building libcap-ng with that toolchain triggers an internal compiler /
+assembler bug, so blacklist that combination and propagate to the reverse
+dependencies.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lxc/Config.in |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
+ package/connman/Config.in    |    1 +
+ package/libcap-ng/Config.in  |    1 +
+ package/ofono/Config.in      |    2 ++
+ package/util-linux/Config.in |    1 +
+ 4 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/lxc/Config.in b/package/lxc/Config.in
-index 10a668d..ffd9b4a 100644
---- a/package/lxc/Config.in
-+++ b/package/lxc/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_LXC
- 	select BR2_PACKAGE_LIBCAP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	# build system forcefully builds a shared library
-+	depends on !BR2_STATIC_LIBS
- 	# the toolchain doesn't support setns syscall
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-@@ -14,9 +16,10 @@ config BR2_PACKAGE_LXC
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index a887c2f..ba238af 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -52,6 +52,7 @@ config BR2_PACKAGE_CONNMAN_NEARD
  
- 	  https://linuxcontainers.org/
+ config BR2_PACKAGE_CONNMAN_OFONO
+ 	bool "enable ofono support"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
+ 	select BR2_PACKAGE_OFONO
  
--comment "lxc needs a toolchain w/ threads, headers >= 3.0"
-+comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library"
+ config BR2_PACKAGE_CONNMAN_DEBUG
+diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+index d1663cd..a52d230 100644
+--- a/package/libcap-ng/Config.in
++++ b/package/libcap-ng/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBCAP_NG
+ 	bool "libcap-ng"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # triggers compiler bug
+ 	help
+ 	  The libcap-ng library is intended to make programming with
+ 	  posix capabilities much easier than the traditional libcap
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+index b26b5e7..eb1856f 100644
+--- a/package/ofono/Config.in
++++ b/package/ofono/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OFONO
+ 	depends on BR2_USE_WCHAR # gettext, libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -17,3 +18,4 @@ config BR2_PACKAGE_OFONO
+ comment "ofono needs a toolchain w/ wchar, threads"
  	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
-+		|| BR2_STATIC_LIBS
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 8ed56b0..39df11c 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -214,6 +214,7 @@ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+ 
+ config BR2_PACKAGE_UTIL_LINUX_SETPRIV
+ 	bool "setpriv"
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405 # libcap-ng
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	help
+ 	  Run a program with different Linux privilege settings
