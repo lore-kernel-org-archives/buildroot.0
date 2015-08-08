@@ -1,109 +1,728 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:55:56 -0000
-Subject: [Buildroot] [git commit branch/next] package/postgresql: fix
-	pthread flags detection
-Message-ID: <20150808105555.4FC7781801@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] binutils: backport xtensa
+	trampolines relaxation optimization
+Message-ID: <20150808105555.13CC881801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=257a2393d0696ae6897f171e1e4ca66aee3892a9
+commit: http://git.buildroot.net/buildroot/commit/?id=911c5e2dd30e9d96984dfaa03c9b1f3bc95ea2fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-PostgreSQL configure may not correctly determine flags for compiling and
-linking with pthreads support when compiler or linker give irrelevant
-warnings.
-
-Record default compiler and linker output and see if adding pthread
-option changes that, instead of assuming that linker and compiler are
-silent by default.
-
-Fixes:
-  http://autobuild.buildroot.net/results/916487aae929c181d4e3f471c6c7508552f0b683/
-  http://autobuild.buildroot.net/results/921a94d1a489d81b362c5b6a403a156b4691effd/
-  http://autobuild.buildroot.net/results/dbcdc58ad32b7b811ea47b6fc0f926a477e30786/
-  http://autobuild.buildroot.net/results/68b582f4caec223a646f095487263353f273156d/
+This optimization alone reduces gnuradio build time for xtensa from 2
+hours to 40 minutes.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ker-compiler-output-with-their-default-ou.patch |   56 ++++++++++++++++++++
- package/postgresql/postgresql.mk                   |    1 +
- 2 files changed, 57 insertions(+), 0 deletions(-)
+ ...10-xtensa-optimize-trampolines-relaxation.patch |  346 ++++++++++++++++++++
+ ...10-xtensa-optimize-trampolines-relaxation.patch |  346 ++++++++++++++++++++
+ 2 files changed, 692 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch b/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
+diff --git a/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch b/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
 new file mode 100644
-index 0000000..3eca82f
+index 0000000..852974b
 --- /dev/null
-+++ b/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
-@@ -0,0 +1,56 @@
-+From 58d05b2a57802345f43e628bc0807dbf0116cdcc Mon Sep 17 00:00:00 2001
++++ b/package/binutils/2.24/910-xtensa-optimize-trampolines-relaxation.patch
+@@ -0,0 +1,346 @@
++From cbe53e134d4c3a656880a906738ce19fdcd38e8b Mon Sep 17 00:00:00 2001
 +From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 20 Mar 2015 16:37:51 +0300
-+Subject: [PATCH] Compare linker/compiler output with their default output
++Date: Fri, 1 May 2015 11:39:12 +0300
++Subject: [PATCH] xtensa: optimize trampolines relaxation
 +
-+linker and compiler may have noisy output by default, making
-+acx_pthread.m4 believe that pthread options that it tries are ignored
-+as invalid.
++Currently every fixup in the current segment is checked when relaxing
++trampoline frag. This is very expensive. Make a searchable array of
++fixups pointing at potentially oversized jumps at the beginning of every
++relaxation pass and only check subset of this cache in the reach of
++single jump from the trampoline frag currently being relaxed.
 +
-+Record default compiler and linker output and see if adding pthread
-+option changes that, instead of assuming that linker and compiler are
-+silent by default.
++Original profile:
++
++% time    self  children    called     name
++-----------------------------------------
++        370.16  593.38 12283048/12283048     relax_segment
++  98.4  370.16  593.38 12283048         xtensa_relax_frag
++         58.91  269.26 2691463834/2699602236     xtensa_insnbuf_from_chars
++         68.35   68.17 811266668/813338977     S_GET_VALUE
++         36.85   29.51 2684369246/2685538060     xtensa_opcode_decode
++         28.34    8.84 2684369246/2685538060     xtensa_format_get_slot
++         12.39    5.94 2691463834/2699775044     xtensa_format_decode
++          0.03    4.60 4101109/4101109     relax_frag_for_align
++          0.18    1.76  994617/994617      relax_frag_immed
++          0.07    0.09 24556277/24851220     new_logical_line
++          0.06    0.00 12283048/14067410     as_where
++          0.04    0.00 7094588/15460506     xtensa_format_num_slots
++          0.00    0.00       1/712477      xtensa_insnbuf_alloc
++-----------------------------------------
++
++Same data, after optimization:
++
++% time    self  children    called     name
++-----------------------------------------
++          0.51    7.47 12283048/12283048     relax_segment
++  58.0    0.51    7.47 12283048         xtensa_relax_frag
++          0.02    4.08 4101109/4101109     relax_frag_for_align
++          0.18    1.39  994617/994617      relax_frag_immed
++          0.01    0.98     555/555         xtensa_cache_relaxable_fixups
++          0.21    0.25 7094588/16693271     xtensa_insnbuf_from_chars
++          0.06    0.12 24556277/24851220     new_logical_line
++          0.06    0.00 7094588/15460506     xtensa_format_num_slots
++          0.02    0.04 7094588/16866079     xtensa_format_decode
++          0.05    0.00 12283048/14067410     as_where
++          0.00    0.00       1/712477      xtensa_insnbuf_alloc
++          0.00    0.00   93808/93808       xtensa_find_first_cached_fixup
++-----------------------------------------
++
++2015-05-02  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (cached_fixupS, fixup_cacheS): New typedefs.
++	(struct cached_fixup, struct fixup_cache): New structures.
++	(fixup_order, xtensa_make_cached_fixup),
++	(xtensa_realloc_fixup_cache, xtensa_cache_relaxable_fixups),
++	(xtensa_find_first_cached_fixup, xtensa_delete_cached_fixup),
++	(xtensa_add_cached_fixup): New functions.
++	(xtensa_relax_frag): Cache fixups pointing at potentially
++	oversized jumps at the beginning of every relaxation pass. Only
++	check subset of this cache in the reach of single jump from the
++	trampoline frag currently being relaxed.
 +
 +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+ config/acx_pthread.m4 | 18 +++++++++++++++++-
-+ 1 file changed, 17 insertions(+), 1 deletion(-)
++Backported from: b76f99d702c3501ac320396ea06bc7f9237173c3
++Changes to ChangeLog are dropped.
 +
-+diff --git a/config/acx_pthread.m4 b/config/acx_pthread.m4
-+index 581164b..d254612 100644
-+--- a/config/acx_pthread.m4
-++++ b/config/acx_pthread.m4
-+@@ -80,6 +80,22 @@
-+ esac
++ gas/config/tc-xtensa.c | 221 +++++++++++++++++++++++++++++++++++++++++++------
++ 1 file changed, 194 insertions(+), 27 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 3e85b69..b1827fa 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -8785,6 +8785,154 @@ static long relax_frag_for_align (fragS *, long);
++ static long relax_frag_immed
++   (segT, fragS *, long, int, xtensa_format, int, int *, bfd_boolean);
 + 
-+ if test x"$acx_pthread_ok" = xno; then
-++
-++cat >conftest.$ac_ext <<_ACEOF
-++int
-++main (int argc, char **argv)
+++typedef struct cached_fixup cached_fixupS;
+++struct cached_fixup
 ++{
-++  (void) argc;
-++  (void) argv;
-++  return 0;
+++  int addr;
+++  int target;
+++  int delta;
+++  fixS *fixP;
+++};
+++
+++typedef struct fixup_cache fixup_cacheS;
+++struct fixup_cache
+++{
+++  cached_fixupS *fixups;
+++  unsigned n_fixups;
+++  unsigned n_max;
+++
+++  segT seg;
+++  fragS *first_frag;
+++};
+++
+++static int fixup_order (const void *a, const void *b)
+++{
+++  const cached_fixupS *pa = a;
+++  const cached_fixupS *pb = b;
+++
+++  if (pa->addr == pb->addr)
+++    {
+++      if (pa->target == pb->target)
+++	{
+++	  if (pa->fixP->fx_r_type == pb->fixP->fx_r_type)
+++	    return 0;
+++	  return pa->fixP->fx_r_type < pb->fixP->fx_r_type ?  -1 : 1;
+++	}
+++      return pa->target - pb->target;
+++    }
+++  return pa->addr - pb->addr;
 ++}
-++_ACEOF
-++rm -f conftest.$ac_objext conftest$ac_exeext
 ++
-++# Record the default linker and compiler output
-++ld_default_output="`(eval $ac_link 2>&1 1>&5)`"
-++cc_default_output="`(eval $ac_compile 2>&1 1>&5)`"
+++static bfd_boolean xtensa_make_cached_fixup (cached_fixupS *o, fixS *fixP)
+++{
+++  xtensa_isa isa = xtensa_default_isa;
+++  int addr = fixP->fx_frag->fr_address;
+++  int target;
+++  int delta;
+++  symbolS *s = fixP->fx_addsy;
+++  int slot;
+++  xtensa_format fmt;
+++  xtensa_opcode opcode;
 ++
-+ for flag in $acx_pthread_flags; do
+++  if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+++      fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+++    return FALSE;
+++  target = S_GET_VALUE (s);
+++  delta = target - addr;
+++
+++  if (abs(delta) < J_RANGE / 2)
+++    return FALSE;
+++
+++  xtensa_insnbuf_from_chars (isa, trampoline_buf,
+++			     (unsigned char *) fixP->fx_frag->fr_literal +
+++			     fixP->fx_where, 0);
+++  fmt = xtensa_format_decode (isa, trampoline_buf);
+++  gas_assert (fmt != XTENSA_UNDEFINED);
+++  slot = fixP->tc_fix_data.slot;
+++  xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+++  opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+++  if (opcode != xtensa_j_opcode)
+++    return FALSE;
+++
+++  o->addr = addr;
+++  o->target = target;
+++  o->delta = delta;
+++  o->fixP = fixP;
+++
+++  return TRUE;
+++}
+++
+++static void xtensa_realloc_fixup_cache (fixup_cacheS *cache, unsigned add)
+++{
+++  if (cache->n_fixups + add > cache->n_max)
+++    {
+++      cache->n_max = (cache->n_fixups + add) * 2;
+++      cache->fixups = xrealloc (cache->fixups,
+++				sizeof (*cache->fixups) * cache->n_max);
+++    }
+++}
+++
+++static void xtensa_cache_relaxable_fixups (fixup_cacheS *cache,
+++					   segment_info_type *seginfo)
+++{
+++  fixS *fixP;
+++
+++  cache->n_fixups = 0;
+++
+++  for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++    {
+++      xtensa_realloc_fixup_cache (cache, 1);
+++
+++      if (xtensa_make_cached_fixup (cache->fixups + cache->n_fixups, fixP))
+++	++cache->n_fixups;
+++    }
+++  qsort (cache->fixups, cache->n_fixups, sizeof (*cache->fixups), fixup_order);
+++}
+++
+++static unsigned xtensa_find_first_cached_fixup (const fixup_cacheS *cache,
+++						int addr)
+++{
+++  unsigned a = 0;
+++  unsigned b = cache->n_fixups;
+++
+++  while (b - a > 1)
+++    {
+++      unsigned c = (a + b) / 2;
+++
+++      if (cache->fixups[c].addr < addr)
+++	a = c;
+++      else
+++	b = c;
+++    }
+++  return a;
+++}
+++
+++static void xtensa_delete_cached_fixup (fixup_cacheS *cache, unsigned i)
+++{
+++  memmove (cache->fixups + i, cache->fixups + i + 1,
+++	   (cache->n_fixups - i - 1) * sizeof (*cache->fixups));
+++  --cache->n_fixups;
+++}
+++
+++static bfd_boolean xtensa_add_cached_fixup (fixup_cacheS *cache, fixS *fixP)
+++{
+++  cached_fixupS o;
+++  unsigned i;
+++
+++  if (!xtensa_make_cached_fixup (&o, fixP))
+++    return FALSE;
+++  xtensa_realloc_fixup_cache (cache, 1);
+++  i = xtensa_find_first_cached_fixup (cache, o.addr);
+++  if (i < cache->n_fixups)
+++    {
+++      ++i;
+++      memmove (cache->fixups + i + 1, cache->fixups + i,
+++	       (cache->n_fixups - i) * sizeof (*cache->fixups));
+++    }
+++  cache->fixups[i] = o;
+++  ++cache->n_fixups;
+++  return TRUE;
+++}
 + 
-+         tryPTHREAD_CFLAGS=""
-+@@ -143,7 +159,7 @@
-+ _ACEOF
-+             rm -f conftest.$ac_objext conftest$ac_exeext
-+             # Check both linking and compiling, because they might tolerate different options.
-+-            if test "`(eval $ac_link 2>&1 1>&5)`" = "" && test "`(eval $ac_compile 2>&1 1>&5)`" = ""; then
-++            if test "`(eval $ac_link 2>&1 1>&5)`" = "$ld_default_output" && test "`(eval $ac_compile 2>&1 1>&5)`" = "$cc_default_output"; then
-+                 # we continue with more flags because Linux needs -lpthread
-+                 # for libpq builds on PostgreSQL.  The test above only
-+                 # tests for building binaries, not shared libraries.
++ /* Return the number of bytes added to this fragment, given that the
++    input has been stretched already by "stretch".  */
++@@ -8896,35 +9044,43 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++     case RELAX_TRAMPOLINE:
++       if (fragP->tc_frag_data.relax_seen)
++         {
++-          segment_info_type *seginfo = seg_info (now_seg);
++-          fragS *fP; /* The out-of-range jump.  */
++-          fixS *fixP;
+++	  static fixup_cacheS fixup_cache;
+++	  segment_info_type *seginfo = seg_info (now_seg);
+++	  int trampaddr = fragP->fr_address + fragP->fr_fix;
+++	  int searchaddr = trampaddr < J_RANGE ? 0 : trampaddr - J_RANGE;
+++	  unsigned i;
+++
+++	  if (now_seg != fixup_cache.seg ||
+++	      fragP == fixup_cache.first_frag ||
+++	      fixup_cache.first_frag == NULL)
+++	    {
+++	      xtensa_cache_relaxable_fixups (&fixup_cache, seginfo);
+++	      fixup_cache.seg = now_seg;
+++	      fixup_cache.first_frag = fragP;
+++	    }
++ 
++           /* Scan for jumps that will not reach.  */
++-          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++          for (i = xtensa_find_first_cached_fixup (&fixup_cache, searchaddr);
+++	       i < fixup_cache.n_fixups; ++i)
+++
++             {
++-              symbolS *s = fixP->fx_addsy;
++-	      xtensa_opcode opcode;
++-              int target;
++-              int addr;
++-              int delta;
++-
++-              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
++-                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
++-                continue;
++-	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
++-					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
++-					 0);
++-	      fmt = xtensa_format_decode (isa, trampoline_buf);
++-	      gas_assert (fmt != XTENSA_UNDEFINED);
++-	      slot = fixP->tc_fix_data.slot;
++-	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
++-	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
++-	      if (opcode != xtensa_j_opcode)
+++	      fixS *fixP = fixup_cache.fixups[i].fixP;
+++	      int target = fixup_cache.fixups[i].target;
+++	      int addr = fixup_cache.fixups[i].addr;
+++	      int delta = fixup_cache.fixups[i].delta + stretch;
+++
+++	      trampaddr = fragP->fr_address + fragP->fr_fix;
+++
+++	      if ((addr + J_RANGE < trampaddr) ||
+++		  abs (addr - trampaddr) < J_RANGE / 2)
++ 		continue;
++-              target = S_GET_VALUE (s);
++-              addr = fixP->fx_frag->fr_address;
++-              delta = target - addr + stretch;
+++	      if (addr > trampaddr + J_RANGE)
+++		break;
+++	      if (abs (delta) < J_RANGE)
+++		continue;
+++
+++	      slot = fixP->tc_fix_data.slot;
+++
++               if (delta > J_RANGE  || delta < -1 * J_RANGE)
++                 { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
++ 		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
++@@ -8978,14 +9134,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 		    }
++ 		  if (tf->fragP == fragP)
++ 		    {
++-		      int trampaddr = fragP->fr_address + fragP->fr_fix;
++-
++ 		      if (abs (addr - trampaddr) < J_RANGE)
++ 			{ /* The trampoline is in range of original; fix it!  */
++ 			  fixS *newfixP;
++ 			  int offset;
++ 			  TInsn insn;
++ 			  symbolS *lsym;
+++			  fragS *fP; /* The out-of-range jump.  */
++ 
++ 			  new_stretch += init_trampoline_frag (tf);
++ 			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
++@@ -9009,10 +9164,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 			  newfixP->tc_fix_data.X_add_symbol = lsym;
++ 			  newfixP->tc_fix_data.X_add_number = offset;
++ 			  newfixP->tc_fix_data.slot = slot;
+++
+++			  xtensa_delete_cached_fixup (&fixup_cache, i);
+++			  xtensa_add_cached_fixup (&fixup_cache, newfixP);
+++
++ 			  /* Move the fix-up from the original j insn to this one.  */
++ 			  fixP->fx_frag = fragP;
++ 			  fixP->fx_where = fragP->fr_fix - 3;
++ 			  fixP->tc_fix_data.slot = 0;
+++
+++			  xtensa_add_cached_fixup (&fixup_cache, fixP);
+++
+++			  /* re-do current fixup */
+++			  --i;
+++
++ 			  /* Adjust the jump around this trampoline (if present).  */
++ 			  if (tf->fixP != NULL)
++ 			    {
++@@ -9027,6 +9192,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 			      fragP->fr_subtype = 0;
++ 			      /* Remove from the trampoline_list.  */
++ 			      prev->next = tf->next;
+++			      if (fragP == fixup_cache.first_frag)
+++				fixup_cache.first_frag = NULL;
++ 			      break;
++ 			    }
++ 			}
 +-- 
 +1.8.1.4
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 85ac0e6..1a6aa88 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -12,6 +12,7 @@ POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes
-+POSTGRESQL_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- # PostgreSQL does not build against uClibc with locales
++
+diff --git a/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch b/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
+new file mode 100644
+index 0000000..852974b
+--- /dev/null
++++ b/package/binutils/2.25/910-xtensa-optimize-trampolines-relaxation.patch
+@@ -0,0 +1,346 @@
++From cbe53e134d4c3a656880a906738ce19fdcd38e8b Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 1 May 2015 11:39:12 +0300
++Subject: [PATCH] xtensa: optimize trampolines relaxation
++
++Currently every fixup in the current segment is checked when relaxing
++trampoline frag. This is very expensive. Make a searchable array of
++fixups pointing at potentially oversized jumps at the beginning of every
++relaxation pass and only check subset of this cache in the reach of
++single jump from the trampoline frag currently being relaxed.
++
++Original profile:
++
++% time    self  children    called     name
++-----------------------------------------
++        370.16  593.38 12283048/12283048     relax_segment
++  98.4  370.16  593.38 12283048         xtensa_relax_frag
++         58.91  269.26 2691463834/2699602236     xtensa_insnbuf_from_chars
++         68.35   68.17 811266668/813338977     S_GET_VALUE
++         36.85   29.51 2684369246/2685538060     xtensa_opcode_decode
++         28.34    8.84 2684369246/2685538060     xtensa_format_get_slot
++         12.39    5.94 2691463834/2699775044     xtensa_format_decode
++          0.03    4.60 4101109/4101109     relax_frag_for_align
++          0.18    1.76  994617/994617      relax_frag_immed
++          0.07    0.09 24556277/24851220     new_logical_line
++          0.06    0.00 12283048/14067410     as_where
++          0.04    0.00 7094588/15460506     xtensa_format_num_slots
++          0.00    0.00       1/712477      xtensa_insnbuf_alloc
++-----------------------------------------
++
++Same data, after optimization:
++
++% time    self  children    called     name
++-----------------------------------------
++          0.51    7.47 12283048/12283048     relax_segment
++  58.0    0.51    7.47 12283048         xtensa_relax_frag
++          0.02    4.08 4101109/4101109     relax_frag_for_align
++          0.18    1.39  994617/994617      relax_frag_immed
++          0.01    0.98     555/555         xtensa_cache_relaxable_fixups
++          0.21    0.25 7094588/16693271     xtensa_insnbuf_from_chars
++          0.06    0.12 24556277/24851220     new_logical_line
++          0.06    0.00 7094588/15460506     xtensa_format_num_slots
++          0.02    0.04 7094588/16866079     xtensa_format_decode
++          0.05    0.00 12283048/14067410     as_where
++          0.00    0.00       1/712477      xtensa_insnbuf_alloc
++          0.00    0.00   93808/93808       xtensa_find_first_cached_fixup
++-----------------------------------------
++
++2015-05-02  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (cached_fixupS, fixup_cacheS): New typedefs.
++	(struct cached_fixup, struct fixup_cache): New structures.
++	(fixup_order, xtensa_make_cached_fixup),
++	(xtensa_realloc_fixup_cache, xtensa_cache_relaxable_fixups),
++	(xtensa_find_first_cached_fixup, xtensa_delete_cached_fixup),
++	(xtensa_add_cached_fixup): New functions.
++	(xtensa_relax_frag): Cache fixups pointing at potentially
++	oversized jumps at the beginning of every relaxation pass. Only
++	check subset of this cache in the reach of single jump from the
++	trampoline frag currently being relaxed.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: b76f99d702c3501ac320396ea06bc7f9237173c3
++Changes to ChangeLog are dropped.
++
++ gas/config/tc-xtensa.c | 221 +++++++++++++++++++++++++++++++++++++++++++------
++ 1 file changed, 194 insertions(+), 27 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 3e85b69..b1827fa 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -8785,6 +8785,154 @@ static long relax_frag_for_align (fragS *, long);
++ static long relax_frag_immed
++   (segT, fragS *, long, int, xtensa_format, int, int *, bfd_boolean);
++ 
+++typedef struct cached_fixup cached_fixupS;
+++struct cached_fixup
+++{
+++  int addr;
+++  int target;
+++  int delta;
+++  fixS *fixP;
+++};
+++
+++typedef struct fixup_cache fixup_cacheS;
+++struct fixup_cache
+++{
+++  cached_fixupS *fixups;
+++  unsigned n_fixups;
+++  unsigned n_max;
+++
+++  segT seg;
+++  fragS *first_frag;
+++};
+++
+++static int fixup_order (const void *a, const void *b)
+++{
+++  const cached_fixupS *pa = a;
+++  const cached_fixupS *pb = b;
+++
+++  if (pa->addr == pb->addr)
+++    {
+++      if (pa->target == pb->target)
+++	{
+++	  if (pa->fixP->fx_r_type == pb->fixP->fx_r_type)
+++	    return 0;
+++	  return pa->fixP->fx_r_type < pb->fixP->fx_r_type ?  -1 : 1;
+++	}
+++      return pa->target - pb->target;
+++    }
+++  return pa->addr - pb->addr;
+++}
+++
+++static bfd_boolean xtensa_make_cached_fixup (cached_fixupS *o, fixS *fixP)
+++{
+++  xtensa_isa isa = xtensa_default_isa;
+++  int addr = fixP->fx_frag->fr_address;
+++  int target;
+++  int delta;
+++  symbolS *s = fixP->fx_addsy;
+++  int slot;
+++  xtensa_format fmt;
+++  xtensa_opcode opcode;
+++
+++  if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
+++      fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
+++    return FALSE;
+++  target = S_GET_VALUE (s);
+++  delta = target - addr;
+++
+++  if (abs(delta) < J_RANGE / 2)
+++    return FALSE;
+++
+++  xtensa_insnbuf_from_chars (isa, trampoline_buf,
+++			     (unsigned char *) fixP->fx_frag->fr_literal +
+++			     fixP->fx_where, 0);
+++  fmt = xtensa_format_decode (isa, trampoline_buf);
+++  gas_assert (fmt != XTENSA_UNDEFINED);
+++  slot = fixP->tc_fix_data.slot;
+++  xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
+++  opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
+++  if (opcode != xtensa_j_opcode)
+++    return FALSE;
+++
+++  o->addr = addr;
+++  o->target = target;
+++  o->delta = delta;
+++  o->fixP = fixP;
+++
+++  return TRUE;
+++}
+++
+++static void xtensa_realloc_fixup_cache (fixup_cacheS *cache, unsigned add)
+++{
+++  if (cache->n_fixups + add > cache->n_max)
+++    {
+++      cache->n_max = (cache->n_fixups + add) * 2;
+++      cache->fixups = xrealloc (cache->fixups,
+++				sizeof (*cache->fixups) * cache->n_max);
+++    }
+++}
+++
+++static void xtensa_cache_relaxable_fixups (fixup_cacheS *cache,
+++					   segment_info_type *seginfo)
+++{
+++  fixS *fixP;
+++
+++  cache->n_fixups = 0;
+++
+++  for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++    {
+++      xtensa_realloc_fixup_cache (cache, 1);
+++
+++      if (xtensa_make_cached_fixup (cache->fixups + cache->n_fixups, fixP))
+++	++cache->n_fixups;
+++    }
+++  qsort (cache->fixups, cache->n_fixups, sizeof (*cache->fixups), fixup_order);
+++}
+++
+++static unsigned xtensa_find_first_cached_fixup (const fixup_cacheS *cache,
+++						int addr)
+++{
+++  unsigned a = 0;
+++  unsigned b = cache->n_fixups;
+++
+++  while (b - a > 1)
+++    {
+++      unsigned c = (a + b) / 2;
+++
+++      if (cache->fixups[c].addr < addr)
+++	a = c;
+++      else
+++	b = c;
+++    }
+++  return a;
+++}
+++
+++static void xtensa_delete_cached_fixup (fixup_cacheS *cache, unsigned i)
+++{
+++  memmove (cache->fixups + i, cache->fixups + i + 1,
+++	   (cache->n_fixups - i - 1) * sizeof (*cache->fixups));
+++  --cache->n_fixups;
+++}
+++
+++static bfd_boolean xtensa_add_cached_fixup (fixup_cacheS *cache, fixS *fixP)
+++{
+++  cached_fixupS o;
+++  unsigned i;
+++
+++  if (!xtensa_make_cached_fixup (&o, fixP))
+++    return FALSE;
+++  xtensa_realloc_fixup_cache (cache, 1);
+++  i = xtensa_find_first_cached_fixup (cache, o.addr);
+++  if (i < cache->n_fixups)
+++    {
+++      ++i;
+++      memmove (cache->fixups + i + 1, cache->fixups + i,
+++	       (cache->n_fixups - i) * sizeof (*cache->fixups));
+++    }
+++  cache->fixups[i] = o;
+++  ++cache->n_fixups;
+++  return TRUE;
+++}
++ 
++ /* Return the number of bytes added to this fragment, given that the
++    input has been stretched already by "stretch".  */
++@@ -8896,35 +9044,43 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++     case RELAX_TRAMPOLINE:
++       if (fragP->tc_frag_data.relax_seen)
++         {
++-          segment_info_type *seginfo = seg_info (now_seg);
++-          fragS *fP; /* The out-of-range jump.  */
++-          fixS *fixP;
+++	  static fixup_cacheS fixup_cache;
+++	  segment_info_type *seginfo = seg_info (now_seg);
+++	  int trampaddr = fragP->fr_address + fragP->fr_fix;
+++	  int searchaddr = trampaddr < J_RANGE ? 0 : trampaddr - J_RANGE;
+++	  unsigned i;
+++
+++	  if (now_seg != fixup_cache.seg ||
+++	      fragP == fixup_cache.first_frag ||
+++	      fixup_cache.first_frag == NULL)
+++	    {
+++	      xtensa_cache_relaxable_fixups (&fixup_cache, seginfo);
+++	      fixup_cache.seg = now_seg;
+++	      fixup_cache.first_frag = fragP;
+++	    }
++ 
++           /* Scan for jumps that will not reach.  */
++-          for (fixP = seginfo->fix_root; fixP ; fixP = fixP->fx_next)
+++          for (i = xtensa_find_first_cached_fixup (&fixup_cache, searchaddr);
+++	       i < fixup_cache.n_fixups; ++i)
+++
++             {
++-              symbolS *s = fixP->fx_addsy;
++-	      xtensa_opcode opcode;
++-              int target;
++-              int addr;
++-              int delta;
++-
++-              if (fixP->fx_r_type < BFD_RELOC_XTENSA_SLOT0_OP ||
++-                  fixP->fx_r_type > BFD_RELOC_XTENSA_SLOT14_OP)
++-                continue;
++-	      xtensa_insnbuf_from_chars (isa, trampoline_buf,
++-					 (unsigned char *) fixP->fx_frag->fr_literal + fixP->fx_where,
++-					 0);
++-	      fmt = xtensa_format_decode (isa, trampoline_buf);
++-	      gas_assert (fmt != XTENSA_UNDEFINED);
++-	      slot = fixP->tc_fix_data.slot;
++-	      xtensa_format_get_slot (isa, fmt, slot, trampoline_buf, trampoline_slotbuf);
++-	      opcode = xtensa_opcode_decode (isa, fmt, slot, trampoline_slotbuf);
++-	      if (opcode != xtensa_j_opcode)
+++	      fixS *fixP = fixup_cache.fixups[i].fixP;
+++	      int target = fixup_cache.fixups[i].target;
+++	      int addr = fixup_cache.fixups[i].addr;
+++	      int delta = fixup_cache.fixups[i].delta + stretch;
+++
+++	      trampaddr = fragP->fr_address + fragP->fr_fix;
+++
+++	      if ((addr + J_RANGE < trampaddr) ||
+++		  abs (addr - trampaddr) < J_RANGE / 2)
++ 		continue;
++-              target = S_GET_VALUE (s);
++-              addr = fixP->fx_frag->fr_address;
++-              delta = target - addr + stretch;
+++	      if (addr > trampaddr + J_RANGE)
+++		break;
+++	      if (abs (delta) < J_RANGE)
+++		continue;
+++
+++	      slot = fixP->tc_fix_data.slot;
+++
++               if (delta > J_RANGE  || delta < -1 * J_RANGE)
++                 { /* Found an out-of-range jump; scan the list of trampolines for the best match.  */
++ 		  struct trampoline_seg *ts = find_trampoline_seg (now_seg);
++@@ -8978,14 +9134,13 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 		    }
++ 		  if (tf->fragP == fragP)
++ 		    {
++-		      int trampaddr = fragP->fr_address + fragP->fr_fix;
++-
++ 		      if (abs (addr - trampaddr) < J_RANGE)
++ 			{ /* The trampoline is in range of original; fix it!  */
++ 			  fixS *newfixP;
++ 			  int offset;
++ 			  TInsn insn;
++ 			  symbolS *lsym;
+++			  fragS *fP; /* The out-of-range jump.  */
++ 
++ 			  new_stretch += init_trampoline_frag (tf);
++ 			  offset = fragP->fr_fix; /* Where to assemble the j insn.  */
++@@ -9009,10 +9164,20 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 			  newfixP->tc_fix_data.X_add_symbol = lsym;
++ 			  newfixP->tc_fix_data.X_add_number = offset;
++ 			  newfixP->tc_fix_data.slot = slot;
+++
+++			  xtensa_delete_cached_fixup (&fixup_cache, i);
+++			  xtensa_add_cached_fixup (&fixup_cache, newfixP);
+++
++ 			  /* Move the fix-up from the original j insn to this one.  */
++ 			  fixP->fx_frag = fragP;
++ 			  fixP->fx_where = fragP->fr_fix - 3;
++ 			  fixP->tc_fix_data.slot = 0;
+++
+++			  xtensa_add_cached_fixup (&fixup_cache, fixP);
+++
+++			  /* re-do current fixup */
+++			  --i;
+++
++ 			  /* Adjust the jump around this trampoline (if present).  */
++ 			  if (tf->fixP != NULL)
++ 			    {
++@@ -9027,6 +9192,8 @@ xtensa_relax_frag (fragS *fragP, long stretch, int *stretched_p)
++ 			      fragP->fr_subtype = 0;
++ 			      /* Remove from the trampoline_list.  */
++ 			      prev->next = tf->next;
+++			      if (fragP == fixup_cache.first_frag)
+++				fixup_cache.first_frag = NULL;
++ 			      break;
++ 			    }
++ 			}
++-- 
++1.8.1.4
++
