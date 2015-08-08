@@ -1,39 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:07 -0000
-Subject: [Buildroot] [git commit branch/next] libmatroska: add host-pkgconf
-	dependency
-Message-ID: <20150808105558.68B9781778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/freerdp: fix build
+	with gstreamer support
+Message-ID: <20150808105559.EC9EE7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c69bafe0aef71b9846866270da9462c3492d9508
+commit: http://git.buildroot.net/buildroot/commit/?id=ffee06d2e3c81db0dde4c29ea6ddb047116d3296
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-libmatroska configure.ac uses PKG_CHECK_MODULES(), so this package
-needs to depend on host-pkgconf.
+FreeRDP with gstreamer support enabled needs gstreamer and gst-plugins-base
+with gstapp.
 
 Fixes:
+  http://autobuild.buildroot.net/results/937/9373d4238bc3f027e571581bd3531018c4faed91/
+  http://autobuild.buildroot.org/results/f77/f77a2c9eea7973b54a22e12ab33ee8964adaddfd/
 
-  http://autobuild.buildroot.org/results/80a/80a9f0f5594ab833600ea8514dc184e50d2bf08c/
-
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Gergely Imreh <imrehg@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmatroska/libmatroska.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freerdp/Config.in  |    2 ++
+ package/freerdp/freerdp.mk |    3 ++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
-index 1086e87..5e2d9b1 100644
---- a/package/libmatroska/libmatroska.mk
-+++ b/package/libmatroska/libmatroska.mk
-@@ -10,6 +10,6 @@ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
- LIBMATROSKA_INSTALL_STAGING = YES
- LIBMATROSKA_LICENSE = LGPLv2.1+
- LIBMATROSKA_LICENSE_FILES = LICENSE.LGPL
--LIBMATROSKA_DEPENDENCIES = libebml
-+LIBMATROSKA_DEPENDENCIES = libebml host-pkgconf
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index 2e879b4..f7d6550 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_FREERDP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_GST_PLUGINS_BASE if BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP if BR2_PACKAGE_GSTREAMER
+ 	help
+ 	  FreeRDP is a free implementation of the Remote Desktop
+ 	  Protocol (RDP), released under the Apache license
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index c7c933e..0d10ef8 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -17,7 +17,8 @@ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_GSTREAMER),y)
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER=ON
+-FREERDP_DEPENDENCIES += gstreamer
++# freerdp needs gstinterface and gstapp from gst-plugins-base
++FREERDP_DEPENDENCIES += gstreamer gst-plugins-base
+ else
+ FREERDP_CONF_OPTS += -DWITH_GSTREAMER=OFF
+ endif
