@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:25 -0000
-Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{10, 14,
-	18}.x and 4.{0, 1}.x series
-Message-ID: <20150808105616.C62967F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openssl: security bump to
+	version 1.0.2d
+Message-ID: <20150808105624.0FFB17FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e4f9923d8b33665cf14812232b74a5a9c5015f6
+commit: http://git.buildroot.net/buildroot/commit/?id=d4e547438cf3add7ad7c816e8fbcb8dd205cac20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Fixes CVE-2015-1793 - Alternative chains certificate forgery.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-headers/Config.in.host |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/openssl/openssl.hash |    6 ++----
+ package/openssl/openssl.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ace00d7..eee3876 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -209,16 +209,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.81"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.82"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.45"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.46"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.17"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
--	default "4.0.6"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1"		if BR2_KERNEL_HEADERS_4_1
-+	default "4.0.7"		if BR2_KERNEL_HEADERS_4_0
-+	default "4.1.1"		if BR2_KERNEL_HEADERS_4_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
+index 4b212fb..355be79 100644
+--- a/package/openssl/openssl.hash
++++ b/package/openssl/openssl.hash
+@@ -1,4 +1,2 @@
+-# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.md5
+-# From https://www.openssl.org/source/openssl-1.0.2c.tar.gz.sha1
+-md5	8c8d81a9ae7005276e486702edbcd4b6	openssl-1.0.2c.tar.gz
+-sha1	6e4a5e91159eb32383296c7c83ac0e59b83a0a44	openssl-1.0.2c.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
++sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 37c640d..3d87919 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.2c
++OPENSSL_VERSION = 1.0.2d
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
