@@ -1,70 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:17 -0000
-Subject: [Buildroot] [git commit branch/next] pinentry: add patch to fix
-	ncursesw include path
-Message-ID: <20150808105613.D19C17F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rpi-firmware: add
+	option to install DTB overlays
+Message-ID: <20150808105616.5660C7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d10204ba5880b1fd3900908af15461f51f9f066
+commit: http://git.buildroot.net/buildroot/commit/?id=c22744542a23299732078c12641a17597e6127da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream pinentry seems to assume a fixed include path for ncursesw,
-while still using pkg-config to check what that path should be.
-This results in detecting the library during config failing to include
-it correctly during build.
+Currently, Buildroot does not support building the overlays that are
+bundled in the Linux kernel, so all we can do is install the ones
+pre-built in rpi-firmware.
 
-Fixes:
-  http://autobuild.buildroot.org/results/d8d/d8d33efd16cc94dc9d9d4b2d7615a0abb5752ee4/
-  http://autobuild.buildroot.org/results/c48/c4805785077e955c61f246d0e4d8416d8dbd10b1/
-  http://autobuild.buildroot.org/results/144/14483d35ab5009e854c7ce86e26942fdefd5c1f0
-and bunch of others.
-
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...1-remove-hard-wired-ncursesw-include-path.patch |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
+ package/rpi-firmware/Config.in       |    8 ++++++++
+ package/rpi-firmware/rpi-firmware.mk |    6 ++++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-new file mode 100644
-index 0000000..c9903c4
---- /dev/null
-+++ b/package/pinentry/0001-remove-hard-wired-ncursesw-include-path.patch
-@@ -0,0 +1,32 @@
-+From cf84bf3ef505059d42184b22cf38f89336bec43d Mon Sep 17 00:00:00 2001
-+From: Gergely Imreh <imrehg@gmail.com>
-+Date: Mon, 22 Jun 2015 07:51:17 +0000
-+Subject: [PATCH 1/1] remove hard-wired ncursesw include path
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index 179fb47..a060b4e 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -56,5 +56,13 @@ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+ 	  and enable BR2_LINUX_KERNEL_DTS_SUPPORT to let the kernel build
+ 	  the DTB.
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
++	bool "Install DTB overlays"
++	depends on BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS \
++		|| BR2_LINUX_KERNEL_DTS_SUPPORT
++	default y
++	help
++	  Say 'y' here if you need to load one or more of the DTB overlays,
++	  to support HATs (Hardware Attached on Top, add-on modules).
+ 
+ endif # BR2_PACKAGE_RPI_FIRMWARE
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 9cccb38..0533588 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -18,6 +18,11 @@ define RPI_FIRMWARE_INSTALL_DTB
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
++endef
++endif
 +
-+Don't assume that the ncursesw headers are in ../usr/include/ncursesw/..,
-+and pkg-config finds the correct include path anyways.
-+
-+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-+---
-+ pinentry/pinentry-curses.c | 4 ----
-+ 1 file changed, 4 deletions(-)
-+
-+diff --git a/pinentry/pinentry-curses.c b/pinentry/pinentry-curses.c
-+index 235435a..bdcd0f4 100644
-+--- a/pinentry/pinentry-curses.c
-++++ b/pinentry/pinentry-curses.c
-+@@ -22,11 +22,7 @@
-+ #include <config.h>
-+ #endif
-+ #include <assert.h>
-+-#ifdef HAVE_NCURSESW
-+-#include <ncursesw/curses.h>
-+-#else
-+ #include <curses.h>
-+-#endif
-+ #include <signal.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+-- 
-+1.9.1
-+
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS),y)
++define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 	for ovldtb in  $(@D)/boot/overlays/*.dtb; do \
+ 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+ 	done
+@@ -31,6 +36,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
++	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+ endef
+ 
+ # We have no host sources to get, since we already
