@@ -1,66 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:40 -0000
-Subject: [Buildroot] [git commit branch/next] gpsd: fix build with musl
-Message-ID: <20150808105613.EB03E7FC68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libupnpp: bump to
+	version 0.11.0
+Message-ID: <20150808105610.1117A7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74954aed627bcf15e7b75a53b62d7b7f016b3aef
+commit: http://git.buildroot.net/buildroot/commit/?id=0b5dcc49bb1d3c405b7faee2fba61fce125a6061
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a patch adding missing include.
-
-Fixes:
-http://autobuild.buildroot.net/results/493/493ddaf63f41918d718b5c26e2db258c67dba0a6/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gpsd/0001-Fix-build-against-musl-libc.patch    |   36 ++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
+ package/libupnpp/libupnpp.hash |    4 ++--
+ package/libupnpp/libupnpp.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gpsd/0001-Fix-build-against-musl-libc.patch b/package/gpsd/0001-Fix-build-against-musl-libc.patch
-new file mode 100644
-index 0000000..c7c5b23
---- /dev/null
-+++ b/package/gpsd/0001-Fix-build-against-musl-libc.patch
-@@ -0,0 +1,36 @@
-+From 2f1b033094df266008d9c4070cd7be33e93a4e12 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 19 Jun 2015 08:08:32 +0300
-+Subject: [PATCH] Fix build against musl libc
-+
-+musl does not include sys/ttydefaults.h from sys/termios.h. Include it
-+explicitly.
-+
-+Fixes build failures like:
-+
-+gpsmon.o: In function `main':
-+gpsmon.c:(.text.startup+0x8f4): undefined reference to `CTRL'
-+
-+Upstream status: sent
-+(http://lists.nongnu.org/archive/html/gpsd-dev/2015-06/msg00031.html)
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ gpsmon.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gpsmon.c b/gpsmon.c
-+index c3001c865821..0ccf74110b5a 100644
-+--- a/gpsmon.c
-++++ b/gpsmon.c
-+@@ -20,6 +20,7 @@
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <sys/select.h>
-++#include <sys/ttydefaults.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-+ 
-+-- 
-+2.1.4
-+
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index 19541cf..ae935c1 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.8.6.tar.gz.sha256
+-sha256 cdacf083100552a5aad57b30608e85fbcc222f4acf920c2d09d28cb75af2cdf8  libupnpp-0.8.6.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.11.0.tar.gz.sha256
++sha256 e7ceab4313226010b6064f65aa156fa04c25af4d5ae4c23a18303e2034fbca05  libupnpp-0.11.0.tar.gz
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index defc16a..caf61af 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.8.6
++LIBUPNPP_VERSION = 0.11.0
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = GPLv2+
+ LIBUPNPP_LICENSE_FILES = COPYING
