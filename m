@@ -1,86 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:43 -0000
-Subject: [Buildroot] [git commit branch/next] linux: add linux-tools infra
-Message-ID: <20150808105633.50EDF80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: ensure
+	kconfig base and fragment files exist
+Message-ID: <20150808105615.304028030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3a23945a283422ce07b3ca4df5398911c77b3a2
+commit: http://git.buildroot.net/buildroot/commit/?id=7148361652c5b40f32e1474119cc8be1fe0d66a9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit add an infrastructure to build linux kernel
-tools available in the kernel sources.
+Even though we do have a dependency chain back to each of the kconfig
+base and fragment files:
 
-Currently, the only linux kernel tool packaged in Buildroot
-is perf and it's packaged as a separate generic package.
-This is a problem for licence information raised in this
-thread [1].
+    $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
 
-Since these tools require to build a Linux kernel, we can
-use some hooks in linux package like we did for linux
-extensions [2] and remove the perf package.
+we can't rely on it to ensure they are all present, because they all have
+this rule:
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-May/128783.html
-[2] http://lists.busybox.net/pipermail/buildroot/2015-March/121835.html
+    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
 
-[Thomas: fix minor typos in comments.]
+but since this rule has no prerequisite (only build-order, but that does
+not count in this case) and no recipe, make will believe each missing
+file to be a PHONY target, and will always run targets that depend on
+it:
+    https://www.gnu.org/software/make/manual/make.html#Force-Targets
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+So, that means a missing kconfig base or fragment file would always
+cause the rule to generate .config to be run at each invocation, which
+in turn would cause a rebuild of the kernel, which is clearly not what
+we want.
+
+Since this is expected make behaviour, we can well end up with a missing
+Kconfig base or fragment. To avoid continuously rebuilding the kernel in
+that case, we must check those files exist by ourselves, and error out
+if any one of them is missing.
+
+One would expect we check for them right in their dependency rule, like
+so:
+
+    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+        [ -f $(@) ] || {echo Missing $(@) >&2; exit 1; }
+
+but that does not work, as only the first target is tested for. That
+check msut be turned into a loop explicitly testing all files, like so:
+
+    $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+        for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
+            [ -f $(@) ] || {echo Missing $$$${f} >&2; exit 1; }; \
+        done
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ package/pkg-kconfig.mk |   18 +++++++++++++++++-
+ 1 files changed, 17 insertions(+), 1 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 8c535f3..3ea564f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -313,6 +313,8 @@ define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_HOST_TOOLS)
- endef
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index e65c6f9..e441548 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -38,8 +38,24 @@ $(2)_KCONFIG_FIXUP_CMDS ?=
+ $(2)_KCONFIG_FRAGMENT_FILES ?=
  
-+# Include all our extensions and tools definitions.
+ # The config file as well as the fragments could be in-tree, so before
+-# depending on them the package should be extracted (and patched) first
++# depending on them the package should be extracted (and patched) first.
 +#
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
- # last directory component in the path. As such, including other Makefile,
-@@ -322,6 +324,7 @@ endef
- # the current Makefile, we are OK. But this is a hard requirement: files
- # included here *must* be in the same directory!
- include $(sort $(wildcard linux/linux-ext-*.mk))
-+include $(sort $(wildcard linux/linux-tool-*.mk))
++# Since those files only have a order-only dependency, make would treat
++# any missing one as a "force" target:
++#   https://www.gnu.org/software/make/manual/make.html#Force-Targets
++# and would forcibly any rule that depend on those files, causing a
++# rebuild of the kernel each time make is called.
++#
++# So, we provide a recipe that checks all of those files exist, to
++# overcome that standard make behaviour.
++#
+ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
++	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
++		if [ ! -f "$$$${f}" ]; then \
++			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
++			exit 1; \
++		fi; \
++	done
  
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-@@ -330,6 +333,27 @@ LINUX_PRE_PATCH_HOOKS += $(foreach ext,$(LINUX_EXTENSIONS),\
- 	$(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),\
- 		$(call UPPERCASE,$(ext))_PREPARE_KERNEL))
- 
-+# Install Linux kernel tools in the staging directory since some tools
-+# may install shared libraries and headers (e.g. cpupower). The kernel
-+# image is NOT installed in the staging directory.
-+LINUX_INSTALL_STAGING = YES
-+
-+LINUX_DEPENDENCIES += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$($(call UPPERCASE,$(tool))_DEPENDENCIES)))
-+
-+LINUX_POST_BUILD_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_BUILD_CMDS))
-+
-+LINUX_POST_INSTALL_STAGING_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_STAGING_CMDS))
-+
-+LINUX_POST_INSTALL_TARGET_HOOKS += $(foreach tool,$(LINUX_TOOLS),\
-+	$(if $(BR2_LINUX_KERNEL_TOOL_$(call UPPERCASE,$(tool))),\
-+		$(call UPPERCASE,$(tool))_INSTALL_TARGET_CMDS))
-+
- # Checks to give errors that the user can understand
- ifeq ($(BR_BUILDING),y)
- 
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
