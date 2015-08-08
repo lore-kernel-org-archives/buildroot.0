@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:35 -0000
-Subject: [Buildroot] [git commit branch/next] libreplaygain: add hash file
-Message-ID: <20150808105635.0FA197FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] jasper: add hash file
+Message-ID: <20150808105635.570B97FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2e10011c7d048cc657190d7f5c9940669d26df7
+commit: http://git.buildroot.net/buildroot/commit/?id=1a4bf69188360a76c6bc38183c3d0651a7297214
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libreplaygain/libreplaygain.hash |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/jasper/jasper.hash |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libreplaygain/libreplaygain.hash b/package/libreplaygain/libreplaygain.hash
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
 new file mode 100644
-index 0000000..7a61098
+index 0000000..4d9ed74
 --- /dev/null
-+++ b/package/libreplaygain/libreplaygain.hash
-@@ -0,0 +1,4 @@
-+# From https://www.musepack.net/index.php?pg=src
-+md5	e27b3b1249b7fbae92d656d9e3d26633	libreplaygain_r475.tar.gz
-+# Calculated based on the hash above
-+sha256	8258bf785547ac2cda43bb195e07522f0a3682f55abe97753c974609ec232482	libreplaygain_r475.tar.gz
++++ b/package/jasper/jasper.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	6e9a959bf4f8cb02f77f42d1b9880b8e85d021ac51f43d8787b5438fd2b7a1c5	jasper-1.900.1.tar.bz2
