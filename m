@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:16 -0000
-Subject: [Buildroot] [git commit branch/next] package/feh: bump to version
-	2.13.1, add hash file
-Message-ID: <20150808105612.EA33A7FC68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] agentpp: bump to 4.0.4
+Message-ID: <20150808105612.97DDA7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5acecf6f864998e23aff252fffd6ec433b41285
+commit: http://git.buildroot.net/buildroot/commit/?id=50e57ec0e865fc3736e8defcaa313438dbc43c24
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/feh/feh.hash |    2 ++
- package/feh/feh.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/agentpp/agentpp.hash |    2 +-
+ package/agentpp/agentpp.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-new file mode 100644
-index 0000000..2ba2b01
---- /dev/null
-+++ b/package/feh/feh.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  865088d0481f6862d79d7c08d7b6cf1d25058a74a5784e511a1422fea8aba980  feh-2.13.1.tar.bz2
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 0c4c164..1fcec20 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
+diff --git a/package/agentpp/agentpp.hash b/package/agentpp/agentpp.hash
+index 7c48044..6b992f9 100644
+--- a/package/agentpp/agentpp.hash
++++ b/package/agentpp/agentpp.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha512 636e19a7bbc3cfbf6f1ac10d29ddd378ca81b5525be1bd09c26a1cbd20ff9cfc3d4406329147bf20994f0d59bbdb675e99e82de3837eb898a145439c5054ef96 agent++-4.0.3.tar.gz
++sha256 d473b98d5f08e572b474c375c11ff1c4c5323824eb721c3979b6c5258b72949d agent++-4.0.4.tar.gz
+diff --git a/package/agentpp/agentpp.mk b/package/agentpp/agentpp.mk
+index 29d809e..7b1edec 100644
+--- a/package/agentpp/agentpp.mk
++++ b/package/agentpp/agentpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FEH_VERSION = 2.12.1
-+FEH_VERSION = 2.13.1
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+-AGENTPP_VERSION = 4.0.3
++AGENTPP_VERSION = 4.0.4
+ AGENTPP_SOURCE = agent++-$(AGENTPP_VERSION).tar.gz
+ AGENTPP_SITE = http://www.agentpp.com/download
+ AGENTPP_LICENSE = Apache-2.0
