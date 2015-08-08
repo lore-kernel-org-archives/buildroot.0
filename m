@@ -1,113 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:03 -0000
-Subject: [Buildroot] [git commit branch/next] pulseaudio: needs dynamic
-	library support
-Message-ID: <20150808105558.E8EFD7FDC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php: Disable jit in
+	bundled pcre library
+Message-ID: <20150808105602.28B147F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ed9137fee544875fa6dca7c0369808ec4b274d4
+commit: http://git.buildroot.net/buildroot/commit/?id=80db0345bdbd7f1c83d6e169b0bc3fef2f0c481f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-http://autobuild.buildroot.net/results/75a/75a3380fdcce88f1f9f2a77c4f059787623919d7/
-http://autobuild.buildroot.net/results/f4a/f4a22344bd5c8f59e6f8cacb6a549f8d8fe99af2/
+Quote from ext/pcre/pcrelib/doc/pcre.txt
+"This support is available only for certain hardware architectures. If
+ this  option is set for an unsupported architecture, a compile time
+ error occurs."
 
-Pulseaudio uses dlfcn.h, so it cannot work in a pure static environment.
+Disable jit support on unsupported archs by updating ext/pcre/pcrelib/config.h
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes
+http://autobuild.buildroot.net/results/966/966d6c47d1ed13a90c2846d96fb3d193df4b2aaa/ (bfin)
+http://autobuild.buildroot.net/results/3f5/3f53751b192078714860e64d3f6d8d7398433d5a/ (xtensa)
+http://autobuild.buildroot.net/results/de1/de12474d2b5cce251b1ab10f7d7e28c90545a1f0/ (arcle)
+http://autobuild.buildroot.net/results/358/358b54245bb48f653ce209be070bd5fe6b17afc4/ (microblazeel)
+http://autobuild.buildroot.net/results/a7c/a7c161ca0b424ae35634c9f2d8a8111cedec8181/ (nios2)
+http://autobuild.buildroot.net/results/dad/dad1128f58fc601bf96da5fa0635b9b9c6c8f0b8/ (sh)
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer/gst-plugins-good/Config.in   |    5 +++--
- package/gstreamer1/gst1-plugins-good/Config.in |    5 +++--
- package/mpd/Config.in                          |    4 ++++
- package/pulseaudio/Config.in                   |    5 +++--
- 4 files changed, 13 insertions(+), 6 deletions(-)
+ package/php/php.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index 70ae9c1..0544b7c 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -205,13 +205,14 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
- 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-+	depends on !BR2_STATIC_LIBS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 
--comment "pulseaudio support needs a toolchain w/ threads"
-+comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index b3929b4..6216c7f 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -312,15 +312,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
- 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-+	depends on !BR2_STATIC_LIBS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 	help
- 	  PulseAudio plugin library
- 
--comment "pulseaudio support needs a toolchain w/ threads"
-+comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index b57aa55..ed036fe 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -238,10 +238,14 @@ config BR2_PACKAGE_MPD_OSS
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
-+	depends on !BR2_STATIC_LIBS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  Enable pulseaudio output support.
- 
-+comment "pulseaudio support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- comment "Miscellaneous plugins"
- 
- config BR2_PACKAGE_MPD_AVAHI_SUPPORT
-diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
-index b2be9ab..63c8ca4 100644
---- a/package/pulseaudio/Config.in
-+++ b/package/pulseaudio/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBSNDFILE
-@@ -30,7 +31,7 @@ config BR2_PACKAGE_PULSEAUDIO_DAEMON
- 
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 448b7ef..89d22aa 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -209,6 +209,10 @@ PHP_DEPENDENCIES += unixodbc
+ endif
  endif
  
--comment "pulseaudio needs a toolchain w/ wchar, threads"
-+comment "pulseaudio needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++define PHP_DISABLE_PCRE_JIT
++	$(SED) '/^#define SUPPORT_JIT/d' $(@D)/ext/pcre/pcrelib/config.h
++endef
++
+ ### Use external PCRE if it's available
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
+@@ -220,6 +224,10 @@ else
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
+ endif
++# check ext/pcre/pcrelib/sljit/sljitConfigInternal.h for supported archs
++ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),)
++PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_PCRE_JIT
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
