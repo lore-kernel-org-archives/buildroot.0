@@ -1,43 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] package/tzdata: bump version
-	to 2015e
-Message-ID: <20150808105609.E4A4D7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/iso9660: use 'depends on'
+	instead of 'select' for bootloader
+Message-ID: <20150808105610.81F2E7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb69379a9ca9567d029837e68790aa4fbe30f315
+commit: http://git.buildroot.net/buildroot/commit/?id=bd256e96c07c31b3804e079dd498fe4a4012b64e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tzdata/tzdata.hash |    4 ++--
- package/tzdata/tzdata.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+In preparation to the introduction of the support for other
+bootloaders than Grub, this commit switches from having the iso9660
+support "select" the necessary bootloader to using a "depends on".
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index d02829a..091f57c 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# Locally computed
--sha256  860fac5f5f57f7a2dfc1ba682dbd1f5c0f0b597f761571277b6ed6561e22365a  tzdata2015c.tar.gz
-+# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
-+sha512  86498190a20c5c67827aa75f7e9c6aa6c19d58a88a70425ce70d5ae7cea42dc7386eb2867fa455fcfcdedc6a105ad70fbbdc7c27c7a58a51bd21d76a135983ce  tzdata2015e.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index d8512a3..eb6da6c 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+The main motivation is that the isolinux bootloader support will
+really need to do a "depends on", due to the need of having a certain
+option enabled, but this option being a kconfig "choice".
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ fs/iso9660/Config.in |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index f5e5f32..cd7b175 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -2,6 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	bool "iso image"
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_LINUX_KERNEL
++	depends on BR2_TARGET_GRUB
+ 	select BR2_LINUX_KERNEL_INSTALL_TARGET \
+ 	       if (!BR2_TARGET_ROOTFS_ISO9660_INITRD && !BR2_TARGET_ROOTFS_INITRAMFS)
+ 	help
+@@ -25,7 +26,7 @@ choice
  
--TZDATA_VERSION = 2015c
-+TZDATA_VERSION = 2015e
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
- TZDATA_DEPENDENCIES = host-tzdata
+ config BR2_TARGET_ROOTFS_ISO9660_GRUB
+ 	bool "grub"
+-	select BR2_TARGET_GRUB
++	depends on BR2_TARGET_GRUB
+ 	select BR2_TARGET_GRUB_FS_ISO9660
+ 
+ endchoice
+@@ -52,6 +53,6 @@ config BR2_TARGET_ROOTFS_ISO9660_INITRD
+ 
+ endif
+ 
+-comment "iso image needs a Linux kernel to be built"
++comment "iso image needs a Linux kernel and grub to be built"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on !BR2_LINUX_KERNEL
++	depends on !BR2_LINUX_KERNEL || !BR2_TARGET_GRUB
