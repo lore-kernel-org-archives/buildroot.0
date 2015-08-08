@@ -1,47 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:51 -0000
-Subject: [Buildroot] [git commit branch/next] openvmtools: fix legal info
-Message-ID: <20150808105613.0B79D7F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] orbit: bump to version 2.2.3
+Message-ID: <20150808105640.909F97FFCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=260d4461479f99baaeff802867ee6977e48a95ef
+commit: http://git.buildroot.net/buildroot/commit/?id=37760dab1d0d83065033aabccbad11ad1a264137
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In ab71dff0 it was moved to SUBDIR, but this was never reflected for the
-legal-info files, update this to fix:
-http://autobuild.buildroot.net/results/836/8363943cc9c967713f585209408ea087a052a12d/
-
-[Thomas: put OPENVMTOOLS_SUBDIR before OPENVMTOOLS_LICENSE_FILES, as
-suggested by Yann.]
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Karoly Kasza <kaszak@gmail.com>
-Tested-by: Karoly Kasza <kaszak@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvmtools/openvmtools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/orbit/orbit.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index 9819640..57271c8 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -6,11 +6,11 @@
+diff --git a/package/orbit/orbit.mk b/package/orbit/orbit.mk
+index 7df7790..fa30f38 100644
+--- a/package/orbit/orbit.mk
++++ b/package/orbit/orbit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- OPENVMTOOLS_VERSION = stable-9.10.0
- OPENVMTOOLS_SITE = $(call github,vmware,open-vm-tools,$(OPENVMTOOLS_VERSION))
-+OPENVMTOOLS_SUBDIR = open-vm-tools
- OPENVMTOOLS_LICENSE = LGPLv2.1
--OPENVMTOOLS_LICENSE_FILES = COPYING
-+OPENVMTOOLS_LICENSE_FILES = $(OPENVMTOOLS_SUBDIR)/COPYING
- # Autoreconf needed or config/missing will run configure again at buildtime
- OPENVMTOOLS_AUTORECONF = YES
--OPENVMTOOLS_SUBDIR = open-vm-tools
- OPENVMTOOLS_CONF_OPTS = --with-dnet \
- 	--without-icu --without-x --without-gtk2 \
- 	--without-gtkmm --without-kernel-modules \
+-ORBIT_VERSION_UPSTREAM = 2.2.1
++ORBIT_VERSION_UPSTREAM = 2.2.3
+ ORBIT_VERSION = $(ORBIT_VERSION_UPSTREAM)-1
+ ORBIT_SUBDIR = orbit
+ ORBIT_LICENSE = MIT
