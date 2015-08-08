@@ -1,162 +1,159 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain-external: add
-	CodeSourcery MIPS 2015.05, remove 2013.11
-Message-ID: <20150808105604.B24BD7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ARC: switch to RC1 of upcoming
+	arc-2015.06 tools
+Message-ID: <20150808105615.63DC17FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f4ec376567f94a68ea3e67a48f9a000814b04ca
+commit: http://git.buildroot.net/buildroot/commit/?id=36555b4c8dce27822ecbbed58798f887ad452b18
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Add CodeSourcery MIPS 2015.05 toolchain
-- Remove CodeSourcery MIPS 2013.11 toolchain
-- Update the hash file
+Even though this is only RC1 it's been heavily used internally so it should
+not be any worse than existing arc-2014.12.
 
-Toolchain datasheet:
-  https://sourcery.mentor.com/GNUToolchain/release3068?@template=datasheet
+Moreover this relase (and so its RC1) finally delivers support of NPTL
+for ARC in uClibc.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+That's why it would be good to allow interested users to start trying it
+(for example WebKit and apps that use WebKit could be successfully built
+and run) also it will be helpful to run that new toolchain through
+autobuilder in attempt to find any hidden regressions so we have a solid
+toolchain for release.
+
+If there's an interest in that patch more patches will follow with
+subsequent RCs and essentially on appearence or relese Buildroot will be
+updated with it.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: arc-buildroot at synopsys.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             |   32 ++++++++++----------
- .../toolchain-external/toolchain-external.hash     |    4 +-
- toolchain/toolchain-external/toolchain-external.mk |    6 ++--
- 3 files changed, 21 insertions(+), 21 deletions(-)
+ package/binutils/Config.in.host |    2 +-
+ package/binutils/binutils.hash  |    2 +-
+ package/gcc/Config.in.host      |    2 +-
+ package/gcc/gcc.hash            |    2 +-
+ package/gdb/Config.in.host      |    2 +-
+ package/gdb/gdb.hash            |    2 +-
+ package/uclibc/Config.in        |    5 +++--
+ package/uclibc/uclibc.hash      |    2 +-
+ 8 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 6ea6838..017e913 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -188,8 +188,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index ec1bd17..926b3d2 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -28,7 +28,7 @@ endchoice
  
- 	  This toolchain uses software-floating point.
+ config BR2_BINUTILS_VERSION
+ 	string
+-	default "arc-2014.12"	if BR2_arc
++	default "arc-2015.06-rc1"	if BR2_arc
+ 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+ 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
+ 	default "2.24"		if BR2_BINUTILS_VERSION_2_24
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 028fc10..f662adc 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -4,4 +4,4 @@ sha512  dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0
+ sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
+ sha512  49438970642f379978aba988e3d2e7b63dab6fd0b46d91f4100f083e87a84d242089daca58572245fe620457a77bbbe2d78588ff3fb79314e500d1a39bf96f30  binutils-2.25.tar.bz2
+ # No hash for the ARC variant, comes from the github-helper:
+-none   xxx                                                               binutils-arc-2014.12.tar.gz
++none   xxx  binutils-arc-2015.06-rc1.tar.gz
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 712f8e9..1fc0b83 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -97,7 +97,7 @@ config BR2_GCC_VERSION
+ 	default "4.8.5"     if BR2_GCC_VERSION_4_8_X
+ 	default "4.9.3"     if BR2_GCC_VERSION_4_9_X
+ 	default "5.1.0"     if BR2_GCC_VERSION_5_1_X
+-	default "arc-2014.12" if BR2_GCC_VERSION_4_8_ARC
++	default "arc-2015.06-rc1" if BR2_GCC_VERSION_4_8_ARC
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
--	bool "Sourcery CodeBench MIPS 2014.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
-+	bool "Sourcery CodeBench MIPS 2015.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -198,11 +198,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.9.1, binutils 2.24.51, glibc
--	  2.20, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.16.2. It
-+	  Mentor Graphics. It uses gcc 4.9.2, binutils 2.24.51, glibc
-+	  2.21, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.19. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -273,8 +273,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	string "Additional gcc options"
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index fe956a7..1506ad9 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -9,4 +9,4 @@ sha512  9ac57377a6975fc7adac704ec81355262b9f537def6955576753b87715470a20ee6a2a31
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-5.1.0/sha512.sum
+ sha512  30f6a94d3adb25bc51fcaddf32a6c41429f569eeb9ed64330445b1296f99998fbfa03277b375be4f7b2b80f519910ef88e4149db7cd9031e2c61a49f501bde94  gcc-5.1.0.tar.bz2
+ # No hash for the ARC variant, comes from the github-helper:
+-none  xxx  gcc-arc-2014.12.tar.gz
++none  xxx  gcc-arc-2015.06-rc1.tar.gz
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index e2f8c27..d2469fc 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -49,7 +49,7 @@ endif
+ config BR2_GDB_VERSION
+ 	string
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+-	default "arc-2014.12-gdb" if BR2_arc
++	default "arc-2015.06-rc1-gdb" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8 || !BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 0130935..cf397d8 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -3,5 +3,5 @@ sha512	887b9b726dae8f6e3e5e41574460a67e4f9002b0d47bc985dcf63bdf3518397a90b6a208c
+ sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
+ sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
+ # No hash for the ARC & microblaze variants, comes from the github-helper:
+-none	xxx	gdb-arc-2014.12-gdb.tar.gz
++none	xxx	gdb-arc-2015.06-rc1-gdb.tar.gz
+ none	xxx	gdb-6be65fb56ea6694a9260733a536a023a1e2d4d57.tar.gz
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 15a590f..32c356a 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -33,6 +33,7 @@ choice
+ 		bool "uClibc Git ARC"
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
++		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+ 		depends on BR2_arc
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
--	bool "Sourcery CodeBench MIPS 2014.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
-+	bool "Sourcery CodeBench MIPS 2014.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -283,11 +283,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.13. It
-+	  Mentor Graphics. It uses gcc 4.9.1, binutils 2.24.51, glibc
-+	  2.20, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.16.2. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -358,8 +358,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	      Select the n64 ABI
- 	      Select BR2_SOFT_FLOAT
+ 	config BR2_UCLIBC_VERSION_NG
+@@ -41,7 +42,7 @@ choice
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+ 		       if BR2_m68k || BR2_arm || BR2_armeb
+ 		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+-		       if !BR2_arc && !BR2_m68k && !BR2_x86_i386
++		       if !BR2_m68k && !BR2_x86_i386
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
--	bool "Sourcery CodeBench MIPS 2013.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-+	bool "Sourcery CodeBench MIPS 2014.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -368,11 +368,11 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers 3.11. It
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers 3.13. It
- 	  has support for the following variants:
- 	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
- 	      Select MIPS (big endian) core
-@@ -914,9 +914,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
--	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 444ddfd..3980c62 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -1,10 +1,10 @@
- # Sourcery CodeBench Lite for MIPS
-+# From: https://sourcery.mentor.com/GNUToolchain/release3068
-+md5  0fcdc0fee260c7bed060c999bfe8440d  mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2935
- md5  ad4a66e4791606c5df70f48c4a97b0ec  mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- # From: https://sourcery.mentor.com/GNUToolchain/release2791
- md5  14facaac538a43533b89d969d7904d46  mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
--# From: https://sourcery.mentor.com/GNUToolchain/release2640
--md5  0ba8bc4923c04728ee3787bed4cd5148  mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
+@@ -63,7 +64,7 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
+ 	string
+ 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
+-	default "arc-2014.12" if BR2_UCLIBC_VERSION_ARC_GIT
++	default "arc-2015.06-rc1" if BR2_UCLIBC_VERSION_ARC_GIT
+ 	default "1.0.3"		if BR2_UCLIBC_VERSION_NG
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
- # Sourcery CodeBench Lite for AMD64
- # From https://sourcery.mentor.com/GNUToolchain/release2777
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b293ba9..22f8118 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -284,15 +284,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.11-22-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2015.05-18-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 841c96b..36fa86f 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -5,7 +5,7 @@ sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0
+ sha256  b4c73fe3e7af4eeabf7510ee66ca85f775c3ed44d20b1bcd30c6ac481dd753cd        uClibc-ng-1.0.3.tar.xz
+ 
+ # No hash for the ARC variant, comes from the github-helper
+-none	xxx	uClibc-arc-2014.12.tar.gz
++none	xxx	uClibc-arc-2015.06-rc1.tar.gz
+ 
+ # No hash for this git snapshot
+ none  xxx  uClibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c.tar.gz
