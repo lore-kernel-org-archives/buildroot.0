@@ -1,49 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:55:59 -0000
-Subject: [Buildroot] [git commit branch/next] postgresql: avoid AC_TRY_RUN
-	when testing snprintf()
-Message-ID: <20150808105557.404FA81778@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lcdproc: needs dynamic library
+	support
+Message-ID: <20150808105557.7C136818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d3f70b567718ae308b5704ddd7d107c4849309e
+commit: http://git.buildroot.net/buildroot/commit/?id=9cc56c24c9cc135990f9b604761596456487322e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-A few snprintf() compatibility tests in config/c-library.m4 use AC_TRY_RUN
-that doesn't work for cross compilation. As a result configure.in decides to
-build a bundled implementation of snprintf(). This implementation calls
-isnan(), but -lm is missing. This breaks link with libpq.so. Preseed the
-correct values to make the configure script happy, and fix rsyslog build.
-
 Fixes:
-http://autobuild.buildroot.net/results/e76/e769982e3131581b38698c109c9bc5215e3d5b11/
-http://autobuild.buildroot.net/results/2b9/2b9d3edc8341675455bc3b74d1e84c8c0c24c521/
-http://autobuild.buildroot.net/results/2a8/2a80357237ed7225823a008b5ff02bab01269814/
+http://autobuild.buildroot.net/results/4ac/4ac625f4e888ba859a5867671664dc8d041ec9b9/
+http://autobuild.buildroot.net/results/614/61450e889c3912e38e52759812fbb6ce03270788/
+http://autobuild.buildroot.net/results/138/13800e3b52c9f6c84f85325710a59c7b3c04d0ee/
+http://autobuild.buildroot.net/results/041/0410fb15e65561031453bedbc549ed82ce7bdc71/
 
-and many more.
+And many more.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Gergely Imreh <imrehg@gmail.com>
+Lcdproc forces shared libraries for the drivers, so mark it as unavailable
+for static only builds.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/lcdproc/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 1a6aa88..eda547c 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -11,7 +11,9 @@ POSTGRESQL_LICENSE = PostgreSQL
- POSTGRESQL_LICENSE_FILES = COPYRIGHT
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
--POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes
-+POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
-+		      pgac_cv_snprintf_long_long_int_format="%lld" \
-+		      pgac_cv_snprintf_size_t_support=yes
- POSTGRESQL_AUTORECONF = YES
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+index f5a8501..042abd6 100644
+--- a/package/lcdproc/Config.in
++++ b/package/lcdproc/Config.in
+@@ -1,6 +1,10 @@
++comment "lcdproc needs a toolchain w/  dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_LCDPROC
+ 	bool "lcdproc"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_ZLIB
