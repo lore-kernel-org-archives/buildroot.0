@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:21 -0000
-Subject: [Buildroot] [git commit branch/next] libunistring: bump to version
-	0.9.6
-Message-ID: <20150808105624.DA1997FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] busybox: adjust configuration
+	to add fancy options to the sleep applet
+Message-ID: <20150808105625.7A6637FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=72688a00d501f9c6809e6c054562aa7625600d10
+commit: http://git.buildroot.net/buildroot/commit/?id=aa1362f220e733689fe4210b0bb2433f6d595e6b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Set CONFIGURE_FEATURE_FANCY_SLEEP and CONFIG_FEATURE_FLOAT_SLEEP so that sleep accept floating point arguments.
+This add 492 bytes to the busybox binary compiled for arm or 2748 bytes when compiled for i386.
+
+Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libunistring/libunistring.hash |    2 +-
- package/libunistring/libunistring.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/busybox.config |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index e272997..ba4b642 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	0b3f4dbea5124f56639a701376ed78e5f595e7b720cfbb0cf1f81f375894c77b	libunistring-0.9.5.tar.xz
-+sha256	2df42eae46743e3f91201bf5c100041540a7704e8b9abfd57c972b2d544de41b	libunistring-0.9.6.tar.xz
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 0060518..bb1641e 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUNISTRING_VERSION = 0.9.5
-+LIBUNISTRING_VERSION = 0.9.6
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 9d930d1..8d1d80a 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -273,8 +273,8 @@ CONFIG_SHA256SUM=y
+ CONFIG_SHA512SUM=y
+ CONFIG_SHA3SUM=y
+ CONFIG_SLEEP=y
+-# CONFIG_FEATURE_FANCY_SLEEP is not set
+-# CONFIG_FEATURE_FLOAT_SLEEP is not set
++CONFIG_FEATURE_FANCY_SLEEP=y
++CONFIG_FEATURE_FLOAT_SLEEP=y
+ CONFIG_SORT=y
+ CONFIG_FEATURE_SORT_BIG=y
+ # CONFIG_SPLIT is not set
