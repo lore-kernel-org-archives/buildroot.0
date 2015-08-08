@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] python-pyxml: add
-	PYTHON_PYXML_VERSION variable to url address
-Message-ID: <20150808105608.AA2B37FB02@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:12 -0000
+Subject: [Buildroot] [git commit branch/next]
+	package/xfont_font-xfree86-type1: add hash file
+Message-ID: <20150808105609.0B9237F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efb58de1804b3dcc42cb963590ff9da54db65f0e
+commit: http://git.buildroot.net/buildroot/commit/?id=3492c195f5742797017fe6ad53849721432decc7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyxml/python-pyxml.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xfont_font-xfree86-type1.hash                  |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-pyxml/python-pyxml.mk b/package/python-pyxml/python-pyxml.mk
-index 77863f5..40435f4 100644
---- a/package/python-pyxml/python-pyxml.mk
-+++ b/package/python-pyxml/python-pyxml.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_PYXML_VERSION = 0.8.4
- PYTHON_PYXML_SOURCE = PyXML-$(PYTHON_PYXML_VERSION).tar.gz
--PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/0.8.4/
-+PYTHON_PYXML_SITE = http://downloads.sourceforge.net/project/pyxml/pyxml/$(PYTHON_PYXML_VERSION)/
- PYTHON_PYXML_LICENSE = BSD-3c
- PYTHON_PYXML_LICENSE_FILES = LICENCE
- PYTHON_PYXML_SETUP_TYPE = distutils
+diff --git a/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.hash b/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.hash
+new file mode 100644
+index 0000000..38be53b
+--- /dev/null
++++ b/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.hash
+@@ -0,0 +1,2 @@
++# From http://www.x.org/archive/current/src/everything/CHECKSUMS
++sha256 caebf42aec7be7f3bd40e0f232d6f34881b853dc84acfcdf7458358701fbe34a font-xfree86-type1-1.0.4.tar.bz2
