@@ -1,80 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] qt5base: add option for custom
-	qconfig file
-Message-ID: <20150808105629.4683E7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] polarssl: security bump to
+	version 1.2.14
+Message-ID: <20150808105620.E776380414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b5fcf958276fdc92bd041bc07438d6e4a7d2c59a
+commit: http://git.buildroot.net/buildroot/commit/?id=f162e9661d90facc07f9778fd23f0aa7e7275925
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add in support for a custom qconfig file in the same way it is
-already present for the Qt4 package
+Fixes one remotely-triggerable issue that was found by the Codenomicon
+Defensics tool, one potential remote crash and countermeasures against
+the "Lucky 13 strikes back" cache-based attack.
 
-Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt5base/Config.in  |   13 +++++++++++++
- package/qt5/qt5base/qt5base.mk |   13 +++++++++++++
- 2 files changed, 26 insertions(+), 0 deletions(-)
+ package/polarssl/polarssl.hash |    4 ++--
+ package/polarssl/polarssl.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index df1d3dc..106517f 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -28,6 +28,19 @@ config BR2_PACKAGE_QT5BASE_LICENSE_APPROVED
+diff --git a/package/polarssl/polarssl.hash b/package/polarssl/polarssl.hash
+index d68185b..e7883fd 100644
+--- a/package/polarssl/polarssl.hash
++++ b/package/polarssl/polarssl.hash
+@@ -1,2 +1,2 @@
+-# From https://polarssl.org/tech-updates/releases/polarssl-1.2.13-released
+-sha256	62f44f2a9f39b5cefb229e5dd2644ca20ead477cb1843d6ff30671624315b021	polarssl-1.2.13-gpl.tgz
++# From https://polarssl.org/tech-updates/releases/polarssl-1.2.14-released
++sha256	d7cbd8314aa3a5441f6282d13d07df610f49b4bc678088b04188adf093d17d37	polarssl-1.2.14-gpl.tgz
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index ebd0651..289a28d 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	  See also http://doc.qt.io/qt-5/licensing.html
- 
-+config BR2_PACKAGE_QT5BASE_CONFIG_FILE
-+	string "Config file"
-+	help
-+	  Configure options allow to set which modules are being
-+	  compiled or not in Qt, but Qt also provide a more
-+	  fine-grained mechanism to configure which features should be
-+	  enabled or disabled, through a header file. Examples of such
-+	  header files can be found in src/corelib/global/qconfig-*.h
-+	  in the Qt sources.
-+
-+	  This option allows to set the path of such a configuration
-+	  file, which Buildroot will give to Qt at compile time.
-+
- config BR2_PACKAGE_QT5BASE_EXAMPLES
- 	bool "Compile and install examples (with code)"
- 	select BR2_PACKAGE_QT5BASE_NETWORK
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 2eebb5b..31247dd 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -53,6 +53,12 @@ QT5BASE_LICENSE = Commercial license
- QT5BASE_REDISTRIBUTE = NO
- endif
- 
-+QT5BASE_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_QT5BASE_CONFIG_FILE))
-+
-+ifneq ($(QT5BASE_CONFIG_FILE),)
-+QT5BASE_CONFIGURE_OPTS += -qconfig buildroot
-+endif
-+
- # Qt5 SQL Plugins
- ifeq ($(BR2_PACKAGE_QT5BASE_SQL),y)
- ifeq ($(BR2_PACKAGE_QT5BASE_MYSQL),y)
-@@ -168,7 +174,14 @@ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_PRINTSUPPORT) += Qt5PrintSupport
- 
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_DBUS) += Qt5DBus
- 
-+ifneq ($(QT5BASE_CONFIG_FILE),)
-+define QT5BASE_CONFIGURE_CONFIG_FILE
-+	cp $(QT5BASE_CONFIG_FILE) $(@D)/src/corelib/global/qconfig-buildroot.h
-+endef
-+endif
-+
- define QT5BASE_CONFIGURE_CMDS
-+	$(QT5BASE_CONFIGURE_CONFIG_FILE)
- 	(cd $(@D); \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ POLARSSL_SITE = https://tls.mbed.org/code/releases
+-POLARSSL_VERSION = 1.2.13
++POLARSSL_VERSION = 1.2.14
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
