@@ -1,37 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] Config.in: remove
-	BR2_DEPRECATED_SINCE_2014_05
-Message-ID: <20150808105603.D439D7FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs: rename
+	atmel_xplained_defconfig
+Message-ID: <20150808105617.CDE927F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7b8f43410e9b9e9afca438d08defbdb40566fc5
+commit: http://git.buildroot.net/buildroot/commit/?id=bb7628b30c124bcc93a32bd6798913a30678b6fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The symbol is unused so remove it.
+For consistency, rename atmel_xplained_defconfig to
+atmel_sama5d3_xplained_mmc_defconfig as this configuration supports
+booting the sama5d3 Xplained with an MMC card (as opposed to the NAND
+flash).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ board/atmel/xplained/readme.txt                    |    8 ++++----
+ ...config => atmel_sama5d3_xplained_mmc_defconfig} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index eaf47dd..e10427f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -296,10 +296,6 @@ config BR2_DEPRECATED
+diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
+index 63744dd..7919c60 100644
+--- a/board/atmel/xplained/readme.txt
++++ b/board/atmel/xplained/readme.txt
+@@ -10,19 +10,19 @@ web site.
+ Note that the default Buildroot configuration is prepared to boot from
+ an SD card: the first stage bootloader, second stage bootloader,
+ kernel image and root filesystem are all located on the SD card. Some
+-adjustements in the bootloader configuration will be needed to boot
+-from NAND flash.
++adjustments in the bootloader configuration will be needed to boot
++from NAND flash, see board/atmel/nandflash.txt
  
- if BR2_DEPRECATED
+ Configuring and building Buildroot
+ ----------------------------------
  
--config BR2_DEPRECATED_SINCE_2014_05
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2014_08
- 	bool
- 	default y
+-  make atmel_xplained_defconfig
++  make atmel_sama5d3_xplained_mmc_defconfig
+   make
+ 
+ Preparing the SD card
+ ---------------------
+ 
+-The SD card must be partitionned with at least two partitions: one
++The SD card must be partitioned with at least two partitions: one
+ FAT16 partition for the bootloaders, kernel image and Device Tree
+ blob, and one ext4 partition for the root filesystem. To partition the
+ SD card:
+diff --git a/configs/atmel_xplained_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+similarity index 100%
+rename from configs/atmel_xplained_defconfig
+rename to configs/atmel_sama5d3_xplained_mmc_defconfig
