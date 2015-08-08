@@ -1,56 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:30 -0000
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: Fix i586
-	compilation with gcc5
-Message-ID: <20150808105621.67E6780414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] busybox: PAM support needs
+	thread support
+Message-ID: <20150808105621.3DDBC7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfb8df2ad9b164b421d25294c6882c8b61dc59a5
+commit: http://git.buildroot.net/buildroot/commit/?id=98e1848db11e707f96504ccf9cb2ed09e6787dd1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In file included from libavcodec/cabac_functions.h:46:0,
-                 from libavcodec/h264_cabac.c:37:
-libavcodec/h264_cabac.c: In function 'ff_h264_decode_mb_cabac':
-libavcodec/x86/cabac.h:192:5: error: 'asm' operand has impossible constraints
-     __asm__ volatile(
+In commit f21b2558a097d07b53b6f20a47770468e9e4f7ed ("busybox: added
+linux-pam support"), we added optional support for PAM in
+Busybox. However, this support requires the toolchain to have thread
+support, which causes build failures with non-thread capable
+toolchains.
 
-To reproduce the bug use this defconfig:
+This commit therefore enables Busybox PAM support only if the
+linux-pam package is available *and the toolchain has thread support.
 
-BR2_GCC_VERSION_5_1_X=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_NONFREE=y
-BR2_PACKAGE_FFMPEG_FFPLAY=y
-BR2_PACKAGE_FFMPEG_FFSERVER=y
-BR2_PACKAGE_FFMPEG_FFPROBE=y
-BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
+Fixes:
 
-[Thomas: add a comment in the code.]
+  http://autobuild.buildroot.org/results/1a3/1a380aaca9303b67cc59165d56cf12f35966fe26/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 787dbb1..94aec4b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -261,6 +261,11 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPTS += --enable-yasm
- FFMPEG_DEPENDENCIES += host-yasm
- else
-+ifeq ($(BR2_x86_i586),y)
-+# Needed to work around a bug with gcc 5.x:
-+# error: 'asm' operand has impossible constraints
-+FFMPEG_CONF_OPTS += --disable-inline-asm
-+endif
- FFMPEG_CONF_OPTS += --disable-yasm
- FFMPEG_CONF_OPTS += --disable-mmx
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 34eb1f3..51b35bc 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -152,7 +152,8 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ endef
  endif
+ 
+-ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++# PAM support requires thread support in the toolchain
++ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ define BUSYBOX_LINUX_PAM
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
+ endef
