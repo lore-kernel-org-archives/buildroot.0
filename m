@@ -1,41 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:19 -0000
-Subject: [Buildroot] [git commit branch/next] mp4v2: Remove --disable-debug
-	workaround.
-Message-ID: <20150808105604.DE4A9818F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nmap: Fix static
+	linking
+Message-ID: <20150808105602.506667FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87e7f5464830b533ca3790452f200bbab0b1b32d
+commit: http://git.buildroot.net/buildroot/commit/?id=58af3f27dff51c19a97e850ea53fcf4d7bb650c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is not needed since BR2_ENABLE_DEBUG does not set this flag
-anymore.
+Fixes
+http://autobuild.buildroot.net/results/040/040129539257d88d9437d113752bc8634fd9b2b2/
+http://autobuild.buildroot.net/results/73a/73a562a3a1f356c1a39b2fb57f0848c4b99fe8b1/
+http://autobuild.buildroot.net/results/767/767b8eafe7a204327eaa182c065ca5cfff18096f/
+http://autobuild.buildroot.net/results/0f7/0f7f3a56815dc6422a466fe9b4357ace98f78e11/
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: add host-pkgconf to _DEPENDENCIES]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mp4v2/mp4v2.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ package/nmap/nmap.mk |   10 +++++++++-
+ 1 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/mp4v2/mp4v2.mk b/package/mp4v2/mp4v2.mk
-index d34de02..2acbb4e 100644
---- a/package/mp4v2/mp4v2.mk
-+++ b/package/mp4v2/mp4v2.mk
-@@ -16,12 +16,6 @@ MP4V2_LICENSE_FILES = COPYING
- # disable it
- MP4V2_CONF_ENV = ac_cv_prog_FOUND_HELP2MAN=no
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index c8c16e6..d46d58b 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -14,6 +14,13 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
+ NMAP_LICENSE = GPLv2
+ NMAP_LICENSE_FILES = COPYING
  
--# infrastructure passes --disable-debug if !BR2_ENABLE_DEBUG. With
--# mpv42 the only thing this option does is that it tries to strip any
--# -g* options from CFLAGS/CXXFLAGS. The logic to do so is
--# unfortunately buggy, so just pass --enable-debug to disable this
--MP4V2_CONF_OPTS = --enable-debug --enable-largefile
--
- ifeq ($(BR2_PACKAGE_MP4V2_UTIL),y)
- MP4V2_CONF_OPTS += --enable-util
++# needed by libpcap
++NMAP_LIBS_FOR_STATIC_LINK += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++
++ifeq ($(BR2_STATIC_LIBS),y)
++NMAP_CONF_ENV += LIBS='$(NMAP_LIBS_FOR_STATIC_LINK)'
++endif
++
+ # for 0001-libdnet-wrapper-configure.patch
+ define NMAP_WRAPPER_EXEC
+ 	chmod +x $(@D)/libdnet-stripped/configure.gnu
+@@ -22,7 +29,8 @@ NMAP_POST_PATCH_HOOKS += NMAP_WRAPPER_EXEC
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ NMAP_CONF_OPTS += --with-openssl="$(STAGING_DIR)/usr"
+-NMAP_DEPENDENCIES += openssl
++NMAP_DEPENDENCIES += host-pkgconf openssl
++NMAP_LIBS_FOR_STATIC_LINK += $(shell $(PKG_CONFIG_HOST_BINARY) --libs --static openssl)
  else
+ NMAP_CONF_OPTS += --without-openssl
+ endif
