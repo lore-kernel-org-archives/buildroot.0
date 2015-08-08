@@ -1,51 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:55 -0000
-Subject: [Buildroot] [git commit branch/next] php: security bump to version
-	5.6.11
-Message-ID: <20150808105625.8307E7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump 3.{10,
+	14}.x and 4.0.x series
+Message-ID: <20150808105613.BFB9F7F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ddda416accf7465e048a330f2b458f21600abbe
+commit: http://git.buildroot.net/buildroot/commit/?id=acc179a110a682be93fe996edc8c98583626c3b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-CVE-2015-3152 - mysqlnd is vulnerable to BACKRONYM
-
-And other security bugs with no CVE assigned yet:
-Bug #69972 - Use-after-free vulnerability in
-sqlite3SafetyCheckSickOrOk()
-Bug # 69970 - Use-after-free vulnerability in
-spl_recursive_it_move_forward_ex()
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash |    2 +-
- package/php/php.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 4abf45e..ea12138 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	1af720c955b0a57aa47606e928616e84c78868aff2a5f269c70601a77d6da8c1	php-5.6.10.tar.xz
-+sha256	3f97dbb1c646b90e1ef638defabe429ef036f903b5baa1c34769d3de4fe62bd4	php-5.6.11.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index afac950..53aaecf 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).10
-+PHP_VERSION = $(PHP_VERSION_MAJOR).11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 059075c..ace00d7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -209,16 +209,16 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.69"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.80"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.81"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.44"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.44"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.45"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.15"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+-	default "4.0.5"		if BR2_KERNEL_HEADERS_4_0
++	default "4.0.6"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1"		if BR2_KERNEL_HEADERS_4_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
