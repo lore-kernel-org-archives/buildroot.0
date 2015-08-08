@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:12 -0000
-Subject: [Buildroot] [git commit branch/next] package/libuv: bump to version
-	1.6.1
-Message-ID: <20150808105610.028508030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] portaudio: fix static linking
+	issue with portaudio
+Message-ID: <20150808105600.C53808190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30f238c9ce6300d91992ca854b6874dba63d9e35
+commit: http://git.buildroot.net/buildroot/commit/?id=dea306c78b5d4c571555c50512e212a725b594b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libuv/libuv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/25f/25f8088ecb276ff4559a56fcc4f1b92d11f7deac/
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 0ce8420..505c8d8 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+As opposed to the other audio backends, the configure script does NOT use
+pkg-config to figure out how to link with portaudio, breaking static linking
+as portaudio uses pthreads.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mpg123/mpg123.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index c2d7b1f..c9acb6b 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -52,6 +52,9 @@ ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
+ MPG123_AUDIO += portaudio
+ MPG123_CONF_OPTS += --with-default-audio=portaudio
+ MPG123_DEPENDENCIES += portaudio
++# configure script does NOT use pkg-config to figure out how to link
++# with portaudio, breaking static linking as portaudio uses pthreads
++MPG123_CONF_ENV += LIBS='$(shell $(PKG_CONFIG_HOST_BINARY) --libs portaudio-2.0)'
+ endif
  
--LIBUV_VERSION = v1.5.0
-+LIBUV_VERSION = v1.6.1
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_SDL),y)
