@@ -1,61 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:50 -0000
-Subject: [Buildroot] [git commit branch/next] zedboard: Switch to U-Boot
-	2015.07
-Message-ID: <20150808105639.7FD4D81904@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] dbus: bump to version 1.8.20
+Message-ID: <20150808105639.DCCE37F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f640a4e7a42667a88101f6ceb787fbb118a6acf
+commit: http://git.buildroot.net/buildroot/commit/?id=aa1d97571847f506527128bc95594d027d085fd7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The U-Boot v2015.07 is required for successful out-of-the-box
-build for common Xilinx Zynq boards (including Zedboard).
-
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/avnet/zedboard/readme.txt |    4 ++--
- configs/zedboard_defconfig      |    5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/dbus/dbus.hash |    2 +-
+ package/dbus/dbus.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index e0ce024..0f72d0d 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -15,14 +15,14 @@ Steps to create a working system for Zedboard:
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 19113a6..5df22ef 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7f795268efd343ff0498786acb35097564390d40b1b6158daf1b4f742b522b07  dbus-1.8.16.tar.gz
++sha256	5c4fbf4c64621c96e871da91d2b729a5b00536e116d3c4612a469d924b1b703a  dbus-1.8.20.tar.gz
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index e9c9aaf..a76f24a 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- The expected output:
- 
-- U-Boot SPL 2015.07-rc2 (Jun 18 2015 - 16:42:58)
-+ U-Boot SPL 2015.07 (Jul 22 2015 - 12:01:55)
-  mmc boot
-  reading system.dtb
-  spl_load_image_fat_os: error reading image system.dtb, err - -1
-  reading u-boot-dtb.img
-  reading u-boot-dtb.img
- 
-- U-Boot 2015.07-rc2 (Jun 18 2015 - 16:42:58 +0200)
-+ U-Boot 2015.07 (Jul 22 2015 - 12:01:55 +0200)
- 
-  Model: Zynq ZED Board
-  I2C:   ready
-diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
-index 99720db..761e32f 100644
---- a/configs/zedboard_defconfig
-+++ b/configs/zedboard_defconfig
-@@ -18,9 +18,8 @@ BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2015.07-rc2"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
- BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/zedboard/uboot"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+-DBUS_VERSION = 1.8.16
++DBUS_VERSION = 1.8.20
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
