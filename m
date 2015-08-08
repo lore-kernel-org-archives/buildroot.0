@@ -1,40 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] netsnmp: fix static build
-Message-ID: <20150808105638.E0C8C803C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Fix selection of bootloaders
+	from $(BR2_EXTERNAL)
+Message-ID: <20150808105629.161CB7FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c59cfaf291f22ec96531ec1595d339c9b4aa9bd
+commit: http://git.buildroot.net/buildroot/commit/?id=470cd0dcada5c2df8c84d89dba1077ad74d1e599
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Exclude the ucd-snmp/dlmod MIB module when building statically.
+If a package is based on "generic-package", pkg-generic.mk will compute
+the name of the Kconfig variable to use for checking if this package has
+been selected by the user.
 
-Fixes:
-http://autobuild.buildroot.net/results/782/7829e74f83c3c4a1f45e049ec9f9d6b00e002c1c/
-http://autobuild.buildroot.net/results/5df/5df28482dfa3d7c54d1e4ae3e1d373bd8e9a2265/
-http://autobuild.buildroot.net/results/4b7/4b7f3c15a4f4c4f4457e78767f5526c044d6dc1d/
+Unfortunately, this mechanism does not take into account the case where
+a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+So, even if the bootloader has been selected, it will not be added to
+$(TARGETS) and will not be built.
+
+This patch fixes this issue.
+
+[Arnout: use single filter line, also apply this to toolchain]
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsnmp/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/pkg-generic.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index 47a53d7..57cc6b9 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -31,7 +31,8 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 
- config BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES
- 	string "Build with these MIB modules"
--	default "host ucd-snmp/dlmod agentx"
-+	default "host ucd-snmp/dlmod agentx" if !BR2_STATIC_LIBS
-+	default "host agentx" if BR2_STATIC_LIBS
- 	help
- 	  Specify which MIB modules to include.
- 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 82376df..e85b4bf 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -642,9 +642,9 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+ # kernel case, the bootloaders case, and the normal packages case.
+ ifeq ($(1),linux)
+ $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+-else ifneq ($$(filter boot/%,$(pkgdir)),)
++else ifneq ($$(filter boot/% $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
+ $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+-else ifneq ($$(filter toolchain/%,$(pkgdir)),)
++else ifneq ($$(filter toolchain/% $(BR2_EXTERNAL)/toolchain/%,$(pkgdir)),)
+ $(2)_KCONFIG_VAR = BR2_$(2)
+ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
