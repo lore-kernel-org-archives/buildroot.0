@@ -1,72 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:11 -0000
-Subject: [Buildroot] [git commit branch/next] package/gdb: Add optional
-	dependencies
-Message-ID: <20150808105609.35ECD7F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/matchbox: add missing
+	dependencies to matchbox-lib
+Message-ID: <20150808105606.C5ED27FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=23413b51b2308225584b65c2fcd800ca8f7c56af
+commit: http://git.buildroot.net/buildroot/commit/?id=b9a4e61087f324b7eac49c0c1f8c006119196621
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-To allow reproducable builds of target gdb add some optional dependencies
+Most of the matchbox packages build-depend on matchbox-lib, but were not
+selecting it from their Config.in.
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libutil.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libpython2.7.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libexpat.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+Fix that.
 
-[Thomas: explicitly use --{with,without}-{expat,zlib}. There is no
-such option for libiconv, so for libiconv, the code was left as is.]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gdb/gdb.mk |   17 ++++++++++++++++-
- 1 files changed, 16 insertions(+), 1 deletions(-)
+ package/matchbox-common/Config.in          |    1 +
+ package/matchbox-desktop/Config.in         |    1 +
+ package/matchbox-fakekey/Config.in         |    1 +
+ package/matchbox-keyboard/Config.in        |    1 +
+ package/matchbox-startup-monitor/Config.in |    1 +
+ 5 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 9818320..4b9a757 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -33,7 +33,8 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
- GDB_SUBDIR = gdb/gdbserver
- HOST_GDB_SUBDIR = .
- else
--GDB_DEPENDENCIES = ncurses
-+GDB_DEPENDENCIES = ncurses \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- endif
- 
- # For the host variant, we really want to build with XML support,
-@@ -98,6 +99,20 @@ else
- GDB_CONF_OPTS += --without-python
- endif
- 
-+ifeq ($(BR2_PACKAGE_EXPAT),y)
-+GDB_CONF_OPTS += --with-expat
-+GDB_DEPENDENCIES += expat
-+else
-+GDB_CONF_OPTS += --without-expat
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+GDB_CONF_OPTS += --with-zlib
-+GDB_DEPENDENCIES += zlib
-+else
-+GDB_CONF_OPTS += --without-zlib
-+endif
-+
- # This removes some unneeded Python scripts and XML target description
- # files that are not useful for a normal usage of the debugger.
- define GDB_REMOVE_UNNEEDED_FILES
+diff --git a/package/matchbox-common/Config.in b/package/matchbox-common/Config.in
+index f1c4ce3..33d6cc4 100644
+--- a/package/matchbox-common/Config.in
++++ b/package/matchbox-common/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MATCHBOX_COMMON
+ 	bool "matchbox-common"
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	depends on BR2_PACKAGE_MATCHBOX_PANEL && BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	help
+ 	  Common desktop folders and matchbox-session script.
+diff --git a/package/matchbox-desktop/Config.in b/package/matchbox-desktop/Config.in
+index ed80c22..22c568b 100644
+--- a/package/matchbox-desktop/Config.in
++++ b/package/matchbox-desktop/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MATCHBOX_DESKTOP
+ 	bool "matchbox-desktop"
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A PDA style application launcher or 'item browser'.
+diff --git a/package/matchbox-fakekey/Config.in b/package/matchbox-fakekey/Config.in
+index 334f3a2..c0cde42 100644
+--- a/package/matchbox-fakekey/Config.in
++++ b/package/matchbox-fakekey/Config.in
+@@ -1,2 +1,3 @@
+ config BR2_PACKAGE_MATCHBOX_FAKEKEY
+ 	bool
++	select BR2_PACKAGE_MATCHBOX_LIB
+diff --git a/package/matchbox-keyboard/Config.in b/package/matchbox-keyboard/Config.in
+index 056a255..8bd2a79 100644
+--- a/package/matchbox-keyboard/Config.in
++++ b/package/matchbox-keyboard/Config.in
+@@ -3,5 +3,6 @@ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_MATCHBOX_FAKEKEY
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	help
+ 	  Virtual Keyboard
+diff --git a/package/matchbox-startup-monitor/Config.in b/package/matchbox-startup-monitor/Config.in
+index 95af5fc..522d7f7 100644
+--- a/package/matchbox-startup-monitor/Config.in
++++ b/package/matchbox-startup-monitor/Config.in
+@@ -1,3 +1,4 @@
+ config BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR
+ 	bool
++	select BR2_PACKAGE_MATCHBOX_LIB
+ 	default y if BR2_PACKAGE_STARTUP_NOTIFICATION
