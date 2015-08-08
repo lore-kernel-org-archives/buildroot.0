@@ -1,58 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:33 -0000
-Subject: [Buildroot] [git commit branch/next] package/vlc: Fix SSE support
-	with gcc5
-Message-ID: <20150808105623.2674F80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] samba4: bump to version 4.2.3
+Message-ID: <20150808105632.C86F78190C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a865c6bd598de45bd81484c7b9dfb0fbd96d7a9d
+commit: http://git.buildroot.net/buildroot/commit/?id=23269765c8d99251157a5b90ebf59dcb51a26c1f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Compile fails
-
-make[4]: Entering directory `/home/fli4l/br6_freeswitch/output/build/vlc-2.2.1/modules'
-  CC       video_chroma/libi420_yuy2_sse2_plugin_la-i420_yuy2.lo
-In file included from video_chroma/i420_yuy2.c:35:0:
-video_chroma/i420_yuy2.c: In function 'I420_UYVY_Filter':
-video_chroma/i420_yuy2.c:194:23: error: calling 'I420_UYVY.isra.2' with SSE caling convention without SSE/SSE2 enabled
- VIDEO_FILTER_WRAPPER( I420_UYVY )
-                       ^
-../include/vlc_filter.h:266:13: note: in definition of macro 'VIDEO_FILTER_WRAPPER'
-             name( p_filter, p_pic, p_outpic );                          \
-
-using this defconfig
-
-BR2_x86_pentium2=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_GCC_VERSION_5_1_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_VLC=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vlc/vlc.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/samba4/samba4.hash |    2 +-
+ package/samba4/samba4.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index a553648..e408635 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -66,6 +66,12 @@ else
- VLC_CONF_OPTS += --disable-altivec
- endif
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 11c15b7..e2b3969 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	27d6c69dc3afee38fd28051001d2d4bdae38c567612a9ec6477bb5567e2abc1e	samba-4.2.2.tar.gz
++sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 7d10a0c..c88cc9f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_X86_CPU_HAS_SSE),y)
-+VLC_CONF_OPTS += --enable-sse
-+else
-+VLC_CONF_OPTS += --disable-sse
-+endif
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- VLC_CONF_OPTS += --enable-alsa
- VLC_DEPENDENCIES += alsa-lib
+-SAMBA4_VERSION = 4.2.2
++SAMBA4_VERSION = 4.2.3
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
