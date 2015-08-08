@@ -1,89 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:58:12 -0000
-Subject: [Buildroot] [git commit branch/next] openipmi: fix missing -lrt for
-	clock_gettime
-Message-ID: <20150808105640.8219281904@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:58:13 -0000
+Subject: [Buildroot] [git commit branch/next] package/icu: icu-uc: provide
+	-lstdc++ flag for static build
+Message-ID: <20150808105641.0170D80414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ede17756f1880c607e5dfd3bcd6f8ce45bf8c39
+commit: http://git.buildroot.net/buildroot/commit/?id=13dc887cdaeda79ae3bc4f981c09448efa5eb04f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a patch to detect when -lrt is needed. This fixes build with glibc < 2.17.
+icu-uc.pc must provide -lstdc++ for C application linked
+statically with libicuuc.a.
 
-Fixes:
-http://autobuild.buildroot.net/results/2b0/2b0eb7149c7bdd8ebd72c1070aeefb210379a889/
-http://autobuild.buildroot.net/results/49f/49fbd7e2dc72279c5b54d0f59a055e3e5e73f648/
+Related to:
+http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...c-detect-lrt-requirement-for-clock_gettim.patch |   57 ++++++++++++++++++++
- 1 files changed, 57 insertions(+), 0 deletions(-)
+ .../icu/0005-fix-static-linking-with-icu-uc.patch  |   34 ++++++++++++++++++++
+ 1 files changed, 34 insertions(+), 0 deletions(-)
 
-diff --git a/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
+diff --git a/package/icu/0005-fix-static-linking-with-icu-uc.patch b/package/icu/0005-fix-static-linking-with-icu-uc.patch
 new file mode 100644
-index 0000000..d58ffd7
+index 0000000..965906b
 --- /dev/null
-+++ b/package/openipmi/0002-configure.ac-detect-lrt-requirement-for-clock_gettim.patch
-@@ -0,0 +1,57 @@
-+From d3be03464be7fa3844dfe0837a7e2c920c107836 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 23 Jul 2015 13:35:35 +0300
-+Subject: [PATCH] configure.ac: detect -lrt requirement for clock_gettime
++++ b/package/icu/0005-fix-static-linking-with-icu-uc.patch
+@@ -0,0 +1,34 @@
++From ffff12fd321c7a056e796e74cc508726b0626ae0 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Wed, 22 Jul 2015 22:43:25 +0200
++Subject: [PATCH] fix static linking with icu-uc
 +
-+glibc versions before 2.17 require link with -lrt.
++During static linking with a C application and libicuuc.a,
++-lstdc++ is required.
 +
-+Upstream status: sent, stuck in moderator's queue
++Add -lstdc++ in Libs.private of icu-uc.pc.
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Fixes:
++http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 +---
-+ configure.ac     | 8 ++++++++
-+ unix/Makefile.am | 4 ++--
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
++ source/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 18401f161d45..6b350a41a916 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -854,6 +854,14 @@ OPENIPMI_SWIG_SO="${PYTHON_POSIX_SO}:\$(top_builddir)/lib/.libs/libOpenIPMI.so:\
-+ AC_SUBST(OPENIPMI_SWIG_LIBS)
-+ AC_SUBST(OPENIPMI_SWIG_SO)
++diff --git a/source/Makefile.in b/source/Makefile.in
++index 9db6c52..ca48e16 100644
++--- a/source/Makefile.in
+++++ b/source/Makefile.in
++@@ -264,7 +264,7 @@ config/icu-uc.pc: config/icu.pc Makefile icudefs.mk
++ 	@echo "Description: $(PACKAGE_ICU_DESCRIPTION): Common and Data libraries" >> $@
++ 	@echo "Name: $(PACKAGE)-uc" >> $@
++ 	@echo "Libs:" '-L$${libdir}' "${ICULIBS_UC}" "${ICULIBS_DT}" >> $@
++-	@echo "Libs.private:" '$${baselibs}' >> $@
+++	@echo "Libs.private:" '$${baselibs}' -lstdc++ >> $@
++ 	@echo $@ updated.
 + 
-++LIB_CLOCK_GETTIME=
-++clk_saved_libs=$LIBS
-++AC_SEARCH_LIBS([clock_gettime], [rt],
-++	       [test "$ac_cv_search_clock_gettime" = "none required" ||
-++		LIB_CLOCK_GETTIME=$ac_cv_search_clock_gettime])
-++AC_SUBST([LIB_CLOCK_GETTIME])
-++LIBS=$clk_saved_libs
-++
-+ # Everything from here to AC_OUTPUT is for libedit
-+ 
-+ # AC_PROG_LIBTOOL runs AC_CANONICAL_HOST
-+diff --git a/unix/Makefile.am b/unix/Makefile.am
-+index a108bc679c9a..fb60242d5d3b 100644
-+--- a/unix/Makefile.am
-++++ b/unix/Makefile.am
-+@@ -9,13 +9,13 @@ lib_LTLIBRARIES = libOpenIPMIposix.la libOpenIPMIpthread.la
-+ 
-+ libOpenIPMIpthread_la_SOURCES = posix_thread_os_hnd.c selector.c
-+ libOpenIPMIpthread_la_LIBADD = -lpthread $(GDBM_LIB) \
-+-	$(top_builddir)/utils/libOpenIPMIutils.la
-++	$(top_builddir)/utils/libOpenIPMIutils.la $(LIB_CLOCK_GETTIME)
-+ libOpenIPMIpthread_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+ 	-Wl,-Map -Wl,libOpenIPMIpthread.map
-+ 
-+ libOpenIPMIposix_la_SOURCES = posix_os_hnd.c selector.c
-+ libOpenIPMIposix_la_LIBADD = $(top_builddir)/utils/libOpenIPMIutils.la \
-+-	$(GDBM_LIB)
-++	$(GDBM_LIB) $(LIB_CLOCK_GETTIME)
-+ libOpenIPMIposix_la_LDFLAGS = -rdynamic -version-info $(LD_VERSION) \
-+ 	-Wl,-Map -Wl,libOpenIPMIposix.map
-+ 
++ config/icu-i18n.pc: config/icu.pc Makefile icudefs.mk
 +-- 
-+2.1.4
++2.4.3
 +
