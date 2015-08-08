@@ -1,83 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] package/nodejs: Update to
-	allow selecting node.js version
-Message-ID: <20150808105615.74E958030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] kodi: propagate the dynamic
+	library dependency of python
+Message-ID: <20150808105605.8123F7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d00fb884e4415e09b57901b001300c6da43086e2
+commit: http://git.buildroot.net/buildroot/commit/?id=36e69dc2415f4bd2759c29bdd39a289b0a3776f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Thomas: fix minor Config.in formatting issues pointed by Yann.]
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-remove-python-bz2-dependency.patch        |    0
- .../0002-gyp-force-link-command-to-use-CXX.patch   |    0
- .../{ => 0.10.39}/0003-use-python-variable.patch   |    0
- ...4-fix-build-error-without-OpenSSL-support.patch |    0
- package/nodejs/Config.in                           |   15 +++++++++++++++
- package/nodejs/nodejs.mk                           |    2 +-
- 6 files changed, 16 insertions(+), 1 deletions(-)
+ package/kodi/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/0001-remove-python-bz2-dependency.patch b/package/nodejs/0.10.39/0001-remove-python-bz2-dependency.patch
-similarity index 100%
-rename from package/nodejs/0001-remove-python-bz2-dependency.patch
-rename to package/nodejs/0.10.39/0001-remove-python-bz2-dependency.patch
-diff --git a/package/nodejs/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/0.10.39/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/0.10.39/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/0003-use-python-variable.patch b/package/nodejs/0.10.39/0003-use-python-variable.patch
-similarity index 100%
-rename from package/nodejs/0003-use-python-variable.patch
-rename to package/nodejs/0.10.39/0003-use-python-variable.patch
-diff --git a/package/nodejs/0004-fix-build-error-without-OpenSSL-support.patch b/package/nodejs/0.10.39/0004-fix-build-error-without-OpenSSL-support.patch
-similarity index 100%
-rename from package/nodejs/0004-fix-build-error-without-OpenSSL-support.patch
-rename to package/nodejs/0.10.39/0004-fix-build-error-without-OpenSSL-support.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 3140683..9a39385 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -22,6 +22,21 @@ comment "nodejs needs a toolchain w/ C++, threads"
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index a4d1aab..ea4b449 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -3,9 +3,10 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	default y if (BR2_arm || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
  
- if BR2_PACKAGE_NODEJS
  
-+choice
-+	prompt "Node.js version"
-+	default BR2_BR2_PACKAGE_NODEJS_0_10_39
-+	help
-+	  Select the version of Node.js you wish to use.
-+
-+config BR2_BR2_PACKAGE_NODEJS_0_10_39
-+	bool "v0.10.39"
-+
-+endchoice
-+
-+config BR2_PACKAGE_NODEJS_VERSION_STRING
-+	string
-+	default "0.10.39"	if BR2_BR2_PACKAGE_NODEJS_0_10_39
-+
- menu "Module Selection"
+-comment "kodi needs a toolchain w/ C++, threads, wchar"
++comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
  
- config BR2_PACKAGE_NODEJS_NPM
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 4293c70..59e03b0 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 0.10.39
-+NODEJS_VERSION = $(call qstrip,$(BR2_PACKAGE_NODEJS_VERSION_STRING))
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -97,6 +98,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_STATIC_LIBS # python
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	help
+ 	  Kodi is an award-winning free and open source (GPL) software
