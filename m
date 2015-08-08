@@ -1,54 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:45 -0000
-Subject: [Buildroot] [git commit branch/next] uclibc-ng: fix parallel build
-	issue for arm/xtensa when LOCALE support is enabled
-Message-ID: <20150808105616.8D3197FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/raspberrypi2: update
+	our defconfig
+Message-ID: <20150808105616.DE7907F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6b339dc8db6418de12e2eb437ba21c1679cb8ca
+commit: http://git.buildroot.net/buildroot/commit/?id=7d37754113e9c689b2a617ceb227dbd3a0135726
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch should fix any parallel build issues found
-by autobuilder lately, f.e.:
-http://autobuild.buildroot.net/results/43dd5c5da0d003b654fd252c989d49c2e5872827/
-http://autobuild.buildroot.net/results/cfb438f933ff7385d612d65798b0b8ed833a6476/
-and many more.
-Will be committed upstream, if autobuilders are working.
+Update to the latest stable kernel version (4.0.y); build an in-tree DTB.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Floris Bos <bos@je-eigen-domein.nl>
+Cc: Pascal de Bruijn <pmjdebruijn@pcode.nl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/1.0.3/0002-fix-parallel-build.patch |   21 ++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
+ configs/raspberrypi2_defconfig |   16 +++++++++++-----
+ 1 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/uclibc/1.0.3/0002-fix-parallel-build.patch b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
-new file mode 100644
-index 0000000..d7c3091
---- /dev/null
-+++ b/package/uclibc/1.0.3/0002-fix-parallel-build.patch
-@@ -0,0 +1,21 @@
-+fix parallel build if UCLIBC_HAS_LOCALE is enabled for arm/xtensa
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 5859749..7b12040 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -7,16 +7,22 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ 
+-# Lock to 3.18 headers as the RPi2 kernel is based off the 3.18 branch
++# Lock to 4.0 headers as the RPi kernel stable tree is
++# based off the 4.0 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="4.0.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="2747cc0bde4ca441691260fae1e34c9ef954ccae"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+-BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_ZIMAGE=yo
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+ 
-+diff -Nur uClibc-ng-1.0.3.orig/Makefile.in uClibc-ng-1.0.3/Makefile.in
-+--- uClibc-ng-1.0.3.orig/Makefile.in	2015-06-13 20:26:56.000000000 +0200
-++++ uClibc-ng-1.0.3/Makefile.in	2015-06-29 20:23:26.000000000 +0200
-+@@ -183,11 +183,12 @@
-+ headers-y += $(target-headers-sysdep)
-+ 
-+ headers: $(top_builddir)include/bits/uClibc_config.h | subdirs
-++	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
-++
-+ subdirs: $(addprefix $(top_builddir),$(subdirs))
-+ 
-+ $(pregen-headers-y): $(headers_dep)
-+ pregen: headers $(pregen-headers-y) $(headers_dep)
-+-	$(Q)$(if $(UCLIBC_HAS_LOCALE),$(MAKE) -C extra/locale locale_headers)
-+ 
-+ $(top_builddir)include/bits/sysnum.h: $(top_srcdir)extra/scripts/gen_bits_syscall_h.sh | $(top_builddir)include/bits
-+ 	@$(disp_gen)
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
