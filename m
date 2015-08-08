@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:48 -0000
-Subject: [Buildroot] [git commit branch/next] dnsmasq: bump to version 2.73
-Message-ID: <20150808105612.2AC858030B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lttng-tools: remove
+	autoreconf
+Message-ID: <20150808105638.A5DCC803C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=333002cffa66b85dcf3ba192234157caa8a4c137
+commit: http://git.buildroot.net/buildroot/commit/?id=2b624a193bb7c70a14774555d113cc744148391e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch is gone
+with the commit fb5d605638c359d008329dd9f8fb6c2c8a2c0537.
+
+lttng-tools-no-sync-file-range-in-uclibc.patch is gone
+with the commit ed692e2dbbf8d4751d39a636dd1119e829bd0f99.
+
+There is no need to autoreconf lttng-tools.
+
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dnsmasq/dnsmasq.hash |    2 +-
- package/dnsmasq/dnsmasq.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lttng-tools/lttng-tools.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index d5e5740..2d6e78c 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	7d0bd23f5d74b3a6b26a75d5ffcf9db81d461b47cbe578cb65a83a98008600b1	dnsmasq-2.72.tar.xz
-+sha256	0bff81103e53fcab3a3c4d0fd6df1882f9446dca4fa74ff8270e1d2ab872d8f6	dnsmasq-2.73.tar.xz
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 4b0999b..13352a9 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index e218a95..0cd381c 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -17,8 +17,6 @@ LTTNG_TOOLS_CONF_OPTS += --with-xml-prefix=$(STAGING_DIR)/usr
+ # trace format into an human readable format.
+ LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt host-lttng-babeltrace util-linux
  
--DNSMASQ_VERSION = 2.72
-+DNSMASQ_VERSION = 2.73
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+-LTTNG_AUTORECONF = YES
+-
+ ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
+ LTTNG_TOOLS_CONF_OPTS += --enable-lttng-ust
+ LTTNG_TOOLS_DEPENDENCIES += lttng-libust
