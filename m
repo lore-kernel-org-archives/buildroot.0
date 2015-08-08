@@ -1,30 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:21 -0000
-Subject: [Buildroot] [git commit branch/next] package/libsvg: add hash file
-Message-ID: <20150808105605.355EC7F8ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] grantlee: add hash
+Message-ID: <20150808105602.ED6E27FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f638d12678e1600a9020b9af1aaa962682b15267
+commit: http://git.buildroot.net/buildroot/commit/?id=8b27ca3da3d2931793513c05b3c16635eab83c72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsvg/libsvg.hash |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/grantlee/grantlee.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libsvg/libsvg.hash b/package/libsvg/libsvg.hash
+diff --git a/package/grantlee/grantlee.hash b/package/grantlee/grantlee.hash
 new file mode 100644
-index 0000000..c500849
+index 0000000..7f02bb3
 --- /dev/null
-+++ b/package/libsvg/libsvg.hash
-@@ -0,0 +1,5 @@
-+# From http://cairographics.org/snapshots/libsvg-0.1.4.tar.gz.md5
-+md5 ce0715e3013f78506795fba16e8455d3 libsvg-0.1.4.tar.gz
-+
-+# Locally calculated
-+sha256 4c3bf9292e676a72b12338691be64d0f38cd7f2ea5e8b67fbbf45f1ed404bc8f libsvg-0.1.4.tar.gz
++++ b/package/grantlee/grantlee.hash
+@@ -0,0 +1,3 @@
++# Locally calculated after checking pgp signature
++sha256	191809bf4c9b7ef877af0fd29345061c2372edfb4506aa7d5df5c71a570fa0ac	grantlee-0.5.1.tar.gz
++sha256	eaf22ba92e53b8eb5dd8bca045fe81b734d3445445ed9e0c1af2a0a7c375b161	grantlee-5.0.0.tar.gz
