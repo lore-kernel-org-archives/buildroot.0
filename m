@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:16 -0000
-Subject: [Buildroot] [git commit branch/next] wayland: bump to version 1.8.1
-Message-ID: <20150808105612.69A667F9A6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gpm: change archive to
+	lzma
+Message-ID: <20150808105612.D81037F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb48d5d08c8ce9e7be0055b08cf9e9208f99dd91
+commit: http://git.buildroot.net/buildroot/commit/?id=0a500e6af79c9c899f8839cbc00479d664e75478
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 1.8.1
-- Update hash file
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wayland/wayland.hash |    4 ++--
- package/wayland/wayland.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gpm/gpm.hash |    2 +-
+ package/gpm/gpm.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index aa9b15d..316d6b5 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
+diff --git a/package/gpm/gpm.hash b/package/gpm/gpm.hash
+index 1f8994b..7bbc43d 100644
+--- a/package/gpm/gpm.hash
++++ b/package/gpm/gpm.hash
 @@ -1,2 +1,2 @@
--# From: http://lists.freedesktop.org/archives/wayland-devel/2015-February/019976.html
--sha256  bdea47a2db96f7e53f1ce0351559c0af5b7f7aae7e95f0a884a78af9f1057c9c  wayland-1.7.0.tar.xz
-+# From: http://lists.freedesktop.org/archives/wayland-devel/2015-June/022630.html
-+sha256  f17c938d1c24fd0a10f650a623a2775d329db3168b5732e498b08388ec776fc8 wayland-1.8.1.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 32869d8..4e44fa0 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed:
+-sha256  f011b7dc7afb824e0a017b89b7300514e772853ece7fc4ee640310889411a48d  gpm-1.20.7.tar.bz2
++sha256  a955053b36556ffa7c628ce18fd6de7d625966573fa412fb08869533d8f7385c  gpm-1.20.7.tar.lzma
+diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+index dee6208..6d3b5d2 100644
+--- a/package/gpm/gpm.mk
++++ b/package/gpm/gpm.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--WAYLAND_VERSION = 1.7.0
-+WAYLAND_VERSION = 1.8.1
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+ GPM_VERSION = 1.20.7
+-GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
++GPM_SOURCE = gpm-$(GPM_VERSION).tar.lzma
+ GPM_SITE = http://www.nico.schottelius.org/software/gpm/archives
+ GPM_LICENSE = GPLv2+
+ GPM_LICENSE_FILES = COPYING
