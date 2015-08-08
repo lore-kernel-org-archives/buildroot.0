@@ -1,59 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] package/dbus: fix machine-id
-	when using systemd
-Message-ID: <20150808105629.4DE887FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/musl: bump to version
+	1.1.10
+Message-ID: <20150808105609.833328030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6921f45d0a919c3c3635db74d5323a52d9542c75
+commit: http://git.buildroot.net/buildroot/commit/?id=48b6fc2dbc0bd90be61e8f2b907e70f466379581
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When systemd is used, /var/lib/dbus becomes dangling symlink, because
-nobody does mkdir /tmp/dbus, so /var/lib/dbus/machine-id could not be
-written. On SysVinit systems there is init script that creates
-/tmp/dbus.
+A new regression in uselocale made it into this release. As suggested [1] by the
+musl maintainers add a patch from upstream [2] to avoid breaking programs that
+call uselocale.
 
-This patch preserves old behavior for SysVinit systems, and introduces
-new one for systemd-booted systems: /var/lib/dbus is a persistent
-directory, it holds symlink /var/lib/dbus/machine-id -> /etc/machine-id
-as machine-id(5) suggests, and /etc/machine-id is managed by systemd.
+[1]
+http://www.musl-libc.org/download.html
 
-Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+[2]
+http://git.musl-libc.org/cgit/musl/patch/?id=63f4b9f18f3674124d8bcb119739fec85e6da005
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dbus/dbus.mk |   13 +++++++------
- 1 files changed, 7 insertions(+), 6 deletions(-)
+ package/musl/0001-fix-uselocale.patch |   30 ++++++++++++++++++++++++++++++
+ package/musl/musl.hash                |    2 +-
+ package/musl/musl.mk                  |    2 +-
+ 3 files changed, 32 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index c810800..7deae11 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -73,17 +73,18 @@ endef
- 
- DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_REMOVE_DEVFILES
- 
--define DBUS_INSTALL_TARGET_FIXUP
-+define DBUS_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/dbus/S30dbus \
-+		$(TARGET_DIR)/etc/init.d/S30dbus
+diff --git a/package/musl/0001-fix-uselocale.patch b/package/musl/0001-fix-uselocale.patch
+new file mode 100644
+index 0000000..03a4c6e
+--- /dev/null
++++ b/package/musl/0001-fix-uselocale.patch
+@@ -0,0 +1,30 @@
++From 63f4b9f18f3674124d8bcb119739fec85e6da005 Mon Sep 17 00:00:00 2001
++From: Timo Ter??s <timo.teras@iki.fi>
++Date: Fri, 05 Jun 2015 07:39:42 +0000
++Subject: fix uselocale((locale_t)0) not to modify locale
 +
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	rm -rf $(TARGET_DIR)/var/lib/dbus
- 	ln -sf /tmp/dbus $(TARGET_DIR)/var/lib/dbus
- endef
++commit 68630b55c0c7219fe9df70dc28ffbf9efc8021d8 made the new locale to
++be assigned unconditonally resulting in crashes later on.
++
++Backported from: 63f4b9f18f3674124d8bcb119739fec85e6da005
++
++Signed-off-by: Timo Ter??s <timo.teras@iki.fi>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++diff --git a/src/locale/uselocale.c b/src/locale/uselocale.c
++index b70a0c1..0fc5ecb 100644
++--- a/src/locale/uselocale.c
+++++ b/src/locale/uselocale.c
++@@ -8,9 +8,7 @@ locale_t __uselocale(locale_t new)
++ 	locale_t old = self->locale;
++ 	locale_t global = &libc.global_locale;
++ 
++-	if (new == LC_GLOBAL_LOCALE) new = global;
++-
++-	self->locale = new;
+++	if (new) self->locale = new == LC_GLOBAL_LOCALE ? global : new;
++ 
++ 	return old == global ? LC_GLOBAL_LOCALE : old;
++ }
++--
++cgit v0.9.0.3-65-g4555
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index d6b28e2..88415b0 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	00bf7173caf972c88cd07cb0d420c082a2f35efcccc1a81f8909bec2d030283e  musl-1.1.9.tar.gz
++sha256	45bbe9b1c7f7a0f743477af1e103b6889bfe4dd9815e16f6c89f6c90831c8b7c  musl-1.1.10.tar.gz
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index a089327..d8c0c6e 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
--
--define DBUS_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/dbus/S30dbus \
--		$(TARGET_DIR)/etc/init.d/S30dbus
-+define DBUS_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/var/lib/dbus
-+	ln -sf /etc/machine-id $(TARGET_DIR)/var/lib/dbus/machine-id
- endef
- 
- HOST_DBUS_DEPENDENCIES = host-pkgconf host-expat
+-MUSL_VERSION = 1.1.9
++MUSL_VERSION = 1.1.10
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
