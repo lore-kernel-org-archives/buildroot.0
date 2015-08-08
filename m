@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:39 -0000
-Subject: [Buildroot] [git commit branch/next] Fix selection of bootloaders
-	from $(BR2_EXTERNAL)
-Message-ID: <20150808105629.161CB7FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/systemd: add missing
+	dependencies
+Message-ID: <20150808105629.2FF607FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=470cd0dcada5c2df8c84d89dba1077ad74d1e599
+commit: http://git.buildroot.net/buildroot/commit/?id=b746088a6091165960d9494957fd67845f5832c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If a package is based on "generic-package", pkg-generic.mk will compute
-the name of the Kconfig variable to use for checking if this package has
-been selected by the user.
+Systemd depends on mount and nologin from util-linux. Mount from busybox
+is not fine, because its behavior differs from util-linux mount. Busybox
+mount does not handle correctly 'mount / -o remount' (should apply
+options from /etc/fstab). Nologin should be present, because
+systemd-sysusers uses it as shell for newly created system users.
 
-Unfortunately, this mechanism does not take into account the case where
-a bootloader is declared in a $(BR2_EXTERNAL)/boot directory.
-
-So, even if the bootloader has been selected, it will not be added to
-$(TARGETS) and will not be built.
-
-This patch fixes this issue.
-
-[Arnout: use single filter line, also apply this to toolchain]
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Maxim Mikityanskiy <maxtram95@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 82376df..e85b4bf 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -642,9 +642,9 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
- # kernel case, the bootloaders case, and the normal packages case.
- ifeq ($(1),linux)
- $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
--else ifneq ($$(filter boot/%,$(pkgdir)),)
-+else ifneq ($$(filter boot/% $(BR2_EXTERNAL)/boot/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
--else ifneq ($$(filter toolchain/%,$(pkgdir)),)
-+else ifneq ($$(filter toolchain/% $(BR2_EXTERNAL)/toolchain/%,$(pkgdir)),)
- $(2)_KCONFIG_VAR = BR2_$(2)
- else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 38353d0..303cf22 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -20,6 +20,9 @@ config BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_BINARIES
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
++	select BR2_PACKAGE_UTIL_LINUX_NOLOGIN
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # kmod-tools
+ 	select BR2_PACKAGE_KMOD_TOOLS
