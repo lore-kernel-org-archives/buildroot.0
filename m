@@ -1,38 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 8 Aug 2015 22:32:11 +0200
-Subject: [Buildroot] Email list volume
-In-Reply-To: <CAJpxd067yR+C--CMMg+A54nsOkFwGZPuutufMkz0-hai2qLPyw@mail.gmail.com>
-References: <CAJpxd067yR+C--CMMg+A54nsOkFwGZPuutufMkz0-hai2qLPyw@mail.gmail.com>
-Message-ID: <20150808223211.0ae9286a@free-electrons.com>
+Date: Sat, 8 Aug 2015 22:44:44 +0200
+Subject: [Buildroot] [git commit] c-periphery: add patch to fix musl
+	compatibility
+Message-ID: <20150808204513.80C8B80E46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bryce,
+commit: http://git.buildroot.net/buildroot/commit/?id=60974ee92dd8ff9e43cc6b785ea5131a8851e74c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 8 Aug 2015 12:46:21 -0700, Bryce Schober wrote:
-> I realize this is really only an occasional problem, but it would be
-> helpful to raise the signal-to-noise ratio if this email list didn't also
-> serve as a git commit log.  I'm just sayin' 1500 emails in a day is a bit
-> much.
+Fixes:
 
-I apologize about today's traffic as it is entirely my fault. I created
-the 'next' branch to start merging new packages and major changes even
-if we've entered the -rc cycle for 2015.08. And the way I did it ended
-up resending a notification e-mail for each commit of the 2015.08-rc1
-cycle.
+  http://autobuild.buildroot.net/results/ebfc9a44a305ab45305f8b393761304576ae9077/
 
-So this 1500 e-mail for today is really exceptional. Though I agree in
-general that the volume of traffic on the list is quite high. If you
-have suggestions to make it more reasonable, it would definitely be
-interesting.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...Add-missing-header-for-musl-compatibility.patch |   32 ++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch b/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
+new file mode 100644
+index 0000000..108297c
+--- /dev/null
++++ b/package/c-periphery/0001-Add-missing-header-for-musl-compatibility.patch
+@@ -0,0 +1,32 @@
++From 1d8cb0ad54099c3d7261aaa19a2c0786f16736d0 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 8 Aug 2015 22:42:39 +0200
++Subject: [PATCH] Add missing header for musl compatibility
++
++<linux/ioctl.h> is needed to get the definition of _IOC_SIZEBITS and
++solve the following build failure:
++
++src/spi.c: In function 'spi_transfer':
++src/spi.c:100:24: error: '_IOC_SIZEBITS' undeclared (first use in this function)
++     if (ioctl(spi->fd, SPI_IOC_MESSAGE(1), &spi_xfer) < 1)
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/spi.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/spi.c b/src/spi.c
++index 52a8d3d..1a6b17c 100644
++--- a/src/spi.c
+++++ b/src/spi.c
++@@ -16,6 +16,7 @@
++ #include <errno.h>
++ 
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ #include <linux/spi/spidev.h>
++ 
++ #include "spi.h"
++-- 
++2.5.0
++
