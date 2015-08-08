@@ -1,75 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:05 -0000
-Subject: [Buildroot] [git commit branch/next] package/upmpdcli: Add patch to
-	fix OPEN_MAX build error
-Message-ID: <20150808105637.EB8CC80414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] core/pkg-kconfig: do not
+	always silence oldconfig
+Message-ID: <20150808105638.60C7880414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9f99c61aa3e56073d1fcfe20d68151f074f9838
+commit: http://git.buildroot.net/buildroot/commit/?id=58bb6ca3b197624a22b7269329729762dc9e54d0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When building upmpdcli with certain toolchains using the compiler flag
--std=c++0x let gcc not define "linux" or "__linux", but "__linux__". Therefore,
-the Linux-specific code in closefrom.cpp is not used and the build fails.
+When debugging packages that use the pkg-kconfig infrastructure, it
+is sometime interesting to see the exact command line that is being
+executed when running oldconfig.
 
-Fixes:
-http://autobuild.buildroot.net/results/d66/d660a9409552b3e1ad9e3ed716386fd0a67fd8db
-http://autobuild.buildroot.net/results/f19/f19e843cdcc968a72919ca3792a90dd40552bd59
-http://autobuild.buildroot.net/results/a77/a776001dae51c4dae1f25b3a9bf9a9fe2ca69003
-http://autobuild.buildroot.net/results/3e7/3e7590566ed3cc7a1dd412fb66b7b987e847aa25
+But currently, those command lines are prefixed with '@' which makes
+them silent, always.
 
-and many more.
+Instead, use $(Q) so they are silent by default, and verbose with V=1.
 
-Pull request is open on github [1].
-
-[1]
-https://github.com/medoc92/upmpdcli/pull/15
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Add-conditional-check-for-__linux__.patch |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
+ package/pkg-kconfig.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch b/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
-new file mode 100644
-index 0000000..910ee3c
---- /dev/null
-+++ b/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
-@@ -0,0 +1,32 @@
-+From 69740cf6fe35413edc4b6adc502ba70ce8de8557 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Sun, 19 Jul 2015 08:48:13 +0200
-+Subject: [PATCH 1/1] Add conditional check for __linux__
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When building upmpdcli with certain toolchains using the compiler flag
-+-std=c++0x let gcc not define "linux" or "__linux", but "__linux__".
-+
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/closefrom.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/closefrom.cpp b/src/closefrom.cpp
-+index 4429b20..0cd7957 100644
-+--- a/src/closefrom.cpp
-++++ b/src/closefrom.cpp
-+@@ -111,7 +111,7 @@ int libclf_closefrom(int fd0)
-+ }
-+ 
-+ /*************************************************************************/
-+-#elif (defined(linux) || defined(__linux))
-++#elif (defined(linux) || defined(__linux) || defined(__linux__))
-+ 
-+ /* Use /proc/self/fd directory */
-+ #include <sys/types.h>
-+-- 
-+2.4.6
-+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index f708875..3e17a70 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -65,14 +65,14 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	support/kconfig/merge_config.sh -m -O $$(@D) \
+ 		$$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+-	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) oldconfig
+ 
+ # In order to get a usable, consistent configuration, some fixup may be needed.
+ # The exact rules are specified by the package .mk file.
+ define $(2)_FIXUP_DOT_CONFIG
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+-	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) oldconfig
+ 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ endef
