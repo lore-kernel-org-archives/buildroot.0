@@ -1,34 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:44 -0000
-Subject: [Buildroot] [git commit branch/next] package/libtirpc: bump version
-Message-ID: <20150808105610.D3B9A7F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/at91bootstrap3: download
+	via custom git url
+Message-ID: <20150808105610.C1EDB7F891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f44f95dd9807f167ca373d9d23f1970a22c88b82
+commit: http://git.buildroot.net/buildroot/commit/?id=c839605ff078fd0c26c1cd4485e14643f0de453a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump to version 0.3.1:
-  - update our patches
-  - rename patches for proper numbering
-  - drop patch 0007, applied upstream
+This patch adds the option to download at91bootstrap3 from
+a custom git URL. This is a requirement for all that boards
+that use a custom at91bootstrap3 version.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...able-parts-of-TIRPC-requiring-NIS-support.patch |   64 ++++----------------
- ...out-RPC-support-does-not-install-rpcent.h.patch |   16 +++--
- ...dd-rpcgen-program-from-nfs-utils-sources.patch} |   17 +++--
- ...y-generate-XDR-header-files-from-.x-sour.patch} |   49 +++++++--------
- ...-files-needed-to-build-rpcbind-on-top-of.patch} |   24 ++++----
- ...g-config-needs-pthread-as-private-library.patch |   36 -----------
- package/libtirpc/libtirpc.hash                     |    4 +-
- package/libtirpc/libtirpc.mk                       |    2 +-
- 8 files changed, 70 insertions(+), 142 deletions(-)
+ boot/at91bootstrap3/Config.in         |   34 +++++++++++++++++++++++++++++++++
+ boot/at91bootstrap3/at91bootstrap3.mk |   19 +++++++++++++++++-
+ 2 files changed, 52 insertions(+), 1 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 8ac40ed..9f2f49b 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -10,6 +10,40 @@ config BR2_TARGET_AT91BOOTSTRAP3
+ 
+ if BR2_TARGET_AT91BOOTSTRAP3
+ 
++choice
++
++	prompt "AT91 Bootstrap 3 version"
++
++config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	bool "3.7.2"
++
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  This option allows Buildroot to get the AT91 Bootstrap 3 source
++	  code from a Git repository.
++
++endchoice
++
++if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by Git
++	  E.G. a sha id, a tag, branch, ..
++
++endif
++
++config BR2_TARGET_AT91BOOTSTRAP3_VERSION
++	string
++	default "v3.7.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
++		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
++
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_PATCH_DIR
+ 	string "custom patch dir"
+ 	help
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index df3896e..1c68094 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -4,8 +4,15 @@
+ #
+ ################################################################################
+ 
+-AT91BOOTSTRAP3_VERSION = v3.7.2
++AT91BOOTSTRAP3_VERSION = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_VERSION))
++
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
++AT91BOOTSTRAP3_SITE = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL))
++AT91BOOTSTRAP3_SITE_METHOD = git
++else
+ AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
++endif
++
+ AT91BOOTSTRAP3_LICENSE = Atmel License
+ AT91BOOTSTRAP3_LICENSE_FILES = main.c
+ 
+@@ -57,4 +64,14 @@ ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)),)
+ $(error No at91bootstrap3 configuration file specified, check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE setting)
+ endif
+ endif
++
++ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT),y)
++ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL)),)
++$(error No custom at91bootstrap3 repository URL specified. Check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL setting)
++endif
++ifeq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION)),)
++$(error No custom at91bootstrap3 repository version specified. Check your BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION setting)
++endif
++endif
++
+ endif
