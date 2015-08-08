@@ -1,60 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:48 -0000
-Subject: [Buildroot] [git commit branch/next] pulseaudio: systemd support
-Message-ID: <20150808105633.A362180414@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ti-gfx: systemd support
+Message-ID: <20150808105633.AB78780414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c42f6907fa5f1cafcb5aedafe4fc9865d0b3fb4a
+commit: http://git.buildroot.net/buildroot/commit/?id=b4857df721ae0f01892323b9b744ab3950ce2e4d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The startup script too complex to embed it completely into the
+.service file, so it is left as a standalone script.
+
 [Thomas:
- - use relative path for the service symlink
- - slightly adjust the service description]
+ - use relative path for the symbolic link
+ - slightly tweak the service Description string]
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pulseaudio/pulseaudio.mk      |    8 ++++++++
- package/pulseaudio/pulseaudio.service |   11 +++++++++++
- 2 files changed, 19 insertions(+), 0 deletions(-)
+ package/ti-gfx/ti-gfx.mk      |   10 ++++++++++
+ package/ti-gfx/ti-gfx.service |   11 +++++++++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index e68ca68..0fcfe38 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -123,6 +123,14 @@ define PULSEAUDIO_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50pulseaudio
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index 061e9fe..5339387 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -190,6 +190,16 @@ define TI_GFX_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S80ti-gfx
  endef
  
-+define PULSEAUDIO_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/pulseaudio/pulseaudio.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/pulseaudio.service
++define TI_GFX_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 755 package/ti-gfx/S80ti-gfx \
++		$(TARGET_DIR)/usr/lib/systemd/scripts/ti-gfx
++	$(INSTALL) -D -m 644 package/ti-gfx/ti-gfx.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/ti-gfx.service
 +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/pulseaudio.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/pulseaudio.service
++	ln -sf ../../../../usr/lib/systemd/system/ti-gfx.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/ti-gfx.service
 +endef
 +
- endif
- 
- $(eval $(autotools-package))
-diff --git a/package/pulseaudio/pulseaudio.service b/package/pulseaudio/pulseaudio.service
+ define TI_GFX_INSTALL_TARGET_CMDS
+ 	$(TI_GFX_INSTALL_KM_CMDS)
+ 	$(TI_GFX_INSTALL_BINS_CMDS)
+diff --git a/package/ti-gfx/ti-gfx.service b/package/ti-gfx/ti-gfx.service
 new file mode 100644
-index 0000000..fc82f03
+index 0000000..432dba2
 --- /dev/null
-+++ b/package/pulseaudio/pulseaudio.service
++++ b/package/ti-gfx/ti-gfx.service
 @@ -0,0 +1,11 @@
 +[Unit]
-+Description=PulseAudio Sound System
-+After=syslog.target
++Description=TI graphics driver
 +
 +[Service]
-+UMask=077
-+ExecStart=/usr/bin/pulseaudio --system --daemonize=no
-+Restart=always
++Type=oneshot
++ExecStart=/usr/lib/systemd/scripts/ti-gfx start
++ExecStop=/usr/lib/systemd/scripts/ti-gfx stop
++RemainAfterExit=yes
 +
 +[Install]
 +WantedBy=multi-user.target
