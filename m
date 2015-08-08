@@ -1,43 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:29 -0000
-Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version
-	0.9.41
-Message-ID: <20150808105620.DEB057FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nodejs: Define NPM
+	command for other packages to use
+Message-ID: <20150808105620.B96BC7FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed10829e3336420608232b10b8021c735f37be74
+commit: http://git.buildroot.net/buildroot/commit/?id=c50256b6d2c4357cfea39350fa6f5496995e200d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Other nodejs-related packages will need to call npm with the same set of
+arguments as is currently used by the nodejs package itself.
+
+To avoid duplicating this code, set the NPM variable so those packages can
+re-use it.
+
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/harfbuzz/harfbuzz.hash |    4 ++--
- package/harfbuzz/harfbuzz.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nodejs/nodejs.mk |   18 ++++++++++--------
+ 1 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 131e8d3..26f4688 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.40.tar.bz2.sha256
--sha256	1771d53583be6d91ca961854b2a24fb239ef0545eed221ae3349abae0ab8321f	harfbuzz-0.9.40.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.41.tar.bz2.sha256
-+sha256	d81aa53d0c02b437beeaac159d7fc16394d676bbce0860fb6f6a10b587dc057c	harfbuzz-0.9.41.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 9cfd613..0adfb53 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 156b151..414f3f3 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -95,6 +95,15 @@ NODEJS_MODULES_LIST= $(call qstrip,\
+ 	$(if $(BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT),coffee-script) \
+ 	$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL))
  
--HARFBUZZ_VERSION = 0.9.40
-+HARFBUZZ_VERSION = 0.9.41
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
++# Define NPM for other packages to use
++NPM = $(TARGET_CONFIGURE_OPTS) \
++	LD="$(TARGET_CXX)" \
++	npm_config_arch=$(NODEJS_CPU) \
++	npm_config_target_arch=$(NODEJS_CPU) \
++	npm_config_build_from_source=true \
++	npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
++	$(HOST_DIR)/usr/bin/npm
++
+ #
+ # We can only call NPM if there's something to install.
+ #
+@@ -104,14 +113,7 @@ define NODEJS_INSTALL_MODULES
+ 	# npm install call below and setting npm_config_rollback=false can both
+ 	# help in diagnosing the problem.
+ 	(cd $(TARGET_DIR)/usr/lib && mkdir -p node_modules && \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		LD="$(TARGET_CXX)" \
+-		npm_config_arch=$(NODEJS_CPU) \
+-		npm_config_target_arch=$(NODEJS_CPU) \
+-		npm_config_build_from_source=true \
+-		npm_config_nodedir=$(BUILD_DIR)/nodejs-$(NODEJS_VERSION) \
+-		$(HOST_DIR)/usr/bin/npm install \
+-		$(NODEJS_MODULES_LIST) \
++		$(NPM) install $(NODEJS_MODULES_LIST) \
+ 	)
+ 
+ 	# Symlink all executables in $(TARGET_DIR)/usr/lib/node_modules/.bin to
