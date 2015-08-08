@@ -1,59 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:36 -0000
-Subject: [Buildroot] [git commit branch/next] wireshark: bump to version
-	1.12.6
-Message-ID: <20150808105611.97F337F891@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mtd: add patch to fix
+	host build error with gcc 5.1
+Message-ID: <20150808105626.21F147FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2536d9ebd123828f5b4f572e9999f37eb2cb007e
+commit: http://git.buildroot.net/buildroot/commit/?id=77fbc684c56d3d247419c6473c67ba5f60b0c093
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Bump to version 1.12.6
-- Update hash file
+host-mtd build fails with gcc 5.1:
+  error: redefinition of ???hashtable_iterator_key???
+  error: redefinition of ???hashtable_iterator_value???
 
-The following vulnerabilities have been fixed in 1.12.6:
+Indeed, both functions are defined twice - once in the header and once in the
+source file. This is permitted in C11 (and maybe in C99).
 
- - wnpa-sec-2015-19
-   WCCP dissector crash. (Bug 11153)
- - wnpa-sec-2015-20
-   GSM DTAP dissector crash. (Bug 11201)
+Add a patch sent to upstream:
+https://patchwork.ozlabs.org/patch/467254/
 
-[Thomas: indicate that this is a security related updated in the
-commit log, as suggested by Gustavo.]
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Tested-by: Doug Kehn <rdkehn@yahoo.com>
+Tested-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wireshark/wireshark.hash |    6 +++---
- package/wireshark/wireshark.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch   |   76 ++++++++++++++++++++
+ 1 files changed, 76 insertions(+), 0 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 35eb1a2..b8368b3 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,3 +1,3 @@
--# From https://www.wireshark.org/download/SIGNATURES-1.12.5.txt
--md5	9ee199dde4f36a3d71f7b81dd6764e93	wireshark-1.12.5.tar.bz2
--sha1	379686f0b6355ae2e6b3f7055578317a07ce5590	wireshark-1.12.5.tar.bz2
-+# From https://www.wireshark.org/download/SIGNATURES-1.12.6.txt
-+md5  25ad2bc1c2a21396827c238fcff51bf3  wireshark-1.12.6.tar.bz2
-+sha1  5b592bd0389b76d3bdee6a7336e9492f8162c94d  wireshark-1.12.6.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index eb56808..af3d67c 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 1.12.5
-+WIRESHARK_VERSION = 1.12.6
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/package/mtd/0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch b/package/mtd/0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch
+new file mode 100644
+index 0000000..7ae691e
+--- /dev/null
++++ b/package/mtd/0005-mkfs.ubifs-Fix-build-with-gcc-5.1.patch
+@@ -0,0 +1,76 @@
++From patchwork Sat May  2 12:38:06 2015
++Content-Type: text/plain; charset="utf-8"
++MIME-Version: 1.0
++Content-Transfer-Encoding: 7bit
++Subject: mkfs.ubifs: Fix build with gcc 5.1
++From: Bernhard Walle <bernhard@bwalle.de>
++X-Patchwork-Id: 467254
++Message-Id: <1430570286-30434-1-git-send-email-bernhard@bwalle.de>
++To: linux-mtd at lists.infradead.org
++Cc: Bernhard Walle <bernhard@bwalle.de>
++Date: Sat,  2 May 2015 14:38:06 +0200
++
++In gcc 5.1, the default C standard which is used to compile a C file,
++has changed from gnu89 to gnu11. This changed the meaning of 'extern
++inline'. See https://gcc.gnu.org/gcc-5/porting_to.html.
++
++In mkfs.ubifs, this leads to multiple definitions of
++hashtable_iterator_key and -hashtable_iterator_value. I think the most
++pragmatic way to fix the issue is to replace 'extern inline' with
++'static inline' here.
++
++Fetch from:
++https://patchwork.ozlabs.org/patch/467254/
++
++Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ mkfs.ubifs/hashtable/hashtable_itr.c | 12 ------------
++ mkfs.ubifs/hashtable/hashtable_itr.h |  4 ++--
++ 2 files changed, 2 insertions(+), 14 deletions(-)
++
++diff --git a/mkfs.ubifs/hashtable/hashtable_itr.c b/mkfs.ubifs/hashtable/hashtable_itr.c
++index 24f4dde..d102453 100644
++--- a/mkfs.ubifs/hashtable/hashtable_itr.c
+++++ b/mkfs.ubifs/hashtable/hashtable_itr.c
++@@ -35,18 +35,6 @@ hashtable_iterator(struct hashtable *h)
++ }
++ 
++ /*****************************************************************************/
++-/* key      - return the key of the (key,value) pair at the current position */
++-/* value    - return the value of the (key,value) pair at the current position */
++-
++-void *
++-hashtable_iterator_key(struct hashtable_itr *i)
++-{ return i->e->k; }
++-
++-void *
++-hashtable_iterator_value(struct hashtable_itr *i)
++-{ return i->e->v; }
++-
++-/*****************************************************************************/
++ /* advance - advance the iterator to the next element
++  *           returns zero if advanced to end of table */
++ 
++diff --git a/mkfs.ubifs/hashtable/hashtable_itr.h b/mkfs.ubifs/hashtable/hashtable_itr.h
++index 87a97eb..5c94a04 100644
++--- a/mkfs.ubifs/hashtable/hashtable_itr.h
+++++ b/mkfs.ubifs/hashtable/hashtable_itr.h
++@@ -28,7 +28,7 @@ hashtable_iterator(struct hashtable *h);
++ /* hashtable_iterator_key
++  * - return the value of the (key,value) pair at the current position */
++ 
++-extern inline void *
+++static inline void *
++ hashtable_iterator_key(struct hashtable_itr *i)
++ {
++     return i->e->k;
++@@ -37,7 +37,7 @@ hashtable_iterator_key(struct hashtable_itr *i)
++ /*****************************************************************************/
++ /* value - return the value of the (key,value) pair at the current position */
++ 
++-extern inline void *
+++static inline void *
++ hashtable_iterator_value(struct hashtable_itr *i)
++ {
++     return i->e->v;
