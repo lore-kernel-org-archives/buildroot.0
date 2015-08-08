@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:20 -0000
-Subject: [Buildroot] [git commit branch/next] package/libtool: disable
-	makeinfo
-Message-ID: <20150808105620.52B387FC31@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:21 -0000
+Subject: [Buildroot] [git commit branch/next] uclibc: use the ARC-specific
+	uClibc by default on ARC
+Message-ID: <20150808105615.6BB087FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9a42ba3eeba08e450762141be03156208f2b4de0
+commit: http://git.buildroot.net/buildroot/commit/?id=c0c97a957ab37b7e4ec90075e4f66bc01083ee5c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-host-libtool can fail to build if the host is missing makeinfo, so
-disable it.
+Following the switch to uClibc-ng as the default library, uClibc-ng
+was also used as the default on ARC, while we actually want to use the
+ARC specific version by default on this architecture.
 
-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libtool/libtool.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/uclibc/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libtool/libtool.mk b/package/libtool/libtool.mk
-index 28786d2..8688f8b 100644
---- a/package/libtool/libtool.mk
-+++ b/package/libtool/libtool.mk
-@@ -13,6 +13,7 @@ LIBTOOL_DEPENDENCIES = host-m4
- LIBTOOL_LICENSE = GPLv2+
- LIBTOOL_LICENSE_FILES = COPYING
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 32c356a..14f713c 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -18,7 +18,7 @@ config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
  
-+HOST_LIBTOOL_CONF_ENV = MAKEINFO=true
- HOST_LIBTOOL_LIBTOOL_PATCH = NO
+ choice
+ 	prompt "uClibc C library Version"
+-	default BR2_UCLIBC_VERSION_NG
++	default BR2_UCLIBC_VERSION_NG if !BR2_arc
+ 	help
+ 	  Select the version of uClibc you wish to use.
  
- # We have a patch that affects libtool.m4, which triggers an autoreconf
