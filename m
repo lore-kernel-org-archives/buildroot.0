@@ -1,60 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:49 -0000
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
-	to 2.4.62
-Message-ID: <20150808105619.753A77FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gcc: add support for fortran
+Message-ID: <20150808105638.1577080428@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da3805186a582fc42ec1b935da0ef87529284c6a
+commit: http://git.buildroot.net/buildroot/commit/?id=c00fd2845e13c55f948ec807bd1ef84fd8b4ab0a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Added support for newly added optional valgrind support:
-http://cgit.freedesktop.org/mesa/drm/commit/?id=47a2de27a0f087908e3063fdd6dfdececd2db75b
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: David Kessler <DJKessler@me.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libdrm/libdrm.hash |    4 ++--
- package/libdrm/libdrm.mk   |    9 ++++++++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ package/gcc/Config.in.host         |    7 +++++++
+ package/gcc/gcc-final/gcc-final.mk |    5 +++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 99889ea..05944c5 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/dri-devel/2015-May/082348.html
--sha256	8b549092c8961a393a7e1d9a1bccddcea8e2af67c0d7d7c67babb9fc3b47699c	libdrm-2.4.61.tar.bz2
-+# From http://lists.freedesktop.org/archives/dri-devel/2015-June/085375.html
-+sha256	906c294bdbe1c94c3ca084305d61a6e5a8367f3b4986e6cc13b1e9b3f75931dc	libdrm-2.4.62.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 3c3de1d..4cca645 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index bd5c13f..3d64b6f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -117,6 +117,13 @@ config BR2_TOOLCHAIN_BUILDROOT_CXX
+ 	  C++ language and you want C++ libraries to be installed on
+ 	  your target system.
  
--LIBDRM_VERSION = 2.4.61
-+LIBDRM_VERSION = 2.4.62
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
-@@ -69,6 +69,13 @@ else
- LIBDRM_CONF_OPTS += --disable-udev
++config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
++	bool "Enable Fortran support"
++	help
++	  Enable this option if you want your toolchain to support the
++	  Fortran language and you want Fortran libraries to be
++	  installed on your target system.
++
+ config BR2_GCC_ENABLE_TLS
+ 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	default y
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 16bf4ee..86b3c78 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -44,6 +44,7 @@ endef
+ # Languages supported by the cross-compiler
+ GCC_FINAL_CROSS_LANGUAGES-y = c
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_TOOLCHAIN_BUILDROOT_FORTRAN) += fortran
+ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
+ 
+ HOST_GCC_FINAL_CONF_OPTS = \
+@@ -146,6 +147,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ HOST_GCC_FINAL_USR_LIBS += libstdc++
  endif
  
-+ifeq ($(BR2_PACKAGE_VALGRIND),y)
-+LIBDRM_CONF_OPTS += --enable-valgrind
-+LIBDRM_DEPENDENCIES += valgrind
-+else
-+LIBDRM_CONF_OPTS += --disable-valgrind
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN),y)
++HOST_GCC_FINAL_USR_LIBS += libgfortran
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
- LIBDRM_CONF_OPTS += --enable-install-test-programs
+ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_USR_LIBS += libgomp
  endif
