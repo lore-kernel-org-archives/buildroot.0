@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:34 -0000
-Subject: [Buildroot] [git commit branch/next] time: add hash file
-Message-ID: <20150808105634.17AF17FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tcping: add hash file
+Message-ID: <20150808105634.0E1857FC31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33a33dcfb44bf6f82bd444dbd1df2e1a69a2484c
+commit: http://git.buildroot.net/buildroot/commit/?id=8941f5c6b4169d4fab6217735d30ae2f3880190c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/time/time.hash |    2 ++
+ package/tcping/tcping.hash |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/time/time.hash b/package/time/time.hash
+diff --git a/package/tcping/tcping.hash b/package/tcping/tcping.hash
 new file mode 100644
-index 0000000..6ad8c24
+index 0000000..de42775
 --- /dev/null
-+++ b/package/time/time.hash
++++ b/package/tcping/tcping.hash
 @@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	e37ea79a253bf85a85ada2f7c632c14e481a5fd262a362f6f4fd58e68601496d	time-1.7.tar.gz
++# Locally calculated after checking pgp signature
++sha256	1ad52e904094d12b225ac4a0bc75297555e931c11a1501445faa548ff5ecdbd0	tcping-1.3.5.tar.gz
