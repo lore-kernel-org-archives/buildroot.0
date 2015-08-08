@@ -1,43 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:18 -0000
-Subject: [Buildroot] [git commit branch/next] lzo: bump version
-Message-ID: <20150808105604.282227FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] lttng-libust: requires dynamic
+	library support
+Message-ID: <20150808105602.134C77F8ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9899769aa7de61780c5f6fa496075ee47378e5ea
+commit: http://git.buildroot.net/buildroot/commit/?id=057d88e701dab42d1bc8037fcbc7684e1451ddaa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-And use upstream hash.
+Fixes:
+http://autobuild.buildroot.net/results/e89/e8974516173ea74c830b71e400fcbafdd69dea60/
+http://autobuild.buildroot.net/results/cac/cac7015c3be7e34dbeaa6accb59aebebe68eb6d2/
+http://autobuild.buildroot.net/results/4ce/4ce0a35316cd25536b58b50f096b6f75f6e3c1c9/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lzo/lzo.hash |    4 ++--
- package/lzo/lzo.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lttng-libust/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/lzo/lzo.hash b/package/lzo/lzo.hash
-index 8d7c666..415ed99 100644
---- a/package/lzo/lzo.hash
-+++ b/package/lzo/lzo.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256 ac1b3e4dee46febe9fd28737eb7f5692d3232ef1a01da10444394c3d47536614 lzo-2.08.tar.gz
-+# From http://www.oberhumer.com/opensource/lzo/
-+sha1 e2a60aca818836181e7e6f8c4f2c323aca6ac057 lzo-2.09.tar.gz
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index a94b5f5..ec7c749 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
+index 7c30d78..1c26843 100644
+--- a/package/lttng-libust/Config.in
++++ b/package/lttng-libust/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_LTTNG_LIBUST
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Userspace tracing library for the LTTng 2.x tracing
+ 	  infrastructure. It allows userspace programs to create
+@@ -16,9 +17,9 @@ config BR2_PACKAGE_LTTNG_LIBUST
  
--LZO_VERSION = 2.08
-+LZO_VERSION = 2.09
- LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
- LZO_LICENSE = GPLv2+
- LZO_LICENSE_FILES = COPYING
+ 	  http://lttng.org
+ 
+-comment "lttng-libust needs a toolchain w/ wchar, threads"
++comment "lttng-libust needs a toolchain w/ dynamic library, wchar, threads"
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 
+ comment "lttng-libust needs a toolchain not affected by GCC bug 58854"
