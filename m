@@ -1,122 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:58:10 -0000
-Subject: [Buildroot] [git commit branch/next] socketcand: resolve GCC5
-	related issue
-Message-ID: <20150808105640.1201F7F8D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] uclibc: fix static linking of
+	pthread apps for x86/x86_64
+Message-ID: <20150808105640.2CFF77F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e14c76a95778c859019cb650da5356285d3387b
+commit: http://git.buildroot.net/buildroot/commit/?id=7b146a0225809be236995aa4e102d30352eb2274
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch removes inline keyword from header and source
-files.
+Fixes:
+http://autobuild.buildroot.net/results/182424bd2fea36af95eea31f7dd53f0399433616/
+http://autobuild.buildroot.net/results/6b1e2132a34e0c263bb0f2ea31caf4ce697e9c9c/
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/8ea/8eac9832554dbd1f2e14cf54e5c99e6bf4dfc2cc/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../socketcand/0001-Remove-inline-keyword.patch    |   90 ++++++++++++++++++++
- 1 files changed, 90 insertions(+), 0 deletions(-)
+ .../uclibc/1.0.4/0001-fix-static-linking-bug.patch |   64 ++++++++++++++++++++
+ 1 files changed, 64 insertions(+), 0 deletions(-)
 
-diff --git a/package/socketcand/0001-Remove-inline-keyword.patch b/package/socketcand/0001-Remove-inline-keyword.patch
+diff --git a/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
 new file mode 100644
-index 0000000..92e8737
+index 0000000..a580a67
 --- /dev/null
-+++ b/package/socketcand/0001-Remove-inline-keyword.patch
-@@ -0,0 +1,90 @@
-+From bdb3cd081a694f8f6924e399d944e32c1578235c Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 22 Jul 2015 11:03:27 +0200
-+Subject: [PATCH] Remove inline keyword
++++ b/package/uclibc/1.0.4/0001-fix-static-linking-bug.patch
+@@ -0,0 +1,64 @@
++From 76513cbe06ec45d6cf0310c00eaf71d3250ed57f Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@uclibc-ng.org>
++Date: Wed, 22 Jul 2015 14:54:07 +0200
++Subject: [PATCH] fix static builds of pthread apps for x86/x86_64
 +
-+Fixes GCC5.x compilation issues related to C99 inline semantics.
++Found via buildroot autobuilder.
 +
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +---
-+ socketcand.h    | 8 ++++----
-+ state_bcm.c     | 2 +-
-+ state_control.c | 2 +-
-+ state_isotp.c   | 2 +-
-+ state_raw.c     | 2 +-
-+ 5 files changed, 8 insertions(+), 8 deletions(-)
++ libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S |    6 ++++++
++ libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S    |    6 ++++++
++ 2 files changed, 12 insertions(+)
 +
-+diff --git a/socketcand.h b/socketcand.h
-+index a287fe2..39eef83 100644
-+--- a/socketcand.h
-++++ b/socketcand.h
-+@@ -27,10 +27,10 @@
-+ 
-+ #undef DEBUG_RECEPTION
-+ 
-+-inline void state_bcm();
-+-inline void state_raw();
-+-inline void state_isotp();
-+-inline void state_control();
-++void state_bcm();
-++void state_raw();
-++void state_isotp();
-++void state_control();
-+ 
-+ extern int client_socket;
-+ extern char **interface_names;
-+diff --git a/state_bcm.c b/state_bcm.c
-+index c63a0a9..0c980fa 100644
-+--- a/state_bcm.c
-++++ b/state_bcm.c
-+@@ -28,7 +28,7 @@ int sc = -1;
-+ fd_set readfds;
-+ struct timeval tv;
-+ 
-+-inline void state_bcm() {
-++void state_bcm() {
-+ 	int i, ret;
-+ 	struct sockaddr_can caddr;
-+ 	socklen_t caddrlen = sizeof(caddr);
-+diff --git a/state_control.c b/state_control.c
-+index 5f62b74..baa9df6 100644
-+--- a/state_control.c
-++++ b/state_control.c
-+@@ -17,7 +17,7 @@
-+ #include <netinet/in.h>
-+ #include <arpa/inet.h>
-+ 
-+-inline void state_control() {
-++void state_control() {
-+ 	char buf[MAXLEN];
-+ 	int i, items;
-+ 
-+diff --git a/state_isotp.c b/state_isotp.c
-+index ae66035..4005f94 100644
-+--- a/state_isotp.c
-++++ b/state_isotp.c
-+@@ -24,7 +24,7 @@
-+ int si = -1;
-+ fd_set readfds;
-+ 
-+-inline void state_isotp() {
-++void state_isotp() {
-+ 	int i, items, ret;
-+ 
-+ 	struct sockaddr_can addr;
-+diff --git a/state_raw.c b/state_raw.c
-+index 1bd2ece..99111ae 100644
-+--- a/state_raw.c
-++++ b/state_raw.c
-+@@ -31,7 +31,7 @@ char ctrlmsg[CMSG_SPACE(sizeof(struct timeval)) + CMSG_SPACE(sizeof(__u32))];
-+ struct timeval tv;
-+ struct cmsghdr *cmsg;
-+ 
-+-inline void state_raw() {
-++void state_raw() {
-+ 	char buf[MAXLEN];
-+ 	int i, ret, items;
-+ 
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
++index f38703b..ff9a784 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/i386/i486/lowlevellock.S
++@@ -70,6 +70,9 @@
++ 	.globl	__lll_lock_wait_private
++ 	.type	__lll_lock_wait_private, at function
++ 	.hidden	__lll_lock_wait_private
+++#ifndef IS_IN_libpthread
+++	.weak	__lll_lock_wait_private
+++#endif
++ 	.align	16
++ __lll_lock_wait_private:
++ 	cfi_startproc
++@@ -320,6 +323,9 @@ __lll_timedlock_wait:
++ 	.globl	__lll_unlock_wake_private
++ 	.type	__lll_unlock_wake_private, at function
++ 	.hidden	__lll_unlock_wake_private
+++#ifndef IS_IN_libpthread
+++	.weak	__lll_unlock_wake_private
+++#endif
++ 	.align	16
++ __lll_unlock_wake_private:
++ 	cfi_startproc
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
++index 50aacea..894c683 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S
++@@ -75,6 +75,9 @@
++ 	.globl	__lll_lock_wait_private
++ 	.type	__lll_lock_wait_private, at function
++ 	.hidden	__lll_lock_wait_private
+++#ifndef IS_IN_libpthread
+++	.weak   __lll_lock_wait_private
+++#endif
++ 	.align	16
++ __lll_lock_wait_private:
++ 	cfi_startproc
++@@ -317,6 +320,9 @@ __lll_timedlock_wait:
++ 	.globl	__lll_unlock_wake_private
++ 	.type	__lll_unlock_wake_private, at function
++ 	.hidden	__lll_unlock_wake_private
+++#ifndef IS_IN_libpthread
+++	.weak	__lll_unlock_wake_private
+++#endif
++ 	.align	16
++ __lll_unlock_wake_private:
++ 	cfi_startproc
 +-- 
-+2.1.4
++1.7.10.4
 +
