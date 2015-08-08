@@ -1,36 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 08 Aug 2015 10:56:26 -0000
-Subject: [Buildroot] [git commit branch/next] lbreakout2: add
-	LBREAKOUT2_VERSION_MAJOR variable
-Message-ID: <20150808105606.205A17FF82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] netcat-openbsd: fix license
+	typo
+Message-ID: <20150808105604.3505C7FF82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cee449a1ce14b587a397707cac3a4835a8e5ceca
+commit: http://git.buildroot.net/buildroot/commit/?id=7e00f6846ae14bd2b77560aa3f4e50f67d73c862
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lbreakout2/lbreakout2.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/netcat-openbsd/netcat-openbsd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lbreakout2/lbreakout2.mk b/package/lbreakout2/lbreakout2.mk
-index d72b949..5dc4c71 100644
---- a/package/lbreakout2/lbreakout2.mk
-+++ b/package/lbreakout2/lbreakout2.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index bf5c4b7..5abfc7e 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -7,7 +7,7 @@
+ NETCAT_OPENBSD_VERSION = debian/1.105-7
+ NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
+ NETCAT_OPENBSD_LICENSE = BSD-3c
+-NETCAT_OPENBSD_LICENSE_FILE = debian/copyright
++NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
+ NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
  
--LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/2.6
--LBREAKOUT2_VERSION = 2.6.4
-+LBREAKOUT2_VERSION_MAJOR = 2.6
-+LBREAKOUT2_VERSION = $(LBREAKOUT2_VERSION_MAJOR).4
-+LBREAKOUT2_SITE = http://downloads.sourceforge.net/lgames/lbreakout2/$(LBREAKOUT2_VERSION_MAJOR)
- LBREAKOUT2_LICENSE = GPLv2+
- LBREAKOUT2_LICENSE_FILES = COPYING
- 
+ # Ensure Busybox gets built/installed before, so that this package
