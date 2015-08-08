@@ -1,32 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:57:57 -0000
-Subject: [Buildroot] [git commit branch/next] gcc/libmudflap: also
-	unavailable for gcc 5.x
-Message-ID: <20150808105636.5171E7FB5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/upmpdcli: disable for
+	PowerPC CS toolchains
+Message-ID: <20150808105636.3B7437FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b0d6d3071b51365ff9c6e4b46a13b03e3513dd51
+commit: http://git.buildroot.net/buildroot/commit/?id=2b33dc30b834aedea8c14999edbd7b6417f412a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Those toolchains use gcc <= 4.5, which is too old as they are missing to
+construct an empty std::shared_ptr with a nullptr (0) as an argument. This
+is only introduced with gcc-4.6.
+
+Fixes:
+http://autobuild.buildroot.net/results/faf/faf1b071c0a5bd8395d79abf2e6a32169ad7f136
+http://autobuild.buildroot.net/results/247/247b3f1ac3d3a9712e9410eef298fce8d885f92c
+http://autobuild.buildroot.net/results/de6/de601c4d4dd7922895892d78d3a37902fb98c7be
+http://autobuild.buildroot.net/results/a4d/a4d7bf9863c134f59d285616b9c1f78201bd1a3e
+
+and many more.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/upmpdcli/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 545cfe7..bd5c13f 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -144,6 +144,7 @@ config BR2_GCC_ENABLE_LIBMUDFLAP
- 	# which mudflap is not supported.
- 	depends on !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
- 	depends on !BR2_GCC_VERSION_4_9_X
-+	depends on !BR2_GCC_VERSION_5_X
- 	help
- 	  libmudflap is a gcc library used for the mudflap pointer
- 	  debugging functionality. It is only needed if you intend to
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+index 6464d06..0fe3d10 100644
+--- a/package/upmpdcli/Config.in
++++ b/package/upmpdcli/Config.in
+@@ -7,6 +7,8 @@ config BR2_PACKAGE_UPMPDCLI
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+ 	# libupnpp triggers the _gp link issue
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+@@ -21,6 +23,8 @@ comment "upmpdcli needs a toolchain w/ C++, threads"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # Too old gcc
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Ditto
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
