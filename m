@@ -1,27 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:56:23 -0000
-Subject: [Buildroot] [git commit branch/next] stress: add hash file
-Message-ID: <20150808105605.A2AEE7FF82@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:56:24 -0000
+Subject: [Buildroot] [git commit branch/next] iproute2: tipc support needs
+	3.18+ headers
+Message-ID: <20150808105615.F24C28030B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7a927cde5a356f7b66454b99591fc73504c3c27
+commit: http://git.buildroot.net/buildroot/commit/?id=c2a3d1f8d6b5cbfb5ff225d26dcaeea986ebae39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+http://autobuild.buildroot.net/results/173/173c9dbed6422a3cc4f9d1f998bc25ce2e9538c7/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stress/stress.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/stress/stress.hash b/package/stress/stress.hash
-new file mode 100644
-index 0000000..24cf043
---- /dev/null
-+++ b/package/stress/stress.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256 057e4fc2a7706411e1014bf172e4f94b63a12f18412378fca8684ca92408825b stress-1.0.4.tar.gz
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index dabc8b4..b2627ec 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -17,8 +17,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ IPROUTE2_DEPENDENCIES += busybox
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBMNL),y)
++# tipc support needs 3.18+ headers and libmnl
++ifeq ($(BR2_PACKAGE_LIBMNL)$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18),yy)
+ IPROUTE2_DEPENDENCIES += libmnl
++else
++define IPROUTE2_DISABLE_TIPC
++	$(SED) '/HAVE_MNL/d' $(@D)/Config
++endef
+ endif
+ 
+ # If we've got iptables enable xtables support for tc
+@@ -57,6 +62,7 @@ define IPROUTE2_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+ 	$(IPROUTE2_DISABLE_ARPD)
+ 	$(IPROUTE2_WITH_IPTABLES)
++	$(IPROUTE2_DISABLE_TIPC)
+ endef
+ 
+ define IPROUTE2_BUILD_CMDS
