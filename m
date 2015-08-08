@@ -1,201 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 08 Aug 2015 10:58:07 -0000
-Subject: [Buildroot] [git commit branch/next] boot/uboot: add support for
-	the kconfig infrastructure
-Message-ID: <20150808105638.06A4180414@busybox.osuosl.org>
+Date: Sat, 08 Aug 2015 10:58:08 -0000
+Subject: [Buildroot] [git commit branch/next] rpcbind: bump version 0.2.3
+Message-ID: <20150808105638.41CE980414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e0f7ebef9e9f4ac4fcc47ed1bf4240ad39109ef
+commit: http://git.buildroot.net/buildroot/commit/?id=48dad0689e200c53352b94d380e7c5993b89688e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With the patchset "kconfig: turnaround into single .config"
-[http://lists.denx.de/pipermail/u-boot/2015-February/205490.html]
-U-Boot switched to a single .config file for board configuration. This
-allows us to use the kconfig-package infrastructure.
+Refreshed patch:
+	0001-Remove-yellow-pages-support.patch
 
-For providing backward compatibility with older U-Boot version a user
-choice between the new Kconfig and the legacy build system is
-introduced.
-
-[Thomas:
-  - make use of the legacy build system the default, to not break
-    existing configurations.
-  - add some comments in the code checking all the configuration
-    options, in order to hopefully make it a bit clearer.]
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/uboot/Config.in |   47 +++++++++++++++++++++++++++++++++++++++++++++++
- boot/uboot/uboot.mk  |   50 +++++++++++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 94 insertions(+), 3 deletions(-)
+ .../rpcbind/0001-Remove-yellow-pages-support.patch |   16 ++++++++--------
+ package/rpcbind/rpcbind.hash                       |    2 +-
+ package/rpcbind/rpcbind.mk                         |    3 ++-
+ 3 files changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 6d8fa6a..d28d93d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -4,6 +4,25 @@ config BR2_TARGET_UBOOT
- 	  Build "Das U-Boot" Boot Monitor
+diff --git a/package/rpcbind/0001-Remove-yellow-pages-support.patch b/package/rpcbind/0001-Remove-yellow-pages-support.patch
+index e35828f..314e32e 100644
+--- a/package/rpcbind/0001-Remove-yellow-pages-support.patch
++++ b/package/rpcbind/0001-Remove-yellow-pages-support.patch
+@@ -1,4 +1,4 @@
+-From 249e25c5cc675c212ca4e4a3342bff8f59285b1a Mon Sep 17 00:00:00 2001
++From 226b9c57ff403b407dbf1ff8a615da455a4cbd23 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Sat, 10 Nov 2012 22:03:43 +0100
+ Subject: [PATCH] Remove yellow pages support
+@@ -13,20 +13,20 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  1 file changed, 18 deletions(-)
  
- if BR2_TARGET_UBOOT
-+choice
-+	prompt "Build system"
-+	default BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
-+
-+config BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
-+	bool "Legacy"
-+	help
-+	  Select this option if you use an old U-Boot (older than 2015.04),
-+	  so that we use the old build system.
-+
-+config BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-+	bool "Kconfig"
-+	help
-+	  Select this option if you use a recent U-Boot version (2015.04 or
-+	  newer), so that we use the Kconfig build system.
-+
-+endchoice
-+
-+if BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- config BR2_TARGET_UBOOT_BOARDNAME
- 	string "U-Boot board name"
- 	help
-@@ -11,6 +30,7 @@ config BR2_TARGET_UBOOT_BOARDNAME
- 	  This will be suffixed with _config to meet U-Boot standard naming.
- 	  See boards.cfg in U-Boot source code for the list of available
- 	  configurations.
-+endif
+ diff --git a/src/security.c b/src/security.c
+-index d272f74..8d5863c 100644
++index 0c9453f..abc81bb 100644
+ --- a/src/security.c
+ +++ b/src/security.c
+-@@ -23,9 +23,6 @@
++@@ -24,9 +24,6 @@
+  #include <rpcsvc/mount.h>
+  #include <rpcsvc/rquota.h>
+  #include <rpcsvc/nfs_prot.h>
+ -#include <rpcsvc/yp.h>
+ -#include <rpcsvc/ypclnt.h>
+ -#include <rpcsvc/yppasswd.h>
+- 
+- #include "rpcbind.h"
+- 
+-@@ -308,24 +305,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
++ #else
++ # define MOUNTPROC_MNT	1
++ # define MOUNTPROC_UMNT	3
++@@ -325,24 +322,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
+  		    args->rmt_proc != MOUNTPROC_UMNT)
+  			break;
+  		goto deny;
+@@ -52,5 +52,5 @@ index d272f74..8d5863c 100644
+  		break;
+  	}
+ -- 
+-2.0.0
++2.4.5
  
- choice
- 	prompt "U-Boot Version"
-@@ -92,6 +112,33 @@ config BR2_TARGET_UBOOT_PATCH
+diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
+index 830ef55..5c9ecd1 100644
+--- a/package/rpcbind/rpcbind.hash
++++ b/package/rpcbind/rpcbind.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  da169ff877a5a07581fad50a9a808ac6e96f0c277a3df49a7ef005778428496e  rpcbind-0.2.1.tar.bz2
++sha256 9897823a9d820ea011d9ea02054d5ab99469b9ca5346265fee380713c8fed27b  rpcbind-0.2.3.tar.bz2
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index b85d88e..d879de1 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  Most users may leave this empty
+-RPCBIND_VERSION = 0.2.1
++RPCBIND_VERSION = 0.2.3
+ RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
+ RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
+ RPCBIND_LICENSE = BSD-3c
+@@ -14,6 +14,7 @@ RPCBIND_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
+ RPCBIND_DEPENDENCIES += libtirpc host-pkgconf
+ RPCBIND_CONF_OPTS += --with-rpcuser=root
++RPCBIND_CONF_OPTS += --with-systemdsystemunitdir=no
  
-+if BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
-+choice
-+	prompt "U-Boot configuration"
-+	default BR2_TARGET_UBOOT_USE_DEFCONFIG
-+
-+config BR2_TARGET_UBOOT_USE_DEFCONFIG
-+	bool "Using an in-tree board defconfig file"
-+
-+config BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
-+	bool "Using a custom board (def)config file"
-+
-+endchoice
-+
-+config BR2_TARGET_UBOOT_BOARD_DEFCONFIG
-+	string "Board defconfig"
-+	depends on BR2_TARGET_UBOOT_USE_DEFCONFIG
-+	help
-+	  Name of the board for which U-Boot should be built, without
-+	  the _defconfig suffix.
-+
-+config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
-+	string "Configuration file path"
-+	depends on BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
-+	help
-+	  Path to the U-Boot configuration file.
-+endif
-+
- choice
- 	prompt "U-Boot binary format"
- 	default BR2_TARGET_UBOOT_FORMAT_BIN
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 042e066..8f321ac 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -127,11 +127,24 @@ define UBOOT_APPLY_LOCAL_PATCHES
- endef
- UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
- 
-+ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- define UBOOT_CONFIGURE_CMDS
- 	$(TARGET_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
- 		$(UBOOT_BOARD_NAME)_config
- endef
-+else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-+ifeq ($(BR2_TARGET_UBOOT_USE_DEFCONFIG),y)
-+UBOOT_SOURCE_CONFIG = $(UBOOT_DIR)/configs/$(call qstrip,\
-+	$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG))_defconfig
-+else ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
-+UBOOT_SOURCE_CONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
-+endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
-+
-+UBOOT_KCONFIG_FILE = $(UBOOT_SOURCE_CONFIG)
-+UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-+UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
-+endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 
- define UBOOT_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) 	\
-@@ -204,25 +217,50 @@ endif
- UBOOT_DEPENDENCIES += host-uboot-tools
- endif
- 
--$(eval $(generic-package))
--
- ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
-+
-+#
-+# Check U-Boot board name (for legacy) or the defconfig/custom config
-+# file options (for kconfig)
-+#
-+ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- ifeq ($(UBOOT_BOARD_NAME),)
- $(error No U-Boot board name set. Check your BR2_TARGET_UBOOT_BOARDNAME setting)
--endif
-+endif # UBOOT_BOARD_NAME
-+else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-+ifeq ($(BR2_TARGET_UBOOT_USE_DEFCONFIG),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOARD_DEFCONFIG)),)
-+$(error No board defconfig name specified, check your BR2_TARGET_UBOOT_DEFCONFIG setting)
-+endif # qstrip BR2_TARGET_UBOOT_BOARD_DEFCONFIG
-+endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
-+ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)),)
-+$(error No board configuration file specified, check your BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE setting)
-+endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
-+endif # BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
-+endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- 
-+#
-+# Check custom version option
-+#
- ifeq ($(BR2_TARGET_UBOOT_CUSTOM_VERSION),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE)),)
- $(error No custom U-Boot version specified. Check your BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE setting)
- endif # qstrip BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
- endif # BR2_TARGET_UBOOT_CUSTOM_VERSION
- 
-+#
-+# Check custom tarball option
-+#
- ifeq ($(BR2_TARGET_UBOOT_CUSTOM_TARBALL),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION)),)
- $(error No custom U-Boot tarball specified. Check your BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION setting)
- endif # qstrip BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
- endif # BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 
-+#
-+# Check Git/Mercurial repo options
-+#
- ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT)$(BR2_TARGET_UBOOT_CUSTOM_HG),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL)),)
- $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_URL setting)
-@@ -233,3 +271,9 @@ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
- endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
- 
- endif # BR2_TARGET_UBOOT && BR_BUILDING
-+
-+ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
-+$(eval $(generic-package))
-+else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-+$(eval $(kconfig-package))
-+endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+ define RPCBIND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
