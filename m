@@ -1,44 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 08 Aug 2015 10:56:40 -0000
-Subject: [Buildroot] [git commit branch/next] linux: adjust fixup logic for
-	ktap
-Message-ID: <20150808105630.C05007FC31@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libucl: new package
+Message-ID: <20150808105614.7E1807F9A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90d008ea7ab4fe0cf8e17b27b978bc367edfd8c0
+commit: http://git.buildroot.net/buildroot/commit/?id=da27b28838b287c263f3c7818195bc62f22967da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The ktap package requires some parts of the kernel tracing
-infrastructure to be enabled, especially
-CONFIG_EVENT_TRACING. However, this option is a blind option in the
-kernel, so enabling it in linux.mk has no effect: we need to enable a
-non-blind option that selects CONFIG_EVENT_TRACING. We've chosen to
-select CONFIG_ENABLE_DEFAULT_TRACERS.
+Libucl is a high performance and flexible JSON/YAML/etc. parser for C.
 
-This fixes the build of ktap.
+https://github.com/vstakhov/libucl
 
-[Thomas: use CONFIG_ENABLE_DEFAULT_TRACERS as suggested by Arnout.]
+[Thomas:
+  - remove hash file, should not be used for github downloads
+  - rewrap Config.in help text
+  - remove trailing white space in Config.in.
+  - add missing host-pkgconf dependency, without which the package
+    doesn't autoreconf properly.
+  - fix license: it is BSD-2c, not just BSD.]
 
+Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- linux/linux.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in        |    1 +
+ package/libucl/Config.in |   15 +++++++++++++++
+ package/libucl/libucl.mk |   15 +++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index eca1450..b602a04 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -207,7 +207,7 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KTAP),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_EVENT_TRACING,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
+diff --git a/package/Config.in b/package/Config.in
+index fac632f..9dbc98f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -881,6 +881,7 @@ menu "JSON/XML"
+ 	source "package/jsoncpp/Config.in"
+ 	source "package/libjson/Config.in"
+ 	source "package/libroxml/Config.in"
++	source "package/libucl/Config.in"
+ 	source "package/libxml2/Config.in"
+ 	source "package/libxmlpp/Config.in"
+ 	source "package/libxmlrpc/Config.in"
+diff --git a/package/libucl/Config.in b/package/libucl/Config.in
+new file mode 100644
+index 0000000..a94701e
+--- /dev/null
++++ b/package/libucl/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBUCL
++	bool "libucl"
++	help
++	  Universal configuration library parser
++
++	  Libucl is a parser and C API to parse and generate ucl
++	  objects. Libucl consist of several groups of functions:
++	  parser, emitting, conversion, generation, iteration,
++	  validation, and utility. These functions can be used to work
++	  with several formats: JSON, compact JSON, configuration
++	  (nginx like), and YAML. Libucl has clear design that should
++	  be very convenient for reading and writing and makes for an
++	  ideal parser with high performance.
++
++	  https://github.com/vstakhov/libucl
+diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
+new file mode 100644
+index 0000000..3530bbe
+--- /dev/null
++++ b/package/libucl/libucl.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libucl
++#
++################################################################################
++
++LIBUCL_VERSION = 0.7.3
++LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
++LIBUCL_INSTALL_STAGING = YES
++LIBUCL_AUTORECONF = YES
++LIBUCL_LICENSE = BSD-2c
++LIBUCL_LICENSE_FILES = COPYING
++LIBUCL_DEPENDENCIES = host-pkgconf
++
++$(eval $(autotools-package))
