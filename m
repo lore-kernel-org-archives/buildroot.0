@@ -1,79 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 9 Aug 2015 17:54:43 +0300
-Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to
- 1.6.5
-In-Reply-To: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150809145443.GB2570@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Aug 2015 16:54:55 +0200
+Subject: [Buildroot] [PATCH] postgresql: fix sparc compile issue
+In-Reply-To: <20150809094150.GA8066@waldemar-brodkorb.de>
+References: <20150809094150.GA8066@waldemar-brodkorb.de>
+Message-ID: <20150809165455.23206e83@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Waldemar,
 
-On Sun, Aug 09, 2015 at 02:28:30PM +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch | 12 +++++++-----
->  package/jsoncpp/jsoncpp.mk                                   |  2 +-
->  2 files changed, 8 insertions(+), 6 deletions(-)
+On Sun, 9 Aug 2015 11:41:51 +0200, Waldemar Brodkorb wrote:
+> Fixes autobuilder compile error:
+> http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
 > 
-> diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-> index 7935849..1178cc2 100644
-> --- a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-> +++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-> @@ -16,6 +16,8 @@ Upstream status: sent upstream
->  package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
->  
->  Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +(bumped patch to jsoncpp 1.6.5)
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> The predefines are wrong:
+> ./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
+> #define sparc 1
+> #define __sparc__ 1
+> #define __sparc 1
+> #define __sparc_v8__ 1
 
-I think this patch is not needed anymore. See 
-https://github.com/open-source-parsers/jsoncpp/pull/232. I haven't tested 
-though.
+As discussed on IRC, can you respin after using #if defined(__sparcv8)
+|| defined(__sparc_v8__), so that it continue to works on Solaris (for
+which __sparcv8 is defined). This way you can submit the patch upstream.
 
-baruch
+Thanks!
 
->   src/lib_json/json_writer.cpp | 2 --
-> @@ -25,15 +27,15 @@ diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
->  index 83102fd2bb86..f7ad1e21bbc0 100644
->  --- a/src/lib_json/json_writer.cpp
->  +++ b/src/lib_json/json_writer.cpp
-> -@@ -29,8 +29,6 @@
-> - 
-> - #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
-> +@@ -31,8 +31,6 @@
->   #define snprintf _snprintf
-> + #elif defined(__ANDROID__)
-> + #define snprintf snprintf
->  -#elif __cplusplus >= 201103L
->  -#define snprintf std::snprintf
->   #endif
->   
-> - #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
-> --- 
-> + #if defined(__BORLANDC__)  
-> +---
->  2.1.4
->  
-> diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-> index 63b18e6..132e264 100644
-> --- a/package/jsoncpp/jsoncpp.mk
-> +++ b/package/jsoncpp/jsoncpp.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -JSONCPP_VERSION = 1.6.1
-> +JSONCPP_VERSION = 1.6.5
->  JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
->  JSONCPP_LICENSE = Public Domain or MIT
->  JSONCPP_LICENSE_FILES = LICENSE
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
