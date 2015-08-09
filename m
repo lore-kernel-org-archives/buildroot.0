@@ -1,76 +1,69 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 9 Aug 2015 20:13:36 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: fix sparc compile issue
-Message-ID: <20150809181336.GA23188@waldemar-brodkorb.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 9 Aug 2015 20:36:41 +0200
+Subject: [Buildroot] [PATCH 3/4 v2] Revert
+ "package/gstreamer1/gst1-plugins-bad: disable opencv plugin with opencv-3"
+In-Reply-To: <5d317246d236dfca1405ba303f28293738572614.1439136753.git.yann.morin.1998@free.fr>
+References: <cover.1439136753.git.yann.morin.1998@free.fr>
+ <5d317246d236dfca1405ba303f28293738572614.1439136753.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJqUSquMMvWcUUD6hveU=MzDkCMLF6N9p5pO5VvjS3kZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autobuilder compile error:
-http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
+Yann,
 
-The predefines are wrong:
-./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
-#define sparc 1                                                                                                                                                                
-#define __sparc__ 1                                                                                                                                                            
-#define __sparc 1                                                                                                                                                              
-#define __sparc_v8__ 1
+On Sun, Aug 9, 2015 at 6:14 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: Samuel Martin <s.martin49@gmail.com>
+>
+> This reverts commit 5e238a87eacf2a0c62736c4123961651afb1ba87.
+>
+> Also update the dependencies.
+>
+> Cc: Jonathan Ben Avraham <yba@tkos.co.il>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> [yann.morin.1998 at free.fr: fix dependencies at the same time]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index bc99527..494a282 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -557,9 +557,22 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
+>
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+>         bool "opencv"
+> -       depends on BR2_INSTALL_LIBSTDCPP
+> -       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> -       depends on BROKEN # gst1-plugin-opencv does not (yet) support opencv >=3.x
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # opencv
+> +       depends on BR2_INSTALL_LIBSTDCPP # opencv
+> +       depends on BR2_USE_WCHAR # opencv
+> +       select BR2_PACKAGE_OPENCV
+> +       # Remove the following opencv modules when gstreamer fixes the
+> +       # problem of including the old "cv.h" header
+> +       # bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
+> +       select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+> +       select BR2_PACKAGE_OPENCV_LIB_CONTRIB
+> +       select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+> +       select BR2_PACKAGE_OPENCV_LIB_FLANN
+> +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> +       select BR2_PACKAGE_OPENCV_LIB_LEGACY
+> +       select BR2_PACKAGE_OPENCV_LIB_ML
+> +       select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+> +       select BR2_PACKAGE_OPENCV_LIB_VIDEO
+>         help
+>           GStreamer OpenCV Plugins
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-Changes v1 -> v2:
-  - keep Solaris gcc specific defines as suggested by Thomas Petazzoni
+How do you ensure that gst1-plugins-bad cannot select opencv when
+opencv3 is already selected?
 
----
- package/postgresql/0002-fix-sparc-compile.patch |   38 +++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/postgresql/0002-fix-sparc-compile.patch
+Regards,
 
-diff --git a/package/postgresql/0002-fix-sparc-compile.patch b/package/postgresql/0002-fix-sparc-compile.patch
-new file mode 100644
-index 0000000..9eec23a
---- /dev/null
-+++ b/package/postgresql/0002-fix-sparc-compile.patch
-@@ -0,0 +1,38 @@
-+The gcc predefines for Linux are __sparc_v8__/__sparc_v7__
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
-+--- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
-++++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 19:57:06.000000000 +0200
-+@@ -420,12 +420,12 @@
-+ :		"=r"(_res), "+m"(*lock)
-+ :		"r"(lock)
-+ :		"memory");
-+-#if defined(__sparcv7)
-++#if defined(__sparcv7) || defined(__sparc_v7__)
-+ 	/*
-+ 	 * No stbar or membar available, luckily no actually produced hardware
-+ 	 * requires a barrier.
-+ 	 */
-+-#elif defined(__sparcv8)
-++#elif defined(__sparcv8) || defined(__sparc_v8__)
-+ 	/* stbar is available (and required for both PSO, RMO), membar isn't */
-+ 	__asm__ __volatile__ ("stbar	 \n":::"memory");
-+ #else
-+@@ -438,13 +438,13 @@
-+ 	return (int) _res;
-+ }
-+ 
-+-#if defined(__sparcv7)
-++#if defined(__sparcv7) || defined(__sparc_v7__)
-+ /*
-+  * No stbar or membar available, luckily no actually produced hardware
-+  * requires a barrier.
-+  */
-+ #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
-+-#elif defined(__sparcv8)
-++#elif defined(__sparcv8) || defined(__sparc_v8__)
-+ /* stbar is available (and required for both PSO, RMO), membar isn't */
-+ #define S_UNLOCK(lock)	\
-+ do \
 -- 
-1.7.10.4
+Samuel
