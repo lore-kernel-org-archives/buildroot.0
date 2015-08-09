@@ -1,36 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 16:54:55 +0200
-Subject: [Buildroot] [PATCH] postgresql: fix sparc compile issue
-In-Reply-To: <20150809094150.GA8066@waldemar-brodkorb.de>
-References: <20150809094150.GA8066@waldemar-brodkorb.de>
-Message-ID: <20150809165455.23206e83@free-electrons.com>
+Date: Sun, 9 Aug 2015 16:56:19 +0200
+Subject: [Buildroot] [git commit] package/powertop: add missing headers for
+	musl
+Message-ID: <20150809145714.36CBA8198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=f7b4865479631fea1aa8b185a977ccd293ade00e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 9 Aug 2015 11:41:51 +0200, Waldemar Brodkorb wrote:
-> Fixes autobuilder compile error:
-> http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
-> 
-> The predefines are wrong:
-> ./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
-> #define sparc 1
-> #define __sparc__ 1
-> #define __sparc 1
-> #define __sparc_v8__ 1
+Reported upstream:
+https://github.com/fenrus75/powertop/pull/20
 
-As discussed on IRC, can you respin after using #if defined(__sparcv8)
-|| defined(__sparc_v8__), so that it continue to works on Solaris (for
-which __sparcv8 is defined). This way you can submit the patch upstream.
+Fixes:
+http://autobuild.buildroot.net/results/713/713df99bebd625434e029abdf360574de879afa3/
 
-Thanks!
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0003-add-missing-sys-time.h-header.patch       |   35 ++++++++++++++++++++
+ .../powertop/0004-add-missing-stdio.h-header.patch |   35 ++++++++++++++++++++
+ 2 files changed, 70 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/powertop/0003-add-missing-sys-time.h-header.patch b/package/powertop/0003-add-missing-sys-time.h-header.patch
+new file mode 100644
+index 0000000..7156e42
+--- /dev/null
++++ b/package/powertop/0003-add-missing-sys-time.h-header.patch
+@@ -0,0 +1,35 @@
++From 283cab667a9ac3ae3a675b5e5d1a42191188699f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 8 Aug 2015 18:24:48 +0200
++Subject: [PATCH] add missing sys/time.h header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++struct timeval is defined in sys/time.h with a musl toolchain.
++
++Fixes:
++In file included from devices/devfreq.cpp:35:0:
++devices/devfreq.h:35:18: error: field ???stamp_before??? has incomplete type ???timeval???
++  struct timeval  stamp_before, stamp_after;
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/devices/devfreq.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/devices/devfreq.h b/src/devices/devfreq.h
++index 16a60fb..4a8983b 100644
++--- a/src/devices/devfreq.h
+++++ b/src/devices/devfreq.h
++@@ -27,6 +27,7 @@
++ 
++ #include "device.h"
++ #include "../parameters/parameters.h"
+++#include <sys/time.h>
++ 
++ struct frequency;
++ 
++-- 
++2.4.3
++
+diff --git a/package/powertop/0004-add-missing-stdio.h-header.patch b/package/powertop/0004-add-missing-stdio.h-header.patch
+new file mode 100644
+index 0000000..7619cca
+--- /dev/null
++++ b/package/powertop/0004-add-missing-stdio.h-header.patch
+@@ -0,0 +1,35 @@
++From e6cfd977c81b335664db1d5d3d6b5488c245e30f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sat, 8 Aug 2015 18:26:15 +0200
++Subject: [PATCH] add missing stdio.h header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++snprinf is defined in stdio.h.
++
++Fixes:
++perf/perf_bundle.cpp: In function ???void parse_event_format(const char*)???:
++perf/perf_bundle.cpp:141:75: error: ???sprintf??? was not declared in this scope
++  sprintf(file, "/sys/kernel/debug/tracing/events/%s/%s/format", sys, event);
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ src/perf/perf_bundle.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/perf/perf_bundle.cpp b/src/perf/perf_bundle.cpp
++index cf1ae11..3d216ff 100644
++--- a/src/perf/perf_bundle.cpp
+++++ b/src/perf/perf_bundle.cpp
++@@ -31,6 +31,7 @@
++ #include <sys/stat.h>
++ #include <fcntl.h>
++ #include <unistd.h>
+++#include <stdio.h>
++ 
++ #include "perf_bundle.h"
++ #include "perf_event.h"
++-- 
++2.4.3
++
