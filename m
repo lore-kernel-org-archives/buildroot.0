@@ -1,174 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Aug 2015 00:38:16 +0200
-Subject: [Buildroot] [PATCH 1/5] instrumentation: explicitly pass the
-	package name
+Date: Mon, 10 Aug 2015 00:38:17 +0200
+Subject: [Buildroot] [PATCH 2/5] fs: add instrumentation steps
 In-Reply-To: <cover.1439159331.git.yann.morin.1998@free.fr>
 References: <cover.1439159331.git.yann.morin.1998@free.fr>
-Message-ID: <5fa739484ae7b3250e2bc76b92e13c5d055da54c.1439159331.git.yann.morin.1998@free.fr>
+Message-ID: <7a7b0d224e33e098a9898ecc918f74bfd217f2a6.1439159331.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the global instrumentation hooks automatically determine the
-current package name, and they can do so because they are only called
-from package-related rules.
-
-However, we're soon gonna call those hooks from other part of the build
-process, that are not related to a package (e.g. the rootfs steps).
-
-So, change the API so that the caller must explicitly pass the name of
-the entity being processed (only packages for now, more to come in a
-followup patch).
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 38 ++++++++++++++++++++------------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ docs/manual/debugging-buildroot.txt | 17 +++++++++++------
+ fs/common.mk                        |  2 ++
+ 2 files changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6a7d97e..d0d580a 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -34,14 +34,16 @@
+diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
+index f575fc4..66ccfd1 100644
+--- a/docs/manual/debugging-buildroot.txt
++++ b/docs/manual/debugging-buildroot.txt
+@@ -6,14 +6,15 @@
+ == Debugging Buildroot
  
- # Start step
- # $1: step name
-+# $2: entity name (package...)
- define step_start
--	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),start,$(1),$($(PKG)_NAME))$(sep))
-+	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),start,$(1),$(2))$(sep))
- endef
+ It is possible to instrument the steps +Buildroot+ does when building
+-packages. Define the variable +BR2_INSTRUMENTATION_SCRIPTS+ to contain
+-the path of one or more scripts (or other executables), in a
+-space-separated list, you want called before and after each step. The
+-scripts are called in sequence, with three parameters:
++packages or assembling rootfs images. Define the variable
+++BR2_INSTRUMENTATION_SCRIPTS+ to contain the path of one or more scripts
++(or other executables), in a space-separated list, you want called
++before and after each step. The scripts are called in sequence, with
++three parameters:
  
- # End step
- # $1: step name
-+# $2: entity name (package...)
- define step_end
--	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),end,$(1),$($(PKG)_NAME))$(sep))
-+	$(foreach hook,$(GLOBAL_INSTRUMENTATION_HOOKS),$(call $(hook),end,$(1),$(2))$(sep))
- endef
+   - +start+ or +end+ to denote the start (resp. the end) of a step;
+   - the name of the step about to be started, or which just ended;
+-  - the name of the package.
++  - the name of the package or rootfs image.
  
- #######################################
-@@ -85,7 +87,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ For example :
  
- # Unpack the archive
- $(BUILD_DIR)/%/.stamp_extracted:
--	@$(call step_start,extract)
-+	@$(call step_start,extract,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Extracting")
- 	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
-@@ -94,7 +96,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- 	$(Q)chmod -R +rw $(@D)
- 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
--	@$(call step_end,extract)
-+	@$(call step_end,extract,$($(PKG)_NAME))
+@@ -21,7 +22,7 @@ For example :
+ make BR2_INSTRUMENTATION_SCRIPTS="/path/to/my/script1 /path/to/my/script2"
+ ----
  
- # Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
- # used.
-@@ -117,7 +119,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS =  $(PKGDIR)
- $(BUILD_DIR)/%/.stamp_patched: PATCH_BASE_DIRS += $(addsuffix /$(RAWNAME),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))
- $(BUILD_DIR)/%/.stamp_patched:
--	@$(call step_start,patch)
-+	@$(call step_start,patch,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Patching")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
-@@ -134,7 +136,7 @@ $(BUILD_DIR)/%/.stamp_patched:
- 	)
- 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
--	@$(call step_end,patch)
-+	@$(call step_end,patch,$($(PKG)_NAME))
+-The list of steps is:
++The list of package-related steps is:
  
- # Check that all directories specified in BR2_GLOBAL_PATCH_DIR exist.
- $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
-@@ -143,33 +145,33 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+   - +extract+
+   - +patch+
+@@ -32,6 +33,10 @@ The list of steps is:
+   - +install-staging+, when a target-package is installed in +$(STAGING_DIR)+
+   - +install-image+, when a target-package installs files in +$(BINARIES_DIR)+
  
- # Configure
- $(BUILD_DIR)/%/.stamp_configured:
--	@$(call step_start,configure)
-+	@$(call step_start,configure,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Configuring")
- 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_CONFIGURE_CMDS)
- 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
--	@$(call step_end,configure)
-+	@$(call step_end,configure,$($(PKG)_NAME))
++For rootfs images, there is a single step:
++
++  - +assemble+
++
+ The script has access to the following variables:
  
- # Build
- $(BUILD_DIR)/%/.stamp_built::
--	@$(call step_start,build)
-+	@$(call step_start,build,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Building")
- 	$(foreach hook,$($(PKG)_PRE_BUILD_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
--	@$(call step_end,build)
-+	@$(call step_end,build,$($(PKG)_NAME))
+   - +BR2_CONFIG+: the path to the Buildroot .config file
+diff --git a/fs/common.mk b/fs/common.mk
+index ad1bcf3..4e9427e 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -68,6 +68,7 @@ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+ endif
  
- # Install to host dir
- $(BUILD_DIR)/%/.stamp_host_installed:
--	@$(call step_start,install-host)
-+	@$(call step_start,install-host,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Installing to host directory")
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
--	@$(call step_end,install-host)
-+	@$(call step_end,install-host,$($(PKG)_NAME))
+ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
++	@$$(call step_start,assemble,rootfs-$(1))
+ 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 	rm -f $$(FAKEROOT_SCRIPT)
+@@ -96,6 +97,7 @@ endif
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+ endif
++	@$$(call step_end,assemble,rootfs-$(1))
  
- # Install to staging dir
- #
-@@ -192,7 +194,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- # empty when we use an internal toolchain.
- #
- $(BUILD_DIR)/%/.stamp_staging_installed:
--	@$(call step_start,install-staging)
-+	@$(call step_start,install-staging,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Installing to staging directory")
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_STAGING_CMDS)
-@@ -220,21 +222,21 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- 			-e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
- 			-e "s:@BASE_DIR@:$(BASE_DIR):g"
- 	$(Q)touch $@
--	@$(call step_end,install-staging)
-+	@$(call step_end,install-staging,$($(PKG)_NAME))
- 
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
--	@$(call step_start,install-image)
-+	@$(call step_start,install-image,$($(PKG)_NAME))
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Installing to images directory")
- 	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
--	@$(call step_end,install-image)
-+	@$(call step_end,install-image,$($(PKG)_NAME))
- 
- # Install to target dir
- $(BUILD_DIR)/%/.stamp_target_installed:
--	@$(call step_start,install-target)
-+	@$(call step_start,install-target,$($(PKG)_NAME))
- 	@$(call MESSAGE,"Installing to target")
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_TARGET_CMDS)
-@@ -247,7 +249,7 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
- 	fi
- 	$(Q)touch $@
--	@$(call step_end,install-target)
-+	@$(call step_end,install-target,$($(PKG)_NAME))
- 
- # Remove package sources
- $(BUILD_DIR)/%/.stamp_dircleaned:
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
 -- 
 1.9.1
