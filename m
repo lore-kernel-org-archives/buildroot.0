@@ -1,56 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Aug 2015 13:11:42 +0200
-Subject: [Buildroot] [PATCH] toolchain/external: better check for gcc-5
-Message-ID: <1439118702-5376-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Aug 2015 13:16:14 +0200
+Subject: [Buildroot] [PATCH 2/3] package/rsyslog: Fix linking against
+ postgresql
+In-Reply-To: <u5oj9cx6jd.ln2@ID-313208.user.individual.net>
+References: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
+ <1428738737-3238-2-git-send-email-bernd.kuhls@t-online.de>
+ <20150411124226.726fde30@free-electrons.com>
+ <XnsA4798AC8357A8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20150411120739.GF4221@free.fr>
+ <20150411141520.4060c6a3@free-electrons.com>
+ <20150411122323.GG4221@free.fr>
+ <u5oj9cx6jd.ln2@ID-313208.user.individual.net>
+Message-ID: <20150809131614.2a9db0bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc will always report a three-digit version sting, like 4.9.3 or 5.1.0.
+Bernd,
 
-For gcc before 5, we want to check the first two digits, while starting
-with gcc 5, we are only concerned about the first digit.
+On Sun, 09 Aug 2015 12:55:26 +0200, Bernd Kuhls wrote:
 
-So, change our matching code to test for the leading part of the version
-string, up to the first dot after as-many version digit we're interested
-in.
+> this is not necessary anymore because the pgsql-rsyslog problem was fixed 
+> with this commit on May 14th by Baruch:
+> 
+> http://git.buildroot.net/buildroot/commit/package/postgresql?
+> id=3d3f70b567718ae308b5704ddd7d107c4849309e
+> 
+> I marked my patch as superseded.
 
-Note: we're adding the dot in the .mk code rather than in the Kconfig
-symbol, because it seemed cleaner to do so.
+Good. Thanks for following up on this patch!
 
-Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/helpers.mk | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 018f3ed..7c70d35 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -191,16 +191,12 @@ check_kernel_headers_version = \
- #   - eat all the remaining chars on the line
- #   - replace by the matched expression
- #
--# - s/\.[[:digit:]]+$//
--#   - eat a dot followed by as many digits as possible up to the end
--#     of line
--#   - replace with nothing
--#
- check_gcc_version = \
- 	expected_version="$(strip $2)" ; \
--	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/; s/\.[[:digit:]]+$$//;'` ; \
--	if [ "$${real_version}" != "$${expected_version}" ] ; then \
--		echo "Incorrect selection of gcc version: expected $${expected_version}, got $${real_version}" ; \
-+	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
-+	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
-+		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
-+			"$${expected_version}" "$${real_version}" ; \
- 		exit 1 ; \
- 	fi
- 
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
