@@ -1,54 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 9 Aug 2015 23:50:00 +0300
-Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to
- 1.6.5
-In-Reply-To: <u4qk9cxek9.ln2@ID-313208.user.individual.net>
-References: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
- <20150809145443.GB2570@tarshish>
- <1439143511.12501.11.camel@embedded.rocks>
- <d6ok9cxek9.ln2@ID-313208.user.individual.net>
- <20150809201327.GF2570@tarshish>
- <u4qk9cxek9.ln2@ID-313208.user.individual.net>
-Message-ID: <20150809205000.GG2570@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  9 Aug 2015 22:27:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 8271] New: Buildroot wit x86_64 architecture fails
+ to boot on qemu with kernels >=3.10
+Message-ID: <bug-8271-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+https://bugs.busybox.net/show_bug.cgi?id=8271
 
-On Sun, Aug 09, 2015 at 10:35:10PM +0200, Bernd Kuhls wrote:
-> Am Sun, 09 Aug 2015 23:13:27 +0300 schrieb Baruch Siach:
-> > On Sun, Aug 09, 2015 at 10:01:49PM +0200, Bernd Kuhls wrote:
-> >> Am Sun, 09 Aug 2015 20:05:11 +0200 schrieb J?rg Krause:
-> >> > I already submitted a patch for jsoncpp version bump and removing the
-> >> > snprintf-patch:
-> >> > http://patchwork.ozlabs.org/patch/502324/
-> >> 
-> >> sorry, I did not notice. I think your patch is better because it takes
-> >> care of the non-c11 toolchains but, as discussed, could you please keep
-> >> the snprintf patch? Therefore I marked my patch as superseded ;)
-> > 
-> > Where has this been discussed? I must have missed something.
-> 
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/124666
+           Summary: Buildroot wit x86_64 architecture fails to boot on
+                    qemu with kernels >=3.10
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: critical
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: gleb at pomykalov.ru
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I only see posix_memalign mentioned. Is the snprintf issue also related 
-somehow?
 
-> jsoncpp 1.6.5 still fails to compile on x86 without the snprintf patch using 
-> this defconfig:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_JSONCPP=y
+Buildroot with x86_64 arch selected and kernels >=3.10 fails to boot on both
+qemu and virtualbox.
+Here is the kernel panic:
+[    0.340000]  [<ffffffff813d207f>] extract_buf+0x8f/0x120
+[    0.340000]  [<ffffffff813d06be>] ? account+0x13e/0x180
+[    0.340000]  [<ffffffff813d250b>] ? xfer_secondary_pool+0x1b/0x60
+[    0.340000]  [<ffffffff813d219c>] extract_entropy+0x8c/0x1c0
+[    0.340000]  [<ffffffff8131a149>] ? vsnprintf+0x109/0x580
+[    0.340000]  [<ffffffff81f8520a>] ? tc_action_init+0x55/0x55
+[    0.340000]  [<ffffffff81325121>] ? bucket_table_alloc+0x111/0x1b0
+[    0.340000]  [<ffffffff813d2586>] get_random_bytes+0x36/0x70
+[    0.340000]  [<ffffffff81325121>] bucket_table_alloc+0x111/0x1b0
+[    0.340000]  [<ffffffff81f8520a>] ? tc_action_init+0x55/0x55
+[    0.340000]  [<ffffffff81f8520a>] ? tc_action_init+0x55/0x55
+[    0.340000]  [<ffffffff81325467>] rhashtable_init+0x1c7/0x3e0
+[    0.340000]  [<ffffffff81f8526b>] netlink_proto_init+0x61/0x15d
+[    0.340000]  [<ffffffff810002c4>] do_one_initcall+0x84/0x1b0
+[    0.340000]  [<ffffffff81f34fe7>] kernel_init_freeable+0x146/0x1d3
+[    0.340000]  [<ffffffff818865d0>] ? rest_init+0x80/0x80
+[    0.340000]  [<ffffffff818865d9>] kernel_init+0x9/0xf0
+[    0.340000]  [<ffffffff818929d2>] ret_from_fork+0x42/0x70
+[    0.340000]  [<ffffffff818865d0>] ? rest_init+0x80/0x80
+[    0.340000] Code: 55 8b 0f 44 8b 4f 10 44 8b 57 08 48 89 e5 41 57 41 56 41
+55
+41 54 89 c8 53 8b 5f 0c c1 c0 05 44 8b 47 04 45 8d a4 01 99 79 82 5a <44> 0f 38
+f0 1e 89 d8 44 31 d0 44 89 1a 44 21 c0 41 c1 c8 02 31
+[    0.340000] RIP  [<ffffffff8131531b>] sha_transform+0x2b/0x1110
+[    0.340000]  RSP <ffff88007d3e7c90>
 
-What is the build error message?
-
-baruch
+I've tried different configuration, with various bootloaders, gcc, buildoot
+versions. At the same time, i386 architecture works just great.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
