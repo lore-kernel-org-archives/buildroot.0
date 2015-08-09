@@ -1,128 +1,85 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Aug 2015 13:50:01 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/jsoncpp: Broken on musl
-Message-ID: <1439121001-14787-1-git-send-email-bernd.kuhls@t-online.de>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 9 Aug 2015 13:58:28 +0200
+Subject: [Buildroot] [RFC/PATCH 1/1] opencv2p4: new (old) compatibility
+	package
+In-Reply-To: <20150809120821.10efaf52@free-electrons.com>
+References: <alpine.DEB.2.02.1508090734200.14799@orcam81.orcam.lan>
+ <20150809111052.4d555583@free-electrons.com>
+ <CAHXCMMKtuF7MLa5nHcAn_a3xzep4kS-i4w1ZWVJ7c+ctDWNs3g@mail.gmail.com>
+ <20150809120821.10efaf52@free-electrons.com>
+Message-ID: <CAHXCMMLNR1uzX6nVLst8fW-Yc-2jZGVJAUhLH8FPadReuT5XWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also propagate to reverse dependencies, to keep bisectability do this in
-one commit.
+oops, re-add the list to the thread for the record.
 
-Fixes compile error:
+On Sun, Aug 9, 2015 at 12:08 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Samuel,
+>
+> On Sun, 9 Aug 2015 11:57:16 +0200, Samuel Martin wrote:
+>
+>> > I indeed think something went wrong here: if OpenCV 3 is indeed API
+>> > incompatible with OpenCV 2.4, then we should have two different
+>> > packages. Samuel, do you acknowledge that OpenCV 3 is significantly
+>> > different API-wise than OpenCV 2.x, so that two packages are needed ?
+>>
+>> I think so... I should have done it in the first place :-/
+>> API-wise, the most noticeable changes are API removals as listed in [1].
+>
+> Ok, so at least we agree on the principle.
+>
+>> > However, I'd prefer if we kept the original OpenCV 2.4 as 'opencv', and
+>> > had the new OpenCV 3 as 'opencv3'. But it's getting late in the release
+>> > cycle, I don't know if we can still do that. Maybe we can just rename
+>> > the existing 'opencv' package as 'opencv3' (as well as all its
+>> > Config.in options), and re-introduce the previous 'opencv' package as
+>> > it was before the bump to OpenCV 3.
+>> >
+>> > OpenCV has a limited number of reverse dependencies: only GStreamer and
+>> > VLC. Do they support both OpenCV 2.x and OpenCV 3.x ?
+>>
+>> vlc: yes
+>
+> Ok. Quite easy to do with a || dependency then.
+>
+>> gstreamer: no because it uses some modules removed in opencv-3 (see [2]).
+>
+> Ok, easy to handle as well.
+>
+>> > Samuel ?
+>>
+>> About the re-introduction of opencv-2, I agree keeping opencv package
+>> as opencv-2.4 and renaming the package for opencv-3 to opencv3.
+>
+> Good.
+>
+>> Jonathan, it seems this patch is a merge between the state of opencv
+>> while still using the 2.4.x version, and a couple of patches added on
+>> top of the opencv-3 package.
+>> Could you give details how you get this *.mk? or list the patch used
+>> to get this *.mk? it will help reviewing the patch. TIA.
+>
+> I think we should just bring back 'opencv' to the state it was before
+> the bump to OpenCV 3. Jonathan, Samuel, can you work on that, and make
+> a proposal?
+>
+> Beware that if you want this in 2015.08, it has to be handled quickly.
+> And it would be good to have this in 2015.08, in order to avoid
+> renaming all the Config.in symbols later.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-[ 16%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o
-In file included from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/xmmintrin.h:34:0,
-                 from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/x86intrin.h:31,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/x86_64-buildroot-linux-musl/bits/opt_random.h:33,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/random:50,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/bits/stl_algo.h:66,
-                 from /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/include/c++/4.9.2/algorithm:62,
-                 from /home/fli4l/br3/output/build/jsoncpp-1.6.1/src/lib_json/json_value.cpp:20:
-/home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux-musl/4.9.2/include/mm_malloc.h:34:64: error: declaration of 'int posix_memalign(void**, size_t, size_t) throw ()' has a different exception specifier
- extern "C" int posix_memalign (void **, size_t, size_t) throw ();
-                                                                ^
-In file included from /home/fli4l/br3/output/build/jsoncpp-1.6.1/include/json/assertions.h:9:0,
-                 from /home/fli4l/br3/output/build/jsoncpp-1.6.1/src/lib_json/json_value.cpp:7:
-/home/fli4l/br3/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/stdlib.h:98:5: error: from previous declaration 'int posix_memalign(void**, size_t, size_t)'
- int posix_memalign (void **, size_t, size_t);
-     ^
-make[2]: *** [src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o] Error 1
 
-using this defconfig:
 
-BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_JSONCPP=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: - rebased
-    - updated comments (Yann)
-    - added reverse dependencies to kodi-pvr-filmon & kodi-pvr-pctv
-v2: Disable jsoncpp and reverse dependency with musl toolchain instead of patching gcc (Thomas)
-    FTR: gcc patches can be found here: http://patchwork.ozlabs.org/patch/460337/
-
----
- package/jsoncpp/Config.in         | 5 +++--
- package/kodi-pvr-filmon/Config.in | 4 ++++
- package/kodi-pvr-pctv/Config.in   | 4 ++++
- package/sysdig/Config.in          | 6 ++++--
- 4 files changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
-index 2c96f13..fb9da7a 100644
---- a/package/jsoncpp/Config.in
-+++ b/package/jsoncpp/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_JSONCPP
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # posix_memalign
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	bool "jsoncpp"
- 	help
-@@ -10,5 +11,5 @@ config BR2_PACKAGE_JSONCPP
- 
- 	  https://github.com/open-source-parsers/jsoncpp
- 
--comment "jsoncpp needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "jsoncpp needs a (e)glibc or uClibc toolchain w/ C++"
-+	depends on BR2_TOOLCHAIN_USES_MUSL || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
-index 0b662df..491b3ac 100644
---- a/package/kodi-pvr-filmon/Config.in
-+++ b/package/kodi-pvr-filmon/Config.in
-@@ -2,7 +2,11 @@ config BR2_PACKAGE_KODI_PVR_FILMON
- 	bool "kodi-pvr-filmon"
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
- 	help
- 	  Filmon PVR client addon for Kodi
- 
- 	  https://github.com/kodi-pvr/pvr.filmon
-+
-+comment "kodi-pvr-filmon needs a (e)glibc or uClibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 255cd4a..97c367d 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -2,7 +2,11 @@ config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
- 	help
- 	  PCTV PVR client addon for Kodi
- 
- 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
-+
-+comment "kodi-pvr-pctv needs a (e)glibc or uClibc toolchain"
-+	depends on BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index dc71d5f..50ebbba 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSDIG
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_JSONCPP
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-@@ -16,6 +17,7 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  http://sysdig.org
- 
--comment "sysdig needs a toolchain w/ C++, dynamic library and a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "sysdig needs a (e)glibc or uClibc toolchain w/ C++, dynamic library and a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 -- 
-2.1.4
+Samuel
