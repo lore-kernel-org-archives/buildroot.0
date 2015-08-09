@@ -1,7 +1,7 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  9 Aug 2015 14:50:38 +0200
+Date: Sun,  9 Aug 2015 14:52:16 +0200
 Subject: [Buildroot] [PATCH 0/4] OpenCV: re-introduce opencv-2.4 package
-Message-ID: <1439124642-26266-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1439124740-26507-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
