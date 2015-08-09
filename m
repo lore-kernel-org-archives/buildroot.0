@@ -1,74 +1,76 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 09 Aug 2015 20:13:01 +0200
-Subject: [Buildroot] [PATCH] toolchain/external: better check for gcc-5
-In-Reply-To: <1439118702-5376-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439118702-5376-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1439143981.12501.14.camel@embedded.rocks>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 9 Aug 2015 20:13:36 +0200
+Subject: [Buildroot] [PATCH v2] postgresql: fix sparc compile issue
+Message-ID: <20150809181336.GA23188@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Fixes autobuilder compile error:
+http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
 
-On So, 2015-08-09 at 13:11 +0200, Yann E. MORIN wrote:
-> gcc will always report a three-digit version sting, like 4.9.3 or 
-> 5.1.0.
-> 
-> For gcc before 5, we want to check the first two digits, while 
-> starting
-> with gcc 5, we are only concerned about the first digit.
-> 
-> So, change our matching code to test for the leading part of the 
-> version
-> string, up to the first dot after as-many version digit we're 
-> interested
-> in.
-> 
-> Note: we're adding the dot in the .mk code rather than in the Kconfig
-> symbol, because it seemed cleaner to do so.
-> 
-> Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/helpers.mk | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 018f3ed..7c70d35 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -191,16 +191,12 @@ check_kernel_headers_version = \
->  #   - eat all the remaining chars on the line
->  #   - replace by the matched expression
->  #
-> -# - s/\.[[:digit:]]+$//
-> -#   - eat a dot followed by as many digits as possible up to the end
-> -#     of line
-> -#   - replace with nothing
-> -#
->  check_gcc_version = \
->  	expected_version="$(strip $2)" ; \
-> -	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) 
-> ([^[:space:]]+).*/\1/; s/\.[[:digit:]]+$$//;'` ; \
-> -	if [ "$${real_version}" != "$${expected_version}" ] ; then \
-> -		echo "Incorrect selection of gcc version: expected 
-> $${expected_version}, got $${real_version}" ; \
-> +	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) 
-> ([^[:space:]]+).*/\1/;'` ; \
-> +	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; 
-> then \
-> +		printf "Incorrect selection of gcc version: expected 
-> %s.x, got %s\n" \
-> +			"$${expected_version}" "$${real_version}" ; 
-> \
->  		exit 1 ; \
->  	fi
->  
+The predefines are wrong:
+./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
+#define sparc 1                                                                                                                                                                
+#define __sparc__ 1                                                                                                                                                            
+#define __sparc 1                                                                                                                                                              
+#define __sparc_v8__ 1
 
-Many thanks! This works fine for my gcc 5.2.0 toolchain. Although, it
-is already commited and applied:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+Changes v1 -> v2:
+  - keep Solaris gcc specific defines as suggested by Thomas Petazzoni
 
-Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/postgresql/0002-fix-sparc-compile.patch |   38 +++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/postgresql/0002-fix-sparc-compile.patch
+
+diff --git a/package/postgresql/0002-fix-sparc-compile.patch b/package/postgresql/0002-fix-sparc-compile.patch
+new file mode 100644
+index 0000000..9eec23a
+--- /dev/null
++++ b/package/postgresql/0002-fix-sparc-compile.patch
+@@ -0,0 +1,38 @@
++The gcc predefines for Linux are __sparc_v8__/__sparc_v7__
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
++--- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
+++++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 19:57:06.000000000 +0200
++@@ -420,12 +420,12 @@
++ :		"=r"(_res), "+m"(*lock)
++ :		"r"(lock)
++ :		"memory");
++-#if defined(__sparcv7)
+++#if defined(__sparcv7) || defined(__sparc_v7__)
++ 	/*
++ 	 * No stbar or membar available, luckily no actually produced hardware
++ 	 * requires a barrier.
++ 	 */
++-#elif defined(__sparcv8)
+++#elif defined(__sparcv8) || defined(__sparc_v8__)
++ 	/* stbar is available (and required for both PSO, RMO), membar isn't */
++ 	__asm__ __volatile__ ("stbar	 \n":::"memory");
++ #else
++@@ -438,13 +438,13 @@
++ 	return (int) _res;
++ }
++ 
++-#if defined(__sparcv7)
+++#if defined(__sparcv7) || defined(__sparc_v7__)
++ /*
++  * No stbar or membar available, luckily no actually produced hardware
++  * requires a barrier.
++  */
++ #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
++-#elif defined(__sparcv8)
+++#elif defined(__sparcv8) || defined(__sparc_v8__)
++ /* stbar is available (and required for both PSO, RMO), membar isn't */
++ #define S_UNLOCK(lock)	\
++ do \
+-- 
+1.7.10.4
