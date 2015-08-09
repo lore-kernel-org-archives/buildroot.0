@@ -1,69 +1,83 @@
-From: Ivo Slanina <ivo.slanina@gmail.com>
-Date: Sun,  9 Aug 2015 17:47:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpi-firmware: add configurable
-	kernel cmdline option
-Message-ID: <1439135221-29285-1-git-send-email-ivo.slanina@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  9 Aug 2015 18:14:53 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] OpenCV: re-introduce opencv-2.4 package
+	(branch yem/sma/opencv3-opencv24)
+Message-ID: <cover.1439136753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Raspberry Pi expects cmdline.txt file at boot partition, which defines
-kernel parameters. Buildroot stores this file in package/rpi-firmware
-directory and makes this configuration quite unconfortable. Basicaly
-user have to manually edit output/images/rpi-firmware/cmdline.txt for
-every build.
+Hello All!
 
-This patch adds option to specify content of cmdline.txt and store it
-in configuration file. This approach removes need to manually modify
-this file for every build and adds posibility to store its value
-in configuration file per project.
+As noticed in [1], users' applications may depend on OpenCV-2.4 APIs,
+which are incompatible with OpenCV-3.
 
-Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
----
- package/rpi-firmware/Config.in       | 6 ++++++
- package/rpi-firmware/cmdline.txt     | 1 -
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 3 files changed, 7 insertions(+), 2 deletions(-)
- delete mode 100644 package/rpi-firmware/cmdline.txt
+This short series first renames the opencv package to opencv3, then
+re-introduces the opencv one for OpenCV-2.4 as discussed in [2], and
+lastly handle the reverse dependencies in the last 2 patches.
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index 405674f..978ecfd 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -39,6 +39,12 @@ config BR2_PACKAGE_RPI_FIRMWARE_CD
- 
- endchoice
- 
-+config BR2_PACKAGE_RPI_FIRMWARE_CMDLINE
-+	string "Kernel cmdline"
-+	default "root=/dev/mmcblk0p2 rootwait"
-+	help
-+	  Set this value to customize cmdline.txt file at boot partition.
-+
- config BR2_PACKAGE_RPI_FIRMWARE_BOOT
- 	string
- 	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
-diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
-deleted file mode 100644
-index 38aa378..0000000
---- a/package/rpi-firmware/cmdline.txt
-+++ /dev/null
-@@ -1 +0,0 @@
--root=/dev/mmcblk0p2 rootwait
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 1ef15aa..9d22a69 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -41,7 +41,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
- 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
- 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
--	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
-+	echo $(BR2_PACKAGE_RPI_FIRMWARE_CMDLINE) > $(BINARIES_DIR)/rpi-firmware/cmdline.txt
- 	$(RPI_FIRMWARE_INSTALL_DTB)
- 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
- endef
+[1] http://lists.busybox.net/pipermail/buildroot/2015-August/135270.html
+[2] http://lists.busybox.net/pipermail/buildroot/2015-August/137133.html
+
+Changes v1 -> v2: (Yann)
+  - only remove legacy symbols once opnecv24 has been re-introduced
+  - fix a missed rename in vlc, patch 1
+  - make opencv3 depends on !opencv, not the othe way around
+  - fix and comment dependencies in gst1-plugins-bad
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 4a5f878946c37deb8c1785fb8363cd1d322f7436:
+
+  toolchain/external: better check for gcc-5 (2015-08-09 16:58:55 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/sma/opencv3-opencv24
+
+for you to fetch changes up to 927987bbdcc79cc1a299cf2a1ba052a6ae82b702:
+
+  package/vlc: update opencv support (2015-08-09 18:08:19 +0200)
+
+----------------------------------------------------------------
+Samuel Martin (4):
+      package: rename opencv -> opencv3
+      package/opencv: re-introduce opencv for opencv-2.4
+      Revert "package/gstreamer1/gst1-plugins-bad: disable opencv plugin with opencv-3"
+      package/vlc: update opencv support
+
+ Config.in.legacy                                   |  32 --
+ package/Config.in                                  |   1 +
+ package/gstreamer1/gst1-plugins-bad/Config.in      |  19 +-
+ .../0001-core-fix-x86-PIC-code-compilation.patch   |  49 +++
+ ...ix-return-type-value-VideoFrameSource_GPU.patch |  40 +++
+ ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 +++++++++
+ package/opencv/Config.in                           | 278 +++++-----------
+ package/opencv/opencv.mk                           | 151 ++-------
+ ...pthread-based-parallel_for-with-gcc-4.4.3.patch |   0
+ ...002-fix-support-for-pthreads-parallel_for.patch |   0
+ package/opencv3/Config.in                          | 344 +++++++++++++++++++
+ package/opencv3/opencv3.mk                         | 363 +++++++++++++++++++++
+ package/vlc/Config.in                              |  14 +-
+ package/vlc/vlc.mk                                 |   6 +-
+ 14 files changed, 1084 insertions(+), 369 deletions(-)
+ create mode 100644 package/opencv/0001-core-fix-x86-PIC-code-compilation.patch
+ create mode 100644 package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
+ create mode 100644 package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+ rename package/{opencv => opencv3}/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch (100%)
+ rename package/{opencv => opencv3}/0002-fix-support-for-pthreads-parallel_for.patch (100%)
+ create mode 100644 package/opencv3/Config.in
+ create mode 100644 package/opencv3/opencv3.mk
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
