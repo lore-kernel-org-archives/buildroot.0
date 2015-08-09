@@ -1,67 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 11:59:27 +0200
-Subject: [Buildroot] [PATCH] python-pyroute2: new package
-In-Reply-To: <1438942181-30466-1-git-send-email-yegorslists@googlemail.com>
-References: <1438942181-30466-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150809115927.534283e9@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun,  9 Aug 2015 12:05:50 +0200
+Subject: [Buildroot] [PATCH] package/util-linux: fix vipw build with musl
+Message-ID: <1439114750-11060-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
+__P() is used for compatibility with old K&R C compilers. With
+ANSI C this macro has no effect.
 
-On Fri,  7 Aug 2015 12:09:41 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                          |  1 +
->  package/python-pyroute2/Config.in          |  7 +++++++
->  package/python-pyroute2/python-pyroute2.mk | 20 ++++++++++++++++++++
->  3 files changed, 28 insertions(+)
->  create mode 100644 package/python-pyroute2/Config.in
->  create mode 100644 package/python-pyroute2/python-pyroute2.mk
+This fixes a compilation error with musl libc because of undeclared
+__P.
 
-This doesn't build here with Python 3, due to an encoding issue:
+Fixes:
+http://autobuild.buildroot.net/results/237/2377ae85bb9d85ba4c02706207f0b3bde3ccd027
 
->>> python-pyroute2 0.3.8 Building
-(cd /home/thomas/projets/buildroot/output/build/python-pyroute2-0.3.8//; PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/home/thomas/projets/buildroot/output/host/usr/bin:/home/thomas/projets/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thomas/sys/bin" CC="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os " LDFLAGS="" LDSHARED="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc -shared" PYTHONPATH="/home/thomas/projets/buildroot/output/target/usr/lib/python3.4/sysconfigdata/:/home/thomas/projets/buildroot/output/target/usr/lib/python3.4/site-packages/" _python_sysroot=/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot _python_prefix=/usr _python_exec_prefix=/usr  /home/thomas/projets/buildroot/outpu
- t/host/u
- sr/bin/python setup.py build --executable=/usr/bin/python )
-Traceback (most recent call last):
-  File "setup.py", line 76, in <module>
-    long_description=readme.read())
-  File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/encodings/ascii.py", line 26, in decode
-    return codecs.ascii_decode(input, self.errors)[0]
-UnicodeDecodeError: 'ascii' codec can't decode byte 0xe2 in position 375: ordinal not in range(128)
-package/pkg-generic.mk:156: recipe for target '/home/thomas/projets/buildroot/output/build/python-pyroute2-0.3.8/.stamp_built' failed
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...004-vipw-Remove-pre-ANSI-compiler-support.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
 
-You can reproduce using the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.05-1190-g4a48479.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_PYROUTE2=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Thanks!
-
-Thomas
+diff --git a/package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch b/package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
+new file mode 100644
+index 0000000..3a0c42a
+--- /dev/null
++++ b/package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
+@@ -0,0 +1,35 @@
++From 9ce534491aea9b7975cfee5064423d0b850d8002 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 9 Aug 2015 11:20:00 +0200
++Subject: [PATCH] vipw: Remove pre-ANSI compiler support
++
++__P() is used for compatibility with old K&R C compilers. With
++ANSI C this macro has no effect.
++
++This fixes a compilation error with musl libc because of undeclared
++__P.
++
++Ref:
++https://lists.samba.org/archive/samba-technical/2015-June/108042.html
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ login-utils/vipw.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/login-utils/vipw.c b/login-utils/vipw.c
++index 668f4d8..e4c803b 100644
++--- a/login-utils/vipw.c
+++++ b/login-utils/vipw.c
++@@ -85,7 +85,7 @@ int program;
++ char orig_file[FILENAMELEN];	/* original file /etc/passwd or /etc/group */
++ char *tmp_file;			/* tmp file */
++ 
++-void pw_error __P((char *, int, int));
+++void pw_error (char *, int, int);
++ 
++ static void copyfile(int from, int to)
++ {
++-- 
++2.4.3
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
