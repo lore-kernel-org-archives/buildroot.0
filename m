@@ -1,38 +1,79 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 09 Aug 2015 16:43:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xfs: Fix linking
-	error
-References: <1424452969-6166-1-git-send-email-bernd.kuhls@t-online.de>
- <20150220193524.72d2ff63@free-electrons.com>
-Message-ID: <ai5k9cxek9.ln2@ID-313208.user.individual.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 9 Aug 2015 17:54:43 +0300
+Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to
+ 1.6.5
+In-Reply-To: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150809145443.GB2570@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 20 Feb 2015 19:35:24 +0100 schrieb Thomas Petazzoni:
+Hi Bernd,
 
-> Dear Bernd Kuhls,
+On Sun, Aug 09, 2015 at 02:28:30PM +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch | 12 +++++++-----
+>  package/jsoncpp/jsoncpp.mk                                   |  2 +-
+>  2 files changed, 8 insertions(+), 6 deletions(-)
 > 
-> On Fri, 20 Feb 2015 18:22:49 +0100, Bernd Kuhls wrote:
->> Fixes
->> http://autobuild.buildroot.net/results/a0b/
-a0bd6312d450fb78db7f57d3db9e01ba2b26687d//
->> http://autobuild.buildroot.net/
-results/534/5347293cdcd7eb2e84b762ee9d073f3b937b5312//
->> http://autobuild.buildroot.net/results/b5e/
-b5e7599ba33dc43a8f7e81bfa6d7ad9cb0ac68a1//
->> 
->> and many others (microblazeel only)
-> 
-> Maybe this is a silly question, but do we know why this error is
-> appearing on Microblaze only?
+> diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+> index 7935849..1178cc2 100644
+> --- a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+> +++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+> @@ -16,6 +16,8 @@ Upstream status: sent upstream
+>  package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+>  
+>  Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +(bumped patch to jsoncpp 1.6.5)
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Hi Thomas,
+I think this patch is not needed anymore. See 
+https://github.com/open-source-parsers/jsoncpp/pull/232. I haven't tested 
+though.
 
-(currently busy cleaning up my local patch queues ;))
+baruch
 
-just ftr: the error is gone with current buildroot.
+>   src/lib_json/json_writer.cpp | 2 --
+> @@ -25,15 +27,15 @@ diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
+>  index 83102fd2bb86..f7ad1e21bbc0 100644
+>  --- a/src/lib_json/json_writer.cpp
+>  +++ b/src/lib_json/json_writer.cpp
+> -@@ -29,8 +29,6 @@
+> - 
+> - #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
+> +@@ -31,8 +31,6 @@
+>   #define snprintf _snprintf
+> + #elif defined(__ANDROID__)
+> + #define snprintf snprintf
+>  -#elif __cplusplus >= 201103L
+>  -#define snprintf std::snprintf
+>   #endif
+>   
+> - #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
+> --- 
+> + #if defined(__BORLANDC__)  
+> +---
+>  2.1.4
+>  
+> diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+> index 63b18e6..132e264 100644
+> --- a/package/jsoncpp/jsoncpp.mk
+> +++ b/package/jsoncpp/jsoncpp.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -JSONCPP_VERSION = 1.6.1
+> +JSONCPP_VERSION = 1.6.5
+>  JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+>  JSONCPP_LICENSE = Public Domain or MIT
+>  JSONCPP_LICENSE_FILES = LICENSE
 
-Regards, Bernd
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
