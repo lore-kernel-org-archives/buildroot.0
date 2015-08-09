@@ -1,41 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 17:17:01 +0200
-Subject: [Buildroot] [PATCH] toolchain/external: better check for gcc-5
-In-Reply-To: <1439118702-5376-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439118702-5376-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150809171701.331c2ed5@free-electrons.com>
+From: Ivo Slanina <ivo.slanina@gmail.com>
+Date: Sun,  9 Aug 2015 17:47:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpi-firmware: add configurable
+	kernel cmdline option
+Message-ID: <1439135221-29285-1-git-send-email-ivo.slanina@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Raspberry Pi expects cmdline.txt file at boot partition, which defines
+kernel parameters. Buildroot stores this file in package/rpi-firmware
+directory and makes this configuration quite unconfortable. Basicaly
+user have to manually edit output/images/rpi-firmware/cmdline.txt for
+every build.
 
-On Sun,  9 Aug 2015 13:11:42 +0200, Yann E. MORIN wrote:
-> gcc will always report a three-digit version sting, like 4.9.3 or 5.1.0.
-> 
-> For gcc before 5, we want to check the first two digits, while starting
-> with gcc 5, we are only concerned about the first digit.
-> 
-> So, change our matching code to test for the leading part of the version
-> string, up to the first dot after as-many version digit we're interested
-> in.
-> 
-> Note: we're adding the dot in the .mk code rather than in the Kconfig
-> symbol, because it seemed cleaner to do so.
-> 
-> Reported-by: J?rg Krause <joerg.krause@embedded.rocks>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/helpers.mk | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
+This patch adds option to specify content of cmdline.txt and store it
+in configuration file. This approach removes need to manually modify
+this file for every build and adds posibility to store its value
+in configuration file per project.
 
-Applied, thanks.
+Signed-off-by: Ivo Slanina <ivo.slanina@gmail.com>
+---
+ package/rpi-firmware/Config.in       | 6 ++++++
+ package/rpi-firmware/cmdline.txt     | 1 -
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+ delete mode 100644 package/rpi-firmware/cmdline.txt
 
-Thomas
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index 405674f..978ecfd 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -39,6 +39,12 @@ config BR2_PACKAGE_RPI_FIRMWARE_CD
+ 
+ endchoice
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_CMDLINE
++	string "Kernel cmdline"
++	default "root=/dev/mmcblk0p2 rootwait"
++	help
++	  Set this value to customize cmdline.txt file at boot partition.
++
+ config BR2_PACKAGE_RPI_FIRMWARE_BOOT
+ 	string
+ 	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
+diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
+deleted file mode 100644
+index 38aa378..0000000
+--- a/package/rpi-firmware/cmdline.txt
++++ /dev/null
+@@ -1 +0,0 @@
+-root=/dev/mmcblk0p2 rootwait
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 1ef15aa..9d22a69 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -41,7 +41,7 @@ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+-	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
++	echo $(BR2_PACKAGE_RPI_FIRMWARE_CMDLINE) > $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
+ 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+ endef
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
