@@ -1,65 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Aug 2015 14:28:30 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to 1.6.5
-Message-ID: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Aug 2015 12:00:09 +0200
+Subject: [Buildroot] [git commit branch/next] jpeg-turbo: bump version from
+	1.4.0 to 1.4.1
+Message-ID: <20150809123145.5DC7580649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch | 12 +++++++-----
- package/jsoncpp/jsoncpp.mk                                   |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=08c3226ba25c22a58c17f221795433aeb6c21075
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-index 7935849..1178cc2 100644
---- a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-+++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
-@@ -16,6 +16,8 @@ Upstream status: sent upstream
- package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
- 
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+(bumped patch to jsoncpp 1.6.5)
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
- 
-  src/lib_json/json_writer.cpp | 2 --
-@@ -25,15 +27,15 @@ diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
- index 83102fd2bb86..f7ad1e21bbc0 100644
- --- a/src/lib_json/json_writer.cpp
- +++ b/src/lib_json/json_writer.cpp
--@@ -29,8 +29,6 @@
-- 
-- #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
-+@@ -31,8 +31,6 @@
-  #define snprintf _snprintf
-+ #elif defined(__ANDROID__)
-+ #define snprintf snprintf
- -#elif __cplusplus >= 201103L
- -#define snprintf std::snprintf
-  #endif
-  
-- #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
---- 
-+ #if defined(__BORLANDC__)  
-+---
- 2.1.4
- 
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index 63b18e6..132e264 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jpeg-turbo/jpeg-turbo.hash |    8 +++++---
+ package/jpeg-turbo/jpeg-turbo.mk   |    2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index bbc62f2..dd61b2c 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,3 +1,5 @@
+-# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/
+-sha1	a9ed7a99a6090e0848836c5df8e836f300a098b9  libjpeg-turbo-1.4.0.tar.gz
+-md5	039153dabe61e1ac8d9323b5522b56b0  libjpeg-turbo-1.4.0.tar.gz
++# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/
++sha1	363a149f644211462c45138a19674f38100036d3	libjpeg-turbo-1.4.1.tar.gz
++md5	b1f6b84859a16b8ebdcda951fa07c3f2	libjpeg-turbo-1.4.1.tar.gz
++# Locally computed
++sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index dd3ae19..25434b1 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JSONCPP_VERSION = 1.6.1
-+JSONCPP_VERSION = 1.6.5
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
--- 
-2.1.4
+-JPEG_TURBO_VERSION = 1.4.0
++JPEG_TURBO_VERSION = 1.4.1
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
