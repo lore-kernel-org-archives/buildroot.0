@@ -1,41 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Aug 2015 17:12:48 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/tor: bump version to 0.2.6.10
-In-Reply-To: <1439133168-13800-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1439133168-13800-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1439133168-13800-2-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Aug 2015 16:58:55 +0200
+Subject: [Buildroot] [git commit] toolchain/external: better check for gcc-5
+Message-ID: <20150809151640.6B79D818C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=4a5f878946c37deb8c1785fb8363cd1d322f7436
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 341a611..637efe4 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	4a6c29ad89a98d7832c599d9480d6d8e55355fb3b8f4b506c5df557f15942f9c  tor-0.2.6.9.tar.gz
-+sha256	0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d	tor-0.2.6.10.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index a464391..7db0964 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
+gcc will always report a three-digit version sting, like 4.9.3 or 5.1.0.
+
+For gcc before 5, we want to check the first two digits, while starting
+with gcc 5, we are only concerned about the first digit.
+
+So, change our matching code to test for the leading part of the version
+string, up to the first dot after as-many version digit we're interested
+in.
+
+Note: we're adding the dot in the .mk code rather than in the Kconfig
+symbol, because it seemed cleaner to do so.
+
+Reported-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk |   12 ++++--------
+ 1 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 018f3ed..7c70d35 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -191,16 +191,12 @@ check_kernel_headers_version = \
+ #   - eat all the remaining chars on the line
+ #   - replace by the matched expression
  #
- ################################################################################
+-# - s/\.[[:digit:]]+$//
+-#   - eat a dot followed by as many digits as possible up to the end
+-#     of line
+-#   - replace with nothing
+-#
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
+-	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/; s/\.[[:digit:]]+$$//;'` ; \
+-	if [ "$${real_version}" != "$${expected_version}" ] ; then \
+-		echo "Incorrect selection of gcc version: expected $${expected_version}, got $${real_version}" ; \
++	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
++	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
++		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
++			"$${expected_version}" "$${real_version}" ; \
+ 		exit 1 ; \
+ 	fi
  
--TOR_VERSION = 0.2.6.9
-+TOR_VERSION = 0.2.6.10
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3c
- TOR_LICENSE_FILES = LICENSE
--- 
-2.1.4
