@@ -1,40 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Aug 2015 14:01:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 5.6.12
-Message-ID: <1439121681-25926-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun,  9 Aug 2015 14:28:30 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to 1.6.5
+Message-ID: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://www.php.net/ChangeLog-5.php#5.6.12
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch | 12 +++++++-----
+ package/jsoncpp/jsoncpp.mk                                   |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index ea12138..6afc166 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,2 +1,2 @@
- # From http://php.net/downloads.php
--sha256	3f97dbb1c646b90e1ef638defabe429ef036f903b5baa1c34769d3de4fe62bd4	php-5.6.11.tar.xz
-+sha256	f8a8446866c0dc3f33319aa196ce87b64d71cab3dd96e39c8816adccc7e8ef33	php-5.6.12.tar.xz
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 6bf022f..8506714 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+index 7935849..1178cc2 100644
+--- a/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
++++ b/package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+@@ -16,6 +16,8 @@ Upstream status: sent upstream
+ package/jsoncpp/0001-Revert-Use-std-namespace-for-snprintf.patch
+ 
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++(bumped patch to jsoncpp 1.6.5)
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+ 
+  src/lib_json/json_writer.cpp | 2 --
+@@ -25,15 +27,15 @@ diff --git a/src/lib_json/json_writer.cpp b/src/lib_json/json_writer.cpp
+ index 83102fd2bb86..f7ad1e21bbc0 100644
+ --- a/src/lib_json/json_writer.cpp
+ +++ b/src/lib_json/json_writer.cpp
+-@@ -29,8 +29,6 @@
+- 
+- #if defined(_MSC_VER) && _MSC_VER < 1500 // VC++ 8.0 and below
++@@ -31,8 +31,6 @@
+  #define snprintf _snprintf
++ #elif defined(__ANDROID__)
++ #define snprintf snprintf
+ -#elif __cplusplus >= 201103L
+ -#define snprintf std::snprintf
+  #endif
+  
+- #if defined(_MSC_VER) && _MSC_VER >= 1400 // VC++ 8.0
+--- 
++ #if defined(__BORLANDC__)  
++---
+ 2.1.4
+ 
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 63b18e6..132e264 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PHP_VERSION_MAJOR = 5.6
--PHP_VERSION = $(PHP_VERSION_MAJOR).11
-+PHP_VERSION = $(PHP_VERSION_MAJOR).12
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-JSONCPP_VERSION = 1.6.1
++JSONCPP_VERSION = 1.6.5
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
 -- 
 2.1.4
