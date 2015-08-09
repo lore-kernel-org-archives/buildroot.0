@@ -1,30 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 16:57:52 +0200
-Subject: [Buildroot] [PATCH] package/powertop: add missing headers for
- musl
-In-Reply-To: <1439051953-11850-1-git-send-email-romain.naour@openwide.fr>
-References: <1439051953-11850-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150809165752.72087ba4@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  9 Aug 2015 17:12:47 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/softether: bump version
+Message-ID: <1439133168-13800-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/softether/softether.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat,  8 Aug 2015 18:39:13 +0200, Romain Naour wrote:
-> Reported upstream:
-> https://github.com/fenrus75/powertop/pull/20
-
-From https://github.com/fenrus75/powertop: "The Linux PowerTOP tool --
-please post patches to the mailing list instead of using github pull
-requests".
-
-Other than that, patch applied, thanks!
-
-Thomas
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 17a450f..489341e 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOFTETHER_VERSION = 18b120e5f747a84d26302ec706f6c1c91d642ace
++SOFTETHER_VERSION = 4b65e251f240d0b36c704acd598f4ceb07c41413
+ SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+ SOFTETHER_PATCH = \
+ 	https://github.com/dajhorn/SoftEtherVPN/commit/c5e5d7e93c6f3302adf5821c29c4efdb7630e418.patch \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
