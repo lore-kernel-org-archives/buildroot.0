@@ -1,34 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 21:04:50 +0200
-Subject: [Buildroot] Autobuilder toolchain configuration update
-Message-ID: <20150809210450.79363a21@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 09 Aug 2015 21:57:40 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/jsoncpp: Broken on musl
+References: <1439121001-14787-1-git-send-email-bernd.kuhls@t-online.de>
+ <1439146794.12501.25.camel@embedded.rocks>
+Message-ID: <kunk9cxek9.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi J?rg,
 
-I've pushed a small update of the Buildroot external toolchains used in
-the autobuilders:
+Am Sun, 09 Aug 2015 20:59:54 +0200 schrieb J?rg Krause:
 
- * All toolchains have been rebuilt from Git version ad0f85e instead of
-   4a48479 previously.
+> After a short investigation [1] I realized this error only applies for
+> x86 targets.
+> 
+> [1] https://gcc.gnu.org/ml/gcc-patches/2015-04/msg01084.html
 
- * br-arm-cortex-a9-glibc is now using gcc 5.x. The last rebuild
-   reverted it to gcc 4.9 due to the rename of Config.in symbol for gcc
-   versions. It's now back at gcc 5.x. So gcc 5.x issues should
-   reappear in the autobuilders.
+v1 of my patch tried to fix it that way but it does not work for external 
+toolchains: http://patchwork.ozlabs.org/patch/460337/
 
- * The NIOS II toolchain, which was stuck at Buildroot 2015.05 due to a
-   build failure in gcc following the bump to 4.9.3, has now been
-   rebuilt thanks to the build problem being fixed.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
