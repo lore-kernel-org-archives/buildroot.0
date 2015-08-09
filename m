@@ -1,34 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 11:40:50 +0200
-Subject: [Buildroot] [PATCH v2] haveged: for sparc we need generic
- clockgettime
-In-Reply-To: <20150809092526.GA16401@waldemar-brodkorb.de>
-References: <20150809092526.GA16401@waldemar-brodkorb.de>
-Message-ID: <20150809114050.09506b63@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 9 Aug 2015 11:41:51 +0200
+Subject: [Buildroot] [PATCH] postgresql: fix sparc compile issue
+Message-ID: <20150809094150.GA8066@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Fixes autobuilder compile error:
+http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
 
-On Sun, 9 Aug 2015 11:25:26 +0200, Waldemar Brodkorb wrote:
-> This fixes autobuilder error:
-> http://autobuild.buildroot.net/results/5b8bbc30f347140309ab2f81e1fe50f517356a3e/
-> 
-> As sparcv9 assembly is used, we need to enable generic clock_gettime
-> for sparcv8 systems.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> Changes v1 -> v2:
->   - be more specific about the subarchitecture, suggested by Thomas Petazzoni
+The predefines are wrong:
+./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
+#define sparc 1
+#define __sparc__ 1
+#define __sparc 1
+#define __sparc_v8__ 1
 
-Applied, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/postgresql/0001-fix-sparcv8-compile.patch |   38 +++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/postgresql/0001-fix-sparcv8-compile.patch
 
-Thomas
+diff --git a/package/postgresql/0001-fix-sparcv8-compile.patch b/package/postgresql/0001-fix-sparcv8-compile.patch
+new file mode 100644
+index 0000000..cde5434
+--- /dev/null
++++ b/package/postgresql/0001-fix-sparcv8-compile.patch
+@@ -0,0 +1,38 @@
++The gcc predefines in 4.9.x are __sparc_v8__/__sparc_v7__.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
++--- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
+++++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 11:17:48.000000000 +0200
++@@ -420,12 +420,12 @@
++ :		"=r"(_res), "+m"(*lock)
++ :		"r"(lock)
++ :		"memory");
++-#if defined(__sparcv7)
+++#if defined(__sparc_v7__)
++ 	/*
++ 	 * No stbar or membar available, luckily no actually produced hardware
++ 	 * requires a barrier.
++ 	 */
++-#elif defined(__sparcv8)
+++#elif defined(__sparc_v8__)
++ 	/* stbar is available (and required for both PSO, RMO), membar isn't */
++ 	__asm__ __volatile__ ("stbar	 \n":::"memory");
++ #else
++@@ -438,13 +438,13 @@
++ 	return (int) _res;
++ }
++ 
++-#if defined(__sparcv7)
+++#if defined(__sparc_v7__)
++ /*
++  * No stbar or membar available, luckily no actually produced hardware
++  * requires a barrier.
++  */
++ #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
++-#elif defined(__sparcv8)
+++#elif defined(__sparc_v8__)
++ /* stbar is available (and required for both PSO, RMO), membar isn't */
++ #define S_UNLOCK(lock)	\
++ do \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
