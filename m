@@ -1,180 +1,98 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 09 Aug 2015 20:48:05 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/jsoncpp: Broken on musl
-In-Reply-To: <1439121001-14787-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1439121001-14787-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1439146085.12501.21.camel@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Aug 2015 20:52:42 +0200
+Subject: [Buildroot] [PATCH 3/4 v2] Revert
+ "package/gstreamer1/gst1-plugins-bad: disable opencv plugin with opencv-3"
+In-Reply-To: <CAHXCMMJqUSquMMvWcUUD6hveU=MzDkCMLF6N9p5pO5VvjS3kZg@mail.gmail.com>
+References: <cover.1439136753.git.yann.morin.1998@free.fr>
+ <5d317246d236dfca1405ba303f28293738572614.1439136753.git.yann.morin.1998@free.fr>
+ <CAHXCMMJqUSquMMvWcUUD6hveU=MzDkCMLF6N9p5pO5VvjS3kZg@mail.gmail.com>
+Message-ID: <20150809185242.GC4299@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Samuel, All,
 
-On So, 2015-08-09 at 13:50 +0200, Bernd Kuhls wrote:
-> Also propagate to reverse dependencies, to keep bisectability do this 
-> in
-> one commit.
+On 2015-08-09 20:36 +0200, Samuel Martin spake thusly:
+> On Sun, Aug 9, 2015 at 6:14 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: Samuel Martin <s.martin49@gmail.com>
+> >
+> > This reverts commit 5e238a87eacf2a0c62736c4123961651afb1ba87.
+> >
+> > Also update the dependencies.
+> >
+> > Cc: Jonathan Ben Avraham <yba@tkos.co.il>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> > [yann.morin.1998 at free.fr: fix dependencies at the same time]
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/gstreamer1/gst1-plugins-bad/Config.in | 19 ++++++++++++++++---
+> >  1 file changed, 16 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> > index bc99527..494a282 100644
+> > --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> > +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> > @@ -557,9 +557,22 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
+> >
+> >  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+> >         bool "opencv"
+> > -       depends on BR2_INSTALL_LIBSTDCPP
+> > -       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> > -       depends on BROKEN # gst1-plugin-opencv does not (yet) support opencv >=3.x
+> > +       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # opencv
+> > +       depends on BR2_INSTALL_LIBSTDCPP # opencv
+> > +       depends on BR2_USE_WCHAR # opencv
+> > +       select BR2_PACKAGE_OPENCV
+> > +       # Remove the following opencv modules when gstreamer fixes the
+> > +       # problem of including the old "cv.h" header
+> > +       # bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
+> > +       select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+> > +       select BR2_PACKAGE_OPENCV_LIB_CONTRIB
+> > +       select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+> > +       select BR2_PACKAGE_OPENCV_LIB_FLANN
+> > +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+> > +       select BR2_PACKAGE_OPENCV_LIB_LEGACY
+> > +       select BR2_PACKAGE_OPENCV_LIB_ML
+> > +       select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+> > +       select BR2_PACKAGE_OPENCV_LIB_VIDEO
+> >         help
+> >           GStreamer OpenCV Plugins
 > 
-> Fixes compile error:
-> 
-> [ 16%] Building CXX object 
-> src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o
-> In file included from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64
-> -buildroot-linux-musl/4.9.2/include/xmmintrin.h:34:0,
->                  from /home/fli4l/br3/output/host/usr/lib/gcc/x86_64
-> -buildroot-linux-musl/4.9.2/include/x86intrin.h:31,
->                  from /home/fli4l/br3/output/host/usr/x86_64
-> -buildroot-linux-musl/include/c++/4.9.2/x86_64-buildroot-linux
-> -musl/bits/opt_random.h:33,
->                  from /home/fli4l/br3/output/host/usr/x86_64
-> -buildroot-linux-musl/include/c++/4.9.2/random:50,
->                  from /home/fli4l/br3/output/host/usr/x86_64
-> -buildroot-linux-musl/include/c++/4.9.2/bits/stl_algo.h:66,
->                  from /home/fli4l/br3/output/host/usr/x86_64
-> -buildroot-linux-musl/include/c++/4.9.2/algorithm:62,
->                  from /home/fli4l/br3/output/build/jsoncpp
-> -1.6.1/src/lib_json/json_value.cpp:20:
-> /home/fli4l/br3/output/host/usr/lib/gcc/x86_64-buildroot-linux
-> -musl/4.9.2/include/mm_malloc.h:34:64: error: declaration of 'int 
-> posix_memalign(void**, size_t, size_t) throw ()' has a different 
-> exception specifier
->  extern "C" int posix_memalign (void **, size_t, size_t) throw ();
->                                                                 ^
-> In file included from /home/fli4l/br3/output/build/jsoncpp
-> -1.6.1/include/json/assertions.h:9:0,
->                  from /home/fli4l/br3/output/build/jsoncpp
-> -1.6.1/src/lib_json/json_value.cpp:7:
-> /home/fli4l/br3/output/host/usr/x86_64-buildroot-linux
-> -musl/sysroot/usr/include/stdlib.h:98:5: error: from previous 
-> declaration 'int posix_memalign(void**, size_t, size_t)'
->  int posix_memalign (void **, size_t, size_t);
->      ^
-> make[2]: *** 
-> [src/lib_json/CMakeFiles/jsoncpp_lib.dir/json_value.cpp.o] Error 1
-> 
-> using this defconfig:
-> 
-> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_JSONCPP=y
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: - rebased
->     - updated comments (Yann)
->     - added reverse dependencies to kodi-pvr-filmon & kodi-pvr-pctv
-> v2: Disable jsoncpp and reverse dependency with musl toolchain 
-> instead of patching gcc (Thomas)
->     FTR: gcc patches can be found here: 
-> http://patchwork.ozlabs.org/patch/460337/
-> 
-> ---
->  package/jsoncpp/Config.in         | 5 +++--
->  package/kodi-pvr-filmon/Config.in | 4 ++++
->  package/kodi-pvr-pctv/Config.in   | 4 ++++
->  package/sysdig/Config.in          | 6 ++++--
->  4 files changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/jsoncpp/Config.in b/package/jsoncpp/Config.in
-> index 2c96f13..fb9da7a 100644
-> --- a/package/jsoncpp/Config.in
-> +++ b/package/jsoncpp/Config.in
-> @@ -1,4 +1,5 @@
->  config BR2_PACKAGE_JSONCPP
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL # posix_memalign
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	bool "jsoncpp"
->  	help
-> @@ -10,5 +11,5 @@ config BR2_PACKAGE_JSONCPP
->  
->  	  https://github.com/open-source-parsers/jsoncpp
->  
-> -comment "jsoncpp needs a toolchain w/ C++"
-> -	depends on !BR2_INSTALL_LIBSTDCPP
-> +comment "jsoncpp needs a (e)glibc or uClibc toolchain w/ C++"
-> +	depends on BR2_TOOLCHAIN_USES_MUSL || !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr
-> -filmon/Config.in
-> index 0b662df..491b3ac 100644
-> --- a/package/kodi-pvr-filmon/Config.in
-> +++ b/package/kodi-pvr-filmon/Config.in
-> @@ -2,7 +2,11 @@ config BR2_PACKAGE_KODI_PVR_FILMON
->  	bool "kodi-pvr-filmon"
->  	select BR2_PACKAGE_JSONCPP
->  	select BR2_PACKAGE_KODI_PLATFORM
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
->  	help
->  	  Filmon PVR client addon for Kodi
->  
->  	  https://github.com/kodi-pvr/pvr.filmon
-> +
-> +comment "kodi-pvr-filmon needs a (e)glibc or uClibc toolchain"
-> +	depends on BR2_TOOLCHAIN_USES_MUSL
-> diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr
-> -pctv/Config.in
-> index 255cd4a..97c367d 100644
-> --- a/package/kodi-pvr-pctv/Config.in
-> +++ b/package/kodi-pvr-pctv/Config.in
-> @@ -2,7 +2,11 @@ config BR2_PACKAGE_KODI_PVR_PCTV
->  	bool "kodi-pvr-pctv"
->  	select BR2_PACKAGE_JSONCPP
->  	select BR2_PACKAGE_KODI_PLATFORM
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
->  	help
->  	  PCTV PVR client addon for Kodi
->  
->  	  https://github.com/kodi-pvr/pvr.vdr.vnsi
-> +
-> +comment "kodi-pvr-pctv needs a (e)glibc or uClibc toolchain"
-> +	depends on BR2_TOOLCHAIN_USES_MUSL
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> index dc71d5f..50ebbba 100644
-> --- a/package/sysdig/Config.in
-> +++ b/package/sysdig/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_SYSDIG
->  	select BR2_PACKAGE_ZLIB
->  	select BR2_PACKAGE_LUAJIT
->  	select BR2_PACKAGE_JSONCPP
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL # jsoncpp
->  	depends on BR2_LINUX_KERNEL
->  	depends on BR2_INSTALL_LIBSTDCPP # libjson
->  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-> @@ -16,6 +17,7 @@ config BR2_PACKAGE_SYSDIG
->  
->  	  http://sysdig.org
->  
-> -comment "sysdig needs a toolchain w/ C++, dynamic library and a 
-> Linux kernel to be built"
-> -	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || 
-> BR2_STATIC_LIBS
-> +comment "sysdig needs a (e)glibc or uClibc toolchain w/ C++, dynamic 
-> library and a Linux kernel to be built"
-> +	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || 
-> BR2_STATIC_LIBS \
-> +		|| BR2_TOOLCHAIN_USES_MUSL
->  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+> How do you ensure that gst1-plugins-bad cannot select opencv when
+> opencv3 is already selected?
 
-I cannot reproduce this error.
+Because OPENCV3 depends on !OPENCV.
 
-Building jsoncpp 1.6.1 works fine for me with the external musl
-toolchain (BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS) and the internal musl
-toolchain (tested with gcc 4.9.3 and 5.2.0).
+So, if a user selects BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV, OpenCV
+gets selected, and OpenCV 3 is not available.
 
-Internal toolchain (gcc 4.9.3) tested with the following defconfig:
-    BR2_arm=y
-    BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-    BR2_TOOLCHAIN_BUILDROOT_MUSL=y
-    BR2_TOOLCHAIN_BUILDROOT_CXX=y
-    BR2_INIT_NONE=y
-    # BR2_TARGET_ENABLE_ROOT_LOGIN is not set
-    BR2_SYSTEM_BIN_SH_NONE=y
-    # BR2_TARGET_GENERIC_GETTY is not set
-    # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-    # BR2_PACKAGE_BUSYBOX is not set
-    BR2_PACKAGE_JSONCPP=y
-    # BR2_TARGET_ROOTFS_TAR is not set
+If you do otherwise, like;
 
-Best regards
-J?rg Krause
+    config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+        bool "opencv"
+        depends on !BR2_PACKAGE_OPENCV3
+        select BR2_PACKAGE_OPENCV
+
+you get circular dependencies.
+
+The only alternative is to depend on BR2_PACKAGE_OPENCV rather than
+select it.
+
+But now I see we anyway already have a circular dependency. sigh... :-(
+
+Lemme fix that...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
