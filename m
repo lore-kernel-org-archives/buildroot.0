@@ -1,34 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
 Date: Sun, 9 Aug 2015 11:25:26 +0200
-Subject: [Buildroot] [PATCHv2] package/wvstreams: disable for musl
- toolchains
-In-Reply-To: <1439031422-24117-1-git-send-email-romain.naour@openwide.fr>
-References: <1439031422-24117-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150809112526.4abcfb22@free-electrons.com>
+Subject: [Buildroot] [PATCH v2] haveged: for sparc we need generic
+	clockgettime
+Message-ID: <20150809092526.GA16401@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+This fixes autobuilder error:
+http://autobuild.buildroot.net/results/5b8bbc30f347140309ab2f81e1fe50f517356a3e/
 
-On Sat,  8 Aug 2015 12:57:02 +0200, Romain Naour wrote:
+As sparcv9 assembly is used, we need to enable generic clock_gettime
+for sparcv8 systems.
 
-> -comment "wvdial needs a toolchain w/ C++, dynamic library"
-> +comment "wvdial needs a (e)glibc or uClibc-ng toolchain w/ C++, dynamic library"
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+Changes v1 -> v2:
+  - be more specific about the subarchitecture, suggested by Thomas Petazzoni
 
-I've replaced uClibc-ng by uClibc here.
+---
+ package/haveged/haveged.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-> -comment "wvstreams needs a toolchain w/ C++, dynamic library"
-> +comment "wvstreams needs a (e)glibc or uClibc-ng toolchain w/ C++, dynamic library"
-
-and here.
-
-And then applied your patch. Thanks!
-
-Thomas
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index c68f766..66d69a6 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -9,6 +9,10 @@ HAVEGED_SITE = http://www.issihosts.com/haveged
+ HAVEGED_LICENSE = GPLv3+
+ HAVEGED_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
++HAVEGED_CONF_OPTS += --enable-clock_gettime=yes
++endif
++
+ define HAVEGED_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/haveged/S21haveged \
+ 		$(TARGET_DIR)/etc/init.d/S21haveged
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
