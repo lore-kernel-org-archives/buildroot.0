@@ -1,39 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 13:16:14 +0200
-Subject: [Buildroot] [PATCH 2/3] package/rsyslog: Fix linking against
- postgresql
-In-Reply-To: <u5oj9cx6jd.ln2@ID-313208.user.individual.net>
-References: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
- <1428738737-3238-2-git-send-email-bernd.kuhls@t-online.de>
- <20150411124226.726fde30@free-electrons.com>
- <XnsA4798AC8357A8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20150411120739.GF4221@free.fr>
- <20150411141520.4060c6a3@free-electrons.com>
- <20150411122323.GG4221@free.fr>
- <u5oj9cx6jd.ln2@ID-313208.user.individual.net>
-Message-ID: <20150809131614.2a9db0bc@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  9 Aug 2015 13:36:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sysdig: Fix typo in comment
+Message-ID: <1439120178-27837-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/sysdig/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sun, 09 Aug 2015 12:55:26 +0200, Bernd Kuhls wrote:
-
-> this is not necessary anymore because the pgsql-rsyslog problem was fixed 
-> with this commit on May 14th by Baruch:
-> 
-> http://git.buildroot.net/buildroot/commit/package/postgresql?
-> id=3d3f70b567718ae308b5704ddd7d107c4849309e
-> 
-> I marked my patch as superseded.
-
-Good. Thanks for following up on this patch!
-
-Thomas
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 36d35fb..dc71d5f 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -16,6 +16,6 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  http://sysdig.org
+ 
+-comment "sysdig needs a toolchain w/ C++, dynamibc library and a Linux kernel to be built"
++comment "sysdig needs a toolchain w/ C++, dynamic library and a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
