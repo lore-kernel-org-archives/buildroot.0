@@ -1,24 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 16:58:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sysdig: Fix typo in comment
-In-Reply-To: <1439120178-27837-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1439120178-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150809165830.6e00a46f@free-electrons.com>
+Date: Sun, 9 Aug 2015 16:57:52 +0200
+Subject: [Buildroot] [PATCH] package/powertop: add missing headers for
+ musl
+In-Reply-To: <1439051953-11850-1-git-send-email-romain.naour@openwide.fr>
+References: <1439051953-11850-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150809165752.72087ba4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Romain Naour,
 
-On Sun,  9 Aug 2015 13:36:18 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/sysdig/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat,  8 Aug 2015 18:39:13 +0200, Romain Naour wrote:
+> Reported upstream:
+> https://github.com/fenrus75/powertop/pull/20
 
-Applied, thanks.
+From https://github.com/fenrus75/powertop: "The Linux PowerTOP tool --
+please post patches to the mailing list instead of using github pull
+requests".
+
+Other than that, patch applied, thanks!
 
 Thomas
 -- 
