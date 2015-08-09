@@ -1,626 +1,373 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 11:42:33 +0200
-Subject: [Buildroot] [git commit branch/next] znc: bump to version 1.6.1
-Message-ID: <20150809094323.7CE7C8190C@busybox.osuosl.org>
+Date: Sun, 9 Aug 2015 11:43:08 +0200
+Subject: [Buildroot] [git commit branch/next] glibc: add version 2.22
+Message-ID: <20150809094323.9B3898042C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e978ab536e711affd6b927de856a509ecc133b2
+commit: http://git.buildroot.net/buildroot/commit/?id=2190e90c7cf09d773a6513c0e46e64d6c797c877
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump to release tarball version.
-Add hash file.
-Update and rework time.h patch for upstream inclusion (hopefully) by
-splitting the CSocket patch out.
-(https://github.com/znc/znc/pull/1021)
+Switch default to version 2.21 and drop 2.20.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...0001-Add-time.h-includes-where-appropiate.patch |  194 +++++++++++++
- package/znc/0001-time.patch                        |  303 --------------------
- package/znc/0002-csocket-timeh.patch               |   19 ++
- package/znc/Config.in                              |    5 +-
- package/znc/znc.hash                               |    2 +
- package/znc/znc.mk                                 |   17 +-
- 6 files changed, 223 insertions(+), 317 deletions(-)
+ package/glibc/2.20/0001-CVE-2014-7817.patch |  173 ---------------------------
+ package/glibc/2.20/0002-CVE-2014-9402.patch |   24 ----
+ package/glibc/2.20/0003-CVE-2015-1472.patch |   88 --------------
+ package/glibc/Config.in                     |   14 +--
+ package/glibc/glibc.hash                    |    2 +-
+ 5 files changed, 7 insertions(+), 294 deletions(-)
 
-diff --git a/package/znc/0001-Add-time.h-includes-where-appropiate.patch b/package/znc/0001-Add-time.h-includes-where-appropiate.patch
-new file mode 100644
-index 0000000..c8ba6d4
---- /dev/null
-+++ b/package/znc/0001-Add-time.h-includes-where-appropiate.patch
-@@ -0,0 +1,194 @@
-+From 9a51195e916f14a36c2a2a809f2393e5ed2424a3 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 6 Aug 2015 11:20:54 -0300
-+Subject: [PATCH] Add <time.h> includes where appropiate
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ modules/adminlog.cpp    | 1 +
-+ modules/ctcpflood.cpp   | 1 +
-+ modules/flooddetach.cpp | 1 +
-+ modules/lastseen.cpp    | 1 +
-+ modules/log.cpp         | 1 +
-+ modules/simple_away.cpp | 1 +
-+ src/Buffer.cpp          | 1 +
-+ src/FileUtils.cpp       | 1 +
-+ src/IRCSock.cpp         | 1 +
-+ src/User.cpp            | 1 +
-+ src/WebModules.cpp      | 1 +
-+ src/ZNCDebug.cpp        | 1 +
-+ src/main.cpp            | 1 +
-+ src/znc.cpp             | 1 +
-+ 14 files changed, 14 insertions(+)
-+
-+diff --git a/modules/adminlog.cpp b/modules/adminlog.cpp
-+index d08369e..1636799 100644
-+--- a/modules/adminlog.cpp
-++++ b/modules/adminlog.cpp
-+@@ -20,6 +20,7 @@
-+ #include <znc/User.h>
-+ 
-+ #include <syslog.h>
-++#include <time.h>
-+ 
-+ class CAdminLogMod : public CModule {
-+ public:
-+diff --git a/modules/ctcpflood.cpp b/modules/ctcpflood.cpp
-+index 7697ef8..c105ef7 100644
-+--- a/modules/ctcpflood.cpp
-++++ b/modules/ctcpflood.cpp
-+@@ -16,6 +16,7 @@
-+ 
-+ #include <znc/Modules.h>
-+ #include <znc/Chan.h>
-++#include <time.h>
-+ 
-+ class CCtcpFloodMod : public CModule {
-+ public:
-+diff --git a/modules/flooddetach.cpp b/modules/flooddetach.cpp
-+index 9c41734..cd88bd2 100644
-+--- a/modules/flooddetach.cpp
-++++ b/modules/flooddetach.cpp
-+@@ -16,6 +16,7 @@
-+ 
-+ #include <znc/Chan.h>
-+ #include <znc/IRCNetwork.h>
-++#include <time.h>
-+ 
-+ using std::map;
-+ 
-+diff --git a/modules/lastseen.cpp b/modules/lastseen.cpp
-+index 416a111..414310f 100644
-+--- a/modules/lastseen.cpp
-++++ b/modules/lastseen.cpp
-+@@ -16,6 +16,7 @@
-+ 
-+ #include <znc/User.h>
-+ #include <znc/znc.h>
-++#include <time.h>
-+ 
-+ using std::map;
-+ using std::pair;
-+diff --git a/modules/log.cpp b/modules/log.cpp
-+index 2f3124a..e238bb1 100644
-+--- a/modules/log.cpp
-++++ b/modules/log.cpp
-+@@ -20,6 +20,7 @@
-+ #include <znc/IRCNetwork.h>
-+ #include <znc/Chan.h>
-+ #include <znc/Server.h>
-++#include <time.h>
-+ #include <algorithm>
-+ 
-+ using std::vector;
-+diff --git a/modules/simple_away.cpp b/modules/simple_away.cpp
-+index 57d6e7a..2f73b0a 100644
-+--- a/modules/simple_away.cpp
-++++ b/modules/simple_away.cpp
-+@@ -16,6 +16,7 @@
-+ 
-+ #include <znc/User.h>
-+ #include <znc/IRCNetwork.h>
-++#include <time.h>
-+ 
-+ #define SIMPLE_AWAY_DEFAULT_REASON "Auto away at %s"
-+ #define SIMPLE_AWAY_DEFAULT_TIME   60
-+diff --git a/src/Buffer.cpp b/src/Buffer.cpp
-+index 4715f76..dc14642 100644
-+--- a/src/Buffer.cpp
-++++ b/src/Buffer.cpp
-+@@ -17,6 +17,7 @@
-+ #include <znc/Buffer.h>
-+ #include <znc/znc.h>
-+ #include <znc/User.h>
-++#include <time.h>
-+ 
-+ CBufLine::CBufLine(const CString& sFormat, const CString& sText, const timeval* ts) : m_sFormat(sFormat), m_sText(sText), m_time() {
-+ 	if (ts == nullptr)
-+diff --git a/src/FileUtils.cpp b/src/FileUtils.cpp
-+index d358aa4..92218f3 100644
-+--- a/src/FileUtils.cpp
-++++ b/src/FileUtils.cpp
-+@@ -22,6 +22,7 @@
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <sys/wait.h>
-++#include <time.h>
-+ 
-+ #ifndef HAVE_LSTAT
-+ #  define lstat(a, b)	stat(a, b)
-+diff --git a/src/IRCSock.cpp b/src/IRCSock.cpp
-+index 738b5bf..c97b8fe 100644
-+--- a/src/IRCSock.cpp
-++++ b/src/IRCSock.cpp
-+@@ -20,6 +20,7 @@
-+ #include <znc/IRCNetwork.h>
-+ #include <znc/Server.h>
-+ #include <znc/Query.h>
-++#include <time.h>
-+ 
-+ using std::set;
-+ using std::vector;
-+diff --git a/src/User.cpp b/src/User.cpp
-+index f3b5b91..580b52d 100644
-+--- a/src/User.cpp
-++++ b/src/User.cpp
-+@@ -22,6 +22,7 @@
-+ #include <znc/Chan.h>
-+ #include <znc/Query.h>
-+ #include <math.h>
-++#include <time.h>
-+ #include <algorithm>
-+ 
-+ using std::vector;
-+diff --git a/src/WebModules.cpp b/src/WebModules.cpp
-+index 832a2e1..74e56de 100644
-+--- a/src/WebModules.cpp
-++++ b/src/WebModules.cpp
-+@@ -19,6 +19,7 @@
-+ #include <znc/User.h>
-+ #include <znc/IRCNetwork.h>
-+ #include <znc/znc.h>
-++#include <time.h>
-+ #include <algorithm>
-+ #include <sstream>
-+ 
-+diff --git a/src/ZNCDebug.cpp b/src/ZNCDebug.cpp
-+index 6e36b57..be2f77f 100644
-+--- a/src/ZNCDebug.cpp
-++++ b/src/ZNCDebug.cpp
-+@@ -18,6 +18,7 @@
-+ #include <iostream>
-+ #include <sys/time.h>
-+ #include <stdio.h>
-++#include <time.h>
-+ 
-+ bool CDebug::stdoutIsTTY = true;
-+ bool CDebug::debug =
-+diff --git a/src/main.cpp b/src/main.cpp
-+index 465e1a0..cbe72bf 100644
-+--- a/src/main.cpp
-++++ b/src/main.cpp
-+@@ -16,6 +16,7 @@
-+ 
-+ #include <znc/znc.h>
-+ #include <signal.h>
-++#include <time.h>
-+ 
-+ #if defined(HAVE_LIBSSL) && defined(HAVE_PTHREAD)
-+ #include <znc/Threads.h>
-+diff --git a/src/znc.cpp b/src/znc.cpp
-+index 624b92c..4c1ffcd 100644
-+--- a/src/znc.cpp
-++++ b/src/znc.cpp
-+@@ -21,6 +21,7 @@
-+ #include <znc/User.h>
-+ #include <znc/IRCNetwork.h>
-+ #include <znc/Config.h>
-++#include <time.h>
-+ #include <tuple>
-+ #include <algorithm>
-+ 
-+-- 
-+2.4.6
-+
-diff --git a/package/znc/0001-time.patch b/package/znc/0001-time.patch
+diff --git a/package/glibc/2.20/0001-CVE-2014-7817.patch b/package/glibc/2.20/0001-CVE-2014-7817.patch
 deleted file mode 100644
-index 3866139..0000000
---- a/package/znc/0001-time.patch
+index cd20c42..0000000
+--- a/package/glibc/2.20/0001-CVE-2014-7817.patch
 +++ /dev/null
-@@ -1,303 +0,0 @@
--From 18d6daf4793fb7e9750175bd46b17fe1965b78dd Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 6 May 2014 22:00:11 +0200
--Subject: [PATCH] Add missing <time.h> includes
+@@ -1,173 +0,0 @@
+-Patch from https://bugzilla.redhat.com/show_bug.cgi?id=1157689
 -
--Submitted upstream at https://github.com/znc/znc/pull/569.
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- modules/adminlog.cpp    | 1 +
-- modules/awaystore.cpp   | 2 ++
-- modules/crypt.cpp       | 2 ++
-- modules/ctcpflood.cpp   | 2 ++
-- modules/flooddetach.cpp | 2 ++
-- modules/lastseen.cpp    | 2 ++
-- modules/log.cpp         | 2 ++
-- modules/savebuff.cpp    | 2 ++
-- modules/schat.cpp       | 2 ++
-- modules/simple_away.cpp | 2 ++
-- src/Buffer.cpp          | 2 ++
-- src/Csocket.cpp         | 2 ++
-- src/FileUtils.cpp       | 2 ++
-- src/HTTPSock.cpp        | 1 +
-- src/IRCSock.cpp         | 2 ++
-- src/User.cpp            | 1 +
-- src/Utils.cpp           | 2 ++
-- src/WebModules.cpp      | 2 ++
-- src/ZNCDebug.cpp        | 1 +
-- src/main.cpp            | 1 +
-- src/znc.cpp             | 2 ++
-- 21 files changed, 37 insertions(+)
+-WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!! WARNING !!!
+-EMBARGOED !!! EMBARGOED !!! EMARGOED !!! EMBARGOED !!! EMBARGOED !!!
+-SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!! SECURITY !!!
 -
--diff --git a/modules/adminlog.cpp b/modules/adminlog.cpp
--index 77577b1..16dd665 100644
----- a/modules/adminlog.cpp
--+++ b/modules/adminlog.cpp
--@@ -20,6 +20,7 @@
-- #include <znc/User.h>
+-CVE-2014-7817:
+-
+-The function wordexp() fails to properly handle the WRDE_NOCMD
+-flag when processing arithmetic inputs in the form of "$((... ``))"
+-where "..." can be anything valid. The backticks in the arithmetic
+-epxression are evaluated by in a shell even if WRDE_NOCMD forbade
+-command substitution. This allows an attacker to attempt to pass
+-dangerous commands via constructs of the above form, and bypass
+-the WRDE_NOCMD flag. This patch fixes this by checking for WRDE_NOCMD
+-in parse_arith(). The patch also hardens parse_backticks() and 
+-parse_comm() to check for WRDE_NOCMD flag and return an error instead
+-of ever running a shell.
+-
+-We expand the testsuite and add 3 new regression tests of roughtly
+-the same form but with a couple of nested levels. 
+-
+-On top of the 3 new tests we add fork validation to the WRDE_NOCMD
+-testing. If any forks are detected during the execution of a wordexp()
+-call with WRDE_NOCMD, the test is marked as failed. This is slightly
+-heuristic since vfork might be used, but it provides a higher level
+-of assurance that no shells were executed as part of command substitution
+-with WRDE_NOCMD in effect. In addition it doesn't require libpthread or
+-libdl, instead we use the public implementation namespace function
+-__register_atfork (already part of the public ABI for libpthread).
+-
+-Tested on x86_64 with no regressions.
+-
+-2014-10-27  Carlos O'Donell  <carlos@redhat.com>
+-
+-	* wordexp-test.c (__dso_handle): Add prototype.
+-	(__register_atfork): Likewise.
+-	(__app_register_atfork): New function.
+-	(registered_forks): New global.
+-	(register_fork): New function.
+-	(test_case): Add 3 new tests for WRDE_CMDSUB.
+-	(main): Call __app_register_atfork.
+-	(testit): If WRDE_NOCMD set registered_forks to zero, run test, and
+-	if fork count is non-zero fail the test.
+-	* posix/wordexp.c (parse_arith): Return WRDE_NOCMD if WRDE_NOCMD flag
+-	is set and parsing '`'. 
+-	(parse_comm): Return WRDE_NOCMD if WRDE_NOCMD flag is set.
+-	(parse_backtick): Return WRDE_NOCMD if WRDE_NOCMD flag is set and
+-	parsing '`'.
+-
+-diff --git a/posix/wordexp-test.c b/posix/wordexp-test.c
+-index 4957006..5ce2a1b 100644
+---- a/posix/wordexp-test.c
+-+++ b/posix/wordexp-test.c
+-@@ -27,6 +27,25 @@
 - 
-- #include <syslog.h>
--+#include <time.h>
+- #define IFS " \n\t"
 - 
-- class CAdminLogMod : public CModule {
-- public:
--diff --git a/modules/awaystore.cpp b/modules/awaystore.cpp
--index da75260..56349df 100644
----- a/modules/awaystore.cpp
--+++ b/modules/awaystore.cpp
--@@ -30,6 +30,8 @@
-- #include <znc/IRCNetwork.h>
-- #include <znc/FileUtils.h>
-- 
--+#include <time.h>
+-+extern void *__dso_handle __attribute__ ((__weak__, __visibility__ ("hidden")));
+-+extern int __register_atfork (void (*) (void), void (*) (void), void (*) (void), void *);
 -+
-- using std::vector;
-- using std::map;
-- 
--diff --git a/modules/crypt.cpp b/modules/crypt.cpp
--index fcc664b..8f9018f 100644
----- a/modules/crypt.cpp
--+++ b/modules/crypt.cpp
--@@ -34,6 +34,8 @@
-- #include <znc/User.h>
-- #include <znc/IRCNetwork.h>
-- 
--+#include <time.h>
+-+static int __app_register_atfork (void (*prepare) (void), void (*parent) (void), void (*child) (void))
+-+{
+-+  return __register_atfork (prepare, parent, child,
+-+			    &__dso_handle == NULL ? NULL : __dso_handle);
+-+}
 -+
-- #define REQUIRESSL	1
-- #define NICK_PREFIX_KEY	"[nick-prefix]"
-- 
--diff --git a/modules/ctcpflood.cpp b/modules/ctcpflood.cpp
--index ac154e2..f2ce27f 100644
----- a/modules/ctcpflood.cpp
--+++ b/modules/ctcpflood.cpp
--@@ -17,6 +17,8 @@
-- #include <znc/Modules.h>
-- #include <znc/Chan.h>
-- 
--+#include <time.h>
+-+/* Number of forks seen.  */
+-+static int registered_forks;
 -+
-- class CCtcpFloodMod : public CModule {
-- public:
-- 	MODCONSTRUCTOR(CCtcpFloodMod) {
--diff --git a/modules/flooddetach.cpp b/modules/flooddetach.cpp
--index f4ed892..0ffb651 100644
----- a/modules/flooddetach.cpp
--+++ b/modules/flooddetach.cpp
--@@ -17,6 +17,8 @@
-- #include <znc/Chan.h>
-- #include <znc/IRCNetwork.h>
-- 
--+#include <time.h>
+-+/* For each fork increment the fork count.  */
+-+static void
+-+register_fork (void)
+-+{
+-+  registered_forks++;
+-+}
 -+
-- using std::map;
+- struct test_case_struct
+- {
+-   int retval;
+-@@ -206,6 +225,12 @@ struct test_case_struct
+-     { WRDE_SYNTAX, NULL, "$((2+))", 0, 0, { NULL, }, IFS },
+-     { WRDE_SYNTAX, NULL, "`", 0, 0, { NULL, }, IFS },
+-     { WRDE_SYNTAX, NULL, "$((010+4+))", 0, 0, { NULL }, IFS },
+-+    /* Test for CVE-2014-7817. We test 3 combinations of command
+-+       substitution inside an arithmetic expression to make sure that
+-+       no commands are executed and error is returned.  */
+-+    { WRDE_CMDSUB, NULL, "$((`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+-+    { WRDE_CMDSUB, NULL, "$((1+`echo 1`))", WRDE_NOCMD, 0, { NULL, }, IFS },
+-+    { WRDE_CMDSUB, NULL, "$((1+$((`echo 1`))))", WRDE_NOCMD, 0, { NULL, }, IFS },
 - 
-- class CFloodDetachMod : public CModule {
--diff --git a/modules/lastseen.cpp b/modules/lastseen.cpp
--index bd6eb9b..b3b209f 100644
----- a/modules/lastseen.cpp
--+++ b/modules/lastseen.cpp
--@@ -17,6 +17,8 @@
-- #include <znc/User.h>
-- #include <znc/znc.h>
+-     { -1, NULL, NULL, 0, 0, { NULL, }, IFS },
+-   };
+-@@ -258,6 +283,15 @@ main (int argc, char *argv[])
+- 	  return -1;
+-     }
 - 
--+#include <time.h>
+-+  /* If we are not allowed to do command substitution, we install
+-+     fork handlers to verify that no forks happened.  No forks should
+-+     happen at all if command substitution is disabled.  */
+-+  if (__app_register_atfork (register_fork, NULL, NULL) != 0)
+-+    {
+-+      printf ("Failed to register fork handler.\n");
+-+      return -1;
+-+    }
 -+
-- using std::map;
-- using std::pair;
-- using std::multimap;
--diff --git a/modules/log.cpp b/modules/log.cpp
--index 260b577..e718d76 100644
----- a/modules/log.cpp
--+++ b/modules/log.cpp
--@@ -21,6 +21,8 @@
-- #include <znc/Chan.h>
-- #include <znc/Server.h>
+-   for (test = 0; test_case[test].retval != -1; test++)
+-     if (testit (&test_case[test]))
+-       ++fail;
+-@@ -367,6 +401,9 @@ testit (struct test_case_struct *tc)
 - 
--+#include <time.h>
+-   printf ("Test %d (%s): ", ++tests, tc->words);
+- 
+-+  if (tc->flags & WRDE_NOCMD)
+-+    registered_forks = 0;
 -+
-- using std::vector;
+-   if (tc->flags & WRDE_APPEND)
+-     {
+-       /* initial wordexp() call, to be appended to */
+-@@ -378,6 +415,13 @@ testit (struct test_case_struct *tc)
+-     }
+-   retval = wordexp (tc->words, &we, tc->flags);
 - 
-- class CLogMod: public CModule {
--diff --git a/modules/savebuff.cpp b/modules/savebuff.cpp
--index 8a85153..2e0ed5c 100644
----- a/modules/savebuff.cpp
--+++ b/modules/savebuff.cpp
--@@ -29,6 +29,8 @@
-- #include <znc/IRCNetwork.h>
-- #include <znc/FileUtils.h>
-- 
--+#include <time.h>
+-+  if ((tc->flags & WRDE_NOCMD)
+-+      && (registered_forks > 0))
+-+    {
+-+      printf ("FAILED fork called for WRDE_NOCMD\n");
+-+      return 1;
+-+    }
 -+
-- using std::vector;
+-   if (tc->flags & WRDE_DOOFFS)
+-       start_offs = sav_we.we_offs;
 - 
-- #define CRYPT_VERIFICATION_TOKEN "::__:SAVEBUFF:__::"
--diff --git a/modules/schat.cpp b/modules/schat.cpp
--index 98d03b4..5a7f1a0 100644
----- a/modules/schat.cpp
--+++ b/modules/schat.cpp
--@@ -25,6 +25,8 @@
-- #include <znc/User.h>
-- #include <znc/IRCNetwork.h>
+-diff --git a/posix/wordexp.c b/posix/wordexp.c
+-index b6b65dd..d6a158f 100644
+---- a/posix/wordexp.c
+-+++ b/posix/wordexp.c
+-@@ -693,6 +693,12 @@ parse_arith (char **word, size_t *word_length, size_t *max_length,
+- 	  break;
 - 
--+#include <time.h>
+- 	case '`':
+-+	   if (flags & WRDE_NOCMD)
+-+	     {
+-+	       free (expr);
+-+	       return WRDE_NOCMD;
+-+	     }
 -+
-- using std::pair;
-- using std::stringstream;
-- using std::map;
--diff --git a/modules/simple_away.cpp b/modules/simple_away.cpp
--index a1e5927..67faeea 100644
----- a/modules/simple_away.cpp
--+++ b/modules/simple_away.cpp
--@@ -17,6 +17,8 @@
-- #include <znc/User.h>
-- #include <znc/IRCNetwork.h>
+- 	  (*offset)++;
+- 	  error = parse_backtick (&expr, &expr_length, &expr_maxlen,
+- 				  words, offset, flags, NULL, NULL, NULL);
+-@@ -1144,6 +1150,10 @@ parse_comm (char **word, size_t *word_length, size_t *max_length,
+-   size_t comm_maxlen;
+-   char *comm = w_newword (&comm_length, &comm_maxlen);
 - 
--+#include <time.h>
+-+  /* Do nothing if command substitution should not succeed.  */
+-+  if (flags & WRDE_NOCMD)
+-+    return WRDE_CMDSUB;
 -+
-- #define SIMPLE_AWAY_DEFAULT_REASON "Auto away at %s"
-- #define SIMPLE_AWAY_DEFAULT_TIME   60
-- 
--diff --git a/src/Buffer.cpp b/src/Buffer.cpp
--index eefbb29..55ecd72 100644
----- a/src/Buffer.cpp
--+++ b/src/Buffer.cpp
--@@ -17,6 +17,8 @@
-- #include <znc/znc.h>
-- #include <znc/User.h>
-- 
--+#include <time.h>
+-   for (; words[*offset]; ++(*offset))
+-     {
+-       switch (words[*offset])
+-@@ -2121,6 +2131,9 @@ parse_backtick (char **word, size_t *word_length, size_t *max_length,
+-       switch (words[*offset])
+- 	{
+- 	case '`':
+-+	  if (flags & WRDE_NOCMD)
+-+	    return WRDE_NOCMD;
 -+
-- CBufLine::CBufLine(const CString& sFormat, const CString& sText, const timeval* ts) {
-- 	m_sFormat = sFormat;
-- 	m_sText = sText;
--diff --git a/src/Csocket.cpp b/src/Csocket.cpp
--index 2e4cb14..ca6ed38 100644
----- a/src/Csocket.cpp
--+++ b/src/Csocket.cpp
--@@ -53,6 +53,8 @@
-- #include <unicode/errorcode.h>
-- #endif /* HAVE_ICU */
+- 	  /* Go -- give the script to the shell */
+- 	  error = exec_comm (comm, word, word_length, max_length, flags,
+- 			     pwordexp, ifs, ifs_white);
+diff --git a/package/glibc/2.20/0002-CVE-2014-9402.patch b/package/glibc/2.20/0002-CVE-2014-9402.patch
+deleted file mode 100644
+index d6d753e..0000000
+--- a/package/glibc/2.20/0002-CVE-2014-9402.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix CVE-2014-9402 - denial of service in getnetbyname function.
+-Backport from https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=11e3417af6e354f1942c68a271ae51e892b2814d
+-See https://bugzilla.redhat.com/show_bug.cgi?id=1175369
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff --git a/resolv/nss_dns/dns-network.c b/resolv/nss_dns/dns-network.c
+-index 0a77c8b..08cf0a6 100644
+---- a/resolv/nss_dns/dns-network.c
+-+++ b/resolv/nss_dns/dns-network.c
+-@@ -398,8 +398,8 @@ getanswer_r (const querybuf *answer, int anslen, struct netent *result,
 - 
--+#include <time.h>
--+
-- #include <list>
-- 
-- #define CS_SRANDBUFFER 128
--diff --git a/src/FileUtils.cpp b/src/FileUtils.cpp
--index 7224a49..4c8f1d3 100644
----- a/src/FileUtils.cpp
--+++ b/src/FileUtils.cpp
--@@ -23,6 +23,8 @@
-- #include <sys/types.h>
-- #include <sys/wait.h>
-- 
--+#include <time.h>
--+
-- #ifndef HAVE_LSTAT
-- #  define lstat(a, b)	stat(a, b)
-- #endif
--diff --git a/src/HTTPSock.cpp b/src/HTTPSock.cpp
--index ab03130..36bf52b 100644
----- a/src/HTTPSock.cpp
--+++ b/src/HTTPSock.cpp
--@@ -18,6 +18,7 @@
-- #include <znc/znc.h>
-- #include <iomanip>
-- 
--+#include <time.h>
-- 
-- #ifdef HAVE_ZLIB
-- #include <zlib.h>
--diff --git a/src/IRCSock.cpp b/src/IRCSock.cpp
--index 2ef12f6..d0c56a7 100644
----- a/src/IRCSock.cpp
--+++ b/src/IRCSock.cpp
--@@ -20,6 +20,8 @@
-- #include <znc/IRCNetwork.h>
-- #include <znc/Server.h>
-- 
--+#include <time.h>
--+
-- using std::set;
-- using std::vector;
-- using std::map;
--diff --git a/src/User.cpp b/src/User.cpp
--index cf664f1..4a64f83 100644
----- a/src/User.cpp
--+++ b/src/User.cpp
--@@ -20,6 +20,7 @@
-- #include <znc/IRCNetwork.h>
-- #include <znc/IRCSock.h>
-- #include <math.h>
--+#include <time.h>
-- 
-- using std::vector;
-- using std::set;
--diff --git a/src/Utils.cpp b/src/Utils.cpp
--index 33c83de..e0862dd 100644
----- a/src/Utils.cpp
--+++ b/src/Utils.cpp
--@@ -26,6 +26,8 @@
-- #include <cstring>
-- #include <cstdlib>
-- 
--+#include <time.h>
--+
-- using std::map;
-- using std::stringstream;
-- using std::vector;
--diff --git a/src/WebModules.cpp b/src/WebModules.cpp
--index d61ba23..ddd88e0 100644
----- a/src/WebModules.cpp
--+++ b/src/WebModules.cpp
--@@ -22,6 +22,8 @@
-- #include <algorithm>
-- #include <sstream>
-- 
--+#include <time.h>
--+
-- using std::pair;
-- using std::vector;
-- 
--diff --git a/src/ZNCDebug.cpp b/src/ZNCDebug.cpp
--index 01d06b4..cc83298 100644
----- a/src/ZNCDebug.cpp
--+++ b/src/ZNCDebug.cpp
--@@ -18,6 +18,7 @@
-- #include <iostream>
-- #include <sys/time.h>
-- #include <stdio.h>
--+#include <time.h>
-- 
-- bool CDebug::stdoutIsTTY = true;
-- bool CDebug::debug =
--diff --git a/src/main.cpp b/src/main.cpp
--index ac9d691..7d74f8e 100644
----- a/src/main.cpp
--+++ b/src/main.cpp
--@@ -16,6 +16,7 @@
-- 
-- #include <znc/znc.h>
-- #include <signal.h>
--+#include <time.h>
-- 
-- using std::cout;
-- using std::endl;
--diff --git a/src/znc.cpp b/src/znc.cpp
--index 9e66f3d..dce1372 100644
----- a/src/znc.cpp
--+++ b/src/znc.cpp
--@@ -21,6 +21,8 @@
-- #include <znc/IRCNetwork.h>
-- #include <znc/Config.h>
-- 
--+#include <time.h>
--+
-- using std::endl;
-- using std::cout;
-- using std::map;
+- 	case BYNAME:
+- 	  {
+--	    char **ap = result->n_aliases++;
+--	    while (*ap != NULL)
+-+	    char **ap;
+-+	    for (ap = result->n_aliases; *ap != NULL; ++ap)
+- 	      {
+- 		/* Check each alias name for being of the forms:
+- 		   4.3.2.1.in-addr.arpa		= net 1.2.3.4
 --- 
--1.9.2
+-1.7.1
 -
-diff --git a/package/znc/0002-csocket-timeh.patch b/package/znc/0002-csocket-timeh.patch
-new file mode 100644
-index 0000000..cbd435f
---- /dev/null
-+++ b/package/znc/0002-csocket-timeh.patch
-@@ -0,0 +1,19 @@
-+Include time.h since time_t is used.
-+
-+Status: not upstream, seems to be fixed in newer CSocket versions in a
-+different way but it hasn't been updated/bundled in znc yet.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura znc-1.6.1.orig/src/Csocket.cpp znc-1.6.1.cs/src/Csocket.cpp
-+--- znc-1.6.1.orig/src/Csocket.cpp	2015-08-06 10:14:45.256246307 -0300
-++++ znc-1.6.1.cs/src/Csocket.cpp	2015-08-06 10:27:25.380446888 -0300
-+@@ -54,6 +54,8 @@
-+ #include <unicode/ucnv_cb.h>
-+ #endif /* HAVE_ICU */
-+ 
-++#include <time.h>
-++
-+ #include <list>
-+ 
-+ #define CS_SRANDBUFFER 128
-diff --git a/package/znc/Config.in b/package/znc/Config.in
-index 274e537..4328c8b 100644
---- a/package/znc/Config.in
-+++ b/package/znc/Config.in
-@@ -2,11 +2,12 @@ config BR2_PACKAGE_ZNC
- 	bool "znc"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Advanced IRC bouncer
- 
- 	  http://www.znc.in
- 
--comment "znc needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "znc needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-new file mode 100644
-index 0000000..9d2b4a2
---- /dev/null
-+++ b/package/znc/znc.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated after checking pgp signature
-+sha256	ba49397364f48d6d32ae5242bc1166f21d972f85dd390d6bbe68a63ecbb6c140	znc-1.6.1.tar.gz
-diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 779a7b1..106be2d 100644
---- a/package/znc/znc.mk
-+++ b/package/znc/znc.mk
-@@ -4,25 +4,18 @@
- #
- ################################################################################
- 
--ZNC_VERSION = b396cafdb249544164ed02942a5babba59e519a3
--ZNC_SITE = $(call github,znc,znc,$(ZNC_VERSION))
-+ZNC_VERSION = 1.6.1
-+ZNC_SITE = http://znc.in/releases
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
--ZNC_DEPENDENCIES = host-pkgconf host-autoconf host-automake
-+ZNC_DEPENDENCIES = host-pkgconf
- ZNC_CONF_OPTS = --disable-perl
- 
--# The standard <pkg>_AUTORECONF = YES invocation doesn't work for this
--# package, because it does not use automake in a normal way.
--define ZNC_RUN_AUTOGEN
--	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
--endef
--ZNC_PRE_CONFIGURE_HOOKS += ZNC_RUN_AUTOGEN
+diff --git a/package/glibc/2.20/0003-CVE-2015-1472.patch b/package/glibc/2.20/0003-CVE-2015-1472.patch
+deleted file mode 100644
+index b2f8e49..0000000
+--- a/package/glibc/2.20/0003-CVE-2015-1472.patch
++++ /dev/null
+@@ -1,88 +0,0 @@
+-Fix CVE-2015-1472 - heap buffer overflow in wscanf
+-Backport from upstream:
+-https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=5bd80bfe9ca0d955bfbbc002781bc7b01b6bcb06
+-See: https://bugzilla.redhat.com/show_bug.cgi?id=1188235
 -
- ifeq ($(BR2_PACKAGE_ICU),y)
- ZNC_DEPENDENCIES += icu
--ZNC_CONF_OPTS += --enable-icu
-+ZNC_CONF_OPTS += --enable-charset
- else
--ZNC_CONF_OPTS += --disable-icu
-+ZNC_CONF_OPTS += --disable-charset
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff --git a/stdio-common/tst-sscanf.c b/stdio-common/tst-sscanf.c
+-index aece3f2..8a2eb9e 100644
+---- a/stdio-common/tst-sscanf.c
+-+++ b/stdio-common/tst-sscanf.c
+-@@ -233,5 +233,38 @@ main (void)
+- 	}
+-     }
+- 
+-+  /* BZ #16618
+-+     The test will segfault during SSCANF if the buffer overflow
+-+     is not fixed.  The size of `s` is such that it forces the use
+-+     of malloc internally and this triggers the incorrect computation.
+-+     Thus the value for SIZE is arbitrariy high enough that malloc
+-+     is used.  */
+-+  {
+-+#define SIZE 131072
+-+    CHAR *s = malloc ((SIZE + 1) * sizeof (*s));
+-+    if (s == NULL)
+-+      abort ();
+-+    for (size_t i = 0; i < SIZE; i++)
+-+      s[i] = L('0');
+-+    s[SIZE] = L('\0');
+-+    int i = 42;
+-+    /* Scan multi-digit zero into `i`.  */
+-+    if (SSCANF (s, L("%d"), &i) != 1)
+-+      {
+-+	printf ("FAIL: bug16618: SSCANF did not read one input item.\n");
+-+	result = 1;
+-+      }
+-+    if (i != 0)
+-+      {
+-+	printf ("FAIL: bug16618: Value of `i` was not zero as expected.\n");
+-+	result = 1;
+-+      }
+-+    free (s);
+-+    if (result != 1)
+-+      printf ("PASS: bug16618: Did not crash.\n");
+-+#undef SIZE
+-+  }
+-+
+-+
+-   return result;
+- }
+-diff --git a/stdio-common/vfscanf.c b/stdio-common/vfscanf.c
+-index cd129a8..0e204e7 100644
+---- a/stdio-common/vfscanf.c
+-+++ b/stdio-common/vfscanf.c
+-@@ -272,9 +272,10 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
+-       if (__glibc_unlikely (wpsize == wpmax))				      \
+- 	{								    \
+- 	  CHAR_T *old = wp;						    \
+--	  size_t newsize = (UCHAR_MAX + 1 > 2 * wpmax			    \
+--			    ? UCHAR_MAX + 1 : 2 * wpmax);		    \
+--	  if (use_malloc || !__libc_use_alloca (newsize))		    \
+-+	  bool fits = __glibc_likely (wpmax <= SIZE_MAX / sizeof (CHAR_T) / 2); \
+-+	  size_t wpneed = MAX (UCHAR_MAX + 1, 2 * wpmax);		    \
+-+	  size_t newsize = fits ? wpneed * sizeof (CHAR_T) : SIZE_MAX;	    \
+-+	  if (!__libc_use_alloca (newsize))				    \
+- 	    {								    \
+- 	      wp = realloc (use_malloc ? wp : NULL, newsize);		    \
+- 	      if (wp == NULL)						    \
+-@@ -286,14 +287,13 @@ _IO_vfscanf_internal (_IO_FILE *s, const char *format, _IO_va_list argptr,
+- 		}							    \
+- 	      if (! use_malloc)						    \
+- 		MEMCPY (wp, old, wpsize);				    \
+--	      wpmax = newsize;						    \
+-+	      wpmax = wpneed;						    \
+- 	      use_malloc = true;					    \
+- 	    }								    \
+- 	  else								    \
+- 	    {								    \
+- 	      size_t s = wpmax * sizeof (CHAR_T);			    \
+--	      wp = (CHAR_T *) extend_alloca (wp, s,			    \
+--					     newsize * sizeof (CHAR_T));    \
+-+	      wp = (CHAR_T *) extend_alloca (wp, s, newsize);		    \
+- 	      wpmax = s / sizeof (CHAR_T);				    \
+- 	      if (old != NULL)						    \
+- 		MEMCPY (wp, old, wpsize);				    \
+--- 
+-1.9.4
+-
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 8cc8cce..72fd3df 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -32,17 +32,15 @@ config BR2_PACKAGE_GLIBC
+ 
+ choice
+ 	prompt "glibc version"
+-	default BR2_GLIBC_VERSION_2_20
+-
+-config BR2_GLIBC_VERSION_2_20
+-	depends on !BR2_nios2
+-	# Broken see https://bugs.busybox.net/show_bug.cgi?id=7941
+-	depends on !BR2_sparc
+-	bool "2.20"
++	default BR2_GLIBC_VERSION_2_21
+ 
+ config BR2_GLIBC_VERSION_2_21
+ 	bool "2.21"
+ 
++config BR2_GLIBC_VERSION_2_22
++	bool "2.22"
++	depends on !BR2_sparc # broken
++
+ endchoice
+ 
  endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+@@ -51,5 +49,5 @@ config BR2_GLIBC_VERSION_STRING
+ 	string
+ 	default "2.18-svnr23787" if BR2_EGLIBC_VERSION_2_18
+ 	default "2.19-svnr25243" if BR2_EGLIBC_VERSION_2_19
+-	default "2.20" if BR2_GLIBC_VERSION_2_20
+ 	default "2.21" if BR2_GLIBC_VERSION_2_21
++	default "2.22" if BR2_GLIBC_VERSION_2_22
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 525a5ed..979202e 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -4,5 +4,5 @@ md5	b395b021422a027d89884992e91734fc	eglibc-2.18-svnr23787.tar.bz2
+ sha1	224d9e655e8f0ad04ffde47b97a11c64e2255b56	eglibc-2.18-svnr23787.tar.bz2
+ md5	197836c2ba42fb146e971222647198dd	eglibc-2.19-svnr25243.tar.bz2
+ sha1	8013c1935b46fd50d2d1fbfad3b0af362b75fb28	eglibc-2.19-svnr25243.tar.bz2
+-sha256	f84b6d42aecc288d593c397b0a3d02260a33ee686bce0c634eb9b32798f36ba5	glibc-2.20.tar.xz
+ sha256  aeeb362437965a5d3f40b151094ca79def04a115bd363fdd4a9a0c69482923b8  glibc-2.21.tar.xz
++sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
