@@ -1,11 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Aug 2015 18:14:56 +0200
-Subject: [Buildroot] [PATCH 3/4 v2] Revert
-	"package/gstreamer1/gst1-plugins-bad: disable opencv plugin
-	with opencv-3"
+Date: Sun,  9 Aug 2015 18:14:57 +0200
+Subject: [Buildroot] [PATCH 4/4 v2] package/vlc: update opencv support
 In-Reply-To: <cover.1439136753.git.yann.morin.1998@free.fr>
 References: <cover.1439136753.git.yann.morin.1998@free.fr>
-Message-ID: <5d317246d236dfca1405ba303f28293738572614.1439136753.git.yann.morin.1998@free.fr>
+Message-ID: <927987bbdcc79cc1a299cf2a1ba052a6ae82b702.1439136753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +12,67 @@ To: buildroot@busybox.net
 
 From: Samuel Martin <s.martin49@gmail.com>
 
-This reverts commit 5e238a87eacf2a0c62736c4123961651afb1ba87.
-
-Also update the dependencies.
+vlc supports both opencv-2.4 and opencv-3, so adjust the vlc package to
+reflect this.
 
 Cc: Jonathan Ben Avraham <yba@tkos.co.il>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: fix dependencies at the same time]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ package/vlc/Config.in | 14 ++++++++++++--
+ package/vlc/vlc.mk    |  6 +++++-
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index bc99527..494a282 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -557,9 +557,22 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	bool "opencv"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BROKEN # gst1-plugin-opencv does not (yet) support opencv >=3.x
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # opencv
-+	depends on BR2_INSTALL_LIBSTDCPP # opencv
-+	depends on BR2_USE_WCHAR # opencv
-+	select BR2_PACKAGE_OPENCV
-+	# Remove the following opencv modules when gstreamer fixes the
-+	# problem of including the old "cv.h" header
-+	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 6679cc9..71e4f34 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -11,8 +11,8 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+-	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC if BR2_PACKAGE_OPENCV3
+-	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT if BR2_PACKAGE_OPENCV3
++	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
  	help
- 	  GStreamer OpenCV Plugins
+ 	  VLC is a free and open source cross-platform multimedia player
+ 	  and framework that plays most multimedia files as well as DVD,
+@@ -20,6 +20,16 @@ config BR2_PACKAGE_VLC
  
+ 	  http://www.videolan.org/vlc/
+ 
++config BR2_PACKAGE_VLC_OPENCV_BACKEND
++	bool
++	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
++
++config BR2_PACKAGE_VLC_OPENCV3_BACKEND
++	bool
++	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
++	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
++
+ comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
+ 	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index fa74a7b..6f7fd58 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -153,9 +153,13 @@ else
+ VLC_CONF_OPTS += --disable-gles2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPENCV3),y)
++ifeq ($(BR2_PACKAGE_OPENCV)$(BR2_PACKAGE_OPENCV3),y)
+ VLC_CONF_OPTS += --enable-opencv
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++VLC_DEPENDENCIES += opencv
++else
+ VLC_DEPENDENCIES += opencv3
++endif
+ else
+ VLC_CONF_OPTS += --disable-opencv
+ endif
 -- 
 1.9.1
