@@ -1,39 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Aug 2015 22:09:45 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libglew: bump version to 1.12.0
-Message-ID: <1439150985-5941-1-git-send-email-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 9 Aug 2015 23:13:27 +0300
+Subject: [Buildroot] [PATCH/next 1/1] package/jsoncpp: bump version to
+ 1.6.5
+In-Reply-To: <d6ok9cxek9.ln2@ID-313208.user.individual.net>
+References: <1439123310-6602-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150809145443.GB2570@tarshish>
+ <1439143511.12501.11.camel@embedded.rocks>
+ <d6ok9cxek9.ln2@ID-313208.user.individual.net>
+Message-ID: <20150809201327.GF2570@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libglew/libglew.hash | 2 +-
- package/libglew/libglew.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Bernd,
 
-diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
-index 9ac811c..68c3e7a 100644
---- a/package/libglew/libglew.hash
-+++ b/package/libglew/libglew.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  99c41320b63f6860869b5fb9af9a1854b15582796c64ee3dfd7096dc0c89f307  glew-1.10.0.tgz
-+sha256	af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf	glew-1.12.0.tgz
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-index 938ec67..4d26ed8 100644
---- a/package/libglew/libglew.mk
-+++ b/package/libglew/libglew.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGLEW_VERSION = 1.10.0
-+LIBGLEW_VERSION = 1.12.0
- LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
- LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
- LIBGLEW_LICENSE = BSD-3c, MIT
+On Sun, Aug 09, 2015 at 10:01:49PM +0200, Bernd Kuhls wrote:
+> Am Sun, 09 Aug 2015 20:05:11 +0200 schrieb J?rg Krause:
+> > I already submitted a patch for jsoncpp version bump and removing the
+> > snprintf-patch:
+> > http://patchwork.ozlabs.org/patch/502324/
+> 
+> sorry, I did not notice. I think your patch is better because it takes 
+> care of the non-c11 toolchains but, as discussed, could you please keep 
+> the snprintf patch? Therefore I marked my patch as superseded ;)
+
+Where has this been discussed? I must have missed something.
+
+baruch
+
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
