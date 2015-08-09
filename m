@@ -1,68 +1,34 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  9 Aug 2015 12:05:50 +0200
-Subject: [Buildroot] [PATCH] package/util-linux: fix vipw build with musl
-Message-ID: <1439114750-11060-1-git-send-email-romain.naour@openwide.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 09 Aug 2015 12:55:26 +0200
+Subject: [Buildroot] [PATCH 2/3] package/rsyslog: Fix linking against
+	postgresql
+References: <1428738737-3238-1-git-send-email-bernd.kuhls@t-online.de>
+ <1428738737-3238-2-git-send-email-bernd.kuhls@t-online.de>
+ <20150411124226.726fde30@free-electrons.com>
+ <XnsA4798AC8357A8berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20150411120739.GF4221@free.fr>
+ <20150411141520.4060c6a3@free-electrons.com>
+ <20150411122323.GG4221@free.fr>
+Message-ID: <u5oj9cx6jd.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-__P() is used for compatibility with old K&R C compilers. With
-ANSI C this macro has no effect.
+Am Sat, 11 Apr 2015 14:23:23 +0200 schrieb Yann E. MORIN:
 
-This fixes a compilation error with musl libc because of undeclared
-__P.
+> So, I can have a deeper and longer look, but that will be later. Unless
+> Bernd beats me to it, that is. ;-)
 
-Fixes:
-http://autobuild.buildroot.net/results/237/2377ae85bb9d85ba4c02706207f0b3bde3ccd027
+Hi Yann,
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...004-vipw-Remove-pre-ANSI-compiler-support.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
+this is not necessary anymore because the pgsql-rsyslog problem was fixed 
+with this commit on May 14th by Baruch:
 
-diff --git a/package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch b/package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
-new file mode 100644
-index 0000000..3a0c42a
---- /dev/null
-+++ b/package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
-@@ -0,0 +1,35 @@
-+From 9ce534491aea9b7975cfee5064423d0b850d8002 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 9 Aug 2015 11:20:00 +0200
-+Subject: [PATCH] vipw: Remove pre-ANSI compiler support
-+
-+__P() is used for compatibility with old K&R C compilers. With
-+ANSI C this macro has no effect.
-+
-+This fixes a compilation error with musl libc because of undeclared
-+__P.
-+
-+Ref:
-+https://lists.samba.org/archive/samba-technical/2015-June/108042.html
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ login-utils/vipw.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/login-utils/vipw.c b/login-utils/vipw.c
-+index 668f4d8..e4c803b 100644
-+--- a/login-utils/vipw.c
-++++ b/login-utils/vipw.c
-+@@ -85,7 +85,7 @@ int program;
-+ char orig_file[FILENAMELEN];	/* original file /etc/passwd or /etc/group */
-+ char *tmp_file;			/* tmp file */
-+ 
-+-void pw_error __P((char *, int, int));
-++void pw_error (char *, int, int);
-+ 
-+ static void copyfile(int from, int to)
-+ {
-+-- 
-+2.4.3
-+
--- 
-2.4.3
+http://git.buildroot.net/buildroot/commit/package/postgresql?
+id=3d3f70b567718ae308b5704ddd7d107c4849309e
+
+I marked my patch as superseded.
+
+Regards, Bernd
