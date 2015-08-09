@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Aug 2015 11:43:17 +0200
-Subject: [Buildroot] [git commit branch/next] squid: bump to version 3.5.7
-Message-ID: <20150809094323.B09868042C@busybox.osuosl.org>
+Date: Sun, 9 Aug 2015 11:43:38 +0200
+Subject: [Buildroot] [PATCH next 1/5] znc: bump to version 1.6.1
+In-Reply-To: <1438954654-11777-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1438954654-11777-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150809114338.17e73fc7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e21ef305ab6544c6433d6e1f6bdacff3cc460053
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Fri,  7 Aug 2015 10:37:30 -0300, Gustavo Zacarias wrote:
+> Bump to release tarball version.
+> Add hash file.
+> Update and rework time.h patch for upstream inclusion (hopefully) by
+> splitting the CSocket patch out.
+> (https://github.com/znc/znc/pull/1021)
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  ...0001-Add-time.h-includes-where-appropiate.patch | 194 +++++++++++++
+>  package/znc/0001-time.patch                        | 303 ---------------------
+>  package/znc/0002-csocket-timeh.patch               |  19 ++
+>  package/znc/Config.in                              |   5 +-
+>  package/znc/znc.hash                               |   2 +
+>  package/znc/znc.mk                                 |  17 +-
+>  6 files changed, 223 insertions(+), 317 deletions(-)
+>  create mode 100644 package/znc/0001-Add-time.h-includes-where-appropiate.patch
+>  delete mode 100644 package/znc/0001-time.patch
+>  create mode 100644 package/znc/0002-csocket-timeh.patch
+>  create mode 100644 package/znc/znc.hash
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index d5738c7..472df2d 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6.tar.xz.asc
--md5  93e18bd257857e35bb634ddb8a348563  squid-3.5.6.tar.xz
--sha1  c5f3ab47e61a08fa6a8767d45befeffd7d26fd9f  squid-3.5.6.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.7.tar.xz.asc
-+md5	e24943386555ca922130a7e034badba7	squid-3.5.7.tar.xz
-+sha1	e7dcc0cbcee6fd10a8c8bf3e9bff0dc6359ccc48	squid-3.5.7.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e201673..d345d15 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+All five patches applied to next, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
