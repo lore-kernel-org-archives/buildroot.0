@@ -1,53 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 20:56:05 +0200
-Subject: [Buildroot] [git commit] fs/common: add <fs>_POST_GEN_HOOKS support
-Message-ID: <20150810185612.8FA7981D3A@busybox.osuosl.org>
+Date: Mon, 10 Aug 2015 20:57:38 +0200
+Subject: [Buildroot] [PATCH] empty: fix compile with toolchain w/o
+ threads
+In-Reply-To: <20150810180152.GU8475@waldemar-brodkorb.de>
+References: <20150709093140.GA8600@waldemar-brodkorb.de>
+ <20150808124622.7837de9c@free-electrons.com>
+ <20150810180152.GU8475@waldemar-brodkorb.de>
+Message-ID: <20150810205738.46d0ba58@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15a53b93a034af78c1a3d62510a2abe5a91e4f8f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Waldemar,
 
-The common filesystem infrastructure already supports a
-<fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
-register some actions to be done before the root filesystem image is
-generated.
+On Mon, 10 Aug 2015 20:01:53 +0200, Waldemar Brodkorb wrote:
 
-This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
-allow filesystem makefiles to do some actions after the filesystem
-image has been generated. It will initially be used by the iso9660
-filesystem to delete the temporary directory it creates.
+> I sent it to Mikhail Zakharov and he mailed me back that he has
+> applied it.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/common.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Excellent, thanks! I see he has done a new release 0.6.20b a few hours
+ago. Can you check whether it includes the fix?
 
-diff --git a/fs/common.mk b/fs/common.mk
-index ad1bcf3..528e194 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -16,6 +16,9 @@
- #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
- #  generating the filesystem image
- #
-+#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
-+#  generating the filesystem image
-+#
- #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
- #  run after running the main filesystem target. This is useful for
- #  initramfs, to rebuild the kernel once the initramfs is generated.
-@@ -96,6 +99,7 @@ endif
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
- endif
-+	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 
- rootfs-$(1)-show-depends:
- 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+The previous release was from 2012, so I wasn't really expecting to see
+a new release anytime soon.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
