@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 15:39:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: needs dynamic library
-In-Reply-To: <1439150940-5033-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1439150940-5033-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150810153918.033a6328@free-electrons.com>
+Date: Mon, 10 Aug 2015 15:42:25 +0200
+Subject: [Buildroot] [git commit] tinc: disable PIE on ARC
+Message-ID: <20150810134253.CAE1E81D64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=38ea889ed07b29bd68b17b2629869588b27536e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  9 Aug 2015 22:09:00 +0200, Bernd Kuhls wrote:
-> Also propagate to reverse dependencies, to keep bisectability do this in
-> one commit.
+Even though ARC gcc understands "-pie" option and attempts to generate
+PIE binaries as of today PIE is not really supported for user-space
+applications.
 
-Propagating to the reverse dependencies was not needed, since they are
-not selecting mesa3d, they only "depends on" it.
+So we disable PIE detection if building for ARC.
+That fixes http://autobuild.buildroot.net/results/2b1/2b1aa474fc432f3f79b03c4577d68642bb7e0f9c
+and also prevents execution of non-supported PIE binary in runtime.
 
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/5ee/5eef099e82e7a65d9b459d88fcb82b468ccf8fed/
-> http://autobuild.buildroot.net/results/e5c/e5c0e693505798ec366328ed87de3460cd07894d/
-> http://autobuild.buildroot.net/results/c6b/c6b6a21f73fc84f4784dd00de504ef0eea3bdaf1/
-> http://autobuild.buildroot.net/results/abd/abd3e2850ee457fc456de3f1641b92405d995e16/
-> http://autobuild.buildroot.net/results/2c4/2c40fe209e6006fdf148e547b1fafe9180afc85d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: fix indentation.]
 
-I've applied after removing the changes from glmark2/Config.in and
-mesa3d-demos/Config.in.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tinc/tinc.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
+index b8d4ca7..f7edd79 100644
+--- a/package/tinc/tinc.mk
++++ b/package/tinc/tinc.mk
+@@ -11,4 +11,10 @@ TINC_LICENSE = GPLv2+ with OpenSSL exception
+ TINC_LICENSE_FILES = COPYING COPYING.README
+ TINC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ 
++ifeq ($(BR2_arc),y)
++TINC_CONF_ENV += \
++	ax_cv_check_cflags___fPIE=no \
++	ax_cv_check_ldflags___pie=no
++endif
++
+ $(eval $(autotools-package))
