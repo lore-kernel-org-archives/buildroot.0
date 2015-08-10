@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 14:44:03 +0200
-Subject: [Buildroot] [PATCH] ola: Add patch to fix linking issue
-In-Reply-To: <CAFXXi0mu73=5UC6=n60uNZd=eUb16ns6vtxMH756MGuTDRhvFg@mail.gmail.com>
-References: <1438748380-5528-1-git-send-email-simon.marchi@polymtl.ca>
- <20150808124445.79092e05@free-electrons.com>
- <CAFXXi0mu73=5UC6=n60uNZd=eUb16ns6vtxMH756MGuTDRhvFg@mail.gmail.com>
-Message-ID: <20150810144403.08c28fb4@free-electrons.com>
+Date: Mon, 10 Aug 2015 15:04:47 +0200
+Subject: [Buildroot] [git commit] libsodium: disable PIE on ARC
+Message-ID: <20150810130454.3537881775@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Simon Marchi,
+commit: http://git.buildroot.net/buildroot/commit/?id=855bb15aa1d646e70b5bdb200017021d39ea5334
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 9 Aug 2015 23:11:03 -0400, Simon Marchi wrote:
-> On 8 August 2015 at 06:44, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Could you report the problem to the upstream ola project and see what
-> > they say? Also, they have a 0.9.7 release, maybe you want to try it?
-> 
-> I discussed it a bit on their IRC channel, it seems like the right fix
-> will be to move the implementations to the .cpp files.
-> 
-> I filed a bug: https://github.com/OpenLightingProject/ola/issues/880
+Even though ARC gcc understands "-pie" option and attempts to generate
+PIE binaries as of today PIE is not really supported for user-space
+applications.
 
-Shouldn't we simply remove -fvisibility-inlines-hidden ?
+So we disable PIE detection if building for ARC.
+That fixes http://autobuild.buildroot.net/results/be4/be46b621ce5443788b0a1bc9fab614c4ca5d0859
+and also prevents execution of non-supported PIE binary in runtime.
 
-> The 0.9.7 release does not change anything about that problem, but we
-> could still bump the version. I am preparing a patch to cleanup the
-> plugin management of the package, if it hasn't been bump by the time I
-> send my patch, I'll do it then.
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsodium/libsodium.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Sure, but that's going to be material for after 2015.08. What I was
-looking for right now for 2015.08 is a fix for the build issue.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index c032863..18035f3 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
+@@ -10,4 +10,8 @@ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
+ LIBSODIUM_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_arc),y)
++LIBSODIUM_CONF_OPTS += --disable-pie
++endif
++
+ $(eval $(autotools-package))
