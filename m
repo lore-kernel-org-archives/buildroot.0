@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 16:12:16 +0200
-Subject: [Buildroot] [git commit branch/next] package/tor: bump version to
-	0.2.6.10
-Message-ID: <20150810141245.7C6407FA8E@busybox.osuosl.org>
+Date: Mon, 10 Aug 2015 16:12:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/softether: bump version
+Message-ID: <20150810141245.7A001819CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81aa2c8bc4d850230ca49a49334a01e00d13554a
+commit: http://git.buildroot.net/buildroot/commit/?id=9b8be0bf50e7aebbe7525fae968d1b4bea33d38d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tor/tor.hash |    2 +-
- package/tor/tor.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/softether/softether.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 341a611..637efe4 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	4a6c29ad89a98d7832c599d9480d6d8e55355fb3b8f4b506c5df557f15942f9c  tor-0.2.6.9.tar.gz
-+sha256	0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d	tor-0.2.6.10.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index a464391..7db0964 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 17a450f..489341e 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.2.6.9
-+TOR_VERSION = 0.2.6.10
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3c
- TOR_LICENSE_FILES = LICENSE
+-SOFTETHER_VERSION = 18b120e5f747a84d26302ec706f6c1c91d642ace
++SOFTETHER_VERSION = 4b65e251f240d0b36c704acd598f4ceb07c41413
+ SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+ SOFTETHER_PATCH = \
+ 	https://github.com/dajhorn/SoftEtherVPN/commit/c5e5d7e93c6f3302adf5821c29c4efdb7630e418.patch \
