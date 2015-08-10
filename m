@@ -1,28 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 20:59:29 +0200
-Subject: [Buildroot] [PATCH] libidn: bump to version 1.32
-In-Reply-To: <1438611081-24120-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438611081-24120-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150810205929.6b5370c5@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 10 Aug 2015 21:03:53 +0200
+Subject: [Buildroot] [PATCH] empty: fix compile with toolchain w/o
+	threads
+In-Reply-To: <20150810205738.46d0ba58@free-electrons.com>
+References: <20150709093140.GA8600@waldemar-brodkorb.de>
+ <20150808124622.7837de9c@free-electrons.com>
+ <20150810180152.GU8475@waldemar-brodkorb.de>
+ <20150810205738.46d0ba58@free-electrons.com>
+Message-ID: <20150810190353.GB8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-On Mon,  3 Aug 2015 11:11:21 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libidn/libidn.hash | 4 ++--
->  package/libidn/libidn.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Waldemar,
+> 
+> On Mon, 10 Aug 2015 20:01:53 +0200, Waldemar Brodkorb wrote:
+> 
+> > I sent it to Mikhail Zakharov and he mailed me back that he has
+> > applied it.
+> 
+> Excellent, thanks! I see he has done a new release 0.6.20b a few hours
+> ago. Can you check whether it includes the fix?
+> 
+> The previous release was from 2012, so I wasn't really expecting to see
+> a new release anytime soon.
 
-Applied, thanks.
+Yes, indeed, patch is included.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
