@@ -1,83 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Aug 2015 19:11:32 +0200
-Subject: [Buildroot] [PATCH] fs/common: add <fs>_POST_GEN_HOOKS support
-In-Reply-To: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
-References: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <20150810171132.GF3676@free.fr>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Date: Mon, 10 Aug 2015 13:45:31 -0400
+Subject: [Buildroot] [PATCH] ola: Add patch to fix linking issue
+In-Reply-To: <20150810144403.08c28fb4@free-electrons.com>
+References: <1438748380-5528-1-git-send-email-simon.marchi@polymtl.ca>
+ <20150808124445.79092e05@free-electrons.com>
+ <CAFXXi0mu73=5UC6=n60uNZd=eUb16ns6vtxMH756MGuTDRhvFg@mail.gmail.com>
+ <20150810144403.08c28fb4@free-electrons.com>
+Message-ID: <CAFXXi0=tRTD13CMOZ7Y7j1+5VLq6Q54s3pWtgecqDTSKQ-JY4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No?, All,
+On 10 August 2015 at 08:44, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Simon Marchi,
+>
+> On Sun, 9 Aug 2015 23:11:03 -0400, Simon Marchi wrote:
+>> On 8 August 2015 at 06:44, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Could you report the problem to the upstream ola project and see what
+>> > they say? Also, they have a 0.9.7 release, maybe you want to try it?
+>>
+>> I discussed it a bit on their IRC channel, it seems like the right fix
+>> will be to move the implementations to the .cpp files.
+>>
+>> I filed a bug: https://github.com/OpenLightingProject/ola/issues/880
+>
+> Shouldn't we simply remove -fvisibility-inlines-hidden ?
 
-On 2015-07-31 10:23 +0200, No? Rubinstein spake thusly:
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> The common filesystem infrastructure already supports a
-> <fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
-> register some actions to be done before the root filesystem image is
-> generated.
-> 
-> This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
-> allow filesystem makefiles to do some actions after the filesystem
-> image has been generated. It will initially be used by the iso9660
-> filesystem to delete the temporary directory it creates.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
+Do you mean remove it as a patch in the buildroot package, or upstream?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I asked in the bug report if removing the switch upstream would be a
+possibility, how much impact it has on runtime performance (startup
+time).
 
-Since this patch was marked as "Changes Requested" in Patchwork, it no
-longer shows up. I'll mark it as New again, so it can get picked up to
-be applied.
+>> The 0.9.7 release does not change anything about that problem, but we
+>> could still bump the version. I am preparing a patch to cleanup the
+>> plugin management of the package, if it hasn't been bump by the time I
+>> send my patch, I'll do it then.
+>
+> Sure, but that's going to be material for after 2015.08. What I was
+> looking for right now for 2015.08 is a fix for the build issue.
 
-Regards,
-Yann E. MORIN.
+As an immediate fix, the patch I sent works. Although it only moves
+the problematic method. It would be possible for another method to
+break with another combination of compiler/platform.
 
-> ---
-> Re-sending this patch to fix hybrid ISO generation as added by patch 
-> 5bac06e8810eb86e7bddc771fda68f0c59a3c3fa.
-> 
->  fs/common.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index ad1bcf3..528e194 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -16,6 +16,9 @@
->  #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
->  #  generating the filesystem image
->  #
-> +#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
-> +#  generating the filesystem image
-> +#
->  #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
->  #  run after running the main filesystem target. This is useful for
->  #  initramfs, to rebuild the kernel once the initramfs is generated.
-> @@ -96,6 +99,7 @@ endif
->  ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
->  	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
->  endif
-> +	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
->  
->  rootfs-$(1)-show-depends:
->  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Removing the switch for the buildroot package would probably work as
+well (I am testing right now) and would prevent other similar breaks.
+Would you like me to send a patch immediately that does that instead?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+
+Simon
