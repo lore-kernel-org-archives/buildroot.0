@@ -1,114 +1,66 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 10 Aug 2015 18:49:37 +0000
-Subject: [Buildroot] Analysis of build results for 2015-08-05
-In-Reply-To: <20150810180849.GV8475@waldemar-brodkorb.de>
-References: <20150806063016.4A0BB102D1F@stock.ovh.net>
- <20150806113014.163c6592@free-electrons.com>
- <1439205989.4848.16.camel@synopsys.com>
- <20150810133656.53b015a1@free-electrons.com>
- <1439207692.4848.27.camel@synopsys.com>
- <20150810180849.GV8475@waldemar-brodkorb.de>
-Message-ID: <1439232577.4848.55.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Aug 2015 20:54:27 +0200
+Subject: [Buildroot] [PATCH 1/2] package/poco: bump to version 1.6.1
+In-Reply-To: <1439217249.5186.18.camel@embedded.rocks>
+References: <1438682248-29767-1-git-send-email-joerg.krause@embedded.rocks>
+ <20150810162227.6a3cde19@free-electrons.com>
+ <1439217249.5186.18.camel@embedded.rocks>
+Message-ID: <20150810205427.156aa7b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Dear J?rg Krause,
 
-On Mon, 2015-08-10 at 20:08 +0200, Waldemar Brodkorb wrote:
-> Hi Alexey, Hi Thomas,
-> Alexey Brodkin wrote,
+On Mon, 10 Aug 2015 16:34:09 +0200, J?rg Krause wrote:
+
+> In that case I do not understand the help text from
+> nightly.buildroot.org, 17.4. The .hash file:
 > 
-> > Hi Thomas,
-> > 
-> > On Mon, 2015-08-10 at 13:36 +0200, Thomas Petazzoni wrote:
-> > > Dear Alexey Brodkin,
-> > > 
-> > > On Mon, 10 Aug 2015 11:26:29 +0000, Alexey Brodkin wrote:
-> > > 
-> > > > On Thu, 2015-08-06 at 11:30 +0200, Thomas Petazzoni wrote:
-> > > > > Hello all,
-> > > > >          arc |                 gnuradio-3.7.5 | NOK | 
-> > > > > > http://autobuild.buildroot.net/results/d44aec8c82ed6a315322726dd698e6b48990ba76/
-> > > > > 
-> > > > > ARC toolchain problem:
-> > > > > 
-> > > > >    error: '__NR_eventfd' was not declared in this scope
-> > > > > 
-> > > > > Alexey, I don't remember, do you have a fix for this one?
-> > > > 
-> > > > I already commented on that one.
-> > > > Basically gnuradio includes source from boost and in boost itself they
-> > > > use syscall directly if (__GLIBC__ == 2 && __GLIBC_MINOR__ < 8) which
-> > > > is the case for uClibc, see http://git.uclibc.org/uClibc/tree/include/features.h#n395
-> > > > -------------->8--------------
-> > > > #define	__GLIBC__	2
-> > > > #define	__GLIBC_MINOR__	2
-> > > > -------------->8--------------
-> > > > 
-> > > > From Boost standpoint this looks like some sort of backward compatibility for older
-> > > > glibc that didn;'t have eventfd() defined.
-> > > > 
-> > > > So probably  the best option here is to bump __GLIBC__/__GLIBC_MINOR__ in uClibc.
-> > > > Maybe Waldemar may comment on that?
-> > > 
-> > > Can't we instead patch boost to use a || defined(__UCLIBC__) or
-> > > something like that?
-> > 
-> > Well we may try but grep for __GLIBC_MINOR__ returns at least 10 files with matches.
-> > That's why I'd prefer to just reuse existing code with __GLIBC__/__GLIBC_MINOR__.
-> > 
-> > If we may just say that  we're on par with say __GLIBC__=2 __GLIBC_MINOR__=10 that
-> > will cure a problem with Boost.
-> > 
-> > Let's get Waldemar's opinion on that and if he says __UCLIBC__ is the way to go we'll
-> > figure out who's going to create that patch :)
-> > 
-> > See I sent 2 emails to Boost mailing list:
-> > http://lists.boost.org/Archives/boost/2015/07/224257.php
-> > http://lists.boost.org/Archives/boost/2015/07/224404.php
-> > and haven't heard back.
-> > 
-> > So it might take a while until these guys accept our patch if at all.
+> "The none hash type is reserved to those archives downloaded from a
+> repository, like a git clone, a subversion checkout? or archives
+> downloaded with the github helper Section 17.19.2, ?How to add a 
+>                     ^^^^^^^^^^^^^
+> package from GitHub?."
 > 
-> May be we should do both. I can add __GLIBC_MINOR__=10 to uClibc-ng
-> and Alexey tries to get the || defined(__UCLIBC__) included into
-> boost.
-> 
-> Alexey, do you think we will get any regression by incrementing the
-> minor number for other architectures? I will try some boost compiles
-> later.
+> And from the example:
+> "# No hash for 1234, comes from the github-helper:
+> none   xxx                                                             
+>  libfoo-1234.tar.gz"
 
-If I knew this for sure I wouldn't ask you :)
-That's why I'm not sure which is a good MINOR number to bump to.
-I'm not sure if 2.2 was intentionally used in the first place in uClibc,
-did that mean that all [important?] features of glibc 2.2 were supported
-in uClibc back in the day?
+I think the case where we really need the "none" type is for packages
+that sometimes get downloaded as a tarball, and sometimes from Github.
+Look for example at binutils.hash:
 
-This is a commit that bumped from 2.1 to 2.2:
-http://git.uclibc.org/uClibc/commit/?id=e83a36ce9f97ac0f59117b3a62fd2dd8461b1fd5
+# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+sha512  ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74  binutils-2.22.tar.bz2
+sha512  dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16  binutils-2.23.2.tar.bz2
+sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
+sha512  0b36dda0e6d32cd25613c0e64b56b28312515c54d6a159efd3db9a86717f114ab0a0a1f69d08975084d55713ebaeab64e4085c9b3d1c3fa86712869f80eb954d  binutils-2.25.1.tar.bz2
+# No hash for the ARC variant, comes from the github-helper:
+none   xxx  binutils-arc-2015.06.tar.gz
 
-Frankly I may barely see a rationale for that last bump.
-So there're IMHO 3 options for uClibc:
+We want hashes for the tarballs, so we added them. But then, the logic
+of the hash verification is that if a .hash file exists, then *all*
+files downloaded by the package should have hashes. If not, then the
+build is aborted. That's why we added this "none" type.
 
- [1] Leave __GLIBC__ versions as they are today (2.2)
- [2] Bump those versions to something that is supposed to fix existing issue
-     with Boost and see if it breaks more than fixes
- [3] Do good analysis of glibc features, compare to what we have in uClibc and
-     with that knowledge set __GLIBC__ versions in uClibc
+Now, we could also decided to add just a single "none" entry in the
+hash file of packages downloaded from Github just to make it clear that
+there is voluntarily no hash being provided, and therefore clarify
+between packages that don't have a hash file because it hasn't been
+added yet from packages that don't have a hash file because they are
+downloaded from Github. But it means adding quite a bunch of pretty
+useless .hash files to the ~220+ packages we download from github.
 
-> But do not forget, buildroot uses ARC specific uClibc fork, so it
-> will not fix the problem, until we switch to uClibc-ng for ARC.
+In any case, we should clarify that in the documentation, indeed.
 
-Well our intention is to drop ARC-specific git repo in favor to upstream
-distributions of uClibc. Even today uClibc in ARC's GitHub is just a mirror
-of master @ git.uclibc.org. But the problem with goode olde uClibc is there're
-no releases so it is useless for us as a method of distribution.
+Yann, thoughts?
 
-That said for Buildroot I'm about to discontinue uClibc from ARC git and use
-your uClibc-ng instead. So one Buildroot v2015.08 is cut I'll send a patch with
-removal of BR2_UCLIBC_VERSION_ARC_GIT.
-
--Alexey
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
