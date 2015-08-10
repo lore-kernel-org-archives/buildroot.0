@@ -1,68 +1,73 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Aug 2015 13:52:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 8271] Buildroot wit x86_64 architecture fails to
- boot on qemu with kernels >=3.10
-In-Reply-To: <bug-8271-163@https.bugs.busybox.net/>
-References: <bug-8271-163@https.bugs.busybox.net/>
-Message-ID: <20150810135225.F2A4A80051@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Aug 2015 15:55:44 +0200
+Subject: [Buildroot] [git commit] postgresql: fix sparc compile issue
+Message-ID: <20150810135551.01ED08185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8271
+commit: http://git.buildroot.net/buildroot/commit/?id=b1c6801f1c5dfdf8610d16d8a4cd68d062b44e16
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #2 from Gleb Pomykalov <gleb@pomykalov.ru> 2015-08-10 13:52:25 UTC ---
-I have tried more different kernel version, and came to conclusion, that the
-first kernel version, where this issue appeared was 3.9. 
-I have done bisection of linux kernel. Here is the linux kernel commit that
-breaks things:
+Fixes autobuilder compile error:
+http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
 
-commit 83a57a4de1a222c351667ef9a0fedaac1295e85b
-Author: David Woodhouse <dwmw2@infradead.org>
-Date:   Thu Dec 20 01:16:20 2012 +0000
+The predefines are wrong:
+./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
+#define sparc 1
+#define __sparc__ 1
+#define __sparc 1
+#define __sparc_v8__ 1
 
-    x86: Enable ARCH_USE_BUILTIN_BSWAP
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/postgresql/0002-fix-sparc-compile.patch |   38 +++++++++++++++++++++++
+ 1 files changed, 38 insertions(+), 0 deletions(-)
 
-    With -mmovbe enabled (implicit with -march=atom), this allows the
-    compiler to use the movbe instruction. This doesn't have a significant
-    effect on code size (unlike on PowerPC), because the movbe instruction
-    actually takes as many bytes to encode as a simple mov and a bswap. But
-    for Atom in particular I believe it should give a performance win over
-    the mov+bswap alternative. That was kind of why movbe was invented in
-    the first place, after all...
-
-    I've done basic functionality testing with IPv6 and Legacy IP, but no
-    performance testing. The EFI firmware on my test box unfortunately no
-    longer starts up.
-
-    Signed-off-by: David Woodhouse <David.Woodhouse@intel.com>
-    Link:
-http://lkml.kernel.org/r/1355966180.18919.102.camel at shinybook.infradead.org
-    Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 79795af..3e941aa 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -114,6 +114,7 @@ config X86
-        select MODULES_USE_ELF_RELA if X86_64
-        select CLONE_BACKWARDS if X86_32
-        select GENERIC_SIGALTSTACK
-+       select ARCH_USE_BUILTIN_BSWAP
-
- config INSTRUCTION_DECODER
-        def_bool y
-
-Revert this commit on later versions of kernel fix it. It seems, that this
-commit enables some functionality for atom processors, which was selected as
-arch variant in my case. 
-
-Using your recommendations with "make qemu_x86_64_defconfig" command works as
-well. It seems that the reason is in atom arch variant.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/postgresql/0002-fix-sparc-compile.patch b/package/postgresql/0002-fix-sparc-compile.patch
+new file mode 100644
+index 0000000..9eec23a
+--- /dev/null
++++ b/package/postgresql/0002-fix-sparc-compile.patch
+@@ -0,0 +1,38 @@
++The gcc predefines for Linux are __sparc_v8__/__sparc_v7__
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
++--- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
+++++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 19:57:06.000000000 +0200
++@@ -420,12 +420,12 @@
++ :		"=r"(_res), "+m"(*lock)
++ :		"r"(lock)
++ :		"memory");
++-#if defined(__sparcv7)
+++#if defined(__sparcv7) || defined(__sparc_v7__)
++ 	/*
++ 	 * No stbar or membar available, luckily no actually produced hardware
++ 	 * requires a barrier.
++ 	 */
++-#elif defined(__sparcv8)
+++#elif defined(__sparcv8) || defined(__sparc_v8__)
++ 	/* stbar is available (and required for both PSO, RMO), membar isn't */
++ 	__asm__ __volatile__ ("stbar	 \n":::"memory");
++ #else
++@@ -438,13 +438,13 @@
++ 	return (int) _res;
++ }
++ 
++-#if defined(__sparcv7)
+++#if defined(__sparcv7) || defined(__sparc_v7__)
++ /*
++  * No stbar or membar available, luckily no actually produced hardware
++  * requires a barrier.
++  */
++ #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
++-#elif defined(__sparcv8)
+++#elif defined(__sparcv8) || defined(__sparc_v8__)
++ /* stbar is available (and required for both PSO, RMO), membar isn't */
++ #define S_UNLOCK(lock)	\
++ do \
