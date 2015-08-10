@@ -1,48 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Aug 2015 19:09:25 +0200
+Date: Mon, 10 Aug 2015 19:11:32 +0200
 Subject: [Buildroot] [PATCH] fs/common: add <fs>_POST_GEN_HOOKS support
-In-Reply-To: <20150806091001.5d609ce2@free-electrons.com>
+In-Reply-To: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
 References: <1438331000-26534-1-git-send-email-nrubinstein@aldebaran.com>
- <20150806091001.5d609ce2@free-electrons.com>
-Message-ID: <20150810170925.GE3676@free.fr>
+Message-ID: <20150810171132.GF3676@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+No?, All,
 
-On 2015-08-06 09:10 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 31 Jul 2015 10:23:20 +0200, No? Rubinstein wrote:
-> > From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > 
-> > The common filesystem infrastructure already supports a
-> > <fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
-> > register some actions to be done before the root filesystem image is
-> > generated.
-> > 
-> > This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
-> > allow filesystem makefiles to do some actions after the filesystem
-> > image has been generated. It will initially be used by the iso9660
-> > filesystem to delete the temporary directory it creates.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
-> > ---
-> > Re-sending this patch to fix hybrid ISO generation as added by patch 
-> > 5bac06e8810eb86e7bddc771fda68f0c59a3c3fa.
+On 2015-07-31 10:23 +0200, No? Rubinstein spake thusly:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Thanks, but could you submit a single patch series that does both the
-> addition of POST_GEN_HOOKS (this patch) and the change to iso9660.mk to
-> use POST_GEN_HOOKS to fix the hybrid image problem?
+> The common filesystem infrastructure already supports a
+> <fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
+> register some actions to be done before the root filesystem image is
+> generated.
+> 
+> This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
+> allow filesystem makefiles to do some actions after the filesystem
+> image has been generated. It will initially be used by the iso9660
+> filesystem to delete the temporary directory it creates.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
 
-I don't know what you meant: iso96606 is already using the post-gen
-hooks, but they are not called because this patch has not yet been
-applied...
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Since this patch was marked as "Changes Requested" in Patchwork, it no
+longer shows up. I'll mark it as New again, so it can get picked up to
+be applied.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> Re-sending this patch to fix hybrid ISO generation as added by patch 
+> 5bac06e8810eb86e7bddc771fda68f0c59a3c3fa.
+> 
+>  fs/common.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index ad1bcf3..528e194 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -16,6 +16,9 @@
+>  #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
+>  #  generating the filesystem image
+>  #
+> +#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
+> +#  generating the filesystem image
+> +#
+>  #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
+>  #  run after running the main filesystem target. This is useful for
+>  #  initramfs, to rebuild the kernel once the initramfs is generated.
+> @@ -96,6 +99,7 @@ endif
+>  ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+>  	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+>  endif
+> +	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
+>  
+>  rootfs-$(1)-show-depends:
+>  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
