@@ -1,63 +1,41 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 10 Aug 2015 13:38:10 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-08-07
-In-Reply-To: <20150809000631.487d0954@free-electrons.com>
-References: <20150808063018.735131014E7@stock.ovh.net>
- <20150809000631.487d0954@free-electrons.com>
-Message-ID: <1439213890.4848.36.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Aug 2015 15:39:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: needs dynamic library
+In-Reply-To: <1439150940-5033-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1439150940-5033-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150810153918.033a6328@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Bernd Kuhls,
 
-On Sun, 2015-08-09 at 00:06 +0200, Thomas Petazzoni wrote:
-> Hello all,
+On Sun,  9 Aug 2015 22:09:00 +0200, Bernd Kuhls wrote:
+> Also propagate to reverse dependencies, to keep bisectability do this in
+> one commit.
+
+Propagating to the reverse dependencies was not needed, since they are
+not selecting mesa3d, they only "depends on" it.
+
 > 
-> Bernd, Alexey, Angelo, Vicente, Will, see below there are some
-> questions for you! :-)
-
-> >          arc |                   boost-1.58.0 | NOK | 
-> > http://autobuild.buildroot.net/results/2658feb999f457c4d88342f822c03aa7f9f983ed/
-> >          arc |                   boost-1.58.0 | NOK | 
-> > http://autobuild.buildroot.net/results/2e3e004d1b53e9b01d6071452ab2c95c1855f0d7/
+> Fixes
+> http://autobuild.buildroot.net/results/5ee/5eef099e82e7a65d9b459d88fcb82b468ccf8fed/
+> http://autobuild.buildroot.net/results/e5c/e5c0e693505798ec366328ed87de3460cd07894d/
+> http://autobuild.buildroot.net/results/c6b/c6b6a21f73fc84f4784dd00de504ef0eea3bdaf1/
+> http://autobuild.buildroot.net/results/abd/abd3e2850ee457fc456de3f1641b92405d995e16/
+> http://autobuild.buildroot.net/results/2c4/2c40fe209e6006fdf148e547b1fafe9180afc85d/
 > 
-> Alexey, still the same issue. Should I make boost unavailable on ARC for now?
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Well I'd like to have boost on arc because it is used by other software packages.
-See discussion in a separate thread.
+I've applied after removing the changes from glmark2/Config.in and
+mesa3d-demos/Config.in.
 
-There should be a way to fix it finally :)
+Thanks!
 
-> >          arc |              libselinux-2.1.13 | NOK | 
-> > http://autobuild.buildroot.net/results/f252d616c90829304f5c5c4d7a25012b40769c62/
-> >          arc |              libselinux-2.1.13 | NOK | 
-> > http://autobuild.buildroot.net/results/7f871263c2342e050034e359870cde72b6ddb986/
-> >          arc |              libselinux-2.1.13 | NOK | 
-> > http://autobuild.buildroot.net/results/e92bcb6a3b671fe61453d5c616ef6e4e8e31a150/
-> 
-> I'm tempted to mark libselinux as not available on ARC for the moment.
-> Alexey?
-
-Ok I got this reproduced and filed internal bug report as STAR 9000937132.
-If we may wait another couple of days let's wait otherwise please disable it for
-ARC for now. I had to report this problem a while back.
-
-IMHO it worth waiting. Usually fix follows in few days. 
-
-
-> >          arc |                    tinc-1.0.24 | NOK | 
-> > http://autobuild.buildroot.net/results/2b1aa474fc432f3f79b03c4577d68642bb7e0f9c/
-> >          arc |                    tinc-1.0.24 | NOK | 
-> > http://autobuild.buildroot.net/results/e16588f02f1f576e8769ddd7be997904fdfd5ba1/
-> 
-> BFD (GNU Binutils) 2.23.2 assertion fail elf32-arc.c:3074
-> 
-> Alexey, that's a toolchain issue.
-
-Another PIE thingy. fixed with http://patchwork.ozlabs.org/patch/505645/
-
--Alexey
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
