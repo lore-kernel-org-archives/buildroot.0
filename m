@@ -1,36 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 15:56:05 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: fix sparc compile issue
-In-Reply-To: <20150809181336.GA23188@waldemar-brodkorb.de>
-References: <20150809181336.GA23188@waldemar-brodkorb.de>
-Message-ID: <20150810155605.02f18e0e@free-electrons.com>
+Date: Mon, 10 Aug 2015 15:57:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpi-firmware: add configurable
+ kernel cmdline option
+In-Reply-To: <20150809162240.GB4299@free.fr>
+References: <1439135221-29285-1-git-send-email-ivo.slanina@gmail.com>
+ <20150809162240.GB4299@free.fr>
+Message-ID: <20150810155759.60fb13ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Yann E. MORIN,
 
-On Sun, 9 Aug 2015 20:13:36 +0200, Waldemar Brodkorb wrote:
-> Fixes autobuilder compile error:
-> http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
+On Sun, 9 Aug 2015 18:22:40 +0200, Yann E. MORIN wrote:
+
+> No. Such tweaking should be left for a post-build script.
 > 
-> The predefines are wrong:
-> ./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
-> #define sparc 1                                                                                                                                                                
-> #define __sparc__ 1                                                                                                                                                            
-> #define __sparc 1                                                                                                                                                              
-> #define __sparc_v8__ 1
+> And *if* we were to have a mean to set the kernel command line in
+> Buildroot, it should not be specific to the RPi. It should be a generic
+> solution, that could be used for all bootloaders. I.e. an entry in the
+> kernel menu.
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> Changes v1 -> v2:
->   - keep Solaris gcc specific defines as suggested by Thomas Petazzoni
+> But I'm not really a fan of this; post-build scripts have been
+> introduced just for this kind of local customisation. Others may
+> disagree, though...
 
-Applied, thanks. Could you submit the patch upstream?
-
-Thanks!
+Fully agreed.
 
 Thomas
 -- 
