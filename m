@@ -1,92 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 15:22:32 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: needs dynamic library
-Message-ID: <20150810132542.9A13F81991@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 10 Aug 2015 16:36:36 +0300
+Subject: [Buildroot] [PATCH] tinc: disable PIE on ARC
+Message-ID: <1439213796-31805-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c635f86d84bfc915a6dd8928f15082f302a9986
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Even though ARC gcc understands "-pie" option and attempts to generate
+PIE binaries as of today PIE is not really supported for user-space
+applications.
 
-Fixes
-http://autobuild.buildroot.net/results/5ee/5eef099e82e7a65d9b459d88fcb82b468ccf8fed/
-http://autobuild.buildroot.net/results/e5c/e5c0e693505798ec366328ed87de3460cd07894d/
-http://autobuild.buildroot.net/results/c6b/c6b6a21f73fc84f4784dd00de504ef0eea3bdaf1/
-http://autobuild.buildroot.net/results/abd/abd3e2850ee457fc456de3f1641b92405d995e16/
-http://autobuild.buildroot.net/results/2c4/2c40fe209e6006fdf148e547b1fafe9180afc85d/
+So we disable PIE detection if building for ARC.
+That fixes http://autobuild.buildroot.net/results/2b1/2b1aa474fc432f3f79b03c4577d68642bb7e0f9c
+and also prevents execution of non-supported PIE binary in runtime.
 
-[Thomas: remove propagation of the dynamic library dependency to
-glmark2 and mesa3d-demos, since none of them select mesa3d.]
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in |   14 ++++++++------
- package/mesa3d/mesa3d.mk |    5 -----
- 2 files changed, 8 insertions(+), 11 deletions(-)
+ package/tinc/tinc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 93ae02a..a658986 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -10,6 +10,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	# Triggers the _gp link issue in nios2
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-@@ -76,10 +77,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
+index b8d4ca7..73cceaf 100644
+--- a/package/tinc/tinc.mk
++++ b/package/tinc/tinc.mk
+@@ -11,4 +11,8 @@ TINC_LICENSE = GPLv2+ with OpenSSL exception
+ TINC_LICENSE_FILES = COPYING COPYING.README
+ TINC_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=c99"
  
--comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_XORG7
-+comment "DRI drivers need X.Org"
-+	depends on !BR2_PACKAGE_XORG7
- 
--if !BR2_STATIC_LIBS && BR2_PACKAGE_XORG7
-+if BR2_PACKAGE_XORG7
- 
- comment "DRI drivers"
- 
-@@ -114,7 +115,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	help
- 	  Legacy Radeon driver for R100 series GPUs.
- 
--endif # !BR2_STATIC_LIBS && BR2_PACKAGE_XORG7
-+endif # BR2_PACKAGE_XORG7
- 
- if BR2_PACKAGE_MESA3D_DRIVER
- 
-@@ -144,7 +145,8 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- 
- endif # BR2_PACKAGE_MESA3D
- 
--comment "mesa3d needs a toolchain w/ C++, NPTL"
-+comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
-+		BR2_STATIC_LIBS
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 67408a3..733c32e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -58,11 +58,6 @@ MESA3D_CONF_OPTS += \
- 	--disable-xa
- endif
- 
--ifeq ($(BR2_STATIC_LIBS),)
--# fix for "configure: error: Cannot use static libraries for DRI drivers"
--MESA3D_CONF_OPTS += --disable-static
--endif
--
- # Drivers
- 
- #Gallium Drivers
++ifeq ($(BR2_arc),y)
++TINC_CONF_ENV += ax_cv_check_cflags___fPIE=no ax_cv_check_ldflags___pie=no
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.4.3
