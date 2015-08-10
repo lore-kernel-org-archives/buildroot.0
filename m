@@ -1,66 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 20:54:27 +0200
-Subject: [Buildroot] [PATCH 1/2] package/poco: bump to version 1.6.1
-In-Reply-To: <1439217249.5186.18.camel@embedded.rocks>
-References: <1438682248-29767-1-git-send-email-joerg.krause@embedded.rocks>
- <20150810162227.6a3cde19@free-electrons.com>
- <1439217249.5186.18.camel@embedded.rocks>
-Message-ID: <20150810205427.156aa7b9@free-electrons.com>
+Date: Mon, 10 Aug 2015 20:56:05 +0200
+Subject: [Buildroot] [git commit] fs/common: add <fs>_POST_GEN_HOOKS support
+Message-ID: <20150810185612.8FA7981D3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=15a53b93a034af78c1a3d62510a2abe5a91e4f8f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 10 Aug 2015 16:34:09 +0200, J?rg Krause wrote:
+The common filesystem infrastructure already supports a
+<fs>_PRE_GEN_HOOKS variable, which allows filesystem makefiles to
+register some actions to be done before the root filesystem image is
+generated.
 
-> In that case I do not understand the help text from
-> nightly.buildroot.org, 17.4. The .hash file:
-> 
-> "The none hash type is reserved to those archives downloaded from a
-> repository, like a git clone, a subversion checkout? or archives
-> downloaded with the github helper Section 17.19.2, ?How to add a 
->                     ^^^^^^^^^^^^^
-> package from GitHub?."
-> 
-> And from the example:
-> "# No hash for 1234, comes from the github-helper:
-> none   xxx                                                             
->  libfoo-1234.tar.gz"
+This commit adds a similiar <fs>_POST_GEN_HOOKS variable, which will
+allow filesystem makefiles to do some actions after the filesystem
+image has been generated. It will initially be used by the iso9660
+filesystem to delete the temporary directory it creates.
 
-I think the case where we really need the "none" type is for packages
-that sometimes get downloaded as a tarball, and sometimes from Github.
-Look for example at binutils.hash:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/common.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-sha512  ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74  binutils-2.22.tar.bz2
-sha512  dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16  binutils-2.23.2.tar.bz2
-sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
-sha512  0b36dda0e6d32cd25613c0e64b56b28312515c54d6a159efd3db9a86717f114ab0a0a1f69d08975084d55713ebaeab64e4085c9b3d1c3fa86712869f80eb954d  binutils-2.25.1.tar.bz2
-# No hash for the ARC variant, comes from the github-helper:
-none   xxx  binutils-arc-2015.06.tar.gz
-
-We want hashes for the tarballs, so we added them. But then, the logic
-of the hash verification is that if a .hash file exists, then *all*
-files downloaded by the package should have hashes. If not, then the
-build is aborted. That's why we added this "none" type.
-
-Now, we could also decided to add just a single "none" entry in the
-hash file of packages downloaded from Github just to make it clear that
-there is voluntarily no hash being provided, and therefore clarify
-between packages that don't have a hash file because it hasn't been
-added yet from packages that don't have a hash file because they are
-downloaded from Github. But it means adding quite a bunch of pretty
-useless .hash files to the ~220+ packages we download from github.
-
-In any case, we should clarify that in the documentation, indeed.
-
-Yann, thoughts?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/fs/common.mk b/fs/common.mk
+index ad1bcf3..528e194 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -16,6 +16,9 @@
+ #  ROOTFS_$(FSTYPE)_PRE_GEN_HOOKS, a list of hooks to call before
+ #  generating the filesystem image
+ #
++#  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
++#  generating the filesystem image
++#
+ #  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
+ #  run after running the main filesystem target. This is useful for
+ #  initramfs, to rebuild the kernel once the initramfs is generated.
+@@ -96,6 +99,7 @@ endif
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+ endif
++	$$(foreach hook,$$(ROOTFS_$(2)_POST_GEN_HOOKS),$$(call $$(hook))$$(sep))
+ 
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
