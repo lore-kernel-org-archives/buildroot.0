@@ -1,31 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 15:42:57 +0200
-Subject: [Buildroot] [PATCH] tinc: disable PIE on ARC
-In-Reply-To: <1439213796-31805-1-git-send-email-abrodkin@synopsys.com>
-References: <1439213796-31805-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150810154257.0c0c53a3@free-electrons.com>
+Date: Mon, 10 Aug 2015 15:43:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version
+ 5.6.12
+In-Reply-To: <1439121681-25926-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1439121681-25926-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150810154329.281e2b62@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Bernd Kuhls,
 
-On Mon, 10 Aug 2015 16:36:36 +0300, Alexey Brodkin wrote:
-> Even though ARC gcc understands "-pie" option and attempts to generate
-> PIE binaries as of today PIE is not really supported for user-space
-> applications.
-> 
-> So we disable PIE detection if building for ARC.
-> That fixes http://autobuild.buildroot.net/results/2b1/2b1aa474fc432f3f79b03c4577d68642bb7e0f9c
-> and also prevents execution of non-supported PIE binary in runtime.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Sun,  9 Aug 2015 14:01:21 +0200, Bernd Kuhls wrote:
+> http://www.php.net/ChangeLog-5.php#5.6.12
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/tinc/tinc.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/php/php.hash | 2 +-
+>  package/php/php.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
