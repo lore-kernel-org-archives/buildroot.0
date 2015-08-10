@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 16:12:24 +0200
-Subject: [Buildroot] [git commit branch/next] package/libglew: bump version
-	to 1.12.0
-Message-ID: <20150810141245.861927FA8E@busybox.osuosl.org>
+Date: Mon, 10 Aug 2015 16:12:16 +0200
+Subject: [Buildroot] [git commit branch/next] package/tor: bump version to
+	0.2.6.10
+Message-ID: <20150810141245.7C6407FA8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1193328c03c54d03d94ddef8a0c52a119186df88
+commit: http://git.buildroot.net/buildroot/commit/?id=81aa2c8bc4d850230ca49a49334a01e00d13554a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libglew/libglew.hash |    2 +-
- package/libglew/libglew.mk   |    2 +-
+ package/tor/tor.hash |    2 +-
+ package/tor/tor.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
-index 9ac811c..68c3e7a 100644
---- a/package/libglew/libglew.hash
-+++ b/package/libglew/libglew.hash
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 341a611..637efe4 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
 @@ -1,2 +1,2 @@
- # Locally computed:
--sha256  99c41320b63f6860869b5fb9af9a1854b15582796c64ee3dfd7096dc0c89f307  glew-1.10.0.tgz
-+sha256	af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf	glew-1.12.0.tgz
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-index 938ec67..4d26ed8 100644
---- a/package/libglew/libglew.mk
-+++ b/package/libglew/libglew.mk
+ # Locally computed
+-sha256	4a6c29ad89a98d7832c599d9480d6d8e55355fb3b8f4b506c5df557f15942f9c  tor-0.2.6.9.tar.gz
++sha256	0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d	tor-0.2.6.10.tar.gz
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index a464391..7db0964 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGLEW_VERSION = 1.10.0
-+LIBGLEW_VERSION = 1.12.0
- LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
- LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
- LIBGLEW_LICENSE = BSD-3c, MIT
+-TOR_VERSION = 0.2.6.9
++TOR_VERSION = 0.2.6.10
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3c
+ TOR_LICENSE_FILES = LICENSE
