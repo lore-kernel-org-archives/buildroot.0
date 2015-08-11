@@ -1,39 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Aug 2015 07:54:39 +0300
-Subject: [Buildroot] [PATCH] libiio: test programs require threads
-Message-ID: <254c2505374c4d6b33e13c4d4bf276ec1e4fbff5.1439268879.git.baruch@tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 11 Aug 2015 07:12:37 +0200
+Subject: [Buildroot] [PATCH v2] postgresql: fix sparc compile issue
+In-Reply-To: <20150810155605.02f18e0e@free-electrons.com>
+References: <20150809181336.GA23188@waldemar-brodkorb.de>
+ <20150810155605.02f18e0e@free-electrons.com>
+Message-ID: <20150811051237.GE8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/228/228a32167d05337acf17b0e3689aa91e8a67d8fb/
-http://autobuild.buildroot.net/results/86a/86adb968659fec56684ba80e1c4230230fd7a1c8/
+Hi,
+Thomas Petazzoni wrote,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libiio/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+> Dear Waldemar Brodkorb,
+> 
+> On Sun, 9 Aug 2015 20:13:36 +0200, Waldemar Brodkorb wrote:
+> > Fixes autobuilder compile error:
+> > http://autobuild.buildroot.net/results/f374d3535cf91f139ce80703cd2d0a2be5d3b2b1/
+> > 
+> > The predefines are wrong:
+> > ./output/host/usr/bin/sparc-buildroot-linux-uclibc-gcc -dM -E - </dev/null|grep sparc
+> > #define sparc 1                                                                                                                                                                
+> > #define __sparc__ 1                                                                                                                                                            
+> > #define __sparc 1                                                                                                                                                              
+> > #define __sparc_v8__ 1
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> > Changes v1 -> v2:
+> >   - keep Solaris gcc specific defines as suggested by Thomas Petazzoni
+> 
+> Applied, thanks. Could you submit the patch upstream?
 
-diff --git a/package/libiio/Config.in b/package/libiio/Config.in
-index 21496ed7c501..99da4c1c1000 100644
---- a/package/libiio/Config.in
-+++ b/package/libiio/Config.in
-@@ -37,9 +37,13 @@ config BR2_PACKAGE_LIBIIO_TESTS
- 	bool "Install test programs"
- 	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
- 	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Install the test programs (iio_info, iio_genxml, iio_readdev).
- 
-+comment "IIO test programs need a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP
- 	bool "Install C# bindings"
- 	depends on BR2_PACKAGE_MONO
--- 
-2.5.0
+Done. And already applied:
+http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=1f64ec6fd28bcd2be9b6b0ad3a5a630e117db601
+
+best regards
+ Waldemar
