@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 11 Aug 2015 20:16:52 +0200
-Subject: [Buildroot] [PATCH/next 07/10] package/libilbc: new package
+Date: Tue, 11 Aug 2015 20:16:51 +0200
+Subject: [Buildroot] [PATCH/next 06/10] package/libg7221: new package
 In-Reply-To: <1439317015-8031-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1439317015-8031-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1439317015-8031-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1439317015-8031-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +12,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in          |  1 +
- package/libilbc/Config.in  |  7 +++++++
- package/libilbc/libilbc.mk | 15 +++++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/libilbc/Config.in
- create mode 100644 package/libilbc/libilbc.mk
+ package/Config.in            |  1 +
+ package/libg7221/Config.in   |  7 +++++++
+ package/libg7221/libg7221.mk | 16 ++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/libg7221/Config.in
+ create mode 100644 package/libg7221/libg7221.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4cc2ce2..8a7960c 100644
+index 69c148f..4cc2ce2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -701,6 +701,7 @@ menu "Audio/Sound"
+@@ -699,6 +699,7 @@ menu "Audio/Sound"
+ 	source "package/libcodec2/Config.in"
+ 	source "package/libcue/Config.in"
  	source "package/libcuefile/Config.in"
- 	source "package/libg7221/Config.in"
++	source "package/libg7221/Config.in"
  	source "package/libid3tag/Config.in"
-+	source "package/libilbc/Config.in"
  	source "package/liblo/Config.in"
  	source "package/libmad/Config.in"
- 	source "package/libmodplug/Config.in"
-diff --git a/package/libilbc/Config.in b/package/libilbc/Config.in
+diff --git a/package/libg7221/Config.in b/package/libg7221/Config.in
 new file mode 100644
-index 0000000..89d5db2
+index 0000000..e057d28
 --- /dev/null
-+++ b/package/libilbc/Config.in
++++ b/package/libg7221/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBILBC
-+	bool "libilbc"
++config BR2_PACKAGE_LIBG7221
++	bool "libg7221"
 +	help
-+	  iLBC (internet Low Bitrate Codec) is a FREE speech codec
-+	  suitable for robust voice communication over IP.
++	  libg722_1 is a library for the ITU G.722.1 and Annex C
++	  wideband speech codecs.
 +
-+	  http://www.webrtc.org/license-rights/ilbc-freeware
-diff --git a/package/libilbc/libilbc.mk b/package/libilbc/libilbc.mk
++	  http://www.soft-switch.org
+diff --git a/package/libg7221/libg7221.mk b/package/libg7221/libg7221.mk
 new file mode 100644
-index 0000000..8bbfc1f
+index 0000000..813af11
 --- /dev/null
-+++ b/package/libilbc/libilbc.mk
-@@ -0,0 +1,15 @@
++++ b/package/libg7221/libg7221.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# libilbc
++# libg7221
 +#
 +################################################################################
 +
-+LIBILBC_VERSION = 829b08c7902ceb87a261279fabb36b6d523c6e07
-+LIBILBC_SITE = https://freeswitch.org/stash/scm/sd/libilbc.git
-+LIBILBC_SITE_METHOD = git
-+LIBILBC_LICENSE = Global IP Sound iLBC Public License, v2.0
-+LIBILBC_LICENSE_FILES = gips_iLBClicense.pdf
-+LIBILBC_AUTORECONF = YES
-+LIBILBC_INSTALL_STAGING = YES
++LIBG7221_VERSION = dbfc29d4806ecdace50379a2f4d68a992a6fec34
++# we use the FreeSwitch fork because it contains pkgconf support
++LIBG7221_SITE = https://freeswitch.org/stash/scm/sd/libg7221.git
++LIBG7221_SITE_METHOD = git
++LIBG7221_LICENSE = Polycom
++LIBG7221_LICENSE_FILES = COPYING
++LIBG7221_AUTORECONF = YES
++LIBG7221_INSTALL_STAGING = YES
 +
 +$(eval $(autotools-package))
 -- 
