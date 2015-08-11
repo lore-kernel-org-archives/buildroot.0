@@ -1,36 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Aug 2015 10:17:31 +0200
-Subject: [Buildroot] [PATCH] fs: cpio: uImage depends on U-Boot
-In-Reply-To: <55C9A3A2.5040300@green-communications.fr>
-References: <1439237106-18033-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <55C9A3A2.5040300@green-communications.fr>
-Message-ID: <20150811101731.150c1b7e@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 11 Aug 2015 11:18:11 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/jsoncpp: bump to version
+	1.6.5
+In-Reply-To: <1439279206-7180-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1439279206-7180-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150811081811.GA2276@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Cavallari,
+Hi J?rg,
 
-On Tue, 11 Aug 2015 09:26:26 +0200, Nicolas Cavallari wrote:
-> On 10/08/2015 22:05, Vivien Didelot wrote:
-> > Even though some bootloaders such as Barebox can boot uImage, this
-> > format is quite U-Boot specific. So make BR2_TARGET_ROOTFS_CPIO_UIMAGE
-> > depends on BR2_TARGET_UBOOT.
+On Tue, Aug 11, 2015 at 09:46:46AM +0200, J?rg Krause wrote:
+> Remove patch 0001-Revert-Use-std-namespace-for-snprintf.patch:
+> This patch was initially intented to remove upstream commit
+> 1c58876185d2a4ed87dac4a54b82f607e74f55fd to disable std::snprintf() for all
+> compilers. However, the patch actually reverts upstream commit
+> 240ddb6a1b7aae7c6528e328995812ee695a73af which only uses std namespace if the
+> compiler defines __cplusplus >= 201103L, thus is a recent C++11 compiler.
 > 
-> What if you already have a U-Boot binary compiled by your board vendor ?
+> Furthermore, upstream commit fac87108a49fb1b2640eff5d8e4cc7a12723a510 adds
+> the `-std=c++11` compiler flag to gcc, so jsoncpp now requires a C++11 compiler
+> either way.
+> 
+> With jsoncpp requiring a recent C++11 compiler we need at least gcc 4.7.
+> 
+> Backport patch from upstream [1] to remove `-Werror` from the compiler flags to
+> allow building with CS ARM toolchains.
+> 
+> [1]
+> https://github.com/open-source-parsers/jsoncpp/commit/d7b84f69c5e92178e110552cce27f900744e1779
+> 
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Agreed. Even if uImage is indeed mainly U-Boot specific, I agree that
-you may not be building U-Boot with Buildroot, or it might be used in
-other contexts.
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 
-I'll mark Vivien's patch as Rejected in patchwork.
+Thanks,
+baruch
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
