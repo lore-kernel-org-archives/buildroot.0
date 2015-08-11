@@ -1,131 +1,93 @@
-From: Guido Hatzsis <Guido.Hatzsis@yandex.com>
-Date: Tue, 11 Aug 2015 22:59:15 +0000
-Subject: [Buildroot] [PATCH 1/1] Add support for x32 ABI for x86-64 target.
-Message-ID: <1439333955-1259-1-git-send-email-Guido.Hatzsis@yandex.com>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Tue, 11 Aug 2015 16:27:44 -0700
+Subject: [Buildroot] bootm - "Starting kernel"
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD933F@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-x32 uses 32-bit pointers on the x84-64 linux target. The kernel needs
-to have CONFIG_X86_X32 enabled. For more information see:
-https://en.wikipedia.org/wiki/X32_ABI
+Hi Buildroot mailing list,
 
-Signed-off-by: Guido Hatzsis <Guido.Hatzsis@yandex.com>
----
- arch/Config.in.x86                      | 30 ++++++++++++++++++++++++++++++
- package/Makefile.in                     |  5 +++++
- package/glibc/Config.in                 |  2 ++
- package/uclibc/Config.in                |  1 +
- toolchain/toolchain-buildroot/Config.in |  2 ++
- 5 files changed, 40 insertions(+)
+My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have made the former meet the latter's requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. This board is bootable using the U-Boot-1.73 and the USB which are given by Marvell.
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 43f6abc..a312df1 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -268,3 +268,33 @@ config BR2_GCC_TARGET_ARCH
- 	default "c3"		if BR2_x86_c3
- 	default "c3-2"		if BR2_x86_c32
- 	default "geode"		if BR2_x86_geode
-+
-+choice
-+	prompt "Target ABI"
-+	depends on BR2_x86_64
-+	default BR2_X86_64_ABI_GCC
-+	help
-+	  Application Binary Interface to use. The Application Binary
-+	  Interface describes the calling conventions (how arguments
-+	  are passed to functions, how the return value is passed, how
-+	  system calls are made, etc.).
-+
-+config BR2_X86_64_ABI_GNU
-+	bool "gnu"
-+	depends on BR2_x86_64
-+	help
-+      This is the gnu ABI for x86-64 which has 64-bits wide pointers.
-+
-+config BR2_X86_64_ABI_X32
-+	bool "x32"
-+	depends on BR2_x86_64
-+	help
-+      The X32 ABI is x86-64 with 32 bit pointers. It runs in x86-64 mode
-+      but as it has 32-bit pointers only 4 GB of RAM can be addressed.
-+      https://en.wikipedia.org/wiki/X32_ABI
-+
-+endchoice
-+
-+config BR2_GCC_TARGET_ABI
-+    default "x32"      if BR2_X86_64_ABI_X32
-+
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 545694f..db2c0f0 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -70,6 +70,11 @@ ABI := $(ABI)hf
- endif
- endif
- 
-+# Only set the ABI for x86-64 x32.
-+ifeq ($(BR2_X86_64_ABI_X32),y)
-+ABI = x32
-+endif
-+
- # For FSL PowerPC there's SPE
- ifeq ($(BR2_powerpc_SPE),y)
- ABI = spe
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 8cc8cce..a76f2c7 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -4,6 +4,7 @@ if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- config BR2_PACKAGE_EGLIBC
- 	bool
- 	default y
-+	depends on !BR2_X86_64_ABI_X32
- 
- choice
- 	prompt "eglibc version"
-@@ -29,6 +30,7 @@ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- config BR2_PACKAGE_GLIBC
- 	bool
- 	default y
-+	depends on !BR2_X86_64_ABI_X32
- 
- choice
- 	prompt "glibc version"
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index bf40a13..b21a7fe 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -4,6 +4,7 @@ if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- config BR2_PACKAGE_UCLIBC
- 	bool
- 	default y
-+	depends on !BR2_X86_64_ABI_X32
- 
- comment "uClibc Options"
- 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 13e2b15..828f753 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -34,6 +34,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_powerpc || BR2_sh2a   || BR2_sh4	   || BR2_sh4eb    || \
- 		   BR2_sparc   || BR2_xtensa || BR2_x86_64
-+	depends on !BR2_X86_64_ABI_X32
- 	help
- 	  This option selects uClibc as the C library for the
- 	  cross-compilation toolchain.
-@@ -51,6 +52,7 @@ config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_DEPRECATED_SINCE_2015_08
-+	depends on !BR2_X86_64_ABI_X32
- 	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our eglibc.mk enables RPC support
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--- 
-2.5.0
+I used Buildroot-2015.05 and built the uImage and rootfs.cpio.uboot with no problems. I enabled the TFTP server on my host.
+
+On my target, the execution of the following commands, listed below, ended up with "Starting kernel", no display of kernel booting messages. The attached is the .config file I created this the make process.
+
+I am resolving this issue now. Your experience sharing is extremely grateful.
+
+Tommy
+
+Marvell>> tftp 02000000 10.28.1.20:uImage
+Using egiga0 device
+TFTP from server 10.28.1.20; our IP address is 10.28.1.47
+Filename 'uImage'.
+Load address: 0x2000000
+Loading: #################################################################
+         #################################################################
+         #################################################################
+         ##############
+         1.6 MiB/s
+done
+Bytes transferred = 1066696 (1046c8 hex)
+Marvell>> tftp 02200000 10.28.1.20:rootfs.cpio.uboot
+Using egiga0 device
+TFTP from server 10.28.1.20; our IP address is 10.28.1.47
+Filename 'rootfs.cpio.uboot'.
+Load address: 0x2200000
+Loading: #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         ######################
+         1.7 MiB/s
+done
+Bytes transferred = 4769344 (48c640 hex)
+Marvell>> bootm 02000000 02200000
+## Booting kernel from Legacy Image at 02000000 ...
+   Image Name:   Linux-4.0.4
+   Created:      2015-08-11   0:21:58 UTC
+   Image Type:   ARM Linux Kernel Image (uncompressed)
+   Data Size:    1066632 Bytes = 1 MiB
+   Load Address: 02000000
+   Entry Point:  02000000
+   Verifying Checksum ... OK
+## Loading init Ramdisk from Legacy Image at 02200000 ...
+   Image Name:
+   Created:      2015-08-11  15:25:49 UTC
+   Image Type:   ARM Linux RAMDisk Image (uncompressed)
+   Data Size:    4769280 Bytes = 4.5 MiB
+   Load Address: 00000000
+   Entry Point:  00000000
+   Verifying Checksum ... OK
+   XIP Kernel Image ... OK
+OK
+
+Starting kernel ...
+
+
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150811/7a72281d/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config.aug11tue15
+Type: application/octet-stream
+Size: 1332 bytes
+Desc: .config.aug11tue15
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150811/7a72281d/attachment.obj>
