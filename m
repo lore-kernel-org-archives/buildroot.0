@@ -1,40 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Aug 2015 22:45:32 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/mosh: fix dependencies
-Message-ID: <1439325932-14400-1-git-send-email-yann.morin.1998@free.fr>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue, 11 Aug 2015 17:01:01 -0400
+Subject: [Buildroot] [PATCH] fs: iso9660: change boot menu entry text
+Message-ID: <1439326861-11486-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mosh selects protobuf, so it needs to propagate *all* its dependencies.
+Replace Grub-specific "menu.lst" with "menu config" in the
+BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU Kconfig entry text.
 
-Fixes:
-    http://autobuild.buildroot.org/results/1e7/1e7d28018252fa48ee1ccd68d0a21afb3e0f072f/
-    http://autobuild.buildroot.org/results/a91/a91ea29454a6f8eefc0bf4f0eb137dd8e061f028/
-    http://autobuild.buildroot.org/results/ecb/ecb67c1d1b04a79ad9fbe4a09121ec492fe1501c/
-    [...]
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Christian Stewart <christian@paral.in>
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 ---
- package/mosh/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/iso9660/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index 4ad7d61..feba023 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -5,7 +5,8 @@ comment "mosh needs a toolchain w/ threads"
- config BR2_PACKAGE_MOSH
- 	bool "mosh"
- 	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
--	depends on BR2_TOOLCHAIN_HAS_THREADS #protobuf
-+	depends on BR2_INSTALL_LIBSTDCPP # protobuf
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_NCURSES
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 7e1ddd6..bab9eec 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -47,7 +47,7 @@ config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
+ endchoice
+ 
+ config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
+-	string "Boot menu.lst file"
++	string "Boot menu config file"
+ 	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
+ 	default "fs/iso9660/grub.cfg" if BR2_TARGET_ROOTFS_ISO9660_GRUB2
+ 	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
 -- 
-1.9.1
+2.5.0
