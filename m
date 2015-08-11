@@ -1,56 +1,30 @@
-From: Matthias Weisser <m.weisser.m@gmail.com>
-Date: Tue, 11 Aug 2015 09:58:21 +0200
-Subject: [Buildroot] [PATCH] squashfs: Add lz4 hc compression
-Message-ID: <1439279901-4337-1-git-send-email-m.weisser.m@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Aug 2015 10:07:27 +0200
+Subject: [Buildroot] [PATCH v2] postgresql: fix sparc compile issue
+In-Reply-To: <20150811051237.GE8475@waldemar-brodkorb.de>
+References: <20150809181336.GA23188@waldemar-brodkorb.de>
+ <20150810155605.02f18e0e@free-electrons.com>
+ <20150811051237.GE8475@waldemar-brodkorb.de>
+Message-ID: <20150811100727.6a791d18@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lz4 offers a high compression mode. A minimalistic file system shrinks by about 15%.
+Waldemar,
 
-Signed-off-by: Matthias Weisser <m.weisser.m@gmail.com>
----
- fs/squashfs/Config.in   | 3 +++
- fs/squashfs/squashfs.mk | 4 ++++
- 2 files changed, 7 insertions(+)
+On Tue, 11 Aug 2015 07:12:37 +0200, Waldemar Brodkorb wrote:
 
-diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
-index ca9ddb2..94e126e 100644
---- a/fs/squashfs/Config.in
-+++ b/fs/squashfs/Config.in
-@@ -18,6 +18,9 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
- config BR2_TARGET_ROOTFS_SQUASHFS4_LZ4
- 	bool "lz4"
- 
-+config BR2_TARGET_ROOTFS_SQUASHFS4_LZ4_HC
-+	bool "lz4hc"
-+
- config BR2_TARGET_ROOTFS_SQUASHFS4_LZMA
- 	bool "lzma"
- 
-diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
-index 446906f..528e0f7 100644
---- a/fs/squashfs/squashfs.mk
-+++ b/fs/squashfs/squashfs.mk
-@@ -9,6 +9,9 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- ROOTFS_SQUASHFS_ARGS += -comp lz4
- else
-+ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4_HC),y)
-+ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
-+else
- ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
- ROOTFS_SQUASHFS_ARGS += -comp lzo
- else
-@@ -23,6 +26,7 @@ endif
- endif
- endif
- endif
-+endif
- 
- define ROOTFS_SQUASHFS_CMD
- 	$(HOST_DIR)/usr/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
+> > Applied, thanks. Could you submit the patch upstream?
+> 
+> Done. And already applied:
+> http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=1f64ec6fd28bcd2be9b6b0ad3a5a630e117db601
+
+Excellent, thanks!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
