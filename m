@@ -1,30 +1,37 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 11 Aug 2015 17:00:11 +0000 (UTC)
-Subject: [Buildroot] Email list volume
-References: <CAJpxd067yR+C--CMMg+A54nsOkFwGZPuutufMkz0-hai2qLPyw@mail.gmail.com>
-Message-ID: <mqd9mr$pgd$1@ger.gmane.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 11 Aug 2015 19:43:03 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/jsoncpp: Broken on musl
+References: <1439121001-14787-1-git-send-email-bernd.kuhls@t-online.de>
+ <1439146794.12501.25.camel@embedded.rocks>
+ <kunk9cxek9.ln2@ID-313208.user.individual.net>
+ <1439189938.14443.3.camel@embedded.rocks>
+Message-ID: <7qop9cxrjq.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-08-08, Bryce Schober <bryce.schober@gmail.com> wrote:
+Am Mon, 10 Aug 2015 08:58:58 +0200 schrieb J?rg Krause:
 
-> I realize this is really only an occasional problem, but it would be
-> helpful to raise the signal-to-noise ratio if this email list didn't also
-> serve as a git commit log.  I'm just sayin' 1500 emails in a day is a bit
-> much.
+> On So, 2015-08-09 at 21:57 +0200, Bernd Kuhls wrote:
+>> Hi J?rg,
+>> 
+>> Am Sun, 09 Aug 2015 20:59:54 +0200 schrieb J?rg Krause:
+>> 
+>> > After a short investigation [1] I realized this error only applies
+>> > for x86 targets.
+>> > 
+>> > [1] https://gcc.gnu.org/ml/gcc-patches/2015-04/msg01084.html
+>> 
+>> v1 of my patch tried to fix it that way but it does not work for
+>> external toolchains: http://patchwork.ozlabs.org/patch/460337/
+> 
+> I see! How about something like depends on !(BR2_i386 || BR2_x86_64) &&
+> !BR2_TOOLCHAIN_USES_MUSL?
 
-You mean there are people who don't filter out the git commit
-messages? I point slrn at nntp://news.gmane.org/gmane.comp.lib.uclibc.buildroot
-and have this in my .score file:
+Hi J?rg,
 
-[gmane.comp.lib.uclibc.buildroot]
-Score: =-9999
-Subject: \[git commit\]
+lgtm.
 
--- 
-Grant Edwards               grant.b.edwards        Yow! Here I am at the flea
-                                  at               market but nobody is buying
-                              gmail.com            my urine sample bottles ...
+Regards, Bernd
