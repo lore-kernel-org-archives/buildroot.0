@@ -1,48 +1,72 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 11 Aug 2015 11:18:11 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/jsoncpp: bump to version
-	1.6.5
-In-Reply-To: <1439279206-7180-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1439279206-7180-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150811081811.GA2276@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Aug 2015 10:55:45 +0200
+Subject: [Buildroot] .hash files for all packages?
+In-Reply-To: <20150811101333.2fd48c22@free-electrons.com>
+References: <1438682248-29767-1-git-send-email-joerg.krause@embedded.rocks>
+ <20150810162227.6a3cde19@free-electrons.com>
+ <1439217249.5186.18.camel@embedded.rocks>
+ <20150810205427.156aa7b9@free-electrons.com>
+ <20150810204725.GG3676@free.fr>
+ <20150811101333.2fd48c22@free-electrons.com>
+Message-ID: <20150811085545.GA3627@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+Thomas, All,
 
-On Tue, Aug 11, 2015 at 09:46:46AM +0200, J?rg Krause wrote:
-> Remove patch 0001-Revert-Use-std-namespace-for-snprintf.patch:
-> This patch was initially intented to remove upstream commit
-> 1c58876185d2a4ed87dac4a54b82f607e74f55fd to disable std::snprintf() for all
-> compilers. However, the patch actually reverts upstream commit
-> 240ddb6a1b7aae7c6528e328995812ee695a73af which only uses std namespace if the
-> compiler defines __cplusplus >= 201103L, thus is a recent C++11 compiler.
+On 2015-08-11 10:13 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 10 Aug 2015 22:47:25 +0200, Yann E. MORIN wrote:
+> > I think the overall goal is to have .hash files for all packages. Having
+> > a .hash files for all packages would allow us to make hashes truly
+> > mandatory, and make a missing .hash file an error, rather than the
+> > warning it is today.
+> > 
+> > Which in turn would ensure we have hashes for all packages for which it
+> > makes sense.
+> > 
+> > Of course, that would mean adding a 'none' hash for those packages for
+> > which we can't have  ahash (like the github helper, or any git/svn/... 
+> > checkouts.
+> > 
+> > So, what J?rg did was in my opinion correct, even if we did not
+> > explicitly document that! ;-)
 > 
-> Furthermore, upstream commit fac87108a49fb1b2640eff5d8e4cc7a12723a510 adds
-> the `-std=c++11` compiler flag to gcc, so jsoncpp now requires a C++11 compiler
-> either way.
-> 
-> With jsoncpp requiring a recent C++11 compiler we need at least gcc 4.7.
-> 
-> Backport patch from upstream [1] to remove `-Werror` from the compiler flags to
-> allow building with CS ARM toolchains.
-> 
-> [1]
-> https://github.com/open-source-parsers/jsoncpp/commit/d7b84f69c5e92178e110552cce27f900744e1779
-> 
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Ok. I'm a bit worried about having 220 useless hash files,
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+The problem we have when there is no .hash file, is that we can't
+differentiate those two cases;
+  - there is no hash for this package, because it does not make sense
+    (github helper, git/svn/foo checkout...)
+  - we forgot to add a hash for that package.
 
-Thanks,
-baruch
+I can understand that having lots of similarly looking files that jsut
+say "don't do hash checks" might seem a bit worrying at first.
+
+But I do think we really do need a way to explicitly say so.
+
+Adding Gustavo in Cc because we already talked about that with him, and
+last we discussed this, I think he agreed (well, I have IRC logs to back
+that claim up! ;-] )
+
+> so I'd like
+> to hear the opinion of others on that. And once we made our decision,
+> document it more clearly.
+
+Yes, it should be throughly documented.
+
+But note: this will have an impact on BR2_EXTERNAL trees; they will also
+have to provide .hash files for their packages.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
