@@ -1,42 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 11 Aug 2015 13:26:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 8286] New: Error with buildroot
-Message-ID: <bug-8286-163@https.bugs.busybox.net/>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Tue, 11 Aug 2015 10:27:54 -0400
+Subject: [Buildroot] [PATCH] fs: cpio: uImage depends on U-Boot
+In-Reply-To: <20150811101731.150c1b7e@free-electrons.com>
+References: <1439237106-18033-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <55C9A3A2.5040300@green-communications.fr>
+ <20150811101731.150c1b7e@free-electrons.com>
+Message-ID: <20150811142750.GA24631@ketchup.touchtunes.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8286
+Hi Nicolas, Thomas,
 
-           Summary: Error with buildroot
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: hmidi.slim1 at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On 15-08-11 10:17:31, Thomas Petazzoni wrote:
+> Dear Nicolas Cavallari,
+> 
+> On Tue, 11 Aug 2015 09:26:26 +0200, Nicolas Cavallari wrote:
+> > On 10/08/2015 22:05, Vivien Didelot wrote:
+> > > Even though some bootloaders such as Barebox can boot uImage, this
+> > > format is quite U-Boot specific. So make BR2_TARGET_ROOTFS_CPIO_UIMAGE
+> > > depends on BR2_TARGET_UBOOT.
+> > 
+> > What if you already have a U-Boot binary compiled by your board vendor ?
+> 
+> Agreed. Even if uImage is indeed mainly U-Boot specific, I agree that
+> you may not be building U-Boot with Buildroot, or it might be used in
+> other contexts.
 
+That is true.
 
-I followed the instructions mentioned on this link:
-http://free-electrons.com/doc/training/buildroot/buildroot-labs.pdf
- But when I run make ,I got these error messages:
- >>> linux Downloading /linux-.tar.xz: Scheme missing. --2015-08-10 09:19:10--
-http://sources.buildroot.net/linux-.tar.xz Resolving sources.buildroot.net
-(sources.buildroot.net)... 176.9.16.109 Connecting to sources.buildroot.net
-(sources.buildroot.net)|176.9.16.109|:80... connected. HTTP request sent,
-awaiting response... 404 Not Found 2015-08-10 09:19:10 ERROR 404: Not Found.
-make: ***
-[/home/slim/Downloads/buildroot/output/build/linux-/.stamp_downloaded] Error 1
+> I'll mark Vivien's patch as Rejected in patchwork.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+My initial concern was seeing the BR2_TARGET_ROOTFS_CPIO_UIMAGE entry
+when enabling BR2_TARGET_ROOTFS_ISO9660 (this last one depends on
+BR2_TARGET_GRUB, BR2_TARGET_GRUB2 or BR2_TARGET_SYSLINUX_ISOLINUX).
+
+Should we make them exclusive?
+
+    config BR2_TARGET_ROOTFS_CPIO_UIMAGE
+        depends on !BR2_TARGET_ROOTFS_ISO9660
+
+Or is that OK to display such options?
+
+Thanks,
+-v
