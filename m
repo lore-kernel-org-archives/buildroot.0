@@ -1,111 +1,74 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 12 Aug 2015 20:40:41 +0200
-Subject: [Buildroot] [PATCH v1] olimex_a20_olinuxino_lime2: new board
-In-Reply-To: <1439391491-4383-1-git-send-email-viktorin@rehivetech.com>
-References: <1439391491-4383-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <CAB0FRsvu_5be0gdt5LxQ1xidUzY6uf1sCiQkeCZahzBk1jdTJQ@mail.gmail.com>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Wed, 12 Aug 2015 14:43:45 -0400
+Subject: [Buildroot] questions about supporting host package along side
+	target package
+Message-ID: <CALe+oY_Q1e_CuE4MamLCdAmzf38j7qdvk5bh5kfNj8WOcKBLRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-08-12 16:58 GMT+02:00 Jan Viktorin <viktorin@rehivetech.com>:
-> Based on olimex_a20_olinuxino_lime and olimex_a20_olinuxino_lime_mali
-> configurations. It is based on the mainline kernel 4.1.4. It boots
-> and the Ethernet is working at speed 1 Gbps.
->
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-> ---
->  board/olimex/a20_olinuxino/boot-lime2.cmd    |  6 ++++++
->  board/olimex/a20_olinuxino/readme.txt        |  3 +++
->  configs/olimex_a20_olinuxino_lime2_defconfig | 31 ++++++++++++++++++++++++++++
->  3 files changed, 40 insertions(+)
->  create mode 100644 board/olimex/a20_olinuxino/boot-lime2.cmd
->  create mode 100644 configs/olimex_a20_olinuxino_lime2_defconfig
->
-> diff --git a/board/olimex/a20_olinuxino/boot-lime2.cmd b/board/olimex/a20_olinuxino/boot-lime2.cmd
-> new file mode 100644
-> index 0000000..a987715
-> --- /dev/null
-> +++ b/board/olimex/a20_olinuxino/boot-lime2.cmd
-> @@ -0,0 +1,6 @@
-> +setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-> +setenv fdtfile sun7i-a20-olinuxino-lime2.dtb
+In some recent work I have been doing, I require the 'rpm' package to
+have a host package variant (so I can manipulate my initial target
+setup during the post-build phase). I have performed some quick edits
+to get rpm (and some dependent libraries) to build for my host system.
+Everything appears to work fine in my setup, but I'd rather clean
+things up and, of course, push the patches upstream. I've been looking
+at other examples and constantly re-reading the manual, but I still
+have some questions about providing support for host packages. If
+anyone has a moment to spare, it would be appreciated.
 
-With the board Lime (and Micro), U-Boot 2015.07 (or 2015.04) set the
-variable 'fdtfile' with the expected value.
-So, the file board/olimex/a20_olinuxino/boot.cmd could be common for
-all A20-Olinuxino boards.
+---
 
-Fran?ois.
+The manual states the following:
 
-> +ext4load mmc 0 0x49000000 /boot/${fdtfile}
-> +ext4load mmc 0 0x46000000 /boot/zImage
-> +env set fdt_high ffffffff
-> +bootz 0x46000000 - 0x49000000
-> diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-> index 7e9af84..7998aa1 100644
-> --- a/board/olimex/a20_olinuxino/readme.txt
-> +++ b/board/olimex/a20_olinuxino/readme.txt
-> @@ -17,6 +17,8 @@ The following defconfigs are available:
->     for the A20-OLinuXino-LIME board using mainline kernel
->   - olimex_a20_olinuxino_lime_mali_defconfig
->     for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel
-> + - olimex_a20_olinuxino_lime2_defconfig
-> +   for the A20-OLinuXino-LIME2 board using mainline kernel
->
->  The legacy linux-sunxi kernels are based on the vendor code drops.
->  They are only useful when accelerated 3D graphics and multimedia support
-> @@ -50,6 +52,7 @@ After building, you should get a tree like this:
->      +-- rootfs.ext4 -> rootfs.ext2
->      +-- script.bin (lime_mali)
->      +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
-> +    +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
->      +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
->      +-- u-boot.bin
->      +-- u-boot-sunxi-with-spl.bin
-> diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-> new file mode 100644
-> index 0000000..b1f9df1
-> --- /dev/null
-> +++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-> @@ -0,0 +1,31 @@
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_ARM_EABIHF=y
-> +BR2_CCACHE=y
-> +BR2_OPTIMIZE_2=y
-> +BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-lime2.cmd $(TARGET_DIR)/boot"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime2"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_PACKAGE_SUNXI_TOOLS=y
-> +BR2_PACKAGE_SUNXI_BOARDS=y
-> +BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime2"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> --
-> 2.5.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+   host-generic-package uses the HOST_LIBFOO_* variables. For some
+variables, if the HOST_LIBFOO_ prefixed variable doesn?t exist, the
+package infrastructure uses the corresponding variable prefixed by
+LIBFOO_.
+
+From a quick look at the manual, it implicitly indicates that
+LIBFOO_CONF_OPTS is not a fallback value, so a respective
+HOST_LIBFOO_CONF_OPTS entry is "required". I was wondering why, for
+some cases, that some packages that build a host package do not define
+the same configuration options for their target package?
+
+For example, the current xz package
+(http://git.buildroot.net/buildroot/tree/package/xz/xz.mk) has support
+for a host and target package, but only explicitly configures thread
+support for the target package. I assume, in this case, this was done
+since it might not really matter for the host package; correct? Should
+there exist lines defining "HOST_XZ_CONF_OPTS" anyways?
+
+---
+
+One of the dependent packages I would have to alter is the "neon"
+package. To have this package support both a host and target package,
+I'll be adding HOST_NEON_CONF_OPTS and HOST_NEON_DEPENDENCIES entries
+to the make file. It seems if I want to match the same capabilities
+found in the target package into the host, I'd be almost doubling the
+size of the make file by adding respective HOST_* values. For example
+(http://git.buildroot.net/buildroot/tree/package/neon/neon.mk):
+
+   ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
+   NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+   NEON_DEPENDENCIES += zlib
+   else
+   NEON_CONF_OPTS += --without-zlib
+   endif
+
+would be changed to:
+
+   ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
+   NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+   NEON_DEPENDENCIES += zlib
+   HOST_NEON_CONF_OPTS += --with-zlib=$(HOST_DIR)
+   HOST_NEON_DEPENDENCIES += host-zlib
+   else
+   NEON_CONF_OPTS += --without-zlib
+   HOST_NEON_CONF_OPTS += --without-zlib
+   endif
+
+Is this the "correct" way to do this? Is there an alternative or an
+example package that shows something better?
