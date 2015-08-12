@@ -1,95 +1,97 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Wed, 12 Aug 2015 16:58:11 +0200
-Subject: [Buildroot] [PATCH v1] olimex_a20_olinuxino_lime2: new board
-Message-ID: <1439391491-4383-1-git-send-email-viktorin@rehivetech.com>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Wed, 12 Aug 2015 08:15:56 -0700
+Subject: [Buildroot] bootm - "Starting kernel"
+In-Reply-To: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
+References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474B5DFA4@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on olimex_a20_olinuxino_lime and olimex_a20_olinuxino_lime_mali
-configurations. It is based on the mainline kernel 4.1.4. It boots
-and the Ethernet is working at speed 1 Gbps.
+Hi Buildroot mailing list,
 
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
----
- board/olimex/a20_olinuxino/boot-lime2.cmd    |  6 ++++++
- board/olimex/a20_olinuxino/readme.txt        |  3 +++
- configs/olimex_a20_olinuxino_lime2_defconfig | 31 ++++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 board/olimex/a20_olinuxino/boot-lime2.cmd
- create mode 100644 configs/olimex_a20_olinuxino_lime2_defconfig
+My yesterday's U-Boot bootargs for my bootm was "console=/dev/ttyS0,115200n8 mem=32M initrd=0x02200000 rw root=/dev/ram0 rw eth=${ethaddr}
 
-diff --git a/board/olimex/a20_olinuxino/boot-lime2.cmd b/board/olimex/a20_olinuxino/boot-lime2.cmd
-new file mode 100644
-index 0000000..a987715
---- /dev/null
-+++ b/board/olimex/a20_olinuxino/boot-lime2.cmd
-@@ -0,0 +1,6 @@
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-+setenv fdtfile sun7i-a20-olinuxino-lime2.dtb
-+ext4load mmc 0 0x49000000 /boot/${fdtfile}
-+ext4load mmc 0 0x46000000 /boot/zImage
-+env set fdt_high ffffffff
-+bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-index 7e9af84..7998aa1 100644
---- a/board/olimex/a20_olinuxino/readme.txt
-+++ b/board/olimex/a20_olinuxino/readme.txt
-@@ -17,6 +17,8 @@ The following defconfigs are available:
-    for the A20-OLinuXino-LIME board using mainline kernel
-  - olimex_a20_olinuxino_lime_mali_defconfig
-    for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel
-+ - olimex_a20_olinuxino_lime2_defconfig
-+   for the A20-OLinuXino-LIME2 board using mainline kernel
- 
- The legacy linux-sunxi kernels are based on the vendor code drops.
- They are only useful when accelerated 3D graphics and multimedia support
-@@ -50,6 +52,7 @@ After building, you should get a tree like this:
-     +-- rootfs.ext4 -> rootfs.ext2
-     +-- script.bin (lime_mali)
-     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
-+    +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
-     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
-     +-- u-boot.bin
-     +-- u-boot-sunxi-with-spl.bin
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-new file mode 100644
-index 0000000..b1f9df1
---- /dev/null
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -0,0 +1,31 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_EABIHF=y
-+BR2_CCACHE=y
-+BR2_OPTIMIZE_2=y
-+BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-lime2.cmd $(TARGET_DIR)/boot"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime2"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_SUNXI_TOOLS=y
-+BR2_PACKAGE_SUNXI_BOARDS=y
-+BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime2"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.5.0
+The original bootargs was given by Marvell for booting from their USB storage device.
+
+Tommy
+________________________________________
+From: Lee, Tommy
+Sent: Tuesday, August 11, 2015 4:27 PM
+To: buildroot at busybox.net
+Subject: bootm - "Starting kernel"
+
+Hi Buildroot mailing list,
+
+My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have made the former meet the latter?s requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. This board is bootable using the U-Boot-1.73 and the USB which are given by Marvell.
+
+I used Buildroot-2015.05 and built the uImage and rootfs.cpio.uboot with no problems. I enabled the TFTP server on my host.
+
+On my target, the execution of the following commands, listed below, ended up with ?Starting kernel?, no display of kernel booting messages. The attached is the .config file I created this the make process.
+
+I am resolving this issue now. Your experience sharing is extremely grateful.
+
+Tommy
+
+Marvell>> tftp 02000000 10.28.1.20:uImage
+Using egiga0 device
+TFTP from server 10.28.1.20; our IP address is 10.28.1.47
+Filename 'uImage'.
+Load address: 0x2000000
+Loading: #################################################################
+         #################################################################
+         #################################################################
+         ##############
+         1.6 MiB/s
+done
+Bytes transferred = 1066696 (1046c8 hex)
+Marvell>> tftp 02200000 10.28.1.20:rootfs.cpio.uboot
+Using egiga0 device
+TFTP from server 10.28.1.20; our IP address is 10.28.1.47
+Filename 'rootfs.cpio.uboot'.
+Load address: 0x2200000
+Loading: #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         ######################
+         1.7 MiB/s
+done
+Bytes transferred = 4769344 (48c640 hex)
+Marvell>> bootm 02000000 02200000
+## Booting kernel from Legacy Image at 02000000 ...
+   Image Name:   Linux-4.0.4
+   Created:      2015-08-11   0:21:58 UTC
+   Image Type:   ARM Linux Kernel Image (uncompressed)
+   Data Size:    1066632 Bytes = 1 MiB
+   Load Address: 02000000
+   Entry Point:  02000000
+   Verifying Checksum ... OK
+## Loading init Ramdisk from Legacy Image at 02200000 ...
+   Image Name:
+   Created:      2015-08-11  15:25:49 UTC
+   Image Type:   ARM Linux RAMDisk Image (uncompressed)
+   Data Size:    4769280 Bytes = 4.5 MiB
+   Load Address: 00000000
+   Entry Point:  00000000
+   Verifying Checksum ... OK
+   XIP Kernel Image ... OK
+OK
+
+Starting kernel ...
+
+
+
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
