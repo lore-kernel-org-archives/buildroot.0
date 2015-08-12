@@ -1,44 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 12 Aug 2015 23:47:10 +0200
-Subject: [Buildroot] [PATCH v1] evemu: bump version to 2.2.0
-Message-ID: <1439416030-13857-1-git-send-email-ps.report@gmx.net>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 13 Aug 2015 01:19:59 +0300
+Subject: [Buildroot] [PATCH 0/4] xtensa: toolchain fix for compiling huge
+	functions
+Message-ID: <1439418003-23805-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See [1] for details.
+Hi Thomas,
 
-[1] http://lists.freedesktop.org/archives/input-tools/2015-August/001190.html
+this series backports binutils and gcc patches that add auto-litpools option
+and replaces text-section-literals ABI flag for xtensa with auto-litpools.
+With that change compiling huge functions should no longer be an issue on
+xtensa. Obviously that change will break builds with pre-built toolchain.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/evemu/evemu.hash | 4 ++--
- package/evemu/evemu.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Max Filippov (4):
+  binutils: backport auto-litpools xtensa gas option
+  gcc: backport mauto-litpools xtensa option
+  xtensa: switch from text-section-literals to auto-litpools
+  Revert "opencv: mark as not available on Xtensa"
 
-diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
-index 99668b7..9d7bb50 100644
---- a/package/evemu/evemu.hash
-+++ b/package/evemu/evemu.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2014-November/001125.html
--sha256 0c87360882751356e9f977ebf7438c00fe97deb232ac725dd86e5ba78203ee97 evemu-2.1.0.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2015-August/001190.html
-+sha256 e0f79808959d1b1f307a3d5add8ee9e5786d926e9aeb0045dadb85c7350d0a3c evemu-2.2.0.tar.xz
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index b502469..ad56888 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EVEMU_VERSION = 2.1.0
-+EVEMU_VERSION = 2.2.0
- EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
+ package/Makefile.in                                |   4 +-
+ .../2.24/913-xtensa-add-auto-litpools-option.patch | 698 ++++++++++++++++++++
+ .../913-xtensa-add-auto-litpools-option.patch      | 699 +++++++++++++++++++++
+ .../870-xtensa-add-mauto-litpools-option.patch     | 290 +++++++++
+ .../870-xtensa-add-mauto-litpools-option.patch     | 290 +++++++++
+ .../870-xtensa-add-mauto-litpools-option.patch     | 290 +++++++++
+ package/gcc/gcc.mk                                 |   6 +-
+ package/opencv/Config.in                           |   3 -
+ 8 files changed, 2272 insertions(+), 8 deletions(-)
+ create mode 100644 package/binutils/2.24/913-xtensa-add-auto-litpools-option.patch
+ create mode 100644 package/binutils/2.25.1/913-xtensa-add-auto-litpools-option.patch
+ create mode 100644 package/gcc/4.8.5/870-xtensa-add-mauto-litpools-option.patch
+ create mode 100644 package/gcc/4.9.3/870-xtensa-add-mauto-litpools-option.patch
+ create mode 100644 package/gcc/5.2.0/870-xtensa-add-mauto-litpools-option.patch
+
 -- 
-2.1.4
+1.8.1.4
