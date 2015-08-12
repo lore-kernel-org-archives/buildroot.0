@@ -1,74 +1,33 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Wed, 12 Aug 2015 14:43:45 -0400
-Subject: [Buildroot] questions about supporting host package along side
-	target package
-Message-ID: <CALe+oY_Q1e_CuE4MamLCdAmzf38j7qdvk5bh5kfNj8WOcKBLRg@mail.gmail.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 12 Aug 2015 19:51:15 +0100
+Subject: [Buildroot] bootm - "Starting kernel"
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD9377@svr-wa-exch1.atg.lc>
+References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474B5DFA4@svr-wa-exch1.atg.lc>
+ <CA+BsyQ5DRnaPbH6dDiPEGcxqckwHMUo3ckyoRkyp0iuWGc-OjA@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474AD9365@svr-wa-exch1.atg.lc>
+ <CA+BsyQ7K9FZ1Z2Q-hfkpeY8jvKzAc3ek_n3VRgs=U=AXd5GUEg@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474AD9377@svr-wa-exch1.atg.lc>
+Message-ID: <CA+BsyQ5eUPRK3bCUgwan5KETLHiEpUbeRy7+kGzbXAoZu8XnHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some recent work I have been doing, I require the 'rpm' package to
-have a host package variant (so I can manipulate my initial target
-setup during the post-build phase). I have performed some quick edits
-to get rpm (and some dependent libraries) to build for my host system.
-Everything appears to work fine in my setup, but I'd rather clean
-things up and, of course, push the patches upstream. I've been looking
-at other examples and constantly re-reading the manual, but I still
-have some questions about providing support for host packages. If
-anyone has a moment to spare, it would be appreciated.
+Tommy,
 
----
+Please keep the list CC'd.
 
-The manual states the following:
+> tclee at Latitude-E6400:~/Downloads/aug10mon15/buildroot-2015.05$ find . -name "*mvebu*v7*defconfig"|xargs ls -lrt
+> -rw-rw-r-- 1 tclee tclee 2957 May 17 09:55 ./output/build/linux-headers-4.0.4/arch/arm/configs/mvebu_v7_defconfig
+> -rw-rw-r-- 1 tclee tclee 2957 May 17 09:55 ./output/build/linux-4.0.4/arch/arm/configs/mvebu_v7_defconfig
+>
+> The md5sum shows that they are identical. Please tell me how to use it for the make process. I wonder if I need to copy it to the configs folder for using the "in-tree defconfig file" option.
 
-   host-generic-package uses the HOST_LIBFOO_* variables. For some
-variables, if the HOST_LIBFOO_ prefixed variable doesn?t exist, the
-package infrastructure uses the corresponding variable prefixed by
-LIBFOO_.
+The above directories are where buildroot has unpacked your kernel to build it.
 
-From a quick look at the manual, it implicitly indicates that
-LIBFOO_CONF_OPTS is not a fallback value, so a respective
-HOST_LIBFOO_CONF_OPTS entry is "required". I was wondering why, for
-some cases, that some packages that build a host package do not define
-the same configuration options for their target package?
+No, you don't need to copy anything. Set up buildroot as I described
+in my previous email.
 
-For example, the current xz package
-(http://git.buildroot.net/buildroot/tree/package/xz/xz.mk) has support
-for a host and target package, but only explicitly configures thread
-support for the target package. I assume, in this case, this was done
-since it might not really matter for the host package; correct? Should
-there exist lines defining "HOST_XZ_CONF_OPTS" anyways?
-
----
-
-One of the dependent packages I would have to alter is the "neon"
-package. To have this package support both a host and target package,
-I'll be adding HOST_NEON_CONF_OPTS and HOST_NEON_DEPENDENCIES entries
-to the make file. It seems if I want to match the same capabilities
-found in the target package into the host, I'd be almost doubling the
-size of the make file by adding respective HOST_* values. For example
-(http://git.buildroot.net/buildroot/tree/package/neon/neon.mk):
-
-   ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
-   NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
-   NEON_DEPENDENCIES += zlib
-   else
-   NEON_CONF_OPTS += --without-zlib
-   endif
-
-would be changed to:
-
-   ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
-   NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
-   NEON_DEPENDENCIES += zlib
-   HOST_NEON_CONF_OPTS += --with-zlib=$(HOST_DIR)
-   HOST_NEON_DEPENDENCIES += host-zlib
-   else
-   NEON_CONF_OPTS += --without-zlib
-   HOST_NEON_CONF_OPTS += --without-zlib
-   endif
-
-Is this the "correct" way to do this? Is there an alternative or an
-example package that shows something better?
+Brendan
