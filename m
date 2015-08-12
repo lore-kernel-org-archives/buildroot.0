@@ -1,53 +1,50 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Wed, 12 Aug 2015 15:31:05 -0700
-Subject: [Buildroot] [RFC] merge_config.sh creates files in buildroot source
-	directory
-Message-ID: <55CBC929.8020101@mentor.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Aug 2015 10:30:16 +0200
+Subject: [Buildroot] [PATCH 3/9] toolchain-external: add support for gcc
+ version dependency
+In-Reply-To: <979955045.8284402.1439295583830.JavaMail.zimbra@datacom.ind.br>
+References: <1438711241-31792-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1438711241-31792-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150804194948.GV3647@free.fr>
+ <20150805121441.13c3a165@free-electrons.com>
+ <1439036584.12501.5.camel@embedded.rocks>
+ <20150808143313.2a5d6fff@free-electrons.com>
+ <1485266737.8272514.1439293774884.JavaMail.zimbra@datacom.ind.br>
+ <979955045.8284402.1439295583830.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20150812103016.6f8ec2fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A co-worker had a problem where their Linux .config did not at all match 
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE ("board-layer/linux/board.defconfig" 
-below). The problem turned out to be that merge_config.sh was failing. 
-(Side note: it failed poorly; the build completed "successfully.")
+Dear Carlos Santos,
 
-merge_config.sh is invoked from the root of the Buildroot source tree, 
-and attempts to create a temporary file there. This is a problem for my 
-team because our Buildroot source tree is shared, and read-only for most 
-users. The problem seems to affect all kconfig projects, including Linux 
-and busybox.
+On Tue, 11 Aug 2015 09:19:43 -0300 (BRT), Carlos Santos wrote:
 
-support/kconfig/merge_config.sh -m -O /.../output/build/linux-4.0 /.../board-layer/linux/board.defconfig
-mktemp: cannot create temp file ./.tmp.config.YIXmE19452: Permission denied
-Using /.../board-layer/linux/board.defconfig as base
-support/kconfig/merge_config.sh: line 88: $TMP_FILE: ambiguous redirect
-cp: missing destination file operand after `/.../output/build/linux-4.0/.config'
-Try `cp --help' for more information.
-#
-# merged configuration written to /.../output/build/linux-4.0/.config (needs make)
+> The problem goes away if I add BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y to my
+> custom defconfig. It was missing in the original file but the absence
+> was harmless.
+> 
+> Anyone using an external toolchain will face the same problem, so I
+> think it's important to emphasize the consequences of the change in
+> the release notes.
 
+There is no need for that, the error message tells you that the
+selection of the gcc version is incorrect. It is exactly the same sort
+of checks that is used to validate the selected C library, etc.
 
-Invoking mktemp with --tmpdir seems to resolve the problem, but I 
-haven't investigated more deeply than that.
+The mechanism to specify the gcc version has been added very recently,
+so that's why you're seeing the problem now.
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 81b0c61..5beb79d 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -82,7 +82,7 @@ shift;
-  
-  MERGE_LIST=$*
-  SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
--TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
-+TMP_FILE=$(mktemp --tmpdir ./.tmp.config.XXXXXXXXXX)
-  
-  echo "Using $INITFILE as base"
-  cat $INITFILE > $TMP_FILE
+If you hand-edit your defconfig, you're supposed to know what you're
+doing. Otherwise, 'make menuconfig' will show an option to select the
+gcc version used in your external toolchain.
 
+Best regards,
 
+Thomas
 -- 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
