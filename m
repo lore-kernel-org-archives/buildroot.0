@@ -1,48 +1,74 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 12 Aug 2015 07:38:16 +0300
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Wed, 12 Aug 2015 17:16:35 +1200
 Subject: [Buildroot] [PATCH] wf111: Add mdev dependency
-In-Reply-To: <CAE21AQqJwCZMRDj3C+JEHjoNJvprxhZusW6TTfNWVwLaL7UziA@mail.gmail.com>
+In-Reply-To: <20150812043816.GG25261@tarshish>
 References: <1439277422-26111-1-git-send-email-cdhmanning@gmail.com>
  <20150811114020.GD25261@tarshish>
  <CAE21AQqJwCZMRDj3C+JEHjoNJvprxhZusW6TTfNWVwLaL7UziA@mail.gmail.com>
-Message-ID: <20150812043816.GG25261@tarshish>
+ <20150812043816.GG25261@tarshish>
+Message-ID: <CAE21AQr13hYAsTkcD2_qRjSHme8aCHPDZDt2CWMeo8Fi4jptHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
+>> On Tue, Aug 11, 2015 at 11:40 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> > On Tue, Aug 11, 2015 at 07:17:02PM +1200, Charles Manning wrote:
+>> >> wf111 really needs mdev
+>> >
+>> > Please explain why.
+>On Wed, Aug 12, 2015 at 4:38 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Charles,
+>
+> On Wed, Aug 12, 2015 at 08:11:08AM +1200, Charles Manning wrote:
+>> Are you saying I should explain here or in the commit notice?
+>
+> In commit log.
 
-On Wed, Aug 12, 2015 at 08:11:08AM +1200, Charles Manning wrote:
-> Are you saying I should explain here or in the commit notice?
+Ok, I will resubmit...
 
-In commit log.
+>
+>> Actually udev would work too.
+>
+> Recent kernels gained the ability to load firmware directly without any help
+> form userspace, so this is probably another option.
 
-> Actually udev would work too.
+Well not without rewriting the wf111 driver and the associated
+prebuilt "helper" binaries it comes with...
 
-Recent kernels gained the ability to load firmware directly without any help 
-form userspace, so this is probably another option.
+The wf111 buildroot package unwraps a tarball from Bluegiga, does an
+out of tree build of the kernel modules then copies the modules +
+binaries into the file system tree.
 
-> The wf111 driver set uses hotpug to perform the firmware patching
-> (loading .xbv files).
-> 
-> From what I have experienced, fw patching is required when you first
-> fire up a new module and when you change modes (sta only vs ap).
+This isn't "pure" or anything like that, but it gets the job done....
 
-Since there are different ways to load the firmware we generally don't make 
-firmware or driver packages build depend on any specific firmware loading 
-mechanism.
+This is why there is quite a bit of "funkiness" to the wf111 package.
 
-baruch
+>
+>> The wf111 driver set uses hotpug to perform the firmware patching
+>> (loading .xbv files).
+>>
+>> From what I have experienced, fw patching is required when you first
+>> fire up a new module and when you change modes (sta only vs ap).
+>
+> Since there are different ways to load the firmware we generally don't make
+> firmware or driver packages build depend on any specific firmware loading
+> mechanism.
 
-> On Tue, Aug 11, 2015 at 11:40 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > On Tue, Aug 11, 2015 at 07:17:02PM +1200, Charles Manning wrote:
-> >> wf111 really needs mdev
-> >
-> > Please explain why.
+In general you are right, but I think this is a special case.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+wf111 driver + associated files  is built out of tree by a special package.
+
+That package already has other dependencies that are nothing to do
+with the kernel. eg.BR2_TOOLCHAIN_USES_GLIBC because of those prebuilt
+binaries.
+
+The prebuilt binaries (and therefore the whole wf111 package) does not
+result in a functioning wf111 subsystem unless there is udev or mdev
+(I've only tested with mdev)., therefore let's be helpful and add the
+dependency.
+
+Regards
+
+Charles
