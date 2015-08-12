@@ -1,31 +1,48 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 12 Aug 2015 06:34:18 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-08-10
-In-Reply-To: <20150811063012.4DDBD1012EE@stock.ovh.net>
-References: <20150811063012.4DDBD1012EE@stock.ovh.net>
-Message-ID: <20150812043418.GJ8475@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 12 Aug 2015 07:38:16 +0300
+Subject: [Buildroot] [PATCH] wf111: Add mdev dependency
+In-Reply-To: <CAE21AQqJwCZMRDj3C+JEHjoNJvprxhZusW6TTfNWVwLaL7UziA@mail.gmail.com>
+References: <1439277422-26111-1-git-send-email-cdhmanning@gmail.com>
+ <20150811114020.GD25261@tarshish>
+ <CAE21AQqJwCZMRDj3C+JEHjoNJvprxhZusW6TTfNWVwLaL7UziA@mail.gmail.com>
+Message-ID: <20150812043816.GG25261@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hi Charles,
 
-> Build statistics for 2015-08-10
-> ===============================
+On Wed, Aug 12, 2015 at 08:11:08AM +1200, Charles Manning wrote:
+> Are you saying I should explain here or in the commit notice?
+
+In commit log.
+
+> Actually udev would work too.
+
+Recent kernels gained the ability to load firmware directly without any help 
+form userspace, so this is probably another option.
+
+> The wf111 driver set uses hotpug to perform the firmware patching
+> (loading .xbv files).
 > 
->         success : 201
->        failures : 45 
->        timeouts : 1  
->           TOTAL : 247
-> 
->          sh4 |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/f373f0b20cf127b3e54970ed50d45fc5c38991a7/
+> From what I have experienced, fw patching is required when you first
+> fire up a new module and when you change modes (sta only vs ap).
 
-There is a patch for gcc in the bugtracker for this.
-Should we add it to gcc 4.9.3?
+Since there are different ways to load the firmware we generally don't make 
+firmware or driver packages build depend on any specific firmware loading 
+mechanism.
 
-best regards
- Waldemar
+baruch
+
+> On Tue, Aug 11, 2015 at 11:40 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > On Tue, Aug 11, 2015 at 07:17:02PM +1200, Charles Manning wrote:
+> >> wf111 really needs mdev
+> >
+> > Please explain why.
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
