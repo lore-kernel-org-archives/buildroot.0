@@ -1,39 +1,31 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 12 Aug 2015 06:32:58 +0200
-Subject: [Buildroot] [PATCH] minidlna: fix static linking
-Message-ID: <20150812043257.GA13454@waldemar-brodkorb.de>
+Date: Wed, 12 Aug 2015 06:34:18 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-08-10
+In-Reply-To: <20150811063012.4DDBD1012EE@stock.ovh.net>
+References: <20150811063012.4DDBD1012EE@stock.ovh.net>
+Message-ID: <20150812043418.GJ8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As libid3tag uses compress, -lz must be linked in, as no pkconfig file exist.
-The name of the vorbis pkgconfig file is vorbis.pc.
-We also need to add sqlite in pkgconfig call.
+Hi Thomas,
+Thomas Petazzoni wrote,
 
-This fixes following autobuilder compile error:
-http://autobuild.buildroot.net/results/f538ad6673b711492acd727d623d0cc2de626f16/
+> Build statistics for 2015-08-10
+> ===============================
+> 
+>         success : 201
+>        failures : 45 
+>        timeouts : 1  
+>           TOTAL : 247
+> 
+>          sh4 |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/f373f0b20cf127b3e54970ed50d45fc5c38991a7/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/minidlna/minidlna.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+There is a patch for gcc in the bugtracker for this.
+Should we add it to gcc 4.9.3?
 
-diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
-index ab93484..385c8df 100644
---- a/package/minidlna/minidlna.mk
-+++ b/package/minidlna/minidlna.mk
-@@ -17,8 +17,9 @@ MINIDLNA_DEPENDENCIES = \
- ifeq ($(BR2_STATIC_LIBS),y)
- # the configure script / Makefile forgets to link with some of the dependent
- # libraries breaking static linking, so help it along
--MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libavcodec libexif libvorbis`
-+MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libavcodec libexif vorbis sqlite3`
- MINIDLNA_STATIC_LIBS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)
-+MINIDLNA_STATIC_LIBS += -lz
- MINIDLNA_CONF_ENV += LIBS="$(MINIDLNA_STATIC_LIBS)"
- else
- MINIDLNA_CONF_OPTS = \
--- 
-1.7.10.4
+best regards
+ Waldemar
