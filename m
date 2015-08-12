@@ -1,40 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Aug 2015 10:16:43 +0200
-Subject: [Buildroot] [PATCH] minidlna: fix static linking
-In-Reply-To: <1439362191.22945.8.camel@embedded.rocks>
-References: <20150812043257.GA13454@waldemar-brodkorb.de>
- <1439362191.22945.8.camel@embedded.rocks>
-Message-ID: <20150812101643.5727f761@free-electrons.com>
+Date: Wed, 12 Aug 2015 10:18:06 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-08-10
+In-Reply-To: <20150812043418.GJ8475@waldemar-brodkorb.de>
+References: <20150811063012.4DDBD1012EE@stock.ovh.net>
+ <20150812043418.GJ8475@waldemar-brodkorb.de>
+Message-ID: <20150812101806.72f55a1a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Waldemar Brodkorb,
 
-On Wed, 12 Aug 2015 08:49:51 +0200, J?rg Krause wrote:
+On Wed, 12 Aug 2015 06:34:18 +0200, Waldemar Brodkorb wrote:
 
-> This is an almost identical patch to what Bernd Kuhls sent two weeks
-> ago [1]. Are there any updates for this patch?
+> >          sh4 |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/f373f0b20cf127b3e54970ed50d45fc5c38991a7/
 > 
-> Best regards
-> J?rg Krause
-> 
-> [1] http://patchwork.ozlabs.org/patch/501844/
+> There is a patch for gcc in the bugtracker for this.
+> Should we add it to gcc 4.9.3?
 
-If you read this link, I said:
-
-"""
-Would it be possible to stop hacking this to death? What about instead
-taking the saner approach of switching minidlna configure.ac to use
-PKG_CHECK_MODULES(), which will remove a lot of crap from it, and make
-it work properly for cross-compilation.
-"""
-
-and I've got no further comment. So my comment still stands.
-
-Thanks,
+If you look at the GCC PR for this bug, I restarted the discussion a
+few days ago. My worry is that the patch proposed in the bug tracker
+has not been merged in any gcc branch for now, as far as I know. So it
+has never been tested by the gcc regression tests and so on.
 
 Thomas
 -- 
