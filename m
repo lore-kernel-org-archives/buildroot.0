@@ -1,42 +1,67 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 12 Aug 2015 22:10:07 +0100
-Subject: [Buildroot] [PATCH 2/2] package/zic: bump version to 2015f
-In-Reply-To: <1439413807-12441-1-git-send-email-martin@barkynet.com>
-References: <1439413807-12441-1-git-send-email-martin@barkynet.com>
-Message-ID: <1439413807-12441-2-git-send-email-martin@barkynet.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Wed, 12 Aug 2015 23:47:01 +0200
+Subject: [Buildroot] [PATCH] wf111: Add mdev dependency
+In-Reply-To: <CAE21AQqpiDz0BEA4ruKVGA28k8b4+-NWAkCjKUqX+b=Qta1yrA@mail.gmail.com>
+References: <1439277422-26111-1-git-send-email-cdhmanning@gmail.com>	<55CB2019.5030304@je-eigen-domein.nl>
+ <CAE21AQqpiDz0BEA4ruKVGA28k8b4+-NWAkCjKUqX+b=Qta1yrA@mail.gmail.com>
+Message-ID: <55CBBED5.80108@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/zic/zic.hash | 4 ++--
- package/zic/zic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 08/12/2015 10:49 PM, Charles Manning wrote:
+> On Wed, Aug 12, 2015 at 10:29 PM, Floris Bos <bos@je-eigen-domein.nl> wrote:
+>> On 08/11/2015 09:17 AM, Charles Manning wrote:
+>>> wf111 really needs mdev
+>>
+>> Problem I have seen with mdev in its default configuration is that it
+>> doesn't just handle firmware load requests, but also takes it upon itself to
+>> create/delete the device nodes (even when that already is being handled by
+>> devtmpfs), and does a bad job with that.
+>>
+>> It doesn't preserve sequencing by default, and events are processed
+>> concurrently, and get out-of-order.
+>>
+>> Becomes a problem if your software for example does anything that causes the
+>> kernel to re-read the partition table of your storage.
+>> In that case the kernel sends events to delete all devices nodes of the
+>> storage device, and add them again, right after each other.
+>> However depending on your luck, they can get processed in reverse order:
+>>
+>> ==
+>> mdev[598]: 9.191594 ACTION:add SUBSYSTEM:block DEVNAME:mmcblk0p6
+>> DEVPATH:/devices/platform/soc/3f300000.mmc/mmc_host/mmc0/mmc0:1234/block/mmcblk0/mmcblk0p6
+>> mdev[598]: dev 179,6
+>> [...]
+>> mdev[593]: 9.192168 ACTION:remove SUBSYSTEM:block DEVNAME:mmcblk0p6
+>> DEVPATH:/devices/platform/soc/3f300000.mmc/mmc_host/mmc0/mmc0:1234/block/mmcblk0/mmcblk0p6
+>> mdev[593]: rule matched, line -1
+>> mdev[593]: unlink: mmcblk0p6
+>> ==
+>>
+>> Add is processed before remove, with the end result that /dev/mmcblk0p6 goes
+>> missing...
+>>
+>>
+>> So please don't pull in mdev automatically just for firmware loading,
+>> because it does more than just that, and can have serious side effects.
+> Ok, now I'm stumped. People are telling me "don't use mdev", but
+> nobody is providing a viable alternative.
+>
+> The situation is this:
+> * I did not write wf111, it is not as if I am submitting a new package.
+> * We have an existing package wf111.
+> * The existing package does not work (ie. does not do fw loading)
+> unless there is mdev or udev. Without fw loading wf111 is broken.
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 3ddd6f8..67a6c6d 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,2 @@
--# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
--sha512  fdc568a68f4876b967b39e21fa53f063dc5756e886e2a273cc046d5a014eb517e9c91eb6e03d18c94a89ce48578868aed710790415c500188fce4e4add0ce7ca  tzcode2015e.tar.gz
-+# From 2015f release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-August/000033.html
-+sha512  5cfbebde8a0be57e8388a7b6d35aeba99130a72c1a41f9bbd5d5864511a473aa5e9320ab21055b4383e64b3b9d7682c0d30377ce8407619987be672436014710  tzcode2015f.tar.gz
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 03e023a..e4cc1d3 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZIC_VERSION = 2015e
-+ZIC_VERSION = 2015f
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = ftp://ftp.iana.org/tz/releases
- ZIC_STRIP_COMPONENTS = 0
--- 
-2.1.4
+Suggest you double check there isn't a newer kernel version available 
+for your target device.
+Pretty sure newer kernels can also load the firmware straight from 
+/lib/firmware without userspace helper.
+
+
+Yours sincerely,
+
+Floris Bos
