@@ -1,79 +1,25 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 11 Aug 2015 17:35:26 +0200
-Subject: [Buildroot] [PATCH v2] python-pyroute2: new package
-Message-ID: <1439307326-11082-1-git-send-email-yegorslists@googlemail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 12 Aug 2015 09:36:45 +0200
+Subject: [Buildroot] [PATCH] minidlna: fix static linking
+In-Reply-To: <1439362191.22945.8.camel@embedded.rocks>
+References: <20150812043257.GA13454@waldemar-brodkorb.de>
+ <1439362191.22945.8.camel@embedded.rocks>
+Message-ID: <20150812073645.GA17303@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
+Joerg Krause wrote,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: use the latest git version, that provides README.md as ASCII only file
-	    add hook description
+> 
+> This is an almost identical patch to what Bernd Kuhls sent two weeks
+> ago [1]. Are there any updates for this patch?
 
- package/Config.in                          |  1 +
- package/python-pyroute2/Config.in          |  7 +++++++
- package/python-pyroute2/python-pyroute2.mk | 21 +++++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/python-pyroute2/Config.in
- create mode 100644 package/python-pyroute2/python-pyroute2.mk
+Sorry for the noise. I need to take a look @pachwork next time
+I try to fix any autobuilder issues :)
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..3edd456 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -646,6 +646,7 @@ menu "external python modules"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyqt/Config.in"
- 	source "package/python-pyro/Config.in"
-+	source "package/python-pyroute2/Config.in"
- 	source "package/python-pysendfile/Config.in"
- 	source "package/python-pysnmp/Config.in"
- 	source "package/python-pysnmp-apps/Config.in"
-diff --git a/package/python-pyroute2/Config.in b/package/python-pyroute2/Config.in
-new file mode 100644
-index 0000000..068ecba
---- /dev/null
-+++ b/package/python-pyroute2/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYROUTE2
-+	bool "python-pyroute2"
-+	help
-+	  Python netlink library - Linux network / netns / wireless / ipset
-+	  configuration.
-+
-+	  https://github.com/svinota/pyroute2
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-new file mode 100644
-index 0000000..23c77b7
---- /dev/null
-+++ b/package/python-pyroute2/python-pyroute2.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# python-pyroute2
-+#
-+#############################################################
-+
-+PYTHON_PYROUTE2_VERSION = 16a8aced82c65b94eb9e15a7d773a3256763d155
-+PYTHON_PYROUTE2_SITE = $(call github,svinota,pyroute2,$(PYTHON_PYROUTE2_VERSION))
-+PYTHON_PYROUTE2_LICENSE = Apache-2.0, GPLv2+
-+PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache.v2, LICENSE.GPL.v2
-+PYTHON_PYROUTE2_SETUP_TYPE = distutils
-+PYTHON_PYROUTE2_DEPENDENCIES = host-gawk
-+
-+# this hook is needed to create setup.py from setup.py.in
-+define PYTHON_PYROUTE2_CREATE_SETUP_PY
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) update-version
-+endef
-+
-+PYTHON_PYROUTE2_PRE_CONFIGURE_HOOKS += PYTHON_PYROUTE2_CREATE_SETUP_PY
-+
-+$(eval $(python-package))
--- 
-1.9.1
+best regards
+ Waldemar
