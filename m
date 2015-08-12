@@ -1,35 +1,39 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Tue, 11 Aug 2015 17:11:49 -0700
-Subject: [Buildroot] [PATCH] linux: handle read-only dts files
-Message-ID: <1439338309-19690-1-git-send-email-hollis_blanchard@mentor.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 12 Aug 2015 06:32:58 +0200
+Subject: [Buildroot] [PATCH] minidlna: fix static linking
+Message-ID: <20150812043257.GA13454@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some fine version control systems make all files read-only. The custom DTS file
-may therefore be read-only, and that permission is preserved when copying into
-the Linux build directory. A subsequent rebuild tries to 'cp' again, which
-fails with a "Permission denied" error unless the -f option is used.
+As libid3tag uses compress, -lz must be linked in, as no pkconfig file exist.
+The name of the vorbis pkgconfig file is vorbis.pc.
+We also need to add sqlite in pkgconfig call.
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+This fixes following autobuilder compile error:
+http://autobuild.buildroot.net/results/f538ad6673b711492acd727d623d0cc2de626f16/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/minidlna/minidlna.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 375a9e1..a4c4733 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -270,7 +270,7 @@ endif
- # configuration has changed.
- define LINUX_BUILD_CMDS
- 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
--		cp $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
-+		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index ab93484..385c8df 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -17,8 +17,9 @@ MINIDLNA_DEPENDENCIES = \
+ ifeq ($(BR2_STATIC_LIBS),y)
+ # the configure script / Makefile forgets to link with some of the dependent
+ # libraries breaking static linking, so help it along
+-MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libavcodec libexif libvorbis`
++MINIDLNA_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libavcodec libexif vorbis sqlite3`
+ MINIDLNA_STATIC_LIBS += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)
++MINIDLNA_STATIC_LIBS += -lz
+ MINIDLNA_CONF_ENV += LIBS="$(MINIDLNA_STATIC_LIBS)"
+ else
+ MINIDLNA_CONF_OPTS = \
 -- 
-2.3.2
+1.7.10.4
