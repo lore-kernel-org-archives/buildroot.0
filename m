@@ -1,22 +1,41 @@
-From: Rene Maurer <rmnet@mailc.net>
-Date: Wed, 12 Aug 2015 14:45:22 +0200
-Subject: [Buildroot] Change password length
-Message-ID: <20150812144522.4a7c948f@WSM2015001>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Aug 2015 10:06:49 -0300
+Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.3.17.1
+Message-ID: <1439384809-4545-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Fixes GNUTLS-SA-2015-3 - Double free in certificate DN decoding.
 
-When I change the root password on the target with "passwd", the
-password length is limited to 8 characters.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Is there a way to change this behavior so that more characters are
-accepted? (buildroot 2013.08 and buildroot 2015.05).
-
-Thank you very much for your attention.
-
-Best regards
-Rene Maurer
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 620caae..4496a2b 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
++sha256	b40f158030a92f450a07b20300a3996710ca19800848d9f6fd62493170c5bbb4	gnutls-3.3.17.1.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 4593034..82d9d29 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.3
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17.1
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+2.4.6
