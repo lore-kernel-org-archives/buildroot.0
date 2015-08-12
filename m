@@ -1,118 +1,90 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Wed, 12 Aug 2015 14:00:35 +0200
-Subject: [Buildroot] bootm - "Starting kernel"
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD933F@svr-wa-exch1.atg.lc>
-References: <944894A3EB1D044A9003B2F944389BB20474AD933F@svr-wa-exch1.atg.lc>
-Message-ID: <1439380835.22945.14.camel@embedded.rocks>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed, 12 Aug 2015 14:38:06 +0200
+Subject: [Buildroot] [PATCHv4]  openpowerlink bump to v2.2
+Message-ID: <1439383087-1548-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tommy Lee,
+From doc/openpowerlink.md:
+"The openPOWERLINK release V2.X is an evolution of the openPOWERLINK V1 stack.
+Running the kernel and user layers of openPOWERLINK on different processors in
+a multi-processor/multi-platform architecture, required fundamental changes in
+the Communication Abstraction Layer. Additionally, the existing code base was
+greatly improved so that it is easier to understand and maintain. Due to these
+reasons a new major release was started."
 
-On Di, 2015-08-11 at 16:27 -0700, Lee, Tommy wrote:
-> Hi Buildroot mailing list,
->  
-> My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have
-> made the former meet the latter?s requirements. My target is Marvell
-> ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. This board is bootable
-> using the U-Boot-1.73 and the USB which are given by Marvell.
->  
-> I used Buildroot-2015.05 and built the uImage and rootfs.cpio.uboot
-> with no problems. I enabled the TFTP server on my host.
->  
-> On my target, the execution of the following commands, listed below,
-> ended up with ?Starting kernel?, no display of kernel booting
-> messages. The attached is the .config file I created this the make
-> process.
->  
-> I am resolving this issue now. Your experience sharing is extremely
-> grateful.
->  
-> Tommy
->  
-> Marvell>> tftp 02000000 10.28.1.20:uImage
-> Using egiga0 device
-> TFTP from server 10.28.1.20; our IP address is 10.28.1.47
-> Filename 'uImage'.
-> Load address: 0x2000000
-> Loading:
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->          ##############
->          1.6 MiB/s
-> done
-> Bytes transferred = 1066696 (1046c8 hex)
-> Marvell>> tftp 02200000 10.28.1.20:rootfs.cpio.uboot
-> Using egiga0 device
-> TFTP from server 10.28.1.20; our IP address is 10.28.1.47
-> Filename 'rootfs.cpio.uboot'.
-> Load address: 0x2200000
-> Loading:
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->         
-> #################################################################
->          ######################
->          1.7 MiB/s
-> done
-> Bytes transferred = 4769344 (48c640 hex)
-> Marvell>> bootm 02000000 02200000
-> ## Booting kernel from Legacy Image at 02000000 ...
->    Image Name:   Linux-4.0.4
->    Created:      2015-08-11   0:21:58 UTC
->    Image Type:   ARM Linux Kernel Image (uncompressed)
->    Data Size:    1066632 Bytes = 1 MiB
->    Load Address: 02000000
->    Entry Point:  02000000
->    Verifying Checksum ... OK
-> ## Loading init Ramdisk from Legacy Image at 02200000 ...
->    Image Name:
->    Created:      2015-08-11  15:25:49 UTC
->    Image Type:   ARM Linux RAMDisk Image (uncompressed)
->    Data Size:    4769280 Bytes = 4.5 MiB
->    Load Address: 00000000
->    Entry Point:  00000000
->    Verifying Checksum ... OK
->    XIP Kernel Image ... OK
-> OK
->  
-> Starting kernel ...
+The openpowerlink2 package archive contains several cmake projects,
+and each of them should be packaged separately in Buildroot.
 
-I guess for a misconfigured console... TI has very helpful
-documentation about using U-Boot and Linux [1].
+"With version 2.0, the source code has been cleanly split into an
+application-oriented user library and a time-critical stack driver."
 
-Best regards
-J?rg Krause
+This complicates the packaging in Buildroot, so a top level CMakeLists.txt
+has been added to the build system.
 
-[1] http://processors.wiki.ti.com/index.php/Kernel_-_Common_Problems_Bo
-oting_Linux#Problem_.231_
--_No_more_output_is_seen_on_the_console_after_.22Starting_Kernel....22
+All patches fix several issues with the cmake build system and will be
+submitted upstream.
+
+There is one project for the EPL (Ethernet PowerLink) stack
+libraries wich provides:
+ * an user space EPL stack to be linked into application
+ * an user space EPL stack pcap daemon
+ * an kernel space EPL library interface
+
+There are two projects for the EPL network driver:
+ * pcap daemon driver
+ * kernel module driver.
+
+Note: On x86/x86_64 only few EPL ethernet driver are available for
+the EPL kernel stack implementation:
+ * Intel 82573
+ * Intel 8255x
+ * Intel I210
+ * Realtek RTL-8111/8168 (new since V2.1.0)
+ * Realtek RTL-8139
+
+There is one project for each demo application:
+ * demo_cn_embedded
+ * demo_mn_embedded
+ * demo_cn_console
+ * demo_mn_console
+ * demo_mn_qt
+
+Only demo_mn_console will be packaged in Buildroot for now.
+
+[1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/
+
+Romain Naour (1):
+  package/openpowerlink: bump to v2.2.0
+
+ ...a-better-regex-for-CMAKE_SYSTEM_PROCESSOR.patch | 158 +++++++++++++++++++
+ ...a-better-regex-for-cmake-system-processor.patch |  89 -----------
+ ...l-the-stack-libraries-to-lib-subdirectory.patch | 133 ++++++++++++++++
+ ...-fix-user-space-stack-enable-shared-build.patch |  54 -------
+ ...0003-FIX-cmake-install-oplk-headers-files.patch |  34 +++++
+ ...-FIX-Fix-name-of-sched_priority-element-2.patch |  96 ++++++++++++
+ .../0005-FIX-add-missing-header-sys-time.h.patch   |  47 ++++++
+ ...se-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch |  80 ++++++++++
+ ...ROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch | 122 +++++++++++++++
+ .../0008-FIX-Add-top-level-CMakeLists.txt.patch    | 167 +++++++++++++++++++++
+ package/openpowerlink/Config.in                    | 131 ++++++++--------
+ package/openpowerlink/openpowerlink.hash           |   3 +
+ package/openpowerlink/openpowerlink.mk             | 143 +++++++++++++-----
+ 13 files changed, 1009 insertions(+), 248 deletions(-)
+ create mode 100644 package/openpowerlink/0001-FIX-use-a-better-regex-for-CMAKE_SYSTEM_PROCESSOR.patch
+ delete mode 100644 package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
+ create mode 100644 package/openpowerlink/0002-FIX-install-the-stack-libraries-to-lib-subdirectory.patch
+ delete mode 100644 package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch
+ create mode 100644 package/openpowerlink/0003-FIX-cmake-install-oplk-headers-files.patch
+ create mode 100644 package/openpowerlink/0004-FIX-Fix-name-of-sched_priority-element-2.patch
+ create mode 100644 package/openpowerlink/0005-FIX-add-missing-header-sys-time.h.patch
+ create mode 100644 package/openpowerlink/0006-FIX-cmake-use-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch
+ create mode 100644 package/openpowerlink/0007-FIX-Use-PROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch
+ create mode 100644 package/openpowerlink/0008-FIX-Add-top-level-CMakeLists.txt.patch
+ create mode 100644 package/openpowerlink/openpowerlink.hash
+
+-- 
+2.4.3
