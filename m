@@ -1,41 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Aug 2015 10:06:49 -0300
-Subject: [Buildroot] [PATCH] gnutls: security bump to version 3.3.17.1
-Message-ID: <1439384809-4545-1-git-send-email-gustavo@zacarias.com.ar>
+From: Nikolay Dimitrov <picmaster@mail.bg>
+Date: Wed, 12 Aug 2015 17:58:43 +0300
+Subject: [Buildroot] [PATCH] linux: handle read-only dts files
+In-Reply-To: <1439338309-19690-1-git-send-email-hollis_blanchard@mentor.com>
+References: <1439338309-19690-1-git-send-email-hollis_blanchard@mentor.com>
+Message-ID: <55CB5F23.7000708@mail.bg>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes GNUTLS-SA-2015-3 - Double free in certificate DN decoding.
+Hi Holis,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 08/12/2015 03:11 AM, Hollis Blanchard wrote:
+> Some fine version control systems make all files read-only. The custom DTS file
+> may therefore be read-only, and that permission is preserved when copying into
+> the Linux build directory. A subsequent rebuild tries to 'cp' again, which
+> fails with a "Permission denied" error unless the -f option is used.
+>
+> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+> ---
+>   linux/linux.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 375a9e1..a4c4733 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -270,7 +270,7 @@ endif
+>   # configuration has changed.
+>   define LINUX_BUILD_CMDS
+>   	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+> -		cp $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
+> +		cp -f $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)) $(KERNEL_ARCH_PATH)/boot/dts/)
+>   	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+>   	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+>   		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+>
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 620caae..4496a2b 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
-+sha256	b40f158030a92f450a07b20300a3996710ca19800848d9f6fd62493170c5bbb4	gnutls-3.3.17.1.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 4593034..82d9d29 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17.1
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
--- 
-2.4.6
+Is there a reason for the custom DTS to exist in both places?
+
+Regards,
+Nikolay
