@@ -1,42 +1,43 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 13 Aug 2015 22:16:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpfm4: disable Werror
-Message-ID: <1439496998-6386-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Thu, 13 Aug 2015 22:22:28 +0200
+Subject: [Buildroot] [PATCH next 1/1] package/libpfm4: bump to version 4.6.0
+Message-ID: <1439497348-7543-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set `DBG` to an empty value to disable -Werror when building libpfm4. Build
-aborts with a musl toolchain because of warnings about redirecting incorrect
-header includes.
-
-So -Werror shouldn't be used in released code since it can cause random build
-failures on moderate warnings. It also depends on the used toolchain since
-different toolchains may or may not print the same warnings.
-
-Fixes:
-http://autobuild.buildroot.net/results/6df/6df9b94a79be1dc5ba878f7b67bf9ad4ce2f2e98/
+Also use checksum from sourceforge.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libpfm4/libpfm4.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libpfm4/libpfm4.hash | 5 +++--
+ package/libpfm4/libpfm4.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
+diff --git a/package/libpfm4/libpfm4.hash b/package/libpfm4/libpfm4.hash
+index bc0ce52..30e65a5 100644
+--- a/package/libpfm4/libpfm4.hash
++++ b/package/libpfm4/libpfm4.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  a23eb9affbff279e13563a39317c0ad71c4de28908d4243c8bc109138430cc3b  libpfm-4.3.0.tar.gz
++# From http://sourceforge.net/projects/perfmon2/files/libpfm4/:
++sha1  2ed06d6e746f7b1cd4b70e9736e621052f60d625  libpfm-4.6.0.tar.gz
++md5  5077b9022440e4951d96f2d0e73bd487  libpfm-4.6.0.tar.gz
 diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
-index e2fff80..7f14758 100644
+index 7f14758..147be7c 100644
 --- a/package/libpfm4/libpfm4.mk
 +++ b/package/libpfm4/libpfm4.mk
-@@ -13,7 +13,8 @@ LIBPFM4_INSTALL_STAGING = YES
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBPFM4_FLAGS = SYS=Linux ARCH=$(BR2_ARCH) \
- 	CC="$(TARGET_CC)" LDCONFIG=true \
--	CONFIG_PFMLIB_SHARED=$(if $(BR2_STATIC_LIBS),n,y)
-+	CONFIG_PFMLIB_SHARED=$(if $(BR2_STATIC_LIBS),n,y) \
-+	DBG=
- 
- define LIBPFM4_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
+-LIBPFM4_VERSION = 4.3.0
++LIBPFM4_VERSION = 4.6.0
+ LIBPFM4_SOURCE = libpfm-$(LIBPFM4_VERSION).tar.gz
+ LIBPFM4_SITE = http://downloads.sourceforge.net/project/perfmon2/libpfm4
+ LIBPFM4_LICENSE = libpfm4 license
 -- 
 2.5.0
