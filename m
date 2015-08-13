@@ -1,64 +1,57 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 13 Aug 2015 17:46:57 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-08-12
-In-Reply-To: <20150813063012.56B7A101EC1@stock.ovh.net>
-References: <20150813063012.56B7A101EC1@stock.ovh.net>
-Message-ID: <1439488017.5209.19.camel@synopsys.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 13 Aug 2015 22:02:49 +0300
+Subject: [Buildroot] [PATCH] [autobuild] package/libiio: tests need
+ threads
+In-Reply-To: <1439475103-2013-1-git-send-email-yann.morin.1998@free.fr>
+References: <1439475103-2013-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150813190249.GZ25261@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Yann,
 
-On Thu, 2015-08-13 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
+On Thu, Aug 13, 2015 at 04:11:43PM +0200, Yann E. MORIN wrote:
+> Fixes:
+>     http://autobuild.buildroot.org/results/4bb/4bbd2d6927ca75517c2bd37eca83a9d98f1cca01/
+>     http://autobuild.buildroot.org/results/949/949314b57f5a396b4bb03e422094b754dcf87e20/
+>     ...
 > 
-> Build statistics for 2015-08-12
-> ===============================
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+I sent an almost identical patch two days ago: 
+http://patchwork.ozlabs.org/patch/505866/.
+
+> ---
+>  package/libiio/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
->         success : 6  
->        failures : 3  
->        timeouts : 0  
->           TOTAL : 9  
-> 
-> Classification of failures by reason
-> ====================================
-> 
->              libselinux-2.1.13 | 1 
->                  mesa3d-10.6.3 | 1 
->                   boost-1.58.0 | 1 
-> 
-> Detail of failures
-> ===================
-> 
->          arc |                   boost-1.58.0 | NOK | 
-> http://autobuild.buildroot.net/results/3b26e44f9fb08220836ce0d2d474d052b4afb3b6/
+> diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+> index 21496ed..c77583d 100644
+> --- a/package/libiio/Config.in
+> +++ b/package/libiio/Config.in
+> @@ -35,11 +35,15 @@ comment "IIO Daemon needs a toolchain w/ threads"
+>  
+>  config BR2_PACKAGE_LIBIIO_TESTS
+>  	bool "Install test programs"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+>  	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
+>  	help
+>  	  Install the test programs (iio_info, iio_genxml, iio_readdev).
+>  
+> +comment "IIO tests needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+>  config BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP
+>  	bool "Install C# bindings"
+>  	depends on BR2_PACKAGE_MONO
 
-This one is fixed with 
-http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=4ff3a6c8eb91db71d6dc3d2932b66e848bd20ac3
-in uclibc-ng. Probably we may want to push the same patch to original uClibc.
+baruch
 
-
->          arc |              libselinux-2.1.13 | NOK | 
-> http://autobuild.buildroot.net/results/4b2d6a802bd2dff5f9cfa37d2b2f930dd1f48bf3/
-
-That's a known issue, out binutils guy is off until the end of the week, I expect to
-get reply from him early next week. Sorry for that delay.
-
->          arc |                  mesa3d-10.6.3 | NOK | 
-> http://autobuild.buildroot.net/results/e52c71a13e3bba0d7d2d17d9d37b4099ccacc029/
-
-Most probably this is a generic issue:
-------------------------->8--------------------
-configure: error: gbm requires --enable-dri
-------------------------->8--------------------
-
-And indeed in configure command line I see both "--enable-gbm" and "--disable-dri".
-Maybe Bernd may take a look at this one?
-
-Looks similar to what he fixed in http://git.buildroot.net/buildroot/commit/?id=b65154c3e4e5c454359d1bef16ae33853cf383e7
-
--Alexey
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
