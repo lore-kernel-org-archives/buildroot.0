@@ -1,26 +1,51 @@
-From: yuanlinyu <cugyly@163.com>
-Date: Thu, 13 Aug 2015 21:03:47 +0800 (CST)
-Subject: [Buildroot] BR2_arm1136j_s in config.in.arm
-Message-ID: <7904fb17.d9ed.14f2728c6c5.Coremail.cugyly@163.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Aug 2015 15:48:21 +0200
+Subject: [Buildroot] [PATCH] [autobuild] package/systat: fix linking with
+	-lintl
+Message-ID: <1439473701-21909-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi,
-"BR2_arm1136j_s" in config.in.arm seems not work because no BR2_arm1136j_s configuration item. how to configure buildroot for soc with arm1136j-s cpu?
+When lining, libraries should be listed in the reverse-dependency order,
+that is the library/ies with no dependency last, preceded by libraries
+that depend on them.
 
+And most importantly, libraries should be listed *after* the local
+objects, .o files.
 
-config BR2_GCC_TARGET_CPU
-	default "arm920t"	if BR2_arm920t
-	default "arm922t"	if BR2_arm922t
-	default "arm926ej-s"	if BR2_arm926t
-	default "arm1136j-s"	if BR2_arm1136j_s
+Currently, sysstat uses CFLAGS to shoehorn the -lintl linker flags,
+which is incorrect, as the CFLAGS are passed before the object files.
 
+However, sysstat has a LFLAGS variable that, presumably, is to be used
+to pass linker flags. This is where we want to shoehorn -lintl.
 
-thanks
+Fixes:
+    http://autobuild.buildroot.org/results/8cc/8cc547074de23b9482ad110234ef7458a44e174a/
+    http://autobuild.buildroot.org/results/360/360f7b8252dc9f6bb47841b1d7207a121f90048c/
+    http://autobuild.buildroot.org/results/04c/04cfc76a09e089985549a4320f34f6669d21cab5/
+    http://autobuild.buildroot.org/results/818/818c08decf4a6190a9ed39915eae4cd3d2779880/
+    ...
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150813/18a6dde6/attachment.html>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/sysstat/sysstat.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index b28c029..7568a4b 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -14,7 +14,7 @@ SYSSTAT_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ SYSSTAT_DEPENDENCIES += gettext
+-SYSSTAT_MAKE_OPTS += CFLAGS="$(TARGET_CFLAGS) -lintl"
++SYSSTAT_MAKE_OPTS += LFLAGS="$(TARGET_LDFLAGS) -lintl"
+ endif
+ 
+ # The isag tool is a post processing script that depends on tcl/tk
+-- 
+1.9.1
