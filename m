@@ -1,53 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Aug 2015 16:58:28 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/lightning: fix build for
-	static-only
-Message-ID: <1439477908-24088-1-git-send-email-yann.morin.1998@free.fr>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Thu, 13 Aug 2015 18:22:48 +0200
+Subject: [Buildroot] [PATCH 2/5] package/rpi-firmware: bump version
+In-Reply-To: <1439482971-92878-1-git-send-email-benoit@wsystem.com>
+References: <1439482971-92878-1-git-send-email-benoit@wsystem.com>
+Message-ID: <1439482971-92878-3-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/019/019b6f2ac034766a4266e20e5dcc229bec4a7222/
-    http://autobuild.buildroot.org/results/55d/55d30db7212863d9f898bb929f0c75d529036bad/
-    http://autobuild.buildroot.org/results/459/459ab12bc3eeb493f39efa2450bc829a351ee3a3/
-    ...
+Misc enhancements and fixes all over the place, most notably:
+ - FW: better overclocking, add Mediatek mt7601u Wi-Fi driver, bump
+       kernel version to 4.1.5...
+ - DT: fix SPI, I?S, gpio-poweroff, add MCP7941X, uart1, Fen Logic
+       VGA666 board, RPi Sense HAT...
+ - video: add early frame sequential 3D support, YUV_UV destination
+          format, qpu deinterlace...
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 ---
- package/lightning/0003-no-check-no-doc.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/lightning/0003-no-check-no-doc.patch
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lightning/0003-no-check-no-doc.patch b/package/lightning/0003-no-check-no-doc.patch
-new file mode 100644
-index 0000000..91a1684
---- /dev/null
-+++ b/package/lightning/0003-no-check-no-doc.patch
-@@ -0,0 +1,21 @@
-+Makefile: do not build checks or docs
-+
-+checks require a toolchain with shared libs, so they FTBFS when the
-+build is static-only.
-+
-+Docs we don't care about in Buildroot.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN lightning-2.0.5.orig/Makefile.am lightning-2.0.5/Makefile.am
-+--- lightning-2.0.5.orig/Makefile.am	2013-09-24 05:37:46.000000000 +0200
-++++ lightning-2.0.5/Makefile.am	2015-08-13 16:27:20.626730913 +0200
-+@@ -17,8 +17,6 @@
-+ ACLOCAL_AMFLAGS = -I m4
-+ 
-+ SUBDIRS =		\
-+-	check		\
-+-	doc		\
-+ 	include		\
-+ 	lib
-+ 
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 1ef15aa..2436376 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 856e2e1907a7f7058289c30268515c8cbf3fa5e3
++RPI_FIRMWARE_VERSION = 52f65ac4ad1ef1d2838fa2f921d5bc3ece4c777b
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-1.9.1
+2.1.4
