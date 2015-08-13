@@ -1,8 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Aug 2015 21:54:41 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/setools: fix buid without
-	wchar
-Message-ID: <1439495681-7220-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 13 Aug 2015 21:55:31 +0200
+Subject: [Buildroot] [PATCH] [autobuild] package/nbd: fix static builds
+Message-ID: <1439495731-8645-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,68 +9,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
-    http://autobuild.buildroot.org/results/051/051a7f72ebadd56407700c22b57e942f08eb1c09/
-    http://autobuild.buildroot.org/results/a4b/a4b2a6f1920430af43c23239de17200e70951b3b/
+    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/ (arm)
+    http://autobuild.buildroot.org/results/e5b/e5bd05623dd6c57bb0338592ecd21a5ba0cbe95a/ (arc)
+    http://autobuild.buildroot.org/results/e0f/e0fd23eec2dd31bece122d84515b2b7cb14594b8/ (ppc)
+    http://autobuild.buildroot.org/results/3a2/3a2d4124f78d4e504e8e961fabe038e570923408/ (mips)
     ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 ---
- package/setools/0003-no-wchar-needed.patch | 45 ++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/setools/0003-no-wchar-needed.patch
+ package/nbd/0001-avoid-name-clashing.patch | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/nbd/0001-avoid-name-clashing.patch
 
-diff --git a/package/setools/0003-no-wchar-needed.patch b/package/setools/0003-no-wchar-needed.patch
+diff --git a/package/nbd/0001-avoid-name-clashing.patch b/package/nbd/0001-avoid-name-clashing.patch
 new file mode 100644
-index 0000000..8b9ea9f
+index 0000000..b3ea9c9
 --- /dev/null
-+++ b/package/setools/0003-no-wchar-needed.patch
-@@ -0,0 +1,45 @@
-+configure: do not use wchar_t in tests
++++ b/package/nbd/0001-avoid-name-clashing.patch
+@@ -0,0 +1,28 @@
++rename err() function to avoid clashing with err() form C library
 +
-+setools does not use widechars for itself, so should build on toolchains
-+missing widechars (uClibc).
++err() is a function available in the C library, so when static linking,
++there is a clash at link timebecause the function is provided both by
++nbd and the C library:
++    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/build-end.log
 +
-+Unfortunately, one of the m4 macros does use wchar_t to check C99,
-+completely unrelated to widechar support, thus making it believe C99 is
-+not available in the compiler:
-+
-+    http://autobuild.buildroot.org/results/051/051a7f72ebadd56407700c22b57e942f08eb1c09/build-end.log
-+
-+    configure:4899: checking for /home/peko/autobuild/instance-1/output/host/usr/bin/powerpc-linux-gcc option to accept ISO C99
-+    [--skip test without flags--]
-+    configure:5048: /home/peko/autobuild/instance-1/output/host/usr/bin/powerpc-linux-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
-+    conftest.c:69:9: error: unknown type name 'wchar_t'
-+       const wchar_t *name;
-+             ^
-+    conftest.c: In function 'main':
-+    conftest.c:146:5: warning: initialization from incompatible pointer type
-+         .name = L"Test wide string",
-+         ^
-+
-+Thus, just remove any widechar from the test.
++Fix that by renaming err() to nbd_err() and providing a small maco
++wrapper to avoid touching the many call sites.
 +
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
-+diff -durN setools-3.3.8.orig/m4/c.m4 setools-3.3.8/m4/c.m4
-+--- setools-3.3.8.orig/m4/c.m4	2013-01-16 17:36:22.000000000 +0100
-++++ setools-3.3.8/m4/c.m4	2015-08-13 21:37:35.795071941 +0200
-+@@ -157,7 +157,6 @@
++---
++Upstream status: hack, not submitted.
++
++diff -durN nbd-3.11.orig/cliserv.h nbd-3.11/cliserv.h
++--- nbd-3.11.orig/cliserv.h	2015-05-25 12:27:56.000000000 +0200
+++++ nbd-3.11/cliserv.h	2015-08-13 19:28:21.609467505 +0200
++@@ -75,7 +75,8 @@
++ void setmysockopt(int sock);
++ void err_nonfatal(const char *s);
 + 
-+ struct named_init {
-+   int number;
-+-  const wchar_t *name;
-+   double average;
-+ };
++-void err(const char *s) G_GNUC_NORETURN;
+++void nbd_err(const char *s) G_GNUC_NORETURN;
+++#define err(S) nbd_err(S)
 + 
-+@@ -231,7 +230,6 @@
-+   // Check named initializers.
-+   struct named_init ni = {
-+     .number = 34,
-+-    .name = L"Test wide string",
-+     .average = 543.34343,
-+   };
++ void logging(const char* name);
 + 
 -- 
 1.9.1
