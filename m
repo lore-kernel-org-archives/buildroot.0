@@ -1,102 +1,218 @@
 From: Bamvor Jian Zhang <bamvor.zhangjian@linaro.org>
-Date: Thu, 13 Aug 2015 09:16:40 +0800
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-Message-ID: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+Date: Thu, 13 Aug 2015 09:16:41 +0800
+Subject: [Buildroot] [PATCH V3 RESEND 1/5] aarch64: align aarch64_be config
+	with aarch64s'
+In-Reply-To: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+Message-ID: <1439428605-17453-2-git-send-email-bamvor.zhangjian@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is third version of my patches. This previous versions are
-here[1][2]. The previous discussion, Gustavo agree that only external
-toolchain is in consideration at this time. I will try to work on the
-buildroot toolchain after current series patch is upstreamed.
+From: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
 
-ILP32 is very useful when the user want to migrate from arm 32bit to
-64bit with minimal risk. There is almost no code changes after
-migration. ILP32 could get the better performance compare with arm
-32bit (use 64bit register and instruction instead of 32bit one) and
-aarch64 LP64 (the default ABI in aarch64).
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
+---
+ package/binutils/Config.in              | 4 ++--
+ package/binutils/Config.in.host         | 5 +++--
+ package/dropwatch/Config.in             | 5 +++--
+ package/gcc/Config.in.host              | 8 ++++----
+ package/gdb/Config.in.host              | 2 +-
+ package/gpsd/Config.in                  | 2 +-
+ package/lightning/Config.in             | 5 +++--
+ package/nginx/Config.in                 | 3 +--
+ package/oprofile/Config.in              | 6 ++++--
+ toolchain/toolchain-buildroot/Config.in | 7 ++++---
+ 10 files changed, 26 insertions(+), 21 deletions(-)
 
-Our test show that the performance of ILP32 is roughly 10% better than
-arm64 LP64 while the footprint is 86% of LP64. Because of these, It is
-useful for both embedded and enterprise system.
-
-Here is the details definition of ILP32:
-ILP32 is elf32 with aarch64 assembly and is compiled by 64bit compiler.
-Refer the following table:
-
-  \-            |  arm 32bit  | arm64 ILP32 | arm64 LP64
-----------------|-------------|-------------|-------------
-instruction set |   armv7-a   |   armv8-a   |   armv8-a
-int             |   32bit     |   32bit     |   32bit
-long            |   32bit     | **32bit**   |   64bit
-pointer         |   32bit     | **32bit**   |   64bit
-
-LP64 is the default ABI on arm64(Implies -mabi=lp64 while compiling),
-and the kernel remains in LP64 no matter ILP32 enables or not.
-
-These series patches introduce the big endian support in aarch64 and
-then add ILP32 special filename and menuconfig step by step.
-
-The test of build is based on linaro kernel[3] and toolchain built by
-linaro ABE environment[4], anyone could built this toolchain through
-the simpile abe script.
-
-This is my first time I try to contribute the buildroot, feedback is
-very appreciated. Sorry if there are some coding style issues.
-
-changes since v2
-1.  rebase on the patch have been .
-    "827ba46 aarch64: add big endian(aarch64_be) support"
-2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5 according to
-    the suggestion from Thomas.
-3.  Improve the ifeq in patch 2/5 according to Gustavo.
-4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to Gustavo.
-
-changes since v1
-1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
-2.  Change default libc, toolchain for ilp32 build.
-3.  Others changes suggested by Gustavo.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
-[2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
-[3] https://git.linaro.org/kernel/linux-linaro-tracking.git
-[4] https://wiki.linaro.org/ABE
-
-
-Bamvor Jian Zhang (5):
-  aarch64: align aarch64_be config with aarch64s'
-  aarch64: ilp32: handle special file name
-  aarch64: ilp32: add ilp32 compiler and linker flags
-  aarch64: ilp32: add ilp32 build config
-  aarch64: ilp32 defconfig examples
-
- Makefile                                           |  6 +++
- arch/Config.in.aarch64                             | 36 ++++++++++++++++++
- configs/aarch64_be_defconfig                       |  2 +
- configs/aarch64_be_ilp32_defconfig                 |  8 ++++
- configs/aarch64_ilp32_defconfig                    |  8 ++++
- package/Makefile.in                                | 13 ++++++-
- package/binutils/Config.in                         |  4 +-
- package/binutils/Config.in.host                    |  5 ++-
- package/dropwatch/Config.in                        |  5 ++-
- package/gcc/Config.in.host                         | 11 +++---
- package/gdb/Config.in.host                         |  2 +-
- package/gpsd/Config.in                             |  2 +-
- package/lightning/Config.in                        |  5 ++-
- package/nginx/Config.in                            |  3 +-
- package/oprofile/Config.in                         |  6 ++-
- toolchain/Config.in                                |  2 +
- toolchain/helpers.mk                               |  5 ++-
- toolchain/toolchain-buildroot/Config.in            |  7 ++--
- toolchain/toolchain-external/Config.in             | 22 +++++++++++
- toolchain/toolchain-external/toolchain-external.mk | 44 +++++++++++++++++++++-
- 20 files changed, 169 insertions(+), 27 deletions(-)
- create mode 100644 configs/aarch64_be_defconfig
- create mode 100644 configs/aarch64_be_ilp32_defconfig
- create mode 100644 configs/aarch64_ilp32_defconfig
-
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 64d0a09..f9e0f16 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -22,5 +22,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ endif
+ 
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 40619ab..0ead1ff 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -8,8 +8,9 @@ choice
+ 	  Select the version of binutils you wish to use.
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_X
+-		depends on !BR2_aarch64 && !BR2_microblaze && \
+-			   !BR2_powerpc64le && !BR2_nios2
++		depends on !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_microblaze && !BR2_powerpc64le && \
++			   !BR2_nios2
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24_X
+diff --git a/package/dropwatch/Config.in b/package/dropwatch/Config.in
+index d331e5e..e109242 100644
+--- a/package/dropwatch/Config.in
++++ b/package/dropwatch/Config.in
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_DROPWATCH
+ 	bool "dropwatch"
+ 	select BR2_PACKAGE_BINUTILS
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	# binutils
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR # binutils
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_LIBNL
+@@ -13,5 +14,5 @@ config BR2_PACKAGE_DROPWATCH
+ 	  https://fedorahosted.org/dropwatch/
+ 
+ comment "dropwatch needs a toolchain w/ threads, wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index baa7956..7014e7f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -17,8 +17,8 @@ choice
+ 		bool "gcc 4.5.x"
+ 		depends on BR2_DEPRECATED_SINCE_2015_05
+ 		# Broken or unsupported architectures
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_powerpc64le && !BR2_nios2
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_arc && !BR2_powerpc64le && !BR2_nios2
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
+ 			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
+@@ -39,8 +39,8 @@ choice
+ 	config BR2_GCC_VERSION_4_7_X
+ 		bool "gcc 4.7.x"
+ 		# Broken or unsupported architectures
+-		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+-			&& !BR2_powerpc64le && !BR2_nios2
++		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_aarch64_be && \
++			   !BR2_arc && !BR2_powerpc64le && !BR2_nios2
+ 		# Broken or unsupported ARM cores
+ 		depends on !BR2_cortex_a12 && !BR2_pj4
+ 		# Broken or unsupported PPC cores
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 3207794..d736f25 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_HOST_GDB
+ 	# allow to build a cross-gdb, as the one of the external
+ 	# toolchain should be used.
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	help
+ 	  Build a cross gdb that runs on the host machine and debugs
+ 	  programs running on the target. It requires 'gdbserver'
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index fa8b8f6..36813ab 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -39,7 +39,7 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
+ config BR2_PACKAGE_GPSD_PROFILING
+ 	bool "profiling support"
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+-	depends on !BR2_aarch64
++	depends on !BR2_aarch64 && !BR2_aarch64_be
+ 
+ comment "profiling support not available with uClibc-based toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+index 8caf39f..3ca477a 100644
+--- a/package/lightning/Config.in
++++ b/package/lightning/Config.in
+@@ -14,13 +14,14 @@ config BR2_PACKAGE_LIGHTNING_DISASSEMBLER
+ 	bool "enable disassembler"
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_ZLIB
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	# binutils
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR # binutils
+ 	help
+ 	  Enable the GNU lightning disassembler.
+ 
+ comment "lightning disassembler needs a toolchain w/ wchar"
+-	depends on !BR2_aarch64 && !BR2_nios2
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
+ 
+ endif
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index be445f4..ef0266e 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -15,8 +15,7 @@ config BR2_PACKAGE_NGINX_FILE_AIO
+ 	# but it's available on neither AArch64 nor ARC where only
+ 	# eventfd() is available. See
+ 	# https://bugs.launchpad.net/linaro-aarch64/+bug/1160013
+-	depends on !BR2_aarch64
+-	depends on !BR2_arc
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_arc
+ 
+ config BR2_PACKAGE_NGINX_HTTP
+ 	bool "http server"
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 9cf5693..b5d0bb6 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_BINUTILS
+ 	select BR2_PACKAGE_LIBPFM4 if BR2_powerpc
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_aarch64 && !BR2_nios2 # binutils
++	# binutils
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2
+ 	depends on BR2_USE_WCHAR # binutils
+ 	depends on !BR2_xtensa
+ 	# libpfm4 is needed on PowerPC, and requires thread support
+@@ -28,7 +29,8 @@ config BR2_PACKAGE_OPROFILE
+ 
+ comment "oprofile needs a toolchain w/ C++, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_aarch64 && !BR2_nios2 && !BR2_xtensa
++	depends on !BR2_aarch64 && !BR2_aarch64_be && !BR2_nios2 && \
++		   !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ 
+ comment "oprofile needs a toolchain w/ NPTL on PPC"
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 13e2b15..0869243 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -85,9 +85,10 @@ comment "(e)glibc only available with shared lib support"
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl (experimental)"
+-	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+-		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
+-		BR2_sh || BR2_x86_64
++	depends on BR2_arm         || BR2_armeb      || BR2_aarch64 || \
++		   BR2_aarch64_be  || BR2_i386       || BR2_microblaze || \
++		   BR2_mips        || BR2_mipsel     || BR2_powerpc || \
++		   BR2_sh          || BR2_x86_64
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 	help
 -- 
 2.1.4
