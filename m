@@ -1,39 +1,26 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Thu, 13 Aug 2015 14:36:01 +0200
-Subject: [Buildroot] [PATCH 1/1] msmtp: don't try to use IDN feature
-Message-ID: <1439469361-31920-1-git-send-email-viallard@syscom-instruments.com>
+From: yuanlinyu <cugyly@163.com>
+Date: Thu, 13 Aug 2015 21:03:47 +0800 (CST)
+Subject: [Buildroot] BR2_arm1136j_s in config.in.arm
+Message-ID: <7904fb17.d9ed.14f2728c6c5.Coremail.cugyly@163.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't known if there is a consensus about IDN usage for buildroot. I
-didn't see an option in the config about it. I presume IDN should be
-disabled for all package, am I right ?
+hi,
+"BR2_arm1136j_s" in config.in.arm seems not work because no BR2_arm1136j_s configuration item. how to configure buildroot for soc with arm1136j-s cpu?
 
-autoconf can't see if AI_IDN is really supported (http://sourceforge.net/p/msmtp/code/ci/907916e8089ea9303a7c091b763087530c88a063/).
-It seems weird but this is the case apparently.
 
-Before I did the above patch, msmtp failed to send mail. The output was:
+config BR2_GCC_TARGET_CPU
+	default "arm920t"	if BR2_arm920t
+	default "arm922t"	if BR2_arm922t
+	default "arm926ej-s"	if BR2_arm926t
+	default "arm1136j-s"	if BR2_arm1136j_s
 
-msmtp: cannot locate host smtp.mandrillapp.com: Bad value for ai_flags
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
----
- package/msmtp/msmtp.mk | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index bff2620..7c8261e 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -10,6 +10,7 @@ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
- MSMTP_DEPENDENCIES = host-pkgconf
- MSMTP_CONF_OPTS = \
- 	--without-libidn \
-+	--disable-gai-idn \
- 	--without-libgsasl
- MSMTP_LICENSE = GPLv3+
- MSMTP_LICENSE_FILES = COPYING
--- 
-2.4.6
+thanks
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150813/18a6dde6/attachment.html>
