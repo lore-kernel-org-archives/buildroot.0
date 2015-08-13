@@ -1,125 +1,64 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Thu, 13 Aug 2015 13:24:07 -0400
-Subject: [Buildroot] [PATCH v2 1/1] yad: new package
-Message-ID: <1439486647-7872-1-git-send-email-james.knight@rockwellcollins.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 13 Aug 2015 17:46:57 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
+ results for 2015-08-12
+In-Reply-To: <20150813063012.56B7A101EC1@stock.ovh.net>
+References: <20150813063012.56B7A101EC1@stock.ovh.net>
+Message-ID: <1439488017.5209.19.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
-Changes v1 -> v2:
-  - Increment to version 0.29.0 (with updated hash and patch fix).
-  - Removed complex gtk library selection. Defaults to libgtk3, if
-     available; elsewise, uses libgtk2 (suggested from comments by
-     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
----
- package/Config.in                         |  1 +
- package/yad/001-no-html-compile-fix.patch | 19 +++++++++++++++++++
- package/yad/Config.in                     | 13 +++++++++++++
- package/yad/yad.hash                      |  2 ++
- package/yad/yad.mk                        | 24 ++++++++++++++++++++++++
- 5 files changed, 59 insertions(+)
- create mode 100644 package/yad/001-no-html-compile-fix.patch
- create mode 100644 package/yad/Config.in
- create mode 100644 package/yad/yad.hash
- create mode 100644 package/yad/yad.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..2472e79 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -292,6 +292,7 @@ comment "X applications"
- 	source "package/xscreensaver/Config.in"
- 	source "package/xterm/Config.in"
- 	source "package/xvkbd/Config.in"
-+	source "package/yad/Config.in"
- 
- comment "X libraries and helper libraries"
- 	source "package/libsexy/Config.in"
-diff --git a/package/yad/001-no-html-compile-fix.patch b/package/yad/001-no-html-compile-fix.patch
-new file mode 100644
-index 0000000..ebe9ff0
---- /dev/null
-+++ b/package/yad/001-no-html-compile-fix.patch
-@@ -0,0 +1,19 @@
-+diff -Naur a/src/main.c b/src/main.c
-+--- a/src/main.c	2015-07-15 08:21:53.000000000 -0400
-++++ b/src/main.c	2015-08-13 11:44:20.832548393 -0400
-+@@ -765,6 +765,7 @@
-+         ret = yad_print_run ();
-+         break;
-+ 
-++#ifdef HAVE_HTML
-+       case YAD_MODE_HTML:
-+         /* Webkit doesn't handle focus for child dialogs when gtk_dialog_run() is used */
-+         /* FIXME: maybe this solution must be expanded to all dialogs */
-+@@ -775,6 +776,7 @@
-+ 
-+         gtk_main ();
-+         break;
-++#endif
-+ 
-+       default:
-+         dialog = create_dialog ();
-diff --git a/package/yad/Config.in b/package/yad/Config.in
-new file mode 100644
-index 0000000..1e6776b
---- /dev/null
-+++ b/package/yad/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_YAD
-+	bool "yad"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  YAD (yet another dialog) is a tool for create graphical dialogs
-+	  from shell scripts.
-+
-+	  http://sourceforge.net/projects/yad-dialog/
-+
-+comment "yad needs libgtk2 or libgtk3"
-+	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
-diff --git a/package/yad/yad.hash b/package/yad/yad.hash
-new file mode 100644
-index 0000000..92b26cb
---- /dev/null
-+++ b/package/yad/yad.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 81ac5241edff6181f6ead779b04ada7f1202d1866938da1507502da0ebf059b7 yad-0.29.0.tar.xz
-diff --git a/package/yad/yad.mk b/package/yad/yad.mk
-new file mode 100644
-index 0000000..da02ae2
---- /dev/null
-+++ b/package/yad/yad.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# yad
-+#
-+################################################################################
-+
-+YAD_VERSION = 0.29.0
-+YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
-+YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
-+YAD_LICENSE = GPLv3
-+YAD_LICENSE_FILES = COPYING
-+YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
-+
-+YAD_CONF_OPTS = --enable-html=no
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+YAD_DEPENDENCIES += libgtk3
-+YAD_CONF_OPTS += --with-gtk=gtk3
-+else
-+YAD_DEPENDENCIES += libgtk2
-+YAD_CONF_OPTS += --with-gtk=gtk2
-+endif
-+
-+$(eval $(autotools-package))
--- 
-1.9.5.msysgit.1
+On Thu, 2015-08-13 at 08:30 +0200, Thomas Petazzoni wrote:
+> Those results are limited to the arc architecture.
+> 
+> Build statistics for 2015-08-12
+> ===============================
+> 
+>         success : 6  
+>        failures : 3  
+>        timeouts : 0  
+>           TOTAL : 9  
+> 
+> Classification of failures by reason
+> ====================================
+> 
+>              libselinux-2.1.13 | 1 
+>                  mesa3d-10.6.3 | 1 
+>                   boost-1.58.0 | 1 
+> 
+> Detail of failures
+> ===================
+> 
+>          arc |                   boost-1.58.0 | NOK | 
+> http://autobuild.buildroot.net/results/3b26e44f9fb08220836ce0d2d474d052b4afb3b6/
+
+This one is fixed with 
+http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=4ff3a6c8eb91db71d6dc3d2932b66e848bd20ac3
+in uclibc-ng. Probably we may want to push the same patch to original uClibc.
+
+
+>          arc |              libselinux-2.1.13 | NOK | 
+> http://autobuild.buildroot.net/results/4b2d6a802bd2dff5f9cfa37d2b2f930dd1f48bf3/
+
+That's a known issue, out binutils guy is off until the end of the week, I expect to
+get reply from him early next week. Sorry for that delay.
+
+>          arc |                  mesa3d-10.6.3 | NOK | 
+> http://autobuild.buildroot.net/results/e52c71a13e3bba0d7d2d17d9d37b4099ccacc029/
+
+Most probably this is a generic issue:
+------------------------->8--------------------
+configure: error: gbm requires --enable-dri
+------------------------->8--------------------
+
+And indeed in configure command line I see both "--enable-gbm" and "--disable-dri".
+Maybe Bernd may take a look at this one?
+
+Looks similar to what he fixed in http://git.buildroot.net/buildroot/commit/?id=b65154c3e4e5c454359d1bef16ae33853cf383e7
+
+-Alexey
