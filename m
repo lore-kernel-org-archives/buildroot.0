@@ -1,77 +1,125 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 13 Aug 2015 17:21:12 +0000
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] arc build
- results for 2015-08-11
-In-Reply-To: <20150812063012.10AFA1011A5@stock.ovh.net>
-References: <20150812063012.10AFA1011A5@stock.ovh.net>
-Message-ID: <1439486471.5209.9.camel@synopsys.com>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu, 13 Aug 2015 13:24:07 -0400
+Subject: [Buildroot] [PATCH v2 1/1] yad: new package
+Message-ID: <1439486647-7872-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+---
+Changes v1 -> v2:
+  - Increment to version 0.29.0 (with updated hash and patch fix).
+  - Removed complex gtk library selection. Defaults to libgtk3, if
+     available; elsewise, uses libgtk2 (suggested from comments by
+     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
+---
+ package/Config.in                         |  1 +
+ package/yad/001-no-html-compile-fix.patch | 19 +++++++++++++++++++
+ package/yad/Config.in                     | 13 +++++++++++++
+ package/yad/yad.hash                      |  2 ++
+ package/yad/yad.mk                        | 24 ++++++++++++++++++++++++
+ 5 files changed, 59 insertions(+)
+ create mode 100644 package/yad/001-no-html-compile-fix.patch
+ create mode 100644 package/yad/Config.in
+ create mode 100644 package/yad/yad.hash
+ create mode 100644 package/yad/yad.mk
 
-On Wed, 2015-08-12 at 08:30 +0200, Thomas Petazzoni wrote:
-> Those results are limited to the arc architecture.
-> 
-> Build statistics for 2015-08-11
-> ===============================
-> 
->         success : 5  
->        failures : 3  
->        timeouts : 0  
->           TOTAL : 8  
-> 
-> Classification of failures by reason
-> ====================================
-> 
->              libselinux-2.1.13 | 2 
->                libpthsem-2.0.8 | 1 
-> 
-> Detail of failures
-> ===================
-> 
->          arc |                libpthsem-2.0.8 | NOK | 
-> http://autobuild.buildroot.net/results/a4cde804f769f8b4bbebc4d6ab5ec0e1e7e01afe/
-
-That one is interesting.
-Definitely not ARC-specific, the same failure I see building for ARM:
------------------------------>8-----------------------
-pth_mctx.c: In function '__pth_mctx_set':
-pth_mctx.c:480:2: error: #error "Unsupported Linux (g)libc version and/or platform"
- #error "Unsupported Linux (g)libc version and/or platform"
-  ^
-Makefile:995: recipe for target 'pth_mctx.lo' failed
------------------------------>8-----------------------
-
-That happens here
------------------------------>8-----------------------
-#if defined(__GLIBC__) && defined(__GLIBC_MINOR__) \
-    && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 0 && defined(JB_PC) && defined(JB_SP)
-    mctx->jb[0].__jmpbuf[JB_PC] = (int)func;
-    mctx->jb[0].__jmpbuf[JB_SP] = (int)sk_addr_hi;
-#elif defined(__GLIBC__) && defined(__GLIBC_MINOR__) \
-    && __GLIBC__ >= 2 && __GLIBC_MINOR__ >= 0 && defined(__mc68000__)
-    mctx->jb[0].__jmpbuf[0].__aregs[0] = (long int)func;
-    mctx->jb[0].__jmpbuf[0].__sp = (int *)sk_addr_hi;
-#elif defined(__GNU_LIBRARY__) && defined(__i386__)
-    mctx->jb[0].__jmpbuf[0].__pc = (char *)func;
-    mctx->jb[0].__jmpbuf[0].__sp = sk_addr_hi;
-#else
-#error "Unsupported Linux (g)libc version and/or platform"
-#endif
------------------------------>8-----------------------
-
-Looks like this library relies on some symbols that are not supported in some tools or
-even architectures.
-
-So we need either add missing parts in both libc and libpthsem for arches we're
-interested in or disable libpthsem for some arches.
-
-I would assume that the best approach is to define __jump_buf structure
-with meaningful members like __pc and __sp for example in the same way as MIPS guys did,
-see http://git.uclibc.org/uClibc/tree/libc/sysdeps/linux/mips/bits/setjmp.h#n34
-
--Alexey
+diff --git a/package/Config.in b/package/Config.in
+index 47d14d7..2472e79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -292,6 +292,7 @@ comment "X applications"
+ 	source "package/xscreensaver/Config.in"
+ 	source "package/xterm/Config.in"
+ 	source "package/xvkbd/Config.in"
++	source "package/yad/Config.in"
+ 
+ comment "X libraries and helper libraries"
+ 	source "package/libsexy/Config.in"
+diff --git a/package/yad/001-no-html-compile-fix.patch b/package/yad/001-no-html-compile-fix.patch
+new file mode 100644
+index 0000000..ebe9ff0
+--- /dev/null
++++ b/package/yad/001-no-html-compile-fix.patch
+@@ -0,0 +1,19 @@
++diff -Naur a/src/main.c b/src/main.c
++--- a/src/main.c	2015-07-15 08:21:53.000000000 -0400
+++++ b/src/main.c	2015-08-13 11:44:20.832548393 -0400
++@@ -765,6 +765,7 @@
++         ret = yad_print_run ();
++         break;
++ 
+++#ifdef HAVE_HTML
++       case YAD_MODE_HTML:
++         /* Webkit doesn't handle focus for child dialogs when gtk_dialog_run() is used */
++         /* FIXME: maybe this solution must be expanded to all dialogs */
++@@ -775,6 +776,7 @@
++ 
++         gtk_main ();
++         break;
+++#endif
++ 
++       default:
++         dialog = create_dialog ();
+diff --git a/package/yad/Config.in b/package/yad/Config.in
+new file mode 100644
+index 0000000..1e6776b
+--- /dev/null
++++ b/package/yad/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_YAD
++	bool "yad"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  YAD (yet another dialog) is a tool for create graphical dialogs
++	  from shell scripts.
++
++	  http://sourceforge.net/projects/yad-dialog/
++
++comment "yad needs libgtk2 or libgtk3"
++	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
+diff --git a/package/yad/yad.hash b/package/yad/yad.hash
+new file mode 100644
+index 0000000..92b26cb
+--- /dev/null
++++ b/package/yad/yad.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 81ac5241edff6181f6ead779b04ada7f1202d1866938da1507502da0ebf059b7 yad-0.29.0.tar.xz
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+new file mode 100644
+index 0000000..da02ae2
+--- /dev/null
++++ b/package/yad/yad.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# yad
++#
++################################################################################
++
++YAD_VERSION = 0.29.0
++YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
++YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
++YAD_LICENSE = GPLv3
++YAD_LICENSE_FILES = COPYING
++YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
++
++YAD_CONF_OPTS = --enable-html=no
++
++ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++YAD_DEPENDENCIES += libgtk3
++YAD_CONF_OPTS += --with-gtk=gtk3
++else
++YAD_DEPENDENCIES += libgtk2
++YAD_CONF_OPTS += --with-gtk=gtk2
++endif
++
++$(eval $(autotools-package))
+-- 
+1.9.5.msysgit.1
