@@ -1,63 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Aug 2015 23:07:58 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/bwm-ng: fix build failures
-	with gcc-5
-Message-ID: <1439500078-22674-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 13 Aug 2015 23:24:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpfm4: disable Werror
+In-Reply-To: <1439496998-6386-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1439496998-6386-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150813212415.GD3522@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to the latest release, for 0.6 -> 0.6.1 to fix gcc-5 build
-failures due to incorrect definitions of 'static' functions.
+J?rg, All,
 
-The project also has a new home.
+On 2015-08-13 22:16 +0200, J?rg Krause spake thusly:
+> Set `DBG` to an empty value to disable -Werror when building libpfm4. Build
+> aborts with a musl toolchain because of warnings about redirecting incorrect
+> header includes.
+> 
+> So -Werror shouldn't be used in released code since it can cause random build
+> failures on moderate warnings. It also depends on the used toolchain since
+> different toolchains may or may not print the same warnings.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/6df/6df9b94a79be1dc5ba878f7b67bf9ad4ce2f2e98/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-fixes:
-    http://autobuild.buildroot.org/results/546/546b332cf95a48412d88add2feec2ffd4712857c/
-    http://autobuild.buildroot.org/results/751/751797f3b97839f69626682ce81dca9bcb2cff22/
-    ...
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: build-tested only]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/bwm-ng/Config.in   | 2 +-
- package/bwm-ng/bwm-ng.hash | 2 +-
- package/bwm-ng/bwm-ng.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/bwm-ng/Config.in b/package/bwm-ng/Config.in
-index 25e7cbe..f93dd93 100644
---- a/package/bwm-ng/Config.in
-+++ b/package/bwm-ng/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_BWM_NG
- 	  network and disk-io bandwidth monitor for Linux, BSD,
- 	  Solaris, Mac OS X and others.
- 
--	  http://sourceforge.net/projects/bwmng/
-+	  http://www.gropp.org/?id=projects&sub=bwm-ng
-diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
-index 6bb8355..44272b1 100644
---- a/package/bwm-ng/bwm-ng.hash
-+++ b/package/bwm-ng/bwm-ng.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c1134358e268329d438b0996399003b0f0b966034fb4b5b138761c2f3c62ffdd  bwm-ng-0.6.tar.gz
-+sha1  9445885d05e2430ca174739e3aba343afce94076  bwm-ng-0.6.1.tar.gz
-diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
-index ed1f5aa..e285422 100644
---- a/package/bwm-ng/bwm-ng.mk
-+++ b/package/bwm-ng/bwm-ng.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--BWM_NG_VERSION = 0.6
--BWM_NG_SITE = http://downloads.sourceforge.net/project/bwmng/bwmng/$(BWM_NG_VERSION)
-+BWM_NG_VERSION = 0.6.1
-+BWM_NG_SITE = http://www.gropp.org/bwm-ng
- BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
- BWM_NG_LICENSE = GPLv2
- BWM_NG_LICENSE_FILES = COPYING
+> ---
+>  package/libpfm4/libpfm4.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
+> index e2fff80..7f14758 100644
+> --- a/package/libpfm4/libpfm4.mk
+> +++ b/package/libpfm4/libpfm4.mk
+> @@ -13,7 +13,8 @@ LIBPFM4_INSTALL_STAGING = YES
+>  
+>  LIBPFM4_FLAGS = SYS=Linux ARCH=$(BR2_ARCH) \
+>  	CC="$(TARGET_CC)" LDCONFIG=true \
+> -	CONFIG_PFMLIB_SHARED=$(if $(BR2_STATIC_LIBS),n,y)
+> +	CONFIG_PFMLIB_SHARED=$(if $(BR2_STATIC_LIBS),n,y) \
+> +	DBG=
+>  
+>  define LIBPFM4_BUILD_CMDS
+>  	$(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
+> -- 
+> 2.5.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
