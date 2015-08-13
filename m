@@ -1,55 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 13 Aug 2015 14:22:47 +0300
-Subject: [Buildroot] [PATCH 1/1] msmtp: don't try to use IDN feature
-In-Reply-To: <55CC79B1.2010003@syscom-instruments.com>
-References: <1439463011-29089-1-git-send-email-viallard@syscom-instruments.com>
- <55CC79B1.2010003@syscom-instruments.com>
-Message-ID: <20150813112247.GY25261@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Aug 2015 14:13:23 +0200
+Subject: [Buildroot] [PATCH] toolchain/external: ensure gcc version is known
+Message-ID: <1439468003-27047-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anthony,
+Currently, when a preconfigured prebuilt toolchain forgets to specify
+its gcc version, the error message is a bit misleading, like:
 
-On Thu, Aug 13, 2015 at 01:04:17PM +0200, Viallard Anthony wrote:
-> On 08/13/2015 12:50 PM, Anthony Viallard wrote:
-> >Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
-> >---
-> >  package/msmtp/msmtp.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> >diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-> >index bff2620..7c8261e 100644
-> >--- a/package/msmtp/msmtp.mk
-> >+++ b/package/msmtp/msmtp.mk
-> >@@ -10,6 +10,7 @@ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
-> >  MSMTP_DEPENDENCIES = host-pkgconf
-> >  MSMTP_CONF_OPTS = \
-> >  	--without-libidn \
-> >+	--disable-gai-idn \
-> >  	--without-libgsasl
-> >  MSMTP_LICENSE = GPLv3+
-> >  MSMTP_LICENSE_FILES = COPYING
-> 
-> I don't known if there is a consensus about IDN usage for buildroot. I
-> didn't see an option in the config about it. I presume IDN should be
-> disabled for all package, am I right ?
-> 
-> autoconf can't see if AI_IDN is really supported (http://sourceforge.net/p/msmtp/code/ci/907916e8089ea9303a7c091b763087530c88a063/).
-> It seems weird but this is the case apparently.
-> 
-> Before I did the above patch, msmtp failed to send mail. The output was:
-> 
-> msmtp: cannot locate host smtp.mandrillapp.com: Bad value for ai_flags
+    Incorrect selection of gcc version: expected .x, got 4.9.2
 
-Excellent. Please add that to the commit log. If someone later feels the need 
-for IDN, that person should come up with a solution.
+Add a an explicit check for the gcc version being set, that reports a
+better error message.
 
-baruch
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+---
+Note: we do not need the same check for kernel headers, because for
+those, we really ensure a version is set, namely 2.6.x, whereas we do
+not set a default 'REALLY_OLD' gcc version (and we can't really do so).
+---
+ toolchain/helpers.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 7c70d35..85a9407 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -193,6 +193,10 @@ check_kernel_headers_version = \
+ #
+ check_gcc_version = \
+ 	expected_version="$(strip $2)" ; \
++	if [ -z "$${expected_version}" ]; then \
++		printf "Internal error, gcc version unknown (no GCC_AT_LEAST_X_Y selected)\n"; \
++		exit 1 ; \
++	fi; \
+ 	real_version=`$(1) --version | sed -r -e '1!d; s/^[^)]+\) ([^[:space:]]+).*/\1/;'` ; \
+ 	if [[ ! "$${real_version}" =~ ^$${expected_version}\. ]] ; then \
+ 		printf "Incorrect selection of gcc version: expected %s.x, got %s\n" \
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
