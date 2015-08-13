@@ -1,132 +1,65 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Thu, 13 Aug 2015 12:06:10 -0700
-Subject: [Buildroot] bootm - "Starting kernel"
-References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474B5DFA4@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474AD93AD@svr-wa-exch1.atg.lc>
- <CA+BsyQ7CdHTkHN4MBfX8txiSbn6Kh0JDrtO96VJ-4RQs7nPU4Q@mail.gmail.com> 
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD93F3@svr-wa-exch1.atg.lc>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Aug 2015 21:08:49 +0200
+Subject: [Buildroot] [PATCH] libiio: test programs require threads
+In-Reply-To: <254c2505374c4d6b33e13c4d4bf276ec1e4fbff5.1439268879.git.baruch@tkos.co.il>
+References: <254c2505374c4d6b33e13c4d4bf276ec1e4fbff5.1439268879.git.baruch@tkos.co.il>
+Message-ID: <20150813190849.GB3522@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Baruch, All,
 
-I added one line and changed one line in my .config file:
+On 2015-08-11 07:54 +0300, Baruch Siach spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/228/228a32167d05337acf17b0e3689aa91e8a67d8fb/
+> http://autobuild.buildroot.net/results/86a/86adb968659fec56684ba80e1c4230230fd7a1c8/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/libiio/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/libiio/Config.in b/package/libiio/Config.in
+> index 21496ed7c501..99da4c1c1000 100644
+> --- a/package/libiio/Config.in
+> +++ b/package/libiio/Config.in
+> @@ -37,9 +37,13 @@ config BR2_PACKAGE_LIBIIO_TESTS
+>  	bool "Install test programs"
+>  	select BR2_PACKAGE_LIBIIO_LOCAL_BACKEND
+>  	select BR2_PACKAGE_LIBIIO_NETWORK_BACKEND
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-385-db-ap"
-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02080000"
+Although I prefer we list dependencies before we do selects:
 
-The reason for 0x02080000 is that the Marvell U-Boot has predefined this value for the kernel_addr_r variable. The U-Boot commands I ran were:
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Marvell>> tftp 0x02080000 10.28.1.20:uImage - Bytes transferred = 3539008 (360040 hex)
-Marvell>> tftp 0x02400000 10.28.1.20:rootfs.cpio.uboot - Bytes transferred = 7776320 (76a840 hex)
-Marvell>> tftp 0x02c00000 10.28.1.20:armada-385-db-ap.dtb - Bytes transferred = 13286 (33e6 hex)
-Marvell>> setenv bootargs console=ttyS0,115200n8 mem=2G initrd=0x02400000,8M rw root=/dev/ram0 rw eth=00:50:43:ec:16:4d
-Marvell>> bootm 0x02080000 0x02400000 0x02c00000
+Regards,
+Yann E. MORIN.
 
-This time, I saw lots of garbage following "Starting kernel". It looks like that the Buildroot system is bootable but the console= part of bootargs needs to be adjusted.
+>  	help
+>  	  Install the test programs (iio_info, iio_genxml, iio_readdev).
+>  
+> +comment "IIO test programs need a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+>  config BR2_PACKAGE_LIBIIO_BINDINGS_CSHARP
+>  	bool "Install C# bindings"
+>  	depends on BR2_PACKAGE_MONO
+> -- 
+> 2.5.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I am resolving this issue. Your experience is definitely welcome.
-
-Tommy
-
-Marvell>> bootm 0x02080000 0x02400000 0x02c00000
-## Booting kernel from Legacy Image at 02080000 ...
-   Image Name:   Linux-4.0.4
-   Created:      2015-08-12  21:51:11 UTC
-   Image Type:   ARM Linux Kernel Image (uncompressed)
-   Data Size:    3538944 Bytes = 3.4 MiB
-   Load Address: 02000000
-   Entry Point:  02000000
-   Verifying Checksum ... OK
-## Loading init Ramdisk from Legacy Image at 02400000 ...
-   Image Name:
-   Created:      2015-08-12  21:51:55 UTC
-   Image Type:   ARM Linux RAMDisk Image (uncompressed)
-   Data Size:    7776256 Bytes = 7.4 MiB
-   Load Address: 00000000
-   Entry Point:  00000000
-   Verifying Checksum ... OK
-## Flattened Device Tree blob at 02c00000
-   Booting using the fdt blob at 0x02c00000
-   Loading Kernel Image ... OK
-OK
-   Loading Ramdisk to 7f261000, end 7f9cb800 ... OK
-   Loading Device Tree to 00ff9000, end 00fff3e5 ... OK
-
-   Starting Device Tree update ('fdt_skip_update' = no)
-Updating device tree failed
-
-Starting kernel ...
-
-??????????????????p?????????????????????????????
-.....
-
------Original Message-----
-From: Lee, Tommy
-Sent: Wednesday, August 12, 2015 5:32 PM
-To: 'Brendan Heading'
-Cc: buildroot at busybox.net
-Subject: RE: bootm - "Starting kernel"
-
-Brendan,
-
-The Marvell's USB has a n armada-385-db-ap.dtb file. My .config file has no such setting yet:
-
-tclee at Latitude-E6400:~/Downloads/aug10mon15/buildroot-2015.05$ egrep DTS .config # BR2_LINUX_KERNEL_DTS_SUPPORT is not set
-
-I discovered only two map files through the make process. They are not map of kernel:
-
-tclee at Latitude-E6400:~/Downloads/aug10mon15/buildroot-2015.05$ find . -name "*.map"|xargs ls -l|egrep "Aug 12"
--rw-rw-r-- 1 tclee tclee 8691522 Aug 12 16:56 ./output/build/busybox-1.23.2/busybox_unstripped.map
--rw-rw-r-- 1 tclee tclee   22576 Aug 12 16:54 ./output/build/host-gcc-final-4.8.4/build/arm-buildroot-linux-uclibcgnueabi/libgcc/libgcc.map
-tclee at Latitude-E6400:~/Downloads/aug10mon15/buildroot-2015.05$
-
-I tried the " bootm 0x02000000" command. The result is same.
-
-Marvell>> print bootargs
-bootargs=console=ttyS0,115200n8 mem=2G initrd=0x02400000,8M rw root=/dev/ram0 rw  eth=00:50:43:ec:16:4d
-Marvell>> bootm 0x02000000
-## Booting kernel from Legacy Image at 02000000 ...
-   Image Name:   Linux-4.0.4
-   Created:      2015-08-12  21:51:11 UTC
-   Image Type:   ARM Linux Kernel Image (uncompressed)
-   Data Size:    3538944 Bytes = 3.4 MiB
-   Load Address: 02000000
-   Entry Point:  02000000
-   Verifying Checksum ... OK
-   XIP Kernel Image ... OK
-OK
-
-Starting kernel ...
-
------Original Message-----
-From: Brendan Heading [mailto:brendanheading at gmail.com]
-Sent: Wednesday, August 12, 2015 4:48 PM
-To: Lee, Tommy
-Cc: buildroot at busybox.net
-Subject: Re: bootm - "Starting kernel"
-
-> -rw-r--r-- 1 root root 7776320 Aug 12 14:53 rootfs.cpio.uboot
-> -rw-r--r-- 1 root root 3539008 Aug 12 14:53 uImage
->
-> On my target, I did the TFTP downloads of the above two files in SDRAM. The uImage is loaded at 0x02000000; rootfd.cpio.uboot:
-
-Tommy,
-
-Can you send through the System.map file generated by the kernel ?
-It's interesting that the kernel has apparently been linked to start at 0x0000 0000. I'm not so familiar with ARM; maybe that's normal.
-
-Also, can you run the test again, except without loading the ramdisk.
-Just load the kernel. It will probably still fail but it's one less variable.
-
-Is there a device tree file for this board ? If so you probably need to configure it in buildroot and load it using u-boot/pass it to the kernel.
-
-regards
-
-Brendan
-
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
