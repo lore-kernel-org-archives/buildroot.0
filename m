@@ -1,68 +1,37 @@
-From: Bamvor Jian Zhang <bamvor.zhangjian@linaro.org>
-Date: Thu, 13 Aug 2015 09:16:45 +0800
-Subject: [Buildroot] [PATCH V3 RESEND 5/5] aarch64: ilp32 defconfig examples
-In-Reply-To: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
-Message-ID: <1439428605-17453-6-git-send-email-bamvor.zhangjian@linaro.org>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 13 Aug 2015 02:07:46 +0000
+Subject: [Buildroot] eUdev Label Issues
+Message-ID: <CA+h8R2qUKBaoif-0B9Gjv3MD_0gycmxicwejCAwyR4CXnzvFYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
+Hi all,
 
-DO NOT APPLY.
+I'm using buildroot to compile a system for an odroid XU4.
 
-Test aarch64 lp64 through qemu_aarch64_virt_defconfig.
-Test aarch64 ilp32, aarch64_be lp64, aarch64_be ilp32 through the
-following config.
+Here's my defconfig: http://pastebin.com/raw.php?i=ETU9d160
 
-Signed-off-by: Bamvor Jian Zhang <bamvor.zhangjian@huawei.com>
----
- configs/aarch64_be_defconfig       | 2 ++
- configs/aarch64_be_ilp32_defconfig | 8 ++++++++
- configs/aarch64_ilp32_defconfig    | 8 ++++++++
- 3 files changed, 18 insertions(+)
- create mode 100644 configs/aarch64_be_defconfig
- create mode 100644 configs/aarch64_be_ilp32_defconfig
- create mode 100644 configs/aarch64_ilp32_defconfig
+Seemingly randomly, my udev device labels will be messed up.
 
-diff --git a/configs/aarch64_be_defconfig b/configs/aarch64_be_defconfig
-new file mode 100644
-index 0000000..6995953
---- /dev/null
-+++ b/configs/aarch64_be_defconfig
-@@ -0,0 +1,2 @@
-+# Architecture
-+BR2_aarch64_be=y
-diff --git a/configs/aarch64_be_ilp32_defconfig b/configs/aarch64_be_ilp32_defconfig
-new file mode 100644
-index 0000000..6a2848a
---- /dev/null
-+++ b/configs/aarch64_be_ilp32_defconfig
-@@ -0,0 +1,8 @@
-+# Architecture
-+BR2_aarch64_be=y
-+BR2_AARCH64_ILP32=y
-+BR2_TOOLCHAIN_EXTERNAL_PATH="/path/to/your/toolchain"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnu"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/configs/aarch64_ilp32_defconfig b/configs/aarch64_ilp32_defconfig
-new file mode 100644
-index 0000000..2b59806
---- /dev/null
-+++ b/configs/aarch64_ilp32_defconfig
-@@ -0,0 +1,8 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_AARCH64_ILP32=y
-+BR2_TOOLCHAIN_EXTERNAL_PATH="/home/bamvor/works/software/toolchain/gcc-linaro-4.9~git82c1251-aarch64_aarch64-ilp32-linux-gnu-20150310"
-+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-ilp32-linux-gnu"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_16=y
-+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-+BR2_TOOLCHAIN_EXTERNAL_CXX=y
--- 
-2.1.4
+ls /dev/disk/by-label/
+boot layer rogtfs swap
+
+After a reboot there's a 50% chance it will be correct:
+
+ls /dev/disk/by-label/
+boot layer rootfs swap
+
+I'm using an SD card with a msdos partition table made with gparted. I'm
+using fat16, ext2, ext4, linux-swap for the partitions, respectively.
+
+Any idea why this would happen? It's always rogtfs, once I saw layer
+spelled daqer, and boot spelled bogt.
+
+Thanks!
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150813/c3b4610f/attachment.html>
