@@ -1,46 +1,39 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Thu, 13 Aug 2015 21:41:21 -0400
-Subject: [Buildroot] [PATCH 1/1] protobuf/protobuf-c: bump versions
-Message-ID: <1439516481-3375-1-git-send-email-nimaim@gmail.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri, 14 Aug 2015 02:25:18 -0300
+Subject: [Buildroot] [PATCH] kconfig: support read-only Buildroot source
+	directories
+In-Reply-To: <20150813224050.GE3522@free.fr>
+References: <1439504572-20085-1-git-send-email-hollis_blanchard@mentor.com>
+ <20150813224050.GE3522@free.fr>
+Message-ID: <CAK4VdL3Ps94aMoq9RvBB0_FT9Pke+vfei7K_NgqK9m6ZJkBNyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Nimai Mahajan <nimaim@gmail.com>
+Hello Hollis,
 
-Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
----
- package/protobuf-c/protobuf-c.mk | 2 +-
- package/protobuf/protobuf.mk     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Aug 13, 2015 at 7:40 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Hollis, All,
+>
+> On 2015-08-13 15:22 -0700, Hollis Blanchard spake thusly:
+>> merge_config.sh currently tries to create a .tmp file in the top-level
+>> Buildroot source tree. This fails when that directory is read-only, leading
+>> to unexpected .config file contents (affecting the configuration of Buildroot
+>> itself, Linux, and Busybox).
+>>
+>> Fix it by using mktemp --tmpdir to create the .tmp file in $TMPDIR or /tmp.
+>>
+>> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Regards,
+> Yann E. MORIN.
+>
 
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index d73eb25..ee4500e 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_C_VERSION = v1.0.0-rc1
-+PROTOBUF_C_VERSION = v1.1.1
- PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 0426fce..144e5fb 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_VERSION = v2.5.0
-+PROTOBUF_VERSION = v2.6.1
- PROTOBUF_SITE = $(call github,google,protobuf,$(PROTOBUF_VERSION))
- PROTOBUF_LICENSE = BSD-3c
- PROTOBUF_LICENSE_FILES = COPYING.txt
--- 
-1.9.1
+I mentioned on IRC the other day that I had reproduced the problem; I
+have tested this patch and it works for me, so:
+
+Tested-by: Erico Nunes <nunes.erico@gmail.com>
