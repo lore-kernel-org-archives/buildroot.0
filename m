@@ -1,125 +1,85 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Fri, 14 Aug 2015 11:54:09 -0400
-Subject: [Buildroot] [PATCH 1/1] protobuf/protobuf-c: bump versions
-In-Reply-To: <20150814154215.GD4017@free.fr>
-References: <1439516481-3375-1-git-send-email-nimaim@gmail.com>
- <20150814121935.GA4017@free.fr>
- <CALoSW66YprLV_WKuWUrPgzT9hL2JzBh69ggg2dNE3rxEkXohXg@mail.gmail.com>
- <20150814123735.GB4017@free.fr>
- <CALoSW67wa+ZY8PswjOFauGeT3-DT0eqd8VnxfS70OUECR_DQeA@mail.gmail.com>
- <20150814154215.GD4017@free.fr>
-Message-ID: <CALoSW65Z_+s+N0E7WSDbqNqzFTfaoDWaCPfA9uPyUh6Q-LyfRw@mail.gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 14 Aug 2015 18:20:24 +0200
+Subject: [Buildroot] [PATCHv5] openpowerlink bump to v2.2.1
+Message-ID: <1439569225-7199-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Aug 14, 2015 11:42 AM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
->
-> Nimai, All,
->
-> On 2015-08-14 11:11 -0400, Nimai Mahajan spake thusly:
-> > On Fri, Aug 14, 2015 at 8:37 AM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
-> [--SNIP--]
-> > >
-http://autobuild.buildroot.org/toolchains/configs/br-arm-full-static.config
-> > >
-http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-musl.config
-> [--SNIP--]
-> > Thanks for the suggestion! I didn't know autobuilder had prebuilt
-> > external toolchains for anyone to use publicly;
->
-> Yes, it is a little-known fact. Even I often forgets about it from time
-> to time... :-/
->
-> > protobuf-c v1.1.1 builds successfully with all toolchains ...
->
-> Good. Please provide a separate patch just to bump protobuf-c, then.
+From doc/openpowerlink.md:
+"The openPOWERLINK release V2.X is an evolution of the openPOWERLINK V1 stack.
+Running the kernel and user layers of openPOWERLINK on different processors in
+a multi-processor/multi-platform architecture, required fundamental changes in
+the Communication Abstraction Layer. Additionally, the existing code base was
+greatly improved so that it is easier to understand and maintain. Due to these
+reasons a new major release was started."
 
-Yep, will do.
+The openpowerlink2 package archive contains several cmake projects,
+and each of them should be packaged separately in Buildroot.
 
->
-> > protobuf    v2.6.1 builds successfully with everything except uClibc
-> > static, where it fails with this:
-> >
-> > D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -c
-> > google/protobuf/stubs/atomicops_internals_x86_gcc.cc -o
-> > google/protobuf/stubs/atomicops_internals_x86_gcc.o
-> > google/protobuf/stubs/common.cc:48:2: error: #error "No suitable
-> > threading library available."
-> >  #error "No suitable threading library available."
-> >   ^
-> [--SNIP--]
-> > Seems to be a threading library issue but toolchain has NPTL thread
-> > support I believe so not sure why that is.
->
-> In fact, it is not a threading issue. If you look closely at the
-> config.log, you'll see that pthreads are properly detected, but that a
-> further check about shared libs is broken, see:
->
->
-http://autobuild.buildroot.org/results/3ef/3efb86c7e8ec2db5d953d634470cafae79bd34cf/protobuf-v2.5.0/config.log
->
-> Most notably:
->
->     checking for the pthreads library -lpthreads... no
->     checking whether pthreads work without any flags... no
->     checking whether pthreads work with -Kthread... no
->     checking whether pthreads work with -kthread... no
->     checking for the pthreads library -llthread... no
->     checking whether pthreads work with -pthread... yes
->     checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
->     checking if more special flags are required for pthreads... no
->     checking whether to check for GCC pthread/shared inconsistencies...
-yes
->     checking whether -pthread is sufficient with -shared... no
->     checking whether -lpthread fixes that... no
->     checking whether -lc_r fixes that... no
->     configure: WARNING: Impossible to determine how to use pthreads with
-shared libraries
->     checking whether what we have so far is sufficient with -nostdlib...
-no
->     checking whether -lpthread saves the day... no
->     configure: WARNING: Impossible to determine how to use pthreads with
-shared libraries and -nostdlib
->
-> So, it's those checks about "GCC pthread/shared inconsistencies" that
-> are broken: it forcibly tries a shared link, even thoug h we are asking
-> for static link.
->
-> It all happens in an m4 macro, in protobuf-v2.5.0/m4/acx_pthread.m4,
-> around lines 239..375.
+"With version 2.0, the source code has been cleanly split into an
+application-oriented user library and a time-critical stack driver."
 
-Thanks for looking into it Yann. I see it now. So many broken autotools
-packages! Add this one to the list.
+This complicates the packaging in Buildroot, so a top level CMakeLists.txt
+has been added to the build system.
 
->
-> Fixing this macros is a huge "enterntainment" ;-]
->
-> So I think it is musch easier to just mark the package as not being
-> availble for static-only builds...
+All patches fix several issues with the cmake build system and will be
+submitted upstream.
 
-Agreed ... will do. I appreciate the help.
+There is one project for the EPL (Ethernet PowerLink) stack
+libraries wich provides:
+ * an user space EPL stack to be linked into application
+ * an user space EPL stack pcap daemon
+ * an kernel space EPL library interface
 
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-.-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
-     |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
- conspiracy.  |
->
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150814/38ef7781/attachment.html>
+There are two projects for the EPL network driver:
+ * pcap daemon driver
+ * kernel module driver.
+
+Note: On x86/x86_64 only few EPL ethernet driver are available for
+the EPL kernel stack implementation:
+ * Intel 82573
+ * Intel 8255x
+ * Intel I210
+ * Realtek RTL-8111/8168 (new since V2.1.0)
+ * Realtek RTL-8139
+
+There is one project for each demo application:
+ * demo_cn_embedded
+ * demo_mn_embedded
+ * demo_cn_console
+ * demo_mn_console
+ * demo_mn_qt
+
+Only demo_mn_console will be packaged in Buildroot for now.
+
+[1] http://sourceforge.net/p/openpowerlink/discussion/newbie/thread/3f13af65/
+
+Romain Naour (1):
+  package/openpowerlink: bump to v2.2.1
+
+ Config.in.legacy                                   |  17 +++
+ ...l-the-stack-libraries-to-lib-subdirectory.patch | 133 ++++++++++++++++
+ ...a-better-regex-for-cmake-system-processor.patch |  89 -----------
+ ...0002-FIX-cmake-install-oplk-headers-files.patch |  34 +++++
+ ...-fix-user-space-stack-enable-shared-build.patch |  54 -------
+ ...se-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch | 154 +++++++++++++++++++
+ ...ROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch | 125 +++++++++++++++
+ .../0005-FIX-Add-top-level-CMakeLists.txt.patch    | 170 +++++++++++++++++++++
+ package/openpowerlink/Config.in                    | 131 ++++++++--------
+ package/openpowerlink/openpowerlink.hash           |   3 +
+ package/openpowerlink/openpowerlink.mk             | 143 ++++++++++++-----
+ 11 files changed, 805 insertions(+), 248 deletions(-)
+ create mode 100644 package/openpowerlink/0001-FIX-install-the-stack-libraries-to-lib-subdirectory.patch
+ delete mode 100644 package/openpowerlink/0001-fix-use-a-better-regex-for-cmake-system-processor.patch
+ create mode 100644 package/openpowerlink/0002-FIX-cmake-install-oplk-headers-files.patch
+ delete mode 100644 package/openpowerlink/0002-fix-user-space-stack-enable-shared-build.patch
+ create mode 100644 package/openpowerlink/0003-FIX-cmake-use-CMAKE_CURRENT_SOURCE_DIR-instead-of-CM.patch
+ create mode 100644 package/openpowerlink/0004-FIX-Use-PROJECT_NAME-instead-of-CMAKE_PROJECT_NAME.patch
+ create mode 100644 package/openpowerlink/0005-FIX-Add-top-level-CMakeLists.txt.patch
+ create mode 100644 package/openpowerlink/openpowerlink.hash
+
+-- 
+2.4.3
