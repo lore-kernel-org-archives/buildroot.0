@@ -1,47 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 15 Aug 2015 11:28:53 +0200
-Subject: [Buildroot] [PATCH 1/1] protobuf/protobuf-c: bump versions
-In-Reply-To: <20150814164515.GE4017@free.fr>
-References: <1439516481-3375-1-git-send-email-nimaim@gmail.com>
- <20150814121935.GA4017@free.fr>
- <CALoSW66YprLV_WKuWUrPgzT9hL2JzBh69ggg2dNE3rxEkXohXg@mail.gmail.com>
- <20150814123735.GB4017@free.fr>
- <CALoSW67wa+ZY8PswjOFauGeT3-DT0eqd8VnxfS70OUECR_DQeA@mail.gmail.com>
- <20150814154215.GD4017@free.fr>
- <CALoSW65Z_+s+N0E7WSDbqNqzFTfaoDWaCPfA9uPyUh6Q-LyfRw@mail.gmail.com>
- <20150814164515.GE4017@free.fr>
-Message-ID: <20150815092853.GA3626@free.fr>
+Date: Sat, 15 Aug 2015 14:46:42 +0200
+Subject: [Buildroot] [PATCH] package/beecrypt: fix C++ support
+Message-ID: <1439642802-9968-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nimai, All,
+C++ support unconditionally needs shared libraries; it uses
+dlopen/dlsym.
 
-On 2015-08-14 18:45 +0200, Yann E. MORIN spake thusly:
-> On 2015-08-14 11:54 -0400, Nimai Mahajan spake thusly:
-> > On Aug 14, 2015 11:42 AM, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > So I think it is musch easier to just mark the package as not being
-> > > availble for static-only builds...
-> > Agreed ... will do. I appreciate the help.
-> 
-> In this case, prepare two patches:
->   - one to "fix" the static issue, that can be applied to master,
-[--SNIP--]
-> (In fact I already have the fix locally, but did not have time to submit
-> it so far, so be my guest and submit it if you want! ;-) )
+Also, fix the conditions under which the comment is shown.
 
-So, I've now sent this patch:
-    https://patchwork.ozlabs.org/patch/507628/
+Finally, explicitly require C++ support when configuring.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/beecrypt/Config.in   | 6 ++++--
+ package/beecrypt/beecrypt.mk | 1 +
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index b9685ef..fc93a77 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -17,13 +17,15 @@ config BR2_PACKAGE_BEECRYPT_CPP
+ 	depends on BR2_USE_WCHAR # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_ARCH_HAS_ATOMICS # icu
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Enable C++ support. This pulls in the (large) icu package.
+ 
+-comment "C++ support needs a toolchain w/ wchar"
++comment "C++ support needs a toolchain w/ C++, wchar, dynamic libraries"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on BR2_ARCH_HAS_ATOMICS
+-	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
++		|| BR2_STATIC_LIBS
+ 
+ endif # BR2_PACKAGE_BEECRYPT
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index cd0b4ac..e66cec1 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -19,6 +19,7 @@ BEECRYPT_CONF_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
+ BEECRYPT_DEPENDENCIES += icu
++BEECRYPT_CONF_OPTS += --with-cplusplus
+ else
+ BEECRYPT_CONF_OPTS += --without-cplusplus
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
