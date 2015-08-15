@@ -1,76 +1,242 @@
 From: Alex Suykov <alex.suykov@gmail.com>
-Date: Sat, 15 Aug 2015 19:15:06 +0300
-Subject: [Buildroot] [PATCH] clapack: musl patches
-Message-ID: <20150815161506.GA28405@vostro>
+Date: Sat, 15 Aug 2015 20:19:34 +0300
+Subject: [Buildroot] [PATCH] package/batctl: bump to version 2015.1
+Message-ID: <20150815171934.GA28760@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/a94f097193cd5444dee5cd9df9d544ce736a7e7e/
-http://autobuild.buildroot.net/results/036014e492f7caf793b92a9822ab6a0b1a54f2e8/
+musl fixes have been merged upstream, so the patch is no longer needed.
 
 Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 ---
- package/clapack/0006-remove-uninit-f2c.patch | 24 ++++++++++++++++++++++++
- package/clapack/0007-off64-t.patch           | 16 ++++++++++++++++
- 2 files changed, 40 insertions(+)
- create mode 100644 package/clapack/0006-remove-uninit-f2c.patch
- create mode 100644 package/clapack/0007-off64-t.patch
+ package/batctl/0001-musl-fixes.patch | 192 -----------------------------------
+ package/batctl/batctl.hash           |   4 +-
+ package/batctl/batctl.mk             |   2 +-
+ 3 files changed, 3 insertions(+), 195 deletions(-)
+ delete mode 100644 package/batctl/0001-musl-fixes.patch
 
-diff --git a/package/clapack/0006-remove-uninit-f2c.patch b/package/clapack/0006-remove-uninit-f2c.patch
-new file mode 100644
-index 0000000..251c702
---- /dev/null
-+++ b/package/clapack/0006-remove-uninit-f2c.patch
-@@ -0,0 +1,24 @@
-+uninit.c includes glibc-specific <fpu_control.h> not provided by musl.
-+Somewhat portable replacement is <fenv.h>, which is available in musl
-+but requires non-trivial changes to uninit.c.
-+
-+f2c uses _uninit_f2c() from uninit.c to implement its -trapuv option,
-+pre-initializiing floating-point variables to NaN and asking FPU to send
-+SIGFPE whenever NaN value is encountered.
-+
-+clapack source has already been run through f2c without -trapuv,
-+so uninit.c code is not used anywhere and can be safely excluded.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/F2CLIBS/libf2c/CMakeLists.txt
-++++ b/F2CLIBS/libf2c/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ set(MISC 
-+   f77vers.c i77vers.c main.c s_rnge.c abort_.c exit_.c getarg_.c iargc_.c
-+   getenv_.c signal_.c s_stop.c s_paus.c system_.c cabs.c ctype.c
-+-  derf_.c derfc_.c erf_.c erfc_.c sig_die.c uninit.c)
-++  derf_.c derfc_.c erf_.c erfc_.c sig_die.c)
-+ set(POW pow_ci.c pow_dd.c pow_di.c pow_hh.c pow_ii.c pow_ri.c pow_zi.c pow_zz.c)
-+ set(CX 	c_abs.c c_cos.c c_div.c c_exp.c c_log.c c_sin.c c_sqrt.c)
-+ set(DCX	z_abs.c z_cos.c z_div.c z_exp.c z_log.c z_sin.c z_sqrt.c)
-diff --git a/package/clapack/0007-off64-t.patch b/package/clapack/0007-off64-t.patch
-new file mode 100644
-index 0000000..bf66d3c
---- /dev/null
-+++ b/package/clapack/0007-off64-t.patch
-@@ -0,0 +1,16 @@
-+musl only provides off64_t, not __off64_t.
-+glibc and uclibc have both defined.
-+
-+Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-+
-+--- a/F2CLIBS/libf2c/sysdep1.h
-++++ b/F2CLIBS/libf2c/sysdep1.h
-+@@ -10,7 +10,7 @@
-+ 
-+ #ifdef __linux__
-+ #define USE_LARGEFILE
-+-#define OFF_T __off64_t
-++#define OFF_T off64_t
-+ #endif
-+ 
-+ #ifdef _AIX43
+diff --git a/package/batctl/0001-musl-fixes.patch b/package/batctl/0001-musl-fixes.patch
+deleted file mode 100644
+index 4d64f31..0000000
+--- a/package/batctl/0001-musl-fixes.patch
++++ /dev/null
+@@ -1,192 +0,0 @@
+-musl does not allow including netinet/* and linux/* headers together.
+-batctl includes netinet/if_ether.h indirectly via net/ethernet.h,
+-so netinet/if_ether.h must be used instead of linux/if_ether.h.
+-
+-__be16 and __be32 are linux-specific typedefs for uint16_t and
+-uint32_t with __attribute__((bitwise)) that has no effect
+-outside of the kernel.
+-
+-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+-
+---- batctl-2014.4.0/ping.c
+-+++ batctl-2014.4.0/ping.c
+-@@ -34,7 +34,7 @@
+- #include <stdint.h>
+- #include <sys/select.h>
+- #include <sys/time.h>
+--#include <linux/if_ether.h>
+-+#include <netinet/if_ether.h>
+- 
+- #include "main.h"
+- #include "ping.h"
+---- batctl-2014.4.0/tcpdump.h
+-+++ batctl-2014.4.0/tcpdump.h
+-@@ -23,7 +23,7 @@
+- #define _BATCTL_TCPDUMP_H
+- 
+- #include <netpacket/packet.h>
+--#include <linux/if_ether.h>
+-+#include <netinet/if_ether.h>
+- #include <net/if_arp.h>
+- #include <sys/types.h>
+- #include "main.h"
+---- batctl-2014.4.0/traceroute.c
+-+++ batctl-2014.4.0/traceroute.c
+-@@ -28,7 +28,7 @@
+- #include <unistd.h>
+- #include <fcntl.h>
+- #include <string.h>
+--#include <linux/if_ether.h>
+-+#include <netinet/if_ether.h>
+- #include <stddef.h>
+- #include <sys/select.h>
+- #include <sys/time.h>
+---- batctl-2014.4.0/packet.h
+-+++ batctl-2014.4.0/packet.h
+-@@ -196,7 +196,7 @@
+- struct batadv_bla_claim_dst {
+- 	uint8_t magic[3];	/* FF:43:05 */
+- 	uint8_t type;		/* bla_claimframe */
+--	__be16 group;		/* group id */
+-+	uint16_t group;		/* group id */
+- };
+- #pragma pack()
+- 
+-@@ -213,12 +213,12 @@
+- 	uint8_t  version;
+- 	uint8_t  ttl;
+- 	uint8_t  flags;
+--	__be32   seqno;
+-+	uint32_t   seqno;
+- 	uint8_t  orig[ETH_ALEN];
+- 	uint8_t  prev_sender[ETH_ALEN];
+- 	uint8_t  reserved;
+- 	uint8_t  tq;
+--	__be16   tvlv_len;
+-+	uint16_t   tvlv_len;
+- 	/* __packed is not needed as the struct size is divisible by 4,
+- 	 * and the largest data type in this struct has a size of 4.
+- 	 */
+-@@ -273,7 +273,7 @@
+- 	uint8_t  orig[ETH_ALEN];
+- 	uint8_t  uid;
+- 	uint8_t  reserved;
+--	__be16   seqno;
+-+	uint16_t   seqno;
+- };
+- 
+- #define BATADV_RR_LEN 16
+-@@ -300,7 +300,7 @@
+- 	uint8_t  orig[ETH_ALEN];
+- 	uint8_t  uid;
+- 	uint8_t  rr_cur;
+--	__be16   seqno;
+-+	uint16_t   seqno;
+- 	uint8_t  rr[BATADV_RR_LEN][ETH_ALEN];
+- };
+- 
+-@@ -380,8 +380,8 @@
+- #endif
+- 	uint8_t dest[ETH_ALEN];
+- 	uint8_t orig[ETH_ALEN];
+--	__be16  seqno;
+--	__be16  total_size;
+-+	uint16_t  seqno;
+-+	uint16_t  total_size;
+- };
+- 
+- /**
+-@@ -398,7 +398,7 @@
+- 	uint8_t  version;  /* batman version field */
+- 	uint8_t  ttl;
+- 	uint8_t  reserved;
+--	__be32   seqno;
+-+	uint32_t   seqno;
+- 	uint8_t  orig[ETH_ALEN];
+- 	/* "4 bytes boundary + 2 bytes" long to make the payload after the
+- 	 * following ethernet header again 4 bytes boundary aligned
+-@@ -431,14 +431,14 @@
+- 	/* uint8_t  first_dest[ETH_ALEN]; - saved in mac header destination */
+- 	uint8_t  first_source[ETH_ALEN];
+- 	uint8_t  first_orig_dest[ETH_ALEN];
+--	__be32   first_crc;
+-+	uint32_t   first_crc;
+- 	uint8_t  second_ttl;
+- 	uint8_t  second_ttvn;
+- 	uint8_t  second_dest[ETH_ALEN];
+- 	uint8_t  second_source[ETH_ALEN];
+- 	uint8_t  second_orig_dest[ETH_ALEN];
+--	__be32   second_crc;
+--	__be16   coded_len;
+-+	uint32_t   second_crc;
+-+	uint16_t   coded_len;
+- };
+- 
+- #pragma pack()
+-@@ -461,7 +461,7 @@
+- 	uint8_t  reserved;
+- 	uint8_t  dst[ETH_ALEN];
+- 	uint8_t  src[ETH_ALEN];
+--	__be16   tvlv_len;
+-+	uint16_t   tvlv_len;
+- 	uint16_t align;
+- };
+- 
+-@@ -474,7 +474,7 @@
+- struct batadv_tvlv_hdr {
+- 	uint8_t type;
+- 	uint8_t version;
+--	__be16  len;
+-+	uint16_t  len;
+- };
+- 
+- /**
+-@@ -484,8 +484,8 @@
+-  * @bandwidth_up: advertised uplink upload bandwidth
+-  */
+- struct batadv_tvlv_gateway_data {
+--	__be32 bandwidth_down;
+--	__be32 bandwidth_up;
+-+	uint32_t bandwidth_down;
+-+	uint32_t bandwidth_up;
+- };
+- 
+- /**
+-@@ -498,7 +498,7 @@
+- struct batadv_tvlv_tt_data {
+- 	uint8_t flags;
+- 	uint8_t ttvn;
+--	__be16  num_vlan;
+-+	uint16_t  num_vlan;
+- };
+- 
+- /**
+-@@ -509,8 +509,8 @@
+-  * @reserved: unused, useful for alignment purposes
+-  */
+- struct batadv_tvlv_tt_vlan_data {
+--	__be32	crc;
+--	__be16	vid;
+-+	uint32_t	crc;
+-+	uint16_t	vid;
+- 	uint16_t reserved;
+- };
+- 
+-@@ -526,7 +526,7 @@
+- 	uint8_t flags;
+- 	uint8_t reserved[3];
+- 	uint8_t addr[ETH_ALEN];
+--	__be16 vid;
+-+	uint16_t vid;
+- };
+- 
+- /**
+-@@ -536,7 +536,7 @@
+-  */
+- struct batadv_tvlv_roam_adv {
+- 	uint8_t  client[ETH_ALEN];
+--	__be16 vid;
+-+	uint16_t vid;
+- };
+- 
+- /**
+diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
+index 663e602..0ac3810 100644
+--- a/package/batctl/batctl.hash
++++ b/package/batctl/batctl.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256	77509ed70232ebc0b73e2fa9471ae13b12d6547d167dda0a82f7a7fad7252c36  batctl-2014.4.0.tar.gz
++# http://downloads.open-mesh.org/batman/releases/batman-adv-2015.1/batctl-2015.1.tar.gz.sha1
++sha1	ae086f334ff912ab2a8116caedf0a2a1816acf1a	batctl-2015.1.tar.gz
+diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
+index c458752..e91dff9 100644
+--- a/package/batctl/batctl.mk
++++ b/package/batctl/batctl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BATCTL_VERSION = 2014.4.0
++BATCTL_VERSION = 2015.1
+ BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
+ BATCTL_LICENSE = GPLv2
+ BATCTL_DEPENDENCIES = libnl host-pkgconf
 -- 
 2.0.3
