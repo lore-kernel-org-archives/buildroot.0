@@ -1,76 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2015 16:09:41 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/dosfstools: fix build with
-	musl
-Message-ID: <1439734181-1015-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 16 Aug 2015 16:38:47 +0200
+Subject: [Buildroot] [PATCH] [autobuild] package/libnetfilter_queue: fix
+	build with musl
+Message-ID: <1439735927-10364-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use correct and standard int types.
+Backport a patch from upstream.
 
 Fixes:
-    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/
-    http://autobuild.buildroot.org/results/62b/62b1a71c4fedb6f9209663e7544d7a36fb42c580/
-    http://autobuild.buildroot.org/results/e80/e808e692220ced315d30d8ee9c93bdf4a5e32a03/
-    http://autobuild.buildroot.org/results/7b7/7b778b7a9ec8c91ec3cea6ee81c6f5c75f0b959a/
+    http://autobuild.buildroot.org/results/59b/59bd31c10a0d445d2ea56550a36920ecb2ef89ed/
+    http://autobuild.buildroot.org/results/60a/60ab98b4cf909b04a57207b2326e9f8080d1721b/
+    http://autobuild.buildroot.org/results/7db/7db3a5c2bebabfdc26947f45382893bb14656617/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- .../0001-mkfs.fat-fix-incorrect-int-type.patch     | 45 ++++++++++++++++++++++
+ package/libnetfilter_queue/0002-musl.patch | 45 ++++++++++++++++++++++++++++++
  1 file changed, 45 insertions(+)
- create mode 100644 package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+ create mode 100644 package/libnetfilter_queue/0002-musl.patch
 
-diff --git a/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+diff --git a/package/libnetfilter_queue/0002-musl.patch b/package/libnetfilter_queue/0002-musl.patch
 new file mode 100644
-index 0000000..3dd7c83
+index 0000000..3765d58
 --- /dev/null
-+++ b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
++++ b/package/libnetfilter_queue/0002-musl.patch
 @@ -0,0 +1,45 @@
-+From 7a589ef6dab52ad32a296939f0ed2acb4d76b2a7 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Sun, 16 Aug 2015 15:55:43 +0200
-+Subject: [PATCH] mkfs.fat: fix incorrect int type
++From 5348da83403383a60831f4c297841afb98692887 Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Sat, 16 May 2015 14:45:46 +0200
++Subject: [PATCH] extra: Define _GNU_SOURCE to get members of tcphdr&ucphdr
 +
-+u_int32_t is not a stanard type, while uint32_t is. This fixes builds
-+with the musl C library, which only defines so-called "clean" headers;
-+build failures are like (back-quotes and elision manually added for
-+readability):
++The source uses linux names for members of tcphdr. For example
++"source" instead of "th_sport", ... musl libc's headers need
++_GNU_SOURCE defined in order to expose these.
 +
-+    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/build-end.log
-+
-+    /home/peko/autobuild/instance-1/output/host/usr/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE \
-+        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_GNU_SOURCE -D_LARGEFILE_SOURCE \
-+        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -c -o mkfs.fat.o src/mkfs.fat.c
-+    src/mkfs.fat.c: In function 'main':
-+    src/mkfs.fat.c:1415:18: error: 'u_int32_t' undeclared (first use in this function)
-+         volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec); [...]
-+                      ^
-+    src/mkfs.fat.c:1415:18: note: each undeclared identifier is reported only once for each
-+    function it appears in
-+
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
++[yann.morin.1998 at free.fr: backported from upstream]
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +---
-+Upstream status: submitted: https://github.com/dosfstools/dosfstools/pull/9
-+---
-+ src/mkfs.fat.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/extra/tcp.c | 1 +
++ src/extra/udp.c | 1 +
++ 2 files changed, 2 insertions(+)
 +
-+diff --git a/src/mkfs.fat.c b/src/mkfs.fat.c
-+index b38d116..dddbe24 100644
-+--- a/src/mkfs.fat.c
-++++ b/src/mkfs.fat.c
-+@@ -1412,7 +1412,7 @@ int main(int argc, char **argv)
++diff --git a/src/extra/tcp.c b/src/extra/tcp.c
++index bf161aa..d1cd79d 100644
++--- a/src/extra/tcp.c
+++++ b/src/extra/tcp.c
++@@ -15,6 +15,7 @@
++ #include <arpa/inet.h>
++ #include <netinet/ip.h>
++ #include <netinet/ip6.h>
+++#define _GNU_SOURCE
++ #include <netinet/tcp.h>
 + 
-+     gettimeofday(&create_timeval, NULL);
-+     create_time = create_timeval.tv_sec;
-+-    volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
-++    volume_id = (uint32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
-+     check_atari();
++ #include <libnetfilter_queue/libnetfilter_queue.h>
++diff --git a/src/extra/udp.c b/src/extra/udp.c
++index 6e6baed..8c44a66 100644
++--- a/src/extra/udp.c
+++++ b/src/extra/udp.c
++@@ -14,6 +14,7 @@
++ #include <arpa/inet.h>
++ #include <netinet/ip.h>
++ #include <netinet/ip6.h>
+++#define _GNU_SOURCE
++ #include <netinet/udp.h>
 + 
-+     printf("mkfs.fat " VERSION " (" VERSION_DATE ")\n");
++ #include <libnetfilter_queue/libnetfilter_queue.h>
 +-- 
 +1.9.1
 +
