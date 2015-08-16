@@ -1,32 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Aug 2015 16:43:25 +0300
-Subject: [Buildroot] [PATCH] [autobuild] package/oprofile: fix static
- linking
-In-Reply-To: <1439732249-14832-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439732249-14832-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150816134325.GF7325@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Aug 2015 16:09:41 +0200
+Subject: [Buildroot] [PATCH] [autobuild] package/dosfstools: fix build with
+	musl
+Message-ID: <1439734181-1015-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Use correct and standard int types.
 
-On Sun, Aug 16, 2015 at 03:37:29PM +0200, Yann E. MORIN wrote:
-> +# popt links with -lintl and specifies it in its popt.pc, and has done
-> +# so for the past 6+ years, but oprofile does not use pkconfig to find
-> +# popt, so we need to tell it to link with -lintl for a static build.
-> +ifeq ($(BR2_PACKAGE_GETTEXT)$(BR2_STATIC_LIBS),yy)
-> +OPROFILE_CONF_OPTS += LIBS=-lintl
-> +endif
+Fixes:
+    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/
+    http://autobuild.buildroot.org/results/62b/62b1a71c4fedb6f9209663e7544d7a36fb42c580/
+    http://autobuild.buildroot.org/results/e80/e808e692220ced315d30d8ee9c93bdf4a5e32a03/
+    http://autobuild.buildroot.org/results/7b7/7b778b7a9ec8c91ec3cea6ee81c6f5c75f0b959a/
 
-Why not run $(PKG_CONFIG_HOST_BINARY) directly like we do in 
-package/logrotate/logrotate.mk for popt?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../0001-mkfs.fat-fix-incorrect-int-type.patch     | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
 
-baruch
-
+diff --git a/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+new file mode 100644
+index 0000000..3dd7c83
+--- /dev/null
++++ b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+@@ -0,0 +1,45 @@
++From 7a589ef6dab52ad32a296939f0ed2acb4d76b2a7 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 16 Aug 2015 15:55:43 +0200
++Subject: [PATCH] mkfs.fat: fix incorrect int type
++
++u_int32_t is not a stanard type, while uint32_t is. This fixes builds
++with the musl C library, which only defines so-called "clean" headers;
++build failures are like (back-quotes and elision manually added for
++readability):
++
++    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/build-end.log
++
++    /home/peko/autobuild/instance-1/output/host/usr/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE \
++        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_GNU_SOURCE -D_LARGEFILE_SOURCE \
++        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -c -o mkfs.fat.o src/mkfs.fat.c
++    src/mkfs.fat.c: In function 'main':
++    src/mkfs.fat.c:1415:18: error: 'u_int32_t' undeclared (first use in this function)
++         volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec); [...]
++                      ^
++    src/mkfs.fat.c:1415:18: note: each undeclared identifier is reported only once for each
++    function it appears in
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status: submitted: https://github.com/dosfstools/dosfstools/pull/9
++---
++ src/mkfs.fat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/mkfs.fat.c b/src/mkfs.fat.c
++index b38d116..dddbe24 100644
++--- a/src/mkfs.fat.c
+++++ b/src/mkfs.fat.c
++@@ -1412,7 +1412,7 @@ int main(int argc, char **argv)
++ 
++     gettimeofday(&create_timeval, NULL);
++     create_time = create_timeval.tv_sec;
++-    volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
+++    volume_id = (uint32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
++     check_atari();
++ 
++     printf("mkfs.fat " VERSION " (" VERSION_DATE ")\n");
++-- 
++1.9.1
++
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
