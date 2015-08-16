@@ -1,55 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2015 23:46:38 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/oprofile: fix static linking
-Message-ID: <1439761598-18631-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 16 Aug 2015 23:48:43 +0200
+Subject: [Buildroot] [PATCHv2] [autobuild] package/oprofile: fix static
+	linking
+In-Reply-To: <20150816180245.GE2765@tarshish>
+References: <1439736807-29324-1-git-send-email-yann.morin.1998@free.fr>
+ <20150816180245.GE2765@tarshish>
+Message-ID: <20150816214843.GH3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When getext is enabled, popt links with -lintl, specifies it in its
-popt.pc and has done so for the past 6+ years. But oprofile does not
-use pkconfig to find popt, so misses -lintl, which is important for
-a static build. We have to do the call to pkgconfig manually...
+Baruch, All,
 
-Fixes:
-    http://autobuild.buildroot.org/results/a48/a485f2171a3fcbfa2e0e5aec8e653cf88512615d/
-    http://autobuild.buildroot.org/results/b37/b374874f1915ab1d7aa6262604ccc8db102bb0b0/
-    http://autobuild.buildroot.org/results/261/2616a63081ed8c55c7ca1a6879b1a6a14e19f918/
-    http://autobuild.buildroot.org/results/73f/73f34ab59d54ded68ff60608a0212a6e5a5190e5/
-    ...
+On 2015-08-16 21:02 +0300, Baruch Siach spake thusly:
+> On Sun, Aug 16, 2015 at 04:53:27PM +0200, Yann E. MORIN wrote:
+> > +# popt links with -lintl and specifies it in its popt.pc, and has done
+> > +# so for the past 6+ years, but oprofile does not use pkconfig to find
+> > +# popt, so we need to tell it to link with -lintl for a static build.
+> > +ifeq ($(BR2_PACKAGE_GETTEXT)$(BR2_STATIC_LIBS),yy)
+> > +OPROFILE_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
+> > +endif
+> 
+> Well, the whole point of running $(PKG_CONFIG_HOST_BINARY) is that its output 
+> matches the actual build dependencies. So the 'ifeq' should not be needed, 
+> just like logrotate.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
+So true. Thanks for the reviews! :-)
 
----
-Change v2 -> v3:
-  - don't make the call to pkgconfig contional  (Baruch)
-  - fix comment appropriately
+Regards,
+Yann E. MORIN.
 
-Changes v1 -> v2:
-  - use PKG_CONFIG_HOST_BINARY to find popt libs  (Baruch)
----
- package/oprofile/oprofile.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 5876307..ba36640 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -41,6 +41,12 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
- OPROFILE_DEPENDENCIES += libpfm4
- endif
- 
-+# When getext is enabled, popt links with -lintl, specifies it in its
-+# popt.pc and has done so for the past 6+ years. But oprofile does not
-+# use pkconfig to find popt, so misses -lintl, which is important for
-+# a static build. We have to do the call to pkgconfig manually...
-+OPROFILE_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
-+
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
