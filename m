@@ -1,44 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2015 17:09:02 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/dosfstools: fix build
-	with musl
-In-Reply-To: <1439734181-1015-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439734181-1015-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150816150902.GG3650@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 16 Aug 2015 17:43:46 +0100
+Subject: [Buildroot] [PATCH] package/ltrace: do not enable libunwind support
+	for MIPS
+Message-ID: <1439743426-3824-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Currently libunwind support in ltrace is broken for MIPS. I'm working
+with upstream to fix this issue, but it's not yet ready, so let's
+disable it by now.
 
-On 2015-08-16 16:09 +0200, Yann E. MORIN spake thusly:
-> Use correct and standard int types.
-[--SNIP--]
-> diff --git a/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
-> new file mode 100644
-> index 0000000..3dd7c83
-> --- /dev/null
-> +++ b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
-> @@ -0,0 +1,45 @@
-> +From 7a589ef6dab52ad32a296939f0ed2acb4d76b2a7 Mon Sep 17 00:00:00 2001
-> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Date: Sun, 16 Aug 2015 15:55:43 +0200
-> +Subject: [PATCH] mkfs.fat: fix incorrect int type
-[--SNIP--]
-> +Upstream status: submitted: https://github.com/dosfstools/dosfstools/pull/9
+Fixes:
 
-Since the patch was submitted, upstream has applied it.
-So, new upstream status: applied.
+  http://autobuild.buildroot.net/results/79b/79b51941ed57b0564c68112489b03cac39a04e9a/
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ltrace/ltrace.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 73ae28e..eac42be 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -19,8 +19,9 @@ LTRACE_POST_PATCH_HOOKS += LTRACE_CREATE_CONFIG_M4
+ 
+ # ltrace can use libunwind only if libc has backtrace() support
+ # We don't normally do so for uClibc and we can't know if it's external
++# Also ltrace with libunwind support is broken for MIPS so we disable it
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_mips)$(BR2_mipsel),)
+ # --with-elfutils only selects unwinding support backend. elfutils is a
+ # mandatory dependency regardless.
+ LTRACE_CONF_OPTS += --with-libunwind=yes --with-elfutils=no
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.6
