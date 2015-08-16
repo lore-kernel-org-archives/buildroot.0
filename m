@@ -1,11 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Aug 2015 11:35:10 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/bwm-ng: fix build
- failures with gcc-5
-In-Reply-To: <20150814144542.GC4017@free.fr>
-References: <1439500078-22674-1-git-send-email-yann.morin.1998@free.fr>
- <20150814141516.GC25261@tarshish> <20150814144542.GC4017@free.fr>
-Message-ID: <20150816093510.GA3650@free.fr>
+Date: Sun, 16 Aug 2015 11:42:48 +0200
+Subject: [Buildroot] [PATCH] libv4l: update homepage link
+In-Reply-To: <00a56e2f1858587033563e1f43f12fa7aa5aa357.1439713778.git.baruch@tkos.co.il>
+References: <00a56e2f1858587033563e1f43f12fa7aa5aa357.1439713778.git.baruch@tkos.co.il>
+Message-ID: <20150816094248.GB3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,43 +12,40 @@ To: buildroot@busybox.net
 
 Baruch, All,
 
-On 2015-08-14 16:45 +0200, Yann E. MORIN spake thusly:
-> On 2015-08-14 17:15 +0300, Baruch Siach spake thusly:
-> > On Thu, Aug 13, 2015 at 11:07:58PM +0200, Yann E. MORIN wrote:
-> > > diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
-> > > index 6bb8355..44272b1 100644
-> > > --- a/package/bwm-ng/bwm-ng.hash
-> > > +++ b/package/bwm-ng/bwm-ng.hash
-> > > @@ -1,2 +1,2 @@
-> > >  # Locally calculated
-> > > -sha256  c1134358e268329d438b0996399003b0f0b966034fb4b5b138761c2f3c62ffdd  bwm-ng-0.6.tar.gz
-> > > +sha1  9445885d05e2430ca174739e3aba343afce94076  bwm-ng-0.6.1.tar.gz
-> > 
-> > Why sha1?
+On 2015-08-16 11:29 +0300, Baruch Siach spake thusly:
+> The official wiki page is more informative and up to date.
 > 
-> Ah, I forgot to update the comment. The sha1 hash is from the SF.net
-> download page, and it only lists sha1 and md5 (click on the (i) icon on
-> the left of the download link to see the hashes):
-> 
->     http://sourceforge.net/projects/bwmng/files/bwmng/0.6/
-> 
-> I'll fix the comment and resubmit. Thanks for noticing! :-)
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Now that I think about it, we are no longer downloading from DF.net, but
-directly from the new official location:
-    http://www.gropp.org/?id=projects&sub=bwm-ng
-
-And this new location does not provide a hash... :-(
-
-But the file is also available on SF.net which provides this sha1.
-
-So I wonder: should we point to the SF.net provided sha1, even though
-we're not downloading from there?
-
-I'll be waiting a bit for feedback before re-submitting...
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/libv4l/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+> index da9bd83de24a..d137613b9b9b 100644
+> --- a/package/libv4l/Config.in
+> +++ b/package/libv4l/Config.in
+> @@ -14,7 +14,7 @@ config BR2_PACKAGE_LIBV4L
+>  	  layer on top of video4linux2 devices. libv4l consists of 3 different
+>  	  libraries: libv4lconvert, libv4l1 and libv4l2.
+>  
+> -	  http://freshmeat.net/projects/libv4l
+> +	  http://linuxtv.org/wiki/index.php/V4l-utils
+>  
+>  if BR2_PACKAGE_LIBV4L
+>  
+> -- 
+> 2.5.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
