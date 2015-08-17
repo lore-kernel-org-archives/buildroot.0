@@ -1,55 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Aug 2015 23:04:25 +0200
-Subject: [Buildroot] [PATCHv2] [autobuild] package/bwm-ng: fix build
- failures with gcc-5
-In-Reply-To: <20150817223418.6f75a2e6@free-electrons.com>
-References: <1439736791-28748-1-git-send-email-yann.morin.1998@free.fr>
- <20150817223418.6f75a2e6@free-electrons.com>
-Message-ID: <20150817210425.GB3988@free.fr>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 17 Aug 2015 22:48:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/canfestival: fix musl compilation
+Message-ID: <1439848115-26645-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2015-08-17 22:34 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Sun, 16 Aug 2015 16:53:11 +0200, Yann E. MORIN wrote:
-> 
-> > diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
-> > index 6bb8355..85f436f 100644
-> > --- a/package/bwm-ng/bwm-ng.hash
-> > +++ b/package/bwm-ng/bwm-ng.hash
-> > @@ -1,2 +1,4 @@
-> > -# Locally calculated
-> > -sha256  c1134358e268329d438b0996399003b0f0b966034fb4b5b138761c2f3c62ffdd  bwm-ng-0.6.tar.gz
-> > +# From: http://sourceforge.net/projects/bwmng/files/bwmng/0.6/
-> > +# sha1  9445885d05e2430ca174739e3aba343afce94076  bwm-ng-0.6.1.tar.gz
-> > +# Because we do not trust SF.net, locally computed sha256:
-> > +sha256  027cf3c960cd96fc9ffacdf7713df62d0fc55eeef4a1388289f8a62ae5e50df0  bwm-ng-0.6.1.tar.gz
-> 
-> I think this is silly. We should use both the sha1 provided by
-> sourceforge and a locally calculated sha256 hash.
+ANSI signal handlers take an int parameter, not sigval_t.
 
-See the discussion that got us toward this situation:
-    http://lists.busybox.net/pipermail/buildroot/2015-August/137445.html
-    http://lists.busybox.net/pipermail/buildroot/2015-August/137447.html
+Upstream-status: pending
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ .../canfestival/0003-fix-musl-compilation.patch    | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/canfestival/0003-fix-musl-compilation.patch
 
-Basically:
-  - we no longer download from SF.net
-  - so, how relevant is it to use a SF-provided hash?
-
-Of course, since the hash does match as of today, we can keep it if you
-really want it.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/canfestival/0003-fix-musl-compilation.patch b/package/canfestival/0003-fix-musl-compilation.patch
+new file mode 100644
+index 0000000..dfe16a7
+--- /dev/null
++++ b/package/canfestival/0003-fix-musl-compilation.patch
+@@ -0,0 +1,22 @@
++# HG changeset patch
++# User Brendan Heading <brendanheading@gmail.com>
++# Date 1439845818 -3600
++#      Mon Aug 17 22:10:18 2015 +0100
++# Node ID 7d62beec4f813074ba250231762f4b84395cc354
++# Parent  8bfe0ac00cdb4d473664fcbf1228a0f6a42eee15
++Fix MUSL compilation issue
++
++signal handler parameter fixed to be int instead of sigval_t.
++
++diff -r 8bfe0ac00cdb -r 7d62beec4f81 drivers/timers_unix/timers_unix.c
++--- a/drivers/timers_unix/timers_unix.c	Mon Aug 03 18:01:58 2015 +0200
+++++ b/drivers/timers_unix/timers_unix.c	Mon Aug 17 22:10:18 2015 +0100
++@@ -33,7 +33,7 @@
++ 	}
++ }
++ 
++-void timer_notify(sigval_t val)
+++void timer_notify(int val)
++ {
++ 	if(gettimeofday(&last_sig,NULL)) {
++ 		perror("gettimeofday()");
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.4.3
