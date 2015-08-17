@@ -1,37 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 22:26:08 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/dosfstools: fix build
- with musl
-In-Reply-To: <1439734181-1015-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439734181-1015-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150817222608.0c19853d@free-electrons.com>
+Date: Mon, 17 Aug 2015 22:28:00 +0200
+Subject: [Buildroot] [git commit] package/oprofile: fix static linking
+Message-ID: <20150817202840.7E3FD81D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=123c41ff72cd34e186074cf61ca087317096a699
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Aug 2015 16:09:41 +0200, Yann E. MORIN wrote:
-> Use correct and standard int types.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/
->     http://autobuild.buildroot.org/results/62b/62b1a71c4fedb6f9209663e7544d7a36fb42c580/
->     http://autobuild.buildroot.org/results/e80/e808e692220ced315d30d8ee9c93bdf4a5e32a03/
->     http://autobuild.buildroot.org/results/7b7/7b778b7a9ec8c91ec3cea6ee81c6f5c75f0b959a/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  .../0001-mkfs.fat-fix-incorrect-int-type.patch     | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+When getext is enabled, popt links with -lintl, specifies it in its
+popt.pc and has done so for the past 6+ years. But oprofile does not
+use pkconfig to find popt, so misses -lintl, which is important for
+a static build. We have to do the call to pkgconfig manually...
 
-Applied after updating the upstream status of the patch, thanks!
+Fixes:
+    http://autobuild.buildroot.org/results/a48/a485f2171a3fcbfa2e0e5aec8e653cf88512615d/
+    http://autobuild.buildroot.org/results/b37/b374874f1915ab1d7aa6262604ccc8db102bb0b0/
+    http://autobuild.buildroot.org/results/261/2616a63081ed8c55c7ca1a6879b1a6a14e19f918/
+    http://autobuild.buildroot.org/results/73f/73f34ab59d54ded68ff60608a0212a6e5a5190e5/
+    ...
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/oprofile/oprofile.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 5876307..ba36640 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -41,6 +41,12 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
+ OPROFILE_DEPENDENCIES += libpfm4
+ endif
+ 
++# When getext is enabled, popt links with -lintl, specifies it in its
++# popt.pc and has done so for the past 6+ years. But oprofile does not
++# use pkconfig to find popt, so misses -lintl, which is important for
++# a static build. We have to do the call to pkgconfig manually...
++OPROFILE_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
++
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
