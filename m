@@ -1,33 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 22:35:00 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/libnetfilter_queue: fix
- build with musl
-In-Reply-To: <1439735927-10364-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439735927-10364-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150817223500.57292a81@free-electrons.com>
+Date: Mon, 17 Aug 2015 22:43:26 +0200
+Subject: [Buildroot] [PATCH] clapack: musl patches
+In-Reply-To: <20150815161506.GA28405@vostro>
+References: <20150815161506.GA28405@vostro>
+Message-ID: <20150817224326.0e40b56f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Alex Suykov,
 
-On Sun, 16 Aug 2015 16:38:47 +0200, Yann E. MORIN wrote:
-> Backport a patch from upstream.
+On Sat, 15 Aug 2015 19:15:06 +0300, Alex Suykov wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/a94f097193cd5444dee5cd9df9d544ce736a7e7e/
+> http://autobuild.buildroot.net/results/036014e492f7caf793b92a9822ab6a0b1a54f2e8/
 > 
-> Fixes:
->     http://autobuild.buildroot.org/results/59b/59bd31c10a0d445d2ea56550a36920ecb2ef89ed/
->     http://autobuild.buildroot.org/results/60a/60ab98b4cf909b04a57207b2326e9f8080d1721b/
->     http://autobuild.buildroot.org/results/7db/7db3a5c2bebabfdc26947f45382893bb14656617/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
 > ---
->  package/libnetfilter_queue/0002-musl.patch | 45 ++++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/libnetfilter_queue/0002-musl.patch
+>  package/clapack/0006-remove-uninit-f2c.patch | 24 ++++++++++++++++++++++++
+>  package/clapack/0007-off64-t.patch           | 16 ++++++++++++++++
+>  2 files changed, 40 insertions(+)
+>  create mode 100644 package/clapack/0006-remove-uninit-f2c.patch
+>  create mode 100644 package/clapack/0007-off64-t.patch
 
-Applied, thanks.
+To be honest, I was a bit hesitant to add the patch that removes
+uninit.c from the build, as the entire clapack thing looks a bit
+complicated, and doing such a change without upstream's opinion is
+dangerous. However, clapack is not that widely used I believe, so let's
+see if that proposal breaks anything for anyone.
+
+Alex, could you submit the two patches you have written to the upstream
+clapack project?
+
+Thanks!
 
 Thomas
 -- 
