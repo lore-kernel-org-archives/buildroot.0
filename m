@@ -1,39 +1,43 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Aug 2015 17:13:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 8296] New: nodejs 0.12.7 - npm crashes (seg core
-	dump)
-Message-ID: <bug-8296-163@https.bugs.busybox.net/>
+Date: Mon, 17 Aug 2015 17:16:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 8301] New: ldconfig parameter in Makefile
+Message-ID: <bug-8301-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8296
+https://bugs.busybox.net/show_bug.cgi?id=8301
 
-           Summary: nodejs 0.12.7 - npm crashes (seg core dump)
+           Summary: ldconfig parameter in Makefile
            Product: buildroot
-           Version: unspecified
+           Version: 2015.05
           Platform: All
-        OS/Version: Linux
+        OS/Version: All
             Status: NEW
           Severity: normal
           Priority: P5
          Component: Other
         AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: pfriedland at gmail.com
+        ReportedBy: ncfernan at gmail.com
                 CC: buildroot at uclibc.org
    Estimated Hours: 0.0
 
 
-tested with  (armv7 and x86_64)
-using a clone from git repository today 8/17/2015
+The ldconfig invocation on the top Makefile seems to be wrong.
+At line 586 the parameter "-r" first set the new root and then the command
+tries to open the new config file, but at the wrong place:
 
-npm built with nodejs 0.12.7 core dumps
-nodejs 0.12.7 starts ok
+/sbin/ldconfig -r $(TARGET_DIR) \
+               -f $(TARGET_DIR)/etc/ld.so.conf;
 
-npm built with nodejs 0.10.40 works fine
-nodejs 0.10.40 works fine
+The above command will always report a file not found, so it must be fixed to:
+
+/sbin/ldconfig -r $(TARGET_DIR) \
+               -f /etc/ld.so.conf;
+
+The same applies to line 583.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
