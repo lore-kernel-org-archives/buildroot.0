@@ -1,61 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 22:53:29 +0200
-Subject: [Buildroot] [PATCH] kconfig: support read-only Buildroot source
- directories
-In-Reply-To: <1439504572-20085-1-git-send-email-hollis_blanchard@mentor.com>
-References: <1439504572-20085-1-git-send-email-hollis_blanchard@mentor.com>
-Message-ID: <20150817225329.6b4e8453@free-electrons.com>
+Date: Mon, 17 Aug 2015 22:45:25 +0200
+Subject: [Buildroot] [git commit] package/beecrypt: fix C++ support
+Message-ID: <20150817205411.CA6CC81D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hollis,
+commit: http://git.buildroot.net/buildroot/commit/?id=a1c16fb29926d2cc9b65229befc1a08ac11b14e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Aug 2015 15:22:52 -0700, Hollis Blanchard wrote:
-> merge_config.sh currently tries to create a .tmp file in the top-level
-> Buildroot source tree. This fails when that directory is read-only, leading
-> to unexpected .config file contents (affecting the configuration of Buildroot
-> itself, Linux, and Busybox).
-> 
-> Fix it by using mktemp --tmpdir to create the .tmp file in $TMPDIR or /tmp.
-> 
-> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-> ---
->  support/kconfig/merge_config.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-> index 81b0c61..19d968b 100755
-> --- a/support/kconfig/merge_config.sh
-> +++ b/support/kconfig/merge_config.sh
-> @@ -82,7 +82,7 @@ shift;
->  
->  MERGE_LIST=$*
->  SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-> -TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
-> +TMP_FILE=$(mktemp --tmpdir .tmp.config.XXXXXXXXXX)
->  
->  echo "Using $INITFILE as base"
->  cat $INITFILE > $TMP_FILE
+C++ support unconditionally needs shared libraries; it uses
+dlopen/dlsym.
 
-Thanks for this patch! It looks good in principle, but is not done
-correctly. support/kconfig/ is directly inherited from the kernel
-source code, and we keep a series of patches in
-support/kconfig/patches/ to clearly identify the changes we made
-compared to the original kernel version. See
-support/kconfig/README.buildroot for details.
+Also, fix the conditions under which the comment is shown.
 
-Could you rework your patch to also add a patch to
-support/kconfig/patches/ ? Can you check whether the problem also
-exists in the kernel kconfig code, and if so, report the problem to the
-kernel developers ?
+Finally, explicitly require C++ support when configuring.
 
-Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/beecrypt/Config.in   |    6 ++++--
+ package/beecrypt/beecrypt.mk |    1 +
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index b9685ef..fc93a77 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -17,13 +17,15 @@ config BR2_PACKAGE_BEECRYPT_CPP
+ 	depends on BR2_USE_WCHAR # icu
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_ARCH_HAS_ATOMICS # icu
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Enable C++ support. This pulls in the (large) icu package.
+ 
+-comment "C++ support needs a toolchain w/ wchar"
++comment "C++ support needs a toolchain w/ C++, wchar, dynamic libraries"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on BR2_ARCH_HAS_ATOMICS
+-	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
++		|| BR2_STATIC_LIBS
+ 
+ endif # BR2_PACKAGE_BEECRYPT
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index cd0b4ac..e66cec1 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -19,6 +19,7 @@ BEECRYPT_CONF_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
+ BEECRYPT_DEPENDENCIES += icu
++BEECRYPT_CONF_OPTS += --with-cplusplus
+ else
+ BEECRYPT_CONF_OPTS += --without-cplusplus
+ 
