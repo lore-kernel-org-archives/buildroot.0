@@ -1,45 +1,80 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 17 Aug 2015 17:16:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 8301] New: ldconfig parameter in Makefile
-Message-ID: <bug-8301-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Aug 2015 22:23:20 +0200
+Subject: [Buildroot] [git commit] package/dosfstools: fix build with musl
+Message-ID: <20150817202340.65F128198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8301
+commit: http://git.buildroot.net/buildroot/commit/?id=581d7fd6cc79564dafbbe9946998d0d3802ff737
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           Summary: ldconfig parameter in Makefile
-           Product: buildroot
-           Version: 2015.05
-          Platform: All
-        OS/Version: All
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ncfernan at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Use correct and standard int types.
 
+Fixes:
+    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/
+    http://autobuild.buildroot.org/results/62b/62b1a71c4fedb6f9209663e7544d7a36fb42c580/
+    http://autobuild.buildroot.org/results/e80/e808e692220ced315d30d8ee9c93bdf4a5e32a03/
+    http://autobuild.buildroot.org/results/7b7/7b778b7a9ec8c91ec3cea6ee81c6f5c75f0b959a/
 
-The ldconfig invocation on the top Makefile seems to be wrong.
-At line 586 the parameter "-r" first set the new root and then the command
-tries to open the new config file, but at the wrong place:
+[Thomas: update upstream status.]
 
-/sbin/ldconfig -r $(TARGET_DIR) \
-               -f $(TARGET_DIR)/etc/ld.so.conf;
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-mkfs.fat-fix-incorrect-int-type.patch     |   45 ++++++++++++++++++++
+ 1 files changed, 45 insertions(+), 0 deletions(-)
 
-The above command will always report a file not found, so it must be fixed to:
-
-/sbin/ldconfig -r $(TARGET_DIR) \
-               -f /etc/ld.so.conf;
-
-The same applies to line 583.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+new file mode 100644
+index 0000000..34ebc24
+--- /dev/null
++++ b/package/dosfstools/0001-mkfs.fat-fix-incorrect-int-type.patch
+@@ -0,0 +1,45 @@
++From 7a589ef6dab52ad32a296939f0ed2acb4d76b2a7 Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 16 Aug 2015 15:55:43 +0200
++Subject: [PATCH] mkfs.fat: fix incorrect int type
++
++u_int32_t is not a stanard type, while uint32_t is. This fixes builds
++with the musl C library, which only defines so-called "clean" headers;
++build failures are like (back-quotes and elision manually added for
++readability):
++
++    http://autobuild.buildroot.org/results/a09/a0923d7f6d4dbae02eba4c5024bbdae3a52aa85a/build-end.log
++
++    /home/peko/autobuild/instance-1/output/host/usr/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE \
++        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os  -D_GNU_SOURCE -D_LARGEFILE_SOURCE \
++        -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -c -o mkfs.fat.o src/mkfs.fat.c
++    src/mkfs.fat.c: In function 'main':
++    src/mkfs.fat.c:1415:18: error: 'u_int32_t' undeclared (first use in this function)
++         volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec); [...]
++                      ^
++    src/mkfs.fat.c:1415:18: note: each undeclared identifier is reported only once for each
++    function it appears in
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstream status: applied: https://github.com/dosfstools/dosfstools/pull/9
++---
++ src/mkfs.fat.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/mkfs.fat.c b/src/mkfs.fat.c
++index b38d116..dddbe24 100644
++--- a/src/mkfs.fat.c
+++++ b/src/mkfs.fat.c
++@@ -1412,7 +1412,7 @@ int main(int argc, char **argv)
++ 
++     gettimeofday(&create_timeval, NULL);
++     create_time = create_timeval.tv_sec;
++-    volume_id = (u_int32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
+++    volume_id = (uint32_t) ((create_timeval.tv_sec << 20) | create_timeval.tv_usec);	/* Default volume ID = creation time, fudged for more uniqueness */
++     check_atari();
++ 
++     printf("mkfs.fat " VERSION " (" VERSION_DATE ")\n");
++-- 
++1.9.1
++
