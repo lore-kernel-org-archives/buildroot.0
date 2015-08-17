@@ -1,29 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 16:26:38 +0200
-Subject: [Buildroot] [PATCH] libv4l: update homepage link
-In-Reply-To: <00a56e2f1858587033563e1f43f12fa7aa5aa357.1439713778.git.baruch@tkos.co.il>
-References: <00a56e2f1858587033563e1f43f12fa7aa5aa357.1439713778.git.baruch@tkos.co.il>
-Message-ID: <20150817162638.65bce243@free-electrons.com>
+Date: Mon, 17 Aug 2015 16:29:52 +0200
+Subject: [Buildroot] [git commit] pkg-kernel-module: die if kernel module
+	support is disabled
+Message-ID: <20150817143015.5CF1C7FC3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=8df95d926e963601c727defeb4ab90ce2368da70
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Aug 2015 11:29:38 +0300, Baruch Siach wrote:
-> The official wiki page is more informative and up to date.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libv4l/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Test the configuration of the kernel to see if loadable module support
+is enabled, and error out otherwise. This makes build failures of
+external kernel modules less confusing.
 
-Applied, thanks.
+[Thomas: tweak the commit log.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-kernel-module.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+index 5fb19be..6fb7704 100644
+--- a/package/pkg-kernel-module.mk
++++ b/package/pkg-kernel-module.mk
+@@ -60,6 +60,10 @@ $(2)_MODULE_SUBDIRS ?= .
+ # includes and other support files (Booo!)
+ define $(2)_KERNEL_MODULES_BUILD
+ 	@$$(call MESSAGE,"Building kernel module(s)")
++	@if ! grep -Fqx 'CONFIG_MODULES=y' $(LINUX_DIR)/.config; then \
++		echo "ERROR: Kernel does not support loadable modules"; \
++		exit 1; \
++	fi
+ 	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
+ 		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
+ 			-C $$(LINUX_DIR) \
