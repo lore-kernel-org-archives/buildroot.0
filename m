@@ -1,35 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 16:24:25 +0200
-Subject: [Buildroot] [git commit] libv4l: update homepage link
-Message-ID: <20150817143015.42445819CD@busybox.osuosl.org>
+Date: Mon, 17 Aug 2015 16:30:30 +0200
+Subject: [Buildroot] [PATCH v2] pkg-kernel-module: Die when kernel
+ module are disabled
+In-Reply-To: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
+References: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
+Message-ID: <20150817163030.15ea69aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ffa368342aa13bd79f0e672d9eefe26f0ab85de
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear No? Rubinstein,
 
-The official wiki page is more informative and up to date.
+On Mon, 17 Aug 2015 09:10:44 +0200, No? Rubinstein wrote:
+> Test the config of the kernel to see if loadable module support is
+> enabled, and error out otherwise. This makes the build failure less
+> confusing.
+> 
+> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/pkg-kernel-module.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libv4l/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied after tweaking the commit log, thanks.
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index da9bd83..d137613 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_LIBV4L
- 	  layer on top of video4linux2 devices. libv4l consists of 3 different
- 	  libraries: libv4lconvert, libv4l1 and libv4l2.
- 
--	  http://freshmeat.net/projects/libv4l
-+	  http://linuxtv.org/wiki/index.php/V4l-utils
- 
- if BR2_PACKAGE_LIBV4L
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
