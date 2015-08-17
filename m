@@ -1,42 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 17 Aug 2015 11:02:39 +0100
-Subject: [Buildroot] Analysis of build results for 2015-08-05
-In-Reply-To: <55C32945.2000209@imgtec.com>
-References: <20150806063016.4A0BB102D1F@stock.ovh.net>
- <20150806113014.163c6592@free-electrons.com> <55C32945.2000209@imgtec.com>
-Message-ID: <55D1B13F.5010908@imgtec.com>
+From: Jonathan Ben-Avraham <yba@tkos.co.il>
+Date: Mon, 17 Aug 2015 14:07:47 +0300
+Subject: [Buildroot] [PATCH 1/1] package/eigen: bump from 3.2.0 to 3.2.5
+Message-ID: <1439809667-11702-1-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+From: Jonathan Ben Avraham <yba@tkos.co.il>
 
-On 08/06/2015 10:30 AM, Vicente Olivert Riera wrote:
-> Hello Thomas,
-> 
-> On 06/08/15 11:30, Thomas Petazzoni wrote:
->>>          mips | ltrace-c22d359433b333937ee3... | NOK |
->>> http://autobuild.buildroot.net/results/79b51941ed57b0564c68112489b03cac39a04e9a/
->>>
->>
->> output.c: In function 'output_right':
->> output.c:784:3: error: size of unnamed array is negative
->>     (void)sizeof(char[1 - 2*(sizeof(unw_word_t)
->>     ^
->>
->> Vicente, J?r?me, can you have a look?
-> 
-> ltrace with libunwind support is broken for MIPS, but I'm working with
-> upstream to get it fixed. I hope to finish with it soon.
+The current version of Eigen in Buildroot is 3.2.0 which was
+released in 2013. Eigen is an active project with too many
+important changes to begin to list in a bump commit message.
+See the project's published changelog for details:
+http://eigen.tuxfamily.org/index.php?title=ChangeLog#Eigen_3.2.5
 
-Fixed by:
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+---
+ package/eigen/eigen.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-http://patchwork.ozlabs.org/patch/507709/
-
-Can you review it please?
-
-Thanks,
-
-Vincent.
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 1ac5707..0153303 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-# version 3.2
+-EIGEN_VERSION = ffa86ffb5570
++# version 3.2.5
++EIGEN_VERSION = 175a47a35f0c
+ EIGEN_SITE = https://bitbucket.org/eigen/eigen
+ EIGEN_SITE_METHOD = hg
+ EIGEN_LICENSE = MPL2, BSD-3c, LGPLv2.1
+-- 
+1.7.9.5
