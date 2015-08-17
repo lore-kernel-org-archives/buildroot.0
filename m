@@ -1,61 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 22:45:25 +0200
-Subject: [Buildroot] [git commit] package/beecrypt: fix C++ support
-Message-ID: <20150817205411.CA6CC81D5F@busybox.osuosl.org>
+Date: Mon, 17 Aug 2015 22:53:58 +0200
+Subject: [Buildroot] [git commit] package/cifs-utils: add upstream patch to
+	fix musl build
+Message-ID: <20150817205411.D58467FB5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1c16fb29926d2cc9b65229befc1a08ac11b14e8
+commit: http://git.buildroot.net/buildroot/commit/?id=4d53184aff4e0e57ddc6ef64a6891f13a1aa9a67
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-C++ support unconditionally needs shared libraries; it uses
-dlopen/dlsym.
+Fixes build error with the musl C library:
 
-Also, fix the conditions under which the comment is shown.
+```
+error: '_PATH_MOUNTED' undeclared (first use in this function)
+```
 
-Finally, explicitly require C++ support when configuring.
+Fixes:
+http://autobuild.buildroot.net/results/44e/44e800d9933160c48b9c2447d63eeb37a0065d03/
+http://autobuild.buildroot.net/results/b9f/b9f918bba4952566e3818fb99f45a7e425acf727/
+http://autobuild.buildroot.net/results/8de/8dec8c46ad1959066101efe7cc1781f3d4732028/
+http://autobuild.buildroot.net/results/cc3/cc38e7581b4bba362a9be388099b0ea237f4e580/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+and many more.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/beecrypt/Config.in   |    6 ++++--
- package/beecrypt/beecrypt.mk |    1 +
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ ...-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch |   31 ++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index b9685ef..fc93a77 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -17,13 +17,15 @@ config BR2_PACKAGE_BEECRYPT_CPP
- 	depends on BR2_USE_WCHAR # icu
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_ARCH_HAS_ATOMICS # icu
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Enable C++ support. This pulls in the (large) icu package.
- 
--comment "C++ support needs a toolchain w/ wchar"
-+comment "C++ support needs a toolchain w/ C++, wchar, dynamic libraries"
- 	depends on !BR2_BINFMT_FLAT
- 	depends on BR2_ARCH_HAS_ATOMICS
--	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+		|| BR2_STATIC_LIBS
- 
- endif # BR2_PACKAGE_BEECRYPT
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index cd0b4ac..e66cec1 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -19,6 +19,7 @@ BEECRYPT_CONF_OPTS = \
- 
- ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
- BEECRYPT_DEPENDENCIES += icu
-+BEECRYPT_CONF_OPTS += --with-cplusplus
- else
- BEECRYPT_CONF_OPTS += --without-cplusplus
- 
+diff --git a/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch b/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
+new file mode 100644
+index 0000000..8fbec11
+--- /dev/null
++++ b/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
+@@ -0,0 +1,31 @@
++From 6603cef0f06c450196a1bca06bb143d8fcda5651 Mon Sep 17 00:00:00 2001
++From: Felix Janda <felix.janda@posteo.de>
++Date: Fri, 5 Dec 2014 23:19:29 +0100
++Subject: [PATCH 1/1] mtab.c: include <paths.h> for _PATH_MOUNTED
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Backported from: 6603cef0f06c450196a1bca06bb143d8fcda5651
++
++Signed-off-by: Felix Janda <felix.janda@posteo.de>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ mtab.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/mtab.c b/mtab.c
++index 7b365b3..a662a3c 100644
++--- a/mtab.c
+++++ b/mtab.c
++@@ -38,6 +38,7 @@
++ #include <mntent.h>
++ #include <stdlib.h>
++ #include <signal.h>
+++#include <paths.h>
++ #include "mount.h"
++ #include "config.h"
++ 
++-- 
++2.5.0
++
