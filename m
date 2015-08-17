@@ -1,381 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:38:27 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump marking script
-	version
-Message-ID: <20150901083106.DCCAA81E93@busybox.osuosl.org>
+Date: Mon, 17 Aug 2015 16:02:18 +0200
+Subject: [Buildroot] [git commit] rapidxml: new package
+Message-ID: <20150901083106.97F2B81E93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d66d2492971cba4a30b326cc3f2eef5d3cb14b70
+commit: http://git.buildroot.net/buildroot/commit/?id=8a33bc3ad9d2c1d516988585113a7751251b8ba4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes since last version:
- - add support for lz4-compressed kernels,
- - add copyright and license banners,
- - enable warnings and fix a few uses of undefined variables,
- - update from the rpi-4.0.y kernel.
+[Thomas:
+  - Rewrap Config.in help text
+  - Indicate that the SHA256 hash has been locally calculated, and add
+    the MD5 and SHA1 hashes from SourceForge.
+  - Use downloads.sourceforge.net as the download site instead of
+    garr.dl.sourceforge.net, in order to use the SourceForge mirrors
+    properly, and be consistent with all other Buildroot packages
+    downloading stuff from SourceForge.
+  - Change the license from "MIT" to "Boost Software License 1.0 or
+    MIT" as indicated by the license.txt file.
+  - Change the <pkg>_EXTRACT_CMDS to remove the sub-directory created
+    by the .zip file extraction, and simplify the staging installation
+    step accordingly.]
 
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-firmware/mkknlimg |  232 +++++++++++++++++++++++++++--------------
- 1 files changed, 152 insertions(+), 80 deletions(-)
+ package/Config.in              |    1 +
+ package/rapidxml/Config.in     |   11 +++++++++++
+ package/rapidxml/rapidxml.hash |    6 ++++++
+ package/rapidxml/rapidxml.mk   |   27 +++++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpi-firmware/mkknlimg b/package/rpi-firmware/mkknlimg
-old mode 100755
-new mode 100644
-index f377947..33f8187
---- a/package/rpi-firmware/mkknlimg
-+++ b/package/rpi-firmware/mkknlimg
-@@ -1,25 +1,51 @@
- #!/usr/bin/env perl
- #
- # Originaly from: https://github.com/raspberrypi/tools/blob/master/mkimage/mkknlimg
--# Original cset : 92a2df13b887f4799554bf92c4fc78d53668c868
-+# Original cset : f5642106425d430e1f82ee064121a5fd0e05a386
+diff --git a/package/Config.in b/package/Config.in
+index 47d14d7..3ab87cf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -918,6 +918,7 @@ menu "JSON/XML"
+ 	source "package/libyaml/Config.in"
+ 	source "package/mxml/Config.in"
+ 	source "package/rapidjson/Config.in"
++	source "package/rapidxml/Config.in"
+ 	source "package/tinyxml/Config.in"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/xerces/Config.in"
+diff --git a/package/rapidxml/Config.in b/package/rapidxml/Config.in
+new file mode 100644
+index 0000000..76b2248
+--- /dev/null
++++ b/package/rapidxml/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_RAPIDXML
++	bool "rapidxml"
++	help
++	  RapidXml is an attempt to create the fastest XML parser
++	  possible, while retaining useability, portability and
++	  reasonable W3C compatibility. It is an in-situ parser with
++	  parsing speed approaching speed of strlen function executed
++	  on the same data.
++
++	  http://sourceforge.net/projects/rapidxml/
++	  https://en.wikipedia.org/wiki/RapidXml
+diff --git a/package/rapidxml/rapidxml.hash b/package/rapidxml/rapidxml.hash
+new file mode 100644
+index 0000000..81919f0
+--- /dev/null
++++ b/package/rapidxml/rapidxml.hash
+@@ -0,0 +1,6 @@
++# From https://sourceforge.net/projects/rapidxml/files/rapidxml/rapidxml%201.13/
++sha1 f5fd4fbc5ad7e96045313697811d65ea8089a950 rapidxml-1.13.zip
++md5 7b4b42c9331c90aded23bb55dc725d6a rapidxml-1.13.zip
++
++# Locally calculated
++sha256	c3f0b886374981bb20fabcf323d755db4be6dba42064599481da64a85f5b3571  rapidxml-1.13.zip
+diff --git a/package/rapidxml/rapidxml.mk b/package/rapidxml/rapidxml.mk
+new file mode 100644
+index 0000000..4356d8d
+--- /dev/null
++++ b/package/rapidxml/rapidxml.mk
+@@ -0,0 +1,27 @@
++################################################################################
 +#
-+# ----------------------------------------------------------------------
-+# mkknlimg by Phil Elwell for Raspberry Pi
-+# based on extract-ikconfig by Dick Streefland
++# rapidxml
 +#
-+# (c) 2009,2010 Dick Streefland <dick@streefland.net>
-+# (c) 2014,2015 Raspberry Pi (Trading) Limited <info@raspberrypi.org>
-+#
-+# Licensed under the terms of the GNU General Public License.
-+# ----------------------------------------------------------------------
- 
- use strict;
-+use warnings;
- use integer;
- 
-+use constant FLAG_PI   => 1;
-+use constant FLAG_DTOK => 2;
-+use constant FLAG_DDTK => 4;
-+use constant FLAG_283X => 8;
++################################################################################
 +
- my $trailer_magic = 'RPTL';
- 
- my $tmpfile1 = "/tmp/mkknlimg_$$.1";
- my $tmpfile2 = "/tmp/mkknlimg_$$.2";
- 
- my $dtok = 0;
-+my $ddtk = 0;
-+my $is_283x = 0;
- 
--while ($ARGV[0] =~ /^-/)
-+while (@ARGV && ($ARGV[0] =~ /^-/))
- {
-     my $arg = shift(@ARGV);
-     if ($arg eq '--dtok')
-     {
- 	$dtok = 1;
-     }
-+    elsif ($arg eq '--ddtk')
-+    {
-+	$ddtk = 1;
-+    }
-+    elsif ($arg eq '--283x')
-+    {
-+	$is_283x = 1;
-+    }
-     else
-     {
- 	print ("* Unknown option '$arg'\n");
-@@ -32,56 +58,68 @@ usage() if (@ARGV != 2);
- my $kernel_file = $ARGV[0];
- my $out_file = $ARGV[1];
- 
--my @wanted_config_lines =
--(
--	'CONFIG_BCM2708_DT'
--);
-+if (! -r $kernel_file)
-+{
-+    print ("* File '$kernel_file' not found\n");
-+    usage();
-+}
++RAPIDXML_VERSION = 1.13
++RAPIDXML_SOURCE = rapidxml-$(RAPIDXML_VERSION).zip
++RAPIDXML_SITE = http://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%20$(RAPIDXML_VERSION)/
++RAPIDXML_LICENSE = Boost Software License 1.0 or MIT
++RAPIDXML_LICENSE_FILES = license.txt
 +
-+my $wanted_configs =
-+{
-+	'CONFIG_BCM2708_DT' => FLAG_PI | FLAG_DTOK,
-+	'CONFIG_ARCH_BCM2835' => FLAG_PI | FLAG_DTOK | FLAG_283X,
-+};
- 
--my @wanted_strings =
--(
--	'bcm2708_fb',
--	'brcm,bcm2708-pinctrl',
--	'brcm,bcm2835-gpio',
--	'of_find_property'
--);
-+my $wanted_strings =
-+{
-+	'bcm2708_fb' => FLAG_PI,
-+	'brcm,bcm2835-mmc' => FLAG_PI,
-+	'brcm,bcm2835-sdhost' => FLAG_PI,
-+	'brcm,bcm2708-pinctrl' => FLAG_PI | FLAG_DTOK,
-+	'brcm,bcm2835-gpio' => FLAG_PI | FLAG_DTOK,
-+	'brcm,bcm2835-pm-wdt' => FLAG_PI | FLAG_DTOK | FLAG_283X,
-+	'of_overlay_apply' => FLAG_DTOK | FLAG_DDTK,
-+};
- 
- my $res = try_extract($kernel_file, $tmpfile1);
--
--$res = try_decompress('\037\213\010', 'xy',    'gunzip', 0,
--		      $kernel_file, $tmpfile1, $tmpfile2) if (!$res);
--$res = try_decompress('\3757zXZ\000', 'abcde', 'unxz --single-stream', -1,
--		      $kernel_file, $tmpfile1, $tmpfile2) if (!$res);
--$res = try_decompress('BZh',          'xy',    'bunzip2', 0,
--		      $kernel_file, $tmpfile1, $tmpfile2) if (!$res);
--$res = try_decompress('\135\0\0\0',   'xxx',   'unlzma', 0,
--		      $kernel_file, $tmpfile1, $tmpfile2) if (!$res);
--$res = try_decompress('\211\114\132', 'xy',    'lzop -d', 0,
--		      $kernel_file, $tmpfile1, $tmpfile2) if (!$res);
-+$res ||= try_decompress('\037\213\010', 'xy',    'gunzip', 0,
-+			$kernel_file, $tmpfile1, $tmpfile2);
-+$res ||= try_decompress('\3757zXZ\000', 'abcde', 'unxz --single-stream', -1,
-+			$kernel_file, $tmpfile1, $tmpfile2);
-+$res ||= try_decompress('BZh',          'xy',    'bunzip2', 0,
-+			$kernel_file, $tmpfile1, $tmpfile2);
-+$res ||= try_decompress('\135\0\0\0',   'xxx',   'unlzma', 0,
-+			$kernel_file, $tmpfile1, $tmpfile2);
-+$res ||= try_decompress('\211\114\132', 'xy',    'lzop -d', 0,
-+			$kernel_file, $tmpfile1, $tmpfile2);
-+$res ||= try_decompress('\002\041\114\030', 'xy',    'lz4 -d', 1,
-+			$kernel_file, $tmpfile1, $tmpfile2);
- 
- my $append_trailer;
- my $trailer;
-+my $kver = '?';
++# C++ headers only
++RAPIDXML_INSTALL_TARGET = NO
++RAPIDXML_INSTALL_STAGING = YES
 +
-+$append_trailer = $dtok;
- 
- if ($res)
- {
--    print("Version: $res->{''}\n");
-+    $kver = $res->{'kver'} || '?';
-+    my $flags = $res->{'flags'};
-+    print("Version: $kver\n");
- 
--    $append_trailer = $dtok;
--    if (!$dtok)
-+    if ($flags & FLAG_PI)
-     {
--	if (config_bool($res, 'bcm2708_fb'))
--	{
--	    $dtok ||= config_bool($res, 'CONFIG_BCM2708_DT');
--	    $dtok ||= config_bool($res, 'brcm,bcm2708-pinctrl');
--	    $dtok ||= config_bool($res, 'brcm,bcm2835-gpio');
--	    $append_trailer = 1;
--	}
--	else
--	{
--	    print ("* This doesn't look like a Raspberry Pi kernel. In pass-through mode.\n");
--	}
-+	$append_trailer = 1;
-+	$dtok ||= ($flags & FLAG_DTOK) != 0;
-+	$is_283x ||= ($flags & FLAG_283X) != 0;
-+	$ddtk ||= ($flags & FLAG_DDTK) != 0;
-+    }
-+    else
-+    {
-+	print ("* This doesn't look like a Raspberry Pi kernel. In pass-through mode.\n");
-     }
- }
--else
-+elsif (!$dtok)
- {
-     print ("* Is this a valid kernel? In pass-through mode.\n");
- }
-@@ -89,12 +127,16 @@ else
- if ($append_trailer)
- {
-     printf("DT: %s\n", $dtok ? "y" : "n");
-+    printf("DDT: %s\n", $ddtk ? "y" : "n");
-+    printf("283x: %s\n", $is_283x ? "y" : "n");
- 
-     my @atoms;
- 
-     push @atoms, [ $trailer_magic, pack('V', 0) ];
--    push @atoms, [ 'KVer', $res->{''} ];
-+    push @atoms, [ 'KVer', $kver ];
-     push @atoms, [ 'DTOK', pack('V', $dtok) ];
-+    push @atoms, [ 'DDTK', pack('V', $ddtk) ];
-+    push @atoms, [ '283x', pack('V', $is_283x) ];
- 
-     $trailer = pack_trailer(\@atoms);
-     $atoms[0]->[1] = pack('V', length($trailer));
-@@ -102,17 +144,31 @@ if ($append_trailer)
-     $trailer = pack_trailer(\@atoms);
- }
- 
--die "* Failed to open '$kernel_file'\n" if (!open(my $ifh, '<', $kernel_file));
--die "* Failed to create '$out_file'\n" if (!open(my $ofh, '>', $out_file));
--
--my $copybuf;
-+my $ofh;
- my $total_len = 0;
--while (1)
++define RAPIDXML_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(DL_DIR)/$(RAPIDXML_SOURCE)
++	mv $(@D)/rapidxml-$(RAPIDXML_VERSION)/* $(@D)/
++	rmdir $(@D)/rapidxml-$(RAPIDXML_VERSION)
++endef
 +
-+if ($out_file eq $kernel_file)
-+{
-+    die "* Failed to open '$out_file' for append\n"
-+	if (!open($ofh, '>>', $out_file));
-+    $total_len = tell($ofh);
-+}
-+else
- {
-+    die "* Failed to open '$kernel_file'\n"
-+	if (!open(my $ifh, '<', $kernel_file));
-+    die "* Failed to create '$out_file'\n"
-+	if (!open($ofh, '>', $out_file));
++define RAPIDXML_INSTALL_STAGING_CMDS
++	cp -dpfr $(@D)/*hpp $(STAGING_DIR)/usr/include
++endef
 +
-+    my $copybuf;
-+    while (1)
-+    {
- 	my $bytes = sysread($ifh, $copybuf, 64*1024);
- 	last if (!$bytes);
- 	syswrite($ofh, $copybuf, $bytes);
- 	$total_len += $bytes;
-+    }
-+    close($ifh);
- }
- 
- if ($trailer)
-@@ -122,7 +178,6 @@ if ($trailer)
-     syswrite($ofh, $trailer);
- }
- 
--close($ifh);
- close($ofh);
- 
- exit($trailer ? 0 : 1);
-@@ -135,7 +190,7 @@ END {
- 
- sub usage
- {
--	print ("Usage: mkknlimg [--dtok] <vmlinux|zImage|bzImage> <outfile>\n");
-+	print ("Usage: mkknlimg [--dtok] [--283x] <vmlinux|zImage|bzImage> <outfile>\n");
- 	exit(1);
- }
- 
-@@ -149,19 +204,59 @@ sub try_extract
- 
- 	chomp($ver);
- 
--	my $res = { ''=>$ver };
--	my $string_pattern = '^('.join('|', @wanted_strings).')$';
-+	my $res = { 'kver'=>$ver };
-+	$res->{'flags'} = strings_to_flags($knl, $wanted_strings) |
-+			  configs_to_flags($knl, $tmp, $wanted_configs);
-+
-+	return $res;
-+}
-+
-+
-+sub try_decompress
-+{
-+	my ($magic, $subst, $zcat, $idx, $knl, $tmp1, $tmp2) = @_;
-+
-+	my $pos = `tr "$magic\n$subst" "\n$subst=" < "$knl" | grep -abo "^$subst"`;
-+	if ($pos)
-+	{
-+		chomp($pos);
-+		$pos = (split(/[\r\n]+/, $pos))[$idx];
-+		return undef if (!defined($pos));
-+		$pos =~ s/:.*[\r\n]*$//s;
-+		my $cmd = "tail -c+$pos \"$knl\" | $zcat > $tmp2 2> /dev/null";
-+		my $err = (system($cmd) >> 8);
-+		return undef if (($err != 0) && ($err != 2));
-+
-+		return try_extract($tmp2, $tmp1);
-+	}
-+
-+	return undef;
-+}
-+
-+
-+sub strings_to_flags
-+{
-+	my ($knl, $strings) = @_;
-+	my $string_pattern = '^('.join('|', keys(%$strings)).')$';
-+	my $flags = 0;
- 
- 	my @matches = `strings \"$knl\" | grep -E \"$string_pattern\"`;
- 	foreach my $match (@matches)
- 	{
- 	    chomp($match);
--	    $res->{$match} = 1;
-+	    $flags |= $strings->{$match};
- 	}
- 
--	my $config_pattern = '^('.join('|', @wanted_config_lines).')=(.*)$';
-+	return $flags;
-+}
-+
-+sub configs_to_flags
-+{
-+	my ($knl, $tmp, $configs) = @_;
-+	my $config_pattern = '^('.join('|', keys(%$configs)).')=(.*)$';
- 	my $cf1 = 'IKCFG_ST\037\213\010';
- 	my $cf2 = '0123456789';
-+	my $flags = 0;
- 
- 	my $pos = `tr "$cf1\n$cf2" "\n$cf2=" < "$knl" | grep -abo "^$cf2"`;
- 	if ($pos)
-@@ -176,7 +271,11 @@ sub try_extract
- 				while (my $line = <$fh>)
- 				{
- 					chomp($line);
--					$res->{$1} = $2 if ($line =~ /$config_pattern/);
-+					if (($line =~ /$config_pattern/) &&
-+					    (($2 eq 'y') || ($2 eq 'm')))
-+					{
-+					    $flags |= $configs->{$1};
-+					}
- 				}
- 
- 				close($fh);
-@@ -184,28 +283,7 @@ sub try_extract
- 		}
- 	}
- 
--	return $res;
--}
--
--
--sub try_decompress
--{
--	my ($magic, $subst, $zcat, $idx, $knl, $tmp1, $tmp2) = @_;
--
--	my $pos = `tr "$magic\n$subst" "\n$subst=" < "$knl" | grep -abo "^$subst"`;
--	if ($pos)
--	{
--		chomp($pos);
--		$pos = (split(/[\r\n]+/, $pos))[$idx];
--		$pos =~ s/:.*[\r\n]*$//s;
--		my $cmd = "tail -c+$pos \"$knl\" | $zcat > $tmp2 2> /dev/null";
--		my $err = (system($cmd) >> 8);
--		return undef if (($err != 0) && ($err != 2));
--
--		return try_extract($tmp2, $tmp1);
--	}
--
--	return undef;
-+	return $flags;
- }
- 
- sub pack_trailer
-@@ -219,9 +297,3 @@ sub pack_trailer
- 	}
- 	return $trailer;
- }
--
--sub config_bool
--{
--	my ($configs, $wanted) = @_;
--	return (($configs->{$wanted} eq 'y') || ($configs->{$wanted} eq '1'));
--}
++$(eval $(generic-package))
