@@ -1,42 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Aug 2015 20:59:24 +0200
-Subject: [Buildroot] [git commit branch/next] libidn: bump to version 1.32
-Message-ID: <20150817141423.F091B81D74@busybox.osuosl.org>
+Date: Mon, 17 Aug 2015 16:16:59 +0200
+Subject: [Buildroot] [PATCH v3 1/1] rapidxml: new package
+In-Reply-To: <1438749983-25600-1-git-send-email-yba@tkos.co.il>
+References: <1438749983-25600-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20150817161659.54a1187c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa50d6c1d33c919e503bed75c504399eb54dfeff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Jonathan,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libidn/libidn.hash |    4 ++--
- package/libidn/libidn.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed,  5 Aug 2015 07:46:23 +0300, Jonathan Ben-Avraham wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
+> 
+> 
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+> ---
+>  package/Config.in              |    1 +
+>  package/rapidxml/Config.in     |   11 +++++++++++
+>  package/rapidxml/rapidxml.hash |    1 +
+>  package/rapidxml/rapidxml.mk   |   26 ++++++++++++++++++++++++++
+>  4 files changed, 39 insertions(+)
+>  create mode 100644 package/rapidxml/Config.in
+>  create mode 100644 package/rapidxml/rapidxml.hash
+>  create mode 100644 package/rapidxml/rapidxml.mk
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index 6425d55..20c844e 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,2 +1,2 @@
--# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
--sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
-+# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
-+sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index e10fb6e..9ac2600 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN_VERSION = 1.31
-+LIBIDN_VERSION = 1.32
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+Applied, after doing a number of changes:
+
+    [Thomas:
+      - Rewrap Config.in help text
+      - Indicate that the SHA256 hash has been locally calculated, and add
+        the MD5 and SHA1 hashes from SourceForge.
+      - Use downloads.sourceforge.net as the download site instead of
+        garr.dl.sourceforge.net, in order to use the SourceForge mirrors
+        properly, and be consistent with all other Buildroot packages
+        downloading stuff from SourceForge.
+      - Change the license from "MIT" to "Boost Software License 1.0 or
+        MIT" as indicated by the license.txt file.
+      - Change the <pkg>_EXTRACT_CMDS to remove the sub-directory created
+        by the .zip file extraction, and simplify the staging installation
+        step accordingly.]
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
