@@ -1,33 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 16:30:30 +0200
-Subject: [Buildroot] [PATCH v2] pkg-kernel-module: Die when kernel
- module are disabled
-In-Reply-To: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
-References: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
-Message-ID: <20150817163030.15ea69aa@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 17 Aug 2015 16:02:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 8276] package/dropbear: symlink resolution
+	incorrect
+In-Reply-To: <bug-8276-163@https.bugs.busybox.net/>
+References: <bug-8276-163@https.bugs.busybox.net/>
+Message-ID: <20150817160231.1016A818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear No? Rubinstein,
+https://bugs.busybox.net/show_bug.cgi?id=8276
 
-On Mon, 17 Aug 2015 09:10:44 +0200, No? Rubinstein wrote:
-> Test the config of the kernel to see if loadable module support is
-> enabled, and error out otherwise. This makes the build failure less
-> confusing.
-> 
-> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/pkg-kernel-module.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> 2015-08-17 16:02:30 UTC ---
+Created attachment 6141
+  --> https://bugs.busybox.net/attachment.cgi?id=6141
+Fix dropbear when readling is busybox
 
-Applied after tweaking the commit log, thanks.
+CAre to test the attached patch and report back, please?
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
