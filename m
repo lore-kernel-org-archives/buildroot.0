@@ -1,82 +1,79 @@
 From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Mon, 17 Aug 2015 18:01:45 +0200
-Subject: [Buildroot] [PATCH v2] olimex_a20_olinuxino_lime2: new board
-In-Reply-To: <1439477297-23492-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <1439827305-26741-1-git-send-email-viktorin@rehivetech.com>
+Date: Mon, 17 Aug 2015 18:50:12 +0200
+Subject: [Buildroot] xtables-addons does not build for arm kernel 4.1.4
+Message-ID: <20150817185012.2051aa10@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is based on olimex_a20_olinuxino_lime configuration. Tested on the mainline
-kernel 4.1.4. It boots and the Ethernet is working at speed 1 Gbps.
+Hello Gustavo,
 
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
----
- board/olimex/a20_olinuxino/readme.txt        |  3 +++
- configs/olimex_a20_olinuxino_lime2_defconfig | 31 ++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 configs/olimex_a20_olinuxino_lime2_defconfig
+I am trying to compile xtables-addons by Buildroot, however, I get a lot
+of "undefined!" warnings and some errors.
 
-diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-index 7e9af84..7998aa1 100644
---- a/board/olimex/a20_olinuxino/readme.txt
-+++ b/board/olimex/a20_olinuxino/readme.txt
-@@ -17,6 +17,8 @@ The following defconfigs are available:
-    for the A20-OLinuXino-LIME board using mainline kernel
-  - olimex_a20_olinuxino_lime_mali_defconfig
-    for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel
-+ - olimex_a20_olinuxino_lime2_defconfig
-+   for the A20-OLinuXino-LIME2 board using mainline kernel
- 
- The legacy linux-sunxi kernels are based on the vendor code drops.
- They are only useful when accelerated 3D graphics and multimedia support
-@@ -50,6 +52,7 @@ After building, you should get a tree like this:
-     +-- rootfs.ext4 -> rootfs.ext2
-     +-- script.bin (lime_mali)
-     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
-+    +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
-     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
-     +-- u-boot.bin
-     +-- u-boot-sunxi-with-spl.bin
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-new file mode 100644
-index 0000000..1464cb8
---- /dev/null
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -0,0 +1,31 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_EABIHF=y
-+BR2_CCACHE=y
-+BR2_OPTIMIZE_2=y
-+BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime2"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_SUNXI_TOOLS=y
-+BR2_PACKAGE_SUNXI_BOARDS=y
-+BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime2"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+I build with:
+- Buildroot (master: 15a53b93a034af78)
+- internal toolchain
+- Linux 4.1.4.
+
+The Buildroot is patched by http://lists.busybox.net/pipermail/buildroot/2015-August/137485.html
+for the olinuxino lime2 support. However, the same issues come with olimex_a20_olinuxino_lime_defconfig.
+
+My setup is:
+
+$ make olimex_a20_olinuxino_lime2_defconfig
+$ make menuconfig
+  enable Target packages/Network Applications/xtables-addons
+$ make
+
+And I end up with:
+
+WARNING: "param_ops_uint" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "single_release" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "seq_read" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "seq_lseek" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "__aeabi_unwind_cpp_pr1" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "xt_unregister_matches" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "unregister_pernet_subsys" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "xt_register_matches" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "register_pernet_subsys" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "printk" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "proc_set_user" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "proc_create_data" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+WARNING: "strncpy" [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_quota2.ko] undefined!
+(...)
+make[6]: *** [buildroot-a20/output/build/xtables-addons-2.7/extensions/xt_DELUDE.mod.o] Error 1
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:8:1: error: variable ?__this_module? has initializer but incomplete type
+ __attribute__((section(".gnu.linkonce.this_module"))) = {
+ ^
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:9:2: error: unknown field ?name? specified in initializer
+  .name = KBUILD_MODNAME,
+  ^
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:9:2: warning: excess elements in struct initializer
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:9:2: warning: (near initialization for ?__this_module?)
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:10:2: error: unknown field ?arch? specified in initializer
+  .arch = MODULE_ARCH_INIT,
+  ^
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:10:10: error: ?MODULE_ARCH_INIT? undeclared here (not in a function)
+  .arch = MODULE_ARCH_INIT,
+          ^
+buildroot-a20/output/build/xtables-addons-2.7/extensions/compat_xtables.mod.c:10:2: warning: excess elements in struct initializer
+  .arch = MODULE_ARCH_INIT,
+(...)
+
+I can see the commit eaa872edca27c6f375d
+that should fix some kind of issues with Linux 4.1+. Is there something I am missing here?
+
+I can build xtables-addons from git (tag 2.7, e277360) for both Linux 4.1.4 and 4.1.5 on
+x86_64 by the standard xtables-addons build-system (without Buildroot).
+
+Regards
+Jan Viktorin
+
 -- 
-2.5.0
+   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
+   System Architect              Web:    www.RehiveTech.com
+   RehiveTech
+   Brno, Czech Republic
