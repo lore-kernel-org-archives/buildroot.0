@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 22:29:02 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/oprofile: fix static
- linking
-In-Reply-To: <1439761598-18631-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439761598-18631-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150817222902.31505c48@free-electrons.com>
+Date: Mon, 17 Aug 2015 22:34:18 +0200
+Subject: [Buildroot] [PATCHv2] [autobuild] package/bwm-ng: fix build
+ failures with gcc-5
+In-Reply-To: <1439736791-28748-1-git-send-email-yann.morin.1998@free.fr>
+References: <1439736791-28748-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150817223418.6f75a2e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,22 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sun, 16 Aug 2015 23:46:38 +0200, Yann E. MORIN wrote:
-> When getext is enabled, popt links with -lintl, specifies it in its
-> popt.pc and has done so for the past 6+ years. But oprofile does not
-> use pkconfig to find popt, so misses -lintl, which is important for
-> a static build. We have to do the call to pkgconfig manually...
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/a48/a485f2171a3fcbfa2e0e5aec8e653cf88512615d/
->     http://autobuild.buildroot.org/results/b37/b374874f1915ab1d7aa6262604ccc8db102bb0b0/
->     http://autobuild.buildroot.org/results/261/2616a63081ed8c55c7ca1a6879b1a6a14e19f918/
->     http://autobuild.buildroot.org/results/73f/73f34ab59d54ded68ff60608a0212a6e5a5190e5/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> 
-> ---
-> Change v2 -> v3:
->   - don't make the call to pkgconfig contional  (Baruch)
->   - fix comment appropriately
+On Sun, 16 Aug 2015 16:53:11 +0200, Yann E. MORIN wrote:
 
-Applied, thanks. Interestingly, oprofile's configure.ac checks for
-pkg-config, but does not seem to use it...
+> diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
+> index 6bb8355..85f436f 100644
+> --- a/package/bwm-ng/bwm-ng.hash
+> +++ b/package/bwm-ng/bwm-ng.hash
+> @@ -1,2 +1,4 @@
+> -# Locally calculated
+> -sha256  c1134358e268329d438b0996399003b0f0b966034fb4b5b138761c2f3c62ffdd  bwm-ng-0.6.tar.gz
+> +# From: http://sourceforge.net/projects/bwmng/files/bwmng/0.6/
+> +# sha1  9445885d05e2430ca174739e3aba343afce94076  bwm-ng-0.6.1.tar.gz
+> +# Because we do not trust SF.net, locally computed sha256:
+> +sha256  027cf3c960cd96fc9ffacdf7713df62d0fc55eeef4a1388289f8a62ae5e50df0  bwm-ng-0.6.1.tar.gz
+
+I think this is silly. We should use both the sha1 provided by
+sourceforge and a locally calculated sha256 hash.
 
 Best regards,
 
