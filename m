@@ -1,122 +1,80 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Tue, 18 Aug 2015 16:17:52 -0500
-Subject: [Buildroot] [PATCH 1/1] package/sp-oops-extract: new package
-Message-ID: <1439932672-2138-1-git-send-email-rdkehn@yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 18 Aug 2015 23:29:17 +0200
+Subject: [Buildroot] [PATCH 0/4] xtensa: toolchain fix for compiling
+ huge functions
+In-Reply-To: <1439418003-23805-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1439418003-23805-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20150818212917.GG3799@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A tool for extracting OOPS/panic logs from MTD.
+Max, All,
 
-Tested using arm-buildroot-linux-gnueabihf toolchain.
+On 2015-08-13 01:19 +0300, Max Filippov spake thusly:
+> this series backports binutils and gcc patches that add auto-litpools option
+> and replaces text-section-literals ABI flag for xtensa with auto-litpools.
+> With that change compiling huge functions should no longer be an issue on
+> xtensa. Obviously that change will break builds with pre-built toolchain.
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
- package/Config.in                                  |  1 +
- ...the-Makefile-more-cross-compiler-friendly.patch | 22 ++++++++++++++++++
- package/sp-oops-extract/Config.in                  |  6 +++++
- package/sp-oops-extract/sp-oops-extract.hash       |  2 ++
- package/sp-oops-extract/sp-oops-extract.mk         | 27 ++++++++++++++++++++++
- 5 files changed, 58 insertions(+)
- create mode 100644 package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch
- create mode 100644 package/sp-oops-extract/Config.in
- create mode 100644 package/sp-oops-extract/sp-oops-extract.hash
- create mode 100644 package/sp-oops-extract/sp-oops-extract.mk
+I'm not a huge fan of this series.
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..aa86f9f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -173,6 +173,7 @@ menu "Filesystem and flash utilities"
- 	source "package/ntfs-3g/Config.in"
- 	source "package/simicsfs/Config.in"
- 	source "package/squashfs/Config.in"
-+	source "package/sp-oops-extract/Config.in"
- 	source "package/sshfs/Config.in"
- 	source "package/sunxi-tools/Config.in"
- 	source "package/unionfs/Config.in"
-diff --git a/package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch b/package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch
-new file mode 100644
-index 0000000..67153c2
---- /dev/null
-+++ b/package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch
-@@ -0,0 +1,22 @@
-+Fetch from: https://github.com/Schischu/ptxdist_sh/tree/master/patches/sp-oops-extract-0.0.7
-+
-+From: Bernhard Walle <walle@corscience.de>
-+Date: Wed, 21 Mar 2012 15:55:06 +0100
-+Subject: [PATCH] Make the Makefile more cross-compiler friendly
-+
-+Signed-off-by: Bernhard Walle <walle@corscience.de>
-+---
-+ src/Makefile |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index cf5b550..e05eb1f 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -9,4 +9,4 @@ distclean: clean
-+ 	$(RM) $(TARGETS)
-+ 		
-+ sp-oops-extract: oopslog.c
-+-	gcc -Wall -s -o $@ $^
-++	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) -Wall -o $@ $^
-+
-diff --git a/package/sp-oops-extract/Config.in b/package/sp-oops-extract/Config.in
-new file mode 100644
-index 0000000..463ae14
---- /dev/null
-+++ b/package/sp-oops-extract/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_SP_OOPS_EXTRACT
-+	bool "sp_oops_extract"
-+	help
-+	  A tool for extracting OOPS/panic logs from MTD.
-+
-+	  http://maemo.org/packages/view/sp-oops-extract/
-diff --git a/package/sp-oops-extract/sp-oops-extract.hash b/package/sp-oops-extract/sp-oops-extract.hash
-new file mode 100644
-index 0000000..835bfe8
---- /dev/null
-+++ b/package/sp-oops-extract/sp-oops-extract.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 85601a569af1f4584db75fad21d3a70e377ce12d1bccad7dbe1112abd3b43d93 sp-oops-extract_0.0.7-1.tar.gz
-diff --git a/package/sp-oops-extract/sp-oops-extract.mk b/package/sp-oops-extract/sp-oops-extract.mk
-new file mode 100644
-index 0000000..d871717
---- /dev/null
-+++ b/package/sp-oops-extract/sp-oops-extract.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# sp_oops_extract
-+#
-+################################################################################
-+
-+SP_OOPS_EXTRACT_VERSION = 0.0.7-1
-+SP_OOPS_EXTRACT_SITE = http://repository.maemo.org/pool/maemo5.0/free/s/sp-oops-extract/
-+SP_OOPS_EXTRACT_SOURCE = sp-oops-extract_$(SP_OOPS_EXTRACT_VERSION).tar.gz
-+SP_OOPS_EXTRACT_LICENSE = GPLv2
-+SP_OOPS_EXTRACT_LICENSE_FILES = COPYING
-+
-+define SP_OOPS_EXTRACT_BUILD_CMDS
-+	@ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)" \
-+		AR="$(TARGET_AR)" \
-+		LD="$(TARGET_LD)" \
-+		CFLAGS="$(TARGET_CFLAGS)" \
-+		LDFLAGS="$(TARGET_LDFLAGS)"
-+endef
-+
-+define SP_OOPS_EXTRACT_INSTALL_TARGET_CMDS
-+	@ $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
-+		DESTDIR="$(TARGET_DIR)"
-+endef
-+
-+$(eval $(generic-package))
+  - First, they are "feature patches" (even if backported) to critical
+    components (gcc, binutils).
+
+  - Then, patches 3 and 4 will break external toolchains.
+
+  - Finally, it seems to me quite some efforst for "just" one package.
+
+So, I'd say we wait for gcc + binutils to spew out releases with those
+changes, then we can incorporate those versions in Buildroot, and make
+OpenCV depend on _GCC_AT_LEAST_X_Y ...
+
+Note: those comments are also valid for the unwind patch you sent
+later...
+
+Note-2: I know this might be a very difficult job you've made,
+backporting those fixes. Still, I don;t think they are fit for having
+in Buldroot.
+
+Regards,
+Yann E. MORIN.
+
+> Max Filippov (4):
+>   binutils: backport auto-litpools xtensa gas option
+>   gcc: backport mauto-litpools xtensa option
+>   xtensa: switch from text-section-literals to auto-litpools
+>   Revert "opencv: mark as not available on Xtensa"
+> 
+>  package/Makefile.in                                |   4 +-
+>  .../2.24/913-xtensa-add-auto-litpools-option.patch | 698 ++++++++++++++++++++
+>  .../913-xtensa-add-auto-litpools-option.patch      | 699 +++++++++++++++++++++
+>  .../870-xtensa-add-mauto-litpools-option.patch     | 290 +++++++++
+>  .../870-xtensa-add-mauto-litpools-option.patch     | 290 +++++++++
+>  .../870-xtensa-add-mauto-litpools-option.patch     | 290 +++++++++
+>  package/gcc/gcc.mk                                 |   6 +-
+>  package/opencv/Config.in                           |   3 -
+>  8 files changed, 2272 insertions(+), 8 deletions(-)
+>  create mode 100644 package/binutils/2.24/913-xtensa-add-auto-litpools-option.patch
+>  create mode 100644 package/binutils/2.25.1/913-xtensa-add-auto-litpools-option.patch
+>  create mode 100644 package/gcc/4.8.5/870-xtensa-add-mauto-litpools-option.patch
+>  create mode 100644 package/gcc/4.9.3/870-xtensa-add-mauto-litpools-option.patch
+>  create mode 100644 package/gcc/5.2.0/870-xtensa-add-mauto-litpools-option.patch
+> 
+> -- 
+> 1.8.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.5.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
