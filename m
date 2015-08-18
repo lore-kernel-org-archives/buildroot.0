@@ -1,47 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 11:38:00 +0200
-Subject: [Buildroot] [git commit] support/download: fix the Hg backend for
-	tags
-Message-ID: <20150901083108.3D738800E9@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 22:43:43 +0200
+Subject: [Buildroot] [git commit] mtd: drop unconditional non LFS build
+Message-ID: <20150901083107.392D87F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=697e2b7d948a8a12fd4c08e0beeb9264774ea5fd
+commit: http://git.buildroot.net/buildroot/commit/?id=81cfbee3410e236a3e6c7a64c9bfbed821706482
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the version of a package is a Mercurial tag, the download fails,
-with:
-    abort: unknown revision 'X.Y.Z'!
+Buildroot removed non LFS support in the 2015.05 release. We now pass
+-D_FILE_OFFSET_BITS=64 unconditionally, so the mtd WITHOUT_LARGEFILE make
+variable has no effect.
 
-This is because, in Mercurial, tags are commits like the others, and
-when we clone, we actively request a tag. But then, the server
-"dereferences" that tag and sends us the revision pointed to by that
-tag. Of course, since the tag is a commit after the revision we got,
-we do not have the revision adding the tag.
+[Thomas: keep using += for other assigments of MTD_MAKE_OPTS.]
 
-So, we just have to download the full repository to be sure we have
-the tags in our local clone.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/download/hg |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mtd/mtd.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/hg b/support/download/hg
-index d6654a1..ac1e9b9 100755
---- a/support/download/hg
-+++ b/support/download/hg
-@@ -25,7 +25,7 @@ repo="${2}"
- cset="${3}"
- basename="${4}"
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index edf6e08..42a8c1d 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -24,8 +24,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ MTD_DEPENDENCIES += busybox
+ endif
  
--${HG} clone ${verbose} --noupdate --rev "${cset}" "${repo}" "${basename}"
-+${HG} clone ${verbose} --noupdate "${repo}" "${basename}"
- 
- ${HG} archive ${verbose} --repository "${basename}" --type tgz \
-               --prefix "${basename}" --rev "${cset}" \
+-MTD_MAKE_OPTS = WITHOUT_LARGEFILE=1
+-
+ # If extended attributes are required, the acl package must
+ # also be enabled which will also include the attr package.
+ ifeq ($(BR2_PACKAGE_ACL),y)
