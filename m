@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:55:23 +0200
-Subject: [Buildroot] [PATCH next 1/1] package/libpfm4: bump to version
- 4.6.0
-In-Reply-To: <1439497348-7543-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1439497348-7543-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150818145523.4846caf2@free-electrons.com>
+Date: Tue, 18 Aug 2015 14:55:52 +0200
+Subject: [Buildroot] [git commit branch/next] package/zic: bump version to
+	2015f
+Message-ID: <20150818125600.4F9C481DEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=b38a6d5c027baae025c6eacb9dbd7b273524c417
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 13 Aug 2015 22:22:28 +0200, J?rg Krause wrote:
-> Also use checksum from sourceforge.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libpfm4/libpfm4.hash | 5 +++--
->  package/libpfm4/libpfm4.mk   | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libpfm4/libpfm4.hash b/package/libpfm4/libpfm4.hash
-> index bc0ce52..30e65a5 100644
-> --- a/package/libpfm4/libpfm4.hash
-> +++ b/package/libpfm4/libpfm4.hash
-> @@ -1,2 +1,3 @@
-> -# Locally computed:
-> -sha256  a23eb9affbff279e13563a39317c0ad71c4de28908d4243c8bc109138430cc3b  libpfm-4.3.0.tar.gz
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zic/zic.hash |    4 ++--
+ package/zic/zic.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Actually, even with the SourceForge hashes, we also want to keep a
-strong hash such as sha256, so I've re-added a sha256 hash in
-additionto the SourceForge provided hashes.
-
-Applied to next with this change.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 3ddd6f8..67a6c6d 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From 2015e release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-June/000032.html
+-sha512  fdc568a68f4876b967b39e21fa53f063dc5756e886e2a273cc046d5a014eb517e9c91eb6e03d18c94a89ce48578868aed710790415c500188fce4e4add0ce7ca  tzcode2015e.tar.gz
++# From 2015f release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-August/000033.html
++sha512  5cfbebde8a0be57e8388a7b6d35aeba99130a72c1a41f9bbd5d5864511a473aa5e9320ab21055b4383e64b3b9d7682c0d30377ce8407619987be672436014710  tzcode2015f.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 03e023a..e4cc1d3 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2015e
++ZIC_VERSION = 2015f
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = ftp://ftp.iana.org/tz/releases
+ ZIC_STRIP_COMPONENTS = 0
