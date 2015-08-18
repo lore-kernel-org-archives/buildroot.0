@@ -1,40 +1,36 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 18 Aug 2015 07:37:23 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/canfestival: fix musl
- compilation
-In-Reply-To: <1439848293-26836-1-git-send-email-brendanheading@gmail.com>
-References: <1439848293-26836-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <1439876243.1710.8.camel@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Aug 2015 07:41:11 +0200
+Subject: [Buildroot] [PATCH v2] pkg-kernel-module: Die when kernel
+	module are disabled
+In-Reply-To: <20150817163030.15ea69aa@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 17 Aug 2015 16:30:30 +0200")
+References: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
+ <20150817163030.15ea69aa@free-electrons.com>
+Message-ID: <87h9nx887c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mo, 2015-08-17 at 22:51 +0100, Brendan Heading wrote:
-> Fixes: http://autobuild.buildroot.net/results/75a/75aa6e7e4f3dcd74e4b
-> 65496060328ec7bd0e747/
-> 
-> ANSI signal handlers take an int parameter, not sigval_t.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-This is true for uClibc, but for other libc timer_notify is asigned to
-the `sigev_notify_function` function which has an `union sigval` as
-argument [1].
+ > Dear No? Rubinstein,
+ > On Mon, 17 Aug 2015 09:10:44 +0200, No? Rubinstein wrote:
+ >> Test the config of the kernel to see if loadable module support is
+ >> enabled, and error out otherwise. This makes the build failure less
+ >> confusing.
+ >> 
+ >> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
+ >> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ >> ---
+ >> package/pkg-kernel-module.mk | 4 ++++
+ >> 1 file changed, 4 insertions(+)
 
-Snipped from the source code of timers_unix.c:
+ > Applied after tweaking the commit log, thanks.
 
-#if defined(__UCLIBC__)
-	[..]
-	signal(SIGALRM, timer_notify);
-#else
-	[..]
-	sigev.sigev_notify_function = timer_notify;
-	[..]
-#endif
-}
+Couldn't we instead just force modules support on in the kernel if the
+pkg-kernel-module infrastructure is used?
 
-[1] http://man7.org/linux/man-pages/man7/sigevent.7.html
-
-Best regards
-J?rg Krause
-> 
+-- 
+Bye, Peter Korsgaard
