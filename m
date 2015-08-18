@@ -1,48 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 11:39:14 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/systat: fix linking
- with -lintl
-In-Reply-To: <1439473701-21909-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439473701-21909-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150818113914.6aec82ea@free-electrons.com>
+Date: Tue, 18 Aug 2015 11:43:24 +0200
+Subject: [Buildroot] [PATCH 1/3] package/beecrypt: add host variant
+In-Reply-To: <1439486091-6564-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1439486091-6564-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20150818114324.748acba6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+James,
 
-On Thu, 13 Aug 2015 15:48:21 +0200, Yann E. MORIN wrote:
-> When lining, libraries should be listed in the reverse-dependency order,
-
-lining -> linking
-
-> that is the library/ies with no dependency last, preceded by libraries
-> that depend on them.
+On Thu, 13 Aug 2015 13:14:49 -0400, James Knight wrote:
+> Required by an upcoming host variant of the `rpm` package.
 > 
-> And most importantly, libraries should be listed *after* the local
-> objects, .o files.
-> 
-> Currently, sysstat uses CFLAGS to shoehorn the -lintl linker flags,
-> which is incorrect, as the CFLAGS are passed before the object files.
-> 
-> However, sysstat has a LFLAGS variable that, presumably, is to be used
-> to pass linker flags. This is where we want to shoehorn -lintl.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/8cc/8cc547074de23b9482ad110234ef7458a44e174a/
->     http://autobuild.buildroot.org/results/360/360f7b8252dc9f6bb47841b1d7207a121f90048c/
->     http://autobuild.buildroot.org/results/04c/04cfc76a09e089985549a4320f34f6669d21cab5/
->     http://autobuild.buildroot.org/results/818/818c08decf4a6190a9ed39915eae4cd3d2779880/
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 > ---
->  package/sysstat/sysstat.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/beecrypt/beecrypt.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+> index cd0b4ac..0d7b360 100644
+> --- a/package/beecrypt/beecrypt.mk
+> +++ b/package/beecrypt/beecrypt.mk
+> @@ -11,16 +11,21 @@ BEECRYPT_INSTALL_STAGING = YES
+>  BEECRYPT_LICENSE = LGPLv2.1+
+>  BEECRYPT_LICENSE_FILES = COPYING.LIB
+>  
+> -BEECRYPT_CONF_OPTS = \
+> +BEECRYPT_CONFIGURE_ARGS = \
+>  	--disable-expert-mode \
+>  	--without-java \
+>  	--without-python \
+>  	--disable-openmp
+>  
+> +BEECRYPT_CONF_OPTS = $(BEECRYPT_CONFIGURE_ARGS)
+> +HOST_BEECRYPT_CONF_OPTS = $(BEECRYPT_CONFIGURE_ARGS)
+> +
+>  ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
+>  BEECRYPT_DEPENDENCIES += icu
+> +HOST_BEECRYPT_DEPENDENCIES += host-icu
 
-Applied, thanks.
+This is really wrong. BR2_PACKAGE_BEECRYPT_CPP indicates that we want
+the C++ support of Beecrypt for the target. It says nothing about what
+should be done for the host variant of Beecrypt.
+
+Target configuration options (BR2_PACKAGE_*) should not affect how host
+packages are built.
+
+Just decide if you need C++ support in host-beecrypt. If you need it,
+enable it. If you don't, do not enable it. But don't make it
+conditional.
+
+Thanks,
 
 Thomas
 -- 
