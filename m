@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 21:51:24 +0200
-Subject: [Buildroot] [git commit branch/next] package/libuv: bump to version
-	1.7.0
-Message-ID: <20150818201003.958D080141@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 22:10:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.7.0
+In-Reply-To: <1439323928-16566-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1439323928-16566-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150818221035.09449415@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f95523ab222e30dbfb0f48df561a7b13d98652f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libuv/libuv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, 11 Aug 2015 22:12:08 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/libuv/libuv.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 505c8d8..68979e0 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.6.1
-+LIBUV_VERSION = v1.7.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+Applied to next, thanks. Can you report upstream the problem that is
+worked around by the LIBUV_FIXUP_AUTOGEN hook so that it get fixed in a
+future release?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
