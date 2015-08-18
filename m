@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:14:56 +0200
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.12.7
-In-Reply-To: <1439463895-29663-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1439463895-29663-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150818141456.0e9d1872@free-electrons.com>
+Date: Tue, 18 Aug 2015 14:18:01 +0200
+Subject: [Buildroot] [git commit] msmtp: don't try to use IDN feature
+Message-ID: <20150818121818.B895B7F986@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=ef7a8c7903046be1ee4d7f43a53c2a4e9dae1574
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 13 Aug 2015 08:04:55 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> wnpa-sec-2015-21 - Protocol tree crash.
-> wnpa-sec-2015-22 - Memory manager crash.
-> wnpa-sec-2015-23 - Dissector table crash.
-> wnpa-sec-2015-24 - ZigBee crash.
-> wnpa-sec-2015-25 - GSM RLC/MAC inifite loop.
-> wnpa-sec-2015-26 - WaveAgent crash.
-> wnpa-sec-2015-27 - OpenFlow infinite loop.
-> wnpa-sec-2015-28 - Ptvcursor crash.
-> wnpa-sec-2015-29 - WCCP crash.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/wireshark/wireshark.hash | 6 +++---
->  package/wireshark/wireshark.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+autoconf can't detect if AI_IDN is really supported
+(http://sourceforge.net/p/msmtp/code/ci/907916e8089ea9303a7c091b763087530c88a063/),
+so a --disable-gai-idn flag was added to explicitly disable the usage
+of IDN.
 
-Applied to master, since it's a security bump, thanks.
+Before this patch, msmtp failed to send mail with the following
+output:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  msmtp: cannot locate host smtp.mandrillapp.com: Bad value for ai_flags
+
+[Thomas: tweak commit log.]
+
+Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/msmtp/msmtp.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index aa75dd4..09d57bf 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -10,6 +10,7 @@ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
+ MSMTP_CONF_OPTS = \
+ 	--without-libidn \
++	--disable-gai-idn \
+ 	--without-libgsasl
+ MSMTP_LICENSE = GPLv3+
+ MSMTP_LICENSE_FILES = COPYING
