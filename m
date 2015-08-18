@@ -1,248 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 11:10:55 +0200
-Subject: [Buildroot] [git commit branch/next] package/batctl: bump to
-	version 2015.1
-Message-ID: <20150818091125.D7C7E8194E@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 11:14:37 +0200
+Subject: [Buildroot] [PATCH] package/batctl: bump to version 2015.1
+In-Reply-To: <20150815171934.GA28760@vostro>
+References: <20150815171934.GA28760@vostro>
+Message-ID: <20150818111437.543f68e2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=718cefbb9ee76afd85c3eea0c2d65d46a7f9e8c7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Alex Suykov,
 
-musl fixes have been merged upstream, so the patch is no longer
-needed.
+On Sat, 15 Aug 2015 20:19:34 +0300, Alex Suykov wrote:
+> musl fixes have been merged upstream, so the patch is no longer needed.
+> 
+> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
+> ---
+>  package/batctl/0001-musl-fixes.patch | 192 -----------------------------------
+>  package/batctl/batctl.hash           |   4 +-
+>  package/batctl/batctl.mk             |   2 +-
+>  3 files changed, 3 insertions(+), 195 deletions(-)
+>  delete mode 100644 package/batctl/0001-musl-fixes.patch
 
-[Thomas: re-add locally calculated sha256 hash.]
+I've applied to next, after re-adding a sha256 hash to the hash file.
+Having the upstream hash is definitely good, but we also want to have a
+"strong" hash such as sha256/sha512 in the hash file.
 
-Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/batctl/0001-musl-fixes.patch |  192 ----------------------------------
- package/batctl/batctl.hash           |    4 +-
- package/batctl/batctl.mk             |    2 +-
- 3 files changed, 4 insertions(+), 194 deletions(-)
+Thanks!
 
-diff --git a/package/batctl/0001-musl-fixes.patch b/package/batctl/0001-musl-fixes.patch
-deleted file mode 100644
-index 4d64f31..0000000
---- a/package/batctl/0001-musl-fixes.patch
-+++ /dev/null
-@@ -1,192 +0,0 @@
--musl does not allow including netinet/* and linux/* headers together.
--batctl includes netinet/if_ether.h indirectly via net/ethernet.h,
--so netinet/if_ether.h must be used instead of linux/if_ether.h.
--
--__be16 and __be32 are linux-specific typedefs for uint16_t and
--uint32_t with __attribute__((bitwise)) that has no effect
--outside of the kernel.
--
--Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
--
----- batctl-2014.4.0/ping.c
--+++ batctl-2014.4.0/ping.c
--@@ -34,7 +34,7 @@
-- #include <stdint.h>
-- #include <sys/select.h>
-- #include <sys/time.h>
---#include <linux/if_ether.h>
--+#include <netinet/if_ether.h>
-- 
-- #include "main.h"
-- #include "ping.h"
----- batctl-2014.4.0/tcpdump.h
--+++ batctl-2014.4.0/tcpdump.h
--@@ -23,7 +23,7 @@
-- #define _BATCTL_TCPDUMP_H
-- 
-- #include <netpacket/packet.h>
---#include <linux/if_ether.h>
--+#include <netinet/if_ether.h>
-- #include <net/if_arp.h>
-- #include <sys/types.h>
-- #include "main.h"
----- batctl-2014.4.0/traceroute.c
--+++ batctl-2014.4.0/traceroute.c
--@@ -28,7 +28,7 @@
-- #include <unistd.h>
-- #include <fcntl.h>
-- #include <string.h>
---#include <linux/if_ether.h>
--+#include <netinet/if_ether.h>
-- #include <stddef.h>
-- #include <sys/select.h>
-- #include <sys/time.h>
----- batctl-2014.4.0/packet.h
--+++ batctl-2014.4.0/packet.h
--@@ -196,7 +196,7 @@
-- struct batadv_bla_claim_dst {
-- 	uint8_t magic[3];	/* FF:43:05 */
-- 	uint8_t type;		/* bla_claimframe */
---	__be16 group;		/* group id */
--+	uint16_t group;		/* group id */
-- };
-- #pragma pack()
-- 
--@@ -213,12 +213,12 @@
-- 	uint8_t  version;
-- 	uint8_t  ttl;
-- 	uint8_t  flags;
---	__be32   seqno;
--+	uint32_t   seqno;
-- 	uint8_t  orig[ETH_ALEN];
-- 	uint8_t  prev_sender[ETH_ALEN];
-- 	uint8_t  reserved;
-- 	uint8_t  tq;
---	__be16   tvlv_len;
--+	uint16_t   tvlv_len;
-- 	/* __packed is not needed as the struct size is divisible by 4,
-- 	 * and the largest data type in this struct has a size of 4.
-- 	 */
--@@ -273,7 +273,7 @@
-- 	uint8_t  orig[ETH_ALEN];
-- 	uint8_t  uid;
-- 	uint8_t  reserved;
---	__be16   seqno;
--+	uint16_t   seqno;
-- };
-- 
-- #define BATADV_RR_LEN 16
--@@ -300,7 +300,7 @@
-- 	uint8_t  orig[ETH_ALEN];
-- 	uint8_t  uid;
-- 	uint8_t  rr_cur;
---	__be16   seqno;
--+	uint16_t   seqno;
-- 	uint8_t  rr[BATADV_RR_LEN][ETH_ALEN];
-- };
-- 
--@@ -380,8 +380,8 @@
-- #endif
-- 	uint8_t dest[ETH_ALEN];
-- 	uint8_t orig[ETH_ALEN];
---	__be16  seqno;
---	__be16  total_size;
--+	uint16_t  seqno;
--+	uint16_t  total_size;
-- };
-- 
-- /**
--@@ -398,7 +398,7 @@
-- 	uint8_t  version;  /* batman version field */
-- 	uint8_t  ttl;
-- 	uint8_t  reserved;
---	__be32   seqno;
--+	uint32_t   seqno;
-- 	uint8_t  orig[ETH_ALEN];
-- 	/* "4 bytes boundary + 2 bytes" long to make the payload after the
-- 	 * following ethernet header again 4 bytes boundary aligned
--@@ -431,14 +431,14 @@
-- 	/* uint8_t  first_dest[ETH_ALEN]; - saved in mac header destination */
-- 	uint8_t  first_source[ETH_ALEN];
-- 	uint8_t  first_orig_dest[ETH_ALEN];
---	__be32   first_crc;
--+	uint32_t   first_crc;
-- 	uint8_t  second_ttl;
-- 	uint8_t  second_ttvn;
-- 	uint8_t  second_dest[ETH_ALEN];
-- 	uint8_t  second_source[ETH_ALEN];
-- 	uint8_t  second_orig_dest[ETH_ALEN];
---	__be32   second_crc;
---	__be16   coded_len;
--+	uint32_t   second_crc;
--+	uint16_t   coded_len;
-- };
-- 
-- #pragma pack()
--@@ -461,7 +461,7 @@
-- 	uint8_t  reserved;
-- 	uint8_t  dst[ETH_ALEN];
-- 	uint8_t  src[ETH_ALEN];
---	__be16   tvlv_len;
--+	uint16_t   tvlv_len;
-- 	uint16_t align;
-- };
-- 
--@@ -474,7 +474,7 @@
-- struct batadv_tvlv_hdr {
-- 	uint8_t type;
-- 	uint8_t version;
---	__be16  len;
--+	uint16_t  len;
-- };
-- 
-- /**
--@@ -484,8 +484,8 @@
--  * @bandwidth_up: advertised uplink upload bandwidth
--  */
-- struct batadv_tvlv_gateway_data {
---	__be32 bandwidth_down;
---	__be32 bandwidth_up;
--+	uint32_t bandwidth_down;
--+	uint32_t bandwidth_up;
-- };
-- 
-- /**
--@@ -498,7 +498,7 @@
-- struct batadv_tvlv_tt_data {
-- 	uint8_t flags;
-- 	uint8_t ttvn;
---	__be16  num_vlan;
--+	uint16_t  num_vlan;
-- };
-- 
-- /**
--@@ -509,8 +509,8 @@
--  * @reserved: unused, useful for alignment purposes
--  */
-- struct batadv_tvlv_tt_vlan_data {
---	__be32	crc;
---	__be16	vid;
--+	uint32_t	crc;
--+	uint16_t	vid;
-- 	uint16_t reserved;
-- };
-- 
--@@ -526,7 +526,7 @@
-- 	uint8_t flags;
-- 	uint8_t reserved[3];
-- 	uint8_t addr[ETH_ALEN];
---	__be16 vid;
--+	uint16_t vid;
-- };
-- 
-- /**
--@@ -536,7 +536,7 @@
--  */
-- struct batadv_tvlv_roam_adv {
-- 	uint8_t  client[ETH_ALEN];
---	__be16 vid;
--+	uint16_t vid;
-- };
-- 
-- /**
-diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
-index 663e602..1a045f4 100644
---- a/package/batctl/batctl.hash
-+++ b/package/batctl/batctl.hash
-@@ -1,2 +1,4 @@
-+# http://downloads.open-mesh.org/batman/releases/batman-adv-2015.1/batctl-2015.1.tar.gz.sha1
-+sha1	ae086f334ff912ab2a8116caedf0a2a1816acf1a	batctl-2015.1.tar.gz
- # Locally calculated
--sha256	77509ed70232ebc0b73e2fa9471ae13b12d6547d167dda0a82f7a7fad7252c36  batctl-2014.4.0.tar.gz
-+sha256	ea67ee22785e6fcd5149472bdf2df4e9f21716968e025e7dd41556a010a8d14a	batctl-2015.1.tar.gz
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-index c458752..e91dff9 100644
---- a/package/batctl/batctl.mk
-+++ b/package/batctl/batctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATCTL_VERSION = 2014.4.0
-+BATCTL_VERSION = 2015.1
- BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
- BATCTL_LICENSE = GPLv2
- BATCTL_DEPENDENCIES = libnl host-pkgconf
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
