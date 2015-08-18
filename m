@@ -1,84 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Aug 2015 14:55:37 +0200
-Subject: [Buildroot] [git commit] scrypt: new package
-Message-ID: <20150901083108.0C6857F95A@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 14:36:45 +0200
+Subject: [Buildroot] [git commit] msmtp: bump to version 1.6.2
+Message-ID: <20150901083106.D007381E93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84face61cf1dfefe864d6d47976932a32bbde9f2
+commit: http://git.buildroot.net/buildroot/commit/?id=9c0da0d7dd73ef376b2173c77a74e6025f1004a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas:
-  - move from "Libraries -> Crypto" to "System tools", since it only
-    installs one binary, scrypt, and no library.
-  - bump from 1.1.6 to 1.2.0
-  - add comment in the .hash file explaining where the hash is coming
-    from.
-  - add missing dependency on OpenSSL
-  - use BSD-2c as the license code, instead of BSD2
-  - use 'main.c' as the license file.]
-
-Signed-off-by: Parnell Springmeyer <parnell@digitalmentat.com>
+Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/scrypt/Config.in   |    8 ++++++++
- package/scrypt/scrypt.hash |    1 +
- package/scrypt/scrypt.mk   |   13 +++++++++++++
- 4 files changed, 23 insertions(+), 0 deletions(-)
+ package/msmtp/msmtp.hash |    6 +++---
+ package/msmtp/msmtp.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1bc31fa..5b8084d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -754,6 +754,7 @@ menu "Crypto"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/polarssl/Config.in"
-+	source "package/scrypt/Config.in"
- endmenu
+diff --git a/package/msmtp/msmtp.hash b/package/msmtp/msmtp.hash
+index a522f9d..fb03e05 100644
+--- a/package/msmtp/msmtp.hash
++++ b/package/msmtp/msmtp.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.1/
+-md5	6ebba4809bbc665b8a665a018d1a5ee1	msmtp-1.6.1.tar.xz
+-sha1	ac70151bcb53af5e192cbb147fd2b8139c637089	msmtp-1.6.1.tar.xz
++# From http://sourceforge.net/projects/msmtp/files/msmtp/1.6.2/
++md5	3baca93c7e5f1aa9d36a2e5b38739ab9	msmtp-1.6.2.tar.xz
++sha1	2d2272d04851b9bc806a77f47344e61840185329	msmtp-1.6.2.tar.xz
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index aa75dd4..bff2620 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- menu "Database"
-diff --git a/package/scrypt/Config.in b/package/scrypt/Config.in
-new file mode 100644
-index 0000000..8be7f54
---- /dev/null
-+++ b/package/scrypt/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SCRYPT
-+	bool "scrypt"
-+	help
-+	  A password-based key derivation function specifically designed
-+	  to make it costly to perform large-scale custom hardware attacks
-+	  by requiring large amounts of memory.
-+
-+	  http://www.tarsnap.com/scrypt.html
-diff --git a/package/scrypt/scrypt.hash b/package/scrypt/scrypt.hash
-new file mode 100644
-index 0000000..e6b690e
---- /dev/null
-+++ b/package/scrypt/scrypt.hash
-@@ -0,0 +1 @@
-+sha256 dfd0d1a544439265bbb9b58043ad3c8ce50a3987b44a61b1d39fd7a3ed5b7fb8  scrypt-1.1.6.tgz
-diff --git a/package/scrypt/scrypt.mk b/package/scrypt/scrypt.mk
-new file mode 100644
-index 0000000..2db6e2e
---- /dev/null
-+++ b/package/scrypt/scrypt.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# scrypt
-+#
-+################################################################################
-+
-+SCRYPT_VERSION = 1.1.6
-+SCRYPT_SOURCE = scrypt-$(SCRYPT_VERSION).tgz
-+SCRYPT_SITE = http://www.tarsnap.com/scrypt
-+SCRYPT_LICENSE = BSD2
-+SCRYPT_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+-MSMTP_VERSION = 1.6.1
++MSMTP_VERSION = 1.6.2
+ MSMTP_SITE = http://downloads.sourceforge.net/project/msmtp/msmtp/$(MSMTP_VERSION)
+ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+ MSMTP_DEPENDENCIES = host-pkgconf
