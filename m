@@ -1,43 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 13:07:52 +0200
-Subject: [Buildroot] [git commit] gnutls: security bump to version 3.3.17.1
-Message-ID: <20150818110810.D0FC5817F5@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 13:14:48 +0200
+Subject: [Buildroot] [git commit] package/mosh: fix dependencies
+Message-ID: <20150818111528.61D6181D28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c8c18a6163209b7e6ebf9ed00531cc420a88b06
+commit: http://git.buildroot.net/buildroot/commit/?id=9fa58ed79b83d61f250cba65a85df096c2a6f447
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes GNUTLS-SA-2015-3 - Double free in certificate DN decoding.
+mosh selects protobuf, so it needs to propagate *all* its dependencies.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+    http://autobuild.buildroot.org/results/1e7/1e7d28018252fa48ee1ccd68d0a21afb3e0f072f/
+    http://autobuild.buildroot.org/results/a91/a91ea29454a6f8eefc0bf4f0eb137dd8e061f028/
+    http://autobuild.buildroot.org/results/ecb/ecb67c1d1b04a79ad9fbe4a09121ec492fe1501c/
+    [...]
+
+[Thomas: add missing C++ comment.]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gnutls/gnutls.hash |    2 +-
- package/gnutls/gnutls.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mosh/Config.in |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 620caae..4496a2b 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	80a471c723572a43ddbe75d7825a3275f640650cc99eae42963ab39b9d0b7552	gnutls-3.3.16.tar.xz
-+sha256	b40f158030a92f450a07b20300a3996710ca19800848d9f6fd62493170c5bbb4	gnutls-3.3.17.1.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 4593034..82d9d29 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index 4ad7d61..f4c1466 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -1,11 +1,12 @@
+-comment "mosh needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "mosh needs a toolchain w/ C++, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 	depends on !(BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64)
  
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).16
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17.1
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+ config BR2_PACKAGE_MOSH
+ 	bool "mosh"
+ 	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
+-	depends on BR2_TOOLCHAIN_HAS_THREADS #protobuf
++	depends on BR2_INSTALL_LIBSTDCPP # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_NCURSES
