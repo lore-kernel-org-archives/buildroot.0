@@ -1,99 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Aug 2015 12:41:10 +0200
-Subject: [Buildroot] [PATCH v2] pkg-kernel-module: Die when kernel
-	module are disabled
-In-Reply-To: <20150818094747.GC3799@free.fr> (Yann E. MORIN's message of "Tue, 
- 18 Aug 2015 11:47:47 +0200")
-References: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
- <20150817163030.15ea69aa@free-electrons.com>
- <87h9nx887c.fsf@dell.be.48ers.dk> <20150818094747.GC3799@free.fr>
-Message-ID: <878u9898vt.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 18 Aug 2015 13:54:01 +0300
+Subject: [Buildroot] [PATCH 1/1] msmtp: don't try to use IDN feature
+In-Reply-To: <1439469361-31920-1-git-send-email-viallard@syscom-instruments.com>
+References: <1439469361-31920-1-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <20150818105401.GV2765@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Anthony,
 
-Hi,
+On Thu, Aug 13, 2015 at 02:36:01PM +0200, Anthony Viallard wrote:
+> I don't known if there is a consensus about IDN usage for buildroot. I
+> didn't see an option in the config about it. I presume IDN should be
+> disabled for all package, am I right ?
 
->> Couldn't we instead just force modules support on in the kernel if the
- >> pkg-kernel-module infrastructure is used?
+This part should not appear in the commit log. The rest looks OK to me.
 
- > And how do you suggest we test whether the kernel-module infra is used?
+> autoconf can't see if AI_IDN is really supported 
+> (http://sourceforge.net/p/msmtp/code/ci/907916e8089ea9303a7c091b763087530c88a063/).
+> It seems weird but this is the case apparently.
+> 
+> Before I did the above patch, msmtp failed to send mail. The output was:
+> 
+> msmtp: cannot locate host smtp.mandrillapp.com: Bad value for ai_flags
+> Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
 
- >     1) it *is* used already: we do have packages that do call
- >         $(eval $(kernel-module)) , but I guess that's not what
- >         you meant. ;-)
+The convention is to have an empty line just above the sign-off line.
 
- >     2) so you probably meant: if we actually need to build a kernel
- >        module.
+> ---
+>  package/msmtp/msmtp.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+> index bff2620..7c8261e 100644
+> --- a/package/msmtp/msmtp.mk
+> +++ b/package/msmtp/msmtp.mk
+> @@ -10,6 +10,7 @@ MSMTP_SOURCE = msmtp-$(MSMTP_VERSION).tar.xz
+>  MSMTP_DEPENDENCIES = host-pkgconf
+>  MSMTP_CONF_OPTS = \
+>  	--without-libidn \
+> +	--disable-gai-idn \
+>  	--without-libgsasl
+>  MSMTP_LICENSE = GPLv3+
+>  MSMTP_LICENSE_FILES = COPYING
 
- > But that's not so easy:
-
- >   - we need to know whether to enable moduls when parsing linux/linux.mk
-
- >   - external packages may call kernel-module
-
- >   - external packages are parsed after linux.mk
-
- > So, too late...
-
-If we can come up with a solution that only works for internal packages
-then that is imho still better than what we have today. We can still
-leave the check in the pkg-kernel-module infrastructure to atleast warn
-BR2_EXTERNAL users.
-
- > We can't enable kernel modules just from the .mk, we can only check for
- > them.
-
- > Unless we add an hidden kconfig knob BR2)LINUX_NEEDS_MODULES that
- > packages may select if they want to build modules. Of a visible knob
- > (user-selectable) that packages can depend on if they need to build
- > kernel modules...
-
-Or the pkg-kernel-module infrastructure can just set a variable that
-gets checked by LINUX_KCONFIG_FIXUP_CMDS, E.G. something like:
-
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-index 6fb7704..436a721 100644
---- a/package/pkg-kernel-module.mk
-+++ b/package/pkg-kernel-module.mk
-@@ -91,6 +91,10 @@ define $(2)_KERNEL_MODULES_INSTALL
- endef
- $(2)_POST_INSTALL_TARGET_HOOKS += $(2)_KERNEL_MODULES_INSTALL
- 
-+ifeq ($(BR2_PACKAGE_$(2)),y)
-+LINUX_NEEDS_MODULES = YES
-+endif
-+
- endef
- 
- ################################################################################
-
-
-And then:
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d91dbb2..eb7ce7e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -219,6 +219,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
-                $(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
-        $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
-                $(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
-+       $(if $(LINUX_NEEDS_MODULES),
-+               $(call KCONFIG_ENABLE_OPT,CONFIG_MODULES,$(@D)/.config))
- endef
- 
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-
- > Needless to say, for 2015.08, No?'s patch is good to go in, while the
- > alternatives are not; they can however be done post-2015.08.
-
-Agreed, this is not a new regression.
+baruch
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
