@@ -1,32 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Aug 2015 22:35:29 +0200
-Subject: [Buildroot] how to configure ip address for beaglebone
-In-Reply-To: <CA+yqE79hgae0JwwFMDYv68PqfDR_baHSY80sJrhsyr403AMh=Q@mail.gmail.com>
-References: <CA+yqE7_D1N5ZX+rCDwC4i6QVPRfgVFUfdc+C2kdhxGSzmbW_hQ@mail.gmail.com>
- <CA+yqE79hgae0JwwFMDYv68PqfDR_baHSY80sJrhsyr403AMh=Q@mail.gmail.com>
-Message-ID: <20150818203529.GD3799@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Aug 2015 22:43:43 +0200
+Subject: [Buildroot] [git commit branch/next] mtd: drop unconditional non
+	LFS build
+Message-ID: <20150818204412.AA81F81E41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hmidi,
+commit: http://git.buildroot.net/buildroot/commit/?id=81cfbee3410e236a3e6c7a64c9bfbed821706482
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2015-08-18 22:25 +0200, Hmidi Slim spake thusly:
-> I want to configure an ip address for beaglebone I tried to follow the
-> instructions mentioned in free electrons labs using rootfs overlay but I
-> got some errors.Can you help me to fix problems.
+Buildroot removed non LFS support in the 2015.05 release. We now pass
+-D_FILE_OFFSET_BITS=64 unconditionally, so the mtd WITHOUT_LARGEFILE make
+variable has no effect.
 
-Do not write to me. Write to the mailing list.
+[Thomas: keep using += for other assigments of MTD_MAKE_OPTS.]
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mtd/mtd.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index edf6e08..42a8c1d 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -24,8 +24,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ MTD_DEPENDENCIES += busybox
+ endif
+ 
+-MTD_MAKE_OPTS = WITHOUT_LARGEFILE=1
+-
+ # If extended attributes are required, the acl package must
+ # also be enabled which will also include the attr package.
+ ifeq ($(BR2_PACKAGE_ACL),y)
