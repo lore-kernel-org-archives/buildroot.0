@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:18:31 +0200
-Subject: [Buildroot] [PATCH 1/1] msmtp: don't try to use IDN feature
-In-Reply-To: <1439469361-31920-1-git-send-email-viallard@syscom-instruments.com>
-References: <1439469361-31920-1-git-send-email-viallard@syscom-instruments.com>
-Message-ID: <20150818141831.6504f58a@free-electrons.com>
+Date: Tue, 18 Aug 2015 14:25:02 +0200
+Subject: [Buildroot] [PATCH v1] evemu: bump version to 2.2.0
+In-Reply-To: <1439416030-13857-1-git-send-email-ps.report@gmx.net>
+References: <1439416030-13857-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20150818142502.0daaa908@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Anthony Viallard,
+Dear Peter Seiderer,
 
-On Thu, 13 Aug 2015 14:36:01 +0200, Anthony Viallard wrote:
-> I don't known if there is a consensus about IDN usage for buildroot. I
-> didn't see an option in the config about it. I presume IDN should be
-> disabled for all package, am I right ?
+On Wed, 12 Aug 2015 23:47:10 +0200, Peter Seiderer wrote:
+> See [1] for details.
 > 
-> autoconf can't see if AI_IDN is really supported (http://sourceforge.net/p/msmtp/code/ci/907916e8089ea9303a7c091b763087530c88a063/).
-> It seems weird but this is the case apparently.
+> [1] http://lists.freedesktop.org/archives/input-tools/2015-August/001190.html
 > 
-> Before I did the above patch, msmtp failed to send mail. The output was:
-> 
-> msmtp: cannot locate host smtp.mandrillapp.com: Bad value for ai_flags
-> Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/msmtp/msmtp.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/evemu/evemu.hash | 4 ++--
+>  package/evemu/evemu.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied after tweaking the commit log. Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
