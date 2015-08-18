@@ -1,55 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 11:16:40 +0200
-Subject: [Buildroot] [PATCHv2] [autobuild] package/bwm-ng: fix build
- failures with gcc-5
-In-Reply-To: <1439736791-28748-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439736791-28748-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150818111640.59f43f3a@free-electrons.com>
+Date: Tue, 18 Aug 2015 11:17:43 +0200
+Subject: [Buildroot] [git commit] package/nbd: fix static builds
+Message-ID: <20150818091754.BBD7B7FEA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=6170eaf4c4a4d9b30674f13b1f44415dfe06084f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Aug 2015 16:53:11 +0200, Yann E. MORIN wrote:
-> Bumping to the latest release, for 0.6 -> 0.6.1 to fix gcc-5 build
-> failures due to incorrect definitions of 'static' functions.
-> 
-> The project also has a new home.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/546/546b332cf95a48412d88add2feec2ffd4712857c/
->     http://autobuild.buildroot.org/results/751/751797f3b97839f69626682ce81dca9bcb2cff22/
->     ...
-> 
-> Notes: the project does not provide hashes on its new location, even
-> though SF.net still has the new file. But as stated on the new home,
-> SF.net "will not be used anymore". And as stated by Baruch, "the dubious
-> reputation of sf.net as of late, I don't think we can rely on their
-> hashes in the long run". So, we only refer to the SF.net hash for
-> reference, but use a locally computed, stronger sha256 as was previously
-> the case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> 
-> ---
-> Changes v1 -> v2:
->   - point to SF.net for the origin of the sha1, but only use a locally
->     computed sha256  (Baruch)
-> ---
->  package/bwm-ng/Config.in   | 2 +-
->  package/bwm-ng/bwm-ng.hash | 6 ++++--
->  package/bwm-ng/bwm-ng.mk   | 4 ++--
->  3 files changed, 7 insertions(+), 5 deletions(-)
+Fixes:
+    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/ (arm)
+    http://autobuild.buildroot.org/results/e5b/e5bd05623dd6c57bb0338592ecd21a5ba0cbe95a/ (arc)
+    http://autobuild.buildroot.org/results/e0f/e0fd23eec2dd31bece122d84515b2b7cb14594b8/ (ppc)
+    http://autobuild.buildroot.org/results/3a2/3a2d4124f78d4e504e8e961fabe038e570923408/ (mips)
+    ...
 
-Applied after removing the SF.net related comments in the hash file,
-and adjusting the commit log accordingly. Thanks!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nbd/0001-avoid-name-clashing.patch |   28 ++++++++++++++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nbd/0001-avoid-name-clashing.patch b/package/nbd/0001-avoid-name-clashing.patch
+new file mode 100644
+index 0000000..b3ea9c9
+--- /dev/null
++++ b/package/nbd/0001-avoid-name-clashing.patch
+@@ -0,0 +1,28 @@
++rename err() function to avoid clashing with err() form C library
++
++err() is a function available in the C library, so when static linking,
++there is a clash at link timebecause the function is provided both by
++nbd and the C library:
++    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/build-end.log
++
++Fix that by renaming err() to nbd_err() and providing a small maco
++wrapper to avoid touching the many call sites.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: hack, not submitted.
++
++diff -durN nbd-3.11.orig/cliserv.h nbd-3.11/cliserv.h
++--- nbd-3.11.orig/cliserv.h	2015-05-25 12:27:56.000000000 +0200
+++++ nbd-3.11/cliserv.h	2015-08-13 19:28:21.609467505 +0200
++@@ -75,7 +75,8 @@
++ void setmysockopt(int sock);
++ void err_nonfatal(const char *s);
++ 
++-void err(const char *s) G_GNUC_NORETURN;
+++void nbd_err(const char *s) G_GNUC_NORETURN;
+++#define err(S) nbd_err(S)
++ 
++ void logging(const char* name);
++ 
