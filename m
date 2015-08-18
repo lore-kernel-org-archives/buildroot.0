@@ -1,28 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:56:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/tzdata: bump version to 2015f
-In-Reply-To: <1439413807-12441-1-git-send-email-martin@barkynet.com>
-References: <1439413807-12441-1-git-send-email-martin@barkynet.com>
-Message-ID: <20150818145645.4471244a@free-electrons.com>
+From: Ran Shalit <ranshalit@gmail.com>
+Date: Tue, 18 Aug 2015 17:04:26 +0300
+Subject: [Buildroot] Telnet server in target file system
+Message-ID: <CAJ2oMhLG6camYr4xyojWJTZq8BbB87E_CFJ+2ZQfn4h-uo+PYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Hello,
 
-On Wed, 12 Aug 2015 22:10:06 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  package/tzdata/tzdata.hash | 4 ++--
->  package/tzdata/tzdata.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+I would like to ask how is best to add telnet support in target file system.
+Is it required to add NETKITTELNET package
+Symbol: BR2_PACKAGE_NETKITTELNET
 
-Both patches applied to next, thanks!
+Or is it suffecient to add TELNETD option in busybox.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Ran
