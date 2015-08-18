@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:38:36 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version
-Message-ID: <20150901083106.E8C58801E3@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 14:38:54 +0200
+Subject: [Buildroot] [git commit] configs/raspberrypi: bump kernel version
+	to 4.1.5
+Message-ID: <20150901083106.F26E17F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81b01ce22308976c241fdad7c39ca237b40e9c9e
+commit: http://git.buildroot.net/buildroot/commit/?id=556d292754932e6f4d5364c86098122980c78521
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Misc enhancements and fixes all over the place, most notably:
- - FW: better overclocking, add Mediatek mt7601u Wi-Fi driver, bump
-       kernel version to 4.1.5...
- - DT: fix SPI, I??S, gpio-poweroff, add MCP7941X, uart1, Fen Logic
-       VGA666 board, RPi Sense HAT...
- - video: add early frame sequential 3D support, YUV_UV destination
-          format, qpu deinterlace...
 
 Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-firmware/rpi-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/raspberrypi_defconfig |   11 +++++------
+ 1 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 1ef15aa..2436376 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 61487a4..af702a3 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -3,19 +3,18 @@ BR2_arm1176jzf_s=y
  
--RPI_FIRMWARE_VERSION = 856e2e1907a7f7058289c30268515c8cbf3fa5e3
-+RPI_FIRMWARE_VERSION = 52f65ac4ad1ef1d2838fa2f921d5bc3ece4c777b
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ 
+-# Lock to 4.0 headers as the RPi kernel stable tree is
+-# based off the 4.0 branch
++# Lock to 4.1 headers as the RPi kernel stable tree is
++# based off the 4.1 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.0.6"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++BR2_DEFAULT_KERNEL_VERSION="4.1.5"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="592503752b6951972f161f04280683c5af38d173"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ 
