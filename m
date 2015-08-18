@@ -1,59 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 11:18:26 +0200
-Subject: [Buildroot] [PATCH] [autobuild] package/nbd: fix static builds
-In-Reply-To: <1439495731-8645-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439495731-8645-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150818111826.16620df1@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 18 Aug 2015 11:19:49 +0200
+Subject: [Buildroot] [PATCH] [autobuild] package/audit: not available
+	for musl
+In-Reply-To: <1439503065-12462-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Thu, 13 Aug 2015 23:57:45 +0200")
+References: <1439503065-12462-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87d1yl7y2y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Thu, 13 Aug 2015 21:55:31 +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/ (arm)
->     http://autobuild.buildroot.org/results/e5b/e5bd05623dd6c57bb0338592ecd21a5ba0cbe95a/ (arc)
->     http://autobuild.buildroot.org/results/e0f/e0fd23eec2dd31bece122d84515b2b7cb14594b8/ (ppc)
->     http://autobuild.buildroot.org/results/3a2/3a2d4124f78d4e504e8e961fabe038e570923408/ (mips)
->     ...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/nbd/0001-avoid-name-clashing.patch | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/nbd/0001-avoid-name-clashing.patch
-> 
-> diff --git a/package/nbd/0001-avoid-name-clashing.patch b/package/nbd/0001-avoid-name-clashing.patch
-> new file mode 100644
-> index 0000000..b3ea9c9
-> --- /dev/null
-> +++ b/package/nbd/0001-avoid-name-clashing.patch
-> @@ -0,0 +1,28 @@
-> +rename err() function to avoid clashing with err() form C library
-> +
-> +err() is a function available in the C library, so when static linking,
-> +there is a clash at link timebecause the function is provided both by
-> +nbd and the C library:
-> +    http://autobuild.buildroot.org/results/aa8/aa8a1ac35a93e1c8b9fddbc2b5d66ecaa921f31e/build-end.log
-> +
-> +Fix that by renaming err() to nbd_err() and providing a small maco
-> +wrapper to avoid touching the many call sites.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +---
-> +Upstream status: hack, not submitted.
+ > audit uses strndupa() which is missing from musl.
+ > Even though the implementation of strndupa is not too complex, we won't
+ > go as far as duplicating it in audit, and we just disable audit for the
+ > musl C library.
 
-Please submit the patch upstream anyway, so that upstream is aware of
-the problem, and hopefully implements a proper solution.
+ > Fixes;
+ >     http://autobuild.buildroot.org/results/e22/e22a70f9ff14bc52f642a6135da44c14e41b6cbb/
+ >     http://autobuild.buildroot.org/results/233/2333c9b3d8f81b15602263b918d422e440f09d60/
+ >     ...
 
-I've applied your patch to master, thanks!
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Ryan Barnett <rjbarnet@rockwellcollins.com>
 
-Thomas
+ > ---
+ > Note: musl does have strdupa() so maybe strndupa is just a few commits
+ > away. Need to revisit later?
+ > ---
+ >  package/audit/0001-Missed-cross-compile-fixes.patch | 0
+ >  package/audit/Config.in                             | 6 ++++--
+ >  2 files changed, 4 insertions(+), 2 deletions(-)
+ >  mode change 100755 => 100644 package/audit/0001-Missed-cross-compile-fixes.patch
+
+ > diff --git a/package/audit/0001-Missed-cross-compile-fixes.patch b/package/audit/0001-Missed-cross-compile-fixes.patch
+ > old mode 100755
+ > new mode 100644
+ > diff --git a/package/audit/Config.in b/package/audit/Config.in
+ > index 8ac1b4f..717c364 100644
+ > --- a/package/audit/Config.in
+ > +++ b/package/audit/Config.in
+ > @@ -9,6 +9,7 @@ config BR2_PACKAGE_AUDIT
+ >  	depends on BR2_PACKAGE_AUDIT_ARCH_SUPPORTS
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS
+ >  	depends on !BR2_STATIC_LIBS
+ > +	depends on !BR2_TOOLCHAIN_USES_MUSL
+
+Minor nit: It would have been good to add a comment like
+
+# no strndupa()
+
+So it is clear why we don't allow it without looking at the git history.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
