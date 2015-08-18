@@ -1,31 +1,33 @@
-From: Alex Suykov <alex.suykov@gmail.com>
-Date: Tue, 18 Aug 2015 22:59:38 +0300
-Subject: [Buildroot] [PATCH] clapack: musl patches
-In-Reply-To: <20150817224326.0e40b56f@free-electrons.com>
-References: <20150815161506.GA28405@vostro>
- <20150817224326.0e40b56f@free-electrons.com>
-Message-ID: <20150818195938.GB27921@vostro>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Aug 2015 21:51:24 +0200
+Subject: [Buildroot] [git commit branch/next] package/libuv: bump to version
+	1.7.0
+Message-ID: <20150818201003.958D080141@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mon, Aug 17, 2015 at 10:43:26PM +0200, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=3f95523ab222e30dbfb0f48df561a7b13d98652f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> To be honest, I was a bit hesitant to add the patch that removes
-> uninit.c from the build, as the entire clapack thing looks a bit
-> complicated, and doing such a change without upstream's opinion is
-> dangerous. However, clapack is not that widely used I believe, so let's
-> see if that proposal breaks anything for anyone.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libuv/libuv.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Well, I think it should be ok as long as standalone f2c is not involved.
-
-With standalone f2c things will break, not because of this patch, but
-because there will be conflict over libf2c.a. But f2c is not something
-I would expect to see in buildroot any time soon.
-
-> Alex, could you submit the two patches you have written to the upstream
-> clapack project?
-
-Patches sent upstream, let's see what they will reply.
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 505c8d8..68979e0 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.6.1
++LIBUV_VERSION = v1.7.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
