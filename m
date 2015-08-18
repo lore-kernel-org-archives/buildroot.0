@@ -1,49 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 14:38:54 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi: bump kernel version
-	to 4.1.5
-Message-ID: <20150901083106.F26E17F95A@busybox.osuosl.org>
+Date: Tue, 18 Aug 2015 14:25:55 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.1.5
+Message-ID: <20150901083106.C2B1981E93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=556d292754932e6f4d5364c86098122980c78521
+commit: http://git.buildroot.net/buildroot/commit/?id=0f2d8eae2e5fc0dade6c8b64c3fe4703fffe1b0c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/raspberrypi_defconfig |   11 +++++------
- 1 files changed, 5 insertions(+), 6 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 61487a4..af702a3 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -3,19 +3,18 @@ BR2_arm1176jzf_s=y
+diff --git a/linux/Config.in b/linux/Config.in
+index 806c495..86aeeeb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.1.4"
++	bool "4.1.5"
  
--# Lock to 4.0 headers as the RPi kernel stable tree is
--# based off the 4.0 branch
-+# Lock to 4.1 headers as the RPi kernel stable tree is
-+# based off the 4.1 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.0.6"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-+BR2_DEFAULT_KERNEL_VERSION="4.1.5"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
  
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="f90f981770e3ac8506dc84c9cd01471faaa0b0c2"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="592503752b6951972f161f04280683c5af38d173"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_ZIMAGE=y
- 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.1.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.1.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
