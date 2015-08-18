@@ -1,12 +1,15 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 18 Aug 2015 18:47:22 +0100
-Subject: [Buildroot] [PATCH] webkitgtk24: fix MIPS64 n64 ABI detection
-Message-ID: <1439920042-58593-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Aug 2015 21:05:27 +0200
+Subject: [Buildroot] [git commit] webkitgtk24: fix MIPS64 n64 ABI detection
+Message-ID: <20150818190534.45BCE819F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=4c551f459470056740f824c6bec491d2ca2945ec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 webkitgtk24 is failing to compile for MIPS64 n64 because the ABI is not
 detected correctly. It causes failures like these ones:
@@ -33,10 +36,10 @@ Fixes:
   http://autobuild.buildroot.net/results/0d5/0d56a5bf6e92e7344dcee7acb85e176198f703e7/
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  ...m.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch |   46 ++++++++++++++++++++
  1 files changed, 46 insertions(+), 0 deletions(-)
- create mode 100644 package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
 
 diff --git a/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch b/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
 new file mode 100644
@@ -90,5 +93,3 @@ index 0000000..d56dc58
 +--
 +1.7.1
 +
--- 
-1.7.1
