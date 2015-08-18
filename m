@@ -1,61 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Aug 2015 21:23:15 +0200
-Subject: [Buildroot] [PATCH 0/2 v2] package/protobuf: misc fixes (branch
-	yem/protobuf)
-Message-ID: <cover.1439925738.git.yann.morin.1998@free.fr>
+Date: Tue, 18 Aug 2015 21:23:17 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] package/protobuf-c: threads dependency
+	is a direct dependency
+In-Reply-To: <cover.1439925738.git.yann.morin.1998@free.fr>
+References: <cover.1439925738.git.yann.morin.1998@free.fr>
+Message-ID: <ab466a72859caffe6dc9f3289ad8ddce5d09eb41.1439925738.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, protobuf-c's dependency on threads is labelled as being
+inherited from protobuf.
 
-This small series fixes two things wrt protobuf:
+This is wrong, as protobuf-c does not depend on protobuf, and such
+dependency was removed in e16865a (protobuf-c: Don't require protobuf on
+target), but forgot to remove the corresponding comment.
 
-  - remove a false comment in protobuf-c, implying that there was a
-    dependency on protobuf, which is wrong,
+Remove it now.
 
-  - make protobuf depend on shared libs to fix an idiosyncracy of the
-    autoconf macro that checks for threads and forcibly wants to link it
-    shared, always.
-
-
-Changes v1 -> v2:
-  - rebase on top of master, after the thread fixes
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 932442e7a30e6d2e08c1ba8cb1d4c1cf7464926c:
-
-  ola: Add patch to fix linking issue (2015-08-18 21:06:20 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/protobuf
-
-for you to fetch changes up to f3cf57fe430940d32733da671c2a9bbac56b1cb9:
-
-  package/protobuf: needs dynamic libraries (2015-08-18 21:18:01 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/protobuf-c: threads dependency is a direct dependency
-      package/protobuf: needs dynamic libraries
-
- package/mosh/Config.in       | 6 ++++--
- package/ola/Config.in        | 6 ++++--
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/protobuf-c/Config.in | 2 +-
- package/protobuf/Config.in   | 6 ++++--
- 4 files changed, 13 insertions(+), 7 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
+index f9fab37..2855550 100644
+--- a/package/protobuf-c/Config.in
++++ b/package/protobuf-c/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PROTOBUF_C
+ 	bool "protobuf-c"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# host-protobuf only builds on certain architectures
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	help
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
