@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 09:58:09 +0200
-Subject: [Buildroot] [PATCH v2] pkg-kernel-module: Die when kernel
- module are disabled
-In-Reply-To: <87h9nx887c.fsf@dell.be.48ers.dk>
-References: <1439795444-32337-1-git-send-email-nrubinstein@aldebaran.com>
- <20150817163030.15ea69aa@free-electrons.com>
- <87h9nx887c.fsf@dell.be.48ers.dk>
-Message-ID: <20150818095809.1384f7da@free-electrons.com>
+Date: Tue, 18 Aug 2015 10:33:34 +0200
+Subject: [Buildroot] [PATCHv2] [autobuild] package/bwm-ng: fix build
+ failures with gcc-5
+In-Reply-To: <20150817210425.GB3988@free.fr>
+References: <1439736791-28748-1-git-send-email-yann.morin.1998@free.fr>
+ <20150817223418.6f75a2e6@free-electrons.com>
+ <20150817210425.GB3988@free.fr>
+Message-ID: <20150818103334.2e89300a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann E. MORIN,
 
-On Tue, 18 Aug 2015 07:41:11 +0200, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Dear No? Rubinstein,
->  > On Mon, 17 Aug 2015 09:10:44 +0200, No? Rubinstein wrote:
->  >> Test the config of the kernel to see if loadable module support is
->  >> enabled, and error out otherwise. This makes the build failure less
->  >> confusing.
->  >> 
->  >> Signed-off-by: No? Rubinstein <nrubinstein@aldebaran.com>
->  >> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  >> ---
->  >> package/pkg-kernel-module.mk | 4 ++++
->  >> 1 file changed, 4 insertions(+)
-> 
->  > Applied after tweaking the commit log, thanks.
-> 
-> Couldn't we instead just force modules support on in the kernel if the
-> pkg-kernel-module infrastructure is used?
+On Mon, 17 Aug 2015 23:04:25 +0200, Yann E. MORIN wrote:
 
-That's another option, yes. No??
+> See the discussion that got us toward this situation:
+>     http://lists.busybox.net/pipermail/buildroot/2015-August/137445.html
+>     http://lists.busybox.net/pipermail/buildroot/2015-August/137447.html
+> 
+> Basically:
+>   - we no longer download from SF.net
+>   - so, how relevant is it to use a SF-provided hash?
+
+Then, just don't mention/use the SF hash in the hash file.
+
+Thanks!
 
 Thomas
 -- 
