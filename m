@@ -1,45 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 21:42:51 +0200
-Subject: [Buildroot] [git commit] fs: iso9660: change boot menu entry text
-Message-ID: <20150818194318.209DA81D58@busybox.osuosl.org>
+From: Alex Suykov <alex.suykov@gmail.com>
+Date: Tue, 18 Aug 2015 22:59:38 +0300
+Subject: [Buildroot] [PATCH] clapack: musl patches
+In-Reply-To: <20150817224326.0e40b56f@free-electrons.com>
+References: <20150815161506.GA28405@vostro>
+ <20150817224326.0e40b56f@free-electrons.com>
+Message-ID: <20150818195938.GB27921@vostro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a691d08e397f212b2d1adfabaee6b0b3eeefac6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Mon, Aug 17, 2015 at 10:43:26PM +0200, Thomas Petazzoni wrote:
 
-Replace Grub-specific "menu.lst" with "menu config" in the
-BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU Kconfig entry text, and mention
-missing grub.cfg for Grub 2.
+> To be honest, I was a bit hesitant to add the patch that removes
+> uninit.c from the build, as the entire clapack thing looks a bit
+> complicated, and doing such a change without upstream's opinion is
+> dangerous. However, clapack is not that widely used I believe, so let's
+> see if that proposal breaks anything for anyone.
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- fs/iso9660/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+Well, I think it should be ok as long as standalone f2c is not involved.
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 7e1ddd6..2482e44 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -47,13 +47,14 @@ config BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
- endchoice
- 
- config BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU
--	string "Boot menu.lst file"
-+	string "Boot menu config file"
- 	default "fs/iso9660/menu.lst" if BR2_TARGET_ROOTFS_ISO9660_GRUB
- 	default "fs/iso9660/grub.cfg" if BR2_TARGET_ROOTFS_ISO9660_GRUB2
- 	default "fs/iso9660/isolinux.cfg" if BR2_TARGET_ROOTFS_ISO9660_ISOLINUX
- 	help
- 	  Use this option to provide a custom bootloader configuration
--	  file (menu.lst for Grub, isolinux.cfg for isolinux).
-+	  file (menu.lst for Grub, grub.cfg for Grub 2, isolinux.cfg for
-+	  isolinux).
- 
- 	  Note that the strings __KERNEL_PATH__ and __INITRD_PATH__
- 	  will automatically be replaced by the path to the kernel and
+With standalone f2c things will break, not because of this patch, but
+because there will be conflict over libf2c.a. But f2c is not something
+I would expect to see in buildroot any time soon.
+
+> Alex, could you submit the two patches you have written to the upstream
+> clapack project?
+
+Patches sent upstream, let's see what they will reply.
