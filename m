@@ -1,101 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 19 Aug 2015 23:06:59 +0200
-Subject: [Buildroot] [git commit] libselinux: mark as not available on ARC
-Message-ID: <20150819210706.6CC598008E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boost: fix build on ARC
+Message-ID: <20150819210706.648D181EB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=881845f5fcc7e30654a95ea8a21e574df60980d1
+commit: http://git.buildroot.net/buildroot/commit/?id=b7aee38fe2d6409caa2b12d2b6a1e6acdf19014f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libselinux causes some build problems due to the toolchain on ARC,
-which haven't been solved so far. As a temporary solution for Buildroot
-2015.08, this commit makes libselinux (and its reverse dependencies)
-unavailable on ARC. Of course, once the toolchain problem is
-addressed, this commit can be reverted to re-enable libselinux on ARC.
+This commit adds a patch to Boost to make it use the eventfd()
+function provided by the C library when uClibc is used, rather than
+falling back to using directly the __NR_eventfd system call. This
+fixes the build on ARC, which doesn't define __NR_eventfd.
+
+The original problem is that uClibc pretends to be glibc 2.2, which
+didn't had eventfd(), so Boost makes the system call
+manually. uClibc-ng, in its next release, will pretend to be glibc
+2.10 (see
+http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=4ff3a6c8eb91db71d6dc3d2932b66e848bd20ac3),
+which will also fix the problem, but requires bumping the uClibc
+version, rebuilding the external toolchains, and so on.
+
+Ideally, Boost should be doing a compile test to detect if eventfd()
+is available or not, but the Boost build system is so brain-damaged
+that doing so would require way too much effort.
 
 Fixes:
 
-   http://autobuild.buildroot.org/results/220/2207f6aad44a6988bf07b02b583b6418ad930dc8/
+  http://autobuild.buildroot.org/results/22b/22b710346d2cd78b7b51cdccd18d670bb6ac5d24/
+  and many similar build failures
 
+[Peter: minor tweaks to description]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/Config.in     |    1 +
- package/libselinux/Config.in  |    3 +++
- package/libsemanage/Config.in |    2 ++
- package/setools/Config.in     |    5 +++--
- 4 files changed, 9 insertions(+), 2 deletions(-)
+ package/boost/0004-fix-uclibc-eventfd.patch |   38 +++++++++++++++++++++++++++
+ 1 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 25f72de..a3a328d 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -36,6 +36,7 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
- 	select BR2_PACKAGE_LIBSELINUX
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_arc
- 	bool "Enable SELinux support"
- 	help
- 	  Enable SELinux support in BusyBox. Please note that
-diff --git a/package/libselinux/Config.in b/package/libselinux/Config.in
-index eb892e4..bc8298d 100644
---- a/package/libselinux/Config.in
-+++ b/package/libselinux/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_LIBSELINUX
- 	select BR2_PACKAGE_PCRE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	# Toolchain issue: "fixup not contained within frag"
-+	depends on !BR2_arc
- 	help
- 	  libselinux is the runtime SELinux library that provides
- 	  interfaces (e.g. library functions for the SELinux kernel
-@@ -16,4 +18,5 @@ config BR2_PACKAGE_LIBSELINUX
- 	  http://selinuxproject.org/page/Main_Page
- 
- comment "libselinux needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libsemanage/Config.in b/package/libsemanage/Config.in
-index 78b6315..d9a83c0 100644
---- a/package/libsemanage/Config.in
-+++ b/package/libsemanage/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	select BR2_PACKAGE_BZIP2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_arc
- 	help
- 	  libsemanage is the policy management library. It uses
- 	  libsepol for binary policy manipulation and libselinux for
-@@ -17,4 +18,5 @@ config BR2_PACKAGE_LIBSEMANAGE
- 	  http://selinuxproject.org/page/Main_Page
- 
- comment "libsemanage needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index 981d64b..046957f 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -10,7 +10,8 @@ config BR2_PACKAGE_SETOOLS
- 	# bfin: infamous _ symbol prefix issue
- 	# nios2: triggers some toolchain issue "No symbol version
- 	# section for versioned symbol"
--	depends on !BR2_nios2 && !BR2_bfin
-+	# arc: libselinux not available
-+	depends on !BR2_nios2 && !BR2_bfin && !BR2_arc
- 	help
- 	  SETools is an open source project designed to facilitate
- 	  SELinux policy analysis. The primary tools are:
-@@ -27,4 +28,4 @@ config BR2_PACKAGE_SETOOLS
- comment "setools needs a toolchain w/ threads, C++, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
- 		|| !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_nios2 && !BR2_bfin
-+	depends on !BR2_nios2 && !BR2_bfin && !BR2_arc
+diff --git a/package/boost/0004-fix-uclibc-eventfd.patch b/package/boost/0004-fix-uclibc-eventfd.patch
+new file mode 100644
+index 0000000..1b7eb87
+--- /dev/null
++++ b/package/boost/0004-fix-uclibc-eventfd.patch
+@@ -0,0 +1,38 @@
++Use eventfd() function with uClibc
++
++The Boost eventfd code either directly makes the eventfd system call
++using __NR_eventfd (when __GLIBC_MINOR is less than 8), or otherwise
++uses the eventfd() function provided by the C library.
++
++However, since uClibc pretends to be glibc 2.2, the Boost eventfd code
++directly uses the system call. While it works fine on most
++architectures, it doesn't on ARC since __NR_eventfd is not defined on
++this architecture. However, eventfd() is properly implemented.
++
++So, this patch adjusts the logic used by Boost to consider uClibc as a
++C library providing the eventfd() function.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
++===================================================================
++--- a/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+++++ b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
++@@ -23,7 +23,7 @@
++ #include <sys/stat.h>
++ #include <sys/types.h>
++ #include <fcntl.h>
++-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
++ # include <asm/unistd.h>
++ #else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
++ # include <sys/eventfd.h>
++@@ -46,7 +46,7 @@
++ 
++ void eventfd_select_interrupter::open_descriptors()
++ {
++-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
++   write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
++   if (read_descriptor_ != -1)
++   {
