@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Aug 2015 21:16:16 +0200
-Subject: [Buildroot] [git commit] qt5base: install libQt5XcbQpa.so for xcb
-	backend
-Message-ID: <20150819191708.46CF381E96@busybox.osuosl.org>
+Date: Wed, 19 Aug 2015 21:17:32 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5base: install libQt5XcbQpa.so for
+ xcb backend
+In-Reply-To: <1439977695-2214-1-git-send-email-matthew.shyu.amlogic@gmail.com>
+References: <1439977695-2214-1-git-send-email-matthew.shyu.amlogic@gmail.com>
+Message-ID: <20150819211732.123b20f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=580513320ee897f5316d92cfe38668f9c3a1224f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Matthew Shyu,
 
-When the XCB backend is selected, the libqxcb.so plugin is installed,
-and is linked against libQt5XcbQpa.so. However, until, Buildroot was
-not installing this library. This commit fixes this.
+On Wed, 19 Aug 2015 17:48:15 +0800, Matthew Shyu wrote:
+> From: Matthew Shyu <matthew.shyu@amlogic.com>
+> 
+> libqxcb.so links again libQt5XcbQpa.so
+> 
+> Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+> ---
+>  package/qt5/qt5base/qt5base.mk |    1 +
+>  1 file changed, 1 insertion(+)
 
-[Thomas: tweak commit log.]
+Thanks, good catch! I've slightly tweaked your commit message, and
+applied. Thanks a lot!
 
-Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt5base/qt5base.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Best regards,
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 753b069..e80c20c 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -156,6 +156,7 @@ QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_EXAMPLES),-make,-nomake) ex
- 
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
-+QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_NETWORK)    += Qt5Network
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_CONCURRENT) += Qt5Concurrent
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_SQL)        += Qt5Sql
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
