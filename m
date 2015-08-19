@@ -1,40 +1,30 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Wed, 19 Aug 2015 15:14:35 +0200
-Subject: [Buildroot] [PATCH v1 1/2] pkg-utils: Define KCONFIG_ASSERT_OPT
-	macro
-In-Reply-To: <1439990076-10412-1-git-send-email-viktorin@rehivetech.com>
-References: <1439990076-10412-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <1439990076-10412-2-git-send-email-viktorin@rehivetech.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 19 Aug 2015 17:46:41 +0200
+Subject: [Buildroot] [PATCH] libpthsem: fix setjmp/longjmp detection
+In-Reply-To: <1439982525-6788-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 19 Aug 2015 13:08:45 +0200")
+References: <1439982525-6788-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <874mjv8en2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The macro can be used (eg. in packages) to assure that
-a certain option in the Linux/BusyBox/...'s .config is
-set to the given value.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
----
- package/pkg-utils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ > libpthsem has been affected since quite a while by build issues, but
+ > occuring only on Nathaniel Roach's autobuilder. The failure message
+ > is:
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 44bd2c9..1e34864 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -63,6 +63,11 @@ define KCONFIG_DISABLE_OPT # (option, file)
- 	echo '# $(1) is not set' >> $(2)
- endef
- 
-+define KCONFIG_ASSERT_OPT # (option, value, file)
-+	grep "\\<$(1)\\>=$(2)" $(3) > /dev/null \
-+		|| (echo "KCONFIG_ASSERT_OPT($(1),$(2),$(3)) has failed" >&2; exit 1)
-+endef
-+
- # Helper functions to determine the name of a package and its
- # directory from its makefile directory, using the $(MAKEFILE_LIST)
- # variable provided by make. This is used by the *-package macros to
+ >   error: #error "Unsupported Linux (g)libc version and/or platform"
+
+ > This message comes from pth_mctx.c file, which implements five methods
+ > for machine context initialization:
+
+[Lots of funky stuff snipped]
+
+Thanks a lot for debugging this - Committed, thanks!
+
 -- 
-2.5.0
+Bye, Peter Korsgaard
