@@ -1,86 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 19 Aug 2015 23:06:59 +0200
-Subject: [Buildroot] [git commit] boost: fix build on ARC
-Message-ID: <20150819210706.648D181EB8@busybox.osuosl.org>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 19 Aug 2015 22:56:44 +0100
+Subject: [Buildroot] Analysis of build results for 2015-08-18
+In-Reply-To: <20150819224105.2993bbe5@free-electrons.com>
+References: <20150819063013.E74B810154B@stock.ovh.net>
+ <20150819224105.2993bbe5@free-electrons.com>
+Message-ID: <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7aee38fe2d6409caa2b12d2b6a1e6acdf19014f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, Yann,
 
-This commit adds a patch to Boost to make it use the eventfd()
-function provided by the C library when uClibc is used, rather than
-falling back to using directly the __NR_eventfd system call. This
-fixes the build on ARC, which doesn't define __NR_eventfd.
+>>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/98fd1c9a3f92d2354fe3bd9c233916f720e26234/
+>>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/7ce7267bdc4da3bd0069cec49b8286316d220cd9/
+>>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/3ebe4454210fb257af08a0ca9cd13844d6985d58/
+>>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/cf90773bcca2b0401135779a293af33dc9cf658b/
+>
+> Peter, what do you suggest we do about these issues for the release?
+> Long-term, libtirpc will be changed to not use atomic builtins. But
+> what do we do now? Mark libtirpc as not available on SPARCv8, and
+> propagate the reverse dependency?
 
-The original problem is that uClibc pretends to be glibc 2.2, which
-didn't had eventfd(), so Boost makes the system call
-manually. uClibc-ng, in its next release, will pretend to be glibc
-2.10 (see
-http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=4ff3a6c8eb91db71d6dc3d2932b66e848bd20ac3),
-which will also fix the problem, but requires bumping the uClibc
-version, rebuilding the external toolchains, and so on.
+Can I suggest that you just leave it broken ? I suspect it's been
+broken for a little while. The problem in libtirpc was a commit in
+2011, which would have first been seen in stable release 0.2.3 in
+2013. We jumped from 0.2.2 to 0.2.4 on 26 Jun 2014 (f2ac23454) so each
+release since then will have had this problem. A simple workaround in
+the short term is simply to turn off libtirpc on SPARC manually.
 
-Ideally, Boost should be doing a compile test to detect if eventfd()
-is available or not, but the Boost build system is so brain-damaged
-that doing so would require way too much effort.
+I've been talking to the devs about this. After some discussion
+they've pretty much come to the view that the commit which added the
+use of the atomic builtins to the library was a bad idea to start
+with, as it exposed extra, needless functionality to the caller that
+is not part of the TI-RPC API. So the plan at the moment is to remove
+it entirely, which will fix our build bug here. This should fix a
+number of other packages that fail on SPARC due to dependence on
+libtirpc.
 
-Fixes:
+It will take another week or so to sort this out as we're waiting for
+the person who committed the change in the first place (in 2011) to
+return from vacation so he can comment on it. The fix should be ready
+by the end of the month assuming no objections are raised.
 
-  http://autobuild.buildroot.org/results/22b/22b710346d2cd78b7b51cdccd18d670bb6ac5d24/
-  and many similar build failures
+>>          arm |                linux-pam-1.1.8 | NOK | http://autobuild.buildroot.net/results/e337d69420ad00b2cc4017d639a31803926f2353/
+>
+> musl build issue.
 
-[Peter: minor tweaks to description]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/boost/0004-fix-uclibc-eventfd.patch |   38 +++++++++++++++++++++++++++
- 1 files changed, 38 insertions(+), 0 deletions(-)
+I have fixed most of this, nearly ready to submit a patch set once
+I've tidied it all up. There are several further problems that also
+have to be fixed. An additional headache is that the changes clash
+with some of the existing patches.
 
-diff --git a/package/boost/0004-fix-uclibc-eventfd.patch b/package/boost/0004-fix-uclibc-eventfd.patch
-new file mode 100644
-index 0000000..1b7eb87
---- /dev/null
-+++ b/package/boost/0004-fix-uclibc-eventfd.patch
-@@ -0,0 +1,38 @@
-+Use eventfd() function with uClibc
-+
-+The Boost eventfd code either directly makes the eventfd system call
-+using __NR_eventfd (when __GLIBC_MINOR is less than 8), or otherwise
-+uses the eventfd() function provided by the C library.
-+
-+However, since uClibc pretends to be glibc 2.2, the Boost eventfd code
-+directly uses the system call. While it works fine on most
-+architectures, it doesn't on ARC since __NR_eventfd is not defined on
-+this architecture. However, eventfd() is properly implemented.
-+
-+So, this patch adjusts the logic used by Boost to consider uClibc as a
-+C library providing the eventfd() function.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-+===================================================================
-+--- a/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-++++ b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-+@@ -23,7 +23,7 @@
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <fcntl.h>
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # include <asm/unistd.h>
-+ #else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-+ # include <sys/eventfd.h>
-+@@ -46,7 +46,7 @@
-+ 
-+ void eventfd_select_interrupter::open_descriptors()
-+ {
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+   write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
-+   if (read_descriptor_ != -1)
-+   {
+Also, I've had to implement some functions that are missing from musl
+entirely (by borrowing BSD implementations and conditionally
+compiling). I know that Yann has been disabling musl support with
+other packages that require this kind of change, so I'd be interested
+to hear what the view is. linux-pam is a reasonably major component
+and part of the justification for musl is to do with security ..
+
+I will try to send an RFC patch tomorrow, it might take an iteration
+or two to get it right. This might be a case where it is appropriate
+to disable libpam + musl in the coming release.
+
+regards
+
+Brendan
