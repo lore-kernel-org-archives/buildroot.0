@@ -1,26 +1,43 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 19 Aug 2015 09:10:06 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-08-18
-In-Reply-To: <20150819063013.E74B810154B@stock.ovh.net>
-References: <20150819063013.E74B810154B@stock.ovh.net>
-Message-ID: <55D439DE.4090503@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Aug 2015 11:11:11 +0200
+Subject: [Buildroot] Web user interface for Buildroot
+In-Reply-To: <alpine.DEB.2.02.1508190647370.26165@orcam81.orcam.lan>
+References: <55D3C27E.9000500@mail.bg>
+ <alpine.DEB.2.02.1508190647370.26165@orcam81.orcam.lan>
+Message-ID: <20150819111111.7a6e12b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Jonathan Ben Avraham,
 
-On 08/19/2015 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2015-08-18
+On Wed, 19 Aug 2015 07:00:43 +0300 (IDT), Jonathan Ben Avraham wrote:
 
->         mips |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/966f2e4bd4237e082922b27b141e7277ffd8a76f/
->         mips |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/305e5c31a6bd37fe5ee20821ba4e693d9bc495f3/
+> By design, Buildroot isn't a Linux distribution like OpenWRT or Debian, so 
+> it doesn't have it's own userspace tools for system configuration. In 
+> fact, Buildroot isn't necessarily for Linux only, although most 
+> applications that use Buildroot are in fact Linux-based.
 
-Fixed by http://patchwork.ozlabs.org/patch/507916/
+This isn't quite correct: Buildroot only supports Linux as an operating
+system, and is only capable of generating Linux-based systems. At least
+as of today.
 
-Regards,
+That being said, you are right that we differ from other systems such
+as OpenWRT in that we don't try to generate out of the box something
+that looks like a product. We simply package existing open-source
+software, make it easy to build all of them together, but we leave it
+to the user to add the product/project specific additions such as web
+interface, custom applications, etc.
 
-Vincent.
+Nikolay: we provide packages for many web servers, and also for many
+Javascript libraries, which you can use to build your own web interface.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
