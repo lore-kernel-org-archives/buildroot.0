@@ -1,47 +1,60 @@
 From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Wed, 19 Aug 2015 07:00:43 +0300 (IDT)
-Subject: [Buildroot] Web user interface for Buildroot
-In-Reply-To: <55D3C27E.9000500@mail.bg>
-References: <55D3C27E.9000500@mail.bg>
-Message-ID: <alpine.DEB.2.02.1508190647370.26165@orcam81.orcam.lan>
+Date: Wed, 19 Aug 2015 07:30:00 +0300 (IDT)
+Subject: [Buildroot] Telnet server in target file system
+In-Reply-To: <CAJ2oMhLG6camYr4xyojWJTZq8BbB87E_CFJ+2ZQfn4h-uo+PYA@mail.gmail.com>
+References: <CAJ2oMhLG6camYr4xyojWJTZq8BbB87E_CFJ+2ZQfn4h-uo+PYA@mail.gmail.com>
+Message-ID: <alpine.DEB.2.02.1508190711540.26165@orcam81.orcam.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nikolay,
-See reply below ...
+Hi Ran,
+See reply below...
 
-On Wed, 19 Aug 2015, Nikolay Dimitrov wrote:
+On Tue, 18 Aug 2015, Ran Shalit wrote:
 
-> Date: Wed, 19 Aug 2015 02:40:46 +0300
-> From: Nikolay Dimitrov <picmaster@mail.bg>
+> Date: Tue, 18 Aug 2015 17:04:26 +0300
+> From: Ran Shalit <ranshalit@gmail.com>
 > To: buildroot at busybox.net
-> Subject: [Buildroot] Web user interface for Buildroot
+> Subject: [Buildroot] Telnet server in target file system
 > 
-> Hi guys,
+> Hello,
 >
-> Is there a buildroot package which implements a web-based GUI for
-> managing the device's network configuration, something like openwrt's
-> luci?
+> I would like to ask how is best to add telnet support in target file system.
+> Is it required to add NETKITTELNET package
+> Symbol: BR2_PACKAGE_NETKITTELNET
 >
-> Thanks in advance. Regards,
-> Nikolay
+> Or is it suffecient to add TELNETD option in busybox.
+>
+> Regards,
+> Ran
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
-By design, Buildroot isn't a Linux distribution like OpenWRT or Debian, so 
-it doesn't have it's own userspace tools for system configuration. In 
-fact, Buildroot isn't necessarily for Linux only, although most 
-applications that use Buildroot are in fact Linux-based.
+Quoting Arnaud Aujon arnaud.aujon on this list from Fri Dec 13 17:51:45 
+UTC 2013:
 
-The Buildroot design goals are modest. The idea is to provide knowledgeable 
-users with a simple system for building a root filesystem using popular 
-Open Source packages. That's it, nothing more than that! By design.
+"The 'netkittelnet' package has been removed, since it has been deprecated 
+since 2012.11. 'busybox' provides a telnet client and should be used 
+instead."
+
+See also in the menuconfig top level menu "Legacy config options  --->" 
+"netkittelnet has been removed". If you select a legacy option, or you try 
+to build a rootfs using a new Buildroot version with an old .config file 
+that has the BR2_PACKAGE_NETKITTELNET set, then the Buildroot make will 
+fail with
+
+Makefile.legacy:12: *** "You have legacy configuration in your .config! 
+Please check your configuration.".  Stop.
+make[1]: Leaving directory `/home/yba/x86_64/buildroot'
+make: *** [all] Error 2
+
+So yes, use the BusyBox telnetd server.
 
 Best regards,
 
