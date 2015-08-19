@@ -1,69 +1,104 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 19 Aug 2015 22:56:44 +0100
-Subject: [Buildroot] Analysis of build results for 2015-08-18
-In-Reply-To: <20150819224105.2993bbe5@free-electrons.com>
-References: <20150819063013.E74B810154B@stock.ovh.net>
- <20150819224105.2993bbe5@free-electrons.com>
-Message-ID: <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 19 Aug 2015 17:06:00 -0500
+Subject: [Buildroot] [PATCH 1/1] libpam-tacplus: new package
+In-Reply-To: <1440017226-14463-1-git-send-email-giovanni.zantedeschi@datacom.ind.br>
+References: <1440017226-14463-1-git-send-email-giovanni.zantedeschi@datacom.ind.br>
+Message-ID: <CAMQcK5JaQx3fVKL0T5CSg+nWmzN+VSyAP4prY4ttaD2HAcDQYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Yann,
+Hi Giovanni,
 
->>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/98fd1c9a3f92d2354fe3bd9c233916f720e26234/
->>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/7ce7267bdc4da3bd0069cec49b8286316d220cd9/
->>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/3ebe4454210fb257af08a0ca9cd13844d6985d58/
->>        sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/cf90773bcca2b0401135779a293af33dc9cf658b/
+Thanks for your contribution - please see the few preliminary comments
+that I have below on the patch. I will try to look into this more
+extensively later this week.
+
+On Wed, Aug 19, 2015 at 3:47 PM, giovanni.zantedeschi
+<giovanni.zantedeschi@datacom.ind.br> wrote:
+> From: "Giovanni Zantedeschi" <giovanni.zantedeschi@datacom.ind.br>
 >
-> Peter, what do you suggest we do about these issues for the release?
-> Long-term, libtirpc will be changed to not use atomic builtins. But
-> what do we do now? Mark libtirpc as not available on SPARCv8, and
-> propagate the reverse dependency?
-
-Can I suggest that you just leave it broken ? I suspect it's been
-broken for a little while. The problem in libtirpc was a commit in
-2011, which would have first been seen in stable release 0.2.3 in
-2013. We jumped from 0.2.2 to 0.2.4 on 26 Jun 2014 (f2ac23454) so each
-release since then will have had this problem. A simple workaround in
-the short term is simply to turn off libtirpc on SPARC manually.
-
-I've been talking to the devs about this. After some discussion
-they've pretty much come to the view that the commit which added the
-use of the atomic builtins to the library was a bad idea to start
-with, as it exposed extra, needless functionality to the caller that
-is not part of the TI-RPC API. So the plan at the moment is to remove
-it entirely, which will fix our build bug here. This should fix a
-number of other packages that fail on SPARC due to dependence on
-libtirpc.
-
-It will take another week or so to sort this out as we're waiting for
-the person who committed the change in the first place (in 2011) to
-return from vacation so he can comment on it. The fix should be ready
-by the end of the month assuming no objections are raised.
-
->>          arm |                linux-pam-1.1.8 | NOK | http://autobuild.buildroot.net/results/e337d69420ad00b2cc4017d639a31803926f2353/
+> Signed-off-by: Giovanni Zantedeschi <giovanni.zantedeschi@datacom.ind.br>
+> ---
+>  package/Config.in                        |  1 +
+>  package/libpam-tacplus/Config.in         |  5 +++++
+>  package/libpam-tacplus/libpam-tacplus.mk | 18 ++++++++++++++++++
+>  3 files changed, 24 insertions(+)
+>  create mode 100644 package/libpam-tacplus/Config.in
+>  create mode 100644 package/libpam-tacplus/libpam-tacplus.mk
 >
-> musl build issue.
+> diff --git a/package/Config.in b/package/Config.in
+> index 47d14d7..9e92023 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1074,6 +1074,7 @@ menu "Other"
+>         source "package/libical/Config.in"
+>         source "package/liblinear/Config.in"
+>         source "package/libnspr/Config.in"
+> +       source "package/libpam-tacplus/Config.in"
+>         source "package/libpfm4/Config.in"
+>         source "package/libplatform/Config.in"
+>         source "package/libplist/Config.in"
+> diff --git a/package/libpam-tacplus/Config.in b/package/libpam-tacplus/Config.in
+> new file mode 100644
+> index 0000000..88d10ff
+> --- /dev/null
+> +++ b/package/libpam-tacplus/Config.in
+> @@ -0,0 +1,5 @@
+> + config BR2_PACKAGE_LIBPAM_TACPLUS
+> +        bool "libpam-tacplus"
+> +        help
+> +          Lib needed to use pam-tacplus
 
-I have fixed most of this, nearly ready to submit a patch set once
-I've tidied it all up. There are several further problems that also
-have to be fixed. An additional headache is that the changes clash
-with some of the existing patches.
+Would spell 'Library' out completely. It would also be good if you
+could link to the projects homepage as well.
 
-Also, I've had to implement some functions that are missing from musl
-entirely (by borrowing BSD implementations and conditionally
-compiling). I know that Yann has been disabling musl support with
-other packages that require this kind of change, so I'd be interested
-to hear what the view is. linux-pam is a reasonably major component
-and part of the justification for musl is to do with security ..
+> +
+> diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
+> new file mode 100644
+> index 0000000..f788f47
+> --- /dev/null
+> +++ b/package/libpam-tacplus/libpam-tacplus.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# libpam-tacplus
+> +#
+> +################################################################################
+> +
+> +LIBPAM_TACPLUS_VERSION = 1.3.9
+> +LIBPAM_TACPLUS_SITE = https://github.com/jeroennijhof/pam_tacplus.git
+> +LIBPAM_TACPLUS_SITE_METHOD = git
 
-I will try to send an RFC patch tomorrow, it might take an iteration
-or two to get it right. This might be a case where it is appropriate
-to disable libpam + musl in the coming release.
+It would be preferable to use the github download helper:
 
-regards
+http://nightly.buildroot.org/manual.html#github-download-url
 
-Brendan
+> +LIBPAM_TACPLUS_INSTALL_STAGING = YES
+> +LIBPAM_TACPLUS_AUTORECONF = YES
+> +LIBPAM_TACPLUS_CONF_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)"
+
+I'm not sure if this is needed but I could definitely be wrong since I
+haven't had a chance to dig into the package. It seems like this is
+something that buildroot's autotools package infrastructure should
+take care of passing into in order to ensure that it using the correct
+compiler.
+
+> +LIBPAM_TACPLUS_AUTORECONF_OPTS = -I m4
+> +LIBPAM_TACPLUS_LICENSE = GPLv2+
+> +LIBPAM_TACPLUS_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
+
+Thanks,
+-Ryan
+
+
+-- 
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
