@@ -1,7 +1,7 @@
 From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
-Date: Thu, 20 Aug 2015 00:23:50 +0200
-Subject: [Buildroot] rpi: image generation
-Message-ID: <55D501F6.6000909@wsystem.com>
+Date: Thu, 20 Aug 2015 00:31:21 +0200
+Subject: [Buildroot] package/dhcp/S80dhcp-*: possible bug
+Message-ID: <55D503B9.6030005@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +10,18 @@ To: buildroot@busybox.net
 
 Hi all,
 
-I have local changes for the Raspberry Pi that can automatically generate an
-image to be flashed on the SD card (e.g. with dd).
+The S80dhcp-* scripts use string variables like INTERFACES that are left empty.
+Because of that, the corresponding services are not started.
 
-This mechanism uses genimage, so no sudo is needed. It generates a FAT32
-partition of 64 MiB and an ext4 partition that just fits its contents with a
-small free space. I also have scripts to auto-expand the ext4 partition and FS
-to fill the SD card.
+Previously, there were configuration files to initialize these variables, but
+they have been removed by the commit 07064c0978b78356bf74408c216f524881df3362.
 
-Are you interested in any of this, or do you prefer to keep the current manual
-approach that makes it possible to do just anything custom?
+Is it a bug, or are these scripts supposed to just be templates (requiring a
+root FS overlay to fix them) and not the actual scripts?
+
+If it is a bug, what is the preferred way of fixing it? With a configuration
+file that would be sourced by these scripts like before, or with Config.in
+string options that would fill these scripts, or with something else?
 
 Best regards,
 Beno?t
