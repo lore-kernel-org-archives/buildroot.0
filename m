@@ -1,39 +1,40 @@
 From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Wed, 19 Aug 2015 15:14:34 +0200
-Subject: [Buildroot] [PATCH v1 0/2] Checking whether a certain CONFIG_* is
-	set
-In-Reply-To: <87lhd98twt.fsf@dell.be.48ers.dk>
-Message-ID: <1439990076-10412-1-git-send-email-viktorin@rehivetech.com>
+Date: Wed, 19 Aug 2015 15:14:35 +0200
+Subject: [Buildroot] [PATCH v1 1/2] pkg-utils: Define KCONFIG_ASSERT_OPT
+	macro
+In-Reply-To: <1439990076-10412-1-git-send-email-viktorin@rehivetech.com>
+References: <1439990076-10412-1-git-send-email-viktorin@rehivetech.com>
+Message-ID: <1439990076-10412-2-git-send-email-viktorin@rehivetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+The macro can be used (eg. in packages) to assure that
+a certain option in the Linux/BusyBox/...'s .config is
+set to the given value.
 
-this short patch series introduces a way how to check whether certain
-CONFIG_* entries are set to an expected value in a selected .config
-file. When building a package that requires a certain CONFIG_* to be
-set (as in the case of xtables-addons), Buildroot can either force
-to set the config or just error out a message.
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+---
+ package/pkg-utils.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I could not find any suitable mechanism for this in Buildroot (if there
-is one, please give me a reference) so I propose a simple extension of
-KCONFIG_*_OPT util macros. It is then implemented for xtables-addons to
-check whether CONFIG_MODULES are set in the Linux Kernel .config.
-
-Regards
-Jan Viktorin
-
-
-Jan Viktorin (2):
-  pkg-utils: Define KCONFIG_ASSERT_OPT macro
-  xtables-addons: test CONFIG_MODULES=y in the kernel
-
- package/pkg-utils.mk                     | 5 +++++
- package/xtables-addons/xtables-addons.mk | 5 +++++
- 2 files changed, 10 insertions(+)
-
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 44bd2c9..1e34864 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -63,6 +63,11 @@ define KCONFIG_DISABLE_OPT # (option, file)
+ 	echo '# $(1) is not set' >> $(2)
+ endef
+ 
++define KCONFIG_ASSERT_OPT # (option, value, file)
++	grep "\\<$(1)\\>=$(2)" $(3) > /dev/null \
++		|| (echo "KCONFIG_ASSERT_OPT($(1),$(2),$(3)) has failed" >&2; exit 1)
++endef
++
+ # Helper functions to determine the name of a package and its
+ # directory from its makefile directory, using the $(MAKEFILE_LIST)
+ # variable provided by make. This is used by the *-package macros to
 -- 
 2.5.0
