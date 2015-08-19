@@ -1,70 +1,50 @@
-From: giovanni.zantedeschi <giovanni.zantedeschi@datacom.ind.br>
-Date: Wed, 19 Aug 2015 17:47:06 -0300
-Subject: [Buildroot] [PATCH 1/1] libpam-tacplus: new package
-Message-ID: <1440017226-14463-1-git-send-email-giovanni.zantedeschi@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Aug 2015 22:54:45 +0200
+Subject: [Buildroot] [git commit] mono: depend on shared library support
+Message-ID: <20150819205612.C304380453@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Giovanni Zantedeschi" <giovanni.zantedeschi@datacom.ind.br>
+commit: http://git.buildroot.net/buildroot/commit/?id=93f6baf135866adcea7a3d77b033fb2cad931d61
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giovanni Zantedeschi <giovanni.zantedeschi@datacom.ind.br>
+The mono source code includes <dlfcn.h>, which is only available when
+shared library support is available. While it might be possible to do
+a fully static installation of Mono, it probably isn't very useful.
+
+While we're at it, this commit also makes sure that the Config.in
+comment is not visible when the architecture doesn't support Mono.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/5d99bdf77f1942fa403081267c362aa1f8fd0dab/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |  1 +
- package/libpam-tacplus/Config.in         |  5 +++++
- package/libpam-tacplus/libpam-tacplus.mk | 18 ++++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/libpam-tacplus/Config.in
- create mode 100644 package/libpam-tacplus/libpam-tacplus.mk
+ package/mono/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..9e92023 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1074,6 +1074,7 @@ menu "Other"
- 	source "package/libical/Config.in"
- 	source "package/liblinear/Config.in"
- 	source "package/libnspr/Config.in"
-+	source "package/libpam-tacplus/Config.in"
- 	source "package/libpfm4/Config.in"
- 	source "package/libplatform/Config.in"
- 	source "package/libplist/Config.in"
-diff --git a/package/libpam-tacplus/Config.in b/package/libpam-tacplus/Config.in
-new file mode 100644
-index 0000000..88d10ff
---- /dev/null
-+++ b/package/libpam-tacplus/Config.in
-@@ -0,0 +1,5 @@
-+ config BR2_PACKAGE_LIBPAM_TACPLUS
-+        bool "libpam-tacplus"
-+        help
-+          Lib needed to use pam-tacplus
-+
-diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
-new file mode 100644
-index 0000000..f788f47
---- /dev/null
-+++ b/package/libpam-tacplus/libpam-tacplus.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# libpam-tacplus
-+#
-+################################################################################
-+
-+LIBPAM_TACPLUS_VERSION = 1.3.9
-+LIBPAM_TACPLUS_SITE = https://github.com/jeroennijhof/pam_tacplus.git
-+LIBPAM_TACPLUS_SITE_METHOD = git
-+
-+LIBPAM_TACPLUS_INSTALL_STAGING = YES
-+LIBPAM_TACPLUS_AUTORECONF = YES
-+LIBPAM_TACPLUS_CONF_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)"
-+LIBPAM_TACPLUS_AUTORECONF_OPTS = -I m4
-+LIBPAM_TACPLUS_LICENSE = GPLv2+
-+LIBPAM_TACPLUS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-1.9.1
+diff --git a/package/mono/Config.in b/package/mono/Config.in
+index 0c7129b..0f57703 100644
+--- a/package/mono/Config.in
++++ b/package/mono/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_MONO
+ 	bool "mono"
+ 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  An open source, cross-platform, implementation of C#
+@@ -14,5 +15,6 @@ config BR2_PACKAGE_MONO
+ 
+ 	  http://download.mono-project.com/sources/mono/
+ 
+-comment "mono needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "mono needs a toolchain w/ threads, dynamic library"
++	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
