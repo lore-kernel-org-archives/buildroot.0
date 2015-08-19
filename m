@@ -1,38 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Aug 2015 11:11:11 +0200
-Subject: [Buildroot] Web user interface for Buildroot
-In-Reply-To: <alpine.DEB.2.02.1508190647370.26165@orcam81.orcam.lan>
-References: <55D3C27E.9000500@mail.bg>
- <alpine.DEB.2.02.1508190647370.26165@orcam81.orcam.lan>
-Message-ID: <20150819111111.7a6e12b3@free-electrons.com>
+Date: Wed, 19 Aug 2015 11:12:24 +0200
+Subject: [Buildroot] how to configure the ip address of beaglebone?
+In-Reply-To: <CA+yqE79AfRuHWa26Sg6zcs8YYjxx1y-Khdp6nY1L5C_uXsevMQ@mail.gmail.com>
+References: <CA+yqE79AfRuHWa26Sg6zcs8YYjxx1y-Khdp6nY1L5C_uXsevMQ@mail.gmail.com>
+Message-ID: <20150819111224.1126ad7c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jonathan Ben Avraham,
+Dear Hmidi Slim,
 
-On Wed, 19 Aug 2015 07:00:43 +0300 (IDT), Jonathan Ben Avraham wrote:
+On Wed, 19 Aug 2015 02:37:30 +0200, Hmidi Slim wrote:
 
-> By design, Buildroot isn't a Linux distribution like OpenWRT or Debian, so 
-> it doesn't have it's own userspace tools for system configuration. In 
-> fact, Buildroot isn't necessarily for Linux only, although most 
-> applications that use Buildroot are in fact Linux-based.
+> I followed the tutorial of free electrons to use rootfs overlay to
+> configure ip address but when I run make I got
+> board/felabs/rootfs-overlay no such file or directory
 
-This isn't quite correct: Buildroot only supports Linux as an operating
-system, and is only capable of generating Linux-based systems. At least
-as of today.
+Because the path to your overlay is wrong. But that's all we can say
+since you don't provide the necessary details to allow us to give a
+more detailed answer.
 
-That being said, you are right that we differ from other systems such
-as OpenWRT in that we don't try to generate out of the box something
-that looks like a product. We simply package existing open-source
-software, make it easy to build all of them together, but we leave it
-to the user to add the product/project specific additions such as web
-interface, custom applications, etc.
-
-Nikolay: we provide packages for many web servers, and also for many
-Javascript libraries, which you can use to build your own web interface.
+Please read http://www.catb.org/esr/faqs/smart-questions.html#beprecise.
 
 Best regards,
 
