@@ -1,58 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Aug 2015 17:51:41 +0200
-Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
-Message-ID: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Thu, 20 Aug 2015 17:59:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: add SysV init script
+Message-ID: <1440086344-100325-1-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Too often the question is raised, that ipkg, opkg and rpm do not work,
-and users complain they can not install packages.
-
-Even though we do have a clear and clearly explained section in our
-manual, people do not read it (when will users read manuals? sigh...).
-
-So, add a big fat comment about ipkg/opkg/rpm, that Buildroot does not
-generate binary packages and does not provide any package database for
-any of those package manager.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
 ---
-Please note the little dirty trick to avoid kconfig eating up all spaces
-on empty lines: the first space in those is U+00A0 (NO-BREAK SPACE). It
-differs from the legacy menu, where we use a single '*' to avoid that.
----
- package/Config.in | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/rng-tools/S21rngd      | 48 ++++++++++++++++++++++++++++++++++++++++++
+ package/rng-tools/rng-tools.mk |  5 +++++
+ 2 files changed, 53 insertions(+)
+ create mode 100755 package/rng-tools/S21rngd
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..c32c989 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1371,6 +1371,19 @@ endif
- endmenu
+diff --git a/package/rng-tools/S21rngd b/package/rng-tools/S21rngd
+new file mode 100755
+index 0000000..09e23c0
+--- /dev/null
++++ b/package/rng-tools/S21rngd
+@@ -0,0 +1,48 @@
++#!/bin/sh
++
++NAME="rngd"
++DAEMON="/usr/sbin/${NAME}"
++DAEMON_ARGS=""
++CFG_FILE="/etc/default/${NAME}"
++PID_FILE="/var/run/${NAME}.pid"
++
++# Read configuration variable file if it is present
++[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
++
++start()
++{
++	echo -n "Starting ${NAME}: "
++	start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS} &&
++			echo "done" || echo "failed"
++}
++
++stop()
++{
++	echo -n "Stopping ${NAME}: "
++	# This daemon does not exit properly with the default TERM signal unless
++	# it's forced to work by something reading /dev/random. Killing it and
++	# removing its PID file is more straightforward.
++	if start-stop-daemon -K -q -s KILL -p "${PID_FILE}" -n "${NAME}"; then
++		rm -f "${PID_FILE}"
++		echo "done"
++	else
++		echo "failed"
++	fi
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		stop
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}" >&2
++		exit 1
++		;;
++esac
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 8648c4f..fc656ef 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -21,6 +21,11 @@ else
+ RNG_TOOLS_CONF_OPTS += --without-libgcrypt
+ endif
  
- menu "Package managers"
-+comment "------------------------------------------------------------------------"
-+comment "Please note:                                                            "
-+comment "- Buildroot does *not* generate binary packages,                        "
-+comment "- Buildroot does *not* install any package database.                    "
-+# First space is U+00A0 (NO-BREAK SPACE), otherwise kconfig eats
-+# up all spaces:
-+comment "?                                                                       "
-+comment "It is up to you to provide those by yourself if you want                "
-+comment "to use any of those package managers.                                   "
-+comment "?                                                                       "
-+comment "See the manual:                                                         "
-+comment "http://buildroot.org/downloads/manual/manual.html#faq-no-binary-packages"
-+comment "------------------------------------------------------------------------"
- 	source "package/ipkg/Config.in"
- 	source "package/opkg/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++define RNG_TOOLS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
++		$(TARGET_DIR)/etc/init.d/S21rngd
++endef
++
+ define RNG_TOOLS_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/rng-tools/rngd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rngd.service
 -- 
-1.9.1
+2.1.4
