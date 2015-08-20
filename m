@@ -1,43 +1,35 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 20 Aug 2015 08:41:34 +0000
-Subject: [Buildroot] [PATCH] boost: fix build on ARC
-In-Reply-To: <20150819230401.61f3b67c@free-electrons.com>
-References: <1440008812-13384-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87zj1n6lnv.fsf@dell.be.48ers.dk>
- <20150819230401.61f3b67c@free-electrons.com>
-Message-ID: <4881796E12491D4BB15146FE0209CE64657844D2@DE02WEMBXB.internal.synopsys.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 20 Aug 2015 12:31:15 +0100
+Subject: [Buildroot] Analysis of build results for 2015-08-18
+In-Reply-To: <87k2sq7aal.fsf@dell.be.48ers.dk>
+References: <20150819063013.E74B810154B@stock.ovh.net>
+ <20150819224105.2993bbe5@free-electrons.com>
+ <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
+ <87k2sq7aal.fsf@dell.be.48ers.dk>
+Message-ID: <CA+BsyQ4AxQyav9w6euXvrRXNUFMhTkeCXNN0gLz4r92pfsGDOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, Thomas,
+[libpam]
 
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: 20 ??????? 2015 ?. 0:04
-> To: Peter Korsgaard
-> Cc: buildroot at uclibc.org; Alexey Brodkin
-> Subject: Re: [PATCH] boost: fix build on ARC
-> 
-> Peter,
-> 
-> On Wed, 19 Aug 2015 22:57:56 +0200, Peter Korsgaard wrote:
-> > >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> >
-> >  > This commit adds a patch to Boost to make it use the eventfd()
-> >  > function provided by the C library when uClibc is used, rather than
-> >  > falling back to using directly the __NR_eventfd system call. This
-> >  > fixes the build on ARC, which doesn't define __NR_eventfd.
-> >
-> > What does it then do? Only __NR_eventfd2?
+>  > I will try to send an RFC patch tomorrow, it might take an iteration
+>  > or two to get it right. This might be a case where it is appropriate
+>  > to disable libpam + musl in the coming release.
+>
+> For 2015.08 I would prefer to just disable it for musl. In general, we
+> want to carry as few / small patches as possible - So if we can work
+> with upstream to get these included that would be very good.
 
-In case of ARC as being one of very few architectures that closely follow kernel's UAPI
-we don't support lots of obsolete things and __NR_eventfd is one of them.
-And indeed __NR_eventfd2 is supported.
+Okay, will I send a patch to disable with musl for the short term ?
 
-For a bit more details pls refer to this explanation:
-http://lists.boost.org/Archives/boost/2015/07/224257.php
+In the longer term - this could get complicated. There are 9 patches
+in buildroot already against linux-pam and none have the
+upstream-status marked :(. Also, we are two releases (= two years)
+behind the upstream. I think I'll need to review all of the buildroot
+patches to see if they've made it up there, and look at doing a
+version bump to the latest.
 
--Alexey
+Brendan
