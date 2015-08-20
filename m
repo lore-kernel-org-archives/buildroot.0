@@ -1,49 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Aug 2015 22:43:56 +0200
-Subject: [Buildroot] [PATCH v4 2015.08 3/4] Makefile: implement a
- size-stats target
-In-Reply-To: <CAMQcK5KM=uRUNOZSqu1vieRe4rc5c8+X6WJE5=M_PFxdbo-42w@mail.gmail.com>
-References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1432591007-27689-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAMQcK5KM=uRUNOZSqu1vieRe4rc5c8+X6WJE5=M_PFxdbo-42w@mail.gmail.com>
-Message-ID: <20150820224356.12a399bb@free-electrons.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Thu, 20 Aug 2015 22:55:58 +0200
+Subject: [Buildroot] [PATCH 2/3] package/dhcp/S80dhcp-server: support extra
+	options
+In-Reply-To: <1440104159-117050-1-git-send-email-benoit@wsystem.com>
+References: <1440104159-117050-1-git-send-email-benoit@wsystem.com>
+Message-ID: <1440104159-117050-2-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan,
+Add an OPTIONS configuration variable in order to make it possible to
+pass custom extra options to dhcpd.
 
-On Thu, 20 Aug 2015 07:42:39 -0500, Ryan Barnett wrote:
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+---
+ package/dhcp/S80dhcp-server | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> > +size-stats:
-> > +       $(Q)mkdir -p $(GRAPHS_DIR)
-> > +       $(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
-> > +               --graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
-> > +               --file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
-> > +               --package-size-csv $(BASE_DIR)/build/package-size-stats.csv \
-> > +               --skeleton-path $(TARGET_SKELETON)
-> 
-> In order to make this patch series to continue to work with the recent
-> addition of the skeleton package, the --skeleton-path variable needs
-> to be updated to:
-> 
->    --skeleton-path $(SKELETON_PATH)
-> 
-> I don't know if you have already updated this or not in your patch
-> series but this change needs to be in order to have the graph
-> statistics work.
-
-I haven't had the time to update the series unfortunately. However, now
-that the skeleton is a real package, I believe all the special handling
-of the skeleton can be removed from this size-stats mechanism. It will
-simply be handled as a normal package.
-
-Best regards,
-
-Thomas
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index b9c47ba..ec4aad5 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -7,6 +7,9 @@
+ #       Separate multiple interfaces with spaces, e.g. "eth0 eth1".
+ INTERFACES=""
+ 
++# Additional options that are passed to the DHCP server daemon?
++OPTIONS=""
++
+ # Read configuration variable file if it is present
+ CFG_FILE="/etc/default/dhcpd"
+ [ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
+@@ -21,7 +24,7 @@ case "$1" in
+ 		echo -n "Starting DHCP server: "
+ 		test -d /var/lib/dhcp/ || mkdir -p /var/lib/dhcp/
+ 		test -f /var/lib/dhcp/dhcpd.leases || touch /var/lib/dhcp/dhcpd.leases
+-		start-stop-daemon -S -x /usr/sbin/dhcpd -- -q $INTERFACES
++		start-stop-daemon -S -x /usr/sbin/dhcpd -- -q $OPTIONS $INTERFACES
+ 		[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 		;;
+ 	stop)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
