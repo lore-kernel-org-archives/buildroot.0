@@ -1,70 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 20 Aug 2015 20:02:48 +0200
-Subject: [Buildroot] [PATCH/next 4/4] package/kodi-visualisation-waveforhue:
-	bump version
-In-Reply-To: <1440093768-18254-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1440093768-18254-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1440093768-18254-4-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 20 Aug 2015 20:02:45 +0200
+Subject: [Buildroot] [PATCH/next 1/4] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.6.4
+Message-ID: <1440093768-18254-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove patch applied upstream:
-https://github.com/notspiff/visualization.waveforhue/commit/8824f4fa384693da0dfb3df5c30992bfe0fee9a4
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Adapt-xbmc_vis_dll.h-header-path.patch    | 26 ----------------------
- .../kodi-visualisation-waveforhue.mk               |  2 +-
- 2 files changed, 1 insertion(+), 27 deletions(-)
- delete mode 100644 package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch b/package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch
-deleted file mode 100644
-index baa69b4..0000000
---- a/package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From d80b2dfeab475b066004d831c0d28c0dab064ca6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 30 Jul 2015 10:24:53 +0200
--Subject: [PATCH] Adapt xbmc_vis_dll.h header path
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/Main_gles.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Main_gles.cpp b/src/Main_gles.cpp
--index 3c22bf8..f5666e9 100644
----- a/src/Main_gles.cpp
--+++ b/src/Main_gles.cpp
--@@ -38,7 +38,7 @@
-- #include <GLES2/gl2ext.h>
-- #endif
-- 
---#include "addons/include/xbmc_vis_dll.h"
--+#include "kodi/xbmc_vis_dll.h"
-- #include "VisGUIShader.h"
-- 
-- //th
---- 
--2.5.0
--
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index 5599065..28eeb4d 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 77c6929..85666cc 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.6.3
++MESA3D_HEADERS_VERSION = 10.6.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 459b7d6..453ee41 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-July/000165.html
+-sha256	58592e07c350cd2e8969b73fa83048c657a39fe2f13f3b88f5e5818fe2e4676d	mesa-10.6.3.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000166.html
++sha256	8f5ac103f0f503de2f7a985b0df349bd4ecdfe7f51c714be146fa5a9a3c07b77	mesa-10.6.4.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 67408a3..f2a1ffd 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--KODI_VISUALISATION_WAVEFORHUE_VERSION = 330b5d0432a976993d8ea3e13f01ec9bd3d8b02e
-+KODI_VISUALISATION_WAVEFORHUE_VERSION = e87d5c7d7e7504036b80af8bc89f4cf6489085fe
- KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPLv2+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.6.3
++MESA3D_VERSION = 10.6.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.1.4
