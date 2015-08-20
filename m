@@ -1,16 +1,45 @@
-From: Hmidi Slim <hmidi.slim1@gmail.com>
-Date: Thu, 20 Aug 2015 15:53:09 +0200
-Subject: [Buildroot] opkg not working
-Message-ID: <CA+yqE7-nV0PWLiuthGcjuQo6-k+JqygMNxj_URMMup=Fo76PzA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 20 Aug 2015 16:22:11 +0200
+Subject: [Buildroot] disabling linux-pam on musl
+In-Reply-To: <CA+BsyQ7_19evrfPvJXoFLSYuUaRk-kQxwYWjkULOCsBwBbGpCQ@mail.gmail.com>
+ (Brendan Heading's message of "Thu, 20 Aug 2015 13:35:00 +0100")
+References: <CA+BsyQ7_19evrfPvJXoFLSYuUaRk-kQxwYWjkULOCsBwBbGpCQ@mail.gmail.com>
+Message-ID: <87bne26nvw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I added the opkg and ipkg on the buildroot configuration but when I connect
-to Beagle Bone Black and I run okg-cl install <name_package>.It doesn't
-work.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150820/247b1bd2/attachment.html>
+>>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
+
+ > Hi guys,
+ > I was about to send a patch disabling linux-pam when musl is being
+ > used. I guess this means that we should also disable its dependencies
+ > on musl too ?
+
+Indeed.
+
+ > By my reckoning this means disabling the following packages musl.
+ > These implicitly turn on linux-pam.
+
+ > openvmtools
+
+Only the pam suboption.
+
+> python-pam
+ > rsh-redone
+
+Only the rlogind + rshd suboptions.
+
+> util-linux
+
+Only the chfn/chsh + login utilities suboptions.
+
+ > Does that sound sane ?
+
+Yes, except for the above.
+
+ 
+-- 
+Bye, Peter Korsgaard
