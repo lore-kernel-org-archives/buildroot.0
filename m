@@ -1,69 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Aug 2015 10:02:57 +0200
-Subject: [Buildroot] [PATCH 1/1] libpam-tacplus: new package
-In-Reply-To: <CAMQcK5JaQx3fVKL0T5CSg+nWmzN+VSyAP4prY4ttaD2HAcDQYQ@mail.gmail.com>
-References: <1440017226-14463-1-git-send-email-giovanni.zantedeschi@datacom.ind.br>
- <CAMQcK5JaQx3fVKL0T5CSg+nWmzN+VSyAP4prY4ttaD2HAcDQYQ@mail.gmail.com>
-Message-ID: <20150820100257.390721eb@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 20 Aug 2015 08:26:52 +0000
+Subject: [Buildroot] [PATCH] boost: fix build on ARC
+In-Reply-To: <1440008812-13384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1440008812-13384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <4881796E12491D4BB15146FE0209CE646578420F@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, Giovanni,
+Hi Thomas,
 
-On Wed, 19 Aug 2015 17:06:00 -0500, Ryan Barnett wrote:
-
-> > diff --git a/package/libpam-tacplus/Config.in b/package/libpam-tacplus/Config.in
-> > new file mode 100644
-> > index 0000000..88d10ff
-> > --- /dev/null
-> > +++ b/package/libpam-tacplus/Config.in
-> > @@ -0,0 +1,5 @@
-> > + config BR2_PACKAGE_LIBPAM_TACPLUS
-> > +        bool "libpam-tacplus"
-> > +        help
-> > +          Lib needed to use pam-tacplus
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: 19 ??????? 2015 ?. 21:27
+> To: buildroot at uclibc.org
+> Cc: Alexey Brodkin; Thomas Petazzoni
+> Subject: [PATCH] boost: fix build on ARC
 > 
-> Would spell 'Library' out completely. It would also be good if you
-> could link to the projects homepage as well.
-
-Agreed, but I believe the description could also be improved by
-copy/pasting more from the upstream website:
-
-	  TACACS+ protocol client library and PAM module in C. This PAM
-	  module support authentication, authorization (account
-	  management) and accounting (session management)performed
-	  using TACACS+ protocol designed by Cisco.
-
-> > +LIBPAM_TACPLUS_INSTALL_STAGING = YES
-> > +LIBPAM_TACPLUS_AUTORECONF = YES
-
-Please add a comment above this line:
-
-# Fetching from github, we need to generate the configure script
-
-> > +LIBPAM_TACPLUS_CONF_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)"
+> This commit adds a patch to Boost to make it use the eventfd() function provided by the C library when uClibc is used, rather than
+> falling back to using directly the __NR_eventfd system call. This fixes the build on ARC, which doesn't define __NR_eventfd.
 > 
-> I'm not sure if this is needed but I could definitely be wrong since I
-> haven't had a chance to dig into the package. It seems like this is
-> something that buildroot's autotools package infrastructure should
-> take care of passing into in order to ensure that it using the correct
-> compiler.
+> The original problem is that uClibc fakes to be glibc 2.2, which didn't had eventfd(), so Boost makes the system call manually. uClibc-ng,
+> in its next release, will pretend to be glibc
+> 2.10 (see
+> http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=4ff3a6c8eb91db71d6dc3d2932b66e848bd20ac3),
+> which will also fix the problem, but requires bumping the uClibc version, rebuilding the external toolchains, and so on.
+> 
+> Ideally, Boost should be doing a compile test to detect if eventfd() is available or not, but the Boost build system is so brain-damage
+> that doing so would require way too much effort.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/22b/22b710346d2cd78b7b51cdccd18d670bb6ac5d24/
+>   and many similar build failures
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/boost/0004-fix-uclibc-eventfd.patch | 38 +++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/boost/0004-fix-uclibc-eventfd.patch
+> 
+> diff --git a/package/boost/0004-fix-uclibc-eventfd.patch b/package/boost/0004-fix-uclibc-eventfd.patch
+> new file mode 100644
+> index 0000000..1b7eb87
+> --- /dev/null
+> +++ b/package/boost/0004-fix-uclibc-eventfd.patch
+> @@ -0,0 +1,38 @@
+> +Use eventfd() function with uClibc
+> +
+> +The Boost eventfd code either directly makes the eventfd system call
+> +using __NR_eventfd (when __GLIBC_MINOR is less than 8), or otherwise
+> +uses the eventfd() function provided by the C library.
+> +
+> +However, since uClibc pretends to be glibc 2.2, the Boost eventfd code
+> +directly uses the system call. While it works fine on most
+> +architectures, it doesn't on ARC since __NR_eventfd is not defined on
+> +this architecture. However, eventfd() is properly implemented.
+> +
+> +So, this patch adjusts the logic used by Boost to consider uClibc as a
+> +C library providing the eventfd() function.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +
+> +Index: b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+> +===================================================================
+> +--- a/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+> ++++ b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
+> +@@ -23,7 +23,7 @@
+> + #include <sys/stat.h>
+> + #include <sys/types.h>
+> + #include <fcntl.h>
+> +-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+> ++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+> + # include <asm/unistd.h>
+> + #else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8  # include
+> +<sys/eventfd.h> @@ -46,7 +46,7 @@
+> +
+> + void eventfd_select_interrupter::open_descriptors()
+> + {
+> +-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
+> ++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
+> +   write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
+> +   if (read_descriptor_ != -1)
+> +   {
+> --
+> 2.5.0
 
-The package is using autoconf, but not automake: it uses a hand-written
-Makefile. Due to this, passing some variable at build time might be
-required. However, it would be useful to try something like:
+Even though it's good to have this patch for fixing Boost building I'm not sure
+what this hack causes in runtime. Remember I mentioned these checks for
+GLIBC version are spread all around their sources.
 
-LIBPAM_TACPLUS_CONF_ENV = $(TARGET_CONFIGURE_OPTS)
+Anyways I see it is already applied so let's live with it for now.
+And I assume once:
+ [1] ARC switches from GitHub based uClibc  to uClibc-ng in Buildroot
+ [2] uClibc-ng bumps to 1.0.6
+we'll get rid of that patch, correct?
 
-instead.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Alexey
