@@ -1,182 +1,241 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Aug 2015 00:01:28 +0200
-Subject: [Buildroot] [git commit branch/next] configs/mpc8315erdb: bump to
-	the latest and greatest versions
-Message-ID: <20150820220203.B13DB7FCC5@busybox.osuosl.org>
+Date: Fri, 21 Aug 2015 00:01:45 +0200
+Subject: [Buildroot] [git commit branch/next] configs/p1010rdb: bump to the
+	latest and greatest versions
+Message-ID: <20150820220203.C026A81EE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4136ea9278bc41f7c0b6afa8f7582b58f510b65a
+commit: http://git.buildroot.net/buildroot/commit/?id=20bcb278ebd5e41230e9b128e657b9b5d0547aa0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/freescale/mpc8315erdb/linux-3.18.config |   92 -------------------------
- board/freescale/mpc8315erdb/linux-4.1.config  |   48 +++++++++++++
- configs/freescale_mpc8315erdb_defconfig       |    8 +-
- 3 files changed, 52 insertions(+), 96 deletions(-)
+ board/freescale/p1010rdb/linux-3.18.config |  129 ----------------------------
+ board/freescale/p1010rdb/linux-4.1.config  |   70 +++++++++++++++
+ configs/freescale_p1010rdb_pa_defconfig    |    8 +-
+ 3 files changed, 74 insertions(+), 133 deletions(-)
 
-diff --git a/board/freescale/mpc8315erdb/linux-3.18.config b/board/freescale/mpc8315erdb/linux-3.18.config
+diff --git a/board/freescale/p1010rdb/linux-3.18.config b/board/freescale/p1010rdb/linux-3.18.config
 deleted file mode 100644
-index a994706..0000000
---- a/board/freescale/mpc8315erdb/linux-3.18.config
+index c48c4fb..0000000
+--- a/board/freescale/p1010rdb/linux-3.18.config
 +++ /dev/null
-@@ -1,92 +0,0 @@
+@@ -1,129 +0,0 @@
+-CONFIG_PPC_85xx=y
+-CONFIG_PHYS_64BIT=y
 -CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_AUDIT=y
+-CONFIG_IRQ_DOMAIN_DEBUG=y
 -CONFIG_NO_HZ=y
 -CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
 -CONFIG_LOG_BUF_SHIFT=14
 -CONFIG_BLK_DEV_INITRD=y
 -CONFIG_EXPERT=y
--# CONFIG_KALLSYMS is not set
+-CONFIG_KALLSYMS_ALL=y
 -CONFIG_MODULES=y
 -CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODULE_FORCE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
 -# CONFIG_BLK_DEV_BSG is not set
--CONFIG_PARTITION_ADVANCED=y
--# CONFIG_PPC_CHRP is not set
--# CONFIG_PPC_PMAC is not set
--CONFIG_PPC_83xx=y
--CONFIG_MPC831x_RDB=y
+-CONFIG_P1010_RDB=y
+-CONFIG_HIGHMEM=y
+-CONFIG_SWIOTLB=y
+-CONFIG_FORCE_MAX_ZONEORDER=12
 -CONFIG_PCI=y
+-CONFIG_PCI_MSI=y
+-CONFIG_RAPIDIO=y
 -CONFIG_NET=y
 -CONFIG_PACKET=y
 -CONFIG_UNIX=y
+-CONFIG_XFRM_USER=y
+-CONFIG_NET_KEY=y
 -CONFIG_INET=y
 -CONFIG_IP_MULTICAST=y
+-CONFIG_IP_ADVANCED_ROUTER=y
+-CONFIG_IP_MULTIPLE_TABLES=y
+-CONFIG_IP_ROUTE_MULTIPATH=y
+-CONFIG_IP_ROUTE_VERBOSE=y
 -CONFIG_IP_PNP=y
 -CONFIG_IP_PNP_DHCP=y
 -CONFIG_IP_PNP_BOOTP=y
--CONFIG_SYN_COOKIES=y
--# CONFIG_INET_LRO is not set
--# CONFIG_IPV6 is not set
+-CONFIG_IP_PNP_RARP=y
+-CONFIG_NET_IPIP=y
+-CONFIG_IP_MROUTE=y
+-CONFIG_IP_PIMSM_V1=y
+-CONFIG_IP_PIMSM_V2=y
+-CONFIG_INET_ESP=y
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-CONFIG_IPV6=y
 -CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--# CONFIG_FW_LOADER is not set
+-CONFIG_DEVTMPFS=y
 -CONFIG_MTD=y
 -CONFIG_MTD_CMDLINE_PARTS=y
 -CONFIG_MTD_BLOCK=y
+-CONFIG_FTL=y
 -CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_INTELEXT=y
 -CONFIG_MTD_CFI_AMDSTD=y
 -CONFIG_MTD_PHYSMAP_OF=y
 -CONFIG_MTD_NAND=y
 -CONFIG_MTD_NAND_FSL_ELBC=y
+-CONFIG_MTD_NAND_FSL_IFC=y
 -CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_NBD=y
 -CONFIG_BLK_DEV_RAM=y
--CONFIG_BLK_DEV_RAM_SIZE=32768
+-CONFIG_BLK_DEV_RAM_SIZE=131072
+-CONFIG_EEPROM_LEGACY=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_CHR_DEV_ST=y
+-CONFIG_BLK_DEV_SR=y
 -CONFIG_CHR_DEV_SG=y
--CONFIG_SCSI_SPI_ATTRS=y
+-CONFIG_SCSI_LOGGING=y
 -CONFIG_ATA=y
 -CONFIG_SATA_FSL=y
--CONFIG_MD=y
--CONFIG_BLK_DEV_MD=y
--CONFIG_MD_LINEAR=y
--CONFIG_MD_RAID0=y
--CONFIG_MD_RAID1=y
 -CONFIG_NETDEVICES=y
+-CONFIG_DUMMY=y
 -CONFIG_GIANFAR=y
--CONFIG_E100=y
--# CONFIG_INPUT_MOUSEDEV is not set
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--# CONFIG_VT is not set
+-CONFIG_VITESSE_PHY=y
+-CONFIG_FIXED_PHY=y
 -CONFIG_SERIAL_8250=y
 -CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_HW_RANDOM=y
+-CONFIG_SERIAL_8250_NR_UARTS=2
+-CONFIG_SERIAL_8250_RUNTIME_UARTS=2
+-CONFIG_SERIAL_8250_MANY_PORTS=y
+-CONFIG_SERIAL_8250_DETECT_IRQ=y
+-CONFIG_SERIAL_8250_RSA=y
+-CONFIG_NVRAM=y
 -CONFIG_I2C=y
 -CONFIG_I2C_CHARDEV=y
 -CONFIG_I2C_MPC=y
 -CONFIG_SPI=y
--CONFIG_SPI_BITBANG=y
--CONFIG_WATCHDOG=y
--# CONFIG_USB_HID is not set
+-CONFIG_SPI_FSL_SPI=y
+-CONFIG_SPI_FSL_ESPI=y
+-# CONFIG_HWMON is not set
 -CONFIG_USB=y
 -CONFIG_USB_MON=y
 -CONFIG_USB_EHCI_HCD=y
 -CONFIG_USB_EHCI_FSL=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_OHCI_HCD_PPC_OF_BE=y
--CONFIG_USB_UHCI_HCD=y
 -CONFIG_USB_STORAGE=y
--CONFIG_USB_GADGET=y
--CONFIG_USB_ETH=m
+-CONFIG_MMC=y
+-CONFIG_MMC_SDHCI=y
+-CONFIG_MMC_SDHCI_PLTFM=y
+-CONFIG_MMC_SDHCI_OF_ESDHC=y
+-CONFIG_EDAC=y
+-CONFIG_EDAC_MM_EDAC=y
 -CONFIG_RTC_CLASS=y
--CONFIG_RTC_INTF_DEV_UIE_EMUL=y
--CONFIG_RTC_DRV_DS1307=y
--CONFIG_EXT2_FS=y
--CONFIG_EXT3_FS=y
--# CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
+-CONFIG_RTC_DRV_CMOS=y
+-CONFIG_DMADEVICES=y
+-CONFIG_FSL_DMA=y
+-CONFIG_EXT4_FS=y
+-CONFIG_MSDOS_FS=m
+-CONFIG_VFAT_FS=y
 -CONFIG_PROC_KCORE=y
 -CONFIG_TMPFS=y
 -CONFIG_JFFS2_FS=y
+-CONFIG_SQUASHFS=y
 -CONFIG_NFS_FS=y
 -CONFIG_NFS_V4=y
 -CONFIG_ROOT_NFS=y
+-CONFIG_NFSD=y
+-CONFIG_CRC_T10DIF=y
+-CONFIG_DEBUG_INFO=y
+-CONFIG_DEBUG_FS=y
 -CONFIG_DETECT_HUNG_TASK=y
 -CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_SHA256=y
+-CONFIG_CRYPTO_SHA512=y
 -# CONFIG_CRYPTO_ANSI_CPRNG is not set
-diff --git a/board/freescale/mpc8315erdb/linux-4.1.config b/board/freescale/mpc8315erdb/linux-4.1.config
+-CONFIG_CRYPTO_DEV_FSL_CAAM=y
+diff --git a/board/freescale/p1010rdb/linux-4.1.config b/board/freescale/p1010rdb/linux-4.1.config
 new file mode 100644
-index 0000000..c9f17b7
+index 0000000..2de430c
 --- /dev/null
-+++ b/board/freescale/mpc8315erdb/linux-4.1.config
-@@ -0,0 +1,48 @@
++++ b/board/freescale/p1010rdb/linux-4.1.config
+@@ -0,0 +1,70 @@
++CONFIG_PPC_85xx=y
++CONFIG_PHYS_64BIT=y
 +CONFIG_SYSVIPC=y
 +CONFIG_NO_HZ=y
 +CONFIG_HIGH_RES_TIMERS=y
 +CONFIG_LOG_BUF_SHIFT=14
 +CONFIG_EXPERT=y
 +CONFIG_MODULES=y
-+# CONFIG_PPC_CHRP is not set
-+# CONFIG_PPC_PMAC is not set
-+CONFIG_PPC_83xx=y
-+CONFIG_MPC831x_RDB=y
++CONFIG_P1010_RDB=y
++CONFIG_HIGHMEM=y
++CONFIG_SWIOTLB=y
++CONFIG_FORCE_MAX_ZONEORDER=12
 +CONFIG_PCI=y
++CONFIG_PCI_MSI=y
++CONFIG_RAPIDIO=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
 +CONFIG_INET=y
++CONFIG_DEVTMPFS=y
 +CONFIG_MTD=y
 +CONFIG_MTD_CMDLINE_PARTS=y
 +CONFIG_MTD_BLOCK=y
++CONFIG_FTL=y
 +CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_INTELEXT=y
 +CONFIG_MTD_CFI_AMDSTD=y
 +CONFIG_MTD_PHYSMAP_OF=y
 +CONFIG_MTD_NAND=y
 +CONFIG_MTD_NAND_FSL_ELBC=y
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_MD=y
-+CONFIG_MD_LINEAR=y
-+CONFIG_MD_RAID0=y
-+CONFIG_MD_RAID1=y
++CONFIG_MTD_NAND_FSL_IFC=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_ATA=y
++CONFIG_SATA_FSL=y
 +CONFIG_NETDEVICES=y
 +CONFIG_GIANFAR=y
-+CONFIG_E100=y
++CONFIG_VITESSE_PHY=y
++CONFIG_FIXED_PHY=y
 +CONFIG_SERIAL_8250=y
 +CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_NR_UARTS=2
++CONFIG_SERIAL_8250_RUNTIME_UARTS=2
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_DETECT_IRQ=y
++CONFIG_SERIAL_8250_RSA=y
++CONFIG_NVRAM=y
 +CONFIG_I2C=y
 +CONFIG_I2C_CHARDEV=y
 +CONFIG_I2C_MPC=y
 +CONFIG_SPI=y
-+CONFIG_SPI_BITBANG=y
-+CONFIG_WATCHDOG=y
++CONFIG_SPI_FSL_SPI=y
++CONFIG_SPI_FSL_ESPI=y
 +CONFIG_USB=y
 +CONFIG_USB_EHCI_HCD=y
 +CONFIG_USB_EHCI_FSL=y
++CONFIG_USB_STORAGE=y
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_SDHCI_OF_ESDHC=y
 +CONFIG_RTC_CLASS=y
-+CONFIG_RTC_INTF_DEV_UIE_EMUL=y
-+CONFIG_RTC_DRV_DS1307=y
++CONFIG_RTC_DRV_CMOS=y
++CONFIG_DMADEVICES=y
++CONFIG_FSL_DMA=y
++CONFIG_EXT4_FS=y
 +CONFIG_TMPFS=y
 +CONFIG_JFFS2_FS=y
-+CONFIG_CRYPTO_DEV_TALITOS=y
-diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
-index 85417e5..4910ebe 100644
---- a/configs/freescale_mpc8315erdb_defconfig
-+++ b/configs/freescale_mpc8315erdb_defconfig
-@@ -12,15 +12,15 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
++CONFIG_SQUASHFS=y
++CONFIG_CRYPTO_DEV_FSL_CAAM=y
+diff --git a/configs/freescale_p1010rdb_pa_defconfig b/configs/freescale_p1010rdb_pa_defconfig
+index ff5ee06..699df2d 100644
+--- a/configs/freescale_p1010rdb_pa_defconfig
++++ b/configs/freescale_p1010rdb_pa_defconfig
+@@ -11,15 +11,15 @@ BR2_TARGET_ROOTFS_JFFS2_CUSTOM_EBSIZE=0x20000
  
  # Lock headers version to match and avoid breakage
  BR2_KERNEL_HEADERS_VERSION=y
@@ -191,8 +250,8 @@ index 85417e5..4910ebe 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-3.18.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-4.1.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/p1010rdb/linux-4.1.config"
  BR2_LINUX_KERNEL_UIMAGE=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="mpc8315erdb"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="p1010rdb-pa"
