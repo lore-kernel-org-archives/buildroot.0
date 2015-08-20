@@ -1,32 +1,198 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Aug 2015 00:01:55 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/mpc8315erdb: bump to the latest
- and greatest versions
-In-Reply-To: <1438693934-29672-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1438693934-29672-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150821000155.4c5cdd84@free-electrons.com>
+Date: Fri, 21 Aug 2015 00:01:28 +0200
+Subject: [Buildroot] [git commit branch/next] configs/mpc8315erdb: bump to
+	the latest and greatest versions
+Message-ID: <20150820220203.B13DB7FCC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=4136ea9278bc41f7c0b6afa8f7582b58f510b65a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue,  4 Aug 2015 10:12:13 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  board/freescale/mpc8315erdb/linux-3.18.config | 92 ---------------------------
->  board/freescale/mpc8315erdb/linux-4.1.config  | 48 ++++++++++++++
->  configs/freescale_mpc8315erdb_defconfig       |  8 +--
->  3 files changed, 52 insertions(+), 96 deletions(-)
->  delete mode 100644 board/freescale/mpc8315erdb/linux-3.18.config
->  create mode 100644 board/freescale/mpc8315erdb/linux-4.1.config
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/freescale/mpc8315erdb/linux-3.18.config |   92 -------------------------
+ board/freescale/mpc8315erdb/linux-4.1.config  |   48 +++++++++++++
+ configs/freescale_mpc8315erdb_defconfig       |    8 +-
+ 3 files changed, 52 insertions(+), 96 deletions(-)
 
-Both applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/freescale/mpc8315erdb/linux-3.18.config b/board/freescale/mpc8315erdb/linux-3.18.config
+deleted file mode 100644
+index a994706..0000000
+--- a/board/freescale/mpc8315erdb/linux-3.18.config
++++ /dev/null
+@@ -1,92 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_EXPERT=y
+-# CONFIG_KALLSYMS is not set
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PARTITION_ADVANCED=y
+-# CONFIG_PPC_CHRP is not set
+-# CONFIG_PPC_PMAC is not set
+-CONFIG_PPC_83xx=y
+-CONFIG_MPC831x_RDB=y
+-CONFIG_PCI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_SYN_COOKIES=y
+-# CONFIG_INET_LRO is not set
+-# CONFIG_IPV6 is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-# CONFIG_FW_LOADER is not set
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_AMDSTD=y
+-CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_FSL_ELBC=y
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_SIZE=32768
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_SPI_ATTRS=y
+-CONFIG_ATA=y
+-CONFIG_SATA_FSL=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=y
+-CONFIG_MD_LINEAR=y
+-CONFIG_MD_RAID0=y
+-CONFIG_MD_RAID1=y
+-CONFIG_NETDEVICES=y
+-CONFIG_GIANFAR=y
+-CONFIG_E100=y
+-# CONFIG_INPUT_MOUSEDEV is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-# CONFIG_VT is not set
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_MPC=y
+-CONFIG_SPI=y
+-CONFIG_SPI_BITBANG=y
+-CONFIG_WATCHDOG=y
+-# CONFIG_USB_HID is not set
+-CONFIG_USB=y
+-CONFIG_USB_MON=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_FSL=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_OHCI_HCD_PPC_OF_BE=y
+-CONFIG_USB_UHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_ETH=m
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_INTF_DEV_UIE_EMUL=y
+-CONFIG_RTC_DRV_DS1307=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-# CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V4=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_CRYPTO_PCBC=m
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+diff --git a/board/freescale/mpc8315erdb/linux-4.1.config b/board/freescale/mpc8315erdb/linux-4.1.config
+new file mode 100644
+index 0000000..c9f17b7
+--- /dev/null
++++ b/board/freescale/mpc8315erdb/linux-4.1.config
+@@ -0,0 +1,48 @@
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_EXPERT=y
++CONFIG_MODULES=y
++# CONFIG_PPC_CHRP is not set
++# CONFIG_PPC_PMAC is not set
++CONFIG_PPC_83xx=y
++CONFIG_MPC831x_RDB=y
++CONFIG_PCI=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_AMDSTD=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_FSL_ELBC=y
++CONFIG_MD=y
++CONFIG_BLK_DEV_MD=y
++CONFIG_MD_LINEAR=y
++CONFIG_MD_RAID0=y
++CONFIG_MD_RAID1=y
++CONFIG_NETDEVICES=y
++CONFIG_GIANFAR=y
++CONFIG_E100=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MPC=y
++CONFIG_SPI=y
++CONFIG_SPI_BITBANG=y
++CONFIG_WATCHDOG=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_FSL=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_INTF_DEV_UIE_EMUL=y
++CONFIG_RTC_DRV_DS1307=y
++CONFIG_TMPFS=y
++CONFIG_JFFS2_FS=y
++CONFIG_CRYPTO_DEV_TALITOS=y
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 85417e5..4910ebe 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -12,15 +12,15 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+ 
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.1"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="4.1.4"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-4.1.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="mpc8315erdb"
