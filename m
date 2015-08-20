@@ -1,110 +1,198 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Aug 2015 16:02:18 +0200
-Subject: [Buildroot] [git commit] rapidxml: new package
-Message-ID: <20150901083106.97F2B81E93@busybox.osuosl.org>
+Date: Fri, 21 Aug 2015 00:01:28 +0200
+Subject: [Buildroot] [git commit] configs/mpc8315erdb: bump to the latest
+	and greatest versions
+Message-ID: <20150901083107.6D0C6801E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a33bc3ad9d2c1d516988585113a7751251b8ba4
+commit: http://git.buildroot.net/buildroot/commit/?id=4136ea9278bc41f7c0b6afa8f7582b58f510b65a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas:
-  - Rewrap Config.in help text
-  - Indicate that the SHA256 hash has been locally calculated, and add
-    the MD5 and SHA1 hashes from SourceForge.
-  - Use downloads.sourceforge.net as the download site instead of
-    garr.dl.sourceforge.net, in order to use the SourceForge mirrors
-    properly, and be consistent with all other Buildroot packages
-    downloading stuff from SourceForge.
-  - Change the license from "MIT" to "Boost Software License 1.0 or
-    MIT" as indicated by the license.txt file.
-  - Change the <pkg>_EXTRACT_CMDS to remove the sub-directory created
-    by the .zip file extraction, and simplify the staging installation
-    step accordingly.]
-
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/rapidxml/Config.in     |   11 +++++++++++
- package/rapidxml/rapidxml.hash |    6 ++++++
- package/rapidxml/rapidxml.mk   |   27 +++++++++++++++++++++++++++
- 4 files changed, 45 insertions(+), 0 deletions(-)
+ board/freescale/mpc8315erdb/linux-3.18.config |   92 -------------------------
+ board/freescale/mpc8315erdb/linux-4.1.config  |   48 +++++++++++++
+ configs/freescale_mpc8315erdb_defconfig       |    8 +-
+ 3 files changed, 52 insertions(+), 96 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 47d14d7..3ab87cf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -918,6 +918,7 @@ menu "JSON/XML"
- 	source "package/libyaml/Config.in"
- 	source "package/mxml/Config.in"
- 	source "package/rapidjson/Config.in"
-+	source "package/rapidxml/Config.in"
- 	source "package/tinyxml/Config.in"
- 	source "package/tinyxml2/Config.in"
- 	source "package/xerces/Config.in"
-diff --git a/package/rapidxml/Config.in b/package/rapidxml/Config.in
+diff --git a/board/freescale/mpc8315erdb/linux-3.18.config b/board/freescale/mpc8315erdb/linux-3.18.config
+deleted file mode 100644
+index a994706..0000000
+--- a/board/freescale/mpc8315erdb/linux-3.18.config
++++ /dev/null
+@@ -1,92 +0,0 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_BLK_DEV_INITRD=y
+-CONFIG_EXPERT=y
+-# CONFIG_KALLSYMS is not set
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PARTITION_ADVANCED=y
+-# CONFIG_PPC_CHRP is not set
+-# CONFIG_PPC_PMAC is not set
+-CONFIG_PPC_83xx=y
+-CONFIG_MPC831x_RDB=y
+-CONFIG_PCI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_MULTICAST=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-CONFIG_IP_PNP_BOOTP=y
+-CONFIG_SYN_COOKIES=y
+-# CONFIG_INET_LRO is not set
+-# CONFIG_IPV6 is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-# CONFIG_FW_LOADER is not set
+-CONFIG_MTD=y
+-CONFIG_MTD_CMDLINE_PARTS=y
+-CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_CFI=y
+-CONFIG_MTD_CFI_AMDSTD=y
+-CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_FSL_ELBC=y
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_SIZE=32768
+-CONFIG_CHR_DEV_SG=y
+-CONFIG_SCSI_SPI_ATTRS=y
+-CONFIG_ATA=y
+-CONFIG_SATA_FSL=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=y
+-CONFIG_MD_LINEAR=y
+-CONFIG_MD_RAID0=y
+-CONFIG_MD_RAID1=y
+-CONFIG_NETDEVICES=y
+-CONFIG_GIANFAR=y
+-CONFIG_E100=y
+-# CONFIG_INPUT_MOUSEDEV is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-# CONFIG_VT is not set
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_MPC=y
+-CONFIG_SPI=y
+-CONFIG_SPI_BITBANG=y
+-CONFIG_WATCHDOG=y
+-# CONFIG_USB_HID is not set
+-CONFIG_USB=y
+-CONFIG_USB_MON=y
+-CONFIG_USB_EHCI_HCD=y
+-CONFIG_USB_EHCI_FSL=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_OHCI_HCD_PPC_OF_BE=y
+-CONFIG_USB_UHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_GADGET=y
+-CONFIG_USB_ETH=m
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_INTF_DEV_UIE_EMUL=y
+-CONFIG_RTC_DRV_DS1307=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-# CONFIG_EXT3_DEFAULTS_TO_ORDERED is not set
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_JFFS2_FS=y
+-CONFIG_NFS_FS=y
+-CONFIG_NFS_V4=y
+-CONFIG_ROOT_NFS=y
+-CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_CRYPTO_PCBC=m
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+diff --git a/board/freescale/mpc8315erdb/linux-4.1.config b/board/freescale/mpc8315erdb/linux-4.1.config
 new file mode 100644
-index 0000000..76b2248
+index 0000000..c9f17b7
 --- /dev/null
-+++ b/package/rapidxml/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_RAPIDXML
-+	bool "rapidxml"
-+	help
-+	  RapidXml is an attempt to create the fastest XML parser
-+	  possible, while retaining useability, portability and
-+	  reasonable W3C compatibility. It is an in-situ parser with
-+	  parsing speed approaching speed of strlen function executed
-+	  on the same data.
-+
-+	  http://sourceforge.net/projects/rapidxml/
-+	  https://en.wikipedia.org/wiki/RapidXml
-diff --git a/package/rapidxml/rapidxml.hash b/package/rapidxml/rapidxml.hash
-new file mode 100644
-index 0000000..81919f0
---- /dev/null
-+++ b/package/rapidxml/rapidxml.hash
-@@ -0,0 +1,6 @@
-+# From https://sourceforge.net/projects/rapidxml/files/rapidxml/rapidxml%201.13/
-+sha1 f5fd4fbc5ad7e96045313697811d65ea8089a950 rapidxml-1.13.zip
-+md5 7b4b42c9331c90aded23bb55dc725d6a rapidxml-1.13.zip
-+
-+# Locally calculated
-+sha256	c3f0b886374981bb20fabcf323d755db4be6dba42064599481da64a85f5b3571  rapidxml-1.13.zip
-diff --git a/package/rapidxml/rapidxml.mk b/package/rapidxml/rapidxml.mk
-new file mode 100644
-index 0000000..4356d8d
---- /dev/null
-+++ b/package/rapidxml/rapidxml.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# rapidxml
-+#
-+################################################################################
-+
-+RAPIDXML_VERSION = 1.13
-+RAPIDXML_SOURCE = rapidxml-$(RAPIDXML_VERSION).zip
-+RAPIDXML_SITE = http://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%20$(RAPIDXML_VERSION)/
-+RAPIDXML_LICENSE = Boost Software License 1.0 or MIT
-+RAPIDXML_LICENSE_FILES = license.txt
-+
-+# C++ headers only
-+RAPIDXML_INSTALL_TARGET = NO
-+RAPIDXML_INSTALL_STAGING = YES
-+
-+define RAPIDXML_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(DL_DIR)/$(RAPIDXML_SOURCE)
-+	mv $(@D)/rapidxml-$(RAPIDXML_VERSION)/* $(@D)/
-+	rmdir $(@D)/rapidxml-$(RAPIDXML_VERSION)
-+endef
-+
-+define RAPIDXML_INSTALL_STAGING_CMDS
-+	cp -dpfr $(@D)/*hpp $(STAGING_DIR)/usr/include
-+endef
-+
-+$(eval $(generic-package))
++++ b/board/freescale/mpc8315erdb/linux-4.1.config
+@@ -0,0 +1,48 @@
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_EXPERT=y
++CONFIG_MODULES=y
++# CONFIG_PPC_CHRP is not set
++# CONFIG_PPC_PMAC is not set
++CONFIG_PPC_83xx=y
++CONFIG_MPC831x_RDB=y
++CONFIG_PCI=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_AMDSTD=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_FSL_ELBC=y
++CONFIG_MD=y
++CONFIG_BLK_DEV_MD=y
++CONFIG_MD_LINEAR=y
++CONFIG_MD_RAID0=y
++CONFIG_MD_RAID1=y
++CONFIG_NETDEVICES=y
++CONFIG_GIANFAR=y
++CONFIG_E100=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MPC=y
++CONFIG_SPI=y
++CONFIG_SPI_BITBANG=y
++CONFIG_WATCHDOG=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_FSL=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_INTF_DEV_UIE_EMUL=y
++CONFIG_RTC_DRV_DS1307=y
++CONFIG_TMPFS=y
++CONFIG_JFFS2_FS=y
++CONFIG_CRYPTO_DEV_TALITOS=y
+diff --git a/configs/freescale_mpc8315erdb_defconfig b/configs/freescale_mpc8315erdb_defconfig
+index 85417e5..4910ebe 100644
+--- a/configs/freescale_mpc8315erdb_defconfig
++++ b/configs/freescale_mpc8315erdb_defconfig
+@@ -12,15 +12,15 @@ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+ 
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.18.1"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_DEFAULT_KERNEL_VERSION="4.1.4"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.1"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-3.18.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mpc8315erdb/linux-4.1.config"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="mpc8315erdb"
