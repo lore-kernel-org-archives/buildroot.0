@@ -1,38 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Aug 2015 09:59:06 +0200
-Subject: [Buildroot] rpi: image generation
-In-Reply-To: <55D501F6.6000909@wsystem.com>
-References: <55D501F6.6000909@wsystem.com>
-Message-ID: <20150820095906.0b2524c2@free-electrons.com>
+Date: Thu, 20 Aug 2015 10:02:57 +0200
+Subject: [Buildroot] [PATCH 1/1] libpam-tacplus: new package
+In-Reply-To: <CAMQcK5JaQx3fVKL0T5CSg+nWmzN+VSyAP4prY4ttaD2HAcDQYQ@mail.gmail.com>
+References: <1440017226-14463-1-git-send-email-giovanni.zantedeschi@datacom.ind.br>
+ <CAMQcK5JaQx3fVKL0T5CSg+nWmzN+VSyAP4prY4ttaD2HAcDQYQ@mail.gmail.com>
+Message-ID: <20150820100257.390721eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+Ryan, Giovanni,
 
-On Thu, 20 Aug 2015 00:23:50 +0200, Beno?t Th?baudeau wrote:
+On Wed, 19 Aug 2015 17:06:00 -0500, Ryan Barnett wrote:
 
-> I have local changes for the Raspberry Pi that can automatically generate an
-> image to be flashed on the SD card (e.g. with dd).
+> > diff --git a/package/libpam-tacplus/Config.in b/package/libpam-tacplus/Config.in
+> > new file mode 100644
+> > index 0000000..88d10ff
+> > --- /dev/null
+> > +++ b/package/libpam-tacplus/Config.in
+> > @@ -0,0 +1,5 @@
+> > + config BR2_PACKAGE_LIBPAM_TACPLUS
+> > +        bool "libpam-tacplus"
+> > +        help
+> > +          Lib needed to use pam-tacplus
 > 
-> This mechanism uses genimage, so no sudo is needed. It generates a FAT32
-> partition of 64 MiB and an ext4 partition that just fits its contents with a
-> small free space. I also have scripts to auto-expand the ext4 partition and FS
-> to fill the SD card.
-> 
-> Are you interested in any of this, or do you prefer to keep the current manual
-> approach that makes it possible to do just anything custom?
+> Would spell 'Library' out completely. It would also be good if you
+> could link to the projects homepage as well.
 
-I am interested in seeing more examples of genimage usage. I believe
-Vivien Didelot, who submitted the patch to use genimage for the
-Wandboard configuration, was also planning on submitting more genimage
-related patches.
+Agreed, but I believe the description could also be improved by
+copy/pasting more from the upstream website:
+
+	  TACACS+ protocol client library and PAM module in C. This PAM
+	  module support authentication, authorization (account
+	  management) and accounting (session management)performed
+	  using TACACS+ protocol designed by Cisco.
+
+> > +LIBPAM_TACPLUS_INSTALL_STAGING = YES
+> > +LIBPAM_TACPLUS_AUTORECONF = YES
+
+Please add a comment above this line:
+
+# Fetching from github, we need to generate the configure script
+
+> > +LIBPAM_TACPLUS_CONF_OPTS = CC="$(TARGET_CC)" LD="$(TARGET_LD)"
+> 
+> I'm not sure if this is needed but I could definitely be wrong since I
+> haven't had a chance to dig into the package. It seems like this is
+> something that buildroot's autotools package infrastructure should
+> take care of passing into in order to ensure that it using the correct
+> compiler.
+
+The package is using autoconf, but not automake: it uses a hand-written
+Makefile. Due to this, passing some variable at build time might be
+required. However, it would be useful to try something like:
+
+LIBPAM_TACPLUS_CONF_ENV = $(TARGET_CONFIGURE_OPTS)
+
+instead.
 
 Best regards,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
