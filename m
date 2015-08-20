@@ -1,86 +1,165 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Thu, 20 Aug 2015 15:14:09 -0700
-Subject: [Buildroot] bootm - "Starting kernel"
-In-Reply-To: <CA+BsyQ7GRYhUA-2aJ+4qxaFnr6g0740B9sxEkGhXNEQ84ct3bw@mail.gmail.com>
-References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474AD9614@svr-wa-exch1.atg.lc>
- <CA+BsyQ7GRYhUA-2aJ+4qxaFnr6g0740B9sxEkGhXNEQ84ct3bw@mail.gmail.com>
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD967E@svr-wa-exch1.atg.lc>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 20 Aug 2015 23:32:13 +0100
+Subject: [Buildroot] [PATCH v2 1/1] packages/linux-pam: disable when using
+	musl
+Message-ID: <1440109933-6123-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Fixes: http://autobuild.buildroot.net/results/e33/e337d69420ad00b2cc4017d639a31803926f2353/
 
+linux-pam needs some surgery to build under musl, so for the time being
+disable it until the issues are solved. Also disables dependent package
+python-pam, and dependent suboptions under openvmtools, rsh-redone and
+util-linux.
 
+---
+v1 -> v2 - added missing comments to document that packages require
+non-musl (ie uclibc or (e)glibc) toolchains.
+---
 
-Thanks for your suggestion. Please view my in-line replies.
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ package/linux-pam/Config.in   |  5 +++--
+ package/openvmtools/Config.in |  5 +++--
+ package/python-pam/Config.in  |  6 ++++--
+ package/rsh-redone/Config.in  | 10 ++++++----
+ package/util-linux/Config.in  | 10 ++++++----
+ 5 files changed, 22 insertions(+), 14 deletions(-)
 
-
-
-Tommy
-
-
-
------Original Message-----
-From: Brendan Heading [mailto:brendanheading at gmail.com]
-Sent: Thursday, August 20, 2015 12:08 PM
-To: Lee, Tommy
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] bootm - "Starting kernel"
-
-
-
-You seem to be setting your rootfs to /dev/sda in your u-boot command line option. This only makes sense if your root filesystem is an attached ATA or SCSI hard disk, which is probably not the case.
-
-
-
-Marvell?s DB-88F6820-GP board has four SDRAM devices and four SATA connectors. With no SATA devices connected, the Linux system in Marvell?s USB is bootable with root=/dev/sda1. You probably know the reason for the booting success.
-
-
-
-In my situation I suppose I need /dev/ram or /dev/ram0 to attach my root filesystem; I need not to use Marvell?s mtdparts string (spi_flash:4m(boot),-(spi-rootfs) .
-
-
-
-Comment please.
-
-
-
-The fix for this depends on what you intend to do. You can either download the rootfs image separately, or you can bake it into the kernel, or you can flash it separately to an MTD partition and then mount it when the kernel starts. Personally I prefer to start out with the initramfs baked into the kernel.
-
-
-
-The kernel binary format is selected as zImage for the U-Boot bootz command. For baking my root filesystem.into the kernel, I suppose my root filesystem?s compression method should be ?no compression?.
-
-
-
-Comment please.
-
-
-
-Following is the ?filesystem images? configuration I am going to use. I hope you see the configuration is proper.
-
-?..
-
--*- cpio the root filesystem (for use as an initial RAM filesyste
-
-Compression method (no compression)  --->
-
-
-
-[*] initial RAM filesystem linked into linux kernel
-
-?..
-
-
-
-Brendan
-
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150820/56e3c8e5/attachment.html>
+diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
+index 6b92886..04618be 100644
+--- a/package/linux-pam/Config.in
++++ b/package/linux-pam/Config.in
+@@ -10,11 +10,12 @@ config BR2_PACKAGE_LINUX_PAM
+ 	# https://lists.fedorahosted.org/pipermail/linux-pam-commits/2012-February/000105.html
+ 	# for details.
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
+ 	help
+ 	  A Security Framework that Provides Authentication for Applications
+ 
+ 	  http://linux-pam.org
+ 
+-comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library"
++comment "linux-pam needs a uClibc or (e)glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 8e22eff..091f640 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -36,11 +36,12 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
+ 	# linux-pam needs locale and wchar, but we already have this
+ 	# dependency on the main symbol, above.
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
+ 	help
+ 	  Support for PAM in openvmtools
+ 
+-comment "PAM support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "PAM support needs a uClibc or (e)glibc toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ endif
+ 
+diff --git a/package/python-pam/Config.in b/package/python-pam/Config.in
+index 6c7bc63..b23a8e0 100644
+--- a/package/python-pam/Config.in
++++ b/package/python-pam/Config.in
+@@ -1,6 +1,7 @@
+-comment "python-pam needs a toolchain w/ wchar, locale, dynamic library"
++comment "python-pam needs a uClibc or (e)glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on BR2_PACKAGE_PYTHON
+-	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
++	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
++		BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_PYTHON_PAM
+ 	bool "python-pam"
+@@ -8,6 +9,7 @@ config BR2_PACKAGE_PYTHON_PAM
+ 	depends on BR2_ENABLE_LOCALE # linux-pam
+ 	depends on BR2_USE_WCHAR # linux-pam
+ 	depends on !BR2_STATIC_LIBS # linux-pam
++	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  PAM (Pluggable Authentication Module) bindings for Python.
+diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
+index 218b47c..4bd0c19 100644
+--- a/package/rsh-redone/Config.in
++++ b/package/rsh-redone/Config.in
+@@ -16,11 +16,12 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ 	bool "rlogind"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+-comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
++comment "rlogind needs a uClibc or (e)glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_RSH_REDONE_RSH
+ 	bool "rsh"
+@@ -29,10 +30,11 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
+ 	bool "rshd"
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+-comment "rshd needs a toolchain w/ wchar, locale, dynamic library"
++comment "rshd needs a uClibc or (e)glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ endif
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 39df11c..cc6e9a5 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -66,13 +66,14 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
+ 	bool "chfn/chsh"
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Change login shell, real user name and information
+ 
+-comment "chfn/chsh needs a toolchain w/ wchar, locale, dynamic library"
++comment "chfn/chsh needs a uClibc or (e)glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_UTIL_LINUX_CRAMFS
+ 	bool "cramfs utilities"
+@@ -124,13 +125,14 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ 	bool "login utilities"
+ 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 	help
+ 	  Build login utilities (last, login, su, sulogin)
+ 
+-comment "login utilities needs a toolchain w/ wchar, locale, dynamic library"
++comment "login utilities needs a uClibc or (e)glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ 	bool "losetup"
+-- 
+2.4.3
