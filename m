@@ -1,191 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Aug 2015 23:16:29 +0200
-Subject: [Buildroot] [PATCH v2] Add support for the x86-64 x32 ABI for
- glibc and musl.
-In-Reply-To: <1440070351-29057-1-git-send-email-Guido.Hatzsis@yandex.com>
-References: <1440070351-29057-1-git-send-email-Guido.Hatzsis@yandex.com>
-Message-ID: <20150820231629.5688e5ed@free-electrons.com>
+Date: Thu, 20 Aug 2015 23:31:44 +0200
+Subject: [Buildroot] Issue with host-erlang-rebar causing timeouts
+In-Reply-To: <20150819230251.6aaa54e2@free-electrons.com>
+References: <20150521212150.3f39f1c1@free-electrons.com>
+ <20150521214726.19fc73fa@free-electrons.com>
+ <20150521220438.624c6697@free-electrons.com>
+ <55663493.1040500@mind.be>
+ <20150819230251.6aaa54e2@free-electrons.com>
+Message-ID: <20150820233144.73d974c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guido Hatzsis,
+Arnout, Johan,
 
-Thanks for this contribution! Great to see someone working on x32
-support!
+On Wed, 19 Aug 2015 23:02:51 +0200, Thomas Petazzoni wrote:
 
-On Thu, 20 Aug 2015 11:32:31 +0000, Guido Hatzsis wrote:
-> x32 uses 32-bit pointers on the x84-64 linux target. The kernel needs
-> to have CONFIG_X86_X32 enabled. For more information see:
-> https://en.wikipedia.org/wiki/X32_ABI
+> >  Have you tried running it within the timeout? Maybe that one is doing SIGSTOP
+> > or ptrace() for some reason...
 > 
-> Changes v1 -> v2:
->     Adding links for libx32 -> lib
->     Added copying for libs to staging directory.
+> I haven't tried running without the timeout, but I've tried to do a
+> manual build of host-relang-rebar *under* timeout, and it worked just
+> fine.
 
-The changelog should go below the "---" sign after the Signed-off-by
-statement, since we don't want the changelog to be kept in the final
-commit.
+FWIW, the "timeout" seems to no longer be able to detect/interrupt the
+host-erlang-rebar build. The four autobuild jobs on gcc75 are stuck
+since several weeks on gcc75, blocking any other build. Here is the
+current process tree (look at the date of the processes) :
 
-> diff --git a/Makefile b/Makefile
-> index b4cef3f..d50161f 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -448,7 +448,11 @@ $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIS
->  # We make a symlink lib32->lib or lib64->lib as appropriate
->  # MIPS64/n32 requires lib32 even though it's a 64-bit arch.
->  ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
-> +ifeq ($(BR2_X86_64_ABI_X32),y)
-> +LIB_SYMLINK= libx32
+thomas    1474  0.0  0.0  56780  4056 pts/7    S+   Jul09   0:00  |   \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
+thomas    1478  0.0  0.0  58680  7044 pts/7    S+   Jul09   0:51  |       \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
+thomas    1755  0.0  0.0   8496   804 pts/7    S    Aug06   0:00  |       |   \_ timeout 28800 make O=/ssd1/thomas/autobuild/instance-0/output -C instance-0/buildroot BR2_DL_
+thomas    1756  0.0  0.4  85192 78400 pts/7    T    Aug06   0:14  |       |       \_ make O=/ssd1/thomas/autobuild/instance-0/output -C instance-0/buildroot BR2_DL_DIR=/ssd1/
+thomas   11478  0.0  0.0      0     0 pts/7    Z    Aug06   0:00  |       |           \_ [bash] <defunct>
+thomas    1479  0.0  0.0  58680  7548 pts/7    S+   Jul09   0:46  |       \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
+thomas    3490  0.0  0.0   8496   816 pts/7    S    Aug07   0:00  |       |   \_ timeout 28800 make O=/ssd1/thomas/autobuild/instance-1/output -C instance-1/buildroot BR2_DL_
+thomas    3491  0.0  0.4  84964 80376 pts/7    T    Aug07   0:14  |       |       \_ make O=/ssd1/thomas/autobuild/instance-1/output -C instance-1/buildroot BR2_DL_DIR=/ssd1/
+thomas    3942  0.0  0.0      0     0 pts/7    Z    Aug07   0:00  |       |           \_ [bash] <defunct>
+thomas    1480  0.0  0.0  58792  3556 pts/7    S+   Jul09   0:22  |       \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
+thomas   30856  0.0  0.0   8496   696 pts/7    S    Jul21   0:00  |       |   \_ timeout 28800 make O=/ssd1/thomas/autobuild/instance-2/output -C instance-2/buildroot BR2_DL_
+thomas   30857  0.0  0.0  83800  1680 pts/7    T    Jul21   0:19  |       |       \_ make O=/ssd1/thomas/autobuild/instance-2/output -C instance-2/buildroot BR2_DL_DIR=/ssd1/
+thomas   29670  0.0  0.0      0     0 pts/7    Z    Jul21   0:00  |       |           \_ [bash] <defunct>
+thomas    1481  0.0  0.0  58680  2612 pts/7    S+   Jul09   0:13  |       \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
+thomas   30548  0.0  0.0   8496   668 pts/7    S    Jul17   0:00  |           \_ timeout 28800 make O=/ssd1/thomas/autobuild/instance-3/output -C instance-3/buildroot BR2_DL_
+thomas   30552  0.0  0.0  82736  1656 pts/7    T    Jul17   0:09  |               \_ make O=/ssd1/thomas/autobuild/instance-3/output -C instance-3/buildroot BR2_DL_DIR=/ssd1/
+thomas   23005  0.0  0.0      0     0 pts/7    Z    Jul17   0:00  |                   \_ [bash] <defunct>
 
-Space after LIB_SYMLINK.
+The log files of the four instances indicate they are blocked
+running ./bootstrap as part of host-erlang-rebar build process.
 
-> +else
->  LIB_SYMLINK = lib64
-> +endif
->  else
->  LIB_SYMLINK = lib32
->  endif
-> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-> index 43f6abc..baaeae1 100644
-> --- a/arch/Config.in.x86
-> +++ b/arch/Config.in.x86
-> @@ -268,3 +268,32 @@ config BR2_GCC_TARGET_ARCH
->  	default "c3"		if BR2_x86_c3
->  	default "c3-2"		if BR2_x86_c32
->  	default "geode"		if BR2_x86_geode
-> +
-> +choice
-> +       prompt "Target ABI"
-> +       depends on BR2_x86_64
-> +       default BR2_X86_64_ABI_GCC
+Also, I have no idea if it's related, but in a different part of the
+process tree, I have:
 
-This option does not exist. You called it BR2_X86_64_ABI_GNU.
+thomas   23006  0.0  0.0   6640  1508 pts/7    T    Jul17   0:00 /usr/bin/make -j4
+thomas   23007  0.0  0.0      0     0 pts/7    Z    Jul17   0:00  \_ [beam.smp] <defunct>
+thomas   29673  0.0  0.0   6640  1524 pts/7    T    Jul21   0:00 /usr/bin/make -j4
+thomas   29674  0.0  0.0      0     0 pts/7    Z    Jul21   0:00  \_ [beam.smp] <defunct>
+thomas   11479  0.0  0.0   6640  1836 pts/7    T    Aug06   0:00 /usr/bin/make -j4
+thomas   11480  0.0  0.0      0     0 pts/7    Z    Aug06   0:00  \_ [beam.smp] <defunct>
+thomas    3943  0.0  0.0   6640  1868 pts/7    T    Aug07   0:00 /usr/bin/make -j4
+thomas    3944  0.0  0.0      0     0 pts/7    Z    Aug07   0:00  \_ [beam.smp] <defunct>
 
-> +       help
-> +         Application Binary Interface to use. The Application Binary
-> +         Interface describes the calling conventions (how arguments
-> +         are passed to functions, how the return value is passed, how
-> +         system calls are made, etc.).
-> +
-> +config BR2_X86_64_ABI_GNU
-> +       bool "gnu"
-> +       depends on BR2_x86_64
-
-Not needed, the entire choice depends on BR2_x86_64.
-
-> +       help
-> +      This is the gnu ABI for x86-64 which has 64-bits wide pointers.
-
-Indentation should be one tab + two spaces. Also, please indicate here
-that something such as "This is the default ABI on x86-64, and should
-be used unless you know what you are doing".
-
-> +
-> +config BR2_X86_64_ABI_X32
-> +       bool "x32"
-> +       depends on BR2_x86_64
-
-Not needed.
-
-> +       help
-> +      The X32 ABI is x86-64 with 32 bit pointers. It runs in x86-64 mode
-> +      but as it has 32-bit pointers only 4 GB of RAM can be addressed.
-> +      https://en.wikipedia.org/wiki/X32_ABI
-
-Please fix the indentation: one tab + two spaces.
-
-> +
-> +endchoice
-> +
-> +config BR2_GCC_TARGET_ABI
-> +    default "x32"      if BR2_X86_64_ABI_X32
-
-Do we need to provide a value for BR2_X86_64_ABI_GNU ? Or the ABI is
-empty ?
-
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 545694f..db2c0f0 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -70,6 +70,11 @@ ABI := $(ABI)hf
->  endif
->  endif
->  
-> +# Only set the ABI for x86-64 x32.
-> +ifeq ($(BR2_X86_64_ABI_X32),y)
-> +ABI = x32
-> +endif
-> +
->  # For FSL PowerPC there's SPE
->  ifeq ($(BR2_powerpc_SPE),y)
->  ABI = spe
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index cbfbf32..59a81d9 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -117,7 +117,7 @@ endif
->  
->  define GLIBC_INSTALL_TARGET_CMDS
->  	for libs in $(GLIBC_LIBS_LIB); do \
-> -		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
-> +		$(call copy_toolchain_lib_root,$(STAGING_DIR)/,,$(if $(BR2_X86_64_ABI_X32),libx32,lib),$$libs,/lib) ; \
-
-Hum, I'm not too happy with this. How does it work for normal x86-64
-toolchains that want lib64 as the library directory?
-
->  	done
->  endef
->  
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index bf40a13..f4de98b 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -3,6 +3,7 @@ if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  # For legal-info
->  config BR2_PACKAGE_UCLIBC
->  	bool
-> +    depends on !BR2_X86_64_ABI_X32
-
-Change not needed, since you're doing a change in
-toolchain/toolchain-buildroot/Config.in to prevent selecting uClibc.
-
->  	default y
->  
->  comment "uClibc Options"
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 13e2b15..a2ce5cd 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -34,6 +34,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
->  		   BR2_powerpc || BR2_sh2a   || BR2_sh4	   || BR2_sh4eb    || \
->  		   BR2_sparc   || BR2_xtensa || BR2_x86_64
-> +	depends on !BR2_X86_64_ABI_X32
-
-I would prefer the following change:
-
--  		   BR2_sparc   || BR2_xtensa || BR2_x86_64
-+ 		   BR2_sparc   || BR2_xtensa || (BR2_x86_64 && BR2_X86_64_ABI_GNU)
-
-Also, you need to:
-
- * Verify that the musl C library supports the x32 ABI, and if not,
-   make it unavailable when x32 is selected.
-
- * Make the relevant external x86-64 toolchains depend on
-   BR2_X86_64_ABI_GNU. You can have a look at how we handle ARM EABI
-   vs. ARM EABIhf toolchains to see how to do this.
-
- * Ideally, we would need to check if we have packages that package
-   pre-built x86-64 binaries. And if we have such packages, then they
-   should probably depend on BR2_X86_64_ABI_GNU. Of course, I'm
-   assuming here that linking x32 binaries/libraries with x86-64 nu
-   binaries/libraries does not work.
-
-Thanks!
+The date of these processes are the same as the blocked sub-processes
+of the autobuilder script.
+https://www.reddit.com/r/Ubuntu/comments/caae8/what_the_hell_is_beamsmb/
+says: "It's the Erlang runtime, which is running couchdb under the
+guise of desktopcouch. CouchDB is a schemaless database system, which
+typically runs globally and has no authentication. Ubuntu adds a layer
+of authentication and runs it on an arbitrary port.".
 
 Thomas
 -- 
