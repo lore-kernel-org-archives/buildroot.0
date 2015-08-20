@@ -1,40 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Aug 2015 10:37:02 +0200
-Subject: [Buildroot] [git commit branch/next] mosquitto: bump version
-Message-ID: <20150820083736.ADC0E8178A@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 20 Aug 2015 08:41:34 +0000
+Subject: [Buildroot] [PATCH] boost: fix build on ARC
+In-Reply-To: <20150819230401.61f3b67c@free-electrons.com>
+References: <1440008812-13384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87zj1n6lnv.fsf@dell.be.48ers.dk>
+ <20150819230401.61f3b67c@free-electrons.com>
+Message-ID: <4881796E12491D4BB15146FE0209CE64657844D2@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b309d194286c3e8e5aa2e6652ed5351c0d879dec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Peter, Thomas,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash |    2 +-
- package/mosquitto/mosquitto.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: 20 ??????? 2015 ?. 0:04
+> To: Peter Korsgaard
+> Cc: buildroot at uclibc.org; Alexey Brodkin
+> Subject: Re: [PATCH] boost: fix build on ARC
+> 
+> Peter,
+> 
+> On Wed, 19 Aug 2015 22:57:56 +0200, Peter Korsgaard wrote:
+> > >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> >
+> >  > This commit adds a patch to Boost to make it use the eventfd()
+> >  > function provided by the C library when uClibc is used, rather than
+> >  > falling back to using directly the __NR_eventfd system call. This
+> >  > fixes the build on ARC, which doesn't define __NR_eventfd.
+> >
+> > What does it then do? Only __NR_eventfd2?
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 90133d7..2ca1d17 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5ebc3800a0018bfbec62dcc3748fb29f628df068acd39c62c4ef651d9276647e  mosquitto-1.4.2.tar.gz
-+sha256	773d7436f729b5a6088035708c9277a9c6ba5651e127b63c8f29fe39e152479c  mosquitto-1.4.3.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 281833c..d9703fb 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.4.2
-+MOSQUITTO_VERSION = 1.4.3
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+In case of ARC as being one of very few architectures that closely follow kernel's UAPI
+we don't support lots of obsolete things and __NR_eventfd is one of them.
+And indeed __NR_eventfd2 is supported.
+
+For a bit more details pls refer to this explanation:
+http://lists.boost.org/Archives/boost/2015/07/224257.php
+
+-Alexey
