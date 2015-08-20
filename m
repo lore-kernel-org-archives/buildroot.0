@@ -1,45 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Aug 2015 16:22:11 +0200
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 20 Aug 2015 15:23:15 +0100
 Subject: [Buildroot] disabling linux-pam on musl
-In-Reply-To: <CA+BsyQ7_19evrfPvJXoFLSYuUaRk-kQxwYWjkULOCsBwBbGpCQ@mail.gmail.com>
- (Brendan Heading's message of "Thu, 20 Aug 2015 13:35:00 +0100")
+In-Reply-To: <87bne26nvw.fsf@dell.be.48ers.dk>
 References: <CA+BsyQ7_19evrfPvJXoFLSYuUaRk-kQxwYWjkULOCsBwBbGpCQ@mail.gmail.com>
-Message-ID: <87bne26nvw.fsf@dell.be.48ers.dk>
+ <87bne26nvw.fsf@dell.be.48ers.dk>
+Message-ID: <CA+BsyQ6-n5EY7vQ6qLvX9PsaS5aLpL5ht8Zd1ViMHu8v1nfy9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
+>  > Does that sound sane ?
+>
+> Yes, except for the above.
 
- > Hi guys,
- > I was about to send a patch disabling linux-pam when musl is being
- > used. I guess this means that we should also disable its dependencies
- > on musl too ?
+Thanks Peter!
 
-Indeed.
-
- > By my reckoning this means disabling the following packages musl.
- > These implicitly turn on linux-pam.
-
- > openvmtools
-
-Only the pam suboption.
-
-> python-pam
- > rsh-redone
-
-Only the rlogind + rshd suboptions.
-
-> util-linux
-
-Only the chfn/chsh + login utilities suboptions.
-
- > Does that sound sane ?
-
-Yes, except for the above.
-
- 
--- 
-Bye, Peter Korsgaard
+Brendan
