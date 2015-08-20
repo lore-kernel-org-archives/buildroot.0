@@ -1,82 +1,56 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Thu, 20 Aug 2015 15:04:59 +0200
-Subject: [Buildroot] CMake and VERBOSE variable
-In-Reply-To: <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
-References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
- <5578B394.1010503@mind.be>
- <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
- <5579E9EF.4070402@mind.be>
- <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
- <55870F2F.4080700@mind.be>
- <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
- <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
- <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
- <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
- <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
-Message-ID: <ae20692cc561152ac16a33820206a599@openmailbox.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 20 Aug 2015 13:10:25 +0000
+Subject: [Buildroot] Target/full GDB fails to build statically
+Message-ID: <4881796E12491D4BB15146FE0209CE6465785322@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hello,
 
-I'm getting back to working on this old subject (it was discussed in 
-June).
-I have proposed a first patch to fix the CMake specific problem.
-See: 
-http://git.buildroot.net/buildroot/commit/?id=307029867b0384446cd74b232b45a7b4f40cf0d1
-VERBOSE is not exported anymore, unless V=1 in the command line.
+I tried to build gdb statically in latest Buildroot but with no luck.
+My defconfig is:
+----------------->8-----------------
+BR2_arm=y
+BR2_STATIC_LIBS=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_PTHREAD_DEBUG=y
+BR2_PACKAGE_GDB=y
+BR2_PACKAGE_GDB_DEBUGGER=y
+----------------->8-----------------
 
-It was suggested that I should provide a second patch, to address the 
-problem globally.
-I have a local patch for that, but I need some feedback before providing 
-it.
+And that's what I see in the very end:
+----------------->8-----------------
+linux-thread-db.c:23:19: fatal error: dlfcn.h: No such file or directory
+ #include <dlfcn.h>
+                   ^
+compilation terminated.
+Makefile:1078: recipe for target 'linux-thread-db.o' failed
+make[4]: *** [linux-thread-db.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+Makefile:8335: recipe for target 'all-gdb' failed
+make[3]: *** [all-gdb] Error 2
+Makefile:832: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+----------------->8-----------------
 
-The idea is to remove exported variables that come from the kernel and 
-are useless in our context (KBUILD_VERBOSE and quiet), to remove 
-VERBOSE, and to manage the verbosity in a specific way in each pkg-infra 
-(VERBOSE=1 is understood by CMake, but might not be understood by 
-another build system).
+Seeing that GDB is not disabled in case of BR2_STATIC_LIBS=y I had a hope it could
+be built. But looks like something is broken.
 
-When V=1, we should export Q = (empty) and a new variable BR2_VERBOSE = 
-1.
-When V=0, we should export Q = @ and BR2_VERBOSE = (empty).
+I tried the same for ARC (where we use pretty recent gdb 7.9.1) and got exactly
+the same result.
 
-Q behaviour is not modified.
+If BR2_PACKAGE_GDB_DEBUGGER is disabled gdbserver gets built perfectly fine.
+----------------->8-----------------
+$ file build/gdb-7.8.2/gdb/gdbserver/gdbserver 
+build/gdb-7.8.2/gdb/gdbserver/gdbserver: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), statically linked, not stripped
+----------------->8-----------------
 
-BR2_VERBOSE is taken into account in pkg-infra.
-* In pkg-cmake.mk:
-When BR2_VERBOSE=1, I add VERBOSE=1 in <PKG>_BUILD_CMDS
-* In pkg-autotools.mk:
-I don't know what to do. VERBOSE=1 has no effect, V=0/1 has no effect, 
---enable-silent-rules has no effect.
+So whether we need to disable building of target/full gdb statically or somebody will need to look into it.
+Given close relese of 2015.08 we may want to implement a former approach.
 
-NB: The only verbosity setting that has an effect on autotools is "make 
--s", but it is different from "make V=0/1", and it is already taken into 
-account by Buildroot (QUIET variable in root Makefile).
+Still thought are much appreciated.
 
-Globally, there is no change:
-* V=1 involves VERBOSE=1 for CMake.
-* V=1 already has no effect for autotools.
-
-In fact I'm not sure about autotools. I suppose it depends on the 
-version of autotools that is used by the package.
-Do you know an autotools package that currently takes Buildroot's V=1 
-into account?
-
-And what about the other pkg-infra?
-Does one of them take VERBOSE into account?
-
-If we have too much doubts, we can also simply remove KBUILD_VERBOSE and 
-quiet, and keep on exporting VERBOSE when not empty. I think it would 
-just have been more clean to apply pkg-infra specific rules.
-
-Let me know what you think about it...
-Thank you.
-
-Regards.
-
--- 
-C?dric
+-Alexey
