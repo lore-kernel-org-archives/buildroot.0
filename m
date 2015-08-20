@@ -1,136 +1,37 @@
 From: Brendan Heading <brendanheading@gmail.com>
-Date: Thu, 20 Aug 2015 19:58:54 +0100
-Subject: [Buildroot] [PATCH 1/1] packages/linux-pam: disable when using musl
-Message-ID: <1440097134-32316-1-git-send-email-brendanheading@gmail.com>
+Date: Thu, 20 Aug 2015 20:08:18 +0100
+Subject: [Buildroot] bootm - "Starting kernel"
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD9614@svr-wa-exch1.atg.lc>
+References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474AD9614@svr-wa-exch1.atg.lc>
+Message-ID: <CA+BsyQ7GRYhUA-2aJ+4qxaFnr6g0740B9sxEkGhXNEQ84ct3bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes: http://autobuild.buildroot.net/results/e33/e337d69420ad00b2cc4017d639a31803926f2353/
+> I did all the bootcmd commands step by step. The final bootz command ended
+> up with a kernel panic message:
+>
+> [    3.482970] ---[ end Kernel panic - not syncing: VFS: Unable to mount
+> root fs on unknown-block(0,0)
+>
+> I am reporting this panic to see any adjustments I need to do in my .config
+> file.
 
-linux-pam needs some surgery to build under musl, so for the time being
-disable it until the issues are solved. Also disables dependent package
-python-pam, and dependent suboptions under openvmtools, rsh-redone and
-util-linux.
+Tommy,
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- package/linux-pam/Config.in   | 3 ++-
- package/openvmtools/Config.in | 3 ++-
- package/python-pam/Config.in  | 4 +++-
- package/rsh-redone/Config.in  | 6 ++++--
- package/util-linux/Config.in  | 3 ++-
- 5 files changed, 13 insertions(+), 6 deletions(-)
+(please don't quote large parts of older emails in replies)
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index 6b92886..8cedd04 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_LINUX_PAM
- 	# https://lists.fedorahosted.org/pipermail/linux-pam-commits/2012-February/000105.html
- 	# for details.
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
- 	help
- 	  A Security Framework that Provides Authentication for Applications
- 
-@@ -17,4 +18,4 @@ config BR2_PACKAGE_LINUX_PAM
- 
- comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 8e22eff..ac6aaca 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -36,11 +36,12 @@ config BR2_PACKAGE_OPENVMTOOLS_PAM
- 	# linux-pam needs locale and wchar, but we already have this
- 	# dependency on the main symbol, above.
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
- 	help
- 	  Support for PAM in openvmtools
- 
- comment "PAM support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || BR2_TOOLCAHIN_USES_MUSL
- 
- endif
- 
-diff --git a/package/python-pam/Config.in b/package/python-pam/Config.in
-index 6c7bc63..5e97b8f 100644
---- a/package/python-pam/Config.in
-+++ b/package/python-pam/Config.in
-@@ -1,6 +1,7 @@
- comment "python-pam needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on BR2_PACKAGE_PYTHON
--	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-+		BR2_TOOLCHAIN_USES_MUSL
- 
- config BR2_PACKAGE_PYTHON_PAM
- 	bool "python-pam"
-@@ -8,6 +9,7 @@ config BR2_PACKAGE_PYTHON_PAM
- 	depends on BR2_ENABLE_LOCALE # linux-pam
- 	depends on BR2_USE_WCHAR # linux-pam
- 	depends on !BR2_STATIC_LIBS # linux-pam
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  PAM (Pluggable Authentication Module) bindings for Python.
-diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
-index 218b47c..6737ef5 100644
---- a/package/rsh-redone/Config.in
-+++ b/package/rsh-redone/Config.in
-@@ -16,11 +16,12 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
- 	bool "rlogind"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
- comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
- 
- config BR2_PACKAGE_RSH_REDONE_RSH
- 	bool "rsh"
-@@ -29,10 +30,11 @@ config BR2_PACKAGE_RSH_REDONE_RSHD
- 	bool "rshd"
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
- comment "rshd needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
- 
- endif
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 39df11c..4db1d3f 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -66,13 +66,14 @@ config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
- 	bool "chfn/chsh"
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Change login shell, real user name and information
- 
- comment "chfn/chsh needs a toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
- 
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
--- 
-2.4.3
+You seem to be setting your rootfs to /dev/sda in your u-boot command
+line option. This only makes sense if your root filesystem is an
+attached ATA or SCSI hard disk, which is probably not the case.
+
+The fix for this depends on what you intend to do. You can either
+download the rootfs image separately, or you can bake it into the
+kernel, or you can flash it separately to an MTD partition and then
+mount it when the kernel starts. Personally I prefer to start out with
+the initramfs baked into the kernel.
+
+Brendan
