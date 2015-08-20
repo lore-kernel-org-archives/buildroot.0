@@ -1,62 +1,82 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 20 Aug 2015 07:42:39 -0500
-Subject: [Buildroot] [PATCH v4 2015.08 3/4] Makefile: implement a
- size-stats target
-In-Reply-To: <1432591007-27689-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1432591007-27689-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAMQcK5KM=uRUNOZSqu1vieRe4rc5c8+X6WJE5=M_PFxdbo-42w@mail.gmail.com>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Thu, 20 Aug 2015 15:04:59 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be>
+ <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be>
+ <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+ <55870F2F.4080700@mind.be>
+ <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
+ <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
+ <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
+ <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
+ <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
+Message-ID: <ae20692cc561152ac16a33820206a599@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hi!
 
-On Mon, May 25, 2015 at 4:56 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> This commit implements a size-stats target that calls the script of
-> the same name to generate the graph and CSV files related to package
-> and file sizes.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Makefile | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index cf244d7..c9b1e72 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -666,6 +666,14 @@ graph-depends: graph-depends-requirements
->         |tee $(GRAPHS_DIR)/$(@).dot \
->         |dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
->
-> +size-stats:
-> +       $(Q)mkdir -p $(GRAPHS_DIR)
-> +       $(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
-> +               --graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
-> +               --file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
-> +               --package-size-csv $(BASE_DIR)/build/package-size-stats.csv \
-> +               --skeleton-path $(TARGET_SKELETON)
+I'm getting back to working on this old subject (it was discussed in 
+June).
+I have proposed a first patch to fix the CMake specific problem.
+See: 
+http://git.buildroot.net/buildroot/commit/?id=307029867b0384446cd74b232b45a7b4f40cf0d1
+VERBOSE is not exported anymore, unless V=1 in the command line.
 
-In order to make this patch series to continue to work with the recent
-addition of the skeleton package, the --skeleton-path variable needs
-to be updated to:
+It was suggested that I should provide a second patch, to address the 
+problem globally.
+I have a local patch for that, but I need some feedback before providing 
+it.
 
-   --skeleton-path $(SKELETON_PATH)
+The idea is to remove exported variables that come from the kernel and 
+are useless in our context (KBUILD_VERBOSE and quiet), to remove 
+VERBOSE, and to manage the verbosity in a specific way in each pkg-infra 
+(VERBOSE=1 is understood by CMake, but might not be understood by 
+another build system).
 
-I don't know if you have already updated this or not in your patch
-series but this change needs to be in order to have the graph
-statistics work.
+When V=1, we should export Q = (empty) and a new variable BR2_VERBOSE = 
+1.
+When V=0, we should export Q = @ and BR2_VERBOSE = (empty).
 
-Thanks,
--Ryan
+Q behaviour is not modified.
+
+BR2_VERBOSE is taken into account in pkg-infra.
+* In pkg-cmake.mk:
+When BR2_VERBOSE=1, I add VERBOSE=1 in <PKG>_BUILD_CMDS
+* In pkg-autotools.mk:
+I don't know what to do. VERBOSE=1 has no effect, V=0/1 has no effect, 
+--enable-silent-rules has no effect.
+
+NB: The only verbosity setting that has an effect on autotools is "make 
+-s", but it is different from "make V=0/1", and it is already taken into 
+account by Buildroot (QUIET variable in root Makefile).
+
+Globally, there is no change:
+* V=1 involves VERBOSE=1 for CMake.
+* V=1 already has no effect for autotools.
+
+In fact I'm not sure about autotools. I suppose it depends on the 
+version of autotools that is used by the package.
+Do you know an autotools package that currently takes Buildroot's V=1 
+into account?
+
+And what about the other pkg-infra?
+Does one of them take VERBOSE into account?
+
+If we have too much doubts, we can also simply remove KBUILD_VERBOSE and 
+quiet, and keep on exporting VERBOSE when not empty. I think it would 
+just have been more clean to apply pkg-infra specific rules.
+
+Let me know what you think about it...
+Thank you.
+
+Regards.
 
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+C?dric
