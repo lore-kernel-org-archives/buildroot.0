@@ -1,59 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Aug 2015 10:46:22 +0200
-Subject: [Buildroot] Analysis of build results for 2015-08-18
-In-Reply-To: <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
-References: <20150819063013.E74B810154B@stock.ovh.net>
- <20150819224105.2993bbe5@free-electrons.com>
- <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
-Message-ID: <20150821104622.3abb16d1@free-electrons.com>
+Date: Fri, 21 Aug 2015 10:48:11 +0200
+Subject: [Buildroot] [PATCH v2] Add support for the x86-64 x32 ABI for
+ glibc and musl.
+In-Reply-To: <2360791440107689@web3h.yandex.ru>
+References: <1440070351-29057-1-git-send-email-Guido.Hatzsis@yandex.com>
+ <20150820231629.5688e5ed@free-electrons.com>
+ <2360791440107689@web3h.yandex.ru>
+Message-ID: <20150821104811.7c695a8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Dear Guido Hatzsis,
 
-On Wed, 19 Aug 2015 22:56:44 +0100, Brendan Heading wrote:
+On Thu, 20 Aug 2015 17:54:49 -0400, Guido Hatzsis wrote:
 
-> > Peter, what do you suggest we do about these issues for the release?
-> > Long-term, libtirpc will be changed to not use atomic builtins. But
-> > what do we do now? Mark libtirpc as not available on SPARCv8, and
-> > propagate the reverse dependency?
+> >> ??define GLIBC_INSTALL_TARGET_CMDS
+> >> ??????????for libs in $(GLIBC_LIBS_LIB); do \
+> >> ?- $(call copy_toolchain_lib_root,$(STAGING_DIR)/,,lib,$$libs,/lib) ; \
+> >> ?+ $(call copy_toolchain_lib_root,$(STAGING_DIR)/,,$(if $(BR2_X86_64_ABI_X32),libx32,lib),$$libs,/lib) ; \
+> >
+> > Hum, I'm not too happy with this. How does it work for normal x86-64
+> > toolchains that want lib64 as the library directory?
+> >
 > 
-> Can I suggest that you just leave it broken ?
+> I think that those two are related. The ABI is part of the x86-64 arch. Glibc uses libx32 and lib (not lib32 and lib64) when not using multilib.  This is done here.
+> 
+> 205 ifneq ($(call qstrip,$(BR2_GCC_TARGET_ABI)),)
+> 206 HOST_GCC_COMMON_CONF_OPTS += --with-abi=$(BR2_GCC_TARGET_ABI)
+> 207 endif
+> 
+> Do you need to set the BR2_GCC_TARGET_ABI to empty? Is this the convention?
 
-Leaving things broken in the autobuilders is annoying. For two reasons:
+No, no.
 
- 1/ Due to this Busybox failure on SPARC, many SPARC builds abort at
-    this point, and we don't see other SPARC failures.
+But you make some changes in the main Makefile to have a libx32 -> lib
+symbolic link in the staging directory. So I don't see why you need to
+change glibc.mk to account for the libx32 thing, since libx32 is just a
+symlink to lib.
 
- 2/ It leaves some "noise" in the build results, and due to this it's
-    hard to distinguish the build failures that should be investigated
-    from the ones that are already analyzed.
+But maybe I need to test by myself to understand what's going on.
 
-> I suspect it's been
-> broken for a little while. The problem in libtirpc was a commit in
-> 2011, which would have first been seen in stable release 0.2.3 in
-> 2013. We jumped from 0.2.2 to 0.2.4 on 26 Jun 2014 (f2ac23454) so each
-> release since then will have had this problem. A simple workaround in
-> the short term is simply to turn off libtirpc on SPARC manually.
-
-Testing SPARC in the autobuilders is fairly recent, that's why we're
-only tackling this problem now.
-
-> It will take another week or so to sort this out as we're waiting for
-> the person who committed the change in the first place (in 2011) to
-> return from vacation so he can comment on it. The fix should be ready
-> by the end of the month assuming no objections are raised.
-
-I doubt we can get this merged for 2015.08, though. It will probably be
-2015.11 material.
-
-In any case, thanks a lot for working on this libtirpc topic, it has
-been around for a while, so it's good to have someone looking into this!
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
