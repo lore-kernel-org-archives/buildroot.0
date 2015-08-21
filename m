@@ -1,48 +1,24 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
-Date: Fri, 21 Aug 2015 18:45:14 +0200
-Subject: [Buildroot] [PATCH v2 3/8] package/dhcp/S80dhcp-server: allow empty
-	INTERFACES
-In-Reply-To: <1440175519-478-1-git-send-email-benoit@wsystem.com>
-References: <1440175519-478-1-git-send-email-benoit@wsystem.com>
-Message-ID: <1440175519-478-4-git-send-email-benoit@wsystem.com>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Fri, 21 Aug 2015 10:29:08 -0700
+Subject: [Buildroot] bootm - "Starting kernel"
+References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474AD9614@svr-wa-exch1.atg.lc>
+ <CA+BsyQ7GRYhUA-2aJ+4qxaFnr6g0740B9sxEkGhXNEQ84ct3bw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474AD968D@svr-wa-exch1.atg.lc>
+ <CA+BsyQ5fZ=0krEW1ctCCV5R5Jaswe90_v6TYir0kGoEHK=FdHA@mail.gmail.com> 
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD96BF@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dhcpd daemon does not require network interface names to be
-specified on the command line.
+Brendan,
 
-From dhcpd(8):
-"The names of the network interfaces on which dhcpd should listen for
-broadcasts may be specified on the command line.  This should be done
-on systems where dhcpd is unable to identify non-broadcast interfaces,
-but should not be required on other systems.  If no interface names
-are specified on the command line dhcpd will identify all network
-interfaces which are up, eliminating non-broadcast interfaces if
-possible, and listen for DHCP broadcasts on each interface."
+I just succeeded in the booting of my Buildroot-2015.5 Linux-4.0.4 system on Marvell?s DB-88F6820-GP board. The solution to the "getty: bad speed" problem is the change of the "BR2_TARGET_GENERIC_GETTY_OPTIONS=8n1" line to "BR2_TARGET_GENERIC_GETTY_OPTIONS=""".
 
-dhcpd exits with "Not configured to listen on any interfaces!" only if
-no requested (those in INTERFACES, or all if empty) non-broadcast
-interfaces matching the subnet declarations in dhcpd.conf are up.
+Thanks for your help on my Buildroot/Marvell work.
 
-Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
----
- package/dhcp/S80dhcp-server | 1 -
- 1 file changed, 1 deletion(-)
+Tommy
 
-diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
-index ec4aad5..fad6a36 100755
---- a/package/dhcp/S80dhcp-server
-+++ b/package/dhcp/S80dhcp-server
-@@ -17,7 +17,6 @@ CFG_FILE="/etc/default/dhcpd"
- # Sanity checks
- test -f /usr/sbin/dhcpd || exit 0
- test -f /etc/dhcp/dhcpd.conf || exit 0
--test -n "$INTERFACES" || exit 0
- 
- case "$1" in
- 	start)
--- 
-2.1.4
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
