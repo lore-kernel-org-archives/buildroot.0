@@ -1,45 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 21 Aug 2015 14:41:26 +0100
-Subject: [Buildroot] Add missing config to RPM target package
-In-Reply-To: <55D70AF3.3050604@gmx.de>
-References: <55D70AF3.3050604@gmx.de>
-Message-ID: <55D72A86.1050505@imgtec.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 21 Aug 2015 15:41:35 +0200 (CEST)
+Subject: [Buildroot] [PATCH v1 0/2] Checking whether a certain
+	CONFIG_*	is set
+In-Reply-To: <20150821132227.GA3753@free.fr>
+Message-ID: <2138056712.6231153.1440164495115.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas,
+On a related note (mainly to fuel ideas) Denis posted the following
+patch a couple of weeks ago...
 
-> diff -Naur a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-> --- a/package/rpm/rpm.mk        2015-08-07 11:38:37.559148663 +0200
-> +++ b/package/rpm/rpm.mk        2015-08-21 11:13:31.679042077 +0200
-> @@ -34,7 +34,7 @@
->  RPM_DEPENDENCIES += pcre
->  RPM_CONF_OPTS += --with-pcre=external
->  else
-> -RPM_CONF_OPTS += --with-pcre=none
-> +RPM_CONF_OPTS += --with-pcre=internal
->  endif
-> 
->  ifeq ($(BR2_PACKAGE_FILE),y)
+http://lists.busybox.net/pipermail/buildroot/2015-August/135321.html
 
-I cannot apply your patch:
+This patch is integrated in pkg-kconfig and "transforms" all kconfig
+variables into makefile variables. These variables can then be
+used from any package to test for available options...
 
-$ wget http://patchwork.ozlabs.org/patch/509471/mbox/ -q -O - | git am
-Applying: Add missing config to RPM target package
-error: patch failed: package/rpm/rpm.mk:34
-error: package/rpm/rpm.mk: patch does not apply
-Patch failed at 0001 Add missing config to RPM target package
-When you have resolved this problem run "git am --resolved".
-If you would prefer to skip this patch, instead run "git am --skip".
-To restore the original branch and stop patching run "git am --abort".
 
-Please make your patches using git, as stated in the Buildroot manual:
+Just pointing out a different approch to the same problem
 
-http://buildroot.uclibc.org/downloads/manual/manual.html#submitting-patches
 
-Regards,
+Cordialement 
 
-Vincent.
+J?r?my Rosen 
++33 (0)1 42 68 28 13
+
+fight key loggers : write some perl using vim 
+
+
+Open Wide Ingenierie
+
+23, rue Daviel
+75013 Paris - France
+www.openwide.fr
