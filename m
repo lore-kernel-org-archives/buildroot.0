@@ -1,90 +1,156 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Aug 2015 08:30:14 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-08-20
-Message-ID: <20150821063014.F0716100F4D@stock.ovh.net>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Fri, 21 Aug 2015 10:23:29 +0200
+Subject: [Buildroot] [PATCH 7/7 v2] mysql: add mariadb galera cluster
+ variant
+In-Reply-To: <CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
+ <1436458921-4199-8-git-send-email-sylvain.raybaud@green-communications.fr>
+ <CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+Message-ID: <55D6E001.6010608@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-08-20
-===============================
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-        success : 189
-       failures : 34 
-       timeouts : 0  
-          TOTAL : 223
+Hi Samuel
 
-Classification of failures by reason
-====================================
+Thanks for your review. Here are my replies to some points (also inlined).
 
-       host-erlang-rebar-2.5.1 | 2 
-               iptables-1.4.21 | 2 
- make[1]: *** [all] Terminated | 2 
-                busybox-1.23.2 | 2 
-                mongrel2-1.9.2 | 2 
-    xserver_xorg-server-1.17.2 | 2 
-                  connman-1.29 | 2 
-             irda-utils-0.9.18 | 1 
-                 lvm2-2.02.125 | 1 
-                 setools-3.3.8 | 1 
-                moarvm-2015.05 | 1 
-               linknx-0.0.1.32 | 1 
-                 qt5base-5.5.0 | 1 
-                   zyre-v1.0.0 | 1 
-              lbreakout2-2.6.4 | 1 
-                 mesa3d-10.6.3 | 1 
-                  opencv-3.0.0 | 1 
-                 gnupg2-2.0.28 | 1 
-                collectd-5.5.0 | 1 
-                 sudo-1.8.14p3 | 1 
-                  mono-4.0.2.5 | 1 
-            gst-ffmpeg-0.10.13 | 1 
-             lttng-tools-2.6.0 | 1 
-             webkitgtk24-2.4.9 | 1 
-                directfb-1.6.3 | 1 
-             bluez_utils-4.101 | 1 
-                    vpnc-0.5.3 | 1 
+On 09/07/2015 23:56, Samuel Martin wrote:
+> Hi Sylvain,
+> 
+> Here is a partial review (inlined).
+> 
+> But, overall, I feel like this implementation (essentially the
+> *.mk file) does not match the Buildroot way of doing things... :-/ 
+> Have you look at the virtual package infrastructure [1]?
 
-Detail of failures
-===================
+Considering your remark and the discussion that took place last week,
+I repackaged the whole thing in the same way as jpeg.
 
-      x86_64 |              bluez_utils-4.101 | NOK | http://autobuild.buildroot.net/results/ac40edb71118eafeced18644137db4f079fb09d2/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/4583eb1eae69a28b01f5f3f8d934301de2be2a6a/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/271fd39e166756b6d46474ed5dbe5188fc7a95d2/
-         arm |                 collectd-5.5.0 | NOK | http://autobuild.buildroot.net/results/abd14ee858be6a97aa135314500a50900614e5bc/
-       sparc |                   connman-1.29 | NOK | http://autobuild.buildroot.net/results/2586e8b5f659b2d2f4e9b02818d396bf9ae5685d/
-       sparc |                   connman-1.29 | NOK | http://autobuild.buildroot.net/results/d5174b224ced00ae6ae8ead66b74638efa681bed/
-         arm |                 directfb-1.6.3 | NOK | http://autobuild.buildroot.net/results/cbdd67fe0fe6fd33e1c67cd9916de240edafde8c/
-      x86_64 |                  gnupg2-2.0.28 | NOK | http://autobuild.buildroot.net/results/826b165662d8fad9c14b32041176bac5f047f2bc/
-         sh4 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/30609b58461141214abdb13772f461610b7849fe/
-         arm |        host-erlang-rebar-2.5.1 | NOK | http://autobuild.buildroot.net/results/9b76975550653c3c2067345a2facce72956b049d/
-     aarch64 |        host-erlang-rebar-2.5.1 | NOK | http://autobuild.buildroot.net/results/30e79fbfd3046c2ac5132f642566520fc39d7983/
-      x86_64 |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/6dc2d8b5889cbd74e7df3f1999a9b9eeb7aa5eb9/
-         arm |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/a77774635f692317a5f13f5e65103bf01bc872bf/
-         arm |              irda-utils-0.9.18 | NOK | http://autobuild.buildroot.net/results/0c861137b4cfd6a9c1990bb58d43c9a1dfb96ecd/
-         arm |               lbreakout2-2.6.4 | NOK | http://autobuild.buildroot.net/results/906d148a474cda96b52b15edb069dc9c4b197afe/
-         arm |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/51a200ef505433ba1d438ae45fa411deba1215d5/
-         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/80f0e705609c27424e8086c74093f89c3be92d59/
-         arm |                  lvm2-2.02.125 | NOK | http://autobuild.buildroot.net/results/6125903af6c6f3132c97040383ca188e4a90e557/
-        i686 |  make[1]: *** [all] Terminated | NOK | http://autobuild.buildroot.net/results/6212571d5ef5a366f72ad10901266722744100e3/
-        i686 |  make[1]: *** [all] Terminated | NOK | http://autobuild.buildroot.net/results/022e03251b407439752d373a3fd5f4b1a2fc48b4/
-         arm |                  mesa3d-10.6.3 | NOK | http://autobuild.buildroot.net/results/7282dd809793ebc48b5f19903109b0eff8732958/
-       sparc |                 moarvm-2015.05 | NOK | http://autobuild.buildroot.net/results/b2c5d77bfc691f406a1cfc7181ee29a015e48cc8/
-         arm |                 mongrel2-1.9.2 | NOK | http://autobuild.buildroot.net/results/954898e6e791ae98402c06b9ef60a74ec19a13bc/
-         arm |                 mongrel2-1.9.2 | NOK | http://autobuild.buildroot.net/results/7002a3b16805e2eaa290a8c59d79d8ee30abd4af/
-         arm |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/43dad533397413315d567d02fc80485bc61558f1/
-         sh4 |                   opencv-3.0.0 | NOK | http://autobuild.buildroot.net/results/400dfb1e6c7134a1b1b7ce62c5c74626711257e4/
-      xtensa |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/cde3fef7f8cb1fac297eee6a1a8d8bead5f96e1d/
-     powerpc |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/29dba8327d88629c4d6b2ac824b7f4f4762f4598/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/3adfa063f2fdd78f0aa569b8811963a9ccc1d87a/
-         arm |                     vpnc-0.5.3 | NOK | http://autobuild.buildroot.net/results/319de9a6f21ceebf67a470af955d73adf765d5ab/
-    mips64el |              webkitgtk24-2.4.9 | NOK | http://autobuild.buildroot.net/results/b95a47fa3afefab88c7682083631adf6cae613a8/
-         arm |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/48dced45556385e692229ab7cec11067b1d180ea/
-        mips |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/b02d41caf1d2823bcf9a5634f318add693a6da54/
-      mipsel |                    zyre-v1.0.0 | NOK | http://autobuild.buildroot.net/results/0ab4c6a4bb4942d51e7712073d4731d81ecb5251/
+> 
+> On Thu, Jul 9, 2015 at 6:22 PM, Sylvain Raybaud
+
+>> diff --git
+>> a/package/mysql/10.0.17/mariadb-galera-01-fix_xtradb_cmakelist.patch
+>> b/package/mysql/10.0.17/mariadb-galera-01-fix_xtradb_cmakelist.patch
+>>
+>> 
+new file mode 100644
+>> index 0000000..83eac77 --- /dev/null +++
+>> b/package/mysql/10.0.17/mariadb-galera-01-fix_xtradb_cmakelist.patch
+>>
+>> 
+@@ -0,0 +1,27 @@
+>> +Do not perform test if the build is not requested anyway. The
+>> test may fail, +preventing building the whole package. +
+> The comment does not really reflect what is done in the patch: -
+> according to the comment: this change touch tests; - AFAICS, this
+> change disable a plugin.
+
+No, I just enclose some commands in:
+
+IF(NOT WITHOUT_XTRADB)
+[..]
+ENDIF()
+
+Meaning: "if building XtraDB plugin was not requested, do not care
+about the result of the test". This patch does not disable XtraDB.
+This is done via an option passed in mariadb-galera.mk
+
+> [..]
+
+>> ++IF(NOT WITHOUT_XTRADB)
+> Does this boolean come from an option? it could.
+> 
+
+It does. There is the following line in mariadb-galera.mk:
+
+MARIADB_GALERA_EXTRA_OPTS += "-DWITHOUT_XTRADB=1"
 
 
--- 
-http://autobuild.buildroot.net
+[..]
+
+>> diff --git
+>> a/package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
+>> b/package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
+>>
+>> 
+new file mode 100644
+>> index 0000000..1ddec5d --- /dev/null +++
+>> b/package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
+>>
+>> 
+@@ -0,0 +1,251 @@
+>> +Use CHECK_C_SOURCE_COMPILES instead of CHECK_C_SOURCE_RUNS in
+>> order to be +cross-compile friendly. +In buildroot another
+>> solution (maybe better, maybe not) could be to use 
+>> +BR2_ARCH_HAS_ATOMICS in order to determine the value of
+>> HAVE_IB_GCC_ATOMIC_BUILTINS_BYTE +and likes. +
+> Missing SoB line [2].
+> 
+> It makes sense to submit this patch upstream as well.
+
+Right. Does this mean we should wait for them to review this patch
+before considering including it in buildroot?
+
+> [..]
+>> +config MYSQL_MARIADB_GALERA +       bool "mariadb-galera" +
+>> select BR2_PACKAGE_NCURSES +       select BR2_PACKAGE_OPENSSL +
+>> select BR2_PACKAGE_ZLIB +       select BR2_PACKAGE_LIBAIO +
+>> select BR2_PACKAGE_LIBTOOL +       select BR2_PACKAGE_GALERA +
+>> select BR2_PACKAGE_BASH # runtime dependency only +       select
+>> BR2_PACKAGE_LSOF # runtime dependency only +       select
+>> BR2_PACKAGE_PROCPS_NG # runtime dependency only +       select
+>> BR2_PACKAGE_FINDUTILS # runtime dependency only +       select
+>> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS +       depends on
+>> BR2_TOOLCHAIN_BUILDROOT_GLIBC || BR2_PACKAGE_EGLIBC # spawn()
+> Missing "depends on" for the selected packages [3].
+> 
+>> +       help +         MariaDB Galera Cluster. +
+>> https://mariadb.com/kb/en/mariadb/what-is-mariadb-galera-cluster 
+>> + +endchoice + +endif + +comment "MySQL needs a toolchain w/ C++,
+>> threads" +depends on !BR2_INSTALL_LIBSTDCPP ||
+>> !BR2_TOOLCHAIN_HAS_THREADS
+> Indent is wrong. Missing: depends on BR2_USE_MMU Move this comment
+> in the choice.
+
+I don't understand how to properly move this in the choice section.
+However I modified Config.in when I made mysql a virtual package. Does
+this remark still apply?
+
+> 
+>> + +comment "MariaDB needs an (e)glibc toolchain" +depends on
+>> !BR2_TOOLCHAIN_BUILDROOT_GLIBC && !BR2_PACKAGE_EGLIBC # spawn()
+> Indent is wrong. Move this comment in the choice.
+
+Same question about moving the comment.
+
+Thanks again!
+
+Cheers,
+
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQIcBAEBAgAGBQJV1uABAAoJEEkkwl4JtJ9yNCIP/ic8RsfhCdG56I3fH55KFDqi
+ABnVSsYB3HP9vczjCfFzLQq3YbbTX1HMhB72L83OdyBoBmoUmEedXO9cOCcZw75q
+Fer4OBgGhrl11uy3KvwH2E/nfGgVtjdiGSW0o+7mB041E/ix2E+SnlKwIQu9mTFS
+4UZq7m7UpeWBQeMwRE3VpNnNCimpW+pcIXIjzMdbDMNfH5xAy6Da3OtJPay4vRBk
+99PZ4Ly6wOcytRnTvuDOz2u8OMbb6GOshSTFyqDucenculWPada+fVa0QKWJlDMo
+wFpLPv5HlcVKXcFZO8T+USK3GFnWgdjeJget1r8vXUUDzh/rEFD6VDCaYIC86dQN
+pWHpqosPCUcd/d4q6hI1rutCO4w9djKmDDC8AFB2iPnwK7EuPV8AnWXE0RLMA+Rf
++CKoNG9D/yny3po37SouxajkIkg/3FOK/3cPVlTCEnMUiQtHh7Alcd6ll7CvTMEk
+0gNA8Sia1vQ6B72O7ASJOfMCLQsOIiqXsODZhI9pFv2K5xGvap6E7LBShSuADE8o
+qb7ig6wsTJnvdOBlDTyva7KPVQ4V/4nBQGT7njvsAtcwe46dNbYhIT2wRv7i7btW
+5tBBy9HDZ8ex6AcM7pDaraU5gu6edEowRSTdZWLoM7SOBgNT8/USeRofVHBd4tgv
+NMtaizcTJNxxjmiQSpwB
+=UmBa
+-----END PGP SIGNATURE-----
