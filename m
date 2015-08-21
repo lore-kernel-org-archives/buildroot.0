@@ -1,40 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Aug 2015 10:43:02 +0200
-Subject: [Buildroot] [PATCH] boost: fix build on ARC
-In-Reply-To: <4881796E12491D4BB15146FE0209CE646578420F@DE02WEMBXB.internal.synopsys.com>
-References: <1440008812-13384-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <4881796E12491D4BB15146FE0209CE646578420F@DE02WEMBXB.internal.synopsys.com>
-Message-ID: <20150821104302.12c70b92@free-electrons.com>
+Date: Fri, 21 Aug 2015 10:46:22 +0200
+Subject: [Buildroot] Analysis of build results for 2015-08-18
+In-Reply-To: <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
+References: <20150819063013.E74B810154B@stock.ovh.net>
+ <20150819224105.2993bbe5@free-electrons.com>
+ <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
+Message-ID: <20150821104622.3abb16d1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey,
+Dear Brendan Heading,
 
-On Thu, 20 Aug 2015 08:26:52 +0000, Alexey Brodkin wrote:
+On Wed, 19 Aug 2015 22:56:44 +0100, Brendan Heading wrote:
 
-> Even though it's good to have this patch for fixing Boost building I'm not sure
-> what this hack causes in runtime. Remember I mentioned these checks for
-> GLIBC version are spread all around their sources.
+> > Peter, what do you suggest we do about these issues for the release?
+> > Long-term, libtirpc will be changed to not use atomic builtins. But
+> > what do we do now? Mark libtirpc as not available on SPARCv8, and
+> > propagate the reverse dependency?
+> 
+> Can I suggest that you just leave it broken ?
 
-It fixes that particular problem. There may indeed be other problems,
-which we can only resolve by having ARC users running Boost based
-applications.
+Leaving things broken in the autobuilders is annoying. For two reasons:
 
-> Anyways I see it is already applied so let's live with it for now.
-> And I assume once:
->  [1] ARC switches from GitHub based uClibc  to uClibc-ng in Buildroot
->  [2] uClibc-ng bumps to 1.0.6
-> we'll get rid of that patch, correct?
+ 1/ Due to this Busybox failure on SPARC, many SPARC builds abort at
+    this point, and we don't see other SPARC failures.
 
-Yes, of course, once the _GLIBC_MINOR bump is in a released version of
-uClibc-ng, and we have rebuilt the external toolchains, we will drop
-this patch from Boost. Do not hesitate to send such a patch series when
-time comes.
+ 2/ It leaves some "noise" in the build results, and due to this it's
+    hard to distinguish the build failures that should be investigated
+    from the ones that are already analyzed.
 
-Thanks!
+> I suspect it's been
+> broken for a little while. The problem in libtirpc was a commit in
+> 2011, which would have first been seen in stable release 0.2.3 in
+> 2013. We jumped from 0.2.2 to 0.2.4 on 26 Jun 2014 (f2ac23454) so each
+> release since then will have had this problem. A simple workaround in
+> the short term is simply to turn off libtirpc on SPARC manually.
+
+Testing SPARC in the autobuilders is fairly recent, that's why we're
+only tackling this problem now.
+
+> It will take another week or so to sort this out as we're waiting for
+> the person who committed the change in the first place (in 2011) to
+> return from vacation so he can comment on it. The fix should be ready
+> by the end of the month assuming no objections are raised.
+
+I doubt we can get this merged for 2015.08, though. It will probably be
+2015.11 material.
+
+In any case, thanks a lot for working on this libtirpc topic, it has
+been around for a while, so it's good to have someone looking into this!
+
+Best regards,
 
 Thomas
 -- 
