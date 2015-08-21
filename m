@@ -1,24 +1,58 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Fri, 21 Aug 2015 10:29:08 -0700
-Subject: [Buildroot] bootm - "Starting kernel"
-References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474AD9614@svr-wa-exch1.atg.lc>
- <CA+BsyQ7GRYhUA-2aJ+4qxaFnr6g0740B9sxEkGhXNEQ84ct3bw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474AD968D@svr-wa-exch1.atg.lc>
- <CA+BsyQ5fZ=0krEW1ctCCV5R5Jaswe90_v6TYir0kGoEHK=FdHA@mail.gmail.com> 
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD96BF@svr-wa-exch1.atg.lc>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Fri, 21 Aug 2015 19:55:18 +0200
+Subject: [Buildroot] [PATCH] package/minidlna/S60minidlnad: add force-reload
+	to rebuild DB
+Message-ID: <1440179718-1864-1-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Add a force-reload operation that restarts minidlnad and makes it
+rebuild its database. This is what Debian does, and this is useful when
+media_dir is changed in the configuration file or when inotify can not
+detect changes inside the media directories (e.g. in case of a mount).
 
-I just succeeded in the booting of my Buildroot-2015.5 Linux-4.0.4 system on Marvell?s DB-88F6820-GP board. The solution to the "getty: bad speed" problem is the change of the "BR2_TARGET_GENERIC_GETTY_OPTIONS=8n1" line to "BR2_TARGET_GENERIC_GETTY_OPTIONS=""".
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+---
+ package/minidlna/S60minidlnad | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Thanks for your help on my Buildroot/Marvell work.
-
-Tommy
-
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+diff --git a/package/minidlna/S60minidlnad b/package/minidlna/S60minidlnad
+index f99999a..b4b62ba 100644
+--- a/package/minidlna/S60minidlnad
++++ b/package/minidlna/S60minidlnad
+@@ -7,7 +7,7 @@ start() {
+ 	echo -n "Starting minidlna: "
+ 	umask 077
+ 	start-stop-daemon -S -q -p /var/run/minidlna/minidlna.pid \
+-		--exec /usr/sbin/minidlnad
++		--exec /usr/sbin/minidlnad -- "$@"
+ 	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop() {
+@@ -19,7 +19,7 @@ restart() {
+ 	stop
+ 	# Sleep needed for minidlna to restart properly
+ 	sleep 1
+-	start
++	start "$@"
+ }
+ 
+ case "$1" in
+@@ -32,8 +32,11 @@ case "$1" in
+   restart|reload)
+ 	restart
+ 	;;
++  force-reload)
++	restart -R
++	;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart|force-reload}"
+ 	exit 1
+ esac
+ 
+-- 
+2.1.4
