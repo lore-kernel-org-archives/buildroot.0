@@ -1,36 +1,42 @@
-From: universe II <universeii@gmx.de>
-Date: Fri, 21 Aug 2015 13:26:43 +0200
-Subject: [Buildroot] Add missing config to RPM target package
-Message-ID: <55D70AF3.3050604@gmx.de>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Fri, 21 Aug 2015 12:38:33 +0100
+Subject: [Buildroot] Analysis of build results for 2015-08-18
+In-Reply-To: <20150821104622.3abb16d1@free-electrons.com>
+References: <20150819063013.E74B810154B@stock.ovh.net>
+ <20150819224105.2993bbe5@free-electrons.com>
+ <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
+ <20150821104622.3abb16d1@free-electrons.com>
+Message-ID: <CA+BsyQ6a=2Lt5Q8XGmT4EegWFnj1b6FeV_EU3KNRGUTXx5PCtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
-building the RPM package for my remote target I found a misconfiguration 
-of the .mk file.
-If the regular expression package pcre is enabled in buildroot, rpm will 
-use it. If not, nothing will be used and regular expression are not 
-available, making rpm unusable. But rpm has the ability to use an 
-internal pcre implementation if the external lib is not available. This 
-needs to be correctly activated before building and then rpm works fine 
-on the target. See the attached patch for more details.
+> Leaving things broken in the autobuilders is annoying. For two reasons:
+>
+>  1/ Due to this Busybox failure on SPARC, many SPARC builds abort at
+>     this point, and we don't see other SPARC failures.
+>
+>  2/ It leaves some "noise" in the build results, and due to this it's
+>     hard to distinguish the build failures that should be investigated
+>     from the ones that are already analyzed.
 
-Regards,
-Andreas
+Understood. Would you like me to put together a "disable libtirpc on
+SPARC" patch then ?
 
+We can make it temporary, like the one I submitted for libpam.
 
-diff -Naur a/package/rpm/rpm.mk b/package/rpm/rpm.mk
---- a/package/rpm/rpm.mk        2015-08-07 11:38:37.559148663 +0200
-+++ b/package/rpm/rpm.mk        2015-08-21 11:13:31.679042077 +0200
-@@ -34,7 +34,7 @@
-  RPM_DEPENDENCIES += pcre
-  RPM_CONF_OPTS += --with-pcre=external
-  else
--RPM_CONF_OPTS += --with-pcre=none
-+RPM_CONF_OPTS += --with-pcre=internal
-  endif
+> I doubt we can get this merged for 2015.08, though. It will probably be
+> 2015.11 material.
+>
+> In any case, thanks a lot for working on this libtirpc topic, it has
+> been around for a while, so it's good to have someone looking into this!
 
-  ifeq ($(BR2_PACKAGE_FILE),y)
+Not at all, it's fun. Kind of like pulling teeth. ;) And it's been
+great to learn the ropes in terms of submitting things to open source
+projects too.
+
+regards
+
+Brendan
