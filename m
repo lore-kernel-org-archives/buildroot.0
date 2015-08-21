@@ -1,111 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Aug 2015 17:52:43 +0200
-Subject: [Buildroot] Issue with host-erlang-rebar causing timeouts
-In-Reply-To: <20150820233144.73d974c9@free-electrons.com>
-References: <20150521212150.3f39f1c1@free-electrons.com>
- <20150521214726.19fc73fa@free-electrons.com>
- <20150521220438.624c6697@free-electrons.com> <55663493.1040500@mind.be>
- <20150819230251.6aaa54e2@free-electrons.com>
- <20150820233144.73d974c9@free-electrons.com>
-Message-ID: <55D7494B.4040404@mind.be>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Fri, 21 Aug 2015 08:56:55 -0700
+Subject: [Buildroot] bootm - "Starting kernel"
+In-Reply-To: <CA+BsyQ5fZ=0krEW1ctCCV5R5Jaswe90_v6TYir0kGoEHK=FdHA@mail.gmail.com>
+References: <893D978F8A8D2B40A4CC1A09F0844518045BB12971@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474AD9614@svr-wa-exch1.atg.lc>
+ <CA+BsyQ7GRYhUA-2aJ+4qxaFnr6g0740B9sxEkGhXNEQ84ct3bw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474AD968D@svr-wa-exch1.atg.lc>
+ <CA+BsyQ5fZ=0krEW1ctCCV5R5Jaswe90_v6TYir0kGoEHK=FdHA@mail.gmail.com>
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD96A4@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Brendan,
+
+I did not touch the inittab files in my buildroot-2015.05. There are five files in the folder as:
+
+tclee at Latitude-E6400:~/Downloads/aug10mon15/buildroot-2015.05$ find . -name inittab|xargs ls -lrt
+-rw-rw-r-- 1 tclee tclee 3067 Mar 22 20:06 ./output/build/busybox-1.23.2/examples/inittab
+-rw-rw-r-- 1 tclee tclee  100 Mar 22 20:06 ./output/build/busybox-1.23.2/examples/bootfloppy/etc/inittab
+-rw-rw-r-- 1 tclee tclee 1053 May 31 14:15 ./system/skeleton/etc/inittab
+-rw-rw-r-- 1 tclee tclee  747 May 31 14:15 ./package/sysvinit/inittab
+-rw-rw-r-- 1 tclee tclee 1056 Aug 20 15:49 ./output/target/etc/inittab
+
+My booting process must use the last inittab  which was built yesterday. Following are the TTY settings in my current .config file:
+
+tclee at Latitude-E6400:~/Downloads/aug10mon15/buildroot-2015.05$ egrep -n TTY .config
+286:BR2_TARGET_GENERIC_GETTY=y
+291:BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+292:# BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP is not set
+293:# BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600 is not set
+294:# BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200 is not set
+295:# BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400 is not set
+296:# BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600 is not set
+297:BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+298:BR2_TARGET_GENERIC_GETTY_BAUDRATE="115200"
+299:BR2_TARGET_GENERIC_GETTY_TERM="vt100"
+300:BR2_TARGET_GENERIC_GETTY_OPTIONS="n81"
+
+My U-Boot console string is " ttyS0,115200". I doubt whether the settings on Line 299 and Line 300 are improper.
+
+Tommy
 
 
-On 08/20/15 23:31, Thomas Petazzoni wrote:
-> Arnout, Johan,
-> 
-> On Wed, 19 Aug 2015 23:02:51 +0200, Thomas Petazzoni wrote:
-> 
->>>  Have you tried running it within the timeout? Maybe that one is doing SIGSTOP
->>> or ptrace() for some reason...
->>
->> I haven't tried running without the timeout, but I've tried to do a
->> manual build of host-relang-rebar *under* timeout, and it worked just
->> fine.
-> 
-> FWIW, the "timeout" seems to no longer be able to detect/interrupt the
-> host-erlang-rebar build. The four autobuild jobs on gcc75 are stuck
-> since several weeks on gcc75, blocking any other build. Here is the
-> current process tree (look at the date of the processes) :
-> 
-> thomas    1474  0.0  0.0  56780  4056 pts/7    S+   Jul09   0:00  |   \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
-> thomas    1478  0.0  0.0  58680  7044 pts/7    S+   Jul09   0:51  |       \_ python ../buildroot-test/scripts/autobuild-run -c autobuild-run.conf
-> thomas    1755  0.0  0.0   8496   804 pts/7    S    Aug06   0:00  |       |   \_ timeout 28800 make O=/ssd1/thomas/autobuild/instance-0/output -C instance-0/buildroot BR2_DL_
-> thomas    1756  0.0  0.4  85192 78400 pts/7    T    Aug06   0:14  |       |       \_ make O=/ssd1/thomas/autobuild/instance-0/output -C instance-0/buildroot BR2_DL_DIR=/ssd1/
-
- timeout isn't called with the -k option, so it'll just send SIGTERM and then
-try to reap its child. Since the child never exits because it is STOPped,
-timeout itself waits indefinitely. Does the make process exit if you send it a
-SIGKILL? (I think there's a difference between how STOPped and ptrace'd process
-behave in that respect.)
 
 
-> thomas   11478  0.0  0.0      0     0 pts/7    Z    Aug06   0:00  |       |           \_ [bash] <defunct>
+-----Original Message-----
+From: Brendan Heading [mailto:brendanheading at gmail.com]
+Sent: Thursday, August 20, 2015 5:12 PM
+To: Lee, Tommy
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] bootm - "Starting kernel"
 
-[snip]
+> FYI, I unplugged the Ethernet cable and did the steps again. This time
+> the same ?tty: bad speedgetty? message is still repeated.
 
-> The log files of the four instances indicate they are blocked
-> running ./bootstrap as part of host-erlang-rebar build process.
+Nothing to do with ethernet - it sounds like it's trying to start getty but there's an issue with the speeds. The error message comes from loginutils/getty.c inside busybox.
 
- Or whatever bootstrap is running without generating output...
+Did you mess around with /etc/inittab, or did you leave it at the defaults ?
 
-> 
-> Also, I have no idea if it's related, but in a different part of the
-> process tree, I have:
-> 
-[snip]
-> thomas   11479  0.0  0.0   6640  1836 pts/7    T    Aug06   0:00 /usr/bin/make -j4
-> thomas   11480  0.0  0.0      0     0 pts/7    Z    Aug06   0:00  \_ [beam.smp] <defunct>
+Brendan
 
- It can't be a coincidence that PID 11479 is exactly one higher than bash 11478,
-so I guess the bash is the shell from HOST_ERLANG_REBAR_BUILD_CMDS and the make
-is the corresponding $(HOST_MAKE_ENV) $(MAKE). But bash itself has already
-exited. Probably it did get killed by timeout, but its child make didn't so that
-one got desinherited.
-
- And then the make does just one thing: it calls bootstrap, which also has
-exited already. The beam.smp process is indeed the erlang runtime of the
-bootstrap script (I checked with an actual host-erlang-rebar build). I have no
-idea why bootstrap has exited before actually building. Its output should also
-keep coming out even if the parent make gets STOPped.
-
- The other weird thing is that _both_ make processes that were active at the
-time get STOPped. It looks as if this bootstrap script is doing a STOP on all
-its parent processes called 'make' before starting the actual compilation...
-Which seems highly unlikely and an strace on the thing also doesn't show that...
-
-
- I still suspect that there must be some weird interaction with timeout. Perhaps
-you can just disable the timeout on that build server and see if it still happens?
-
-
- Regards,
- Arnout
-
-
-> thomas    3943  0.0  0.0   6640  1868 pts/7    T    Aug07   0:00 /usr/bin/make -j4
-> thomas    3944  0.0  0.0      0     0 pts/7    Z    Aug07   0:00  \_ [beam.smp] <defunct>
-> 
-> The date of these processes are the same as the blocked sub-processes
-> of the autobuilder script.
-> https://www.reddit.com/r/Ubuntu/comments/caae8/what_the_hell_is_beamsmb/
-> says: "It's the Erlang runtime, which is running couchdb under the
-> guise of desktopcouch. CouchDB is a schemaless database system, which
-> typically runs globally and has no authentication. Ubuntu adds a layer
-> of authentication and runs it on an arbitrary port.".
-> 
-> Thomas
-> 
-
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
