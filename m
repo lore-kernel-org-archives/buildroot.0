@@ -1,97 +1,161 @@
 From: Brendan Heading <brendanheading@gmail.com>
-Date: Sat, 22 Aug 2015 22:45:24 +0100
-Subject: [Buildroot] [PATCH] package/canfestival: fix build with musl
-In-Reply-To: <20150822213815.GA3861@free.fr>
-References: <1440279318-19132-1-git-send-email-yann.morin.1998@free.fr>
- <20150822213815.GA3861@free.fr>
-Message-ID: <CA+BsyQ5AaMkDCb7Ldnu5u9ZArNe0swiAhKwxsRgES6RdrxTVoQ@mail.gmail.com>
+Date: Sat, 22 Aug 2015 22:55:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtirpc: fix atomic compilation
+	issues on some arches
+Message-ID: <1440280541-28020-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Fixes : http://autobuild.buildroot.net/results/fe0/fe0a36890c5de7cca1f35212c4434d53463c4641/
 
-I submitted a patch similar to this about a week ago. Not sure if you
-spotted it or not.
+The build is failing because SPARCv8/Leon do not support some the atomic
+builtin being used. It's likely that some other architectures will see
+the same issues.
 
-When signal() is being used (as it will be when __UCLIBC__ is defined)
-the handler should take an int as a parameter, not a sigval_t.
+As the patch comments note, one of the upstream maintainers feels that
+the API which uses the atomic builtin should not be there to start with,
+and has suggested it be removed. We are now waiting to see if there is
+consensus on this with another principal maintainer.
 
-I was going to take this up with the developers as I can't see a good
-reason why the behaviour is different for uclibc and non-uclibc
-environments, and in any case CLOCK_REALTIME is almost certainly not
-what they want. But I haven't had a spare moment to write a test case
-to prove that the timer code used in the non-uclibc version would work
-just as well under uclibc.
+In the meantime, we can apply the patch speculatively to fix the
+autobuild errors. Since several packages depend on libtirpc it is simpler
+to do this rather than disable all the dependent packages for each
+of the architectures which have this limitation.
 
-regards
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ .../0008-Revert-Reference-count-AUTHs.patch        | 120 +++++++++++++++++++++
+ 1 file changed, 120 insertions(+)
+ create mode 100644 package/libtirpc/0008-Revert-Reference-count-AUTHs.patch
 
-Brendan
-
-
-
-On 22 August 2015 at 22:38, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Hello All!
->
-> On 2015-08-22 23:35 +0200, Yann E. MORIN spake thusly:
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> Damn, I forgot the autobuilder refs:
->
-> Fixes:
->     http://autobuild.buildroot.org/results/8eb/8ebb38f4b1ab4d1eadf7139e3467ed59ccb10646/
->     http://autobuild.buildroot.org/results/0da/0dac4c0639d75540e004d0fdd0ac6cd9fb9c7ef0/
->     http://autobuild.buildroot.org/results/75a/75aa6e7e4f3dcd74e4b65496060328ec7bd0e747/
->     ...
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>  package/canfestival/0003-sigval-musl.patch | 20 ++++++++++++++++++++
->>  1 file changed, 20 insertions(+)
->>  create mode 100644 package/canfestival/0003-sigval-musl.patch
->>
->> diff --git a/package/canfestival/0003-sigval-musl.patch b/package/canfestival/0003-sigval-musl.patch
->> new file mode 100644
->> index 0000000..7a4dadf
->> --- /dev/null
->> +++ b/package/canfestival/0003-sigval-musl.patch
->> @@ -0,0 +1,20 @@
->> +timers/unix: fix build with musl
->> +
->> +sigval_t is a glibcism, which is not defined in musl.
->> +
->> +Use the union instead.
->> +
->> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> +
->> +diff -durN a/drivers/timers_unix/timers_unix.c b/drivers/timers_unix/timers_unix.c
->> +--- a/drivers/timers_unix/timers_unix.c      2014-06-12 14:07:16.000000000 +0200
->> ++++ b/drivers/timers_unix/timers_unix.c      2015-08-22 23:12:26.921455179 +0200
->> +@@ -33,7 +33,7 @@
->> +     }
->> + }
->> +
->> +-void timer_notify(sigval_t val)
->> ++void timer_notify(union sigval val)
->> + {
->> +     if(gettimeofday(&last_sig,NULL)) {
->> +             perror("gettimeofday()");
->> --
->> 1.9.1
->>
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libtirpc/0008-Revert-Reference-count-AUTHs.patch b/package/libtirpc/0008-Revert-Reference-count-AUTHs.patch
+new file mode 100644
+index 0000000..b7080ac
+--- /dev/null
++++ b/package/libtirpc/0008-Revert-Reference-count-AUTHs.patch
+@@ -0,0 +1,120 @@
++From e49380b0dbf4241070f0af3cb5d1237ff90a7207 Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Sat, 22 Aug 2015 13:50:33 +0100
++Subject: [PATCH 1/2] Revert "Reference count AUTHs"
++
++This reverts commit 8271dfe7ec97a993fe3e369c9e02165f54f32322.
++
++The change introduced by this patch is under discussion with the
++libtirpc maintainers. The jist is that the auth_get/auth_set functions
++which were added by the commit being reverted here amount to
++inappropriate extensions to the API, which do not form part of the
++TI-RPC spec.
++
++The libtirpc maintainers are still discussing the final solution, but
++reverting the change (as per this patch) is the most likely outcome.
++
++See discussion here :
++https://sourceforge.net/p/libtirpc/mailman/message/34372096/
++
++Upstream-status: pending
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ src/auth_des.c   |  1 -
++ src/auth_gss.c   |  2 --
++ src/auth_unix.c  |  1 -
++ tirpc/rpc/auth.h | 31 ++++---------------------------
++ 4 files changed, 4 insertions(+), 31 deletions(-)
++
++diff --git a/src/auth_des.c b/src/auth_des.c
++index f8749b0..4d3639e 100644
++--- a/src/auth_des.c
+++++ b/src/auth_des.c
++@@ -223,7 +223,6 @@ authdes_pk_seccreate(const char *servername, netobj *pkey, u_int window,
++ 		goto failed;
++ 	}
++ 	ad->ad_nis_srvr = NULL; /* not needed any longer */
++-	auth_get(auth);		/* Reference for caller */
++ 	return (auth);
++ 
++ failed:
++diff --git a/src/auth_gss.c b/src/auth_gss.c
++index 722d54c..7712a7f 100644
++--- a/src/auth_gss.c
+++++ b/src/auth_gss.c
++@@ -204,8 +204,6 @@ authgss_create(CLIENT *clnt, gss_name_t name, struct rpc_gss_sec *sec)
++ 
++ 	if (!authgss_refresh(auth, NULL))
++ 		auth = NULL;
++-	else
++-		auth_get(auth); /* Reference for caller */
++ 
++ 	clnt->cl_auth = save_auth;
++ 
++diff --git a/src/auth_unix.c b/src/auth_unix.c
++index 3009543..fc2be02 100644
++--- a/src/auth_unix.c
+++++ b/src/auth_unix.c
++@@ -161,7 +161,6 @@ authunix_create(machname, uid, gid, len, aup_gids)
++ 	 */
++ 	auth->ah_cred = au->au_origcred;
++ 	marshal_new_auth(auth);
++-	auth_get(auth);		/* Reference for caller */
++ 	return (auth);
++ #ifndef _KERNEL
++  cleanup_authunix_create:
++diff --git a/tirpc/rpc/auth.h b/tirpc/rpc/auth.h
++index 3e44863..667f541 100644
++--- a/tirpc/rpc/auth.h
+++++ b/tirpc/rpc/auth.h
++@@ -191,22 +191,8 @@ typedef struct __auth {
++ 
++ 	} *ah_ops;
++ 	void *ah_private;
++-	int ah_refcnt;
++ } AUTH;
++ 
++-static __inline int
++-auth_get(AUTH *auth)
++-{
++-	return __sync_add_and_fetch(&auth->ah_refcnt, 1);
++-}
++-
++-static __inline int
++-auth_put(AUTH *auth)
++-{
++-	return __sync_sub_and_fetch(&auth->ah_refcnt, 1);
++-}
++-
++-
++ 
++ /*
++  * Authentication ops.
++@@ -236,19 +222,10 @@ auth_put(AUTH *auth)
++ #define auth_refresh(auth, msg)		\
++ 		((*((auth)->ah_ops->ah_refresh))(auth, msg))
++ 
++-#define AUTH_DESTROY(auth)						\
++-		do {							\
++-			int refs;					\
++-			if ((refs = auth_put((auth))) == 0)		\
++-				((*((auth)->ah_ops->ah_destroy))(auth));\
++-		} while (0)
++-
++-#define auth_destroy(auth)						\
++-		do {							\
++-			int refs;					\
++-			if ((refs = auth_put((auth))) == 0)		\
++-				((*((auth)->ah_ops->ah_destroy))(auth));\
++-		} while (0)
+++#define AUTH_DESTROY(auth)		\
+++		((*((auth)->ah_ops->ah_destroy))(auth))
+++#define auth_destroy(auth)		\
+++		((*((auth)->ah_ops->ah_destroy))(auth))
++ 
++ #define AUTH_WRAP(auth, xdrs, xfunc, xwhere)            \
++ 		((*((auth)->ah_ops->ah_wrap))(auth, xdrs, \
++-- 
++2.4.3
++
+-- 
+2.4.3
