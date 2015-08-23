@@ -1,34 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Aug 2015 16:46:53 +0200
-Subject: [Buildroot] [PATCH v4 2015.08 3/4] Makefile: implement a
- size-stats target
-In-Reply-To: <CAMQcK5K5RbYUgDgH1VmRE9SSxU=LBEQL=7ph1mnLA2SZokdcCg@mail.gmail.com>
-References: <1432591007-27689-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1432591007-27689-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAMQcK5KM=uRUNOZSqu1vieRe4rc5c8+X6WJE5=M_PFxdbo-42w@mail.gmail.com>
- <20150820224356.12a399bb@free-electrons.com>
- <CAMQcK5K5RbYUgDgH1VmRE9SSxU=LBEQL=7ph1mnLA2SZokdcCg@mail.gmail.com>
-Message-ID: <20150823164653.6d686931@free-electrons.com>
+Date: Sun, 23 Aug 2015 16:53:17 +0200
+Subject: [Buildroot] Add cpio package to make rpm work
+In-Reply-To: <55D71656.7040704@gmx.de>
+References: <55D71656.7040704@gmx.de>
+Message-ID: <20150823165317.6db43fff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Hello Andreas,
 
-On Fri, 21 Aug 2015 09:07:26 -0500, Ryan Barnett wrote:
+On Fri, 21 Aug 2015 14:15:18 +0200, universe II wrote:
+> Dear all,
+> I configured buildroot to add the rpm package to my target system, but I 
+> ran into a problem when executing rpm on the target system. Reason is, 
+> that a lot of rpms a packaged using the binary format of cpio. But the 
+> busybox builtin cpio only supports "newc" and "crc" format. Therefore 
+> the cpio package is necessary when rpm should be able to handle rpms in 
+> binary format. The following patch add the cpio package to buildroot.
+> 
+> Regards,
+> Andreas
 
-> Not a problem - we have been pretty thoroughly testing these patches
-> for the last couple months chasing master. I guess the one thing about
-> it being handled by being a "package" is there are no files in the
-> build directory. However, if I remember correctly you size-stats
-> script monitors the target directory for new files so the skeleton
-> package would be handled.
-
-Yes, IIRC the size-stats stuff doesn't take care of anything in the
-per-package build directory, it only monitors what gets installed by
-each package in the target directory.
+As indicated by Vicente, we already have a cpio package in Buildroot.
+So I've marked your patch as Rejected in our patch tracking system.
 
 Best regards,
 
