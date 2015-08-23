@@ -1,50 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Aug 2015 20:06:04 +0200
-Subject: [Buildroot] Add missing config to RPM target package
-In-Reply-To: <55D70AF3.3050604@gmx.de>
-References: <55D70AF3.3050604@gmx.de>
-Message-ID: <20150823200604.0c1e00cb@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Aug 2015 20:58:01 +0200
+Subject: [Buildroot] [PATCHv2] package: add comment about ipkg/opkg/rpm
+Message-ID: <1440356281-10227-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas,
+Too often the question is raised, that ipkg, opkg and rpm do not work,
+and users complain they can not install packages.
 
-On Fri, 21 Aug 2015 13:26:43 +0200, universe II wrote:
+Even though we do have a clear and clearly explained section in our
+manual, people do not read it (when will users read manuals? sigh...).
 
-> building the RPM package for my remote target I found a misconfiguration 
-> of the .mk file.
-> If the regular expression package pcre is enabled in buildroot, rpm will 
-> use it. If not, nothing will be used and regular expression are not 
-> available, making rpm unusable. But rpm has the ability to use an 
-> internal pcre implementation if the external lib is not available. This 
-> needs to be correctly activated before building and then rpm works fine 
-> on the target. See the attached patch for more details.
+So, add a big fat comment about ipkg/opkg/rpm, that Buildroot does not
+generate binary packages and does not provide any package database for
+any of those package manager.
 
-We generally don't want to use the internal copy of libraries, and
-prefer to use the system-provided library when possible, which is what
-is done here.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-So there are really two cases:
+---
+Changes v1 -> v2:
+  - don't use U+00A0 as first char on empty lines  (Arnout)
+---
+ package/Config.in | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
- 1 Either the regexp support in RPM is absolutely mandatory for RPM to
-   be useful. If this is the case, then just make the pcre dependency a
-   mandatory one, and always pass --with-pcre=external.
-
- 2 Or the regexp support in RPM is really optional, and useful only in
-   certain situations. If this is the case, then what is done today is
-   correct, and you should simply enable the pcre library.
-
-Consequently, I've marked your patch as Rejected in our patch tracking
-system. Do not hesitate to follow up with a different patch if we are
-in case (1) above.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index b9437d7..6a37c84 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1370,6 +1370,18 @@ endif
+ endmenu
+ 
+ menu "Package managers"
++comment "-----------------------------------------------------"
++comment "Please note:                                         "
++comment "- Buildroot does *not* generate binary packages,     "
++comment "- Buildroot does *not* install any package database. "
++comment "*                                                    "
++comment "It is up to you to provide those by yourself if you  "
++comment "want to use any of those package managers.           "
++comment "*                                                    "
++comment "See the manual:                                      "
++comment "http://buildroot.org/downloads/manual/manual.html#faq"
++comment "-no-binary-packages                                  "
++comment "-----------------------------------------------------"
+ 	source "package/ipkg/Config.in"
+ 	source "package/opkg/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
