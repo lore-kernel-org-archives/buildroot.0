@@ -1,566 +1,150 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sun, 23 Aug 2015 20:02:58 +0100
-Subject: [Buildroot] [PATCH 1/1] packages/linux-pam: bump version to 1.1.8
-	-> 1.2.1
-Message-ID: <1440356578-2205-1-git-send-email-brendanheading@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Aug 2015 22:53:25 +0200
+Subject: [Buildroot] [git commit branch/next] package/libserial: bump to
+	version 0.6.0rc2
+Message-ID: <20150823205408.18FAA80E31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move to the latest release of linux-pam. This allows us to remove
-a number of patches and consolidate the existing ones :
+commit: http://git.buildroot.net/buildroot/commit/?id=84a78f4f0b67814a64a834ce8f157ee342fef678
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- 0001-configure.patch
-- 0007-rhosts.patch
+Also:
+  * Update patch #1
+  * Remove patch #2, fixed upstream
+  * add new dependency to boost
+  * use hashes from sourceforge
 
-these two patches deal with the ruserok function, which is not
-usable with uclibc. Consolidated into
-0002-Conditionally-compile-per-ruserok-availability.patch.
+[Thomas:
+ - add locally calculated sha256 hash
+ - show the Config.in comment about toolchain dependencies only when
+   BR2_PACKAGE_BOOST_ARCH_SUPPORTS is set.]
 
-- 0003-group.patch
-- 0005-succeed.patch
-- 0006-time.patch
-
-these three patches deal with the innetgr function, which is not
-usable with uclibc. Consolidated into
-0003-Conditionally-compile-per-innetgr-availability.patch.
-
-- 0004-mkdir.patch
-
-Fixed in upstream, no longer required.
-
-- 0002-doc-makefile-am.patch
-
-renamed to 0001-doc-makefile-am.patch.
-
-- 0008-fix-CVE-2014-2583.patch
-- 0009-fix-CVE-2013-7041.patch
-
-These patches are already included in the new release and so
-can be safely deleted.
-
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v1 - I thought rather than patching linux-pam 1.1.8 to fix the
-musl compilation issues, we may as well bump to the newer
-version first. I have the musl patches waiting, but thought it
-better to submit this first. This patch includes only the changes
-necessary to get linux-pam 1.2.1 building under uclibc and glibc
-(ie just the version bump).
+ .../libserial/0001-disable-python-bindings.patch   |   21 ++++++++++---------
+ .../0002-add-missing-header-include.patch          |   15 --------------
+ package/libserial/Config.in                        |    9 ++++++-
+ package/libserial/libserial.hash                   |    7 ++++-
+ package/libserial/libserial.mk                     |    3 +-
+ 5 files changed, 25 insertions(+), 30 deletions(-)
 
-The original set of patches seemed unnecessarily fragmented so
-I've consolidated them into larger patches based on which
-aspect they were fixing. Makes dealing with the set of patches
-a little more convenient. Also added Upstream-status indications
-which were not originally present. Once we are happy here
-I will look at submitting these where appropriate.
----
-
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- package/linux-pam/0001-configure.patch             | 19 -----
- ...akefile-am.patch => 0001-doc-makefile-am.patch} |  3 +
- ...tionally-compile-per-ruserok-availability.patch | 49 +++++++++++++
- ...tionally-compile-per-innetgr-availability.patch | 84 ++++++++++++++++++++++
- package/linux-pam/0003-group.patch                 | 26 -------
- package/linux-pam/0004-mkdir.patch                 | 17 -----
- package/linux-pam/0005-succeed.patch               | 31 --------
- package/linux-pam/0006-time.patch                  | 26 -------
- package/linux-pam/0007-rhosts.patch                | 24 -------
- package/linux-pam/0008-fix-CVE-2014-2583.patch     | 53 --------------
- package/linux-pam/0009-fix-CVE-2013-7041.patch     | 50 -------------
- package/linux-pam/linux-pam.hash                   |  2 +-
- package/linux-pam/linux-pam.mk                     |  2 +-
- 13 files changed, 138 insertions(+), 248 deletions(-)
- delete mode 100644 package/linux-pam/0001-configure.patch
- rename package/linux-pam/{0002-doc-makefile-am.patch => 0001-doc-makefile-am.patch} (91%)
- create mode 100644 package/linux-pam/0002-Conditionally-compile-per-ruserok-availability.patch
- create mode 100644 package/linux-pam/0003-Conditionally-compile-per-innetgr-availability.patch
- delete mode 100644 package/linux-pam/0003-group.patch
- delete mode 100644 package/linux-pam/0004-mkdir.patch
- delete mode 100644 package/linux-pam/0005-succeed.patch
- delete mode 100644 package/linux-pam/0006-time.patch
- delete mode 100644 package/linux-pam/0007-rhosts.patch
- delete mode 100644 package/linux-pam/0008-fix-CVE-2014-2583.patch
- delete mode 100644 package/linux-pam/0009-fix-CVE-2013-7041.patch
-
-diff --git a/package/linux-pam/0001-configure.patch b/package/linux-pam/0001-configure.patch
-deleted file mode 100644
-index d39261f..0000000
---- a/package/linux-pam/0001-configure.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Add check for ruserok
--
--ruserok is not available/functional in uclibc, provide conditions for compilation
--where needed.
--
--Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
--
--diff -urN a/configure.in b/configure.in
----- a/configure.in	2012-08-17 03:48:24.000000000 -0500
--+++ b/configure.in	2013-07-17 09:49:23.760254684 -0500
--@@ -526,7 +526,7 @@
-- AC_CHECK_FUNCS(strcspn strdup strspn strstr strtol uname)
-- AC_CHECK_FUNCS(getutent_r getpwnam_r getpwuid_r getgrnam_r getgrgid_r getspnam_r)
-- AC_CHECK_FUNCS(getgrouplist getline getdelim)
---AC_CHECK_FUNCS(inet_ntop inet_pton innetgr ruserok_af)
--+AC_CHECK_FUNCS(inet_ntop inet_pton innetgr ruserok_af ruserok)
-- 
-- AC_CHECK_FUNCS(unshare, [UNSHARE=yes], [UNSHARE=no])
-- AM_CONDITIONAL([HAVE_UNSHARE], [test "$UNSHARE" = yes])
-diff --git a/package/linux-pam/0002-doc-makefile-am.patch b/package/linux-pam/0001-doc-makefile-am.patch
-similarity index 91%
-rename from package/linux-pam/0002-doc-makefile-am.patch
-rename to package/linux-pam/0001-doc-makefile-am.patch
-index 8fa2dda..ac3ff2b 100644
---- a/package/linux-pam/0002-doc-makefile-am.patch
-+++ b/package/linux-pam/0001-doc-makefile-am.patch
-@@ -3,6 +3,9 @@ Disable generation of documentation
- Generation of documentation is not necessary in Buildroot, disable it completely.
+diff --git a/package/libserial/0001-disable-python-bindings.patch b/package/libserial/0001-disable-python-bindings.patch
+index 54b5cb6..1f2f5ed 100644
+--- a/package/libserial/0001-disable-python-bindings.patch
++++ b/package/libserial/0001-disable-python-bindings.patch
+@@ -1,25 +1,26 @@
+ Disable build of Python bindings, which requires the sipconfig module.
  
- Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+
-+Upstream-status: inappropriate
+ Signed-off-by: Simon Dawson <spdawson@gmail.com>
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
  
- diff -urN a/doc/Makefile.am b/doc/Makefile.am
- --- a/doc/Makefile.am	2012-08-15 06:08:43.000000000 -0500
-diff --git a/package/linux-pam/0002-Conditionally-compile-per-ruserok-availability.patch b/package/linux-pam/0002-Conditionally-compile-per-ruserok-availability.patch
-new file mode 100644
-index 0000000..cec642d
---- /dev/null
-+++ b/package/linux-pam/0002-Conditionally-compile-per-ruserok-availability.patch
-@@ -0,0 +1,49 @@
-+ruserok is not available/functional in uclibc, provide conditions
-+for compilation where needed.
-+
-+Patch originally by Dmitry Golubovsky <golubovsky@gmail.com> -
-+porting to linux-pam 1.2.1.
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+
-+Upstream-status: pending
-+
-+---
-+ configure.ac                    | 2 +-
-+ modules/pam_rhosts/pam_rhosts.c | 6 +++++-
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 08e4530..fd2fd23 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -542,7 +542,7 @@ AC_CHECK_FUNCS(fseeko getdomainname gethostname gettimeofday lckpwdf mkdir selec
-+ AC_CHECK_FUNCS(strcspn strdup strspn strstr strtol uname)
-+ AC_CHECK_FUNCS(getutent_r getpwnam_r getpwuid_r getgrnam_r getgrgid_r getspnam_r)
-+ AC_CHECK_FUNCS(getgrouplist getline getdelim)
-+-AC_CHECK_FUNCS(inet_ntop inet_pton innetgr ruserok_af)
-++AC_CHECK_FUNCS(inet_ntop inet_pton innetgr ruserok_af ruserok)
-+ 
-+ AC_CHECK_FUNCS(unshare, [UNSHARE=yes], [UNSHARE=no])
-+ AM_CONDITIONAL([HAVE_UNSHARE], [test "$UNSHARE" = yes])
-+diff --git a/modules/pam_rhosts/pam_rhosts.c b/modules/pam_rhosts/pam_rhosts.c
-+index bc9e76f..909db29 100644
-+--- a/modules/pam_rhosts/pam_rhosts.c
-++++ b/modules/pam_rhosts/pam_rhosts.c
-+@@ -114,8 +114,12 @@ int pam_sm_authenticate (pam_handle_t *pamh, int flags, int argc,
-+ #ifdef HAVE_RUSEROK_AF
-+     retval = ruserok_af (rhost, as_root, ruser, luser, PF_UNSPEC);
-+ #else
-++  #ifdef HAVE_RUSEROK
-+     retval = ruserok (rhost, as_root, ruser, luser);
-+-#endif
-++  #else
-++    retval = -1;
-++  #endif  /* HAVE_RUSEROK */
-++#endif  /*HAVE_RUSEROK_AF */
-+     if (retval != 0) {
-+       if (!opt_silent || opt_debug)
-+ 	pam_syslog(pamh, LOG_WARNING, "denied access to %s@%s as %s",
-+-- 
-+2.4.3
-+
-diff --git a/package/linux-pam/0003-Conditionally-compile-per-innetgr-availability.patch b/package/linux-pam/0003-Conditionally-compile-per-innetgr-availability.patch
-new file mode 100644
-index 0000000..4b516fa
---- /dev/null
-+++ b/package/linux-pam/0003-Conditionally-compile-per-innetgr-availability.patch
-@@ -0,0 +1,84 @@
-+innetgr is not available/functional in uclibc, provide conditions for
-+compilation.
-+
-+Patch originally by Dmitry Golubovsky <golubovsky@gmail.com> - porting
-+to linux-pam 1.2.1.
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+
-+Upstream-status: pending
-+
-+---
-+ modules/pam_group/pam_group.c           | 8 +++++++-
-+ modules/pam_succeed_if/pam_succeed_if.c | 4 ++++
-+ modules/pam_time/pam_time.c             | 8 +++++++-
-+ 3 files changed, 18 insertions(+), 2 deletions(-)
-+
-+diff --git a/modules/pam_group/pam_group.c b/modules/pam_group/pam_group.c
-+index be5f20f..0982de8 100644
-+--- a/modules/pam_group/pam_group.c
-++++ b/modules/pam_group/pam_group.c
-+@@ -655,8 +655,14 @@ static int check_account(pam_handle_t *pamh, const char *service,
-+ 	    continue;
-+ 	}
-+ 	/* If buffer starts with @, we are using netgroups */
-+-	if (buffer[0] == '@')
-++	if (buffer[0] == '@') {
-++#ifdef HAVE_INNETGR
-+ 	  good &= innetgr (&buffer[1], NULL, user, NULL);
-++#else
-++	  good = 0;
-++	  pam_syslog (pamh, LOG_ERR, "pam_group does not have netgroup support");
-++#endif  /* HAVE_INNETGR */
-++	}
-+ 	/* otherwise, if the buffer starts with %, it's a UNIX group */
-+ 	else if (buffer[0] == '%')
-+           good &= pam_modutil_user_in_group_nam_nam(pamh, user, &buffer[1]);
-+diff --git a/modules/pam_succeed_if/pam_succeed_if.c b/modules/pam_succeed_if/pam_succeed_if.c
-+index aa828fc..c09d669 100644
-+--- a/modules/pam_succeed_if/pam_succeed_if.c
-++++ b/modules/pam_succeed_if/pam_succeed_if.c
-+@@ -233,16 +233,20 @@ evaluate_notingroup(pam_handle_t *pamh, const char *user, const char *group)
-+ static int
-+ evaluate_innetgr(const char *host, const char *user, const char *group)
-+ {
-++#ifdef HAVE_INNETGR
-+ 	if (innetgr(group, host, user, NULL) == 1)
-+ 		return PAM_SUCCESS;
-++#endif /* HAVE_INNETGR */
-+ 	return PAM_AUTH_ERR;
-+ }
-+ /* Return PAM_SUCCESS if the (host,user) is NOT in the netgroup. */
-+ static int
-+ evaluate_notinnetgr(const char *host, const char *user, const char *group)
-+ {
-++#ifdef HAVE_INNETGR
-+ 	if (innetgr(group, host, user, NULL) == 0)
-+ 		return PAM_SUCCESS;
-++#endif /* HAVE_INNETGR */
-+ 	return PAM_AUTH_ERR;
-+ }
-+ 
-+diff --git a/modules/pam_time/pam_time.c b/modules/pam_time/pam_time.c
-+index c94737c..4898fd2 100644
-+--- a/modules/pam_time/pam_time.c
-++++ b/modules/pam_time/pam_time.c
-+@@ -554,8 +554,14 @@ check_account(pam_handle_t *pamh, const char *service,
-+ 	       continue;
-+ 	  }
-+ 	  /* If buffer starts with @, we are using netgroups */
-+-	  if (buffer[0] == '@')
-++	  if (buffer[0] == '@') {
-++#ifdef HAVE_INNETGR
-+ 	    good &= innetgr (&buffer[1], NULL, user, NULL);
-++#else
-++	    good = 0;
-++	    pam_syslog (pamh, LOG_ERR, "pam_time does not have netgroup support");
-++#endif /* HAVE_INNETGR */
-++	  }
-+ 	  else
-+ 	    good &= logic_field(pamh, user, buffer, count, is_same);
-+ 	  D(("with user: %s", good ? "passes":"fails" ));
-+-- 
-+2.4.3
-+
-diff --git a/package/linux-pam/0003-group.patch b/package/linux-pam/0003-group.patch
-deleted file mode 100644
-index a94cf9e..0000000
---- a/package/linux-pam/0003-group.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Conditionally compile per innetgr availability
--
--innetgr is not available/functional in uclibc, provide conditions for compilation.
--
--Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
--
--Index: linux-pam-1.1.4/modules/pam_group/pam_group.c
--============================================================================
----- linux-pam-1.1.4/modules/pam_group/pam_group.c	2011-06-21 05:04:56.000000000 -0400
--+++ linux-pam-1.1.4/modules/pam_group/pam_group.c	2012-08-09 21:35:06.000000000 -0400
--@@ -655,8 +655,14 @@
-- 	    continue;
-- 	}
-- 	/* If buffer starts with @, we are using netgroups */
---	if (buffer[0] == '@')
--+	if (buffer[0] == '@') {
--+#ifdef HAVE_INNETGR
-- 	  good &= innetgr (&buffer[1], NULL, user, NULL);
--+#else
--+	  good = 0;
--+	  pam_syslog (pamh, LOG_ERR, "pam_group does not have netgroup support");
--+#endif  /* HAVE_INNETGR */
--+	}
-- 	/* otherwise, if the buffer starts with %, it's a UNIX group */
-- 	else if (buffer[0] == '%')
--           good &= pam_modutil_user_in_group_nam_nam(pamh, user, &buffer[1]);
-diff --git a/package/linux-pam/0004-mkdir.patch b/package/linux-pam/0004-mkdir.patch
-deleted file mode 100644
-index 00056da..0000000
---- a/package/linux-pam/0004-mkdir.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--$(mkdir_p) is obsolete for newer automake, use $(MKDIR_P) instead.
--Upstream should really gettextize with a newer version before packing up.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura Linux-PAM-1.1.7.orig/po/Makefile.in.in Linux-PAM-1.1.7/po/Makefile.in.in
----- Linux-PAM-1.1.7.orig/po/Makefile.in.in	2013-09-11 20:45:16.610770002 -0300
--+++ Linux-PAM-1.1.7/po/Makefile.in.in	2013-09-11 20:45:28.030145316 -0300
--@@ -31,7 +31,7 @@
-- INSTALL = @INSTALL@
-- INSTALL_DATA = @INSTALL_DATA@
-- mkinstalldirs = $(SHELL) @install_sh@ -d
---mkdir_p = @mkdir_p@
--+mkdir_p = @MKDIR_P@
+-diff -Nurp a/Makefile.am b/Makefile.am
+---- a/Makefile.am	2008-11-12 01:27:31.000000000 +0000
+-+++ b/Makefile.am	2013-04-16 09:41:13.476002178 +0100
++diff -purN libserial-0.6.0rc2.orig/Makefile.am libserial-0.6.0rc2/Makefile.am
++--- libserial-0.6.0rc2.orig/Makefile.am	2014-06-05 18:37:25.000000000 +0200
+++++ libserial-0.6.0rc2/Makefile.am	2015-07-30 20:59:28.828429011 +0200
+ @@ -1,4 +1,4 @@
+ -SUBDIRS=src doc examples sip
+ +SUBDIRS=src doc examples
++ ACLOCAL_AMFLAGS=-I m4
+  
+  EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
 - 
-- GMSGFMT_ = @GMSGFMT@
-- GMSGFMT_no = @GMSGFMT@
-diff --git a/package/linux-pam/0005-succeed.patch b/package/linux-pam/0005-succeed.patch
+-diff -Nurp a/Makefile.in b/Makefile.in
+---- a/Makefile.in	2008-11-12 01:28:14.000000000 +0000
+-+++ b/Makefile.in	2013-04-16 09:41:05.628013626 +0100
+-@@ -197,7 +197,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
++diff -purN libserial-0.6.0rc2.orig/Makefile.in libserial-0.6.0rc2/Makefile.in
++--- libserial-0.6.0rc2.orig/Makefile.in	2014-06-05 18:40:09.000000000 +0200
+++++ libserial-0.6.0rc2/Makefile.in	2015-07-30 21:00:09.215188376 +0200
++@@ -348,7 +348,7 @@ target_alias = @target_alias@
++ top_build_prefix = @top_build_prefix@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+ -SUBDIRS = src doc examples sip
+ +SUBDIRS = src doc examples
++ ACLOCAL_AMFLAGS = -I m4
+  EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
+  pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = libserial.pc
+diff --git a/package/libserial/0002-add-missing-header-include.patch b/package/libserial/0002-add-missing-header-include.patch
 deleted file mode 100644
-index 8a675ef..0000000
---- a/package/linux-pam/0005-succeed.patch
+index a022637..0000000
+--- a/package/libserial/0002-add-missing-header-include.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--Conditionally compile per innetgr availability
+@@ -1,15 +0,0 @@
+-Add a missing header include, to fix a build error.
 -
--innetgr is not available/functional in uclibc, provide conditions for compilation.
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 -
--Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
--
--Index: linux-pam-1.1.4/modules/pam_succeed_if/pam_succeed_if.c
--============================================================================
----- linux-pam-1.1.4/modules/pam_succeed_if/pam_succeed_if.c	2011-06-21 05:04:56.000000000 -0400
--+++ linux-pam-1.1.4/modules/pam_succeed_if/pam_succeed_if.c	2012-08-09 21:05:02.000000000 -0400
--@@ -233,16 +233,20 @@
-- static int
-- evaluate_innetgr(const char *host, const char *user, const char *group)
-- {
--+#ifdef HAVE_INNETGR
-- 	if (innetgr(group, host, user, NULL) == 1)
-- 		return PAM_SUCCESS;
--+#endif /* HAVE_INNETGR */
-- 	return PAM_AUTH_ERR;
-- }
-- /* Return PAM_SUCCESS if the (host,user) is NOT in the netgroup. */
-- static int
-- evaluate_notinnetgr(const char *host, const char *user, const char *group)
-- {
--+#ifdef HAVE_INNETGR
-- 	if (innetgr(group, host, user, NULL) == 0)
-- 		return PAM_SUCCESS;
--+#endif /* HAVE_INNETGR */
-- 	return PAM_AUTH_ERR;
-- }
-- 
-diff --git a/package/linux-pam/0006-time.patch b/package/linux-pam/0006-time.patch
-deleted file mode 100644
-index 58d7c9f..0000000
---- a/package/linux-pam/0006-time.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--Conditionally compile per innetgr availability
--
--innetgr is not available/functional in uclibc, provide conditions for compilation.
--
--Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
--
--Index: linux-pam-1.1.4/modules/pam_time/pam_time.c
--============================================================================
----- linux-pam-1.1.4/modules/pam_time/pam_time.c	2011-06-21 05:04:56.000000000 -0400
--+++ linux-pam-1.1.4/modules/pam_time/pam_time.c	2012-08-09 21:02:29.000000000 -0400
--@@ -554,8 +554,14 @@
-- 	       continue;
-- 	  }
-- 	  /* If buffer starts with @, we are using netgroups */
---	  if (buffer[0] == '@')
--+	  if (buffer[0] == '@') {
--+#ifdef HAVE_INNETGR
-- 	    good &= innetgr (&buffer[1], NULL, user, NULL);
--+#else
--+	    good = 0;
--+	    pam_syslog (pamh, LOG_ERR, "pam_time does not have netgroup support");
--+#endif /* HAVE_INNETGR */
--+	  }
-- 	  else
-- 	    good &= logic_field(pamh, user, buffer, count, is_same);
-- 	  D(("with user: %s", good ? "passes":"fails" ));
-diff --git a/package/linux-pam/0007-rhosts.patch b/package/linux-pam/0007-rhosts.patch
-deleted file mode 100644
-index 58f9adb..0000000
---- a/package/linux-pam/0007-rhosts.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Conditionally compile per ruserok availability
--
--ruserok is not available/functional in uclibc, provide conditions for compilation.
--
--Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
--
--Index: linux-pam-1.1.4/modules/pam_rhosts/pam_rhosts.c
--============================================================================
----- linux-pam-1.1.4/modules/pam_rhosts/pam_rhosts.c	2011-06-21 05:04:56.000000000 -0400
--+++ linux-pam-1.1.4/modules/pam_rhosts/pam_rhosts.c	2012-08-09 21:19:34.000000000 -0400
--@@ -114,8 +114,12 @@
-- #ifdef HAVE_RUSEROK_AF
--     retval = ruserok_af (rhost, as_root, ruser, luser, PF_UNSPEC);
-- #else
--+  #ifdef HAVE_RUSEROK
--     retval = ruserok (rhost, as_root, ruser, luser);
---#endif
--+  #else
--+    retval = -1;
--+  #endif  /* HAVE_RUSEROK */
--+#endif  /*HAVE_RUSEROK_AF */
--     if (retval != 0) {
--       if (!opt_silent || opt_debug)
-- 	pam_syslog(pamh, LOG_WARNING, "denied access to %s@%s as %s",
-diff --git a/package/linux-pam/0008-fix-CVE-2014-2583.patch b/package/linux-pam/0008-fix-CVE-2014-2583.patch
-deleted file mode 100644
-index a8b5f7b..0000000
---- a/package/linux-pam/0008-fix-CVE-2014-2583.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 9dcead87e6d7f66d34e7a56d11a30daca367dffb Mon Sep 17 00:00:00 2001
--From: "Dmitry V. Levin" <ldv@altlinux.org>
--Date: Wed, 26 Mar 2014 22:17:23 +0000
--Subject: pam_timestamp: fix potential directory traversal issue (ticket #27)
--
--pam_timestamp uses values of PAM_RUSER and PAM_TTY as components of
--the timestamp pathname it creates, so extra care should be taken to
--avoid potential directory traversal issues.
--
--* modules/pam_timestamp/pam_timestamp.c (check_tty): Treat
--"." and ".." tty values as invalid.
--(get_ruser): Treat "." and ".." ruser values, as well as any ruser
--value containing '/', as invalid.
--
--Fixes CVE-2014-2583.
--
--Reported-by: Sebastian Krahmer <krahmer@suse.de>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff --git a/modules/pam_timestamp/pam_timestamp.c b/modules/pam_timestamp/pam_timestamp.c
--index 5193733..b3f08b1 100644
----- a/modules/pam_timestamp/pam_timestamp.c
--+++ b/modules/pam_timestamp/pam_timestamp.c
--@@ -158,7 +158,7 @@ check_tty(const char *tty)
-- 		tty = strrchr(tty, '/') + 1;
-- 	}
-- 	/* Make sure the tty wasn't actually a directory (no basename). */
---	if (strlen(tty) == 0) {
--+	if (!strlen(tty) || !strcmp(tty, ".") || !strcmp(tty, "..")) {
-- 		return NULL;
-- 	}
-- 	return tty;
--@@ -243,6 +243,17 @@ get_ruser(pam_handle_t *pamh, char *ruserbuf, size_t ruserbuflen)
-- 		if (pwd != NULL) {
-- 			ruser = pwd->pw_name;
-- 		}
--+	} else {
--+		/*
--+		 * This ruser is used by format_timestamp_name as a component
--+		 * of constructed timestamp pathname, so ".", "..", and '/'
--+		 * are disallowed to avoid potential path traversal issues.
--+		 */
--+		if (!strcmp(ruser, ".") ||
--+		    !strcmp(ruser, "..") ||
--+		    strchr(ruser, '/')) {
--+			ruser = NULL;
--+		}
-- 	}
-- 	if (ruser == NULL || strlen(ruser) >= ruserbuflen) {
-- 		*ruserbuf = '\0';
---- 
--cgit v0.10.2
--
-diff --git a/package/linux-pam/0009-fix-CVE-2013-7041.patch b/package/linux-pam/0009-fix-CVE-2013-7041.patch
-deleted file mode 100644
-index ed58807..0000000
---- a/package/linux-pam/0009-fix-CVE-2013-7041.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 57a1e2b274d0a6376d92ada9926e5c5741e7da20 Mon Sep 17 00:00:00 2001
--From: "Dmitry V. Levin" <ldv@altlinux.org>
--Date: Fri, 24 Jan 2014 22:18:32 +0000
--Subject: pam_userdb: fix password hash comparison
--
--Starting with commit Linux-PAM-0-77-28-g0b3e583 that introduced hashed
--passwords support in pam_userdb, hashes are compared case-insensitively.
--This bug leads to accepting hashes for completely different passwords in
--addition to those that should be accepted.
--
--Additionally, commit Linux-PAM-1_1_6-13-ge2a8187 that added support for
--modern password hashes with different lengths and settings, did not
--update the hash comparison accordingly, which leads to accepting
--computed hashes longer than stored hashes when the latter is a prefix
--of the former.
--
--* modules/pam_userdb/pam_userdb.c (user_lookup): Reject the computed
--hash whose length differs from the stored hash length.
--Compare computed and stored hashes case-sensitively.
--Fixes CVE-2013-7041.
--
--Bug-Debian: http://bugs.debian.org/731368
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff --git a/modules/pam_userdb/pam_userdb.c b/modules/pam_userdb/pam_userdb.c
--index de8b5b1..ff040e6 100644
----- a/modules/pam_userdb/pam_userdb.c
--+++ b/modules/pam_userdb/pam_userdb.c
--@@ -222,12 +222,15 @@ user_lookup (pam_handle_t *pamh, const char *database, const char *cryptmode,
-- 	  } else {
-- 	    cryptpw = crypt (pass, data.dptr);
-- 
---	    if (cryptpw) {
---	      compare = strncasecmp (data.dptr, cryptpw, data.dsize);
--+	    if (cryptpw && strlen(cryptpw) == (size_t)data.dsize) {
--+	      compare = memcmp(data.dptr, cryptpw, data.dsize);
-- 	    } else {
-- 	      compare = -2;
-- 	      if (ctrl & PAM_DEBUG_ARG) {
---		pam_syslog(pamh, LOG_INFO, "crypt() returned NULL");
--+		if (cryptpw)
--+		  pam_syslog(pamh, LOG_INFO, "lengths of computed and stored hashes differ");
--+		else
--+		  pam_syslog(pamh, LOG_INFO, "crypt() returned NULL");
-- 	      }
-- 	    };
-- 
---- 
--cgit v0.10.2
--
-diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
-index 3f420c2..a6a26d1 100644
---- a/package/linux-pam/linux-pam.hash
-+++ b/package/linux-pam/linux-pam.hash
-@@ -1,2 +1,2 @@
- # Locally computed hashes, not provided by upstream
--sha256	c4b1f23a236d169e2496fea20721578d864ba00f7242d2b41d81050ac87a1e55	Linux-PAM-1.1.8.tar.bz2
-+sha256	342b1211c0d3b203a7df2540a5b03a428a087bd8a48c17e49ae268f992b334d9	Linux-PAM-1.2.1.tar.bz2
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 26b627e..cf1b5b7 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -4,7 +4,7 @@
+-diff -Nurp a/src/SerialPort.cpp b/src/SerialPort.cpp
+---- a/src/SerialPort.cpp	2008-11-12 01:27:30.000000000 +0000
+-+++ b/src/SerialPort.cpp	2013-04-23 15:43:41.537495852 +0100
+-@@ -27,6 +27,7 @@
+- #include <cassert>
+- #include <termios.h>
+- #include <fcntl.h>
+-+#include <unistd.h>
+- #include <sys/ioctl.h>
+- #include <sys/time.h>
+- #include <signal.h>
+diff --git a/package/libserial/Config.in b/package/libserial/Config.in
+index 22adb72..df5d1b5 100644
+--- a/package/libserial/Config.in
++++ b/package/libserial/Config.in
+@@ -1,11 +1,16 @@
+ config BR2_PACKAGE_LIBSERIAL
+ 	bool "libserial"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
++	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
++	depends on BR2_USE_WCHAR # boost
++	select BR2_PACKAGE_BOOST
+ 	help
+ 	  Simplified serial port programming in C++ under POSIX operating
+ 	  systems.
+ 
+ 	  http://libserial.sourceforge.net/
+ 
+-comment "libserial needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libserial needs a toolchain w/ C++, threads, wchar"
++	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/libserial/libserial.hash b/package/libserial/libserial.hash
+index 26f65e5..bca647a 100644
+--- a/package/libserial/libserial.hash
++++ b/package/libserial/libserial.hash
+@@ -1,2 +1,5 @@
+-# Locally computed:
+-sha256  60d8aebf5f262c12baf94ce61d61198fc9b79da2432c735c200decd08ead1fb4  libserial-0.6.0rc1.tar.gz
++# From http://sourceforge.net/projects/libserial/files/libserial/0.6.0rc2/
++sha1  e09113be3ba595135e95e853003ff96feea0da63  libserial-0.6.0rc2.tar.gz
++md5  7787679b22901e4810bc53ecccdf8266  libserial-0.6.0rc2.tar.gz
++# Locally calculated
++sha256 35ee29eb1369d52ffb8658237577692f991eb508320d0abbb71c53e6494a1c23 libserial-0.6.0rc2.tar.gz
+diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
+index d2c928b..11f1874 100644
+--- a/package/libserial/libserial.mk
++++ b/package/libserial/libserial.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--LINUX_PAM_VERSION = 1.1.8
-+LINUX_PAM_VERSION = 1.2.1
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
- LINUX_PAM_SITE = http://linux-pam.org/library
- LINUX_PAM_INSTALL_STAGING = YES
--- 
-2.4.3
+-LIBSERIAL_VERSION = 0.6.0rc1
++LIBSERIAL_VERSION = 0.6.0rc2
+ LIBSERIAL_SITE = http://downloads.sourceforge.net/libserial
+ LIBSERIAL_INSTALL_STAGING = YES
+ LIBSERIAL_LICENSE = GPLv2+
+ LIBSERIAL_LICENSE_FILES = COPYING
++LIBSERIAL_DEPENDENCIES = boost
+ 
+ LIBSERIAL_CONF_ENV = ac_cv_prog_DOCBOOK2PDF=no
+ 
