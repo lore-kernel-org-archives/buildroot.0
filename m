@@ -1,33 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 00:45:33 +0200
-Subject: [Buildroot] BR2_arm1136j_s in config.in.arm
-In-Reply-To: <7904fb17.d9ed.14f2728c6c5.Coremail.cugyly@163.com> (yuanlinyu's
- message of "Thu, 13 Aug 2015 21:03:47 +0800 (CST)")
-References: <7904fb17.d9ed.14f2728c6c5.Coremail.cugyly@163.com>
-Message-ID: <87twrpzks2.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Aug 2015 00:43:12 +0200
+Subject: [Buildroot] [git commit] arch/arm: add missing arm1136j-s variant
+Message-ID: <20150823224543.2CC1F7FD02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yuanlinyu" == yuanlinyu  <cugyly@163.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7deaa277fd4c89c67de39ea21b4cd081ab85366f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > hi,
- > "BR2_arm1136j_s" in config.in.arm seems not work because no
- > BR2_arm1136j_s configuration item. how to configure buildroot for soc
- > with arm1136j-s cpu?
+Identical to arm1136jf-s, except that is doesn't have a vfp unit.
 
- > config BR2_GCC_TARGET_CPU
- > 	default "arm920t"	if BR2_arm920t
- > 	default "arm922t"	if BR2_arm922t
- > 	default "arm926ej-s"	if BR2_arm926t
- > 	default "arm1136j-s"	if BR2_arm1136j_s
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in.arm |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Hmm, you're right. I've added it now to git master.
-
-I don't think I have ever seen a non-vfp variant of the arm1136 in the
-wild. What SoC are you using?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 9aa23a3..4d10f4c 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -78,6 +78,12 @@ config BR2_arm926t
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV5
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_arm1136j_s
++	bool "arm1136j-s"
++	select BR2_ARM_CPU_HAS_ARM
++	select BR2_ARM_CPU_HAS_THUMB
++	select BR2_ARM_CPU_ARMV6
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_arm1136jf_s
+ 	bool "arm1136jf-s"
+ 	select BR2_ARM_CPU_HAS_ARM
