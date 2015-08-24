@@ -1,24 +1,32 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Mon, 24 Aug 2015 16:45:21 +0100
-Subject: [Buildroot] virtualisation packages
-In-Reply-To: <20150824153700.GD3619@free.fr>
-References: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
- <20150824153700.GD3619@free.fr>
-Message-ID: <CA+BsyQ4z4j8deZyEqkc0yP_J1u83BfQ_Q6Qs=7Qf39K4XxVCJg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Aug 2015 17:55:50 +0200
+Subject: [Buildroot] [PATCH] apitrace: bump to version 7.0
+In-Reply-To: <55DB3B4E.3060109@imgtec.com> (Vicente Olivert Riera's message of
+ "Mon, 24 Aug 2015 16:42:06 +0100")
+References: <1440406490-15855-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87h9nozp9e.fsf@dell.be.48ers.dk> <55DB3B4E.3060109@imgtec.com>
+Message-ID: <874mjoznnd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Sure. From an initial glance, the patch sets (each adding support for
-qemu, and libvirt, respectively) look OK to me.
+Hi,
 
-Maybe I could simply submit them here to start a discussion .. or are
-there obvious issues that you are aware of which need resolved first ?
+> No, no. I think you misunderstood me, or perhaps I didn't explain myself
+ > very well.
 
-regards
+ > What the new version of apitrace does is using python2 even if you have
+ > python3 installed. The old one was using python3 although both python2
+ > and python3 were installed. It was just choosing the wrong python. Does
+ > it make sense now?
 
-Brendan
+Ahh, ok. I don't see any references to 'python2' in the apitrace sources
+though.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
