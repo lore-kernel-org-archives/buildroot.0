@@ -1,21 +1,42 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 24 Aug 2015 15:36:14 +0000
-Subject: [Buildroot] uClibc-ng 1.0.6 update
-Message-ID: <1440430574.2745.13.camel@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Aug 2015 17:37:00 +0200
+Subject: [Buildroot] virtualisation packages
+In-Reply-To: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
+References: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
+Message-ID: <20150824153700.GD3619@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Brendan, All,
 
-I noticed that you recently cut release of 1.0.6 uclibc-ng.
+On 2015-08-24 13:07 +0100, Brendan Heading spake thusly:
+> I had an idea over the weekend about using buildroot to build a
+> virtualisation platform, but I see that you've already been doing
+> quite a bit of work on this. I see there was some discussion of this
+> dating back 18 months or so.
+> 
+> I can see you have a tree where you are keeping a set of patches
+> rebased against the current buildroot master.
+> 
+> Are there barriers in terms of getting these packages into buildroot
+> proper, and if so, is it something I could help with ?
 
-I'm wondering if you plan to submit a patch to Buildroot with bumping
-of uClibc version?
+Well, I haven't had time to finalise such support. Even though I'm also
+interested in it, it's not my top-priority.
 
-I may do it myself but just to escape duplicates IMHO would
-be good to check with you.
+You can get them in your tree and work on them if you're interested. I'd
+be happy to help.
 
--Alexey
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
