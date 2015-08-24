@@ -1,40 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 17:38:23 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: fix when readlink is
-	busybox'
-In-Reply-To: <20150824153234.GA3619@free.fr> (Yann E. MORIN's message of "Mon, 
- 24 Aug 2015 17:32:34 +0200")
-References: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr>
- <87pp2czptc.fsf@dell.be.48ers.dk> <20150824153234.GA3619@free.fr>
-Message-ID: <878u90zogg.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 24 Aug 2015 16:42:06 +0100
+Subject: [Buildroot] [PATCH] apitrace: bump to version 7.0
+In-Reply-To: <87h9nozp9e.fsf@dell.be.48ers.dk>
+References: <1440406490-15855-1-git-send-email-Vincent.Riera@imgtec.com>
+ <87h9nozp9e.fsf@dell.be.48ers.dk>
+Message-ID: <55DB3B4E.3060109@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Peter Korsgaard,
 
-Hi,
+On 08/24/2015 04:21 PM, Peter Korsgaard wrote:
+>>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+> 
+>  > Our current apitrace version can't detect the host-python version
+>  > correctly, so if both host-python and host-python3 where installed, it
+>  > will take the last one and it will fail with an "invalid syntax" error.
+>  > The latest apitrace version has this problem solved and it detects the
+>  > host-python version correctly.
+> 
+>  > Fixes:
+> 
+>  >   http://autobuild.buildroot.net/results/22a/22a73b4ba0adcc874ecc153917ae6edcfd4d37af/
+> 
+>  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> So then perhaps we shouldn't force people to build host-python if they
+> already have host-python3 built?
+> 
+> E.G. something like:
+> 
+> APITRACE_DEPENDENCIES = xlib_libX11 $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+> 
+> But that can be added later - Committed, thanks.
+> 
 
->> Looking at the recent changes to S50dropbear, isn't it quite noisy with
- >> a RO rootfs? I would imagine those rm and mkdir calls complain with
- >> RO. Perhaps we should add 2>/dev/null to them?
+No, no. I think you misunderstood me, or perhaps I didn't explain myself
+very well.
 
- > Well, on a RO filesystem, we'd create /var/run/dropbear on each boot,
- > and thus regenerate keys on each boot. This means keys from such a
- > device can not really be trusted.
+What the new version of apitrace does is using python2 even if you have
+python3 installed. The old one was using python3 although both python2
+and python3 were installed. It was just choosing the wrong python. Does
+it make sense now?
 
-Well, with a RO filesystem you only have the option to either generate
-at each boot or bake in a hardcoded host key in the rootfs. Neither is
-really great for security.
+Regards,
 
- > So I'd prefer we get the error messages, as a clue to the user that
- > something is wrong. Maybe we could have had an explicit message, yes.
-
-Those fairly obscure messages are imho not really helpful - But on the
-other hand I'm not sure a dedicated message is really warranted.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Vincent.
