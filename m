@@ -1,85 +1,121 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon, 24 Aug 2015 15:46:13 +0200
-Subject: [Buildroot] [PATCH] core/pkg-kconfig: fix configurators
-In-Reply-To: <1440265993-31292-1-git-send-email-yann.morin.1998@free.fr>
-References: <1440265993-31292-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55DB2025.9030102@mclink.it>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Mon, 24 Aug 2015 16:11:29 +0200
+Subject: [Buildroot] [PATCH 0/3] core/pkg-kernel-config: ensure linux
+ supports modules (branch yem/kernel-module)
+In-Reply-To: <cover.1440418870.git.yann.morin.1998@free.fr>
+References: <cover.1440418870.git.yann.morin.1998@free.fr>
+Message-ID: <20150824161129.272f994c@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I can confirm the patch solves the problem for me.
-I did a simple test issuing "make linux-menuconfig" right before and after applying the patch, nothing else changed.
-The first one failed:
-   HOSTCC  scripts/kconfig/mconf.o
-   *** Unable to find the ncurses libraries or the
-   *** required header files.
-   *** 'make menuconfig' requires the ncurses libraries.
-   ***
-   *** Install ncurses (ncurses-devel) and try again.
-   ***
+Hello Yann, all.
 
-The second worked Ok.
+I've tried the patch series and it works. However, I've tried to do
+this for xtables-addons:
 
-Tested-by: Mauro Condarelli <mc5686@mclink.it>
+-LINUX_NEEDS_MODULES = y
++#LINUX_NEEDS_MODULES = y
+
+and the result is that it again compiles with CONFIG_MODULES=y (and it
+shouldn't). I was investigating why and couldn't find the answer. It
+just sets the CONFIG_MODULES=y everytime.
+
+Simple test is possible:
+
+1) $ make olimex_a20_olinuxino_lime_defconfig
+2) $ make linux-menuconfig
+3) Check "Enable loadable module support" is (un)checked.
+
+* For origin/master (7deaa27), it works as expected (unchecked).
+* After merge of morin-repo/yem/kernel-module (2af986e) it DOES NOT work
+as expected (checked).
+
+Can you reproduce it as well?
+
+Regards
+Jan Viktorin
+
+On Mon, 24 Aug 2015 14:27:38 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+
+> Hello All!
+> 
+> This series fixes two standing issues with the way we handle packages
+> that build kernel modules:
+> 
+>   - first, the current check is broken, because $(LINUX_DIR) should be
+>     double-$ed, as it is used in a macro from an infra,
+> 
+>   - second, it is currently possible to (try to) build such packages
+>     without the kernel config havong CONFIG_MODULES set.
+> 
+> So, these three patches fix that:
+> 
+>   - introduce a new internal variable to tell the kernel to enable
+>     support for modules, LINUX_NEEDS_MODULES, that should be set
+> whenever a package wants to build a kernel modules, and is
+> automatically set by the kernel-module infra,
+> 
+>   - the (broken) check is no longer needed so removed,
+> 
+>   - a few packages that build kernel modules without using the
+>     kernel-module infra are fixed to manually set that variable.
+> 
+> I believe that should go into master, because:
+> 
+>   - it actually fixes build issues
+> 
+>   - the kernel-module infra is brand new in this release, and should
+> be fixed and stable prior to being released to the wide hostile world
+>     ;-) 
+> 
+> Thanks to Peter for suggesting the solution, and to No? and Jan for
+> their previous attempts that eventually led to this series.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+> The following changes since commit
+> 7deaa277fd4c89c67de39ea21b4cd081ab85366f:
+> 
+>   arch/arm: add missing arm1136j-s variant (2015-08-24 00:43:12 +0200)
+> 
+> are available in the git repository at:
+> 
+>   git://git.busybox.net/~ymorin/git/buildroot yem/kernel-module
+> 
+> for you to fetch changes up to
+> 2af986ecd146d1dc6e7603bd93fac5420c459e41:
+> 
+>   packages: ensure linux supports modules even when not using
+> kernel-module (2015-08-24 14:14:23 +0200)
+> 
+> ----------------------------------------------------------------
+> Yann E. MORIN (3):
+>       core/pkg-kernel-module: ensure linux supports modules
+>       core/pkg-kernel-module: drop now-useles check for CONFIG_MODULES
+>       packages: ensure linux supports modules even when not using
+> kernel-module
+> 
+>  linux/linux.mk                           | 2 ++
+>  package/linux-fusion/linux-fusion.mk     | 9 ++++++---
+>  package/nvidia-driver/nvidia-driver.mk   | 4 ++++
+>  package/pkg-kernel-module.mk             | 9 +++++----
+>  package/racehound/racehound.mk           | 4 ++++
+>  package/rtai/rtai.mk                     | 4 ++++
+>  package/ti-gfx/ti-gfx.mk                 | 5 +++++
+>  package/xtables-addons/xtables-addons.mk | 4 ++++
+>  8 files changed, 34 insertions(+), 7 deletions(-)
+> 
 
 
-Il 22/08/2015 19:53, Yann E. MORIN ha scritto:
-> Currently, the configurators are using $($(2)_MAKE_ENV) , often derived
-> from $(TARGE_MAKE_ENV) , as the environment to be set when calling the
-> various configurators.
->
-> This means that our host tools are used first, most notably pkg-config
-> (from host-pkgconf).
->
-> However, this is inherently flawed. Our pkg-config, when set for the
-> host, only searches .pc files in $(HOST_DIR) and never ever uses the
-> ones from the host. For example, since we do not build a host-qt, our
-> pkg-config would not find the host's QtCore.pc et al.
->
-> Consequently, on some systems (but not on others?) most of the
-> configurators fail to build, especially the latest kernel versions, as
-> they have been starting to use pkg-config two years ago.
->
-> Fix that by filtering-out sensible values out of the environment, but
-> only when calling the configurators.
->
-> Reported-by: Mauro Condarelli <mc5686@mclink.it>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Mauro Condarelli <mc5686@mclink.it>
-> ---
->   package/pkg-kconfig.mk | 11 ++++++++++-
->   1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 375607f..158c386 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -96,6 +96,15 @@ $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
->   endif
->   endif
->   
-> +# For the configurators, we do want to use the system-provided host tools, not
-> +# the ones we build. This is particularly true for pkg-config; if we use our
-> +# pkg-config (from host-pkgconf), then it would not look for the .pc from the
-> +# host, but we do need them, especially to find ncurses, GTK+, Qt (resp. for
-> +# menuconfig and nconfig, gconfig, xconfig).
-> +# So we simply remove our PATH and PKG_CONFIG_* variables.
-> +$(2)_CONFIGURATOR_MAKE_ENV = \
-> +	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV))
-> +
->   # Configuration editors (menuconfig, ...)
->   #
->   # We need to apply the configuration fixups right after a configuration
-> @@ -112,7 +121,7 @@ endif
->   #
->   $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
->   $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-> -	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> +	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
->   		$$($(2)_KCONFIG_OPTS) $$(*)
->   	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
->   	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
+
+-- 
+   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
+   System Architect              Web:    www.RehiveTech.com
+   RehiveTech
+   Brno, Czech Republic
