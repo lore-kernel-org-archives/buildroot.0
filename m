@@ -1,64 +1,91 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Aug 2015 21:44:19 +0200
-Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
-In-Reply-To: <20150823094750.GC3729@free.fr>
-References: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
- <55D8FA56.5020009@mind.be> <20150823094750.GC3729@free.fr>
-Message-ID: <55DB7413.4060109@mind.be>
+Date: Mon, 24 Aug 2015 22:07:48 +0200
+Subject: [Buildroot] [PATCH] package/wf111: remove package
+In-Reply-To: <20150823205857.1625a64f@free-electrons.com>
+References: <1440202387-7291-1-git-send-email-yann.morin.1998@free.fr>
+ <20150823163653.3989f210@free-electrons.com> <20150823153737.GD3729@free.fr>
+ <20150823205857.1625a64f@free-electrons.com>
+Message-ID: <55DB7994.8080509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/23/2015 11:47 AM, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2015-08-23 00:40 +0200, Arnout Vandecappelle spake thusly:
+ I'm not going to comment on all the points made here, but my stance is: lthough
+I also hate what the wf111 package does, I don't think it's bad enough to remove
+it from buildroot. It doesn't hurt the rest of buildroot at all, and it is a
+useful package for some users. I'd rather get rid of sparc than getting rid of
+this package.
+
+
+On 08/23/2015 08:58 PM, Thomas Petazzoni wrote:
 [snip]
+> They cannot change their mind. I even met a Bluegiga representative at
+> a trade show a few months ago, and discussed with him the matter. The
+> problem is that their hardware include a chip from a third-party
+> manufacturer that does not allow redistributing the code without
+> agreeing with some stupid licensing conditions. So there's nothing
+> Bluegiga can do (except using a different vendor for their future
+> products, but that will not solve the problem for wf111).
+
+ I registered (under a false name and with a dummy e-mail address) and
+downloaded the driver, and there is no license text available in it. I also did
+not have to agree to any license conditions in order to register or download
+anything. So either this representative is wrong about "does not allow
+redistributing without licensing conditions", or the website designer botched
+it. Probably the latter. Bottom line is: unless you have a separate agreement
+with Bluegiga, you are not allowed to use this software for any purpose. I don't
+understand how legal departments can let something like this pass but on the
+other hand get all excited about some piece of GPLv3 in your product...
+
+ The source code says "Refer to LICENSE.txt included with this source code for
+details on the license terms.", but LICENSE.txt is missing. An earlier version
+of the tarball has a LICENSE.txt with a MIT-like license or GPLv2. But anyway,
+that obviously only applies to the sources, not to the userspace binaries that
+are included and much less to the firmware blobs. So we probably can't host a
+copy on sources.buildroot.org.
+
+
+[snip]
+>> That package is the *only* one we have in BR (unless I missed any) for
+>> which this is not the case.
+
+ Thomas DS is trying to push support for the Cavium toolchains...
+
+[snip]
+>> The day we use a testing framework (like your nice pending proposal), we
+>> will start to see failures because of that package. And blacklisting it
+>> in the autobuilders' code would not be the right answer.
+
+ Actually, for any package that requires some kind of string option to be set
+(e.g. most boot loaders), we'll always need exceptions in the autobuilders.
+
 >>
->>  Don't know how important this is, but on a 80-character display it gets chopped
->> off after the faq-no-. But I guess there's not much we can do about it.
->> Except perhaps: http://nightly.buildroot.org/manual.html#faq-no-binary-packages
->> - still doesn't fit but at least we get to the binary-pa :-)
+>> So, I completely disagree with these non-removal arguments you made.
 > 
-> What about;
-> 
->     comment "-----------------------------------------------------"
->     comment "Please note:                                         "
->     comment "- Buildroot does *not* generate binary packages,     "
->     comment "- Buildroot does *not* install any package database. "
->     comment "*                                                    "
->     comment "It is up to you to provide those by yourself if you  "
->     comment "want to use any of those package managers.           "
->     comment "*                                                    "
->     comment "See the manual:                                      "
->     comment "http://buildroot.org/downloads/manual/manaul.html#faq"
->     comment "-no-binary-packages                                  "
->     comment "-----------------------------------------------------"
-> 
-> This does fit on a 80-char wide terminal, and we get the complete URL on
-> two lines.
+> I agree that the non-testability of the package is annoying, but I
+> don't really see how to overcome this problem. 
 
- ... which is also not ideal, since it means that the URL can't be copy&paste'd
-easily, and that people with a modern terminal that is more than 80 characters
-wide can't ctrl-click (or whatever) to open the URL directly.
-
- So I think it's best to use the slightly shorter nightly URL and keep it
-non-wrapped.
-
- Or actually, it's best to add a manual.html -> downloads/manual/manual.html
-symlink to the website and refer to that. This fits easily:
-http://buildroot.org/manual.html#faq-no-binary-packages
-And it also makes it easier for us to refer to the manual in other places.
-
- Peter, what do you think of such a symlink?
-
+ Put the tarball somewhere in each autobuild instance and feed its path into the
+config.
 
  Regards,
  Arnout
 
--- 
+
+> Keep this package in
+> private tree, and have every user of wf111 struggle with their
+> sub-optimal build system? Not ideal either.
+> 
+> So I agree it's not ideal, but I'm not sure the removal of the package
+> will actually make the situation better.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
 Essensium/Mind                                http://www.mind.be
