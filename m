@@ -1,56 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 17:29:08 +0200
-Subject: [Buildroot] [PATCH 3/3] packages: ensure linux supports modules
-	even when not using kernel-module
-In-Reply-To: <2af986ecd146d1dc6e7603bd93fac5420c459e41.1440418870.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 24 Aug 2015 14:27:43 +0200")
-References: <cover.1440418870.git.yann.morin.1998@free.fr>
- <2af986ecd146d1dc6e7603bd93fac5420c459e41.1440418870.git.yann.morin.1998@free.fr>
-Message-ID: <87d1yczovv.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Aug 2015 17:32:34 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: fix when readlink is
+	busybox'
+In-Reply-To: <87pp2czptc.fsf@dell.be.48ers.dk>
+References: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr>
+ <87pp2czptc.fsf@dell.be.48ers.dk>
+Message-ID: <20150824153234.GA3619@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Peter, All,
 
- > Some packages build kernel modules without using the kernel-module infra
- > (because they use custom build systems); they do not automatically get
- > the kernel to support modules which is ensured when using the infra.
+On 2015-08-24 17:09 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > Busybox' "readlink -f" does not canonicalise paths when the target is
+>  > missing, while coreutils do.
+> 
+>  > Fix that by:
+>  >   - making an absolute symlink
+>  >   - dropping "-f" when calling readlink
+> 
+>  > Fixes #8276.
+> 
+> Committed, thanks.
+> 
+>  > --- a/package/dropbear/S50dropbear
+>  > +++ b/package/dropbear/S50dropbear
+>  > @@ -18,7 +18,7 @@ start() {
+>  >  	#   - the filesystem is RW (i.e. we can rm the symlink),
+>  >  	#     replace the symlink with an actual directory
+>  >  	if [ -L /etc/dropbear \
+>  > -	     -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
+>  > +	     -a "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]
+>  >  	then
+>  >  		if rm -f /etc/dropbear; then
+>  >  			mkdir -p /etc/dropbear
+> 
+> Looking at the recent changes to S50dropbear, isn't it quite noisy with
+> a RO rootfs? I would imagine those rm and mkdir calls complain with
+> RO. Perhaps we should add 2>/dev/null to them?
 
- > It must be done manually for all those packages.
+Well, on a RO filesystem, we'd create /var/run/dropbear on each boot,
+and thus regenerate keys on each boot. This means keys from such a
+device can not really be trusted.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Peter Korsgaard <jacmet@uclibc.org>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: No? Rubinstein <nrubinstein@aldebaran.com>
- > Cc: Jan Viktorin <viktorin@rehivetech.com>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/linux-fusion/linux-fusion.mk     | 9 ++++++---
- >  package/nvidia-driver/nvidia-driver.mk   | 4 ++++
- >  package/racehound/racehound.mk           | 4 ++++
- >  package/rtai/rtai.mk                     | 4 ++++
- >  package/ti-gfx/ti-gfx.mk                 | 5 +++++
- >  package/xtables-addons/xtables-addons.mk | 4 ++++
- >  6 files changed, 27 insertions(+), 3 deletions(-)
+So I'd prefer we get the error messages, as a clue to the user that
+something is wrong. Maybe we could have had an explicit message, yes.
 
- > +++ b/package/nvidia-driver/nvidia-driver.mk
- > @@ -91,6 +91,10 @@ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_MODULE),y)
- 
- >  NVIDIA_DRIVER_DEPENDENCIES += linux
- 
- > +# We're building a kernel module without using the kernel-module infra,
- > +# so we need to tell we want module support in the kernel:
- > +LINUX_NEEDS_MODULES = y
- > +
-
-Ehh, this should only be done if the package is enabled, E.G.
-
-ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER),y)
-LINUX_NEEDS_MODULES = y
-endif
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
