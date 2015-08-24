@@ -1,31 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 17:16:32 +0200
-Subject: [Buildroot] Bug in package tftp
-In-Reply-To: <55D70AD3.2030302@gmx.de> (universe II's message of "Fri, 21 Aug
- 2015 13:26:11 +0200")
-References: <55D70AD3.2030302@gmx.de>
-Message-ID: <87lhd0zpgv.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Aug 2015 17:13:37 +0200
+Subject: [Buildroot] [git commit] tftpd: fix init script
+Message-ID: <20150824151649.2453E7FD1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "universe" == universe  <universeii@gmx.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=eaddabf55719a13f19bfadd5519e9b9a85cf95ff
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear all,
- > when adding the tftp server to my target system image I found out that
- > the tftp server is not started by the corresponding init
- > script. Reason for that is a typo in the init script. The tftp binary
- > is installed with the filename "tftpd" but the init script tries to
- > call "in.tftpd". Just fixing the name in the script solves the
- > problem. Please find below the patch for correcting the bug.
+The daemon binary is tftpd, not in.tftpd. While we are at it, drop the
+unneeded /usr/local from the PATH.
 
- > Regards,
- > Andreas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tftpd/S80tftpd-hpa |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Fixed, thanks. In the future, please provide git formatted patches and
-use your real name in From: and your Signed-off-by lines.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tftpd/S80tftpd-hpa b/package/tftpd/S80tftpd-hpa
+index 41c28d1..08443a4 100755
+--- a/package/tftpd/S80tftpd-hpa
++++ b/package/tftpd/S80tftpd-hpa
+@@ -4,9 +4,9 @@ OPTIONS="-c -l -s /var/lib/tftpboot"
+ 
+ set -e
+ 
+-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
++PATH=/sbin:/bin:/usr/sbin:/usr/bin
+ DESC="HPA's tftpd"
+-NAME=in.tftpd
++NAME=tftpd
+ DAEMON=/usr/sbin/$NAME
+ PIDFILE=/var/run/$NAME.pid
+ SCRIPTNAME=/etc/init.d/S80tftpd-hpa
