@@ -1,45 +1,47 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Mon, 24 Aug 2015 16:38:37 -0700
-Subject: [Buildroot] Starting network...
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD978F@svr-wa-exch1.atg.lc>
+From: yuanlinyu <cugyly@163.com>
+Date: Tue, 25 Aug 2015 07:39:53 +0800 (CST)
+Subject: [Buildroot] BR2_arm1136j_s in config.in.arm
+In-Reply-To: <87twrpzks2.fsf@dell.be.48ers.dk>
+References: <7904fb17.d9ed.14f2728c6c5.Coremail.cugyly@163.com>
+ <87twrpzks2.fsf@dell.be.48ers.dk>
+Message-ID: <6eb08afc.de8.14f621518bd.Coremail.cugyly@163.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is my .config.
+hi peter,now I am using M82359 VOIP processer, it's simple introduction as below,Comcerto 300 devices are available in two different varieties: Master (M8235x) and Slave (M8234x). Master 
+devices include both an MSP subsystem (ARM1136J-S + DSP array) and a CSP subsystem (ARM1136J-S), while 
+Slave devices include only the MSP subsystem.
 
-From: Lee, Tommy
-Sent: Monday, August 24, 2015 4:36 PM
-To: 'buildroot at busybox.net'
-Subject: Starting network...
+now i work on csp core, it's have no vfp.
 
-Hi Buildroot mailing list,
 
-My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have made the former meet the latter's requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. Last week I succeeded in the building of the zImage file of my Linux system which has a rootfilesystem integrated, and a armada-385-db-ap.dtb file, The DB-88F6820-GP on-board U-Boot-1.73 commands are able to the boot up the system. The U-Boot bootargs string is:
+thanks
 
-"setenv bootargs console=ttyS0,115200 root=/dev/ram0 rw rootdelay=2"
 
-But, I discovered, this system cannot enable the eth0 device at the boot time. The "Starting network..." messages are:
-
-Starting network...
-[    1.618607] mvneta f1030000.ethernet eth0: could not find the PHY
-[    1.624732] mvneta f1030000.ethernet eth0: cannot probe MDIO busip: SIOCSIFFLAGS: No such device
-
-Before I boot the system, the board's eth0 interface connects to a DHCP server. The attached is my .config. I am resolving this eth0-enabling issue. Your experience sharing is definitely welcome.
-
-Tommy
-
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+At 2015-08-24 06:45:33, "Peter Korsgaard" <peter@korsgaard.com> wrote:
+>>>>>> "yuanlinyu" == yuanlinyu  <cugyly@163.com> writes:
+>
+> > hi,
+> > "BR2_arm1136j_s" in config.in.arm seems not work because no
+> > BR2_arm1136j_s configuration item. how to configure buildroot for soc
+> > with arm1136j-s cpu?
+>
+> > config BR2_GCC_TARGET_CPU
+> > 	default "arm920t"	if BR2_arm920t
+> > 	default "arm922t"	if BR2_arm922t
+> > 	default "arm926ej-s"	if BR2_arm926t
+> > 	default "arm1136j-s"	if BR2_arm1136j_s
+>
+>Hmm, you're right. I've added it now to git master.
+>
+>I don't think I have ever seen a non-vfp variant of the arm1136 in the
+>wild. What SoC are you using?
+>
+>-- 
+>Bye, Peter Korsgaard
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150824/6db120be/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config.aug21fri15
-Type: application/octet-stream
-Size: 54042 bytes
-Desc: config.aug21fri15
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150824/6db120be/attachment.obj>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150825/5c1e75f6/attachment.html>
