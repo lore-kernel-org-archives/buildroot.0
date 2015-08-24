@@ -1,50 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Aug 2015 18:50:05 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] package/linux-fusion: slight
-	simplification
-In-Reply-To: <cover.1440434894.git.yann.morin.1998@free.fr>
-References: <cover.1440434894.git.yann.morin.1998@free.fr>
-Message-ID: <96204099417c101327b357870e89386fe1757931.1440434894.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Aug 2015 21:44:19 +0200
+Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
+In-Reply-To: <20150823094750.GC3729@free.fr>
+References: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
+ <55D8FA56.5020009@mind.be> <20150823094750.GC3729@free.fr>
+Message-ID: <55DB7413.4060109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using an intermediate variable to "store" LINUX_VERSION_PROBED is
-un-ncessary, because They are both recursively-expanded variables, and
-the `make kernel-version` code will anyway be used in both places it is
-needed; storing in an intermediate variable will not make that a single
-expansion of the sub-shell.
+On 08/23/2015 11:47 AM, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2015-08-23 00:40 +0200, Arnout Vandecappelle spake thusly:
+[snip]
+>>
+>>  Don't know how important this is, but on a 80-character display it gets chopped
+>> off after the faq-no-. But I guess there's not much we can do about it.
+>> Except perhaps: http://nightly.buildroot.org/manual.html#faq-no-binary-packages
+>> - still doesn't fit but at least we get to the binary-pa :-)
+> 
+> What about;
+> 
+>     comment "-----------------------------------------------------"
+>     comment "Please note:                                         "
+>     comment "- Buildroot does *not* generate binary packages,     "
+>     comment "- Buildroot does *not* install any package database. "
+>     comment "*                                                    "
+>     comment "It is up to you to provide those by yourself if you  "
+>     comment "want to use any of those package managers.           "
+>     comment "*                                                    "
+>     comment "See the manual:                                      "
+>     comment "http://buildroot.org/downloads/manual/manaul.html#faq"
+>     comment "-no-binary-packages                                  "
+>     comment "-----------------------------------------------------"
+> 
+> This does fit on a 80-char wide terminal, and we get the complete URL on
+> two lines.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/linux-fusion/linux-fusion.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ ... which is also not ideal, since it means that the URL can't be copy&paste'd
+easily, and that people with a modern terminal that is more than 80 characters
+wide can't ctrl-click (or whatever) to open the URL directly.
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index 21b6e42..5f9e44e 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -17,17 +17,16 @@ ifeq ($(BR2_PACKAGE_LINUX_FUSION),y)
- LINUX_NEEDS_MODULES = y
- endif
- 
--LINUX_FOR_FUSION = $(LINUX_VERSION_PROBED)
- LINUX_FUSION_ETC_DIR = $(TARGET_DIR)/etc/udev/rules.d
- 
--LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_FOR_FUSION)
-+LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_VERSION_PROBED)
- LINUX_FUSION_MAKE_OPTS += KERNEL_BUILD=$(LINUX_DIR)
- LINUX_FUSION_MAKE_OPTS += KERNEL_SOURCE=$(LINUX_DIR)
- 
- LINUX_FUSION_MAKE_OPTS += SYSROOT=$(TARGET_DIR)
- LINUX_FUSION_MAKE_OPTS += ARCH=$(KERNEL_ARCH)
- LINUX_FUSION_MAKE_OPTS += CROSS_COMPILE=$(TARGET_CROSS)
--LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_FOR_FUSION)/kernel
-+LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_VERSION_PROBED)/kernel
- 
- define LINUX_FUSION_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LINUX_FUSION_MAKE_OPTS) -C $(@D)
+ So I think it's best to use the slightly shorter nightly URL and keep it
+non-wrapped.
+
+ Or actually, it's best to add a manual.html -> downloads/manual/manual.html
+symlink to the website and refer to that. This fits easily:
+http://buildroot.org/manual.html#faq-no-binary-packages
+And it also makes it easier for us to refer to the manual in other places.
+
+ Peter, what do you think of such a symlink?
+
+
+ Regards,
+ Arnout
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
