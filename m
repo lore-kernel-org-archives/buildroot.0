@@ -1,121 +1,45 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Mon, 24 Aug 2015 16:11:29 +0200
-Subject: [Buildroot] [PATCH 0/3] core/pkg-kernel-config: ensure linux
- supports modules (branch yem/kernel-module)
-In-Reply-To: <cover.1440418870.git.yann.morin.1998@free.fr>
-References: <cover.1440418870.git.yann.morin.1998@free.fr>
-Message-ID: <20150824161129.272f994c@pcviktorin.fit.vutbr.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Aug 2015 17:09:03 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: fix when readlink is
+	busybox'
+In-Reply-To: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 18 Aug 2015 21:25:53 +0200")
+References: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87pp2czptc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, all.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-I've tried the patch series and it works. However, I've tried to do
-this for xtables-addons:
+ > Busybox' "readlink -f" does not canonicalise paths when the target is
+ > missing, while coreutils do.
 
--LINUX_NEEDS_MODULES = y
-+#LINUX_NEEDS_MODULES = y
+ > Fix that by:
+ >   - making an absolute symlink
+ >   - dropping "-f" when calling readlink
 
-and the result is that it again compiles with CONFIG_MODULES=y (and it
-shouldn't). I was investigating why and couldn't find the answer. It
-just sets the CONFIG_MODULES=y everytime.
+ > Fixes #8276.
 
-Simple test is possible:
+Committed, thanks.
 
-1) $ make olimex_a20_olinuxino_lime_defconfig
-2) $ make linux-menuconfig
-3) Check "Enable loadable module support" is (un)checked.
+ > --- a/package/dropbear/S50dropbear
+ > +++ b/package/dropbear/S50dropbear
+ > @@ -18,7 +18,7 @@ start() {
+ >  	#   - the filesystem is RW (i.e. we can rm the symlink),
+ >  	#     replace the symlink with an actual directory
+ >  	if [ -L /etc/dropbear \
+ > -	     -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
+ > +	     -a "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]
+ >  	then
+ >  		if rm -f /etc/dropbear; then
+ >  			mkdir -p /etc/dropbear
 
-* For origin/master (7deaa27), it works as expected (unchecked).
-* After merge of morin-repo/yem/kernel-module (2af986e) it DOES NOT work
-as expected (checked).
-
-Can you reproduce it as well?
-
-Regards
-Jan Viktorin
-
-On Mon, 24 Aug 2015 14:27:38 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-
-> Hello All!
-> 
-> This series fixes two standing issues with the way we handle packages
-> that build kernel modules:
-> 
->   - first, the current check is broken, because $(LINUX_DIR) should be
->     double-$ed, as it is used in a macro from an infra,
-> 
->   - second, it is currently possible to (try to) build such packages
->     without the kernel config havong CONFIG_MODULES set.
-> 
-> So, these three patches fix that:
-> 
->   - introduce a new internal variable to tell the kernel to enable
->     support for modules, LINUX_NEEDS_MODULES, that should be set
-> whenever a package wants to build a kernel modules, and is
-> automatically set by the kernel-module infra,
-> 
->   - the (broken) check is no longer needed so removed,
-> 
->   - a few packages that build kernel modules without using the
->     kernel-module infra are fixed to manually set that variable.
-> 
-> I believe that should go into master, because:
-> 
->   - it actually fixes build issues
-> 
->   - the kernel-module infra is brand new in this release, and should
-> be fixed and stable prior to being released to the wide hostile world
->     ;-) 
-> 
-> Thanks to Peter for suggesting the solution, and to No? and Jan for
-> their previous attempts that eventually led to this series.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> The following changes since commit
-> 7deaa277fd4c89c67de39ea21b4cd081ab85366f:
-> 
->   arch/arm: add missing arm1136j-s variant (2015-08-24 00:43:12 +0200)
-> 
-> are available in the git repository at:
-> 
->   git://git.busybox.net/~ymorin/git/buildroot yem/kernel-module
-> 
-> for you to fetch changes up to
-> 2af986ecd146d1dc6e7603bd93fac5420c459e41:
-> 
->   packages: ensure linux supports modules even when not using
-> kernel-module (2015-08-24 14:14:23 +0200)
-> 
-> ----------------------------------------------------------------
-> Yann E. MORIN (3):
->       core/pkg-kernel-module: ensure linux supports modules
->       core/pkg-kernel-module: drop now-useles check for CONFIG_MODULES
->       packages: ensure linux supports modules even when not using
-> kernel-module
-> 
->  linux/linux.mk                           | 2 ++
->  package/linux-fusion/linux-fusion.mk     | 9 ++++++---
->  package/nvidia-driver/nvidia-driver.mk   | 4 ++++
->  package/pkg-kernel-module.mk             | 9 +++++----
->  package/racehound/racehound.mk           | 4 ++++
->  package/rtai/rtai.mk                     | 4 ++++
->  package/ti-gfx/ti-gfx.mk                 | 5 +++++
->  package/xtables-addons/xtables-addons.mk | 4 ++++
->  8 files changed, 34 insertions(+), 7 deletions(-)
-> 
-
-
+Looking at the recent changes to S50dropbear, isn't it quite noisy with
+a RO rootfs? I would imagine those rm and mkdir calls complain with
+RO. Perhaps we should add 2>/dev/null to them?
 
 -- 
-   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
-   System Architect              Web:    www.RehiveTech.com
-   RehiveTech
-   Brno, Czech Republic
+Bye, Peter Korsgaard
