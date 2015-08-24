@@ -1,58 +1,41 @@
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date: Mon, 24 Aug 2015 11:13:04 +0200
-Subject: [Buildroot] [PATCH] package/libcgroup: allow to build cgroup-tools
-Message-ID: <1440407584-5538-1-git-send-email-bgolaszewski@baylibre.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 24 Aug 2015 10:31:06 +0100
+Subject: [Buildroot] [PATCH v2] zyre: fix static builds
+Message-ID: <1440408666-62387-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a new config option that allows to build cgroup-tools - a set of
-command-line utils for managing cgroups.
+zyre package fails to build statically, so we pass the needed libs
+directly in order to fix this problem.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/0ab/0ab4c6a4bb4942d51e7712073d4731d81ecb5251/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/libcgroup/Config.in    | 6 ++++++
- package/libcgroup/libcgroup.mk | 7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+Changes v1 -> v2: add "Fixes" URL.
 
-diff --git a/package/libcgroup/Config.in b/package/libcgroup/Config.in
-index b7a84e0..2d7a808 100644
---- a/package/libcgroup/Config.in
-+++ b/package/libcgroup/Config.in
-@@ -9,5 +9,11 @@ config BR2_PACKAGE_LIBCGROUP
+ package/zyre/zyre.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
+index 661dddc..87ed427 100644
+--- a/package/zyre/zyre.mk
++++ b/package/zyre/zyre.mk
+@@ -12,6 +12,10 @@ ZYRE_INSTALL_STAGING = YES
+ ZYRE_DEPENDENCIES = czmq zeromq
+ ZYRE_AUTORECONF = YES
  
- 	  http://libcg.sourceforge.net/
- 
-+config BR2_PACKAGE_CGROUP_TOOLS
-+	bool "build cgroup-tools"
-+	depends on BR2_PACKAGE_LIBCGROUP
-+	help
-+	  Include a set of command-line tools for managing cgroups.
-+
- comment "libcgroup needs an (e)glibc toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index ace2744..f3dbf18 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -20,10 +20,15 @@ LIBCGROUP_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS"
- 
- LIBCGROUP_CONF_OPTS = \
--	--disable-tools \
- 	--disable-daemon \
- 	--disable-initscript-install
- 
-+ifeq ($(BR2_PACKAGE_CGROUP_TOOLS),y)
-+LIBCGROUP_CONF_OPTS += --enable-tools
-+else
-+LIBCGROUP_CONF_OPTS += --disable-tools
++ifeq ($(BR2_STATIC_LIBS),y)
++ZYRE_CONF_ENV += LIBS="-lzmq -lstdc++ -lczmq -pthread"
 +endif
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- LIBCGROUP_DEPENDENCIES += linux-pam
- LIBCGROUP_CONF_OPTS += --enable-pam
+ define ZYRE_CREATE_CONFIG_DIR
+ 	mkdir -p $(@D)/config
+ endef
 -- 
-2.1.4
+1.7.1
