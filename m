@@ -1,35 +1,30 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 24 Aug 2015 09:59:05 +0100
-Subject: [Buildroot] [PATCH] zyre: fix static builds
-Message-ID: <1440406745-16062-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 24 Aug 2015 10:04:42 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-08-20
+In-Reply-To: <20150821063014.F0716100F4D@stock.ovh.net>
+References: <20150821063014.F0716100F4D@stock.ovh.net>
+Message-ID: <55DADE2A.5030509@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zyre package fails to build statically, so we pass the needed libs
-directly in order to fix this problem.
+Dear Thomas Petazzoni,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/zyre/zyre.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+On 08/21/2015 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2015-08-20
 
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index 661dddc..87ed427 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -12,6 +12,10 @@ ZYRE_INSTALL_STAGING = YES
- ZYRE_DEPENDENCIES = czmq zeromq
- ZYRE_AUTORECONF = YES
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+ZYRE_CONF_ENV += LIBS="-lzmq -lstdc++ -lczmq -pthread"
-+endif
-+
- define ZYRE_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
- endef
--- 
-1.7.1
+>       mipsel |                    zyre-v1.0.0 | NOK | http://autobuild.buildroot.net/results/0ab4c6a4bb4942d51e7712073d4731d81ecb5251/
+
+Fixed by:
+
+http://patchwork.ozlabs.org/patch/509948/
+
+Note that I also tried to fix it by following the
+`$(PKG_CONFIG_HOST_BINARY) --libs <whatever>` approach, but it doesn't work.
+
+Regards,
+
+Vincent.
