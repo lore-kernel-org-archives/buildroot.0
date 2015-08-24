@@ -1,43 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Aug 2015 22:36:22 +0200
-Subject: [Buildroot] virtualisation packages
-In-Reply-To: <CA+BsyQ4z4j8deZyEqkc0yP_J1u83BfQ_Q6Qs=7Qf39K4XxVCJg@mail.gmail.com>
-References: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
- <20150824153700.GD3619@free.fr>
- <CA+BsyQ4z4j8deZyEqkc0yP_J1u83BfQ_Q6Qs=7Qf39K4XxVCJg@mail.gmail.com>
-Message-ID: <20150824203622.GG3619@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Aug 2015 22:42:01 +0200
+Subject: [Buildroot] [PATCH 3/4 v2] packages: ensure linux supports
+ modules even when not using kernel-module
+In-Reply-To: <445a9cea52e08b8f3d20c717e11e8b397f2f40ff.1440434894.git.yann.morin.1998@free.fr>
+References: <cover.1440434894.git.yann.morin.1998@free.fr>
+ <445a9cea52e08b8f3d20c717e11e8b397f2f40ff.1440434894.git.yann.morin.1998@free.fr>
+Message-ID: <55DB8199.2080903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan, All,
-
-On 2015-08-24 16:45 +0100, Brendan Heading spake thusly:
-> Sure. From an initial glance, the patch sets (each adding support for
-> qemu, and libvirt, respectively) look OK to me.
+On 08/24/2015 06:50 PM, Yann E. MORIN wrote:
+> Some packages build kernel modules without using the kernel-module infra
+> (because they use custom build systems); they do not automatically get
+> the kernel to support modules which is ensured when using the infra.
 > 
-> Maybe I could simply submit them here to start a discussion .. or are
-> there obvious issues that you are aware of which need resolved first ?
+> It must be done manually for all those packages, whenever they ar
+> eenabled.
 
-Nothing obvious as far as I know. Just that I did not have time to fully
-test them.
+ are enabled
 
-The qemu patches I still ave had some comments from Peter, but I never
-came to eventually fix them (and it was quite a while ago, and I don't
-recall everything Peter said...).
+> 
+> Note: the nvidia-driver case does not need the ifeq-block other packages
+> use, because it is already enclosed in a more stringent ifeq-block.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: No? Rubinstein <nrubinstein@aldebaran.com>
+> Cc: Jan Viktorin <viktorin@rehivetech.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-So, maybe you can get them, test that they work for you, and if so, spin
-them on the list.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Regards,
-Yann E. MORIN.
+ Minor nit:
+
+[snip]
+> +# We're building a kernel module without using the kernel-module infra,
+> +# so we need to tell we want module support in the kernel:
+
+ The colon at the end of the line is not needed (same for all others).
+
+ Regards,
+ Arnout
+
+
+> +ifeq ($(BR2_PACKAGE_LINUX_FUSION),y)
+> +LINUX_NEEDS_MODULES = y
+> +endif
+> +
+>  LINUX_FOR_FUSION = $(LINUX_VERSION_PROBED)
+>  LINUX_FUSION_ETC_DIR = $(TARGET_DIR)/etc/udev/rules.d
+>  
+[snip]
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
