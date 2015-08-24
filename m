@@ -1,72 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Aug 2015 22:34:21 +0200
-Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
-In-Reply-To: <55DB7413.4060109@mind.be>
-References: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
- <55D8FA56.5020009@mind.be> <20150823094750.GC3729@free.fr>
- <55DB7413.4060109@mind.be>
-Message-ID: <20150824203421.GF3619@free.fr>
+Date: Mon, 24 Aug 2015 22:36:22 +0200
+Subject: [Buildroot] virtualisation packages
+In-Reply-To: <CA+BsyQ4z4j8deZyEqkc0yP_J1u83BfQ_Q6Qs=7Qf39K4XxVCJg@mail.gmail.com>
+References: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
+ <20150824153700.GD3619@free.fr>
+ <CA+BsyQ4z4j8deZyEqkc0yP_J1u83BfQ_Q6Qs=7Qf39K4XxVCJg@mail.gmail.com>
+Message-ID: <20150824203622.GG3619@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Brendan, All,
 
-On 2015-08-24 21:44 +0200, Arnout Vandecappelle spake thusly:
-> On 08/23/2015 11:47 AM, Yann E. MORIN wrote:
-> > On 2015-08-23 00:40 +0200, Arnout Vandecappelle spake thusly:
-> [snip]
-> >>
-> >>  Don't know how important this is, but on a 80-character display it gets chopped
-> >> off after the faq-no-. But I guess there's not much we can do about it.
-> >> Except perhaps: http://nightly.buildroot.org/manual.html#faq-no-binary-packages
-> >> - still doesn't fit but at least we get to the binary-pa :-)
-> > 
-> > What about;
-> > 
-> >     comment "-----------------------------------------------------"
-> >     comment "Please note:                                         "
-> >     comment "- Buildroot does *not* generate binary packages,     "
-> >     comment "- Buildroot does *not* install any package database. "
-> >     comment "*                                                    "
-> >     comment "It is up to you to provide those by yourself if you  "
-> >     comment "want to use any of those package managers.           "
-> >     comment "*                                                    "
-> >     comment "See the manual:                                      "
-> >     comment "http://buildroot.org/downloads/manual/manaul.html#faq"
-> >     comment "-no-binary-packages                                  "
-> >     comment "-----------------------------------------------------"
-> > 
-> > This does fit on a 80-char wide terminal, and we get the complete URL on
-> > two lines.
+On 2015-08-24 16:45 +0100, Brendan Heading spake thusly:
+> Sure. From an initial glance, the patch sets (each adding support for
+> qemu, and libvirt, respectively) look OK to me.
 > 
->  ... which is also not ideal, since it means that the URL can't be copy&paste'd
-> easily, and that people with a modern terminal that is more than 80 characters
-> wide can't ctrl-click (or whatever) to open the URL directly.
+> Maybe I could simply submit them here to start a discussion .. or are
+> there obvious issues that you are aware of which need resolved first ?
 
-Right, but then, it's better than npthing, no?
+Nothing obvious as far as I know. Just that I did not have time to fully
+test them.
 
->  So I think it's best to use the slightly shorter nightly URL and keep it
-> non-wrapped.
+The qemu patches I still ave had some comments from Peter, but I never
+came to eventually fix them (and it was quite a while ago, and I don't
+recall everything Peter said...).
 
-I would not like we use the nightly version, just because nightly is
-not stable.
-
->  Or actually, it's best to add a manual.html -> downloads/manual/manual.html
-> symlink to the website and refer to that. This fits easily:
-> http://buildroot.org/manual.html#faq-no-binary-packages
-> And it also makes it easier for us to refer to the manual in other places.
-> 
->  Peter, what do you think of such a symlink?
-
-At least, I'd like that.
-
-Since I have access to the server, if Peter agrees, I can try to
-configure the apache server for that.
-
-But note that this apache server also serves ulibc and busybox.
+So, maybe you can get them, test that they work for you, and if so, spin
+them on the list.
 
 Regards,
 Yann E. MORIN.
