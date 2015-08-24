@@ -1,42 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Aug 2015 17:37:00 +0200
-Subject: [Buildroot] virtualisation packages
-In-Reply-To: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
-References: <CA+BsyQ7fZYo9ZCyk3vpJoe0a1t5JU57-TTuSTYcdCRY3+yTi3g@mail.gmail.com>
-Message-ID: <20150824153700.GD3619@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Aug 2015 17:38:23 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: fix when readlink is
+	busybox'
+In-Reply-To: <20150824153234.GA3619@free.fr> (Yann E. MORIN's message of "Mon, 
+ 24 Aug 2015 17:32:34 +0200")
+References: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr>
+ <87pp2czptc.fsf@dell.be.48ers.dk> <20150824153234.GA3619@free.fr>
+Message-ID: <878u90zogg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2015-08-24 13:07 +0100, Brendan Heading spake thusly:
-> I had an idea over the weekend about using buildroot to build a
-> virtualisation platform, but I see that you've already been doing
-> quite a bit of work on this. I see there was some discussion of this
-> dating back 18 months or so.
-> 
-> I can see you have a tree where you are keeping a set of patches
-> rebased against the current buildroot master.
-> 
-> Are there barriers in terms of getting these packages into buildroot
-> proper, and if so, is it something I could help with ?
+Hi,
 
-Well, I haven't had time to finalise such support. Even though I'm also
-interested in it, it's not my top-priority.
+>> Looking at the recent changes to S50dropbear, isn't it quite noisy with
+ >> a RO rootfs? I would imagine those rm and mkdir calls complain with
+ >> RO. Perhaps we should add 2>/dev/null to them?
 
-You can get them in your tree and work on them if you're interested. I'd
-be happy to help.
+ > Well, on a RO filesystem, we'd create /var/run/dropbear on each boot,
+ > and thus regenerate keys on each boot. This means keys from such a
+ > device can not really be trusted.
 
-Regards,
-Yann E. MORIN.
+Well, with a RO filesystem you only have the option to either generate
+at each boot or bake in a hardcoded host key in the rootfs. Neither is
+really great for security.
+
+ > So I'd prefer we get the error messages, as a clue to the user that
+ > something is wrong. Maybe we could have had an explicit message, yes.
+
+Those fairly obscure messages are imho not really helpful - But on the
+other hand I'm not sure a dedicated message is really warranted.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Venlig hilsen,
+Peter Korsgaard 
