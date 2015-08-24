@@ -1,63 +1,71 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Aug 2015 22:45:46 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] package/linux-fusion: slight
- simplification
-In-Reply-To: <96204099417c101327b357870e89386fe1757931.1440434894.git.yann.morin.1998@free.fr>
-References: <cover.1440434894.git.yann.morin.1998@free.fr>
- <96204099417c101327b357870e89386fe1757931.1440434894.git.yann.morin.1998@free.fr>
-Message-ID: <55DB827A.6070001@mind.be>
+Date: Mon, 24 Aug 2015 22:51:57 +0200
+Subject: [Buildroot] Installing libpq
+In-Reply-To: <CAJoXuZgkk+nLFHJixMHuFpSDJQTM=G9sJu0TRN9TV2a4+xkYrA@mail.gmail.com>
+References: <CAJoXuZgkk+nLFHJixMHuFpSDJQTM=G9sJu0TRN9TV2a4+xkYrA@mail.gmail.com>
+Message-ID: <55DB83ED.60901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/24/2015 06:50 PM, Yann E. MORIN wrote:
-> Using an intermediate variable to "store" LINUX_VERSION_PROBED is
-> un-ncessary, because They are both recursively-expanded variables, and
-  unnecessary          they
-
-> the `make kernel-version` code will anyway be used in both places it is
-> needed; storing in an intermediate variable will not make that a single
-> expansion of the sub-shell.
+On 08/16/2015 01:59 PM, Chris Reeves wrote:
+> Hi
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> I'm new to using buildroot, trying to create some lightweight containers. My
+> application requires libpq in order to install psycopg2. I don't really want to
+> install al of Postgres to get it so I had a go at creating a package that is
+> basically the equivalent too libpq-dev in the liks of Ubuntu and Debian.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ For something like this, you don't want to create a new package. Instead, you
+should add options to the postgresql package to build just the library or also
+the server (see libidn for a simple example).
+
+
+[snip]
+> '/tmp/buildroot/output/build/libpq-9.4.4/src/interfaces/libpq'
+> /bin/mkdir -p '/tmp/buildroot/output/target/usr/lib'
+> '/tmp/buildroot/output/target/usr/lib/pkgconfig'
+> /bin/mkdir -p '/tmp/buildroot/output/target/usr/include'
+> '/tmp/buildroot/output/target/usr/include/postgresql/internal'
+> '/tmp/buildroot/output/target/usr/share/postgresql'
+> /usr/bin/install -c -m 755  libpq.so.5.7
+> '/tmp/buildroot/output/target/usr/lib/libpq.so.5.7'
+> cd '/tmp/buildroot/output/target/usr/lib' && \
+> rm -f libpq.so.5 && \
+> ln -s libpq.so.5.7 libpq.so.5
+> /usr/bin/install -c -m 644  libpq.a '/tmp/buildroot/output/target/usr/lib/libpq.a'
+> /usr/bin/install -c -m 644 libpq.pc
+> '/tmp/buildroot/output/target/usr/lib/pkgconfig/libpq.pc'
+> cd '/tmp/buildroot/output/target/usr/lib' && \
+> rm -f libpq.so && \
+> ln -s libpq.so.5.7 libpq.so
+> /usr/bin/install -c -m 644 ./libpq-fe.h '/tmp/buildroot/output/target/usr/include'
+> /usr/bin/install -c -m 644 ./libpq-events.h
+> '/tmp/buildroot/output/target/usr/include'
+> /usr/bin/install -c -m 644 ./libpq-int.h
+> '/tmp/buildroot/output/target/usr/include/postgresql/internal'
+> /usr/bin/install -c -m 644 ./pqexpbuffer.h
+> '/tmp/buildroot/output/target/usr/include/postgresql/internal'
+> /usr/bin/install -c -m 644 ./pg_service.conf.sample
+> '/tmp/buildroot/output/target/usr/share/postgresql/pg_service.conf.sample'
+> make[1]: Leaving directory
+> '/tmp/buildroot/output/build/libpq-9.4.4/src/interfaces/libpq'
+> 
+> However the files I expect like the .so's and the headers don't end up in the
+> rootfs.
+
+ That the headers don't appear in the rootfs is normal: they are removed by
+buildroot. Since your target doesn't have a compiler, the headers are useless.
+
+ However, the .so library should still be there. If not, the server wouldn't
+even be able to run...
+
+
 
  Regards,
  Arnout
-
-> ---
->  package/linux-fusion/linux-fusion.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-> index 21b6e42..5f9e44e 100644
-> --- a/package/linux-fusion/linux-fusion.mk
-> +++ b/package/linux-fusion/linux-fusion.mk
-> @@ -17,17 +17,16 @@ ifeq ($(BR2_PACKAGE_LINUX_FUSION),y)
->  LINUX_NEEDS_MODULES = y
->  endif
->  
-> -LINUX_FOR_FUSION = $(LINUX_VERSION_PROBED)
->  LINUX_FUSION_ETC_DIR = $(TARGET_DIR)/etc/udev/rules.d
->  
-> -LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_FOR_FUSION)
-> +LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_VERSION_PROBED)
->  LINUX_FUSION_MAKE_OPTS += KERNEL_BUILD=$(LINUX_DIR)
->  LINUX_FUSION_MAKE_OPTS += KERNEL_SOURCE=$(LINUX_DIR)
->  
->  LINUX_FUSION_MAKE_OPTS += SYSROOT=$(TARGET_DIR)
->  LINUX_FUSION_MAKE_OPTS += ARCH=$(KERNEL_ARCH)
->  LINUX_FUSION_MAKE_OPTS += CROSS_COMPILE=$(TARGET_CROSS)
-> -LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_FOR_FUSION)/kernel
-> +LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_VERSION_PROBED)/kernel
->  
->  define LINUX_FUSION_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LINUX_FUSION_MAKE_OPTS) -C $(@D)
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
