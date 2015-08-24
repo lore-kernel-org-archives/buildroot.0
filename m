@@ -1,74 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Aug 2015 22:33:08 +0200
-Subject: [Buildroot] [PATCH 2/4 v2] core/pkg-kernel-module: drop
- now-useles check for CONFIG_MODULES
-In-Reply-To: <672d1cb2623b894cc263b04c7b796cc1ab1267f9.1440434894.git.yann.morin.1998@free.fr>
-References: <cover.1440434894.git.yann.morin.1998@free.fr>
- <672d1cb2623b894cc263b04c7b796cc1ab1267f9.1440434894.git.yann.morin.1998@free.fr>
-Message-ID: <55DB7F84.9080806@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Aug 2015 22:34:21 +0200
+Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
+In-Reply-To: <55DB7413.4060109@mind.be>
+References: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
+ <55D8FA56.5020009@mind.be> <20150823094750.GC3729@free.fr>
+ <55DB7413.4060109@mind.be>
+Message-ID: <20150824203421.GF3619@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/24/2015 06:50 PM, Yann E. MORIN wrote:
-> Now that we force-enable support for modules in the kernel config, we
-> need not check it.
+Arnout, All,
+
+On 2015-08-24 21:44 +0200, Arnout Vandecappelle spake thusly:
+> On 08/23/2015 11:47 AM, Yann E. MORIN wrote:
+> > On 2015-08-23 00:40 +0200, Arnout Vandecappelle spake thusly:
+> [snip]
+> >>
+> >>  Don't know how important this is, but on a 80-character display it gets chopped
+> >> off after the faq-no-. But I guess there's not much we can do about it.
+> >> Except perhaps: http://nightly.buildroot.org/manual.html#faq-no-binary-packages
+> >> - still doesn't fit but at least we get to the binary-pa :-)
+> > 
+> > What about;
+> > 
+> >     comment "-----------------------------------------------------"
+> >     comment "Please note:                                         "
+> >     comment "- Buildroot does *not* generate binary packages,     "
+> >     comment "- Buildroot does *not* install any package database. "
+> >     comment "*                                                    "
+> >     comment "It is up to you to provide those by yourself if you  "
+> >     comment "want to use any of those package managers.           "
+> >     comment "*                                                    "
+> >     comment "See the manual:                                      "
+> >     comment "http://buildroot.org/downloads/manual/manaul.html#faq"
+> >     comment "-no-binary-packages                                  "
+> >     comment "-----------------------------------------------------"
+> > 
+> > This does fit on a 80-char wide terminal, and we get the complete URL on
+> > two lines.
 > 
-> Besides, the check was broken, because it did not use $$ to dereference
-> LINUX_DIR, thus leading to systematic build failures when a package
-> using the kernel-module infra was enabled.
+>  ... which is also not ideal, since it means that the URL can't be copy&paste'd
+> easily, and that people with a modern terminal that is more than 80 characters
+> wide can't ctrl-click (or whatever) to open the URL directly.
 
- Would be nice to add:
+Right, but then, it's better than npthing, no?
 
-This reverts commit 8df95d926e963601c727defeb4ab90ce2368da70
-[pkg-kernel-module: die if kernel module support is disabled]
+>  So I think it's best to use the slightly shorter nightly URL and keep it
+> non-wrapped.
 
+I would not like we use the nightly version, just because nightly is
+not stable.
 
- Otherwise:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
+>  Or actually, it's best to add a manual.html -> downloads/manual/manual.html
+> symlink to the website and refer to that. This fits easily:
+> http://buildroot.org/manual.html#faq-no-binary-packages
+> And it also makes it easier for us to refer to the manual in other places.
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: No? Rubinstein <noe.rubinstein@gmail.com>
-> Cc: Jan Viktorin <viktorin@rehivetech.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - the check was broken anyway
-> ---
->  package/pkg-kernel-module.mk | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-> index f6730b8..200c91d 100644
-> --- a/package/pkg-kernel-module.mk
-> +++ b/package/pkg-kernel-module.mk
-> @@ -65,10 +65,6 @@ $(2)_MODULE_SUBDIRS ?= .
->  # includes and other support files (Booo!)
->  define $(2)_KERNEL_MODULES_BUILD
->  	@$$(call MESSAGE,"Building kernel module(s)")
-> -	@if ! grep -Fqx 'CONFIG_MODULES=y' $(LINUX_DIR)/.config; then \
-> -		echo "ERROR: Kernel does not support loadable modules"; \
-> -		exit 1; \
-> -	fi
->  	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
->  		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
->  			-C $$(LINUX_DIR) \
-> 
+>  Peter, what do you think of such a symlink?
 
+At least, I'd like that.
+
+Since I have access to the server, if Peter agrees, I can try to
+configure the apache server for that.
+
+But note that this apache server also serves ulibc and busybox.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
