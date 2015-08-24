@@ -1,44 +1,30 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 25 Aug 2015 00:15:38 +0200
-Subject: [Buildroot] [PATCH] package/wf111: remove package
-In-Reply-To: <55DB7994.8080509@mind.be>
-References: <1440202387-7291-1-git-send-email-yann.morin.1998@free.fr>
- <20150823163653.3989f210@free-electrons.com> <20150823153737.GD3729@free.fr>
- <20150823205857.1625a64f@free-electrons.com> <55DB7994.8080509@mind.be>
-Message-ID: <55DB978A.3050805@je-eigen-domein.nl>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Mon, 24 Aug 2015 16:36:22 -0700
+Subject: [Buildroot] Starting network...
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/24/2015 10:07 PM, Arnout Vandecappelle wrote:
-> I registered (under a false name and with a dummy e-mail address) and
-> downloaded the driver, and there is no license text available in it. I also did
-> not have to agree to any license conditions in order to register or download
-> anything. So either this representative is wrong about "does not allow
-> redistributing without licensing conditions", or the website designer botched
-> it. Probably the latter. Bottom line is: unless you have a separate agreement
-> with Bluegiga, you are not allowed to use this software for any purpose. I don't
-> understand how legal departments can let something like this pass but on the
-> other hand get all excited about some piece of GPLv3 in your product...
->
->   The source code says "Refer to LICENSE.txt included with this source code for
-> details on the license terms.", but LICENSE.txt is missing. An earlier version
-> of the tarball has a LICENSE.txt with a MIT-like license or GPLv2. But anyway,
-> that obviously only applies to the sources, not to the userspace binaries that
-> are included and much less to the firmware blobs. So we probably can't host a
-> copy on sources.buildroot.org.
+Hi Buildroot mailing list,
 
-Although not necessarily a version that works with this device, source 
-for the unifi_helper program doesn't seem to be that hard to find either.
+My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have made the former meet the latter's requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. Last week I succeeded in the building of the zImage file of my Linux system which has a rootfilesystem integrated, and a armada-385-db-ap.dtb file, The DB-88F6820-GP on-board U-Boot-1.73 commands are able to the boot up the system. The U-Boot bootargs string is:
 
-https://github.com/kk30/A10-Linux-2.6.36/tree/master/modules/wifi/apm/unifi-linux
-license.txt suggests everything is dual licensed MIT and GPLv2
+"setenv bootargs console=ttyS0,115200 root=/dev/ram0 rw rootdelay=2"
+But, I discovered, this system cannot enable the eth0 device at the boot time. The "Starting network..." messages are:
 
-So wonder if it is really the chip vendor being the problem...
+Starting network...
+[    1.618607] mvneta f1030000.ethernet eth0: could not find the PHY
+[    1.624732] mvneta f1030000.ethernet eth0: cannot probe MDIO busip: SIOCSIFFLAGS: No such device
 
+Before I boot the system, the board's eth0 interface connects to a DHCP server. The attached is my .config. I am resolving this eth0-enabling issue. Your experience sharing is definitely welcome.
 
-Yours sincerely,
+Tommy
 
-Floris Bos
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150824/d31923de/attachment.html>
