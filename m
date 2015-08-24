@@ -1,32 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 17:55:50 +0200
-Subject: [Buildroot] [PATCH] apitrace: bump to version 7.0
-In-Reply-To: <55DB3B4E.3060109@imgtec.com> (Vicente Olivert Riera's message of
- "Mon, 24 Aug 2015 16:42:06 +0100")
-References: <1440406490-15855-1-git-send-email-Vincent.Riera@imgtec.com>
- <87h9nozp9e.fsf@dell.be.48ers.dk> <55DB3B4E.3060109@imgtec.com>
-Message-ID: <874mjoznnd.fsf@dell.be.48ers.dk>
+From: universe II <universeii@gmx.de>
+Date: Mon, 24 Aug 2015 18:25:40 +0200
+Subject: [Buildroot] Add missing config to RPM target package
+In-Reply-To: <55D72A86.1050505@imgtec.com>
+References: <55D70AF3.3050604@gmx.de> <55D72A86.1050505@imgtec.com>
+Message-ID: <55DB4584.1000102@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Am 21.08.2015 um 15:41 schrieb Vicente Olivert Riera:
+> Dear Andreas,
+>
+>> diff -Naur a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+>> --- a/package/rpm/rpm.mk        2015-08-07 11:38:37.559148663 +0200
+>> +++ b/package/rpm/rpm.mk        2015-08-21 11:13:31.679042077 +0200
+>> @@ -34,7 +34,7 @@
+>>   RPM_DEPENDENCIES += pcre
+>>   RPM_CONF_OPTS += --with-pcre=external
+>>   else
+>> -RPM_CONF_OPTS += --with-pcre=none
+>> +RPM_CONF_OPTS += --with-pcre=internal
+>>   endif
+>>
+>>   ifeq ($(BR2_PACKAGE_FILE),y)
+> I cannot apply your patch:
+>
+> $ wget http://patchwork.ozlabs.org/patch/509471/mbox/ -q -O - | git am
+> Applying: Add missing config to RPM target package
+> error: patch failed: package/rpm/rpm.mk:34
+> error: package/rpm/rpm.mk: patch does not apply
+> Patch failed at 0001 Add missing config to RPM target package
+> When you have resolved this problem run "git am --resolved".
+> If you would prefer to skip this patch, instead run "git am --skip".
+> To restore the original branch and stop patching run "git am --abort".
+>
+> Please make your patches using git, as stated in the Buildroot manual:
+>
+> http://buildroot.uclibc.org/downloads/manual/manual.html#submitting-patches
+>
+> Regards,
+>
+> Vincent.
+Dear Vincent,
+I tried to make my patch using git according to the manual, but I always 
+got an error. Maybe related to my inexperience with git. After 4 hours 
+of different tries I gave up and sent the patch via email. Sorry for the 
+inconvenience.
 
-Hi,
-
-> No, no. I think you misunderstood me, or perhaps I didn't explain myself
- > very well.
-
- > What the new version of apitrace does is using python2 even if you have
- > python3 installed. The old one was using python3 although both python2
- > and python3 were installed. It was just choosing the wrong python. Does
- > it make sense now?
-
-Ahh, ok. I don't see any references to 'python2' in the apitrace sources
-though.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Regards,
+Andreas
