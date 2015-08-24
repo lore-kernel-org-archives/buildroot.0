@@ -1,45 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 17:09:03 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: fix when readlink is
-	busybox'
-In-Reply-To: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 18 Aug 2015 21:25:53 +0200")
-References: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87pp2czptc.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Aug 2015 17:16:32 +0200
+Subject: [Buildroot] Bug in package tftp
+In-Reply-To: <55D70AD3.2030302@gmx.de> (universe II's message of "Fri, 21 Aug
+ 2015 13:26:11 +0200")
+References: <55D70AD3.2030302@gmx.de>
+Message-ID: <87lhd0zpgv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "universe" == universe  <universeii@gmx.de> writes:
 
- > Busybox' "readlink -f" does not canonicalise paths when the target is
- > missing, while coreutils do.
+ > Dear all,
+ > when adding the tftp server to my target system image I found out that
+ > the tftp server is not started by the corresponding init
+ > script. Reason for that is a typo in the init script. The tftp binary
+ > is installed with the filename "tftpd" but the init script tries to
+ > call "in.tftpd". Just fixing the name in the script solves the
+ > problem. Please find below the patch for correcting the bug.
 
- > Fix that by:
- >   - making an absolute symlink
- >   - dropping "-f" when calling readlink
+ > Regards,
+ > Andreas
 
- > Fixes #8276.
-
-Committed, thanks.
-
- > --- a/package/dropbear/S50dropbear
- > +++ b/package/dropbear/S50dropbear
- > @@ -18,7 +18,7 @@ start() {
- >  	#   - the filesystem is RW (i.e. we can rm the symlink),
- >  	#     replace the symlink with an actual directory
- >  	if [ -L /etc/dropbear \
- > -	     -a "$(readlink -f /etc/dropbear)" = "/var/run/dropbear" ]
- > +	     -a "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]
- >  	then
- >  		if rm -f /etc/dropbear; then
- >  			mkdir -p /etc/dropbear
-
-Looking at the recent changes to S50dropbear, isn't it quite noisy with
-a RO rootfs? I would imagine those rm and mkdir calls complain with
-RO. Perhaps we should add 2>/dev/null to them?
+Fixed, thanks. In the future, please provide git formatted patches and
+use your real name in From: and your Signed-off-by lines.
 
 -- 
 Bye, Peter Korsgaard
