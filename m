@@ -1,42 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Aug 2015 17:17:19 +0200
-Subject: [Buildroot] [git commit] apitrace: bump to version 7.0
-Message-ID: <20150824152137.96BD5818B2@busybox.osuosl.org>
+Date: Mon, 24 Aug 2015 17:29:08 +0200
+Subject: [Buildroot] [PATCH 3/3] packages: ensure linux supports modules
+	even when not using kernel-module
+In-Reply-To: <2af986ecd146d1dc6e7603bd93fac5420c459e41.1440418870.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 24 Aug 2015 14:27:43 +0200")
+References: <cover.1440418870.git.yann.morin.1998@free.fr>
+ <2af986ecd146d1dc6e7603bd93fac5420c459e41.1440418870.git.yann.morin.1998@free.fr>
+Message-ID: <87d1yczovv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c1e3a1a79e600ebb863aa67a2d06f4479e28b2a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Our current apitrace version can't detect the host-python version
-correctly, so if both host-python and host-python3 where installed, it
-will take the last one and it will fail with an "invalid syntax" error.
-The latest apitrace version has this problem solved and it detects the
-host-python version correctly.
+ > Some packages build kernel modules without using the kernel-module infra
+ > (because they use custom build systems); they do not automatically get
+ > the kernel to support modules which is ensured when using the infra.
 
-Fixes:
+ > It must be done manually for all those packages.
 
-  http://autobuild.buildroot.net/results/22a/22a73b4ba0adcc874ecc153917ae6edcfd4d37af/
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: No? Rubinstein <nrubinstein@aldebaran.com>
+ > Cc: Jan Viktorin <viktorin@rehivetech.com>
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/linux-fusion/linux-fusion.mk     | 9 ++++++---
+ >  package/nvidia-driver/nvidia-driver.mk   | 4 ++++
+ >  package/racehound/racehound.mk           | 4 ++++
+ >  package/rtai/rtai.mk                     | 4 ++++
+ >  package/ti-gfx/ti-gfx.mk                 | 5 +++++
+ >  package/xtables-addons/xtables-addons.mk | 4 ++++
+ >  6 files changed, 27 insertions(+), 3 deletions(-)
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/apitrace/apitrace.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/apitrace/apitrace.mk b/package/apitrace/apitrace.mk
-index b164367..28a40e4 100644
---- a/package/apitrace/apitrace.mk
-+++ b/package/apitrace/apitrace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > +++ b/package/nvidia-driver/nvidia-driver.mk
+ > @@ -91,6 +91,10 @@ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_MODULE),y)
  
--APITRACE_VERSION = c181b7fbf4b1c3912424761fec8ac7124640543a
-+APITRACE_VERSION = 7.0
- APITRACE_SITE = $(call github,apitrace,apitrace,$(APITRACE_VERSION))
- APITRACE_LICENSE = MIT
- APITRACE_LICENSE_FILES = LICENSE
+ >  NVIDIA_DRIVER_DEPENDENCIES += linux
+ 
+ > +# We're building a kernel module without using the kernel-module infra,
+ > +# so we need to tell we want module support in the kernel:
+ > +LINUX_NEEDS_MODULES = y
+ > +
+
+Ehh, this should only be done if the package is enabled, E.G.
+
+ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER),y)
+LINUX_NEEDS_MODULES = y
+endif
+
+-- 
+Bye, Peter Korsgaard
