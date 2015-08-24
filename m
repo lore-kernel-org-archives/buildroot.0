@@ -1,41 +1,60 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Aug 2015 21:15:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 8256] pointing to /usr/bin/objcopy old version
- (x86) instead of the generated one
-In-Reply-To: <bug-8256-163@https.bugs.busybox.net/>
-References: <bug-8256-163@https.bugs.busybox.net/>
-Message-ID: <20150824211544.488BE81E39@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Aug 2015 23:16:54 +0200
+Subject: [Buildroot] eUdev Label Issues
+In-Reply-To: <CA+h8R2qUKBaoif-0B9Gjv3MD_0gycmxicwejCAwyR4CXnzvFYg@mail.gmail.com>
+References: <CA+h8R2qUKBaoif-0B9Gjv3MD_0gycmxicwejCAwyR4CXnzvFYg@mail.gmail.com>
+Message-ID: <55DB89C6.7010801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8256
-
---- Comment #8 from Arnout Vandecappelle <arnout@mind.be> 2015-08-24 21:15:44 UTC ---
-(In reply to comment #2)
-
-> Before launcing gmake, I have  now executed the following command
+On 08/13/2015 04:07 AM, Christian Stewart wrote:
+> Hi all,
 > 
-> setenv PATH
-> "/home/elinux/localinstall/buildroot-2015.05/install/buildroot-2015.05/output/host/usr/x86_64-buildroot-linux-uclibc/bin:/home/elinux/localinstall/buildroot-2015.05/install/buildroot-2015.05/output/host/usr/bin:${PATH}"
-> set PATH = "/home/elinux/localinstall/buildroot-2015.05/install/buildroot-2015.05/output/host/usr/x86_64-buildroot-linux-uclibc/bin:/home/elinux/localinstall/buildroot-2015.05/install/buildroot-2015.05/output/host/usr/bin:${PATH}"
+> I'm using buildroot to compile a system for an odroid XU4.
+> 
+> Here's my defconfig: http://pastebin.com/raw.php?i=ETU9d160
+> 
+> Seemingly randomly, my udev device labels will be messed up.
+> 
+> ls /dev/disk/by-label/
+> boot layer rogtfs swap
+> 
+> After a reboot there's a 50% chance it will be correct:
+> 
+> ls /dev/disk/by-label/
+> boot layer rootfs swap
+> 
+> I'm using an SD card with a msdos partition table made with gparted. I'm using
+> fat16, ext2, ext4, linux-swap for the partitions, respectively.
+> 
+> Any idea why this would happen? It's always rogtfs, once I saw layer spelled
+> daqer, and boot spelled bogt.
 
-I don't know why you think it's a good idea to add the target binaries to your
-PATH. Don't do that.
+ Note that all of these bitflips are in the same bit. So I guess you have a
+hardware problem, possibly a timing issue..
 
-The config.log of attachment 6136 is useless. Could you re-run a clean build
-without hacking PATH, and then attach the full
-output/build/grub2-2.00/config.log please?
+ Regards,
+ Arnout
 
-My conjecture is that grub2 is using the wrong objcopy somewhere in configure.
-Oh, indeed, now I see: we use HOST_CONFIGURE_OPTS, so it will have
-OBJCOPY=/usr/bin/objcopy explicitly. I guess we should override that with
-OBJCOPY=$(TARGET_OBJCOPY), but I'm not sure how that will affect other
-host,target combinations...
+> 
+> Thanks!
+> Christian
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
