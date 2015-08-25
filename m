@@ -1,31 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Aug 2015 22:37:38 +0200
-Subject: [Buildroot] [PATCH] package/canfestival: fix build with musl
-In-Reply-To: <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
- (Brendan Heading's message of "Sat, 22 Aug 2015 23:35:00 +0100")
-References: <1440279318-19132-1-git-send-email-yann.morin.1998@free.fr>
- <20150822213815.GA3861@free.fr>
- <CA+BsyQ5AaMkDCb7Ldnu5u9ZArNe0swiAhKwxsRgES6RdrxTVoQ@mail.gmail.com>
- <20150822222544.GB3861@free.fr>
- <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
-Message-ID: <87r3mrxfxp.fsf@dell.be.48ers.dk>
+Date: Tue, 25 Aug 2015 22:55:44 +0200
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.1p1
+In-Reply-To: <1440528839-20096-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 25 Aug 2015 15:53:59 -0300")
+References: <1440528839-20096-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mvxfxf3j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ > Fixes:
+ > CVE-2015-6563 - Fixed a privilege separation weakness related to PAM
+ > support.
+ > CVE-2015-6564 - Fixed a use-after-free bug related to PAM support that
+ > was reachable by attackers who could compromise the pre-authentication
+ > process for remote code exectuion.
+ > CVE-2015-6565 - incorrectly set TTYs to be world-writable.
 
- > I thought about submitting a patch with another #ifdef __UCLIBC__
- > around the function declaration - not ideal, but it at least matches
- > what the upstream were trying to do. But I wasn't sure if such an
- > approach would pass muster here ?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-It would be good to get it acked by upstream / included in the git repo
-so we can instead just bump the version.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
