@@ -1,11 +1,11 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 25 Aug 2015 11:20:20 +0100
-Subject: [Buildroot] [PATCH 2/3] package/x11r7/xserver_xorg-server: Fix
- libdrm dependency handling
-In-Reply-To: <1439035146-26080-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 25 Aug 2015 11:21:10 +0100
+Subject: [Buildroot] [PATCH 3/3] package/x11r7/xserver_xorg-server: Add
+ libdrm dependency when dri or dri2 is enabled
+In-Reply-To: <1439035146-26080-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1439035146-26080-1-git-send-email-bernd.kuhls@t-online.de>
- <1439035146-26080-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <55DC4164.20102@imgtec.com>
+ <1439035146-26080-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <55DC4196.5020308@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +15,34 @@ To: buildroot@busybox.net
 Dear Bernd Kuhls,
 
 On 08/08/2015 12:59 PM, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/2e1/2e12f1a91812f027d89fcceeb41d6c88ef7b9d32/
+> Fixes compile error using this defconfig
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_XORG7=y
+> BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> BR2_PACKAGE_XPROTO_DRI2PROTO=y
+> 
+> drmVersionPtr is referenced not only in hw/xfree86/dri2/dri2.c
+> but also in hw/xfree86/dri/dri.c.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
+>  package/x11r7/xserver_xorg-server/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 566d93a..c88614b 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -86,6 +86,12 @@ endif
->  ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
->  XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
-> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
-> +XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
-> +XSERVER_XORG_SERVER_CONF_OPTS += --enable-libdrm
-> +else
-> +XSERVER_XORG_SERVER_CONF_OPTS += --disable-libdrm
-> +endif
->  else
->  XSERVER_XORG_SERVER_CONF_OPTS += --disable-xorg
->  endif
-> @@ -125,10 +131,10 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
->  endif
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index f0ec598..8b794b3 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -92,6 +92,8 @@ choice
 >  
->  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-> -XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
-> -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
-> +XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
-> +XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
->  else
-> -XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-libdrm --disable-glx
-> +XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
->  endif
->  
->  ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
-> @@ -148,8 +154,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES += udev
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev
->  # udev kms support depends on libdrm and dri2
->  ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_XPROTO_DRI2PROTO),yy)
-> -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
-> -XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms --enable-libdrm
-> +XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms
->  else
->  XSERVER_XORG_SERVER_CONF_OPTS += --disable-config-udev-kms
->  endif
+>  config BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+>  	bool "Modular X.org"
+> +	select BR2_PACKAGE_LIBDRM if (BR2_PACKAGE_XPROTO_XF86DRIPROTO || \
+> +		BR2_PACKAGE_XPROTO_DRI2PROTO)
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	help
+>  	  This variant of the X.org server is the full-blown variant,
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
