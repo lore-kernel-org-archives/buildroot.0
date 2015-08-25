@@ -1,11 +1,11 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 25 Aug 2015 11:19:52 +0100
-Subject: [Buildroot] [PATCH 1/3] package/x11r7/xserver_xorg-server: Fix
- compilation of modesetting driver
-In-Reply-To: <1439035146-26080-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 25 Aug 2015 11:20:20 +0100
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xserver_xorg-server: Fix
+ libdrm dependency handling
+In-Reply-To: <1439035146-26080-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1439035146-26080-1-git-send-email-bernd.kuhls@t-online.de>
- <1439035146-26080-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <55DC4148.4020004@imgtec.com>
+ <1439035146-26080-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <55DC4164.20102@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,70 +15,55 @@ To: buildroot@busybox.net
 Dear Bernd Kuhls,
 
 On 08/08/2015 12:59 PM, Bernd Kuhls wrote:
-> Kernel modesettings support also depends on dri2, see
-> http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
-> 
 > Fixes
-> http://autobuild.buildroot.net/results/f26/f26018d5ad62bc7b61623dd173dc1e92e2c958a4/
+> http://autobuild.buildroot.net/results/2e1/2e12f1a91812f027d89fcceeb41d6c88ef7b9d32/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  .../0001-modesettings-needs-dri2.patch                | 19 +++++++++++++++++++
->  .../x11r7/xserver_xorg-server/xserver_xorg-server.mk  |  7 +++++--
->  2 files changed, 24 insertions(+), 2 deletions(-)
->  create mode 100644 package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+>  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
 > 
-> diff --git a/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
-> new file mode 100644
-> index 0000000..4ef95ef
-> --- /dev/null
-> +++ b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
-> @@ -0,0 +1,19 @@
-> +Kernel modesettings support also depends on dri2, see
-> +http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
-> +
-> +Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=91584
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +diff -uNr xorg-server-1.17.2.org/configure.ac xorg-server-1.17.2/configure.ac
-> +--- xorg-server-1.17.2.org/configure.ac	2015-06-16 17:42:40.000000000 +0200
-> ++++ xorg-server-1.17.2/configure.ac	2015-08-08 10:44:59.702382624 +0200
-> +@@ -2036,7 +2036,7 @@
-> + 	        XORG_SYS_LIBS="$XORG_SYS_LIBS $XORG_MODULES_LIBS"
-> + 	fi
-> + 
-> +-	if test "x$DRM" = xyes; then
-> ++	if test "x$DRM" = xyes -a "x$DRI2" = xyes; then
-> + 		dnl 2.4.46 is required for cursor hotspot support.
-> + 		PKG_CHECK_EXISTS(libdrm >= 2.4.46)
-> + 		XORG_DRIVER_MODESETTING=yes
 > diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 79d663c..566d93a 100644
+> index 566d93a..c88614b 100644
 > --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 > +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -10,7 +10,10 @@ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserv
->  XSERVER_XORG_SERVER_LICENSE = MIT
->  XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
->  XSERVER_XORG_SERVER_INSTALL_STAGING = YES
-> +# xfont_font-util is needed only for autoreconf
-> +XSERVER_XORG_SERVER_AUTORECONF = YES
->  XSERVER_XORG_SERVER_DEPENDENCIES = 	\
-> +	xfont_font-util			\
->  	xutil_util-macros 		\
->  	xlib_libXfont 			\
->  	xlib_libX11 			\
-> @@ -143,8 +146,8 @@ endif
->  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
->  XSERVER_XORG_SERVER_DEPENDENCIES += udev
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev
-> -# udev kms support depends on libdrm
-> -ifeq ($(BR2_PACKAGE_LIBDRM),y)
-> +# udev kms support depends on libdrm and dri2
-> +ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_XPROTO_DRI2PROTO),yy)
->  XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
->  XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms --enable-libdrm
+> @@ -86,6 +86,12 @@ endif
+>  ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+>  XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
+>  XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
+> +ifeq ($(BR2_PACKAGE_LIBDRM),y)
+> +XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
+> +XSERVER_XORG_SERVER_CONF_OPTS += --enable-libdrm
+> +else
+> +XSERVER_XORG_SERVER_CONF_OPTS += --disable-libdrm
+> +endif
 >  else
+>  XSERVER_XORG_SERVER_CONF_OPTS += --disable-xorg
+>  endif
+> @@ -125,10 +131,10 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+> -XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
+> -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
+> +XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
+> +XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
+>  else
+> -XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-libdrm --disable-glx
+> +XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
+> @@ -148,8 +154,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+>  XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev
+>  # udev kms support depends on libdrm and dri2
+>  ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_XPROTO_DRI2PROTO),yy)
+> -XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
+> -XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms --enable-libdrm
+> +XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms
+>  else
+>  XSERVER_XORG_SERVER_CONF_OPTS += --disable-config-udev-kms
+>  endif
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
