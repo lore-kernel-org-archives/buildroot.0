@@ -1,47 +1,126 @@
-From: yuanlinyu <cugyly@163.com>
-Date: Tue, 25 Aug 2015 07:39:53 +0800 (CST)
-Subject: [Buildroot] BR2_arm1136j_s in config.in.arm
-In-Reply-To: <87twrpzks2.fsf@dell.be.48ers.dk>
-References: <7904fb17.d9ed.14f2728c6c5.Coremail.cugyly@163.com>
- <87twrpzks2.fsf@dell.be.48ers.dk>
-Message-ID: <6eb08afc.de8.14f621518bd.Coremail.cugyly@163.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 25 Aug 2015 07:56:09 +0200
+Subject: [Buildroot] [PATCH 1/3] [v3] libgudev: New package
+In-Reply-To: <1440431056-25983-1-git-send-email-nroach44@gmail.com>
+References: <1440431056-25983-1-git-send-email-nroach44@gmail.com>
+Message-ID: <CAGm1_kttw+s321dGUBvWGAvYFMCBVRj1Oj=HSn1oj=WpSmfuow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi peter,now I am using M82359 VOIP processer, it's simple introduction as below,Comcerto 300 devices are available in two different varieties: Master (M8235x) and Slave (M8234x). Master 
-devices include both an MSP subsystem (ARM1136J-S + DSP array) and a CSP subsystem (ARM1136J-S), while 
-Slave devices include only the MSP subsystem.
-
-now i work on csp core, it's have no vfp.
-
-
-thanks
-
-
-At 2015-08-24 06:45:33, "Peter Korsgaard" <peter@korsgaard.com> wrote:
->>>>>> "yuanlinyu" == yuanlinyu  <cugyly@163.com> writes:
+On Mon, Aug 24, 2015 at 5:44 PM, Nathaniel Roach <nroach44@gmail.com> wrote:
+> As libgudev recently was split from the main systemd/udev source,
+>         this library is now required to build certain packages.
 >
-> > hi,
-> > "BR2_arm1136j_s" in config.in.arm seems not work because no
-> > BR2_arm1136j_s configuration item. how to configure buildroot for soc
-> > with arm1136j-s cpu?
+> This library is only relevant to systemd, as the code it contains
+>         is still contained in eudev.
 >
-> > config BR2_GCC_TARGET_CPU
-> > 	default "arm920t"	if BR2_arm920t
-> > 	default "arm922t"	if BR2_arm922t
-> > 	default "arm926ej-s"	if BR2_arm926t
-> > 	default "arm1136j-s"	if BR2_arm1136j_s
+> Add the package and tweak systemd's Config.in message accordingly.
 >
->Hmm, you're right. I've added it now to git master.
+> ---
+> Changes v2 -> v3
+> (Changes as suggested by Yann E. MORIN)
+>  - Separate libgudev and network-manager portions into
+>         discrete patches, and a new patch for libmbim
 >
->I don't think I have ever seen a non-vfp variant of the arm1136 in the
->wild. What SoC are you using?
+> Changes v1 -> v2
+> (Changes as suggested by Peter Korsgaard)
+>  - Added the toolchain dependencies
+>  - Dropped NM references in package
+>  - Added _LICENSE_FILEs
+>  - Conditionally depend on libgudev in NM if using systemd
 >
->-- 
->Bye, Peter Korsgaard
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150825/5c1e75f6/attachment.html>
+> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+> ---
+>  package/Config.in            |  1 +
+>  package/libgudev/Config.in   | 19 +++++++++++++++++++
+>  package/libgudev/libgudev.mk | 17 +++++++++++++++++
+>  package/systemd/Config.in    |  1 -
+>  4 files changed, 37 insertions(+), 1 deletion(-)
+>  create mode 100644 package/libgudev/Config.in
+>  create mode 100644 package/libgudev/libgudev.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 47d14d7..6494322 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -852,6 +852,7 @@ menu "Hardware handling"
+>         source "package/libfreefare/Config.in"
+>         source "package/libftdi/Config.in"
+>         source "package/libftdi1/Config.in"
+> +       source "package/libgudev/Config.in"
+>         source "package/libhid/Config.in"
+>         source "package/libiio/Config.in"
+>         source "package/libinput/Config.in"
+> diff --git a/package/libgudev/Config.in b/package/libgudev/Config.in
+> new file mode 100644
+> index 0000000..8cdd9f6
+> --- /dev/null
+> +++ b/package/libgudev/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_LIBGUDEV
+> +       bool "libgudev"
+> +       depends on BR2_INIT_SYSTEMD
+> +       depends on BR2_USE_WCHAR # gettext
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on BR2_USE_MMU # fork()
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       help
+> +         This library provides GObject bindings for libudev.
+> +         It was originally part of udev-extras, then udev, then systemd.
+> +         It's now a project on its own.
+> +         Required for building some programs that use udev, when using
+> +         systemd.
+> +
+> +         https://wiki.gnome.org/Projects/libgudev
+> +
+> +comment "libgudev needs a toolchain w/ wchar, threads, and systemd"
+> +       depends on BR2_USE_MMU
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INIT_SYSTEMD
+> diff --git a/package/libgudev/libgudev.mk b/package/libgudev/libgudev.mk
+> new file mode 100644
+> index 0000000..fa15b56
+> --- /dev/null
+> +++ b/package/libgudev/libgudev.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# libgudev
+> +#
+> +################################################################################
+> +
+> +LIBGUDEV_VERSION = 230
+> +LIBGUDEV_SOURCE = libgudev-$(LIBGUDEV_VERSION).tar.xz
+> +LIBGUDEV_SITE = http://ftp.gnome.org/pub/GNOME/sources/libgudev/$(LIBGUDEV_VERSION)
+> +LIBGUDEV_INSTALL_STAGING = YES
+> +
+> +LIBGUDEV_DEPENDENCIES = host-pkgconf udev libglib2
+> +
+> +LIBGUDEV_LICENSE = GPLv2+
+> +LIBGUDEV_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 510badd..f7fc3bb 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -55,7 +55,6 @@ config BR2_PACKAGE_SYSTEMD
+>
+>           The selection of other packages will enable some features:
+>
+> -         - libglib2 package will add support for gudev.
+>           - acl package will add support for multi-seat.
+>
+>           http://freedesktop.org/wiki/Software/systemd
+> --
+> 2.5.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
