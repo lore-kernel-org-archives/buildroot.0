@@ -1,54 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 19:52:28 +0200
-Subject: [Buildroot] Java 7 (IcedTea / OpenJDK / JamVM)
-In-Reply-To: <CAJtjsKZkwagH=wOECedbiEUndwdjTVXR2X+MChhxSYdnywAgsw@mail.gmail.com>
-References: <CAJtjsKZkwagH=wOECedbiEUndwdjTVXR2X+MChhxSYdnywAgsw@mail.gmail.com>
-Message-ID: <20150825195228.14dbfc2f@free-electrons.com>
+Date: Tue, 25 Aug 2015 19:54:52 +0200
+Subject: [Buildroot] Starting network...
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
+References: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
+Message-ID: <20150825195452.2d7be97c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+Tommy,
 
-On Tue, 25 Aug 2015 17:31:42 +0200, Johan Oudinet wrote:
-
-> The way IcedTea is design, its makefile downloads the original openjdk
-> archive, along with several other archives, extracts them and patches
-> them. Then it builds the modified openjdk with a Java 1.5 compiler
-> (gcj by default) to get a preliminary java compiler. Finally, it uses
-> this bootstrap jdk to fully compile openjdk.
+On Mon, 24 Aug 2015 16:36:22 -0700, Lee, Tommy wrote:
+> Hi Buildroot mailing list,
 > 
-> There is an option to disable the download of archives but you have to
-> provide the location to them. I wonder how I should download such
-> extra tarballs in Buildroot?
+> My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have made the former meet the latter's requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. Last week I succeeded in the building of the zImage file of my Linux system which has a rootfilesystem integrated, and a armada-385-db-ap.dtb file, The DB-88F6820-GP on-board U-Boot-1.73 commands are able to the boot up the system. The U-Boot bootargs string is:
+> 
+> "setenv bootargs console=ttyS0,115200 root=/dev/ram0 rw rootdelay=2"
+> But, I discovered, this system cannot enable the eth0 device at the boot time. The "Starting network..." messages are:
+> 
+> Starting network...
+> [    1.618607] mvneta f1030000.ethernet eth0: could not find the PHY
+> [    1.624732] mvneta f1030000.ethernet eth0: cannot probe MDIO busip: SIOCSIFFLAGS: No such device
 
-Look at <pkg>_EXTRA_DOWNLOADS. It does exactly that: download more
-files, and simply store them in $(DL_DIR) without doing anything with
-them.
+This is a kernel/hardware issue, that has nothing to do with Buildroot.
 
-> The other issue I'm facing is how to deactivate the X11 dependencies.
-> I see that debian provides an openjdk-jre-headless package and that's
-> what I would like to have in buildroot. However, debian simply
-> compiles everything and omits to install the X11 part in the headless
-> package. There's a blog post from a guy in the OpenEmbedded project
-> that does it on a previous OpenJDK version but he actually patches
-> IcedTea and OpenJDK sources:
-> https://evolvis.org/plugins/mediawiki/wiki/jalimo/index.php/CrossCompilingOpenJDK
-> Ideally, I would like to have the possibility to activate or not the
-> graphical part of OpenJDK. Any better idea before I start a long and
-> tedious process of patching IcedTea and OpenJDK?
+However, beware that if you run the mainline (official) Linux kernel on
+Armada 38x, the first network interface (from a HW point of view) is
+seen as eth1 in Linux, and the second network interface (from a HW
+point of view) is seen as eth0 in Linux. This is due to the ordering of
+the nodes in the Device Tree, which are ordered by register address.
 
-Indeed being able to build this without building X11 would be nice.
-However, before starting the tedious process of patching things, you
-should make sure there is some upstream interest in merging such
-patches. Indeed, we don't want to keep heavy patches in Buildroot that
-have no chance of being upstream, especially for things like IcedTea
-that are quite specific: if you disappear or lose interest in this
-package, nobody will be able to maintain such patches.
-
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
