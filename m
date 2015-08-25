@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 12:01:26 +0200
-Subject: [Buildroot] [pull request] package/opencv: re-introduce opencv24
-In-Reply-To: <cover.1440420122.git.yann.morin.1998@free.fr>
-References: <cover.1440420122.git.yann.morin.1998@free.fr>
-Message-ID: <20150825120126.52fecfeb@free-electrons.com>
+Date: Tue, 25 Aug 2015 12:17:36 +0200
+Subject: [Buildroot] [PATCH] package/canfestival: don't build in parallel
+In-Reply-To: <1440279290-18408-1-git-send-email-yann.morin.1998@free.fr>
+References: <1440279290-18408-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150825121736.0d3982d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,29 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Mon, 24 Aug 2015 14:47:07 +0200, Yann E. MORIN wrote:
+On Sat, 22 Aug 2015 23:34:50 +0200, Yann E. MORIN wrote:
+> The Makefiles for canfestival are not correctly written, which leads to
+> multiple warnings such as:
+> 
+>     make[4]: warning: jobserver unavailable: using -j1. Add `+' to parent make rule.
+> 
+> Since canfestival is relatively small, it builds in less than 6s here
+> when not in parallell, while a parallel build takes 5s.
+> 
+> Just disable parallel build to avoid future surprises.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Samuel Martin (4):
->       package: rename opencv -> opencv3
->       package/opencv: re-introduce opencv for opencv-2.4
->       Revert "package/gstreamer1/gst1-plugins-bad: disable opencv plugin with opencv-3"
->       package/vlc: update opencv support
+Do you actually understand why make is displaying those warning
+messages in the first place? From what I understood from the make
+manual, it typically happens when you call "make" directly for a
+subdirectory instead of using $(MAKE). A quick test on a simple example
+seems to confirm that.
 
-Series applied to master, so that 2015.08 isn't introducing a
-regression in the OpenCV support.
+However, I see that canfestival seems to be using $(MAKE) everywhere,
+so I don't see why make decides that the jobserver is not available.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
