@@ -1,37 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 20:53:59 +0200
-Subject: [Buildroot] [PATCH] package/canfestival: don't build in parallel
-In-Reply-To: <1440279290-18408-1-git-send-email-yann.morin.1998@free.fr>
-References: <1440279290-18408-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150825205359.0b1f1fee@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 25 Aug 2015 15:53:59 -0300
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.1p1
+Message-ID: <1440528839-20096-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Fixes:
+CVE-2015-6563 - Fixed a privilege separation weakness related to PAM
+support.
+CVE-2015-6564 - Fixed a use-after-free bug related to PAM support that
+was reachable by attackers who could compromise the pre-authentication
+process for remote code exectuion.
+CVE-2015-6565 - incorrectly set TTYs to be world-writable.
 
-On Sat, 22 Aug 2015 23:34:50 +0200, Yann E. MORIN wrote:
-> The Makefiles for canfestival are not correctly written, which leads to
-> multiple warnings such as:
-> 
->     make[4]: warning: jobserver unavailable: using -j1. Add `+' to parent make rule.
-> 
-> Since canfestival is relatively small, it builds in less than 6s here
-> when not in parallell, while a parallel build takes 5s.
-> 
-> Just disable parallel build to avoid future surprises.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/canfestival/canfestival.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssh/openssh.hash | 5 +++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 76d0be8..84f0667 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-6.9 (sha256 is base64 encoded)
+-sha256	6e074df538f357d440be6cf93dc581a21f22d39e236f217fcd8eacbb6c896cfe	openssh-6.9p1.tar.gz
++# Also from http://www.openssh.com/txt/release-7.1 (sha256 is base64 encoded)
++# Decode with -> echo <encoded stuff>|base64 -d|hexdump -v -e '/1 "%02x"'
++sha256	fc0a6d2d1d063d5c66dffd952493d0cda256cad204f681de0f84ef85b2ad8428	openssh-7.1p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 5a7162f..b95914b 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 6.9p1
++OPENSSH_VERSION = 7.1p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.6
