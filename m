@@ -1,35 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Aug 2015 22:28:37 +0200
-Subject: [Buildroot] [PATCH] package/wf111: remove package
-In-Reply-To: <55DB7994.8080509@mind.be> (Arnout Vandecappelle's message of
- "Mon, 24 Aug 2015 22:07:48 +0200")
-References: <1440202387-7291-1-git-send-email-yann.morin.1998@free.fr>
- <20150823163653.3989f210@free-electrons.com>
- <20150823153737.GD3729@free.fr>
- <20150823205857.1625a64f@free-electrons.com>
- <55DB7994.8080509@mind.be>
-Message-ID: <87vbc3xgcq.fsf@dell.be.48ers.dk>
+Date: Tue, 25 Aug 2015 22:37:38 +0200
+Subject: [Buildroot] [PATCH] package/canfestival: fix build with musl
+In-Reply-To: <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
+ (Brendan Heading's message of "Sat, 22 Aug 2015 23:35:00 +0100")
+References: <1440279318-19132-1-git-send-email-yann.morin.1998@free.fr>
+ <20150822213815.GA3861@free.fr>
+ <CA+BsyQ5AaMkDCb7Ldnu5u9ZArNe0swiAhKwxsRgES6RdrxTVoQ@mail.gmail.com>
+ <20150822222544.GB3861@free.fr>
+ <CA+BsyQ53-OSsdm=DONB9AX_K+y0a8AKnzf1SrRV7ykZVUagjkw@mail.gmail.com>
+Message-ID: <87r3mrxfxp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
 
 Hi,
 
- >  I'm not going to comment on all the points made here, but my stance
- > is: lthough I also hate what the wf111 package does, I don't think
- > it's bad enough to remove it from buildroot. It doesn't hurt the rest
- > of buildroot at all, and it is a useful package for some users. I'd
- > rather get rid of sparc than getting rid of this package.
+ > I thought about submitting a patch with another #ifdef __UCLIBC__
+ > around the function declaration - not ideal, but it at least matches
+ > what the upstream were trying to do. But I wasn't sure if such an
+ > approach would pass muster here ?
 
-I'm with Arnout here. While the download/binary blobs issues certainly
-aren't nice (and perhaps we would have had second thoughts when it was
-submitted if we had known about these issues), the fact is that it is in
-the tree today, people are using it and it doesn't cause any real
-problems for us - So I suggest we keep it.
+It would be good to get it acked by upstream / included in the git repo
+so we can instead just bump the version.
 
 -- 
 Bye, Peter Korsgaard
