@@ -1,56 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Aug 2015 10:34:10 +0200
-Subject: [Buildroot] [PATCH 3/3] package/rpm: add host variant
-In-Reply-To: <CALe+oY-nOMMoYdocgzkanLOLyTX-uaTm2EDXPeKFOLMifpaeag@mail.gmail.com>
-References: <1439486091-6564-1-git-send-email-james.knight@rockwellcollins.com>
- <1439486091-6564-3-git-send-email-james.knight@rockwellcollins.com>
- <20150818114453.05e19fae@free-electrons.com>
- <CALe+oY9v5rmHwqGPwzJyuo3tnbrc+okuygciyFheqOUmVvkOQg@mail.gmail.com>
- <20150818160332.GX2765@tarshish>
- <CALe+oY9u6XjFDnOurT7ELboULh6C3OUh+CiHxSS8toMPMD5atw@mail.gmail.com>
- <20150818172723.GY2765@tarshish>
- <CALe+oY9=XXOFUFgfiuCRUHsLLqUKdwbLfnVzA2Nu=kz60VoRwg@mail.gmail.com>
- <55DB7E68.2040708@mind.be>
- <CALe+oY-nOMMoYdocgzkanLOLyTX-uaTm2EDXPeKFOLMifpaeag@mail.gmail.com>
-Message-ID: <55DC2882.4030804@mind.be>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 25 Aug 2015 10:36:10 +0200
+Subject: [Buildroot] uClibc-ng 1.0.6 update
+In-Reply-To: <1440450025.2745.25.camel@synopsys.com>
+References: <1440430574.2745.13.camel@synopsys.com>
+ <BCD08FBE-D0D8-4720-A851-F66BB2D256BE@waldemar-brodkorb.de>
+ <1440450025.2745.25.camel@synopsys.com>
+Message-ID: <20150825083610.GA27782@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+Alexey Brodkin wrote,
 
-
-On 08/24/2015 11:08 PM, James Knight wrote:
-[snip]
-> I saw the option to build with an internal db implementation, but I'm
-> a bit curious what the correct way to set it up (same with beecrypt,
-> as mentioned above). While I can set the configuration options to
-> build these internally, I have to somehow extract/link-up the
-> beecrypt/berkeleydb code with my host-rpm source (ie. I'll need a
-> 'beecrypt' and 'db' folder inside my host-rpm extracted source). 
-
- I haven't looked at rpm 4.12.0.1, but the rpm5 tarball we have now has the
-berkeleydb sources bundled. It doesn't have beecrypt though (but according to
-configure.ac it's optional).
-
- If rpm 4.12.0.1 doesn't have those sources bundled, then it's definitely better
-to just add host-beecrypt and host-berkeleydb.
-
- Regards,
- Arnout
-
-> Is
-> there an example out there (I'm having trouble seeing if another host
-> package in Buildroot does this)? I really don't know how else to
-> download and prepare beecrypt/berkeleydb without making them
-> host-supported packages as well.
+> Hi Waldemar,
 > 
+> On Mon, 2015-08-24 at 18:09 +0200, Waldemar Brodkorb wrote:
+> > Hi,
+> > 
+> > i have planned, but didn't started yet.
+> > So if you want to do it, i am very happy. being a little busy at the moment.
+> 
+> Ok I think I'll do that this week.
+> 
+> > It also includes the right symlink fix and the arc boost fixes. may be a patch series including arc switch to uclibc
+> > -ng?
+> 
+> Yeah I already noticed a proper fix... after I spent nearly 2 days trying to debug
+> failing dynamic linker (that's with your initial fix).
 
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Yeah, sorry. Had a three days business trip and didn't had the time
+to fix it directly. Normally I do runtime tests before pushing any
+change. I promise I will do it always in the future :)
+ 
+> So now with new fix I may confirm that uclibc not only gets built but also
+> could be executed on target properly.
+> 
+> As for switching ARC to uClibc-ng I'm not sure this is the best idea
+> now when we're already on Buidlroot 2015.08-rc1. So probably I'll do that
+> right after final release of 2015.08 happens.
+
+Yeah, sure. I don't meant that 1.0.6 should be included in 2015.08.
+But there is -next for new stuff.
+ 
+best regards
+ Waldemar
