@@ -1,42 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Aug 2015 08:35:45 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-08-24
-In-Reply-To: <20150825125744.406bc9c1@free-electrons.com>
-References: <20150825063012.C9C1510159F@stock.ovh.net>
- <55DC42A1.6060003@imgtec.com> <20150825123933.382f5e06@free-electrons.com>
- <55DC479B.6000406@imgtec.com> <20150825125744.406bc9c1@free-electrons.com>
-Message-ID: <55DC5311.4000500@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 25 Aug 2015 13:55:50 +0200
+Subject: [Buildroot] [PATCH] package/canfestival: don't build in parallel
+In-Reply-To: <20150825121736.0d3982d4@free-electrons.com>
+References: <1440279290-18408-1-git-send-email-yann.morin.1998@free.fr>
+ <20150825121736.0d3982d4@free-electrons.com>
+Message-ID: <20150825115550.GA3794@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/08/15 07:57, Thomas Petazzoni wrote:
+Thomas, All,
 
->>>>>      mips64el |                   midori-0.5.9 | NOK | http://autobuild.buildroot.net/results/80ffdf54fd675fbff5a645784cd041cdf862154c/
->>>>>      mips64el |                   midori-0.5.9 | NOK | http://autobuild.buildroot.net/results/1c049845ade60de223296c77c8a70869c4db64f0/
->>>>
->>>> Currently investigating.
->>>
->>> Thanks!
->>
->> And cannot reproduce it :/ Sorry, let's see if future build reports
->> still hightlight this failure.
->
-> Well:
->
-> --   package 'webkit2gtk-3.0>=1.11.91' not found
-> --   package 'javascriptcoregtk-3.0' not found
->
-> and we don't have webkit2gtk-3.0, we only have webkit2gtk. But I'm a
-> bit surprised, since Gustavo bumped webkitgtk and midori at the same
-> time. Gustavo, can you have a look?
+On 2015-08-25 12:17 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 22 Aug 2015 23:34:50 +0200, Yann E. MORIN wrote:
+> > The Makefiles for canfestival are not correctly written, which leads to
+> > multiple warnings such as:
+> > 
+> >     make[4]: warning: jobserver unavailable: using -j1. Add `+' to parent make rule.
+> > 
+> > Since canfestival is relatively small, it builds in less than 6s here
+> > when not in parallell, while a parallel build takes 5s.
+> > 
+> > Just disable parallel build to avoid future surprises.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Do you actually understand why make is displaying those warning
+> messages in the first place?
 
-webkit2gtk-3.0 means webkit API 2 (new) for gtk 3, which is correct 
-since the config has libgtk3 enabled.
-This curious naming is used so that multiple variants can live 
-side-by-side (different screen rendering backends and APIs).
-I'll give it a look.
-Regards.
+Yes, and it's a bit tricky.
+
+canfestival indeed uses $(MAKE) everywhere. However, it is using it in a
+variable, like so:
+
+    define build_cmds
+        $(MAKE) foo
+        $(MAKE) bar
+    endef
+
+    all:
+        $(build_cmds)
+
+Since $(MAKE) is not directly in the rule body, it looses its magic
+behaviour. This is explicited said so in the make manual:
+
+    This special feature is only enabled if the MAKE variable appears
+    directly in the recipe: it does not apply if the MAKE variable is
+    referenced through expansion of another variable.
+
+Ergo.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
