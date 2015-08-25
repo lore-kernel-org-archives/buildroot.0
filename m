@@ -1,41 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 19:54:52 +0200
-Subject: [Buildroot] Starting network...
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
-References: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
-Message-ID: <20150825195452.2d7be97c@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 25 Aug 2015 15:04:43 -0300
+Subject: [Buildroot] [PATCH] midori: depend on x11 backend for gtk3
+Message-ID: <1440525883-29560-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tommy,
+Mirror commit ba25711e for midori as well, otherwise gtk3 with non-X11
+backends can trigger build failures. Fixes:
+http://autobuild.buildroot.net/results/80ffdf54fd675fbff5a645784cd041cdf862154c/
+http://autobuild.buildroot.net/results/1c049845ade60de223296c77c8a70869c4db64f0/
 
-On Mon, 24 Aug 2015 16:36:22 -0700, Lee, Tommy wrote:
-> Hi Buildroot mailing list,
-> 
-> My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I have made the former meet the latter's requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. Last week I succeeded in the building of the zImage file of my Linux system which has a rootfilesystem integrated, and a armada-385-db-ap.dtb file, The DB-88F6820-GP on-board U-Boot-1.73 commands are able to the boot up the system. The U-Boot bootargs string is:
-> 
-> "setenv bootargs console=ttyS0,115200 root=/dev/ram0 rw rootdelay=2"
-> But, I discovered, this system cannot enable the eth0 device at the boot time. The "Starting network..." messages are:
-> 
-> Starting network...
-> [    1.618607] mvneta f1030000.ethernet eth0: could not find the PHY
-> [    1.624732] mvneta f1030000.ethernet eth0: cannot probe MDIO busip: SIOCSIFFLAGS: No such device
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/midori/midori.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is a kernel/hardware issue, that has nothing to do with Buildroot.
-
-However, beware that if you run the mainline (official) Linux kernel on
-Armada 38x, the first network interface (from a HW point of view) is
-seen as eth1 in Linux, and the second network interface (from a HW
-point of view) is seen as eth0 in Linux. This is due to the ordering of
-the nodes in the Device Tree, which are ordered by register address.
-
-Best regards,
-
-Thomas
+diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+index ed2cdd8..197f51a 100644
+--- a/package/midori/midori.mk
++++ b/package/midori/midori.mk
+@@ -37,7 +37,7 @@ ifeq ($(BR2_PACKAGE_MIDORI_HTTPS),y)
+ MIDORI_DEPENDENCIES += glib-networking
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ MIDORI_CONF_OPTS += -DUSE_GTK3=ON -DHALF_BRO_INCOM_WEBKIT2=ON
+ MIDORI_DEPENDENCIES += libgtk3
+ else
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.6
