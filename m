@@ -1,77 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 11:57:36 +0200
-Subject: [Buildroot] [git commit] package/vlc: update opencv support
-Message-ID: <20150825095807.9ABC680110@busybox.osuosl.org>
+Date: Tue, 25 Aug 2015 12:01:26 +0200
+Subject: [Buildroot] [pull request] package/opencv: re-introduce opencv24
+In-Reply-To: <cover.1440420122.git.yann.morin.1998@free.fr>
+References: <cover.1440420122.git.yann.morin.1998@free.fr>
+Message-ID: <20150825120126.52fecfeb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=644b856e4ab51606528c1305ade811f52fa3bec4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Yann,
 
-vlc supports both opencv-2.4 and opencv-3, so adjust the vlc package to
-reflect this.
+On Mon, 24 Aug 2015 14:47:07 +0200, Yann E. MORIN wrote:
 
-Cc: Jonathan Ben Avraham <yba@tkos.co.il>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/Config.in |   14 ++++++++++++--
- package/vlc/vlc.mk    |    6 +++++-
- 2 files changed, 17 insertions(+), 3 deletions(-)
+> Samuel Martin (4):
+>       package: rename opencv -> opencv3
+>       package/opencv: re-introduce opencv for opencv-2.4
+>       Revert "package/gstreamer1/gst1-plugins-bad: disable opencv plugin with opencv-3"
+>       package/vlc: update opencv support
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 6679cc9..71e4f34 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -11,8 +11,8 @@ config BR2_PACKAGE_VLC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
--	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC if BR2_PACKAGE_OPENCV3
--	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT if BR2_PACKAGE_OPENCV3
-+	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
-+	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
- 	help
- 	  VLC is a free and open source cross-platform multimedia player
- 	  and framework that plays most multimedia files as well as DVD,
-@@ -20,6 +20,16 @@ config BR2_PACKAGE_VLC
- 
- 	  http://www.videolan.org/vlc/
- 
-+config BR2_PACKAGE_VLC_OPENCV_BACKEND
-+	bool
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+
-+config BR2_PACKAGE_VLC_OPENCV3_BACKEND
-+	bool
-+	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
-+
- comment "vlc needs a uclibc snapshot, uclibc-ng or (e)glibc toolchain w/ C++, wchar, threads, headers >= 3.7"
- 	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_UCLIBC_VERSION_NG || BR2_TOOLCHAIN_USES_GLIBC) \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index fa74a7b..6f7fd58 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -153,9 +153,13 @@ else
- VLC_CONF_OPTS += --disable-gles2
- endif
- 
--ifeq ($(BR2_PACKAGE_OPENCV3),y)
-+ifeq ($(BR2_PACKAGE_OPENCV)$(BR2_PACKAGE_OPENCV3),y)
- VLC_CONF_OPTS += --enable-opencv
-+ifeq ($(BR2_PACKAGE_OPENCV),y)
-+VLC_DEPENDENCIES += opencv
-+else
- VLC_DEPENDENCIES += opencv3
-+endif
- else
- VLC_CONF_OPTS += --disable-opencv
- endif
+Series applied to master, so that 2015.08 isn't introducing a
+regression in the OpenCV support.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
