@@ -1,51 +1,97 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 25 Aug 2015 11:25:37 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-08-24
-In-Reply-To: <20150825063012.C9C1510159F@stock.ovh.net>
-References: <20150825063012.C9C1510159F@stock.ovh.net>
-Message-ID: <55DC42A1.6060003@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Aug 2015 12:25:31 +0200
+Subject: [Buildroot] [git commit] package/libwebsock: fix incorrect inline
+	function
+Message-ID: <20150825102547.4191F81E7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+commit: http://git.buildroot.net/buildroot/commit/?id=fd89a8b7d1d7a94dbd244f713f1fca1a8d96e88a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 08/25/2015 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2015-08-24
+Fixes:
+    http://autobuild.buildroot.org/results/c02/c0243afc26202cbea98a1a75ddb9e37d8e2e08de/
+    http://autobuild.buildroot.org/results/8a0/8a0f34da29fdfb2807aaa7280759e324a3874851/
+    http://autobuild.buildroot.org/results/3da/3dac7b3504349e06c05fa0170a033e7828a9ab55/
 
->         mips | ltrace-c22d359433b333937ee3... | NOK | http://autobuild.buildroot.net/results/e1a99784d7cbd5a14808f6d8fc27994b44e996c4/
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libwebsock/0003-fix-incorrect-inline.patch |   66 ++++++++++++++++++++
+ 1 files changed, 66 insertions(+), 0 deletions(-)
 
-Fixed by:
-
-  http://patchwork.ozlabs.org/patch/507709/
-
->     mips64el |                   midori-0.5.9 | NOK | http://autobuild.buildroot.net/results/80ffdf54fd675fbff5a645784cd041cdf862154c/
->     mips64el |                   midori-0.5.9 | NOK | http://autobuild.buildroot.net/results/1c049845ade60de223296c77c8a70869c4db64f0/
-
-Currently investigating.
-
->     mips64el |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/10bd119bae1ee158a10ce542e9e991719e240b45/
->       x86_64 |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/29caf899bb6d0a591a533af024b4262d0ef4ce96/
->         mips |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/d0a37acf8a9377cd9c5a99aaaa867ae72276b4a8/
->       x86_64 |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/6386886945292e86c6b8c08311c1125d9760e258/
->          sh4 |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/22009a4acceab9b99e811784ca59b2fc17de0fcb/
->     mips64el |     xserver_xorg-server-1.17.2 | NOK | http://autobuild.buildroot.net/results/66d962ed0fa6adf5ebbf24965df5afec16791a99/
-
-Fixed by Bernd Kuhls' series:
-
-http://patchwork.ozlabs.org/patch/505307/
-http://patchwork.ozlabs.org/patch/505305/
-http://patchwork.ozlabs.org/patch/505306/
-
->          arm |                    zyre-v1.0.0 | NOK | http://autobuild.buildroot.net/results/b07f5ab8657d6c6515e90f3d41ee23cab14c3f44/
-
-Fixed by:
-
-  http://patchwork.ozlabs.org/patch/509957/
-
-Regards,
-
-Vincent.
+diff --git a/package/libwebsock/0003-fix-incorrect-inline.patch b/package/libwebsock/0003-fix-incorrect-inline.patch
+new file mode 100644
+index 0000000..043df45
+--- /dev/null
++++ b/package/libwebsock/0003-fix-incorrect-inline.patch
+@@ -0,0 +1,66 @@
++utf: do not define decode() to be inline
++
++Currently, decode() is prototyped in utf.h, its body is in utf.c and it
++is called from util.c.
++
++However, decode() is defined to be inline, which can not work since,
++when compiling util.c, the body of decode() is out-of-scope for that
++compilation unit.
++
++Furthermore, decode() uses a utf8d, which is a static defined in utf.c .
++So utf8d is not visible when compiling util.c either.
++
++This means that the definition of decode() along with utf8d is basically
++wrong, and is now failing with gcc-5.x, with warnings like so:
++
++    libtool: compile:  /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gcc -DHAVE_CONFIG_H -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Wmissing-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -c utf.c  -fPIC -DPIC -o .libs/libwebsock_la-utf.o
++    utf.c:36:12: warning: ???utf8d??? is static but used in inline function ???decode??? which is not static
++       *state = utf8d[256 + *state*16 + type];
++                ^
++    utf.c:30:19: warning: ???utf8d??? is static but used in inline function ???decode??? which is not static
++       uint32_t type = utf8d[byte];
++                       ^
++    libtool: compile:  /home/ymorin/dev/buildroot/O/host/usr/bin/arm-linux-gcc -DHAVE_CONFIG_H -I. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -Wmissing-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -c util.c  -fPIC -DPIC -o .libs/libwebsock_la-util.o
++    In file included from websock.h:73:0,
++                     from util.c:20:
++    utf.h:25:17: warning: inline function ???decode??? declared but never defined
++     uint32_t inline decode(uint32_t *state, uint32_t *codep, uint32_t byte);
++                     ^
++
++This results in decode() to be omitted from libwebsock.so, and thus link
++failures when another program wants to link with -lwebsock.
++
++The simplest solution is to not inline decode() at all.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Note: an alternative would be to move both decode() and utf8d into
++decode.h nad ditch decode.c if decode really must be inline. This is
++left as an execise for an interested party. But since upstream hasn't
++seen a single commit in more than a year now... :-(
++
++diff -durN a/src/utf.c b/src/utf.c
++--- a/src/utf.c	2014-07-15 01:43:20.000000000 +0200
+++++ b/src/utf.c	2015-08-22 22:29:38.667393786 +0200
++@@ -24,7 +24,7 @@
++   1,3,1,1,1,1,1,3,1,3,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1, // s7..s8
++ };
++ 
++-uint32_t inline
+++uint32_t
++ decode(uint32_t* state, uint32_t* codep, uint32_t byte)
++ {
++   uint32_t type = utf8d[byte];
++diff -durN a/src/utf.h b/src/utf.h
++--- a/src/utf.h	2014-07-15 01:43:20.000000000 +0200
+++++ b/src/utf.h	2015-08-22 22:29:10.439227396 +0200
++@@ -22,7 +22,7 @@
++ 
++ #include <stdint.h>
++ 
++-uint32_t inline decode(uint32_t *state, uint32_t *codep, uint32_t byte);
+++uint32_t decode(uint32_t *state, uint32_t *codep, uint32_t byte);
++ 
++ 
++ #endif /* UTF_H_ */
