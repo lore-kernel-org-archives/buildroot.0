@@ -1,35 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Aug 2015 15:04:43 -0300
-Subject: [Buildroot] [PATCH] midori: depend on x11 backend for gtk3
-Message-ID: <1440525883-29560-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Aug 2015 16:37:08 +0200
+Subject: [Buildroot] [git commit] package/network-manager: now needs
+	libgudev when systemd is used
+Message-ID: <20150825182426.0647C81E5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mirror commit ba25711e for midori as well, otherwise gtk3 with non-X11
-backends can trigger build failures. Fixes:
-http://autobuild.buildroot.net/results/80ffdf54fd675fbff5a645784cd041cdf862154c/
-http://autobuild.buildroot.net/results/1c049845ade60de223296c77c8a70869c4db64f0/
+commit: http://git.buildroot.net/buildroot/commit/?id=1a2c56150f9d1520f5e06eb6feada891963e7591
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+NetworkManager uses code (originally from udev) that has since been
+split from the main systemd codebase into libgudev.
+
+Tweak the package files for NetworkManager to require libgudev when
+building with systemd.
+
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/midori/midori.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/network-manager/Config.in          |    1 +
+ package/network-manager/network-manager.mk |    4 ++++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index ed2cdd8..197f51a 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -37,7 +37,7 @@ ifeq ($(BR2_PACKAGE_MIDORI_HTTPS),y)
- MIDORI_DEPENDENCIES += glib-networking
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index bcf8f90..5a0e636 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_GNUTLS
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBNL
++	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_WIRELESS_TOOLS
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 25ad2a2..03c7d63 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -63,6 +63,10 @@ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+ NETWORK_MANAGER_CONF_OPTS += --with-dhcpcd=/sbin/dhcpcd
  endif
  
--ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- MIDORI_CONF_OPTS += -DUSE_GTK3=ON -DHALF_BRO_INCOM_WEBKIT2=ON
- MIDORI_DEPENDENCIES += libgtk3
- else
--- 
-2.4.6
++ifeq ($(BR2_INIT_SYSTEMD),y)
++NETWORK_MANAGER_DEPENDENCIES += libgudev
++endif
++
+ # uClibc by default doesn't have backtrace support, so don't use it
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ NETWORK_MANAGER_CONF_OPTS += --disable-crashtrace
