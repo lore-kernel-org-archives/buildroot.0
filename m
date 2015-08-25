@@ -1,53 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 20:48:33 +0200
-Subject: [Buildroot] [PATCH 1/3] [v3] libgudev: New package
-In-Reply-To: <1440431056-25983-1-git-send-email-nroach44@gmail.com>
-References: <1440431056-25983-1-git-send-email-nroach44@gmail.com>
-Message-ID: <20150825204833.57f5a846@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Aug 2015 20:48:47 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: fix when readlink is
+	busybox'
+In-Reply-To: <20150824154308.GE3619@free.fr> (Yann E. MORIN's message of "Mon, 
+ 24 Aug 2015 17:43:08 +0200")
+References: <1439925953-5345-1-git-send-email-yann.morin.1998@free.fr>
+ <87pp2czptc.fsf@dell.be.48ers.dk> <20150824153234.GA3619@free.fr>
+ <878u90zogg.fsf@dell.be.48ers.dk> <20150824154308.GE3619@free.fr>
+Message-ID: <87zj1fxkz4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nathaniel,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon, 24 Aug 2015 23:44:14 +0800, Nathaniel Roach wrote:
-> As libgudev recently was split from the main systemd/udev source,
-> 	this library is now required to build certain packages.
-> 
-> This library is only relevant to systemd, as the code it contains
-> 	is still contained in eudev.
-> 
-> Add the package and tweak systemd's Config.in message accordingly.
-> 
-> ---
-> Changes v2 -> v3
-> (Changes as suggested by Yann E. MORIN)
->  - Separate libgudev and network-manager portions into
-> 	discrete patches, and a new patch for libmbim
+Hi,
 
-Applied after doing a few changes:
+>> Well, with a RO filesystem you only have the option to either generate
+ >> at each boot or bake in a hardcoded host key in the rootfs. Neither is
+ >> really great for security.
 
-    [Thomas:
-     - don't show the dependency comment when systemd is not available,
-       since libgudev is anyway useless when you're not using systemd.
-     - fix the license, it's LGPLv2.1+ and not GPLv2+
-     - remove useless empty lines in the .mk file.]
+ > Or, as some are doing (Paul for example), have /etc/dropbear point to a
+ > R/W location (e.g. a persistent FS done at first boot) and have the
+ > symlink overwritten by an overlay to point to that location.
 
-In addition to this, two comments:
+ > Which is anyway something sane to do in most case of a R/O FS.
 
- * Your SoB line should be before the first "---". Otherwise, it gets
-   removed by git when applying the patch (anything after the first
-   "---" gets ignored by git in terms of commit log)
+Sure, or simply union mount a persistent R/W FS on top of /etc so you
+don't need to mess around with symlinks like I usually do.
 
- * Don't indent the second line of paragraphs with a tab, we don't do
-   this in general for Buildroot commit logs.
+ >> Those fairly obscure messages are imho not really helpful - But on the
+ >> other hand I'm not sure a dedicated message is really warranted.
 
-Thanks!
+ > Maybe something along the lines of;
 
-Thomas
+ >     I have no persistent location to store SSH host keys.
+ >     I will generate new ones on each boot.
+ >     Are you sure that's what you wanted to do?
+
+I don't feel strongly about it. If you think it is needed then that's
+fine by me. I think it sounds a bit odd to use the 'I' form, so perhaps
+something like this instead:
+
+No persistent location to store SSH host keys. New keys will be
+generated at each boot. Are you sure this is what you want to do?
+
+And perhaps the message should contain hints about how to fix this?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
