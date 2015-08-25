@@ -1,45 +1,54 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 25 Aug 2015 14:58:56 +0200
-Subject: [Buildroot] [PATCH 1/1][v2] erlang-p1-tls: add missing dependency
-	to openssl
-Message-ID: <1440507536-29611-1-git-send-email-johan.oudinet@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Aug 2015 15:12:31 +0200
+Subject: [Buildroot] [PATCH] package/canfestival: don't build in parallel
+In-Reply-To: <20150825115550.GA3794@free.fr>
+References: <1440279290-18408-1-git-send-email-yann.morin.1998@free.fr>
+ <20150825121736.0d3982d4@free-electrons.com>
+ <20150825115550.GA3794@free.fr>
+Message-ID: <20150825151231.43abeaa8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Yann,
 
----
-Changes v1 -> v2:
-  - Add openssl dependency to the .mk file (suggested by Thomas).
----
- package/erlang-p1-tls/Config.in        | 1 +
- package/erlang-p1-tls/erlang-p1-tls.mk | 1 +
- 2 files changed, 2 insertions(+)
+On Tue, 25 Aug 2015 13:55:50 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/erlang-p1-tls/Config.in b/package/erlang-p1-tls/Config.in
-index 42c6a3e..0df3348 100644
---- a/package/erlang-p1-tls/Config.in
-+++ b/package/erlang-p1-tls/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ERLANG_P1_TLS
- 	bool "erlang-p1-tls"
-+	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Erlang interface to OpenSSL
- 
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
-index d706797..4f1fc48 100644
---- a/package/erlang-p1-tls/erlang-p1-tls.mk
-+++ b/package/erlang-p1-tls/erlang-p1-tls.mk
-@@ -9,5 +9,6 @@ ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
- ERLANG_P1_TLS_LICENSE = GPLv2+
- ERLANG_P1_TLS_LICENSE_FILES = COPYING
- ERLANG_P1_TLS_INSTALL_STAGING = YES
-+ERLANG_P1_TLS_DEPENDENCIES = openssl
- 
- $(eval $(rebar-package))
+> > Do you actually understand why make is displaying those warning
+> > messages in the first place?
+> 
+> Yes, and it's a bit tricky.
+> 
+> canfestival indeed uses $(MAKE) everywhere. However, it is using it in a
+> variable, like so:
+> 
+>     define build_cmds
+>         $(MAKE) foo
+>         $(MAKE) bar
+>     endef
+> 
+>     all:
+>         $(build_cmds)
+>
+> Since $(MAKE) is not directly in the rule body, it looses its magic
+> behaviour. This is explicited said so in the make manual:
+> 
+>     This special feature is only enabled if the MAKE variable appears
+>     directly in the recipe: it does not apply if the MAKE variable is
+>     referenced through expansion of another variable.
+> 
+> Ergo.
+
+I have to say I really like working on Buildroot with smart people,
+because I learn things every day. Thanks for pointing me to this part
+of the documentation I overlooked! I will apply your patch.
+
+Thanks,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
