@@ -1,39 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 25 Aug 2015 19:46:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 8256] pointing to /usr/bin/objcopy old version
- (x86) instead of the generated one
-In-Reply-To: <bug-8256-163@https.bugs.busybox.net/>
-References: <bug-8256-163@https.bugs.busybox.net/>
-Message-ID: <20150825194613.7A32D81D58@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Aug 2015 22:28:37 +0200
+Subject: [Buildroot] [PATCH] package/wf111: remove package
+In-Reply-To: <55DB7994.8080509@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 24 Aug 2015 22:07:48 +0200")
+References: <1440202387-7291-1-git-send-email-yann.morin.1998@free.fr>
+ <20150823163653.3989f210@free-electrons.com>
+ <20150823153737.GD3729@free.fr>
+ <20150823205857.1625a64f@free-electrons.com>
+ <55DB7994.8080509@mind.be>
+Message-ID: <87vbc3xgcq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8256
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
---- Comment #10 from CB <christophebricout@yahoo.fr> 2015-08-25 19:46:13 UTC ---
-Created attachment 6146
-  --> https://bugs.busybox.net/attachment.cgi?id=6146
-output/build/grub2-2.00/config.log (gzipped) content
+Hi,
 
-Please fine here after the sequence history
+ >  I'm not going to comment on all the points made here, but my stance
+ > is: lthough I also hate what the wf111 package does, I don't think
+ > it's bad enough to remove it from buildroot. It doesn't hurt the rest
+ > of buildroot at all, and it is a useful package for some users. I'd
+ > rather get rid of sparc than getting rid of this package.
 
-
-    97  20:51   make clean
-    98  20:54   make
-    99  21:32   cd
-/home/elinux/localinstall/buildroot-2015.05/install/buildroot-2015.05/output/build/grub2-2.00
-   100  21:32   ls
-   101  21:32   more config.log
-
-The attachment is the config.log from grub2-2.00
-
-Available for others experiments if necessary.
-Tnanks.
+I'm with Arnout here. While the download/binary blobs issues certainly
+aren't nice (and perhaps we would have had second thoughts when it was
+submitted if we had known about these issues), the fact is that it is in
+the tree today, people are using it and it doesn't cause any real
+problems for us - So I suggest we keep it.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
