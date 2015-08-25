@@ -1,62 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 12:57:44 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-08-24
-In-Reply-To: <55DC479B.6000406@imgtec.com>
-References: <20150825063012.C9C1510159F@stock.ovh.net>
- <55DC42A1.6060003@imgtec.com>
- <20150825123933.382f5e06@free-electrons.com>
- <55DC479B.6000406@imgtec.com>
-Message-ID: <20150825125744.406bc9c1@free-electrons.com>
+Date: Tue, 25 Aug 2015 12:59:21 +0200
+Subject: [Buildroot] [git commit] core/pkg-kconfig: fix configurators
+Message-ID: <20150825105952.8555081E84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
+commit: http://git.buildroot.net/buildroot/commit/?id=1a91c82f8a8e2de1ab95794429dfa90b78d51670
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Aug 2015 11:46:51 +0100, Vicente Olivert Riera wrote:
+Currently, the configurators are using $($(2)_MAKE_ENV), often derived
+from $(TARGE_MAKE_ENV), as the environment to be set when calling the
+various configurators.
 
-> >>>         mips | ltrace-c22d359433b333937ee3... | NOK | http://autobuild.buildroot.net/results/e1a99784d7cbd5a14808f6d8fc27994b44e996c4/
-> >>
-> >> Fixed by:
-> >>
-> >>   http://patchwork.ozlabs.org/patch/507709/
-> > 
-> > Will have a look.
-> 
-> I'm working together with the upstream maintaner to provide a patch
-> which actually fixes the problem, but he seems to be on summer holidays
-> so his reply is being delayed. I think disabling support for libunwind
-> is a good temporary solution in order to fix it before the next release.
+This means that our host tools are used first, most notably pkg-config
+(from host-pkgconf).
 
-Yes, sure. Thanks for working on this.
+However, this is inherently flawed. Our pkg-config, when set for the
+host, only searches .pc files in $(HOST_DIR) and never ever uses the
+ones from the host. For example, since we do not build a host-qt, our
+pkg-config would not find the host's QtCore.pc et al.
 
-> 
-> >>>     mips64el |                   midori-0.5.9 | NOK | http://autobuild.buildroot.net/results/80ffdf54fd675fbff5a645784cd041cdf862154c/
-> >>>     mips64el |                   midori-0.5.9 | NOK | http://autobuild.buildroot.net/results/1c049845ade60de223296c77c8a70869c4db64f0/
-> >>
-> >> Currently investigating.
-> > 
-> > Thanks!
-> 
-> And cannot reproduce it :/ Sorry, let's see if future build reports
-> still hightlight this failure.
+Consequently, on some systems (but not on others?) most of the
+configurators fail to build, especially the latest kernel versions, as
+they have been starting to use pkg-config two years ago.
 
-Well:
+Fix that by filtering-out sensible values out of the environment, but
+only when calling the configurators.
 
---   package 'webkit2gtk-3.0>=1.11.91' not found
---   package 'javascriptcoregtk-3.0' not found
+[Thomas: rewrap comment to appropriate length.]
 
-and we don't have webkit2gtk-3.0, we only have webkit2gtk. But I'm a
-bit surprised, since Gustavo bumped webkitgtk and midori at the same
-time. Gustavo, can you have a look?
+Reported-by: Mauro Condarelli <mc5686@mclink.it>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Mauro Condarelli <mc5686@mclink.it>
+Tested-by: Mauro Condarelli <mc5686@mclink.it>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-kconfig.mk |   12 +++++++++++-
+ 1 files changed, 11 insertions(+), 1 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 375607f..44c74a7 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -96,6 +96,16 @@ $$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
+ endif
+ endif
+ 
++# For the configurators, we do want to use the system-provided host
++# tools, not the ones we build. This is particularly true for
++# pkg-config; if we use our pkg-config (from host-pkgconf), then it
++# would not look for the .pc from the host, but we do need them,
++# especially to find ncurses, GTK+, Qt (resp. for menuconfig and
++# nconfig, gconfig, xconfig).
++# So we simply remove our PATH and PKG_CONFIG_* variables.
++$(2)_CONFIGURATOR_MAKE_ENV = \
++	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV))
++
+ # Configuration editors (menuconfig, ...)
+ #
+ # We need to apply the configuration fixups right after a configuration
+@@ -112,7 +122,7 @@ endif
+ #
+ $$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $(1)-%: $$($(2)_DIR)/.kconfig_editor_%
+ $$($(2)_DIR)/.kconfig_editor_%: $$($(2)_DIR)/.stamp_kconfig_fixup_done
+-	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++	$$($(2)_CONFIGURATOR_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+ 		$$($(2)_KCONFIG_OPTS) $$(*)
+ 	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
+ 	rm -f $$($(2)_DIR)/.stamp_{target,staging,images}_installed
