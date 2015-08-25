@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 11:49:43 +0200
-Subject: [Buildroot] [PATCH] dhcpdump: fix build with musl
-In-Reply-To: <13b133721c7c1883ac2aef7e482be8d0752ab558.1440484341.git.baruch@tkos.co.il>
-References: <13b133721c7c1883ac2aef7e482be8d0752ab558.1440484341.git.baruch@tkos.co.il>
-Message-ID: <20150825114943.27cfb497@free-electrons.com>
+Date: Tue, 25 Aug 2015 11:50:27 +0200
+Subject: [Buildroot] [PATCH 1/1] erlang-p1-tls: add missing dependency
+ to openssl
+In-Reply-To: <1440495924-18788-1-git-send-email-johan.oudinet@gmail.com>
+References: <1440495924-18788-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20150825115027.33547a1f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Johan Oudinet,
 
-On Tue, 25 Aug 2015 09:32:21 +0300, Baruch Siach wrote:
-> muls exposes udphdr Linux member names only when _GNU_SOURCE is defined.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/dc2/dc2902b758faa7bcfed44cca5fa73aeffdf284ae/
-> http://autobuild.buildroot.net/results/432/43214b5f7d9e5881fbeba7203ee7fcfc6386a492/
-> http://autobuild.buildroot.net/results/291/29100641731904b50d73af7cf2db08847fe1567a/
-> 
-> and more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Tue, 25 Aug 2015 11:45:24 +0200, Johan Oudinet wrote:
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 > ---
->  package/dhcpdump/dhcpdump.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/erlang-p1-tls/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/erlang-p1-tls/Config.in b/package/erlang-p1-tls/Config.in
+> index 42c6a3e..0df3348 100644
+> --- a/package/erlang-p1-tls/Config.in
+> +++ b/package/erlang-p1-tls/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_ERLANG_P1_TLS
+>  	bool "erlang-p1-tls"
+> +	select BR2_PACKAGE_OPENSSL
 
-Applied, thanks.
+What about the dependency in the .mk file? Doing a "select" in
+Config.in does not guarantee that the dependency will be built before
+that package.
+
+Thanks!
 
 Thomas
 -- 
