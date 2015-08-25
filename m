@@ -1,40 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Aug 2015 09:32:21 +0300
-Subject: [Buildroot] [PATCH] dhcpdump: fix build with musl
-Message-ID: <13b133721c7c1883ac2aef7e482be8d0752ab558.1440484341.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Aug 2015 10:30:55 +0200
+Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
+In-Reply-To: <20150824203421.GF3619@free.fr>
+References: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
+ <55D8FA56.5020009@mind.be> <20150823094750.GC3729@free.fr>
+ <55DB7413.4060109@mind.be> <20150824203421.GF3619@free.fr>
+Message-ID: <55DC27BF.6000909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-muls exposes udphdr Linux member names only when _GNU_SOURCE is defined.
 
-Fixes:
-http://autobuild.buildroot.net/results/dc2/dc2902b758faa7bcfed44cca5fa73aeffdf284ae/
-http://autobuild.buildroot.net/results/432/43214b5f7d9e5881fbeba7203ee7fcfc6386a492/
-http://autobuild.buildroot.net/results/291/29100641731904b50d73af7cf2db08847fe1567a/
 
-and more.
+On 08/24/2015 10:34 PM, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2015-08-24 21:44 +0200, Arnout Vandecappelle spake thusly:
+>> On 08/23/2015 11:47 AM, Yann E. MORIN wrote:
+>>> On 2015-08-23 00:40 +0200, Arnout Vandecappelle spake thusly:
+[snip]
+>>  Or actually, it's best to add a manual.html -> downloads/manual/manual.html
+>> symlink to the website and refer to that. This fits easily:
+>> http://buildroot.org/manual.html#faq-no-binary-packages
+>> And it also makes it easier for us to refer to the manual in other places.
+>>
+>>  Peter, what do you think of such a symlink?
+> 
+> At least, I'd like that.
+> 
+> Since I have access to the server, if Peter agrees, I can try to
+> configure the apache server for that.
+> 
+> But note that this apache server also serves ulibc and busybox.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/dhcpdump/dhcpdump.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Just do
+ln -s downloads/manual/manual.html docs/website/manual.html
+git add docs/website/manual.html
 
-diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
-index 15fc02f84511..6b677a674ae6 100644
---- a/package/dhcpdump/dhcpdump.mk
-+++ b/package/dhcpdump/dhcpdump.mk
-@@ -16,7 +16,8 @@ DHCPDUMP_LIBS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
- endif
- 
- define DHCPDUMP_BUILD_CMDS
--	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" LIBS="$(DHCPDUMP_LIBS)"
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS) -D_GNU_SOURCE" \
-+		LIBS="$(DHCPDUMP_LIBS)"
- endef
- 
- define DHCPDUMP_INSTALL_TARGET_CMDS
+ It results in a dead link in our repo, but who looks at the docs/website
+directory anyway?
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 -- 
-2.5.0
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
