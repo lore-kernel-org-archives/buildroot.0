@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 11:50:27 +0200
-Subject: [Buildroot] [PATCH 1/1] erlang-p1-tls: add missing dependency
- to openssl
-In-Reply-To: <1440495924-18788-1-git-send-email-johan.oudinet@gmail.com>
-References: <1440495924-18788-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20150825115027.33547a1f@free-electrons.com>
+Date: Tue, 25 Aug 2015 11:51:35 +0200
+Subject: [Buildroot] [git commit] package: rename opencv -> opencv3
+Message-ID: <20150825095807.6C75781E7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Oudinet,
+commit: http://git.buildroot.net/buildroot/commit/?id=3ba8dc3561090c817cdc123d9182b0f0d5d326c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Aug 2015 11:45:24 +0200, Johan Oudinet wrote:
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> ---
->  package/erlang-p1-tls/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/erlang-p1-tls/Config.in b/package/erlang-p1-tls/Config.in
-> index 42c6a3e..0df3348 100644
-> --- a/package/erlang-p1-tls/Config.in
-> +++ b/package/erlang-p1-tls/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_ERLANG_P1_TLS
->  	bool "erlang-p1-tls"
-> +	select BR2_PACKAGE_OPENSSL
+Since there is a couple of API breaks between OpenCV 2.4 and 3.0, two
+distinct packages mutually exclusive will be integrated in the package
+tree.
 
-What about the dependency in the .mk file? Doing a "select" in
-Config.in does not guarantee that the dependency will be built before
-that package.
+So, this change prepares the re-introduction of the OpenCV-2.4 package
+by renaming the current opencv package (which provides OpenCV-3.0) to
+opencv3.
 
-Thanks!
+Reverse dependencies (vlc) is fixed to use the new symbols.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Cc: Jonathan Ben Avraham <yba@tkos.co.il>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr:
+  - fix missed usage in vlc.mk
+  - don't remove legacy OpenCV symbols
+  - fix 'endif' comment
+  - slightly reword commit log (reverse deps)
+]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    2 +-
+ ...pthread-based-parallel_for-with-gcc-4.4.3.patch |    0
+ ...002-fix-support-for-pthreads-parallel_for.patch |    0
+ package/{opencv => opencv3}/Config.in              |  152 +++++++-------
+ package/{opencv/opencv.mk => opencv3/opencv3.mk}   |  230 ++++++++++----------
+ package/vlc/Config.in                              |    4 +-
+ package/vlc/vlc.mk                                 |    4 +-
+ 7 files changed, 196 insertions(+), 196 deletions(-)
+
+Patch is too large, so refusing to show it
