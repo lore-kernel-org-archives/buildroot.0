@@ -1,11 +1,18 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Aug 2015 10:30:55 +0200
-Subject: [Buildroot] [PATCH] package: add comment about ipkg/opkg/rpm
-In-Reply-To: <20150824203421.GF3619@free.fr>
-References: <1440085901-24479-1-git-send-email-yann.morin.1998@free.fr>
- <55D8FA56.5020009@mind.be> <20150823094750.GC3729@free.fr>
- <55DB7413.4060109@mind.be> <20150824203421.GF3619@free.fr>
-Message-ID: <55DC27BF.6000909@mind.be>
+Date: Tue, 25 Aug 2015 10:34:10 +0200
+Subject: [Buildroot] [PATCH 3/3] package/rpm: add host variant
+In-Reply-To: <CALe+oY-nOMMoYdocgzkanLOLyTX-uaTm2EDXPeKFOLMifpaeag@mail.gmail.com>
+References: <1439486091-6564-1-git-send-email-james.knight@rockwellcollins.com>
+ <1439486091-6564-3-git-send-email-james.knight@rockwellcollins.com>
+ <20150818114453.05e19fae@free-electrons.com>
+ <CALe+oY9v5rmHwqGPwzJyuo3tnbrc+okuygciyFheqOUmVvkOQg@mail.gmail.com>
+ <20150818160332.GX2765@tarshish>
+ <CALe+oY9u6XjFDnOurT7ELboULh6C3OUh+CiHxSS8toMPMD5atw@mail.gmail.com>
+ <20150818172723.GY2765@tarshish>
+ <CALe+oY9=XXOFUFgfiuCRUHsLLqUKdwbLfnVzA2Nu=kz60VoRwg@mail.gmail.com>
+ <55DB7E68.2040708@mind.be>
+ <CALe+oY-nOMMoYdocgzkanLOLyTX-uaTm2EDXPeKFOLMifpaeag@mail.gmail.com>
+Message-ID: <55DC2882.4030804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +21,30 @@ To: buildroot@busybox.net
 
 
 
-On 08/24/2015 10:34 PM, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2015-08-24 21:44 +0200, Arnout Vandecappelle spake thusly:
->> On 08/23/2015 11:47 AM, Yann E. MORIN wrote:
->>> On 2015-08-23 00:40 +0200, Arnout Vandecappelle spake thusly:
+On 08/24/2015 11:08 PM, James Knight wrote:
 [snip]
->>  Or actually, it's best to add a manual.html -> downloads/manual/manual.html
->> symlink to the website and refer to that. This fits easily:
->> http://buildroot.org/manual.html#faq-no-binary-packages
->> And it also makes it easier for us to refer to the manual in other places.
->>
->>  Peter, what do you think of such a symlink?
-> 
-> At least, I'd like that.
-> 
-> Since I have access to the server, if Peter agrees, I can try to
-> configure the apache server for that.
-> 
-> But note that this apache server also serves ulibc and busybox.
+> I saw the option to build with an internal db implementation, but I'm
+> a bit curious what the correct way to set it up (same with beecrypt,
+> as mentioned above). While I can set the configuration options to
+> build these internally, I have to somehow extract/link-up the
+> beecrypt/berkeleydb code with my host-rpm source (ie. I'll need a
+> 'beecrypt' and 'db' folder inside my host-rpm extracted source). 
 
- Just do
-ln -s downloads/manual/manual.html docs/website/manual.html
-git add docs/website/manual.html
+ I haven't looked at rpm 4.12.0.1, but the rpm5 tarball we have now has the
+berkeleydb sources bundled. It doesn't have beecrypt though (but according to
+configure.ac it's optional).
 
- It results in a dead link in our repo, but who looks at the docs/website
-directory anyway?
+ If rpm 4.12.0.1 doesn't have those sources bundled, then it's definitely better
+to just add host-beecrypt and host-berkeleydb.
 
  Regards,
  Arnout
 
-> 
-> Regards,
-> Yann E. MORIN.
+> Is
+> there an example out there (I'm having trouble seeing if another host
+> package in Buildroot does this)? I really don't know how else to
+> download and prepare beecrypt/berkeleydb without making them
+> host-supported packages as well.
 > 
 
 -- 
