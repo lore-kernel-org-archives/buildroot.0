@@ -1,37 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Aug 2015 12:27:14 +0200
-Subject: [Buildroot] [PATCH] package/libwebsock: fix incorrect inline
- function
-In-Reply-To: <1440277469-15130-1-git-send-email-yann.morin.1998@free.fr>
-References: <1440277469-15130-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150825122714.38067dbd@free-electrons.com>
+Date: Tue, 25 Aug 2015 12:28:29 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: Fix
+	libdrm dependency handling
+Message-ID: <20150825102853.229DE7FC2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=d23c4d4f4d6148e7f33c73af86611020a61b8cbb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 22 Aug 2015 23:04:29 +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/c02/c0243afc26202cbea98a1a75ddb9e37d8e2e08de/
->     http://autobuild.buildroot.org/results/8a0/8a0f34da29fdfb2807aaa7280759e324a3874851/
->     http://autobuild.buildroot.org/results/3da/3dac7b3504349e06c05fa0170a033e7828a9ab55/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/libwebsock/0003-fix-incorrect-inline.patch | 66 ++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 package/libwebsock/0003-fix-incorrect-inline.patch
+Fixes
+http://autobuild.buildroot.net/results/2e1/2e12f1a91812f027d89fcceeb41d6c88ef7b9d32/
 
-Applied, thanks. Can you submit the patch upstream? I know upstream has
-not committed anything since 1 year, but who knows...
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   15 ++++++++++-----
+ 1 files changed, 10 insertions(+), 5 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 566d93a..c88614b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -86,6 +86,12 @@ endif
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-xorg
+ XSERVER_XORG_SERVER_DEPENDENCIES += libpciaccess
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-libdrm
++else
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-libdrm
++endif
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-xorg
+ endif
+@@ -125,10 +131,10 @@ XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-libdrm --enable-glx
+-XSERVER_XORG_SERVER_DEPENDENCIES += libdrm mesa3d xproto_xf86driproto
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
++XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
+ else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-libdrm --disable-glx
++XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
+@@ -148,8 +154,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+ XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev
+ # udev kms support depends on libdrm and dri2
+ ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_XPROTO_DRI2PROTO),yy)
+-XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms --enable-libdrm
++XSERVER_XORG_SERVER_CONF_OPTS += --enable-config-udev-kms
+ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-config-udev-kms
+ endif
