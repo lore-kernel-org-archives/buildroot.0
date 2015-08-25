@@ -1,56 +1,39 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 25 Aug 2015 21:32:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: Fix static build
-In-Reply-To: <1440519726-30166-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1440519726-30166-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <55DCC2B9.20207@trzebnica.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 25 Aug 2015 19:46:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 8256] pointing to /usr/bin/objcopy old version
+ (x86) instead of the generated one
+In-Reply-To: <bug-8256-163@https.bugs.busybox.net/>
+References: <bug-8256-163@https.bugs.busybox.net/>
+Message-ID: <20150825194613.7A32D81D58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+https://bugs.busybox.net/show_bug.cgi?id=8256
 
-> Fixes
-> http://autobuild.buildroot.net/results/bd0/bd0e8619df7cd8f21da96ae470691b1ebb2f156c/
-> http://autobuild.buildroot.net/results/f1c/f1c40ac9dda5ceeb5665d021333058eb29828d62/
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->   package/tvheadend/tvheadend.mk | 8 ++++++++
->   1 file changed, 8 insertions(+)
->
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index ec04e6f..e145ded 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -71,6 +71,14 @@ define TVHEADEND_CONFIGURE_CMDS
->   	)
->   endef
->   
-> +# remove hardcoded -ldl for static builds
-> +define TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
-> +	$(SED) 's/-ldl -lpthread -lm/-lpthread -lm/' $(@D)/Makefile
-> +endef
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +TVHEADEND_POST_CONFIGURE_HOOKS += TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
-> +endif
+--- Comment #10 from CB <christophebricout@yahoo.fr> 2015-08-25 19:46:13 UTC ---
+Created attachment 6146
+  --> https://bugs.busybox.net/attachment.cgi?id=6146
+output/build/grub2-2.00/config.log (gzipped) content
 
-This should rather be:
-
-ifeq ($(BR2_STATIC_LIBS),y)
-define TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
-	$(SED) 's/-ldl -lpthread -lm/-lpthread -lm/' $(@D)/Makefile
-endef
-TVHEADEND_POST_CONFIGURE_HOOKS += TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
-endif
+Please fine here after the sequence history
 
 
-Regards,
-Jerzy
+    97  20:51   make clean
+    98  20:54   make
+    99  21:32   cd
+/home/elinux/localinstall/buildroot-2015.05/install/buildroot-2015.05/output/build/grub2-2.00
+   100  21:32   ls
+   101  21:32   more config.log
 
-> +
->   define TVHEADEND_BUILD_CMDS
->   	$(MAKE) -C $(@D)
->   endef
+The attachment is the config.log from grub2-2.00
+
+Available for others experiments if necessary.
+Tnanks.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
