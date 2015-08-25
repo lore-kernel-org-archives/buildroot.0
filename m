@@ -1,88 +1,110 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Aug 2015 23:43:33 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: add warning about volatile
-	keys
-Message-ID: <1440539013-23389-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 26 Aug 2015 00:00:02 +0200
+Subject: [Buildroot] [PATCH] website: make a symlink for the manual at the
+	root of the website
+Message-ID: <1440540002-13541-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the rootfs is read-only, keys will be generated in a volatile
-location, which is inherently bad as host keys will change on each boot,
-rendering virtually useless.
+This will give us a shorter URL, that we can mor eeasily refer to in the
+documetation itself, in help texts, on IRC...
 
-Add a warning so the user is at least aware of the issue.
-
-Consign the rm output to oblivion, to avoid noisy output, now that we
-have a proper warning.
-
-Move the starting message after the symlink-block, to avoid messages
-collision. Move the umask as well, sicne /etc/dropbear/ may be world
-readable; just the private host keys should be ?00 (and dropbear handles
-that by itself).
-
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/dropbear/S50dropbear      | 12 +++++++-----
- package/dropbear/dropbear.service |  6 ++++--
- 2 files changed, 11 insertions(+), 7 deletions(-)
+ docs/website/contribute.html    |  2 +-
+ docs/website/docs.html          |  2 +-
+ docs/website/manual.html        |  1 +
+ package/Config.in               | 23 +++++++++++------------
+ package/rpi-firmware/config.txt |  2 +-
+ 5 files changed, 15 insertions(+), 15 deletions(-)
+ create mode 120000 docs/website/manual.html
 
-diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
-index 765d6a3..b4e3c5c 100644
---- a/package/dropbear/S50dropbear
-+++ b/package/dropbear/S50dropbear
-@@ -9,9 +9,6 @@ test -r /etc/default/dropbear && . /etc/default/dropbear
- start() {
- 	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
+diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+index 17ed26f..d048c47 100644
+--- a/docs/website/contribute.html
++++ b/docs/website/contribute.html
+@@ -26,7 +26,7 @@ There are many different ways to contribute:</p>
+ </ul>
  
--	echo -n "Starting dropbear sshd: "
--	umask 077
--
- 	# If /etc/dropbear is a symlink to /var/run/dropbear, and
- 	#   - the filesystem is RO (i.e. we can not rm the symlink),
- 	#     create the directory pointed to by the symlink.
-@@ -20,13 +17,18 @@ start() {
- 	if [ -L /etc/dropbear \
- 	     -a "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]
- 	then
--		if rm -f /etc/dropbear; then
-+		if rm -f /etc/dropbear >/dev/null 2>&1; then
- 			mkdir -p /etc/dropbear
- 		else
--			mkdir -p $(readlink /etc/dropbear)
-+			echo "No persistent location to store SSH host keys. New keys will be"
-+			echo "generated at each boot. Are you sure this is what you want to do?"
-+			mkdir -p "$(readlink /etc/dropbear)"
- 		fi
- 	fi
+ <p>For more details on these topics, check out the
+-<a href="http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot">
++<a href="http://buildroot.uclibc.org/manual.html#_contributing_to_buildroot">
+ Contributing to buildroot</a> chapter in the Buildroot manual. Thanks for your help!</p>
  
-+	echo -n "Starting dropbear sshd: "
-+	umask 077
-+
- 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
- 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
- 	[ $? = 0 ] && echo "OK" || echo "FAIL"
-diff --git a/package/dropbear/dropbear.service b/package/dropbear/dropbear.service
-index 9dcbf25..1eb42f9 100644
---- a/package/dropbear/dropbear.service
-+++ b/package/dropbear/dropbear.service
-@@ -11,10 +11,12 @@ After=syslog.target network.target auditd.service
- ExecStartPre=/bin/sh -c '\
- if [ -L /etc/dropbear \
-      -a "$(readlink /etc/dropbear)" = "/var/run/dropbear" ]; then \
--    if rm -f /etc/dropbear; then \
-+    if rm -f /etc/dropbear >/dev/null 2>&1; then \
-         mkdir -p /etc/dropbear; \
-     else \
--        mkdir -p $(readlink /etc/dropbear); \
-+        echo "No persistent location to store SSH host keys. New keys will be"; \
-+        echo "generated at each boot. Are you sure this is what you want to do?"; \
-+        mkdir -p "$(readlink /etc/dropbear)"; \
-     fi; \
- fi'
- ExecStart=/usr/sbin/dropbear -F -R
+ <p>If you need any support yourself, have a look at <a href="./support.html">
+diff --git a/docs/website/docs.html b/docs/website/docs.html
+index 3bd3172..6edc989 100644
+--- a/docs/website/docs.html
++++ b/docs/website/docs.html
+@@ -11,7 +11,7 @@ things. It is available as:</p>
+ 
+ <h4>Latest stable release</h4>
+ <ul>
+-  <li><a href="/downloads/manual/manual.html">Online HTML</a></li>
++  <li><a href="/manual.html">Online HTML</a></li>
+   <li><a href="/downloads/manual/manual.pdf">PDF document</a></li>
+   <li><a href="/downloads/manual/manual.text">ASCII text</a></li>
+ </ul>
+diff --git a/docs/website/manual.html b/docs/website/manual.html
+new file mode 120000
+index 0000000..bd5552e
+--- /dev/null
++++ b/docs/website/manual.html
+@@ -0,0 +1 @@
++/downloads/manual/manual.html
+\ No newline at end of file
+diff --git a/package/Config.in b/package/Config.in
+index 55b80b1..702d497 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1372,18 +1372,17 @@ endif
+ endmenu
+ 
+ menu "Package managers"
+-comment "-----------------------------------------------------"
+-comment "Please note:                                         "
+-comment "- Buildroot does *not* generate binary packages,     "
+-comment "- Buildroot does *not* install any package database. "
+-comment "*                                                    "
+-comment "It is up to you to provide those by yourself if you  "
+-comment "want to use any of those package managers.           "
+-comment "*                                                    "
+-comment "See the manual:                                      "
+-comment "http://buildroot.org/downloads/manual/manual.html#faq"
+-comment "-no-binary-packages                                  "
+-comment "-----------------------------------------------------"
++comment "-------------------------------------------------------"
++comment "Please note:                                           "
++comment "- Buildroot does *not* generate binary packages,       "
++comment "- Buildroot does *not* install any package database.   "
++comment "*                                                      "
++comment "It is up to you to provide those by yourself if you    "
++comment "want to use any of those package managers.             "
++comment "*                                                      "
++comment "See the manual:                                        "
++comment "http://buildroot.org/manual.html#faq-no-binary-packages"
++comment "-------------------------------------------------------"
+ 	source "package/ipkg/Config.in"
+ 	source "package/opkg/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index aa8d2ab..58cc966 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -1,7 +1,7 @@
+ # Please note that this is only a sample, we recommend you to change it to fit
+ # your needs.
+ # You should override this file using a post-build script.
+-# See http://buildroot.org/downloads/manual/manual.html#rootfs-custom
++# See http://buildroot.org/manual.html#rootfs-custom
+ # and http://elinux.org/RPiconfig for a description of config.txt syntax
+ 
+ kernel=zImage
 -- 
 1.9.1
