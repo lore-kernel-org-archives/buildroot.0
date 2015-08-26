@@ -1,54 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 26 Aug 2015 12:07:47 +0100
-Subject: [Buildroot] [PATCH] tn5250: fix static build with openssl
-In-Reply-To: <88bb0424ee487e10af488dafdb30914439569076.1440584935.git.baruch@tkos.co.il>
-References: <88bb0424ee487e10af488dafdb30914439569076.1440584935.git.baruch@tkos.co.il>
-Message-ID: <55DD9E03.6060200@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Aug 2015 14:12:55 +0300
+Subject: [Buildroot] [PATCH] package/tn5250: fix static linking problem
+In-Reply-To: <55DD9D29.6090308@imgtec.com>
+References: <1440579591-23594-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150826090804.GG8919@tarshish> <55DD824B.6030700@imgtec.com>
+ <20150826103248.GH8919@tarshish> <55DD9D29.6090308@imgtec.com>
+Message-ID: <20150826111255.GI8919@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi Vicente,
 
-On 08/26/2015 11:28 AM, Baruch Siach wrote:
-> OpenSSL needs libz. Use pkg-config to find dependencies.
+On Wed, Aug 26, 2015 at 12:04:09PM +0100, Vicente Olivert Riera wrote:
+> On 08/26/2015 11:32 AM, Baruch Siach wrote:
+> > On Wed, Aug 26, 2015 at 10:09:31AM +0100, Vicente Olivert Riera wrote:
+> >> On 08/26/2015 10:08 AM, Baruch Siach wrote:
+> >>> On Wed, Aug 26, 2015 at 09:59:51AM +0100, Vicente Olivert Riera wrote:
+> >>>>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> >>>> +TN5250_CONF_ENV += LIBS="-lssl -lcrypto -lz"
+> >>>
+> >>> Please use pkg-config. See package/vsftpd/vsftpd.mk for example.
+> >>
+> >> that was my first approach and it didn't work. Does it work for you?
+> > 
+> > Please try http://patchwork.ozlabs.org/patch/510797/. Works for me :-).
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/95f/95f6df0d01e4944ecd84e830e2bbd8389e1d3e3d/
-> http://autobuild.buildroot.net/results/432/432b1fdec1e6282d51ba1d859c0f4ab9ed2a5efc/
-> http://autobuild.buildroot.net/results/d6a/d6a7125c21b4f92b69bb9e30b05c4727eedb63ba/
-> 
-> and more.
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/tn5250/tn5250.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
-> index 213f02cb68e8..180f9225598b 100644
-> --- a/package/tn5250/tn5250.mk
-> +++ b/package/tn5250/tn5250.mk
-> @@ -13,7 +13,8 @@ TN5250_LICENSE_FILES = COPYING
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  TN5250_CONF_OPTS += --with-ssl-dir=$(STAGING_DIR)/usr
-> -TN5250_DEPENDENCIES += openssl
-> +TN5250_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libssl libcrypto`"
-> +TN5250_DEPENDENCIES += openssl host-pkgconf
->  else
->  TN5250_CONF_OPTS += --without-ssl
->  endif
-> 
+> yeah, that one works. I was missing "libcrypto". But, I don't understand
+> why do you need to put libcrypto manually since it's already listed in
+> the openssl.pc file, and then libcrypto pulls libz. Doesn't work
+> recursively?
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+I tried "--libs openssl" here, and it works as well. I'm not sure which one is 
+better.
 
-Build test for MIPS architecture was successful.
+baruch
 
-Regards,
-
-Vincent.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
