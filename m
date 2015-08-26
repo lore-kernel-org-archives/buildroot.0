@@ -1,36 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 26 Aug 2015 17:31:14 +0200
-Subject: [Buildroot] [PATCH] package/wf111: remove package
-In-Reply-To: <20150826170933.4501e3e8@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 26 Aug 2015 17:09:33 +0200")
-References: <1440202387-7291-1-git-send-email-yann.morin.1998@free.fr>
- <20150823163653.3989f210@free-electrons.com>
- <20150823153737.GD3729@free.fr>
- <20150823205857.1625a64f@free-electrons.com>
- <55DB7994.8080509@mind.be> <87vbc3xgcq.fsf@dell.be.48ers.dk>
- <20150826170933.4501e3e8@free-electrons.com>
-Message-ID: <87bnduxe0t.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Aug 2015 17:37:05 +0200
+Subject: [Buildroot] [PATCH] website: make a symlink for the manual at
+	the root of the website
+In-Reply-To: <1440540002-13541-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 26 Aug 2015 00:00:02 +0200")
+References: <1440540002-13541-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <877foixdr2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ > This will give us a shorter URL, that we can mor eeasily refer to in the
+ > documetation itself, in help texts, on IRC...
 
- > So it was 100% clear when the package was submitted that the tarball
- > cannot be automatically retrieved, and that creating an account was
- > needed to download the tarball.
+ > Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+ > ---
+ >  docs/website/contribute.html    |  2 +-
+ >  docs/website/docs.html          |  2 +-
+ >  docs/website/manual.html        |  1 +
+ >  package/Config.in               | 23 +++++++++++------------
+ >  package/rpi-firmware/config.txt |  2 +-
+ >  5 files changed, 15 insertions(+), 15 deletions(-)
+ >  create mode 120000 docs/website/manual.html
 
-Yeah, I should probably have been more clear. _I_ didn't notice the issue
-back when it was submitted (and you committed the patch). If I had,
-perhaps I would have commented on it.
+ > diff --git a/docs/website/contribute.html b/docs/website/contribute.html
+ > index 17ed26f..d048c47 100644
+ > --- a/docs/website/contribute.html
+ > +++ b/docs/website/contribute.html
+ > @@ -26,7 +26,7 @@ There are many different ways to contribute:</p>
+ >  </ul>
+ 
+ >  <p>For more details on these topics, check out the
+ > -<a href="http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot">
+ > +<a href="http://buildroot.uclibc.org/manual.html#_contributing_to_buildroot">
 
-But again, it's in the tree now and people are using it, so lets leave
-it in.
+We use buildroot.org instead of the legacy .uclibc.org elsewhere, so
+I've fixed that and committed, thanks.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
