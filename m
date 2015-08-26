@@ -1,40 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 26 Aug 2015 12:43:25 +0000 (UTC)
-Subject: [Buildroot] [Bug 4099] cut utility from GNU coreutils works
-	incorrect
-In-Reply-To: <bug-4099-163@https.bugs.busybox.net/>
-References: <bug-4099-163@https.bugs.busybox.net/>
-Message-ID: <20150826124325.C84FA81E74@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Aug 2015 15:09:00 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: Fix static build
+In-Reply-To: <20150826123603.GA3699@free.fr>
+References: <1440537516-1908-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150826123603.GA3699@free.fr>
+Message-ID: <20150826150900.7acf16e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4099
+Dear Yann E. MORIN,
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-08-26 12:43:25 UTC ---
-(In reply to comment #3)
-> Hi,
+On Wed, 26 Aug 2015 14:36:03 +0200, Yann E. MORIN wrote:
+
+> > +ifeq ($(BR2_STATIC_LIBS),y)
+> > +# remove hardcoded -ldl for static builds
+> > +define TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
+> > +	$(SED) 's/-ldl -lpthread -lm/-lpthread -lm/' $(@D)/Makefile
 > 
-> okay, found the reason. 
-> It seems following options in uClibc config fixes the problem:
-> UCLIBC_HAS_STDIO_GETC_MACRO=y
-> UCLIBC_HAS_STDIO_PUTC_MACRO=y
+> Are you sure?
 > 
-> They are both disabled in the default config in Buildroot.
-> In OpenADK, which I used to verify the issue, the options are on.
-> 
-> So no difference which uClibc version is in use.
+> src/extra/capmt_ca.c uses dlsym() so it does need -ldl.
 
-Thanks for the investigation. In other words, you suggest to enable these
-options in Buildroot as well? The help text of these options says "Most people
-will answer Y."
+This file is not built by default, it's part of the extras.
 
-(It still seems to be a bug in gnulib to assume that uClibc is always built
-with those options enabled...)
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
