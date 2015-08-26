@@ -1,35 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 26 Aug 2015 12:12:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 4099] cut utility from GNU coreutils works
-	incorrect
-In-Reply-To: <bug-4099-163@https.bugs.busybox.net/>
-References: <bug-4099-163@https.bugs.busybox.net/>
-Message-ID: <20150826121238.CD8EF81D5F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 26 Aug 2015 14:36:03 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: Fix static build
+In-Reply-To: <1440537516-1908-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1440537516-1908-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150826123603.GA3699@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4099
+Bernd, All,
 
---- Comment #3 from wbx at openadk.org 2015-08-26 12:12:38 UTC ---
-Hi,
+On 2015-08-25 23:18 +0200, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/bd0/bd0e8619df7cd8f21da96ae470691b1ebb2f156c/
+> http://autobuild.buildroot.net/results/f1c/f1c40ac9dda5ceeb5665d021333058eb29828d62/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Put everything in the if-static_libs-then clause (Jerzy)
+> 
+>  package/tvheadend/tvheadend.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index ec04e6f..29ecf4f 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -71,6 +71,14 @@ define TVHEADEND_CONFIGURE_CMDS
+>  	)
+>  endef
+>  
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +# remove hardcoded -ldl for static builds
+> +define TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
+> +	$(SED) 's/-ldl -lpthread -lm/-lpthread -lm/' $(@D)/Makefile
 
-okay, found the reason. 
-It seems following options in uClibc config fixes the problem:
-UCLIBC_HAS_STDIO_GETC_MACRO=y
-UCLIBC_HAS_STDIO_PUTC_MACRO=y
+Are you sure?
 
-They are both disabled in the default config in Buildroot.
-In OpenADK, which I used to verify the issue, the options are on.
+src/extra/capmt_ca.c uses dlsym() so it does need -ldl.
 
-So no difference which uClibc version is in use.
+I suspect we should instead mark tvheadend as not available for
+static-only.
 
-best regards
- Waldemar
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +TVHEADEND_POST_CONFIGURE_HOOKS += TVHEADEND_FIX_MAKEFILE_FOR_STATIC_BUILD
+> +endif
+> +
+>  define TVHEADEND_BUILD_CMDS
+>  	$(MAKE) -C $(@D)
+>  endef
+> -- 
+> 2.1.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
