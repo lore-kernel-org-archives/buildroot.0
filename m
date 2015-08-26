@@ -1,44 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Aug 2015 15:28:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] packages/linux-pam: disable when
- using musl
-In-Reply-To: <1440109933-6123-1-git-send-email-brendanheading@gmail.com>
-References: <1440109933-6123-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150826152842.1fb22ddd@free-electrons.com>
+Date: Wed, 26 Aug 2015 15:45:34 +0200
+Subject: [Buildroot] [PATCH] pacakge/qt5/qt5base: fix build with ccache
+In-Reply-To: <1440499298-39957-1-git-send-email-benoit@wsystem.com>
+References: <1440499298-39957-1-git-send-email-benoit@wsystem.com>
+Message-ID: <20150826154534.3e67c9bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Beno?t,
 
-On Thu, 20 Aug 2015 23:32:13 +0100, Brendan Heading wrote:
-> Fixes: http://autobuild.buildroot.net/results/e33/e337d69420ad00b2cc4017d639a31803926f2353/
+On Tue, 25 Aug 2015 12:41:38 +0200, Beno?t Th?baudeau wrote:
+> Building with ccache failed with:
 > 
-> linux-pam needs some surgery to build under musl, so for the time being
-> disable it until the issues are solved. Also disables dependent package
-> python-pam, and dependent suboptions under openvmtools, rsh-redone and
-> util-linux.
+>     Running configuration tests...
+>     Failed to process makespec for platform 'devices/linux-buildroot-g++'
+>     Project ERROR: Compiler <path_to_output_dir>/host/usr/bin/ccache <path_to_output_dir>/host/usr/bin/<cross_compile>-g++ not found. Check the value of CROSS_COMPILE -device-option
+>     Could not read qmake configuration file <path_to_output_dir>/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
+>     Error processing project file: /dev/null
 > 
+> This was caused by Buildroot setting this in
+> qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf:
+> 
+>     QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
+> 
+> But qt5base-5.5.0/mkspecs/features/device_config.prf expects QMAKE_CXX
+> to be a valid (absolute or QMAKE_PATH_ENV-relative) path to an existing
+> file, which is not possible if using ccache as above.
+> 
+> Add a patch removing these tests since the toolchain is already tested
+> by Buildroot, which allows to keep using ccache.
+> 
+> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+
+Thanks for the patch. I see the problem, but as usual, having a
+solution that can be submitted upstream is better. See my suggestion
+below.
+
 > ---
-> v1 -> v2 - added missing comments to document that packages require
-> non-musl (ie uclibc or (e)glibc) toolchains.
-> ---
+>  .../qt5/qt5base/0009-fix-build-with-ccache.patch   | 60 ++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0009-fix-build-with-ccache.patch
 > 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> diff --git a/package/qt5/qt5base/0009-fix-build-with-ccache.patch b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+> new file mode 100644
+> index 0000000..04d41a4
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+> @@ -0,0 +1,60 @@
+> +Fix build with ccache
+> +
+> +Building with Buildroot and ccache failed with:
+> +
+> +    Running configuration tests...
+> +    Failed to process makespec for platform 'devices/linux-buildroot-g++'
+> +    Project ERROR: Compiler <path_to_output_dir>/host/usr/bin/ccache <path_to_output_dir>/host/usr/bin/<cross_compile>-g++ not found. Check the value of CROSS_COMPILE -device-option
+> +    Could not read qmake configuration file <path_to_output_dir>/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
+> +    Error processing project file: /dev/null
+> +
+> +This was caused by Buildroot setting this in
+> +qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf:
+> +
+> +    QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
+> +
+> +But qt5base-5.5.0/mkspecs/features/device_config.prf expects QMAKE_CXX
+> +to be a valid (absolute or QMAKE_PATH_ENV-relative) path to an existing
+> +file, which is not possible if using ccache as above.
+> +
+> +Remove these tests since the toolchain is already tested by Buildroot,
+> +which allows to keep using ccache.
+> +
+> +Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+> +---
+> + mkspecs/features/device_config.prf | 23 -----------------------
+> + 1 file changed, 23 deletions(-)
+> +
+> +diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
+> +index cd3a0cf..ef16540 100644
+> +--- a/mkspecs/features/device_config.prf
+> ++++ b/mkspecs/features/device_config.prf
+> +@@ -14,28 +14,5 @@ host_build {
+> + 
+> + # Provide a function to be used by mkspecs
+> + defineTest(deviceSanityCheckCompiler) {
+> +-    equals(QMAKE_HOST.os, Windows): \
+> +-        sfx = .exe
+> +-    else: \
+> +-        sfx =
+> +-
+> +-    # Check if the binary exists with an absolute path. Do this check
+> +-    # before the CROSS_COMPILE empty check below to allow the mkspec
+> +-    # to derive the compiler path from other device options.
+> +-    exists($$QMAKE_CXX$$sfx):return()
+> +-
+> +-    # Check for possible reasons of failure
+> +-    # check if CROSS_COMPILE device-option is set
+> +-    isEmpty(CROSS_COMPILE):error("CROSS_COMPILE needs to be set via -device-option CROSS_COMPILE=<path>")
+> +-
+> +-    # Check if QMAKE_CXX points to an executable.
+> +-    ensurePathEnv()
+> +-    for (dir, QMAKE_PATH_ENV) {
+> +-        exists($$dir/$${QMAKE_CXX}$$sfx): \
+> +-            return()
+> +-    }
 
-Your SoB line should be before the first "---" otherwise it gets
-stripped by Git when applying.
+Instead of removing this entire piece of code, can you try to replace
+just this last part by something like:
 
+	system($${QMAKE_CXX}$$sfx --version): return()
 
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL	# linux-pam
+Instead of trying to look for a file, it will actually try to run the
+compiler.
 
-We use a space before the comment, not a tab.
+Also, can you report the bug and submit the patch upstream to Qt? See
+https://bugreports.qt.io/secure/Dashboard.jspa.
 
-I've applied to master after fixing those minor nits.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
