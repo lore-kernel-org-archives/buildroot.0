@@ -1,92 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Aug 2015 17:06:18 +0200
-Subject: [Buildroot] [PATCH] qt5: disable for static-only builds
-Message-ID: <1440601578-6669-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Aug 2015 17:09:33 +0200
+Subject: [Buildroot] [PATCH] package/wf111: remove package
+In-Reply-To: <87vbc3xgcq.fsf@dell.be.48ers.dk>
+References: <1440202387-7291-1-git-send-email-yann.morin.1998@free.fr>
+ <20150823163653.3989f210@free-electrons.com>
+ <20150823153737.GD3729@free.fr>
+ <20150823205857.1625a64f@free-electrons.com>
+ <55DB7994.8080509@mind.be> <87vbc3xgcq.fsf@dell.be.48ers.dk>
+Message-ID: <20150826170933.4501e3e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even though we have some specific code to support building Qt5 for
-static-only configurations, it doesn't work. The first problem is that
-our custom qmake.conf always passes -ldl, which makes a number of Qt5
-config.tests fail at configure time. Once this problem is fixed by
-removing -ldl from QMAKE_LIBS and adding it to QMAKE_LIBS_DYNLOAD
-instead, the next problem is that the plugin infrastructure of Qt5
-assumes that Linux has dynamic library support: the qlibrary_unix.cpp
-file includes <dlfcn.h>, and the only condition for this file to not
-be included is:
+Peter,
 
-Until recently, building Qt5 statically was working because our C
-library was not built static-only: it provided <dlfcn.h> and
-libdl.so. But now that we have a really static only toolchain, Qt5 no
-longer builds.
+On Tue, 25 Aug 2015 22:28:37 +0200, Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >  I'm not going to comment on all the points made here, but my stance
+>  > is: lthough I also hate what the wf111 package does, I don't think
+>  > it's bad enough to remove it from buildroot. It doesn't hurt the rest
+>  > of buildroot at all, and it is a useful package for some users. I'd
+>  > rather get rid of sparc than getting rid of this package.
+> 
+> I'm with Arnout here. While the download/binary blobs issues certainly
+> aren't nice (and perhaps we would have had second thoughts when it was
+> submitted if we had known about these issues)
 
-The easiest solution is to simply make Qt5 depend on dynamic library
-support.
+From the commit log of the package:
 
-Fixes:
+    Adds support for the BlueGiga WF111 WiFi driver and the binary utilities
+    distributed alongside the driver. An account is required to download the
+    sources from the BlueGiga website, which can be created freely. The
+    driver is available for armv5, arm7a and i386.
+    
+    Since it is not possible to automatically retrieve the sources, because
+    of the required user account needed on the BlueGiga website, an option
+    is added to let the Buildroot user specify the directory where the
+    driver tarball was downloaded.
 
-   http://autobuild.buildroot.net/results/538/538e0325adba9fabbe4ec8e550fbb6a7219f5e7a/
+So it was 100% clear when the package was submitted that the tarball
+cannot be automatically retrieved, and that creating an account was
+needed to download the tarball.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/Config.in          |  5 +++--
- package/qt5/qt5base/qt5base.mk | 11 ++---------
- 2 files changed, 5 insertions(+), 11 deletions(-)
+See also the initial package submission:
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 3fb65f7..22fd0c0 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -11,15 +11,16 @@ config BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_ARM_CPU_ARMV4
- 	default y
- 
--comment "Qt5 needs a toolchain w/ wchar, NPTL, C++"
-+comment "Qt5 needs a toolchain w/ wchar, NPTL, C++, dynamic library"
- 	depends on !BR2_PACKAGE_QT
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
- menuconfig BR2_PACKAGE_QT5
- 	bool "Qt5"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT5BASE
- 	help
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e80c20c..e783b4d 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -26,7 +26,8 @@ QT5BASE_CONFIGURE_OPTS += \
- 	-no-iconv \
- 	-system-zlib \
- 	-system-pcre \
--	-no-pch
-+	-no-pch \
-+	-shared
- 
- ifeq ($(BR2_ENABLE_DEBUG),y)
- QT5BASE_CONFIGURE_OPTS += -debug
-@@ -34,14 +35,6 @@ else
- QT5BASE_CONFIGURE_OPTS += -release
- endif
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--QT5BASE_CONFIGURE_OPTS += -static
--else
--# We apparently can't build both the shared and static variants of the
--# library.
--QT5BASE_CONFIGURE_OPTS += -shared
--endif
--
- QT5BASE_CONFIGURE_OPTS += -largefile
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+    http://lists.busybox.net/pipermail/buildroot/2015-January/118194.html
+
+Best regards,
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
