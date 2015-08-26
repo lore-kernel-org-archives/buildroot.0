@@ -1,53 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Aug 2015 14:07:16 +0200
-Subject: [Buildroot] [PATCH v2] tn5250: fix static build with openssl
-In-Reply-To: <d48309c2a902001ef0cd019279cb34d377690733.1440588928.git.baruch@tkos.co.il>
-References: <d48309c2a902001ef0cd019279cb34d377690733.1440588928.git.baruch@tkos.co.il>
-Message-ID: <20150826140716.62975ed9@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 26 Aug 2015 12:12:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 4099] cut utility from GNU coreutils works
+	incorrect
+In-Reply-To: <bug-4099-163@https.bugs.busybox.net/>
+References: <bug-4099-163@https.bugs.busybox.net/>
+Message-ID: <20150826121238.CD8EF81D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+https://bugs.busybox.net/show_bug.cgi?id=4099
 
-On Wed, 26 Aug 2015 14:35:28 +0300, Baruch Siach wrote:
-> OpenSSL needs libz. Use pkg-config to find dependencies.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/95f/95f6df0d01e4944ecd84e830e2bbd8389e1d3e3d/
-> http://autobuild.buildroot.net/results/432/432b1fdec1e6282d51ba1d859c0f4ab9ed2a5efc/
-> http://autobuild.buildroot.net/results/d6a/d6a7125c21b4f92b69bb9e30b05c4727eedb63ba/
-> 
-> and more.
-> 
-> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v2:
->    Use '--libs openssl' instead of listing the actual libraries (Vicente)
-> ---
->  package/tn5250/tn5250.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/tn5250/tn5250.mk b/package/tn5250/tn5250.mk
-> index 213f02cb68e8..a5b70aa019a4 100644
-> --- a/package/tn5250/tn5250.mk
-> +++ b/package/tn5250/tn5250.mk
-> @@ -13,7 +13,8 @@ TN5250_LICENSE_FILES = COPYING
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  TN5250_CONF_OPTS += --with-ssl-dir=$(STAGING_DIR)/usr
-> -TN5250_DEPENDENCIES += openssl
-> +TN5250_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
+--- Comment #3 from wbx at openadk.org 2015-08-26 12:12:38 UTC ---
+Hi,
 
-I've changed this line to use += instead of = to avoid future mistakes,
-and applied your patch. Thanks!
+okay, found the reason. 
+It seems following options in uClibc config fixes the problem:
+UCLIBC_HAS_STDIO_GETC_MACRO=y
+UCLIBC_HAS_STDIO_PUTC_MACRO=y
 
-Thomas
+They are both disabled in the default config in Buildroot.
+In OpenADK, which I used to verify the issue, the options are on.
+
+So no difference which uClibc version is in use.
+
+best regards
+ Waldemar
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
