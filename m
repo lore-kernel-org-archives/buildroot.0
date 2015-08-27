@@ -1,34 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Aug 2015 20:35:01 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix elf2flt build
-In-Reply-To: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
-References: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
-Message-ID: <20150827203501.00528bd2@free-electrons.com>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Thu, 27 Aug 2015 21:03:55 +0200
+Subject: [Buildroot] [PATCH] pacakge/qt5/qt5base: fix build with ccache
+In-Reply-To: <55DF074B.7080408@jcz.nl>
+References: <1440499298-39957-1-git-send-email-benoit@wsystem.com>
+ <20150826154534.3e67c9bc@free-electrons.com>
+ <CA+sos7-LVKNjkVc+1hg0w8WZMGEtnthaJnaA7-fUKEOizjJCeg@mail.gmail.com>
+ <55DEC67C.6000500@wsystem.com> <20150827105450.100164af@free-electrons.com>
+ <55DED48F.3030102@wsystem.com> <55DF074B.7080408@jcz.nl>
+Message-ID: <CA+sos7_skmvhCRNMOf8d=sEYrc_cr=kLV0d7a76yKYX0Ma8=dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Douglas,
+Dear Jaap Crezee,
 
-On Thu, 27 Aug 2015 18:47:17 +0200, Douglas RAILLARD wrote:
-> Add -ldl to fix elf2flt build, because libbfd
-> uses dlopen and friends for plugin loading
-> 
-> Signed-off-by: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+On Thu, Aug 27, 2015 at 2:49 PM, Jaap Crezee <jaap@jcz.nl> wrote:
+> On 08/27/15 11:12, Beno?t Th?baudeau wrote:
+>> OK, but in the meantime, until we have a wrapper for the internal toolchain too,
+>> what do you want to do to fix the current build failure?
+>>  - Forbid the use of ccache with Qt 5?
+>
+> I would not recommend that. Qt5base is *huge* and recompiling it over and over again (as I
+> do when I am developing with/against buildroot) is just too time consuming.
 
-Thanks for this patch. Great to see that there is some interest in
-noMMU architecture. Which architecture are you working on?
+Agreed.
 
-I'm not able to reproduce the problem: here host-elf2flt builds fine.
-However the build of an ARM Cortex-M3 toolchain fails during the uClibc
-build (which takes place *after* host-elf2flt is built).
+>>  - Use the current patch?
+>
+> You can also look at one of my previous patches (see list archive). I simply don't have
+> the time to respond to all correction requests unfortunately.
 
-Thanks!
+I have added your suggestion here:
+https://bugreports.qt.io/browse/QTBUG-47951?focusedCommentId=291119&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-291119
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Beno?t
