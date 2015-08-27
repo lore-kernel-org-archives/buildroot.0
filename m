@@ -1,60 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Aug 2015 16:29:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 8316] New: lttng-tools and lttng-babeltrace
- executables contain bad RPATH pointing to host machine
-Message-ID: <bug-8316-163@https.bugs.busybox.net/>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Thu, 27 Aug 2015 18:34:14 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5multimedia: fix gstreamer1
+	support
+Message-ID: <1440693254-31854-1-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8316
+Fix the missing gstreamer1 build dependencies, which could possibly
+prevent the configuration of qt5multimedia from detecting the supported
+gstreamer1 features.
 
-           Summary: lttng-tools and lttng-babeltrace executables contain
-                    bad RPATH pointing to host machine
-           Product: buildroot
-           Version: 2015.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: benjamin.h.shelton at intel.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Fix the missing gstreamer1 install rules, which resulted in the
+following runtime error:
 
+    defaultServiceProvider::requestService(): no service found for - "org.qt-project.qt.mediaplayer"
 
-The lttng-tools and lttng-babeltrace executables contain bad RPATHs pointing to
-the buildroot output/build directory.  This happens with lttng-tools versions
-2.6.0 and 2.7.0-rc1, as well as with lttng-babeltrace.
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-objdump -p shows the following:
-
-RPATH               
-/workspace/sw/bhshelto/buildroot/buildroot/output/build/lttng-tools-2.7.0-rc1/src/lib/lttng-ctl/.libs:/workspace/sw/bhshelto/buildroot/buildroot/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib:/workspace/sw/bhshelto/buildroot/buildroot/output/build/liburcu-0.8.7/.libs
-
-This is a problem for us because /workspace is an NFS mount that we use for
-development builds, and we also mount it on our embedded targets.  When
-/workspace is not mounted on the embedded target, the lttng utilities run fine,
-since the RPATH does not match anything.  However, if I mount /workspace, I see
-the following:
-
-[root at buildroot cli]# lttng stop
-lttng: error while loading shared libraries:
-/workspace/sw/bhshelto/buildroot/buildroot/output/build/lttng-tools-2.7.0-rc1/src/lib/lttng-ctl/.libs/liblttng-ctl.so.0:
-file too short
-[root at buildroot cli]# cd
-[root at buildroot ~]# umount /workspace
-[root at buildroot ~]# lttng stop
-Waiting for data availability
-Tracing stopped for session my-session
-
-When I use patchelf to remove the RPATH, everything works as expected.
-
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 763fc28..50fdd57 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -21,6 +21,9 @@ endif
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
+ endif
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
++endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
+@@ -40,7 +43,7 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS),)
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++ifneq ($(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ endef
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.1.4
