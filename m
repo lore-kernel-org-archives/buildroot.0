@@ -1,34 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Aug 2015 17:31:01 +0200
-Subject: [Buildroot] Buildroot article in Mind newsletter
-Message-ID: <55DF2D35.2050302@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Aug 2015 16:29:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 8281] pyrexc fails to run when path is too long
+In-Reply-To: <bug-8281-163@https.bugs.busybox.net/>
+References: <bug-8281-163@https.bugs.busybox.net/>
+Message-ID: <20150827162904.B7F1481EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=8281
 
- I wrote a short article for my company's newsletter (which we try to fill with
-interesting stuff rather than commercial blabla) about recent (= last 5 years)
-developments in Buildroot. If anyone is interested, you can read it on our
-website [1]. It's CC-BY-SA licensed so you can reuse the text. You can download
-the source here[2].
+--- Comment #2 from kevin.alden2 at gmail.com 2015-08-27 16:29:04 UTC ---
+(In reply to comment #1)
+> Isn't this a pyrexc bug rather than a Buildroot bug?
 
- Note: the newsletter will only be sent out tomorrow, so if you think I'm
-writing something that's incorrect or not very good and it should be changed,
-there's still a bit of time...
+I suppose you could look at it that way.  I don't know enough about pyrexc to
+propose a solution, but Buildroot must be populating that invalid shebang.  I
+guess I would look at it as a Buildroot bug for that reason.  
 
- Regards,
- Arnout
+I would consider it a pyrexc bug as well if it happens to be completely reliant
+on the shebang to work.  It seems like you could just explicitly pass pyrexc to
+python and avoid the shebang issue though.
 
-[1] http://www.mind.be/?page=buildrootarticle
-[2] http://www.mind.be/content/Presentations/buildroot.txt
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
