@@ -1,99 +1,86 @@
 From: Renaud AUBIN <root@renaud.io>
-Date: Thu, 27 Aug 2015 22:43:22 +0200
-Subject: [Buildroot] [PATCH] wiringpi: New package
-Message-ID: <1440708202-19616-1-git-send-email-root@renaud.io>
+Date: Thu, 27 Aug 2015 22:54:56 +0200
+Subject: [Buildroot] [PATCH] package/libhttpparser: New package
+Message-ID: <1440708896-22502-1-git-send-email-root@renaud.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable Raspberry Pi GPIO access through the WiringPi library.
+http-parser provides a simple C API to parse HTTP responses and
+requests.
 
-Git http backend is not enabled on the official repo. There is no
-official release tarball. As a consequence, this packaging uses an
-unofficial repo hosted on github.
+This packaging uses the official Joyent repository.
 ---
- package/Config.in            |  4 ++++
- package/wiringpi/Config.in   | 11 +++++++++++
- package/wiringpi/wiringpi.mk | 40 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+)
- create mode 100644 package/wiringpi/Config.in
- create mode 100644 package/wiringpi/wiringpi.mk
+ package/Config.in                      |  1 +
+ package/libhttpparser/Config.in        | 13 +++++++++++++
+ package/libhttpparser/libhttpparser.mk | 27 +++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+ create mode 100644 package/libhttpparser/Config.in
+ create mode 100644 package/libhttpparser/libhttpparser.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 783fbb4..0c08fc2 100644
+index 783fbb4..89d863d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1502,4 +1502,8 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- endmenu
- 
-+menu "Raspberry Pi"
-+	source "package/wiringpi/Config.in"
-+endmenu
-+
- endmenu
-diff --git a/package/wiringpi/Config.in b/package/wiringpi/Config.in
+@@ -979,6 +979,7 @@ menu "Networking"
+ 	source "package/libeXosip2/Config.in"
+ 	source "package/libfcgi/Config.in"
+ 	source "package/libgsasl/Config.in"
++	source "package/libhttpparser/Config.in"
+ 	source "package/libidn/Config.in"
+ 	source "package/libiscsi/Config.in"
+ 	source "package/libmbus/Config.in"
+diff --git a/package/libhttpparser/Config.in b/package/libhttpparser/Config.in
 new file mode 100644
-index 0000000..46141d4
+index 0000000..b8e6825
 --- /dev/null
-+++ b/package/wiringpi/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_WIRINGPI
-+        bool "wiringpi"
++++ b/package/libhttpparser/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBHTTPPARSER
++        bool "libhttpparser"
 +        help
-+          WiringPi is a GPIO access library written in C for the
-+          BCM2835 used in the Raspberry Pi. It?s released under the
-+          GNU LGPLv3 license and is usable from C and C++ and many
-+          other languages with suitable wrappers (See below) It?s
-+          designed to be familiar to people who have used the
-+          Arduino ?wiring? system
++          This is a parser for HTTP messages written in C. It
++          parses both requests and responses. The parser is
++          designed to be used in performance HTTP applications.
++          It does not make any syscalls nor allocations, it does
++          not buffer data, it can be interrupted at anytime.
++          Depending on your architecture, it only requires about
++          40 bytes of data per message stream (in a web server
++          that is per connection).
 +
-+          http://wiringpi.com/
-diff --git a/package/wiringpi/wiringpi.mk b/package/wiringpi/wiringpi.mk
++          https://github.com/joyent/http-parser
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
 new file mode 100644
-index 0000000..4340a4f
+index 0000000..bcb26c7
 --- /dev/null
-+++ b/package/wiringpi/wiringpi.mk
-@@ -0,0 +1,40 @@
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# wiringpi
++# libhttp-parser
 +#
 +################################################################################
 +
-+WIRINGPI_VERSION = 2.25
-+WIRINGPI_SITE = $(call github,nibua-r,unofficial-wiringpi,v$(WIRINGPI_VERSION))
-+WIRINGPI_INSTALL_STAGING = YES
-+WIRINGPI_LICENSE = LGPLv3
-+WIRINGPI_LICENSE_FILES = COPYING.LESSER
++LIBHTTPPARSER_VERSION = v2.5.0
++LIBHTTPPARSER_SITE = $(call github,joyent,http-parser,$(LIBHTTPPARSER_VERSION))
++LIBHTTPPARSER_INSTALL_STAGING = YES
++LIBHTTPPARSER_LICENSE = MIT
++LIBHTTPPARSER_LICENSE_FILES = LICENSE-MIT
 +
-+define WIRINGPI_BUILD_CMDS
-+    $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D)/wiringPi
-+    $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D)/wiringPi static
-+    $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D)/devLib
-+    $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D)/devLib static
-+    $(MAKE) LDFLAGS="-L$(@D)/devLib -L$(@D)/wiringPi" INCLUDE="-I$(@D)/devLib -I$(@D)/wiringPi" CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D)/gpio all
++define LIBHTTPPARSER_BUILD_CMDS
++    $(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) library package
 +endef
 +
-+define WIRINGPI_INSTALL_STAGING_CMDS
-+    $(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.so.$(WIRINGPI_VERSION) $(STAGING_DIR)/usr/lib
-+    $(INSTALL) -D -m 0644 $(@D)/wiringPi/*.h $(STAGING_DIR)/usr/include/
-+    $(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.a $(STAGING_DIR)/usr/lib
-+    cd $(STAGING_DIR)/usr/lib; ln -sf libwiringPi.so.$(WIRINGPI_VERSION) libwiringPi.so
-+    $(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.so.$(WIRINGPI_VERSION) $(STAGING_DIR)/usr/lib
-+    $(INSTALL) -D -m 0644 $(@D)/devLib/*.h $(STAGING_DIR)/usr/include/
-+    $(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.a $(STAGING_DIR)/usr/lib
-+    cd $(STAGING_DIR)/usr/lib; ln -sf libwiringPiDev.so.$(WIRINGPI_VERSION) libwiringPiDev.so
++define LIBHTTPPARSER_INSTALL_STAGING_CMDS
++    $(INSTALL) -D -m 0755 $(@D)/libhttp_parser.a $(STAGING_DIR)/usr/lib/libhttp_parser.a
++    $(INSTALL) -D -m 0644 $(@D)/http_parser.h $(STAGING_DIR)/usr/include/http_parser.h
++    $(INSTALL) -D -m 0755 $(@D)/libhttp_parser.so* $(STAGING_DIR)/usr/lib
 +endef
 +
-+define WIRINGPI_INSTALL_TARGET_CMDS
-+    $(INSTALL) -D -m 0755 $(@D)/wiringPi/libwiringPi.so.$(WIRINGPI_VERSION) $(TARGET_DIR)/usr/lib
-+    cd $(TARGET_DIR)/usr/lib; ln -sf libwiringPi.so.$(WIRINGPI_VERSION) libwiringPi.so
-+    $(INSTALL) -D -m 0755 $(@D)/devLib/libwiringPiDev.so.$(WIRINGPI_VERSION) $(TARGET_DIR)/usr/lib
-+    cd $(TARGET_DIR)/usr/lib; ln -sf libwiringPiDev.so.$(WIRINGPI_VERSION) libwiringPiDev.so
-+    $(INSTALL) -D -m 0755 $(@D)/gpio/gpio $(TARGET_DIR)/usr/bin
++define LIBHTTPPARSER_INSTALL_TARGET_CMDS
++    $(INSTALL) -D -m 0755 $(@D)/libhttp_parser.so* $(TARGET_DIR)/usr/lib
 +endef
 +
 +$(eval $(generic-package))
