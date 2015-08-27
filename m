@@ -1,39 +1,92 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Thu, 27 Aug 2015 21:03:55 +0200
-Subject: [Buildroot] [PATCH] pacakge/qt5/qt5base: fix build with ccache
-In-Reply-To: <55DF074B.7080408@jcz.nl>
-References: <1440499298-39957-1-git-send-email-benoit@wsystem.com>
- <20150826154534.3e67c9bc@free-electrons.com>
- <CA+sos7-LVKNjkVc+1hg0w8WZMGEtnthaJnaA7-fUKEOizjJCeg@mail.gmail.com>
- <55DEC67C.6000500@wsystem.com> <20150827105450.100164af@free-electrons.com>
- <55DED48F.3030102@wsystem.com> <55DF074B.7080408@jcz.nl>
-Message-ID: <CA+sos7_skmvhCRNMOf8d=sEYrc_cr=kLV0d7a76yKYX0Ma8=dw@mail.gmail.com>
+From: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+Date: Thu, 27 Aug 2015 21:11:18 +0200
+Subject: [Buildroot] elf2flt .ARM.exidx and .ARM.extab section handling
+Message-ID: <1990856.EDz1xKh0BM@raillard-dv6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jaap Crezee,
+Hi everybody,
 
-On Thu, Aug 27, 2015 at 2:49 PM, Jaap Crezee <jaap@jcz.nl> wrote:
-> On 08/27/15 11:12, Beno?t Th?baudeau wrote:
->> OK, but in the meantime, until we have a wrapper for the internal toolchain too,
->> what do you want to do to fix the current build failure?
->>  - Forbid the use of ccache with Qt 5?
->
-> I would not recommend that. Qt5base is *huge* and recompiling it over and over again (as I
-> do when I am developing with/against buildroot) is just too time consuming.
+Cortex M3 no-MMU toolchain includes the elf2flt tool to convert ELF to bFLT.
+However, it does not seem to be able to do its job when given the ELF output
+of gcc 4.9.3 and uClibc 0.9.33.
+The problem is: .ARM.exidx sections and .ARM.extab input sections are
+not kept by the elf2flt linker script and libgcc apparently needs that
+information (actually, a symbol for the beginning and the end of the 
+.ARM.exidx sections):
+output/build/host-gcc-final-4.9.3/build/arm-buildroot-uclinux-uclibcgnueabi/libgcc/../../../libgcc/unwind-arm-common.inc:275: undefined reference to ? __exidx_start ?
+This error shows up during the final link of a binary, not when
+compiling the toolchain itself.
 
-Agreed.
+A patch has been sent here 3 years ago but for some reasons, has not been
+checked in buildroot:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/40885/match=elf2flt
 
->>  - Use the current patch?
->
-> You can also look at one of my previous patches (see list archive). I simply don't have
-> the time to respond to all correction requests unfortunately.
+Now elf2flt sources had been moved out of the buildroot tree, but the currently
+used upstream has no obvious mean of contact so here is a serie of small patches that
+allow the elf2flt toolchain to compile cleanly C code (C++ not tested).
+Also, support for two relocations types (R_ARM_NONE, R_ARM_PREL31) must be
+added to elf2flt in order to process the content of .ARM.exidx section.
+Note that I have not already tested the resulting binaries, only that 
+buildroot builds the root image without error, but Sourcery 2010q1 
+uClinux prebuilt toolchain default linker script does a similar thing.
+Unfortunately, I have not been able to find the sources of the elf2flt 
+binary included in that prebuilt toolchain yet.
+Here is the URL of that prebuilt toolchain:
+https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 
 
-I have added your suggestion here:
-https://bugreports.qt.io/browse/QTBUG-47951?focusedCommentId=291119&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-291119
 
-Best regards,
-Beno?t
+
+--- host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47/elf2flt.ld.in	2012-10-04 04:32:38.000000000 +0200
++++ host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47/elf2flt.ld.in	2015-08-27 17:21:14.115151557 +0200
+@@ -142,8 +142,12 @@
+ 	.gcc_except_table : {
+ 		KEEP(*(.gcc_except_table))
+ 		KEEP(*(.gcc_except_table.*))
+-	} >flatmem
+-
++	} >flatmem	
++	.ARM.extab   : { *(.ARM.extab* .gnu.linkonce.armextab.*) } > flatmem
++	PROVIDE_HIDDEN (@SYMBOL_PREFIX at __exidx_start = .);
++	.ARM.exidx   : { *(.ARM.exidx* .gnu.linkonce.armexidx.*) } > flatmem
++	PROVIDE_HIDDEN (@SYMBOL_PREFIX at __exidx_end = .);
++	
+ 	. = ALIGN(0x10) ;
+ 	@SYMBOL_PREFIX at _edata = . ;
+ 
+
+
+--- host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47//elf2flt.c	2012-10-04 04:32:38.000000000 +0200
++++ host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47/elf2flt.c	2015-08-27 16:42:51.599398857 +0200
+@@ -638,6 +638,8 @@
+ 				case R_ARM_ABS32:
+ 					relocation_needed = 1;
+ 					break;
++				case R_ARM_NONE:
++				case R_ARM_PREL31:                                    
+ 				case R_ARM_REL32:
+ 				case R_ARM_THM_PC11:
+ 				case R_ARM_THM_PC22:
+
+
+--- host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47/cygwin-elf.h	2012-10-04 04:32:38.000000000 +0200
++++ host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47/cygwin-elf.h	2015-08-25 23:00:09.971202559 +0200
+@@ -1882,6 +1882,7 @@
+ #define R_ARM_LDR_SBREL_11_0	35
+ #define R_ARM_ALU_SBREL_19_12	36
+ #define R_ARM_ALU_SBREL_27_20	37
++#define R_ARM_PREL31		42	/* 32 bit PLT address */
+ #define R_ARM_GNU_VTENTRY	100
+ #define R_ARM_GNU_VTINHERIT	101
+ #define R_ARM_THM_PC11		102	/* thumb unconditional branch */
+
+
+
+
+
+-- 
+
+Douglas RAILLARD
