@@ -1,9 +1,10 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 27 Aug 2015 20:26:55 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: add mips64 for uClibc-ng
-In-Reply-To: <20150811052205.GA24260@waldemar-brodkorb.de>
-References: <20150811052205.GA24260@waldemar-brodkorb.de>
-Message-ID: <20150827182655.GZ8475@waldemar-brodkorb.de>
+Date: Thu, 27 Aug 2015 20:27:33 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain: add sparc64 architecture
+ support
+In-Reply-To: <20150811203709.GA9885@waldemar-brodkorb.de>
+References: <20150811203709.GA9885@waldemar-brodkorb.de>
+Message-ID: <20150827182733.GA8475@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,54 +17,93 @@ ping...
 
 Waldemar Brodkorb wrote,
 
-> Filter out all other uClibc versions, as they containing
-> serious bugs for mips64.
+> Introduce sparc64 architecture to buildroot.
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> Changes v1 -> v2:
->   - filter out uClibc versions as requested by Thomas Petazzoni
+>  arch/Config.in                          |   12 +++++++++++-
+>  arch/Config.in.sparc                    |    9 +++++++--
+>  toolchain/toolchain-buildroot/Config.in |    3 ++-
+>  3 files changed, 20 insertions(+), 4 deletions(-)
 > 
-> ---
->  package/uclibc/Config.in                |    4 ++--
->  toolchain/toolchain-buildroot/Config.in |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index bf40a13..72e85ed 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -27,7 +27,7 @@ choice
->  		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
->  		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
->  		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL if !BR2_x86_i386
-> -		depends on !(BR2_arc || BR2_xtensa)
-> +		depends on !(BR2_arc || BR2_mips64 || BR2_mips64el || BR2_xtensa)
+> diff --git a/arch/Config.in b/arch/Config.in
+> index 875f412..4cdd54e 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+> @@ -217,6 +217,16 @@ config BR2_sparc
+>  	  http://www.oracle.com/sun
+>  	  http://en.wikipedia.org/wiki/Sparc
 >  
->  	config BR2_UCLIBC_VERSION_ARC_GIT
->  		bool "uClibc Git ARC"
-> @@ -50,7 +50,7 @@ choice
->  		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
->  		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
->  		       if !BR2_x86_i386 && !BR2_xtensa
-> -		depends on !(BR2_arc)
-> +		depends on !(BR2_arc || BR2_mips64 || BR2_mips64el)
+> +config BR2_sparc64
+> +	bool "SPARC64"
+> +	select BR2_ARCH_IS_64
+> +	select BR2_ARCH_HAS_MMU_MANDATORY
+> +	help
+> +	  SPARC (from Scalable Processor Architecture) is a RISC instruction
+> +	  set architecture (ISA) developed by Sun Microsystems.
+> +	  http://www.oracle.com/sun
+> +	  http://en.wikipedia.org/wiki/Sparc
+> +
+>  config BR2_x86_64
+>  	bool "x86_64"
+>  	select BR2_ARCH_IS_64
+> @@ -388,7 +398,7 @@ if BR2_sh || BR2_sh64
+>  source "arch/Config.in.sh"
+>  endif
 >  
+> -if BR2_sparc
+> +if BR2_sparc || BR2_sparc64
+>  source "arch/Config.in.sparc"
+>  endif
+>  
+> diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+> index cc10e8d..faf4a11 100644
+> --- a/arch/Config.in.sparc
+> +++ b/arch/Config.in.sparc
+> @@ -1,7 +1,8 @@
+>  choice
+>  	prompt "Target Architecture Variant"
+> -	depends on BR2_sparc
+> -	default BR2_sparc_v8
+> +	depends on BR2_sparc || BR2_sparc64
+> +	default BR2_sparc_v8 if BR2_sparc
+> +	default BR2_sparc_v9 if BR2_sparc64
+>  	help
+>  	  Specific CPU variant to use
+>  
+> @@ -9,10 +10,13 @@ config BR2_sparc_v8
+>  	bool "v8"
+>  config BR2_sparc_leon3
+>  	bool "leon3"
+> +config BR2_sparc_v9
+> +	bool "v9"
 >  endchoice
 >  
+>  config BR2_ARCH
+>  	default "sparc"	if BR2_sparc
+> +	default "sparc64" if BR2_sparc64
+>  
+>  config BR2_ENDIAN
+>  	default "BIG"
+> @@ -20,3 +24,4 @@ config BR2_ENDIAN
+>  config BR2_GCC_TARGET_CPU
+>  	default "leon3"		if BR2_sparc_leon3
+>  	default "v8"		if BR2_sparc_v8
+> +	default "ultrasparc"	if BR2_sparc_v9
 > diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 13e2b15..6d74819 100644
+> index 6d74819..17dba36 100644
 > --- a/toolchain/toolchain-buildroot/Config.in
 > +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -24,7 +24,7 @@ choice
->  	prompt "C library"
->  	default BR2_TOOLCHAIN_UCLIBC
->  	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_aarch64 || BR2_aarch64_be \
-> -		|| BR2_microblaze || BR2_mips64 || BR2_mips64el || BR2_powerpc64
-> +		|| BR2_microblaze || BR2_powerpc64
->  
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  	bool "uClibc"
+> @@ -67,7 +67,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
+>  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+>  		   BR2_sh          || BR2_sh64       || BR2_sparc   || \
+> -		   BR2_x86_64      || BR2_microblaze || BR2_nios2
+> +		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze || \
+> +		   BR2_nios2
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on !BR2_powerpc_SPE
 > -- 
 > 1.7.10.4
 > 
