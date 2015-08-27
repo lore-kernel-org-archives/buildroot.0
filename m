@@ -1,74 +1,52 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 27 Aug 2015 20:20:31 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for x32 ABI for x86-64
- target.
-In-Reply-To: <CAGtNMfM=h-kOytBJoKLSk1kPxTNV=H5ZUP1JDR4tiB+wZV+vGQ@mail.gmail.com>
-References: <1439333955-1259-1-git-send-email-Guido.Hatzsis@yandex.com>
- <CAGtNMfM=h-kOytBJoKLSk1kPxTNV=H5ZUP1JDR4tiB+wZV+vGQ@mail.gmail.com>
-Message-ID: <20150827182031.GY8475@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 Aug 2015 20:24:18 +0200
+Subject: [Buildroot] [git commit] package/qt5/qt5multimedia: fix gstreamer1
+	support
+Message-ID: <20150827182426.CD96881EAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sergey,
-sergey kostanbaev wrote,
+commit: http://git.buildroot.net/buildroot/commit/?id=a0f3a2b88d27df6f3e8e3d45bd8a0506a3d09455
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hi Guido,
-> 
-> I tried your patch against?buildroot-2015.05 and it fails during compilation of
-> glibc-2.21:
-> 
-> /home/serg/projects/buildroot-2015.05/output/host/usr/bin/
-> x86_64-umsiteroot-linux-gnux32-gcc mktime.c -c -std=gnu99 -fgnu89-inline ?-O2
-> -Wall -Werror -Winline -Wno-error=undef -Wundef -Wwrite-strings
-> -fmerge-all-constants -frounding-math -Wstrict-prototypes ? -fPIC ? ? ? ?-I../
-> include -I/home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/build/
-> time ?-I/home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/build
-> ?-I../sysdeps/unix/sysv/linux/x86_64/x32 ?-I../sysdeps/x86_64/x32/nptl ?-I../
-> sysdeps/unix/sysv/linux/x86_64 ?-I../sysdeps/unix/sysv/linux/x86 ?-I../sysdeps/
-> unix/sysv/linux/wordsize-64 ?-I../sysdeps/x86_64/nptl ?-I../sysdeps/unix/sysv/
-> linux/include -I../sysdeps/unix/sysv/linux ?-I../sysdeps/nptl ?-I../sysdeps/
-> pthread ?-I../sysdeps/gnu ?-I../sysdeps/unix/inet ?-I../sysdeps/unix/sysv ?-I..
-> /sysdeps/unix/x86_64 ?-I../sysdeps/unix ?-I../sysdeps/posix ?-I../sysdeps/
-> x86_64/x32 ?-I../sysdeps/x86_64/fpu/multiarch ?-I../sysdeps/x86_64/fpu ?-I../
-> sysdeps/x86/fpu/include -I../sysdeps/x86/fpu ?-I../sysdeps/x86_64/multiarch
-> ?-I../sysdeps/x86_64 ?-I../sysdeps/x86 ?-I../sysdeps/ieee754/ldbl-96 ?-I../
-> sysdeps/ieee754/dbl-64/wordsize-64 ?-I../sysdeps/ieee754/dbl-64 ?-I../sysdeps/
-> ieee754/flt-32 ?-I../sysdeps/wordsize-32 ?-I../sysdeps/ieee754 ?-I../sysdeps/
-> generic ?-I.. -I../libio -I. -nostdinc -isystem /home/serg/projects/
-> buildroot-2015.05/output/host/usr/lib/gcc/x86_64-umsiteroot-linux-gnux32/4.9.2/
-> include -isystem /home/serg/projects/buildroot-2015.05/output/host/usr/lib/gcc/
-> x86_64-umsiteroot-linux-gnux32/4.9.2/include-fixed -isystem /home/serg/projects
-> /buildroot-2015.05/output/host/usr/x86_64-umsiteroot-linux-gnux32/sysroot/usr/
-> include ?-D_LIBC_REENTRANT -include /home/serg/projects/buildroot-2015.05/
-> output/build/glibc-2.21/build/libc-modules.h -DMODULE_NAME=libc -include ../
-> include/libc-symbols.h ?-DPIC -DSHARED ? ? -o /home/serg/projects/
-> buildroot-2015.05/output/build/glibc-2.21/build/time/mktime.os -MD -MP -MF /
-> home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/build/time/
-> mktime.os.dt -MT /home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/
-> build/time/mktime.os
-> (echo '#include <dl-vdso.h>'; \
-> ? ? ? ? ?echo 'extern void *time_ifunc (void) __asm ("time");'; \
-> ? ? ? ? ?echo 'void *'; \
-> ? ? ? ? ?echo 'time_ifunc (void)'; \
-> ? ? ? ? ?echo '{'; \
-> ? ? ? ? ?echo ' ?PREPARE_VERSION_KNOWN (symver, LINUX_2_6);'; \
-> ? ? ? ? ?echo ' ?return _dl_vdso_vsym ("__vdso_time", &symver);'; \
-> ? ? ? ? ?echo '}'; \
-> ? ? ? ? ?echo 'asm (".type time, %gnu_indirect_function");'; \
-> ? ? ? ? ?echo 'asm (".globl __GI_time
-> /bin/sh: 10: Syntax error: Unterminated quoted string
-> make[3]: *** [/home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/
-> build/time/time.os] Error 2
+Fix the missing gstreamer1 build dependencies, which could possibly
+prevent the configuration of qt5multimedia from detecting the supported
+gstreamer1 features.
 
-If I remember correctly this is a shell portability issue, which
-only occurs with x86_64 x32, when not using bash as your shell.
-(f.e. Ubuntu uses dash as /bin/sh)
+Fix the missing gstreamer1 install rules, which resulted in the
+following runtime error:
 
-The bug is fixed in 2.22.
-https://sourceware.org/bugzilla/show_bug.cgi?id=16704
+    defaultServiceProvider::requestService(): no service found for - "org.qt-project.qt.mediaplayer"
 
-best regards
- Waldemar
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 763fc28..50fdd57 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -21,6 +21,9 @@ endif
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
+ endif
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
++endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += qt5declarative
+@@ -40,7 +43,7 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_STATIC_LIBS),)
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++ifneq ($(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ endef
