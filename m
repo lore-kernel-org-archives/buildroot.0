@@ -1,53 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Aug 2015 20:32:05 +0200
-Subject: [Buildroot] [PATCH v2] package/libcgroup: allow to build
- cgroup-tools
-In-Reply-To: <1440413393-11023-1-git-send-email-bgolaszewski@baylibre.com>
-References: <1440413393-11023-1-git-send-email-bgolaszewski@baylibre.com>
-Message-ID: <20150827203205.42b530e6@free-electrons.com>
+Date: Thu, 27 Aug 2015 20:35:01 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix elf2flt build
+In-Reply-To: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
+References: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
+Message-ID: <20150827203501.00528bd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bartosz Golaszewski,
+Douglas,
 
-On Mon, 24 Aug 2015 12:49:53 +0200, Bartosz Golaszewski wrote:
-> Add a new config option that allows to build cgroup-tools - a set of
-> command-line utils for managing cgroups.
+On Thu, 27 Aug 2015 18:47:17 +0200, Douglas RAILLARD wrote:
+> Add -ldl to fix elf2flt build, because libbfd
+> uses dlopen and friends for plugin loading
 > 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
-> v2:
-> - prefix package option with package name
-> - use if/endif instead of depends on for libcgroup dependence
-> 
-> v1:
-> http://lists.busybox.net/pipermail/buildroot/2015-August/137816.html
-> 
->  package/libcgroup/Config.in    | 9 +++++++++
->  package/libcgroup/libcgroup.mk | 7 ++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libcgroup/Config.in b/package/libcgroup/Config.in
-> index b7a84e0..7852567 100644
-> --- a/package/libcgroup/Config.in
-> +++ b/package/libcgroup/Config.in
-> @@ -9,5 +9,14 @@ config BR2_PACKAGE_LIBCGROUP
->  
->  	  http://libcg.sourceforge.net/
->  
-> +if BR2_PACKAGE_LIBCGROUP
-> +
-> +config BR2_PACKAGE_LIBCGROUP_TOOLS
-> +	bool "build cgroup-tools"
+> Signed-off-by: Douglas RAILLARD <public.douglas.raillard@gmail.com>
 
-I've adjusted the prompt of the option to be "install tools": there's
-no need to repeat "cgroup" since the option will already be indented
-under "libcgroup".
+Thanks for this patch. Great to see that there is some interest in
+noMMU architecture. Which architecture are you working on?
 
-Applied with this change, thanks!
+I'm not able to reproduce the problem: here host-elf2flt builds fine.
+However the build of an ARM Cortex-M3 toolchain fails during the uClibc
+build (which takes place *after* host-elf2flt is built).
+
+Thanks!
 
 Thomas
 -- 
