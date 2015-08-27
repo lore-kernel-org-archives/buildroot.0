@@ -1,37 +1,34 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Thu, 27 Aug 2015 14:49:15 +0200
-Subject: [Buildroot] [PATCH] pacakge/qt5/qt5base: fix build with ccache
-In-Reply-To: <55DED48F.3030102@wsystem.com>
-References: <1440499298-39957-1-git-send-email-benoit@wsystem.com>
- <20150826154534.3e67c9bc@free-electrons.com>
- <CA+sos7-LVKNjkVc+1hg0w8WZMGEtnthaJnaA7-fUKEOizjJCeg@mail.gmail.com>
- <55DEC67C.6000500@wsystem.com> <20150827105450.100164af@free-electrons.com>
- <55DED48F.3030102@wsystem.com>
-Message-ID: <55DF074B.7080408@jcz.nl>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 27 Aug 2015 17:31:01 +0200
+Subject: [Buildroot] Buildroot article in Mind newsletter
+Message-ID: <55DF2D35.2050302@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+ Hi all,
 
+ I wrote a short article for my company's newsletter (which we try to fill with
+interesting stuff rather than commercial blabla) about recent (= last 5 years)
+developments in Buildroot. If anyone is interested, you can read it on our
+website [1]. It's CC-BY-SA licensed so you can reuse the text. You can download
+the source here[2].
 
-On 08/27/15 11:12, Beno?t Th?baudeau wrote:
-> OK, but in the meantime, until we have a wrapper for the internal toolchain too,
-> what do you want to do to fix the current build failure?
->  - Forbid the use of ccache with Qt 5?
+ Note: the newsletter will only be sent out tomorrow, so if you think I'm
+writing something that's incorrect or not very good and it should be changed,
+there's still a bit of time...
 
-I would not recommend that. Qt5base is *huge* and recompiling it over and over again (as I
-do when I am developing with/against buildroot) is just too time consuming.
+ Regards,
+ Arnout
 
->  - Use the current patch?
-
-You can also look at one of my previous patches (see list archive). I simply don't have
-the time to respond to all correction requests unfortunately.
-
-
-Regards,
-
-
-Jaap Crezee
+[1] http://www.mind.be/?page=buildrootarticle
+[2] http://www.mind.be/content/Presentations/buildroot.txt
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
