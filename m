@@ -1,28 +1,58 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 27 Aug 2015 16:29:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 8281] pyrexc fails to run when path is too long
-In-Reply-To: <bug-8281-163@https.bugs.busybox.net/>
-References: <bug-8281-163@https.bugs.busybox.net/>
-Message-ID: <20150827162904.B7F1481EE3@busybox.osuosl.org>
+Date: Thu, 27 Aug 2015 16:29:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 8316] New: lttng-tools and lttng-babeltrace
+ executables contain bad RPATH pointing to host machine
+Message-ID: <bug-8316-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8281
+https://bugs.busybox.net/show_bug.cgi?id=8316
 
---- Comment #2 from kevin.alden2 at gmail.com 2015-08-27 16:29:04 UTC ---
-(In reply to comment #1)
-> Isn't this a pyrexc bug rather than a Buildroot bug?
+           Summary: lttng-tools and lttng-babeltrace executables contain
+                    bad RPATH pointing to host machine
+           Product: buildroot
+           Version: 2015.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: benjamin.h.shelton at intel.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I suppose you could look at it that way.  I don't know enough about pyrexc to
-propose a solution, but Buildroot must be populating that invalid shebang.  I
-guess I would look at it as a Buildroot bug for that reason.  
 
-I would consider it a pyrexc bug as well if it happens to be completely reliant
-on the shebang to work.  It seems like you could just explicitly pass pyrexc to
-python and avoid the shebang issue though.
+The lttng-tools and lttng-babeltrace executables contain bad RPATHs pointing to
+the buildroot output/build directory.  This happens with lttng-tools versions
+2.6.0 and 2.7.0-rc1, as well as with lttng-babeltrace.
+
+objdump -p shows the following:
+
+RPATH               
+/workspace/sw/bhshelto/buildroot/buildroot/output/build/lttng-tools-2.7.0-rc1/src/lib/lttng-ctl/.libs:/workspace/sw/bhshelto/buildroot/buildroot/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib:/workspace/sw/bhshelto/buildroot/buildroot/output/build/liburcu-0.8.7/.libs
+
+This is a problem for us because /workspace is an NFS mount that we use for
+development builds, and we also mount it on our embedded targets.  When
+/workspace is not mounted on the embedded target, the lttng utilities run fine,
+since the RPATH does not match anything.  However, if I mount /workspace, I see
+the following:
+
+[root at buildroot cli]# lttng stop
+lttng: error while loading shared libraries:
+/workspace/sw/bhshelto/buildroot/buildroot/output/build/lttng-tools-2.7.0-rc1/src/lib/lttng-ctl/.libs/liblttng-ctl.so.0:
+file too short
+[root at buildroot cli]# cd
+[root at buildroot ~]# umount /workspace
+[root at buildroot ~]# lttng stop
+Waiting for data availability
+Tracing stopped for session my-session
+
+When I use patchelf to remove the RPATH, everything works as expected.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
