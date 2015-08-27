@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Aug 2015 20:02:59 +0200
-Subject: [Buildroot] Buildroot article in Mind newsletter
-In-Reply-To: <55DF2D35.2050302@mind.be>
-References: <55DF2D35.2050302@mind.be>
-Message-ID: <20150827200259.5f85cd8e@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 27 Aug 2015 18:09:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 8316] lttng-tools and lttng-babeltrace executables
+ contain bad RPATH pointing to host machine
+In-Reply-To: <bug-8316-163@https.bugs.busybox.net/>
+References: <bug-8316-163@https.bugs.busybox.net/>
+Message-ID: <20150827180902.2989C81EAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+https://bugs.busybox.net/show_bug.cgi?id=8316
 
-On Thu, 27 Aug 2015 17:31:01 +0200, Arnout Vandecappelle wrote:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-08-27 18:09:01 UTC ---
+Thanks for your bug report.
 
->  I wrote a short article for my company's newsletter (which we try to fill with
-> interesting stuff rather than commercial blabla) about recent (= last 5 years)
-> developments in Buildroot. If anyone is interested, you can read it on our
-> website [1]. It's CC-BY-SA licensed so you can reuse the text. You can download
-> the source here[2].
-> 
->  Note: the newsletter will only be sent out tomorrow, so if you think I'm
-> writing something that's incorrect or not very good and it should be changed,
-> there's still a bit of time...
+We indeed know that some binaries/executables on the target have invalid rpath
+pointing to locations on the build machine. However, I believe it is not really
+Buildroot's fault here, but the build system of some packages that does an
+incorrect thing.
 
-"The _OVERRIDE_SRCDIR variable"
+So far, this hasn't been a big issue since pretty much nobody has a path on the
+target that matches those invalid rpath. Of course, having such rpaths is ugly,
+but it wasn't causing any practical problem.
 
-Did you meant to write "The <pkg>_OVERRIDE_SRCDIR variable, but the
-<pkg> got eaten as an HTML tag ?
+We have a patch series pending that takes care of cleaning up the target rpath
+(and also adjusting the rpath of the host binaries). See
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/120158 and the
+following patches.
 
-That's the only comment I have, the rest of the article is very good!
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
