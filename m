@@ -1,40 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Aug 2015 21:18:56 +0200
-Subject: [Buildroot] [PATCH/next 02/10] package/libyuv: new package
-In-Reply-To: <1439317015-8031-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1439317015-8031-1-git-send-email-bernd.kuhls@t-online.de>
- <1439317015-8031-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150828211856.3c8c27a9@free-electrons.com>
+From: Erico Nunes <nunes.erico@gmail.com>
+Date: Fri, 28 Aug 2015 16:35:00 -0300
+Subject: [Buildroot] [PATCH] kconfig: support read-only Buildroot source
+	directories
+In-Reply-To: <20150817225329.6b4e8453@free-electrons.com>
+References: <1439504572-20085-1-git-send-email-hollis_blanchard@mentor.com>
+ <20150817225329.6b4e8453@free-electrons.com>
+Message-ID: <CAK4VdL1O23q7Q1Fs9SjWZCRpxC-34qn1_j0gEVeBPwYHbeMgaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello all,
 
-On Tue, 11 Aug 2015 20:16:47 +0200, Bernd Kuhls wrote:
+This bug seems to be somewhat major to remain in the 2015.08 release,
+as it prevents users from using a read-only buildroot source with
+out-of-tree builds.
 
-> +LIBYUV_VERSION = 1ebf86795cb213a37f06eb1ef3713cff080568ea
-> +# we use the FreeSwitch fork because there is currently no alternative
-> +# for https://chromium.googlesource.com/libyuv/libyuv which will be
-> +# deactivated in 2015.
-> +LIBYUV_SITE = https://freeswitch.org/stash/scm/sd/libyuv.git
+On Mon, Aug 17, 2015 at 5:53 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Thanks for this patch! It looks good in principle, but is not done
+> correctly. support/kconfig/ is directly inherited from the kernel
+> source code, and we keep a series of patches in
+> support/kconfig/patches/ to clearly identify the changes we made
+> compared to the original kernel version. See
+> support/kconfig/README.buildroot for details.
+>
+> Could you rework your patch to also add a patch to
+> support/kconfig/patches/ ? Can you check whether the problem also
+> exists in the kernel kconfig code, and if so, report the problem to the
+> kernel developers ?
+>
 
-Ok. I hope there will be a new official upstream location at some
-point. There are already some github mirrors available, but they are
-not more official than the freeswitch repo.
+Hollis, did you manage to evolve this issue with the kernel developers?
+Or, will you have time to work this patch before the release according
+to Thomas' review?
+I believe it would be a very important fix, and I could pick it in
+case you are unable right now.
 
-> +LIBYUV_SITE_METHOD = git
-> +LIBYUV_LICENSE = BSD-4c
+Thanks,
 
-The license is actually BSD-3c. I've fixed that up and committed your
-package to the next branch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Erico
