@@ -1,122 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 23:12:48 +0200
-Subject: [Buildroot] [git commit] package/sp-oops-extract: new package
-Message-ID: <20150901083109.1044C7F95A@busybox.osuosl.org>
+Date: Fri, 28 Aug 2015 19:18:13 +0200
+Subject: [Buildroot] [git commit] package/libhttpparser: New package
+Message-ID: <20150901083108.1D6C2801E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22212f15e43e5f274c8c0ad33957a346ccb99cf1
+commit: http://git.buildroot.net/buildroot/commit/?id=ba1b3a5f39cb3507d548269f58770b66d441a545
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A tool for extracting OOPS/panic logs from MTD.
+http-parser provides a simple C API to parse HTTP responses and
+requests.
 
-Tested using arm-buildroot-linux-gnueabihf toolchain.
+This packaging uses the official Joyent repository.
 
 [Thomas:
- - use sp-oops-extract instead of sp_oops_extract as the Config.in
-   prompt and in the .mk file comment
- - remove @ in front of the build and install commands.
- - use $(TARGET_CONFIGURE_OPTS) instead of manually passing CC, AR,
-   LD, CFLAGS and LDFLAGS.]
+ - since we're always building the shared library, depend on
+   !BR2_STATIC_LIBS in Config.in. We could build only the static
+   library, but then we would have to do all the lib installation
+   manually.
+ - indent using tabs in Config.in
+ - use 'make install' instead of handcoding the library installation.
+ - use $(TARGET_CONFIGURE_OPTS) instead of just CC= and LD=.
+ - use tabs for indentation in commands instead of spaces
+ - add patch to fix reinstallation.]
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/Config.in                                  |    1 +
- ...the-Makefile-more-cross-compiler-friendly.patch |   22 ++++++++++++++++++++
- package/sp-oops-extract/Config.in                  |    6 +++++
- package/sp-oops-extract/sp-oops-extract.hash       |    2 +
- package/sp-oops-extract/sp-oops-extract.mk         |   22 ++++++++++++++++++++
- 5 files changed, 53 insertions(+), 0 deletions(-)
+ ...-f-option-when-calling-ln-at-install-time.patch |   34 ++++++++++++++++++++
+ package/libhttpparser/Config.in                    |   17 ++++++++++
+ package/libhttpparser/libhttpparser.mk             |   26 +++++++++++++++
+ 4 files changed, 78 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index ed0eb98..c6244b7 100644
+index 60cda71..69abc78 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -173,6 +173,7 @@ menu "Filesystem and flash utilities"
- 	source "package/ntfs-3g/Config.in"
- 	source "package/simicsfs/Config.in"
- 	source "package/squashfs/Config.in"
-+	source "package/sp-oops-extract/Config.in"
- 	source "package/sshfs/Config.in"
- 	source "package/sunxi-tools/Config.in"
- 	source "package/unionfs/Config.in"
-diff --git a/package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch b/package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch
+@@ -979,6 +979,7 @@ menu "Networking"
+ 	source "package/libeXosip2/Config.in"
+ 	source "package/libfcgi/Config.in"
+ 	source "package/libgsasl/Config.in"
++	source "package/libhttpparser/Config.in"
+ 	source "package/libidn/Config.in"
+ 	source "package/libiscsi/Config.in"
+ 	source "package/libmbus/Config.in"
+diff --git a/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
 new file mode 100644
-index 0000000..67153c2
+index 0000000..29fe04d
 --- /dev/null
-+++ b/package/sp-oops-extract/0001-Make-the-Makefile-more-cross-compiler-friendly.patch
-@@ -0,0 +1,22 @@
-+Fetch from: https://github.com/Schischu/ptxdist_sh/tree/master/patches/sp-oops-extract-0.0.7
++++ b/package/libhttpparser/0001-Use-f-option-when-calling-ln-at-install-time.patch
+@@ -0,0 +1,34 @@
++From d9dfeca8736318eaad5cd4554cbae059469decde Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 28 Aug 2015 19:02:11 +0200
++Subject: [PATCH] Use -f option when calling ln at install time
 +
-+From: Bernhard Walle <walle@corscience.de>
-+Date: Wed, 21 Mar 2012 15:55:06 +0100
-+Subject: [PATCH] Make the Makefile more cross-compiler friendly
++This allows "make install; make install" to work properly.
 +
-+Signed-off-by: Bernhard Walle <walle@corscience.de>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ src/Makefile |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/Makefile b/src/Makefile
-+index cf5b550..e05eb1f 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -9,4 +9,4 @@ distclean: clean
-+ 	$(RM) $(TARGETS)
-+ 		
-+ sp-oops-extract: oopslog.c
-+-	gcc -Wall -s -o $@ $^
-++	$(CC) $(LDFLAGS) $(CPPFLAGS) $(CFLAGS) -Wall -o $@ $^
++diff --git a/Makefile b/Makefile
++index 373709c..6206b09 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -113,12 +113,12 @@ tags: http_parser.c http_parser.h test.c
++ install: library
++ 	$(INSTALL) -D  http_parser.h $(INCLUDEDIR)/http_parser.h
++ 	$(INSTALL) -D $(SONAME) $(LIBDIR)/$(SONAME)
++-	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
+++	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
++ 
++ install-strip: library
++ 	$(INSTALL) -D  http_parser.h $(INCLUDEDIR)/http_parser.h
++ 	$(INSTALL) -D -s $(SONAME) $(LIBDIR)/$(SONAME)
++-	ln -s $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
+++	ln -sf $(LIBDIR)/$(SONAME) $(LIBDIR)/libhttp_parser.so
++ 
++ uninstall:
++ 	rm $(INCLUDEDIR)/http_parser.h
++-- 
++2.5.0
 +
-diff --git a/package/sp-oops-extract/Config.in b/package/sp-oops-extract/Config.in
+diff --git a/package/libhttpparser/Config.in b/package/libhttpparser/Config.in
 new file mode 100644
-index 0000000..d4e0252
+index 0000000..31b8b9b
 --- /dev/null
-+++ b/package/sp-oops-extract/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_SP_OOPS_EXTRACT
-+	bool "sp-oops-extract"
++++ b/package/libhttpparser/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBHTTPPARSER
++	bool "libhttpparser"
++	depends on !BR2_STATIC_LIBS
 +	help
-+	  A tool for extracting OOPS/panic logs from MTD.
++	  This is a parser for HTTP messages written in C. It
++	  parses both requests and responses. The parser is
++	  designed to be used in performance HTTP applications.
++	  It does not make any syscalls nor allocations, it does
++	  not buffer data, it can be interrupted at anytime.
++	  Depending on your architecture, it only requires about
++	  40 bytes of data per message stream (in a web server
++	  that is per connection).
 +
-+	  http://maemo.org/packages/view/sp-oops-extract/
-diff --git a/package/sp-oops-extract/sp-oops-extract.hash b/package/sp-oops-extract/sp-oops-extract.hash
++	  https://github.com/joyent/http-parser
++
++comment "libhttpparser needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libhttpparser/libhttpparser.mk b/package/libhttpparser/libhttpparser.mk
 new file mode 100644
-index 0000000..835bfe8
+index 0000000..d6ec236
 --- /dev/null
-+++ b/package/sp-oops-extract/sp-oops-extract.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 85601a569af1f4584db75fad21d3a70e377ce12d1bccad7dbe1112abd3b43d93 sp-oops-extract_0.0.7-1.tar.gz
-diff --git a/package/sp-oops-extract/sp-oops-extract.mk b/package/sp-oops-extract/sp-oops-extract.mk
-new file mode 100644
-index 0000000..5882431
---- /dev/null
-+++ b/package/sp-oops-extract/sp-oops-extract.mk
-@@ -0,0 +1,22 @@
++++ b/package/libhttpparser/libhttpparser.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# sp-oops-extract
++# libhttpparser
 +#
 +################################################################################
 +
-+SP_OOPS_EXTRACT_VERSION = 0.0.7-1
-+SP_OOPS_EXTRACT_SITE = http://repository.maemo.org/pool/maemo5.0/free/s/sp-oops-extract/
-+SP_OOPS_EXTRACT_SOURCE = sp-oops-extract_$(SP_OOPS_EXTRACT_VERSION).tar.gz
-+SP_OOPS_EXTRACT_LICENSE = GPLv2
-+SP_OOPS_EXTRACT_LICENSE_FILES = COPYING
++LIBHTTPPARSER_VERSION = v2.5.0
++LIBHTTPPARSER_SITE = $(call github,joyent,http-parser,$(LIBHTTPPARSER_VERSION))
++LIBHTTPPARSER_INSTALL_STAGING = YES
++LIBHTTPPARSER_LICENSE = MIT
++LIBHTTPPARSER_LICENSE_FILES = LICENSE-MIT
 +
-+define SP_OOPS_EXTRACT_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++define LIBHTTPPARSER_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) library package
 +endef
 +
-+define SP_OOPS_EXTRACT_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
-+		DESTDIR=$(TARGET_DIR)
++define LIBHTTPPARSER_INSTALL_STAGING_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(STAGING_DIR)/usr install
++	$(INSTALL) -D -m 0644 $(@D)/libhttp_parser.a $(STAGING_DIR)/usr/lib/libhttp_parser.a
++endef
++
++define LIBHTTPPARSER_INSTALL_TARGET_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) PREFIX=$(TARGET_DIR)/usr install
 +endef
 +
 +$(eval $(generic-package))
