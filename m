@@ -1,52 +1,75 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 28 Aug 2015 23:31:06 +0200
-Subject: [Buildroot] [PATCH] package/cppcms: bump to 1.0.5
-Message-ID: <1440797466-29956-1-git-send-email-romain.naour@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Aug 2015 00:25:01 +0200
+Subject: [Buildroot] [PATCH] docs/manual: makedevs only accepts numerical
+	values
+Message-ID: <1440800701-26153-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump cppcms since it seems to fixe an issue with gcc5+.
-The new release has been build tested against a failing Buildroot config.
+Because of a limitation in how makedevs resolves names [0], usernames
+and groupnames would be resolved with UIDs and GIDs from the host, not
+the target.
 
-Fixes:
-http://autobuild.buildroot.net/results/d9d/d9d3f40bf0a203e052d2a43ac7a6a1dfa60379b3/build-end.log
+Fixing makedevs would involve us rewriting a /etc/passwd and /etc/group
+parser (not too complex, still not trivial).
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Document that the user and group fields should only be numbers, not
+names. Also, the manual is currently mislieading, as an example indeed
+uses names for the user and group fields. Fix that and expand the
+explanations.
+
+The mode field should also be numbers, not a rwx combo.
+
+Slight typographical eye-candy about major/minor fields.
+
+[0] it uses getpwnma(3) and getgrnam(3) to resolve names to IDs, and
+those only resolve names on the host (i.e. there is no way to specify
+a chroot-like feature)
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
-It's hard to undersand which commit really fixe the issue
-since svn logs lack of verbosity and contains comments like:
-"Various fixes", "Workaround", "One more fixe", "make it work"...
+Note: fixing makedevs to support names would require us to provide
+replacements for getpwnam() and getgrnam(), that can read from an
+alternate passwd and group file. This is not too complex, but far from
+trivial. Fixing the docs is much easier, that close to the release...
 ---
- package/cppcms/cppcms.hash | 5 ++++-
- package/cppcms/cppcms.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ docs/manual/makedev-syntax.txt | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
-index 3b2fa28..28e998c 100644
---- a/package/cppcms/cppcms.hash
-+++ b/package/cppcms/cppcms.hash
-@@ -1,2 +1,5 @@
-+# From http://sourceforge.net/projects/cppcms/files/cppcms/1.0.5/
-+sha1	15f21897c14acfd4b0c74622e49d95857f2fe939	cppcms-1.0.5.tar.bz2
-+md5	d668c201dd31fff8090380ebdc0bcc2b	cppcms-1.0.5.tar.bz2
- # Locally computed:
--sha256  7c76befc706f3a5f7435b5757eab56784d762db9dd3654467e02e85000caf700  cppcms-1.0.4.tar.bz2
-+sha256	84b685977bca97c3e997497f227bd5906adb80555066d811a7046b01c2f51865	cppcms-1.0.5.tar.bz2
-diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
-index 7f9a452..611020c 100644
---- a/package/cppcms/cppcms.mk
-+++ b/package/cppcms/cppcms.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index 283119d..cae37f7 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -28,8 +28,9 @@ There are a few non-trivial blocks:
+   * c: a character device file
+   * b: a block device file
+   * p: a named pipe
+-- +mode+, +uid+ and +gid+ are the usual permissions settings
+-- +major+ and +minor+ are here for device files - set to - for other
++- +mode+, +uid+ and +gid+ are the usual permissions settings (only
++  numerical values are allowed)
++- +major+ and +minor+ are here for device files, set to +-+ for other
+   files
+ - +start+, +inc+ and +count+ are for when you want to create a batch
+   of files, and can be reduced to a loop, beginning at +start+,
+@@ -43,10 +44,12 @@ this syntax, you will need to put:
+ ----
  
--CPPCMS_VERSION = 1.0.4
-+CPPCMS_VERSION = 1.0.5
- CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
- CPPCMS_LICENSE = LGPLv3
- CPPCMS_LICENSE_FILES = COPYING.TXT
+ Alternatively, if you want to change owner/permission of a directory
+-recursively, you can put:
++recursively, you can put (to set UID to 123, GID to 456 and access
++rights to rwxr-x--- for the directory /usr/share/myapp and all files
++and directories below it):
+ 
+ ----
+-/usr/share/myapp r 750 myuser myuser - - - - -
++/usr/share/myapp r 750 123 456 - - - - -
+ ----
+ 
+ On the other hand, if you want to create the device file +/dev/hda+
 -- 
-2.4.3
+1.9.1
