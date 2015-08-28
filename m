@@ -1,101 +1,110 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 27 Aug 2015 23:22 +0200
-Subject: [Buildroot] [PATCH 4/4] board/raspberrypi: auto-expand rootfs
-	on first boot
-In-Reply-To: <55DED20A.5030800@wsystem.com>
-References: <1440273688-92868-1-git-send-email-benoit@wsystem.com>
- <1440273688-92868-4-git-send-email-benoit@wsystem.com>
- <55DED20A.5030800@wsystem.com>
-Message-ID: <5881659.QqO7LoEYvS@sagittea>
+From: sergey kostanbaev <sergey.kostanbaev@gmail.com>
+Date: Fri, 28 Aug 2015 08:39:06 +0300
+Subject: [Buildroot] [PATCH 1/1] Add support for x32 ABI for x86-64
+	target.
+In-Reply-To: <20150827182031.GY8475@waldemar-brodkorb.de>
+References: <1439333955-1259-1-git-send-email-Guido.Hatzsis@yandex.com>
+ <CAGtNMfM=h-kOytBJoKLSk1kPxTNV=H5ZUP1JDR4tiB+wZV+vGQ@mail.gmail.com>
+ <20150827182031.GY8475@waldemar-brodkorb.de>
+Message-ID: <CAGtNMfMWfSQ35KXjxtyPYenZY4+vZwjS1dRUm60axOVf8eNhOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Beno?t,
+Hi Waldemar,
 
-On Thursday 27 August 2015 11:02:02 Beno?t Th?baudeau wrote:
-> Hi Vivien, Yann, all,
-> 
-> On 22/08/2015 22:01, Beno?t Th?baudeau wrote:
-[...]
-> So the initial contents of the unused space on the SD card seem to have an
-> influence, and there seems to be a bug somewhere (Linux, resize2fs,
-> genext2fs, tune2fs, or lack of call to e2fsck before calling resize2fs but
-> this would not be reliable with an online partition).
-> 
-> Then I retried with a 16-GiB SD card on a Raspberry Pi B, and it was very
-> slow too. Same if the resize is performed on a PC. However, it's very quick
-> with raspi-config and the latest Raspbian image. The main difference seemed
-> to be the block size (4 KiB on Raspbian vs. 1 KiB with mke2img), so I
-> hacked mke2img to test with genext2fs -B 4096 and tune2fs -J size=4, but it
-> did not make things faster, only the image bigger (about 512 MiB, probably
-> the minimal size for 4-KiB blocks). So I don't know which ones, but it's
-> probably some ext4 parameters that are having an influence on the resize2fs
-> speed here. Any idea?
-Yes, I have an idea :-) Did you try sparse_super?
+Thank you for pointing it
+27 ??? 2015 ?. 21:20 ???????????? "Waldemar Brodkorb" <wbx@openadk.org>
+???????:
 
-In fact a did nearly same task a few month ago and I found same problem. For 
-information, I use following script to fill disk with last partition:
-
-diff --git 1/sdflash.sh 2/sdflash.sh
-new file mode 100755
-index 0000000..5f9a9d5
---- /dev/null
-+++ 2/sdflash.sh
-@@ -0,0 +1,48 @@
-+#!/bin/bash
-+#
-+# Copy a disk image to sdcard card and resize last partition in order to use
-+# whole disk
-+#
-+
-+device=$1
-+image=$2
-+
-+if [ "$device" = "" ]; then
-+    echo "Usage: $0 DEVICE IMAGE"
-+    echo "Example: $0 /dev/sdd images/disk.img"
-+    exit 1
-+fi
-+
-+sfdisk -R $device       || exit 1
-+echo "Copying $image to $device"
-+dd if=$image of=$device conv=fsync,notrunc || exit 1
-+sfdisk -R $device       || exit 1
-+for part in 4 3 2 1; do
-+    for file in $device$part ${device}p${part}; do
-+        if [ -e $file ]; then
-+            ID=$(sfdisk --print-id $device $part)
-+            if [[ "0x$ID" -eq 0x83 ]]; then
-+                e2fsck -f $file
-+                [ $? -le 1 ] || exit 1
-+                tune2fs -O sparse_super -c 0 -i 0 $file
-+                [ $? -eq 0 ] || exit 1
-+                e2fsck -yf $file > /dev/null
-+                [ $? -le 1 ] || exit 1
-+                sleep 1
-+                echo ',+,' | sfdisk -L -D -uM -N $part $device
-+                [ $? -eq 0 ] || exit 1
-+                resize2fs $file
-+                [ $? -eq 0 ] || exit 1
-+                e2fsck -f $file
-+                [ $? -le 1 ] || exit 1
-+                exit 0
-+            else
-+                echo "Unknown partition type"
-+                exit 1
-+            fi
-+        fi
-+    done
-+done
-+echo "Cannot find partition on $device"
-+exit 1
-+
-
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+> Hi Sergey,
+> sergey kostanbaev wrote,
+>
+> > Hi Guido,
+> >
+> > I tried your patch against buildroot-2015.05 and it fails during
+> compilation of
+> > glibc-2.21:
+> >
+> > /home/serg/projects/buildroot-2015.05/output/host/usr/bin/
+> > x86_64-umsiteroot-linux-gnux32-gcc mktime.c -c -std=gnu99 -fgnu89-inline
+>  -O2
+> > -Wall -Werror -Winline -Wno-error=undef -Wundef -Wwrite-strings
+> > -fmerge-all-constants -frounding-math -Wstrict-prototypes   -fPIC
+>  -I../
+> > include
+> -I/home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/build/
+> > time
+>  -I/home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/build
+> >  -I../sysdeps/unix/sysv/linux/x86_64/x32  -I../sysdeps/x86_64/x32/nptl
+>  -I../
+> > sysdeps/unix/sysv/linux/x86_64  -I../sysdeps/unix/sysv/linux/x86
+>  -I../sysdeps/
+> > unix/sysv/linux/wordsize-64  -I../sysdeps/x86_64/nptl
+>  -I../sysdeps/unix/sysv/
+> > linux/include -I../sysdeps/unix/sysv/linux  -I../sysdeps/nptl
+>  -I../sysdeps/
+> > pthread  -I../sysdeps/gnu  -I../sysdeps/unix/inet
+>  -I../sysdeps/unix/sysv  -I..
+> > /sysdeps/unix/x86_64  -I../sysdeps/unix  -I../sysdeps/posix
+>  -I../sysdeps/
+> > x86_64/x32  -I../sysdeps/x86_64/fpu/multiarch  -I../sysdeps/x86_64/fpu
+>  -I../
+> > sysdeps/x86/fpu/include -I../sysdeps/x86/fpu
+>  -I../sysdeps/x86_64/multiarch
+> >  -I../sysdeps/x86_64  -I../sysdeps/x86  -I../sysdeps/ieee754/ldbl-96
+>  -I../
+> > sysdeps/ieee754/dbl-64/wordsize-64  -I../sysdeps/ieee754/dbl-64
+>  -I../sysdeps/
+> > ieee754/flt-32  -I../sysdeps/wordsize-32  -I../sysdeps/ieee754
+>  -I../sysdeps/
+> > generic  -I.. -I../libio -I. -nostdinc -isystem /home/serg/projects/
+> >
+> buildroot-2015.05/output/host/usr/lib/gcc/x86_64-umsiteroot-linux-gnux32/4.9.2/
+> > include -isystem
+> /home/serg/projects/buildroot-2015.05/output/host/usr/lib/gcc/
+> > x86_64-umsiteroot-linux-gnux32/4.9.2/include-fixed -isystem
+> /home/serg/projects
+> >
+> /buildroot-2015.05/output/host/usr/x86_64-umsiteroot-linux-gnux32/sysroot/usr/
+> > include  -D_LIBC_REENTRANT -include
+> /home/serg/projects/buildroot-2015.05/
+> > output/build/glibc-2.21/build/libc-modules.h -DMODULE_NAME=libc -include
+> ../
+> > include/libc-symbols.h  -DPIC -DSHARED     -o /home/serg/projects/
+> > buildroot-2015.05/output/build/glibc-2.21/build/time/mktime.os -MD -MP
+> -MF /
+> > home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/build/time/
+> > mktime.os.dt -MT
+> /home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/
+> > build/time/mktime.os
+> > (echo '#include <dl-vdso.h>'; \
+> >          echo 'extern void *time_ifunc (void) __asm ("time");'; \
+> >          echo 'void *'; \
+> >          echo 'time_ifunc (void)'; \
+> >          echo '{'; \
+> >          echo '  PREPARE_VERSION_KNOWN (symver, LINUX_2_6);'; \
+> >          echo '  return _dl_vdso_vsym ("__vdso_time", &symver);'; \
+> >          echo '}'; \
+> >          echo 'asm (".type time, %gnu_indirect_function");'; \
+> >          echo 'asm (".globl __GI_time
+> > /bin/sh: 10: Syntax error: Unterminated quoted string
+> > make[3]: ***
+> [/home/serg/projects/buildroot-2015.05/output/build/glibc-2.21/
+> > build/time/time.os] Error 2
+>
+> If I remember correctly this is a shell portability issue, which
+> only occurs with x86_64 x32, when not using bash as your shell.
+> (f.e. Ubuntu uses dash as /bin/sh)
+>
+> The bug is fixed in 2.22.
+> https://sourceware.org/bugzilla/show_bug.cgi?id=16704
+>
+> best regards
+>  Waldemar
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150828/f05f1078/attachment.html>
