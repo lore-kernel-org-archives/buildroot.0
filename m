@@ -1,118 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Aug 2015 10:09:32 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix elf2flt build
-In-Reply-To: <6966330.pLhB8QsgjT@raillard-dv6>
-References: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
- <20150827203501.00528bd2@free-electrons.com>
- <6966330.pLhB8QsgjT@raillard-dv6>
-Message-ID: <20150828100932.738b1809@free-electrons.com>
+Date: Fri, 28 Aug 2015 10:59:55 +0200
+Subject: [Buildroot] [git commit branch/next] libpam-radius-auth: new package
+Message-ID: <20150828090015.7069781F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Douglas,
+commit: http://git.buildroot.net/buildroot/commit/?id=90251cda02acbcda49ba5c267d045e6d09bff066
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Please do not reply to me directly: keep the list in Cc so that others
-can continue to participate to the discussion. Thanks!
+[Thomas:
+  - make libpam-radius-auth depend on linux-pam (since it's a
+    linux-pam plugin, it needs some header files from linux-pam) by
+    adding a "if BR2_PACKAGE_LINUX_PAM...endif" block in
+    package/Config.in. This way, we will be grouping all the Linux PAM
+    plugins together.
+  - Fix the indententation in the Config.in file.
+  - Use a better Config.in help text, copy/pasted from the website.
+  - Use a tarball instead of github. This allows to remove
+    AUTORECONF=YES.
+  - Add linux-pam as a dependency.
+  - Use $(TARGET_CONFIGURE_OPTS) instead of passing just CC/LD, but
+    pass it in the environment rather than as options so that the
+    CFLAGS/LDFLAGS added by the package Makefile are still taken into
+    account.
+  - Use mkdir -p + cp -dpfr instead of $(INSTALL) -D since we are
+    copying multiple files.
+  - Add a hash file.]
 
-On Thu, 27 Aug 2015 20:56:42 +0200, Douglas RAILLARD wrote:
-> Thomas,
-> 
-> > Thanks for this patch. Great to see that there is some interest in
-> > noMMU architecture. Which architecture are you working on?
-> 
-> Im actually working on the STM32F429 Cortex M4 with the
-> stm32f429-discovery board from STMicroelectronics.
+Signed-off-by: Giovanni Zantedeschi <giovanni.zantedeschi@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    4 +++
+ package/libpam-radius-auth/Config.in               |    9 ++++++
+ package/libpam-radius-auth/libpam-radius-auth.hash |    2 +
+ package/libpam-radius-auth/libpam-radius-auth.mk   |   28 ++++++++++++++++++++
+ 4 files changed, 43 insertions(+), 0 deletions(-)
 
-Nice!
-
-> It seems that things are also moving on the kernel side
-> for this arch and board.
-
-Yes, ST is pushing patches to the upstream kernel for this platform.
-
-> > I'm not able to reproduce the problem: here host-elf2flt builds fine.
-> 
-> I did not find any failure for elf2flt on the autobuild server,
-> but without the patch, make complains.
-> I have not checked if libbfd can be configured without plugin
-> support, but it fails with my configuration
-> (sorry for untranslated french diagnostic error):
-> /usr/bin/gcc -Wall -O2 -I/working_dir/buildroot/output/host/usr/include -L/working_dir/buildroot/output/host/lib -L/working_dir/buildroot/output/host/usr/lib -Wl,-rpath,/working_dir/buildroot/output/host/usr/lib -o elf2flt elf2flt.o compress.o stubs.o -lc -lz /working_dir/buildroot/output/build/host-binutils-2.24/bfd/libbfd.a /working_dir/buildroot/output/build/host-binutils-2.24/libiberty/libiberty.a -lz
-> /working_dir/buildroot/output/build/host-binutils-2.24/bfd/libbfd.a(plugin.o): in fonction ? try_load_plugin ?:
-> plugin.c:(.text+0x1db): undefined reference to ? dlopen ?
-> plugin.c:(.text+0x1f1): undefined reference to ? dlsym ?
-> plugin.c:(.text+0x270): undefined reference to ? dlerror ?
-> collect2: error: ld a retourn? 1 code d'?tat d'ex?cution
-> Makefile:75 : la recette pour la cible ? elf2flt ? a ?chou?e
-> make[1]: *** [elf2flt] Erreur 1
-> make[1] : on quitte le r?pertoire ? /working_dir/buildroot/output/build/host-elf2flt-21c6a41885ad544763ccd19883c1353f3b0b7a47 ?
-
-I have not reproduced this issue, but it might be caused by the fact
-that you've enabled LTO support in gcc. I'll try again with LTO
-enabled, just to narrow down the problem.
-
-> > However the build of an ARM Cortex-M3 toolchain fails during the uClibc
-> > build (which takes place *after* host-elf2flt is built).
-> 
-> There are indeed problems when some toolchain options are selected, 
-> so I managed to leave them out for the moment to focus on getting 
-> something built. Here is my buildroot configuration generated with
-> make savedefconfig:
-> BR2_arm=y
-> BR2_cortex_m3=y
-> BR2_ARM_INSTRUCTIONS_THUMB2=y
-> BR2_GLOBAL_PATCH_DIR="../patch"
-> BR2_UCLIBC_VERSION_0_9_33=y
-> BR2_UCLIBC_CONFIG="package/uclibc/uClibc-ng.config"
-
-This seems weird: using uClibc 0.9.33 with the configuration file for
-uClibc-ng. Have you had any problem with uClibc-ng that made you go
-back to uClibc 0.9.33 ?
-
-> BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_PTHREADS_NONE=y
-
-Any reason to disable thread support?
-
-> BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
-> BR2_GCC_ENABLE_LTO=y
-> BR2_PACKAGE_HOST_ELF2FLT=y
-> BR2_PACKAGE_HOST_GDB=y
-> BR2_PACKAGE_HOST_GDB_TUI=y
-> BR2_PACKAGE_HOST_GDB_PYTHON=y
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
-> BR2_LINUX_KERNEL_DEFCONFIG="stm32"
-> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
-> BR2_TARGET_ROOTFS_ROMFS=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> BR2_TARGET_UBOOT=y
-> BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f429-discovery"
-> BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> 
-> Moreover, there are some other issues with elf2flt when the toolchain is built
-> (one of the first target binary which get compiled after uClibc is getconf, part of uClibc I guess),
-> I am writing another email for that :)
-
-Ok, thanks!
-
-To tell the truth, ARM noMMU support in Buildroot is very much a work
-in progress. We have had only some initial Cortex-M3 patches, and a lot
-of work remain to be done to make it really usable. Your
-patches/reports are definitely welcome!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 729df7a..b92dc05 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1093,6 +1093,10 @@ menu "Other"
+ 	source "package/libuv/Config.in"
+ 	source "package/lightning/Config.in"
+ 	source "package/linux-pam/Config.in"
++if BR2_PACKAGE_LINUX_PAM
++comment "linux-pam plugins"
++	source "package/libpam-radius-auth/Config.in"
++endif
+ 	source "package/lttng-libust/Config.in"
+ 	source "package/mpc/Config.in"
+ 	source "package/mpdecimal/Config.in"
+diff --git a/package/libpam-radius-auth/Config.in b/package/libpam-radius-auth/Config.in
+new file mode 100644
+index 0000000..a0dec14
+--- /dev/null
++++ b/package/libpam-radius-auth/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBPAM_RADIUS_AUTH
++	bool "libpam-radius-auth"
++	help
++	  This is the PAM to RADIUS authentication module. It allows
++	  any PAM-capable machine to become a RADIUS client for
++	  authentication and accounting requests. You will need a
++	  RADIUS server to perform the actual authentication.
++
++	  http://freeradius.org/pam_radius_auth/
+diff --git a/package/libpam-radius-auth/libpam-radius-auth.hash b/package/libpam-radius-auth/libpam-radius-auth.hash
+new file mode 100644
+index 0000000..ffd7404
+--- /dev/null
++++ b/package/libpam-radius-auth/libpam-radius-auth.hash
+@@ -0,0 +1,2 @@
++# Locally calculated after checking PGP signature
++sha256	  742d79fc39824726c098e746bd3dc3484f983f5ee082c621c1e848b2c3725305	pam_radius-1.4.0.tar.gz
+diff --git a/package/libpam-radius-auth/libpam-radius-auth.mk b/package/libpam-radius-auth/libpam-radius-auth.mk
+new file mode 100644
+index 0000000..42acffd
+--- /dev/null
++++ b/package/libpam-radius-auth/libpam-radius-auth.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libpam-radius-auth
++#
++################################################################################
++
++LIBPAM_RADIUS_AUTH_VERSION = 1.4.0
++LIBPAM_RADIUS_AUTH_SITE = ftp://ftp.freeradius.org/pub/radius/
++LIBPAM_RADIUS_AUTH_SOURCE = pam_radius-$(LIBPAM_RADIUS_AUTH_VERSION).tar.gz
++LIBPAM_RADIUS_AUTH_DEPENDENCIES = linux-pam
++LIBPAM_RADIUS_AUTH_INSTALL_STAGING = YES
++LIBPAM_RADIUS_AUTH_LICENSE = GPLv2+
++LIBPAM_RADIUS_AUTH_LICENSE_FILES = LICENSE
++# While autoconf is used for configuration, the Makefile is
++# hand-written, so we need to pass CC, LD, CFLAGS at build time.
++LIBPAM_RADIUS_AUTH_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
++
++define LIBPAM_RADIUS_AUTH_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/lib/security/
++	cp -dpfr $(@D)/pam_radius_auth.so* $(STAGING_DIR)/lib/security/
++endef
++
++define LIBPAM_RADIUS_AUTH_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/lib/security/
++	cp -dpfr $(@D)/pam_radius_auth.so* $(TARGET_DIR)/lib/security/
++endef
++
++$(eval $(autotools-package))
