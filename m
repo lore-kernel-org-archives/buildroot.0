@@ -1,50 +1,52 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Fri, 28 Aug 2015 13:54:54 -0700
-Subject: [Buildroot] [PATCH] kconfig: support read-only Buildroot source
- directories
-In-Reply-To: <CAK4VdL1O23q7Q1Fs9SjWZCRpxC-34qn1_j0gEVeBPwYHbeMgaA@mail.gmail.com>
-References: <1439504572-20085-1-git-send-email-hollis_blanchard@mentor.com>	<20150817225329.6b4e8453@free-electrons.com>
- <CAK4VdL1O23q7Q1Fs9SjWZCRpxC-34qn1_j0gEVeBPwYHbeMgaA@mail.gmail.com>
-Message-ID: <55E0CA9E.4060304@mentor.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 28 Aug 2015 23:31:06 +0200
+Subject: [Buildroot] [PATCH] package/cppcms: bump to 1.0.5
+Message-ID: <1440797466-29956-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's on my list, but I don't expect to be able to get back to this for 
-quite a while. Sorry!
+Bump cppcms since it seems to fixe an issue with gcc5+.
+The new release has been build tested against a failing Buildroot config.
 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+Fixes:
+http://autobuild.buildroot.net/results/d9d/d9d3f40bf0a203e052d2a43ac7a6a1dfa60379b3/build-end.log
 
-On 08/28/2015 12:35 PM, Erico Nunes wrote:
-> Hello all,
->
-> This bug seems to be somewhat major to remain in the 2015.08 release,
-> as it prevents users from using a read-only buildroot source with
-> out-of-tree builds.
->
-> On Mon, Aug 17, 2015 at 5:53 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Thanks for this patch! It looks good in principle, but is not done
->> correctly. support/kconfig/ is directly inherited from the kernel
->> source code, and we keep a series of patches in
->> support/kconfig/patches/ to clearly identify the changes we made
->> compared to the original kernel version. See
->> support/kconfig/README.buildroot for details.
->>
->> Could you rework your patch to also add a patch to
->> support/kconfig/patches/ ? Can you check whether the problem also
->> exists in the kernel kconfig code, and if so, report the problem to the
->> kernel developers ?
->>
-> Hollis, did you manage to evolve this issue with the kernel developers?
-> Or, will you have time to work this patch before the release according
-> to Thomas' review?
-> I believe it would be a very important fix, and I could pick it in
-> case you are unable right now.
->
-> Thanks,
->
-> Erico
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+It's hard to undersand which commit really fixe the issue
+since svn logs lack of verbosity and contains comments like:
+"Various fixes", "Workaround", "One more fixe", "make it work"...
+---
+ package/cppcms/cppcms.hash | 5 ++++-
+ package/cppcms/cppcms.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/cppcms/cppcms.hash b/package/cppcms/cppcms.hash
+index 3b2fa28..28e998c 100644
+--- a/package/cppcms/cppcms.hash
++++ b/package/cppcms/cppcms.hash
+@@ -1,2 +1,5 @@
++# From http://sourceforge.net/projects/cppcms/files/cppcms/1.0.5/
++sha1	15f21897c14acfd4b0c74622e49d95857f2fe939	cppcms-1.0.5.tar.bz2
++md5	d668c201dd31fff8090380ebdc0bcc2b	cppcms-1.0.5.tar.bz2
+ # Locally computed:
+-sha256  7c76befc706f3a5f7435b5757eab56784d762db9dd3654467e02e85000caf700  cppcms-1.0.4.tar.bz2
++sha256	84b685977bca97c3e997497f227bd5906adb80555066d811a7046b01c2f51865	cppcms-1.0.5.tar.bz2
+diff --git a/package/cppcms/cppcms.mk b/package/cppcms/cppcms.mk
+index 7f9a452..611020c 100644
+--- a/package/cppcms/cppcms.mk
++++ b/package/cppcms/cppcms.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CPPCMS_VERSION = 1.0.4
++CPPCMS_VERSION = 1.0.5
+ CPPCMS_SOURCE = cppcms-$(CPPCMS_VERSION).tar.bz2
+ CPPCMS_LICENSE = LGPLv3
+ CPPCMS_LICENSE_FILES = COPYING.TXT
+-- 
+2.4.3
