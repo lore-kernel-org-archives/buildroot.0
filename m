@@ -1,56 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Aug 2015 19:36:43 +0200
-Subject: [Buildroot] [PATCH 1/1] python3: add patch to fix PEP 3147
- issue with automake built packages
-In-Reply-To: <1440773921-769-1-git-send-email-cvubrugier@fastmail.fm>
-References: <1440773921-769-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20150828193643.10876a0f@free-electrons.com>
+Date: Fri, 28 Aug 2015 19:42:34 +0200
+Subject: [Buildroot] [RFC PATCH v2] pkg-generic: detect incorrectly used
+	package
+Message-ID: <1440783754-32663-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+In Buildroot, the selection of a package from a Config.in level and
+from a Makefile level are completely disconnected. This can lead to
+issues where the build of a package is triggered at the Makefile level
+due to the package being listed in another package <pkg>_DEPENDENCIES
+variable, even if that package is not enabled in the configuration.
 
-On Fri, 28 Aug 2015 16:58:41 +0200, Christophe Vu-Brugier wrote:
-> Packages built with automake use a `py-compile` helper to byte-compile
-> Python source files. This script uses the "py_compile" module from the
-> standard library. In turn, the compile() function in the "py_compile"
-> module invokes the cache_from_source() function provided by importlib.
-> 
-> This patch changes cache_from_source() and source_from_cache() in
-> importlib to get rid of the "__pycache__" directory.
-> 
-> This fixes the following import error in kmod when the module is built
-> for Python 3:
-> 
->   >>> from kmod import Kmod
->   Traceback (most recent call last):
->     File "<stdin>", line 1, in <module>
->   ImportError: cannot import name 'Kmod'
-> 
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+This has for example been the case recently with python-can having
+'python' in its <pkg>_DEPENDENCIES, while python-can could be enabled
+when Python 3.x is used, in which case the 'python' package should not
+be built.
 
-Thanks for this patch. However, I'm wondering if it doesn't make the
-existing patch 016-distutils-no-pep3147.patch unnecessary. Patch 016
-fixes the distutils/setuptools case by preventing the logic from
-calling importlib.util.cache_from_source(). But since you're fixing
-this function in your patch, maybe there's no need for the 016 patch
-anymore ? What about patch 004 ?
+To detect such issues more easily, this patch adds a check in the
+package infrastructure. When the build process of a package is being
+triggered, we verify that the package is enabled in the
+configuration. We do this check in the "configure" step, since this
+step is the first common step between the normal download case and the
+"local site method" / "package override" case.
 
-Could you do some quick testing without patches 004 and 016, and see if
-1/ the Python standard library is byte-compiled without __pycache__
-folders and 2/ same for Python external modules built with distutils
-and setuptools.
+This requires passing two new target variables to the configure
+target:
 
-I'm pretty sure with your patch we can remove patch 016 (so your patch
-could replace it). I'm not sure about patch 004, though.
+ - TYPE, which is either host or target. This is needed since the test
+   should only be done on target packages (most host packages don't
+   have a Config.in option)
 
-Thanks a lot!
+ - KCONFIG_VAR, which is the name of the Config.in variable
+   corresponding to the package being built. For most packages, it's
+   BR2_PACKAGE_<pkg>, but not for toolchain packages, bootloaders or
+   linux.
 
-Thomas
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+Still sent as an RFC. Maybe we should make this optional, since it
+prevents from doing "make <pkg>" when "<pkg>" is not selected in
+menuconfig, which can be seen as annoying for power users. So maybe we
+could enable this only in the autobuilders? But then newcomers writing
+new packages would not notice their potential mistake.
+
+Changes since v1:
+ - Use KCONFIG_VAR in order to make the thing work for toolchain
+   packages, bootloaders and Linux. Issue reported by Vicente.
+---
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6a7d97e..7db5ab8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -143,6 +143,10 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+ 
+ # Configure
+ $(BUILD_DIR)/%/.stamp_configured:
++	if test "$(TYPE)" = "target" -a -z "$($(KCONFIG_VAR))" ; then \
++		echo "ERROR: package $(PKG) is being built but is not enabled in the configuration." ; \
++		exit 1 ; \
++	fi
+ 	@$(call step_start,configure)
+ 	@$(call MESSAGE,"Configuring")
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+@@ -664,6 +668,8 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+ $$($(2)_TARGET_BUILD):			PKG=$(2)
+ $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
++$$($(2)_TARGET_CONFIGURE):		TYPE=$(4)
++$$($(2)_TARGET_CONFIGURE):		KCONFIG_VAR=$$($(2)_KCONFIG_VAR)
+ $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+ $$($(2)_TARGET_RSYNC):                  PKG=$(2)
+ $$($(2)_TARGET_PATCH):			PKG=$(2)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
