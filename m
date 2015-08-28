@@ -1,40 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Aug 2015 10:37:02 +0200
-Subject: [Buildroot] [git commit] mosquitto: bump version
-Message-ID: <20150901083107.5A12181E93@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Aug 2015 19:47:54 +0200
+Subject: [Buildroot] [git commit] mtd: add mtdpart option
+Message-ID: <20150901083108.27252800E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b309d194286c3e8e5aa2e6652ed5351c0d879dec
+commit: http://git.buildroot.net/buildroot/commit/?id=68847ad739e881e603e0473e34ed27ccade55ef9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mosquitto/mosquitto.hash |    2 +-
- package/mosquitto/mosquitto.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+As pointed by J??rg Krause one of the novelties of the 1.5.2 release is
+the new mtdpart tool, so add an option for it.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 90133d7..2ca1d17 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5ebc3800a0018bfbec62dcc3748fb29f628df068acd39c62c4ef651d9276647e  mosquitto-1.4.2.tar.gz
-+sha256	773d7436f729b5a6088035708c9277a9c6ba5651e127b63c8f29fe39e152479c  mosquitto-1.4.3.tar.gz
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 281833c..d9703fb 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mtd/Config.in |    3 +++
+ package/mtd/mtd.mk    |    1 +
+ 2 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 6653464..6e4346f 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -71,6 +71,9 @@ config BR2_PACKAGE_MTD_MTD_DEBUG
+ 	bool "mtd_debug"
+ 	default y
  
--MOSQUITTO_VERSION = 1.4.2
-+MOSQUITTO_VERSION = 1.4.3
- MOSQUITTO_SITE = http://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
++config BR2_PACKAGE_MTD_MTDPART
++	bool "mtdpart"
++
+ config BR2_PACKAGE_MTD_NANDDUMP
+ 	bool "nanddump"
+ 	default y
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 42a8c1d..0fb9fc2 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -63,6 +63,7 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT)	+= ftl_format
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_JFFS2DUMP)	+= jffs2dump
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_MKFSJFFS2)	+= mkfs.jffs2
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_MTD_DEBUG)	+= mtd_debug
++MTD_TARGETS_$(BR2_PACKAGE_MTD_MTDPART)		+= mtdpart
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDDUMP)		+= nanddump
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDTEST)		+= nandtest
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_NANDWRITE)	+= nandwrite
