@@ -1,51 +1,96 @@
-From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
-Date: Fri, 28 Aug 2015 13:15:24 +0200
-Subject: [Buildroot] [PATCH 4/4] board/raspberrypi: auto-expand rootfs
- on first boot
-In-Reply-To: <55E039B4.1040005@wsystem.com>
-References: <1440273688-92868-1-git-send-email-benoit@wsystem.com>
- <1440273688-92868-4-git-send-email-benoit@wsystem.com>
- <55DED20A.5030800@wsystem.com> <5881659.QqO7LoEYvS@sagittea>
- <55E039B4.1040005@wsystem.com>
-Message-ID: <55E042CC.6050807@wsystem.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Aug 2015 13:20:47 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix elf2flt build
+In-Reply-To: <2694397.HiyaVxjcGY@raillard-dv6>
+References: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
+ <6966330.pLhB8QsgjT@raillard-dv6>
+ <20150828100932.738b1809@free-electrons.com>
+ <2694397.HiyaVxjcGY@raillard-dv6>
+Message-ID: <20150828132047.5ef4eec8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/08/2015 12:36, Beno?t Th?baudeau wrote:
-> On 27/08/2015 23:22, J?r?me Pouiller wrote:
->> On Thursday 27 August 2015 11:02:02 Beno?t Th?baudeau wrote:
->>> Hi Vivien, Yann, all,
->>>
->>> On 22/08/2015 22:01, Beno?t Th?baudeau wrote:
->> [...]
->>> So the initial contents of the unused space on the SD card seem to have an
->>> influence, and there seems to be a bug somewhere (Linux, resize2fs,
->>> genext2fs, tune2fs, or lack of call to e2fsck before calling resize2fs but
->>> this would not be reliable with an online partition).
->>>
->>> Then I retried with a 16-GiB SD card on a Raspberry Pi B, and it was very
->>> slow too. Same if the resize is performed on a PC. However, it's very quick
->>> with raspi-config and the latest Raspbian image. The main difference seemed
->>> to be the block size (4 KiB on Raspbian vs. 1 KiB with mke2img), so I
->>> hacked mke2img to test with genext2fs -B 4096 and tune2fs -J size=4, but it
->>> did not make things faster, only the image bigger (about 512 MiB, probably
->>> the minimal size for 4-KiB blocks). So I don't know which ones, but it's
->>> probably some ext4 parameters that are having an influence on the resize2fs
->>> speed here. Any idea?
->> Yes, I have an idea :-) Did you try sparse_super?
-> 
-> [...]
-> 
-> Awesome, it works, even if resizing the partition online. Thanks for the tip!
-> 
-> I'll send a patch changing mke2img to allow the use of this option.
+Douglas,
 
-Please apply the patch below before this series in order to avoid the resize
-speed issue described above:
-http://patchwork.ozlabs.org/patch/511861/
+On Fri, 28 Aug 2015 12:17:40 +0200, Douglas RAILLARD wrote:
 
-Best regards,
-Beno?t
+> > This seems weird: using uClibc 0.9.33 with the configuration file for
+> > uClibc-ng. Have you had any problem with uClibc-ng that made you go
+> > back to uClibc 0.9.33 ?
+> 
+> Indeed, I did not pay attention to it in the first place as I wanted to use as 
+> much default as possible.
+> uClibc-ng does not compile with my configuration (same as before but with
+> uClibc-ng instead of uClibc 0.9.33), I have not tried to investigate this issue yet:
+
+I would suggest to use uClibc-ng. The upstream uClibc developers are
+not really active anymore, while the uClibc-ng (Waldemar) is very
+active, and is following/helping the Buildroot development as well. I'm
+sure he will be interested by your reports. I've added him in Cc.
+
+> make[1]: Entering directory '/working_dir/buildroot/output/build/uclibc-1.0.5'
+> /working_dir/buildroot/output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-gcc -c libc/sysdeps/linux/arm/setcontext.S -o libc/sysdeps/linux/arm/setcontext.os -Wall -Wstrict-prototypes -Wstrict-aliasing -funsigned-char -fno-builtin -fno-asm -fmerge-all-constants -msoft-float -mlittle-endian -fstack-protector -nostdinc -I./include -I./include -include libc-symbols.h -I./libc/sysdeps/linux/arm -I./libc/sysdeps/linux -I./ldso/ldso/arm -I./ldso/include -I. -DSTATIC -Os -fstrict-aliasing -I./libc/sysdeps/linux/common -isystem /working_dir/buildroot/output/host/usr/lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/4.9.3/include-fixed -isystem /working_dir/buildroot/output/host/usr/lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/4.9.3/include -I/working_dir/buildroot/output/build/linux-headers-4.1.4/usr/include/ -DNDEBUG -DIN_LIB=libc -fPIC -MT libc/sysdeps/linux/arm/setcontext.os -MD -MP -MF libc/sysdeps/linux/arm/.setcontext.os.dep -D__ASSEMBLER__ -Wa,--noexecstack    
+> libc/sysdeps/linux/arm/setcontext.S: Assembler messages:
+> libc/sysdeps/linux/arm/setcontext.S:63: Error: LR and PC should not both be in register list -- `ldmia r14,{r14,pc}'
+> Makerules:386: recipe for target 'libc/sysdeps/linux/arm/setcontext.os' failed
+> make[1]: *** [libc/sysdeps/linux/arm/setcontext.os] Error 1
+> make[1]: Leaving directory '/working_dir/buildroot/output/build/uclibc-1.0.5'
+> package/pkg-generic.mk:156: recipe for target '/working_dir/buildroot/output/build/uclibc-1.0.5/.stamp_built' failed
+> make: *** [/working_dir/buildroot/output/build/uclibc-1.0.5/.stamp_built] Error 2
+> 
+> 
+> > > BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+> > > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> > > BR2_PTHREADS_NONE=y
+> > 
+> > Any reason to disable thread support?
+> It fails  with NPTL thread support enabled (and also with every other threading backend).
+> Same configuration with uClibc 0.9.33 and NPTL thread, I did not try to solve this 
+> issue yet:
+> 
+> make[1]: Entering directory '/working_dir/buildroot/output/build/uclibc-0.9.33.2'
+>   AR cr lib/libcrypt.a
+>   STRIP -x -R .note -R .comment lib/libcrypt.a
+>   AR cr lib/libm.a
+>   STRIP -x -R .note -R .comment lib/libm.a
+>   AR cr lib/libnsl.a
+>   STRIP -x -R .note -R .comment lib/libnsl.a
+>   AR cr lib/libresolv.a
+>   STRIP -x -R .note -R .comment lib/libresolv.a
+>   AR cr lib/libutil.a
+>   STRIP -x -R .note -R .comment lib/libutil.a
+>   AS libpthread/nptl/sysdeps/arm/pthread_spin_lock.os -DSTATIC -DHAVE_FORCED_UNWIND -DNDEBUG -D__USE_STDIO_FUTEXES__ -D__ASSEMBLER__ -DNOT_IN_libc -DIS_IN_libpthread
+> libpthread/nptl/sysdeps/arm/pthread_spin_lock.S: Assembler messages:
+> libpthread/nptl/sysdeps/arm/pthread_spin_lock.S:26: Error: selected processor does not support Thumb mode `swp r2,r1,[r0]'
+> libpthread/nptl/sysdeps/arm/pthread_spin_lock.S:27: Error: instruction not supported in Thumb16 mode -- `teq r2,#0'
+> Makerules:362: recipe for target 'libpthread/nptl/sysdeps/arm/pthread_spin_lock.os' failed
+> make[1]: *** [libpthread/nptl/sysdeps/arm/pthread_spin_lock.os] Error 1
+> make[1]: Leaving directory '/working_dir/buildroot/output/build/uclibc-0.9.33.2'
+> package/pkg-generic.mk:156: recipe for target '/working_dir/buildroot/output/build/uclibc-0.9.33.2/.stamp_built' failed
+> make: *** [/working_dir/buildroot/output/build/uclibc-0.9.33.2/.stamp_built] Error 2
+
+Another thing for Waldemar :-)
+
+> > To tell the truth, ARM noMMU support in Buildroot is very much a work
+> > in progress. We have had only some initial Cortex-M3 patches, and a lot
+> > of work remain to be done to make it really usable. Your
+> > patches/reports are definitely welcome!
+> 
+> I plan to add support the smt32f429-discovery board with as much new
+> stuff as possible (new kernel, new toolchain, new Busybox, new U-boot), because
+> I started from this: https://github.com/jserv/stm32f429-linux-builder and after some
+> research, I felt that Buildroot was in the same vein, but much more integrated and also
+> widespread so this was the way to go for that kind of job.
+
+Great idea! Looking forward to seeing patches going in this direction!
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
