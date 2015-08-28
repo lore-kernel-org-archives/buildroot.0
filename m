@@ -1,35 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 18:14:04 +0200
-Subject: [Buildroot] [git commit] ibrcommon: fix dependencies of comment in
-	Config.in
-Message-ID: <20150901083108.C69B97F95A@busybox.osuosl.org>
+Date: Fri, 28 Aug 2015 11:27:06 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.6.4
+Message-ID: <20150901083107.DA963801E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bb79ac97d152a4e611357564eebf370e947a57e
+commit: http://git.buildroot.net/buildroot/commit/?id=afb8c5d80955b14bfb1713d5ad5cdf4d1e8ae6d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We want the comment to be displayed either if C++ is not supported
-*or* if threads is not supported.
-
-Also, fix the indentation to use a tab.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ibrcommon/Config.in |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |    2 +-
+ package/mesa3d/mesa3d.hash               |    4 ++--
+ package/mesa3d/mesa3d.mk                 |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ibrcommon/Config.in b/package/ibrcommon/Config.in
-index 5aa51a4..36ccfbc 100644
---- a/package/ibrcommon/Config.in
-+++ b/package/ibrcommon/Config.in
-@@ -10,5 +10,4 @@ config BR2_PACKAGE_IBRCOMMON
- 	  http://trac.ibr.cs.tu-bs.de/project-cm-2012-ibrdtn
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 77c6929..85666cc 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- comment "ibrcommon needs a toolchain w/ C++, threads"
--        depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.6.3
++MESA3D_HEADERS_VERSION = 10.6.4
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 459b7d6..453ee41 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-July/000165.html
+-sha256	58592e07c350cd2e8969b73fa83048c657a39fe2f13f3b88f5e5818fe2e4676d	mesa-10.6.3.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000166.html
++sha256	8f5ac103f0f503de2f7a985b0df349bd4ecdfe7f51c714be146fa5a9a3c07b77	mesa-10.6.4.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 67408a3..f2a1ffd 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.6.3
++MESA3D_VERSION = 10.6.4
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
