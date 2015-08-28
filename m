@@ -1,52 +1,95 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 28 Aug 2015 09:36:30 +0000
-Subject: [Buildroot] [PATCH] u-boot: 2015.07 - fix creation of .config
-In-Reply-To: <55D8FE3F.8080206@mind.be>
-References: <1438351475-14447-1-git-send-email-abrodkin@synopsys.com>
- <20150731161818.2056383e@free-electrons.com>
- <1438355649.4848.41.camel@synopsys.com>
- <1438600559.13201.4.camel@synopsys.com>
- <1439295600.3252.2.camel@synopsys.com>
- <20150812102334.15742776@free-electrons.com> <55D8FE3F.8080206@mind.be>
-Message-ID: <1440754590.14215.3.camel@synopsys.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
+Date: Fri, 28 Aug 2015 11:46:51 +0200
+Subject: [Buildroot] [PATCH v2] pacakge/qt5/qt5base: fix build with ccache
+Message-ID: <1440755211-46875-1-git-send-email-benoit@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Building with ccache failed with:
 
-On Sun, 2015-08-23 at 00:57 +0200, Arnout Vandecappelle wrote:
-> On 08/12/2015 10:23 AM, Thomas Petazzoni wrote:
-> > Dear Alexey Brodkin,
-> > 
-> > On Tue, 11 Aug 2015 12:20:01 +0000, Alexey Brodkin wrote:
-> > 
-> > > Any chance for this one to be applied?
-> > > Note without this change or anything similar U-Boot from
-> > > snsp_axs10x_defconfig fails to config.
-> > 
-> > I haven't had the time to look into this in detail. It would be great
-> > if Yann, or J?rg could have a look. I remain unhappy with solving such
-> > a problem by using a patch against U-Boot 2015.07, because it means
-> > anyone specifying a slightly different U-Boot version (but based on
-> > 2015.07) will still have the problem.
-> 
->  I assume the problem will be fixed soon upstream, so the chance that some chip
-> vendor releases a U-Boot based on 2015.07 is not that high. And if someone is
-> making their own modified git copy of 2015.07, they'll notice _very_ quickly
-> that it fails and with any luck they'll notice the patch in buildroot.
-> 
->  Not fixing the problem at all in 2015.08 is obviously worse.
-> 
->  We could do a sed independent of the U-Boot version, but that runs the risk of
-> breaking some other random non-2015.07 version completely.
-> 
->  The problem is in fact in Kconfig (as noted in Tom Rini's comment in
-> http://patchwork.ozlabs.org/patch/502793/ ) so a fundamental solution is not easy.
+    Running configuration tests...
+    Failed to process makespec for platform 'devices/linux-buildroot-g++'
+    Project ERROR: Compiler <path_to_output_dir>/host/usr/bin/ccache <path_to_output_dir>/host/usr/bin/<cross_compile>-g++ not found. Check the value of CROSS_COMPILE -device-option
+    Could not read qmake configuration file <path_to_output_dir>/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
+    Error processing project file: /dev/null
 
-So we're well beyond rc2 and release will inevitably happen from day to day still
-this problem is not resolved. Anything else we're going to consider here?
+This was caused by Buildroot setting this in
+qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf:
 
--Alexey
+    QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
+
+But qt5base-5.5.0/mkspecs/features/device_config.prf expects QMAKE_CXX
+to be a single valid (absolute or QMAKE_PATH_ENV-relative) path to an
+existing file, which is not possible if using ccache as above.
+
+Add a patch fixing this by testing only the first value in QMAKE_CXX.
+
+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+---
+Changes v1 -> v2:
+ - Use the first value in QMAKE_CXX instead of removing the whole test.
+---
+ .../qt5/qt5base/0009-fix-build-with-ccache.patch   | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/qt5/qt5base/0009-fix-build-with-ccache.patch
+
+diff --git a/package/qt5/qt5base/0009-fix-build-with-ccache.patch b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+new file mode 100644
+index 0000000..896c0ef
+--- /dev/null
++++ b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+@@ -0,0 +1,49 @@
++Fix QMAKE_CXX/CROSS_COMPILE verification with ccache
++
++The use of ccache leads to QMAKE_CXX definitions of the form:
++
++    QMAKE_CXX = $${CCACHE} $${CROSS_COMPILE}g++
++
++The previous test required QMAKE_CXX to be a single valid (absolute or
++QMAKE_PATH_ENV-relative) path to an existing file, which was not
++compatible with definitions of QMAKE_CXX like the one above.
++
++Fix this by using only the first value in QMAKE_CXX, which usually
++points to the compiler executable, or to the ccache executable in the
++above case.
++
++Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
++---
++ mkspecs/features/device_config.prf | 9 +++++++--
++ 1 file changed, 7 insertions(+), 2 deletions(-)
++
++diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
++index cd3a0cf..eee4ac6 100644
++--- a/mkspecs/features/device_config.prf
+++++ b/mkspecs/features/device_config.prf
++@@ -19,10 +19,15 @@ defineTest(deviceSanityCheckCompiler) {
++     else: \
++         sfx =
++ 
+++    # Build the compiler filename using the first value in QMAKE_CXX in order to
+++    # support tools like ccache, which give QMAKE_CXX values of the form:
+++    #     ccache <path_to_compiler>
+++    compiler = $$first(QMAKE_CXX)$$sfx
+++
++     # Check if the binary exists with an absolute path. Do this check
++     # before the CROSS_COMPILE empty check below to allow the mkspec
++     # to derive the compiler path from other device options.
++-    exists($$QMAKE_CXX$$sfx):return()
+++    exists($$compiler):return()
++ 
++     # Check for possible reasons of failure
++     # check if CROSS_COMPILE device-option is set
++@@ -31,7 +36,7 @@ defineTest(deviceSanityCheckCompiler) {
++     # Check if QMAKE_CXX points to an executable.
++     ensurePathEnv()
++     for (dir, QMAKE_PATH_ENV) {
++-        exists($$dir/$${QMAKE_CXX}$$sfx): \
+++        exists($$dir/$${compiler}): \
++             return()
++     }
++ 
+-- 
+2.1.4
