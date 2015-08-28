@@ -1,95 +1,38 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit@wsystem.com>
-Date: Fri, 28 Aug 2015 11:46:51 +0200
-Subject: [Buildroot] [PATCH v2] pacakge/qt5/qt5base: fix build with ccache
-Message-ID: <1440755211-46875-1-git-send-email-benoit@wsystem.com>
+From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
+Date: Fri, 28 Aug 2015 11:50:37 +0200
+Subject: [Buildroot] [PATCH] pacakge/qt5/qt5base: fix build with ccache
+In-Reply-To: <20150827143918.1dc522a1@free-electrons.com>
+References: <1440499298-39957-1-git-send-email-benoit@wsystem.com>
+ <20150826154534.3e67c9bc@free-electrons.com>
+ <CA+sos7-LVKNjkVc+1hg0w8WZMGEtnthaJnaA7-fUKEOizjJCeg@mail.gmail.com>
+ <55DEC67C.6000500@wsystem.com> <20150827105450.100164af@free-electrons.com>
+ <55DED48F.3030102@wsystem.com> <20150827143918.1dc522a1@free-electrons.com>
+Message-ID: <55E02EED.20800@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building with ccache failed with:
+Hi Thomas,
 
-    Running configuration tests...
-    Failed to process makespec for platform 'devices/linux-buildroot-g++'
-    Project ERROR: Compiler <path_to_output_dir>/host/usr/bin/ccache <path_to_output_dir>/host/usr/bin/<cross_compile>-g++ not found. Check the value of CROSS_COMPILE -device-option
-    Could not read qmake configuration file <path_to_output_dir>/build/qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf.
-    Error processing project file: /dev/null
+On 27/08/2015 14:39, Thomas Petazzoni wrote:
+> On Thu, 27 Aug 2015 11:12:47 +0200, Beno?t Th?baudeau wrote:
+> 
+>  > OK, but in the meantime, until we have a wrapper for the internal toolchain too,
+>> what do you want to do to fix the current build failure?
+>>  - Forbid the use of ccache with Qt 5?
+>>  - Use the current patch?
+>>  - Use the wrapper from the URL above? In that case, where would you put it in
+>>    Buildroot (qt5base, new package, toolchain, support)?
+> 
+> For 2015.08, your patch is certainly the simplest solution.
 
-This was caused by Buildroot setting this in
-qt5base-5.5.0/mkspecs/devices/linux-buildroot-g++/qmake.conf:
+I've just posted a v2:
+http://patchwork.ozlabs.org/patch/511841/
 
-    QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
+I will submit it upstream. According to the last comment in the upstream bug
+report, this patch could possibly be accepted upstream.
 
-But qt5base-5.5.0/mkspecs/features/device_config.prf expects QMAKE_CXX
-to be a single valid (absolute or QMAKE_PATH_ENV-relative) path to an
-existing file, which is not possible if using ccache as above.
-
-Add a patch fixing this by testing only the first value in QMAKE_CXX.
-
-Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
----
-Changes v1 -> v2:
- - Use the first value in QMAKE_CXX instead of removing the whole test.
----
- .../qt5/qt5base/0009-fix-build-with-ccache.patch   | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/qt5/qt5base/0009-fix-build-with-ccache.patch
-
-diff --git a/package/qt5/qt5base/0009-fix-build-with-ccache.patch b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
-new file mode 100644
-index 0000000..896c0ef
---- /dev/null
-+++ b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
-@@ -0,0 +1,49 @@
-+Fix QMAKE_CXX/CROSS_COMPILE verification with ccache
-+
-+The use of ccache leads to QMAKE_CXX definitions of the form:
-+
-+    QMAKE_CXX = $${CCACHE} $${CROSS_COMPILE}g++
-+
-+The previous test required QMAKE_CXX to be a single valid (absolute or
-+QMAKE_PATH_ENV-relative) path to an existing file, which was not
-+compatible with definitions of QMAKE_CXX like the one above.
-+
-+Fix this by using only the first value in QMAKE_CXX, which usually
-+points to the compiler executable, or to the ccache executable in the
-+above case.
-+
-+Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
-+---
-+ mkspecs/features/device_config.prf | 9 +++++++--
-+ 1 file changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
-+index cd3a0cf..eee4ac6 100644
-+--- a/mkspecs/features/device_config.prf
-++++ b/mkspecs/features/device_config.prf
-+@@ -19,10 +19,15 @@ defineTest(deviceSanityCheckCompiler) {
-+     else: \
-+         sfx =
-+ 
-++    # Build the compiler filename using the first value in QMAKE_CXX in order to
-++    # support tools like ccache, which give QMAKE_CXX values of the form:
-++    #     ccache <path_to_compiler>
-++    compiler = $$first(QMAKE_CXX)$$sfx
-++
-+     # Check if the binary exists with an absolute path. Do this check
-+     # before the CROSS_COMPILE empty check below to allow the mkspec
-+     # to derive the compiler path from other device options.
-+-    exists($$QMAKE_CXX$$sfx):return()
-++    exists($$compiler):return()
-+ 
-+     # Check for possible reasons of failure
-+     # check if CROSS_COMPILE device-option is set
-+@@ -31,7 +36,7 @@ defineTest(deviceSanityCheckCompiler) {
-+     # Check if QMAKE_CXX points to an executable.
-+     ensurePathEnv()
-+     for (dir, QMAKE_PATH_ENV) {
-+-        exists($$dir/$${QMAKE_CXX}$$sfx): \
-++        exists($$dir/$${compiler}): \
-+             return()
-+     }
-+ 
--- 
-2.1.4
+Best regards,
+Beno?t
