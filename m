@@ -1,84 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Aug 2015 00:00:39 +0200
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 0.11.2
-Message-ID: <20150901083107.63D91801E3@busybox.osuosl.org>
+Date: Fri, 28 Aug 2015 21:16:15 +0200
+Subject: [Buildroot] [git commit] package/libyuv: new package
+Message-ID: <20150901083108.2F0CD800E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49334f20c228e539b0e3fe3fa8bfb38358dcd0e4
+commit: http://git.buildroot.net/buildroot/commit/?id=ebf3a6117c58422ee9e7af99a37b671b1e301c68
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also:
-  * remove patch #1 -> merged upstream
+[Thomas: fix license, it's BSD-3c, not BSD-4c.]
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Add-conditional-check-for-__linux__.patch |   32 --------------------
- package/upmpdcli/upmpdcli.hash                     |    4 +-
- package/upmpdcli/upmpdcli.mk                       |    2 +-
- 3 files changed, 3 insertions(+), 35 deletions(-)
+ package/Config.in                   |    1 +
+ package/libyuv/0001-i386-sse2.patch |   16 ++++++++++++++++
+ package/libyuv/Config.in            |   12 ++++++++++++
+ package/libyuv/libyuv.mk            |   18 ++++++++++++++++++
+ 4 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch b/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
-deleted file mode 100644
-index 910ee3c..0000000
---- a/package/upmpdcli/0001-Add-conditional-check-for-__linux__.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 69740cf6fe35413edc4b6adc502ba70ce8de8557 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
--Date: Sun, 19 Jul 2015 08:48:13 +0200
--Subject: [PATCH 1/1] Add conditional check for __linux__
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--When building upmpdcli with certain toolchains using the compiler flag
---std=c++0x let gcc not define "linux" or "__linux", but "__linux__".
--
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-----
-- src/closefrom.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/closefrom.cpp b/src/closefrom.cpp
--index 4429b20..0cd7957 100644
----- a/src/closefrom.cpp
--+++ b/src/closefrom.cpp
--@@ -111,7 +111,7 @@ int libclf_closefrom(int fd0)
-- }
-- 
-- /*************************************************************************/
---#elif (defined(linux) || defined(__linux))
--+#elif (defined(linux) || defined(__linux) || defined(__linux__))
-- 
-- /* Use /proc/self/fd directory */
-- #include <sys/types.h>
---- 
--2.4.6
--
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 549945e..762b0af 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,2 +1,2 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.11.0.tar.gz.sha256
--sha256 0f064b7fe498ee56879e606f48b7bafa42381d25fda6b91ef2cb3677effc85b9  upmpdcli-0.11.0.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.11.2.tar.gz.sha256
-+sha256 595865c306b0076baaff7eb4f76f779119bd8952f53a4e6662157dc83ab70d89  upmpdcli-0.11.2.tar.gz
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 8dde87d..c69e01c 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 0.11.0
-+UPMPDCLI_VERSION = 0.11.2
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index 69abc78..810f4ae 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -955,6 +955,7 @@ menu "Multimedia"
+ 	source "package/libplayer/Config.in"
+ 	source "package/libtheora/Config.in"
+ 	source "package/live555/Config.in"
++	source "package/libyuv/Config.in"
+ 	source "package/mediastreamer/Config.in"
+ 	source "package/x264/Config.in"
+ endmenu
+diff --git a/package/libyuv/0001-i386-sse2.patch b/package/libyuv/0001-i386-sse2.patch
+new file mode 100644
+index 0000000..b8ecb34
+--- /dev/null
++++ b/package/libyuv/0001-i386-sse2.patch
+@@ -0,0 +1,16 @@
++Fix compilation on non-sse2 platforms
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libyuv-1411.org/include/libyuv/scale_row.h libyuv-1411/include/libyuv/scale_row.h
++--- libyuv-1411.org/include/libyuv/scale_row.h	2015-05-22 23:39:21.000000000 +0200
+++++ libyuv-1411/include/libyuv/scale_row.h	2015-05-25 12:35:17.000000000 +0200
++@@ -33,7 +33,7 @@
++ 
++ // The following are available on all x86 platforms:
++ #if !defined(LIBYUV_DISABLE_X86) && \
++-    (defined(_M_IX86) || defined(__x86_64__) || defined(__i386__))
+++    (defined(_M_IX86) || defined(__x86_64__) || (defined(__i386__) && defined(__SSE2__)))
++ #define HAS_FIXEDDIV1_X86
++ #define HAS_FIXEDDIV_X86
++ #define HAS_SCALEADDROWS_SSE2
+diff --git a/package/libyuv/Config.in b/package/libyuv/Config.in
+new file mode 100644
+index 0000000..29dcaa4
+--- /dev/null
++++ b/package/libyuv/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBYUV
++	bool "libyuv"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	help
++	  libyuv is an open source project that includes YUV scaling
++	  and conversion functionality.
++
++	  https://code.google.com/p/libyuv
++
++comment "libyuv needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/libyuv/libyuv.mk b/package/libyuv/libyuv.mk
+new file mode 100644
+index 0000000..c00bc05
+--- /dev/null
++++ b/package/libyuv/libyuv.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# libyuv
++#
++################################################################################
++
++LIBYUV_VERSION = 1ebf86795cb213a37f06eb1ef3713cff080568ea
++# we use the FreeSwitch fork because there is currently no alternative
++# for https://chromium.googlesource.com/libyuv/libyuv which will be
++# deactivated in 2015.
++LIBYUV_SITE = https://freeswitch.org/stash/scm/sd/libyuv.git
++LIBYUV_SITE_METHOD = git
++LIBYUV_LICENSE = BSD-3c
++LIBYUV_LICENSE_FILES = LICENSE
++LIBYUV_INSTALL_STAGING = YES
++LIBYUV_DEPENDENCIES = $(if $(BR2_PACKAGE_JPEG),jpeg)
++
++$(eval $(cmake-package))
