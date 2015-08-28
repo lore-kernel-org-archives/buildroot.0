@@ -1,36 +1,77 @@
-From: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
 Date: Fri, 28 Aug 2015 17:27:10 +0200
-Subject: [Buildroot] elf2flt .ARM.exidx and .ARM.extab section handling
-In-Reply-To: <20150828150203.GB2808@waldemar-brodkorb.de>
-References: <1990856.EDz1xKh0BM@raillard-dv6>
- <20150828153506.3567c225@free-electrons.com>
- <20150828150203.GB2808@waldemar-brodkorb.de>
-Message-ID: <8200580.aRsvryMkeN@raillard-dv6>
+Subject: [Buildroot] [PATCH 1/1] gnuradio: stat.h is need for mode_t
+In-Reply-To: <55E079B1.80305@imgtec.com>
+References: <1440773264-14999-1-git-send-email-gwenj@trabucayre.com>
+ <55E079B1.80305@imgtec.com>
+Message-ID: <20150828172710.179bccd5@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Dear Vicente Olivert Riera
+On Fri, 28 Aug 2015 16:09:37 +0100
+Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
 
-On Friday 28 August 2015 17:02:03, Waldemar Brodkorb wrote:
-> As uClibc-ng is the only C library I know of, which is using BFLT,
-> it belongs to uClibc-ng and I will maintain it.
-So maybe the best solution is just to fix the build of elf2flt in buildroot 
-and switch to Waldemar repo as upstream for buildroot's elf2flt ?
+> Dear Gwenhael Goavec-Merou,
+> 
+> On 08/28/2015 03:47 PM, Gwenhael Goavec-Merou wrote:
+> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> > 
+> > fix :
+> > http://autobuild.buildroot.net/results/8e3/8e3afd5f22312f0660f631fdb82bbb64eda913fb/build-end.log
+> > 
+> > error: 'mode_t' has not been declared
+> > 
+> > Signed-off-by: Gwenhael Goavec-Merou
+> > <gwenhael.goavec-merou@trabucayre.com> ---
+> >  package/gnuradio/0002-stat_t-is-need-for-mode_t.patch | 13
+> > +++++++++++++ 1 file changed, 13 insertions(+)
+> >  create mode 100644
+> > package/gnuradio/0002-stat_t-is-need-for-mode_t.patch
+> > 
+> > diff --git a/package/gnuradio/0002-stat_t-is-need-for-mode_t.patch
+> > b/package/gnuradio/0002-stat_t-is-need-for-mode_t.patch new file
+> > mode 100644 index 0000000..391a12f
+> > --- /dev/null
+> > +++ b/package/gnuradio/0002-stat_t-is-need-for-mode_t.patch
+> > @@ -0,0 +1,13 @@
+> > +Index: gnuradio-3.7.5/gnuradio-runtime/include/gnuradio/logger.h.in
+> > +===================================================================
+> > +---
+> > gnuradio-3.7.5.orig/gnuradio-runtime/include/gnuradio/logger.h.in
+> > ++++ gnuradio-3.7.5/gnuradio-runtime/include/gnuradio/logger.h.in
+> > +@@ -44,6 +44,8 @@
+> > + 
+> > + #ifdef _MSC_VER
+> > + typedef unsigned short mode_t;
+> > ++#else
+> > ++#include <sys/stat.h>
+> > + #endif
+> > + 
+> > + #include <gnuradio/api.h>
+> > 
+> 
+> I cannot see that change upstream, so I will assume that you haven't
+> backported this patch from it:
+> 
+> http://gnuradio.org/redmine/projects/gnuradio/repository/revisions/master/entry/gnuradio-runtime/include/gnuradio/logger.h.in
+> 
+No it's not a backport.
 
-> nommu.org focus is to use musl C library for at the moment sh2
-> target, which will _not_ use BFLT. It will use ELF with static PIE.
-> See here about some notes from Rich Felker:
-> http://www.openwall.com/lists/musl/2015/08/26/1
+> Have you tried to submit it your patch upstream? It would be nice if
+> the upstream package is fixed as well, so we can just backport the
+> patch from it, or even better, bump our version to one which has that
+> problem fixed.
+> 
+No. I'm agree with you about the need to send this patch to gnuradio
+but, currently, I'm not sure it's a global problem with all
+toolchains or strictly related to musl. 
+> Regards,
+> 
+> Vincent.
 
-I've already asked on nommu.org mailing list, we'll see what comes out.
-
-Best regards,
-
-Douglas
-
--- 
-
-Douglas RAILLARD
+Regards,
+Gwenhael.
