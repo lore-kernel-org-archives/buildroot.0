@@ -1,281 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 15:41:03 +0200
-Subject: [Buildroot] [PATCH/next 10/10] package/freeswitch: new package
-In-Reply-To: <1439317015-8031-11-git-send-email-bernd.kuhls@t-online.de>
-References: <1439317015-8031-1-git-send-email-bernd.kuhls@t-online.de>
- <1439317015-8031-11-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150829154103.62b721ce@free-electrons.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Sat, 29 Aug 2015 15:52:27 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: stat.h is need for mode_t
+In-Reply-To: <20150828193146.58c943bc@free-electrons.com>
+References: <1440773264-14999-1-git-send-email-gwenj@trabucayre.com>
+ <20150828193146.58c943bc@free-electrons.com>
+Message-ID: <20150829155227.54561ee9@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Thomas Petazzoni
+On Fri, 28 Aug 2015 19:31:46 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Thanks for this submission. A quite complicated software, it seems. You
-submitted Asterisk a while ago, and now Freeswitch. Did you give up on
-Asterisk packaging?
+> Dear Gwenhael Goavec-Merou,
+> 
+> On Fri, 28 Aug 2015 16:47:44 +0200, Gwenhael Goavec-Merou wrote:
+> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> > 
+> > fix :
+> > http://autobuild.buildroot.net/results/8e3/8e3afd5f22312f0660f631fdb82bbb64eda913fb/build-end.log
+> > 
+> > error: 'mode_t' has not been declared
+> > 
+> > Signed-off-by: Gwenhael Goavec-Merou
+> > <gwenhael.goavec-merou@trabucayre.com>
+> 
+> mode_t is according to the standard
+> (http://pubs.opengroup.org/onlinepubs/007908799/xsh/sysstat.h.html)
+> defined in <sys/types.h>. Can you try including <sys/types.h> instead?
+> 
+Ok It's working with sys/types.h
+> If that works as well, then please submit the patch upstream: it is
+> valid for all toolchains.
+> 
+I've checked all the autobuild for 07/2015 and 08/2015. The missing
+mode_t only appears if the toolchain is based on musl. I'll will,
+nevertheless, try to send my patch to gnuradio.
 
-Some comments below.
-
-On Tue, 11 Aug 2015 20:16:55 +0200, Bernd Kuhls wrote:
-
-> diff --git a/package/freeswitch/0001-cross_git.patch b/package/freeswitch/0001-cross_git.patch
-> new file mode 100644
-> index 0000000..3ef1be7
-> --- /dev/null
-> +++ b/package/freeswitch/0001-cross_git.patch
-> @@ -0,0 +1,11 @@
-
-Missing description + SoB.
-
-> +--- freeswitch.git/configure.ac.orig	2015-02-24 18:15:49.000000000 +0100
-> ++++ freeswitch.git/configure.ac	2015-02-24 19:17:15.857077515 +0100
-> +@@ -379,7 +379,7 @@
-> + elif test "x${ax_cv_c_compiler_vendor}" = "xgnu" ; then
-> +     APR_ADDTO(SWITCH_AM_CFLAGS, -fPIC)
-> +     APR_ADDTO(SWITCH_AM_CXXFLAGS, -fPIC)
-> +-    if test "$ac_cv_gcc_supports_w_no_unused_result" = yes; then
-> ++    if test "$ac_cv_gcc_supports_w_no_unused_result" = xyes; then
-
-This looks wrong: there is no "x" in the left hand side of the test.
-Should this be:
-
-	if test "$ac...." = "yes" ; then
-
-instead?
-
-> diff --git a/package/freeswitch/0002-jpeg.patch b/package/freeswitch/0002-jpeg.patch
-> new file mode 100644
-> index 0000000..26094a0
-> --- /dev/null
-> +++ b/package/freeswitch/0002-jpeg.patch
-> @@ -0,0 +1,24 @@
-> +Fix jpeg detection
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +diff -uNr freeswitch_video2-b8b6acf33efe64aebbd939dd7281d6b6cd8fc2f4.org/configure.ac freeswitch_video2-b8b6acf33efe64aebbd939dd7281d6b6cd8fc2f4/configure.ac
-> +--- freeswitch_video2-b8b6acf33efe64aebbd939dd7281d6b6cd8fc2f4.org/configure.ac	2015-05-23 05:18:56.000000000 +0200
-> ++++ freeswitch_video2-b8b6acf33efe64aebbd939dd7281d6b6cd8fc2f4/configure.ac	2015-05-25 14:15:20.360156247 +0200
-> +@@ -783,6 +783,8 @@
-> + APR_ADDTO([PLATFORM_CORE_LIBS], [-lz])
-> + fi
-> + 
-> ++AC_CHECK_LIB(jpeg, jpeg_std_error,, AC_MSG_ERROR([no usable libjpeg; please install libjpeg devel package or equivalent]))
-> ++
-> + PKG_CHECK_MODULES([YUV], [libyuv >= 0.0.1280],
-> +	     [AC_MSG_RESULT([yes]);AM_CONDITIONAL([HAVE_YUV],[true])],
-> +	     [AC_MSG_RESULT([no]);AM_CONDITIONAL([HAVE_YUV],[false])])
-> +@@ -797,7 +799,6 @@
-> + 
-> + save_LIBS="$LIBS"
-> + LIBS=
-> +-AC_CHECK_LIB(jpeg, jpeg_std_error,, AC_MSG_ERROR([no usable libjpeg; please install libjpeg devel package or equivalent]))
-
-Why is this fixing exactly?
-
-> diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-> new file mode 100644
-> index 0000000..35aa5f9
-> --- /dev/null
-> +++ b/package/freeswitch/Config.in
-> @@ -0,0 +1,58 @@
-> +config BR2_PACKAGE_FREESWITCH
-> +	bool "freeswitch"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_MMU # apr, included in freeswitch source
-> +	depends on BR2_USE_WCHAR # util-linux
-> +	depends on !BR2_STATIC_LIBS # apr, included in freeswitch source
-
-No way of using an external apr library? There are some
-use_system_apr / use_system_aprutil variables in configure.ac that seem
-to indicate that it might be possible.
-
-> +	depends on !BR2_aarch64
-
-Why ?
-
-> +	# Triggers the _gp link issue in nios2
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
-> +	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
-> +	select BR2_PACKAGE_LIBBROADVOICE
-> +	select BR2_PACKAGE_LIBCODEC2
-> +	select BR2_PACKAGE_FFMPEG
-> +	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
-> +	select BR2_PACKAGE_FFMPEG_SWSCALE
-> +	select BR2_PACKAGE_FREETYPE
-> +	select BR2_PACKAGE_IMAGEMAGICK
-> +	select BR2_PACKAGE_LIBBROADVOICE
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBEDIT
-> +	select BR2_PACKAGE_LIBG7221
-> +	select BR2_PACKAGE_LIBILBC
-> +	select BR2_PACKAGE_LIBJPEG
-> +	select BR2_PACKAGE_LIBLDNS
-> +	select BR2_PACKAGE_LIBOPENH264 if BR2_PACKAGE_LIBOPENH264_ARCH_SUPPORTS
-
-So it's optional, so why make it mandatory on architectures that are
-part of BR2_PACKAGE_LIBOPENH264_ARCH_SUPPORTS ?
-
-> +	select BR2_PACKAGE_LIBPNG
-> +	select BR2_PACKAGE_LIBSILK
-> +	select BR2_PACKAGE_LIBSNDFILE
-> +	select BR2_PACKAGE_LIBSOUNDTOUCH
-> +	select BR2_PACKAGE_LIBVPX
-> +	select BR2_PACKAGE_LIBYAML
-> +	select BR2_PACKAGE_LIBYUV
-> +	select BR2_PACKAGE_LUA
-> +	select BR2_PACKAGE_OPENCV
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_OPUS
-> +	select BR2_PACKAGE_PCRE
-> +	select BR2_PACKAGE_PORTAUDIO
-> +	select BR2_PACKAGE_SPEEX
-> +	select BR2_PACKAGE_SQLITE
-> +	select BR2_PACKAGE_UNIXODBC
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	select BR2_PACKAGE_ZLIB
-
-Are you sure all these dependencies are mandatory? For example ODBC
-support seems to be optional. Yaml seems to be optional as well, etc.
-
-> +FREESWITCH_VERSION = 7cf1238137d8876a1a34d28a54d60d328c44d895
-> +FREESWITCH_SITE = https://freeswitch.org/stash/scm/fs/freeswitch.git
-> +FREESWITCH_SITE_METHOD = git
-> +FREESWITCH_LICENSE = MPL v1.1
-> +FREESWITCH_LICENSE_FILES = COPYING
-
-The license file is docs/COPYING.
-
-> +FREESWITCH_DEPENDENCIES = \
-> +	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
-> +	ffmpeg \
-> +	freetype \
-> +	host-pkgconf \
-> +	imagemagick \
-> +	libbroadvoice \
-> +	libcodec2 \
-> +	libcurl \
-> +	libedit \
-> +	libg7221 \
-> +	libilbc \
-> +	libjpeg \
-> +	libldns \
-> +	libopenh264 \
-> +	libpng \
-> +	libsilk \
-> +	libsndfile \
-> +	libsoundtouch \
-> +	libvpx \
-> +	libyaml \
-> +	libyuv \
-> +	lua \
-> +	$(if $(BR2_PACKAGE_MYSQL),mysql) \
-> +	opencv \
-> +	openssl \
-> +	opus \
-> +	pcre \
-> +	portaudio \
-> +	speex \
-> +	sqlite \
-> +	unixodbc \
-> +	util-linux \
-> +	zlib
-
-Please try to make more of these optional.
-
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON),y)
-> +FREESWITCH_DEPENDENCIES += python
-> +else
-> +FREESWITCH_CONF_OPTS += --without-python
-> +endif
-
-Pass --with-python when python is enabled.
-
-> +define FREESWITCH_BOOTSTRAP
-> +	cd $(@D) && $(TARGET_MAKE_ENV) ./bootstrap.sh
-> +endef
-> +FREESWITCH_POST_PATCH_HOOKS += FREESWITCH_BOOTSTRAP
-
-If you don't use AUTORECONF = YES, then you need to manually add
-host-autoconf, host-automake and host-libtool in the package
-dependencies.
-
-> +
-> +# Deactivate a module. Has no effect if it does not exits.
-> +define freeswitch-module-deactivate # module-name
-> +	$(SED) '/$1/s/^/#/' $(@D)/modules.conf
-> +endef
-
-This macro is not used anywhere.
-
-> +
-> +# Activate a module. Has no effect if it does not exits.
-> +define freeswitch-module-activate # module-name
-> +	$(SED) '/$1/s/^#//' $(@D)/modules.conf
-> +endef
-
-Why not using something like the KCONFIG_ENABLE_OPT mechanism, so that
-it can be used both for modules listed in modules.conf as comment, and
-modules not listed (such as mod_openh264).
-
-> +define FREESWITCH_ENABLE_MODULES
-> +	$(call freeswitch-module-activate,mod_av)
-> +	$(call freeswitch-module-activate,mod_avmd)
-> +	$(call freeswitch-module-activate,mod_blacklist)
-> +	$(call freeswitch-module-activate,mod_bv)
-> +	$(call freeswitch-module-activate,mod_callcenter)
-> +	$(call freeswitch-module-activate,mod_cidlookup)
-> +	$(call freeswitch-module-activate,mod_codec2)
-> +	$(call freeswitch-module-activate,mod_curl)
-> +	$(call freeswitch-module-activate,mod_directory)
-> +	$(call freeswitch-module-activate,mod_easyroute)
-> +	$(call freeswitch-module-activate,mod_esl)
-> +	$(call freeswitch-module-activate,mod_fsk)
-> +	$(call freeswitch-module-activate,mod_ilbc)
-> +	$(call freeswitch-module-activate,mod_imagick)
-> +	$(call freeswitch-module-activate,mod_isac)
-> +	$(call freeswitch-module-activate,mod_lcr)
-> +	$(call freeswitch-module-activate,mod_portaudio)
-> +	$(call freeswitch-module-activate,mod_rtc)
-> +	$(call freeswitch-module-activate,mod_say_de)
-> +	$(call freeswitch-module-activate,mod_silk)
-> +	$(call freeswitch-module-activate,mod_snom)
-> +	$(call freeswitch-module-activate,mod_soundtouch)
-> +	$(call freeswitch-module-activate,mod_spy)
-> +	$(call freeswitch-module-activate,mod_stress)
-> +	$(call freeswitch-module-activate,mod_verto)
-> +	$(call freeswitch-module-activate,mod_vpx)
-> +	echo "codecs/mod_openh264" >> $(@D)/modules.conf
-> +endef
-> +FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
-
-Maybe:
-
-FREESWITCH_ENABLED_MODULES = \
-	av avmd blacklist bv .... vpx
-
-	$(foreach mod,$(FREESWITCH_ENABLED_MODULES),\
-		$(call freeswitch-module-activate,mod_$(mod))$(sep))
-
-> +FREESWITCH_CONF_OPTS += \
-> +	--without-erlang \
-> +	--enable-fhs \
-> +	--with-odbc=$(STAGING_DIR)/usr \
-> +	--enable-zrtp
-
-Please put the "mandatory" configuration options before the "optional"
-ones (the ones about Python).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Gwenhael
