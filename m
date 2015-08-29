@@ -1,149 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Aug 2015 22:53:25 +0200
-Subject: [Buildroot] [git commit] package/libserial: bump to version 0.6.0rc2
-Message-ID: <20150901083107.82D4A7F95A@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 14:49:52 +0200
+Subject: [Buildroot] [git commit] package/libsoundtouch: new package
+Message-ID: <20150901083108.9E8487F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84a78f4f0b67814a64a834ce8f157ee342fef678
+commit: http://git.buildroot.net/buildroot/commit/?id=5dc0167525bdbbd14e554a60a52ac9fe78d00ce9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also:
-  * Update patch #1
-  * Remove patch #2, fixed upstream
-  * add new dependency to boost
-  * use hashes from sourceforge
-
-[Thomas:
- - add locally calculated sha256 hash
- - show the Config.in comment about toolchain dependencies only when
-   BR2_PACKAGE_BOOST_ARCH_SUPPORTS is set.]
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../libserial/0001-disable-python-bindings.patch   |   21 ++++++++++---------
- .../0002-add-missing-header-include.patch          |   15 --------------
- package/libserial/Config.in                        |    9 ++++++-
- package/libserial/libserial.hash                   |    7 ++++-
- package/libserial/libserial.mk                     |    3 +-
- 5 files changed, 25 insertions(+), 30 deletions(-)
+ package/Config.in                      |    1 +
+ package/libsoundtouch/Config.in        |    8 ++++++++
+ package/libsoundtouch/libsoundtouch.mk |   20 ++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
-diff --git a/package/libserial/0001-disable-python-bindings.patch b/package/libserial/0001-disable-python-bindings.patch
-index 54b5cb6..1f2f5ed 100644
---- a/package/libserial/0001-disable-python-bindings.patch
-+++ b/package/libserial/0001-disable-python-bindings.patch
-@@ -1,25 +1,26 @@
- Disable build of Python bindings, which requires the sipconfig module.
- 
- Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
- 
--diff -Nurp a/Makefile.am b/Makefile.am
----- a/Makefile.am	2008-11-12 01:27:31.000000000 +0000
--+++ b/Makefile.am	2013-04-16 09:41:13.476002178 +0100
-+diff -purN libserial-0.6.0rc2.orig/Makefile.am libserial-0.6.0rc2/Makefile.am
-+--- libserial-0.6.0rc2.orig/Makefile.am	2014-06-05 18:37:25.000000000 +0200
-++++ libserial-0.6.0rc2/Makefile.am	2015-07-30 20:59:28.828429011 +0200
- @@ -1,4 +1,4 @@
- -SUBDIRS=src doc examples sip
- +SUBDIRS=src doc examples
-+ ACLOCAL_AMFLAGS=-I m4
-  
-  EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
-- 
--diff -Nurp a/Makefile.in b/Makefile.in
----- a/Makefile.in	2008-11-12 01:28:14.000000000 +0000
--+++ b/Makefile.in	2013-04-16 09:41:05.628013626 +0100
--@@ -197,7 +197,7 @@ sysconfdir = @sysconfdir@
-- target_alias = @target_alias@
-+diff -purN libserial-0.6.0rc2.orig/Makefile.in libserial-0.6.0rc2/Makefile.in
-+--- libserial-0.6.0rc2.orig/Makefile.in	2014-06-05 18:40:09.000000000 +0200
-++++ libserial-0.6.0rc2/Makefile.in	2015-07-30 21:00:09.215188376 +0200
-+@@ -348,7 +348,7 @@ target_alias = @target_alias@
-+ top_build_prefix = @top_build_prefix@
-  top_builddir = @top_builddir@
-  top_srcdir = @top_srcdir@
- -SUBDIRS = src doc examples sip
- +SUBDIRS = src doc examples
-+ ACLOCAL_AMFLAGS = -I m4
-  EXTRA_DIST = doxygen.conf.in Makefile.dist libserial.spec libserial.pc
-  pkgconfigdir = $(libdir)/pkgconfig
-- pkgconfig_DATA = libserial.pc
-diff --git a/package/libserial/0002-add-missing-header-include.patch b/package/libserial/0002-add-missing-header-include.patch
-deleted file mode 100644
-index a022637..0000000
---- a/package/libserial/0002-add-missing-header-include.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Add a missing header include, to fix a build error.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/src/SerialPort.cpp b/src/SerialPort.cpp
----- a/src/SerialPort.cpp	2008-11-12 01:27:30.000000000 +0000
--+++ b/src/SerialPort.cpp	2013-04-23 15:43:41.537495852 +0100
--@@ -27,6 +27,7 @@
-- #include <cassert>
-- #include <termios.h>
-- #include <fcntl.h>
--+#include <unistd.h>
-- #include <sys/ioctl.h>
-- #include <sys/time.h>
-- #include <signal.h>
-diff --git a/package/libserial/Config.in b/package/libserial/Config.in
-index 22adb72..df5d1b5 100644
---- a/package/libserial/Config.in
-+++ b/package/libserial/Config.in
-@@ -1,11 +1,16 @@
- config BR2_PACKAGE_LIBSERIAL
- 	bool "libserial"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # boost
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
-+	depends on BR2_USE_WCHAR # boost
-+	select BR2_PACKAGE_BOOST
- 	help
- 	  Simplified serial port programming in C++ under POSIX operating
- 	  systems.
- 
- 	  http://libserial.sourceforge.net/
- 
--comment "libserial needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libserial needs a toolchain w/ C++, threads, wchar"
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/libserial/libserial.hash b/package/libserial/libserial.hash
-index 26f65e5..bca647a 100644
---- a/package/libserial/libserial.hash
-+++ b/package/libserial/libserial.hash
-@@ -1,2 +1,5 @@
--# Locally computed:
--sha256  60d8aebf5f262c12baf94ce61d61198fc9b79da2432c735c200decd08ead1fb4  libserial-0.6.0rc1.tar.gz
-+# From http://sourceforge.net/projects/libserial/files/libserial/0.6.0rc2/
-+sha1  e09113be3ba595135e95e853003ff96feea0da63  libserial-0.6.0rc2.tar.gz
-+md5  7787679b22901e4810bc53ecccdf8266  libserial-0.6.0rc2.tar.gz
-+# Locally calculated
-+sha256 35ee29eb1369d52ffb8658237577692f991eb508320d0abbb71c53e6494a1c23 libserial-0.6.0rc2.tar.gz
-diff --git a/package/libserial/libserial.mk b/package/libserial/libserial.mk
-index d2c928b..11f1874 100644
---- a/package/libserial/libserial.mk
-+++ b/package/libserial/libserial.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--LIBSERIAL_VERSION = 0.6.0rc1
-+LIBSERIAL_VERSION = 0.6.0rc2
- LIBSERIAL_SITE = http://downloads.sourceforge.net/libserial
- LIBSERIAL_INSTALL_STAGING = YES
- LIBSERIAL_LICENSE = GPLv2+
- LIBSERIAL_LICENSE_FILES = COPYING
-+LIBSERIAL_DEPENDENCIES = boost
- 
- LIBSERIAL_CONF_ENV = ac_cv_prog_DOCBOOK2PDF=no
- 
+diff --git a/package/Config.in b/package/Config.in
+index 958b3ed..72fcbc9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -713,6 +713,7 @@ menu "Audio/Sound"
+ 	source "package/libsidplay2/Config.in"
+ 	source "package/libsilk/Config.in"
+ 	source "package/libsndfile/Config.in"
++	source "package/libsoundtouch/Config.in"
+ 	source "package/libsoxr/Config.in"
+ 	source "package/libvorbis/Config.in"
+ 	source "package/mp4v2/Config.in"
+diff --git a/package/libsoundtouch/Config.in b/package/libsoundtouch/Config.in
+new file mode 100644
+index 0000000..396036f
+--- /dev/null
++++ b/package/libsoundtouch/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBSOUNDTOUCH
++	bool "libsoundtouch"
++	help
++	  SoundTouch is an open-source audio processing library for
++	  changing the Tempo, Pitch and Playback Rates of audio streams
++	  or audio files.
++
++	  http://www.surina.net/soundtouch
+diff --git a/package/libsoundtouch/libsoundtouch.mk b/package/libsoundtouch/libsoundtouch.mk
+new file mode 100644
+index 0000000..cdfec20
+--- /dev/null
++++ b/package/libsoundtouch/libsoundtouch.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# libsoundtouch
++#
++################################################################################
++
++LIBSOUNDTOUCH_VERSION = 010a91a59071c7fefd316fca62c0d980ec85b4b1
++LIBSOUNDTOUCH_SITE = https://freeswitch.org/stash/scm/sd/libsoundtouch.git
++LIBSOUNDTOUCH_SITE_METHOD = git
++LIBSOUNDTOUCH_LICENSE = LGPLv2.1+
++LIBSOUNDTOUCH_LICENSE_FILES = COPYING.TXT
++LIBSOUNDTOUCH_AUTORECONF = YES
++LIBSOUNDTOUCH_INSTALL_STAGING = YES
++
++define LIBSOUNDTOUCH_CREATE_CONFIG_M4
++	mkdir -p $(@D)/config/m4
++endef
++LIBSOUNDTOUCH_POST_PATCH_HOOKS += LIBSOUNDTOUCH_CREATE_CONFIG_M4
++
++$(eval $(autotools-package))
