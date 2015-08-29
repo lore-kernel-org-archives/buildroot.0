@@ -1,82 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 11:33:13 +0200
-Subject: [Buildroot] [git commit] ipkg: add patch to fix musl build
-Message-ID: <20150829093448.4558C81950@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 11:36:07 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix umask settings for non-bash shells
+ for root user
+In-Reply-To: <20150829093317.GB4857@free.fr>
+References: <1434378026-15007-1-git-send-email-vorel@jablocom.com>
+ <20150829105707.3d5e0fec@free-electrons.com>
+ <20150829092037.GA4857@free.fr>
+ <20150829112955.3a6b8d77@free-electrons.com>
+ <20150829093317.GB4857@free.fr>
+Message-ID: <20150829113607.53818ac4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f52f17e0c379312cea7c87fdb037584eede1abe4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Like Romain Naour did for util-linux, this commit adds a patch for the
-ipkg package to remove the use of the __P, which is useless for modern
-compilers, and not defined by the musl C library.
+On Sat, 29 Aug 2015 11:33:17 +0200, Yann E. MORIN wrote:
 
-Fixes:
+> > > And maybe provide a simple .profile *iff* needed.
+> > 
+> > Can you check if a .profile is really needed? If so, can you submit a
+> > patch series cleaning up .bash_* ?
+> 
+> After the release, maybe?
 
-  http://autobuild.buildroot.net/results/c27d1d1e6a9bb52fead7b48625bb456f42b2f056/
+Absolutely, this is post 2015.08 stuff.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipkg/0001-fix-musl-build.patch |   50 ++++++++++++++++++++++++++++++++
- 1 files changed, 50 insertions(+), 0 deletions(-)
+> > Why? Git doesn't track empty directories, so we have those .empty files
+> > all over the place. I don't see what would recreate the root/ directory
+> > for the root user if we don't keep it in the skeleton. Am I missing
+> > something?
+> 
+> Right. I was thinking of keeping a .profile in that directory. If there
+> is a .profile, there is no need for .empty . If there is no .profile
+> (and no other file), we need to keep .empty , yes.
 
-diff --git a/package/ipkg/0001-fix-musl-build.patch b/package/ipkg/0001-fix-musl-build.patch
-new file mode 100644
-index 0000000..fce3ec4
---- /dev/null
-+++ b/package/ipkg/0001-fix-musl-build.patch
-@@ -0,0 +1,50 @@
-+Remove __P macro usage to fix musl build
-+
-+__P() is used for compatibility with old K&R C compilers. With ANSI C
-+this macro has no effect.
-+
-+This fixes a compilation error with musl libc because of undeclared
-+__P.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/md5.c
-+===================================================================
-+--- a/md5.c
-++++ b/md5.c
-+@@ -97,21 +97,21 @@
-+ 
-+ /* Initialize structure containing state of computation.
-+    (RFC 1321, 3.3: Step 3)  */
-+-static void md5_init_ctx __P ((struct md5_ctx *ctx));
-++static void md5_init_ctx (struct md5_ctx *ctx);
-+ 
-+ /* Starting with the result of former calls of this function (or the
-+    initialization function update the context for the next LEN bytes
-+    starting at BUFFER.
-+    It is necessary that LEN is a multiple of 64!!! */
-+-static void md5_process_block __P ((const void *buffer, size_t len,
-+-				    struct md5_ctx *ctx));
-++static void md5_process_block (const void *buffer, size_t len,
-++				    struct md5_ctx *ctx);
-+ 
-+ /* Starting with the result of former calls of this function (or the
-+    initialization function update the context for the next LEN bytes
-+    starting at BUFFER.
-+    It is NOT required that LEN is a multiple of 64.  */
-+-static void md5_process_bytes __P ((const void *buffer, size_t len,
-+-				    struct md5_ctx *ctx));
-++static void md5_process_bytes (const void *buffer, size_t len,
-++				    struct md5_ctx *ctx);
-+ 
-+ /* Process the remaining bytes in the buffer and put result from CTX
-+    in first 16 bytes following RESBUF.  The result is always in little
-+@@ -120,7 +120,7 @@
-+ 
-+    IMPORTANT: On some systems it is required that RESBUF is correctly
-+    aligned for a 32 bits value.  */
-+-static void *md5_finish_ctx __P ((struct md5_ctx *ctx, void *resbuf));
-++static void *md5_finish_ctx (struct md5_ctx *ctx, void *resbuf);
-+ 
-+ //----------------------------------------------------------------------------
-+ //--------end of md5.h
+Ah, ok, I see. We're on the same line then. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
