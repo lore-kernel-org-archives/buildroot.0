@@ -1,66 +1,132 @@
-From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Sat, 29 Aug 2015 14:06:35 +0200
-Subject: [Buildroot] [PATCH 1/1] python3: add patch to fix PEP 3147
- issue with automake built packages
-In-Reply-To: <20150828193643.10876a0f@free-electrons.com>
-References: <1440773921-769-1-git-send-email-cvubrugier@fastmail.fm>
- <20150828193643.10876a0f@free-electrons.com>
-Message-ID: <20150829140635.1495affc@trantor>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Aug 2015 14:48:31 +0200
+Subject: [Buildroot] [git commit branch/next] package/libopenh264: new
+	package
+Message-ID: <20150829124901.23C4881DD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=082a3dd28613d18260772b689961ce7843447af7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Fri, 28 Aug 2015 19:36:43 +0200, Thomas Petazzoni wrote :
-> On Fri, 28 Aug 2015 16:58:41 +0200, Christophe Vu-Brugier wrote:
-> > Packages built with automake use a `py-compile` helper to
-> > byte-compile Python source files. This script uses the "py_compile"
-> > module from the standard library. In turn, the compile() function
-> > in the "py_compile" module invokes the cache_from_source() function
-> > provided by importlib.
-> > 
-> > This patch changes cache_from_source() and source_from_cache() in
-> > importlib to get rid of the "__pycache__" directory.
-> > 
-> > This fixes the following import error in kmod when the module is
-> > built for Python 3:
-> > 
-> >   >>> from kmod import Kmod
-> >   Traceback (most recent call last):
-> >     File "<stdin>", line 1, in <module>
-> >   ImportError: cannot import name 'Kmod'
-> > 
-> > Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> 
-> Thanks for this patch. However, I'm wondering if it doesn't make the
-> existing patch 016-distutils-no-pep3147.patch unnecessary. Patch 016
-> fixes the distutils/setuptools case by preventing the logic from
-> calling importlib.util.cache_from_source(). But since you're fixing
-> this function in your patch, maybe there's no need for the 016 patch
-> anymore ? What about patch 004 ?
-> 
-> Could you do some quick testing without patches 004 and 016, and see
-> if 1/ the Python standard library is byte-compiled without __pycache__
-> folders and 2/ same for Python external modules built with distutils
-> and setuptools.
-> 
-> I'm pretty sure with your patch we can remove patch 016 (so your patch
-> could replace it). I'm not sure about patch 004, though.
+[Thomas:
+  - make the license info more specific: it's BSD-2c, not just BSD.
+  - use a single conditional block to test the architecture, instead
+    of multiple separate conditions.
+  - add missing arm/armeb handling in the architecture condition.
+  - make the host-nasm dependency only used on x86/x86-64, since it's
+    not used for other architectures
+  - group the ARCH= and ENABLE64BIT= make variable definitions in a
+    LIBOPENH264_MAKE_OPTS variable, and use them at install time (in
+    addition to build time) to avoid build issues.
+  - wrap too long lines in the .mk file.]
 
-Indeed, patch 016 for distutils / setuptools is no longer necessary.
-Moreover, patch 004 for the standard library can be dropped as well.
-Afer removing patches 004 and 016, I see no __pycache__ directory in the
-Python path and the interpreter behaves as expected (I tested by loading
-modules and running samples for readline, urwid, six, kmod or
-pyparsing).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                  |    1 +
+ package/libopenh264/Config.in      |   22 +++++++++++++++
+ package/libopenh264/libopenh264.mk |   52 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+), 0 deletions(-)
 
-I will respin my patch to drop 004 and 016 and update 005 which is
-impacted by the removal of 004.
-
-Thank you !
-
--- 
-Christophe Vu-Brugier
+diff --git a/package/Config.in b/package/Config.in
+index d9dfb34..958b3ed 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -957,6 +957,7 @@ menu "Multimedia"
+ 	source "package/libmms/Config.in"
+ 	source "package/libmpeg2/Config.in"
+ 	source "package/libogg/Config.in"
++	source "package/libopenh264/Config.in"
+ 	source "package/libplayer/Config.in"
+ 	source "package/libtheora/Config.in"
+ 	source "package/live555/Config.in"
+diff --git a/package/libopenh264/Config.in b/package/libopenh264/Config.in
+new file mode 100644
+index 0000000..2b77578
+--- /dev/null
++++ b/package/libopenh264/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_LIBOPENH264_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || \
++		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
++		BR2_x86_64
++
++config BR2_PACKAGE_LIBOPENH264
++	bool "libopenh264"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_LIBOPENH264_ARCH_SUPPORTS
++	help
++	  OpenH264 is a codec library which supports H.264 encoding and
++	  decoding.
++
++	  http://www.openh264.org
++
++comment "libopenh264 needs a toolchain w/ C++, dynamic library, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
++	depends on BR2_PACKAGE_LIBOPENH264_ARCH_SUPPORTS
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+new file mode 100644
+index 0000000..cbe30bc
+--- /dev/null
++++ b/package/libopenh264/libopenh264.mk
+@@ -0,0 +1,52 @@
++################################################################################
++#
++# libopenh264
++#
++################################################################################
++
++LIBOPENH264_VERSION = v1.4.0
++LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
++LIBOPENH264_LICENSE = BSD-2c
++LIBOPENH264_LICENSE_FILES = LICENSE
++LIBOPENH264_INSTALL_STAGING = YES
++
++ifeq ($(BR2_aarch64),y)
++LIBOPENH264_ARCH = aarch64
++else ifeq ($(BR2_arm)$(BR2_armeb),y)
++LIBOPENH264_ARCH = arm
++else ifeq ($(BR2_i386),y)
++LIBOPENH264_ARCH = x86
++LIBOPENH264_DEPENDENCIES += host-nasm
++else ifeq ($(BR2_mips)$(BR2_mipsel),y)
++LIBOPENH264_ARCH = mips
++else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
++LIBOPENH264_ARCH = mips64
++else ifeq ($(BR2_x86_64),y)
++LIBOPENH264_ARCH = x86_64
++LIBOPENH264_DEPENDENCIES += host-nasm
++endif
++
++# ENABLE64BIT is really only used for x86-64, other 64 bits
++# architecture don't need it.
++LIBOPENH264_MAKE_OPTS = \
++	ARCH=$(LIBOPENH264_ARCH) \
++	ENABLE64BIT=$(if $(BR2_x86_64),Yes,No)
++
++define LIBOPENH264_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(LIBOPENH264_MAKE_OPTS)
++endef
++
++define LIBOPENH264_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(LIBOPENH264_MAKE_OPTS) \
++		DESTDIR=$(STAGING_DIR) PREFIX=/usr install
++endef
++
++define LIBOPENH264_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(LIBOPENH264_MAKE_OPTS) \
++		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
