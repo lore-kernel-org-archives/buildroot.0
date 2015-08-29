@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 23:18:39 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: Fix
-	glamor dependency
-Message-ID: <20150829211854.0C85C818C6@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 23:19:04 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/x11r7/xserver_xorg-server:
+ Fix glamor dependency
+In-Reply-To: <1438445235-4662-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1438445235-4662-1-git-send-email-bernd.kuhls@t-online.de>
+ <1438445235-4662-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150829231904.0d58e0b1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9141ea81f0423efa0c93daffb91b56418f8ea0d7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-X.org xserver depends on libepoxy for glamor support, which depends on
-EGL support. Mesa3d is not the only possible EGL provider therefore
-change the dependency check.
+On Sat,  1 Aug 2015 18:07:15 +0200, Bernd Kuhls wrote:
+> X.org xserver depends on libepoxy for glamor support, which depends on
+> EGL support. Mesa3d is not the only possible EGL provider therefore
+> change the dependency check.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: rebased
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied to master, thanks!
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index c88614b..617bcbc 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -203,7 +203,7 @@ endif
- ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri3
--ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
-+ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += libepoxy
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-glamor
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
