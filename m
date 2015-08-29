@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 23:26:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: More fixes to static
- compile
-In-Reply-To: <1438203871-8548-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1438203871-8548-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150829232625.214c5b01@free-electrons.com>
+Date: Sat, 29 Aug 2015 23:29:21 +0200
+Subject: [Buildroot] [PATCH v2 4/4] cubieboard: [PATCH] ipconfig: add
+ nameserver IPs to kernel-parameter ip=
+In-Reply-To: <1438067769-10254-4-git-send-email-fancp2007@gmail.com>
+References: <1438067769-10254-1-git-send-email-fancp2007@gmail.com>
+ <1438067769-10254-4-git-send-email-fancp2007@gmail.com>
+Message-ID: <20150829232921.2dd013ab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Scott Fan,
 
-On Wed, 29 Jul 2015 23:04:31 +0200, Bernd Kuhls wrote:
-> libz is needed by libid3tag, fixes
-> http://autobuild.buildroot.net/results/85e/85e53f2b30f107f486be08549ce6df08953ea499/
-> 
-> libm is needed by libexif, changes
-> 
-> checking for exif_data_new_from_file in -lexif... no
-> checking for exif_data_new_from_file in -lexif... no
-> 
-> from the forementioned autobuilder config.log to
-> 
-> checking for exif_data_new_from_file in -lexif... yes
-> 
-> The pkgconfig file of libvorbis is called vorbis.pc, fix wrong naming. Also
-> we need to link against libsqlite3, so add that lib to the pkgconf call.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Tue, 28 Jul 2015 15:16:09 +0800, Scott Fan wrote:
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 > ---
->  package/minidlna/minidlna.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../5e953778a2aab04929a5e7b69f53dc26e39b079e.patch | 133 +++++++++++++++++++++
+>  configs/cubieboard2_defconfig                      |   1 +
+>  configs/cubieboard_defconfig                       |   1 +
+>  configs/cubietruck_defconfig                       |   1 +
+>  4 files changed, 136 insertions(+)
+>  create mode 100644 board/cubietech/cubieboard/5e953778a2aab04929a5e7b69f53dc26e39b079e.patch
 
-It's now too late for 2015.08. Therefore, could you engage the process
-of moving minidlna (and its dependencies to use pkg-config), in order
-to fix this properly? minidlna Git repository seems to be active, so
-there is a chance of getting such changes merged.
+Thanks for this patch. It is indeed the backport of an upstream kernel
+patch. But if we go down the road of backporting patches adding new
+features to the kernel for each platform, it's going to be a never
+ending story. You are interested by nameserver configuration in ip=,
+but the next Buildroot user will want this other backported patch. This
+is not manageable I believe.
 
-Thanks!
+So, I would suggest that you keep this backported patch in your
+project-specific customization. You can use BR2_GLOBAL_PATCH_DIR to
+point to a place outside of the Buildroot sources, and store your
+custom patches here.
+
+Consequently, I will mark your patch as "Rejected" in our patch
+tracking system.
+
+Thanks again!
 
 Thomas
 -- 
