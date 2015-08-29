@@ -1,39 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 15:26:02 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/tvheadend: Fix static build
-In-Reply-To: <20150829130656.GD4857@free.fr>
-References: <1440849333-27450-1-git-send-email-bernd.kuhls@t-online.de>
- <20150829130656.GD4857@free.fr>
-Message-ID: <20150829152602.76d984e0@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Aug 2015 15:36:32 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/tvheadend: needs dynamic
+	libraries
+Message-ID: <1440855392-3323-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Bernd,
+Fixes
+http://autobuild.buildroot.net/results/f1c/f1c40ac9dda5ceeb5665d021333058eb29828d62/
+http://autobuild.buildroot.net/results/bd0/bd0e8619df7cd8f21da96ae470691b1ebb2f156c/
+http://autobuild.buildroot.net/results/f1c/f1c40ac9dda5ceeb5665d021333058eb29828d62/
 
-On Sat, 29 Aug 2015 15:06:56 +0200, Yann E. MORIN wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v4: tvheadend depends on dladdr() and needs dynamic libraries (Thomas, Yann)
+v3: Changed patch to fix Makefile instead (Thomas)
+v2: Put everything in the if-static_libs-then clause (Jerzy)
 
-> > +The only trace of dladdr() can be found currently in src/trap.c in line
-> > +192, encapsulated in #if ENABLE_EXECINFO. The buildsystem does not
-> > +contain any trace of ENABLE_EXECINFO
-> 
-> Yes there is:
-> 
->     $ git grep -i execinfo
->     configure:check_cc_header execinfo
->     [...]
+ package/tvheadend/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Yes, I missed that one when looking for places where libdl was actually
-used. So libdl is not only used by capmt_ca.c, but also by tvheadend
-itself, when execinfo support is available.
-
-Maybe we should stop bike-shedding, and mark tvheadend as not available
-for static builds, no?
-
-Thomas
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 4edf014..aef5454 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -1,8 +1,10 @@
+-comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_TVHEADEND
+ 	bool "tvheadend"
++	depends on !BR2_STATIC_LIBS # dladdr()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	select BR2_PACKAGE_DTV_SCAN_TABLES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
