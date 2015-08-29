@@ -1,47 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 20:18:41 +0200
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 29 Aug 2015 20:36:26 +0200
 Subject: [Buildroot] [PATCH] package/libnspr: disable for musl toolchains
-In-Reply-To: <1440870131-17263-1-git-send-email-romain.naour@openwide.fr>
+In-Reply-To: <20150829201841.227bc47d@free-electrons.com>
 References: <1440870131-17263-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150829201841.227bc47d@free-electrons.com>
+ <20150829201841.227bc47d@free-electrons.com>
+Message-ID: <55E1FBAA.30306@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Hi Thomas,
 
-On Sat, 29 Aug 2015 19:42:11 +0200, Romain Naour wrote:
-> libnspr use getprotobyname_r() which is not available on musl.
+Le 29/08/2015 20:18, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> Also there is another error due to missing _PR_HAVE_GETHOSTBYNAME2 define:
-> prnetdb.c: In function ?PR_GetIPNodeByName?:
-> prnetdb.c:898:2: error: #error "Unknown name-to-address translation function"
->  #error "Unknown name-to-address translation function"
+> On Sat, 29 Aug 2015 19:42:11 +0200, Romain Naour wrote:
+>> libnspr use getprotobyname_r() which is not available on musl.
+>>
+>> Also there is another error due to missing _PR_HAVE_GETHOSTBYNAME2 define:
+>> prnetdb.c: In function ?PR_GetIPNodeByName?:
+>> prnetdb.c:898:2: error: #error "Unknown name-to-address translation function"
+>>  #error "Unknown name-to-address translation function"
+>>
+>> _PR_HAVE_GETHOSTBYNAME2 is only set in pr/include/md/_linux.h if __GLIBC__
+>> is defined.
+>>
+>> To conclude, libnspr is not ready for musl.
+>> Add reverse dependency on ecryptfs-utils and libnss.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/c75/c756f82dfc49611fa3f650d9cf2a71b59d23c3d0/
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > 
-> _PR_HAVE_GETHOSTBYNAME2 is only set in pr/include/md/_linux.h if __GLIBC__
-> is defined.
+> Could you instead give a try to
+> http://git.alpinelinux.org/cgit/aports/tree/main/nspr/fix-getproto.patch ?
 > 
-> To conclude, libnspr is not ready for musl.
-> Add reverse dependency on ecryptfs-utils and libnss.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c75/c756f82dfc49611fa3f650d9cf2a71b59d23c3d0/
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Generally speaking, for musl compatibility issues, always look at
+> http://git.alpinelinux.org/cgit/aports/tree/main/, it very often
+> contains interesting patches.
 
-Could you instead give a try to
-http://git.alpinelinux.org/cgit/aports/tree/main/nspr/fix-getproto.patch ?
+Ha! thanks.
+But for this case it's not enough...
 
-Generally speaking, for musl compatibility issues, always look at
-http://git.alpinelinux.org/cgit/aports/tree/main/, it very often
-contains interesting patches.
+prnetdb.c: In function ?PR_GetIPNodeByName?:
+prnetdb.c:895:2: error: #error "Unknown name-to-address translation function"
+ #error "Unknown name-to-address translation function"
 
-Thanks,
+But the packaging add some define :
+http://git.alpinelinux.org/cgit/aports/tree/main/nspr/APKBUILD#n40
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+# ./nspr/pr/include/md/_linux.h tests only __GLIBC__ version
+# to detect c-library features, list musl features here for now.
+CFLAGS="$CFLAGS -D_PR_POLL_AVAILABLE -D_PR_HAVE_OFF64_T -D_PR_INET6
+-D_PR_HAVE_INET_NTOP -D_PR_HAVE_GETHOSTBYNAME2 -D_PR_HAVE_GETADDRINFO
+-D_PR_INET6_PROBE
+
+It build fine if (at least) -D_PR_HAVE_GETHOSTBYNAME2 is added to CFLAGS.
+
+Best regards,
+Romain
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
