@@ -1,57 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Aug 2015 11:27:06 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.6.4
-Message-ID: <20150901083107.DA963801E3@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 12:44:06 +0200
+Subject: [Buildroot] [git commit] package/libg7221: new package
+Message-ID: <20150901083108.790C07F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afb8c5d80955b14bfb1713d5ad5cdf4d1e8ae6d4
+commit: http://git.buildroot.net/buildroot/commit/?id=2657024167e86b9694573e9518c5ef801c978e3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |    2 +-
- package/mesa3d/mesa3d.hash               |    4 ++--
- package/mesa3d/mesa3d.mk                 |    2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in            |    1 +
+ package/libg7221/Config.in   |    7 +++++++
+ package/libg7221/libg7221.mk |   16 ++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 77c6929..85666cc 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.6.3
-+MESA3D_HEADERS_VERSION = 10.6.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 459b7d6..453ee41 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-July/000165.html
--sha256	58592e07c350cd2e8969b73fa83048c657a39fe2f13f3b88f5e5818fe2e4676d	mesa-10.6.3.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000166.html
-+sha256	8f5ac103f0f503de2f7a985b0df349bd4ecdfe7f51c714be146fa5a9a3c07b77	mesa-10.6.4.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 67408a3..f2a1ffd 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.6.3
-+MESA3D_VERSION = 10.6.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/Config.in b/package/Config.in
+index 61b181c..eb4215d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -700,6 +700,7 @@ menu "Audio/Sound"
+ 	source "package/libcodec2/Config.in"
+ 	source "package/libcue/Config.in"
+ 	source "package/libcuefile/Config.in"
++	source "package/libg7221/Config.in"
+ 	source "package/libid3tag/Config.in"
+ 	source "package/liblo/Config.in"
+ 	source "package/libmad/Config.in"
+diff --git a/package/libg7221/Config.in b/package/libg7221/Config.in
+new file mode 100644
+index 0000000..e057d28
+--- /dev/null
++++ b/package/libg7221/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBG7221
++	bool "libg7221"
++	help
++	  libg722_1 is a library for the ITU G.722.1 and Annex C
++	  wideband speech codecs.
++
++	  http://www.soft-switch.org
+diff --git a/package/libg7221/libg7221.mk b/package/libg7221/libg7221.mk
+new file mode 100644
+index 0000000..813af11
+--- /dev/null
++++ b/package/libg7221/libg7221.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libg7221
++#
++################################################################################
++
++LIBG7221_VERSION = dbfc29d4806ecdace50379a2f4d68a992a6fec34
++# we use the FreeSwitch fork because it contains pkgconf support
++LIBG7221_SITE = https://freeswitch.org/stash/scm/sd/libg7221.git
++LIBG7221_SITE_METHOD = git
++LIBG7221_LICENSE = Polycom
++LIBG7221_LICENSE_FILES = COPYING
++LIBG7221_AUTORECONF = YES
++LIBG7221_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
