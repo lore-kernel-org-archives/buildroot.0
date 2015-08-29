@@ -1,69 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Aug 2015 11:28:25 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-waveforhue:
-	bump version
-Message-ID: <20150901083107.F2ABD801E3@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 12:53:16 +0200
+Subject: [Buildroot] [git commit] package/libilbc: new package
+Message-ID: <20150901083108.80F4D7F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52269572124c36054fa397dc47420b4177a71938
+commit: http://git.buildroot.net/buildroot/commit/?id=838af7ac04d60c5deb4c91401a6c69fa1165c6e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also remove patch applied upstream:
-https://github.com/notspiff/visualization.waveforhue/commit/8824f4fa384693da0dfb3df5c30992bfe0fee9a4
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-Adapt-xbmc_vis_dll.h-header-path.patch    |   26 --------------------
- .../kodi-visualisation-waveforhue.mk               |    2 +-
- 2 files changed, 1 insertions(+), 27 deletions(-)
+ package/Config.in          |    1 +
+ package/libilbc/Config.in  |    7 +++++++
+ package/libilbc/libilbc.mk |   15 +++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch b/package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch
-deleted file mode 100644
-index baa69b4..0000000
---- a/package/kodi-visualisation-waveforhue/0001-Adapt-xbmc_vis_dll.h-header-path.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From d80b2dfeab475b066004d831c0d28c0dab064ca6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 30 Jul 2015 10:24:53 +0200
--Subject: [PATCH] Adapt xbmc_vis_dll.h header path
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- src/Main_gles.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Main_gles.cpp b/src/Main_gles.cpp
--index 3c22bf8..f5666e9 100644
----- a/src/Main_gles.cpp
--+++ b/src/Main_gles.cpp
--@@ -38,7 +38,7 @@
-- #include <GLES2/gl2ext.h>
-- #endif
-- 
---#include "addons/include/xbmc_vis_dll.h"
--+#include "kodi/xbmc_vis_dll.h"
-- #include "VisGUIShader.h"
-- 
-- //th
---- 
--2.5.0
--
-diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-index 5599065..28eeb4d 100644
---- a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-+++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_WAVEFORHUE_VERSION = 330b5d0432a976993d8ea3e13f01ec9bd3d8b02e
-+KODI_VISUALISATION_WAVEFORHUE_VERSION = e87d5c7d7e7504036b80af8bc89f4cf6489085fe
- KODI_VISUALISATION_WAVEFORHUE_SITE = $(call github,notspiff,visualization.waveforhue,$(KODI_VISUALISATION_WAVEFORHUE_VERSION))
- KODI_VISUALISATION_WAVEFORHUE_LICENSE = GPLv2+
- KODI_VISUALISATION_WAVEFORHUE_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index eb4215d..d9dfb34 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -702,6 +702,7 @@ menu "Audio/Sound"
+ 	source "package/libcuefile/Config.in"
+ 	source "package/libg7221/Config.in"
+ 	source "package/libid3tag/Config.in"
++	source "package/libilbc/Config.in"
+ 	source "package/liblo/Config.in"
+ 	source "package/libmad/Config.in"
+ 	source "package/libmodplug/Config.in"
+diff --git a/package/libilbc/Config.in b/package/libilbc/Config.in
+new file mode 100644
+index 0000000..89d5db2
+--- /dev/null
++++ b/package/libilbc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBILBC
++	bool "libilbc"
++	help
++	  iLBC (internet Low Bitrate Codec) is a FREE speech codec
++	  suitable for robust voice communication over IP.
++
++	  http://www.webrtc.org/license-rights/ilbc-freeware
+diff --git a/package/libilbc/libilbc.mk b/package/libilbc/libilbc.mk
+new file mode 100644
+index 0000000..06d94eb
+--- /dev/null
++++ b/package/libilbc/libilbc.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libilbc
++#
++################################################################################
++
++LIBILBC_VERSION = 829b08c7902ceb87a261279fabb36b6d523c6e07
++LIBILBC_SITE = https://freeswitch.org/stash/scm/sd/libilbc.git
++LIBILBC_SITE_METHOD = git
++LIBILBC_LICENSE = Global IP Sound iLBC Public License v2.0
++LIBILBC_LICENSE_FILES = gips_iLBClicense.pdf
++LIBILBC_AUTORECONF = YES
++LIBILBC_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
