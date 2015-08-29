@@ -1,60 +1,102 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat, 29 Aug 2015 18:28:41 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix Image name not configurable (issue
- #28).
-In-Reply-To: <20150829115935.GC4857@free.fr>
-References: <1440842823-1283-1-git-send-email-mc5686@mclink.it>
- <1440845031-3965-1-git-send-email-mc5686@mclink.it>
- <1440845031-3965-2-git-send-email-mc5686@mclink.it>
- <20150829115935.GC4857@free.fr>
-Message-ID: <55E1DDB9.6040101@mclink.it>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 29 Aug 2015 19:42:11 +0200
+Subject: [Buildroot] [PATCH] package/libnspr: disable for musl toolchains
+Message-ID: <1440870131-17263-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+libnspr use getprotobyname_r() which is not available on musl.
 
-After the previous discussion on IRC I came up with this very different patch which does not touch the upstream package at all (even though I still think allowing user to chose isn't evil).
-Before I try to submit it I would like a comment.
-The aim is to force the booted image name according to requested kernel target if (and only if) user contextually requests the image to be installed.
-Obvious downside is user has no feedback of the change (and I don't know how to provide this feedback).
-Would this be more acceptable?
+Also there is another error due to missing _PR_HAVE_GETHOSTBYNAME2 define:
+prnetdb.c: In function ?PR_GetIPNodeByName?:
+prnetdb.c:898:2: error: #error "Unknown name-to-address translation function"
+ #error "Unknown name-to-address translation function"
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index fa67ea6..ccb5e95 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -40,6 +40,23 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
-         cp $(@D)/binaries/*.bin $(BINARIES_DIR)
-  endef
-+ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
-+define AT91BOOTSTRAP3_KCONFIG_FIXUP_CMDS
-+       $(if $(BR2_LINUX_KERNEL_UIMAGE),
-+               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
-+       $(if $(BR2_LINUX_KERNEL_APPENDED_UIMAGE),
-+               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
-+       $(if $(BR2_LINUX_KERNEL_ZIMAGE),
-+               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
-+       $(if $(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),
-+               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
-+       $(if $(BR2_LINUX_KERNEL_VMLINUX),
-+               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"vmlinux",$(@D)/.config))
-+       $(if $(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),
-+               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,$(BR2_LINUX_KERNEL_IMAGE_NAME),$(@D)/.config))
-+endef
-+endif
-+
-  ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_DEFCONFIG),y)
-  AT91BOOTSTRAP3_SOURCE_CONFIG = $(AT91BOOTSTRAP3_DIR)/board/*/$(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG))_defconfig
-  else ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
+_PR_HAVE_GETHOSTBYNAME2 is only set in pr/include/md/_linux.h if __GLIBC__
+is defined.
 
+To conclude, libnspr is not ready for musl.
+Add reverse dependency on ecryptfs-utils and libnss.
 
-Il 29/08/2015 13:59, Yann E. MORIN ha scritto:
-> ...
-> I'm marking this patch as rejected in Patchwork. Regards, Yann E. MORIN.
-understood.
+Fixes:
+http://autobuild.buildroot.net/results/c75/c756f82dfc49611fa3f650d9cf2a71b59d23c3d0/
 
-Regards
-Mauro
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/ecryptfs-utils/Config.in | 5 +++--
+ package/libnspr/Config.in        | 5 +++--
+ package/libnss/Config.in         | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index cb70e00..6c7ccbd 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+ 	depends on !BR2_STATIC_LIBS # libnss, keyutils
++	depends on !BR2_TOOLCHAIN_USES_MUSL # libnss -> libnspr
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+@@ -29,9 +30,9 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 
+ 	  http://ecryptfs.org
+ 
+-comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynamic library"
++comment "ecryptfs-utils needs a uClibc or (e)glibc toolchain w/ threads, wchar, dynamic library"
+ 	depends on !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index ba1ea55..7f5b63c 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_LIBNSPR
+ 	bool "libnspr"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  NSPR is the Netscape Portable Runtime library which provides
+ 	  a platform-neutral API for system level and libc like
+@@ -16,7 +17,7 @@ config BR2_PACKAGE_LIBNSPR
+ 
+ 	  http://www.mozilla.org/projects/nspr/
+ 
+-comment "libnspr needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++comment "libnspr needs a uClibc or (e)glibc toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ endif
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index f07bb04..e056fe1 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # libnspr
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_LIBNSS
+ 
+ 	  http://www.mozilla.org/projects/security/pki/nss/
+ 
+-comment "libnss needs a toolchain w/ threads, dynamic library"
++comment "libnss needs a uClibc or (e)glibc toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+-- 
+2.4.3
