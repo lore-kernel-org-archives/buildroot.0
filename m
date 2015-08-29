@@ -1,53 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 12:42:18 +0200
-Subject: [Buildroot] [PATCH/next 05/10] package/libcodec2: new package
-In-Reply-To: <1439317015-8031-6-git-send-email-bernd.kuhls@t-online.de>
-References: <1439317015-8031-1-git-send-email-bernd.kuhls@t-online.de>
- <1439317015-8031-6-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150829124218.7059b957@free-electrons.com>
+Date: Sat, 29 Aug 2015 12:43:17 +0200
+Subject: [Buildroot] [git commit] package/setools: needs wchar
+Message-ID: <20150829104324.45DC981D8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=82c40a83e9f5376c2db117f632e85e98e623b131
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 11 Aug 2015 20:16:50 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/Config.in                             |  1 +
->  package/libcodec2/0001-cross.patch            | 44 +++++++++++++++++++++++++++
->  package/libcodec2/0002-disable-unittest.patch | 13 ++++++++
->  package/libcodec2/Config.in                   |  7 +++++
->  package/libcodec2/libcodec2.mk                | 23 ++++++++++++++
->  5 files changed, 88 insertions(+)
->  create mode 100644 package/libcodec2/0001-cross.patch
->  create mode 100644 package/libcodec2/0002-disable-unittest.patch
->  create mode 100644 package/libcodec2/Config.in
->  create mode 100644 package/libcodec2/libcodec2.mk
+Even though setools itself does not require wide chars, the configure
+script needs them when testing for C99 support.
 
-The two patches you added were not written in a way that makes them
-upstreamable. Since upstream seems to be active, this is a little bit
-sad.
+Since:
+  - it is not clear whether wchar are mandatory for C99 or not,
+  - only uClibc may miss support for wide chars,
+  - using SELinux would probably involve rather big systems (i.e. glibc
+    would not be such a huge overhead),
+just make setools depend on the toolchain having widechar.
 
-So, I've replaced them by patches that can actually be upstream:
+Fixes:
+    http://autobuild.buildroot.org/results/051/051a7f72ebadd56407700c22b57e942f08eb1c09/
+    http://autobuild.buildroot.org/results/a4b/a4b2a6f1920430af43c23239de17200e70951b3b/
+    ...
 
- * For generate_cookbook, I've added a patch that integrates the
-   AX_CC_FOR_BUILD Autoconf macro from the GNU Autoconf Archive, and
-   use that to build generate_cookbook.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/setools/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
- * For the unit tests, I've simply added a --enable/--disable option.
-
-Could you take care of pushing the patches upstream? Another patch that
-would be useful to push upstream is a patch to pass the subdir-objects
-automake option, which would avoid a huge amount of warning when
-autoreconfiguring the package.
-
-I've applied your patch with those changes, to the next branch. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/setools/Config.in b/package/setools/Config.in
+index 046957f..7bab789 100644
+--- a/package/setools/Config.in
++++ b/package/setools/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_SETOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
+ 	# bfin: infamous _ symbol prefix issue
+ 	# nios2: triggers some toolchain issue "No symbol version
+ 	# section for versioned symbol"
+@@ -25,7 +26,7 @@ config BR2_PACKAGE_SETOOLS
+ 	   * secmds - command-line tools to analyze and search SELinux
+ 	     policy.
+ 
+-comment "setools needs a toolchain w/ threads, C++, dynamic library"
++comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+-		|| !BR2_INSTALL_LIBSTDCPP
++		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_nios2 && !BR2_bfin && !BR2_arc
