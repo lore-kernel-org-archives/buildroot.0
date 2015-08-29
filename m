@@ -1,56 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 16:46:58 +0200
-Subject: [Buildroot] [PATCH 1/1] ibrcommon: new package
-In-Reply-To: <1439037734-10302-1-git-send-email-tom_a_sparks@yahoo.com.au>
-References: <1439037734-10302-1-git-send-email-tom_a_sparks@yahoo.com.au>
-Message-ID: <20150829164658.32312d79@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Aug 2015 16:54:41 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 10.6.5
+Message-ID: <1440860081-22344-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tom Sparks,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-On Sat,  8 Aug 2015 22:42:14 +1000, Tom Sparks wrote:
-> Signed-off-by: Tom Sparks <tom_a_sparks@yahoo.com.au>
-> ---
->  package/ibrcommon/Config.in    | 17 +++++++++++++++++
->  package/ibrcommon/ibrcommon.mk | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 47 insertions(+)
->  create mode 100644 package/ibrcommon/Config.in
->  create mode 100644 package/ibrcommon/ibrcommon.mk
-
-Thanks for your contribution! I applied your patch to the next branch
-(so this patch will be part of the 2015.11 release in november, but
-not of the upcoming 2015.08 release).
-
-However, I had to do quite a few changes compared to your submission:
-
-    [Thomas:
-      - add package in package/Config.in, to make it visible in menuconfig
-      - make the openssl, libnl and libxml2 dependencies optional, since
-        they are definitely not mandatory
-      - add README to the license files, since it contains useful
-        licensing related information.
-      - remove custom INSTALL_STAGING_OPTS and INSTALL_TARGET_OPTS since
-        the package uses automake.
-      - add missing final newline in Config.in and .mk file.]
-
-You can look at the final commit at:
-
-  http://git.buildroot.net/buildroot/commit/?h=next&id=d45e6bf09d0413742457b371762b09e69cf22829
-
-and compare it to your original submission, to see the changes that
-have been made. The most important issues were: 1/ that
-package/ibrcommon/Config.in was not included in package/Config.in and
-2/ that the openssl, libxml2 and libnl dependencies were optional not
-mandatory.
-
-Thanks!
-
-Thomas
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 85666cc..6092693 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 10.6.4
++MESA3D_HEADERS_VERSION = 10.6.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 453ee41..3b8bb62 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000166.html
+-sha256	8f5ac103f0f503de2f7a985b0df349bd4ecdfe7f51c714be146fa5a9a3c07b77	mesa-10.6.4.tar.xz
++# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000167.html
++sha256	fb6fac3c85bcfa9d06b8dd439169f23f0c0924a88e44362e738b99b1feff762f	mesa-10.6.5.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f2a1ffd..d39ef68 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 10.6.4
++MESA3D_VERSION = 10.6.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
