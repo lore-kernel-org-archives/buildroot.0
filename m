@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Aug 2015 22:43:43 +0200
-Subject: [Buildroot] [git commit] mtd: drop unconditional non LFS build
-Message-ID: <20150901083107.392D87F95A@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 11:40:39 +0200
+Subject: [Buildroot] [git commit] eigen: use mercurial tag
+Message-ID: <20150901083108.44C68800E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81cfbee3410e236a3e6c7a64c9bfbed821706482
+commit: http://git.buildroot.net/buildroot/commit/?id=14fc30a8a163ae41a4d8d502a188ef3fad3182a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot removed non LFS support in the 2015.05 release. We now pass
--D_FILE_OFFSET_BITS=64 unconditionally, so the mtd WITHOUT_LARGEFILE make
-variable has no effect.
+Now that our Mercurial download mechanism has been fixed to also
+support tags, let's use this possibility in the eigen package.
 
-[Thomas: keep using += for other assigments of MTD_MAKE_OPTS.]
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mtd/mtd.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/eigen/eigen.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index edf6e08..42a8c1d 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -24,8 +24,6 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- MTD_DEPENDENCIES += busybox
- endif
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 0153303..dd88fde 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
  
--MTD_MAKE_OPTS = WITHOUT_LARGEFILE=1
--
- # If extended attributes are required, the acl package must
- # also be enabled which will also include the attr package.
- ifeq ($(BR2_PACKAGE_ACL),y)
+-# version 3.2.5
+-EIGEN_VERSION = 175a47a35f0c
++EIGEN_VERSION = 3.2.5
+ EIGEN_SITE = https://bitbucket.org/eigen/eigen
+ EIGEN_SITE_METHOD = hg
+ EIGEN_LICENSE = MPL2, BSD-3c, LGPLv2.1
