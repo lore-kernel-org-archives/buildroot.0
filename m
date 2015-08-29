@@ -1,33 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 12:54:13 +0200
-Subject: [Buildroot] [PATCH/next 07/10] package/libilbc: new package
-In-Reply-To: <1439317015-8031-8-git-send-email-bernd.kuhls@t-online.de>
-References: <1439317015-8031-1-git-send-email-bernd.kuhls@t-online.de>
- <1439317015-8031-8-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150829125413.32529484@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2015 13:44:37 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix umask settings for non-bash shells
+	for root user
+In-Reply-To: <55E18457.3080302@mind.be> (Arnout Vandecappelle's message of
+ "Sat, 29 Aug 2015 12:07:19 +0200")
+References: <1434378026-15007-1-git-send-email-vorel@jablocom.com>
+ <20150829105707.3d5e0fec@free-electrons.com>
+ <20150829092037.GA4857@free.fr> <55E18457.3080302@mind.be>
+Message-ID: <87bndquxne.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Tue, 11 Aug 2015 20:16:52 +0200, Bernd Kuhls wrote:
+ >> My opinion? Here's what I'd do ;-)
+ >> 
+ >> git rm system/skeleton/root/.bash_*
 
-> +LIBILBC_VERSION = 829b08c7902ceb87a261279fabb36b6d523c6e07
-> +LIBILBC_SITE = https://freeswitch.org/stash/scm/sd/libilbc.git
-> +LIBILBC_SITE_METHOD = git
-> +LIBILBC_LICENSE = Global IP Sound iLBC Public License, v2.0
+ >  +1
 
-"," is the separator between different licenses applying to the same
-package. So I've removed this "," and applied your patch to the next
-branch.
+ >  Even when bash is the default shell, none of these are needed IMHO.
 
-Thanks!
++1 from here as well (for 2015.11).
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
