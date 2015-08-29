@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 11:36:07 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix umask settings for non-bash shells
- for root user
-In-Reply-To: <20150829093317.GB4857@free.fr>
-References: <1434378026-15007-1-git-send-email-vorel@jablocom.com>
- <20150829105707.3d5e0fec@free-electrons.com>
- <20150829092037.GA4857@free.fr>
- <20150829112955.3a6b8d77@free-electrons.com>
- <20150829093317.GB4857@free.fr>
-Message-ID: <20150829113607.53818ac4@free-electrons.com>
+Date: Sat, 29 Aug 2015 11:38:00 +0200
+Subject: [Buildroot] [git commit branch/next] support/download: fix the Hg
+	backend for tags
+Message-ID: <20150829094111.3F66F81D8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=697e2b7d948a8a12fd4c08e0beeb9264774ea5fd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 29 Aug 2015 11:33:17 +0200, Yann E. MORIN wrote:
+When the version of a package is a Mercurial tag, the download fails,
+with:
+    abort: unknown revision 'X.Y.Z'!
 
-> > > And maybe provide a simple .profile *iff* needed.
-> > 
-> > Can you check if a .profile is really needed? If so, can you submit a
-> > patch series cleaning up .bash_* ?
-> 
-> After the release, maybe?
+This is because, in Mercurial, tags are commits like the others, and
+when we clone, we actively request a tag. But then, the server
+"dereferences" that tag and sends us the revision pointed to by that
+tag. Of course, since the tag is a commit after the revision we got,
+we do not have the revision adding the tag.
 
-Absolutely, this is post 2015.08 stuff.
+So, we just have to download the full repository to be sure we have
+the tags in our local clone.
 
-> > Why? Git doesn't track empty directories, so we have those .empty files
-> > all over the place. I don't see what would recreate the root/ directory
-> > for the root user if we don't keep it in the skeleton. Am I missing
-> > something?
-> 
-> Right. I was thinking of keeping a .profile in that directory. If there
-> is a .profile, there is no need for .empty . If there is no .profile
-> (and no other file), we need to keep .empty , yes.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/hg |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Ah, ok, I see. We're on the same line then. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/download/hg b/support/download/hg
+index d6654a1..ac1e9b9 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -25,7 +25,7 @@ repo="${2}"
+ cset="${3}"
+ basename="${4}"
+ 
+-${HG} clone ${verbose} --noupdate --rev "${cset}" "${repo}" "${basename}"
++${HG} clone ${verbose} --noupdate "${repo}" "${basename}"
+ 
+ ${HG} archive ${verbose} --repository "${basename}" --type tgz \
+               --prefix "${basename}" --rev "${cset}" \
