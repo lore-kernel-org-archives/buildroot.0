@@ -1,106 +1,99 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 29 Aug 2015 09:57:33 +0200
-Subject: [Buildroot] [PATCHv2 1/2] toolchain: add sparc64 architecture
-	support
-Message-ID: <20150829075733.GA19454@waldemar-brodkorb.de>
+Date: Sat, 29 Aug 2015 09:59:06 +0200
+Subject: [Buildroot] [PATCHv2 2/2] qemu: add new board support for
+	qemu-system-sparc64
+Message-ID: <20150829075906.GA19935@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce sparc64 architecture to buildroot.
+SPARC64 builds can be tested with Qemu.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
  - Changes v1 -> v2:
-   only allow useful architecture variants suggested by Thomas Petazzoni 
+   remove unused variable suggested by Thomas Petazzoni
 ---
- arch/Config.in                          |   12 +++++++++++-
- arch/Config.in.sparc                    |   12 ++++++++++--
- toolchain/toolchain-buildroot/Config.in |    3 ++-
- 3 files changed, 23 insertions(+), 4 deletions(-)
+ board/qemu/sparc64-sun4u/linux-4.1.config |   27 +++++++++++++++++++++++++++
+ board/qemu/sparc64-sun4u/readme.txt       |    7 +++++++
+ configs/qemu_sparc64_sun4u_defconfig      |   19 +++++++++++++++++++
+ 3 files changed, 53 insertions(+)
+ create mode 100644 board/qemu/sparc64-sun4u/linux-4.1.config
+ create mode 100644 board/qemu/sparc64-sun4u/readme.txt
+ create mode 100644 configs/qemu_sparc64_sun4u_defconfig
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 875f412..4cdd54e 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -217,6 +217,16 @@ config BR2_sparc
- 	  http://www.oracle.com/sun
- 	  http://en.wikipedia.org/wiki/Sparc
- 
-+config BR2_sparc64
-+	bool "SPARC64"
-+	select BR2_ARCH_IS_64
-+	select BR2_ARCH_HAS_MMU_MANDATORY
-+	help
-+	  SPARC (from Scalable Processor Architecture) is a RISC instruction
-+	  set architecture (ISA) developed by Sun Microsystems.
-+	  http://www.oracle.com/sun
-+	  http://en.wikipedia.org/wiki/Sparc
+diff --git a/board/qemu/sparc64-sun4u/linux-4.1.config b/board/qemu/sparc64-sun4u/linux-4.1.config
+new file mode 100644
+index 0000000..2b282f9
+--- /dev/null
++++ b/board/qemu/sparc64-sun4u/linux-4.1.config
+@@ -0,0 +1,27 @@
++# CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_EMBEDDED=y
++CONFIG_MODULES=y
++CONFIG_PCI=y
++CONFIG_SUN_OPENPROMFS=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_ATA=y
++CONFIG_PATA_CMD64X=y
++CONFIG_NETDEVICES=y
++CONFIG_NE2K_PCI=y
++CONFIG_SERIAL_SUNSU=y
++CONFIG_SERIAL_SUNSU_CONSOLE=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_USE_FOR_EXT23=y 
++CONFIG_TMPFS=y
++CONFIG_NLS=y
++CONFIG_NLS_DEFAULT="utf-8"
++CONFIG_MAGIC_SYSRQ=y
+diff --git a/board/qemu/sparc64-sun4u/readme.txt b/board/qemu/sparc64-sun4u/readme.txt
+new file mode 100644
+index 0000000..90d1edc
+--- /dev/null
++++ b/board/qemu/sparc64-sun4u/readme.txt
+@@ -0,0 +1,7 @@
++Run the emulation with:
 +
- config BR2_x86_64
- 	bool "x86_64"
- 	select BR2_ARCH_IS_64
-@@ -388,7 +398,7 @@ if BR2_sh || BR2_sh64
- source "arch/Config.in.sh"
- endif
- 
--if BR2_sparc
-+if BR2_sparc || BR2_sparc64
- source "arch/Config.in.sparc"
- endif
- 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index cc10e8d..307540f 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -1,18 +1,25 @@
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_sparc
--	default BR2_sparc_v8
-+	depends on BR2_sparc || BR2_sparc64
-+	default BR2_sparc_v8 if BR2_sparc
-+	default BR2_sparc_v9 if BR2_sparc64
- 	help
- 	  Specific CPU variant to use
- 
- config BR2_sparc_v8
- 	bool "v8"
-+	depends on BR2_sparc
- config BR2_sparc_leon3
- 	bool "leon3"
-+	depends on BR2_sparc
-+config BR2_sparc_v9
-+	bool "v9"
-+	depends on BR2_sparc64
- endchoice
- 
- config BR2_ARCH
- 	default "sparc"	if BR2_sparc
-+	default "sparc64" if BR2_sparc64
- 
- config BR2_ENDIAN
- 	default "BIG"
-@@ -20,3 +27,4 @@ config BR2_ENDIAN
- config BR2_GCC_TARGET_CPU
- 	default "leon3"		if BR2_sparc_leon3
- 	default "v8"		if BR2_sparc_v8
-+	default "ultrasparc"	if BR2_sparc_v9
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 13e2b15..56c01c8 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -67,7 +67,8 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
- 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
- 		   BR2_sh          || BR2_sh64       || BR2_sparc   || \
--		   BR2_x86_64      || BR2_microblaze || BR2_nios2
-+		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze || \
-+		   BR2_nios2
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on !BR2_powerpc_SPE
++  qemu-system-sparc64 -M sun4u -kernel output/images/vmlinux -append "root=/dev/sda console=ttyS0,115200" -serial stdio output/images/rootfs.ext2
++
++The login prompt will appear in the terminal that started Qemu.
++
++Tested with QEMU 2.3.0
+diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
+new file mode 100644
+index 0000000..0bb4b3e
+--- /dev/null
++++ b/configs/qemu_sparc64_sun4u_defconfig
+@@ -0,0 +1,19 @@
++# Architecture
++BR2_sparc64=y
++BR2_sparc_v9=y
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Lock to 4.1 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="4.1"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++
++# Linux kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux-4.1.config"
 -- 
 1.7.10.4
