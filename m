@@ -1,54 +1,68 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat, 29 Aug 2015 12:43:51 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix Image name not configurable (issue #28).
-In-Reply-To: <1440845031-3965-1-git-send-email-mc5686@mclink.it>
-References: <1440842823-1283-1-git-send-email-mc5686@mclink.it>
- <1440845031-3965-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1440845031-3965-2-git-send-email-mc5686@mclink.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Aug 2015 12:44:06 +0200
+Subject: [Buildroot] [git commit branch/next] package/libg7221: new package
+Message-ID: <20150829104525.354F08177A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- ...age-name-not-appearing-in-make-menuconfig.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 boot/at91bootstrap3/0001-fix-Image-name-not-appearing-in-make-menuconfig.patch
+commit: http://git.buildroot.net/buildroot/commit/?id=2657024167e86b9694573e9518c5ef801c978e3d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/boot/at91bootstrap3/0001-fix-Image-name-not-appearing-in-make-menuconfig.patch b/boot/at91bootstrap3/0001-fix-Image-name-not-appearing-in-make-menuconfig.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in            |    1 +
+ package/libg7221/Config.in   |    7 +++++++
+ package/libg7221/libg7221.mk |   16 ++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index 61b181c..eb4215d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -700,6 +700,7 @@ menu "Audio/Sound"
+ 	source "package/libcodec2/Config.in"
+ 	source "package/libcue/Config.in"
+ 	source "package/libcuefile/Config.in"
++	source "package/libg7221/Config.in"
+ 	source "package/libid3tag/Config.in"
+ 	source "package/liblo/Config.in"
+ 	source "package/libmad/Config.in"
+diff --git a/package/libg7221/Config.in b/package/libg7221/Config.in
 new file mode 100644
-index 0000000..cf72b16
+index 0000000..e057d28
 --- /dev/null
-+++ b/boot/at91bootstrap3/0001-fix-Image-name-not-appearing-in-make-menuconfig.patch
-@@ -0,0 +1,27 @@
-+From d2a65fce095242f28f263bbaba373516b6b4db43 Mon Sep 17 00:00:00 2001
-+From: Mauro Condarelli <mc5686@mclink.it>
-+Date: Sat, 29 Aug 2015 11:49:26 +0200
-+Subject: [PATCH] trivial patch to fix Image name not appearing in 'make
-+ manuconfig' (fixes issue #28).
++++ b/package/libg7221/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBG7221
++	bool "libg7221"
++	help
++	  libg722_1 is a library for the ITU G.722.1 and Annex C
++	  wideband speech codecs.
 +
-+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-+---
-+ Config.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++	  http://www.soft-switch.org
+diff --git a/package/libg7221/libg7221.mk b/package/libg7221/libg7221.mk
+new file mode 100644
+index 0000000..813af11
+--- /dev/null
++++ b/package/libg7221/libg7221.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libg7221
++#
++################################################################################
 +
-+diff --git a/Config.in b/Config.in
-+index 432df26..714b05d 100644
-+--- a/Config.in
-++++ b/Config.in
-+@@ -81,7 +81,7 @@ source "Config.in.u-boot"
-+ source "Config.in.app-image"
-+ 
-+ config CONFIG_IMAGE_NAME
-+-	string
-++	string "Image name"
-+ 	default "Image" if CONFIG_LINUX_IMAGE
-+ 	default "u-boot.bin" if CONFIG_LOAD_UBOOT
-+ 	default "softpack.bin" if CONFIG_LOAD_64KB || CONFIG_LOAD_4MB || CONFIG_LOAD_1MB
-+-- 
-+2.1.4
++LIBG7221_VERSION = dbfc29d4806ecdace50379a2f4d68a992a6fec34
++# we use the FreeSwitch fork because it contains pkgconf support
++LIBG7221_SITE = https://freeswitch.org/stash/scm/sd/libg7221.git
++LIBG7221_SITE_METHOD = git
++LIBG7221_LICENSE = Polycom
++LIBG7221_LICENSE_FILES = COPYING
++LIBG7221_AUTORECONF = YES
++LIBG7221_INSTALL_STAGING = YES
 +
--- 
-2.1.4
++$(eval $(autotools-package))
