@@ -1,70 +1,34 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 29 Aug 2015 20:36:26 +0200
-Subject: [Buildroot] [PATCH] package/libnspr: disable for musl toolchains
-In-Reply-To: <20150829201841.227bc47d@free-electrons.com>
-References: <1440870131-17263-1-git-send-email-romain.naour@openwide.fr>
- <20150829201841.227bc47d@free-electrons.com>
-Message-ID: <55E1FBAA.30306@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Aug 2015 20:42:31 +0200
+Subject: [Buildroot] [git commit branch/next] ibrcommon: add missing
+	dependency on host-pkgconf
+Message-ID: <20150829184540.DC1B681DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=e4f6046f7a2932aa746c705d2b3d3d4745f5b061
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le 29/08/2015 20:18, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
-> 
-> On Sat, 29 Aug 2015 19:42:11 +0200, Romain Naour wrote:
->> libnspr use getprotobyname_r() which is not available on musl.
->>
->> Also there is another error due to missing _PR_HAVE_GETHOSTBYNAME2 define:
->> prnetdb.c: In function ?PR_GetIPNodeByName?:
->> prnetdb.c:898:2: error: #error "Unknown name-to-address translation function"
->>  #error "Unknown name-to-address translation function"
->>
->> _PR_HAVE_GETHOSTBYNAME2 is only set in pr/include/md/_linux.h if __GLIBC__
->> is defined.
->>
->> To conclude, libnspr is not ready for musl.
->> Add reverse dependency on ecryptfs-utils and libnss.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/c75/c756f82dfc49611fa3f650d9cf2a71b59d23c3d0/
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> 
-> Could you instead give a try to
-> http://git.alpinelinux.org/cgit/aports/tree/main/nspr/fix-getproto.patch ?
-> 
-> Generally speaking, for musl compatibility issues, always look at
-> http://git.alpinelinux.org/cgit/aports/tree/main/, it very often
-> contains interesting patches.
+pkg-config is used by ibrcommon to detect the availability of openssl,
+libnl and libxml2, so we must depend on host-pkgconf.
 
-Ha! thanks.
-But for this case it's not enough...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ibrcommon/ibrcommon.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-prnetdb.c: In function ?PR_GetIPNodeByName?:
-prnetdb.c:895:2: error: #error "Unknown name-to-address translation function"
- #error "Unknown name-to-address translation function"
-
-But the packaging add some define :
-http://git.alpinelinux.org/cgit/aports/tree/main/nspr/APKBUILD#n40
-
-# ./nspr/pr/include/md/_linux.h tests only __GLIBC__ version
-# to detect c-library features, list musl features here for now.
-CFLAGS="$CFLAGS -D_PR_POLL_AVAILABLE -D_PR_HAVE_OFF64_T -D_PR_INET6
--D_PR_HAVE_INET_NTOP -D_PR_HAVE_GETHOSTBYNAME2 -D_PR_HAVE_GETADDRINFO
--D_PR_INET6_PROBE
-
-It build fine if (at least) -D_PR_HAVE_GETHOSTBYNAME2 is added to CFLAGS.
-
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
+diff --git a/package/ibrcommon/ibrcommon.mk b/package/ibrcommon/ibrcommon.mk
+index 282bfb0..97eced3 100644
+--- a/package/ibrcommon/ibrcommon.mk
++++ b/package/ibrcommon/ibrcommon.mk
+@@ -10,6 +10,7 @@ IBRCOMMON_SITE = https://www.ibr.cs.tu-bs.de/projects/ibr-dtn/releases/
+ IBRCOMMON_INSTALL_STAGING = YES
+ IBRCOMMON_LICENSE = Apache-2.0
+ IBRCOMMON_LICENSE_FILES = COPYING README
++IBRCOMMON_DEPENDENCIES = host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ IBRCOMMON_DEPENDENCIES += openssl
