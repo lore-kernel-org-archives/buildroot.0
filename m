@@ -1,35 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 11:40:39 +0200
-Subject: [Buildroot] [git commit branch/next] eigen: use mercurial tag
-Message-ID: <20150829094111.4CBCF801E4@busybox.osuosl.org>
+Date: Sat, 29 Aug 2015 11:45:16 +0200
+Subject: [Buildroot] [PATCH] support/downlaod: fix the Hg backend for
+ tags
+In-Reply-To: <1439933704-7451-1-git-send-email-yann.morin.1998@free.fr>
+References: <1439933704-7451-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150829114516.24a5b19e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14fc30a8a163ae41a4d8d502a188ef3fad3182a1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Yann E. MORIN,
 
-Now that our Mercurial download mechanism has been fixed to also
-support tags, let's use this possibility in the eigen package.
+On Tue, 18 Aug 2015 23:35:04 +0200, Yann E. MORIN wrote:
+> When the version of a package is a Mercurial tag, the download fails,
+> with:
+>     abort: unknown revision 'X.Y.Z'!
+> 
+> This is because, in Mercurial, tags are commits like the others, and
+> when we clone, we actively request a tag. But then, the server
+> "dereferences" that tag and sends us the revision pointed to by that
+> tag. Of course, since the tag is a commit after the revision we got,
+> we do not have the revision adding the tag.
+> 
+> So, we just have to download the full repository to be sure we have
+> the tags in our local clone.
+> 
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  support/download/hg | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/eigen/eigen.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+Applied to next, thanks (after fixing the minor typo in the commit
+title). I've also committed a follow-up patch that makes the eigen
+package use a Mercurial tag.
 
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 0153303..dd88fde 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
- 
--# version 3.2.5
--EIGEN_VERSION = 175a47a35f0c
-+EIGEN_VERSION = 3.2.5
- EIGEN_SITE = https://bitbucket.org/eigen/eigen
- EIGEN_SITE_METHOD = hg
- EIGEN_LICENSE = MPL2, BSD-3c, LGPLv2.1
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
