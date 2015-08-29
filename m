@@ -1,46 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 11:45:16 +0200
-Subject: [Buildroot] [PATCH] support/downlaod: fix the Hg backend for
- tags
-In-Reply-To: <1439933704-7451-1-git-send-email-yann.morin.1998@free.fr>
-References: <1439933704-7451-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150829114516.24a5b19e@free-electrons.com>
+Date: Sat, 29 Aug 2015 11:48:16 +0200
+Subject: [Buildroot] [git commit branch/next] package/libbroadvoice: new
+	package
+Message-ID: <20150829094940.F2F1780DB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=eb4cb5e0da8574e16bb1f87f75509b566dbfbf52
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 18 Aug 2015 23:35:04 +0200, Yann E. MORIN wrote:
-> When the version of a package is a Mercurial tag, the download fails,
-> with:
->     abort: unknown revision 'X.Y.Z'!
-> 
-> This is because, in Mercurial, tags are commits like the others, and
-> when we clone, we actively request a tag. But then, the server
-> "dereferences" that tag and sends us the revision pointed to by that
-> tag. Of course, since the tag is a commit after the revision we got,
-> we do not have the revision adding the tag.
-> 
-> So, we just have to download the full repository to be sure we have
-> the tags in our local clone.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  support/download/hg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |    1 +
+ package/libbroadvoice/Config.in        |    7 +++++++
+ package/libbroadvoice/libbroadvoice.mk |   19 +++++++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
 
-Applied to next, thanks (after fixing the minor typo in the commit
-title). I've also committed a follow-up patch that makes the eigen
-package use a Mercurial tag.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 5912563..a1eb373 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -694,6 +694,7 @@ menu "Audio/Sound"
+ 	source "package/celt051/Config.in"
+ 	source "package/fdk-aac/Config.in"
+ 	source "package/libao/Config.in"
++	source "package/libbroadvoice/Config.in"
+ 	source "package/libcdaudio/Config.in"
+ 	source "package/libcdio/Config.in"
+ 	source "package/libcue/Config.in"
+diff --git a/package/libbroadvoice/Config.in b/package/libbroadvoice/Config.in
+new file mode 100644
+index 0000000..d695df0
+--- /dev/null
++++ b/package/libbroadvoice/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBBROADVOICE
++	bool "libbroadvoice"
++	help
++	  broadvoice - a library for the BroadVoice 16 and 32 speech
++	  codecs
++
++	  https://www.broadcom.com/support/broadvoice
+diff --git a/package/libbroadvoice/libbroadvoice.mk b/package/libbroadvoice/libbroadvoice.mk
+new file mode 100644
+index 0000000..c18d3d2
+--- /dev/null
++++ b/package/libbroadvoice/libbroadvoice.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libbroadvoice
++#
++################################################################################
++
++LIBBROADVOICE_VERSION = f65b0f50c8c767229fbf1758370880abc0d78564
++# we use the FreeSwitch fork because (quoting README):
++# "This library is based on the Broadcom reference code, but has been
++# heavily modified so that it builds into a proper library, with a clean
++# usable interface, on a range of platforms."
++LIBBROADVOICE_SITE = https://freeswitch.org/stash/scm/sd/libbroadvoice.git
++LIBBROADVOICE_SITE_METHOD = git
++LIBBROADVOICE_LICENSE = LGPLv2.1
++LIBBROADVOICE_LICENSE_FILES = COPYING
++LIBBROADVOICE_AUTORECONF = YES
++LIBBROADVOICE_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
