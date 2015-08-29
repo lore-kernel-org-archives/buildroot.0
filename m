@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 15:21:26 +0200
-Subject: [Buildroot] [PATCH 2/2] gdb: use 7.9 by default
-In-Reply-To: <1440854486-2146-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1440854486-2146-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1440854486-2146-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 29 Aug 2015 15:26:02 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/tvheadend: Fix static build
+In-Reply-To: <20150829130656.GD4857@free.fr>
+References: <1440849333-27450-1-git-send-email-bernd.kuhls@t-online.de>
+ <20150829130656.GD4857@free.fr>
+Message-ID: <20150829152602.76d984e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we have added 7.10, let's switch to 7.9 as the default gdb
-version.
+Yann, Bernd,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gdb/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sat, 29 Aug 2015 15:06:56 +0200, Yann E. MORIN wrote:
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 7b05796..b66e742 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -27,7 +27,7 @@ choice
- 	prompt "GDB debugger Version"
- 	depends on !BR2_arc
- 	depends on !BR2_microblaze
--	default BR2_GDB_VERSION_7_8
-+	default BR2_GDB_VERSION_7_9
- 	help
- 	  Select the version of gdb you wish to use.
- 
-@@ -55,6 +55,6 @@ config BR2_GDB_VERSION
- 	default "arc-2015.06-gdb" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.7.1"    if BR2_GDB_VERSION_7_7
--	default "7.8.2"	   if BR2_GDB_VERSION_7_8 || !BR2_PACKAGE_HOST_GDB
--	default "7.9.1"    if BR2_GDB_VERSION_7_9
-+	default "7.8.2"	   if BR2_GDB_VERSION_7_8
-+	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
- 	default "7.10"     if BR2_GDB_VERSION_7_10
+> > +The only trace of dladdr() can be found currently in src/trap.c in line
+> > +192, encapsulated in #if ENABLE_EXECINFO. The buildsystem does not
+> > +contain any trace of ENABLE_EXECINFO
+> 
+> Yes there is:
+> 
+>     $ git grep -i execinfo
+>     configure:check_cc_header execinfo
+>     [...]
+
+Yes, I missed that one when looking for places where libdl was actually
+used. So libdl is not only used by capmt_ca.c, but also by tvheadend
+itself, when execinfo support is available.
+
+Maybe we should stop bike-shedding, and mark tvheadend as not available
+for static builds, no?
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
