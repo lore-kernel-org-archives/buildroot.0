@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 10:36:44 +0200
-Subject: [Buildroot] [PATCH] docs/manual: makedevs only accepts
- numerical values
-In-Reply-To: <1440800701-26153-1-git-send-email-yann.morin.1998@free.fr>
-References: <1440800701-26153-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150829103644.747302a4@free-electrons.com>
+Date: Sat, 29 Aug 2015 10:36:52 +0200
+Subject: [Buildroot] [PATCH] docs/website: remove broken symlink for
+ top-level manual
+In-Reply-To: <1440801281-7585-1-git-send-email-yann.morin.1998@free.fr>
+References: <1440801281-7585-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150829103652.4b49f06c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,24 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sat, 29 Aug 2015 00:25:01 +0200, Yann E. MORIN wrote:
-> Because of a limitation in how makedevs resolves names [0], usernames
-> and groupnames would be resolved with UIDs and GIDs from the host, not
-> the target.
+On Sat, 29 Aug 2015 00:34:41 +0200, Yann E. MORIN wrote:
+> Recently, we've tried to have the manual lie at the top-level of the
+> site, to get a shorter URL.
 > 
-> Fixing makedevs would involve us rewriting a /etc/passwd and /etc/group
-> parser (not too complex, still not trivial).
+> However, that is broken: we do not need only a link the the HTML, but
+> also to the CSS and to any resource linked from the html (images...).
 > 
-> Document that the user and group fields should only be numbers, not
-> names. Also, the manual is currently mislieading, as an example indeed
+> The server configuration has now been updated to add a redirect, so we
+> no longer need that symlink anyway. Remove it.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> ---
+>  docs/website/manual.html | 1 -
+>  1 file changed, 1 deletion(-)
+>  delete mode 120000 docs/website/manual.html
 
-mislieading -> misleading typo fixed.
-
-And patch applied to master, thanks!
+Applied, thanks.
 
 Thomas
 -- 
