@@ -1,58 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 10:11:36 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: add sparc64 architecture
- support
-In-Reply-To: <20150829074104.GB8475@waldemar-brodkorb.de>
-References: <20150811203709.GA9885@waldemar-brodkorb.de>
- <20150828202224.2f12a93c@free-electrons.com>
- <20150829074104.GB8475@waldemar-brodkorb.de>
-Message-ID: <20150829101136.02a50aec@free-electrons.com>
+Date: Sat, 29 Aug 2015 10:33:18 +0200
+Subject: [Buildroot] [git commit branch/next] package/libsilk: new package
+Message-ID: <20150829083342.2F6DB81D81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=19ff3f764628a151e08d8c504b8acf240091b1f2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 29 Aug 2015 09:41:04 +0200, Waldemar Brodkorb wrote:
+[Thomas: fix license, it's BSD-3c.]
 
-> Yeah, the main reason providing the patch is to discover portability
-> issues in software packages for this platform. I like the
-> autobuilder stuff and a greater test coverage is useful in my
-> opinion.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in          |    1 +
+ package/libsilk/Config.in  |    6 ++++++
+ package/libsilk/libsilk.mk |   16 ++++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
 
-Ok, no problem.
-
-> There is already ppc64-pseries, which isn't an embedded system or do
-> I missed something? :=)
-
-Yes, it was contributed by IBM IIRC, so we kind of assumed they would
-be around to fix issues if any (though in practice we have not yet
-added a PowerPC 64 toolchain configuration in the autobuilders, so my
-comment is a bit moot as we have never tested the reactivity of the IBM
-guys).
-
-> > >  config BR2_ENDIAN
-> > >  	default "BIG"
-> > > @@ -20,3 +24,4 @@ config BR2_ENDIAN
-> > >  config BR2_GCC_TARGET_CPU
-> > >  	default "leon3"		if BR2_sparc_leon3
-> > >  	default "v8"		if BR2_sparc_v8
-> > > +	default "ultrasparc"	if BR2_sparc_v9
-> > 
-> > Why not using v9 here? It's a valid -mcpu value:
-> 
-> Valid, but not useful for Linux:
-> http://permalink.gmane.org/gmane.comp.lib.glibc.alpha/10649
-
-So maybe the option should be called v9a, rather than just v9 ? Or just
-Ultrasparc so it matches the name of the gcc -mcpu option ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 810f4ae..5912563 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -707,6 +707,7 @@ menu "Audio/Sound"
+ 	source "package/libreplaygain/Config.in"
+ 	source "package/libsamplerate/Config.in"
+ 	source "package/libsidplay2/Config.in"
++	source "package/libsilk/Config.in"
+ 	source "package/libsndfile/Config.in"
+ 	source "package/libsoxr/Config.in"
+ 	source "package/libvorbis/Config.in"
+diff --git a/package/libsilk/Config.in b/package/libsilk/Config.in
+new file mode 100644
+index 0000000..10fe03a
+--- /dev/null
++++ b/package/libsilk/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBSILK
++	bool "libsilk"
++	help
++	  SILK is an audio compression format and audio codec.
++
++	  http://tools.ietf.org/html/draft-vos-silk-01
+diff --git a/package/libsilk/libsilk.mk b/package/libsilk/libsilk.mk
+new file mode 100644
+index 0000000..eefdf8f
+--- /dev/null
++++ b/package/libsilk/libsilk.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libsilk
++#
++################################################################################
++
++LIBSILK_VERSION = 4268a02240c35c6055b0f237c46b09b2dcf79e45
++# we use the FreeSwitch fork because it contains pkgconf support
++LIBSILK_SITE = https://freeswitch.org/stash/scm/sd/libsilk.git
++LIBSILK_SITE_METHOD = git
++LIBSILK_LICENSE = BSD-3c
++LIBSILK_LICENSE_FILES = COPYING
++LIBSILK_AUTORECONF = YES
++LIBSILK_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
