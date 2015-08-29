@@ -1,55 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Aug 2015 16:54:41 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.6.5
-Message-ID: <1440860081-22344-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Sat, 29 Aug 2015 17:10:06 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: sys/types.h is needed for mode_t
+Message-ID: <1440861006-26198-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 85666cc..6092693 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.6.4
-+MESA3D_HEADERS_VERSION = 10.6.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 453ee41..3b8bb62 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000166.html
--sha256	8f5ac103f0f503de2f7a985b0df349bd4ecdfe7f51c714be146fa5a9a3c07b77	mesa-10.6.4.tar.xz
-+# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000167.html
-+sha256	fb6fac3c85bcfa9d06b8dd439169f23f0c0924a88e44362e738b99b1feff762f	mesa-10.6.5.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f2a1ffd..d39ef68 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.6.4
-+MESA3D_VERSION = 10.6.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+fix :
+http://autobuild.buildroot.net/results/8e3/8e3afd5f22312f0660f631fdb82bbb64eda913fb/build-end.log
+
+error: 'mode_t' has not been declared
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ .../gnuradio/0002-types_t-is-need-for-mode_t.patch    | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/gnuradio/0002-types_t-is-need-for-mode_t.patch
+
+diff --git a/package/gnuradio/0002-types_t-is-need-for-mode_t.patch b/package/gnuradio/0002-types_t-is-need-for-mode_t.patch
+new file mode 100644
+index 0000000..7730d2d
+--- /dev/null
++++ b/package/gnuradio/0002-types_t-is-need-for-mode_t.patch
+@@ -0,0 +1,19 @@
++To avoid :
++error: 'mode_t' has not been declared
++sys/types.h must be included 
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++Index: gnuradio-3.7.5/gnuradio-runtime/include/gnuradio/logger.h.in
++===================================================================
++--- gnuradio-3.7.5.orig/gnuradio-runtime/include/gnuradio/logger.h.in
+++++ gnuradio-3.7.5/gnuradio-runtime/include/gnuradio/logger.h.in
++@@ -44,6 +44,8 @@
++ 
++ #ifdef _MSC_VER
++ typedef unsigned short mode_t;
+++#else
+++#include <sys/types.h>
++ #endif
++ 
++ #include <gnuradio/api.h>
 -- 
-2.1.4
+2.4.6
