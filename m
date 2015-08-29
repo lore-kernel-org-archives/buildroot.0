@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 18:17:41 +0200
-Subject: [Buildroot] [PATCH 1/1] ibrdtn: new package
-In-Reply-To: <1439038145-10822-1-git-send-email-tom_a_sparks@yahoo.com.au>
-References: <1439038145-10822-1-git-send-email-tom_a_sparks@yahoo.com.au>
-Message-ID: <20150829181741.05d171df@free-electrons.com>
+Date: Sat, 29 Aug 2015 18:19:29 +0200
+Subject: [Buildroot] [PATCH 4/4] ibrdtnd: new package
+In-Reply-To: <1439039262-11803-2-git-send-email-tom_a_sparks@yahoo.com.au>
+References: <1439039262-11803-1-git-send-email-tom_a_sparks@yahoo.com.au>
+ <1439039262-11803-2-git-send-email-tom_a_sparks@yahoo.com.au>
+Message-ID: <20150829181929.30e06b5c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +13,29 @@ To: buildroot@busybox.net
 
 Dear Tom Sparks,
 
-On Sat,  8 Aug 2015 22:49:05 +1000, Tom Sparks wrote:
+On Sat,  8 Aug 2015 23:07:42 +1000, Tom Sparks wrote:
 > Signed-off-by: Tom Sparks <tom_a_sparks@yahoo.com.au>
 > ---
->  package/ibrdtn/Config.in | 15 +++++++++++++++
->  package/ibrdtn/ibrdtn.mk | 30 ++++++++++++++++++++++++++++++
->  2 files changed, 45 insertions(+)
->  create mode 100644 package/ibrdtn/Config.in
->  create mode 100644 package/ibrdtn/ibrdtn.mk
+>  package/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 47d14d7..c901774 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1221,6 +1221,7 @@ endif
+>  	source "package/hostapd/Config.in"
+>  	source "package/hplip/Config.in"
+>  	source "package/httping/Config.in"
+> +	source "package/ibrdtnd/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/ifplugd/Config.in"
+>  endif
 
-Applied to the next branch, after doing a number of changes:
-
-    [Thomas:
-      - Add missing include in package/Config.in to make the package
-        appear in menuconfig.
-      - Fix the comment dependencies: the comment should be shown either
-        if C++ is not available *or* if threads are not supported.
-      - Add a hash file.
-      - Add missing dependency on host-pkgconf, since pkg-config is used
-        to detect the availability of ibrcommon.
-      - Remove the custom INSTALL_STAGING_OPTS and INSTALL_TARGET_OPTS:
-        they are not needed since automake is used.
-      - Make --with-compression conditional on whether zlib is available.
-      - Add optional dependency on libglib2.
-      - Add missing final newlines in .mk and Config.in files.]
+This patch should have been part of the patch adding ibrdtnd/ibrdtnd.mk
+and ibrdtnd/Config.in. Therefore, I've marked this patch as rejected,
+and I will modify the patch really adding ibrdtnd so that it gets added
+to package/Config.in.
 
 Thanks!
 
