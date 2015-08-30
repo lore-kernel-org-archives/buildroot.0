@@ -1,116 +1,169 @@
 From: Scott Fan <fancp2007@gmail.com>
-Date: Mon, 31 Aug 2015 00:05:10 +0800
-Subject: [Buildroot] [PATCH v2] libssh: new package
-In-Reply-To: <1440950710-9165-1-git-send-email-fancp2007@gmail.com>
-References: <1440950710-9165-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <1440950710-9165-2-git-send-email-fancp2007@gmail.com>
+Date: Mon, 31 Aug 2015 00:09:26 +0800
+Subject: [Buildroot] [PATCH v2 1/2] libssh: new package
+In-Reply-To: <20150828122138.0a0dddec@free-electrons.com>
+References: <1438089479-30678-1-git-send-email-fancp2007@gmail.com>
+ <1438089479-30678-2-git-send-email-fancp2007@gmail.com>
+ <20150828122138.0a0dddec@free-electrons.com>
+Message-ID: <CAFkzVZZ2nDvLAghVVZFv8JstwCifzJ5ZdU3y9LT3eGACW0BXHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libssh2 and libssh both implement SSH and provide a library API for apps.
-Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of code.
+Dear Thomas,
 
-[libssh2 vs libssh - A comparison]
-http://www.libssh2.org/libssh2-vs-libssh.html
+I've fixed this patch, please see at
+http://patchwork.ozlabs.org/patch/512240/
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+thanks.
 
----
-Changes V1 -> V2:
-  - fix dependencies
+Scott Fan
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- package/Config.in          |  1 +
- package/libssh/Config.in   | 11 +++++++++++
- package/libssh/libssh.hash |  2 ++
- package/libssh/libssh.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/libssh/Config.in
- create mode 100644 package/libssh/libssh.hash
- create mode 100644 package/libssh/libssh.mk
+On Fri, Aug 28, 2015 at 6:21 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 783fbb4..024500c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -749,6 +749,7 @@ menu "Crypto"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
- 	source "package/libsodium/Config.in"
-+	source "package/libssh/Config.in"
- 	source "package/libssh2/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-new file mode 100644
-index 0000000..478011b
---- /dev/null
-+++ b/package/libssh/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBSSH
-+        bool "libssh"
-+        # Either OpenSSL or libgcrypt are mandatory
-+        select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
-+        help
-+          libssh is a mulitplatform C library implementing the SSHv2
-+          and SSHv1 protocol on client and server side. With libssh,
-+          you can remotely execute programs, transfer files, use a
-+          secure and transparent tunnel for your remote applications.
-+
-+          http://www.libssh.org/
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-new file mode 100644
-index 0000000..81466cc
---- /dev/null
-+++ b/package/libssh/libssh.hash
-@@ -0,0 +1,2 @@
-+# from https://red.libssh.org/projects/libssh/files/
-+md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-new file mode 100644
-index 0000000..39cff50
---- /dev/null
-+++ b/package/libssh/libssh.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+## libssh
-+#
-+#################################################################################
-+
-+LIBSSH_VERSION = 0.7.1
-+LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
-+LIBSSH_SITE = https://red.libssh.org/attachments/download/154
-+LIBSSH_LICENSE = LGPLv2.1
-+LIBSSH_LICENSE_FILES = COPYING
-+LIBSSH_INSTALL_STAGING = YES
-+LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
-+LIBSSH_CONF_OPTS = \
-+        -DWITH_STACK_PROTECTOR=OFF \
-+        -DWITH_SERVER=OFF \
-+        -DWITH_EXAMPLES=OFF
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
-+LIBSSH_DEPENDENCIES += zlib
-+else
-+LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
-+LIBSSH_DEPENDENCIES += libgcrypt
-+else
-+LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBSSH_DEPENDENCIES += openssl
-+endif
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.5.1
+> Dear Scott Fan,
+>
+> Thanks for this patch!
+>
+> On Tue, 28 Jul 2015 21:17:58 +0800, Scott Fan wrote:
+> > libssh2 and libssh both implement SSH and provide a library API for apps.
+> > Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of
+> code.
+> >
+> > [libssh2 vs libssh - A comparison]
+> > http://www.libssh2.org/libssh2-vs-libssh.html
+> >
+> > Signed-off-by: Scott Fan <fancp2007@gmail.com>
+>
+> I've tried to merge this package, but it really doesn't work:
+>
+>  * It wants zlib unless -DWITH_LIB=OFF
+>
+>  * It needs either libgcrypt or OpenSSL
+>
+>  * It needs to be passed -DHAVE_WORDS_BIGENDIAN=0 or 1 depending on the
+>    endianness of the platform.
+>
+> And even with all this fixed, it still fails to build:
+>
+> Building C object src/CMakeFiles/ssh_shared.dir/bignum.c.o
+> In file included from
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/src/bignum.c:24:0:
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/include/libssh/priv.h:42:4:
+> error: #error "no strtoull function found"
+> In file included from
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/src/buffer.c:34:0:
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/include/libssh/priv.h:42:4:
+> error: #error "no strtoull function found"
+> In file included from
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/src/auth.c:34:0:
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/include/libssh/priv.h:42:4:
+> error: #error "no strtoull function found"
+> In file included from
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/src/buffer.c:34:0:
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/include/libssh/priv.h:154:4:
+> error: #error "Your system must provide a __func__ macro"
+> In file included from
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/src/bignum.c:24:0:
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/include/libssh/priv.h:154:4:
+> error: #error "Your system must provide a __func__ macro"
+> In file included from
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/src/auth.c:34:0:
+> /home/thomas/projets/buildroot/output/build/libssh-0.7.1/include/libssh/priv.h:154:4:
+> error: #error "Your system must provide a __func__ macro"
+> src/CMakeFiles/ssh_shared.dir/build.make:123: recipe for target
+> 'src/CMakeFiles/ssh_shared.dir/bignum.c.o' failed
+> make[4]: *** [src/CMakeFiles/ssh_shared.dir/bignum.c.o] Error 1
+>
+> I believe you probably haven't tested this package throughly enough.
+> Please make sure that:
+>
+>  * You do a Buildroot build with only this package enabled, and nothing
+>    else. This will make sure you get the dependencies correct.
+>
+>  * You do a Buildroot build with a uClibc toolchain. You can for
+>    example use the base configuration
+>    http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config
+>    to use a pre-built uClibc external toolchain, which will avoid the
+>    need for building the toolchain.
+>
+> For reference, here is the libssh.mk file that I have right now:
+>
+>
+> ################################################################################
+> #
+> ## libssh
+> #
+>
+> #################################################################################
+>
+> LIBSSH_VERSION = 0.7.1
+> LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+> LIBSSH_SITE = https://red.libssh.org/attachments/download/154
+> LIBSSH_LICENSE = LGPLv2.1
+> LIBSSH_LICENSE_FILES = COPYING
+> LIBSSH_INSTALL_STAGING = YES
+> LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
+> LIBSSH_CONF_OPTS = \
+>         -DWITH_SERVER=OFF
+>
+> ifeq ($(BR2_ENDIAN),"BIG")
+> LIBSSH_CONF_OPTS += -DHAVE_WORDS_BIGENDIAN=1
+> else
+> LIBSSH_CONF_OPTS += -DHAVE_WORDS_BIGENDIAN=0
+> endif
+>
+> ifeq ($(BR2_PACKAGE_ZLIB),y)
+> LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
+> LIBSSH_DEPENDENCIES += zlib
+> else
+> LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
+> endif
+>
+> ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+> LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
+> LIBSSH_DEPENDENCIES += libgcrypt
+> else
+> LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
+> endif
+>
+> ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+> LIBSSH_CONF_OPTS += -DWITH_OPENSSL=ON
+> LIBSSH_DEPENDENCIES += openssl
+> else
+> LIBSSH_CONF_OPTS += -DWITH_OPENSSL=OFF
+> endif
+>
+> $(eval $(cmake-package))
+>
+> And the Config.in file:
+>
+> config BR2_PACKAGE_LIBSSH
+>         bool "libssh"
+>         # Either OpenSSL or libgcrypt are mandatory
+>         select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+>         help
+>           libssh is a mulitplatform C library implementing the SSHv2
+>           and SSHv1 protocol on client and server side. With libssh,
+>           you can remotely execute programs, transfer files, use a
+>           secure and transparent tunnel for your remote applications.
+>
+>           http://www.libssh.org/
+>
+> Can you resubmit this patch after making sure the package builds
+> properly?
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150831/52ee93f6/attachment.html>
