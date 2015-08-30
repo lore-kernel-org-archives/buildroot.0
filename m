@@ -1,82 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 30 Aug 2015 11:30:29 +0300
-Subject: [Buildroot] [1/1] linux: avoid multiple dtb append on uImages
-In-Reply-To: <1440823702-13736-1-git-send-email-derosier@gmail.com>
-References: <1440823702-13736-1-git-send-email-derosier@gmail.com>
-Message-ID: <20150830083029.GC17874@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 30 Aug 2015 12:49:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-ati: Fix
+	DRI-related build
+Message-ID: <1440931793-2679-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Steve,
+This package is not available on arm:
+https://packages.gentoo.org/package/x11-drivers/xf86-video-ati
+https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/xf86-video-ati/ChangeLog?r1=1.74&r2=1.75
 
-On Fri, Aug 28, 2015 at 09:48:22PM -0700, Steve deRosier wrote:
-> From: Steve deRosier <steve.derosier@lairdtech.com>
-> 
-> If using appended dtbs on uImages, a 'make linux-rebuild' will end up just
-> adding the new dtb after the previous dtb if all you did was modify the
-> device tree without a modification that would regenerate the zImage. This
-> results in a surprising effect when you boot your device: your DT changes
-> don't take effect because linux just loads the first dtb.
-> 
-> This patch fixes this little edge case by using an intermediate file for the
-> append work if using BR2_LINUX_KERNEL_APPEND_UIMAGE. Otherwise it must
-> retain the zImage naming, so the situation is unchanged for the case where
-> this flag is not set.
+Select the radeon driver from libdrm to fix the compile errors noticed
+by autobuilders.
 
-See http://patchwork.ozlabs.org/patch/394002/ (our oldest patchwork entry) for 
-a different, arguably simpler, approach.
+This package also depends on DRI support in xserver_xorg-server. To have
+working DRI support there at least one mesa3d DRI driver has to be
+selected, we select swrast because it is available on all supported
+platforms.
 
-baruch
+Fixes
+http://autobuild.buildroot.net/results/441/441b30b6899cca67b2c70fd3195f4be2c8a037b4/
+http://autobuild.buildroot.net/results/d88/d88d2f99bc538ce5a518d83e4807faa908889188/
+http://autobuild.buildroot.net/results/6c4/6c4fda4cafa587d5fffb44cd9bd38a32cb2616f3/
+http://autobuild.buildroot.net/results/0d2/0d2b131ec425a62f18015cf38914eabd08aa4158/
+http://autobuild.buildroot.net/results/a6e/a6e7e7e8abec135885dc482eb49cdae7bb45ebf6/
+http://autobuild.buildroot.net/results/42f/42ffff241f58913aa32c1561e04f681bbc9c44fc/
+http://autobuild.buildroot.net/results/b0c/b0cdabd7d840698837f1f6816499ff0102624e9b/
 
-> Signed-off-by: Steve deRosier <steve.derosier@lairdtech.com>
-> ---
->  linux/linux.mk |   17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 48f9c74..d4252e3 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -245,14 +245,23 @@ endif
->  endif
->  
->  ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
-> -# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
-> +# If we append and create the uImage, we want to be sure not to multiple-append on
-> +# rebuilds, so use a temporary intermediate "zImage-dtb" and then append, but if we
-> +# don't use the APPENDED_UIMAGE option, we need to be sure it stays named as zImage.
-> +IMAGE_PLUS_DTB = zImage
-> +ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
-> +	IMAGE_PLUS_DTB = zImage-dtb
->  define LINUX_APPEND_DTB
-> +	cp $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(IMAGE_PLUS_DTB);
-> +endef
-> +endif
-> +# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
-> +LINUX_APPEND_DTB += \
->  	if [ -e $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb ]; then \
->  		cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb; \
->  	else \
->  		cat $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb; \
-> -	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
-> -endef
-> +	fi >> $(KERNEL_ARCH_PATH)/boot/$(IMAGE_PLUS_DTB)
->  ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
->  # We need to generate a new u-boot image that takes into
->  # account the extra-size added by the device tree at the end
-> @@ -263,7 +272,7 @@ LINUX_APPEND_DTB += $(sep) MKIMAGE_ARGS=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) |\
->  	sed -n -e 's/Image Name:[ ]*\(.*\)/-n \1/p' -e 's/Load Address:/-a/p' -e 's/Entry Point:/-e/p'`; \
->  	$(MKIMAGE) -A $(MKIMAGE_ARCH) -O linux \
->  	-T kernel -C none $${MKIMAGE_ARGS} \
-> -	-d $(KERNEL_ARCH_PATH)/boot/zImage $(LINUX_IMAGE_PATH);
-> +	-d $(KERNEL_ARCH_PATH)/boot/$(IMAGE_PLUS_DTB) $(LINUX_IMAGE_PATH);
->  endif
->  endif
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xdriver_xf86-video-ati/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
+index 191c20f..5dd84b1 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
+@@ -1,8 +1,10 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	bool "xf86-video-ati"
++	depends on !BR2_arm && !BR2_armeb
+ 	depends on BR2_PACKAGE_MESA3D
+-	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+-	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
+@@ -16,4 +18,5 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	  ATI video driver
+ 
+ comment "xf86-video-ati needs mesa3d"
++	depends on !BR2_arm && !BR2_armeb
+ 	depends on !BR2_PACKAGE_MESA3D
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.1.4
