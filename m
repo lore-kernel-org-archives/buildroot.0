@@ -1,62 +1,70 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Aug 2015 12:49:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-ati: Fix
-	DRI-related build
-Message-ID: <1440931793-2679-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 30 Aug 2015 13:53:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x264: Fix aarch64 support,
+	bump version
+Message-ID: <1440935601-19009-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is not available on arm:
-https://packages.gentoo.org/package/x11-drivers/xf86-video-ati
-https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/xf86-video-ati/ChangeLog?r1=1.74&r2=1.75
+The current x264 revision fails to include asm code from common/aarch64
+which is needed by packages linking to x264, like ffmpeg:
 
-Select the radeon driver from libdrm to fix the compile errors noticed
-by autobuilders.
+Quoting http://autobuild.buildroot.net/results/189/189f215bcbc510cd292c0f337fe6b39979f01813//ffmpeg-2.7.2/config.log
 
-This package also depends on DRI support in xserver_xorg-server. To have
-working DRI support there at least one mesa3d DRI driver has to be
-selected, we select swrast because it is available on all supported
-platforms.
+/home/test/autobuild/instance-3/output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libx264.so:
+ undefined reference to `x264_deblock_h_chroma_422_intra_neon'
+
+Function "chroma_422_intra_neon" is defined in
+x264/common/aarch64/deblock-a.S. The code in
+x264/common/aarch64/* is only compiled if an
+assembler was found:
+http://git.videolan.org/?p=x264.git;a=blob;f=Makefile;h=6193c5936939fda36f9a2e00c734223318ccda14;hb=HEAD#l134
+
+To allow this add BR2_aarch64 as an assembler-enabled arch.
+
+This however breaks compilation due to broken NEON detection:
+"no NEON support, try adding -mfpu=neon to CFLAGS
+If you really want to run on such a CPU, configure with --disable-asm."
+
+The bug was fixed upstream Jul, 25th, 2015:
+http://git.videolan.org/?p=x264.git;a=commit;h=73ae2d11d472d0eb3b7c218dc1659db32f649b14
+
+When we already have to do a version bump let's take the latest one ;)
 
 Fixes
-http://autobuild.buildroot.net/results/441/441b30b6899cca67b2c70fd3195f4be2c8a037b4/
-http://autobuild.buildroot.net/results/d88/d88d2f99bc538ce5a518d83e4807faa908889188/
-http://autobuild.buildroot.net/results/6c4/6c4fda4cafa587d5fffb44cd9bd38a32cb2616f3/
-http://autobuild.buildroot.net/results/0d2/0d2b131ec425a62f18015cf38914eabd08aa4158/
-http://autobuild.buildroot.net/results/a6e/a6e7e7e8abec135885dc482eb49cdae7bb45ebf6/
-http://autobuild.buildroot.net/results/42f/42ffff241f58913aa32c1561e04f681bbc9c44fc/
-http://autobuild.buildroot.net/results/b0c/b0cdabd7d840698837f1f6816499ff0102624e9b/
+http://autobuild.buildroot.net/results/90a/90ae4b2fa8a6cff0f18abea2b1c45282afe99e4b/
+http://autobuild.buildroot.net/results/109/109686cbc8327e62f757db576cfff49c490b52ae/
+http://autobuild.buildroot.net/results/189/189f215bcbc510cd292c0f337fe6b39979f01813/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-video-ati/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/x264/x264.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 191c20f..5dd84b1 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
-+	depends on !BR2_arm && !BR2_armeb
- 	depends on BR2_PACKAGE_MESA3D
--	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
--	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_GLPROTO
-@@ -16,4 +18,5 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	  ATI video driver
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index ace7f43..d24cf20 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "xf86-video-ati needs mesa3d"
-+	depends on !BR2_arm && !BR2_armeb
- 	depends on !BR2_PACKAGE_MESA3D
+-X264_VERSION = c8a773ebfca148ef04f5a60d42cbd7336af0baf6
++X264_VERSION = e86f3a1993234e8f26050c243aa253651200fa6b
+ X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
+@@ -14,7 +14,7 @@ X264_CONF_OPTS = --disable-avs
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X264_DEPENDENCIES += host-yasm
+-else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++else ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_aarch64),y)
+ # We need to pass gcc as AS, because the ARM assembly files have to be
+ # preprocessed
+ X264_CONF_ENV += AS="$(TARGET_CC)"
 -- 
 2.1.4
