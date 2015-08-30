@@ -1,45 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 30 Aug 2015 19:52:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 8321] New: invalid opcode error with minidlna and
-	ffmpeg
-Message-ID: <bug-8321-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Aug 2015 22:05:26 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: add warning about
+	volatile keys
+In-Reply-To: <1440539013-23389-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 25 Aug 2015 23:43:33 +0200")
+References: <1440539013-23389-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87si70tud5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8321
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-           Summary: invalid opcode error with minidlna and ffmpeg
-           Product: buildroot
-           Version: 2015.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ramesh at rr7.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ > When the rootfs is read-only, keys will be generated in a volatile
+ > location, which is inherently bad as host keys will change on each boot,
+ > rendering virtually useless.
 
++them
 
-Have a strange issue... I keep getting invalid opcode errors when minidlna is
-scanning my files. The scanner then stops. I get these sort of errors in
-dmesg...
+ > Add a warning so the user is at least aware of the issue.
 
-traps: minidlnad[2435] trap invalid opcode ip:7fb52ca30120 sp:7fff7745e1a8
-error:0 in libavutil.so.54.20.100[7fb52ca1b000+4c000]
+ > Consign the rm output to oblivion, to avoid noisy output, now that we
+ > have a proper warning.
 
-Running 2015.05 with ffmpeg 2.6.2 and minidlna 1.1.4
+Is consign a English word? I changed it to 'hide' as I think that is clearer.
 
-ffmpeg version up to 2.5.8 work fine. Everything from 2.6.1 onwards causes
-various versions of the above error. I cannot seem to debug it - any help is
-very welcome. Thanks.
+ > Move the starting message after the symlink-block, to avoid messages
+ > collision. Move the umask as well, sicne /etc/dropbear/ may be world
+ > readable; just the private host keys should be ?00 (and dropbear handles
+ > that by itself).
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
