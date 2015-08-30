@@ -1,34 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 20:42:31 +0200
-Subject: [Buildroot] [git commit] ibrdtn: fix bogus dependency on zlib
-Message-ID: <20150901083108.EC2EC800E9@busybox.osuosl.org>
+From: James Knight <james.d.knight@live.com>
+Date: Sun, 30 Aug 2015 06:46:21 -0400
+Subject: [Buildroot] [PATCH 1/1] package/bash: indicate getcwd is
+	malloc-supported
+Message-ID: <BLU436-SMTP9655109BE08C391F0C3B99A0680@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f56de721c4d98e5c064be584e0efbb14f84b0b71
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When Bash attempts to find the current working directory, it uses a C
+library call `getcwd` to resolve it. When cross-compiling, the
+configuration process cannot determine if the target system's C library
+can support an "unfixed" path length. Therefore, Bash will fallback to a
+size of `PATH_MAX` for determining the current working directory. When
+using OverlayFS (and possible other file systems), this becomes an issue
+since file paths can commonly exceed standard `PATH_MAX` length. This
+typically results in the following error appearing:
 
-Due to a copy/paste mistake, zlib was being added to
-<pkg>_DEPENDENCIES even when not enabled in the configuration. This
-commit fixes that.
+   error retrieving current directory: [...]
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Common C library `getcwd` calls can default to a higher limit (usually
+the system's page size). The current configurable C libraries (as of at
+least 2015.08) support a zero (0) size buffer length. Most use the
+system's page size; musl, being an exception, which defaults to
+`PATH_MAX` (as Bash was doing). Since these C libraries support
+allocating buffer space with a zero (0) provided size, the following
+configuration change allows Bash to support getting a larger-length'ed
+working directory on target's that support it.
+
+Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- package/ibrdtn/ibrdtn.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/bash/bash.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ibrdtn/ibrdtn.mk b/package/ibrdtn/ibrdtn.mk
-index aab27a8..f899843 100644
---- a/package/ibrdtn/ibrdtn.mk
-+++ b/package/ibrdtn/ibrdtn.mk
-@@ -17,7 +17,6 @@ IBRDTN_CONF_OPTS += --with-compression
- IBRDTN_DEPENDENCIES += zlib
- else
- IBRDTN_CONF_OPTS += --without-compression
--IBRDTN_DEPENDENCIES += zlib
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 9865e19..97d7182 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -16,6 +16,7 @@ BASH_LICENSE_FILES = COPYING
+ BASH_CONF_ENV += \
+ 	ac_cv_rl_prefix="$(STAGING_DIR)" \
+ 	ac_cv_rl_version="$(READLINE_VERSION)" \
++	bash_cv_getcwd_malloc=yes \
+ 	bash_cv_job_control_missing=present \
+ 	bash_cv_sys_named_pipes=present \
+ 	bash_cv_func_sigsetjmp=present \
+-- 
+2.4.3
