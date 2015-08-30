@@ -1,59 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Aug 2015 14:16:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: dri
-	needs arm >= v6
-Message-ID: <1440936990-26531-1-git-send-email-bernd.kuhls@t-online.de>
+From: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+Date: Sun, 30 Aug 2015 17:43:02 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix elf2flt build
+In-Reply-To: <20150828130109.GA2808@waldemar-brodkorb.de>
+References: <1440694037-9022-1-git-send-email-public.douglas.raillard@gmail.com>
+ <6966330.pLhB8QsgjT@raillard-dv6>
+ <20150828100932.738b1809@free-electrons.com>
+ <2694397.HiyaVxjcGY@raillard-dv6>
+ <20150828132047.5ef4eec8@free-electrons.com>
+ <20150828130109.GA2808@waldemar-brodkorb.de>
+Message-ID: <55E32486.5070501@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
+On 28/08/2015 15:01, Waldemar Brodkorb wrote:
+> Please disable UCLIBC_HAS_CONTEXT_FUNCS, as the code is not thumb
+> ready. I'll accept any patches for this 
 
-  CC       dri.lo
-/tmp/ccc6IbbW.s: Assembler messages:
-/tmp/ccc6IbbW.s:3114: Error: selected processor does not support ARM mode `ldrex r2,[r1]'
-/tmp/ccc6IbbW.s:3117: Error: selected processor does not support ARM mode `strexeq r2,r0,[r1]'
-/tmp/ccc6IbbW.s:3273: Error: selected processor does not support ARM mode `ldrex r2,[r1]'
-/tmp/ccc6IbbW.s:3276: Error: selected processor does not support ARM mode `strexeq r2,r3,[r1]'
-/tmp/ccc6IbbW.s:3352: Error: selected processor does not support ARM mode `ldrex r1,[r2]'
-/tmp/ccc6IbbW.s:3355: Error: selected processor does not support ARM mode `strexeq r1,r0,[r2]'
-/tmp/ccc6IbbW.s:3451: Error: selected processor does not support ARM mode `ldrex r3,[r2]'
-/tmp/ccc6IbbW.s:3454: Error: selected processor does not support ARM mode `strexeq r3,ip,[r2]'
-/tmp/ccc6IbbW.s:3522: Error: selected processor does not support ARM mode `ldrex r3,[r0]'
-/tmp/ccc6IbbW.s:3525: Error: selected processor does not support ARM mode `strexeq r3,r1,[r0]'
-Makefile:653: recipe for target 'dri.lo' failed
-make[5]: *** [dri.lo] Error 1
-make[5]: Leaving directory '/home/buildroot/buildroot/output/build/xserver_xorg-server-1.17.2/hw/xfree86/dri'
+Works better without UCLIBC_HAS_CONTEXT_FUNCS
 
-using this defconfig
-BR2_arm=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> NPTL is not thumb ready, please use LINUXTHREADS.OLD for ARM no-MMU
+> or send a fix :)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Still fails with LINUXTHREADS_OLD:
+/working_dir/buildroot/output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-gcc -c libpthread/linuxthreads.old/mutex.c -o libpthread/linuxthreads.old/mutex.os -Wall -Wstrict-prototypes -Wstrict-aliasing -funsigned-char -fno-builtin -fno-asm -fmerge-all-constants -msoft-float -std=gnu99 -mlittle-endian -fstack-protector -nostdinc -I./include -I./include -include libc-symbols.h -I./libc/sysdeps/linux/arm -I./libc/sysdeps/linux -I./ldso/ldso/arm -I./ldso/include -I. -DSTATIC -Os -fstrict-aliasing -I./libpthread/linuxthreads.old/sysdeps/unix/sysv/linux/arm -I./libpthread/linuxthreads.old/sysdeps/arm -I./libpthread/linuxthreads.old/sysdeps/unix/sysv/linux -I./libpthread/linuxthreads.old/sysdeps/pthread -I./libpthread/linuxthreads.old -I./libpthread -I./libc/sysdeps/linux/common -isystem /working_dir/buildroot/output/host/usr/lib/gcc/arm-buildroot-uclinux-uclibcgnueabi/4.9.3/include-fixed -isystem /working_dir/buildroot/output/host/usr/lib/gcc/arm-buildroot-uclinux-uclibcgnueabi
+ /4.9.3/in
+clude -I/working_dir/buildroot/output/build/linux-headers-4.1.4/usr/include/ -DNDEBUG -DNOT_IN_libc -DIS_IN_libpthread -fstack-protector-all -DIN_LIB=libpthread -fPIC -MT libpthread/linuxthreads.old/mutex.os -MD -MP -MF libpthread/linuxthreads.old/.mutex.os.dep
+/tmp/ccWVQC5r.s: Assembler messages:
+/tmp/ccWVQC5r.s:34: Error: selected processor does not support ARM opcodes
+/tmp/ccWVQC5r.s:35: Error: attempt to use an ARM instruction on a Thumb-only processor -- `swp r3,r3,[r0]'
+/tmp/ccWVQC5r.s:36: Error: attempt to use an ARM instruction on a Thumb-only processor -- `orr r0,pc,#1'
+/tmp/ccWVQC5r.s:37: Error: attempt to use an ARM instruction on a Thumb-only processor -- `bx r0'
+/tmp/ccWVQC5r.s:151: Error: selected processor does not support ARM opcodes
+/tmp/ccWVQC5r.s:152: Error: attempt to use an ARM instruction on a Thumb-only processor -- `swp r3,r3,[r0]'
+/tmp/ccWVQC5r.s:153: Error: attempt to use an ARM instruction on a Thumb-only processor -- `orr r0,pc,#1'
+/tmp/ccWVQC5r.s:154: Error: attempt to use an ARM instruction on a Thumb-only processor -- `bx r0'
+Makerules:383: recipe for target 'libpthread/linuxthreads.old/mutex.os' failed
+make[1]: *** [libpthread/linuxthreads.old/mutex.os] Error 1
+make[1]: Leaving directory '/working_dir/buildroot/output/build/uclibc-1.0.5'
+package/pkg-generic.mk:156: recipe for target '/working_dir/buildroot/output/build/uclibc-1.0.5/.stamp_built' failed
+make: *** [/working_dir/buildroot/output/build/uclibc-1.0.5/.stamp_built] Error 2
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 617bcbc..2442f83 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -130,7 +130,7 @@ else # modular
- XSERVER_XORG_SERVER_CONF_OPTS += --disable-kdrive --disable-xfbdev
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER)$(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5),y)
- XSERVER_XORG_SERVER_CONF_OPTS += --enable-dri --enable-glx
- XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
- else
+It seems that the problem stems from libpthread/linuxthreads.old/sysdeps/arm/pt-machine.h in testandset function:
+     83         "\tswp %0, %2, [%3]\n"
+     84         "\torr %1, pc, #1\n"
+     85         "\tbx %1\n"
+
+
+Is it still the good place to send such reports or should I post them somewhere else ? (or in a new thread)
+
+
+Best regards,
+
+Douglas
+
+
 -- 
-2.1.4
+
+Douglas RAILLARD
