@@ -1,187 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Aug 2015 14:56:33 +0200
-Subject: [Buildroot] [git commit] package/libldns: new package
-Message-ID: <20150901083108.A7D0B7F95A@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Aug 2015 23:38:32 +0200
+Subject: [Buildroot] [git commit] libssh: new package
+Message-ID: <20150901083109.2048B7F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=721c78c9e05a49a3291364283225b552debb879e
+commit: http://git.buildroot.net/buildroot/commit/?id=aa016797444017d4379a139e39697e38ed2e2357
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed by freeswitch.
+libssh2 and libssh both implement SSH and provide a library API for apps.
+Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of code.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[libssh2 vs libssh - A comparison]
+http://www.libssh2.org/libssh2-vs-libssh.html
+
+[Peter: add sha256 hash, fix typo in help text]
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                  |    1 +
- ...-double-free-for-answers-bigger-than-4096.patch |   25 +++++++++++
- ...0002-fix-whitespace-bug-in-ldns-read-zone.patch |   45 ++++++++++++++++++++
- package/libldns/Config.in                          |    9 ++++
- package/libldns/libldns.hash                       |    4 ++
- package/libldns/libldns.mk                         |   36 ++++++++++++++++
- 6 files changed, 120 insertions(+), 0 deletions(-)
+ package/Config.in          |    1 +
+ package/libssh/Config.in   |   11 +++++++++++
+ package/libssh/libssh.hash |    4 ++++
+ package/libssh/libssh.mk   |   36 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 72fcbc9..68b3aa8 100644
+index cb548bb..914b838 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -990,6 +990,7 @@ menu "Networking"
- 	source "package/libhttpparser/Config.in"
- 	source "package/libidn/Config.in"
- 	source "package/libiscsi/Config.in"
-+	source "package/libldns/Config.in"
- 	source "package/libmbus/Config.in"
- 	source "package/libmemcached/Config.in"
- 	source "package/libmicrohttpd/Config.in"
-diff --git a/package/libldns/0001-fix-double-free-for-answers-bigger-than-4096.patch b/package/libldns/0001-fix-double-free-for-answers-bigger-than-4096.patch
+@@ -757,6 +757,7 @@ menu "Crypto"
+ 	source "package/libsecret/Config.in"
+ 	source "package/libsha1/Config.in"
+ 	source "package/libsodium/Config.in"
++	source "package/libssh/Config.in"
+ 	source "package/libssh2/Config.in"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
+diff --git a/package/libssh/Config.in b/package/libssh/Config.in
 new file mode 100644
-index 0000000..36bc875
+index 0000000..080ad18
 --- /dev/null
-+++ b/package/libldns/0001-fix-double-free-for-answers-bigger-than-4096.patch
-@@ -0,0 +1,25 @@
-+Downloaded from
-+http://anonscm.debian.org/cgit/pkg-nlnetlabs/ldns.git/plain/debian/patches/fix-double-free-for-answers-bigger-than-4096.patch
++++ b/package/libssh/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBSSH
++        bool "libssh"
++        # Either OpenSSL or libgcrypt are mandatory
++        select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
++        help
++          libssh is a multiplatform C library implementing the SSHv2
++          and SSHv1 protocol on client and server side. With libssh,
++          you can remotely execute programs, transfer files, use a
++          secure and transparent tunnel for your remote applications.
 +
-+which is a backport from upstream
-+http://git.nlnetlabs.nl/ldns/commit/?h=develop&id=2853eb352b4461e98f2926ace4ea3810cedf4167
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+From 2853eb352b4461e98f2926ace4ea3810cedf4167 Mon Sep 17 00:00:00 2001
-+From: Willem Toorop <willem@nlnetlabs.nl>
-+Date: Tue, 28 Jan 2014 11:06:38 +0100
-+Subject: bugfix #548: Double free for answers > 4096
-+
-+in ldns_resolver_send_pkt.  Thank you sunthought at gmail.com
-+---
-+--- ldns.orig/resolver.c
-++++ ldns/resolver.c
-+@@ -1117,6 +1117,7 @@ ldns_resolver_send_pkt(ldns_pkt **answer
-+ 					ldns_pkt_set_edns_udp_size(query_pkt
-+ 							, 4096);
-+ 					ldns_pkt_free(answer_pkt);
-++					answer_pkt = NULL;
-+ 					/* Nameservers should not become 
-+ 					 * unreachable because fragments are
-+ 					 * dropped (network error). We might
-diff --git a/package/libldns/0002-fix-whitespace-bug-in-ldns-read-zone.patch b/package/libldns/0002-fix-whitespace-bug-in-ldns-read-zone.patch
++          http://www.libssh.org/
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
 new file mode 100644
-index 0000000..4d8908e
+index 0000000..473ced3
 --- /dev/null
-+++ b/package/libldns/0002-fix-whitespace-bug-in-ldns-read-zone.patch
-@@ -0,0 +1,45 @@
-+Dwonloaded from
-+http://anonscm.debian.org/cgit/pkg-nlnetlabs/ldns.git/tree/debian/patches/fix-whitespace-bug-in-ldns-read-zone.patch
-+
-+which is a backport from
-+http://git.nlnetlabs.nl/ldns/commit/?h=develop&id=d6037a22fbedb8ef3a22de4107e4eaa36840865b
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+From d6037a22fbedb8ef3a22de4107e4eaa36840865b Mon Sep 17 00:00:00 2001
-+From: Matthijs Mekking <matthijs@nlnetlabs.nl>
-+Date: Wed, 18 Jun 2014 09:55:17 +0200
-+Subject: whitespace bug in ldns-read-zone
-+
-+---
-+--- ldns.orig/rr.c
-++++ ldns/rr.c
-+@@ -670,6 +670,18 @@ ldns_rr_new_question_frm_str(ldns_rr **n
-+ 	                                    true);
-+ }
-+ 
-++static int
-++ldns_rr_is_whitespace_line(char* line, int line_len)
-++{
-++	int i;
-++	for (i = 0; i < line_len; i++) {
-++		if (!isspace((int)line[i])) {
-++			return 0;
-++		}
-++	}
-++	return 1;
-++}
-++
-+ ldns_status
-+ ldns_rr_new_frm_fp(ldns_rr **newrr, FILE *fp, uint32_t *ttl, ldns_rdf **origin, ldns_rdf **prev)
-+ {
-+@@ -745,6 +757,9 @@ ldns_rr_new_frm_fp_l(ldns_rr **newrr, FI
-+ 		s = LDNS_STATUS_SYNTAX_TTL;
-+ 	} else if (strncmp(line, "$INCLUDE", 8) == 0) {
-+ 		s = LDNS_STATUS_SYNTAX_INCLUDE;
-++	} else if (ldns_rr_is_whitespace_line(line, size)) {
-++		LDNS_FREE(line);
-++		return LDNS_STATUS_SYNTAX_EMPTY;
-+ 	} else {
-+ 		if (origin && *origin) {
-+ 			s = ldns_rr_new_frm_str(&rr, (const char*) line, ttl, *origin, prev);
-diff --git a/package/libldns/Config.in b/package/libldns/Config.in
-new file mode 100644
-index 0000000..12065ae
---- /dev/null
-+++ b/package/libldns/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBLDNS
-+	bool "libldns"
-+	help
-+	  The goal of ldns is to simplify DNS programming, it supports
-+	  recent RFCs like the DNSSEC documents, and allows developers
-+	  to easily create software conforming to current RFCs, and
-+	  experimental software for current Internet Drafts.
-+
-+	  http://www.nlnetlabs.nl/projects/ldns
-diff --git a/package/libldns/libldns.hash b/package/libldns/libldns.hash
-new file mode 100644
-index 0000000..3565c58
---- /dev/null
-+++ b/package/libldns/libldns.hash
++++ b/package/libssh/libssh.hash
 @@ -0,0 +1,4 @@
-+# From http://www.nlnetlabs.nl/downloads/ldns/ldns-1.6.17.tar.gz.sha1
-+sha1	4218897b3c002aadfc7280b3f40cda829e05c9a4	ldns-1.6.17.tar.gz
++# from https://red.libssh.org/projects/libssh/files/
++md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
 +# Locally calculated
-+sha256	8b88e059452118e8949a2752a55ce59bc71fa5bc414103e17f5b6b06f9bcc8cd	ldns-1.6.17.tar.gz
-diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
++sha256	2fc7ccf96d3263cbd8ab520118cb94d9a2e11714c61e22b3f761fc5352fd046d  libssh-0.7.1.tar.xz
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
 new file mode 100644
-index 0000000..9a28404
+index 0000000..39cff50
 --- /dev/null
-+++ b/package/libldns/libldns.mk
++++ b/package/libssh/libssh.mk
 @@ -0,0 +1,36 @@
 +################################################################################
 +#
-+# libldns
++## libssh
 +#
-+################################################################################
++#################################################################################
 +
-+LIBLDNS_VERSION = 1.6.17
-+LIBLDNS_SOURCE = ldns-$(LIBLDNS_VERSION).tar.gz
-+LIBLDNS_SITE = http://www.nlnetlabs.nl/downloads/ldns
-+LIBLDNS_LICENSE = BSD-3c
-+LIBLDNS_LICENSE_FILES = LICENSE
-+LIBLDNS_INSTALL_STAGING = YES
-+LIBLDNS_CONF_OPTS = \
-+	--without-examples \
-+	--without-p5-dns-ldns \
-+	--without-pyldns \
-+	--without-pyldnsx
++LIBSSH_VERSION = 0.7.1
++LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
++LIBSSH_SITE = https://red.libssh.org/attachments/download/154
++LIBSSH_LICENSE = LGPLv2.1
++LIBSSH_LICENSE_FILES = COPYING
++LIBSSH_INSTALL_STAGING = YES
++LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBSSH_CONF_OPTS = \
++        -DWITH_STACK_PROTECTOR=OFF \
++        -DWITH_SERVER=OFF \
++        -DWITH_EXAMPLES=OFF
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBLDNS_DEPENDENCIES += host-pkgconf openssl
-+LIBLDNS_CONF_OPTS += \
-+	--with-ssl=$(STAGING_DIR)/usr \
-+	--enable-dane \
-+	--enable-ecdsa \
-+	--enable-gost \
-+	--enable-sha2
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
++LIBSSH_DEPENDENCIES += zlib
 +else
-+LIBLDNS_CONF_OPTS += \
-+	--without-ssl \
-+	--disable-dane \
-+	--disable-ecdsa \
-+	--disable-gost \
-+	--disable-sha2
++LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
 +endif
 +
-+$(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
++LIBSSH_DEPENDENCIES += libgcrypt
++else
++LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBSSH_DEPENDENCIES += openssl
++endif
++endif
++
++$(eval $(cmake-package))
