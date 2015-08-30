@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Aug 2015 22:12:05 +0200
+Date: Sun, 30 Aug 2015 22:14:47 +0200
 Subject: [Buildroot] [PATCH] package/dropbear: add warning about
-	volatile keys
-In-Reply-To: <87si70tud5.fsf@dell.be.48ers.dk>
+ volatile keys
+In-Reply-To: <20150830201205.GA1786@free.fr>
 References: <1440539013-23389-1-git-send-email-yann.morin.1998@free.fr>
- <87si70tud5.fsf@dell.be.48ers.dk>
-Message-ID: <20150830201205.GA1786@free.fr>
+ <87si70tud5.fsf@dell.be.48ers.dk> <20150830201205.GA1786@free.fr>
+Message-ID: <20150830201447.GB1786@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,26 @@ To: buildroot@busybox.net
 
 Peter, All,
 
-On 2015-08-30 22:05 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 2015-08-30 22:12 +0200, Yann E. MORIN spake thusly:
+> On 2015-08-30 22:05 +0200, Peter Korsgaard spake thusly:
+> > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> >  > Consign the rm output to oblivion, to avoid noisy output, now that we
+> >  > have a proper warning.
+> > 
+> > Is consign a English word? I changed it to 'hide' as I think that is clearer.
 > 
->  > When the rootfs is read-only, keys will be generated in a volatile
->  > location, which is inherently bad as host keys will change on each boot,
->  > rendering virtually useless.
-> +them
-
-Ack.
-
->  > Add a warning so the user is at least aware of the issue.
+> Yes, it is:
+>     http://www.merriam-webster.com/dictionary/consign
 > 
->  > Consign the rm output to oblivion, to avoid noisy output, now that we
->  > have a proper warning.
-> 
-> Is consign a English word? I changed it to 'hide' as I think that is clearer.
+>     to put (something that is not wanted or used) in a place where old
+>     things are stored or thrown away
 
-Yes, it is:
-    http://www.merriam-webster.com/dictionary/consign
+Or even better yet:
 
-    to put (something that is not wanted or used) in a place where old
-    things are stored or thrown away
+    to commit especially to a final destination or fate <a writer
+    consigned to oblivion>
+
+Muhahaha! ;-)
 
 Regards,
 Yann E. MORIN.
