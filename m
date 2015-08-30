@@ -1,8 +1,8 @@
 From: James Knight <james.d.knight@live.com>
-Date: Sun, 30 Aug 2015 06:46:21 -0400
+Date: Sun, 30 Aug 2015 08:20:42 -0400
 Subject: [Buildroot] [PATCH 1/1] package/bash: indicate getcwd is
 	malloc-supported
-Message-ID: <BLU436-SMTP9655109BE08C391F0C3B99A0680@phx.gbl>
+Message-ID: <BLU436-SMTP2066E5D6D70E93216F0327EA0680@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
