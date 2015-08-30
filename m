@@ -1,47 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Aug 2015 22:14:47 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: add warning about
- volatile keys
-In-Reply-To: <20150830201205.GA1786@free.fr>
-References: <1440539013-23389-1-git-send-email-yann.morin.1998@free.fr>
- <87si70tud5.fsf@dell.be.48ers.dk> <20150830201205.GA1786@free.fr>
-Message-ID: <20150830201447.GB1786@free.fr>
+From: =?UTF-8?B?Q8OpZHJpYyBNYXJpZQ==?= <cedric.marie@openmailbox.org>
+Date: Sun, 30 Aug 2015 22:27:39 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <55D9016F.5080602@mind.be>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be> <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be> <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+ <55870F2F.4080700@mind.be> <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
+ <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
+ <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
+ <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
+ <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
+ <ae20692cc561152ac16a33820206a599@openmailbox.org> <55D9016F.5080602@mind.be>
+Message-ID: <55E3673B.40804@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi,
 
-On 2015-08-30 22:12 +0200, Yann E. MORIN spake thusly:
-> On 2015-08-30 22:05 +0200, Peter Korsgaard spake thusly:
-> > >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> >  > Consign the rm output to oblivion, to avoid noisy output, now that we
-> >  > have a proper warning.
-> > 
-> > Is consign a English word? I changed it to 'hide' as I think that is clearer.
-> 
-> Yes, it is:
->     http://www.merriam-webster.com/dictionary/consign
-> 
->     to put (something that is not wanted or used) in a place where old
->     things are stored or thrown away
+Le 23/08/2015 01:10, Arnout Vandecappelle a ?crit :
+>> When V=1, we should export Q = (empty) and a new variable BR2_VERBOSE = 1.
+>> When V=0, we should export Q = @ and BR2_VERBOSE = (empty).
+>
+>   I don't think we should export anything at all, we should really do it per
+> build system (which is problematic for generic-package of course).
 
-Or even better yet:
+You're right for Q. It is used in pkg-generic.mk, and should be defined 
+only in this file, depending on V value and origin.
 
-    to commit especially to a final destination or fate <a writer
-    consigned to oblivion>
+The benefits to exporting a new variable BR2_VERBOSE, is that we can 
+check V value (0 or 1) and origin ("command line"?) only once, instead 
+of repeating this double test in every .mk.
 
-Muhahaha! ;-)
+So now, thanks to your remarks, I've got something that is working for 
+cmake and autotools.
 
-Regards,
-Yann E. MORIN.
+* I have removed these exports from root Makefile: quiet Q KBUILD_VERBOSE.
+
+* In pkg-generic.mk, I define Q=(empty) if V=1 from the command line, 
+and Q=@ otherwise.
+
+* In pkg-cmake.mk, I add "VERBOSE=1" in build command when V=1 from the 
+command line.
+(checked with libcuefile)
+
+* In pkg-autotools.mk, I add "V=1" in build command when V=1 from the 
+command line (and "V=0" otherwise, because V=1 is the default).
+(checked with libpthsem)
+NB: It would not even be necessary to modify pkg-autotools.mk, if V=0 
+was the default.
+
+I think that these modifications keep the behaviour unchanged.
+
+Can I provide a patch with that?
+
+Do you prefer to check V value and origin in all pkg-*.mk, or should I 
+use BR2_VERBOSE to compute it once?
+
+Waiting for your feedback,
+Regards.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+C?dric
