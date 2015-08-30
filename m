@@ -1,66 +1,64 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Mon, 31 Aug 2015 00:13:34 +0800
-Subject: [Buildroot] [PATCH v2 4/4] cubieboard: [PATCH] ipconfig: add
- nameserver IPs to kernel-parameter ip=
-In-Reply-To: <20150829232921.2dd013ab@free-electrons.com>
-References: <1438067769-10254-1-git-send-email-fancp2007@gmail.com>
- <1438067769-10254-4-git-send-email-fancp2007@gmail.com>
- <20150829232921.2dd013ab@free-electrons.com>
-Message-ID: <CAFkzVZbOsLLTx=SC4j_Ow=vgqz+zWBbZNNwtokES_V=GUQFocg@mail.gmail.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sun, 30 Aug 2015 20:36:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bootutils: fix musl compilation
+	issue
+Message-ID: <1440963380-6449-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Fixes:
+http://autobuild.buildroot.net/results/389/38914a0a7ff0aa79acbbbe6c46ab701325dfceb8/
+http://autobuild.buildroot.net/results/c0d/c0d09f5dd0e26c0d2454ebb2ea5317db1135db89/
 
-I know your means, you are correct, i think.
+musl requires strict inclusion of <sys/types.h> for makedev(3).
 
-Thanks for your explanation.
+note - upstream project appears dead since 2009.
 
-Scott Fan
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ .../0001-fix-musl-compilation-issue.patch          | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/bootutils/0001-fix-musl-compilation-issue.patch
 
-On Sun, Aug 30, 2015 at 5:29 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Scott Fan,
->
-> On Tue, 28 Jul 2015 15:16:09 +0800, Scott Fan wrote:
-> > Signed-off-by: Scott Fan <fancp2007@gmail.com>
-> > ---
-> >  .../5e953778a2aab04929a5e7b69f53dc26e39b079e.patch | 133
-> +++++++++++++++++++++
-> >  configs/cubieboard2_defconfig                      |   1 +
-> >  configs/cubieboard_defconfig                       |   1 +
-> >  configs/cubietruck_defconfig                       |   1 +
-> >  4 files changed, 136 insertions(+)
-> >  create mode 100644
-> board/cubietech/cubieboard/5e953778a2aab04929a5e7b69f53dc26e39b079e.patch
->
-> Thanks for this patch. It is indeed the backport of an upstream kernel
-> patch. But if we go down the road of backporting patches adding new
-> features to the kernel for each platform, it's going to be a never
-> ending story. You are interested by nameserver configuration in ip=,
-> but the next Buildroot user will want this other backported patch. This
-> is not manageable I believe.
->
-> So, I would suggest that you keep this backported patch in your
-> project-specific customization. You can use BR2_GLOBAL_PATCH_DIR to
-> point to a place outside of the Buildroot sources, and store your
-> custom patches here.
->
-> Consequently, I will mark your patch as "Rejected" in our patch
-> tracking system.
->
-> Thanks again!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150831/df30a53e/attachment.html>
+diff --git a/package/bootutils/0001-fix-musl-compilation-issue.patch b/package/bootutils/0001-fix-musl-compilation-issue.patch
+new file mode 100644
+index 0000000..ccb6ef6
+--- /dev/null
++++ b/package/bootutils/0001-fix-musl-compilation-issue.patch
+@@ -0,0 +1,31 @@
++From e4c2c18b9d1d7a6dc17d8f7705b26fc2e2efc5a9 Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Sun, 30 Aug 2015 20:12:40 +0100
++Subject: [PATCH 1/1] fix musl compilation issue
++
++makedev(3) requires sys/types.h to be included.
++
++Note upstream has not issued releases since 2009. No mailing list activity
++since January 2010, and even before then it seems to be mostly spam.
++
++Upstream-Status: dormant
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ raidscan.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/raidscan.c b/raidscan.c
++index fab3b02..3cb1a0d 100644
++--- a/raidscan.c
+++++ b/raidscan.c
++@@ -22,6 +22,7 @@
++ #include "config.h"
++ 
++ #include <sys/stat.h>
+++#include <sys/types.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
++ #include <linux/major.h>
++-- 
++2.4.3
++
+-- 
+2.4.3
