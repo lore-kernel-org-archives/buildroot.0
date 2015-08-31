@@ -1,139 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2015 23:54:52 +0200
-Subject: [Buildroot] [PATCH 9/9] core: finalise target in its own location
-In-Reply-To: <cover.1443650034.git.yann.morin.1998@free.fr>
-References: <cover.1443650034.git.yann.morin.1998@free.fr>
-Message-ID: <a594ac3858ea713de72610ad49566be4e20c176f.1443650034.git.yann.morin.1998@free.fr>
+Date: Tue, 1 Sep 2015 00:23:34 +0200
+Subject: [Buildroot] [PATCHv3] pkg-generic: detect incorrectly used
+ package
+In-Reply-To: <1441058113-32621-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441058113-32621-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150831222334.GA3705@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, after all packages have been installed into target/ , we run
-a sanitising pass called 'target-finalize' on that directory, to:
-  - apply overlays
-  - remove unnecessary files (man, .h, .a ...)
-  - strip files
-as well as a few other miscellanous cleanups.
+Thomas, All,
 
-This means that target/ no longer contains only package-installed files,
-and that target-finalize might not be idempotent (i.e. sucessive runs of
-target-finalize may yield different results in target/ ). We're trying
-pretty hard that all the internal target-finalize hooks are idempotent,
-whether they are from the core (e.g. installing glibc locales) or
-provided by packages (e.g. cleaning up perl files).
+On 2015-08-31 23:55 +0200, Thomas Petazzoni spake thusly:
+> In Buildroot, the selection of a package from a Config.in level and
+> from a Makefile level are completely disconnected. This can lead to
+> issues where the build of a package is triggered at the Makefile level
+> due to the package being listed in another package <pkg>_DEPENDENCIES
+> variable, even if that package is not enabled in the configuration.
+[--SNIP--]
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6a7d97e..e8cf488 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -143,6 +143,17 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+>  
+>  # Configure
+>  $(BUILD_DIR)/%/.stamp_configured:
+> +# Only trigger the check for default builds. If the user forces
+> +# building a package, even if not enabled in the configuration, we
+> +# want to accept it.
+> +ifeq ($(MAKECMDGOALS),)
+> +	@if test "$(TYPE)" = "target" -a -z "$($(KCONFIG_VAR))" ; then \
+> +		echo "ERROR: A package must have added $(PKG) to its _DEPENDENCIES line but" ; \
+> +		echo "forgot to add the corresponding select / depends on $(KCONFIG_VAR)." ; \
+> +		echo "Please review your packages and try again." ; \
+> +		exit 1 ; \
 
-However, that might not be the case for packages from br2-external for
-example, or under complex situations where a combination of packages
-does not yield an idempotent sequence (quoting Wikipedia: "a combination
-of idempotent methods or subroutines is not necessrily idempotent"; see:
-https://en.wikipedia.org/wiki/Idempotence#Examples ).
+It might even be interesting to tell the user what those packages might
+be, like so (totally untested):
 
-Address this issue by copying target/ to a "landing" area where the
-finalising takes place.
+    diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+    index 6a7d97e..03ca9cc 100644
+    --- a/package/pkg-generic.mk
+    +++ b/package/pkg-generic.mk
+    @@ -758,6 +758,9 @@ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+     # configuration
+     ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+     
+    +# Store reverse build-dependency information
+    +$$(eval $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(call UPPER,$$(d))_DEPENDENT_OF += $(1)$$(sep)))
+    +
+     # Ensure the calling package is the declared provider for all the virtual
+     # packages it claims to be an implementation of.
+     ifneq ($$($(2)_PROVIDES),)
 
-This keeps the user-visible target/ directory to contain only what
-packages have installed, helps keeping target-finalize be idempotent by
-allowing packages to provide simpler target-finalize hooks.
+and then, in this new error message (wording to be adapted):
 
-For simplicity for packages, we have to allow them to use $(TARGET_DIR)
-everywhere, be it in target install commands or target finalize
-commands, without requiring them to know whether to use $(TARGET_DIR)
-or $(FINAL_TARGET_DIR). $(TARGET_DIR) always points to the directory in
-which to act.
+    echo "Potential culprits are:"; \
+    for p in $($(2)_DEPENDENT_OF); do \
+        echo "  - ${p}"; \
+    done
 
-So, for target-finalize, we override TARGET_DIR to point to the landing
-area. But since packages are dependencies of target-finalize, they
-would also inherit from this override. So, we over-override TARGET_DIR
-for packages, to point to the usual and currently used $(O)/target/
-directory.
+Thoughts?
 
-Finally, filesystem images are generated from that landing area, of
-course. Similarly, we need to override TARGET_DIR for them.
+I'll further review that patch tomorrow...
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile     | 28 +++++++++++++++++++++++++++-
- fs/common.mk |  4 ++--
- 2 files changed, 29 insertions(+), 3 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/Makefile b/Makefile
-index b3f519e..985ed02 100644
---- a/Makefile
-+++ b/Makefile
-@@ -191,7 +191,9 @@ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
- 
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
--TARGET_DIR := $(BASE_DIR)/target
-+BUILD_TARGET_DIR := $(BASE_DIR)/target
-+TARGET_DIR := $(BUILD_TARGET_DIR)
-+FINAL_TARGET_DIR := $(BUILD_DIR)/target-finalize
- # initial definition so that 'make clean' works for most users, even without
- # .config. HOST_DIR will be overwritten later when .config is included.
- HOST_DIR := $(BASE_DIR)/host
-@@ -562,8 +564,32 @@ $(TARGETS_ROOTFS): target-finalize
- # multiple times in the list returned by show-target.
- PACKAGES := $(sort $(PACKAGES))
- 
-+# Finalizing the target directory involves:
-+#  - applying overlays,
-+#  - removing unecessary files (man, .h, .a ...)
-+#  - tweaking files installed by packages (like stripping)
-+# and miscellanous cleanups.
-+#
-+# We want to keep the $(O)/target/ directory as a perfect image of
-+# what packages have actually installed, so we copy it to a landing
-+# location where we'll do those cleanups.
-+#
-+# Still, we only document $(TARGET_DIR) so packages that want to provide
-+# target-finalize hooks will be using that. Thus, we just override that
-+# variable with the landing location just for target-finalize.
-+#
-+# However, since rule-overriden variables are inherited by the dependencies
-+# of that rule, we must re-override TARGET_DIR with its original location
-+# for packages.
-+#
-+$(PACKAGES): TARGET_DIR=$(BUILD_TARGET_DIR)
-+target-finalize: TARGET_DIR=$(FINAL_TARGET_DIR)
-+
- target-finalize: $(PACKAGES)
- 	@$(call MESSAGE,"Finalizing target directory")
-+	$(Q)rm -rf $(TARGET_DIR)
-+	$(Q)cp -a $(BUILD_TARGET_DIR) $(TARGET_DIR)
-+	$(Q)rm -f $(TARGET_DIR_WARNING_FILE)
- 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-diff --git a/fs/common.mk b/fs/common.mk
-index 9b544eb..f35bbd6 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -36,6 +36,7 @@ USERS_TABLE = $(FS_DIR)/users_table.txt
- ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
- 
- .PHONY: rootfs-common
-+rootfs-common: TARGET_DIR=$(FINAL_TARGET_DIR)
- rootfs-common: target-finalize
- 	mkdir -p "$(FS_DIR)"
- 	rm -f $(FAKEROOT_SCRIPT)
-@@ -91,14 +92,13 @@ endif
- 
- ROOTFS_$(2)_FAKEROOT_SCRIPT = $$(FS_DIR)/fakeroot.$(1)
- 
-+$$(BINARIES_DIR)/rootfs.$(1): TARGET_DIR=$(FINAL_TARGET_DIR)
- $$(BINARIES_DIR)/rootfs.$(1): rootfs-common $$(ROOTFS_$(2)_DEPENDENCIES)
- 	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
- 	$$(INSTALL) -D -m 0755 $$(FAKEROOT_SCRIPT) $$(ROOTFS_$(2)_FAKEROOT_SCRIPT)
- 	echo "$$(ROOTFS_$(2)_CMD)" >> $$(ROOTFS_$(2)_FAKEROOT_SCRIPT)
--	rm -f $$(TARGET_DIR_WARNING_FILE)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(ROOTFS_$(2)_FAKEROOT_SCRIPT)
--	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
- endif
+> +	fi
+> +endif
+>  	@$(call step_start,configure)
+>  	@$(call MESSAGE,"Configuring")
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+> @@ -664,6 +675,8 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+>  $$($(2)_TARGET_BUILD):			PKG=$(2)
+>  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+> +$$($(2)_TARGET_CONFIGURE):		TYPE=$(4)
+> +$$($(2)_TARGET_CONFIGURE):		KCONFIG_VAR=$$($(2)_KCONFIG_VAR)
+>  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+>  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			PKG=$(2)
+> -- 
+> 2.5.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
