@@ -1,50 +1,39 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Mon, 31 Aug 2015 20:07:50 +0530
-Subject: [Buildroot] First rootfile system build using buildroot
-Message-ID: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 31 Aug 2015 16:38:43 +0200
+Subject: [Buildroot] [PATCH v3 1/2] libssh: new package
+References: <1441025945-4689-1-git-send-email-fancp2007@gmail.com>
+ <1441025945-4689-2-git-send-email-fancp2007@gmail.com>
+Message-ID: <jg5ebcxrsk.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi ,
+Am Mon, 31 Aug 2015 20:59:04 +0800 schrieb Scott Fan:
 
-I am new to buildroot. I am Trying to learn it. I am following this manual.
-http://buildroot.uclibc.org/downloads/manual/manual.html
+> libssh2 and libssh both implement SSH and provide a library API for
+> apps.
+> Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of
+> code.
 
-So i have started with Rpi.
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(only compile tested and linked with Kodi using this
+ patch: http://patchwork.ozlabs.org/patch/512504/)
 
-I am trying to build my own rootfile system for RPI using buildroot.
+This defconfig was used:
 
-I have downloaded following cross compiler folder from git :--
-https://github.com/raspberrypi/tools/tree/master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian
-as mentioned in this link :--
-http://hertaville.com/2012/09/28/development-environment-raspberry-pi-cross-compiler/
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_KODI_LIBSSH=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I915=y
+BR2_PACKAGE_XORG7=y
 
-My installer GCC compiler is :--
-arm-linux-gnueabihf-gcc
+Please note that OpenELEC carries a patch to fix compilation problems 
+with gcc5: https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/
+network/libssh/patches/libssh-gcc-5-fix.patch
+I did not try to compile libssh with gcc5...
 
-crosscompiler is downloaded from git at following location:--
-~/home/gcc-linaro-arm-linux-gnueabihf-raspbian
-
-Please suggest what value to fill here for external toolchain selection,
-some values i have filled :--
-
-Toolchain type : External toolchain
-Toolchain : Custom toolchain
-Toolchain origin : Pre-installed toolchain
-Toolchain path : ?
-Toolchain prefix : ? external
-Toolchain kernel header series : ?
-external toolchain c library : ?
-
-How i will come to know what is the kernel header is used by above cross
-compiler ?
-
-Please suggest.
-
-// katoch
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150831/d064c6e7/attachment.html>
+Regards, Bernd
