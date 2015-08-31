@@ -1,114 +1,112 @@
 From: Scott Fan <fancp2007@gmail.com>
-Date: Mon, 31 Aug 2015 20:59:04 +0800
-Subject: [Buildroot] [PATCH v3 1/2] libssh: new package
+Date: Mon, 31 Aug 2015 20:59:05 +0800
+Subject: [Buildroot] [PATCH v3 2/2] Remmina: new package
 In-Reply-To: <1441025945-4689-1-git-send-email-fancp2007@gmail.com>
 References: <1441025945-4689-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <1441025945-4689-2-git-send-email-fancp2007@gmail.com>
+Message-ID: <1441025945-4689-3-git-send-email-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libssh2 and libssh both implement SSH and provide a library API for apps.
-Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of code.
+Remmina is a remote desktop client written in GTK+.
+Currently RDP, VNC, NX, XDMCP and SSH are supported.
 
-[libssh2 vs libssh - A comparison]
-http://www.libssh2.org/libssh2-vs-libssh.html
-
-[Peter: add sha256 hash, fix typo in help text]
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+http://remmina.sourceforge.net/
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
  package/Config.in          |  1 +
- package/libssh/Config.in   | 11 +++++++++++
- package/libssh/libssh.hash |  4 ++++
- package/libssh/libssh.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 package/libssh/Config.in
- create mode 100644 package/libssh/libssh.hash
- create mode 100644 package/libssh/libssh.mk
+ package/remmina/Config.in  | 28 ++++++++++++++++++++++++++++
+ package/remmina/remmina.mk | 34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
+ create mode 100644 package/remmina/Config.in
+ create mode 100644 package/remmina/remmina.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 783fbb4..024500c 100644
+index 024500c..832cda4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -749,6 +749,7 @@ menu "Crypto"
- 	source "package/libsecret/Config.in"
- 	source "package/libsha1/Config.in"
- 	source "package/libsodium/Config.in"
-+	source "package/libssh/Config.in"
- 	source "package/libssh2/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+@@ -239,6 +239,7 @@ endif
+ 	source "package/fbterm/Config.in"
+ 	source "package/fbv/Config.in"
+ 	source "package/freerdp/Config.in"
++	source "package/remmina/Config.in"
+ 	source "package/imagemagick/Config.in"
+ 	source "package/linux-fusion/Config.in"
+ 	source "package/lite/Config.in"
+diff --git a/package/remmina/Config.in b/package/remmina/Config.in
 new file mode 100644
-index 0000000..080ad18
+index 0000000..e82f31b
 --- /dev/null
-+++ b/package/libssh/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBSSH
-+        bool "libssh"
-+        # Either OpenSSL or libgcrypt are mandatory
-+        select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
-+        help
-+          libssh is a multiplatform C library implementing the SSHv2
-+          and SSHv1 protocol on client and server side. With libssh,
-+          you can remotely execute programs, transfer files, use a
-+          secure and transparent tunnel for your remote applications.
++++ b/package/remmina/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_REMMINA
++	bool "remmina"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBGTK3
++	depends on BR2_USE_MMU # libvncserver depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR # freerdp
++	depends on !BR2_STATIC_LIBS # freerdp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # freerdp
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXKBFILE
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_LIBSSH
++	select BR2_PACKAGE_LIBVNCSERVER
++	select BR2_PACKAGE_FREERDP
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	help
++	  Remmina is a remote desktop client written in GTK+, aiming to be
++	  useful for system administrators and travellers, who need to work
++	  with lots of remote computers in front of either large monitors
++	  or tiny netbooks.
 +
-+          http://www.libssh.org/
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
++	  Remmina supports multiple network protocols in an integrated and
++	  consistent user interface.
++
++	  Currently RDP, VNC, NX, XDMCP and SSH are supported.
++
++	  http://remmina.sourceforge.net/
+diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
 new file mode 100644
-index 0000000..473ced3
+index 0000000..0ac5fd0
 --- /dev/null
-+++ b/package/libssh/libssh.hash
-@@ -0,0 +1,4 @@
-+# from https://red.libssh.org/projects/libssh/files/
-+md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
-+# Locally calculated
-+sha256	2fc7ccf96d3263cbd8ab520118cb94d9a2e11714c61e22b3f761fc5352fd046d  libssh-0.7.1.tar.xz
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-new file mode 100644
-index 0000000..39cff50
---- /dev/null
-+++ b/package/libssh/libssh.mk
-@@ -0,0 +1,36 @@
++++ b/package/remmina/remmina.mk
+@@ -0,0 +1,34 @@
 +################################################################################
 +#
-+## libssh
++# remmina
 +#
-+#################################################################################
++################################################################################
 +
-+LIBSSH_VERSION = 0.7.1
-+LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
-+LIBSSH_SITE = https://red.libssh.org/attachments/download/154
-+LIBSSH_LICENSE = LGPLv2.1
-+LIBSSH_LICENSE_FILES = COPYING
-+LIBSSH_INSTALL_STAGING = YES
-+LIBSSH_SUPPORTS_IN_SOURCE_BUILD = NO
-+LIBSSH_CONF_OPTS = \
-+        -DWITH_STACK_PROTECTOR=OFF \
-+        -DWITH_SERVER=OFF \
-+        -DWITH_EXAMPLES=OFF
++REMMINA_VERSION = v1.1.2
++REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
++REMMINA_LICENSE = GPLv2+ with OpenSSL exception
++REMMINA_LICENSE_FILES = COPYING LICENSE LICENSE.OpenSSL
 +
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
-+LIBSSH_DEPENDENCIES += zlib
-+else
-+LIBSSH_CONF_OPTS += -DWITH_ZLIB=OFF
-+endif
++REMMINA_CONF_OPTS = \
++	-DWITH_AVAHI=OFF \
++	-DWITH_APPINDICATOR=OFF \
++	-DWITH_GNOMEKEYRING=OFF \
++	-DWITH_TELEPATHY=OFF \
++	-DWITH_VTE=OFF
 +
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+LIBSSH_CONF_OPTS += -DWITH_GCRYPT=ON
-+LIBSSH_DEPENDENCIES += libgcrypt
-+else
-+LIBSSH_CONF_OPTS += -DWITH_GCRYPT=OFF
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBSSH_DEPENDENCIES += openssl
-+endif
++REMMINA_DEPENDENCIES = \
++	libgtk3 libgcrypt libssh libvncserver freerdp \
++	xlib_libX11 xlib_libXext xlib_libxkbfile
++
++ifeq ($(BR2_NEEDS_GETTEXT),y)
++REMMINA_DEPENDENCIES += gettext
++
++define REMMINA_POST_PATCH_FIXINTL
++	$(SED) 's/$${GTK_LIBRARIES}/$${GTK_LIBRARIES} -lintl/' \
++		$(@D)/remmina/CMakeLists.txt
++endef
++
++REMMINA_POST_PATCH_HOOKS += REMMINA_POST_PATCH_FIXINTL
 +endif
 +
 +$(eval $(cmake-package))
