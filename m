@@ -1,9 +1,9 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon, 31 Aug 2015 13:26:15 -0400
-Subject: [Buildroot] [PATCH v2 2/4] package/berkeleydb: add host variant
+Date: Mon, 31 Aug 2015 13:26:16 -0400
+Subject: [Buildroot] [PATCH v2 3/4] package/beecrypt: add host variant
 In-Reply-To: <1441041977-9160-1-git-send-email-james.knight@rockwellcollins.com>
 References: <1441041977-9160-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <1441041977-9160-2-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <1441041977-9160-3-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +15,40 @@ Required by an upcoming host variant of the `rpm` package.
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
 Changes v1 -> v2:
-  - Package changed introduced in change set 2.
+  - Do not configured host variant based off of target variant
+     configuration (based off comments from Thomas Petazzoni).
 ---
- package/berkeleydb/berkeleydb.mk | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/beecrypt/beecrypt.mk | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index e5c11bd..e9ab760 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -44,6 +44,26 @@ define BERKELEYDB_CONFIGURE_CMDS
- 	)
- endef
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index e66cec1..e3749d5 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -11,11 +11,18 @@ BEECRYPT_INSTALL_STAGING = YES
+ BEECRYPT_LICENSE = LGPLv2.1+
+ BEECRYPT_LICENSE_FILES = COPYING.LIB
  
-+define HOST_BERKELEYDB_CONFIGURE_CMDS
-+	(cd $(@D)/build_unix; rm -rf config.cache; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		$(HOST_CONFIGURE_ARGS) \
-+		../dist/configure $(QUIET) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--sysconfdir=/etc \
-+		--with-gnu-ld \
-+		--disable-java \
-+		--disable-tcl \
-+		--enable-compat185 \
-+		--enable-cxx \
-+		--enable-o_direct \
-+		--with-pic \
-+	)
-+endef
+-BEECRYPT_CONF_OPTS = \
++BEECRYPT_CONFIGURE_ARGS = \
+ 	--disable-expert-mode \
++	--disable-openmp \
+ 	--without-java \
+-	--without-python \
+-	--disable-openmp
++	--without-python
 +
-+HOST_BERKELEYDB_INSTALL_OPTS += DESTDIR="$(HOST_DIR)" install
++BEECRYPT_CONF_OPTS += \
++	$(BEECRYPT_CONFIGURE_ARGS)
 +
- ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
++HOST_BEECRYPT_CONF_OPTS += \
++	$(BEECRYPT_CONFIGURE_ARGS) \
++	--without-cplusplus
  
- define BERKELEYDB_REMOVE_TOOLS
-@@ -61,3 +81,4 @@ endef
- BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
+ ifeq ($(BR2_PACKAGE_BEECRYPT_CPP),y)
+ BEECRYPT_DEPENDENCIES += icu
+@@ -33,3 +40,4 @@ BEECRYPT_POST_CONFIGURE_HOOKS += BEECRYPT_LINK_WITH_CC
+ endif
  
  $(eval $(autotools-package))
 +$(eval $(host-autotools-package))
