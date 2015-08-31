@@ -1,49 +1,133 @@
-From: =?UTF-8?B?Q8OpZHJpYyBNYXJpZQ==?= <cedric.marie@openmailbox.org>
-Date: Mon, 31 Aug 2015 14:35:05 +0200
-Subject: [Buildroot] CMake and VERBOSE variable
-In-Reply-To: <20150831092822.521c2c72@free-electrons.com>
-References: <9943347198fceae1227501e1d00f818a@openmailbox.org>	<5578B394.1010503@mind.be>	<a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>	<5579E9EF.4070402@mind.be>	<0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>	<55870F2F.4080700@mind.be>	<4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>	<CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>	<7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>	<CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>	<0494936f4284565201a58a70d0a3c08d@openmailbox.org>	<ae20692cc561152ac16a33820206a599@openmailbox.org>	<55D9016F.5080602@mind.be>
- <20150831092822.521c2c72@free-electrons.com>
-Message-ID: <55E449F9.90407@openmailbox.org>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 31 Aug 2015 13:39:08 +0100
+Subject: [Buildroot] [PATCH 1/1] packages/lm-sensors: fix compilation with
+	musl
+Message-ID: <1441024748-11818-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/f72/f72ae17cea910a1dbd3d5d4d09cfbc90d9ba8dc0/
 
-Le 31/08/2015 09:28, Thomas Petazzoni a ?crit :
-> Arnout, C?dric,
->
-> On Sun, 23 Aug 2015 01:10:39 +0200, Arnout Vandecappelle wrote:
->
->>   For autotools it depends a lot on the version. Relatively recent automake (at
->> least 1.15) has the V=0/1 option, but it defaults to 1 I think.
->
-> It actually depends on how AM_SILENT_RULES is used:
->
->   * If it's not used, then the build is verbose, and V=0/1 has no effect.
->
->   * If AM_SILENT_RULES is used, with no special argument, then it
->     defaults to verbose (V=1), but can be made quiet by passing V=0
->
->   * If AM_SILENT_RULES([yes]) is used, then it defaults to quiet (V=0)
->     and can be made verbose by passing V=1.
+Imports a patch from Alpine Linux to remove __GLIBC__ conditional
+compilation. Retested with both musl, glibc and uclibc.
 
+Patch accepted upstream.
 
-So I think the best way to manage it is to be explicit: "V=0" when 
-nothing is specified (because we want the default to be silent), and 
-"V=1" when V=1 from the command line.
-In worst case, it is not taken into account.
-Otherwise, it is correctly managed, whatever the default setting of 
-AM_SILENT_RULE.
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ package/lm-sensors/0003-musl-fix-includes.patch | 100 ++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+ create mode 100644 package/lm-sensors/0003-musl-fix-includes.patch
 
-NB: I said that the behaviour was kept unchanged, but in fact there is 
-one case that seems to be better handled with my modification: when 
-AM_SILENT_RULES is used without argument (i.e. the default is verbose). 
-Now we turn it to quiet by forcing explicit V=0.
-
-
+diff --git a/package/lm-sensors/0003-musl-fix-includes.patch b/package/lm-sensors/0003-musl-fix-includes.patch
+new file mode 100644
+index 0000000..69325ab
+--- /dev/null
++++ b/package/lm-sensors/0003-musl-fix-includes.patch
+@@ -0,0 +1,100 @@
++From 6d85773537c9f277ed342f57500f784ccb2c4a3e Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Sun, 30 Aug 2015 22:26:39 +0100
++Subject: [PATCH 1/1] fix compilation under musl
++
++This patch removes conditional compilation elements that are designed to
++support glibc versions earlier than 2.0, which were causing the build
++to fail under musl.
++
++Based on the patch found here :
++
++http://git.alpinelinux.org/cgit/aports/plain/main/lm_sensors/musl-fix-includes.patch?id=fece1d19448dbd3a56fd8ac70443116187141848
++
++This patch has been accepted for integration upstream and should be
++present in the next release. See :
++
++http://www.lm-sensors.org/changeset/6314
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++Upstream-Status: pending
++---
++ prog/dump/isadump.c | 6 ------
++ prog/dump/isaset.c  | 6 ------
++ prog/dump/superio.c | 5 -----
++ prog/dump/util.c    | 5 -----
++ 4 files changed, 22 deletions(-)
++
++diff --git a/prog/dump/isadump.c b/prog/dump/isadump.c
++index e031e47..88e4c3b 100644
++--- a/prog/dump/isadump.c
+++++ b/prog/dump/isadump.c
++@@ -36,13 +36,7 @@
++ #include "util.h"
++ #include "superio.h"
++ 
++-
++-/* To keep glibc2 happy */
++-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
++ #include <sys/io.h>
++-#else
++-#include <asm/io.h>
++-#endif
++ 
++ #ifdef __powerpc__
++ unsigned long isa_io_base = 0; /* XXX for now */
++diff --git a/prog/dump/isaset.c b/prog/dump/isaset.c
++index 1d1bdad..a084c8a 100644
++--- a/prog/dump/isaset.c
+++++ b/prog/dump/isaset.c
++@@ -32,13 +32,7 @@
++ #include <string.h>
++ #include "util.h"
++ 
++-
++-/* To keep glibc2 happy */
++-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
++ #include <sys/io.h>
++-#else
++-#include <asm/io.h>
++-#endif
++ 
++ #ifdef __powerpc__
++ unsigned long isa_io_base = 0; /* XXX for now */
++diff --git a/prog/dump/superio.c b/prog/dump/superio.c
++index 1af7358..31e0d78 100644
++--- a/prog/dump/superio.c
+++++ b/prog/dump/superio.c
++@@ -20,12 +20,7 @@
++ */
++ 
++ #include <stdlib.h>
++-
++-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
++ #include <sys/io.h>
++-#else
++-#include <asm/io.h>
++-#endif
++ 
++ #include "superio.h"
++ 
++diff --git a/prog/dump/util.c b/prog/dump/util.c
++index 676c339..d8b0927 100644
++--- a/prog/dump/util.c
+++++ b/prog/dump/util.c
++@@ -11,12 +11,7 @@
++ #include <stdio.h>
++ #include "util.h"
++ 
++-/* To keep glibc2 happy */
++-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
++ #include <sys/io.h>
++-#else
++-#include <asm/io.h>
++-#endif
++ 
++ /* Return 1 if we should continue, 0 if we should abort */
++ int user_ack(int def)
++-- 
++2.4.3
++
 -- 
-C?dric
+2.4.3
