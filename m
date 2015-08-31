@@ -1,248 +1,60 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Mon, 31 Aug 2015 00:05:34 -0700
-Subject: [Buildroot] [PATCH] bitlbee: Added package
-In-Reply-To: <1440992016-31768-2-git-send-email-g@maral.me>
-References: <1440992016-31768-2-git-send-email-g@maral.me>
-Message-ID: <1441004734-25616-1-git-send-email-g@maral.me>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 31 Aug 2015 09:04:09 +0200
+Subject: [Buildroot] [git commit] x264: unbreak x86 build after version bump
+Message-ID: <20150831070943.8A8B181E01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BitlBee brings IM (instant messaging) to IRC clients. It's a great
-solution for people who have an IRC client running all the time and
-don't want to run an additional MSN/AIM/whatever client.
+commit: http://git.buildroot.net/buildroot/commit/?id=d29b105318b985752e4ab56984689f8c1f21a155
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
+Fixes:
+http://autobuild.buildroot.net/results/3ec/3ec54f722d6008fc422540d3a5462b306d16e84c/
+
+The recent x264 version bump broke the configure step on x86/x86-64 as x264
+ends up using gas instead of yasm as assembler.  The reason for this is the
+recent upstream commit to optionally use nasm instead of yasm if AS= is
+passed:
+
+commit b568a256b9bc6c500d7b1ffe4b9c3311ee5ff337
+Author: Henrik Gramner <henrik@gramner.com>
+Date:   Sat May 23 19:44:16 2015 +0200
+
+    x86: Experimental nasm support
+
+    Enables the use of nasm as an alternative to yasm.
+
+    Note that nasm cannot assemble x264 with PIC enabled since it currently doesn't
+    support [symbol-$$] addressing which is used extensively by x264's PIC code.
+    This includes all 64-bit Windows and 64-bit OS X builds, even non-shared.
+
+    For the above reason nasm is currently intentionally not auto-detected, instead
+    the assembler must be explicitly specified using "AS=nasm ./configure".
+
+    Also drop -O2 from ASFLAGS since it's simply ignored anyway.
+
+But as we pass AS=$(TARGET_AS) it ends up using gas instead. Fix it by
+explicitly passing AS=yasm instead.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                                  |  1 +
- .../0001-Improved-cross-compiler-support.patch     | 76 ++++++++++++++++++++++
- package/bitlbee/Config.in                          | 56 ++++++++++++++++
- package/bitlbee/bitlbee.mk                         | 57 ++++++++++++++++
- 4 files changed, 190 insertions(+)
- create mode 100644 package/bitlbee/0001-Improved-cross-compiler-support.patch
- create mode 100644 package/bitlbee/Config.in
- create mode 100644 package/bitlbee/bitlbee.mk
+ package/x264/x264.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 2c92439..8c77898 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1182,6 +1182,7 @@ menu "Networking applications"
- 	source "package/batctl/Config.in"
- 	source "package/bcusdk/Config.in"
- 	source "package/bind/Config.in"
-+	source "package/bitlbee/Config.in"
- 	source "package/bluez_utils/Config.in"
- 	source "package/bluez5_utils/Config.in"
- 	source "package/bmon/Config.in"
-diff --git a/package/bitlbee/0001-Improved-cross-compiler-support.patch b/package/bitlbee/0001-Improved-cross-compiler-support.patch
-new file mode 100644
-index 0000000..47d5250
---- /dev/null
-+++ b/package/bitlbee/0001-Improved-cross-compiler-support.patch
-@@ -0,0 +1,76 @@
-+From 523cd4c5861edae31b45404272c1dc048f9484eb Mon Sep 17 00:00:00 2001
-+From: "Guillermo A. Amaral" <g@maral.me>
-+Date: Sun, 30 Aug 2015 15:22:58 -0700
-+Subject: [PATCH] Improved cross compiler support.
-+
-+* Added a configure option for sysroot.
-+* Prevent pkgconfig environment variables to be clobbered.
-+* Prevent PATH environment variable pollution.
-+* Backward compatible.
-+
-+Signed-off-by: Guillermo A. Amaral <g@maral.me>
-+---
-+ configure | 31 +++++++++++++++++++++++++++----
-+ 1 file changed, 27 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 921c9b4..5a0527d 100755
-+--- a/configure
-++++ b/configure
-+@@ -22,6 +22,7 @@ pidfile='/var/run/bitlbee.pid'
-+ ipcsocket=''
-+ pcdir='$prefix/lib/pkgconfig'
-+ systemlibdirs="/lib64 /usr/lib64 /usr/local/lib64 /lib /usr/lib /usr/local/lib"
-++sysroot=''
-+ 
-+ # Set these to default-on to let it be overriden by either the user or purple
-+ #
-+@@ -148,6 +149,7 @@ Option		Description				Default
-+ 
-+ 
-+ --target=...	Cross compilation target 		same as host
-++--sysroot=...	Cross compilation sysroot 		$sysroot
-+ EOF
-+ 		exit;
-+ 	fi
-+@@ -239,12 +241,33 @@ EOF
-+ 
-+ 
-+ if [ -n "$target" ]; then
-+-	PKG_CONFIG_LIBDIR=/usr/$target/lib/pkgconfig
-+-	export PKG_CONFIG_LIBDIR
-+-	PATH=/usr/$target/bin:$PATH
-++	# prepend sysroot to system lib dirs
-++
-++	systemlibdirs_cross=''
-++	for i in $systemlibdirs; do
-++		systemlibdirs_cross="$systemlibdirs_cross $sysroot$i"
-++	done
-++	systemlibdirs=$systemlibdirs_cross
-++	unset systemlibdirs_cross
-++
-++	# backward compatibility
-++
-++	if [ -z "$PKG_CONFIG_LIBDIR" ]; then
-++		PKG_CONFIG_LIBDIR=/usr/$target/lib/pkgconfig
-++		export PKG_CONFIG_LIBDIR
-++	fi
-++
-++	if [ -d /usr/$target/bin ]; then
-++		PATH=/usr/$target/bin:$PATH
-++	fi
-++
-++	if [ -d /usr/$target/lib ]; then
-++		systemlibdirs="$systemlibdirs /usr/$target/lib"
-++	fi
-++
-+ 	CC=$target-cc
-+ 	LD=$target-ld
-+-	systemlibdirs="/usr/$target/lib"
-++	STRIP=$target-strip
-+ fi
-+ 
-+ if [ "$asan" = "1" ]; then
-+-- 
-+2.4.6
-+
-diff --git a/package/bitlbee/Config.in b/package/bitlbee/Config.in
-new file mode 100644
-index 0000000..29abb78
---- /dev/null
-+++ b/package/bitlbee/Config.in
-@@ -0,0 +1,56 @@
-+config BR2_PACKAGE_BITLBEE
-+	bool "bitlbee"
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  An IRC to other chat networks gateway
-+
-+	  http://www.bitlbee.org/
-+
-+if BR2_PACKAGE_BITLBEE
-+
-+config BR2_PACKAGE_BITLBEE_MSN
-+	bool "Enable MSN Part"
-+	help
-+	  MSN Messenger support.
-+
-+config BR2_PACKAGE_BITLBEE_JABBER
-+	bool "Enable Jabber Part"
-+	help
-+	  Jabber/XMPP support.
-+
-+config BR2_PACKAGE_BITLBEE_OSCAR
-+	bool "Enable Oscar Part"
-+	help
-+	  OSCAR/ICQ support.
-+
-+config BR2_PACKAGE_BITLBEE_YAHOO
-+	bool "Enable Yahoo Part"
-+	help
-+	  Yahoo Messenger support.
-+
-+config BR2_PACKAGE_BITLBEE_TWITTER
-+	bool "Enable Twitter Part"
-+	help
-+	  Twitter support.
-+
-+choice
-+	prompt "SSL Backend"
-+	help
-+	  Select an SSL backend.
-+
-+config BR2_PACKAGE_BITLBEE_OPENSSL
-+	bool "OpenSSL"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Use OpenSSL backend.
-+
-+config BR2_PACKAGE_BITLBEE_GNUTLS
-+	bool "GnuTLS"
-+	select BR2_PACKAGE_GNUTLS
-+	help
-+	  Use GnuTLS backend.
-+
-+endchoice
-+
-+endif
-diff --git a/package/bitlbee/bitlbee.mk b/package/bitlbee/bitlbee.mk
-new file mode 100644
-index 0000000..86c26c0
---- /dev/null
-+++ b/package/bitlbee/bitlbee.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# bitlbee
-+#
-+################################################################################
-+
-+BITLBEE_VERSION = 3.4.1
-+BITLBEE_SITE = $(call github,bitlbee,bitlbee,$(BITLBEE_VERSION))
-+BITLBEE_LICENSE = GPL-2.0
-+BITLBEE_LICENSE_FILES = COPYING
-+BITLBEE_DEPENDENCIES = libglib2
-+BITLBEE_CONF_OPTS = --doc=0
-+
-+BITLBEE_CONF_OPTS += --msn=$(if $(BR2_PACKAGE_BITLBEE_MSN),1,0)
-+BITLBEE_CONF_OPTS += --jabber=$(if $(BR2_PACKAGE_BITLBEE_JABBER),1,0)
-+BITLBEE_CONF_OPTS += --oscar=$(if $(BR2_PACKAGE_BITLBEE_OSCAR),1,0)
-+BITLBEE_CONF_OPTS += --yahoo=$(if $(BR2_PACKAGE_BITLBEE_YAHOO),1,0)
-+BITLBEE_CONF_OPTS += --twitter=$(if $(BR2_PACKAGE_BITLBEE_TWITTER),1,0)
-+
-+ifeq ($(BR2_PACKAGE_BITLBEE_OPENSSL),y)
-+BITLBEE_CONF_OPTS += --ssl=openssl
-+BITLBEE_DEPENDENCIES += openssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BITLBEE_GNUTLS),y)
-+BITLBEE_CONF_OPTS += --ssl=gnutls
-+BITLBEE_DEPENDENCIES += gnutls
-+endif
-+
-+define BITLBEE_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
-+		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
-+		./configure \
-+		--cpu=$(ARCH) \
-+		--arch=$(TARGET_OS) \
-+		--prefix=/usr \
-+		--etcdir=/etc/bitlbee \
-+		--target=$(GNU_TARGET_NAME) \
-+		--sysroot=$(STAGING_DIR) \
-+		$(BITLBEE_CONF_OPTS) \
-+	)
-+endef
-+
-+define BITLBEE_BUILD_CMDS
-+	PATH="$(PATH):$(HOST_DIR)/usr/bin" \
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define BITLBEE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d $(TARGET_DIR)/var/lib/bitlbee
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-etc install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.4.6
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index d24cf20..7e7e597 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -13,7 +13,9 @@ X264_INSTALL_STAGING = YES
+ X264_CONF_OPTS = --disable-avs
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
++# yasm needed for assembly files
+ X264_DEPENDENCIES += host-yasm
++X264_CONF_ENV += AS="$(HOST_DIR)/usr/bin/yasm"
+ else ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_aarch64),y)
+ # We need to pass gcc as AS, because the ARM assembly files have to be
+ # preprocessed
