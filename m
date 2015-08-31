@@ -1,12 +1,12 @@
 From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Mon, 31 Aug 2015 20:53:11 +0200
+Date: Mon, 31 Aug 2015 21:05:42 +0200
 Subject: [Buildroot] [PATCH 4/4] board/raspberrypi: auto-expand rootfs
  on first boot
-In-Reply-To: <55E445CA.9030907@je-eigen-domein.nl>
+In-Reply-To: <55E455DA.9050403@je-eigen-domein.nl>
 References: <1440273688-92868-1-git-send-email-benoit@wsystem.com>
  <1440273688-92868-4-git-send-email-benoit@wsystem.com>
- <55E445CA.9030907@je-eigen-domein.nl>
-Message-ID: <CA+sos78s_Gs9sfqk0QPMxkR2KM2WX67-TiHbT-4ejkP7+6zGQw@mail.gmail.com>
+ <55E455DA.9050403@je-eigen-domein.nl>
+Message-ID: <CA+sos7_9CL_ajQZvpG2j9C4cLMTMoh2nzOEzQmvwH0gA3eU4Fw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +15,91 @@ To: buildroot@busybox.net
 
 Dear Floris Bos,
 
-On Mon, Aug 31, 2015 at 2:17 PM, Floris Bos <bos@je-eigen-domein.nl> wrote:
+On Mon, Aug 31, 2015 at 3:25 PM, Floris Bos <bos@je-eigen-domein.nl> wrote:
 > On 08/22/2015 10:01 PM, Beno?t Th?baudeau wrote:
 >> Add init scripts to auto-expand the persistent rootfs on the first boot
 >> to fill the medium.
 >
 >
-> Wonder if it wouldn't be better to have a package section in buildroot for
-> commonly used init scripts like this?
+> Had a look at your script, but think it has more dependencies than strictly
+> necessary.
+
+Certainly. I've not tried to optimize dependencies in this patch.
+
+>>   diff --git
+>> a/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
+>> b/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
+>> new file mode 100755
+>> index 0000000..7f19e7a
+>> --- /dev/null
+>> +++ b/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
+>> @@ -0,0 +1,36 @@
+>> +#!/bin/sh
+>> +
+>> +case "$1" in
+>> +       start)
+>> +               echo -n "Expanding the root partition: "
+>> +               BLOCK_DEV="/dev/mmcblk0"
+>> +               PART_NUM="2"
+>> +               PART_START="$(parted -ms "${BLOCK_DEV}" unit s p
+>> 2>/dev/null | \
+>> +                       grep "^${PART_NUM}:" | cut -d : -f 2 | sed
+>> 's/s$//')"
+>> +               if [ -z "${PART_START}" ]; then
+>> +                       echo "failed"
 >
-> I don't think resizing the rootfs is specific to only this board.
-> And by making it a package you could do "depends on
-> !BR2_TARGET_ROOTFS_INITRAMFS" instead of grep magic in the post build
-> script.
+>
+> Note that the existing start sector can also be found in
+> /sys/class/block/mmcblk0p2/start
+> So can remove the parted dependency.
 
-That makes sense. It would do "depends on BR2_TARGET_ROOTFS_EXT2" and
-select the required target utils. It would also have to ask the user
-for the block device to use (or it could autodetect at runtime the
-block device on which '/' is mounted). Should this be a new package,
-or just new options in the ext2 rootfs menu? I think that the latter
-makes more sense for now.
+Yes, but we would have to check how portable this is among all Linux
+versions if we want to move that to fs/ext2/ or packages/.
 
-But regarding the "!BR2_TARGET_ROOTFS_INITRAMFS", it would not be
-needed at all. This is only on RPi to make user choices easier by not
-having to unselect ext4fs and the rootfs overlay besides selecting
-initramfs. On RPi, we could just force users to select only one of
-them, and say so in readme.txt, and there would be no rootfs overlay
-to manage with this feature as new config options.
+[...]
+
+>> diff --git a/configs/raspberrypi2_defconfig
+>> b/configs/raspberrypi2_defconfig
+>> index 73dc290..2e064e0 100644
+>> --- a/configs/raspberrypi2_defconfig
+>> +++ b/configs/raspberrypi2_defconfig
+>> @@ -3,6 +3,7 @@ BR2_cortex_a7=y
+>>   BR2_ARM_EABIHF=y
+>>   BR2_ARM_FPU_NEON_VFPV4=y
+>>   +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+>
+>
+> Why is glibc required?
+> Isn't it possible to just set the right options (like wchar, largefile) for
+> uclibc?
+
+Maybe. It was for e2fsprogs or parted. I will check that.
+
+>>   BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>>     BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+>> @@ -27,6 +28,13 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
+>>   BR2_PACKAGE_RPI_FIRMWARE=y
+>>   # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+>>   +BR2_PACKAGE_E2FSPROGS=y
+>> +BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+>> +BR2_PACKAGE_PARTED=y
+>> +BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+>> +
+>> +BR2_ROOTFS_OVERLAY="board/raspberrypi2/rootfs-overlay"
+>> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
+>
+>
+> Why is UTIL_LINUX_BINARIES necessary?
+> If for fdisk,
+
+Yes.
+
+> doesn't busybox provides this as well?
+
+Yes, it does, and it's selected in the default Busybox configuration
+provided by Buildroot and used on RPi. But I've not checked whether it
+is compatible with the one from util-linux regarding the command line
+interactions. I will check this.
 
 Best regards,
 Beno?t
