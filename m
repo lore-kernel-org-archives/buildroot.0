@@ -1,41 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Aug 2015 16:42:45 +0200
-Subject: [Buildroot] Analysis of build results for 2015-08-18
-In-Reply-To: <CA+BsyQ6a=2Lt5Q8XGmT4EegWFnj1b6FeV_EU3KNRGUTXx5PCtg@mail.gmail.com>
-References: <20150819063013.E74B810154B@stock.ovh.net>
- <20150819224105.2993bbe5@free-electrons.com>
- <CA+BsyQ7iPgOxOOY+vi09shjAJMhkaFQBcfe6EEJxmX_kVPh21A@mail.gmail.com>
- <20150821104622.3abb16d1@free-electrons.com>
- <CA+BsyQ6a=2Lt5Q8XGmT4EegWFnj1b6FeV_EU3KNRGUTXx5PCtg@mail.gmail.com>
-Message-ID: <20150831164245.1a25a5a9@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 31 Aug 2015 16:43:31 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/kodi: Add support for libssh
+Message-ID: <1441032211-23162-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+This patch depends on http://patchwork.ozlabs.org/patch/512480/
+and adds sftp support to the virtual filesystems supported by Kodi.
 
-On Fri, 21 Aug 2015 12:38:33 +0100, Brendan Heading wrote:
-> > Leaving things broken in the autobuilders is annoying. For two reasons:
-> >
-> >  1/ Due to this Busybox failure on SPARC, many SPARC builds abort at
-> >     this point, and we don't see other SPARC failures.
-> >
-> >  2/ It leaves some "noise" in the build results, and due to this it's
-> >     hard to distinguish the build failures that should be investigated
-> >     from the ones that are already analyzed.
-> 
-> Understood. Would you like me to put together a "disable libtirpc on
-> SPARC" patch then ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rebased
 
-I think we'll just ship 2015.08 with the SPARCv8 breakage on libtirpc.
-I must admit I'm not sure what to do with SPARCv8. Should we simply
-deprecate it, and if someone complain, ask that someone to help
-maintaining the platform?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 8 +++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 797f59d..9622d89 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -217,6 +217,12 @@ config BR2_PACKAGE_KODI_LIBSMBCLIENT
+ 	help
+ 	  Enable Samba support
+ 
++config BR2_PACKAGE_KODI_LIBSSH
++	bool "ssh"
++	select BR2_PACKAGE_LIBSSH
++	help
++	  Enable sftp virtual filesystem using libssh.
++
+ config BR2_PACKAGE_KODI_LIBTHEORA
+ 	bool "theora"
+ 	select BR2_PACKAGE_LIBTHEORA
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 6399ff1..6f4c1f3 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -34,7 +34,6 @@ KODI_CONF_OPTS +=  \
+ 	--disable-openmax \
+ 	--disable-projectm \
+ 	--disable-pulse \
+-	--disable-ssh \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -172,6 +171,13 @@ else
+ KODI_CONF_OPTS += --disable-airplay
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_LIBSSH),y)
++KODI_DEPENDENCIES += libssh
++KODI_CONF_OPTS += --enable-ssh
++else
++KODI_CONF_OPTS += --disable-ssh
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_AVAHI),y)
+ KODI_DEPENDENCIES += avahi
+ KODI_CONF_OPTS += --enable-avahi
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
