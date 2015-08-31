@@ -1,39 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Aug 2015 16:32:23 +0200
-Subject: [Buildroot] Add missing config to RPM target package
-In-Reply-To: <55DCC1F6.4060008@gmx.de>
-References: <55D70AF3.3050604@gmx.de>
- <20150823200604.0c1e00cb@free-electrons.com>
- <55DCC1F6.4060008@gmx.de>
-Message-ID: <20150831163223.67982cd3@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 31 Aug 2015 16:34:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Add support for libssh
+Message-ID: <1441031642-21869-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Ehmanns,
+This patch depends on http://patchwork.ozlabs.org/patch/512480/
+and adds sftp support to the virtual filesystems supported by Kodi.
 
-On Tue, 25 Aug 2015 21:28:54 +0200, Andreas Ehmanns wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in | 6 ++++++
+ package/kodi/kodi.mk   | 8 +++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-> in my first try I had no pcre support, so rpm package was built with 
-> --with-pcre=none
-> Trying to install a binary rpm just containing one file on my target 
-> system failed at the very beginning when rpm was checking package 
-> dependencies. Setting --with-pcre=internal solved this problem. So it 
-> seems to me that pcre is necessary to to dependency checks which is in 
-> my opinion one of the main features or rpm. Isn't it?
-
-If that's indeed the case, then pcre support is really mandatory for
-RPM to be useful. Therefore, can you send a patch to make the pcre
-dependency a mandatory one? Don't forget to add a comment explaining
-why we're making it mandatory even if RPM makes it an optional
-dependency.
-
-Thanks,
-
-Thomas
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 662154d..fc8bb09 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -197,6 +197,12 @@ config BR2_PACKAGE_KODI_LIBSMBCLIENT
+ 	help
+ 	  Enable Samba support
+ 
++config BR2_PACKAGE_KODI_LIBSSH
++	bool "ssh"
++	select BR2_PACKAGE_LIBSSH
++	help
++	  Enable sftp virtual filesystem using libssh.
++
+ config BR2_PACKAGE_KODI_LIBTHEORA
+ 	bool "theora"
+ 	select BR2_PACKAGE_LIBTHEORA
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 80554e9..f46d9b3 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -36,7 +36,6 @@ KODI_CONF_OPTS +=  \
+ 	--disable-projectm \
+ 	--disable-pulse \
+ 	--disable-rsxs \
+-	--disable-ssh \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -152,6 +151,13 @@ else
+ KODI_CONF_OPTS += --disable-airplay
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KODI_LIBSSH),y)
++KODI_DEPENDENCIES += libssh
++KODI_CONF_OPTS += --enable-ssh
++else
++KODI_CONF_OPTS += --disable-ssh
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_AVAHI),y)
+ KODI_DEPENDENCIES += avahi
+ KODI_CONF_OPTS += --enable-avahi
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
