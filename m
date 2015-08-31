@@ -1,133 +1,75 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Mon, 31 Aug 2015 13:39:08 +0100
-Subject: [Buildroot] [PATCH 1/1] packages/lm-sensors: fix compilation with
-	musl
-Message-ID: <1441024748-11818-1-git-send-email-brendanheading@gmail.com>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Mon, 31 Aug 2015 14:48:27 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix Image name not configurable (issue
+ #28).
+In-Reply-To: <20150831081740.GA3596@free.fr>
+References: <1440842823-1283-1-git-send-email-mc5686@mclink.it>
+ <1440845031-3965-1-git-send-email-mc5686@mclink.it>
+ <1440845031-3965-2-git-send-email-mc5686@mclink.it>
+ <20150829115935.GC4857@free.fr> <55E1DDB9.6040101@mclink.it>
+ <20150831093214.6ae89b8a@free-electrons.com> <20150831081740.GA3596@free.fr>
+Message-ID: <55E44D1B.5050207@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/f72/f72ae17cea910a1dbd3d5d4d09cfbc90d9ba8dc0/
+Agreed.
+I will press upstream.
+In the meantime I will live with my local changes.
+I'll keep the list posted on any (eventual) development.
 
-Imports a patch from Alpine Linux to remove __GLIBC__ conditional
-compilation. Retested with both musl, glibc and uclibc.
+Regards
+Mauro
 
-Patch accepted upstream.
-
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- package/lm-sensors/0003-musl-fix-includes.patch | 100 ++++++++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 package/lm-sensors/0003-musl-fix-includes.patch
-
-diff --git a/package/lm-sensors/0003-musl-fix-includes.patch b/package/lm-sensors/0003-musl-fix-includes.patch
-new file mode 100644
-index 0000000..69325ab
---- /dev/null
-+++ b/package/lm-sensors/0003-musl-fix-includes.patch
-@@ -0,0 +1,100 @@
-+From 6d85773537c9f277ed342f57500f784ccb2c4a3e Mon Sep 17 00:00:00 2001
-+From: Brendan Heading <brendanheading@gmail.com>
-+Date: Sun, 30 Aug 2015 22:26:39 +0100
-+Subject: [PATCH 1/1] fix compilation under musl
-+
-+This patch removes conditional compilation elements that are designed to
-+support glibc versions earlier than 2.0, which were causing the build
-+to fail under musl.
-+
-+Based on the patch found here :
-+
-+http://git.alpinelinux.org/cgit/aports/plain/main/lm_sensors/musl-fix-includes.patch?id=fece1d19448dbd3a56fd8ac70443116187141848
-+
-+This patch has been accepted for integration upstream and should be
-+present in the next release. See :
-+
-+http://www.lm-sensors.org/changeset/6314
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+Upstream-Status: pending
-+---
-+ prog/dump/isadump.c | 6 ------
-+ prog/dump/isaset.c  | 6 ------
-+ prog/dump/superio.c | 5 -----
-+ prog/dump/util.c    | 5 -----
-+ 4 files changed, 22 deletions(-)
-+
-+diff --git a/prog/dump/isadump.c b/prog/dump/isadump.c
-+index e031e47..88e4c3b 100644
-+--- a/prog/dump/isadump.c
-++++ b/prog/dump/isadump.c
-+@@ -36,13 +36,7 @@
-+ #include "util.h"
-+ #include "superio.h"
-+ 
-+-
-+-/* To keep glibc2 happy */
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ #ifdef __powerpc__
-+ unsigned long isa_io_base = 0; /* XXX for now */
-+diff --git a/prog/dump/isaset.c b/prog/dump/isaset.c
-+index 1d1bdad..a084c8a 100644
-+--- a/prog/dump/isaset.c
-++++ b/prog/dump/isaset.c
-+@@ -32,13 +32,7 @@
-+ #include <string.h>
-+ #include "util.h"
-+ 
-+-
-+-/* To keep glibc2 happy */
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ #ifdef __powerpc__
-+ unsigned long isa_io_base = 0; /* XXX for now */
-+diff --git a/prog/dump/superio.c b/prog/dump/superio.c
-+index 1af7358..31e0d78 100644
-+--- a/prog/dump/superio.c
-++++ b/prog/dump/superio.c
-+@@ -20,12 +20,7 @@
-+ */
-+ 
-+ #include <stdlib.h>
-+-
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ #include "superio.h"
-+ 
-+diff --git a/prog/dump/util.c b/prog/dump/util.c
-+index 676c339..d8b0927 100644
-+--- a/prog/dump/util.c
-++++ b/prog/dump/util.c
-+@@ -11,12 +11,7 @@
-+ #include <stdio.h>
-+ #include "util.h"
-+ 
-+-/* To keep glibc2 happy */
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ /* Return 1 if we should continue, 0 if we should abort */
-+ int user_ack(int def)
-+-- 
-+2.4.3
-+
--- 
-2.4.3
+Il 31/08/2015 10:17, Yann E. MORIN ha scritto:
+> Mauro, Thomas, All,
+>
+> On 2015-08-31 09:32 +0200, Thomas Petazzoni spake thusly:
+>> On Sat, 29 Aug 2015 18:28:41 +0200, Mauro Condarelli wrote:
+>>> After the previous discussion on IRC I came up with this very different patch which does not touch the upstream package at all (even though I still think allowing user to chose isn't evil).
+>>> Before I try to submit it I would like a comment.
+>>> The aim is to force the booted image name according to requested kernel target if (and only if) user contextually requests the image to be installed.
+>>> Obvious downside is user has no feedback of the change (and I don't know how to provide this feedback).
+>>> Would this be more acceptable?
+>>>
+>>> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+>>> index fa67ea6..ccb5e95 100644
+>>> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+>>> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+>>> @@ -40,6 +40,23 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+>>>           cp $(@D)/binaries/*.bin $(BINARIES_DIR)
+>>>    endef
+>>> +ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+>>> +define AT91BOOTSTRAP3_KCONFIG_FIXUP_CMDS
+>>> +       $(if $(BR2_LINUX_KERNEL_UIMAGE),
+>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
+>>> +       $(if $(BR2_LINUX_KERNEL_APPENDED_UIMAGE),
+>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
+>>> +       $(if $(BR2_LINUX_KERNEL_ZIMAGE),
+>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
+>>> +       $(if $(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),
+>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
+>>> +       $(if $(BR2_LINUX_KERNEL_VMLINUX),
+>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"vmlinux",$(@D)/.config))
+>>> +       $(if $(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),
+>>> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,$(BR2_LINUX_KERNEL_IMAGE_NAME),$(@D)/.config))
+>>> +endef
+>>> +endif
+>> I think this is not correct because it assumes you want to boot the
+>> Linux kernel directly from ATBootstrap, while many people usually do
+>> AT91Bootstrap -> another bootloader (U-Boot or Barebox) -> Linux kernel.
+> Besides, this is changing an option that is not user-configurable, so
+> its lifetime in the .config is not guaranteed. I.e. if the buildsystem
+> of at01bootstrap3 would do an "oldconfig" on it, it would get lost
+> (well, at least that's the case on their master branch).
+>
+> Please, get the matter with upstream and see what they think.
+>
+> When upstream has agreed on a "fix", *then* we can see at backporting it
+> until they do a new release.
+>
+> Regards,
+> Yann E. MORIN.
+>
