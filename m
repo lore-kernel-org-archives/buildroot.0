@@ -1,43 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Aug 2015 09:28:22 +0200
-Subject: [Buildroot] CMake and VERBOSE variable
-In-Reply-To: <55D9016F.5080602@mind.be>
-References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
- <5578B394.1010503@mind.be>
- <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
- <5579E9EF.4070402@mind.be>
- <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
- <55870F2F.4080700@mind.be>
- <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
- <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
- <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
- <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
- <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
- <ae20692cc561152ac16a33820206a599@openmailbox.org>
- <55D9016F.5080602@mind.be>
-Message-ID: <20150831092822.521c2c72@free-electrons.com>
+Date: Mon, 31 Aug 2015 09:32:14 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix Image name not configurable (issue
+ #28).
+In-Reply-To: <55E1DDB9.6040101@mclink.it>
+References: <1440842823-1283-1-git-send-email-mc5686@mclink.it>
+ <1440845031-3965-1-git-send-email-mc5686@mclink.it>
+ <1440845031-3965-2-git-send-email-mc5686@mclink.it>
+ <20150829115935.GC4857@free.fr> <55E1DDB9.6040101@mclink.it>
+Message-ID: <20150831093214.6ae89b8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, C?dric,
+Dear Mauro Condarelli,
 
-On Sun, 23 Aug 2015 01:10:39 +0200, Arnout Vandecappelle wrote:
+On Sat, 29 Aug 2015 18:28:41 +0200, Mauro Condarelli wrote:
+> Yann, All,
+> 
+> After the previous discussion on IRC I came up with this very different patch which does not touch the upstream package at all (even though I still think allowing user to chose isn't evil).
+> Before I try to submit it I would like a comment.
+> The aim is to force the booted image name according to requested kernel target if (and only if) user contextually requests the image to be installed.
+> Obvious downside is user has no feedback of the change (and I don't know how to provide this feedback).
+> Would this be more acceptable?
+> 
+> diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+> index fa67ea6..ccb5e95 100644
+> --- a/boot/at91bootstrap3/at91bootstrap3.mk
+> +++ b/boot/at91bootstrap3/at91bootstrap3.mk
+> @@ -40,6 +40,23 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+>          cp $(@D)/binaries/*.bin $(BINARIES_DIR)
+>   endef
+> +ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+> +define AT91BOOTSTRAP3_KCONFIG_FIXUP_CMDS
+> +       $(if $(BR2_LINUX_KERNEL_UIMAGE),
+> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
+> +       $(if $(BR2_LINUX_KERNEL_APPENDED_UIMAGE),
+> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
+> +       $(if $(BR2_LINUX_KERNEL_ZIMAGE),
+> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
+> +       $(if $(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),
+> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
+> +       $(if $(BR2_LINUX_KERNEL_VMLINUX),
+> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"vmlinux",$(@D)/.config))
+> +       $(if $(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),
+> +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,$(BR2_LINUX_KERNEL_IMAGE_NAME),$(@D)/.config))
+> +endef
+> +endif
 
->  For autotools it depends a lot on the version. Relatively recent automake (at
-> least 1.15) has the V=0/1 option, but it defaults to 1 I think.
-
-It actually depends on how AM_SILENT_RULES is used:
-
- * If it's not used, then the build is verbose, and V=0/1 has no effect.
-
- * If AM_SILENT_RULES is used, with no special argument, then it
-   defaults to verbose (V=1), but can be made quiet by passing V=0
-
- * If AM_SILENT_RULES([yes]) is used, then it defaults to quiet (V=0)
-   and can be made verbose by passing V=1.
+I think this is not correct because it assumes you want to boot the
+Linux kernel directly from ATBootstrap, while many people usually do
+AT91Bootstrap -> another bootloader (U-Boot or Barebox) -> Linux kernel.
 
 Best regards,
 
