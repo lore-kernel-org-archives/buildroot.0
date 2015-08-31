@@ -1,75 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Aug 2015 10:17:40 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix Image name not configurable (issue
- #28).
-In-Reply-To: <20150831093214.6ae89b8a@free-electrons.com>
-References: <1440842823-1283-1-git-send-email-mc5686@mclink.it>
- <1440845031-3965-1-git-send-email-mc5686@mclink.it>
- <1440845031-3965-2-git-send-email-mc5686@mclink.it>
- <20150829115935.GC4857@free.fr> <55E1DDB9.6040101@mclink.it>
- <20150831093214.6ae89b8a@free-electrons.com>
-Message-ID: <20150831081740.GA3596@free.fr>
+From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
+Date: Mon, 31 Aug 2015 11:11:01 +0200
+Subject: [Buildroot] [PATCH 4/4] board/raspberrypi: auto-expand rootfs
+ on first boot
+In-Reply-To: <4057940.fE2DsQZqLb@sagittea>
+References: <1440273688-92868-1-git-send-email-benoit@wsystem.com>
+ <1440273688-92868-4-git-send-email-benoit@wsystem.com>
+ <4057940.fE2DsQZqLb@sagittea>
+Message-ID: <55E41A25.9020303@wsystem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mauro, Thomas, All,
+Hello J?r?me,
 
-On 2015-08-31 09:32 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 29 Aug 2015 18:28:41 +0200, Mauro Condarelli wrote:
-> > After the previous discussion on IRC I came up with this very different patch which does not touch the upstream package at all (even though I still think allowing user to chose isn't evil).
-> > Before I try to submit it I would like a comment.
-> > The aim is to force the booted image name according to requested kernel target if (and only if) user contextually requests the image to be installed.
-> > Obvious downside is user has no feedback of the change (and I don't know how to provide this feedback).
-> > Would this be more acceptable?
-> > 
-> > diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-> > index fa67ea6..ccb5e95 100644
-> > --- a/boot/at91bootstrap3/at91bootstrap3.mk
-> > +++ b/boot/at91bootstrap3/at91bootstrap3.mk
-> > @@ -40,6 +40,23 @@ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
-> >          cp $(@D)/binaries/*.bin $(BINARIES_DIR)
-> >   endef
-> > +ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
-> > +define AT91BOOTSTRAP3_KCONFIG_FIXUP_CMDS
-> > +       $(if $(BR2_LINUX_KERNEL_UIMAGE),
-> > +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
-> > +       $(if $(BR2_LINUX_KERNEL_APPENDED_UIMAGE),
-> > +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"uImage",$(@D)/.config))
-> > +       $(if $(BR2_LINUX_KERNEL_ZIMAGE),
-> > +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
-> > +       $(if $(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),
-> > +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"zImage",$(@D)/.config))
-> > +       $(if $(BR2_LINUX_KERNEL_VMLINUX),
-> > +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,"vmlinux",$(@D)/.config))
-> > +       $(if $(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),
-> > +               $(call KCONFIG_SET_OPT,CONFIG_IMAGE_NAME,$(BR2_LINUX_KERNEL_IMAGE_NAME),$(@D)/.config))
-> > +endef
-> > +endif
+On 31/08/2015 10:51, J?r?me Pouiller wrote:
+> On Saturday 22 August 2015 22:01:28 Beno?t Th?baudeau wrote:
+>> Add init scripts to auto-expand the persistent rootfs on the first boot
+>> to fill the medium.
+>>
+>> These scripts follow the same procedure as raspi-config. The root
+>> partition is first expanded, then a reboot is required, then the rootfs
+>> is expanded. Each script removes itself once run.
+> [..]
+>> diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+>> index d63e71e..7ee783b 100644
+>> --- a/board/raspberrypi/readme.txt
+>> +++ b/board/raspberrypi/readme.txt
+>> @@ -34,10 +34,13 @@ And for model 2 B:
+>>    $ make raspberrypi2_defconfig
+>>
+>>  If you want to use a persistent rootfs, the generated ext4 rootfs image
+>> fits its -contents with only a small (but sensible) margin of free space by
+>> default, so -you might want to adjust "Filesystem images"/"ext2/3/4 root
+>> filesystem"/ -"size in blocks (leave at 0 for auto calculation)" depending
+>> on your needs, then -skip to "Build the rootfs", below.
+>> +contents with only a small (but sensible) margin of free space by default,
+>> but +it is auto-expanded on the first boot to fill the medium. You can
+>> however adjust +"Filesystem images"/"ext2/3/4 root filesystem"/
+>> +"size in blocks (leave at 0 for auto calculation)" to fit your needs. The
+>> +auto-expansion is controlled by
+>> +board/raspberrypi/rootfs-overlay/etc/init.d/S*expand-root*. Skip to
+>> +"Build the rootfs", below.
+> Isn't safer to auto-expand partition while flashing SD Card instead of doing 
+> it online?
 > 
-> I think this is not correct because it assumes you want to boot the
-> Linux kernel directly from ATBootstrap, while many people usually do
-> AT91Bootstrap -> another bootloader (U-Boot or Barebox) -> Linux kernel.
+> Maybe you can explain how to resize partition in README or provide a script 
+> like the one I sent you a few days ago (named sdflash.sh), no?
 
-Besides, this is changing an option that is not user-configurable, so
-its lifetime in the .config is not guaranteed. I.e. if the buildsystem
-of at01bootstrap3 would do an "oldconfig" on it, it would get lost
-(well, at least that's the case on their master branch).
+It would be safer if users pull the power plug during the few seconds that the
+expansion lasts, without looking at their console output, which is not a big
+risk. Doing it while flashing the SD card would have a major limitation: it
+prevents the publication of an autonomous image file that you can program by any
+means to get the same result.
 
-Please, get the matter with upstream and see what they think.
+Resizing a partition on a PC is trivial if the image is programmed first. There
+are plenty of tools like gparted and tutorials for that on the web, so I don't
+think adding such information to the readme.txt would be worth it.
 
-When upstream has agreed on a "fix", *then* we can see at backporting it
-until they do a new release.
+Regarding a script writing the SD card and auto-expanding the rootfs, it might
+be useful. Since it would require superuser rights, it should not be added to
+the post-image scripts, but launched manually. That would give users a choice.
+This script would just write the generated image file, auto-expand the rootfs
+and remove the auto-expansion scripts from the rootfs. I'll look into it.
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Beno?t
