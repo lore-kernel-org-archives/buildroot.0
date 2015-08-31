@@ -1,41 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2015 22:23:51 +0200
-Subject: [Buildroot] [PATCH] arc: axs10x - bump Linux kernel to 4.2
-	release
-In-Reply-To: <1441038349-14606-1-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Mon, 31 Aug 2015 19:25:49 +0300")
-References: <1441038349-14606-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <87d1y3ryug.fsf@dell.be.48ers.dk>
+Date: Mon, 31 Aug 2015 22:24:55 +0200
+Subject: [Buildroot] [PATCH] exfat: fix build with musl
+In-Reply-To: <1441012865-31350-1-git-send-email-peter@korsgaard.com> (Peter
+ Korsgaard's message of "Mon, 31 Aug 2015 11:21:05 +0200")
+References: <1441012865-31350-1-git-send-email-peter@korsgaard.com>
+Message-ID: <878u8rryso.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Linux kernel 4.2 was finally released, so bumping from
- > 4.2-rc5 to final release.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/e1d/e1db07f0ea1e70c62f3294016c1b3a094de71d12/
 
- > Also adding 1 back-ported patch that makes SD/MMC cards usable on AXS boards.
- > This patch will be a part of 4.3 (already in linux-next) and hopefully
- > will make its way in 4.2.1.
+ > The endianness handling functions in platform.h are protected behind ifdef
+ > __GLIBC__ which musl doesn't define even though it does provide the
+ > endianness handling interface.  Work around it by ensuring __GLIBC__ is
+ > defined.
 
- > Once that patch appears in 4.2.x it must be removed from here.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
- > ---
-
- > Hopefully this is not too late for v2015.08 Buildroot release.
- > 4.2 hasjust released and I had to test build on real HW.
- > Sorry for that last moment patch.
-
-Sorry, it is :/
-
-You forgot to change the kernel headers to 4.2 as well, and we don't
-have a BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2 option yet.
+Committed, thanks.
 
 -- 
 Venlig hilsen,
