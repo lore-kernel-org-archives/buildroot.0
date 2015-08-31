@@ -1,102 +1,71 @@
 From: Denis THULIN <denis.thulin@openwide.fr>
-Date: Mon, 31 Aug 2015 11:59:11 +0200
-Subject: [Buildroot] [PATCH 6/6] python: Adds tests
+Date: Mon, 31 Aug 2015 11:59:08 +0200
+Subject: [Buildroot] [PATCH 3/6] tests: create variable files through kconfig
 In-Reply-To: <1441015151-3108-1-git-send-email-denis.thulin@openwide.fr>
 References: <1441015151-3108-1-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <1441015151-3108-7-git-send-email-denis.thulin@openwide.fr>
+Message-ID: <1441015151-3108-4-git-send-email-denis.thulin@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds a 'host' test (usr/bin/python exists) and a few target tests.
-
-Current target tests:
-Check Python Version: Should be 2
-Check Python Math: import math module and check that it works
-Check Python Libc: import ctypes and load libc
-Check Python Zlib: import zlib
-Check Python SSL: import ssl
-
-Tests of zlib and ssl make sure that the result is correct according
-to the buildroot configuration.
+Install of target tests can now be selected from menuconfig
+This patch adds a new menu entry in Config.in in order to configure
+the test environnment.
 
 Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
 ---
 
 Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
 ---
- package/python/python.mk    | 17 +++++++++++++++++
- package/python/python.robot | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
- create mode 100644 package/python/python.robot
+ Config.in       | 6 ++++++
+ tests/Config.in | 8 ++++++++
+ tests/tests.mk  | 3 +++
+ 3 files changed, 17 insertions(+)
+ create mode 100644 tests/Config.in
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 80ffbde..047567a 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -214,6 +214,23 @@ endif
- # Provided to other packages
- PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
+diff --git a/Config.in b/Config.in
+index 8b1bd8d..51e0ea2 100644
+--- a/Config.in
++++ b/Config.in
+@@ -624,3 +624,9 @@ menu "User-provided options"
+ source "$BR2_EXTERNAL/Config.in"
  
-+# Host Tests
-+PYTHON_TEST_INSTALL_LOCATION := /usr/bin/python
+ endmenu
 +
-+# Target tests
-+PYTHON_TEST_ORIGINAL = python.robot
-+ifeq ($(BR2_PACKAGE_PYTHON_ZLIB),y)
-+	PYTHON_TEST_VARIABLES += zlib_return_code=0
-+else
-+	PYTHON_TEST_VARIABLES += zlib_return_code=1
-+endif
++menu "Test Configuration Settings"
 +
-+ifeq ($(BR2_PACKAGE_PYTHON_SSL),y)
-+	PYTHON_TEST_VARIABLES += ssl_return_code=0
-+else
-+	PYTHON_TEST_VARIABLES += ssl_return_code=1
-+endif
++source "tests/Config.in"
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
- 
-diff --git a/package/python/python.robot b/package/python/python.robot
++endmenu
+diff --git a/tests/Config.in b/tests/Config.in
 new file mode 100644
-index 0000000..9ea3203
+index 0000000..937753c
 --- /dev/null
-+++ b/package/python/python.robot
-@@ -0,0 +1,32 @@
-+*** Settings ***
-+Documentation       Test suite for package python of buildroot
-+Library             Process
-+*** Variables ***
-+*** Test Cases ***
-+Python Version
-+    ${result}=              Run Process       python      --version       stderr=STDOUT
-+    Should Start With       ${result.stdout}     Python 2
++++ b/tests/Config.in
+@@ -0,0 +1,8 @@
++comment "Target tests require robotframework"
++	depends on !BR2_PACKAGE_PYTHON_ROBOTFRAMEWORK
 +
-+Python Math
-+    [Template]      Check Python Return Code of Python Command
-+    0       import math; math.floor(12.3)
-+
-+Python Libc
-+    [Template]      Check Python Return Code of Python Command
-+    0       import ctypes; libc = ctypes.dll.LoadLibrary(\\"libc.so\\"); print libc.time(None)
-+
-+Python Zlib
-+    [Template]      Check Python Return Code of Python Command
-+    ${zlib_return_code}       import zlib
-+
-+Python SSL
-+    [Template]      Check Python Return Code of Python Command
-+    ${ssl_return_code}       import ssl
-+    
-+*** Keywords ***
-+Check Python Return Code of Python Command
-+    [arguments]     ${return_code}      ${command}
-+    ${result}=      Run Process       python      -c      "${command}"
-+    Should Be Equal As Integers     ${return_code}      ${result.rc}
-+
-+
++config BR2_TEST_TARGET
++	bool "Install tests to target"
++	depends on BR2_PACKAGE_PYTHON_ROBOTFRAMEWORK
++	help
++	  Enable this if you want to install tests on your target
+diff --git a/tests/tests.mk b/tests/tests.mk
+index a246c6e..ad05f7c 100644
+--- a/tests/tests.mk
++++ b/tests/tests.mk
+@@ -6,6 +6,9 @@ tests-common-resources: host-python-robotframework
+ 	echo target_dir = \"$(TARGET_DIR)\" >> $(TEST_DIR)/host/resources/common_variables.py
+ 	mkdir -p $(TEST_DIR)/target
+ 	cp -r tests/target $(TEST_DIR)/target/resources
++ifeq ($(BR2_TEST_TARGET),y)
++	cp -r $(TEST_DIR)/target $(TARGET_DIR)/usr/share/buildroot_tests
++endif
+ 
+ 
+ PYBOT = $(HOST_DIR)/usr/bin/pybot
 -- 
 2.5.0
