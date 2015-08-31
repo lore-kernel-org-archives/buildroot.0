@@ -1,28 +1,29 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Mon, 31 Aug 2015 13:58:04 -0700
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
-References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
- <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
- <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 31 Aug 2015 21:03:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 8246] X.org DRI2 build issue
+In-Reply-To: <bug-8246-163@https.bugs.busybox.net/>
+References: <bug-8246-163@https.bugs.busybox.net/>
+Message-ID: <20150831210342.8F1CE81D6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Katoch,
+https://bugs.busybox.net/show_bug.cgi?id=8246
 
-Using the internal toolchain saves your time and effort on the external toolchain installation. This is one of the Buildroot benefits.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Building the rootfilesystem into zImage resolves the rootfilesystem loading/linking issue clearly. I do not see any reason to build and load the rootfilesystem independently.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-Tommy
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-08-31 21:03:42 UTC ---
+This bug is fixed in master now, probably thanks to the DRI related fixes made
+by Bernd. The same defconfig builds fine with today's master. Closing.
 
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150831/fc42e45e/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
