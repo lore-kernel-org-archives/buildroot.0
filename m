@@ -1,29 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 31 Aug 2015 16:44:25 +0200
-Subject: [Buildroot] [PATCH v3 1/2] libssh: new package
-References: <1441025945-4689-1-git-send-email-fancp2007@gmail.com>
- <1441025945-4689-2-git-send-email-fancp2007@gmail.com>
- <jg5ebcxrsk.ln2@ID-313208.user.individual.net>
-Message-ID: <9r5ebcxrsk.ln2@ID-313208.user.individual.net>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Mon, 31 Aug 2015 20:48:28 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+Message-ID: <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 31 Aug 2015 16:38:43 +0200 schrieb Bernd Kuhls:
+Please suggest have i posted to right list ?
 
-> Am Mon, 31 Aug 2015 20:59:04 +0800 schrieb Scott Fan:
-> 
->> libssh2 and libssh both implement SSH and provide a library API for
->> apps.
->> Both support SSH, SFTP, auth, channels etc. Both are 25K-30K lines of
->> code.
-> 
-> Tested-by: Bernd Kuhls
-> <bernd.kuhls@t-online.de>
-> (only compile tested and linked with Kodi using this
->  patch: http://patchwork.ozlabs.org/patch/512504/)
+Developer list or user list ?
+On 31 Aug 2015 20:07, "Dinesh Guleria" <din.gulu.er@gmail.com> wrote:
 
-Correction: I used this patch for Kodi support:
-http://patchwork.ozlabs.org/patch/512505/
+> Hi ,
+>
+> I am new to buildroot. I am Trying to learn it. I am following this manual.
+> http://buildroot.uclibc.org/downloads/manual/manual.html
+>
+> So i have started with Rpi.
+>
+> I am trying to build my own rootfile system for RPI using buildroot.
+>
+> I have downloaded following cross compiler folder from git :--
+>
+> https://github.com/raspberrypi/tools/tree/master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian
+> as mentioned in this link :--
+>
+> http://hertaville.com/2012/09/28/development-environment-raspberry-pi-cross-compiler/
+>
+> My installer GCC compiler is :--
+> arm-linux-gnueabihf-gcc
+>
+> crosscompiler is downloaded from git at following location:--
+> ~/home/gcc-linaro-arm-linux-gnueabihf-raspbian
+>
+> Please suggest what value to fill here for external toolchain selection,
+> some values i have filled :--
+>
+> Toolchain type : External toolchain
+> Toolchain : Custom toolchain
+> Toolchain origin : Pre-installed toolchain
+> Toolchain path : ?
+> Toolchain prefix : ? external
+> Toolchain kernel header series : ?
+> external toolchain c library : ?
+>
+> How i will come to know what is the kernel header is used by above cross
+> compiler ?
+>
+> Please suggest.
+>
+> // katoch
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150831/24e4ca5a/attachment.html>
