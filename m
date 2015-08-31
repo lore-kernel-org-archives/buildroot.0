@@ -1,134 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2015 22:17:16 +0200
-Subject: [Buildroot] [git commit] packages/lm-sensors: fix compilation with
-	musl
-Message-ID: <20150831201941.05AD381E61@busybox.osuosl.org>
+Date: Mon, 31 Aug 2015 22:23:51 +0200
+Subject: [Buildroot] [PATCH] arc: axs10x - bump Linux kernel to 4.2
+	release
+In-Reply-To: <1441038349-14606-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Mon, 31 Aug 2015 19:25:49 +0300")
+References: <1441038349-14606-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87d1y3ryug.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c559c0b55fd350de239fb01ac893d59ec7f64e4a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/f72/f72ae17cea910a1dbd3d5d4d09cfbc90d9ba8dc0/
+ > Linux kernel 4.2 was finally released, so bumping from
+ > 4.2-rc5 to final release.
 
-Imports a patch from Alpine Linux to remove __GLIBC__ conditional
-compilation. Retested with both musl, glibc and uclibc.
+ > Also adding 1 back-ported patch that makes SD/MMC cards usable on AXS boards.
+ > This patch will be a part of 4.3 (already in linux-next) and hopefully
+ > will make its way in 4.2.1.
 
-Patch accepted upstream.
+ > Once that patch appears in 4.2.x it must be removed from here.
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lm-sensors/0003-musl-fix-includes.patch |  100 +++++++++++++++++++++++
- 1 files changed, 100 insertions(+), 0 deletions(-)
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > ---
 
-diff --git a/package/lm-sensors/0003-musl-fix-includes.patch b/package/lm-sensors/0003-musl-fix-includes.patch
-new file mode 100644
-index 0000000..69325ab
---- /dev/null
-+++ b/package/lm-sensors/0003-musl-fix-includes.patch
-@@ -0,0 +1,100 @@
-+From 6d85773537c9f277ed342f57500f784ccb2c4a3e Mon Sep 17 00:00:00 2001
-+From: Brendan Heading <brendanheading@gmail.com>
-+Date: Sun, 30 Aug 2015 22:26:39 +0100
-+Subject: [PATCH 1/1] fix compilation under musl
-+
-+This patch removes conditional compilation elements that are designed to
-+support glibc versions earlier than 2.0, which were causing the build
-+to fail under musl.
-+
-+Based on the patch found here :
-+
-+http://git.alpinelinux.org/cgit/aports/plain/main/lm_sensors/musl-fix-includes.patch?id=fece1d19448dbd3a56fd8ac70443116187141848
-+
-+This patch has been accepted for integration upstream and should be
-+present in the next release. See :
-+
-+http://www.lm-sensors.org/changeset/6314
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+Upstream-Status: pending
-+---
-+ prog/dump/isadump.c | 6 ------
-+ prog/dump/isaset.c  | 6 ------
-+ prog/dump/superio.c | 5 -----
-+ prog/dump/util.c    | 5 -----
-+ 4 files changed, 22 deletions(-)
-+
-+diff --git a/prog/dump/isadump.c b/prog/dump/isadump.c
-+index e031e47..88e4c3b 100644
-+--- a/prog/dump/isadump.c
-++++ b/prog/dump/isadump.c
-+@@ -36,13 +36,7 @@
-+ #include "util.h"
-+ #include "superio.h"
-+ 
-+-
-+-/* To keep glibc2 happy */
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ #ifdef __powerpc__
-+ unsigned long isa_io_base = 0; /* XXX for now */
-+diff --git a/prog/dump/isaset.c b/prog/dump/isaset.c
-+index 1d1bdad..a084c8a 100644
-+--- a/prog/dump/isaset.c
-++++ b/prog/dump/isaset.c
-+@@ -32,13 +32,7 @@
-+ #include <string.h>
-+ #include "util.h"
-+ 
-+-
-+-/* To keep glibc2 happy */
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ #ifdef __powerpc__
-+ unsigned long isa_io_base = 0; /* XXX for now */
-+diff --git a/prog/dump/superio.c b/prog/dump/superio.c
-+index 1af7358..31e0d78 100644
-+--- a/prog/dump/superio.c
-++++ b/prog/dump/superio.c
-+@@ -20,12 +20,7 @@
-+ */
-+ 
-+ #include <stdlib.h>
-+-
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ #include "superio.h"
-+ 
-+diff --git a/prog/dump/util.c b/prog/dump/util.c
-+index 676c339..d8b0927 100644
-+--- a/prog/dump/util.c
-++++ b/prog/dump/util.c
-+@@ -11,12 +11,7 @@
-+ #include <stdio.h>
-+ #include "util.h"
-+ 
-+-/* To keep glibc2 happy */
-+-#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ >= 0
-+ #include <sys/io.h>
-+-#else
-+-#include <asm/io.h>
-+-#endif
-+ 
-+ /* Return 1 if we should continue, 0 if we should abort */
-+ int user_ack(int def)
-+-- 
-+2.4.3
-+
+ > Hopefully this is not too late for v2015.08 Buildroot release.
+ > 4.2 hasjust released and I had to test build on real HW.
+ > Sorry for that last moment patch.
+
+Sorry, it is :/
+
+You forgot to change the kernel headers to 4.2 as well, and we don't
+have a BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2 option yet.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
