@@ -1,67 +1,60 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Mon, 31 Aug 2015 22:47:12 +0530
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
-References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
- <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
-Message-ID: <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Mon, 31 Aug 2015 13:26:15 -0400
+Subject: [Buildroot] [PATCH v2 2/4] package/berkeleydb: add host variant
+In-Reply-To: <1441041977-9160-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1441041977-9160-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <1441041977-9160-2-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05
-Mine is also same.
+Required by an upcoming host variant of the `rpm` package.
 
->> For this work I used the Buildroot internal toolchain;
-But manual says to use external tool chain, to reduce build time.
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+---
+Changes v1 -> v2:
+  - Package changed introduced in change set 2.
+---
+ package/berkeleydb/berkeleydb.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
->> configured the rootfilesystem built into zImage and the device tree blob
-built
-I want to go step by step, first with separate rootfile system & zimage
-with static nodes in dev directory. Then try on the advance combination.
-
-Katoch
-On 31 Aug 2015 21:23, "Lee, Tommy" <Tommy_Lee@alliedtelesis.com> wrote:
-
-> Katoch,
->
->
->
-> My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I made the
-> former meet the latter?s requirements. My target is Marvell ARMADA A385
-> (ARM-Cortex-A9) DB-88F6820-GP.
->
->
->
-> I have succeeded in the building of zImage. It is able to be booted up on
-> the target, using U-Boot-1.73.
->
->
->
-> For this work I used the Buildroot internal toolchain; configured the
-> rootfilesystem built into zImage and the device tree blob built outside
-> zImage.
->
->
->
-> I hope my experience is useful for your work.
->
->
->
-> Tommy
->
-> ------------------------------
-> This e-mail message is for the sole use of the intended recipient(s) and
-> may contain confidential and privileged information. Any unauthorized
-> review, use, disclosure or distribution is prohibited. If you are not the
-> intended recipient, please contact the sender by reply e-mail and destroy
-> all copies of the original message. If you are the intended recipient,
-> please be advised that the content of this message is subject to access,
-> review and disclosure by the sender's e-mail System Administrator.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150831/3ff2f66d/attachment.html>
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index e5c11bd..e9ab760 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -44,6 +44,26 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++define HOST_BERKELEYDB_CONFIGURE_CMDS
++	(cd $(@D)/build_unix; rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		$(HOST_CONFIGURE_ARGS) \
++		../dist/configure $(QUIET) \
++		--prefix=/usr \
++		--exec-prefix=/usr \
++		--sysconfdir=/etc \
++		--with-gnu-ld \
++		--disable-java \
++		--disable-tcl \
++		--enable-compat185 \
++		--enable-cxx \
++		--enable-o_direct \
++		--with-pic \
++	)
++endef
++
++HOST_BERKELEYDB_INSTALL_OPTS += DESTDIR="$(HOST_DIR)" install
++
+ ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
+ 
+ define BERKELEYDB_REMOVE_TOOLS
+@@ -61,3 +81,4 @@ endef
+ BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+1.9.5.msysgit.1
