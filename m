@@ -1,114 +1,128 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Mon, 31 Aug 2015 20:59:05 +0800
-Subject: [Buildroot] [PATCH v3 2/2] Remmina: new package
-In-Reply-To: <1441025945-4689-1-git-send-email-fancp2007@gmail.com>
-References: <1441025945-4689-1-git-send-email-fancp2007@gmail.com>
-Message-ID: <1441025945-4689-3-git-send-email-fancp2007@gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Mon, 31 Aug 2015 15:25:46 +0200
+Subject: [Buildroot] [PATCH 4/4] board/raspberrypi: auto-expand rootfs
+ on first boot
+In-Reply-To: <1440273688-92868-4-git-send-email-benoit@wsystem.com>
+References: <1440273688-92868-1-git-send-email-benoit@wsystem.com>
+ <1440273688-92868-4-git-send-email-benoit@wsystem.com>
+Message-ID: <55E455DA.9050403@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remmina is a remote desktop client written in GTK+.
-Currently RDP, VNC, NX, XDMCP and SSH are supported.
+On 08/22/2015 10:01 PM, Beno?t Th?baudeau wrote:
+> Add init scripts to auto-expand the persistent rootfs on the first boot
+> to fill the medium.
 
-http://remmina.sourceforge.net/
+Had a look at your script, but think it has more dependencies than 
+strictly necessary.
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- package/Config.in          |  1 +
- package/remmina/Config.in  | 28 ++++++++++++++++++++++++++++
- package/remmina/remmina.mk | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 package/remmina/Config.in
- create mode 100644 package/remmina/remmina.mk
+>   
+> diff --git a/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart b/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
+> new file mode 100755
+> index 0000000..7f19e7a
+> --- /dev/null
+> +++ b/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
+> @@ -0,0 +1,36 @@
+> +#!/bin/sh
+> +
+> +case "$1" in
+> +	start)
+> +		echo -n "Expanding the root partition: "
+> +		BLOCK_DEV="/dev/mmcblk0"
+> +		PART_NUM="2"
+> +		PART_START="$(parted -ms "${BLOCK_DEV}" unit s p 2>/dev/null | \
+> +			grep "^${PART_NUM}:" | cut -d : -f 2 | sed 's/s$//')"
+> +		if [ -z "${PART_START}" ]; then
+> +			echo "failed"
 
-diff --git a/package/Config.in b/package/Config.in
-index 024500c..832cda4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -239,6 +239,7 @@ endif
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
-+	source "package/remmina/Config.in"
- 	source "package/imagemagick/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-diff --git a/package/remmina/Config.in b/package/remmina/Config.in
-new file mode 100644
-index 0000000..e82f31b
---- /dev/null
-+++ b/package/remmina/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_REMMINA
-+	bool "remmina"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LIBGTK3
-+	depends on BR2_USE_MMU # libvncserver depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR # freerdp
-+	depends on !BR2_STATIC_LIBS # freerdp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # freerdp
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXKBFILE
-+	select BR2_PACKAGE_LIBGCRYPT
-+	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_LIBVNCSERVER
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	help
-+	  Remmina is a remote desktop client written in GTK+, aiming to be
-+	  useful for system administrators and travellers, who need to work
-+	  with lots of remote computers in front of either large monitors
-+	  or tiny netbooks.
-+
-+	  Remmina supports multiple network protocols in an integrated and
-+	  consistent user interface.
-+
-+	  Currently RDP, VNC, NX, XDMCP and SSH are supported.
-+
-+	  http://remmina.sourceforge.net/
-diff --git a/package/remmina/remmina.mk b/package/remmina/remmina.mk
-new file mode 100644
-index 0000000..0ac5fd0
---- /dev/null
-+++ b/package/remmina/remmina.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# remmina
-+#
-+################################################################################
-+
-+REMMINA_VERSION = v1.1.2
-+REMMINA_SITE = $(call github,FreeRDP,Remmina,$(REMMINA_VERSION))
-+REMMINA_LICENSE = GPLv2+ with OpenSSL exception
-+REMMINA_LICENSE_FILES = COPYING LICENSE LICENSE.OpenSSL
-+
-+REMMINA_CONF_OPTS = \
-+	-DWITH_AVAHI=OFF \
-+	-DWITH_APPINDICATOR=OFF \
-+	-DWITH_GNOMEKEYRING=OFF \
-+	-DWITH_TELEPATHY=OFF \
-+	-DWITH_VTE=OFF
-+
-+REMMINA_DEPENDENCIES = \
-+	libgtk3 libgcrypt libssh libvncserver freerdp \
-+	xlib_libX11 xlib_libXext xlib_libxkbfile
-+
-+ifeq ($(BR2_NEEDS_GETTEXT),y)
-+REMMINA_DEPENDENCIES += gettext
-+
-+define REMMINA_POST_PATCH_FIXINTL
-+	$(SED) 's/$${GTK_LIBRARIES}/$${GTK_LIBRARIES} -lintl/' \
-+		$(@D)/remmina/CMakeLists.txt
-+endef
-+
-+REMMINA_POST_PATCH_HOOKS += REMMINA_POST_PATCH_FIXINTL
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.5.1
+Note that the existing start sector can also be found in 
+/sys/class/block/mmcblk0p2/start
+So can remove the parted dependency.
+
+> +		else
+> +			fdisk "${BLOCK_DEV}" <<-EOF &>/dev/null
+> +				d
+> +				$PART_NUM
+> +				n
+> +				p
+> +				$PART_NUM
+> +				$PART_START
+> +
+> +				w
+> +			EOF
+> +			echo "done"
+> +		fi
+> +		rm -f /etc/init.d/S22expand-rootpart
+> +		if [ "${PART_START}" ]; then
+> +			reboot -f
+> +			while true; do :; done
+> +		fi
+> +		exit 2
+> +		;;
+> +	*)
+> +		echo "Usage: $0 start" >&2
+> +		exit 1
+> +		;;
+> +esac
+> diff --git a/board/raspberrypi/rootfs-overlay/etc/init.d/S23expand-rootfs b/board/raspberrypi/rootfs-overlay/etc/init.d/S23expand-rootfs
+> new file mode 100755
+> index 0000000..7b3f286
+> --- /dev/null
+> +++ b/board/raspberrypi/rootfs-overlay/etc/init.d/S23expand-rootfs
+> @@ -0,0 +1,16 @@
+> +#!/bin/sh
+> +
+> +case "$1" in
+> +	start)
+> +		echo -n "Expanding the root FS: "
+> +		resize2fs /dev/mmcblk0p2 &>/dev/null
+> +		ret=$?
+> +		[ ${ret} -eq 0 ] && echo "done" || echo "failed"
+> +		rm -f /etc/init.d/S23expand-rootfs
+> +		exit ${ret}
+> +		;;
+> +	*)
+> +		echo "Usage: $0 start" >&2
+> +		exit 1
+> +		;;
+> +esac
+> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+> index 73dc290..2e064e0 100644
+> --- a/configs/raspberrypi2_defconfig
+> +++ b/configs/raspberrypi2_defconfig
+> @@ -3,6 +3,7 @@ BR2_cortex_a7=y
+>   BR2_ARM_EABIHF=y
+>   BR2_ARM_FPU_NEON_VFPV4=y
+>   
+> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+
+Why is glibc required?
+Isn't it possible to just set the right options (like wchar, largefile) 
+for uclibc?
+
+>   BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>   
+>   BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+> @@ -27,6 +28,13 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
+>   BR2_PACKAGE_RPI_FIRMWARE=y
+>   # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+>   
+> +BR2_PACKAGE_E2FSPROGS=y
+> +BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
+> +BR2_PACKAGE_PARTED=y
+> +BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+> +
+> +BR2_ROOTFS_OVERLAY="board/raspberrypi2/rootfs-overlay"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
+
+Why is UTIL_LINUX_BINARIES necessary?
+If for fdisk, doesn't busybox provides this as well?
+
+
+
+Yours sincerely,
+
+Floris Bos
