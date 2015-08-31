@@ -1,122 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 1 Sep 2015 00:32:33 +0200
-Subject: [Buildroot] [PATCHv3] pkg-generic: detect incorrectly used
- package
-In-Reply-To: <20150831222334.GA3705@free.fr>
-References: <1441058113-32621-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150831222334.GA3705@free.fr>
-Message-ID: <20150831223233.GB3705@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Sep 2015 00:34:49 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <55E449F9.90407@openmailbox.org>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be> <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be> <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+ <55870F2F.4080700@mind.be> <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
+ <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
+ <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
+ <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
+ <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
+ <ae20692cc561152ac16a33820206a599@openmailbox.org> <55D9016F.5080602@mind.be>
+ <20150831092822.521c2c72@free-electrons.com> <55E449F9.90407@openmailbox.org>
+Message-ID: <55E4D689.30103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 31-08-15 14:35, C?dric Marie wrote:
+> Hi,
+> 
+> Le 31/08/2015 09:28, Thomas Petazzoni a ?crit :
+>> Arnout, C?dric,
+>>
+>> On Sun, 23 Aug 2015 01:10:39 +0200, Arnout Vandecappelle wrote:
+>>
+>>>   For autotools it depends a lot on the version. Relatively recent automake (at
+>>> least 1.15) has the V=0/1 option, but it defaults to 1 I think.
+>>
+>> It actually depends on how AM_SILENT_RULES is used:
+>>
+>>   * If it's not used, then the build is verbose, and V=0/1 has no effect.
+>>
+>>   * If AM_SILENT_RULES is used, with no special argument, then it
+>>     defaults to verbose (V=1), but can be made quiet by passing V=0
+>>
+>>   * If AM_SILENT_RULES([yes]) is used, then it defaults to quiet (V=0)
+>>     and can be made verbose by passing V=1.
+> 
+> 
+> So I think the best way to manage it is to be explicit: "V=0" when nothing is
+> specified (because we want the default to be silent), and "V=1" when V=1 from
+> the command line.
 
-On 2015-09-01 00:23 +0200, Yann E. MORIN spake thusly:
-> On 2015-08-31 23:55 +0200, Thomas Petazzoni spake thusly:
-> > In Buildroot, the selection of a package from a Config.in level and
-> > from a Makefile level are completely disconnected. This can lead to
-> > issues where the build of a package is triggered at the Makefile level
-> > due to the package being listed in another package <pkg>_DEPENDENCIES
-> > variable, even if that package is not enabled in the configuration.
-> [--SNIP--]
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 6a7d97e..e8cf488 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -143,6 +143,17 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
-> >  
-> >  # Configure
-> >  $(BUILD_DIR)/%/.stamp_configured:
-> > +# Only trigger the check for default builds. If the user forces
-> > +# building a package, even if not enabled in the configuration, we
-> > +# want to accept it.
-> > +ifeq ($(MAKECMDGOALS),)
-> > +	@if test "$(TYPE)" = "target" -a -z "$($(KCONFIG_VAR))" ; then \
-> > +		echo "ERROR: A package must have added $(PKG) to its _DEPENDENCIES line but" ; \
-> > +		echo "forgot to add the corresponding select / depends on $(KCONFIG_VAR)." ; \
-> > +		echo "Please review your packages and try again." ; \
-> > +		exit 1 ; \
-> 
-> It might even be interesting to tell the user what those packages might
-> be, like so (totally untested):
-> 
->     diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->     index 6a7d97e..03ca9cc 100644
->     --- a/package/pkg-generic.mk
->     +++ b/package/pkg-generic.mk
->     @@ -758,6 +758,9 @@ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->      # configuration
->      ifeq ($$($$($(2)_KCONFIG_VAR)),y)
->      
->     +# Store reverse build-dependency information
->     +$$(eval $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(call UPPER,$$(d))_DEPENDENT_OF += $(1)$$(sep)))
->     +
->      # Ensure the calling package is the declared provider for all the virtual
->      # packages it claims to be an implementation of.
->      ifneq ($$($(2)_PROVIDES),)
-> 
-> and then, in this new error message (wording to be adapted):
-> 
->     echo "Potential culprits are:"; \
->     for p in $($(2)_DEPENDENT_OF); do \
+ Actually, we want the default to be the package build system's default, I
+think. So do nothing when nothing is specified, and add V=1 when V=1 is specified.
 
-Woops...  $($(PKG)_DEPENDENT_OF)  of course, sicne we don;t have $(2) at
-that point in the Makefile...
+> In worst case, it is not taken into account.
+> Otherwise, it is correctly managed, whatever the default setting of AM_SILENT_RULE.
+> 
+> NB: I said that the behaviour was kept unchanged, but in fact there is one case
+> that seems to be better handled with my modification: when AM_SILENT_RULES is
+> used without argument (i.e. the default is verbose). Now we turn it to quiet by
+> forcing explicit V=0.
 
-Regards,
-Yann E. MORIN.
+ Perhaps we could do that when V=0 is passed explicitly on buildroot's top-level
+make.
 
->         echo "  - ${p}"; \
->     done
+ BTW, this stuff should also be tested from an output directory and with a
+non-022 umask.
+
+ Regards,
+ Arnout
+
 > 
-> Thoughts?
 > 
-> I'll further review that patch tomorrow...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > +	fi
-> > +endif
-> >  	@$(call step_start,configure)
-> >  	@$(call MESSAGE,"Configuring")
-> >  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
-> > @@ -664,6 +675,8 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
-> >  $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
-> >  $$($(2)_TARGET_BUILD):			PKG=$(2)
-> >  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-> > +$$($(2)_TARGET_CONFIGURE):		TYPE=$(4)
-> > +$$($(2)_TARGET_CONFIGURE):		KCONFIG_VAR=$$($(2)_KCONFIG_VAR)
-> >  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
-> >  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
-> >  $$($(2)_TARGET_PATCH):			PKG=$(2)
-> > -- 
-> > 2.5.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
