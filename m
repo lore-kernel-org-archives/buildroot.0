@@ -1,128 +1,39 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Mon, 31 Aug 2015 15:25:46 +0200
-Subject: [Buildroot] [PATCH 4/4] board/raspberrypi: auto-expand rootfs
- on first boot
-In-Reply-To: <1440273688-92868-4-git-send-email-benoit@wsystem.com>
-References: <1440273688-92868-1-git-send-email-benoit@wsystem.com>
- <1440273688-92868-4-git-send-email-benoit@wsystem.com>
-Message-ID: <55E455DA.9050403@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 31 Aug 2015 16:32:23 +0200
+Subject: [Buildroot] Add missing config to RPM target package
+In-Reply-To: <55DCC1F6.4060008@gmx.de>
+References: <55D70AF3.3050604@gmx.de>
+ <20150823200604.0c1e00cb@free-electrons.com>
+ <55DCC1F6.4060008@gmx.de>
+Message-ID: <20150831163223.67982cd3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/22/2015 10:01 PM, Beno?t Th?baudeau wrote:
-> Add init scripts to auto-expand the persistent rootfs on the first boot
-> to fill the medium.
+Dear Andreas Ehmanns,
 
-Had a look at your script, but think it has more dependencies than 
-strictly necessary.
+On Tue, 25 Aug 2015 21:28:54 +0200, Andreas Ehmanns wrote:
 
->   
-> diff --git a/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart b/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
-> new file mode 100755
-> index 0000000..7f19e7a
-> --- /dev/null
-> +++ b/board/raspberrypi/rootfs-overlay/etc/init.d/S22expand-rootpart
-> @@ -0,0 +1,36 @@
-> +#!/bin/sh
-> +
-> +case "$1" in
-> +	start)
-> +		echo -n "Expanding the root partition: "
-> +		BLOCK_DEV="/dev/mmcblk0"
-> +		PART_NUM="2"
-> +		PART_START="$(parted -ms "${BLOCK_DEV}" unit s p 2>/dev/null | \
-> +			grep "^${PART_NUM}:" | cut -d : -f 2 | sed 's/s$//')"
-> +		if [ -z "${PART_START}" ]; then
-> +			echo "failed"
+> in my first try I had no pcre support, so rpm package was built with 
+> --with-pcre=none
+> Trying to install a binary rpm just containing one file on my target 
+> system failed at the very beginning when rpm was checking package 
+> dependencies. Setting --with-pcre=internal solved this problem. So it 
+> seems to me that pcre is necessary to to dependency checks which is in 
+> my opinion one of the main features or rpm. Isn't it?
 
-Note that the existing start sector can also be found in 
-/sys/class/block/mmcblk0p2/start
-So can remove the parted dependency.
+If that's indeed the case, then pcre support is really mandatory for
+RPM to be useful. Therefore, can you send a patch to make the pcre
+dependency a mandatory one? Don't forget to add a comment explaining
+why we're making it mandatory even if RPM makes it an optional
+dependency.
 
-> +		else
-> +			fdisk "${BLOCK_DEV}" <<-EOF &>/dev/null
-> +				d
-> +				$PART_NUM
-> +				n
-> +				p
-> +				$PART_NUM
-> +				$PART_START
-> +
-> +				w
-> +			EOF
-> +			echo "done"
-> +		fi
-> +		rm -f /etc/init.d/S22expand-rootpart
-> +		if [ "${PART_START}" ]; then
-> +			reboot -f
-> +			while true; do :; done
-> +		fi
-> +		exit 2
-> +		;;
-> +	*)
-> +		echo "Usage: $0 start" >&2
-> +		exit 1
-> +		;;
-> +esac
-> diff --git a/board/raspberrypi/rootfs-overlay/etc/init.d/S23expand-rootfs b/board/raspberrypi/rootfs-overlay/etc/init.d/S23expand-rootfs
-> new file mode 100755
-> index 0000000..7b3f286
-> --- /dev/null
-> +++ b/board/raspberrypi/rootfs-overlay/etc/init.d/S23expand-rootfs
-> @@ -0,0 +1,16 @@
-> +#!/bin/sh
-> +
-> +case "$1" in
-> +	start)
-> +		echo -n "Expanding the root FS: "
-> +		resize2fs /dev/mmcblk0p2 &>/dev/null
-> +		ret=$?
-> +		[ ${ret} -eq 0 ] && echo "done" || echo "failed"
-> +		rm -f /etc/init.d/S23expand-rootfs
-> +		exit ${ret}
-> +		;;
-> +	*)
-> +		echo "Usage: $0 start" >&2
-> +		exit 1
-> +		;;
-> +esac
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index 73dc290..2e064e0 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -3,6 +3,7 @@ BR2_cortex_a7=y
->   BR2_ARM_EABIHF=y
->   BR2_ARM_FPU_NEON_VFPV4=y
->   
-> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+Thanks,
 
-Why is glibc required?
-Isn't it possible to just set the right options (like wchar, largefile) 
-for uclibc?
-
->   BR2_TOOLCHAIN_BUILDROOT_CXX=y
->   
->   BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-> @@ -27,6 +28,13 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
->   BR2_PACKAGE_RPI_FIRMWARE=y
->   # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
->   
-> +BR2_PACKAGE_E2FSPROGS=y
-> +BR2_PACKAGE_E2FSPROGS_RESIZE2FS=y
-> +BR2_PACKAGE_PARTED=y
-> +BR2_PACKAGE_UTIL_LINUX_BINARIES=y
-> +
-> +BR2_ROOTFS_OVERLAY="board/raspberrypi2/rootfs-overlay"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
-
-Why is UTIL_LINUX_BINARIES necessary?
-If for fdisk, doesn't busybox provides this as well?
-
-
-
-Yours sincerely,
-
-Floris Bos
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
