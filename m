@@ -1,27 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 31 Aug 2015 09:21:53 +0200
-Subject: [Buildroot] [PATCH v2 1/2] libssh: new package
-In-Reply-To: <CAFkzVZZ2nDvLAghVVZFv8JstwCifzJ5ZdU3y9LT3eGACW0BXHg@mail.gmail.com>
-References: <1438089479-30678-1-git-send-email-fancp2007@gmail.com>
- <1438089479-30678-2-git-send-email-fancp2007@gmail.com>
- <20150828122138.0a0dddec@free-electrons.com>
- <CAFkzVZZ2nDvLAghVVZFv8JstwCifzJ5ZdU3y9LT3eGACW0BXHg@mail.gmail.com>
-Message-ID: <20150831092153.24cfebe6@free-electrons.com>
+Date: Mon, 31 Aug 2015 09:28:22 +0200
+Subject: [Buildroot] CMake and VERBOSE variable
+In-Reply-To: <55D9016F.5080602@mind.be>
+References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
+ <5578B394.1010503@mind.be>
+ <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
+ <5579E9EF.4070402@mind.be>
+ <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
+ <55870F2F.4080700@mind.be>
+ <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
+ <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
+ <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
+ <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
+ <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
+ <ae20692cc561152ac16a33820206a599@openmailbox.org>
+ <55D9016F.5080602@mind.be>
+Message-ID: <20150831092822.521c2c72@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Scott Fan,
+Arnout, C?dric,
 
-On Mon, 31 Aug 2015 00:09:26 +0800, Scott Fan wrote:
-> Dear Thomas,
-> 
-> I've fixed this patch, please see at
-> http://patchwork.ozlabs.org/patch/512240/
+On Sun, 23 Aug 2015 01:10:39 +0200, Arnout Vandecappelle wrote:
 
-Thanks, it has been applied by Peter in the mean time!
+>  For autotools it depends a lot on the version. Relatively recent automake (at
+> least 1.15) has the V=0/1 option, but it defaults to 1 I think.
+
+It actually depends on how AM_SILENT_RULES is used:
+
+ * If it's not used, then the build is verbose, and V=0/1 has no effect.
+
+ * If AM_SILENT_RULES is used, with no special argument, then it
+   defaults to verbose (V=1), but can be made quiet by passing V=0
+
+ * If AM_SILENT_RULES([yes]) is used, then it defaults to quiet (V=0)
+   and can be made verbose by passing V=1.
+
+Best regards,
 
 Thomas
 -- 
