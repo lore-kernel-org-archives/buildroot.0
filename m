@@ -1,115 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 21:55:55 +0200
-Subject: [Buildroot] [git commit] gdk-pixbuf: add security patch for
-	CVE-2015-4491
-Message-ID: <20150901200659.2FE5681EB0@busybox.osuosl.org>
+Date: Tue, 1 Sep 2015 21:56:34 +0200
+Subject: [Buildroot] [git commit] expat: add security patch for CVE-2015-1283
+Message-ID: <20150901200659.4815681EC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=064ceebf93687e3496d3039a432cb5da70bbb0f8
+commit: http://git.buildroot.net/buildroot/commit/?id=67d6276c1bd050b362b11658ae0c7b4da73e227e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-CVE-2015-4491 - Heap overflow in gdk-pixbuf when scaling bitmap images.
-Patch from upstream:
-https://git.gnome.org/browse/gdk-pixbuf/commit/?id=ffec86e
+CVE-2015-1283 - Multiple integer overflows in the XML_GetBuffer
+function.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch |   84 +++++++++++++++++++++++
- 1 files changed, 84 insertions(+), 0 deletions(-)
+ package/expat/0001-fix-CVE-2015-1283.patch |   76 ++++++++++++++++++++++++++++
+ 1 files changed, 76 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
+diff --git a/package/expat/0001-fix-CVE-2015-1283.patch b/package/expat/0001-fix-CVE-2015-1283.patch
 new file mode 100644
-index 0000000..d2a68bd
+index 0000000..cdebaa0
 --- /dev/null
-+++ b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
-@@ -0,0 +1,84 @@
-+From ffec86ed5010c5a2be14f47b33bcf4ed3169a199 Mon Sep 17 00:00:00 2001
-+From: Matthias Clasen <mclasen@redhat.com>
-+Date: Mon, 13 Jul 2015 00:33:40 -0400
-+Subject: pixops: Be more careful about integer overflow
++++ b/package/expat/0001-fix-CVE-2015-1283.patch
+@@ -0,0 +1,76 @@
 +
-+Our loader code is supposed to handle out-of-memory and overflow
-+situations gracefully, reporting errors instead of aborting. But
-+if you load an image at a specific size, we also execute our
-+scaling code, which was not careful enough about overflow in some
-+places.
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+This commit makes the scaling code silently return if it fails to
-+allocate filter tables. This is the best we can do, since
-+gdk_pixbuf_scale() is not taking a GError.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=752297
-+
-+Signed-off-by: Gustavo Zacarisa <gustavo@zacarias.com.ar>
-+
-+diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
-+index 29a1c14..ce51745 100644
-+--- a/gdk-pixbuf/pixops/pixops.c
-++++ b/gdk-pixbuf/pixops/pixops.c
-+@@ -1272,7 +1272,16 @@ make_filter_table (PixopsFilter *filter)
-+   int i_offset, j_offset;
-+   int n_x = filter->x.n;
-+   int n_y = filter->y.n;
-+-  int *weights = g_new (int, SUBSAMPLE * SUBSAMPLE * n_x * n_y);
-++  gsize n_weights;
-++  int *weights;
-++
-++  n_weights = SUBSAMPLE * SUBSAMPLE * n_x * n_y;
-++  if (n_weights / (SUBSAMPLE * SUBSAMPLE * n_x) != n_y)
-++    return NULL; /* overflow, bail */
-++
-++  weights = g_try_new (int, n_weights);
-++  if (!weights)
-++    return NULL; /* overflow, bail */
++diff --git a/lib/xmlparse.c b/lib/xmlparse.c
++--- a/lib/xmlparse.c
+++++ b/lib/xmlparse.c
++@@ -1648,29 +1648,40 @@ XML_ParseBuffer(XML_Parser parser, int l
++   XmlUpdatePosition(encoding, positionPtr, bufferPtr, &position);
++   positionPtr = bufferPtr;
++   return result;
++ }
 + 
-+   for (i_offset=0; i_offset < SUBSAMPLE; i_offset++)
-+     for (j_offset=0; j_offset < SUBSAMPLE; j_offset++)
-+@@ -1347,8 +1356,11 @@ pixops_process (guchar         *dest_buf,
-+   if (x_step == 0 || y_step == 0)
-+     return; /* overflow, bail out */
-+ 
-+-  line_bufs = g_new (guchar *, filter->y.n);
-+   filter_weights = make_filter_table (filter);
-++  if (!filter_weights)
-++    return; /* overflow, bail out */
-++
-++  line_bufs = g_new (guchar *, filter->y.n);
-+ 
-+   check_shift = check_size ? get_check_shift (check_size) : 0;
-+ 
-+@@ -1468,7 +1480,7 @@ tile_make_weights (PixopsFilterDimension *dim,
-+ 		   double                 scale)
++ void * XMLCALL
++ XML_GetBuffer(XML_Parser parser, int len)
 + {
-+   int n = ceil (1 / scale + 1);
-+-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
-++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
-+   int offset;
-+   int i;
+++/* BEGIN MOZILLA CHANGE (sanity check len) */
+++  if (len < 0) {
+++    errorCode = XML_ERROR_NO_MEMORY;
+++    return NULL;
+++  }
+++/* END MOZILLA CHANGE */
++   switch (ps_parsing) {
++   case XML_SUSPENDED:
++     errorCode = XML_ERROR_SUSPENDED;
++     return NULL;
++   case XML_FINISHED:
++     errorCode = XML_ERROR_FINISHED;
++     return NULL;
++   default: ;
++   }
 + 
-+@@ -1526,7 +1538,7 @@ bilinear_magnify_make_weights (PixopsFilterDimension *dim,
++   if (len > bufferLim - bufferEnd) {
++-    /* FIXME avoid integer overflow */
++     int neededSize = len + (int)(bufferEnd - bufferPtr);
+++/* BEGIN MOZILLA CHANGE (sanity check neededSize) */
+++    if (neededSize < 0) {
+++      errorCode = XML_ERROR_NO_MEMORY;
+++      return NULL;
+++    }
+++/* END MOZILLA CHANGE */
++ #ifdef XML_CONTEXT_BYTES
++     int keep = (int)(bufferPtr - buffer);
++ 
++     if (keep > XML_CONTEXT_BYTES)
++       keep = XML_CONTEXT_BYTES;
++     neededSize += keep;
++ #endif  /* defined XML_CONTEXT_BYTES */
++     if (neededSize  <= bufferLim - buffer) {
++@@ -1689,17 +1700,25 @@ XML_GetBuffer(XML_Parser parser, int len
 +     }
-+ 
-+   dim->n = n;
-+-  dim->weights = g_new (double, SUBSAMPLE * n);
-++  dim->weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
-+ 
-+   pixel_weights = dim->weights;
-+ 
-+@@ -1617,7 +1629,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
-+ 			   double                 scale)
-+ {
-+   int n = ceil (1/scale + 3.0);
-+-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
-++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
-+   double w;
-+   int offset, i;
-+ 
-+-- 
-+cgit v0.10.2
++     else {
++       char *newBuf;
++       int bufferSize = (int)(bufferLim - bufferPtr);
++       if (bufferSize == 0)
++         bufferSize = INIT_BUFFER_SIZE;
++       do {
++         bufferSize *= 2;
++-      } while (bufferSize < neededSize);
+++/* BEGIN MOZILLA CHANGE (prevent infinite loop on overflow) */
+++      } while (bufferSize < neededSize && bufferSize > 0);
+++/* END MOZILLA CHANGE */
+++/* BEGIN MOZILLA CHANGE (sanity check bufferSize) */
+++      if (bufferSize <= 0) {
+++        errorCode = XML_ERROR_NO_MEMORY;
+++        return NULL;
+++      }
+++/* END MOZILLA CHANGE */
++       newBuf = (char *)MALLOC(bufferSize);
++       if (newBuf == 0) {
++         errorCode = XML_ERROR_NO_MEMORY;
++         return NULL;
++       }
++       bufferLim = newBuf + bufferSize;
++ #ifdef XML_CONTEXT_BYTES
++       if (bufferPtr) {
 +
