@@ -1,150 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 1 Sep 2015 13:14:09 +0100
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8tR9JRSQAqHFNYRyeNoFXwA2AwjT5-VpDCvyJL4g=0EbQ@mail.gmail.com>
-References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
- <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
- <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
- <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
- <20150901085841.3b90dd93@free-electrons.com>
- <CAKpDV8tfzK28zoRr2s7R856vgPdgzeVA2Zn6HUuLOsmG+b1gvQ@mail.gmail.com>
- <CAKpDV8tR9JRSQAqHFNYRyeNoFXwA2AwjT5-VpDCvyJL4g=0EbQ@mail.gmail.com>
-Message-ID: <55E59691.4040808@imgtec.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue,  1 Sep 2015 13:39:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dhrystone: fix musl compilation
+	issue
+Message-ID: <1441111142-8561-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dinesh Guleria,
+Fixes:
+http://autobuild.buildroot.net/results/1b6cb1b40431bf484db2d99bfdc8237cbae6a9d7/
+http://autobuild.buildroot.net/results/20e669d6e4bc3d872a355ef658ddad8f34676624/
 
-On 09/01/2015 01:02 PM, Dinesh Guleria wrote:
-> First build is successful. Some questions from my side.
-> 
-> Following images are generated :--
-> /output/images
-> rootsfs.tar
-> rootsfs.tar.gz
-> 
-> 
-> 1> Why this fakeroot is downloaded ?
+Include a more appropriate header file to pick up the definition of HZ
+from the kernel headers.
 
-Because it's needed when generating the image files. Some actions
-performed when creating the images would need superuser privileges, but
-you run (or should run) Buildroot using a normal user account. fakeroot
-fixes that issue by pretending a UID and GID of 0 (root).
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 
-> 2>  Also in the name of the crosscompiler tool chain their is word
-> "686-pc" does it means tool chain for intel 686 PC ?
+---
+v1 - This looks a bit hacky, but it seems to compile fine against
+the uclibc, glibc and musl toolchain combos without any other packages
+enabled. Comments welcome.
+---
+ package/dhrystone/0002-HZ.patch | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-It means the toolchain binaries are built for that architecture, but
-since it's a cross-toolchain, it can generate code for others.
-
-> 3> How to configure the busybox ? Build root make menuconfig does not
-> provide entry to configure the busy box ?
-> /dl
-> arm-2014.05-29-arm-none-linux-gnueabi-1686-pc-linux-gnu.tar.bz2
-> fakeroot_1.18.4.orig.tar.bz2
-> busybox-1.23.2.tar.bz2
-
-make busybox-menuconfig
-
-http://buildroot.org/manual.html#_configuration_of_other_components
-
-> 
-> 4> Is this the place where toolchain is unzipped ?
-> /output/host/opt/ext-toolchain  location contains :--
-> arm-none-linux-gnueabi 
-> bin
-> i686-pc-linux-gnu
-> lib
-> libexec
-> share
-
-Yes.
-
-Regards,
-
-Vincent.
-
-> Regards,
-> Katoch
-> 
-> On Tue, Sep 1, 2015 at 4:55 PM, Dinesh Guleria <din.gulu.er@gmail.com
-> <mailto:din.gulu.er@gmail.com>> wrote:
-> 
->     Thanks Thomas for your reply. I will use Sourcery CodeBench
->     2014.05 for time being.
-> 
->     Build is taking some time. Will Get back to you.
-> 
->     Thanks & Regards,
->     Katoch
-> 
-> 
-> 
->     On Tue, Sep 1, 2015 at 12:28 PM, Thomas Petazzoni
->     <thomas.petazzoni@free-electrons.com
->     <mailto:thomas.petazzoni@free-electrons.com>> wrote:
-> 
->         Dear Dinesh Guleria,
-> 
->         On Tue, 1 Sep 2015 06:39:34 +0530, Dinesh Guleria wrote:
-> 
->         > One more question from my side if i use " Sourcery
->         > CodeBench 2014.05"  toolchain then buildroot will download it for me or i
->         > have to download it manually ?
-> 
->         Buildroot will download it for you.
-> 
->         > Also if buildroot will download it then in
->         > this case will it be a one time process or if i make a new build for my
->         > rootfile system, then every time tool chain will be downloaded ?
-> 
->         It is a one time process. Buildroot keeps a cache of the downloaded
->         files into the dl/ sub-directory (which can be customized using the
->         BR2_DL_DIR configuration option, which is also an environment
->         variable).
-> 
->         > What exactly the diffrence between using external tool chain like Sourcery
->         > CodeBench 2014.05"  & building toolchain using crosstool-ng ?
->         > http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
-> 
->         Sourcery CodeBench 2014.05 is a pre-built toolchain, used by a
->         lot of
->         people. It's already there and available, hopefully quite well
->         tested.
->         However, since it's pre-built, you cannot customize it.
-> 
->         Using crosstool-ng to build your toolchain allows to generate a
->         completely custom toolchain, tailored for your platform.
-> 
->         > >> Building the rootfilesystem into zImage resolves the rootfilesystem
->         > loading/linking issue clearly.
->         >
->         > Will uboot be able to understand that my rootfilesystem is inside my zimage
->         > ? Or i have to tell uboot explicitly ?
-> 
->         If you're using an initramfs bundled inside the zImage, then U-Boot
->         does not even need to know about it. Just load the zImage in U-Boot,
->         start the kernel, and that's it.
-> 
->         Best regards,
-> 
->         Thomas
->         --
->         Thomas Petazzoni, CTO, Free Electrons
->         Embedded Linux, Kernel and Android engineering
->         http://free-electrons.com
-> 
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/dhrystone/0002-HZ.patch b/package/dhrystone/0002-HZ.patch
+index e3b8a0e..9572b59 100644
+--- a/package/dhrystone/0002-HZ.patch
++++ b/package/dhrystone/0002-HZ.patch
+@@ -2,6 +2,11 @@ Get HZ value from system rather than requiring via CPPFLAGS
+ 
+ Patch by Robin Getz <rgetz@blackfin.uclinux.org>
+ 
++Tweaked by Brendan Heading <brendanheading@gmail.com> - musl
++doesn't define HZ within sys/param.h (and strictly speaking
++it's not wise to depend on the glibc def either). Changed it
++here to grab the kernel version.
++
+ --- a/dhry.h
+ +++ b/dhry.h
+ @@ -359,6 +359,10 @@
+@@ -9,7 +14,7 @@ Patch by Robin Getz <rgetz@blackfin.uclinux.org>
+  #endif
+  
+ +#ifndef HZ
+-+#include <sys/param.h>
+++#include <linux/param.h>
+ +#endif
+ +
+  #define Mic_secs_Per_Second     1000000.0
+-- 
+2.4.3
