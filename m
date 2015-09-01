@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2015 13:12:57 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{2, 10, 12,
-	14}.x and 4.1.x series
-In-Reply-To: <1441103136-26019-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 1 Sep 2015 07:25:36 -0300")
-References: <1441103136-26019-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87r3miqtom.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Sep 2015 13:13:05 +0200
+Subject: [Buildroot] [PATCH] ruby: bump to version 2.2.3
+In-Reply-To: <1441103155-26065-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 1 Sep 2015 07:25:55 -0300")
+References: <1441103155-26065-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mvx6qtoe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
