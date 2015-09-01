@@ -1,71 +1,173 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 1 Sep 2015 14:20:50 +0100
-Subject: [Buildroot] [PATCH] util-linux: show utilities alphabetically
-	ordered
-Message-ID: <1441113650-51415-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Tue, 1 Sep 2015 18:53:08 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <55E59691.4040808@imgtec.com>
+References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+ <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
+ <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <20150901085841.3b90dd93@free-electrons.com>
+ <CAKpDV8tfzK28zoRr2s7R856vgPdgzeVA2Zn6HUuLOsmG+b1gvQ@mail.gmail.com>
+ <CAKpDV8tR9JRSQAqHFNYRyeNoFXwA2AwjT5-VpDCvyJL4g=0EbQ@mail.gmail.com>
+ <55E59691.4040808@imgtec.com>
+Message-ID: <CAKpDV8unp-zDo6=-XtUqWeBG_dExsTMCzwEbbas4FG7w3yyxBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The list of util-linux utilities we can find on its Config.in file it
-seems to be alphabetically ordered in purpose. However, there are some
-of them which are in the wrong place. This patch fixes that.
+Thanks Vincent.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/util-linux/Config.in |   24 ++++++++++++------------
- 1 files changed, 12 insertions(+), 12 deletions(-)
+Regards
+Katoch
+On 1 Sep 2015 17:44, "Vicente Olivert Riera" <Vincent.Riera@imgtec.com>
+wrote:
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index cc6e9a5..d5c9812 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -149,15 +149,6 @@ config BR2_PACKAGE_UTIL_LINUX_MINIX
- 	help
- 	  Minix filesystem support
- 
--config BR2_PACKAGE_UTIL_LINUX_NSENTER
--	bool "nsenter"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--	help
--	  Enter the namespaces of another process.
--
--comment "nsenter needs a toolchain w/ headers >= 3.0"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--
- config BR2_PACKAGE_UTIL_LINUX_MORE
- 	bool "more"
- 	select BR2_PACKAGE_NCURSES
-@@ -184,16 +175,25 @@ config BR2_PACKAGE_UTIL_LINUX_NOLOGIN
- 	help
- 	  Politely refuse a login
- 
--config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
--	bool "pivot_root"
-+config BR2_PACKAGE_UTIL_LINUX_NSENTER
-+	bool "nsenter"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	help
--	  Change the root filesystem
-+	  Enter the namespaces of another process.
-+
-+comment "nsenter needs a toolchain w/ headers >= 3.0"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 
- config BR2_PACKAGE_UTIL_LINUX_PARTX
- 	bool "partition utilities"
- 	help
- 	  Partition tools (addpart, delpart, partx)
- 
-+config BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
-+	bool "pivot_root"
-+	help
-+	  Change the root filesystem
-+
- config BR2_PACKAGE_UTIL_LINUX_RAW
- 	bool "raw"
- 	help
--- 
-1.7.1
+> Dear Dinesh Guleria,
+>
+> On 09/01/2015 01:02 PM, Dinesh Guleria wrote:
+> > First build is successful. Some questions from my side.
+> >
+> > Following images are generated :--
+> > /output/images
+> > rootsfs.tar
+> > rootsfs.tar.gz
+> >
+> >
+> > 1> Why this fakeroot is downloaded ?
+>
+> Because it's needed when generating the image files. Some actions
+> performed when creating the images would need superuser privileges, but
+> you run (or should run) Buildroot using a normal user account. fakeroot
+> fixes that issue by pretending a UID and GID of 0 (root).
+>
+> > 2>  Also in the name of the crosscompiler tool chain their is word
+> > "686-pc" does it means tool chain for intel 686 PC ?
+>
+> It means the toolchain binaries are built for that architecture, but
+> since it's a cross-toolchain, it can generate code for others.
+>
+> > 3> How to configure the busybox ? Build root make menuconfig does not
+> > provide entry to configure the busy box ?
+> > /dl
+> > arm-2014.05-29-arm-none-linux-gnueabi-1686-pc-linux-gnu.tar.bz2
+> > fakeroot_1.18.4.orig.tar.bz2
+> > busybox-1.23.2.tar.bz2
+>
+> make busybox-menuconfig
+>
+> http://buildroot.org/manual.html#_configuration_of_other_components
+>
+> >
+> > 4> Is this the place where toolchain is unzipped ?
+> > /output/host/opt/ext-toolchain  location contains :--
+> > arm-none-linux-gnueabi
+> > bin
+> > i686-pc-linux-gnu
+> > lib
+> > libexec
+> > share
+>
+> Yes.
+>
+> Regards,
+>
+> Vincent.
+>
+> > Regards,
+> > Katoch
+> >
+> > On Tue, Sep 1, 2015 at 4:55 PM, Dinesh Guleria <din.gulu.er@gmail.com
+> > <mailto:din.gulu.er@gmail.com>> wrote:
+> >
+> >     Thanks Thomas for your reply. I will use Sourcery CodeBench
+> >     2014.05 for time being.
+> >
+> >     Build is taking some time. Will Get back to you.
+> >
+> >     Thanks & Regards,
+> >     Katoch
+> >
+> >
+> >
+> >     On Tue, Sep 1, 2015 at 12:28 PM, Thomas Petazzoni
+> >     <thomas.petazzoni@free-electrons.com
+> >     <mailto:thomas.petazzoni@free-electrons.com>> wrote:
+> >
+> >         Dear Dinesh Guleria,
+> >
+> >         On Tue, 1 Sep 2015 06:39:34 +0530, Dinesh Guleria wrote:
+> >
+> >         > One more question from my side if i use " Sourcery
+> >         > CodeBench 2014.05"  toolchain then buildroot will download it
+> for me or i
+> >         > have to download it manually ?
+> >
+> >         Buildroot will download it for you.
+> >
+> >         > Also if buildroot will download it then in
+> >         > this case will it be a one time process or if i make a new
+> build for my
+> >         > rootfile system, then every time tool chain will be downloaded
+> ?
+> >
+> >         It is a one time process. Buildroot keeps a cache of the
+> downloaded
+> >         files into the dl/ sub-directory (which can be customized using
+> the
+> >         BR2_DL_DIR configuration option, which is also an environment
+> >         variable).
+> >
+> >         > What exactly the diffrence between using external tool chain
+> like Sourcery
+> >         > CodeBench 2014.05"  & building toolchain using crosstool-ng ?
+> >         >
+> http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
+> >
+> >         Sourcery CodeBench 2014.05 is a pre-built toolchain, used by a
+> >         lot of
+> >         people. It's already there and available, hopefully quite well
+> >         tested.
+> >         However, since it's pre-built, you cannot customize it.
+> >
+> >         Using crosstool-ng to build your toolchain allows to generate a
+> >         completely custom toolchain, tailored for your platform.
+> >
+> >         > >> Building the rootfilesystem into zImage resolves the
+> rootfilesystem
+> >         > loading/linking issue clearly.
+> >         >
+> >         > Will uboot be able to understand that my rootfilesystem is
+> inside my zimage
+> >         > ? Or i have to tell uboot explicitly ?
+> >
+> >         If you're using an initramfs bundled inside the zImage, then
+> U-Boot
+> >         does not even need to know about it. Just load the zImage in
+> U-Boot,
+> >         start the kernel, and that's it.
+> >
+> >         Best regards,
+> >
+> >         Thomas
+> >         --
+> >         Thomas Petazzoni, CTO, Free Electrons
+> >         Embedded Linux, Kernel and Android engineering
+> >         http://free-electrons.com
+> >
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/78bf1338/attachment.html>
