@@ -1,113 +1,102 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Sep 2015 14:31:09 -0300
-Subject: [Buildroot] [PATCH] gdk-pixbuf: add security patch for CVE-2015-4491
-Message-ID: <1441128669-30777-1-git-send-email-gustavo@zacarias.com.ar>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Tue, 1 Sep 2015 10:45:01 -0700
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
+References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+ <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
+ <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
+ <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2015-4491 - Heap overflow in gdk-pixbuf when scaling bitmap images.
-Patch from upstream:
-https://git.gnome.org/browse/gdk-pixbuf/commit/?id=ffec86e
+Katosh,
+Please always include buildroot at busybox.net<mailto:buildroot@busybox.net> for messages exchange.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch | 84 +++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
+I did not use QEMU ever.
 
-diff --git a/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
-new file mode 100644
-index 0000000..d2a68bd
---- /dev/null
-+++ b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
-@@ -0,0 +1,84 @@
-+From ffec86ed5010c5a2be14f47b33bcf4ed3169a199 Mon Sep 17 00:00:00 2001
-+From: Matthias Clasen <mclasen@redhat.com>
-+Date: Mon, 13 Jul 2015 00:33:40 -0400
-+Subject: pixops: Be more careful about integer overflow
-+
-+Our loader code is supposed to handle out-of-memory and overflow
-+situations gracefully, reporting errors instead of aborting. But
-+if you load an image at a specific size, we also execute our
-+scaling code, which was not careful enough about overflow in some
-+places.
-+
-+This commit makes the scaling code silently return if it fails to
-+allocate filter tables. This is the best we can do, since
-+gdk_pixbuf_scale() is not taking a GError.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=752297
-+
-+Signed-off-by: Gustavo Zacarisa <gustavo@zacarias.com.ar>
-+
-+diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
-+index 29a1c14..ce51745 100644
-+--- a/gdk-pixbuf/pixops/pixops.c
-++++ b/gdk-pixbuf/pixops/pixops.c
-+@@ -1272,7 +1272,16 @@ make_filter_table (PixopsFilter *filter)
-+   int i_offset, j_offset;
-+   int n_x = filter->x.n;
-+   int n_y = filter->y.n;
-+-  int *weights = g_new (int, SUBSAMPLE * SUBSAMPLE * n_x * n_y);
-++  gsize n_weights;
-++  int *weights;
-++
-++  n_weights = SUBSAMPLE * SUBSAMPLE * n_x * n_y;
-++  if (n_weights / (SUBSAMPLE * SUBSAMPLE * n_x) != n_y)
-++    return NULL; /* overflow, bail */
-++
-++  weights = g_try_new (int, n_weights);
-++  if (!weights)
-++    return NULL; /* overflow, bail */
-+ 
-+   for (i_offset=0; i_offset < SUBSAMPLE; i_offset++)
-+     for (j_offset=0; j_offset < SUBSAMPLE; j_offset++)
-+@@ -1347,8 +1356,11 @@ pixops_process (guchar         *dest_buf,
-+   if (x_step == 0 || y_step == 0)
-+     return; /* overflow, bail out */
-+ 
-+-  line_bufs = g_new (guchar *, filter->y.n);
-+   filter_weights = make_filter_table (filter);
-++  if (!filter_weights)
-++    return; /* overflow, bail out */
-++
-++  line_bufs = g_new (guchar *, filter->y.n);
-+ 
-+   check_shift = check_size ? get_check_shift (check_size) : 0;
-+ 
-+@@ -1468,7 +1480,7 @@ tile_make_weights (PixopsFilterDimension *dim,
-+ 		   double                 scale)
-+ {
-+   int n = ceil (1 / scale + 1);
-+-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
-++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
-+   int offset;
-+   int i;
-+ 
-+@@ -1526,7 +1538,7 @@ bilinear_magnify_make_weights (PixopsFilterDimension *dim,
-+     }
-+ 
-+   dim->n = n;
-+-  dim->weights = g_new (double, SUBSAMPLE * n);
-++  dim->weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
-+ 
-+   pixel_weights = dim->weights;
-+ 
-+@@ -1617,7 +1629,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
-+ 			   double                 scale)
-+ {
-+   int n = ceil (1/scale + 3.0);
-+-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
-++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
-+   double w;
-+   int offset, i;
-+ 
-+-- 
-+cgit v0.10.2
-+
--- 
-2.4.6
+Tommy
+
+From: Dinesh Guleria [mailto:din.gulu.er at gmail.com]
+Sent: Tuesday, September 01, 2015 10:37 AM
+To: Lee, Tommy
+Subject: RE: [Buildroot] First rootfile system build using buildroot
+
+
+Thanks.
+
+Now my root filesystem is build, please suggest can i run it using qemu ?
+
+Which version of qemu for ARM to use, any reference link which you may have used in past ?
+On 1 Sep 2015 21:27, "Lee, Tommy" <Tommy_Lee at alliedtelesis.com<mailto:Tommy_Lee@alliedtelesis.com>> wrote:
+??.root/dev/ram0?.? Must be corrected to ??.root=/dev/ram0?.?. Sorry for typo.
+
+From: buildroot [mailto:buildroot-bounces at busybox.net<mailto:buildroot-bounces@busybox.net>] On Behalf Of Lee, Tommy
+Sent: Tuesday, September 01, 2015 8:54 AM
+To: Dinesh Guleria
+Cc: buildroot at busybox.net<mailto:buildroot@busybox.net>
+Subject: Re: [Buildroot] First rootfile system build using buildroot
+
+Katosh,
+
+?bootz 0x02000000 ? 0x01000000? is the U-Boot command I am using to boot my zImage and DTB. Before running this command, I download zImage and DTB to addresses 0x02000000 and 0x01000000 separately. My bootargs string is ?console=ttyS0,115200 root/dev/ram0 rw rootdelay=2?. I believe ? ? ? in the bootz command line tells U-Boot that the rootfilesystem has been built into zImage. You probably need to adjust you bootargs string.
+
+Tommy
+
+From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Dinesh Guleria
+Sent: Monday, August 31, 2015 6:10 PM
+To: Lee, Tommy
+Cc: buildroot at busybox.net<mailto:buildroot@busybox.net>
+Subject: Re: [Buildroot] First rootfile system build using buildroot
+
+
+Thanks Tommy & Peter for your reply.
+
+>> Either use the one generated by Buildroot ("Buildroot
+toolchain") or use a pre-defined external toolchain ("Sourcery
+CodeBench 2014.05" if you're using the RPi 1, or "Linaro" if you're
+using the RPi 2).
+I am using Rpi 1.
+
+One more question from my side if i use " Sourcery
+CodeBench 2014.05"  toolchain then buildroot will download it for me or i have to download it manually ? Also if buildroot will download it then in this case will it be a one time process or if i make a new build for my rootfile system, then every time tool chain will be downloaded ?
+
+What exactly the diffrence between using external tool chain like Sourcery
+CodeBench 2014.05"  & building toolchain using crosstool-ng ?
+http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
+
+>> Building the rootfilesystem into zImage resolves the rootfilesystem loading/linking issue clearly.
+
+Will uboot be able to understand that my rootfilesystem is inside my zimage ? Or i have to tell uboot explicitly ?
+
+Katoch
+Katoch,
+
+Using the internal toolchain saves your time and effort on the external toolchain installation. This is one of the Buildroot benefits.
+
+Building the rootfilesystem into zImage resolves the rootfilesystem loading/linking issue clearly. I do not see any reason to build and load the rootfilesystem independently.
+
+Tommy
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/f0d2782f/attachment.html>
