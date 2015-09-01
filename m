@@ -1,50 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 1 Sep 2015 13:12:51 +0300
-Subject: [Buildroot] [PATCH 3/6] python-rtslib-fb: bump version
-In-Reply-To: <1441095032-5656-3-git-send-email-cvubrugier@fastmail.fm>
-References: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
- <1441095032-5656-3-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20150901101251.GN17874@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 1 Sep 2015 07:18:31 -0300
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.1p1
+In-Reply-To: <CAGm1_ku7aBHOPyKGpvXFKzPPc-kgjYTd9MqZ1dB0yAR7r7aOrQ@mail.gmail.com>
+References: <1440528839-20096-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAGm1_ku7aBHOPyKGpvXFKzPPc-kgjYTd9MqZ1dB0yAR7r7aOrQ@mail.gmail.com>
+Message-ID: <55E57B77.6070602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christophe,
+On 01/09/15 03:46, Yegor Yefremov wrote:
 
-On Tue, Sep 01, 2015 at 10:10:29AM +0200, Christophe Vu-Brugier wrote:
-> Also add new dependency to python-six.
-> 
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> ---
->  package/python-rtslib-fb/python-rtslib-fb.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
-> index d45c261..85bee0b 100644
-> --- a/package/python-rtslib-fb/python-rtslib-fb.mk
-> +++ b/package/python-rtslib-fb/python-rtslib-fb.mk
-> @@ -4,10 +4,11 @@
->  #
->  ################################################################################
->  
-> -PYTHON_RTSLIB_FB_VERSION = v2.1.fb50
-> +PYTHON_RTSLIB_FB_VERSION = v2.1.fb57
->  PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
->  PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
->  PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
->  PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
-> +PYTHON_RTSLIB_FB_DEPENDENCIES = python-six
+> Hi Gustavo,
 
-You should select BR2_PACKAGE_PYTHON_SIX in Config.in. Same for other package 
-bumps adding python-six dependency in this series.
+Hi Yegor.
 
->  $(eval $(python-package))
+> Are you using special sshd_config? After updating to 7.1p1 I couldn't
+> login with the default config. ssh said "Permission denied". After
+> downgrading to 6.9p1 I could login as usual.
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+I bet you're trying to login as root, aren't you?
+There's been a default behaviour change with 7.0p1+, password root 
+logins are disable by default, root can only login via ssh keys.
+We had a small chat with Yann and Peter on IRC and decided following 
+upstream was best (opposed to try tweaking the sshd_config).
+Regards.
