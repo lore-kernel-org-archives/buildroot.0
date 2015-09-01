@@ -1,207 +1,192 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Sep 2015 00:01:02 +0200
-Subject: [Buildroot] [PATCHv3 01/15] directfb: bump to 1.7.7
+Date: Wed,  2 Sep 2015 00:01:04 +0200
+Subject: [Buildroot] [PATCHv3 03/15] qt: fix directfb-1.7.7 compiler errors
 In-Reply-To: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1441144876-2628-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1441144876-2628-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In addition to doing the bump, this commit changes the --enable-fusion
-option to --enable-multi-kernel, as was renamed upstream.
+From: Peter Seiderer <ps.report@gmx.net>
 
-The patches were just refreshed, except
-0003-remove-redefinition-of-__typeof__.patch, which was removed since
-it was a backport from upstream, and is therefore now part of DirectFB
-1.7.7.
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0003-remove-redefinition-of-__typeof__.patch   | 28 ----------------
- ...region-lock.patch => 0003-setregion-lock.patch} | 39 +++++++++++++---------
- ...-use-gcc-link.patch => 0004-use-gcc-link.patch} |  0
- package/directfb/directfb.hash                     |  4 +--
- package/directfb/directfb.mk                       |  8 +++--
- 5 files changed, 30 insertions(+), 49 deletions(-)
- delete mode 100644 package/directfb/0003-remove-redefinition-of-__typeof__.patch
- rename package/directfb/{0004-setregion-lock.patch => 0003-setregion-lock.patch} (79%)
- rename package/directfb/{0005-use-gcc-link.patch => 0004-use-gcc-link.patch} (100%)
+ ...ion-constructor-error-for-legacy-c-compil.patch | 163 +++++++++++++++++++++
+ 1 file changed, 163 insertions(+)
+ create mode 100644 package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
 
-diff --git a/package/directfb/0003-remove-redefinition-of-__typeof__.patch b/package/directfb/0003-remove-redefinition-of-__typeof__.patch
-deleted file mode 100644
-index e3861af..0000000
---- a/package/directfb/0003-remove-redefinition-of-__typeof__.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Remove definition to fix qt5 build.
--
--Fetch from: http://git.directfb.org/?p=core/DirectFB.git;a=patch;h=203f78a4193a8ff110dec3c860e0928af1a0a72f
--
--From 203f78a4193a8ff110dec3c860e0928af1a0a72f Mon Sep 17 00:00:00 2001
--From: Denis Oliver Kropp <dok@directfb.org>
--Date: Wed, 31 Jul 2013 21:56:05 +0200
--Subject: [PATCH] libdirect: Remove redefinition of __typeof__!!!
--
-----
-- lib/direct/os/linux/glibc/types.h |    1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/lib/direct/os/linux/glibc/types.h b/lib/direct/os/linux/glibc/types.h
--index 08e94b2..80cb350 100644
----- a/lib/direct/os/linux/glibc/types.h
--+++ b/lib/direct/os/linux/glibc/types.h
--@@ -81,7 +81,6 @@ typedef int64_t s64;
-- #define __dfb_no_instrument_function__  __attribute__((no_instrument_function))
-- #define __constructor__                 __attribute__((constructor))
-- #define __destructor__                  __attribute__((destructor))
---#define __typeof__(x)                   __typeof__(x)
-- 
-- #ifndef __func__
-- #define __func__                        __FUNCTION__
---- 
--1.7.9.5
--
-diff --git a/package/directfb/0004-setregion-lock.patch b/package/directfb/0003-setregion-lock.patch
-similarity index 79%
-rename from package/directfb/0004-setregion-lock.patch
-rename to package/directfb/0003-setregion-lock.patch
-index 8a246ea..bec4234 100644
---- a/package/directfb/0004-setregion-lock.patch
-+++ b/package/directfb/0003-setregion-lock.patch
-@@ -6,9 +6,11 @@ http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/DirectFB/files/
- 
- Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
- 
----- directfb-1.6.3/gfxdrivers/cyber5k/cyber5k.c
--+++ directfb-1.6.3/gfxdrivers/cyber5k/cyber5k.c
--@@ -636,7 +636,8 @@ osdSetRegion( CoreLayer
-+Index: b/gfxdrivers/cyber5k/cyber5k.c
-+===================================================================
-+--- a/gfxdrivers/cyber5k/cyber5k.c
-++++ b/gfxdrivers/cyber5k/cyber5k.c
-+@@ -640,7 +640,8 @@
-                CoreLayerRegionConfigFlags  updated,
-                CoreSurface                *surface,
-                CorePalette                *palette,
-@@ -18,7 +20,7 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-  {
-       DFBResult ret;
-  
--@@ -644,7 +645,7 @@ osdSetRegion( CoreLayer
-+@@ -648,7 +649,7 @@
-       ret = oldPrimaryFuncs.SetRegion( layer, oldPrimaryDriverData,
-                                        layer_data, region_data,
-                                        config, updated, surface,
-@@ -27,9 +29,11 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-       if (ret)
-            return ret;
-  
----- directfb-1.6.3/gfxdrivers/radeon/radeon_crtc1.c
--+++ directfb-1.6.3/gfxdrivers/radeon/radeon_crtc1.c
--@@ -147,14 +147,15 @@ crtc1SetRegion( CoreLayer
-+Index: b/gfxdrivers/radeon/radeon_crtc1.c
-+===================================================================
-+--- a/gfxdrivers/radeon/radeon_crtc1.c
-++++ b/gfxdrivers/radeon/radeon_crtc1.c
-+@@ -147,14 +147,15 @@
-                  CoreLayerRegionConfigFlags  updated,
-                  CoreSurface                *surface,
-                  CorePalette                *palette,
-@@ -47,9 +51,11 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-       }
-  
-       return DFB_OK;
----- directfb-1.6.3/gfxdrivers/cle266/uc_primary.c
--+++ directfb-1.6.3/gfxdrivers/cle266/uc_primary.c
--@@ -138,7 +138,8 @@ osdSetRegion( CoreLayer
-+Index: b/gfxdrivers/cle266/uc_primary.c
-+===================================================================
-+--- a/gfxdrivers/cle266/uc_primary.c
-++++ b/gfxdrivers/cle266/uc_primary.c
-+@@ -142,7 +142,8 @@
-                CoreLayerRegionConfigFlags  updated,
-                CoreSurface                *surface,
-                CorePalette                *palette,
-@@ -59,7 +65,7 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-  {
-       DFBResult     ret;
-       UcDriverData *ucdrv = (UcDriverData*) driver_data;
--@@ -147,7 +148,7 @@ osdSetRegion( CoreLayer
-+@@ -151,7 +152,7 @@
-       ret = ucOldPrimaryFuncs.SetRegion( layer, ucOldPrimaryDriverData,
-                                          layer_data, region_data,
-                                          config, updated, surface,
-@@ -68,9 +74,11 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-       if (ret)
-            return ret;
-  
----- directfb-1.6.3/gfxdrivers/unichrome/uc_primary.c
--+++ directfb-1.6.3/gfxdrivers/unichrome/uc_primary.c
--@@ -135,7 +135,8 @@ osdSetRegion( CoreLayer
-+Index: b/gfxdrivers/unichrome/uc_primary.c
-+===================================================================
-+--- a/gfxdrivers/unichrome/uc_primary.c
-++++ b/gfxdrivers/unichrome/uc_primary.c
-+@@ -139,7 +139,8 @@
-                CoreLayerRegionConfigFlags  updated,
-                CoreSurface                *surface,
-                CorePalette                *palette,
-@@ -80,7 +88,7 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-  {
-       DFBResult     ret;
-       UcDriverData *ucdrv = (UcDriverData*) driver_data;
--@@ -144,7 +145,7 @@ osdSetRegion( CoreLayer
-+@@ -148,7 +149,7 @@
-       ret = ucOldPrimaryFuncs.SetRegion( layer, ucOldPrimaryDriverData,
-                                          layer_data, region_data,
-                                          config, updated, surface,
-@@ -89,4 +97,3 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
-       if (ret)
-            return ret;
-  
--
-diff --git a/package/directfb/0005-use-gcc-link.patch b/package/directfb/0004-use-gcc-link.patch
-similarity index 100%
-rename from package/directfb/0005-use-gcc-link.patch
-rename to package/directfb/0004-use-gcc-link.patch
-diff --git a/package/directfb/directfb.hash b/package/directfb/directfb.hash
-index a577cba..069d8c3 100644
---- a/package/directfb/directfb.hash
-+++ b/package/directfb/directfb.hash
-@@ -1,2 +1,2 @@
--# locally computed hash
--sha256 7a96aced0f69b2ec0810e9923068e61c21e6b19dd593e09394c872414df75e70 DirectFB-1.6.3.tar.gz
-+# Locally computed
-+sha256 b785c638dc31b8fe3a7c81be1475c89b2255ab3d67b777c747d3fbc52f8027a3 DirectFB-1.7.7.tar.gz
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index ad1dd18..c27e982 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DIRECTFB_VERSION_MAJOR = 1.6
--DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).3
-+DIRECTFB_VERSION_MAJOR = 1.7
-+DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
- DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_LICENSE = LGPLv2.1+
-@@ -35,8 +35,10 @@ DIRECTFB_CONFIG_SCRIPTS = directfb-config
- DIRECTFB_DEPENDENCIES = freetype zlib
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
--DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
-+DIRECTFB_CONF_OPTS += --enable-multi --enable-multi-kernel
- DIRECTFB_DEPENDENCIES += linux-fusion
-+else
-+DIRECTFB_CONF_OPTS += --disable-multi --disable-multi-kernel
- endif
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
+diff --git a/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch b/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+new file mode 100644
+index 0000000..d7d387a
+--- /dev/null
++++ b/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+@@ -0,0 +1,163 @@
++From ea46f47fb3c475ba2d7581c15185b8d43e63b8c2 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 27 Feb 2015 21:30:52 +0100
++Subject: [PATCH] Fix conversion/constructor error for legacy c++ compiler.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes the following compile error with legacy c++ compiler:
++
++error: in C++98 ?blitRect? must be initialized by constructor, not by ?{...}?
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp   | 14 +++++++-------
++ src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp        |  6 +++---
++ src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp        |  6 +++---
++ src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp |  2 +-
++ 4 files changed, 14 insertions(+), 14 deletions(-)
++
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
++index 876d0c2..ed69386 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
++@@ -942,7 +942,7 @@ void QDirectFBPaintEngine::drawBufferSpan(const uint *buffer, int bufsize,
++     IDirectFBSurface *src = d->surfaceCache->getSurface(buffer, bufsize);
++     // ### how does this play with setDFBColor
++     src->SetColor(src, 0, 0, 0, const_alpha);
++-    const DFBRectangle rect = { 0, 0, length, 1 };
+++    const DFBRectangle rect = (DFBRectangle_C){ 0, 0, length, 1 };
++     d->surface->Blit(d->surface, src, &rect, x, y);
++ }
++ 
++@@ -1223,14 +1223,14 @@ void QDirectFBPaintEnginePrivate::blit(const QRectF &dest, IDirectFBSurface *s,
++     const QRect dr = engine->state()->matrix.mapRect(dest).toRect();
++     if (dr.isEmpty())
++         return;
++-    const DFBRectangle sRect = { sr.x(), sr.y(), sr.width(), sr.height() };
+++    const DFBRectangle sRect = (DFBRectangle_C){ sr.x(), sr.y(), sr.width(), sr.height() };
++     DFBResult result;
++ 
++     if (dr.size() == sr.size()) {
++         result = surface->Blit(surface, s, &sRect, dr.x(), dr.y());
++     } else {
++         Q_ASSERT(supportsStretchBlit());
++-        const DFBRectangle dRect = { dr.x(), dr.y(), dr.width(), dr.height() };
+++        const DFBRectangle dRect = (DFBRectangle_C){ dr.x(), dr.y(), dr.width(), dr.height() };
++         result = surface->StretchBlit(surface, s, &sRect, &dRect);
++     }
++     if (result != DFB_OK)
++@@ -1261,7 +1261,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
++     if (newClip.isNull())
++         return;
++ 
++-    const DFBRegion clip = {
+++    const DFBRegion clip = (DFBRegion_C){
++         newClip.x(),
++         newClip.y(),
++         newClip.right(),
++@@ -1295,7 +1295,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
++         while (y <= destinationRect.bottom()) {
++             qreal x = startX;
++             while (x <= destinationRect.right()) {
++-                const DFBRectangle destination = { qRound(x), qRound(y), mappedSize.width(), mappedSize.height() };
+++                const DFBRectangle destination = (DFBRectangle_C){ qRound(x), qRound(y), (int)mappedSize.width(), (int)mappedSize.height() };
++                 surface->StretchBlit(surface, sourceSurface, 0, &destination);
++                 x += mappedSize.width();
++             }
++@@ -1337,7 +1337,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
++     if (currentClip.isEmpty()) {
++         surface->SetClip(surface, 0);
++     } else {
++-        const DFBRegion clip = {
+++        const DFBRegion clip = (DFBRegion_C){
++             currentClip.x(),
++             currentClip.y(),
++             currentClip.right(),
++@@ -1356,7 +1356,7 @@ void QDirectFBPaintEnginePrivate::updateClip()
++         surface->SetClip(surface, NULL);
++         clipType = NoClip;
++     } else if (clipData->hasRectClip) {
++-        const DFBRegion r = {
+++        const DFBRegion r = (DFBRegion_C){
++             clipData->clipRect.x(),
++             clipData->clipRect.y(),
++             clipData->clipRect.right(),
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
++index 412e684..c59c47d 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
++@@ -363,7 +363,7 @@ void QDirectFBPixmapData::copy(const QPixmapData *data, const QRect &rect)
++     } else {
++         dfbSurface->SetBlittingFlags(dfbSurface, DSBLIT_NOFX);
++     }
++-    const DFBRectangle blitRect = { rect.x(), rect.y(),
+++    const DFBRectangle blitRect = (DFBRectangle_C){ rect.x(), rect.y(),
++                                     rect.width(), rect.height() };
++     w = rect.width();
++     h = rect.height();
++@@ -465,7 +465,7 @@ QPixmap QDirectFBPixmapData::transformed(const QTransform &transform,
++     }
++     data->dfbSurface->SetBlittingFlags(data->dfbSurface, flags);
++ 
++-    const DFBRectangle destRect = { 0, 0, size.width(), size.height() };
+++    const DFBRectangle destRect = (DFBRectangle_C){ 0, 0, size.width(), size.height() };
++     data->dfbSurface->StretchBlit(data->dfbSurface, dfbSurface, 0, &destRect);
++     data->w = size.width();
++     data->h = size.height();
++@@ -551,7 +551,7 @@ bool QDirectFBPixmapData::scroll(int dx, int dy, const QRect &rect)
++         return false;
++     }
++ 
++-    const DFBRectangle source = { rect.x(), rect.y(), rect.width(), rect.height() };
+++    const DFBRectangle source = (DFBRectangle_C){ rect.x(), rect.y(), rect.width(), rect.height() };
++     result = dfbSurface->Blit(dfbSurface, dfbSurface, &source, source.x + dx, source.y + dy);
++     if (result != DFB_OK) {
++         DirectFBError("QDirectFBPixmapData::scroll", result);
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
++index eab9580..d26e5bf 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
++@@ -1635,7 +1635,7 @@ void QDirectFBScreen::solidFill(const QColor &color, const QRegion &region)
++ static inline void clearRect(IDirectFBSurface *surface, const QColor &color, const QRect &rect)
++ {
++     Q_ASSERT(surface);
++-    const DFBRegion region = { rect.left(), rect.top(), rect.right(), rect.bottom() };
+++    const DFBRegion region = (DFBRegion_C){ rect.left(), rect.top(), rect.right(), rect.bottom() };
++     // could just reinterpret_cast this to a DFBRegion
++     surface->SetClip(surface, &region);
++     surface->Clear(surface, color.red(), color.green(), color.blue(), color.alpha());
++@@ -1716,14 +1716,14 @@ void QDirectFBScreen::flipSurface(IDirectFBSurface *surface, DFBSurfaceFlipFlags
++             const DFBSurfaceFlipFlags nonWaitFlags = flipFlags & ~DSFLIP_WAIT;
++             for (int i=0; i<rects.size(); ++i) {
++                 const QRect &r = rects.at(i);
++-                const DFBRegion dfbReg = { r.x() + offset.x(), r.y() + offset.y(),
+++                const DFBRegion dfbReg = (DFBRegion_C){ r.x() + offset.x(), r.y() + offset.y(),
++                                            r.right() + offset.x(),
++                                            r.bottom() + offset.y() };
++                 surface->Flip(surface, &dfbReg, i + 1 < rects.size() ? nonWaitFlags : flipFlags);
++             }
++         } else {
++             const QRect r = region.boundingRect();
++-            const DFBRegion dfbReg = { r.x() + offset.x(), r.y() + offset.y(),
+++            const DFBRegion dfbReg = (DFBRegion_C){ r.x() + offset.x(), r.y() + offset.y(),
++                                        r.right() + offset.x(),
++                                        r.bottom() + offset.y() };
++             surface->Flip(surface, &dfbReg, flipFlags);
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
++index 4dff907..25ad06b 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
++@@ -333,7 +333,7 @@ bool QDirectFBWindowSurface::scroll(const QRegion &region, int dx, int dy)
++     }
++     dfbSurface->SetBlittingFlags(dfbSurface, DSBLIT_NOFX);
++     const QRect r = region.boundingRect();
++-    const DFBRectangle rect = { r.x(), r.y(), r.width(), r.height() };
+++    const DFBRectangle rect = (DFBRectangle_C){ r.x(), r.y(), r.width(), r.height() };
++     dfbSurface->Blit(dfbSurface, dfbSurface, &rect, r.x() + dx, r.y() + dy);
++     return true;
++ }
++-- 
++2.1.4
++
 -- 
 2.5.1
