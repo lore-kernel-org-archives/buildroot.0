@@ -1,44 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 21:58:37 +0200
-Subject: [Buildroot] [git commit] znc: needs gcc >= 4.7
-Message-ID: <20150901200659.4922F81E5A@busybox.osuosl.org>
+Date: Tue, 1 Sep 2015 22:06:26 +0200
+Subject: [Buildroot] [git commit] package/eudev: fix install command
+Message-ID: <20150901200659.67D7A7FF81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=448cdcbbf9d74430581424b228fd239076e3866b
+commit: http://git.buildroot.net/buildroot/commit/?id=1037475b9b9e1ec8092e4f90c3e33f9c485867ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/aba/aba13674fb3624e0bd6a3b1e17f28883e298c8ca/
+The directory $(TARGET_DIR)/etc/init.d/ must exist before installing
+S10udev init script.
+Add the missing "-D" option to create the "init.d" directory.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/znc/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/eudev/eudev.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/znc/Config.in b/package/znc/Config.in
-index 4328c8b..154d4b0 100644
---- a/package/znc/Config.in
-+++ b/package/znc/Config.in
-@@ -3,11 +3,13 @@ config BR2_PACKAGE_ZNC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  Advanced IRC bouncer
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index b916acd..1aa74b3 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -57,7 +57,7 @@ EUDEV_CONF_OPTS += --disable-selinux
+ endif
  
- 	  http://www.znc.in
+ define EUDEV_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
++	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
+ endef
  
--comment "znc needs a toolchain w/ C++, dynamic library"
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-+comment "znc needs a toolchain w/ C++, dynamic library, gcc >= 4.7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	depends on BR2_USE_MMU
+ # Required by default rules for input devices
