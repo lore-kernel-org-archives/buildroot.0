@@ -1,102 +1,207 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Sep 2015 00:01:01 +0200
-Subject: [Buildroot] [PATCHv3 00/15] DirectFB stack bump
-Message-ID: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed,  2 Sep 2015 00:01:02 +0200
+Subject: [Buildroot] [PATCHv3 01/15] directfb: bump to 1.7.7
+In-Reply-To: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1441144876-2628-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In addition to doing the bump, this commit changes the --enable-fusion
+option to --enable-multi-kernel, as was renamed upstream.
 
-Here is the third version of the DirectFB bump. The previous version
-was submitted in February by Peter Seiderer, so it's time to move
-forward on this topic. There are too many changes compared to Peter's
-version to really list all of them, it's better to think of this
-series almost as a new one: it combines changes from Peter with
-changes I had also prepared on my side.
+The patches were just refreshed, except
+0003-remove-redefinition-of-__typeof__.patch, which was removed since
+it was a backport from upstream, and is therefore now part of DirectFB
+1.7.7.
 
-The patch series bumps DirectFB, DirectFB-examples and linux-fusion,
-but also does a number of related cleanups (remove unused/useless
-options, simplify the DirectFB-examples package, remove no longer
-useful packages, etc.).
-
-I did quite a bit of build testing: I built 10 different Buildroot
-configurations, to test each of the 10 direct reverse dependencies of
-DirectFB:
-
- - Cairo
- - EFL (libevas and libecore)
- - GStreamer 0.10 DirectFB bad plugin
- - Gstreamer 1.x DirectFB bad plugin
- - Links with DirectFB support
- - Lite
- - Qt4 with DirectFB backend (required a patch)
- - Qt5 with DirectFB backend
- - SDL with DirectFB backend
- - VLC with DirectFB backend
-
-All of them built successfully.
-
-Thanks,
-
-Thomas
-
-Peter Seiderer (3):
-  qt: fix directfb-1.7.7 compiler errors
-  directfb: do not use inexistant configure options
-  directfb: add new TIFF option
-
-Thomas Petazzoni (12):
-  directfb: bump to 1.7.7
-  directfb: mark as available only for gcc >= 4.5
-  directfb: remove broken X.org support
-  directfb: remove BR2_PACKAGE_DIRECTFB_UNIQUE option
-  directfb: add options for divine and sawman
-  divine: remove package
-  sawman: remove package
-  linux-fusion: bump to 9.0.3, use .tar.xz
-  linux-fusion: use a more traditional style to define
-    LINUX_FUSION_MAKE_OPTS
-  directfb-examples: remove options for each example
-  directfb-examples: do not install to staging
-  directfb-examples: bump to 1.7.0
-
- Config.in.legacy                                   | 232 +++++++++++++++++++++
- package/Config.in                                  |   2 -
- package/directfb-examples/Config.in                | 151 --------------
- package/directfb-examples/directfb-examples.hash   |   4 +-
- package/directfb-examples/directfb-examples.mk     |  96 +--------
- .../0003-remove-redefinition-of-__typeof__.patch   |  28 ---
- ...region-lock.patch => 0003-setregion-lock.patch} |  39 ++--
- ...-use-gcc-link.patch => 0004-use-gcc-link.patch} |   0
- .../directfb/0005-add-missing-idivine-header.patch |  65 ++++++
- package/directfb/Config.in                         |  23 +-
- package/directfb/directfb.hash                     |   4 +-
- package/directfb/directfb.mk                       |  32 +--
- package/divine/Config.in                           |   8 -
- package/divine/divine.mk                           |  19 --
- package/gstreamer/gst-plugins-bad/Config.in        |   4 +
- package/gstreamer1/gst1-plugins-bad/Config.in      |   4 +
- package/linux-fusion/linux-fusion.hash             |   4 +-
- package/linux-fusion/linux-fusion.mk               |  19 +-
- ...ion-constructor-error-for-legacy-c-compil.patch | 163 +++++++++++++++
- package/qt5/qt5base/Config.in                      |   4 +
- .../sawman/0001-link-using-gcc-instead-of-ld.patch |  19 --
- package/sawman/Config.in                           |  11 -
- package/sawman/sawman.mk                           |  16 --
- 23 files changed, 547 insertions(+), 400 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0003-remove-redefinition-of-__typeof__.patch   | 28 ----------------
+ ...region-lock.patch => 0003-setregion-lock.patch} | 39 +++++++++++++---------
+ ...-use-gcc-link.patch => 0004-use-gcc-link.patch} |  0
+ package/directfb/directfb.hash                     |  4 +--
+ package/directfb/directfb.mk                       |  8 +++--
+ 5 files changed, 30 insertions(+), 49 deletions(-)
  delete mode 100644 package/directfb/0003-remove-redefinition-of-__typeof__.patch
  rename package/directfb/{0004-setregion-lock.patch => 0003-setregion-lock.patch} (79%)
  rename package/directfb/{0005-use-gcc-link.patch => 0004-use-gcc-link.patch} (100%)
- create mode 100644 package/directfb/0005-add-missing-idivine-header.patch
- delete mode 100644 package/divine/Config.in
- delete mode 100644 package/divine/divine.mk
- create mode 100644 package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
- delete mode 100644 package/sawman/0001-link-using-gcc-instead-of-ld.patch
- delete mode 100644 package/sawman/Config.in
- delete mode 100644 package/sawman/sawman.mk
 
+diff --git a/package/directfb/0003-remove-redefinition-of-__typeof__.patch b/package/directfb/0003-remove-redefinition-of-__typeof__.patch
+deleted file mode 100644
+index e3861af..0000000
+--- a/package/directfb/0003-remove-redefinition-of-__typeof__.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Remove definition to fix qt5 build.
+-
+-Fetch from: http://git.directfb.org/?p=core/DirectFB.git;a=patch;h=203f78a4193a8ff110dec3c860e0928af1a0a72f
+-
+-From 203f78a4193a8ff110dec3c860e0928af1a0a72f Mon Sep 17 00:00:00 2001
+-From: Denis Oliver Kropp <dok@directfb.org>
+-Date: Wed, 31 Jul 2013 21:56:05 +0200
+-Subject: [PATCH] libdirect: Remove redefinition of __typeof__!!!
+-
+----
+- lib/direct/os/linux/glibc/types.h |    1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/lib/direct/os/linux/glibc/types.h b/lib/direct/os/linux/glibc/types.h
+-index 08e94b2..80cb350 100644
+---- a/lib/direct/os/linux/glibc/types.h
+-+++ b/lib/direct/os/linux/glibc/types.h
+-@@ -81,7 +81,6 @@ typedef int64_t s64;
+- #define __dfb_no_instrument_function__  __attribute__((no_instrument_function))
+- #define __constructor__                 __attribute__((constructor))
+- #define __destructor__                  __attribute__((destructor))
+--#define __typeof__(x)                   __typeof__(x)
+- 
+- #ifndef __func__
+- #define __func__                        __FUNCTION__
+--- 
+-1.7.9.5
+-
+diff --git a/package/directfb/0004-setregion-lock.patch b/package/directfb/0003-setregion-lock.patch
+similarity index 79%
+rename from package/directfb/0004-setregion-lock.patch
+rename to package/directfb/0003-setregion-lock.patch
+index 8a246ea..bec4234 100644
+--- a/package/directfb/0004-setregion-lock.patch
++++ b/package/directfb/0003-setregion-lock.patch
+@@ -6,9 +6,11 @@ http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/DirectFB/files/
+ 
+ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+ 
+---- directfb-1.6.3/gfxdrivers/cyber5k/cyber5k.c
+-+++ directfb-1.6.3/gfxdrivers/cyber5k/cyber5k.c
+-@@ -636,7 +636,8 @@ osdSetRegion( CoreLayer
++Index: b/gfxdrivers/cyber5k/cyber5k.c
++===================================================================
++--- a/gfxdrivers/cyber5k/cyber5k.c
+++++ b/gfxdrivers/cyber5k/cyber5k.c
++@@ -640,7 +640,8 @@
+                CoreLayerRegionConfigFlags  updated,
+                CoreSurface                *surface,
+                CorePalette                *palette,
+@@ -18,7 +20,7 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+  {
+       DFBResult ret;
+  
+-@@ -644,7 +645,7 @@ osdSetRegion( CoreLayer
++@@ -648,7 +649,7 @@
+       ret = oldPrimaryFuncs.SetRegion( layer, oldPrimaryDriverData,
+                                        layer_data, region_data,
+                                        config, updated, surface,
+@@ -27,9 +29,11 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+       if (ret)
+            return ret;
+  
+---- directfb-1.6.3/gfxdrivers/radeon/radeon_crtc1.c
+-+++ directfb-1.6.3/gfxdrivers/radeon/radeon_crtc1.c
+-@@ -147,14 +147,15 @@ crtc1SetRegion( CoreLayer
++Index: b/gfxdrivers/radeon/radeon_crtc1.c
++===================================================================
++--- a/gfxdrivers/radeon/radeon_crtc1.c
+++++ b/gfxdrivers/radeon/radeon_crtc1.c
++@@ -147,14 +147,15 @@
+                  CoreLayerRegionConfigFlags  updated,
+                  CoreSurface                *surface,
+                  CorePalette                *palette,
+@@ -47,9 +51,11 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+       }
+  
+       return DFB_OK;
+---- directfb-1.6.3/gfxdrivers/cle266/uc_primary.c
+-+++ directfb-1.6.3/gfxdrivers/cle266/uc_primary.c
+-@@ -138,7 +138,8 @@ osdSetRegion( CoreLayer
++Index: b/gfxdrivers/cle266/uc_primary.c
++===================================================================
++--- a/gfxdrivers/cle266/uc_primary.c
+++++ b/gfxdrivers/cle266/uc_primary.c
++@@ -142,7 +142,8 @@
+                CoreLayerRegionConfigFlags  updated,
+                CoreSurface                *surface,
+                CorePalette                *palette,
+@@ -59,7 +65,7 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+  {
+       DFBResult     ret;
+       UcDriverData *ucdrv = (UcDriverData*) driver_data;
+-@@ -147,7 +148,7 @@ osdSetRegion( CoreLayer
++@@ -151,7 +152,7 @@
+       ret = ucOldPrimaryFuncs.SetRegion( layer, ucOldPrimaryDriverData,
+                                          layer_data, region_data,
+                                          config, updated, surface,
+@@ -68,9 +74,11 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+       if (ret)
+            return ret;
+  
+---- directfb-1.6.3/gfxdrivers/unichrome/uc_primary.c
+-+++ directfb-1.6.3/gfxdrivers/unichrome/uc_primary.c
+-@@ -135,7 +135,8 @@ osdSetRegion( CoreLayer
++Index: b/gfxdrivers/unichrome/uc_primary.c
++===================================================================
++--- a/gfxdrivers/unichrome/uc_primary.c
+++++ b/gfxdrivers/unichrome/uc_primary.c
++@@ -139,7 +139,8 @@
+                CoreLayerRegionConfigFlags  updated,
+                CoreSurface                *surface,
+                CorePalette                *palette,
+@@ -80,7 +88,7 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+  {
+       DFBResult     ret;
+       UcDriverData *ucdrv = (UcDriverData*) driver_data;
+-@@ -144,7 +145,7 @@ osdSetRegion( CoreLayer
++@@ -148,7 +149,7 @@
+       ret = ucOldPrimaryFuncs.SetRegion( layer, ucOldPrimaryDriverData,
+                                          layer_data, region_data,
+                                          config, updated, surface,
+@@ -89,4 +97,3 @@ Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+       if (ret)
+            return ret;
+  
+-
+diff --git a/package/directfb/0005-use-gcc-link.patch b/package/directfb/0004-use-gcc-link.patch
+similarity index 100%
+rename from package/directfb/0005-use-gcc-link.patch
+rename to package/directfb/0004-use-gcc-link.patch
+diff --git a/package/directfb/directfb.hash b/package/directfb/directfb.hash
+index a577cba..069d8c3 100644
+--- a/package/directfb/directfb.hash
++++ b/package/directfb/directfb.hash
+@@ -1,2 +1,2 @@
+-# locally computed hash
+-sha256 7a96aced0f69b2ec0810e9923068e61c21e6b19dd593e09394c872414df75e70 DirectFB-1.6.3.tar.gz
++# Locally computed
++sha256 b785c638dc31b8fe3a7c81be1475c89b2255ab3d67b777c747d3fbc52f8027a3 DirectFB-1.7.7.tar.gz
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index ad1dd18..c27e982 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DIRECTFB_VERSION_MAJOR = 1.6
+-DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).3
++DIRECTFB_VERSION_MAJOR = 1.7
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
+ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_LICENSE = LGPLv2.1+
+@@ -35,8 +35,10 @@ DIRECTFB_CONFIG_SCRIPTS = directfb-config
+ DIRECTFB_DEPENDENCIES = freetype zlib
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
+-DIRECTFB_CONF_OPTS += --enable-multi --enable-fusion
++DIRECTFB_CONF_OPTS += --enable-multi --enable-multi-kernel
+ DIRECTFB_DEPENDENCIES += linux-fusion
++else
++DIRECTFB_CONF_OPTS += --disable-multi --disable-multi-kernel
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB_DEBUG_SUPPORT),y)
 -- 
 2.5.1
