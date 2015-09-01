@@ -1,40 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 10:17:42 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.2
-Message-ID: <20150901083109.660C67FA68@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 01 Sep 2015 08:31:13 -0000
+Subject: [Buildroot] [git commit] package/softether: bump version
+Message-ID: <20150901083106.558577F9EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eeef055db40ba0208f4f9e28eb051b8e32bb3c03
+commit: http://git.buildroot.net/buildroot/commit/?id=9b8be0bf50e7aebbe7525fae968d1b4bea33d38d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/softether/softether.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 86aeeeb..f4fdbb2 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/softether/softether.mk b/package/softether/softether.mk
+index 17a450f..489341e 100644
+--- a/package/softether/softether.mk
++++ b/package/softether/softether.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.1.5"
-+	bool "4.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.1.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-SOFTETHER_VERSION = 18b120e5f747a84d26302ec706f6c1c91d642ace
++SOFTETHER_VERSION = 4b65e251f240d0b36c704acd598f4ceb07c41413
+ SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN,$(SOFTETHER_VERSION))
+ SOFTETHER_PATCH = \
+ 	https://github.com/dajhorn/SoftEtherVPN/commit/c5e5d7e93c6f3302adf5821c29c4efdb7630e418.patch \
