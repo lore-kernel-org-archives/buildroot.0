@@ -1,25 +1,115 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2015 22:06:39 +0200
-Subject: [Buildroot] [PATCH] package/eudev: fix install command
-In-Reply-To: <1441107556-8212-1-git-send-email-romain.naour@openwide.fr>
- (Romain Naour's message of "Tue, 1 Sep 2015 13:39:16 +0200")
-References: <1441107556-8212-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <87k2s9q4z4.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Sep 2015 21:55:55 +0200
+Subject: [Buildroot] [git commit] gdk-pixbuf: add security patch for
+	CVE-2015-4491
+Message-ID: <20150901200659.2FE5681EB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=064ceebf93687e3496d3039a432cb5da70bbb0f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The directory $(TARGET_DIR)/etc/init.d/ must exist before installing
- > S10udev init script.
- > Add the missing "-D" option to create the "init.d" directory.
+Fixes:
+CVE-2015-4491 - Heap overflow in gdk-pixbuf when scaling bitmap images.
+Patch from upstream:
+https://git.gnome.org/browse/gdk-pixbuf/commit/?id=ffec86e
 
- > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch |   84 +++++++++++++++++++++++
+ 1 files changed, 84 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
+new file mode 100644
+index 0000000..d2a68bd
+--- /dev/null
++++ b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
+@@ -0,0 +1,84 @@
++From ffec86ed5010c5a2be14f47b33bcf4ed3169a199 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen <mclasen@redhat.com>
++Date: Mon, 13 Jul 2015 00:33:40 -0400
++Subject: pixops: Be more careful about integer overflow
++
++Our loader code is supposed to handle out-of-memory and overflow
++situations gracefully, reporting errors instead of aborting. But
++if you load an image at a specific size, we also execute our
++scaling code, which was not careful enough about overflow in some
++places.
++
++This commit makes the scaling code silently return if it fails to
++allocate filter tables. This is the best we can do, since
++gdk_pixbuf_scale() is not taking a GError.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=752297
++
++Signed-off-by: Gustavo Zacarisa <gustavo@zacarias.com.ar>
++
++diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
++index 29a1c14..ce51745 100644
++--- a/gdk-pixbuf/pixops/pixops.c
+++++ b/gdk-pixbuf/pixops/pixops.c
++@@ -1272,7 +1272,16 @@ make_filter_table (PixopsFilter *filter)
++   int i_offset, j_offset;
++   int n_x = filter->x.n;
++   int n_y = filter->y.n;
++-  int *weights = g_new (int, SUBSAMPLE * SUBSAMPLE * n_x * n_y);
+++  gsize n_weights;
+++  int *weights;
+++
+++  n_weights = SUBSAMPLE * SUBSAMPLE * n_x * n_y;
+++  if (n_weights / (SUBSAMPLE * SUBSAMPLE * n_x) != n_y)
+++    return NULL; /* overflow, bail */
+++
+++  weights = g_try_new (int, n_weights);
+++  if (!weights)
+++    return NULL; /* overflow, bail */
++ 
++   for (i_offset=0; i_offset < SUBSAMPLE; i_offset++)
++     for (j_offset=0; j_offset < SUBSAMPLE; j_offset++)
++@@ -1347,8 +1356,11 @@ pixops_process (guchar         *dest_buf,
++   if (x_step == 0 || y_step == 0)
++     return; /* overflow, bail out */
++ 
++-  line_bufs = g_new (guchar *, filter->y.n);
++   filter_weights = make_filter_table (filter);
+++  if (!filter_weights)
+++    return; /* overflow, bail out */
+++
+++  line_bufs = g_new (guchar *, filter->y.n);
++ 
++   check_shift = check_size ? get_check_shift (check_size) : 0;
++ 
++@@ -1468,7 +1480,7 @@ tile_make_weights (PixopsFilterDimension *dim,
++ 		   double                 scale)
++ {
++   int n = ceil (1 / scale + 1);
++-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
+++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
++   int offset;
++   int i;
++ 
++@@ -1526,7 +1538,7 @@ bilinear_magnify_make_weights (PixopsFilterDimension *dim,
++     }
++ 
++   dim->n = n;
++-  dim->weights = g_new (double, SUBSAMPLE * n);
+++  dim->weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
++ 
++   pixel_weights = dim->weights;
++ 
++@@ -1617,7 +1629,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
++ 			   double                 scale)
++ {
++   int n = ceil (1/scale + 3.0);
++-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
+++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
++   double w;
++   int offset, i;
++ 
++-- 
++cgit v0.10.2
++
