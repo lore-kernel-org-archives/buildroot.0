@@ -1,42 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 01 Sep 2015 08:31:10 -0000
-Subject: [Buildroot] [git commit] libidn: bump to version 1.32
-Message-ID: <20150901083106.8DC917F9EB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Sep 2015 09:56:56 +0200
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2015.08
+	announcement link
+Message-ID: <20150901083109.357F97F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa50d6c1d33c919e503bed75c504399eb54dfeff
+commit: http://git.buildroot.net/buildroot/commit/?id=b6beb1d5031dae48878132b5cde378c1330dbb45
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libidn/libidn.hash |    4 ++--
- package/libidn/libidn.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/website/news.html |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index 6425d55..20c844e 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,2 +1,2 @@
--# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
--sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
-+# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
-+sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index e10fb6e..9ac2600 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN_VERSION = 1.31
-+LIBIDN_VERSION = 1.32
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
+Patch is too large, so refusing to show it
