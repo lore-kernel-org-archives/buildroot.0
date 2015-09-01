@@ -1,104 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Sep 2015 00:12:13 +0200
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Tue, 1 Sep 2015 15:36:48 -0700
 Subject: [Buildroot] Starting network...
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C345D2@svr-wa-exch1.atg.lc>
+In-Reply-To: <20150902001213.6aa70acb@free-electrons.com>
 References: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
  <20150825195452.2d7be97c@free-electrons.com>
  <944894A3EB1D044A9003B2F944389BB20474C3459F@svr-wa-exch1.atg.lc>
  <20150901211412.5a71ae8e@free-electrons.com>
  <944894A3EB1D044A9003B2F944389BB20474C345D2@svr-wa-exch1.atg.lc>
-Message-ID: <20150902001213.6aa70acb@free-electrons.com>
+ <20150902001213.6aa70acb@free-electrons.com>
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474C345DB@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Tue, 1 Sep 2015 15:03:58 -0700, Lee, Tommy wrote:
+I should have noticed that the .dts files come along with the kernel source downloading.
 
-> In the buildroot-2015.05 folder the armada-385-gp.dts file does not exist but the armada-385-db-ap.dts one.
+I just discovered the output/build/linux-headers-4.0.4/arch/arm/boot/dts/armada-388-gp.dts. I will not use it since, as you mentioned, the 388 board differs from the 385 one I am using.
 
-Buildroot does *not* contain any armada-*.dts file. Those files come
-with the kernel sources. You are confusing things, it seems.
+After I added following lines into the /etc/network/interfaces file and did the "ifdown eth0" and "ifup eth0" commands, my "ifconfig -a" command shows following result. Now my system has two network interfaces enabled.
 
-There is indeed no armada-385-gp.dts file in the kernel, as it's called
-armada-388-gp.dts.
+Thanks for your help!
 
-> Last week I built armada-385-db-ap.dtb using the following .config DTS and eth0 with no problems:
-> 
-> 
-> 
-> BR2_SYSTEM_DHCP="eth0"
-> 
-> BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> 
-> BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-> 
-> # BR2_LINUX_KERNEL_USE_CUSTOM_DTS is not set
-> 
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-385-db-ap"
-> 
-> 
-> 
-> I just used the settings again and built zImage and armada-385-db-ap. This time the armada-385-db-ap.dtb has the same md5sum value as the one I built last week.
+Tommy
 
-And? I don't see where your question is here. Also, I don't understand
-why you're sometimes referring to the Armada 388 GP and sometimes to
-the Armada 385 DB AP. Those are completely different boards, so you
-cannot use the Device Tree for one platform on the other platform.
+# vi /etc/network/interfaces
+.....
+iface eth0 inet static
+address 192.168.1.5
+gateway 192.168.1.254
+netmask 255.255.255.0
 
-> On the board, the boot process shows:
-> 
-> 
-> 
-> Starting network...
-> 
-> udhcpc (v1.23.2) started
-> 
-> Sending discover...
-> 
-> [    4.732186] mvneta f1070000.ethernet eth2: Link is Up - 100Mbps/Half - flow f
-> 
-> Sending discover...
-> 
-> Sending select for 10.28.1.47...
-> 
-> Lease of 10.28.1.47 obtained, lease time 1209600
-> 
-> deleting routers
-> 
-> adding dns 10.28.5.20
-> 
-> adding dns 10.4.5.7
-> 
-> ssh-keygen: generating new host keys: RSA1 RSA DSA ECDSA ED25519
-> 
-> Starting sshd: OK
-> 
-> Starting network management serv[   11.715258] NET: Registered protocol family 0
-> 
-> ices:.
-> 
-> 
-> 
-> Welcome to Buildroot
-> 
-> buildroot login:
-> 
-> 
-> 
-> After login, the ifconfig result is:
-> 
-> 
-> 
-> # ifconfig
+# ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:50:43:48:16:4D
+          inet addr:192.168.1.5  Bcast:0.0.0.0  Mask:255.255.255.0
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:532
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:36
 
-Use ifconfig -a to see all interfaces.
+eth1      Link encap:Ethernet  HWaddr 00:50:43:48:EC:4D
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:532
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:37
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+eth2      Link encap:Ethernet  HWaddr 00:50:43:EC:16:4D
+          inet addr:10.28.1.47  Bcast:10.28.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::250:43ff:feec:164d/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4031 errors:0 dropped:3 overruns:0 frame:0
+          TX packets:10 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:532
+          RX bytes:461861 (451.0 KiB)  TX bytes:1332 (1.3 KiB)
+          Interrupt:38
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
