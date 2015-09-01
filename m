@@ -1,84 +1,43 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Tue, 1 Sep 2015 16:55:24 +0530
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <20150901085841.3b90dd93@free-electrons.com>
-References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
- <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
- <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
- <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
- <20150901085841.3b90dd93@free-electrons.com>
-Message-ID: <CAKpDV8tfzK28zoRr2s7R856vgPdgzeVA2Zn6HUuLOsmG+b1gvQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 1 Sep 2015 14:30:23 +0300
+Subject: [Buildroot] [PATCH 1/2] dos2unix: add target support
+In-Reply-To: <55E58486.2000407@imgtec.com>
+References: <d04d05bf5fb09fd02747689fe348375cdff4fc6a.1441089817.git.baruch@tkos.co.il>
+ <55E58486.2000407@imgtec.com>
+Message-ID: <20150901113023.GO17874@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Thomas for your reply. I will use Sourcery CodeBench 2014.05 for
-time being.
+Hi Vicent,
 
-Build is taking some time. Will Get back to you.
+On Tue, Sep 01, 2015 at 11:57:10AM +0100, Vicente Olivert Riera wrote:
+> On 09/01/2015 07:43 AM, Baruch Siach wrote:
+> > From: James Knight <james.knight@rockwellcollins.com>
+> > 
+> > Allow the `dos2unix` utility to be built and installed on the target
+> > system.
+> > 
+> > [baruch: properly handle target gettext]
+> > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> > v2:
+> >    * Fix static build with gettext
+> >    * Support build without locale support
+> > ---
+> 
+> I guess Baruch forgot to add v2 the subject line and James forgot to
+> mark its previous patch as superseded in Patchwork.
 
-Thanks & Regards,
-Katoch
+You are correct on the former, my fault. As for the latter I guess James has 
+not seen the v2 patch yet, given the timezone difference.
 
+baruch
 
-
-On Tue, Sep 1, 2015 at 12:28 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Dinesh Guleria,
->
-> On Tue, 1 Sep 2015 06:39:34 +0530, Dinesh Guleria wrote:
->
-> > One more question from my side if i use " Sourcery
-> > CodeBench 2014.05"  toolchain then buildroot will download it for me or i
-> > have to download it manually ?
->
-> Buildroot will download it for you.
->
-> > Also if buildroot will download it then in
-> > this case will it be a one time process or if i make a new build for my
-> > rootfile system, then every time tool chain will be downloaded ?
->
-> It is a one time process. Buildroot keeps a cache of the downloaded
-> files into the dl/ sub-directory (which can be customized using the
-> BR2_DL_DIR configuration option, which is also an environment variable).
->
-> > What exactly the diffrence between using external tool chain like
-> Sourcery
-> > CodeBench 2014.05"  & building toolchain using crosstool-ng ?
-> >
-> http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
->
-> Sourcery CodeBench 2014.05 is a pre-built toolchain, used by a lot of
-> people. It's already there and available, hopefully quite well tested.
-> However, since it's pre-built, you cannot customize it.
->
-> Using crosstool-ng to build your toolchain allows to generate a
-> completely custom toolchain, tailored for your platform.
->
-> > >> Building the rootfilesystem into zImage resolves the rootfilesystem
-> > loading/linking issue clearly.
-> >
-> > Will uboot be able to understand that my rootfilesystem is inside my
-> zimage
-> > ? Or i have to tell uboot explicitly ?
->
-> If you're using an initramfs bundled inside the zImage, then U-Boot
-> does not even need to know about it. Just load the zImage in U-Boot,
-> start the kernel, and that's it.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/9c01709f/attachment.html>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
