@@ -1,42 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 13:11:57 +0200
-Subject: [Buildroot] [git commit] ruby: bump to version 2.2.3
-Message-ID: <20150901112046.4FCA480E3D@busybox.osuosl.org>
+Date: Tue, 1 Sep 2015 13:18:56 +0200
+Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.0.2
+Message-ID: <20150901112046.5C70681D58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed5c939dfb2dc76fd0b824d2f0eacc232ffddc21
+commit: http://git.buildroot.net/buildroot/commit/?id=1da34d2b21e5696e5fd15161af3ad4629a404150
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Static fix patch upstream so dropped.
+
+[Peter: drop _AUTORECONF as libtool 2.4.2 is used / no patches]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.hash |    4 ++--
- package/ruby/ruby.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-fix-static-linking-with-icu-uc.patch      |   33 --------------------
+ package/harfbuzz/harfbuzz.hash                     |    4 +-
+ package/harfbuzz/harfbuzz.mk                       |    5 +--
+ 3 files changed, 3 insertions(+), 39 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 4680a61..4a1861c 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
+diff --git a/package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch b/package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
+deleted file mode 100644
+index dd64393..0000000
+--- a/package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 5752d3f17072aa97a056dc081e402f43e1a3ba32 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Wed, 22 Jul 2015 23:26:23 +0200
+-Subject: [PATCH] fix static linking with icu-uc
+-
+-When linking test-unicode statically it needs $(ICU_LIBS)
+-which contains all required flags.
+-Especially -lstdc++.
+-
+-Fixes:
+-http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- test/api/Makefile.am | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/test/api/Makefile.am b/test/api/Makefile.am
+-index 4ff14fa..314a09f 100644
+---- a/test/api/Makefile.am
+-+++ b/test/api/Makefile.am
+-@@ -34,7 +34,7 @@ test_unicode_CPPFLAGS += $(GLIB_CFLAGS)
+- endif
+- if HAVE_ICU
+- test_unicode_CPPFLAGS += $(ICU_CFLAGS)
+--test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la
+-+test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la $(ICU_LIBS)
+- endif
+- 
+- 
+--- 
+-2.4.3
+-
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index daf495c..a054d6e 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
--# From https://www.ruby-lang.org/en/news/2015/04/13/ruby-2-2-2-released/
--sha256	f033b5d08ab57083e48c1d81bcd7399967578c370b664da90e12a32891424462	ruby-2.2.2.tar.xz
-+# From https://www.ruby-lang.org/en/news/2015/08/18/ruby-2-2-3-released/
-+sha256	c6ec90e9ed018e6d9a578fc93755d8565839908d5796809e1aecd1798c7ea8a7	ruby-2.2.3.tar.xz
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 2fa6b4e..243cd0b 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.1.tar.bz2.sha256
+-sha256	32a1a7ad584a2f2cfba5c1d234d046c0521e86e7a21d403e15e89aa509ef0ea8	harfbuzz-1.0.1.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.2.tar.bz2.sha256
++sha256	beb3caf8654010fcdca61c810a3a7532237fc567ee4271deb674b5efbbe3b466	harfbuzz-1.0.2.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 1d10a94..3fa9642 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 2.2
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 2.2.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-HARFBUZZ_VERSION = 1.0.1
++HARFBUZZ_VERSION = 1.0.2
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+@@ -25,9 +25,6 @@ HOST_HARFBUZZ_CONF_OPTS = \
+ 	--with-freetype=yes \
+ 	--with-glib=yes
+ 
+-# beta libtool version and patching Makefile.am
+-HARFBUZZ_AUTORECONF = YES
+-
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ # forgets to link test programs with -pthread breaking static link
+ HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
