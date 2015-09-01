@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Sep 2015 08:31:07 -0000
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.2.6.10
-Message-ID: <20150901083106.60BB87F9EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] jpeg-turbo: bump version from 1.4.0 to
+	1.4.1
+Message-ID: <20150901083106.4AC317F9EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81aa2c8bc4d850230ca49a49334a01e00d13554a
+commit: http://git.buildroot.net/buildroot/commit/?id=08c3226ba25c22a58c17f221795433aeb6c21075
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tor/tor.hash |    2 +-
- package/tor/tor.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash |    8 +++++---
+ package/jpeg-turbo/jpeg-turbo.mk   |    2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 341a611..637efe4 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	4a6c29ad89a98d7832c599d9480d6d8e55355fb3b8f4b506c5df557f15942f9c  tor-0.2.6.9.tar.gz
-+sha256	0542c0efe43b86619337862fa7eb02c7a74cb23a79d587090628a5f0f1224b8d	tor-0.2.6.10.tar.gz
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index a464391..7db0964 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index bbc62f2..dd61b2c 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,3 +1,5 @@
+-# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/
+-sha1	a9ed7a99a6090e0848836c5df8e836f300a098b9  libjpeg-turbo-1.4.0.tar.gz
+-md5	039153dabe61e1ac8d9323b5522b56b0  libjpeg-turbo-1.4.0.tar.gz
++# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/
++sha1	363a149f644211462c45138a19674f38100036d3	libjpeg-turbo-1.4.1.tar.gz
++md5	b1f6b84859a16b8ebdcda951fa07c3f2	libjpeg-turbo-1.4.1.tar.gz
++# Locally computed
++sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index dd3ae19..25434b1 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.2.6.9
-+TOR_VERSION = 0.2.6.10
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3c
- TOR_LICENSE_FILES = LICENSE
+-JPEG_TURBO_VERSION = 1.4.0
++JPEG_TURBO_VERSION = 1.4.1
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
