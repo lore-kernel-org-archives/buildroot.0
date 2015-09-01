@@ -1,41 +1,39 @@
 From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Tue,  1 Sep 2015 10:10:27 +0200
-Subject: [Buildroot] [PATCH 1/6] python-urwid: bump version and add checksums
-Message-ID: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
+Date: Tue,  1 Sep 2015 10:10:30 +0200
+Subject: [Buildroot] [PATCH 4/6] python-configshell-fb: bump version
+In-Reply-To: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
+References: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <1441095032-5656-4-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add new dependency to python-six.
+
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 ---
- package/python-urwid/python-urwid.hash | 3 +++
- package/python-urwid/python-urwid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/python-urwid/python-urwid.hash
+ package/python-configshell-fb/python-configshell-fb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
-new file mode 100644
-index 0000000..2b18082
---- /dev/null
-+++ b/package/python-urwid/python-urwid.hash
-@@ -0,0 +1,3 @@
-+# md from https://pypi.python.org/pypi?:action=show_md5&digest=a989acd54f4ff1a554add464803a9175, sha256 locally computed
-+md5  	a989acd54f4ff1a554add464803a9175  urwid-1.3.0.tar.gz
-+sha256	29f04fad3bf0a79c5491f7ebec2d50fa086e9d16359896c9204c6a92bc07aba2  urwid-1.3.0.tar.gz
-diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
-index 4f1be46..1cd3022 100644
---- a/package/python-urwid/python-urwid.mk
-+++ b/package/python-urwid/python-urwid.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-configshell-fb/python-configshell-fb.mk b/package/python-configshell-fb/python-configshell-fb.mk
+index 76ef48d..d0671d5 100644
+--- a/package/python-configshell-fb/python-configshell-fb.mk
++++ b/package/python-configshell-fb/python-configshell-fb.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_URWID_VERSION = 1.2.1
-+PYTHON_URWID_VERSION = 1.3.0
- PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
- PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
- PYTHON_URWID_LICENSE = LGPLv2.1+
+-PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb15
++PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb18
+ PYTHON_CONFIGSHELL_FB_SITE = $(call github,agrover,configshell-fb,$(PYTHON_CONFIGSHELL_FB_VERSION))
+ PYTHON_CONFIGSHELL_FB_LICENSE = Apache-2.0
+ PYTHON_CONFIGSHELL_FB_LICENSE_FILES = COPYING
+ PYTHON_CONFIGSHELL_FB_SETUP_TYPE = setuptools
+-PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-urwid
++PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-six python-urwid
+ 
+ $(eval $(python-package))
 -- 
 2.5.0
