@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Sep 2015 08:31:07 -0000
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.22
-Message-ID: <20150901083106.845617F9EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] squid: bump to version 3.5.7
+Message-ID: <20150901083106.3EF197F9EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a01be610b2d2c986cf3b4671ef2066d79e62114a
+commit: http://git.buildroot.net/buildroot/commit/?id=e21ef305ab6544c6433d6e1f6bdacff3cc460053
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/stunnel/stunnel.hash |    4 ++--
- package/stunnel/stunnel.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash |    6 +++---
+ package/squid/squid.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 5e75b2e..9c2bb14 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005180.html
--sha256	2aef568b1955f5e233f6a8e17ebce3d30755f1be44c813f5a48e621f785596e3	stunnel-5.21.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-July/005183.html
-+sha256	8ad628a6948153cdb2044283f6988384a30585ea7e14778c2ee616a6678cb83f	stunnel-5.22.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 5e9cd72..64c60b1 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index d5738c7..472df2d 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6.tar.xz.asc
+-md5  93e18bd257857e35bb634ddb8a348563  squid-3.5.6.tar.xz
+-sha1  c5f3ab47e61a08fa6a8767d45befeffd7d26fd9f  squid-3.5.6.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.7.tar.xz.asc
++md5	e24943386555ca922130a7e034badba7	squid-3.5.7.tar.xz
++sha1	e7dcc0cbcee6fd10a8c8bf3e9bff0dc6359ccc48	squid-3.5.7.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e201673..d345d15 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).21
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).22
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
