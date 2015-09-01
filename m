@@ -1,10 +1,10 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 1 Sep 2015 13:08:16 +0300
-Subject: [Buildroot] [PATCH 1/6] python-urwid: bump version and add
- checksums
-In-Reply-To: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
+Date: Tue, 1 Sep 2015 13:12:51 +0300
+Subject: [Buildroot] [PATCH 3/6] python-rtslib-fb: bump version
+In-Reply-To: <1441095032-5656-3-git-send-email-cvubrugier@fastmail.fm>
 References: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20150901100816.GM17874@tarshish>
+ <1441095032-5656-3-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <20150901101251.GN17874@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,34 @@ To: buildroot@busybox.net
 
 Hi Christophe,
 
-On Tue, Sep 01, 2015 at 10:10:27AM +0200, Christophe Vu-Brugier wrote:
+On Tue, Sep 01, 2015 at 10:10:29AM +0200, Christophe Vu-Brugier wrote:
+> Also add new dependency to python-six.
+> 
 > Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 > ---
->  package/python-urwid/python-urwid.hash | 3 +++
->  package/python-urwid/python-urwid.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->  create mode 100644 package/python-urwid/python-urwid.hash
+>  package/python-rtslib-fb/python-rtslib-fb.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
-> new file mode 100644
-> index 0000000..2b18082
-> --- /dev/null
-> +++ b/package/python-urwid/python-urwid.hash
-> @@ -0,0 +1,3 @@
-> +# md from https://pypi.python.org/pypi?:action=show_md5&digest=a989acd54f4ff1a554add464803a9175, sha256 locally computed
-
-This is weird. You put the MD5 in the URL to retrieve the same MD5? Is there a 
-way to lookup the MD5 using the package name? If not, I guess that 
-https://pypi.python.org/pypi/urwid/1.3.0 would be good enough.
-
-> +md5  	a989acd54f4ff1a554add464803a9175  urwid-1.3.0.tar.gz
-> +sha256	29f04fad3bf0a79c5491f7ebec2d50fa086e9d16359896c9204c6a92bc07aba2  urwid-1.3.0.tar.gz
-> diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
-> index 4f1be46..1cd3022 100644
-> --- a/package/python-urwid/python-urwid.mk
-> +++ b/package/python-urwid/python-urwid.mk
-> @@ -4,7 +4,7 @@
+> diff --git a/package/python-rtslib-fb/python-rtslib-fb.mk b/package/python-rtslib-fb/python-rtslib-fb.mk
+> index d45c261..85bee0b 100644
+> --- a/package/python-rtslib-fb/python-rtslib-fb.mk
+> +++ b/package/python-rtslib-fb/python-rtslib-fb.mk
+> @@ -4,10 +4,11 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_URWID_VERSION = 1.2.1
-> +PYTHON_URWID_VERSION = 1.3.0
->  PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
->  PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
->  PYTHON_URWID_LICENSE = LGPLv2.1+
+> -PYTHON_RTSLIB_FB_VERSION = v2.1.fb50
+> +PYTHON_RTSLIB_FB_VERSION = v2.1.fb57
+>  PYTHON_RTSLIB_FB_SITE = $(call github,agrover,rtslib-fb,$(PYTHON_RTSLIB_FB_VERSION))
+>  PYTHON_RTSLIB_FB_LICENSE = Apache-2.0
+>  PYTHON_RTSLIB_FB_LICENSE_FILES = COPYING
+>  PYTHON_RTSLIB_FB_SETUP_TYPE = setuptools
+> +PYTHON_RTSLIB_FB_DEPENDENCIES = python-six
+
+You should select BR2_PACKAGE_PYTHON_SIX in Config.in. Same for other package 
+bumps adding python-six dependency in this series.
+
+>  $(eval $(python-package))
 
 baruch
 
