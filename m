@@ -1,146 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Sep 2015 00:01:08 +0200
-Subject: [Buildroot] [PATCHv3 07/15] directfb: add options for divine and
-	sawman
+Date: Wed,  2 Sep 2015 00:01:09 +0200
+Subject: [Buildroot] [PATCHv3 08/15] directfb: add new TIFF option
 In-Reply-To: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1441144876-2628-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1441144876-2628-9-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since DirectFB 1.7.x, the divine (virtual input) and sawman (window
-manager) features have been merged in DirectFB itself rather than
-being shipped as separate tarballs. This commit creates additional
-options to enable those features.
+From: Peter Seiderer <ps.report@gmx.net>
 
-Upcoming commits will get rid of the existing divine and sawman
-Buildroot packages.
+[Thomas: don't enable option by default.]
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../directfb/0005-add-missing-idivine-header.patch | 65 ++++++++++++++++++++++
- package/directfb/Config.in                         | 10 ++++
- package/directfb/directfb.mk                       | 12 ++++
- 3 files changed, 87 insertions(+)
- create mode 100644 package/directfb/0005-add-missing-idivine-header.patch
+ package/directfb/Config.in   | 4 ++++
+ package/directfb/directfb.mk | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/directfb/0005-add-missing-idivine-header.patch b/package/directfb/0005-add-missing-idivine-header.patch
-new file mode 100644
-index 0000000..7823eb7
---- /dev/null
-+++ b/package/directfb/0005-add-missing-idivine-header.patch
-@@ -0,0 +1,65 @@
-+Add idivine.h, which is missing from DirectFB tarballs
-+
-+The idivine.h file was taken from the DirectFB Git repository.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/lib/divine/idivine.h
-+===================================================================
-+--- /dev/null
-++++ b/lib/divine/idivine.h
-+@@ -0,0 +1,54 @@
-++/*
-++   (c) Copyright 2012-2013  DirectFB integrated media GmbH
-++   (c) Copyright 2001-2013  The world wide DirectFB Open Source Community (directfb.org)
-++   (c) Copyright 2000-2004  Convergence (integrated media) GmbH
-++
-++   All rights reserved.
-++
-++   Written by Denis Oliver Kropp <dok@directfb.org>,
-++              Andreas Shimokawa <andi@directfb.org>,
-++              Marek Pikarski <mass@directfb.org>,
-++              Sven Neumann <neo@directfb.org>,
-++              Ville Syrj??l?? <syrjala@sci.fi> and
-++              Claudio Ciccani <klan@users.sf.net>.
-++
-++   This library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2 of the License, or (at your option) any later version.
-++
-++   This library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with this library; if not, write to the
-++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-++   Boston, MA 02111-1307, USA.
-++*/
-++
-++
-++
-++#ifndef __IDIVINE_H__
-++#define __IDIVINE_H__
-++
-++#include <divine.h>
-++
-++/*
-++ * private data struct of IDiVine
-++ */
-++typedef struct {
-++     int                         ref;      /* reference counter */
-++
-++     DiVine                     *divine;
-++} IDiVine_data;
-++
-++/*
-++ * IDiVine constructor/destructor
-++ */
-++DFBResult IDiVine_Construct( IDiVine *thiz );
-++
-++void      IDiVine_Destruct ( IDiVine *thiz );
-++
-++#endif
 diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index d71858e..f8865e8 100644
+index f8865e8..548f602 100644
 --- a/package/directfb/Config.in
 +++ b/package/directfb/Config.in
-@@ -45,6 +45,16 @@ config BR2_PACKAGE_DIRECTFB_TRACE
- 	help
- 	  Enable call tracing for DirectFB applications
+@@ -125,6 +125,10 @@ config BR2_PACKAGE_DIRECTFB_GIF
+ 	bool "enable GIF support"
+ 	default y
  
-+config BR2_PACKAGE_DIRECTFB_DIVINE
-+	bool "divine"
-+	help
-+	  Enable the DiVine feature (virtual input)
++config BR2_PACKAGE_DIRECTFB_TIFF
++	bool "enable TIFF support"
++	select BR2_PACKAGE_TIFF
 +
-+config BR2_PACKAGE_DIRECTFB_SAWMAN
-+	bool "sawman"
-+	help
-+	  Enable the SawMan feature (window manager)
-+
- config BR2_PACKAGE_DIRECTFB_ATI128
- 	bool "compile ati128 graphics driver"
- 	depends on BR2_i386 || BR2_x86_64
+ config BR2_PACKAGE_DIRECTFB_IMLIB2
+ 	bool "enable IMLIB2 support"
+ 	select BR2_PACKAGE_IMLIB2
 diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index d44e658..ea579f5 100644
+index ea579f5..5e68b7b 100644
 --- a/package/directfb/directfb.mk
 +++ b/package/directfb/directfb.mk
-@@ -53,6 +53,18 @@ ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
- DIRECTFB_CONF_OPTS += --enable-trace
+@@ -106,6 +106,13 @@ else
+ DIRECTFB_CONF_OPTS += --disable-gif
  endif
  
-+ifeq ($(BR2_PACKAGE_DIRECTFB_DIVINE),y)
-+DIRECTFB_CONF_OPTS += --enable-divine
++ifeq ($(BR2_PACKAGE_DIRECTFB_TIFF),y)
++DIRECTFB_CONF_OPTS += --enable-tiff
++DIRECTFB_DEPENDENCIES += tiff
 +else
-+DIRECTFB_CONF_OPTS += --disable-divine
++DIRECTFB_CONF_OPTS += --disable-tiff
 +endif
 +
-+ifeq ($(BR2_PACKAGE_DIRECTFB_SAWMAN),y)
-+DIRECTFB_CONF_OPTS += --enable-sawman
-+else
-+DIRECTFB_CONF_OPTS += --disable-sawman
-+endif
-+
- DIRECTFB_GFX = \
- 	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_CLE266),cle266) \
+ ifeq ($(BR2_PACKAGE_DIRECTFB_PNG),y)
+ DIRECTFB_CONF_OPTS += --enable-png
+ DIRECTFB_DEPENDENCIES += libpng
 -- 
 2.5.1
