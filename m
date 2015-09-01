@@ -1,77 +1,113 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Sep 2015 13:40:24 -0300
-Subject: [Buildroot] [PATCH] musl: bump to version 1.1.11
-Message-ID: <1441125624-13215-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  1 Sep 2015 14:31:09 -0300
+Subject: [Buildroot] [PATCH] gdk-pixbuf: add security patch for CVE-2015-4491
+Message-ID: <1441128669-30777-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2015-4491 - Heap overflow in gdk-pixbuf when scaling bitmap images.
+Patch from upstream:
+https://git.gnome.org/browse/gdk-pixbuf/commit/?id=ffec86e
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/musl/0001-fix-uselocale.patch | 30 ------------------------------
- package/musl/musl.hash                |  2 +-
- package/musl/musl.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 32 deletions(-)
- delete mode 100644 package/musl/0001-fix-uselocale.patch
+ package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch | 84 +++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+ create mode 100644 package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
 
-diff --git a/package/musl/0001-fix-uselocale.patch b/package/musl/0001-fix-uselocale.patch
-deleted file mode 100644
-index 03a4c6e..0000000
---- a/package/musl/0001-fix-uselocale.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 63f4b9f18f3674124d8bcb119739fec85e6da005 Mon Sep 17 00:00:00 2001
--From: Timo Ter?s <timo.teras@iki.fi>
--Date: Fri, 05 Jun 2015 07:39:42 +0000
--Subject: fix uselocale((locale_t)0) not to modify locale
--
--commit 68630b55c0c7219fe9df70dc28ffbf9efc8021d8 made the new locale to
--be assigned unconditonally resulting in crashes later on.
--
--Backported from: 63f4b9f18f3674124d8bcb119739fec85e6da005
--
--Signed-off-by: Timo Ter?s <timo.teras@iki.fi>
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-----
--diff --git a/src/locale/uselocale.c b/src/locale/uselocale.c
--index b70a0c1..0fc5ecb 100644
----- a/src/locale/uselocale.c
--+++ b/src/locale/uselocale.c
--@@ -8,9 +8,7 @@ locale_t __uselocale(locale_t new)
-- 	locale_t old = self->locale;
-- 	locale_t global = &libc.global_locale;
-- 
---	if (new == LC_GLOBAL_LOCALE) new = global;
---
---	self->locale = new;
--+	if (new) self->locale = new == LC_GLOBAL_LOCALE ? global : new;
-- 
-- 	return old == global ? LC_GLOBAL_LOCALE : old;
-- }
----
--cgit v0.9.0.3-65-g4555
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 88415b0..4872f94 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	45bbe9b1c7f7a0f743477af1e103b6889bfe4dd9815e16f6c89f6c90831c8b7c  musl-1.1.10.tar.gz
-+sha256	bb9e6da51b7b12641f5d1abb39705c6c6c1b2fbd20002362948aa736a0aa353f  musl-1.1.11.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index d8c0c6e..22589f5 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.10
-+MUSL_VERSION = 1.1.11
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+diff --git a/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
+new file mode 100644
+index 0000000..d2a68bd
+--- /dev/null
++++ b/package/gdk-pixbuf/0001-fix-CVE-2015-4491.patch
+@@ -0,0 +1,84 @@
++From ffec86ed5010c5a2be14f47b33bcf4ed3169a199 Mon Sep 17 00:00:00 2001
++From: Matthias Clasen <mclasen@redhat.com>
++Date: Mon, 13 Jul 2015 00:33:40 -0400
++Subject: pixops: Be more careful about integer overflow
++
++Our loader code is supposed to handle out-of-memory and overflow
++situations gracefully, reporting errors instead of aborting. But
++if you load an image at a specific size, we also execute our
++scaling code, which was not careful enough about overflow in some
++places.
++
++This commit makes the scaling code silently return if it fails to
++allocate filter tables. This is the best we can do, since
++gdk_pixbuf_scale() is not taking a GError.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=752297
++
++Signed-off-by: Gustavo Zacarisa <gustavo@zacarias.com.ar>
++
++diff --git a/gdk-pixbuf/pixops/pixops.c b/gdk-pixbuf/pixops/pixops.c
++index 29a1c14..ce51745 100644
++--- a/gdk-pixbuf/pixops/pixops.c
+++++ b/gdk-pixbuf/pixops/pixops.c
++@@ -1272,7 +1272,16 @@ make_filter_table (PixopsFilter *filter)
++   int i_offset, j_offset;
++   int n_x = filter->x.n;
++   int n_y = filter->y.n;
++-  int *weights = g_new (int, SUBSAMPLE * SUBSAMPLE * n_x * n_y);
+++  gsize n_weights;
+++  int *weights;
+++
+++  n_weights = SUBSAMPLE * SUBSAMPLE * n_x * n_y;
+++  if (n_weights / (SUBSAMPLE * SUBSAMPLE * n_x) != n_y)
+++    return NULL; /* overflow, bail */
+++
+++  weights = g_try_new (int, n_weights);
+++  if (!weights)
+++    return NULL; /* overflow, bail */
++ 
++   for (i_offset=0; i_offset < SUBSAMPLE; i_offset++)
++     for (j_offset=0; j_offset < SUBSAMPLE; j_offset++)
++@@ -1347,8 +1356,11 @@ pixops_process (guchar         *dest_buf,
++   if (x_step == 0 || y_step == 0)
++     return; /* overflow, bail out */
++ 
++-  line_bufs = g_new (guchar *, filter->y.n);
++   filter_weights = make_filter_table (filter);
+++  if (!filter_weights)
+++    return; /* overflow, bail out */
+++
+++  line_bufs = g_new (guchar *, filter->y.n);
++ 
++   check_shift = check_size ? get_check_shift (check_size) : 0;
++ 
++@@ -1468,7 +1480,7 @@ tile_make_weights (PixopsFilterDimension *dim,
++ 		   double                 scale)
++ {
++   int n = ceil (1 / scale + 1);
++-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
+++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
++   int offset;
++   int i;
++ 
++@@ -1526,7 +1538,7 @@ bilinear_magnify_make_weights (PixopsFilterDimension *dim,
++     }
++ 
++   dim->n = n;
++-  dim->weights = g_new (double, SUBSAMPLE * n);
+++  dim->weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
++ 
++   pixel_weights = dim->weights;
++ 
++@@ -1617,7 +1629,7 @@ bilinear_box_make_weights (PixopsFilterDimension *dim,
++ 			   double                 scale)
++ {
++   int n = ceil (1/scale + 3.0);
++-  double *pixel_weights = g_new (double, SUBSAMPLE * n);
+++  double *pixel_weights = g_malloc_n (sizeof (double) * SUBSAMPLE, n);
++   double w;
++   int offset, i;
++ 
++-- 
++cgit v0.10.2
++
 -- 
 2.4.6
