@@ -1,8 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Sep 2015 07:25:36 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{2, 10, 12,
-	14}.x and 4.1.x series
-Message-ID: <1441103136-26019-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  1 Sep 2015 07:25:55 -0300
+Subject: [Buildroot] [PATCH] ruby: bump to version 2.2.3
+Message-ID: <1441103155-26065-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1ee3ef9..3a9603e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -216,19 +216,19 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
--	default "3.2.70"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.71"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.86"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.87"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.46"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.47"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.50"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.51"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.20"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.5"		if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.6"		if BR2_KERNEL_HEADERS_4_1
- 	default "4.2"		if BR2_KERNEL_HEADERS_4_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 4680a61..4a1861c 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,2 +1,2 @@
+-# From https://www.ruby-lang.org/en/news/2015/04/13/ruby-2-2-2-released/
+-sha256	f033b5d08ab57083e48c1d81bcd7399967578c370b664da90e12a32891424462	ruby-2.2.2.tar.xz
++# From https://www.ruby-lang.org/en/news/2015/08/18/ruby-2-2-3-released/
++sha256	c6ec90e9ed018e6d9a578fc93755d8565839908d5796809e1aecd1798c7ea8a7	ruby-2.2.3.tar.xz
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 2fa6b4e..243cd0b 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.2
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
+ RUBY_VERSION_EXT = 2.2.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 -- 
 2.4.6
