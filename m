@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Sep 2015 08:31:07 -0000
-Subject: [Buildroot] [git commit] openvpn: bump to version 2.3.8
-Message-ID: <20150901083105.E56F881E93@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libglew: bump version to 1.12.0
+Message-ID: <20150901083106.6A6027F9EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85e7763e3127a633768322e111bf40d53c4cc188
+commit: http://git.buildroot.net/buildroot/commit/?id=1193328c03c54d03d94ddef8a0c52a119186df88
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openvpn/openvpn.hash |    2 +-
- package/openvpn/openvpn.mk   |    2 +-
+ package/libglew/libglew.hash |    2 +-
+ package/libglew/libglew.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 9a917b9..49227ea 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
+diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
+index 9ac811c..68c3e7a 100644
+--- a/package/libglew/libglew.hash
++++ b/package/libglew/libglew.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	4062ce972500f98988e9c6e9dd1040be25582f0d49aa7e69f3f4cff96e9aebee 	openvpn-2.3.7.tar.xz
-+sha256	a8620cc6b79beea91de8487f8fd2400a2e1ffdef109917021435cb31417cbb99 	openvpn-2.3.8.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 336d491..1caa9a0 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+ # Locally computed:
+-sha256  99c41320b63f6860869b5fb9af9a1854b15582796c64ee3dfd7096dc0c89f307  glew-1.10.0.tgz
++sha256	af58103f4824b443e7fa4ed3af593b8edac6f3a7be3b30911edbc7344f48e4bf	glew-1.12.0.tgz
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+index 938ec67..4d26ed8 100644
+--- a/package/libglew/libglew.mk
++++ b/package/libglew/libglew.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.3.7
-+OPENVPN_VERSION = 2.3.8
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
+-LIBGLEW_VERSION = 1.10.0
++LIBGLEW_VERSION = 1.12.0
+ LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
+ LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
+ LIBGLEW_LICENSE = BSD-3c, MIT
