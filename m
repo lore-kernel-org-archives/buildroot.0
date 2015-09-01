@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 01 Sep 2015 08:31:07 -0000
-Subject: [Buildroot] [git commit] squid: bump to version 3.5.7
-Message-ID: <20150901083106.3EF197F9EB@busybox.osuosl.org>
+Date: Tue, 01 Sep 2015 08:31:10 -0000
+Subject: [Buildroot] [git commit] libidn: bump to version 1.32
+Message-ID: <20150901083106.8DC917F9EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e21ef305ab6544c6433d6e1f6bdacff3cc460053
+commit: http://git.buildroot.net/buildroot/commit/?id=fa50d6c1d33c919e503bed75c504399eb54dfeff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libidn/libidn.hash |    4 ++--
+ package/libidn/libidn.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index d5738c7..472df2d 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.6.tar.xz.asc
--md5  93e18bd257857e35bb634ddb8a348563  squid-3.5.6.tar.xz
--sha1  c5f3ab47e61a08fa6a8767d45befeffd7d26fd9f  squid-3.5.6.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.7.tar.xz.asc
-+md5	e24943386555ca922130a7e034badba7	squid-3.5.7.tar.xz
-+sha1	e7dcc0cbcee6fd10a8c8bf3e9bff0dc6359ccc48	squid-3.5.7.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e201673..d345d15 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index 6425d55..20c844e 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.gnu.org/archive/html/help-libidn/2015-07/msg00011.html
+-sha1	0bb34003a0fe05a91e60d346803401f16c82a1fb	libidn-1.31.tar.gz
++# From http://lists.nongnu.org/archive/html/help-libidn/2015-08/msg00001.html
++sha1	ddd018611b98af7c67d434aa42d15d39f45129f5	libidn-1.32.tar.gz
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index e10fb6e..9ac2600 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+-LIBIDN_VERSION = 1.31
++LIBIDN_VERSION = 1.32
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
