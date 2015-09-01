@@ -1,80 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2015 23:37:51 +0200
-Subject: [Buildroot] [PATCH 1/2] dos2unix: add target support
-In-Reply-To: <d04d05bf5fb09fd02747689fe348375cdff4fc6a.1441089817.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 1 Sep 2015 09:43:36 +0300")
-References: <d04d05bf5fb09fd02747689fe348375cdff4fc6a.1441089817.git.baruch@tkos.co.il>
-Message-ID: <87a8t5q0r4.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 1 Sep 2015 23:56:11 +0200
+Subject: [Buildroot] [PATCHv4] pkg-generic: detect incorrectly used
+ package
+In-Reply-To: <1441141898-26885-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441141898-26885-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150901215611.GB3581@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Thomas, All,
 
- > From: James Knight <james.knight@rockwellcollins.com>
- > Allow the `dos2unix` utility to be built and installed on the target
- > system.
+On 2015-09-01 23:11 +0200, Thomas Petazzoni spake thusly:
+> In Buildroot, the selection of a package from a Config.in level and
+> from a Makefile level are completely disconnected. This can lead to
+> issues where the build of a package is triggered at the Makefile level
+> due to the package being listed in another package <pkg>_DEPENDENCIES
+> variable, even if that package is not enabled in the configuration.
+[--SNIP--]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- > [baruch: properly handle target gettext]
- > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2:
- >    * Fix static build with gettext
- >    * Support build without locale support
- > ---
- >  package/Config.in            |  3 +++
- >  package/dos2unix/Config.in   | 11 +++++++++++
- >  package/dos2unix/dos2unix.mk | 24 +++++++++++++++++++++---
- >  3 files changed, 35 insertions(+), 3 deletions(-)
- >  create mode 100644 package/dos2unix/Config.in
+Small nit below (but already discussed on IRC), otherwise:
 
- > diff --git a/package/Config.in b/package/Config.in
- > index 914b83833d3e..7c5fe4ec36b2 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -115,6 +115,9 @@ menu "Development tools"
- >  	source "package/cvs/Config.in"
- >  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- >  	source "package/diffutils/Config.in"
- > +endif
- > +	source "package/dos2unix/Config.in"
- > +if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Busybox does have a dos2unix applet, so this should also be inside the
-conditional.
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6a7d97e..596c798 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -143,6 +143,18 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+>  
+>  # Configure
+>  $(BUILD_DIR)/%/.stamp_configured:
+> +# Only trigger the check for default builds. If the user forces
+> +# building a package, even if not enabled in the configuration, we
+> +# want to accept it.
+> +ifeq ($(MAKECMDGOALS),)
+> +	@if test "$(TYPE)" = "target" -a -z "$($(KCONFIG_VAR))" ; then \
+> +		echo "ERROR: A package must have added $($(PKG)_NAME) to its _DEPENDENCIES line but" ; \
+> +		echo "forgot to add the corresponding select / depends on $(KCONFIG_VAR)." ; \
+> +		echo "Potential culprits: " ; \
 
+Extraneous space after the ':'.
 
- >  	source "package/findutils/Config.in"
- >  endif
- >  	source "package/flex/Config.in"
- > diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
- > new file mode 100644
- > index 000000000000..fdcd0700509b
- > --- /dev/null
- > +++ b/package/dos2unix/Config.in
- > @@ -0,0 +1,11 @@
- > +config BR2_PACKAGE_DOS2UNIX
- > +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- > +	depends on BR2_USE_WCHAR # gettext
+Regards,
+Yann E. MORIN.
 
-This looks odd - If wchar is only for gettext then we should allow
-non-locale builds without wchar. A quick test shows that dos2unix uses
-wchar several places, but this can be disabled if UCS= is passed on the
-make line (wchar_t is still referred in 3 error prints though).
-
-
- >  DOS2UNIX_VERSION = 7.0
- >  DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- > -DOS2UNIX_DEPENDENCIES = host-gettext
- >  DOS2UNIX_LICENSE = BSD-2c
- >  DOS2UNIX_LICENSE_FILES = COPYING.txt
- > +HOST_DOS2UNIX_DEPENDENCIES = host-gettext
-
-If gettext is optional for target builds, why do we then force it for
-host builds?
+> +		for p in $($(PKG)_DEPENDENT_OF) ; do echo " - $$p" ; done ; \
+> +		exit 1 ; \
+> +	fi
+> +endif
+>  	@$(call step_start,configure)
+>  	@$(call MESSAGE,"Configuring")
+>  	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+> @@ -664,6 +676,8 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+>  $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+>  $$($(2)_TARGET_BUILD):			PKG=$(2)
+>  $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+> +$$($(2)_TARGET_CONFIGURE):		TYPE=$(4)
+> +$$($(2)_TARGET_CONFIGURE):		KCONFIG_VAR=$$($(2)_KCONFIG_VAR)
+>  $$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+>  $$($(2)_TARGET_RSYNC):                  PKG=$(2)
+>  $$($(2)_TARGET_PATCH):			PKG=$(2)
+> @@ -758,6 +772,9 @@ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>  # configuration
+>  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+>  
+> +# Store reverse build-dependency information
+> +$$(eval $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(call UPPERCASE,$$(d))_DEPENDENT_OF += $(1)$$(sep)))
+> +
+>  # Ensure the calling package is the declared provider for all the virtual
+>  # packages it claims to be an implementation of.
+>  ifneq ($$($(2)_PROVIDES),)
+> -- 
+> 2.5.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
