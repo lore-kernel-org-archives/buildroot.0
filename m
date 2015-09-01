@@ -1,105 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 21:56:34 +0200
-Subject: [Buildroot] [git commit] expat: add security patch for CVE-2015-1283
-Message-ID: <20150901200659.4815681EC3@busybox.osuosl.org>
+Date: Tue, 1 Sep 2015 21:58:37 +0200
+Subject: [Buildroot] [git commit] znc: needs gcc >= 4.7
+Message-ID: <20150901200659.4922F81E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67d6276c1bd050b362b11658ae0c7b4da73e227e
+commit: http://git.buildroot.net/buildroot/commit/?id=448cdcbbf9d74430581424b228fd239076e3866b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-CVE-2015-1283 - Multiple integer overflows in the XML_GetBuffer
-function.
+http://autobuild.buildroot.net/results/aba/aba13674fb3624e0bd6a3b1e17f28883e298c8ca/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expat/0001-fix-CVE-2015-1283.patch |   76 ++++++++++++++++++++++++++++
- 1 files changed, 76 insertions(+), 0 deletions(-)
+ package/znc/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/expat/0001-fix-CVE-2015-1283.patch b/package/expat/0001-fix-CVE-2015-1283.patch
-new file mode 100644
-index 0000000..cdebaa0
---- /dev/null
-+++ b/package/expat/0001-fix-CVE-2015-1283.patch
-@@ -0,0 +1,76 @@
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff --git a/lib/xmlparse.c b/lib/xmlparse.c
-+--- a/lib/xmlparse.c
-++++ b/lib/xmlparse.c
-+@@ -1648,29 +1648,40 @@ XML_ParseBuffer(XML_Parser parser, int l
-+   XmlUpdatePosition(encoding, positionPtr, bufferPtr, &position);
-+   positionPtr = bufferPtr;
-+   return result;
-+ }
-+ 
-+ void * XMLCALL
-+ XML_GetBuffer(XML_Parser parser, int len)
-+ {
-++/* BEGIN MOZILLA CHANGE (sanity check len) */
-++  if (len < 0) {
-++    errorCode = XML_ERROR_NO_MEMORY;
-++    return NULL;
-++  }
-++/* END MOZILLA CHANGE */
-+   switch (ps_parsing) {
-+   case XML_SUSPENDED:
-+     errorCode = XML_ERROR_SUSPENDED;
-+     return NULL;
-+   case XML_FINISHED:
-+     errorCode = XML_ERROR_FINISHED;
-+     return NULL;
-+   default: ;
-+   }
-+ 
-+   if (len > bufferLim - bufferEnd) {
-+-    /* FIXME avoid integer overflow */
-+     int neededSize = len + (int)(bufferEnd - bufferPtr);
-++/* BEGIN MOZILLA CHANGE (sanity check neededSize) */
-++    if (neededSize < 0) {
-++      errorCode = XML_ERROR_NO_MEMORY;
-++      return NULL;
-++    }
-++/* END MOZILLA CHANGE */
-+ #ifdef XML_CONTEXT_BYTES
-+     int keep = (int)(bufferPtr - buffer);
-+ 
-+     if (keep > XML_CONTEXT_BYTES)
-+       keep = XML_CONTEXT_BYTES;
-+     neededSize += keep;
-+ #endif  /* defined XML_CONTEXT_BYTES */
-+     if (neededSize  <= bufferLim - buffer) {
-+@@ -1689,17 +1700,25 @@ XML_GetBuffer(XML_Parser parser, int len
-+     }
-+     else {
-+       char *newBuf;
-+       int bufferSize = (int)(bufferLim - bufferPtr);
-+       if (bufferSize == 0)
-+         bufferSize = INIT_BUFFER_SIZE;
-+       do {
-+         bufferSize *= 2;
-+-      } while (bufferSize < neededSize);
-++/* BEGIN MOZILLA CHANGE (prevent infinite loop on overflow) */
-++      } while (bufferSize < neededSize && bufferSize > 0);
-++/* END MOZILLA CHANGE */
-++/* BEGIN MOZILLA CHANGE (sanity check bufferSize) */
-++      if (bufferSize <= 0) {
-++        errorCode = XML_ERROR_NO_MEMORY;
-++        return NULL;
-++      }
-++/* END MOZILLA CHANGE */
-+       newBuf = (char *)MALLOC(bufferSize);
-+       if (newBuf == 0) {
-+         errorCode = XML_ERROR_NO_MEMORY;
-+         return NULL;
-+       }
-+       bufferLim = newBuf + bufferSize;
-+ #ifdef XML_CONTEXT_BYTES
-+       if (bufferPtr) {
-+
+diff --git a/package/znc/Config.in b/package/znc/Config.in
+index 4328c8b..154d4b0 100644
+--- a/package/znc/Config.in
++++ b/package/znc/Config.in
+@@ -3,11 +3,13 @@ config BR2_PACKAGE_ZNC
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	help
+ 	  Advanced IRC bouncer
+ 
+ 	  http://www.znc.in
+ 
+-comment "znc needs a toolchain w/ C++, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++comment "znc needs a toolchain w/ C++, dynamic library, gcc >= 4.7"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_USE_MMU
