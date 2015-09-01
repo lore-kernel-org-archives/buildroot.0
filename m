@@ -1,57 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 22:02:39 +0200
-Subject: [Buildroot] [git commit] ebtables: migrated to netfilter.org
-Message-ID: <20150901200659.51ECA7FF81@busybox.osuosl.org>
+Date: Tue, 1 Sep 2015 22:05:28 +0200
+Subject: [Buildroot] [git commit] package/dmraid: fix compilation under musl
+Message-ID: <20150901200659.5E26081E5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=480380cb0805f50d115527c59d6eb6d026b8f2a4
+commit: http://git.buildroot.net/buildroot/commit/?id=c1ff456745bd4e8dfb99ef3db253d03add21c40a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ebtables moved out of sf.net. Update website link, download location, and
-hashes reference.
+Fixes:
+http://autobuild.buildroot.net/results/feb/feb731da1d865b82781366798ffa8aaf40cf2ec4/
+http://autobuild.buildroot.net/results/fcf/fcf1ea738da90016900c04313cdcb3a02658e953/
+http://autobuild.buildroot.net/results/385/385e07e9097d877cd1babdd4133fbe14a8f217d9/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+.. and others.
+
+Note, upstream package appears dormant.
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ebtables/Config.in     |    2 +-
- package/ebtables/ebtables.hash |    5 ++---
- package/ebtables/ebtables.mk   |    2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ .../dmraid/0001-fix-compilation-under-musl.patch   |   47 ++++++++++++++++++++
+ 1 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index 18fff24..3f7566a 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_EBTABLES
- 	help
- 	  Ethernet bridge frame table administration
- 
--	  http://ebtables.sourceforge.net
-+	  http://ebtables.netfilter.org/
-diff --git a/package/ebtables/ebtables.hash b/package/ebtables/ebtables.hash
-index 75ab7db..4526276 100644
---- a/package/ebtables/ebtables.hash
-+++ b/package/ebtables/ebtables.hash
-@@ -1,3 +1,2 @@
--# From http://sourceforge.net/projects/ebtables/files/ebtables/ebtables-2-0-10-4/
--sha1	907d3b82329e8fbb7aaaa98049732bd8dab022f9	ebtables-v2.0.10-4.tar.gz
--md5	506742a3d44b9925955425a659c1a8d0		ebtables-v2.0.10-4.tar.gz
-+# Locally computed
-+sha256	dc6f7b484f207dc712bfca81645f45120cb6aee3380e77a1771e9c34a9a4455d	ebtables-v2.0.10-4.tar.gz
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 99f9363..e6cdd26 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -6,7 +6,7 @@
- 
- EBTABLES_VERSION = 2.0.10-4
- EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
--EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst .,-,$(EBTABLES_VERSION))
-+EBTABLES_SITE = http://ftp.netfilter.org/pub/ebtables/
- EBTABLES_LICENSE = GPLv2+
- EBTABLES_LICENSE_FILES = COPYING
- EBTABLES_STATIC = $(if $(BR2_STATIC_LIBS),static)
+diff --git a/package/dmraid/0001-fix-compilation-under-musl.patch b/package/dmraid/0001-fix-compilation-under-musl.patch
+new file mode 100644
+index 0000000..7cf8792
+--- /dev/null
++++ b/package/dmraid/0001-fix-compilation-under-musl.patch
+@@ -0,0 +1,47 @@
++From 89c7fc15e064dd407e6d5ccefe78985b86b8a036 Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Tue, 1 Sep 2015 12:26:36 +0100
++Subject: [PATCH 1/1] fix compilation under musl
++
++Patch borrowed from Void Linux :
++
++https://github.com/voidlinux/void-packages/blob/master/srcpkgs/dmraid/patches/25_musl-libc.patch
++
++Upstream package appears dormant, no mailing list and no
++maintainence releases since Nov 2010.
++
++Upstream-Status: dormant
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++
++---
++ 1.0.0.rc16-3/dmraid/include/dmraid/misc.h | 1 +
++ 1.0.0.rc16-3/dmraid/lib/device/scan.c     | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/1.0.0.rc16-3/dmraid/include/dmraid/misc.h b/1.0.0.rc16-3/dmraid/include/dmraid/misc.h
++index 247a68e..1b1dfdf 100644
++--- a/1.0.0.rc16-3/dmraid/include/dmraid/misc.h
+++++ b/1.0.0.rc16-3/dmraid/include/dmraid/misc.h
++@@ -10,6 +10,7 @@
++ 
++ #ifndef _MISC_H_
++ #define _MISC_H_
+++#include <fcntl.h>
++ 
++ #define DM_ASSERT(__cond) do { if (!(__cond)) { printf("ASSERT file:%s line:%d fuction:%s cond: %s\n", __FILE__, __LINE__, __FUNCTION__, #__cond); } } while(0);
++ 
++diff --git a/1.0.0.rc16-3/dmraid/lib/device/scan.c b/1.0.0.rc16-3/dmraid/lib/device/scan.c
++index a040d53..6897146 100644
++--- a/1.0.0.rc16-3/dmraid/lib/device/scan.c
+++++ b/1.0.0.rc16-3/dmraid/lib/device/scan.c
++@@ -10,6 +10,7 @@
++ # include <dirent.h>
++ # include <paths.h>
++ #else
+++# include <paths.h>
++ # include <dirent.h>
++ # include <mntent.h>
++ #endif
++-- 
++2.4.3
++
