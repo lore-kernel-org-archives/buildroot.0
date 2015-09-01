@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 01 Sep 2015 08:31:07 -0000
-Subject: [Buildroot] [git commit] jpeg-turbo: bump version from 1.4.0 to
-	1.4.1
-Message-ID: <20150901083106.4AC317F9EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] whois: bump to version 5.2.10
+Message-ID: <20150901083106.15DD081ED2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08c3226ba25c22a58c17f221795433aeb6c21075
+commit: http://git.buildroot.net/buildroot/commit/?id=208fc3075247e2f2226af706278d1e13f3746942
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash |    8 +++++---
- package/jpeg-turbo/jpeg-turbo.mk   |    2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/whois/whois.hash |    4 ++--
+ package/whois/whois.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index bbc62f2..dd61b2c 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,3 +1,5 @@
--# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.0/
--sha1	a9ed7a99a6090e0848836c5df8e836f300a098b9  libjpeg-turbo-1.4.0.tar.gz
--md5	039153dabe61e1ac8d9323b5522b56b0  libjpeg-turbo-1.4.0.tar.gz
-+# From http://sourceforge.net/projects/libjpeg-turbo/files/1.4.1/
-+sha1	363a149f644211462c45138a19674f38100036d3	libjpeg-turbo-1.4.1.tar.gz
-+md5	b1f6b84859a16b8ebdcda951fa07c3f2	libjpeg-turbo-1.4.1.tar.gz
-+# Locally computed
-+sha256 4bf5bad4ce85625bffbbd9912211e06790e00fb982b77724af7211034efafb08	libjpeg-turbo-1.4.1.tar.gz
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index dd3ae19..25434b1 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 79c9aca..f04980d 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.9.dsc
+-sha256	eee5446bf76ca7d38052767d6e2c542297d3a54ce928cada0ff24d2f1749d359	whois_5.2.9.tar.xz
++# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.10.dsc
++sha256	8acb42bc693f73f3141b413f7df11b5582b9b738d9bf0d60e9017a8af4cb53b9	whois_5.2.10.tar.xz
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 274349f..738d464 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--JPEG_TURBO_VERSION = 1.4.0
-+JPEG_TURBO_VERSION = 1.4.1
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = http://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
+-WHOIS_VERSION = 5.2.9
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150608T042724Z/pool/main/w/whois
++WHOIS_VERSION = 5.2.10
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20150730T034655Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
