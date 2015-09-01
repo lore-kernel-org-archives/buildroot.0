@@ -1,95 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2015 13:18:56 +0200
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.0.2
-Message-ID: <20150901112046.5C70681D58@busybox.osuosl.org>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Tue, 1 Sep 2015 16:55:24 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <20150901085841.3b90dd93@free-electrons.com>
+References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+ <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
+ <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <20150901085841.3b90dd93@free-electrons.com>
+Message-ID: <CAKpDV8tfzK28zoRr2s7R856vgPdgzeVA2Zn6HUuLOsmG+b1gvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1da34d2b21e5696e5fd15161af3ad4629a404150
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks Thomas for your reply. I will use Sourcery CodeBench 2014.05 for
+time being.
 
-Static fix patch upstream so dropped.
+Build is taking some time. Will Get back to you.
 
-[Peter: drop _AUTORECONF as libtool 2.4.2 is used / no patches]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-fix-static-linking-with-icu-uc.patch      |   33 --------------------
- package/harfbuzz/harfbuzz.hash                     |    4 +-
- package/harfbuzz/harfbuzz.mk                       |    5 +--
- 3 files changed, 3 insertions(+), 39 deletions(-)
+Thanks & Regards,
+Katoch
 
-diff --git a/package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch b/package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
-deleted file mode 100644
-index dd64393..0000000
---- a/package/harfbuzz/0001-fix-static-linking-with-icu-uc.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 5752d3f17072aa97a056dc081e402f43e1a3ba32 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Wed, 22 Jul 2015 23:26:23 +0200
--Subject: [PATCH] fix static linking with icu-uc
--
--When linking test-unicode statically it needs $(ICU_LIBS)
--which contains all required flags.
--Especially -lstdc++.
--
--Fixes:
--http://autobuild.buildroot.net/results/210/2107f9dfb39eeb6559fb4271c7af8b39aef521ca/
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- test/api/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/test/api/Makefile.am b/test/api/Makefile.am
--index 4ff14fa..314a09f 100644
----- a/test/api/Makefile.am
--+++ b/test/api/Makefile.am
--@@ -34,7 +34,7 @@ test_unicode_CPPFLAGS += $(GLIB_CFLAGS)
-- endif
-- if HAVE_ICU
-- test_unicode_CPPFLAGS += $(ICU_CFLAGS)
---test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la
--+test_unicode_LDADD += $(top_builddir)/src/libharfbuzz-icu.la $(ICU_LIBS)
-- endif
-- 
-- 
---- 
--2.4.3
--
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index daf495c..a054d6e 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.1.tar.bz2.sha256
--sha256	32a1a7ad584a2f2cfba5c1d234d046c0521e86e7a21d403e15e89aa509ef0ea8	harfbuzz-1.0.1.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.2.tar.bz2.sha256
-+sha256	beb3caf8654010fcdca61c810a3a7532237fc567ee4271deb674b5efbbe3b466	harfbuzz-1.0.2.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 1d10a94..3fa9642 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.0.1
-+HARFBUZZ_VERSION = 1.0.2
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
-@@ -25,9 +25,6 @@ HOST_HARFBUZZ_CONF_OPTS = \
- 	--with-freetype=yes \
- 	--with-glib=yes
- 
--# beta libtool version and patching Makefile.am
--HARFBUZZ_AUTORECONF = YES
--
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- # forgets to link test programs with -pthread breaking static link
- HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
+
+
+On Tue, Sep 1, 2015 at 12:28 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Dinesh Guleria,
+>
+> On Tue, 1 Sep 2015 06:39:34 +0530, Dinesh Guleria wrote:
+>
+> > One more question from my side if i use " Sourcery
+> > CodeBench 2014.05"  toolchain then buildroot will download it for me or i
+> > have to download it manually ?
+>
+> Buildroot will download it for you.
+>
+> > Also if buildroot will download it then in
+> > this case will it be a one time process or if i make a new build for my
+> > rootfile system, then every time tool chain will be downloaded ?
+>
+> It is a one time process. Buildroot keeps a cache of the downloaded
+> files into the dl/ sub-directory (which can be customized using the
+> BR2_DL_DIR configuration option, which is also an environment variable).
+>
+> > What exactly the diffrence between using external tool chain like
+> Sourcery
+> > CodeBench 2014.05"  & building toolchain using crosstool-ng ?
+> >
+> http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
+>
+> Sourcery CodeBench 2014.05 is a pre-built toolchain, used by a lot of
+> people. It's already there and available, hopefully quite well tested.
+> However, since it's pre-built, you cannot customize it.
+>
+> Using crosstool-ng to build your toolchain allows to generate a
+> completely custom toolchain, tailored for your platform.
+>
+> > >> Building the rootfilesystem into zImage resolves the rootfilesystem
+> > loading/linking issue clearly.
+> >
+> > Will uboot be able to understand that my rootfilesystem is inside my
+> zimage
+> > ? Or i have to tell uboot explicitly ?
+>
+> If you're using an initramfs bundled inside the zImage, then U-Boot
+> does not even need to know about it. Just load the zImage in U-Boot,
+> start the kernel, and that's it.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/9c01709f/attachment.html>
