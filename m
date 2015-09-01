@@ -1,55 +1,122 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  1 Sep 2015 14:57:59 +0300
-Subject: [Buildroot] [PATCH] ebtables: migrated to netfilter.org
-Message-ID: <d06a3fb7399d374ccb5f4e2a65978b3270f37749.1441108679.git.baruch@tkos.co.il>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Tue, 1 Sep 2015 17:32:04 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <CAKpDV8tfzK28zoRr2s7R856vgPdgzeVA2Zn6HUuLOsmG+b1gvQ@mail.gmail.com>
+References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
+ <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
+ <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <20150901085841.3b90dd93@free-electrons.com>
+ <CAKpDV8tfzK28zoRr2s7R856vgPdgzeVA2Zn6HUuLOsmG+b1gvQ@mail.gmail.com>
+Message-ID: <CAKpDV8tR9JRSQAqHFNYRyeNoFXwA2AwjT5-VpDCvyJL4g=0EbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ebtables moved out of sf.net. Update website link, download location, and
-hashes reference.
+First build is successful. Some questions from my side.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ebtables/Config.in     | 2 +-
- package/ebtables/ebtables.hash | 5 ++---
- package/ebtables/ebtables.mk   | 2 +-
- 3 files changed, 4 insertions(+), 5 deletions(-)
+Following images are generated :--
+/output/images
+rootsfs.tar
+rootsfs.tar.gz
 
-diff --git a/package/ebtables/Config.in b/package/ebtables/Config.in
-index 18fff2450dd7..3f7566a60729 100644
---- a/package/ebtables/Config.in
-+++ b/package/ebtables/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_EBTABLES
- 	help
- 	  Ethernet bridge frame table administration
- 
--	  http://ebtables.sourceforge.net
-+	  http://ebtables.netfilter.org/
-diff --git a/package/ebtables/ebtables.hash b/package/ebtables/ebtables.hash
-index 75ab7dbc1a4d..45262765c27f 100644
---- a/package/ebtables/ebtables.hash
-+++ b/package/ebtables/ebtables.hash
-@@ -1,3 +1,2 @@
--# From http://sourceforge.net/projects/ebtables/files/ebtables/ebtables-2-0-10-4/
--sha1	907d3b82329e8fbb7aaaa98049732bd8dab022f9	ebtables-v2.0.10-4.tar.gz
--md5	506742a3d44b9925955425a659c1a8d0		ebtables-v2.0.10-4.tar.gz
-+# Locally computed
-+sha256	dc6f7b484f207dc712bfca81645f45120cb6aee3380e77a1771e9c34a9a4455d	ebtables-v2.0.10-4.tar.gz
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 99f936359edd..e6cdd269d244 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -6,7 +6,7 @@
- 
- EBTABLES_VERSION = 2.0.10-4
- EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
--EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtables-$(subst .,-,$(EBTABLES_VERSION))
-+EBTABLES_SITE = http://ftp.netfilter.org/pub/ebtables/
- EBTABLES_LICENSE = GPLv2+
- EBTABLES_LICENSE_FILES = COPYING
- EBTABLES_STATIC = $(if $(BR2_STATIC_LIBS),static)
--- 
-2.5.0
+
+1> Why this fakeroot is downloaded ?
+2>  Also in the name of the crosscompiler tool chain their is word "686-pc"
+does it means tool chain for intel 686 PC ?
+3> How to configure the busybox ? Build root make menuconfig does not
+provide entry to configure the busy box ?
+/dl
+arm-2014.05-29-arm-none-linux-gnueabi-1686-pc-linux-gnu.tar.bz2
+fakeroot_1.18.4.orig.tar.bz2
+busybox-1.23.2.tar.bz2
+
+
+4> Is this the place where toolchain is unzipped ?
+/output/host/opt/ext-toolchain  location contains :--
+arm-none-linux-gnueabi
+bin
+i686-pc-linux-gnu
+lib
+libexec
+share
+
+Regards,
+Katoch
+
+On Tue, Sep 1, 2015 at 4:55 PM, Dinesh Guleria <din.gulu.er@gmail.com>
+wrote:
+
+> Thanks Thomas for your reply. I will use Sourcery CodeBench 2014.05 for
+> time being.
+>
+> Build is taking some time. Will Get back to you.
+>
+> Thanks & Regards,
+> Katoch
+>
+>
+>
+> On Tue, Sep 1, 2015 at 12:28 PM, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+>
+>> Dear Dinesh Guleria,
+>>
+>> On Tue, 1 Sep 2015 06:39:34 +0530, Dinesh Guleria wrote:
+>>
+>> > One more question from my side if i use " Sourcery
+>> > CodeBench 2014.05"  toolchain then buildroot will download it for me or
+>> i
+>> > have to download it manually ?
+>>
+>> Buildroot will download it for you.
+>>
+>> > Also if buildroot will download it then in
+>> > this case will it be a one time process or if i make a new build for my
+>> > rootfile system, then every time tool chain will be downloaded ?
+>>
+>> It is a one time process. Buildroot keeps a cache of the downloaded
+>> files into the dl/ sub-directory (which can be customized using the
+>> BR2_DL_DIR configuration option, which is also an environment variable).
+>>
+>> > What exactly the diffrence between using external tool chain like
+>> Sourcery
+>> > CodeBench 2014.05"  & building toolchain using crosstool-ng ?
+>> >
+>> http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
+>>
+>> Sourcery CodeBench 2014.05 is a pre-built toolchain, used by a lot of
+>> people. It's already there and available, hopefully quite well tested.
+>> However, since it's pre-built, you cannot customize it.
+>>
+>> Using crosstool-ng to build your toolchain allows to generate a
+>> completely custom toolchain, tailored for your platform.
+>>
+>> > >> Building the rootfilesystem into zImage resolves the rootfilesystem
+>> > loading/linking issue clearly.
+>> >
+>> > Will uboot be able to understand that my rootfilesystem is inside my
+>> zimage
+>> > ? Or i have to tell uboot explicitly ?
+>>
+>> If you're using an initramfs bundled inside the zImage, then U-Boot
+>> does not even need to know about it. Just load the zImage in U-Boot,
+>> start the kernel, and that's it.
+>>
+>> Best regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/700a1c9d/attachment.html>
