@@ -1,19 +1,28 @@
 From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Tue, 1 Sep 2015 08:54:07 -0700
+Date: Tue, 1 Sep 2015 08:57:36 -0700
 Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
 References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
  <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
  <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
  <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
  <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
  <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+??.root/dev/ram0?.? Must be corrected to ??.root=/dev/ram0?.?. Sorry for typo.
+
+From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Lee, Tommy
+Sent: Tuesday, September 01, 2015 8:54 AM
+To: Dinesh Guleria
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] First rootfile system build using buildroot
 
 Katosh,
 
@@ -24,7 +33,7 @@ Tommy
 From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Dinesh Guleria
 Sent: Monday, August 31, 2015 6:10 PM
 To: Lee, Tommy
-Cc: buildroot at busybox.net
+Cc: buildroot at busybox.net<mailto:buildroot@busybox.net>
 Subject: Re: [Buildroot] First rootfile system build using buildroot
 
 
@@ -61,6 +70,9 @@ This e-mail message is for the sole use of the intended recipient(s) and may con
 
 ________________________________
 This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/c218265c/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150901/04f751ac/attachment.html>
