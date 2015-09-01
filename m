@@ -1,111 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  2 Sep 2015 00:55:13 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib to
-	be symlinks into /usr
-Message-ID: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed,  2 Sep 2015 01:10:34 +0200
+Subject: [Buildroot] [PATCH] system: use a menuconfig for the getty options
+Message-ID: <1441149034-27282-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd is incresaingly expected things to live in /usr/bin or
-/usr/sbin.
-
-However, a lot of packages stil install stuff directly into /bin or
-/sbin.
-
-Add an option so that /bin and /sbin be symlinks to /usr/bin and
-/usr/sbin. Ditto for .lib for consistency.
-
-That option is forcibly enabled when the init system is systemd.
+Making the getty option a menuconfig instead of a simple config
+automatically moves its dependees into a menu without the need to
+manually declare such a menu.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/skeleton/skeleton.mk | 17 ++++++++++++++++-
- system/Config.in             | 13 +++++++++++++
- system/skeleton/bin/.empty   |  0
- system/skeleton/lib/.empty   |  0
- system/skeleton/sbin/.empty  |  0
- 5 files changed, 29 insertions(+), 1 deletion(-)
- delete mode 100644 system/skeleton/bin/.empty
- delete mode 100644 system/skeleton/lib/.empty
- delete mode 100644 system/skeleton/sbin/.empty
+ system/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 48e7085..173b485 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -19,14 +19,29 @@ else
- SKELETON_PATH = system/skeleton
- endif
- 
-+ifeq ($(BR2_ROOTFS_USR_SYMLINKS),y)
-+define SKELETON_USR_SYMLINKS
-+	ln -snf usr/bin $(TARGET_DIR)/bin
-+	ln -snf usr/sbin $(TARGET_DIR)/sbin
-+	ln -snf usr/lib $(TARGET_DIR)/lib
-+endef
-+else
-+define SKELETON_NO_USR_SYMLINKS
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/sbin
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
-+endef
-+endif
-+
- define SKELETON_INSTALL_TARGET_CMDS
- 	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
- 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
- 		$(SKELETON_PATH)/ $(TARGET_DIR)/
-+	$(SKELETON_NO_USR_SYMLINKS)
-+	$(SKELETON_USR_SYMLINKS)
- 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
- 		$(TARGET_DIR_WARNING_FILE)
- 	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
--	mkdir -p $(TARGET_DIR)/usr
- 	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
- endef
- 
 diff --git a/system/Config.in b/system/Config.in
-index fad829d..96860d1 100644
+index fad829d..ea45cf3 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -88,6 +88,7 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
-+	select BR2_ROOTFS_USR_SYMLINKS
- 	select BR2_PACKAGE_SYSTEMD
+@@ -260,12 +260,11 @@ config BR2_SYSTEM_BIN_SH
+ 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
+ 	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
  
- comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
-@@ -178,6 +179,18 @@ endif
- 
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
-+config BR2_ROOTFS_USR_SYMLINKS
-+	bool "Use symlinks to /usr for /bin, /sbin and /lib"
-+	help
-+	  If you say 'n' here, then /bin /sbin and /lib and their
-+	  counterparts in /usr will be separate directories. This
-+	  is the traditional UNIX way. In this case, /usr can be a
-+	  partition separate from / .
-+
-+	  If you say 'y' here, then /bin /sbin and /lib will be symlinks
-+	  to their counterparts in /usr. This is the new systemd way. In
-+	  this case, /usr has to be on the / partition.
-+
- config BR2_TARGET_ENABLE_ROOT_LOGIN
- 	bool "Enable root login with password"
+-config BR2_TARGET_GENERIC_GETTY
++menuconfig BR2_TARGET_GENERIC_GETTY
+ 	bool "Run a getty (login prompt) after boot"
  	default y
-diff --git a/system/skeleton/bin/.empty b/system/skeleton/bin/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/system/skeleton/lib/.empty b/system/skeleton/lib/.empty
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/system/skeleton/sbin/.empty b/system/skeleton/sbin/.empty
-deleted file mode 100644
-index e69de29..0000000
+ 
+ if BR2_TARGET_GENERIC_GETTY
+-menu "getty options"
+ config BR2_TARGET_GENERIC_GETTY_PORT
+ 	string "TTY port"
+ 	default "console"
+@@ -313,7 +312,6 @@ config BR2_TARGET_GENERIC_GETTY_OPTIONS
+ 	help
+ 	  Any other flags you want to pass to getty,
+ 	  Refer to getty --help for details.
+-endmenu
+ endif
+ 
+ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
 -- 
 1.9.1
