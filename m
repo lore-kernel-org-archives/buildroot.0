@@ -1,74 +1,111 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Tue, 1 Sep 2015 15:36:48 -0700
-Subject: [Buildroot] Starting network...
-In-Reply-To: <20150902001213.6aa70acb@free-electrons.com>
-References: <944894A3EB1D044A9003B2F944389BB20474AD978E@svr-wa-exch1.atg.lc>
- <20150825195452.2d7be97c@free-electrons.com>
- <944894A3EB1D044A9003B2F944389BB20474C3459F@svr-wa-exch1.atg.lc>
- <20150901211412.5a71ae8e@free-electrons.com>
- <944894A3EB1D044A9003B2F944389BB20474C345D2@svr-wa-exch1.atg.lc>
- <20150902001213.6aa70acb@free-electrons.com>
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474C345DB@svr-wa-exch1.atg.lc>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  2 Sep 2015 00:55:13 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib to
+	be symlinks into /usr
+Message-ID: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+systemd is incresaingly expected things to live in /usr/bin or
+/usr/sbin.
 
-I should have noticed that the .dts files come along with the kernel source downloading.
+However, a lot of packages stil install stuff directly into /bin or
+/sbin.
 
-I just discovered the output/build/linux-headers-4.0.4/arch/arm/boot/dts/armada-388-gp.dts. I will not use it since, as you mentioned, the 388 board differs from the 385 one I am using.
+Add an option so that /bin and /sbin be symlinks to /usr/bin and
+/usr/sbin. Ditto for .lib for consistency.
 
-After I added following lines into the /etc/network/interfaces file and did the "ifdown eth0" and "ifup eth0" commands, my "ifconfig -a" command shows following result. Now my system has two network interfaces enabled.
+That option is forcibly enabled when the init system is systemd.
 
-Thanks for your help!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/skeleton/skeleton.mk | 17 ++++++++++++++++-
+ system/Config.in             | 13 +++++++++++++
+ system/skeleton/bin/.empty   |  0
+ system/skeleton/lib/.empty   |  0
+ system/skeleton/sbin/.empty  |  0
+ 5 files changed, 29 insertions(+), 1 deletion(-)
+ delete mode 100644 system/skeleton/bin/.empty
+ delete mode 100644 system/skeleton/lib/.empty
+ delete mode 100644 system/skeleton/sbin/.empty
 
-Tommy
-
-# vi /etc/network/interfaces
-.....
-iface eth0 inet static
-address 192.168.1.5
-gateway 192.168.1.254
-netmask 255.255.255.0
-
-# ifconfig -a
-eth0      Link encap:Ethernet  HWaddr 00:50:43:48:16:4D
-          inet addr:192.168.1.5  Bcast:0.0.0.0  Mask:255.255.255.0
-          BROADCAST MULTICAST  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:532
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-          Interrupt:36
-
-eth1      Link encap:Ethernet  HWaddr 00:50:43:48:EC:4D
-          BROADCAST MULTICAST  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:532
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-          Interrupt:37
-
-eth2      Link encap:Ethernet  HWaddr 00:50:43:EC:16:4D
-          inet addr:10.28.1.47  Bcast:10.28.1.255  Mask:255.255.255.0
-          inet6 addr: fe80::250:43ff:feec:164d/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:4031 errors:0 dropped:3 overruns:0 frame:0
-          TX packets:10 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:532
-          RX bytes:461861 (451.0 KiB)  TX bytes:1332 (1.3 KiB)
-          Interrupt:38
-
-lo        Link encap:Local Loopback
-          inet addr:127.0.0.1  Mask:255.0.0.0
-          inet6 addr: ::1/128 Scope:Host
-          UP LOOPBACK RUNNING  MTU:65536  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 48e7085..173b485 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -19,14 +19,29 @@ else
+ SKELETON_PATH = system/skeleton
+ endif
+ 
++ifeq ($(BR2_ROOTFS_USR_SYMLINKS),y)
++define SKELETON_USR_SYMLINKS
++	ln -snf usr/bin $(TARGET_DIR)/bin
++	ln -snf usr/sbin $(TARGET_DIR)/sbin
++	ln -snf usr/lib $(TARGET_DIR)/lib
++endef
++else
++define SKELETON_NO_USR_SYMLINKS
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/bin
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/sbin
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib
++endef
++endif
++
+ define SKELETON_INSTALL_TARGET_CMDS
+ 	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
+ 		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ 		$(SKELETON_PATH)/ $(TARGET_DIR)/
++	$(SKELETON_NO_USR_SYMLINKS)
++	$(SKELETON_USR_SYMLINKS)
+ 	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+ 		$(TARGET_DIR_WARNING_FILE)
+ 	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+-	mkdir -p $(TARGET_DIR)/usr
+ 	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+ endef
+ 
+diff --git a/system/Config.in b/system/Config.in
+index fad829d..96860d1 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -88,6 +88,7 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	select BR2_ROOTFS_USR_SYMLINKS
+ 	select BR2_PACKAGE_SYSTEMD
+ 
+ comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
+@@ -178,6 +179,18 @@ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
++config BR2_ROOTFS_USR_SYMLINKS
++	bool "Use symlinks to /usr for /bin, /sbin and /lib"
++	help
++	  If you say 'n' here, then /bin /sbin and /lib and their
++	  counterparts in /usr will be separate directories. This
++	  is the traditional UNIX way. In this case, /usr can be a
++	  partition separate from / .
++
++	  If you say 'y' here, then /bin /sbin and /lib will be symlinks
++	  to their counterparts in /usr. This is the new systemd way. In
++	  this case, /usr has to be on the / partition.
++
+ config BR2_TARGET_ENABLE_ROOT_LOGIN
+ 	bool "Enable root login with password"
+ 	default y
+diff --git a/system/skeleton/bin/.empty b/system/skeleton/bin/.empty
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/system/skeleton/lib/.empty b/system/skeleton/lib/.empty
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/system/skeleton/sbin/.empty b/system/skeleton/sbin/.empty
+deleted file mode 100644
+index e69de29..0000000
+-- 
+1.9.1
