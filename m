@@ -1,105 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  1 Sep 2015 09:43:36 +0300
-Subject: [Buildroot] [PATCH 1/2] dos2unix: add target support
-Message-ID: <d04d05bf5fb09fd02747689fe348375cdff4fc6a.1441089817.git.baruch@tkos.co.il>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 1 Sep 2015 08:46:40 +0200
+Subject: [Buildroot] [PATCH] openssh: security bump to version 7.1p1
+In-Reply-To: <1440528839-20096-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1440528839-20096-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CAGm1_ku7aBHOPyKGpvXFKzPPc-kgjYTd9MqZ1dB0yAR7r7aOrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: James Knight <james.knight@rockwellcollins.com>
+Hi Gustavo,
 
-Allow the `dos2unix` utility to be built and installed on the target
-system.
+On Tue, Aug 25, 2015 at 8:53 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Fixes:
+> CVE-2015-6563 - Fixed a privilege separation weakness related to PAM
+> support.
+> CVE-2015-6564 - Fixed a use-after-free bug related to PAM support that
+> was reachable by attackers who could compromise the pre-authentication
+> process for remote code exectuion.
+> CVE-2015-6565 - incorrectly set TTYs to be world-writable.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/openssh/openssh.hash | 5 +++--
+>  package/openssh/openssh.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+> index 76d0be8..84f0667 100644
+> --- a/package/openssh/openssh.hash
+> +++ b/package/openssh/openssh.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -# Also from http://www.openssh.com/txt/release-6.9 (sha256 is base64 encoded)
+> -sha256 6e074df538f357d440be6cf93dc581a21f22d39e236f217fcd8eacbb6c896cfe        openssh-6.9p1.tar.gz
+> +# Also from http://www.openssh.com/txt/release-7.1 (sha256 is base64 encoded)
+> +# Decode with -> echo <encoded stuff>|base64 -d|hexdump -v -e '/1 "%02x"'
+> +sha256 fc0a6d2d1d063d5c66dffd952493d0cda256cad204f681de0f84ef85b2ad8428        openssh-7.1p1.tar.gz
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 5a7162f..b95914b 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -OPENSSH_VERSION = 6.9p1
+> +OPENSSH_VERSION = 7.1p1
+>  OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+>  OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+>  OPENSSH_LICENSE_FILES = LICENCE
 
-[baruch: properly handle target gettext]
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2:
-   * Fix static build with gettext
-   * Support build without locale support
----
- package/Config.in            |  3 +++
- package/dos2unix/Config.in   | 11 +++++++++++
- package/dos2unix/dos2unix.mk | 24 +++++++++++++++++++++---
- 3 files changed, 35 insertions(+), 3 deletions(-)
- create mode 100644 package/dos2unix/Config.in
+Are you using special sshd_config? After updating to 7.1p1 I couldn't
+login with the default config. ssh said "Permission denied". After
+downgrading to 6.9p1 I could login as usual.
 
-diff --git a/package/Config.in b/package/Config.in
-index 914b83833d3e..7c5fe4ec36b2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -115,6 +115,9 @@ menu "Development tools"
- 	source "package/cvs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/diffutils/Config.in"
-+endif
-+	source "package/dos2unix/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/findutils/Config.in"
- endif
- 	source "package/flex/Config.in"
-diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
-new file mode 100644
-index 000000000000..fdcd0700509b
---- /dev/null
-+++ b/package/dos2unix/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_DOS2UNIX
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	depends on BR2_USE_WCHAR # gettext
-+	bool "dos2unix"
-+	help
-+	  dos2unix converts text file line endings between CRLF and LF
-+
-+	  http://freshmeat.net/projects/dos2unix
-+
-+comment "dos2unix needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 2d7fcbbc6958..34777d0bceda 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -6,17 +6,35 @@
- 
- DOS2UNIX_VERSION = 7.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
--DOS2UNIX_DEPENDENCIES = host-gettext
- DOS2UNIX_LICENSE = BSD-2c
- DOS2UNIX_LICENSE_FILES = COPYING.txt
-+HOST_DOS2UNIX_DEPENDENCIES = host-gettext
-+
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+DOS2UNIX_MAKE_OPTS += ENABLE_NLS=
-+endif
-+
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+DOS2UNIX_DEPENDENCIES += gettext
-+DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=-lintl
-+endif
-+
-+define DOS2UNIX_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(DOS2UNIX_MAKE_OPTS)
-+endef
-+
-+define DOS2UNIX_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
-+		$(DOS2UNIX_MAKE_OPTS) install
-+endef
- 
- define HOST_DOS2UNIX_BUILD_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define HOST_DOS2UNIX_INSTALL_CMDS
--	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		install DESTDIR=$(HOST_DIR)
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
- endef
- 
-+$(eval $(generic-package))
- $(eval $(host-generic-package))
--- 
-2.5.0
+Yegor
