@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2015 22:02:21 +0200
-Subject: [Buildroot] [PATCH] znc: needs gcc >= 4.7
-In-Reply-To: <1441115011-20223-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 1 Sep 2015 10:43:31 -0300")
-References: <1441115011-20223-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wpw9q56a.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Sep 2015 22:03:45 +0200
+Subject: [Buildroot] [PATCH] ebtables: migrated to netfilter.org
+In-Reply-To: <d06a3fb7399d374ccb5f4e2a65978b3270f37749.1441108679.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 1 Sep 2015 14:57:59 +0300")
+References: <d06a3fb7399d374ccb5f4e2a65978b3270f37749.1441108679.git.baruch@tkos.co.il>
+Message-ID: <87si6xq53y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/aba/aba13674fb3624e0bd6a3b1e17f28883e298c8ca/
+ > ebtables moved out of sf.net. Update website link, download location, and
+ > hashes reference.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
