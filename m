@@ -1,63 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Sep 2015 08:58:41 +0200
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
-References: <CAKpDV8uVJjtssJDEx4knqtATvjXzy+kdKtwBoWWLcv-9v4cikg@mail.gmail.com>
- <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
- <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
- <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
-Message-ID: <20150901085841.3b90dd93@free-electrons.com>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Tue,  1 Sep 2015 10:10:27 +0200
+Subject: [Buildroot] [PATCH 1/6] python-urwid: bump version and add checksums
+Message-ID: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dinesh Guleria,
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+---
+ package/python-urwid/python-urwid.hash | 3 +++
+ package/python-urwid/python-urwid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/python-urwid/python-urwid.hash
 
-On Tue, 1 Sep 2015 06:39:34 +0530, Dinesh Guleria wrote:
-
-> One more question from my side if i use " Sourcery
-> CodeBench 2014.05"  toolchain then buildroot will download it for me or i
-> have to download it manually ?
-
-Buildroot will download it for you.
-
-> Also if buildroot will download it then in
-> this case will it be a one time process or if i make a new build for my
-> rootfile system, then every time tool chain will be downloaded ?
-
-It is a one time process. Buildroot keeps a cache of the downloaded
-files into the dl/ sub-directory (which can be customized using the
-BR2_DL_DIR configuration option, which is also an environment variable).
-
-> What exactly the diffrence between using external tool chain like Sourcery
-> CodeBench 2014.05"  & building toolchain using crosstool-ng ?
-> http://www.bootc.net/archives/2012/05/26/how-to-build-a-cross-compiler-for-your-raspberry-pi/
-
-Sourcery CodeBench 2014.05 is a pre-built toolchain, used by a lot of
-people. It's already there and available, hopefully quite well tested.
-However, since it's pre-built, you cannot customize it.
-
-Using crosstool-ng to build your toolchain allows to generate a
-completely custom toolchain, tailored for your platform.
-
-> >> Building the rootfilesystem into zImage resolves the rootfilesystem
-> loading/linking issue clearly.
-> 
-> Will uboot be able to understand that my rootfilesystem is inside my zimage
-> ? Or i have to tell uboot explicitly ?
-
-If you're using an initramfs bundled inside the zImage, then U-Boot
-does not even need to know about it. Just load the zImage in U-Boot,
-start the kernel, and that's it.
-
-Best regards,
-
-Thomas
+diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
+new file mode 100644
+index 0000000..2b18082
+--- /dev/null
++++ b/package/python-urwid/python-urwid.hash
+@@ -0,0 +1,3 @@
++# md from https://pypi.python.org/pypi?:action=show_md5&digest=a989acd54f4ff1a554add464803a9175, sha256 locally computed
++md5  	a989acd54f4ff1a554add464803a9175  urwid-1.3.0.tar.gz
++sha256	29f04fad3bf0a79c5491f7ebec2d50fa086e9d16359896c9204c6a92bc07aba2  urwid-1.3.0.tar.gz
+diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
+index 4f1be46..1cd3022 100644
+--- a/package/python-urwid/python-urwid.mk
++++ b/package/python-urwid/python-urwid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URWID_VERSION = 1.2.1
++PYTHON_URWID_VERSION = 1.3.0
+ PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
+ PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
+ PYTHON_URWID_LICENSE = LGPLv2.1+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
