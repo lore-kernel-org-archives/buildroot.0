@@ -1,96 +1,141 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Sep 2015 00:00:12 +0200
-Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
- qeglplatformscreen.cpp
-In-Reply-To: <1441195419-3616-1-git-send-email-marc.andre@netline.ch>
-References: <1441195419-3616-1-git-send-email-marc.andre@netline.ch>
-Message-ID: <55E7716C.7010701@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Sep 2015 00:07:42 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <55E76348.3020509@mind.be>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+ <55E76348.3020509@mind.be>
+Message-ID: <20150902220742.GC7845@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Marc,
+Arnout, All,
 
-On 02-09-15 14:03, Marc wrote:
-> Update the already existing fix for EGL/X11 header issue to fix
-> an additional problem encountered on my system where I had
-> compile errors in qeglplatformscreen.cpp. The problem was related
-> to the wrong order of includes. The X11 headers must always be
-> included last, as indicated in
-> http://lists.qt-project.org/pipermail/development/2013-March/010511.html
+On 2015-09-02 22:59 +0200, Arnout Vandecappelle spake thusly:
+> On 02-09-15 00:55, Yann E. MORIN wrote:
+> > systemd is incresaingly expected things to live in /usr/bin or
+>  increasingly
+
+Yup, as noted by Baruch.
+
+> > /usr/sbin.
+> > 
+> > However, a lot of packages stil install stuff directly into /bin or
+>  still
+
+Yup.
+
+> > /sbin.
+> > 
+> > Add an option so that /bin and /sbin be symlinks to /usr/bin and
+>  be -> are
+
+Nope, this is subjunctive. ;-)
+
+    https://en.wikipedia.org/wiki/Subjunctive_mood
+
+    Subjunctives occur most often, although not exclusively, in
+    subordinate clauses, particularly that-clauses. Examples of subjunctive
+    use can be found in the English sentences "I suggest that you be
+    careful" [...]
+
+> > /usr/sbin. Ditto for .lib for consistency.
+>  .lib -> /lib
+
+Yup.
+
+>  In reality, this option is only tangentially related to systemd. Rather, it's a
+> Fedora feature [1] that was taken over by Lennart P. and therefore by systemd
+> [2]. A better name for the feature is "merged /usr".
+
+ACK, thanks for the history lesson. :-)
+
+/me has laways been pretty bad in history.
+/me is ready to trade history lessons for grammatical lessons. But not
+ortograph, as it seems, nor typing lessons. ;-)
+
+[--SNIP--]
+> > +ifeq ($(BR2_ROOTFS_USR_SYMLINKS),y)
+> > +define SKELETON_USR_SYMLINKS
+> > +	ln -snf usr/bin $(TARGET_DIR)/bin
+> > +	ln -snf usr/sbin $(TARGET_DIR)/sbin
+> > +	ln -snf usr/lib $(TARGET_DIR)/lib
+> > +endef
+> > +else
+> > +define SKELETON_NO_USR_SYMLINKS
 > 
-> I decided instead of adding a new patch to update the existing patch,
-> because it is an additional fix for the same problem. If you don't agree
-> I am happy to submit a seperate patch.
+>  I would define only a single variable: SKELETON_USR_SYMLINKS_OR_DIRECTORIES.
+
+Yeah, I wandered between the two options: a single variable or two.
+Since I could not find a good name for the single-variable solution, I
+went for two variables.
+
+I'll switch (and maybe rename the variable to SKELETON_USR_SYMLINKS_OR_DIRS.
+
+[--SNIP--]
+> > @@ -178,6 +179,18 @@ endif
+> >  
+> >  if BR2_ROOTFS_SKELETON_DEFAULT
+> >  
+> > +config BR2_ROOTFS_USR_SYMLINKS
+> > +	bool "Use symlinks to /usr for /bin, /sbin and /lib"
 > 
-> Signed-off-by: Marc <marc.andre@netline.ch>
+>  I like this summary!
 
- Please use your full (real) name in the Sob. It's a legal statement, where you
-assert that you have the right to contribute this patch under the appropriate
-license.
+Thanks! ;-)
 
-> ---
->  package/qt5/qt5base/0003-xcb-egl-fixes.patch | 23 ++++++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
+> > +	help
+> > +	  If you say 'n' here, then /bin /sbin and /lib and their
+> > +	  counterparts in /usr will be separate directories. This
+> > +	  is the traditional UNIX way. In this case, /usr can be a
+> > +	  partition separate from / .
+> > +
+> > +	  If you say 'y' here, then /bin /sbin and /lib will be symlinks
 > 
-> diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-> index 53f8453..56b4923 100644
-> --- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-> +++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-> @@ -1,11 +1,13 @@
-> -The vivante headers pull in X11 defines which break eglconvenience
-> +Some EGL headers pull in X11 defines which break eglconvenience
->  
->  * Adds a missing include to qeglplatformcontext.cpp
->  * Fix namespace collision on CursorShape, pulled in from X11/X.h
->  * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
-> +* Reorder includes to have the X11-header the last include
->  
-> -[based on patch from Yocto project]
-> -Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> +Based on patch from Yocto project and buildroot patch from J?r?me Pouiller <jezz@sysmic.org>
-> +Updated to fix issue in qeglplatformscreen (reorder includes, see also
-> +http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
+>  If you say 'y' here, then /bin, /sbin and /lib will be merged to their
+> counterparts in /usr and replaced by symlinks.
 
- You should also add your Sob here, Also, since most of the original patch is
-still maintained, you should not remove J?r?me's Sob.
+It's not that they will be merged, since we do not install things in
+/bin and /sbin, and them merge the two; they are one from the beginning.
 
- Regards,
- Arnout
+So, I'm a bit uneasy at using 'merge' in this case.
 
-
->  
->  
->  diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-> @@ -61,4 +63,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
->   #include "qeglplatformscreen_p.h"
->   
->   QT_BEGIN_NAMESPACE
-> +--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
-> ++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
-> +@@ -31,11 +31,11 @@
-> + **
-> + ****************************************************************************/
-> + 
-> +-#include "qeglplatformscreen_p.h"
-> +-#include "qeglplatformwindow_p.h"
-> + #include <QtGui/qwindow.h>
-> + #include <qpa/qwindowsysteminterface.h>
-> + #include <QtPlatformSupport/private/qopenglcompositor_p.h>
-> ++#include "qeglplatformscreen_p.h"
-> ++#include "qeglplatformwindow_p.h"
-> + 
-> + QT_BEGIN_NAMESPACE
->   
+> > +	  to their counterparts in /usr. This is the new systemd way. In
 > 
+>  There's not much point to refer to systemd here, since it is forcibly selected
+> in the systemd case.
 
+After reading what you said above: ACK.
+
+> > +	  this case, /usr has to be on the / partition.
+> 
+>  /usr cannot be a separate filesystem.
+
+ACK.
+
+>  BTW I wouldn't mind if this option would default to y eventually. I've been
+> doing this (using a custom skeleton) for quite a while now.
+
+Well, I certainly know some caes where /usr is a separate partition, and
+defaulting that option to 'y' would break the unsuspecting users.
+
+I'd rather we keep it 'n' at least for the foreseeable future (1 year?)
+
+> [1] https://fedoraproject.org/wiki/Features/UsrMove
+> [2] http://www.freedesktop.org/wiki/Software/systemd/TheCaseForTheUsrMerge
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
