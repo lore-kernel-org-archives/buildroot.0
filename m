@@ -1,49 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Sep 2015 00:09:23 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
- to be symlinks into /usr
-In-Reply-To: <55E76775.8030200@mind.be>
-References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
- <55E76348.3020509@mind.be> <55E76775.8030200@mind.be>
-Message-ID: <20150902220923.GD7845@free.fr>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 2 Sep 2015 23:09:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez_utils: fix musl
+	compilation issue
+In-Reply-To: <55E77193.3060202@mind.be>
+References: <1441203317-10180-1-git-send-email-brendanheading@gmail.com>
+ <55E77193.3060202@mind.be>
+Message-ID: <CA+BsyQ7uHePcdOVX_4QKnQmLUe9fJ=OWRkesX0oO6fROC46etQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+>  The current version is in bluez5_utils. It had to be a separate package because
+> the API has changed from bluez4 to bluez5, so it must be possible to select one
+> or the other. So this comment is not really relevant. The bluez5_utils package
+> builds fine under musl BTW.
+>
+>  Of course, because bluez4 predates musl, there is really no reason to try to
+> build bluez4 with musl, so an equally acceptable option would be to make it
+> depend on !MUSL. However, I think the patch is sufficiently light to be
+> acceptable. IMHO, the argument "we prefer not to carry patches that will not
+> make it into upstream" doesn't apply for frozen packages, because then there is
+> no maintainance effort for the patches (since there is no version bumping).
 
-On 2015-09-02 23:17 +0200, Arnout Vandecappelle spake thusly:
-> On 02-09-15 22:59, Arnout Vandecappelle wrote:
-> > On 02-09-15 00:55, Yann E. MORIN wrote:
-> >> systemd is incresaingly expected things to live in /usr/bin or
-> >> /usr/sbin.
-> >>
-> >> However, a lot of packages stil install stuff directly into /bin or
-> >> /sbin.
-> >>
-> >> Add an option so that /bin and /sbin be symlinks to /usr/bin and
-> >> /usr/sbin. Ditto for .lib for consistency.
-> 
->  One more thing: it would be good to mention explicitly in the commit log that
-> /lib64 (or /lib32 or /libx32) doesn't need to be handled because that is already
-> a symlink to lib.
+Many thanks for that Arnout, and for pointing out the bluez5 package.
+Comments noted for future reference!
 
-Yeah, I almost mentionned them, but refrained from doing so, as I thought
-it was already well-known that they were synlinks already.
+regards
 
-But I'll add this before I resubmit.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Brendan
