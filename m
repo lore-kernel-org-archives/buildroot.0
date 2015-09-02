@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Sep 2015 16:16:13 -0300
-Subject: [Buildroot] [PATCH] libcurl: bump to version 7.44.0
-Message-ID: <1441221373-7712-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  2 Sep 2015 16:18:27 -0300
+Subject: [Buildroot] [PATCH] tiff: bump to version 4.0.5
+Message-ID: <1441221507-26382-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
+ package/tiff/tiff.hash | 2 +-
+ package/tiff/tiff.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index ee68922..db012a4 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index c594568..9cb31dc 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  baa654a1122530483ccc1c58cc112fec3724a82c11c6a389f1e6a37dc8858df9  curl-7.43.0.tar.bz2
-+sha256  1e2541bae6582bb697c0fbae49e1d3e6fad5d05d5aa80dbd6f072e0a44341814  curl-7.44.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 29a888c..6a5348b 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+ # Locally computed
+-sha256	8cb1d90c96f61cdfc0bcf036acc251c9dbe6320334da941c7a83cfe1576ef890	tiff-4.0.4.tar.gz
++sha256	e25eaa83ed7fab43ddd278b9b14d91a406a4b674cedc776adb95535f897f309c	tiff-4.0.5.tar.gz
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 548e47a..9a2bf70 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.43.0
-+LIBCURL_VERSION = 7.44.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-TIFF_VERSION = 4.0.4
++TIFF_VERSION = 4.0.5
+ TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+ TIFF_LICENSE_FILES = COPYRIGHT
 -- 
 2.4.6
