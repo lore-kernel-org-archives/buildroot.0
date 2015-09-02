@@ -1,56 +1,53 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Wed, 2 Sep 2015 19:24:27 +0530
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <20150902114729.GA18583@tarshish>
-References: <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
- <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
- <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
- <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
- <20150902033810.GS17874@tarshish>
- <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
- <20150902114729.GA18583@tarshish>
-Message-ID: <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Wed, 2 Sep 2015 09:50:34 -0400
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <20150902091051.7ee82cf3@free-electrons.com>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+ <20150902091051.7ee82cf3@free-electrons.com>
+Message-ID: <CANPyyuP-7XUHqJET+UOKEtGS8_N4R0nAFY1tfffrUK5oko5DnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> You need to set
-BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name of your
-in-tree defconfig file.
-Is this file an existing file or will be created at runtime ? If existing
-then where does this in-tree deconfig file lies in the buildroot directory ?
+On Wed, Sep 2, 2015 at 3:10 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Regards,
-Katoch
-Hi Katoch,
-
-On Wed, Sep 02, 2015 at 04:36:51PM +0530, Dinesh Guleria wrote:
-> I have successfully compiled a linux rootfs.Now I am trying to compile a
-> linux kernel using buildroot.
-> My kernel settings are ;--
-> Kernel version : 4.0.4
-> kernel configuration : use an in-tree deconfig file
+> Dear Yann E. MORIN,
 >
-> But i am getting following error, when make :--
-> linux/linux.mk:367: *** No kernel defconfig name specified, check your
-> BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
+> On Wed,  2 Sep 2015 00:55:13 +0200, Yann E. MORIN wrote:
+> > systemd is incresaingly expected things to live in /usr/bin or
+> > /usr/sbin.
+> >
+> > However, a lot of packages stil install stuff directly into /bin or
+> > /sbin.
+> >
+> > Add an option so that /bin and /sbin be symlinks to /usr/bin and
+> > /usr/sbin. Ditto for .lib for consistency.
+> >
+> > That option is forcibly enabled when the init system is systemd.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> But do we actually need this? Vicente sent a patch to fix the systemd
+> issues that were discussed on the list:
+>
+>    [PATCH] systemd: override the path for kill, sulogin, mount and umount
+>
 
-This means that BR2_LINUX_KERNEL_DEFCONFIG is empty. You need to set
-BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name of your
-in-tree defconfig file.
+It's not just what systemd expects, many packages by default install their
+systemd-related items to /lib, etc. instead of /usr/lib, so we either have
+manual fixes to the .mk files for those packages or inconsistencies in
+where those items go. As an example, I believe rsyslog is passed a special
+flag setting its systemd install location to /usr/lib, and gpsd is still
+just installing to /lib/systemd/system.
 
-baruch
+It wouldn't surprise me if most of our systemd users had already merged
+their directories in their skeleton; I will probably do so soon as well.
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Mike
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150902/bcd9e544/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150902/aa8dc4b1/attachment.html>
