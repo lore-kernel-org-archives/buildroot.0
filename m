@@ -1,68 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 3 Sep 2015 00:13:13 +0200
-Subject: [Buildroot] [PATCH] system: use a menuconfig for the getty
- options
-In-Reply-To: <1441149034-27282-1-git-send-email-yann.morin.1998@free.fr>
-References: <1441149034-27282-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55E77479.3080800@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  3 Sep 2015 00:51:57 +0200
+Subject: [Buildroot] [PATCH 0/6 RFC] toolchain/external: use generic extract
+	commands (branch yem/extract-cmds)
+Message-ID: <cover.1441233378.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-09-15 01:10, Yann E. MORIN wrote:
-> Making the getty option a menuconfig instead of a simple config
-> automatically moves its dependees into a menu without the need to
-> manually declare such a menu.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hello All!
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This series is an attempt at simplifying the way external toolchains are
+extracted.
 
- I don't quite like the new title of the menu, but I do think that this is
-better than the original.
+Currently, external toolchains use custom extract commands, because they
+want to exclude a bumch of files during extraction, so as to save a bit
+of space (locales in some toolchains can account for up to 80% of the
+size of the toolchain as a whole).
 
- Regards,
- Arnout
+And it turns out, gcc also wants to exclude a bunch of files (java and
+go, testsuites).
 
-> ---
->  system/Config.in | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index fad829d..ea45cf3 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -260,12 +260,11 @@ config BR2_SYSTEM_BIN_SH
->  	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
->  	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
->  
-> -config BR2_TARGET_GENERIC_GETTY
-> +menuconfig BR2_TARGET_GENERIC_GETTY
->  	bool "Run a getty (login prompt) after boot"
->  	default y
->  
->  if BR2_TARGET_GENERIC_GETTY
-> -menu "getty options"
->  config BR2_TARGET_GENERIC_GETTY_PORT
->  	string "TTY port"
->  	default "console"
-> @@ -313,7 +312,6 @@ config BR2_TARGET_GENERIC_GETTY_OPTIONS
->  	help
->  	  Any other flags you want to pass to getty,
->  	  Refer to getty --help for details.
-> -endmenu
->  endif
->  
->  config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-> 
+Using custom extract commands means that those packages (and critical
+ones, at that) can not benefit from the enhancements and fixes made to
+the generic commands, like the automatic triiping of components.
 
+In this series:
+
+  - we first introduce the support for the exclusion list
+  - we always break/dereference hardlinks
+  - we make gcc use the exclusion list
+  - we then make the external toolchains use it (in two passes: one for
+    the non-Blackfin case, one for it, as it is 'seecial')
+  - finaly, we introduce the Codescape MTI toolchain from Vincent
+
+Thomas, there is a question for you in the second commit: would you
+care to explain what your goal was when you added --hard-dereference
+when extracting the Blackfin toolchains?
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 91f12b7e7a013e3db639e0fa44ac395ac46442f2:
+
+  tar: move package to 'system tools' (2015-09-01 22:28:49 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/extract-cmds
+
+for you to fetch changes up to 8ea8baf0059c895f8df15fca5d3b9b70d41f7b53:
+
+  Add support for MIPS Codescape MTI GNU Linux toolchain (2015-09-03 00:31:19 +0200)
+
+----------------------------------------------------------------
+Vicente Olivert Riera (1):
+      Add support for MIPS Codescape MTI GNU Linux toolchain
+
+Yann E. MORIN (5):
+      core/pkg-generic: allow packages to exclude files when extracting
+      core/pkg-generic: always dereference hardlinks from archives
+      package/gcc: use generic extract commands
+      toolchain/external: use generic extract commands (!blackfin case)
+      toolchain/external: use generic extract commands (blackfin case)
+
+ docs/manual/adding-packages-generic.txt            |  4 ++
+ package/gcc/gcc-final/gcc-final.mk                 |  3 +-
+ package/gcc/gcc-initial/gcc-initial.mk             |  3 +-
+ package/gcc/gcc.mk                                 | 15 ++---
+ package/pkg-generic.mk                             |  6 +-
+ toolchain/helpers.mk                               | 12 +++-
+ toolchain/toolchain-external/Config.in             | 52 +++++++++++++++++
+ .../toolchain-external/toolchain-external.hash     |  4 ++
+ toolchain/toolchain-external/toolchain-external.mk | 68 ++++++++++++++--------
+ 9 files changed, 129 insertions(+), 38 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
