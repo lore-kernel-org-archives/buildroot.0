@@ -1,71 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Sep 2015 23:15:05 +0200
-Subject: [Buildroot] [PATCHv5 4/4] docs/manual: add section about size
-	graphing
+Date: Wed,  2 Sep 2015 23:15:04 +0200
+Subject: [Buildroot] [PATCHv5 3/4] Makefile: implement a size-stats target
 In-Reply-To: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1441228505-23235-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1441228505-23235-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/common-usage.txt | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+This commit implements a size-stats target that calls the script of
+the same name to generate the graph and CSV files related to package
+and file sizes.
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 5b27b1f..24f1d0b 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -273,6 +273,46 @@ only other format supported is PNG:
- BR2_GRAPH_OUT=png make graph-build
- ----------------
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
+---
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 9a6e9c0..4a33495 100644
+--- a/Makefile
++++ b/Makefile
+@@ -685,6 +685,13 @@ graph-depends: graph-depends-requirements
+ 	|tee $(GRAPHS_DIR)/$(@).dot \
+ 	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
  
-+=== Graphing the filesystem size contribution of packages
++size-stats:
++	$(Q)mkdir -p $(GRAPHS_DIR)
++	$(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
++		--graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
++		--file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
++		--package-size-csv $(BASE_DIR)/build/package-size-stats.csv
 +
-+When your target system grows, it is sometimes useful to understand
-+how much each Buildroot package is contributing to the overall root
-+filesystem size. To help with such an analysis, Buildroot collects
-+data about the files each package install and generate graphs and CSVs
-+files detailing the size contribution of each package.
-+
-+To generate these data after a build, run:
-+
-+----------------
-+make size-stats
-+----------------
-+
-+This will generate:
-+
-+* +output/graphs/graph-size+, a pie chart of the contribution of each
-+  package to the overall root filesystem size
-+
-+* +output/build/package-size-stats.csv+, a CSV file giving the size
-+  contribution of each package to the overall root filesystem size
-+
-+* +output/build/file-size-stats.csv+, a CSV file giving the size
-+  contribution of each installed file to the package it belongs, and
-+  to the overall filesystem size.
-+
-+This +size-stats+ target requires the Python Matplotlib library to be
-+installed (+python-matplotlib+ on most distributions), and also the
-++argpase+ module if you're using a Python version older than 2.7
-+(+python-argparse+ on most distributions).
-+
-+Just like for the duration graph, a +BR2_GRAPH_OUT+ environment is
-+supported to adjust the output file format. See xref:graph-depends[]
-+for details about this environment variable.
-+
-+.Note
-+The collected filesystem size data is only meaningful after a complete
-+clean rebuild. Be sure to run +make clean all+ before using +make
-+size-stats+.
-+
- include::eclipse-integration.txt[]
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
- include::advanced.txt[]
+ all: menuconfig
+@@ -903,6 +910,7 @@ endif
+ 	@echo '  manual-epub            - build manual in ePub'
+ 	@echo '  graph-build            - generate graphs of the build times'
+ 	@echo '  graph-depends          - generate graph of the dependency tree'
++	@echo '  size-stats             - generate stats of the filesystem size'
+ 	@echo '  list-defconfigs        - list all defconfigs (pre-configured minimal systems)'
+ 	@echo
+ 	@echo 'Miscellaneous:'
 -- 
 2.5.1
