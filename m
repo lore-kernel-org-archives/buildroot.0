@@ -1,60 +1,164 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  2 Sep 2015 19:54:12 +0300
-Subject: [Buildroot] [PATCH 1/2] imx-vpu: remove kernel dependency
-Message-ID: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Wed, 2 Sep 2015 22:27:01 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <55E70DF5.7060309@imgtec.com>
+References: <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
+ <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
+ <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
+ <20150902033810.GS17874@tarshish>
+ <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
+ <20150902114729.GA18583@tarshish>
+ <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
+ <55E700A5.3080403@imgtec.com>
+ <CAKpDV8s=1pCEaM33q-5YRADPhrAfkEaRbncFKBPeb3CWwxz_Ew@mail.gmail.com>
+ <55E70DF5.7060309@imgtec.com>
+Message-ID: <CAKpDV8uF2+EPKHTtcfSG6P43apra6ZeC=wd9q4X3_L-U3h98_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The imx-vpu package builds just fine without any special kernel header.
+>> And choose "Using an in-tree defconfig file", which is the default
+option.
+Done
 
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/freescale-imx/imx-vpu/Config.in  | 5 -----
- package/freescale-imx/imx-vpu/imx-vpu.mk | 5 +----
- 2 files changed, 1 insertion(+), 9 deletions(-)
+>> And type the name of the defconfig (without the trailing _defconfig).
+As i need to build for raspberrypi.
+And as I have *raspberrypi_deconfig* in my following directory /config of
+buildroot.
+So i write the name as *raspberrypi *.
 
-diff --git a/package/freescale-imx/imx-vpu/Config.in b/package/freescale-imx/imx-vpu/Config.in
-index 8a9541607bcf..220385cec83d 100644
---- a/package/freescale-imx/imx-vpu/Config.in
-+++ b/package/freescale-imx/imx-vpu/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_IMX_VPU
- 	bool "imx-vpu"
--	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
- 	select BR2_PACKAGE_FIRMWARE_IMX
- 	help
-@@ -11,7 +10,3 @@ config BR2_PACKAGE_IMX_VPU
- 
- 	  This library is provided by Freescale as-is and doesn't have
- 	  an upstream.
--
--comment "imx-vpu needs an imx-specific Linux kernel to be built"
--	depends on BR2_arm
--	depends on !BR2_LINUX_KERNEL
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index 4c4a0311144f..599dce85c945 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
-@@ -10,14 +10,11 @@ IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
- 
- IMX_VPU_INSTALL_STAGING = YES
- 
--# imx-vpu needs access to imx-specific kernel headers
--IMX_VPU_DEPENDENCIES += linux
- IMX_VPU_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
--	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
--	INCLUDE="-idirafter $(LINUX_DIR)/include"
-+	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
- 
- IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
- IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
--- 
-2.5.0
+But getting following error at the time of make . see the attached image.
+
+Regards,
+Katoch
+
+On Wed, Sep 2, 2015 at 8:25 PM, Vicente Olivert Riera <
+Vincent.Riera@imgtec.com> wrote:
+
+> Dear Dinesh Guleria,
+>
+> On 09/02/2015 03:51 PM, Dinesh Guleria wrote:
+> >>> one quick question. Which one is your name, "Katoch" or "Dinesh
+> Guleira"?
+> > Katoch is my nick name real name is as per my mail id Dinesh Guleria ..
+> :-)
+> >
+> >>> it is an existing defconfig file in the kernel tree, not in the
+> > Buildroot tree. You can find them in "arch/<your architecture>/configs/".
+> > So i need to copy this file from kernel tree to my buildroot tree & point
+> > BR2_LINUX_KERNEL_DEFCONFIG variable to it. Right ?
+>
+> no, you have to go to:
+>
+> Kernel
+> -> Linux Kernel
+>   -> Kernel configuration
+>
+> And choose "Using an in-tree defconfig file", which is the default option.
+>
+> Now go to:
+>
+> Kernel
+> -> Linux Kernel
+>   -> Defconfig name
+>
+> And type the name of the defconfig (without the trailing _defconfig).
+>
+> Regards,
+>
+> Vincent.
+>
+> > Regards,
+> > Katoch
+> >
+> > On 2 Sep 2015 19:29, "Vicente Olivert Riera" <Vincent.Riera@imgtec.com
+> > <mailto:Vincent.Riera@imgtec.com>> wrote:
+> >
+> >     Dear Katoch,
+> >
+> >     one quick question. Which one is your name, "Katoch" or "Dinesh
+> >     Guleira"?
+> >
+> >     On 09/02/2015 02:54 PM, Dinesh Guleria wrote:
+> >     >>> You need to set
+> >     > BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name
+> >     of your
+> >     > in-tree defconfig file.
+> >     > Is this file an existing file or will be created at runtime ? If
+> >     > existing then where does this in-tree deconfig file lies in the
+> >     > buildroot directory ?
+> >
+> >     it is an existing defconfig file in the kernel tree, not in the
+> >     Buildroot tree. You can find them in "arch/<your
+> >     architecture>/configs/".
+> >
+> >     If you want to use a custom defconfig file, then place it into the
+> >     Buildroot tree, maybe at $(TOPDIR), and use the appropriate option in
+> >     the Buildroot menuconfig.
+> >
+> >     Regards,
+> >
+> >     Vincent.
+> >
+> >     > Regards,
+> >     > Katoch
+> >     >
+> >     > Hi Katoch,
+> >     >
+> >     > On Wed, Sep 02, 2015 at 04:36:51PM +0530, Dinesh Guleria wrote:
+> >     >> I have successfully compiled a linux rootfs.Now I am trying to
+> >     compile a
+> >     >> linux kernel using buildroot.
+> >     >> My kernel settings are ;--
+> >     >> Kernel version : 4.0.4
+> >     >> kernel configuration : use an in-tree deconfig file
+> >     >>
+> >     >> But i am getting following error, when make :--
+> >     >> linux/linux.mk:367 <http://linux.mk:367> <http://linux.mk:367>:
+> >     *** No kernel defconfig name
+> >     > specified, check your
+> >     >> BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
+> >     >
+> >     > This means that BR2_LINUX_KERNEL_DEFCONFIG is empty. You need to
+> set
+> >     > BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name
+> >     of your
+> >     > in-tree defconfig file.
+> >     >
+> >     > baruch
+> >     >
+> >     > --
+> >     >      http://baruch.siach.name/blog/                  ~. .~   Tk
+> >     Open Systems
+> >     >
+> >
+>  =}------------------------------------------------ooO--U--Ooo------------{=
+> >     >    - baruch at tkos.co.il <mailto:baruch@tkos.co.il>
+> >     <mailto:baruch at tkos.co.il <mailto:baruch@tkos.co.il>> - tel:
+> >     > +972.2.679.5364, http://www.tkos.co.il -
+> >     >
+> >     >
+> >     > _______________________________________________
+> >     > buildroot mailing list
+> >     > buildroot at busybox.net <mailto:buildroot@busybox.net>
+> >     > http://lists.busybox.net/mailman/listinfo/buildroot
+> >     >
+> >
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150902/82a3ef4b/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: linux_error.png
+Type: image/png
+Size: 207492 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150902/82a3ef4b/attachment-0001.png>
