@@ -1,111 +1,132 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 2 Sep 2015 20:24:09 +0200
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8t+_+_dDKD07ZtT9KdJWTqpoLnXe+fJq_tALohfJAZ82Q@mail.gmail.com>
-References: <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
- <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
- <20150902033810.GS17874@tarshish>
- <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
- <20150902114729.GA18583@tarshish>
- <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
- <55E700A5.3080403@imgtec.com>
- <CAKpDV8s=1pCEaM33q-5YRADPhrAfkEaRbncFKBPeb3CWwxz_Ew@mail.gmail.com>
- <55E70DF5.7060309@imgtec.com>
- <CAKpDV8uF2+EPKHTtcfSG6P43apra6ZeC=wd9q4X3_L-U3h98_g@mail.gmail.com>
- <20150902171635.GB18583@tarshish>
- <CAKpDV8t+_+_dDKD07ZtT9KdJWTqpoLnXe+fJq_tALohfJAZ82Q@mail.gmail.com>
-Message-ID: <CAHXCMMJ=GDJ3boDtCYV8YbGXDgnHa93De5RJdT-fWGjYhBVnCA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Sep 2015 16:15:20 -0300
+Subject: [Buildroot] [PATCH] lighttpd: bump to version 1.4.37
+Message-ID: <1441221320-12527-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Katoch,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../lighttpd/0001-Fix-default-config-file.patch    | 32 ++++++++++++----------
+ package/lighttpd/lighttpd.hash                     |  2 +-
+ package/lighttpd/lighttpd.mk                       |  2 +-
+ 3 files changed, 19 insertions(+), 17 deletions(-)
 
-On Wed, Sep 2, 2015 at 7:58 PM, Dinesh Guleria <din.gulu.er@gmail.com> wrote:
->>> You find the list of kernel defconfig files under the arch/<your
->>> architecture>/configs/ directory of the *kernel*.
->    I have selected bcm2835 (Rpi controller), its building fine.
->
-> Buildroot /board directory contains folder for many boards. What is the
-> significance of buildroot /board directory ?
-
-You might find some answers here [1] (even if this section of the
-manual is about for user's project customization, the rough idea is
-still followed in the official buildroot tree).
-
->
->
-> What is the significance of  *_deconfig files under buildroot directory
-> /configs
->
-
-Please, understand that Buildroot uses the same configuration tool as
-the linux kernel, i.e. Kconfig.
-So, the *_defconfig files in the <buildroot>/configs/ directory are
-exactly the same that what the *_defconfig files in
-<linux>/arch/<your_arch>/configs/ are.
-IOW,:
-- for the kernel: a <cpu>_defconfig file is the minimal set of linux'
-configurations for the given CPU;
-- for Buildroot: a <target>_defconfig file is the minimal set of
-Buildroot's configurations for the given target, with one of these
-configurations being the kernel's defconfig name or configuration file
-(depending on your selection in the menu).
-
-
-Take some time in the Buildroot manual [2] (at least, parts I and II),
-you'll certainly learn something useful for your work.
-Then, if you have not found the answers to some question, let us know
-what is missing in the manual (we try hard to make Buildroot easy for
-new comers, including the manual ;-]).
-
-
-[1] http://buildroot.org/downloads/manual/manual.html#customize-dir-structure
-[2] http://buildroot.org/downloads/manual/manual.html
-
-
-> Regards,
-> katoch
->
-> On Wed, Sep 2, 2015 at 10:46 PM, Baruch Siach <baruch@tkos.co.il> wrote:
->>
->> Hi Katoch,
->>
->> On Wed, Sep 02, 2015 at 10:27:01PM +0530, Dinesh Guleria wrote:
->> > >> And type the name of the defconfig (without the trailing _defconfig).
->> > As i need to build for raspberrypi.
->> > And as I have *raspberrypi_deconfig* in my following directory /config
->> > of
->> > buildroot.
->> > So i write the name as *raspberrypi *.
->> >
->> > But getting following error at the time of make . see the attached
->> > image.
->>
->> This option is about the *kernel* config, not Buildroot one. You find the
->> list
->> of kernel defconfig files under the arch/<your architecture>/configs/
->> directory of the *kernel*.
->>
->> baruch
->>
->> --
->>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
->> Systems
->>
->> =}------------------------------------------------ooO--U--Ooo------------{=
->>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Regards,
-
+diff --git a/package/lighttpd/0001-Fix-default-config-file.patch b/package/lighttpd/0001-Fix-default-config-file.patch
+index bffc2a8..ada1589 100644
+--- a/package/lighttpd/0001-Fix-default-config-file.patch
++++ b/package/lighttpd/0001-Fix-default-config-file.patch
+@@ -9,11 +9,13 @@ Modify the default lighttpd configuration file to have one a starting conf
+ 
+ Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Signed-off-by: Simon Dawson <spdawson@gmail.com>
++[Gustavo: update for 1.4.37]
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nurp a/doc/config/conf.d/access_log.conf b/doc/config/conf.d/access_log.conf
+---- a/doc/config/conf.d/access_log.conf	2010-07-11 18:01:32.000000000 +0100
+-+++ b/doc/config/conf.d/access_log.conf	2012-07-21 19:37:58.453207990 +0100
+-@@ -9,7 +9,7 @@ server.modules += ( "mod_accesslog" )
++diff -Nura lighttpd-1.4.37.orig/doc/config/conf.d/access_log.conf lighttpd-1.4.37/doc/config/conf.d/access_log.conf
++--- lighttpd-1.4.37.orig/doc/config/conf.d/access_log.conf	2015-09-01 14:38:48.684673663 -0300
+++++ lighttpd-1.4.37/doc/config/conf.d/access_log.conf	2015-09-01 14:38:53.975855142 -0300
++@@ -9,7 +9,7 @@
+  ##
+  ## Default access log.
+  ##
+@@ -22,9 +24,9 @@ diff -Nurp a/doc/config/conf.d/access_log.conf b/doc/config/conf.d/access_log.co
+  
+  ##
+  ## The default format produces CLF compatible output.
+-diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+---- a/doc/config/lighttpd.conf	2011-12-18 12:57:25.000000000 +0000
+-+++ b/doc/config/lighttpd.conf	2012-07-21 19:40:45.281200552 +0100
++diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/config/lighttpd.conf
++--- lighttpd-1.4.37.orig/doc/config/lighttpd.conf	2015-09-01 14:38:48.684673663 -0300
+++++ lighttpd-1.4.37/doc/config/lighttpd.conf	2015-09-01 14:39:40.256442492 -0300
+ @@ -13,8 +13,8 @@
+  ## if you add a variable here. Add the corresponding variable in the
+  ## chroot example aswell.
+@@ -36,7 +38,7 @@ diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+  var.state_dir   = "/var/run"
+  var.home_dir    = "/var/lib/lighttpd"
+  var.conf_dir    = "/etc/lighttpd"
+-@@ -90,7 +90,7 @@ server.port = 80
++@@ -90,7 +90,7 @@
+  ##
+  ## Use IPv6?
+  ##
+@@ -45,7 +47,7 @@ diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+  
+  ##
+  ## bind to a specific IP
+-@@ -101,8 +101,8 @@ server.use-ipv6 = "enable"
++@@ -101,8 +101,8 @@
+  ## Run as a different username/groupname.
+  ## This requires root permissions during startup. 
+  ##
+@@ -56,7 +58,7 @@ diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+  
+  ## 
+  ## enable core files.
+-@@ -112,7 +112,7 @@ server.groupname = "lighttpd"
++@@ -112,7 +112,7 @@
+  ##
+  ## Document root
+  ##
+@@ -65,7 +67,7 @@ diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+  
+  ##
+  ## The value for the "Server:" response field.
+-@@ -138,7 +138,7 @@ server.pid-file = state_dir + "/lighttpd
++@@ -138,7 +138,7 @@
+  ##
+  ## Path to the error log file
+  ##
+@@ -74,16 +76,16 @@ diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
+  
+  ##
+  ## If you want to log to syslog you have to unset the 
+-@@ -188,7 +188,7 @@ server.event-handler = "linux-sysepoll"
+- ## linux-sendfile - is recommended for small files.
++@@ -188,7 +188,7 @@
++ ## sendfile       - is recommended for small files.
+  ## writev         - is recommended for sending many large files
+  ##
+--server.network-backend = "linux-sendfile"
++-server.network-backend = "sendfile"
+ +server.network-backend = "writev"
+  
+  ##
+  ## As lighttpd is a single-threaded server, its main resource limit is
+-@@ -311,9 +311,9 @@ url.access-deny             = ( "~", ".i
++@@ -311,9 +311,9 @@
+  ## disable range requests for pdf files
+  ## workaround for a bug in the Acrobat Reader plugin.
+  ##
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index f74727c..b06e2ae 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,2 +1,2 @@
+ # From http://www.lighttpd.net/
+-sha256	897ab6b1cc7bd51671f8af759e7846245fbbca0685c30017e93a5882a9ac1a53	lighttpd-1.4.36.tar.xz
++sha256	804e6f60567ca1da2b3927f92b7e9332b93aca9560f282ca135b86b7558979bd	lighttpd-1.4.37.tar.xz
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index c75eeff..9ff8cfe 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).36
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).37
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3c
 -- 
-Samuel
+2.4.6
