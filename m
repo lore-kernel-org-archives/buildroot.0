@@ -1,110 +1,151 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Sep 2015 23:12:31 +0200
-Subject: [Buildroot] [PATCHv4 1/2] udisks: bump to version 1.0.5
-In-Reply-To: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <55E7663F.2040802@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  2 Sep 2015 23:15:01 +0200
+Subject: [Buildroot] [PATCHv5 0/4] Generate package size statistics
+Message-ID: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-09-15 16:21, Vicente Olivert Riera wrote:
-> This version depends on libgudev when using systemd, otherwise it fails
-> with an error like this one:
-> 
-> checking for GUDEV... no
-> configure: error: Package requirements (gudev-1.0 >= 147) were not met:
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Hello,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Here is the fifth iteration of the patches adding a 'size-stats'
+feature, which mainly allows to generate a pie chart of the size
+contribution of each package to the overall root filesystem size.
 
- However, I think it would be better to take a different approach here, because
-there will be more packages with this requirement (we already have libmbim now,
-but there are probably more that we haven't detected yet because we don't have
-systemd in the autobuilders).
+This code is also available at:
 
- So I think there should be either a new virtual package or a suboption of udev
-to handle the libgudev case.
+  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=size-stats-v5
 
- But that's more work, so let's fix udisks now by applying this patch.
+Changes since v4:
 
- Regards,
- Arnout
+ - Rebased on top of the latest master.
 
-> ---
-> Changes v3 -> v4: improve the libgudev dependency comment [Thomas]
-> Changes v2 -> v3: add a comment about the libgudev dependency
-> Changes v1 -> v2: depend on libgudev when using systemd
-> 
->  package/udisks/Config.in   |    6 ++++++
->  package/udisks/udisks.hash |    2 +-
->  package/udisks/udisks.mk   |   11 ++++++++++-
->  3 files changed, 17 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-> index a5da2bf..f24df03 100644
-> --- a/package/udisks/Config.in
-> +++ b/package/udisks/Config.in
-> @@ -12,6 +12,12 @@ config BR2_PACKAGE_UDISKS
->  	select BR2_PACKAGE_PARTED
->  	select BR2_PACKAGE_LVM2
->  	select BR2_PACKAGE_LIBATASMART
-> +	# When eudev is used as the udev provider, libgudev is automatically
-> +	# provided as it is part of eudev. However, when systemd is used as
-> +	# the udev provider, libgudev is not provided, and needs to be built
-> +	# separately. This is why we select the libgudev package only if
-> +	# systemd is used.
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_SYSTEMD
->  	help
->  	  The udisks project provides
->  
-> diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
-> index 5debfd5..7ad4326 100644
-> --- a/package/udisks/udisks.hash
-> +++ b/package/udisks/udisks.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256	854b89368733b9c3a577101b761ad5397ae75a05110c8698ac5b29de9a8bf8f5	udisks-1.0.4.tar.gz
-> +sha256 f2ec82eb0ea7e01dc299b5b29b3c18cdf861236ec43dcff66b3552b4b31c6f71  udisks-1.0.5.tar.gz
-> diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-> index 7a24106..a39ff31 100644
-> --- a/package/udisks/udisks.mk
-> +++ b/package/udisks/udisks.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -UDISKS_VERSION = 1.0.4
-> +UDISKS_VERSION = 1.0.5
->  UDISKS_SITE = http://hal.freedesktop.org/releases
->  UDISKS_LICENSE = GPLv2+
->  UDISKS_LICENSE_FILES = COPYING
-> @@ -22,6 +22,15 @@ UDISKS_DEPENDENCIES = 	\
->  
->  UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
->  
-> +# When eudev is used as the udev provider, libgudev is automatically
-> +# provided as it is part of eudev. However, when systemd is used as the
-> +# udev provider, libgudev is not provided, and needs to be built
-> +# separately. This is why we select the libgudev package only if systemd
-> +# is used.
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +UDISKS_CONF_OPTS += libgudev
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_UDISKS_LVM2),y)
->  UDISKS_CONF_OPTS += --enable-lvm2
->  endif
-> 
+ - Now that the skeleton logic has been moved to a regular Buildroot
+   package, remove all the skeleton specific handling in the
+   size-stats script, as well as the passing of the --skeleton-path
+   from the main Makefile to the size-stats script.
 
+ - Added Reviewed-by/Tested-by from Ryan Barnett on "pkg-generic: add
+   step_pkg_size global instrumentation hook".
+
+ - Rework the commit log of "pkg-generic: add step_pkg_size global
+   instrumentation hook" to not mention the Config.in option that no
+   longer exists, and instead explain why we are doing the data
+   collection unconditionally. Reported by Romain Naour.
+
+ - Display the total filesystem on the generated graph. Suggested by
+   Ryan Barnett.
+
+ - Call matplotlib.use('Agg') to make sure matplotlib doesn't try to
+   connect to a X server. Suggested by Claython Shotwell.
+
+ - Added Reviewed-by/Tested-by from Ryan Barnett on "Makefile:
+   implement a size-stats target".
+
+ - Minor tweaks in the manual, suggested by Ryan Barnett. Also added
+   Reviewed-by/Tested-by from Ryan on the manual patch.
+
+Changes since v3:
+
+ - Remove the BR2_COLLECT_FILE_SIZE_STATS option, and collect the
+   necessary data unconditionally. This was suggested by Yann
+   E. Morin, who did some testing of the performance impact, and found
+   that it was so insignificant that it is negligible. See Yann's
+   analysis at
+   http://lists.busybox.net/pipermail/buildroot/2015-February/119431.html.
+
+ - Store the temporary files listing the files before/after inside
+   each package build directory, rather than in $(BUILD_DIR)
+   directly. This was suggested by Yann E. Morin.
+
+   They are now named .br_filelist_before and .br_filelist_after. They
+   are also no longer removed after the step_pkg_size_end hook, as
+   they don't consume that much space and could be useful for
+   analysis. If anyone finds that annoying, I'll be happy to change
+   this back to remove them.
+
+ - As suggested by Arnout, make a number of improvements to the
+   size-stats Python script:
+
+   * Use collections.defaultdict()
+
+   * Use a dict of tuples (package name, file size) for the filesdict,
+     instead of a dict of dict containing just two entries.
+
+   * Factorize code between build_skeleton_dict() and
+     build_package_dict() into a add_file() function.
+
+   * Use [2:] instead of .replace("./", "") to remove the leading "./"
+     in relative file paths returned by find.
+
+   * Many other small things: one digit for percentages, use sum()
+     when possible, rename pkgdict to filesdict where it makes sense,
+     etc.
+
+ - In the main Makefile:
+
+   * Use mkdir -p instead of install -d, as suggested by Arnout.
+
+   * Use $(Q) instead of @, as suggested by Arnout
+
+   * Do not cd into $(CONFIG_DIR), as it would break out of tree
+     build, since the path to the skeleton is passed as a relative
+     path.
+
+ - Add a new patch updating the manual with a new section describing
+   this feature.
+
+Changes since v2:
+
+ - Use print0 in find and -0 in xargs to support spaces in filenames,
+   just in case. Suggested by J?r?me Pouiller.
+
+ - Support custom skeleton locations, instead of assuming the skeleton
+   comes from system/skeleton.
+
+ - Fix the size-stats target to actually call the size-stats script,
+   and not graph-size, which was the old name of the script in
+   previous versions of the series.
+
+ - Fix usage of the size-stats target in out of tree build
+   situations. For consistency reasons, we chose to mimic what
+   graph-depends already does, even if size-stats does not necessarily
+   need to be executed from within CONFIG_DIR.
+
+ - Add one patch to make sure that 'make clean' removes the graphs/
+   subdirectory in the output directory, which wasn't done today. This
+   issue isn't specific to size-stats, and already existed with
+   graph-build and graph-depends.
+
+Changes since v1:
+
+ - Improve the logic to properly take into account packages that
+   overwrite files installed by other packages.
+
+ - Make the new pkg_step hook optional.
+
+ - Extend the facility to not only generate a graph, but also CSV
+   files. As a consequence, everything was renamed from 'graph-size'
+   to 'size-stats'.
+
+Best regards,
+
+Thomas
+
+Thomas Petazzoni (4):
+  pkg-generic: add step_pkg_size global instrumentation hook
+  support/scripts: add size-stats script
+  Makefile: implement a size-stats target
+  docs/manual: add section about size graphing
+
+ Makefile                     |   8 ++
+ docs/manual/common-usage.txt |  40 ++++++++
+ package/pkg-generic.mk       |  32 +++++++
+ support/scripts/size-stats   | 217 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 297 insertions(+)
+ create mode 100755 support/scripts/size-stats
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.1
