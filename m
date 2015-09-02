@@ -1,65 +1,65 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed,  2 Sep 2015 19:44:54 +0200
-Subject: [Buildroot] [PATCH 1/1] gnuradio: gnuradio-python gnuradio-utils:
-	add missing dependency to python-numpy
-Message-ID: <1441215894-31473-1-git-send-email-gwenj@trabucayre.com>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Wed, 2 Sep 2015 23:28:56 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <20150902171635.GB18583@tarshish>
+References: <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
+ <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
+ <20150902033810.GS17874@tarshish>
+ <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
+ <20150902114729.GA18583@tarshish>
+ <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
+ <55E700A5.3080403@imgtec.com>
+ <CAKpDV8s=1pCEaM33q-5YRADPhrAfkEaRbncFKBPeb3CWwxz_Ew@mail.gmail.com>
+ <55E70DF5.7060309@imgtec.com>
+ <CAKpDV8uF2+EPKHTtcfSG6P43apra6ZeC=wd9q4X3_L-U3h98_g@mail.gmail.com>
+ <20150902171635.GB18583@tarshish>
+Message-ID: <CAKpDV8t+_+_dDKD07ZtT9KdJWTqpoLnXe+fJq_tALohfJAZ82Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>> You find the list of kernel defconfig files under the arch/<your
+architecture>/configs/ directory of the *kernel*.
+   I have selected bcm2835 (Rpi controller), its building fine.
 
-Some python blocks needs python-numpy present.
+Buildroot /board directory contains folder for many boards. What is the
+significance of buildroot /board directory ?
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/gnuradio/Config.in   | 9 ++++++++-
- package/gnuradio/gnuradio.mk | 2 +-
- 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index e264a21..ea37d74 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -43,16 +43,23 @@ config BR2_PACKAGE_GNURADIO_FEC
- 	help
- 	  FEC signal processing blocks
- 
-+comment "gr-python depends on numpy"
-+	depends on !BR2_PACKAGE_PYTHON_NUMPY
-+
- config BR2_PACKAGE_GNURADIO_PYTHON
- 	bool "python support"
-+	depends on BR2_PACKAGE_PYTHON_NUMPY
- 	select BR2_PACKAGE_BOOST_PYTHON
- 	select BR2_PACKAGE_PYTHON
- 	help
- 	  Enable python component
- 
-+comment "gr-utils depends on gr-python"
-+	depends on !BR2_PACKAGE_GNURADIO_PYTHON
-+
- config BR2_PACKAGE_GNURADIO_UTILS
- 	bool "gr-utils support"
--	select BR2_PACKAGE_GNURADIO_PYTHON
-+	depends on BR2_PACKAGE_GNURADIO_PYTHON
- 	help
- 	  Misc python utilities
- 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index fc5cd1f..565c113 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -86,7 +86,7 @@ GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
--GNURADIO_DEPENDENCIES += python
-+GNURADIO_DEPENDENCIES += python python-numpy
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
- else
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
--- 
-2.4.6
+What is the significance of  *_deconfig files under buildroot directory
+/configs
+
+Regards,
+katoch
+
+On Wed, Sep 2, 2015 at 10:46 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+
+> Hi Katoch,
+>
+> On Wed, Sep 02, 2015 at 10:27:01PM +0530, Dinesh Guleria wrote:
+> > >> And type the name of the defconfig (without the trailing _defconfig).
+> > As i need to build for raspberrypi.
+> > And as I have *raspberrypi_deconfig* in my following directory /config of
+> > buildroot.
+> > So i write the name as *raspberrypi *.
+> >
+> > But getting following error at the time of make . see the attached image.
+>
+> This option is about the *kernel* config, not Buildroot one. You find the
+> list
+> of kernel defconfig files under the arch/<your architecture>/configs/
+> directory of the *kernel*.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150902/cf494763/attachment.html>
