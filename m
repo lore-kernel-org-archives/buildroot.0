@@ -1,62 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  3 Sep 2015 00:51:55 +0200
-Subject: [Buildroot] [PATCH 1/6 RFC] core/pkg-generic: allow packages to
-	exclude files when extracting
+Date: Thu,  3 Sep 2015 00:51:56 +0200
+Subject: [Buildroot] [PATCH 2/6 RFC] core/pkg-generic: always dereference
+	hardlinks from archives
 In-Reply-To: <cover.1441233378.git.yann.morin.1998@free.fr>
 References: <cover.1441233378.git.yann.morin.1998@free.fr>
-Message-ID: <419c992b5ee60036fd6e601f421e92f0ebadffe1.1441233378.git.yann.morin.1998@free.fr>
+Message-ID: <175fe503a9643013b377148eb847d0437c9a1c78.1441233378.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, packages that need to exclude parts of the archives when
-extracting (e.g. to gain space), like gcc or toolchain-external, have to
-provide custom extract commands, just for the sake of adding a bunch of
---exclude directives when calling tar.
+Currently, hardlinks in archives are extracted as hard-links on the
+filesystem.
 
-Add a new variable that packages may set, to provide a space-separated
-list of patterns to exclude.
+While the vast majority of archives do not have hard-links in them,
+there are a few (the Blackfin prebuilt toolchains, most notably) that
+have hard-links, and for which we want to break the hard-linking on
+extract because [--see Thomas--]...
+
+Since the case for hard-links in archives is very rare, we can probably
+accept the size impact of breaking hard-links always.
+
+Note: This will come handy when the toolchains are converted to using
+the generic extract commands.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- docs/manual/adding-packages-generic.txt | 4 ++++
- package/pkg-generic.mk                  | 5 ++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 4c12b42..e7a473c 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -312,6 +312,10 @@ information is (assuming the package name is +libfoo+) :
-   that have more than one leading component to strip, set this
-   variable with the value to be passed to tar. Default: 1.
- 
-+* +LIBFOO_EXCLUDES+ is a space-separated list of patterns to exclude
-+  when extracting the archive. Each item from that list is passed as
-+  a tar's +--exclude+ option. By default, empty.
-+
- * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
-   name) that are required for the current target package to
-   compile. These dependencies are guaranteed to be compiled and
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6a7d97e..d1877a7 100644
+index d1877a7..45b4218 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -476,7 +476,10 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
- # default extract command
- $(2)_EXTRACT_CMDS ?= \
+@@ -478,6 +478,7 @@ $(2)_EXTRACT_CMDS ?= \
  	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
--	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
-+	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
-+		-C $$($(2)_DIR) \
-+		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
-+		$$(TAR_OPTIONS) -)
+ 	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
+ 		-C $$($(2)_DIR) \
++		--hard-dereference \
+ 		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
+ 		$$(TAR_OPTIONS) -)
  
- # pre/post-steps hooks
- $(2)_PRE_DOWNLOAD_HOOKS         ?=
 -- 
 1.9.1
