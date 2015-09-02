@@ -1,81 +1,42 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Sep 2015 14:59:01 +0100
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
-References: <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
- <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
- <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
- <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
- <20150902033810.GS17874@tarshish>
- <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
- <20150902114729.GA18583@tarshish>
- <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
-Message-ID: <55E700A5.3080403@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Sep 2015 16:04:46 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <CANPyyuP-7XUHqJET+UOKEtGS8_N4R0nAFY1tfffrUK5oko5DnA@mail.gmail.com>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+ <20150902091051.7ee82cf3@free-electrons.com>
+ <CANPyyuP-7XUHqJET+UOKEtGS8_N4R0nAFY1tfffrUK5oko5DnA@mail.gmail.com>
+Message-ID: <20150902160446.7fbf9ef6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Katoch,
+Dear Mike Williams,
 
-one quick question. Which one is your name, "Katoch" or "Dinesh Guleira"?
+On Wed, 2 Sep 2015 09:50:34 -0400, Mike Williams wrote:
 
-On 09/02/2015 02:54 PM, Dinesh Guleria wrote:
->>> You need to set
-> BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name of your
-> in-tree defconfig file.
-> Is this file an existing file or will be created at runtime ? If
-> existing then where does this in-tree deconfig file lies in the
-> buildroot directory ?
+> It's not just what systemd expects, many packages by default install their
+> systemd-related items to /lib, etc. instead of /usr/lib, so we either have
+> manual fixes to the .mk files for those packages or inconsistencies in
+> where those items go. As an example, I believe rsyslog is passed a special
+> flag setting its systemd install location to /usr/lib, and gpsd is still
+> just installing to /lib/systemd/system.
+> 
+> It wouldn't surprise me if most of our systemd users had already merged
+> their directories in their skeleton; I will probably do so soon as well.
 
-it is an existing defconfig file in the kernel tree, not in the
-Buildroot tree. You can find them in "arch/<your architecture>/configs/".
+Hum, right, I see. Then maybe Yann's patch is the right answer. In fact
+what I'd like to see in Buildroot is a group of people taking care of
+the systemd-related issues. So if you're willing (with others) to
+tackle that, it would be very useful. If you agree with Yann's patch,
+can you please test it and give your formal Tested-by/Reviewed-by?
 
-If you want to use a custom defconfig file, then place it into the
-Buildroot tree, maybe at $(TOPDIR), and use the appropriate option in
-the Buildroot menuconfig.
+Thanks,
 
-Regards,
-
-Vincent.
-
-> Regards,
-> Katoch
-> 
-> Hi Katoch,
-> 
-> On Wed, Sep 02, 2015 at 04:36:51PM +0530, Dinesh Guleria wrote:
->> I have successfully compiled a linux rootfs.Now I am trying to compile a
->> linux kernel using buildroot.
->> My kernel settings are ;--
->> Kernel version : 4.0.4
->> kernel configuration : use an in-tree deconfig file
->>
->> But i am getting following error, when make :--
->> linux/linux.mk:367 <http://linux.mk:367>: *** No kernel defconfig name
-> specified, check your
->> BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
-> 
-> This means that BR2_LINUX_KERNEL_DEFCONFIG is empty. You need to set
-> BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name of your
-> in-tree defconfig file.
-> 
-> baruch
-> 
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il <mailto:baruch@tkos.co.il> - tel:
-> +972.2.679.5364, http://www.tkos.co.il -
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
