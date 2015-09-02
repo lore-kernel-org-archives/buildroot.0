@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Sep 2015 09:10:51 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
- to be symlinks into /usr
-In-Reply-To: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
-References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150902091051.7ee82cf3@free-electrons.com>
+Date: Wed, 2 Sep 2015 09:11:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-kernel-module.mk: module
+ build fails
+In-Reply-To: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
+References: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20150902091159.2f52ea06@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Doug Kehn,
 
-On Wed,  2 Sep 2015 00:55:13 +0200, Yann E. MORIN wrote:
-> systemd is incresaingly expected things to live in /usr/bin or
-> /usr/sbin.
+On Tue,  1 Sep 2015 20:37:53 -0500, Doug Kehn wrote:
+> Observed the following when building cryptodev-linux:
+> >>> cryptodev-linux 1.7 Building kernel module(s)
+> grep: /.config: No such file or directory
+> ERROR: Kernel does not support loadable modules
 > 
-> However, a lot of packages stil install stuff directly into /bin or
-> /sbin.
+> Fix LINUX_DIR reference when determining if kernel configuration
+> supports loadable modules.
 > 
-> Add an option so that /bin and /sbin be symlinks to /usr/bin and
-> /usr/sbin. Ditto for .lib for consistency.
-> 
-> That option is forcibly enabled when the init system is systemd.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
 
-But do we actually need this? Vicente sent a patch to fix the systemd
-issues that were discussed on the list:
+Indeed:
 
-   [PATCH] systemd: override the path for kill, sulogin, mount and umount
-
-Thomas
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
