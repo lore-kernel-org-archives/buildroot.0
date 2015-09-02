@@ -1,41 +1,39 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Wed, 2 Sep 2015 09:02:41 +0200
-Subject: [Buildroot] [PATCH 1/1] gnuradio: sys/types.h is needed for
- mode_t
-In-Reply-To: <20150829232114.3c384d4d@free-electrons.com>
-References: <1440861006-26198-1-git-send-email-gwenj@trabucayre.com>
- <20150829232114.3c384d4d@free-electrons.com>
-Message-ID: <20150902090241.149048c7@x230.trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Sep 2015 09:10:51 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150902091051.7ee82cf3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni
-On Sat, 29 Aug 2015 23:21:14 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Dear Yann E. MORIN,
 
-> Dear Gwenhael Goavec-Merou,
+On Wed,  2 Sep 2015 00:55:13 +0200, Yann E. MORIN wrote:
+> systemd is incresaingly expected things to live in /usr/bin or
+> /usr/sbin.
 > 
-> On Sat, 29 Aug 2015 17:10:06 +0200, Gwenhael Goavec-Merou wrote:
-> > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> > 
-> > fix :
-> > http://autobuild.buildroot.net/results/8e3/8e3afd5f22312f0660f631fdb82bbb64eda913fb/build-end.log
-> > 
-> > error: 'mode_t' has not been declared
-> > 
-> > Signed-off-by: Gwenhael Goavec-Merou
-> > <gwenhael.goavec-merou@trabucayre.com> ---
-> >  .../gnuradio/0002-types_t-is-need-for-mode_t.patch    | 19
-> > +++++++++++++++++++ 1 file changed, 19 insertions(+)
-> >  create mode 100644
-> > package/gnuradio/0002-types_t-is-need-for-mode_t.patch
+> However, a lot of packages stil install stuff directly into /bin or
+> /sbin.
 > 
-> Applied, thanks. As we discussed, please submit the patch upstream.
-> Thanks!
+> Add an option so that /bin and /sbin be symlinks to /usr/bin and
+> /usr/sbin. Ditto for .lib for consistency.
 > 
-Done :
-https://github.com/gnuradio/gnuradio/commit/3e2dc168467304212328abd061bf10f0c511f17f
-Gwenhael
+> That option is forcibly enabled when the init system is systemd.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+But do we actually need this? Vicente sent a patch to fix the systemd
+issues that were discussed on the list:
+
+   [PATCH] systemd: override the path for kill, sulogin, mount and umount
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
