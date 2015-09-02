@@ -1,9 +1,8 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Sep 2015 11:39:23 +0100
-Subject: [Buildroot] [PATCH 2/2] udisks: fix build with newer glibc versions
-In-Reply-To: <1441190363-29697-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441190363-29697-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1441190363-29697-2-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 2 Sep 2015 11:40:14 +0100
+Subject: [Buildroot] [PATCHv3 2/2] udisks: fix build with newer glibc
+	versions
+Message-ID: <1441190414-30546-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
