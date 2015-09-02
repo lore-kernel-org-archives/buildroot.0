@@ -1,82 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Sep 2015 11:26:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-kernel-module.mk: module
- build fails
-In-Reply-To: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
-References: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20150902092651.GB3585@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 2 Sep 2015 10:31:23 +0100
+Subject: [Buildroot] [PATCH 1/2] udisks: bump to version 1.0.5
+Message-ID: <1441186284-61034-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doug, All,
+This version depends on libgudev, otherwise it fails with an error like
+this one:
 
-On 2015-09-01 20:37 -0500, Doug Kehn spake thusly:
-> Observed the following when building cryptodev-linux:
-> >>> cryptodev-linux 1.7 Building kernel module(s)
-> grep: /.config: No such file or directory
-> ERROR: Kernel does not support loadable modules
-> 
-> Fix LINUX_DIR reference when determining if kernel configuration
-> supports loadable modules.
+checking for GUDEV... no
+configure: error: Package requirements (gudev-1.0 >= 147) were not met:
 
-Dang.. I let that skip before the release...
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/udisks/Config.in   |    1 +
+ package/udisks/udisks.hash |    2 +-
+ package/udisks/udisks.mk   |    5 +++--
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-
-On principle:
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, there's a series that did not have time to make it to master
-before the release, and that is an improvement over the current
-situation, which would render this patch moot:
-
-    https://patchwork.ozlabs.org/patch/510186/
-    https://patchwork.ozlabs.org/patch/510187/
-    https://patchwork.ozlabs.org/patch/510188/
-
-So, even though this patch is good, I'd prefer we aply the series
-instead.
-
-Still, the kernel-module infra is indeed broken in the release, thus
-making all kernel module packages broken. I'll Oeter and Thomas decide
-whether we want to put out a .1 release to fix just that.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-kernel-module.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-> index 6fb7704..7628352 100644
-> --- a/package/pkg-kernel-module.mk
-> +++ b/package/pkg-kernel-module.mk
-> @@ -60,7 +60,7 @@ $(2)_MODULE_SUBDIRS ?= .
->  # includes and other support files (Booo!)
->  define $(2)_KERNEL_MODULES_BUILD
->  	@$$(call MESSAGE,"Building kernel module(s)")
-> -	@if ! grep -Fqx 'CONFIG_MODULES=y' $(LINUX_DIR)/.config; then \
-> +	@if ! grep -Fqx 'CONFIG_MODULES=y' $$(LINUX_DIR)/.config; then \
->  		echo "ERROR: Kernel does not support loadable modules"; \
->  		exit 1; \
->  	fi
-> -- 
-> 2.5.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index a5da2bf..8b8fd28 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_UDISKS
+ 	select BR2_PACKAGE_PARTED
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_LIBATASMART
++	select BR2_PACKAGE_LIBGUDEV
+ 	help
+ 	  The udisks project provides
+ 
+diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
+index 5debfd5..7ad4326 100644
+--- a/package/udisks/udisks.hash
++++ b/package/udisks/udisks.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	854b89368733b9c3a577101b761ad5397ae75a05110c8698ac5b29de9a8bf8f5	udisks-1.0.4.tar.gz
++sha256 f2ec82eb0ea7e01dc299b5b29b3c18cdf861236ec43dcff66b3552b4b31c6f71  udisks-1.0.5.tar.gz
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index 7a24106..0770a27 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UDISKS_VERSION = 1.0.4
++UDISKS_VERSION = 1.0.5
+ UDISKS_SITE = http://hal.freedesktop.org/releases
+ UDISKS_LICENSE = GPLv2+
+ UDISKS_LICENSE_FILES = COPYING
+@@ -18,7 +18,8 @@ UDISKS_DEPENDENCIES = 	\
+ 	polkit		\
+ 	parted		\
+ 	lvm2		\
+-	libatasmart
++	libatasmart \
++	libgudev
+ 
+ UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.1
