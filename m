@@ -1,97 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  3 Sep 2015 00:51:58 +0200
-Subject: [Buildroot] [PATCH 4/6 RFC] toolchain/external: use generic extract
-	commands (!blackfin case)
+Date: Thu,  3 Sep 2015 00:51:59 +0200
+Subject: [Buildroot] [PATCH 5/6 RFC] toolchain/external: use generic extract
+	commands (blackfin case)
 In-Reply-To: <cover.1441233378.git.yann.morin.1998@free.fr>
 References: <cover.1441233378.git.yann.morin.1998@free.fr>
-Message-ID: <07008633b2570983b01bcb69b611802eae4eade9.1441233378.git.yann.morin.1998@free.fr>
+Message-ID: <c1fedf9874fad47ccea6cf67a4913a2010e3a3f4.1441233378.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that packages can provide a list of files to be excluded when
-extracting their archive, downloaded external toolchains are no longer
-special in this respect.
+The backfin toolchains come in two archives.
 
-Still, those toolchains are currently extracted directly into their
-final location, $(HOST_DIR)/opt/ext-toolchain/ which means we still
-need a custom extract command.
-
-Except, we don't really need it: we can just move the toolchain, after
-it's been extracted by the generic extract command, with a post-extract
-hook.
-
-This means that:
-
-  - we now extract the toolchain with the generic extract command,
-
-  - the toolchain is thus extracted into $(@D) ,
-
-  - fixup commands are run against $(@D), as a post-extract hook,
-    instead of against $(HOST_DIR)/opt/ext-toolchain ,
-
-  - once this is done, we move $(@D)/* into the final location with a
-    new post-extract hook.
-
-Note: the blackfin case is special, and will be handled in a follow-up
-patch.
+We extract the first (main) archive using the generic extract commands,
+while the second is extracted as a post-extract hook.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
 ---
-Note: ideally, this part should be a host-generic-package, which
-installs the toolchain as apart of its install commands, but that's much
-more intrusive, and can be postponed for a later patchset...
----
- toolchain/toolchain-external/toolchain-external.mk | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk | 33 ++++++++++++----------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
 
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 3cb59c6..b14e0a1 100644
+index b14e0a1..6bc2fdc 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -266,15 +266,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv7a/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
--	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
-+	mv $(@D)/arago-2011.09/armv7a/* $(@D)/
-+	rm -rf $(@D)/arago-2011.09/
+@@ -253,6 +253,16 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
  endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109),y)
- TOOLCHAIN_EXTERNAL_SITE = http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports
- TOOLCHAIN_EXTERNAL_SOURCE = arago-2011.09-armv5te-linux-gnueabi-sdk.tar.bz2
- define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
--	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
--	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
-+	mv $(@D)/arago-2011.09/armv5te/* $(@D)/
-+	rm -rf $(@D)/arago-2011.09/
- endef
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-@@ -423,12 +423,14 @@ define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
- endef
- else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
- # Normal handling of toolchain tarball extraction.
--define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
-+TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
-+define TOOLCHAIN_EXTERNAL_MOVE
- 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
--	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
--		$(TAR) --strip-components=1 --exclude='usr/lib/locale/*' -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
--	$(TOOLCHAIN_EXTERNAL_FIXUP_CMDS)
-+	mv $(@D)/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
- endef
-+TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += \
-+	TOOLCHAIN_EXTERNAL_FIXUP_CMDS \
-+	TOOLCHAIN_EXTERNAL_MOVE
- endif
  
- # Returns the location of the libc.a file for the given compiler + flags
++# Special handling for Blackfin toolchain, because of the split in two
++# tarballs, and the organization of tarball contents. The tarballs
++# contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
++# which themselves contain the toolchain. This is why we strip more
++# components than usual.
++define TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
++	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
++		$(TAR) --strip-components=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
++endef
++
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi
+ TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+@@ -340,14 +350,20 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R2-RC2.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
++TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
++TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
++TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+@@ -408,21 +424,8 @@ TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1),y)
+-# Special handling for Blackfin toolchain, because of the split in two
+-# tarballs, and the organization of tarball contents. The tarballs
+-# contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+-# which themselves contain the toolchain. This is why we strip more
+-# components than usual.
+-define TOOLCHAIN_EXTERNAL_EXTRACT_CMDS
+-	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
+-	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_SOURCE)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) | \
+-		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+-	$(call suitable-extractor,$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS)) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS) | \
+-		$(TAR) --strip-components=3 --hard-dereference -C $(TOOLCHAIN_EXTERNAL_INSTALL_DIR) $(TAR_OPTIONS) -
+-endef
+-else ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
+-# Normal handling of toolchain tarball extraction.
++# Normal handling of downloaded toolchain tarball extraction.
++ifneq ($(TOOLCHAIN_EXTERNAL_SOURCE),)
+ TOOLCHAIN_EXTERNAL_EXCLUDES = usr/lib/locale/*
+ define TOOLCHAIN_EXTERNAL_MOVE
+ 	mkdir -p $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)
 -- 
 1.9.1
