@@ -1,41 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  2 Sep 2015 20:11:59 +0300
-Subject: [Buildroot] [PATCH] pkg-generic: fix <pkg>-legal-info target
-Message-ID: <217433bd5ec057444b036dd8b72778f078f0926e.1441213919.git.baruch@tkos.co.il>
+Date: Wed, 2 Sep 2015 20:16:35 +0300
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <CAKpDV8uF2+EPKHTtcfSG6P43apra6ZeC=wd9q4X3_L-U3h98_g@mail.gmail.com>
+References: <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
+ <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
+ <20150902033810.GS17874@tarshish>
+ <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
+ <20150902114729.GA18583@tarshish>
+ <CAKpDV8vpO_2UUWUBssE6hDCV=Jh3b1sAeY4=V-b6xEazzdJAPg@mail.gmail.com>
+ <55E700A5.3080403@imgtec.com>
+ <CAKpDV8s=1pCEaM33q-5YRADPhrAfkEaRbncFKBPeb3CWwxz_Ew@mail.gmail.com>
+ <55E70DF5.7060309@imgtec.com>
+ <CAKpDV8uF2+EPKHTtcfSG6P43apra6ZeC=wd9q4X3_L-U3h98_g@mail.gmail.com>
+Message-ID: <20150902171635.GB18583@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When making the <pkg>-legal-info target before the main legal-info target, the
-following error shows:
+Hi Katoch,
 
-/bin/sh: /home/baruch/git/buildroot/output/legal-info/licenses.txt: No such file or directory
-package/freescale-imx/imx-vpu/imx-vpu.mk:39: recipe for target 'imx-vpu-legal-info' failed
-make: *** [imx-vpu-legal-info] Error 1
+On Wed, Sep 02, 2015 at 10:27:01PM +0530, Dinesh Guleria wrote:
+> >> And type the name of the defconfig (without the trailing _defconfig).
+> As i need to build for raspberrypi.
+> And as I have *raspberrypi_deconfig* in my following directory /config of
+> buildroot.
+> So i write the name as *raspberrypi *.
+> 
+> But getting following error at the time of make . see the attached image.
 
-Make <pkg>-legal-info depend on legal-info-prepare to ensure that
-$(LEGAL_INFO_DIR) exists when generating licenses.txt.
+This option is about the *kernel* config, not Buildroot one. You find the list 
+of kernel defconfig files under the arch/<your architecture>/configs/ 
+directory of the *kernel*.
 
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+baruch
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6a7d97efdf02..24b473b13ff2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -715,7 +715,7 @@ endif
- endif
- 
- # legal-info: produce legally relevant info.
--$(1)-legal-info:
-+$(1)-legal-info: legal-info-prepare
- # Packages without a source are assumed to be part of Buildroot, skip them.
- 	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
 -- 
-2.5.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
