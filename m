@@ -1,39 +1,39 @@
-From: Doug Kehn <rdkehn@yahoo.com>
-Date: Tue,  1 Sep 2015 20:37:53 -0500
-Subject: [Buildroot] [PATCH 1/1] package/pkg-kernel-module.mk: module build
-	fails
-Message-ID: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 2 Sep 2015 06:38:10 +0300
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
+References: <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
+ <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
+ <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
+ <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
+Message-ID: <20150902033810.GS17874@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Observed the following when building cryptodev-linux:
->>> cryptodev-linux 1.7 Building kernel module(s)
-grep: /.config: No such file or directory
-ERROR: Kernel does not support loadable modules
+Hi Katoch,
 
-Fix LINUX_DIR reference when determining if kernel configuration
-supports loadable modules.
+On Wed, Sep 02, 2015 at 05:59:37AM +0530, Dinesh Guleria wrote:
+> Now my root filesystem is build, please suggest can i run it using qemu ?
+> 
+> Which version of qemu for ARM to use, any reference link which anyone on
+> list  may have used in past ?
 
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
----
- package/pkg-kernel-module.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There is a list of tested qemu configurations at configs/qemu_*. Instructions 
+for running them are in readme.txt files under board/qemu/.
 
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-index 6fb7704..7628352 100644
---- a/package/pkg-kernel-module.mk
-+++ b/package/pkg-kernel-module.mk
-@@ -60,7 +60,7 @@ $(2)_MODULE_SUBDIRS ?= .
- # includes and other support files (Booo!)
- define $(2)_KERNEL_MODULES_BUILD
- 	@$$(call MESSAGE,"Building kernel module(s)")
--	@if ! grep -Fqx 'CONFIG_MODULES=y' $(LINUX_DIR)/.config; then \
-+	@if ! grep -Fqx 'CONFIG_MODULES=y' $$(LINUX_DIR)/.config; then \
- 		echo "ERROR: Kernel does not support loadable modules"; \
- 		exit 1; \
- 	fi
+Hope this helps,
+baruch
+
 -- 
-2.5.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
