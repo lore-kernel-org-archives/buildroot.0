@@ -1,49 +1,40 @@
-From: Sam Bobroff <sam.bobroff@au1.ibm.com>
-Date: Wed,  2 Sep 2015 13:54:34 +1000
-Subject: [Buildroot] [PATCH v2 0/4] Handle generated kconfig defconfigs
-Message-ID: <cover.1441166076.git.sam.bobroff@au1.ibm.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 2 Sep 2015 07:54:40 +0300
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150902045440.GT17874@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yann,
 
-See the first patch in this set for a description of the issue.
+On Wed, Sep 02, 2015 at 12:55:13AM +0200, Yann E. MORIN wrote:
+> systemd is incresaingly expected things to live in /usr/bin or
+> /usr/sbin.
 
+s/expected/expecting/
 
-Changes v1 -> v2:
-This version incorporates various improvements suggested by Arnout
-Vandecappelle <arnout@mind.be>.
+Can you be more specific? What actually breaks?
 
-* The initial fix is now separated from it's first use.
+baruch
 
-* Some make error messages are now reported via $(error ...) which is simpler
-  and provides better (IMHO) feedback than echo and exit and there are a few
-  other minor makefile tweaks.
-
-* Two other places (in boot/) now make use of the new method.
-
-Please note that the changes to the boot targets are not tested (I included
-them because Arnout indicated that they needed this fix), although they look
-simple enough. I had a quick look at testing them but couldn't work out how to
-do it. I'll test them if someone can give me instructions (including which
-defconfigs are missing config files and which versions of the packages they
-occur in if they differ from the default buildroot versions) or they could be
-dropped.
-
-
-Sam Bobroff (4):
-  Handle kconfig generated defconfigs
-  package/linux: Handle generated defconfigs
-  boot/at91bootstrap3: Handled generated defconfigs
-  boot/barebox: Handle generated defconfigs
-
- boot/at91bootstrap3/at91bootstrap3.mk |  9 ++++-----
- boot/barebox/barebox.mk               | 10 ++++------
- linux/linux.mk                        | 10 ++++------
- package/pkg-kconfig.mk                | 26 ++++++++++++++++++++------
- 4 files changed, 32 insertions(+), 23 deletions(-)
+> 
+> However, a lot of packages stil install stuff directly into /bin or
+> /sbin.
+> 
+> Add an option so that /bin and /sbin be symlinks to /usr/bin and
+> /usr/sbin. Ditto for .lib for consistency.
+> 
+> That option is forcibly enabled when the init system is systemd.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 -- 
-2.1.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
