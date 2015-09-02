@@ -1,44 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 2 Sep 2015 14:47:29 +0300
-Subject: [Buildroot] First rootfile system build using buildroot
-In-Reply-To: <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
-References: <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
- <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
- <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
- <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
- <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
- <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
- <20150902033810.GS17874@tarshish>
- <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
-Message-ID: <20150902114729.GA18583@tarshish>
+From: Marc <marc.andre@netline.ch>
+Date: Wed,  2 Sep 2015 14:03:39 +0200
+Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
+	qeglplatformscreen.cpp
+Message-ID: <1441195419-3616-1-git-send-email-marc.andre@netline.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Katoch,
+Update the already existing fix for EGL/X11 header issue to fix
+an additional problem encountered on my system where I had
+compile errors in qeglplatformscreen.cpp. The problem was related
+to the wrong order of includes. The X11 headers must always be
+included last, as indicated in
+http://lists.qt-project.org/pipermail/development/2013-March/010511.html
 
-On Wed, Sep 02, 2015 at 04:36:51PM +0530, Dinesh Guleria wrote:
-> I have successfully compiled a linux rootfs.Now I am trying to compile a
-> linux kernel using buildroot.
-> My kernel settings are ;--
-> Kernel version : 4.0.4
-> kernel configuration : use an in-tree deconfig file
-> 
-> But i am getting following error, when make :--
-> linux/linux.mk:367: *** No kernel defconfig name specified, check your
-> BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
+I decided instead of adding a new patch to update the existing patch,
+because it is an additional fix for the same problem. If you don't agree
+I am happy to submit a seperate patch.
 
-This means that BR2_LINUX_KERNEL_DEFCONFIG is empty. You need to set 
-BR2_LINUX_KERNEL_DEFCONFIG (label: "Defconfig name") to the name of your 
-in-tree defconfig file.
+Signed-off-by: Marc <marc.andre@netline.ch>
+---
+ package/qt5/qt5base/0003-xcb-egl-fixes.patch | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-baruch
-
+diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+index 53f8453..56b4923 100644
+--- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
++++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+@@ -1,11 +1,13 @@
+-The vivante headers pull in X11 defines which break eglconvenience
++Some EGL headers pull in X11 defines which break eglconvenience
+ 
+ * Adds a missing include to qeglplatformcontext.cpp
+ * Fix namespace collision on CursorShape, pulled in from X11/X.h
+ * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
++* Reorder includes to have the X11-header the last include
+ 
+-[based on patch from Yocto project]
+-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++Based on patch from Yocto project and buildroot patch from J?r?me Pouiller <jezz@sysmic.org>
++Updated to fix issue in qeglplatformscreen (reorder includes, see also
++http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
+ 
+ 
+ diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
+@@ -61,4 +63,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
+  #include "qeglplatformscreen_p.h"
+  
+  QT_BEGIN_NAMESPACE
++--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
+++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
++@@ -31,11 +31,11 @@
++ **
++ ****************************************************************************/
++ 
++-#include "qeglplatformscreen_p.h"
++-#include "qeglplatformwindow_p.h"
++ #include <QtGui/qwindow.h>
++ #include <qpa/qwindowsysteminterface.h>
++ #include <QtPlatformSupport/private/qopenglcompositor_p.h>
+++#include "qeglplatformscreen_p.h"
+++#include "qeglplatformwindow_p.h"
++ 
++ QT_BEGIN_NAMESPACE
+  
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
