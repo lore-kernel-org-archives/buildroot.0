@@ -1,50 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Sep 2015 12:14:29 +0200
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 2 Sep 2015 11:14:59 +0100
 Subject: [Buildroot] [PATCHv2 1/2] udisks: bump to version 1.0.5
 In-Reply-To: <20150902101033.GY17874@tarshish>
 References: <1441188349-13079-1-git-send-email-Vincent.Riera@imgtec.com>
  <20150902101033.GY17874@tarshish>
-Message-ID: <20150902121429.2829a9e5@free-electrons.com>
+Message-ID: <55E6CC23.2090502@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Baruch Siach,
 
-On Wed, 2 Sep 2015 13:10:34 +0300, Baruch Siach wrote:
+On 09/02/2015 11:10 AM, Baruch Siach wrote:
 > Hi Vincent,
 > 
 > On Wed, Sep 02, 2015 at 11:05:48AM +0100, Vicente Olivert Riera wrote:
-> > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> > +UDISKS_CONF_OPTS += libgudev
-> > +endif
+>> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>> +UDISKS_CONF_OPTS += libgudev
+>> +endif
 > 
 > So libgudev is not even an optional dependency when there is no systemd?
 
-No.
+Well, it wasn't there before, so... Anyway, the default is not to add
+every optional dependency in the .mk, and let the users who really need
+them to send a patch to do it.
 
-libgudev used to be provided by udev. Then udev was merged in systemd.
-Then libgudev was taken out of systemd, and made a separate project.
+> In any case, a comment explaining this unusual dependency would be nice.
 
-So:
+Well, I have copied the output of the error you will face if you don't
+depend on libgudev when using systemd. Do you think it's also necessary
+in the Config.in and udisks.mk file as well? I don't mind doing it if
+you think it is.
 
- * If you're using systemd as the udev provider, and you need libgudev,
-   then you must use the libgudev package.
+Regards,
 
- * If you're using eudev as the udev provider, and you need libgudev,
-   you have nothing to do, because libgudev is still provided by eudev
-   (it hasn't been removed of it, like it was done in systemd).
+Vincent.
 
-So, libgudev is used in both cases (systemd or not), but it's simply
-either provided by the libgudev package (systemd case) or by the udev
-implementation itself (eudev case).
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+> baruch
+> 
