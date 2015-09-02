@@ -1,70 +1,82 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Sep 2015 11:50:45 +0100
-Subject: [Buildroot] [PATCHv3 2/2] udisks: fix build with newer glibc
-	versions
-In-Reply-To: <1441191045-41925-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441191045-41925-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1441191045-41925-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Wed, 2 Sep 2015 16:36:51 +0530
+Subject: [Buildroot] First rootfile system build using buildroot
+In-Reply-To: <20150902033810.GS17874@tarshish>
+References: <CAKpDV8uLvtaLFK=Oxd5vw-zpkzB9C+m0_hhmx-9meZSRViW12g@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C344F7@svr-wa-exch1.atg.lc>
+ <CAKpDV8tYxteVo=nKwMih_Ub-dxCQM=xh2G-AC3riPevrMySrNw@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3452F@svr-wa-exch1.atg.lc>
+ <CAKpDV8stME3N6uU8n_DVUYp=sgLGr9RDk_563FCy8XQqRQSL5Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C34560@svr-wa-exch1.atg.lc>
+ <944894A3EB1D044A9003B2F944389BB20474C34562@svr-wa-exch1.atg.lc>
+ <CAKpDV8uny8GAJrEkEBmMdcboOrGuVQ4G09KRtL9yuvgH1XKE=Q@mail.gmail.com>
+ <944894A3EB1D044A9003B2F944389BB20474C3458C@svr-wa-exch1.atg.lc>
+ <CAKpDV8svFZsaBA_hZjpoM5SFdSohihmugGW_9jYps=zsNzG5Mw@mail.gmail.com>
+ <20150902033810.GS17874@tarshish>
+Message-ID: <CAKpDV8u0ojKAuOJMEzFOjd7dKx6k9Sm-fK8Z5xk7Y7_xdJPNyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport an upstream patch to fix the build with newer glibc versions.
-This is how the failure looks like:
+Thanks Baruch.
 
-job-drive-detach.c: In function 'sysfs_exists':
-job-drive-detach.c:44:15: error: storage size of 'statbuf' isn't known
-   struct stat statbuf;
+I have successfully compiled a linux rootfs.Now I am trying to compile a
+linux kernel using buildroot.
+My kernel settings are ;--
+Kernel version : 4.0.4
+kernel configuration : use an in-tree deconfig file
 
-Fixes:
+But i am getting following error, when make :--
+linux/linux.mk:367: *** No kernel defconfig name specified, check your
+BR2_LINUX_KERNEL_DEFCONFIG setting.  Stop.
 
-  http://autobuild.buildroot.net/results/ab3/ab36c2a1d2ca41a4d9ec6bab7d8d45678dbc5dcd/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v2 -> v3: no changes
-Changes v1 -> v2: no changes
+What i got is Buildroot is not able to find the kernel configuration file.
+But my kernel is not downloaded by the Buildroot till yet.
+And kernel configuration file is generated after we perform "make
+menuconfig" to kernel. How to generate kernel configuration file, in this
+case ?
 
- .../0001-fix-build-with-newer-glibc-versions.patch |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/udisks/0001-fix-build-with-newer-glibc-versions.patch
+Already Thomas have some reply here, but i did not get answer to it.
+http://lists.busybox.net/pipermail/buildroot/2013-April/070180.html
 
-diff --git a/package/udisks/0001-fix-build-with-newer-glibc-versions.patch b/package/udisks/0001-fix-build-with-newer-glibc-versions.patch
-new file mode 100644
-index 0000000..336fc44
---- /dev/null
-+++ b/package/udisks/0001-fix-build-with-newer-glibc-versions.patch
-@@ -0,0 +1,29 @@
-+Fix build with newer glibc versions
-+
-+This patch has been backported from upstream:
-+
-+http://cgit.freedesktop.org/udisks/commit/?h=udisks1&id=9829152b12a8924d2e091a00133ed1a3a7ba75c0
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 9829152b12a8924d2e091a00133ed1a3a7ba75c0 Mon Sep 17 00:00:00 2001
-+From: Alexandre Rostovtsev <tetromino@gentoo.org>
-+Date: Fri, 29 May 2015 21:09:39 -0400
-+Subject: fix build with newer glibc versions
-+
-+https://bugs.freedesktop.org/show_bug.cgi?id=90778
-+
-+diff --git a/src/helpers/job-drive-detach.c b/src/helpers/job-drive-detach.c
-+index eeafcab..d122a1f 100644
-+--- a/src/helpers/job-drive-detach.c
-++++ b/src/helpers/job-drive-detach.c
-+@@ -18,6 +18,7 @@
-+  *
-+  */
-+ 
-++#include <sys/stat.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <errno.h>
-+-- 
-+cgit v0.10.2
--- 
-1.7.1
+what is the diffrence betwen :--
+BR2_LINUX_KERNEL_DEFCONFIG  & BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+enviromental variable.
+
+
+How to resolve this error ?
+
+Please suggest.
+
+Regards,
+katoch
+
+On Wed, Sep 2, 2015 at 9:08 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+
+> Hi Katoch,
+>
+> On Wed, Sep 02, 2015 at 05:59:37AM +0530, Dinesh Guleria wrote:
+> > Now my root filesystem is build, please suggest can i run it using qemu ?
+> >
+> > Which version of qemu for ARM to use, any reference link which anyone on
+> > list  may have used in past ?
+>
+> There is a list of tested qemu configurations at configs/qemu_*.
+> Instructions
+> for running them are in readme.txt files under board/qemu/.
+>
+> Hope this helps,
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150902/c4106b82/attachment.html>
