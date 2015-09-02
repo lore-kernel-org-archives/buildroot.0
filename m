@@ -1,51 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Sep 2015 23:15:04 +0200
-Subject: [Buildroot] [PATCHv5 3/4] Makefile: implement a size-stats target
-In-Reply-To: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1441228505-23235-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 2 Sep 2015 23:17:41 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <55E76348.3020509@mind.be>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+ <55E76348.3020509@mind.be>
+Message-ID: <55E76775.8030200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit implements a size-stats target that calls the script of
-the same name to generate the graph and CSV files related to package
-and file sizes.
+On 02-09-15 22:59, Arnout Vandecappelle wrote:
+> On 02-09-15 00:55, Yann E. MORIN wrote:
+>> systemd is incresaingly expected things to live in /usr/bin or
+> 
+>  increasingly
+> 
+>> /usr/sbin.
+>>
+>> However, a lot of packages stil install stuff directly into /bin or
+> 
+>  still
+> 
+>> /sbin.
+>>
+>> Add an option so that /bin and /sbin be symlinks to /usr/bin and
+> 
+>  be -> are
+> 
+>> /usr/sbin. Ditto for .lib for consistency.
+> 
+>  .lib -> /lib
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
----
- Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ One more thing: it would be good to mention explicitly in the commit log that
+/lib64 (or /lib32 or /libx32) doesn't need to be handled because that is already
+a symlink to lib.
 
-diff --git a/Makefile b/Makefile
-index 9a6e9c0..4a33495 100644
---- a/Makefile
-+++ b/Makefile
-@@ -685,6 +685,13 @@ graph-depends: graph-depends-requirements
- 	|tee $(GRAPHS_DIR)/$(@).dot \
- 	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
- 
-+size-stats:
-+	$(Q)mkdir -p $(GRAPHS_DIR)
-+	$(Q)$(TOPDIR)/support/scripts/size-stats --builddir $(BASE_DIR) \
-+		--graph $(BASE_DIR)/graphs/graph-size.$(BR_GRAPH_OUT) \
-+		--file-size-csv $(BASE_DIR)/build/file-size-stats.csv \
-+		--package-size-csv $(BASE_DIR)/build/package-size-stats.csv
-+
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
-@@ -903,6 +910,7 @@ endif
- 	@echo '  manual-epub            - build manual in ePub'
- 	@echo '  graph-build            - generate graphs of the build times'
- 	@echo '  graph-depends          - generate graph of the dependency tree'
-+	@echo '  size-stats             - generate stats of the filesystem size'
- 	@echo '  list-defconfigs        - list all defconfigs (pre-configured minimal systems)'
- 	@echo
- 	@echo 'Miscellaneous:'
+
+ Regards,
+ Arnout
+
+[snip]
+
 -- 
-2.5.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
