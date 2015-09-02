@@ -1,71 +1,70 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Sep 2015 11:05:48 +0100
-Subject: [Buildroot] [PATCHv2 1/2] udisks: bump to version 1.0.5
-Message-ID: <1441188349-13079-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  2 Sep 2015 12:10:07 +0200
+Subject: [Buildroot] [PATCH] package/clapack: fix comments
+Message-ID: <1441188607-9953-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version depends on libgudev when using systemd, otherwise it fails
-with an error like this one:
+Provide appropriate comments for the powerpc and !powerpc cases.
 
-checking for GUDEV... no
-configure: error: Package requirements (gudev-1.0 >= 147) were not met:
+Adapt armadillo's comments accordingly.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
-Changes v1 -> v2: depend on libgudev only when using systemd
+ package/armadillo/Config.in | 12 ++++++++----
+ package/clapack/Config.in   |  8 ++++++--
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
- package/udisks/Config.in   |    1 +
- package/udisks/udisks.hash |    2 +-
- package/udisks/udisks.mk   |    6 +++++-
- 3 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index a5da2bf..fba1793 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_UDISKS
- 	select BR2_PACKAGE_PARTED
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_LIBATASMART
-+	select BR2_PACKAGE_LIBGUDEV if BR2_PACKAGE_SYSTEMD
- 	help
- 	  The udisks project provides
- 
-diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
-index 5debfd5..7ad4326 100644
---- a/package/udisks/udisks.hash
-+++ b/package/udisks/udisks.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	854b89368733b9c3a577101b761ad5397ae75a05110c8698ac5b29de9a8bf8f5	udisks-1.0.4.tar.gz
-+sha256 f2ec82eb0ea7e01dc299b5b29b3c18cdf861236ec43dcff66b3552b4b31c6f71  udisks-1.0.5.tar.gz
-diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-index 7a24106..957823c 100644
---- a/package/udisks/udisks.mk
-+++ b/package/udisks/udisks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UDISKS_VERSION = 1.0.4
-+UDISKS_VERSION = 1.0.5
- UDISKS_SITE = http://hal.freedesktop.org/releases
- UDISKS_LICENSE = GPLv2+
- UDISKS_LICENSE_FILES = COPYING
-@@ -22,6 +22,10 @@ UDISKS_DEPENDENCIES = 	\
- 
- UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+UDISKS_CONF_OPTS += libgudev
-+endif
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index e49997d..18bf750 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -1,14 +1,18 @@
+ comment "armadillo needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
+-	depends on !BR2_bfin # clapack
++	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
++	depends on !BR2_powerpc
++	depends on !BR2_bfin
 +
- ifeq ($(BR2_PACKAGE_UDISKS_LVM2),y)
- UDISKS_CONF_OPTS += --enable-lvm2
- endif
++comment "armadillo needs an (e)glibc toolchain w/ C++"
++	depends on BR2_powerpc
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_UCLIBC
+ 
+ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
++	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
+ 	depends on !BR2_bfin # clapack
+ 	select BR2_PACKAGE_CLAPACK
+ 	help
+diff --git a/package/clapack/Config.in b/package/clapack/Config.in
+index f37752a..2257524 100644
+--- a/package/clapack/Config.in
++++ b/package/clapack/Config.in
+@@ -1,9 +1,13 @@
++comment "clapack needs an (e)glibc toolchain"
++	depends on BR2_powerpc
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
+ config BR2_PACKAGE_CLAPACK
+ 	bool "cblas/clapack"
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ 	# _fpu_control is used on PowerPC, but not available with
+-	# uClibc
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
++	# uClibc or musl
++	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
+ 	# disable clapack on blackfin, it triggers "undefined symbol" failure
+ 	# because of the "_" symbol prefix:
+ 	# http://autobuild.buildroot.net/results/a28df0ba10803e6e54c2f8160bbd8190cba4d690/
 -- 
-1.7.1
+1.9.1
