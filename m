@@ -1,71 +1,58 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Sep 2015 15:21:20 +0100
-Subject: [Buildroot] [PATCHv4 2/2] udisks: fix build with newer glibc
-	versions
-In-Reply-To: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1441203680-29193-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 2 Sep 2015 16:28:20 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <CANPyyuPXrY8jEFyT01JOG57TOqBh=hmWvDCQ5TOc8948+m2QOw@mail.gmail.com>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+ <20150902091051.7ee82cf3@free-electrons.com>
+ <CANPyyuP-7XUHqJET+UOKEtGS8_N4R0nAFY1tfffrUK5oko5DnA@mail.gmail.com>
+ <20150902160446.7fbf9ef6@free-electrons.com>
+ <CANPyyuPXrY8jEFyT01JOG57TOqBh=hmWvDCQ5TOc8948+m2QOw@mail.gmail.com>
+Message-ID: <20150902142820.GB7845@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport an upstream patch to fix the build with newer glibc versions.
-This is how the failure looks like:
+Mike, All,
 
-job-drive-detach.c: In function 'sysfs_exists':
-job-drive-detach.c:44:15: error: storage size of 'statbuf' isn't known
-   struct stat statbuf;
+On 2015-09-02 10:05 -0400, Mike Williams spake thusly:
+> On Wed, Sep 2, 2015 at 10:04 AM, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+> > Dear Mike Williams,
+> > On Wed, 2 Sep 2015 09:50:34 -0400, Mike Williams wrote:
+> > > It's not just what systemd expects, many packages by default install
+> > their
+> > > systemd-related items to /lib, etc. instead of /usr/lib, so we either
+> > have
+> > > manual fixes to the .mk files for those packages or inconsistencies in
+> > > where those items go. As an example, I believe rsyslog is passed a
+> > special
+> > > flag setting its systemd install location to /usr/lib, and gpsd is still
+> > > just installing to /lib/systemd/system.
+> > >
+> > > It wouldn't surprise me if most of our systemd users had already merged
+> > > their directories in their skeleton; I will probably do so soon as well.
+> >
+> > Hum, right, I see. Then maybe Yann's patch is the right answer. In fact
+> > what I'd like to see in Buildroot is a group of people taking care of
+> > the systemd-related issues. So if you're willing (with others) to
+> > tackle that, it would be very useful. If you agree with Yann's patch,
+> > can you please test it and give your formal Tested-by/Reviewed-by?
+> 
+> Sure, I'll get it tested tomorrow.
 
-Fixes:
+Great, thanks! If you can think of a better commit log to suggest, then
+that would be great, too! ;-)
 
-  http://autobuild.buildroot.net/results/ab3/ab36c2a1d2ca41a4d9ec6bab7d8d45678dbc5dcd/
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v3 -> v4: no changes
-Changes v2 -> v3: no changes
-Changes v1 -> v2: no changes
-
- .../0001-fix-build-with-newer-glibc-versions.patch |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/udisks/0001-fix-build-with-newer-glibc-versions.patch
-
-diff --git a/package/udisks/0001-fix-build-with-newer-glibc-versions.patch b/package/udisks/0001-fix-build-with-newer-glibc-versions.patch
-new file mode 100644
-index 0000000..336fc44
---- /dev/null
-+++ b/package/udisks/0001-fix-build-with-newer-glibc-versions.patch
-@@ -0,0 +1,29 @@
-+Fix build with newer glibc versions
-+
-+This patch has been backported from upstream:
-+
-+http://cgit.freedesktop.org/udisks/commit/?h=udisks1&id=9829152b12a8924d2e091a00133ed1a3a7ba75c0
-+
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 9829152b12a8924d2e091a00133ed1a3a7ba75c0 Mon Sep 17 00:00:00 2001
-+From: Alexandre Rostovtsev <tetromino@gentoo.org>
-+Date: Fri, 29 May 2015 21:09:39 -0400
-+Subject: fix build with newer glibc versions
-+
-+https://bugs.freedesktop.org/show_bug.cgi?id=90778
-+
-+diff --git a/src/helpers/job-drive-detach.c b/src/helpers/job-drive-detach.c
-+index eeafcab..d122a1f 100644
-+--- a/src/helpers/job-drive-detach.c
-++++ b/src/helpers/job-drive-detach.c
-+@@ -18,6 +18,7 @@
-+  *
-+  */
-+ 
-++#include <sys/stat.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <errno.h>
-+-- 
-+cgit v0.10.2
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
