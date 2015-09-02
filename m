@@ -1,70 +1,73 @@
-From: Marc <marc.andre@netline.ch>
-Date: Wed,  2 Sep 2015 14:03:39 +0200
-Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
-	qeglplatformscreen.cpp
-Message-ID: <1441195419-3616-1-git-send-email-marc.andre@netline.ch>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 2 Sep 2015 13:08:50 +0100
+Subject: [Buildroot] [PATCH] webkitgtk24: fix compilation failure due to
+	unicode quotes
+Message-ID: <1441195730-38798-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the already existing fix for EGL/X11 header issue to fix
-an additional problem encountered on my system where I had
-compile errors in qeglplatformscreen.cpp. The problem was related
-to the wrong order of includes. The X11 headers must always be
-included last, as indicated in
-http://lists.qt-project.org/pipermail/development/2013-March/010511.html
+As reported in this upstream bug...
 
-I decided instead of adding a new patch to update the existing patch,
-because it is an additional fix for the same problem. If you don't agree
-I am happy to submit a seperate patch.
+https://bugs.webkit.org/show_bug.cgi?id=128971
 
-Signed-off-by: Marc <marc.andre@netline.ch>
+...the pretty unicode double quotes break Python stdin. Backporting the
+patch that was attached to that bug report and tweak it minimally to
+make it apply on Buildroot.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c8e/c8ea1cab0a1ee081f9bca994ff5309ea0117d692/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/qt5/qt5base/0003-xcb-egl-fixes.patch | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ ...etty-quotes-in-licence-break-Python-stdin.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch
 
-diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-index 53f8453..56b4923 100644
---- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-+++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-@@ -1,11 +1,13 @@
--The vivante headers pull in X11 defines which break eglconvenience
-+Some EGL headers pull in X11 defines which break eglconvenience
- 
- * Adds a missing include to qeglplatformcontext.cpp
- * Fix namespace collision on CursorShape, pulled in from X11/X.h
- * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
-+* Reorder includes to have the X11-header the last include
- 
--[based on patch from Yocto project]
--Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-+Based on patch from Yocto project and buildroot patch from J?r?me Pouiller <jezz@sysmic.org>
-+Updated to fix issue in qeglplatformscreen (reorder includes, see also
-+http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
- 
- 
- diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-@@ -61,4 +63,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
-  #include "qeglplatformscreen_p.h"
-  
-  QT_BEGIN_NAMESPACE
-+--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
-++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
-+@@ -31,11 +31,11 @@
-+ **
-+ ****************************************************************************/
-+ 
-+-#include "qeglplatformscreen_p.h"
-+-#include "qeglplatformwindow_p.h"
-+ #include <QtGui/qwindow.h>
-+ #include <qpa/qwindowsysteminterface.h>
-+ #include <QtPlatformSupport/private/qopenglcompositor_p.h>
-++#include "qeglplatformscreen_p.h"
-++#include "qeglplatformwindow_p.h"
-+ 
-+ QT_BEGIN_NAMESPACE
-  
+diff --git a/package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch b/package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch
+new file mode 100644
+index 0000000..df51078
+--- /dev/null
++++ b/package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch
+@@ -0,0 +1,36 @@
++Pretty quotes in licence break Python stdin.
++
++This patch was submitted upstream in this bug report:
++
++https://bugs.webkit.org/show_bug.cgi?id=128971
++
++[Vincent: tweak the patch to make it apply on Buildroot]
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++Pretty quotes in licence break Python stdin.
++
++https://bugs.webkit.org/show_bug.cgi?id=128971
++
++--- a/Source/WebCore/xml/XMLViewer.css	2014-01-23 16:49:58.000000000 +0000
+++++ b/Source/WebCore/xml/XMLViewer.css
++@@ -14,7 +14,7 @@
++  * distribution.
++  *
++  * THIS SOFTWARE IS PROVIDED BY GOOGLE INC. AND ITS CONTRIBUTORS
++- * ???AS IS??? AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GOOGLE INC.
++  * OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++--- a/Source/WebCore/xml/XMLViewer.js	2014-01-23 16:49:58.000000000 +0000
+++++ b/Source/WebCore/xml/XMLViewer.js
++@@ -15,7 +15,7 @@
++  * distribution.
++  *
++  * THIS SOFTWARE IS PROVIDED BY GOOGLE INC. AND ITS CONTRIBUTORS
++- * ???AS IS??? AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GOOGLE INC.
++  * OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 -- 
-1.9.1
+1.7.1
