@@ -1,202 +1,54 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 2 Sep 2015 16:21:27 +0100
-Subject: [Buildroot] [PATCHv5] Add support for MIPS Codescape MTI GNU Linux
-	toolchain
-Message-ID: <1441207287-37761-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  2 Sep 2015 19:54:13 +0300
+Subject: [Buildroot] [PATCH 2/2] imx-vpu: bump to verson 5.4.31
+In-Reply-To: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
+References: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
+Message-ID: <ee8ba1a5bdeb867d4edcfaef36f3eb5c9ceef54c.1441212853.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add support for MIPS Codescape MTI GNU Linux toolchain
-- Add a hash value
-- Add logic to 'toolchain/helpers.mk' to allow the SYSROOT_DIR and
-  ARCH_SYSROOT_DIR sit side by side instead of nested.
-- Add logic for creating the side-by-side symlink as a post install
-  hook.
-- Add logic to allow Buildroot finding the toolchain binaries under
-  $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/2015.06-05/bin.
+Also, update license file location, and add a hash file.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v4 -> v5:
- - Use 2015.06-05 version instead of 2015.06-04
-Changes v3 -> v4:
- - Forget about strip-components as Yann has some patches prepared to
-   add
-   support for that.
- - Use 2015.06-04 version instead of 2015.06-03.
- - Add BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-Changes v2 -> v3:
- - Add stip-components logic.
-Changes v1 -> v2:
- - changes made according Yann E. Morin's review. Please see:
-   http://patchwork.ozlabs.org/patch/499460/
+ package/freescale-imx/imx-vpu/imx-vpu.hash | 2 ++
+ package/freescale-imx/imx-vpu/imx-vpu.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+ create mode 100644 package/freescale-imx/imx-vpu/imx-vpu.hash
 
- toolchain/helpers.mk                               |   12 ++++-
- toolchain/toolchain-external/Config.in             |   52 ++++++++++++++++++++
- .../toolchain-external/toolchain-external.hash     |    4 ++
- toolchain/toolchain-external/toolchain-external.mk |   18 +++++++
- 4 files changed, 85 insertions(+), 1 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 85a9407..9fa831d 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -116,6 +116,13 @@ copy_toolchain_lib_root = \
- #    non-default architecture variant is used. Without this, the
- #    compiler fails to find libraries and headers.
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
+new file mode 100644
+index 000000000000..3fdd092e1699
+--- /dev/null
++++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 a266ab317fbd866541eae506d68983bcd361f49d1162a66bb34cb8088ceec88c imx-vpu-5.4.31.bin
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+index 599dce85c945..360685755441 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.mk
++++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+@@ -4,7 +4,7 @@
  #
-+#  * Note: this guesses that the ARCH_SYSROOT_DIR is nested into
-+#    the SYSROOT_DIR, but that's not true for all toolchains (i.e.
-+#    Codescape toolchains), so a post-install-staging hook will be
-+#    needed to create the symlink when the sysroot dirs are not nested
-+#    because there is not enough information here to determine whether
-+#    the sysroot layout is nested or side-by-side.
-+#
- # Some toolchains (i.e Linaro binary toolchains) store support
- # libraries (libstdc++, libgcc_s) outside of the sysroot, so we simply
- # copy all the libraries from the "support lib directory" into our
-@@ -144,7 +151,10 @@ copy_toolchain_sysroot = \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		fi ; \
- 	done ; \
--	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
-+	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
-+	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
-+	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} \
-+		-a $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
- 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
- 		fi ; \
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e7aed2e..56ae84a 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -195,6 +195,57 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ ################################################################################
  
- 	  This toolchain uses software-floating point.
+-IMX_VPU_VERSION = 5.4.27
++IMX_VPU_VERSION = 5.4.31
+ IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506
-+	bool "Codescape MTI GNU Linux Toolchain 2015.06"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_MIPS_SOFT_FLOAT
-+	depends on BR2_mips_32r2 || BR2_mips_64r2
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  Codescape MTI GNU Linux Toolchain 2015.06 for the MIPS
-+	  architecture, from Imagination Technologies. It uses gcc
-+	  4.9.2, binutils 2.24.90, glibc 2.20, gdb 7.9.1 and kernel
-+	  headers 4.0. It has support for the following variants:
-+	    - MIPS32r2 - Big-Endian, O32
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	    - MIPS32r2 - Little-Endian, O32
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	    - MIPS32r2 - Big-Endian, 2008 NaN, O32
-+	      Select 'MIPS (big endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Little-Endian, 2008 NaN, O32
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008'
-+	    - MIPS32r2 - Little-Endian, 2008 NaN, O32, microMIPS
-+	      Select 'MIPS (little endian)' Target Architecture
-+	      Select 'mips 32r6' Target Architecture Variant
-+	      Set BR2_TARGET_OPTIMIZATION to '-mnan=2008 -mmicromips'
-+	    - MIPS64r2 - Big-Endian, N32
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	    - MIPS64r2 - Little-Endian, N32
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n32' Target ABI
-+	    - MIPS64r2 - Big-Endian, N64
-+	      Select 'MIPS64 (big endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+	    - MIPS64r2 - Little-Endian, N64
-+	      Select 'MIPS64 (little endian)' Target Architecture
-+	      Select 'mips 64r2' Target Architecture Variant
-+	      Select 'n64' Target ABI
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
- 	bool "Sourcery CodeBench MIPS 2015.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-@@ -943,6 +994,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-arago-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
-+	default "mips-mti-linux-gnu"     if BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 3980c62..116cea4 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -55,6 +55,10 @@ sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-lin
- sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+@@ -17,7 +17,7 @@ IMX_VPU_MAKE_ENV = \
+ 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
  
-+# Codescape toolchains from Imagination Technologies
-+# From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05/
-+sha256 f2d12dde626b750987d37ba6c73c6e11839850add94b0d4e4cf77917c1b0944f  Codescape.GNU.Tools.Package.2015.06-05.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-+
- # Synopsys DesignWare ARC toolchains
- sha256 1fa4ea2c8616623205f1c7beca02ea31b019099528a7433e5b020b0876b93bf3  arc_gnu_2014.12_prebuilt_uclibc_le_arc700_linux_install.tar.gz
- sha256 1080f07fcae2bfc176a3ea8d30b9ed8eaecab70fb786639d6ec70cae8322df10  arc_gnu_2014.12_prebuilt_uclibc_be_arc700_linux_install.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 3cb59c6..7a3b1d7 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -144,6 +144,8 @@ endif
- else
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
- TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/$(TOOLCHAIN_EXTERNAL_PREFIX)/bin
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
-+TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/2015.06-05/bin
- else
- TOOLCHAIN_EXTERNAL_BIN := $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/bin
- endif
-@@ -253,6 +255,18 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
- endef
+ IMX_VPU_LICENSE = Freescale Semiconductor Software License Agreement
+-IMX_VPU_LICENSE_FILES = EULA vpu/EULA.txt
++IMX_VPU_LICENSE_FILES = EULA COPYING
+ IMX_VPU_REDISTRIBUTE = NO
  
-+# The Codescape toolchain uses a sysroot layout that places them
-+# side-by-side instead of nested like multilibs. A symlink is needed
-+# much like for the nested sysroots which are handled in
-+# copy_toolchain_sysroot but there is not enough information in there
-+# to determine whether the sysroot layout was nested or side-by-side.
-+# Add the symlink here for now.
-+define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
-+	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"; \
-+	ARCH_SUBDIR=`basename $${ARCH_SYSROOT_DIR}`; \
-+	ln -snf . $(STAGING_DIR)/$${ARCH_SUBDIR}
-+endef
-+
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi
- TOOLCHAIN_EXTERNAL_SOURCE = arm-2013.05-24-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-@@ -284,6 +298,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS201506),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05
-+TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.06-05.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ define IMX_VPU_EXTRACT_CMDS
 -- 
-1.7.1
+2.5.0
