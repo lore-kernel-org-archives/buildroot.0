@@ -1,86 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  3 Sep 2015 00:51:57 +0200
-Subject: [Buildroot] [PATCH 0/6 RFC] toolchain/external: use generic extract
-	commands (branch yem/extract-cmds)
-Message-ID: <cover.1441233378.git.yann.morin.1998@free.fr>
+Date: Thu,  3 Sep 2015 00:51:55 +0200
+Subject: [Buildroot] [PATCH 1/6 RFC] core/pkg-generic: allow packages to
+	exclude files when extracting
+In-Reply-To: <cover.1441233378.git.yann.morin.1998@free.fr>
+References: <cover.1441233378.git.yann.morin.1998@free.fr>
+Message-ID: <419c992b5ee60036fd6e601f421e92f0ebadffe1.1441233378.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, packages that need to exclude parts of the archives when
+extracting (e.g. to gain space), like gcc or toolchain-external, have to
+provide custom extract commands, just for the sake of adding a bunch of
+--exclude directives when calling tar.
 
-This series is an attempt at simplifying the way external toolchains are
-extracted.
+Add a new variable that packages may set, to provide a space-separated
+list of patterns to exclude.
 
-Currently, external toolchains use custom extract commands, because they
-want to exclude a bumch of files during extraction, so as to save a bit
-of space (locales in some toolchains can account for up to 80% of the
-size of the toolchain as a whole).
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ docs/manual/adding-packages-generic.txt | 4 ++++
+ package/pkg-generic.mk                  | 5 ++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-And it turns out, gcc also wants to exclude a bunch of files (java and
-go, testsuites).
-
-Using custom extract commands means that those packages (and critical
-ones, at that) can not benefit from the enhancements and fixes made to
-the generic commands, like the automatic triiping of components.
-
-In this series:
-
-  - we first introduce the support for the exclusion list
-  - we always break/dereference hardlinks
-  - we make gcc use the exclusion list
-  - we then make the external toolchains use it (in two passes: one for
-    the non-Blackfin case, one for it, as it is 'seecial')
-  - finaly, we introduce the Codescape MTI toolchain from Vincent
-
-Thomas, there is a question for you in the second commit: would you
-care to explain what your goal was when you added --hard-dereference
-when extracting the Blackfin toolchains?
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 91f12b7e7a013e3db639e0fa44ac395ac46442f2:
-
-  tar: move package to 'system tools' (2015-09-01 22:28:49 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/extract-cmds
-
-for you to fetch changes up to 8ea8baf0059c895f8df15fca5d3b9b70d41f7b53:
-
-  Add support for MIPS Codescape MTI GNU Linux toolchain (2015-09-03 00:31:19 +0200)
-
-----------------------------------------------------------------
-Vicente Olivert Riera (1):
-      Add support for MIPS Codescape MTI GNU Linux toolchain
-
-Yann E. MORIN (5):
-      core/pkg-generic: allow packages to exclude files when extracting
-      core/pkg-generic: always dereference hardlinks from archives
-      package/gcc: use generic extract commands
-      toolchain/external: use generic extract commands (!blackfin case)
-      toolchain/external: use generic extract commands (blackfin case)
-
- docs/manual/adding-packages-generic.txt            |  4 ++
- package/gcc/gcc-final/gcc-final.mk                 |  3 +-
- package/gcc/gcc-initial/gcc-initial.mk             |  3 +-
- package/gcc/gcc.mk                                 | 15 ++---
- package/pkg-generic.mk                             |  6 +-
- toolchain/helpers.mk                               | 12 +++-
- toolchain/toolchain-external/Config.in             | 52 +++++++++++++++++
- .../toolchain-external/toolchain-external.hash     |  4 ++
- toolchain/toolchain-external/toolchain-external.mk | 68 ++++++++++++++--------
- 9 files changed, 129 insertions(+), 38 deletions(-)
-
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 4c12b42..e7a473c 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -312,6 +312,10 @@ information is (assuming the package name is +libfoo+) :
+   that have more than one leading component to strip, set this
+   variable with the value to be passed to tar. Default: 1.
+ 
++* +LIBFOO_EXCLUDES+ is a space-separated list of patterns to exclude
++  when extracting the archive. Each item from that list is passed as
++  a tar's +--exclude+ option. By default, empty.
++
+ * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
+   name) that are required for the current target package to
+   compile. These dependencies are guaranteed to be compiled and
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6a7d97e..d1877a7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -476,7 +476,10 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ # default extract command
+ $(2)_EXTRACT_CMDS ?= \
+ 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
+-	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
++	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
++		-C $$($(2)_DIR) \
++		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
++		$$(TAR_OPTIONS) -)
+ 
+ # pre/post-steps hooks
+ $(2)_PRE_DOWNLOAD_HOOKS         ?=
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
