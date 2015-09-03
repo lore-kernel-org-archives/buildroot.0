@@ -1,32 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  3 Sep 2015 20:26:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 7424] undefined reference to
-	`__builtin_thread_pointer'
-In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
-References: <bug-7424-163@https.bugs.busybox.net/>
-Message-ID: <20150903202641.D57C681F59@busybox.osuosl.org>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu, 3 Sep 2015 16:34:26 -0400
+Subject: [Buildroot] [PATCH v3 4/4] package/rpm: add host variant
+In-Reply-To: <20150903183516.GF3607@free.fr>
+References: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
+ <1441293831-3524-4-git-send-email-james.knight@rockwellcollins.com>
+ <20150903183516.GF3607@free.fr>
+Message-ID: <CALe+oY8qrjgBwjXTHacFjwy=4LToG98PmrF4VjeCERSUcxVF4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7424
+Yann,
 
---- Comment #14 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-09-03 20:26:41 UTC ---
-(In reply to comment #13)
+Thanks; and sorry for all these little mistakes.
 
-> So, if gcc is built without tls, this leads to the error from this ticket.
-> After switching threads to something different uclibc builds fine without tls
-> in gcc. I think, these two options (BR2_PTHREADS_NATIVE and BR2_GCC_ENABLE_TLS)
-> should be connected, since tls has to either be enabled in both gcc and uclibc,
-> or likewise disabled in both.
+On Thu, Sep 3, 2015 at 2:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Same comment as for beecrypt: you do not need an intermediate variable,
+> just re-use the target variable when defining the host variable; [...]
+>
+>     RPM_CONF_OPTS = \
+>         --disable-largefile \
+>         --disable-rpath \
+>         [...]
+>
+>     HOST_RPM_CONF_OPTS = \
+>         $(RPM_CONF_OPTS) \
+>         --with-beecrypt \
+>         --without-archive \
+>         [...]
 
-Thanks for the report. Our plan is to make the TLS option no longer visible,
-and make TLS mandatory when thread support is enabled. If you want to tackle
-that, don't hesitate to send a patch!
+Question about this though, won't this be an issue for additional
+configuration values set later in the file (ie. options added to
+`RPM_CONF_OPTS`)?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+When I clean up this patch and remove the intermediate variable, I
+assume I should be declaring the host options such as:
+
+    HOST_RPM_CONF_OPTS := \
+        $(RPM_CONF_OPTS) \
+        --with-beecrypt \
+        --without-archive \
+        [...]
+
+Unless I've missed something?
