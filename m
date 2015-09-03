@@ -1,67 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Sep 2015 22:55:05 +0200
-Subject: [Buildroot] [PATCH v3 4/4] package/rpm: add host variant
-In-Reply-To: <CALe+oY8qrjgBwjXTHacFjwy=4LToG98PmrF4VjeCERSUcxVF4A@mail.gmail.com>
-References: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
- <1441293831-3524-4-git-send-email-james.knight@rockwellcollins.com>
- <20150903183516.GF3607@free.fr>
- <CALe+oY8qrjgBwjXTHacFjwy=4LToG98PmrF4VjeCERSUcxVF4A@mail.gmail.com>
-Message-ID: <20150903205505.GG3607@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 3 Sep 2015 23:02:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bash: indicate getcwd is
+ malloc-supported
+In-Reply-To: <1441292409-5264-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1441292409-5264-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <55E8B565.3030407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
-
-On 2015-09-03 16:34 -0400, James Knight spake thusly:
-> On Thu, Sep 3, 2015 at 2:35 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Same comment as for beecrypt: you do not need an intermediate variable,
-> > just re-use the target variable when defining the host variable; [...]
-> >
-> >     RPM_CONF_OPTS = \
-> >         --disable-largefile \
-> >         --disable-rpath \
-> >         [...]
-> >
-> >     HOST_RPM_CONF_OPTS = \
-> >         $(RPM_CONF_OPTS) \
-> >         --with-beecrypt \
-> >         --without-archive \
-> >         [...]
+On 03-09-15 17:00, James Knight wrote:
+> When Bash attempts to find the current working directory, it uses a C
+> library call `getcwd` to resolve it. When cross-compiling, the
+> configuration process cannot determine if the target system's C library
+> can support an "unfixed" path length. Therefore, Bash will fallback to a
+> size of `PATH_MAX` for determining the current working directory. When
+> using OverlayFS (and possible other file systems), this becomes an issue
+> since file paths can commonly exceed standard `PATH_MAX` length. This
+> typically results in the following error appearing:
 > 
-> Question about this though, won't this be an issue for additional
-> configuration values set later in the file (ie. options added to
-> `RPM_CONF_OPTS`)?
+>    error retrieving current directory: [...]
 > 
-> When I clean up this patch and remove the intermediate variable, I
-> assume I should be declaring the host options such as:
+> Common C library `getcwd` calls can default to a higher limit (usually
+> the system's page size). The current configurable C libraries (as of at
+> least 2015.08) support a zero (0) size buffer length. Most use the
+> system's page size; musl, being an exception, which defaults to
+> `PATH_MAX` (as Bash was doing). Since these C libraries support
+> allocating buffer space with a zero (0) provided size, the following
+> configuration change allows Bash to support getting a larger-length'ed
+> working directory on target's that support it.
 > 
->     HOST_RPM_CONF_OPTS := \
->         $(RPM_CONF_OPTS) \
->         --with-beecrypt \
->         --without-archive \
->         [...]
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+
+ Just to be clear for other reviewers: this will work for glibc, musl and
+uClibc. In the worst case (musl) it won't make a difference compared to the
+current situation. uClibc and glibc will allocate getpagesize(),
+
+ Therefore:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> ---
+>  package/bash/bash.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Unless I've missed something?
+> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+> index 9865e19..97d7182 100644
+> --- a/package/bash/bash.mk
+> +++ b/package/bash/bash.mk
+> @@ -16,6 +16,7 @@ BASH_LICENSE_FILES = COPYING
+>  BASH_CONF_ENV += \
+>  	ac_cv_rl_prefix="$(STAGING_DIR)" \
+>  	ac_cv_rl_version="$(READLINE_VERSION)" \
+> +	bash_cv_getcwd_malloc=yes \
+>  	bash_cv_job_control_missing=present \
+>  	bash_cv_sys_named_pipes=present \
+>  	bash_cv_func_sigsetjmp=present \
+> 
 
-Nope, you're right. I missed the fact that additional configure flags
-could be added to the target variant.
-
-And following Arnout's comment, pleas keep the internediate variable.
-
-However, I think it is mis-named. What about RPM_COMMON_CONF_OPTS ?
-Ditto for beecrypt, of course.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
