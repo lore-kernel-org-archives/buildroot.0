@@ -1,116 +1,95 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Thu,  3 Sep 2015 11:23:51 -0400
-Subject: [Buildroot] [PATCH v3 4/4] package/rpm: add host variant
-In-Reply-To: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <1441293831-3524-4-git-send-email-james.knight@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Sep 2015 17:57:41 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <55E86350.9070603@imgtec.com>
+References: <1441148113-4894-1-git-send-email-yann.morin.1998@free.fr>
+ <55E76348.3020509@mind.be> <55E76775.8030200@mind.be>
+ <20150902220923.GD7845@free.fr>
+ <CANPyyuODFsF95S_k6tJSdetokUXbeds3OgfQ6WwxAVh_M3VAyQ@mail.gmail.com>
+ <55E86350.9070603@imgtec.com>
+Message-ID: <20150903155741.GB3607@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following adds support for a host variant of the rpm package. This
-support will allow a host system to setup/manipulate a target system's
-initial RPM database during the post-build phase.
+Mike, Vincent, All,
 
-A target's default RPM database (/var/lib/rpm) is initially empty. If a
-developer wishes to create this database during the build phase, they
-will have to do so using the same database format between their host
-system and target system. By provided an rpm host variant, a developer
-can ensure an rpm database build, for example, during the post-build
-phase will be compatible with the rpm system installed on the target.
+On 2015-09-03 16:12 +0100, Vicente Olivert Riera spake thusly:
+> On 09/03/2015 03:46 PM, Mike Williams wrote:
+> > On Wed, Sep 2, 2015 at 6:09 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >>>> On 02-09-15 00:55, Yann E. MORIN wrote:
+> >>>>> systemd is incresaingly expected things to live in /usr/bin or
+> >>>>> /usr/sbin.
+> >>>>>
+> >>>>> However, a lot of packages stil install stuff directly into /bin or
+> >>>>> /sbin.
+> >>>>>
+> >>>>> Add an option so that /bin and /sbin be symlinks to /usr/bin and
+> >>>>> /usr/sbin. Ditto for .lib for consistency.
+> > 
+> > The systemd build failed for me unless I modified systemd.mk as such:
+> 
+> same problem here:
+> 
+> mv:
+> `/home/ldap/vriera/git-clones/buildroot-1/output/target/usr/lib/libsystemd.so.0'
+> and
+> `/home/ldap/vriera/git-clones/buildroot-1/output/target/lib/libsystemd.so.0'
+> are the same file
+> mv:
+> `/home/ldap/vriera/git-clones/buildroot-1/output/target/usr/lib/libsystemd.so.0.8.0'
+> and
+> `/home/ldap/vriera/git-clones/buildroot-1/output/target/lib/libsystemd.so.0.8.0'
+> are the same file
+> make[5]: *** [libsystemd-install-hook] Error 1
+> 
+> > -- a/package/systemd/systemd.mk
+> > +++ b/package/systemd/systemd.mk
+> > @@ -28,7 +28,6 @@ endif
+> > 
+> > SYSTEMD_CONF_OPTS += \
+> >        --with-rootprefix= \
+> > -       --with-rootlibdir=/lib \
+> >        --enable-static=no \
+> >        --disable-manpages \
+> >        --disable-selinux \
+> > @@ -37,7 +36,6 @@ SYSTEMD_CONF_OPTS += \
+> >        --with-dbuspolicydir=/etc/dbus-1/system.d \
+> >        --with-dbussessionservicedir=/usr/share/dbus-1/services \
+> >        --with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+> > -       --enable-split-usr \
+> >        --disable-efi \
+> >        --disable-gnuefi \
+> >        --disable-tests \
+> > 
+> > Once those changes were made everything worked fine so feel free to
+> > add my Tested-by: Mike Williams <mike@mikebwilliams.com> if your next
+> > patch spin includes them.
+> 
+> But I only needed to remove the "--with-rootlibdir=/lib \" line to make
+> it build fine.
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
----
-Changes v2 -> v3:
-  - None.
+Well, since we're effectively ditching the split-usr case, there's no
+reason to keep the --enable-split-usr configure option, is there?
 
-Changes v1 -> v2:
-  - A series of changes (different configuration options) based off of a
-     switch from rpm 4.12.0.1 (from rpm5).
-  - Cleaned up configuration options to ensure host variant is not
-     configured based off of target variant configuration (from comments
-     provided by from Thomas Petazzoni).
-  - Original patch set referenced a host variant neon package. This is
-     no longer required in rpm 4.12.0.1 version.
----
- package/Config.in.host     |  1 +
- package/rpm/Config.in.host |  8 ++++++++
- package/rpm/rpm.mk         | 18 +++++++++++++++++-
- 3 files changed, 26 insertions(+), 1 deletion(-)
- create mode 100644 package/rpm/Config.in.host
+Anyway, thanks both for testing! :-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1e047aa..1820b20 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -22,6 +22,7 @@ menu "Host utilities"
- 	source "package/patchelf/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/qemu/Config.in.host"
-+	source "package/rpm/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-diff --git a/package/rpm/Config.in.host b/package/rpm/Config.in.host
-new file mode 100644
-index 0000000..3c15bd4
---- /dev/null
-+++ b/package/rpm/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_RPM
-+	bool "host rpm"
-+	select BR2_PACKAGE_HOST_BEECRYPT
-+	select BR2_PACKAGE_HOST_BERKELEYDB
-+	help
-+	  The RPM Package Manager (RPM).
-+
-+	  http://www.rpm.org/
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index adf408e..6de3e63 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -9,10 +9,11 @@ RPM_VERSION = $(RPM_VERSION_MAJOR).0.1
- RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
- RPM_SITE = http://rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
- RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
-+HOST_RPM_DEPENDENCIES = host-pkgconf host-beecrypt host-berkeleydb host-popt
- RPM_LICENSE = GPLv2
- RPM_LICENSE_FILES = COPYING
- 
--RPM_CONF_OPTS += \
-+RPM_CONFIGURE_ARGS = \
- 	--disable-largefile \
- 	--disable-rpath \
- 	--enable-python=no \
-@@ -20,6 +21,18 @@ RPM_CONF_OPTS += \
- 	--with-gnu-ld \
- 	--without-hackingdocs
- 
-+RPM_CONF_OPTS += \
-+	$(RPM_CONFIGURE_ARGS)
-+
-+HOST_RPM_CONF_OPTS += \
-+	$(RPM_CONFIGURE_ARGS) \
-+	--with-beecrypt \
-+	--without-archive \
-+	--without-cap \
-+	--without-libintl-prefix \
-+	--without-lua \
-+	--without-selinux
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- RPM_DEPENDENCIES += acl
- RPM_CONF_OPTS += --with-acl
-@@ -75,5 +88,8 @@ endif
- 
- RPM_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(RPM_CONFIGURATION)"
-+HOST_RPM_CONF_ENV += \
-+	CFLAGS="$(HOST_CFLAGS) -I$(HOST_DIR)/usr/include/beecrypt"
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+Mike, I won't carry your reviewd and tested tags, since I've made quite
+some changes after all the comments, so that would not be fair to list a
+review and test which would not have been conducted on the new code.
+However, that's much appreciated! :-)  Do not hesitate to retest the new
+version when I send it (soonish). Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.5.msysgit.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
