@@ -1,42 +1,103 @@
-From: Anders Roxell <anders.roxell@linaro.org>
-Date: Thu,  3 Sep 2015 11:01:58 +0200
-Subject: [Buildroot] [PATCH 3/3] package/ltp-testsuite: version bump to
-	20150420
-In-Reply-To: <1441270918-28981-1-git-send-email-anders.roxell@linaro.org>
-References: <1441270918-28981-1-git-send-email-anders.roxell@linaro.org>
-Message-ID: <1441270918-28981-4-git-send-email-anders.roxell@linaro.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Sep 2015 12:25:29 +0200
+Subject: [Buildroot] [PATCHv5 1/4] pkg-generic: add step_pkg_size global
+ instrumentation hook
+In-Reply-To: <1441228505-23235-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441228505-23235-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20150903102529.GA3689@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- package/ltp-testsuite/ltp-testsuite.hash | 2 +-
- package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas, All,
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-index 77ec483..5923daf 100644
---- a/package/ltp-testsuite/ltp-testsuite.hash
-+++ b/package/ltp-testsuite/ltp-testsuite.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  c21b91407f94a0c55c4cd3f12a0dc30f1d17cd2d4c44598f81ca075843141496  ltp-full-20140115.tar.xz
-+sha256  ad504e6697b964787f51caad6d8a916caa367f241ac602545548488195216a80  ltp-full-20150420.tar.xz
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 634fc45..32038a0 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LTP_TESTSUITE_VERSION = 20140115
-+LTP_TESTSUITE_VERSION = 20150420
- LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
+On 2015-09-02 23:15 +0200, Thomas Petazzoni spake thusly:
+> This patch adds a global instrumentation hook that collects the list
+> of files installed in $(TARGET_DIR) by each package, and stores this
+> list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
+> later be used to determine the size contribution of each package to
+> the target root filesystem.
+> 
+> Note that in order to detect if a file installed by one package is
+> later overriden by another package, we calculate the md5 of installed
+> files and compare them at each installation of a new package.
+> 
+> Collecting the list of files installed by each package is done
+> unconditionally, as tests have shown that the performance impact of
+> doing this is negligible.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
+
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-generic.mk | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6a7d97e..2c8fe29 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -55,6 +55,38 @@ define step_time
+>  endef
+>  GLOBAL_INSTRUMENTATION_HOOKS += step_time
+>  
+> +# Hooks to collect statistics about installed files
+> +
+> +# This hook will be called before the target installation of a
+> +# package. We store in a file named .br_filelist_before the list of
+> +# files currently installed in the target. Note that the MD5 is also
+> +# stored, in order to identify if the files are overwritten.
+> +define step_pkg_size_start
+> +	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +		$($(PKG)_DIR)/.br_filelist_before
+> +endef
+> +
+> +# This hook will be called after the target installation of a
+> +# package. We store in a file named .br_filelist_after the list of
+> +# files (and their MD5) currently installed in the target. We then do
+> +# a diff with the .br_filelist_before to compute the list of files
+> +# installed by this package.
+> +define step_pkg_size_end
+> +	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +		$($(PKG)_DIR)/.br_filelist_after
+> +	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
+> +		while read hash file ; do \
+> +			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
+> +		done
+> +endef
+> +
+> +define step_pkg_size
+> +	$(if $(filter install-target,$(2)),\
+> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
+> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
+> +endef
+> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+> +
+>  # User-supplied script
+>  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+>  define step_user
+> -- 
+> 2.5.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
