@@ -1,8 +1,10 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu,  3 Sep 2015 15:13:15 +0200
-Subject: [Buildroot] [PATCH v2 1/2] python-numpy: introduce ARCH_SUPPORTS
-	hidden variable
-Message-ID: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+Date: Thu,  3 Sep 2015 15:13:16 +0200
+Subject: [Buildroot] [PATCH v2 2/2] gnuradio: gnuradio-python
+	gnuradio-utils: add missing dependency to python-numpy
+In-Reply-To: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+References: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1441285996-29463-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,38 +13,75 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Python-numpy has specific constraints about uClibc and arch. This patch add an
-BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS hidden variable to avoid duplicate
-dependencies test for others packages which uses numpy.
+Some gnuradio python blocks needs python-numpy present.
+
+Without python-numpy, gnuradio-python based apps fails with traceback like:
+
+Traceback (most recent call last):
+  File "./top_block.py", line 18, in <module>
+    from gnuradio import analog
+  File "/usr/lib/python2.7/site-packages/gnuradio/analog/__init__.py", line 35, in <module>
+    from am_demod import *
+  File "/usr/lib/python2.7/site-packages/gnuradio/analog/am_demod.py", line 22, in <module>
+    from gnuradio import gr
+  File "/usr/lib/python2.7/site-packages/gnuradio/gr/__init__.py", line 44, in <module>
+    from top_block import *
+  File "/usr/lib/python2.7/site-packages/gnuradio/gr/top_block.py", line 30, in <module>
+    from hier_block2 import hier_block2
+  File "/usr/lib/python2.7/site-packages/gnuradio/gr/hier_block2.py", line 26, in <module>
+    import pmt
+  File "/usr/lib/python2.7/site-packages/pmt/__init__.py", line 58, in <module>
+    from pmt_to_python import pmt_to_python as to_python
+  File "/usr/lib/python2.7/site-packages/pmt/pmt_to_python.py", line 22, in <module>
+    import numpy
+ImportError: No module named numpy
+
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/python-numpy/Config.in | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+ * Add dependy to BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS;
+ * gnuradio-python select numpy;
+ * gnuradio-utils select again gnuradio-python;
+ * fix commit message
+---
+ package/gnuradio/Config.in   | 3 +++
+ package/gnuradio/gnuradio.mk | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 1f9938a..4c02ea6 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,12 +1,16 @@
-+config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	bool
-+	# numpy needs fenv.h. Available for all architectures in
-+	# glibc, but only for x86 and x86-64 in uClibc.
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
-+
- config BR2_PACKAGE_PYTHON_NUMPY
- 	bool "python-numpy"
- 	# Numpy has some CPU specific code
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
- 		|| BR2_sh || BR2_x86_64
--	# numpy needs fenv.h. Available for all architectures in
--	# glibc, but only for x86 and x86-64 in uClibc.
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index e264a21..3568a6c 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -45,13 +45,16 @@ config BR2_PACKAGE_GNURADIO_FEC
+ 
+ config BR2_PACKAGE_GNURADIO_PYTHON
+ 	bool "python support"
 +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_BOOST_PYTHON
+ 	select BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_NUMPY
  	help
- 	  NumPy is the fundamental package for scientific computing
- 	  with Python.
+ 	  Enable python component
+ 
+ config BR2_PACKAGE_GNURADIO_UTILS
+ 	bool "gr-utils support"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_GNURADIO_PYTHON
+ 	help
+ 	  Misc python utilities
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index fc5cd1f..565c113 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -86,7 +86,7 @@ GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
+-GNURADIO_DEPENDENCIES += python
++GNURADIO_DEPENDENCIES += python python-numpy
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
+ else
+ GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
 -- 
 2.4.6
