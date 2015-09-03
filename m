@@ -1,87 +1,75 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Thu,  3 Sep 2015 15:13:16 +0200
-Subject: [Buildroot] [PATCH v2 2/2] gnuradio: gnuradio-python
-	gnuradio-utils: add missing dependency to python-numpy
-In-Reply-To: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
-References: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <1441285996-29463-2-git-send-email-gwenj@trabucayre.com>
+From: Marc Andre <marc.andre@netline.ch>
+Date: Thu,  3 Sep 2015 15:22:10 +0200
+Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
+	qeglplatformscreen.cpp
+Message-ID: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Update the already existing fix for EGL/X11 header issue to fix
+an additional problem encountered on my system where I had
+compile errors in qeglplatformscreen.cpp. The problem was related
+to the wrong order of includes. The X11 headers must always be
+included last, as indicated in
+http://lists.qt-project.org/pipermail/development/2013-March/010511.html
 
-Some gnuradio python blocks needs python-numpy present.
+I decided instead of adding a new patch to update the existing patch,
+because it is an additional fix for the same problem. If you don't agree
+I am happy to submit a seperate patch.
 
-Without python-numpy, gnuradio-python based apps fails with traceback like:
+This version is updated as suggested by Arnout.
 
-Traceback (most recent call last):
-  File "./top_block.py", line 18, in <module>
-    from gnuradio import analog
-  File "/usr/lib/python2.7/site-packages/gnuradio/analog/__init__.py", line 35, in <module>
-    from am_demod import *
-  File "/usr/lib/python2.7/site-packages/gnuradio/analog/am_demod.py", line 22, in <module>
-    from gnuradio import gr
-  File "/usr/lib/python2.7/site-packages/gnuradio/gr/__init__.py", line 44, in <module>
-    from top_block import *
-  File "/usr/lib/python2.7/site-packages/gnuradio/gr/top_block.py", line 30, in <module>
-    from hier_block2 import hier_block2
-  File "/usr/lib/python2.7/site-packages/gnuradio/gr/hier_block2.py", line 26, in <module>
-    import pmt
-  File "/usr/lib/python2.7/site-packages/pmt/__init__.py", line 58, in <module>
-    from pmt_to_python import pmt_to_python as to_python
-  File "/usr/lib/python2.7/site-packages/pmt/pmt_to_python.py", line 22, in <module>
-    import numpy
-ImportError: No module named numpy
-
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Marc Andre <marc.andre@netline.ch>
 ---
-Changes v1 -> v2:
- * Add dependy to BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS;
- * gnuradio-python select numpy;
- * gnuradio-utils select again gnuradio-python;
- * fix commit message
----
- package/gnuradio/Config.in   | 3 +++
- package/gnuradio/gnuradio.mk | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/0003-xcb-egl-fixes.patch | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index e264a21..3568a6c 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -45,13 +45,16 @@ config BR2_PACKAGE_GNURADIO_FEC
+diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+index 53f8453..0777c44 100644
+--- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
++++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+@@ -1,11 +1,17 @@
+-The vivante headers pull in X11 defines which break eglconvenience
++Some EGL headers pull in X11 defines which break eglconvenience
  
- config BR2_PACKAGE_GNURADIO_PYTHON
- 	bool "python support"
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST_PYTHON
- 	select BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_NUMPY
- 	help
- 	  Enable python component
+ * Adds a missing include to qeglplatformcontext.cpp
+ * Fix namespace collision on CursorShape, pulled in from X11/X.h
+ * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
++* Reorder includes to have the X11-header the last include
++
++Based on patch from Yocto project and buildroot patch from
++Jerome Pouiller <jezz@sysmic.org>
++Updated to fix issue in qeglplatformscreen (reorder includes, see also
++http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
  
- config BR2_PACKAGE_GNURADIO_UTILS
- 	bool "gr-utils support"
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	select BR2_PACKAGE_GNURADIO_PYTHON
- 	help
- 	  Misc python utilities
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index fc5cd1f..565c113 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -86,7 +86,7 @@ GNURADIO_CONF_OPTS += -DENABLE_GR_FILTER=OFF
- endif
+-[based on patch from Yocto project]
+ Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
++Signed-off-by: Marc Andre <marc.andre@netline.ch>
  
- ifeq ($(BR2_PACKAGE_GNURADIO_PYTHON),y)
--GNURADIO_DEPENDENCIES += python
-+GNURADIO_DEPENDENCIES += python python-numpy
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=ON
- else
- GNURADIO_CONF_OPTS += -DENABLE_PYTHON=OFF
+ 
+ diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
+@@ -61,4 +67,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
+  #include "qeglplatformscreen_p.h"
+  
+  QT_BEGIN_NAMESPACE
++--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
+++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
++@@ -31,11 +31,11 @@
++ **
++ ****************************************************************************/
++
++-#include "qeglplatformscreen_p.h"
++-#include "qeglplatformwindow_p.h"
++ #include <QtGui/qwindow.h>
++ #include <qpa/qwindowsysteminterface.h>
++ #include <QtPlatformSupport/private/qopenglcompositor_p.h>
+++#include "qeglplatformscreen_p.h"
+++#include "qeglplatformwindow_p.h"
++
++ QT_BEGIN_NAMESPACE
+  
 -- 
-2.4.6
+1.9.1
