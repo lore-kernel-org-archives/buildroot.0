@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Sep 2015 18:15:58 +0200
+Date: Thu, 3 Sep 2015 18:32:03 +0200
 Subject: [Buildroot] [PATCH v3 3/4] package/beecrypt: add host variant
 In-Reply-To: <1441293831-3524-3-git-send-email-james.knight@rockwellcollins.com>
 References: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
  <1441293831-3524-3-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20150903161558.GD3607@free.fr>
+Message-ID: <20150903163203.GE3607@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -44,19 +44,25 @@ On 2015-09-03 11:23 -0400, James Knight spake thusly:
 > -	--without-python \
 > -	--disable-openmp
 > +	--without-python
-
-Do not re-order options, it just makes noise.
-
+> +
 > +BEECRYPT_CONF_OPTS += \
 > +	$(BEECRYPT_CONFIGURE_ARGS)
-
-No need for '+=' since that;s the only assignment. Just use '='.
-
+> +
 > +HOST_BEECRYPT_CONF_OPTS += \
 > +	$(BEECRYPT_CONFIGURE_ARGS) \
 > +	--without-cplusplus
 
-Ditto.
+Well, I forgot to say: you do not need an intermediate variable:
+
+    BEECRYPT_CONF_OPTS = \
+        --disable-expert-mode \
+        --without-java \
+        --without-python \
+        --disable-openmp
+
+    HOST_BEECRYPT_CONF_OPTS = \
+        $(BEECRYPT_CONF_OPTS) \
+        --without-cplusplus
 
 Regards,
 Yann E. MORIN.
