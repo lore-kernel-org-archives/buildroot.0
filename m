@@ -1,59 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 3 Sep 2015 15:54:14 +0100
-Subject: [Buildroot] [PATCH] system: use a menuconfig for the getty
-	options
-In-Reply-To: <1441149034-27282-1-git-send-email-yann.morin.1998@free.fr>
-References: <1441149034-27282-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55E85F16.1050203@imgtec.com>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu,  3 Sep 2015 11:00:09 -0400
+Subject: [Buildroot] [PATCH 1/1] package/bash: indicate getcwd is
+	malloc-supported
+Message-ID: <1441292409-5264-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+When Bash attempts to find the current working directory, it uses a C
+library call `getcwd` to resolve it. When cross-compiling, the
+configuration process cannot determine if the target system's C library
+can support an "unfixed" path length. Therefore, Bash will fallback to a
+size of `PATH_MAX` for determining the current working directory. When
+using OverlayFS (and possible other file systems), this becomes an issue
+since file paths can commonly exceed standard `PATH_MAX` length. This
+typically results in the following error appearing:
 
-On 09/02/2015 12:10 AM, Yann E. MORIN wrote:
-> Making the getty option a menuconfig instead of a simple config
-> automatically moves its dependees into a menu without the need to
-> manually declare such a menu.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  system/Config.in | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index fad829d..ea45cf3 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -260,12 +260,11 @@ config BR2_SYSTEM_BIN_SH
->  	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
->  	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
->  
-> -config BR2_TARGET_GENERIC_GETTY
-> +menuconfig BR2_TARGET_GENERIC_GETTY
->  	bool "Run a getty (login prompt) after boot"
->  	default y
->  
->  if BR2_TARGET_GENERIC_GETTY
-> -menu "getty options"
->  config BR2_TARGET_GENERIC_GETTY_PORT
->  	string "TTY port"
->  	default "console"
-> @@ -313,7 +312,6 @@ config BR2_TARGET_GENERIC_GETTY_OPTIONS
->  	help
->  	  Any other flags you want to pass to getty,
->  	  Refer to getty --help for details.
-> -endmenu
->  endif
->  
->  config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-> 
+   error retrieving current directory: [...]
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Common C library `getcwd` calls can default to a higher limit (usually
+the system's page size). The current configurable C libraries (as of at
+least 2015.08) support a zero (0) size buffer length. Most use the
+system's page size; musl, being an exception, which defaults to
+`PATH_MAX` (as Bash was doing). Since these C libraries support
+allocating buffer space with a zero (0) provided size, the following
+configuration change allows Bash to support getting a larger-length'ed
+working directory on target's that support it.
 
-Regards,
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+---
+ package/bash/bash.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Vincent.
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 9865e19..97d7182 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -16,6 +16,7 @@ BASH_LICENSE_FILES = COPYING
+ BASH_CONF_ENV += \
+ 	ac_cv_rl_prefix="$(STAGING_DIR)" \
+ 	ac_cv_rl_version="$(READLINE_VERSION)" \
++	bash_cv_getcwd_malloc=yes \
+ 	bash_cv_job_control_missing=present \
+ 	bash_cv_sys_named_pipes=present \
+ 	bash_cv_func_sigsetjmp=present \
+-- 
+1.9.5.msysgit.1
