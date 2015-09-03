@@ -1,13 +1,16 @@
 From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Date: Thu,  3 Sep 2015 09:55:21 +0200
-Subject: [Buildroot] [PATCH v2 1/6] python-urwid: bump version and add
-	checksums
-Message-ID: <1441266926-2942-1-git-send-email-cvubrugier@fastmail.fm>
+Date: Thu,  3 Sep 2015 09:55:22 +0200
+Subject: [Buildroot] [PATCH v2 2/6] python-pyparsing: bump version
+In-Reply-To: <1441266926-2942-1-git-send-email-cvubrugier@fastmail.fm>
+References: <1441266926-2942-1-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <1441266926-2942-2-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Also download tarball from PyPI instead of SourceForge.
 
 Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
 
@@ -16,32 +19,35 @@ Changes since v1:
  * Change hash URL from PyPI as suggested by Baruch Siach
 
 ---
- package/python-urwid/python-urwid.hash | 3 +++
- package/python-urwid/python-urwid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/python-urwid/python-urwid.hash
+ package/python-pyparsing/python-pyparsing.hash | 5 +++--
+ package/python-pyparsing/python-pyparsing.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
-new file mode 100644
-index 0000000..eceed9d
---- /dev/null
-+++ b/package/python-urwid/python-urwid.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi/urwid/1.3.0, sha256 locally computed
-+md5	a989acd54f4ff1a554add464803a9175  urwid-1.3.0.tar.gz
-+sha256	29f04fad3bf0a79c5491f7ebec2d50fa086e9d16359896c9204c6a92bc07aba2  urwid-1.3.0.tar.gz
-diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
-index 4f1be46..1cd3022 100644
---- a/package/python-urwid/python-urwid.mk
-+++ b/package/python-urwid/python-urwid.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
+index aee93af..93a0845 100644
+--- a/package/python-pyparsing/python-pyparsing.hash
++++ b/package/python-pyparsing/python-pyparsing.hash
+@@ -1,2 +1,3 @@
+-# Locally computed:
+-sha256  17e43d6b17588ed5968735575b3983a952133ec4082596d214d7090b56d48a06  pyparsing-2.0.2.tar.gz
++# md5 from https://pypi.python.org/pypi/pyparsing/2.0.3, sha256 locally computed
++md5	0fe479be09fc2cf005f753d3acc35939  pyparsing-2.0.3.tar.gz
++sha256  06e729e1cbf5274703b1f47b6135ed8335999d547f9d8cf048b210fb8ebf844f  pyparsing-2.0.3.tar.gz
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 8e83f34..ad066b8 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_URWID_VERSION = 1.2.1
-+PYTHON_URWID_VERSION = 1.3.0
- PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
- PYTHON_URWID_SITE = https://pypi.python.org/packages/source/u/urwid
- PYTHON_URWID_LICENSE = LGPLv2.1+
+-PYTHON_PYPARSING_VERSION = 2.0.2
++PYTHON_PYPARSING_VERSION = 2.0.3
+ PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+-PYTHON_PYPARSING_SITE = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
++PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/source/p/pyparsing
+ PYTHON_PYPARSING_LICENSE = MIT
+ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
+ PYTHON_PYPARSING_SETUP_TYPE = distutils
 -- 
 2.5.0
