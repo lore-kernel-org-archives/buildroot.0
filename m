@@ -1,99 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Sep 2015 21:05:28 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
- to be symlinks into /usr
-In-Reply-To: <20150904162946.GC4540@free.fr>
-References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
- <55E94CE5.1010308@imgtec.com> <55E9534C.3070708@mind.be>
- <20150904162946.GC4540@free.fr>
-Message-ID: <55E9EB78.9000702@mind.be>
+Date: Fri, 4 Sep 2015 21:52:50 +0200
+Subject: [Buildroot] [bug] bootwrapper runs before linking initrd
+In-Reply-To: <20150904105409.53804439@free-electrons.com>
+References: <55E8C311.6000404@mentor.com>
+ <20150904105409.53804439@free-electrons.com>
+Message-ID: <55E9F692.8040501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+[Adding Jeremy Kerr in CC - he's the author of
+http://patchwork.ozlabs.org/patch/366549/ ]
 
-
-On 04-09-15 18:29, Yann E. MORIN wrote:
-> Arnout, All,
+On 04-09-15 10:54, Thomas Petazzoni wrote:
+> Hollis,
 > 
-> On 2015-09-04 10:16 +0200, Arnout Vandecappelle spake thusly:
+> On Thu, 3 Sep 2015 15:00:49 -0700, Hollis Blanchard wrote:
+>> I have a BR config that includes the following:
+>> BR2_LINUX_KERNEL=y
+>> BR2_TARGET_ROOTFS_INITRAMFS=y
+>> BR2_TARGET_BOOT_WRAPPER_AARCH64=y
+> 
+> Yes, this is not working right now.
 [snip]
->>>> diff --git a/system/Config.in b/system/Config.in
->>>> index fad829d..735ad62 100644
->>>> --- a/system/Config.in
->>>> +++ b/system/Config.in
->>>> @@ -88,6 +88,7 @@ config BR2_INIT_SYSTEMD
->>>>  	depends on BR2_USE_MMU
->>>>  	depends on !BR2_STATIC_LIBS
->>>>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
->>>> +	select BR2_ROOTFS_MERGED_USR
->>
->>  Wouldn't it be more appropriate to move this to package/systemd/Config.in,
->> which already has all the other selects?
->>
->>  OTOH, this is a system option while package/systemd/Config.in selects only
->> packages.
+>> What's the real solution? Thanks!
 > 
-> Well, I don't care. In fact, BR2_INIT_SYSTEMD and BR2_PACKAGE_SYSTEMD
-> are in effect synonyms. So, it's completely arbiotrary where we put the
-> selects.
-> 
-> I would have favoured pacakge dependencies, like libs and support stuff,
-> to be selected by the package, while system-related dependencies would
-> have been handled by the init sytem.
+> See http://lists.busybox.net/pipermail/buildroot/2014-July/101052.html
+> for a possible solution. I remember we discussed this patch during the
+> Buildroot Summer camp, but I thought we had sent some comments for
+> Jeremy to improve the patch. But it seems it wasn't done. Arnout, do
+> you remember the conclusion of our discussion?
 
- Indeed.
+ I did send it:
 
-> But as you say, this is a fringe case. After all, systemd *does* support
-> a separate /usr, it's just that we in Buildroot decided (with this
-> patch) not to support that case.
-> 
->>  I think we should reason as follows: if we would ever support building the
->> systemd package without BR2_INIT_SYSTEMD,
-> 
-> But does that question even make sense to start with? systemd *is* an
-> init system and nothing more, so there's no reason we would ever build
-> systemd stand-alone.
-> 
-> At least, in the current state of affairs, for the foreseeable future,
-> there's almost no chance we build systemd standalone.
+http://lists.busybox.net/pipermail/buildroot/2015-July/132686.html
 
- Yeah, you're right, not a good idea to design for things that may not happen.
+(mailmain/pipermail threading sucks)
+
+ TL;DR:
+
+ It was a long discussion, mainly because it doesn't really solve the problem
+(which BTW is mainly in the approach we take for linux-with-initramfs - that's
+just a huge hack).
+
+ That said, we basically agree with the approach. So if you're stilling willing
+to do it, please post a full series including the change to
+boot-wrapper-aarch64, taking into account the comments below. We've marked this
+patch as Changes Requested in patchwork.
 
 
->>  Anyway, it's probably bikeshedding. But perhaps you can put a rationale in the
->> commit message for future reference.
-> 
-> Like:
-> 
->     In Buildroot, we decided not to support a split-usr when systemd
->     is used as an init system. This is not a systemd issue, this is a
->     deign decision. Thus the select is with BR2_INIT_SYSTEMD rather
->     than with BR2_PACKAGE_SYSTEMD.
+ _However_, I may have an idea for an alternative approach that confines the
+hack to boot-wrapper-aarch64 itself. The following may work:
 
- Perfect!
+boot-wrapper-aarch64-rebuild-with-initramfs: linux-rebuild-with-initramfs
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(BOOT_WRAPPER_AARCH64_SRCDIR)
+	cp $(BOOT_WRAPPER_AARCH64_SRCDIR)/linux-system.axf $(BINARIES_DIR)
 
+ROOTFS_INITRAMFS_POST_TARGETS += boot-wrapper-aarch64-rebuild-with-initramfs
+
+
+I.e., rerun the build and install commands as part of the rootfs-initramfs build
+step. Note that no conditions are needed, since this target will anyway only
+come into play when rootfs-initramfs is built.
+
+ Can someone give that a try and post a patch?
 
  Regards,
  Arnout
 
 > 
->> After all, your commit message is a bit
->> short at the moment :-P
+> I must say I'm not thrilled by making such major changes to Buildroot
+> just for the sake of this very specific use-case. But we probably don't
+> have much choice.
 > 
-> I'll take that as an incitation at expanding it even more. The four
-> lines above will make it! ;-p
-> 
-> Regards,
-> Yann E. MORIN.
+> Thomas
 > 
 
+
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
