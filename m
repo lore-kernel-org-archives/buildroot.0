@@ -1,50 +1,88 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Sep 2015 18:31:21 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
- to be symlinks into /usr
-In-Reply-To: <55E9540C.9060000@mind.be>
-References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
- <20150904101128.4206779d@free-electrons.com>
- <55E9540C.9060000@mind.be>
-Message-ID: <20150904163121.GD4540@free.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 4 Sep 2015 17:41:01 +0100
+Subject: [Buildroot] [PATCHv3 01/15] directfb: bump to 1.7.7
+In-Reply-To: <55E9C2A6.70504@mind.be>
+References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441144876-2628-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <55E9B048.8070704@imgtec.com> <55E9C2A6.70504@mind.be>
+Message-ID: <55E9C99D.40807@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, All,
+Dear Arnout Vandecappelle,
 
-On 2015-09-04 10:19 +0200, Arnout Vandecappelle spake thusly:
-> On 04-09-15 10:11, Thomas Petazzoni wrote:
-> > On Fri,  4 Sep 2015 01:47:42 +0200, Yann E. MORIN wrote:
-> > 
-> >> +config BR2_ROOTFS_MERGED_USR
-> >> +	bool "Use symlinks to /usr for /bin, /sbin and /lib"
-> > 
-> > Shouldn't we make this a blind option? I.e just do merged usr for
-> > systemd always, and never do it for !systemd.
-> 
->  I will always turn this option on, even in non-systemd, because it makes for a
-> better environment. See the Fedora document for a long explanation why split
-> /usr is just legacy baggage. Other parts of your system will also work better
-> when this option is turned on - no more confusion between busybox installing
-> something in /bin and the full package putting it in /usr/bin. No more worries
-> about a shebang being correct.
-> 
->  So no, I don't want this to be hidden.
+On 04/09/15 17:11, Arnout Vandecappelle wrote:
+>   Hi Vicente,
+>
+> On 04-09-15 16:52, Vicente Olivert Riera wrote:
+>> Dear Thomas Petazzoni,
+>>
+>> On 09/01/2015 11:01 PM, Thomas Petazzoni wrote:
+>>> In addition to doing the bump, this commit changes the --enable-fusion
+>>> option to --enable-multi-kernel, as was renamed upstream.
+>>>
+>>> The patches were just refreshed, except
+>>> 0003-remove-redefinition-of-__typeof__.patch, which was removed since
+>>> it was a backport from upstream, and is therefore now part of DirectFB
+>>> 1.7.7.
+>>>
+>>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [snip]
+>> Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>
+>   Thanks for all these reviews and tests! However, it would be more convenient if
+> you could put the tag just below the Sob (like now) so we don't have to scroll
+> all the way to the bottom to see what you're saying.
 
-Ditto, I do not want this to be hidden. I want to have the choice of
-using a merged-usr even without systemd (and I even have a use-case in
-my head for that).
+Ok, sorry. I will do it in that way from now on. Thanks.
+
+>
+>>
+>> Compile test for MIPS architecture:
+>>
+>> $ grep ^DIRECTFB_VERSION package/directfb/directfb.mk
+>> DIRECTFB_VERSION_MAJOR = 1.7
+>> DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).7
+>>
+>> $ file
+>> output/target/usr/lib/directfb-1.7-7-pure/systems/libdirectfb_fbdev.so
+>> output/target/usr/lib/directfb-1.7-7-pure/systems/libdirectfb_fbdev.so:
+>> ELF 32-bit MSB shared object, MIPS, MIPS32 rel2 version 1 (SYSV),
+>> dynamically linked, with unknown capability 0x41000000 = 0xf676e75, with
+>> unknown capability 0x10000 = 0x70401, stripped
+>
+>   BTW, what do you want to show with this information?
+
+In the first command I want to state that I was using the right directfb 
+version (this is a version bump patch).
+
+In the second one I want to state that the package was successfully 
+installed (and therefore built) in $(TARGET_DIR). It also states that it 
+was built for the right architecture. Sometimes the packages don't 
+install any native binary file so the file command can't state the 
+second part.
 
 Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Vincent.
+
+>
+>
+>   Regards,
+>   Arnout
+>
+>>
+>> Regards,
+>>
+>> Vincent.
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+>
