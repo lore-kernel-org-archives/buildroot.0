@@ -1,24 +1,34 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 4 Sep 2015 11:46:14 +0200
-Subject: [Buildroot] [PATCH 1/2] imx-vpu: remove kernel dependency
-In-Reply-To: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
-References: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
-Message-ID: <CAAMH-ytoY6eJOs5r_pSpTf9fd4OB6+a4khFW2VmHsyD_TaVsGw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  4 Sep 2015 10:50:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 7424] undefined reference to
+	`__builtin_thread_pointer'
+In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
+References: <bug-7424-163@https.bugs.busybox.net/>
+Message-ID: <20150904105016.ABEFE81F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+https://bugs.busybox.net/show_bug.cgi?id=7424
 
-On Wed, Sep 2, 2015 at 6:54 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> The imx-vpu package builds just fine without any special kernel header.
+--- Comment #15 from Alex Potapenko <opotapenko@gmail.com> 2015-09-04 10:50:15 UTC ---
+(In reply to comment #14)
+> Thanks for the report. Our plan is to make the TLS option no longer visible,
+> and make TLS mandatory when thread support is enabled. If you want to tackle
+> that, don't hesitate to send a patch!
 
-Indeed it seems that it builds fine without it. Yocto recipe still
-depends on the kernel but I see no point in keeping it.
+I think forcing TLS is a good idea, and BR2_PTHREADS_NATIVE should be the only
+threads option (if enabled) for uclibc, as with uclibc-ng.
 
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+If I had known about TLS when I was building my original toolchains for my
+Optware-ng project using Buildroot-2015-02, I would have enabled it. For now,
+until I eventually migrate to uclibc-ng (plan to create new feeds and abandon
+old ones), I have to make sure that upgraded toolchains are compatible with the
+old ones, so have to disable TLS.
 
-Thanks,
-Gary
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
