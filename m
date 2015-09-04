@@ -1,43 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Sep 2015 11:57:35 +0200
-Subject: [Buildroot] [git commit] iproute2: bump to version 4.2.0
-Message-ID: <20150904100014.2401D7FB60@busybox.osuosl.org>
+Date: Fri, 4 Sep 2015 11:45:49 +0200
+Subject: [Buildroot] [git commit] make help: remove <pkg>-legal-info
+Message-ID: <20150904100013.DAFFD81EDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc537892e63194439b916e523935152cc47428a1
+commit: http://git.buildroot.net/buildroot/commit/?id=466382e1fab84b57e60156f7b9f2fc8abbb01fe4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+The <pkg>-legal-info target is only a component of the top-level
+legal-info target, it is not meant to be used alone.
+
+For example, calling twice 'make busybox-legal-info' produces duplicate
+entries in licenses.txt and manifest.csv.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iproute2/iproute2.hash |    2 +-
- package/iproute2/iproute2.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 2263e89..e3fe013 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,2 +1,2 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	73077a989efb934450bd655cbd9aaddaa747cb696c64d0c9a3323768a6a8e66f	iproute2-4.1.1.tar.xz
-+sha256	a4101e743e0da36b55f63353ff489699ddcd634ceca854a9a272346588f30f30	iproute2-4.2.0.tar.xz
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index c42c5c9..d1aa6bf 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPROUTE2_VERSION = 4.1.1
-+IPROUTE2_VERSION = 4.2.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+diff --git a/Makefile b/Makefile
+index 9a6e9c0..23e2ee6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -876,7 +876,6 @@ help:
+ 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+ 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+-	@echo '  <pkg>-legal-info       - Generate license information for <pkg>'
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+ endif
