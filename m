@@ -1,120 +1,122 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Sep 2015 17:03:52 +0200
-Subject: [Buildroot] [git commit] dos2unix: remove WCHAR dependency
-Message-ID: <20150904150747.8DB868016D@busybox.osuosl.org>
+From: Marc Andre <marc.andre@netline.ch>
+Date: Fri, 4 Sep 2015 17:24:24 +0200
+Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
+ qeglplatformscreen.cpp
+In-Reply-To: <55E99F28.3030409@imgtec.com>
+References: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
+ <55E99F28.3030409@imgtec.com>
+Message-ID: <55E9B7A8.7060504@netline.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=966968c8a99604130fc69b8948f2c4d28592005a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Vincente
 
-Add a patch fixing wchar build failure.
+On 04.09.2015 15:39, Vicente Olivert Riera wrote:
+> Dear Marc Andre,
+>
+> On 09/03/2015 02:22 PM, Marc Andre wrote:
+>> Update the already existing fix for EGL/X11 header issue to fix
+>> an additional problem encountered on my system where I had
+>> compile errors in qeglplatformscreen.cpp. The problem was related
+>> to the wrong order of includes. The X11 headers must always be
+>> included last, as indicated in
+>> http://lists.qt-project.org/pipermail/development/2013-March/010511.html
+> I have seen that message in the mailing list and Thiago says:
+>
+> "Please reorder the includes in that file. The X11 includes must
+> *always* be the last include in the .cpp. If you can, submit that fix to
+> codereview.qt-project.org."
+>
+> Have you submitted that fix to codereview.qt-project.org? It would be
+> good to fix it upstream.
+I did consider it, but as long as the the other part of the 
+0003-xcb-egl-fixes.patch isn't fixed in the upstream project fixing this 
+doesn't make too much sense. I will certainly submit, but I would 
+appreciate to fix it in buildroot until qt5 is fixed.
+I will submit the full 0003-xcb-egl-fixes.patch to qt.
+>> I decided instead of adding a new patch to update the existing patch,
+>> because it is an additional fix for the same problem. If you don't agree
+>> I am happy to submit a seperate patch.
+>>
+>> This version is updated as suggested by Arnout.
+>>
+>> Signed-off-by: Marc Andre <marc.andre@netline.ch>
+>> ---
+>>   package/qt5/qt5base/0003-xcb-egl-fixes.patch | 25 +++++++++++++++++++++++--
+>>   1 file changed, 23 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+>> index 53f8453..0777c44 100644
+>> --- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+>> +++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+>> @@ -1,11 +1,17 @@
+>> -The vivante headers pull in X11 defines which break eglconvenience
+>> +Some EGL headers pull in X11 defines which break eglconvenience
+>>   
+>>   * Adds a missing include to qeglplatformcontext.cpp
+>>   * Fix namespace collision on CursorShape, pulled in from X11/X.h
+>>   * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
+>> +* Reorder includes to have the X11-header the last include
+>> +
+>> +Based on patch from Yocto project and buildroot patch from
+>> +Jerome Pouiller <jezz@sysmic.org>
+>> +Updated to fix issue in qeglplatformscreen (reorder includes, see also
+>> +http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
+>>   
+>> -[based on patch from Yocto project]
+> I'm not sure if this is correct. Yes, you are modifying the patch and
+> adding new stuff, but the rest is still based on Yocto Project's patch.
+> I think it should stay, or at least say something like:
+>
+> [part of it based on patch from Yocto project]
+It is in, see 3 lines higher: "Based on patch from Yocto project and 
+builroot patch from Jerome"
+>
+>>   Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+>> +Signed-off-by: Marc Andre <marc.andre@netline.ch>
+>>   
+>>   
+>>   diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
+>> @@ -61,4 +67,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
+>>    #include "qeglplatformscreen_p.h"
+>>    
+>>    QT_BEGIN_NAMESPACE
+>> +--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
+>> ++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
+>> +@@ -31,11 +31,11 @@
+>> + **
+>> + ****************************************************************************/
+>> +
+>> +-#include "qeglplatformscreen_p.h"
+>> +-#include "qeglplatformwindow_p.h"
+>> + #include <QtGui/qwindow.h>
+>> + #include <qpa/qwindowsysteminterface.h>
+>> + #include <QtPlatformSupport/private/qopenglcompositor_p.h>
+>> ++#include "qeglplatformscreen_p.h"
+>> ++#include "qeglplatformwindow_p.h"
+>> +
+>> + QT_BEGIN_NAMESPACE
+>>    
+>>
+> Regards,
+>
+> Vincent.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../dos2unix/0001-fix-build-without-wchar.patch    |   59 ++++++++++++++++++++
- package/dos2unix/Config.in                         |    4 -
- package/dos2unix/dos2unix.mk                       |    4 +
- 3 files changed, 63 insertions(+), 4 deletions(-)
+Regards,
+Marc
 
-diff --git a/package/dos2unix/0001-fix-build-without-wchar.patch b/package/dos2unix/0001-fix-build-without-wchar.patch
-new file mode 100644
-index 0000000..c318836
---- /dev/null
-+++ b/package/dos2unix/0001-fix-build-without-wchar.patch
-@@ -0,0 +1,59 @@
-+Don't reference wchar_t when D2U_UNICODE is not defined.
-+
-+Patch status: upstream (http://sourceforge.net/p/dos2unix/code/736)
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+diff -Nuar dos2unix-7.3.orig/common.c dos2unix-7.3/common.c
-+--- dos2unix-7.3.orig/common.c	2015-08-21 02:02:31.000000000 +0300
-++++ dos2unix-7.3/common.c	2015-09-02 22:13:33.648486366 +0300
-+@@ -1615,9 +1615,11 @@
-+     } else if (pFlag->status & WRONG_CODEPAGE) {
-+       d2u_fprintf(stderr,"%s: ",progname);
-+       d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
-++#ifdef D2U_UNICODE
-+     } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
-+       d2u_fprintf(stderr,"%s: ",progname);
-+       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), "stdin", (int)sizeof(wchar_t));
-++#endif
-+     } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
-+       d2u_fprintf(stderr,"%s: ",progname);
-+       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), "stdin", pFlag->line_nr);
-+@@ -1701,9 +1703,11 @@
-+   } else if (pFlag->status & WRONG_CODEPAGE) {
-+     d2u_fprintf(stderr,"%s: ",progname);
-+     d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
-++#ifdef D2U_UNICODE
-+   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
-+     d2u_fprintf(stderr,"%s: ",progname);
-+     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
-++#endif
-+   } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
-+     d2u_fprintf(stderr,"%s: ",progname);
-+     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), infile, pFlag->line_nr);
-+@@ -1781,9 +1785,11 @@
-+   } else if (pFlag->status & WRONG_CODEPAGE) {
-+     d2u_fprintf(stderr,"%s: ",progname);
-+     d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
-++#ifdef D2U_UNICODE
-+   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
-+     d2u_fprintf(stderr,"%s: ",progname);
-+     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
-++#endif
-+   } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
-+     d2u_fprintf(stderr,"%s: ",progname);
-+     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), infile, pFlag->line_nr);
-+@@ -1834,11 +1840,13 @@
-+       d2u_fprintf(stderr,"%s: ",progname);
-+       d2u_fprintf(stderr, _("Skipping symbolic link %s, target is not a regular file.\n"), infile);
-+     }
-++#ifdef D2U_UNICODE
-+   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
-+     if (pFlag->verbose) {
-+       d2u_fprintf(stderr,"%s: ",progname);
-+       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
-+     }
-++#endif
-+   }
-+ }
-+ 
-diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
-index fdcd070..782c25c 100644
---- a/package/dos2unix/Config.in
-+++ b/package/dos2unix/Config.in
-@@ -1,11 +1,7 @@
- config BR2_PACKAGE_DOS2UNIX
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
--	depends on BR2_USE_WCHAR # gettext
- 	bool "dos2unix"
- 	help
- 	  dos2unix converts text file line endings between CRLF and LF
- 
- 	  http://freshmeat.net/projects/dos2unix
--
--comment "dos2unix needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 0d5a674..4c5f4fc 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -20,6 +20,10 @@ DOS2UNIX_DEPENDENCIES += gettext
- DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=-lintl
- endif
- 
-+ifeq ($(BR2_USE_WCHAR),)
-+DOS2UNIX_MAKE_OPTS += UCS=
-+endif
-+
- define DOS2UNIX_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(DOS2UNIX_MAKE_OPTS)
- endef
+-- 
+Marc Andr?, Andr?-Netline
+eBusiness-Solutions
+
+Andr?-Netline
+K?nizstr. 161
+CH-3097 Liebefeld
+
+Tel. 031 974 16 66
+Fax: 031 974 16 65
+marc.andre at netline.ch
+http://www.netline.ch
