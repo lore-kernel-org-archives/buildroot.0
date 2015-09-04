@@ -1,94 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 4 Sep 2015 18:30:58 +0200
-Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
- qeglplatformscreen.cpp
-In-Reply-To: <55E99F28.3030409@imgtec.com>
-References: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
- <55E99F28.3030409@imgtec.com>
-Message-ID: <55E9C742.5080804@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Sep 2015 18:31:21 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <55E9540C.9060000@mind.be>
+References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+ <20150904101128.4206779d@free-electrons.com>
+ <55E9540C.9060000@mind.be>
+Message-ID: <20150904163121.GD4540@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04-09-15 15:39, Vicente Olivert Riera wrote:
-> Dear Marc Andre,
+Thomas, Arnout, All,
+
+On 2015-09-04 10:19 +0200, Arnout Vandecappelle spake thusly:
+> On 04-09-15 10:11, Thomas Petazzoni wrote:
+> > On Fri,  4 Sep 2015 01:47:42 +0200, Yann E. MORIN wrote:
+> > 
+> >> +config BR2_ROOTFS_MERGED_USR
+> >> +	bool "Use symlinks to /usr for /bin, /sbin and /lib"
+> > 
+> > Shouldn't we make this a blind option? I.e just do merged usr for
+> > systemd always, and never do it for !systemd.
 > 
-> On 09/03/2015 02:22 PM, Marc Andre wrote:
-[snip]
->> +Based on patch from Yocto project and buildroot patch from
->> +Jerome Pouiller <jezz@sysmic.org>
->> +Updated to fix issue in qeglplatformscreen (reorder includes, see also
->> +http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
->>  
->> -[based on patch from Yocto project]
+>  I will always turn this option on, even in non-systemd, because it makes for a
+> better environment. See the Fedora document for a long explanation why split
+> /usr is just legacy baggage. Other parts of your system will also work better
+> when this option is turned on - no more confusion between busybox installing
+> something in /bin and the full package putting it in /usr/bin. No more worries
+> about a shebang being correct.
 > 
-> I'm not sure if this is correct. Yes, you are modifying the patch and
-> adding new stuff, but the rest is still based on Yocto Project's patch.
-> I think it should stay, or at least say something like:
+>  So no, I don't want this to be hidden.
 
- It is still there, a few lines up:
+Ditto, I do not want this to be hidden. I want to have the choice of
+using a merged-usr even without systemd (and I even have a use-case in
+my head for that).
 
-Based on patch from Yocto project and buildroot patch from
-Jerome Pouiller <jezz@sysmic.org>
-
- That said, I don't really like the way it's formulated either, I'd prefer to
-keep the original and add something:
-
- [based on patch from Yocto project]
- Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-+Updated to fix issue in qeglplatformscreen (reorder includes, see also
-+http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
-+Signed-off-by: Marc Andre <marc.andre@netline.ch>
-
- But really, it's not that important, so:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
-
-> 
-> [part of it based on patch from Yocto project]
-> 
->>  Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
->> +Signed-off-by: Marc Andre <marc.andre@netline.ch>
->>  
->>  
->>  diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
->> @@ -61,4 +67,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
->>   #include "qeglplatformscreen_p.h"
->>   
->>   QT_BEGIN_NAMESPACE
->> +--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
->> ++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
->> +@@ -31,11 +31,11 @@
->> + **
->> + ****************************************************************************/
->> +
->> +-#include "qeglplatformscreen_p.h"
->> +-#include "qeglplatformwindow_p.h"
->> + #include <QtGui/qwindow.h>
->> + #include <qpa/qwindowsysteminterface.h>
->> + #include <QtPlatformSupport/private/qopenglcompositor_p.h>
->> ++#include "qeglplatformscreen_p.h"
->> ++#include "qeglplatformwindow_p.h"
->> +
->> + QT_BEGIN_NAMESPACE
->>   
->>
-> 
-> Regards,
-> 
-> Vincent.
-> 
-
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
