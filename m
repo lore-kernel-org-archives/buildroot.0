@@ -1,29 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2015 11:45:53 +0200
-Subject: [Buildroot] [PATCH] make help: remove <pkg>-legal-info
-In-Reply-To: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Fri, 4 Sep 2015 09:17:41 +0200")
-References: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87wpw6o6um.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Sep 2015 12:08:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-kernel-module.mk: module
+	build fails
+In-Reply-To: <20150902092651.GB3585@free.fr> (Yann E. MORIN's message of "Wed, 
+ 2 Sep 2015 11:26:52 +0200")
+References: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
+ <20150902092651.GB3585@free.fr>
+Message-ID: <87r3memr8f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > The <pkg>-legal-info target is only a component of the top-level
- > legal-info target, it is not meant to be used alone.
+Hi,
 
- > For example, calling twice 'make busybox-legal-info' produces duplicate
- > entries in licenses.txt and manifest.csv.
+ >> Fix LINUX_DIR reference when determining if kernel configuration
+ >> supports loadable modules.
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Baruch Siach <baruch@tkos.co.il>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Dang.. I let that skip before the release...
 
-Committed, thanks.
+ >> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+
+ > On principle:
+
+ > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ > However, there's a series that did not have time to make it to master
+ > before the release, and that is an improvement over the current
+ > situation, which would render this patch moot:
+
+ >     https://patchwork.ozlabs.org/patch/510186/
+ >     https://patchwork.ozlabs.org/patch/510187/
+ >     https://patchwork.ozlabs.org/patch/510188/
+
+ > So, even though this patch is good, I'd prefer we aply the series
+ > instead.
+
+Yes, I'll do so shortly for master.
+
+ > Still, the kernel-module infra is indeed broken in the release, thus
+ > making all kernel module packages broken. I'll Oeter and Thomas decide
+ > whether we want to put out a .1 release to fix just that.
+
+I've created a 2015.08.x branch and applied it. I'll wait a few days and
+see if anything else shows up before releasing 2015.08.1.
 
 -- 
 Bye, Peter Korsgaard
