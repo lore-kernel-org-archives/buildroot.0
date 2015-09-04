@@ -1,34 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 4 Sep 2015 10:58:57 +0300
-Subject: [Buildroot] [PATCH] make help: remove <pkg>-legal-info
-In-Reply-To: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net>
-References: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150904075857.GN18583@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Sep 2015 10:11:28 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20150904101128.4206779d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+Yann,
 
-On Fri, Sep 04, 2015 at 09:17:41AM +0200, Luca Ceresoli wrote:
-> The <pkg>-legal-info target is only a component of the top-level
-> legal-info target, it is not meant to be used alone.
-> 
-> For example, calling twice 'make busybox-legal-info' produces duplicate
-> entries in licenses.txt and manifest.csv.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+On Fri,  4 Sep 2015 01:47:42 +0200, Yann E. MORIN wrote:
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+> +config BR2_ROOTFS_MERGED_USR
+> +	bool "Use symlinks to /usr for /bin, /sbin and /lib"
 
-Thanks,
-baruch
+Shouldn't we make this a blind option? I.e just do merged usr for
+systemd always, and never do it for !systemd.
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
