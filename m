@@ -1,19 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2015 11:57:10 +0200
-Subject: [Buildroot] [PATCH] libcurl: bump to version 7.44.0
-In-Reply-To: <1441221373-7712-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Sep 2015 16:16:13 -0300")
-References: <1441221373-7712-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d1xyo6bt.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Sep 2015 11:59:54 +0200
+Subject: [Buildroot] [PATCH] package/clapack: fix comments
+In-Reply-To: <1441188607-9953-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 2 Sep 2015 12:10:07 +0200")
+References: <1441188607-9953-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87zj12mrmt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Provide appropriate comments for the powerpc and !powerpc cases.
+ > Adapt armadillo's comments accordingly.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
 
 Committed, thanks.
 
