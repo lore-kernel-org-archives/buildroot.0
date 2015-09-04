@@ -1,49 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2015 13:15:55 +0200
-Subject: [Buildroot] [PATCH 0/4 v3] core/pkg-kernel-config: ensure linux
-	supports modules (branch yem/kernel-module)
-In-Reply-To: <cover.1441284678.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 3 Sep 2015 14:54:19 +0200")
-References: <cover.1441284678.git.yann.morin.1998@free.fr>
-Message-ID: <87io7qmo44.fsf@dell.be.48ers.dk>
+Date: Fri, 4 Sep 2015 13:16:42 +0200
+Subject: [Buildroot] [git commit] core/pkg-kernel-module: drop now-useless
+	check for CONFIG_MODULES
+Message-ID: <20150904111726.6FC847FB01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2e95747ab9b6b0bf97007ce2733321c90462249a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello All!
- > This series fixes two standing issues with the way we handle packages
- > that build kernel modules:
+This reverts commit 8df95d9 (pkg-kernel-module: die if kernel module
+support is disabled).
 
- >   - first, the current check is broken, because $(LINUX_DIR) should be
- >     double-$ed, as it is used in a macro from an infra,
+Now that we force-enable support for modules in the kernel config, we
+need not check it.
 
- >   - second, it is currently possible to (try to) build such packages
- >     without the kernel config havong CONFIG_MODULES set.
+Besides, the check was broken, because it did not use $$ to dereference
+LINUX_DIR, thus leading to systematic build failures when a package
+using the kernel-module infra was enabled.
 
- > NOTE: The tree is currently *broken* for any package that uses the
- > kernel-module infra. The release is broken, too.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: No?? Rubinstein <noe.rubinstein@gmail.com>
+Cc: Jan Viktorin <viktorin@rehivetech.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-kernel-module.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
- > So, these three patches fix that:
-
- >   - introduce a new internal variable to tell the kernel to enable
- >     support for modules, LINUX_NEEDS_MODULES, that should be set
- >     whenever a package wants to build a kernel modules, and is
- >     automatically set by the kernel-module infra,
-
- >   - the (broken) check is no longer needed so removed,
-
- >   - a few packages that build kernel modules without using the
- >     kernel-module infra are fixed to manually set that variable.
-
-
- > Thanks to Peter for suggesting the solution, and to No? and Jan for
- > their previous attempts that eventually led to this series.
-
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
+index f6730b8..200c91d 100644
+--- a/package/pkg-kernel-module.mk
++++ b/package/pkg-kernel-module.mk
+@@ -65,10 +65,6 @@ $(2)_MODULE_SUBDIRS ?= .
+ # includes and other support files (Booo!)
+ define $(2)_KERNEL_MODULES_BUILD
+ 	@$$(call MESSAGE,"Building kernel module(s)")
+-	@if ! grep -Fqx 'CONFIG_MODULES=y' $(LINUX_DIR)/.config; then \
+-		echo "ERROR: Kernel does not support loadable modules"; \
+-		exit 1; \
+-	fi
+ 	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
+ 		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
+ 			-C $$(LINUX_DIR) \
