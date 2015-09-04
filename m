@@ -1,11 +1,11 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 13:31:54 +0100
-Subject: [Buildroot] [PATCH 3/3] package/ltp-testsuite: version bump to
- 20150420
-In-Reply-To: <1441270918-28981-4-git-send-email-anders.roxell@linaro.org>
+Date: Fri, 4 Sep 2015 13:31:59 +0100
+Subject: [Buildroot] [PATCH 2/3] package/ltp-testsuite: enable
+ power-management tests
+In-Reply-To: <1441270918-28981-3-git-send-email-anders.roxell@linaro.org>
 References: <1441270918-28981-1-git-send-email-anders.roxell@linaro.org>
- <1441270918-28981-4-git-send-email-anders.roxell@linaro.org>
-Message-ID: <55E98F3A.4040804@imgtec.com>
+ <1441270918-28981-3-git-send-email-anders.roxell@linaro.org>
+Message-ID: <55E98F3F.5040501@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Dear Anders Roxell,
-
 On 09/03/2015 10:01 AM, Anders Roxell wrote:
 > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > ---
->  package/ltp-testsuite/ltp-testsuite.hash | 2 +-
->  package/ltp-testsuite/ltp-testsuite.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/ltp-testsuite/ltp-testsuite.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
-> index 77ec483..5923daf 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.hash
-> +++ b/package/ltp-testsuite/ltp-testsuite.hash
-> @@ -1,2 +1,2 @@
->  # Locally computed:
-> -sha256  c21b91407f94a0c55c4cd3f12a0dc30f1d17cd2d4c44598f81ca075843141496  ltp-full-20140115.tar.xz
-> +sha256  ad504e6697b964787f51caad6d8a916caa367f241ac602545548488195216a80  ltp-full-20150420.tar.xz
 > diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index 634fc45..32038a0 100644
+> index 48733f2..634fc45 100644
 > --- a/package/ltp-testsuite/ltp-testsuite.mk
 > +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LTP_TESTSUITE_VERSION = 20140115
-> +LTP_TESTSUITE_VERSION = 20150420
->  LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
->  LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
+> @@ -10,6 +10,7 @@ LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/l
 >  LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
+>  LTP_TESTSUITE_LICENSE_FILES = COPYING
+>  LTP_TESTSUITE_CONF_OPTS += \
+> +			   --with-power-management-testsuite \
+>  			   --with-realtime-testsuite
+>  
+>  # Needs libcap with file attrs which needs attr, so both required
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
@@ -49,14 +38,14 @@ Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Compile test for MIPS architecture:
 
-$ grep ^LTP_TESTSUITE_VERSION package/ltp-testsuite/ltp-testsuite.mk
-LTP_TESTSUITE_VERSION = 20150420
+$ sha256sum
+output/build/ltp-testsuite-20140115/testcases/kernel/power_management/runpwtests.sh
+a6700d41611b926a495827de43ef96edd1b86cb65fd1e8a972d021c910edca2f
+output/build/ltp-testsuite-20140115/testcases/kernel/power_management/runpwtests.sh
 
-$ file output/target/usr/testcases/bin/lftest
-output/target/usr/testcases/bin/lftest: ELF 32-bit MSB executable, MIPS,
-MIPS32 rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
-GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
-unknown capability 0x10000 = 0x70401, stripped
+$ sha256sum output/target/usr/testcases/bin/runpwtests.sh
+a6700d41611b926a495827de43ef96edd1b86cb65fd1e8a972d021c910edca2f
+output/target/usr/testcases/bin/runpwtests.sh
 
 Regards,
 
