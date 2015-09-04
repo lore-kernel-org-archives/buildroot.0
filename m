@@ -1,37 +1,34 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  4 Sep 2015 09:17:41 +0200
-Subject: [Buildroot] [PATCH] make help: remove <pkg>-legal-info
-Message-ID: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net>
+Date: Fri, 4 Sep 2015 09:18:31 +0200
+Subject: [Buildroot] [PATCH] pkg-generic: fix <pkg>-legal-info target
+In-Reply-To: <55E8D61E.705@mind.be>
+References: <217433bd5ec057444b036dd8b72778f078f0926e.1441213919.git.baruch@tkos.co.il>
+ <55E85556.4030103@lucaceresoli.net> <20150903143043.GJ18583@tarshish>
+ <55E8C75B.5080008@lucaceresoli.net> <55E8D61E.705@mind.be>
+Message-ID: <55E945C7.8020507@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The <pkg>-legal-info target is only a component of the top-level
-legal-info target, it is not meant to be used alone.
+Dear Arnout,
 
-For example, calling twice 'make busybox-legal-info' produces duplicate
-entries in licenses.txt and manifest.csv.
+Arnout Vandecappelle wrote:
+>
+>
+> On 04-09-15 00:19, Luca Ceresoli wrote:
+>> First, why do we have <pkg>-legal-info in 'make help' at all?
+>>
+>> Arnout, you wrote that line in the help text, after a discussion IIRC.
+>> Do you remember a good reason _not_ to remove it?
+>
+>   I mostly took over what Thomas had put in
+> http://patchwork.ozlabs.org/patch/433692
+>
+>   So no, I see no reason to document <pkg>-legal-info.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- Makefile | 1 -
- 1 file changed, 1 deletion(-)
+Fine, I just sent a patch to remove that line.
 
-diff --git a/Makefile b/Makefile
-index 9a6e9c0..23e2ee6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -876,7 +876,6 @@ help:
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
--	@echo '  <pkg>-legal-info       - Generate license information for <pkg>'
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
- endif
 -- 
-1.9.1
+Luca
