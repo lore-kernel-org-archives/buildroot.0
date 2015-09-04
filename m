@@ -1,34 +1,47 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 4 Sep 2015 09:18:31 +0200
-Subject: [Buildroot] [PATCH] pkg-generic: fix <pkg>-legal-info target
-In-Reply-To: <55E8D61E.705@mind.be>
-References: <217433bd5ec057444b036dd8b72778f078f0926e.1441213919.git.baruch@tkos.co.il>
- <55E85556.4030103@lucaceresoli.net> <20150903143043.GJ18583@tarshish>
- <55E8C75B.5080008@lucaceresoli.net> <55E8D61E.705@mind.be>
-Message-ID: <55E945C7.8020507@lucaceresoli.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 4 Sep 2015 08:48:53 +0100
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <55E94CE5.1010308@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+Dear Yann E. MORIN,
 
-Arnout Vandecappelle wrote:
->
->
-> On 04-09-15 00:19, Luca Ceresoli wrote:
->> First, why do we have <pkg>-legal-info in 'make help' at all?
->>
->> Arnout, you wrote that line in the help text, after a discussion IIRC.
->> Do you remember a good reason _not_ to remove it?
->
->   I mostly took over what Thomas had put in
-> http://patchwork.ozlabs.org/patch/433692
->
->   So no, I see no reason to document <pkg>-legal-info.
+I think you forgot to add "v2" to the subject prefix and also list the
+changes between v1 and v2.
 
-Fine, I just sent a patch to remove that line.
+On 09/04/2015 12:47 AM, Yann E. MORIN wrote:
+> Furthermore, this means we're no longer supporting a split-usr setup, so
+> the corresponding configure options have been removed as well for
+> systemd and, when using a merged /usr, for eudev as well.
 
--- 
-Luca
+taking the last line of that comment into account...
+
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 1aa74b3..24fe4ed 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -22,11 +22,9 @@ EUDEV_CONF_ENV += LIBS=-lrt
+>  EUDEV_CONF_OPTS =		\
+>  	--disable-manpages	\
+>  	--sbindir=/sbin		\
+> -	--with-rootlibdir=/lib	\
+>  	--libexecdir=/lib	\
+>  	--with-firmware-path=/lib/firmware	\
+>  	--disable-introspection			\
+> -	--enable-split-usr			\
+>  	--enable-libkmod
+>  
+>  EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+
+shouldn't you do that _ONLY_ when BR2_ROOTFS_MERGED_USR is selected?
+
+Regards,
+
+Vincent.
