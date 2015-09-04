@@ -1,47 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 08:48:53 +0100
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
- to be symlinks into /usr
-In-Reply-To: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
-References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55E94CE5.1010308@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 4 Sep 2015 10:58:57 +0300
+Subject: [Buildroot] [PATCH] make help: remove <pkg>-legal-info
+In-Reply-To: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net>
+References: <1441351061-6306-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20150904075857.GN18583@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Luca,
 
-I think you forgot to add "v2" to the subject prefix and also list the
-changes between v1 and v2.
+On Fri, Sep 04, 2015 at 09:17:41AM +0200, Luca Ceresoli wrote:
+> The <pkg>-legal-info target is only a component of the top-level
+> legal-info target, it is not meant to be used alone.
+> 
+> For example, calling twice 'make busybox-legal-info' produces duplicate
+> entries in licenses.txt and manifest.csv.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-On 09/04/2015 12:47 AM, Yann E. MORIN wrote:
-> Furthermore, this means we're no longer supporting a split-usr setup, so
-> the corresponding configure options have been removed as well for
-> systemd and, when using a merged /usr, for eudev as well.
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 
-taking the last line of that comment into account...
+Thanks,
+baruch
 
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> index 1aa74b3..24fe4ed 100644
-> --- a/package/eudev/eudev.mk
-> +++ b/package/eudev/eudev.mk
-> @@ -22,11 +22,9 @@ EUDEV_CONF_ENV += LIBS=-lrt
->  EUDEV_CONF_OPTS =		\
->  	--disable-manpages	\
->  	--sbindir=/sbin		\
-> -	--with-rootlibdir=/lib	\
->  	--libexecdir=/lib	\
->  	--with-firmware-path=/lib/firmware	\
->  	--disable-introspection			\
-> -	--enable-split-usr			\
->  	--enable-libkmod
->  
->  EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-
-shouldn't you do that _ONLY_ when BR2_ROOTFS_MERGED_USR is selected?
-
-Regards,
-
-Vincent.
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
