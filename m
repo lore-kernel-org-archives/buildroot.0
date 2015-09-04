@@ -1,39 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Sep 2015 12:39:29 +0200
-Subject: [Buildroot] [bug] bootwrapper runs before linking initrd
-In-Reply-To: <87pp1yo6l6.fsf@dell.be.48ers.dk>
-References: <55E8C311.6000404@mentor.com>
- <20150904105409.53804439@free-electrons.com>
- <87pp1yo6l6.fsf@dell.be.48ers.dk>
-Message-ID: <20150904123929.085e85bd@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 4 Sep 2015 11:46:14 +0200
+Subject: [Buildroot] [PATCH 1/2] imx-vpu: remove kernel dependency
+In-Reply-To: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
+References: <0bc73d48fdc587c9efd46e5d1c18bd1485bc1e28.1441212853.git.baruch@tkos.co.il>
+Message-ID: <CAAMH-ytoY6eJOs5r_pSpTf9fd4OB6+a4khFW2VmHsyD_TaVsGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hi Baruch,
 
-On Fri, 04 Sep 2015 11:51:33 +0200, Peter Korsgaard wrote:
+On Wed, Sep 2, 2015 at 6:54 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> The imx-vpu package builds just fine without any special kernel header.
 
->  > I must say I'm not thrilled by making such major changes to Buildroot
->  > just for the sake of this very specific use-case. But we probably don't
->  > have much choice.
-> 
-> I don't know any details of this boot wrapper, but perhaps we could
-> change the package to only build the host tool and simply ask people to
-> write a post-image script to invoke it with the correct arguments once
-> the build is completely done, similar to what we do for other custom
-> "post processing" tasks?
+Indeed it seems that it builds fine without it. Yocto recipe still
+depends on the kernel but I see no point in keeping it.
 
-Doesn't work: the kernel image is *linked* into the boot wrapper. So
-really, it's not just a post-processing tool, you need the kernel image
-to build the wrapper.
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Gary
