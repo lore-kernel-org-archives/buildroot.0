@@ -1,42 +1,128 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2015 16:45:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bash: indicate getcwd is
-	malloc-supported
-In-Reply-To: <1441292409-5264-1-git-send-email-james.knight@rockwellcollins.com>
- (James Knight's message of "Thu, 3 Sep 2015 11:00:09 -0400")
-References: <1441292409-5264-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <87a8t2mee2.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 4 Sep 2015 15:49:09 +0100
+Subject: [Buildroot] [PATCHv3 02/15] directfb: mark as available only
+ for gcc >= 4.5
+In-Reply-To: <1441144876-2628-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441144876-2628-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <55E9AF65.5080801@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Knight <james.knight@rockwellcollins.com> writes:
+Dear Thomas Petazzoni,
 
- > When Bash attempts to find the current working directory, it uses a C
- > library call `getcwd` to resolve it. When cross-compiling, the
- > configuration process cannot determine if the target system's C library
- > can support an "unfixed" path length. Therefore, Bash will fallback to a
- > size of `PATH_MAX` for determining the current working directory. When
- > using OverlayFS (and possible other file systems), this becomes an issue
- > since file paths can commonly exceed standard `PATH_MAX` length. This
- > typically results in the following error appearing:
+On 09/01/2015 11:01 PM, Thomas Petazzoni wrote:
+> The new DirectFB version does not build with gcc 4.3 from the Blackfin
+> toolchain. One of the reason is that va_copy has some issues, which
+> were fixed in gcc 4.4.0
+> (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36799). There are also
+> some other issues, which were fixed by a patch proposed by Peter
+> Seiderer at
+> http://lists.busybox.net/pipermail/buildroot/2015-February/120281.html.
+> 
+> However, it probably doesn't make a lot of sense to carry patches that
+> are not upstream for such old compilers. Instead, this commit takes
+> the action of making DirectFB available only on toolchains using gcc
+>> = 4.5, which was tested with the Arago toolchain. gcc 4.4 could
+> potentially work, but wasn't tested (it is no longer supported by the
+> internal toolchain backend, and we don't have any toolchain based on
+> gcc 4.4), so we take the safe decision of requiring at least gcc 4.5.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> This commit could be squashed into the DirectFB bump itself for
+> bisectability, but was kept separate to ease the review.
+> ---
+>  package/directfb/Config.in                    | 5 +++--
+>  package/gstreamer/gst-plugins-bad/Config.in   | 4 ++++
+>  package/gstreamer1/gst1-plugins-bad/Config.in | 4 ++++
+>  package/qt5/qt5base/Config.in                 | 4 ++++
+>  4 files changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+> index 2b0d5c7..3ab40f9 100644
+> --- a/package/directfb/Config.in
+> +++ b/package/directfb/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_DIRECTFB
+>  	bool "directfb"
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+>  	select BR2_PACKAGE_FREETYPE
+>  	select BR2_PACKAGE_ZLIB
+>  	help
+> @@ -157,5 +158,5 @@ config BR2_PACKAGE_DIRECTFB_TESTS
+>  
+>  endif # BR2_PACKAGE_DIRECTFB
+>  
+> -comment "directfb needs a toolchain w/ C++, threads"
+> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> +comment "directfb needs a toolchain w/ C++, threads, gcc >= 4.5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+> diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+> index 1b465b2..43f0554 100644
+> --- a/package/gstreamer/gst-plugins-bad/Config.in
+> +++ b/package/gstreamer/gst-plugins-bad/Config.in
+> @@ -263,6 +263,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DIRECTFB
+>  	select BR2_PACKAGE_DIRECTFB
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
 
- >    error retrieving current directory: [...]
+worth adding " #directfb" at the end of that line to see why it's
+needed, or is it too obvious?
 
- > Common C library `getcwd` calls can default to a higher limit (usually
- > the system's page size). The current configurable C libraries (as of at
- > least 2015.08) support a zero (0) size buffer length. Most use the
- > system's page size; musl, being an exception, which defaults to
- > `PATH_MAX` (as Bash was doing). Since these C libraries support
- > allocating buffer space with a zero (0) provided size, the following
- > configuration change allows Bash to support getting a larger-length'ed
- > working directory on target's that support it.
+> +
+> +comment "directfb needs a toolchain w/ C++, threads, gcc >= 4.5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+>  
+>  config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
+>  	bool "dvb"
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index d268fc6..d5294c3 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -495,6 +495,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DIRECTFB
+>  	select BR2_PACKAGE_DIRECTFB
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
 
- > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Same as above.
 
-Committed, thanks.
+> +
+> +comment "directfb needs a toolchain w/ C++, threads, gcc >= 4.5"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+>  
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND
+>  	bool "wayland"
+> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+> index 106517f..6e76e90 100644
+> --- a/package/qt5/qt5base/Config.in
+> +++ b/package/qt5/qt5base/Config.in
+> @@ -179,6 +179,10 @@ config BR2_PACKAGE_QT5BASE_LINUXFB
+>  config BR2_PACKAGE_QT5BASE_DIRECTFB
+>  	bool "directfb support"
+>  	select BR2_PACKAGE_DIRECTFB
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
 
--- 
-Bye, Peter Korsgaard
+Same as above.
+
+> +
+> +comment "directfb needs a toolchain w/ gcc >= 4.5"
+> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+>  
+>  config BR2_PACKAGE_QT5BASE_XCB
+>  	bool "X.org XCB support"
+> 
+
+Anyway,
+
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Regards,
+
+Vincent.
