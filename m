@@ -1,53 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Sep 2015 16:45:42 +0200
-Subject: [Buildroot] [git commit] package/bash: indicate getcwd is
-	malloc-supported
-Message-ID: <20150904150747.57AF581EE0@busybox.osuosl.org>
+Date: Fri, 4 Sep 2015 17:05:43 +0200
+Subject: [Buildroot] [git commit] dos2unix: remove host-gettext dependency
+	from host package
+Message-ID: <20150904150747.962E58016D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0610de14901e5ad0f6c9b4db488477db47d2ff57
+commit: http://git.buildroot.net/buildroot/commit/?id=708818aaa287b17d607ee35b57fef194e38f1055
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When Bash attempts to find the current working directory, it uses a C
-library call `getcwd` to resolve it. When cross-compiling, the
-configuration process cannot determine if the target system's C library
-can support an "unfixed" path length. Therefore, Bash will fallback to a
-size of `PATH_MAX` for determining the current working directory. When
-using OverlayFS (and possible other file systems), this becomes an issue
-since file paths can commonly exceed standard `PATH_MAX` length. This
-typically results in the following error appearing:
+This shortens build time.
 
-   error retrieving current directory: [...]
-
-Common C library `getcwd` calls can default to a higher limit (usually
-the system's page size). The current configurable C libraries (as of at
-least 2015.08) support a zero (0) size buffer length. Most use the
-system's page size; musl, being an exception, which defaults to
-`PATH_MAX` (as Bash was doing). Since these C libraries support
-allocating buffer space with a zero (0) provided size, the following
-configuration change allows Bash to support getting a larger-length'ed
-working directory on target's that support it.
-
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bash/bash.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/dos2unix/dos2unix.mk |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 9865e19..97d7182 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -16,6 +16,7 @@ BASH_LICENSE_FILES = COPYING
- BASH_CONF_ENV += \
- 	ac_cv_rl_prefix="$(STAGING_DIR)" \
- 	ac_cv_rl_version="$(READLINE_VERSION)" \
-+	bash_cv_getcwd_malloc=yes \
- 	bash_cv_job_control_missing=present \
- 	bash_cv_sys_named_pipes=present \
- 	bash_cv_func_sigsetjmp=present \
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 4c5f4fc..55608c6 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -9,7 +9,7 @@ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2c
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
+ DOS2UNIX_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+-HOST_DOS2UNIX_DEPENDENCIES = host-gettext
++HOST_DOS2UNIX_DEPENDENCIES =
+ 
+ ifeq ($(BR2_ENABLE_LOCALE),)
+ DOS2UNIX_MAKE_OPTS += ENABLE_NLS=
+@@ -34,11 +34,12 @@ define DOS2UNIX_INSTALL_TARGET_CMDS
+ endef
+ 
+ define HOST_DOS2UNIX_BUILD_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) ENABLE_NLS=
+ endef
+ 
+ define HOST_DOS2UNIX_INSTALL_CMDS
+-	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
++	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) ENABLE_NLS= \
++		install
+ endef
+ 
+ $(eval $(generic-package))
