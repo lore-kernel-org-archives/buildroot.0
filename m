@@ -1,36 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2015 11:51:33 +0200
-Subject: [Buildroot] [bug] bootwrapper runs before linking initrd
-In-Reply-To: <20150904105409.53804439@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 4 Sep 2015 10:54:09 +0200")
-References: <55E8C311.6000404@mentor.com>
- <20150904105409.53804439@free-electrons.com>
-Message-ID: <87pp1yo6l6.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Sep 2015 11:56:52 +0200
+Subject: [Buildroot] [PATCH] openswan: security bump to version 2.6.45
+In-Reply-To: <1441221347-11991-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 2 Sep 2015 16:15:47 -0300")
+References: <1441221347-11991-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87h9nao6cb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ > Fixes:
+ > CVE-2015-3240 - IKE DoS when using NSS.
 
- > See http://lists.busybox.net/pipermail/buildroot/2014-July/101052.html
- > for a possible solution. I remember we discussed this patch during the
- > Buildroot Summer camp, but I thought we had sent some comments for
- > Jeremy to improve the patch. But it seems it wasn't done. Arnout, do
- > you remember the conclusion of our discussion?
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > I must say I'm not thrilled by making such major changes to Buildroot
- > just for the sake of this very specific use-case. But we probably don't
- > have much choice.
-
-I don't know any details of this boot wrapper, but perhaps we could
-change the package to only build the host tool and simply ask people to
-write a post-image script to invoke it with the correct arguments once
-the build is completely done, similar to what we do for other custom
-"post processing" tasks?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
