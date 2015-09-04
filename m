@@ -1,34 +1,130 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  4 Sep 2015 10:50:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 7424] undefined reference to
-	`__builtin_thread_pointer'
-In-Reply-To: <bug-7424-163@https.bugs.busybox.net/>
-References: <bug-7424-163@https.bugs.busybox.net/>
-Message-ID: <20150904105016.ABEFE81F7A@busybox.osuosl.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 4 Sep 2015 11:52:18 +0100
+Subject: [Buildroot] [PATCH v3 1/5] dos2unix: add target support
+In-Reply-To: <35a5aad580e5c2cae7eb79522f11a1aded941caf.1441253454.git.baruch@tkos.co.il>
+References: <35a5aad580e5c2cae7eb79522f11a1aded941caf.1441253454.git.baruch@tkos.co.il>
+Message-ID: <55E977E2.2060901@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7424
+Dear Baruch Siach,
 
---- Comment #15 from Alex Potapenko <opotapenko@gmail.com> 2015-09-04 10:50:15 UTC ---
-(In reply to comment #14)
-> Thanks for the report. Our plan is to make the TLS option no longer visible,
-> and make TLS mandatory when thread support is enabled. If you want to tackle
-> that, don't hesitate to send a patch!
+On 09/03/2015 05:10 AM, Baruch Siach wrote:
+> From: James Knight <james.knight@rockwellcollins.com>
+> 
+> Allow the `dos2unix` utility to be built and installed on the target
+> system.
+> 
+> [baruch: properly handle target gettext]
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v3:
+>   * Show only if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is enabled (Peter)
+>   * Add busybox to _DEPENDENCIES
+> 
+> v2:
+>    * Fix static build with gettext
+>    * Support build without locale support
+> ---
+>  package/Config.in            |  1 +
+>  package/dos2unix/Config.in   | 11 +++++++++++
+>  package/dos2unix/dos2unix.mk | 25 ++++++++++++++++++++++---
+>  3 files changed, 34 insertions(+), 3 deletions(-)
+>  create mode 100644 package/dos2unix/Config.in
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 6ba21a1aace8..2c1325af31c5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -115,6 +115,7 @@ menu "Development tools"
+>  	source "package/cvs/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	source "package/diffutils/Config.in"
+> +	source "package/dos2unix/Config.in"
+>  	source "package/findutils/Config.in"
+>  endif
+>  	source "package/flex/Config.in"
+> diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
+> new file mode 100644
+> index 000000000000..fdcd0700509b
+> --- /dev/null
+> +++ b/package/dos2unix/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_DOS2UNIX
+> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+> +	depends on BR2_USE_WCHAR # gettext
+> +	bool "dos2unix"
+> +	help
+> +	  dos2unix converts text file line endings between CRLF and LF
+> +
+> +	  http://freshmeat.net/projects/dos2unix
+> +
+> +comment "dos2unix needs a toolchain w/ wchar"
+> +	depends on !BR2_USE_WCHAR
+> diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+> index 2d7fcbbc6958..b1d21f27364d 100644
+> --- a/package/dos2unix/dos2unix.mk
+> +++ b/package/dos2unix/dos2unix.mk
+> @@ -6,17 +6,36 @@
+>  
+>  DOS2UNIX_VERSION = 7.0
+>  DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+> -DOS2UNIX_DEPENDENCIES = host-gettext
+>  DOS2UNIX_LICENSE = BSD-2c
+>  DOS2UNIX_LICENSE_FILES = COPYING.txt
+> +DOS2UNIX_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+> +HOST_DOS2UNIX_DEPENDENCIES = host-gettext
+> +
+> +ifeq ($(BR2_ENABLE_LOCALE),)
+> +DOS2UNIX_MAKE_OPTS += ENABLE_NLS=
+> +endif
+> +
+> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+> +DOS2UNIX_DEPENDENCIES += gettext
+> +DOS2UNIX_MAKE_OPTS += LIBS_EXTRA=-lintl
+> +endif
+> +
+> +define DOS2UNIX_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(DOS2UNIX_MAKE_OPTS)
+> +endef
+> +
+> +define DOS2UNIX_INSTALL_TARGET_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
+> +		$(DOS2UNIX_MAKE_OPTS) install
+> +endef
+>  
+>  define HOST_DOS2UNIX_BUILD_CMDS
+>  	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+>  endef
+>  
+>  define HOST_DOS2UNIX_INSTALL_CMDS
+> -	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> -		install DESTDIR=$(HOST_DIR)
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install
+>  endef
+>  
+> +$(eval $(generic-package))
+>  $(eval $(host-generic-package))
+> 
 
-I think forcing TLS is a good idea, and BR2_PTHREADS_NATIVE should be the only
-threads option (if enabled) for uclibc, as with uclibc-ng.
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-If I had known about TLS when I was building my original toolchains for my
-Optware-ng project using Buildroot-2015-02, I would have enabled it. For now,
-until I eventually migrate to uclibc-ng (plan to create new feeds and abandon
-old ones), I have to make sure that upgraded toolchains are compatible with the
-old ones, so have to disable TLS.
+Compile test for MIPS architecture:
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+$ grep ^DOS2UNIX_VERSION package/dos2unix/dos2unix.mk
+DOS2UNIX_VERSION = 7.0
+
+$ file output/target/usr/bin/dos2unix
+output/target/usr/bin/dos2unix: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70401, stripped
+
+Regards,
+
+Vincent.
