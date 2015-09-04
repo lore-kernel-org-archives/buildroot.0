@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 14:20:30 +0100
-Subject: [Buildroot] [PATCH v2 4/6] python-configshell-fb: bump version
-In-Reply-To: <1441266926-2942-4-git-send-email-cvubrugier@fastmail.fm>
+Date: Fri, 4 Sep 2015 14:22:08 +0100
+Subject: [Buildroot] [PATCH v2 5/6] targetcli-fb: bump version
+In-Reply-To: <1441266926-2942-5-git-send-email-cvubrugier@fastmail.fm>
 References: <1441266926-2942-1-git-send-email-cvubrugier@fastmail.fm>
- <1441266926-2942-4-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <55E99A9E.7040302@imgtec.com>
+ <1441266926-2942-5-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <55E99B00.5080302@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,40 +23,41 @@ On 09/03/2015 08:55 AM, Christophe Vu-Brugier wrote:
 >  * Select BR2_PACKAGE_PYTHON_SIX in Config.in
 > 
 > ---
->  package/python-configshell-fb/Config.in                | 1 +
->  package/python-configshell-fb/python-configshell-fb.mk | 4 ++--
+>  package/targetcli-fb/Config.in       | 1 +
+>  package/targetcli-fb/targetcli-fb.mk | 4 ++--
 >  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/python-configshell-fb/Config.in b/package/python-configshell-fb/Config.in
-> index 85f47a8..a680ce0 100644
-> --- a/package/python-configshell-fb/Config.in
-> +++ b/package/python-configshell-fb/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
->  	select BR2_PACKAGE_PYTHON_PYPARSING
->  	select BR2_PACKAGE_PYTHON3_READLINE if BR2_PACKAGE_PYTHON3
->  	select BR2_PACKAGE_PYTHON_READLINE if BR2_PACKAGE_PYTHON
+> diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
+> index ee241ef..b655938 100644
+> --- a/package/targetcli-fb/Config.in
+> +++ b/package/targetcli-fb/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_TARGETCLI_FB
+>  	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+>  	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
+>  	select BR2_PACKAGE_PYTHON_RTSLIB_FB
 > +	select BR2_PACKAGE_PYTHON_SIX
->  	select BR2_PACKAGE_PYTHON_URWID
 >  	help
->  	  configshell-fb is a Python library that provides a framework
-> diff --git a/package/python-configshell-fb/python-configshell-fb.mk b/package/python-configshell-fb/python-configshell-fb.mk
-> index 76ef48d..d0671d5 100644
-> --- a/package/python-configshell-fb/python-configshell-fb.mk
-> +++ b/package/python-configshell-fb/python-configshell-fb.mk
-> @@ -4,11 +4,11 @@
+>  	  targetcli-fb is a command-line interface for configuring the
+>  	  LIO generic SCSI target, present in 3.x Linux kernel
+> diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
+> index b5f2fbe..0a64c46 100644
+> --- a/package/targetcli-fb/targetcli-fb.mk
+> +++ b/package/targetcli-fb/targetcli-fb.mk
+> @@ -4,12 +4,12 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb15
-> +PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb18
->  PYTHON_CONFIGSHELL_FB_SITE = $(call github,agrover,configshell-fb,$(PYTHON_CONFIGSHELL_FB_VERSION))
->  PYTHON_CONFIGSHELL_FB_LICENSE = Apache-2.0
->  PYTHON_CONFIGSHELL_FB_LICENSE_FILES = COPYING
->  PYTHON_CONFIGSHELL_FB_SETUP_TYPE = setuptools
-> -PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-urwid
-> +PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-six python-urwid
+> -TARGETCLI_FB_VERSION = v2.1.fb37
+> +TARGETCLI_FB_VERSION = v2.1.fb41
+>  TARGETCLI_FB_SITE = $(call github,agrover,targetcli-fb,$(TARGETCLI_FB_VERSION))
+>  TARGETCLI_FB_LICENSE = Apache-2.0
+>  TARGETCLI_FB_LICENSE_FILES = COPYING
+>  TARGETCLI_FB_SETUP_TYPE = setuptools
+> -TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
+> +TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
 >  
->  $(eval $(python-package))
+>  define TARGETCLI_FB_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
@@ -64,14 +65,12 @@ Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Compile test for MIPS architecture:
 
-$ grep ^PYTHON_CONFIGSHELL_FB_VERSION
-package/python-configshell-fb/python-configshell-fb.mk
-PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb18
+$ grep ^TARGETCLI_FB_VERSION package/targetcli-fb/targetcli-fb.mk
+TARGETCLI_FB_VERSION = v2.1.fb41
 
-$ file
-output/target/usr/lib/python2.7/site-packages/configshell_fb/console.pyc
-output/target/usr/lib/python2.7/site-packages/configshell_fb/console.pyc: DBase
-3 data file (1435076290 records)
+$ file output/target/usr/lib/python2.7/site-packages/targetcli/ui_target.pyc
+output/target/usr/lib/python2.7/site-packages/targetcli/ui_target.pyc:
+DBase 3 data file (1435076614 records)
 
 Regards,
 
