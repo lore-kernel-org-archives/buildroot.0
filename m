@@ -1,50 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Sep 2015 13:16:42 +0200
-Subject: [Buildroot] [git commit] core/pkg-kernel-module: drop now-useless
-	check for CONFIG_MODULES
-Message-ID: <20150904111726.6FC847FB01@busybox.osuosl.org>
+Date: Fri, 4 Sep 2015 13:16:59 +0200
+Subject: [Buildroot] [git commit] package/linux-fusion: slight simplification
+Message-ID: <20150904111726.880887FB01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e95747ab9b6b0bf97007ce2733321c90462249a
+commit: http://git.buildroot.net/buildroot/commit/?id=249f487e97db809fe35b4c8a959b4670f533062b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 8df95d9 (pkg-kernel-module: die if kernel module
-support is disabled).
-
-Now that we force-enable support for modules in the kernel config, we
-need not check it.
-
-Besides, the check was broken, because it did not use $$ to dereference
-LINUX_DIR, thus leading to systematic build failures when a package
-using the kernel-module infra was enabled.
+Using an intermediate variable to "store" LINUX_VERSION_PROBED is
+unnecessary, because they are both recursively-expanded variables, and
+the `make kernel-version` code will anyway be used in both places it is
+needed; storing in an intermediate variable will not make that a single
+expansion of the sub-shell.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: No?? Rubinstein <noe.rubinstein@gmail.com>
-Cc: Jan Viktorin <viktorin@rehivetech.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-kernel-module.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/linux-fusion/linux-fusion.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-kernel-module.mk b/package/pkg-kernel-module.mk
-index f6730b8..200c91d 100644
---- a/package/pkg-kernel-module.mk
-+++ b/package/pkg-kernel-module.mk
-@@ -65,10 +65,6 @@ $(2)_MODULE_SUBDIRS ?= .
- # includes and other support files (Booo!)
- define $(2)_KERNEL_MODULES_BUILD
- 	@$$(call MESSAGE,"Building kernel module(s)")
--	@if ! grep -Fqx 'CONFIG_MODULES=y' $(LINUX_DIR)/.config; then \
--		echo "ERROR: Kernel does not support loadable modules"; \
--		exit 1; \
--	fi
- 	$$(foreach d,$$($(2)_MODULE_SUBDIRS), \
- 		$$(LINUX_MAKE_ENV) $$($$(PKG)_MAKE) \
- 			-C $$(LINUX_DIR) \
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index d52fe40..326ef88 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -17,17 +17,16 @@ ifeq ($(BR2_PACKAGE_LINUX_FUSION),y)
+ LINUX_NEEDS_MODULES = y
+ endif
+ 
+-LINUX_FOR_FUSION = $(LINUX_VERSION_PROBED)
+ LINUX_FUSION_ETC_DIR = $(TARGET_DIR)/etc/udev/rules.d
+ 
+-LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_FOR_FUSION)
++LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_VERSION_PROBED)
+ LINUX_FUSION_MAKE_OPTS += KERNEL_BUILD=$(LINUX_DIR)
+ LINUX_FUSION_MAKE_OPTS += KERNEL_SOURCE=$(LINUX_DIR)
+ 
+ LINUX_FUSION_MAKE_OPTS += SYSROOT=$(TARGET_DIR)
+ LINUX_FUSION_MAKE_OPTS += ARCH=$(KERNEL_ARCH)
+ LINUX_FUSION_MAKE_OPTS += CROSS_COMPILE=$(TARGET_CROSS)
+-LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_FOR_FUSION)/kernel
++LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_VERSION_PROBED)/kernel
+ 
+ define LINUX_FUSION_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LINUX_FUSION_MAKE_OPTS) -C $(@D)
