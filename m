@@ -1,76 +1,98 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 14:22:08 +0100
-Subject: [Buildroot] [PATCH v2 5/6] targetcli-fb: bump version
-In-Reply-To: <1441266926-2942-5-git-send-email-cvubrugier@fastmail.fm>
-References: <1441266926-2942-1-git-send-email-cvubrugier@fastmail.fm>
- <1441266926-2942-5-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <55E99B00.5080302@imgtec.com>
+Date: Fri, 4 Sep 2015 14:39:52 +0100
+Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
+	qeglplatformscreen.cpp
+In-Reply-To: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
+References: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
+Message-ID: <55E99F28.3030409@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+Dear Marc Andre,
 
-On 09/03/2015 08:55 AM, Christophe Vu-Brugier wrote:
-> Also add new dependency to python-six.
+On 09/03/2015 02:22 PM, Marc Andre wrote:
+> Update the already existing fix for EGL/X11 header issue to fix
+> an additional problem encountered on my system where I had
+> compile errors in qeglplatformscreen.cpp. The problem was related
+> to the wrong order of includes. The X11 headers must always be
+> included last, as indicated in
+> http://lists.qt-project.org/pipermail/development/2013-March/010511.html
+
+I have seen that message in the mailing list and Thiago says:
+
+"Please reorder the includes in that file. The X11 includes must
+*always* be the last include in the .cpp. If you can, submit that fix to
+codereview.qt-project.org."
+
+Have you submitted that fix to codereview.qt-project.org? It would be
+good to fix it upstream.
+
+> I decided instead of adding a new patch to update the existing patch,
+> because it is an additional fix for the same problem. If you don't agree
+> I am happy to submit a seperate patch.
 > 
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+> This version is updated as suggested by Arnout.
 > 
+> Signed-off-by: Marc Andre <marc.andre@netline.ch>
 > ---
-> Changes since v1:
->  * Select BR2_PACKAGE_PYTHON_SIX in Config.in
+>  package/qt5/qt5base/0003-xcb-egl-fixes.patch | 25 +++++++++++++++++++++++--
+>  1 file changed, 23 insertions(+), 2 deletions(-)
 > 
-> ---
->  package/targetcli-fb/Config.in       | 1 +
->  package/targetcli-fb/targetcli-fb.mk | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/targetcli-fb/Config.in b/package/targetcli-fb/Config.in
-> index ee241ef..b655938 100644
-> --- a/package/targetcli-fb/Config.in
-> +++ b/package/targetcli-fb/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_TARGETCLI_FB
->  	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  	select BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
->  	select BR2_PACKAGE_PYTHON_RTSLIB_FB
-> +	select BR2_PACKAGE_PYTHON_SIX
->  	help
->  	  targetcli-fb is a command-line interface for configuring the
->  	  LIO generic SCSI target, present in 3.x Linux kernel
-> diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-> index b5f2fbe..0a64c46 100644
-> --- a/package/targetcli-fb/targetcli-fb.mk
-> +++ b/package/targetcli-fb/targetcli-fb.mk
-> @@ -4,12 +4,12 @@
->  #
->  ################################################################################
+> diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+> index 53f8453..0777c44 100644
+> --- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+> +++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
+> @@ -1,11 +1,17 @@
+> -The vivante headers pull in X11 defines which break eglconvenience
+> +Some EGL headers pull in X11 defines which break eglconvenience
 >  
-> -TARGETCLI_FB_VERSION = v2.1.fb37
-> +TARGETCLI_FB_VERSION = v2.1.fb41
->  TARGETCLI_FB_SITE = $(call github,agrover,targetcli-fb,$(TARGETCLI_FB_VERSION))
->  TARGETCLI_FB_LICENSE = Apache-2.0
->  TARGETCLI_FB_LICENSE_FILES = COPYING
->  TARGETCLI_FB_SETUP_TYPE = setuptools
-> -TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb
-> +TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
+>  * Adds a missing include to qeglplatformcontext.cpp
+>  * Fix namespace collision on CursorShape, pulled in from X11/X.h
+>  * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
+> +* Reorder includes to have the X11-header the last include
+> +
+> +Based on patch from Yocto project and buildroot patch from
+> +Jerome Pouiller <jezz@sysmic.org>
+> +Updated to fix issue in qeglplatformscreen (reorder includes, see also
+> +http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
 >  
->  define TARGETCLI_FB_INSTALL_INIT_SYSV
->  	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target
+> -[based on patch from Yocto project]
+
+I'm not sure if this is correct. Yes, you are modifying the patch and
+adding new stuff, but the rest is still based on Yocto Project's patch.
+I think it should stay, or at least say something like:
+
+[part of it based on patch from Yocto project]
+
+>  Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> +Signed-off-by: Marc Andre <marc.andre@netline.ch>
+>  
+>  
+>  diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
+> @@ -61,4 +67,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
+>   #include "qeglplatformscreen_p.h"
+>   
+>   QT_BEGIN_NAMESPACE
+> +--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
+> ++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
+> +@@ -31,11 +31,11 @@
+> + **
+> + ****************************************************************************/
+> +
+> +-#include "qeglplatformscreen_p.h"
+> +-#include "qeglplatformwindow_p.h"
+> + #include <QtGui/qwindow.h>
+> + #include <qpa/qwindowsysteminterface.h>
+> + #include <QtPlatformSupport/private/qopenglcompositor_p.h>
+> ++#include "qeglplatformscreen_p.h"
+> ++#include "qeglplatformwindow_p.h"
+> +
+> + QT_BEGIN_NAMESPACE
+>   
 > 
-
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Compile test for MIPS architecture:
-
-$ grep ^TARGETCLI_FB_VERSION package/targetcli-fb/targetcli-fb.mk
-TARGETCLI_FB_VERSION = v2.1.fb41
-
-$ file output/target/usr/lib/python2.7/site-packages/targetcli/ui_target.pyc
-output/target/usr/lib/python2.7/site-packages/targetcli/ui_target.pyc:
-DBase 3 data file (1435076614 records)
 
 Regards,
 
