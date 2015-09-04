@@ -1,54 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 11:52:36 +0100
-Subject: [Buildroot] [PATCH v3 5/5] dos2unix: update homepage link
-In-Reply-To: <0c19e0b47cd31f36c57c50e3f4cfa2cf2666d9e9.1441253454.git.baruch@tkos.co.il>
-References: <35a5aad580e5c2cae7eb79522f11a1aded941caf.1441253454.git.baruch@tkos.co.il>
- <0c19e0b47cd31f36c57c50e3f4cfa2cf2666d9e9.1441253454.git.baruch@tkos.co.il>
-Message-ID: <55E977F4.6040504@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 04 Sep 2015 12:57:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-kernel-module.mk: module
+	build fails
+In-Reply-To: <392224124.190077.1441362178515.JavaMail.zimbra@openwide.fr>
+ (Romain Naour's message of "Fri, 4 Sep 2015 12:22:58 +0200 (CEST)")
+References: <1441157873-12285-1-git-send-email-rdkehn@yahoo.com>
+ <20150902092651.GB3585@free.fr> <87r3memr8f.fsf@dell.be.48ers.dk>
+ <392224124.190077.1441362178515.JavaMail.zimbra@openwide.fr>
+Message-ID: <87mvx2moyt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-On 09/03/2015 05:10 AM, Baruch Siach wrote:
-> Use the maintainer page that is much more informative than freecode.com.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v3:
->    * New patch in this series
-> ---
->  package/dos2unix/Config.in      | 2 +-
->  package/dos2unix/Config.in.host | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/dos2unix/Config.in b/package/dos2unix/Config.in
-> index 782c25cf0e13..ead1a8ffac78 100644
-> --- a/package/dos2unix/Config.in
-> +++ b/package/dos2unix/Config.in
-> @@ -4,4 +4,4 @@ config BR2_PACKAGE_DOS2UNIX
->  	help
->  	  dos2unix converts text file line endings between CRLF and LF
->  
-> -	  http://freshmeat.net/projects/dos2unix
-> +	  http://waterlan.home.xs4all.nl/dos2unix.html
-> diff --git a/package/dos2unix/Config.in.host b/package/dos2unix/Config.in.host
-> index 012d614c0df4..5ec6033a8e32 100644
-> --- a/package/dos2unix/Config.in.host
-> +++ b/package/dos2unix/Config.in.host
-> @@ -3,4 +3,4 @@ config BR2_PACKAGE_HOST_DOS2UNIX
->  	help
->  	  dos2unix converts text file line endings between CRLF and LF
->  
-> -	  http://freecode.com/projects/dos2unix
-> +	  http://waterlan.home.xs4all.nl/dos2unix.html
-> 
+Hi,
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Hi Peter,
 
-Regards,
+>> I've created a 2015.08.x branch and applied it. I'll wait a few days and
+ >> see if anything else shows up before releasing 2015.08.1.
 
-Vincent.
+ > Since you are preparing a bug fix release, can you backport this little
+ > patch ? ;-)
+ > http://patchwork.ozlabs.org/patch/512785/
+
+Cherrypicked, thanks. Please let me know if there are any other fixes
+that should go in 2015.08.1.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
