@@ -1,39 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Sep 2015 12:56:36 +0200
-Subject: [Buildroot] [git commit branch/2015.08.x] package/eudev: fix
-	install command
-Message-ID: <20150904105751.84FD181F76@busybox.osuosl.org>
+Date: Fri, 04 Sep 2015 13:15:55 +0200
+Subject: [Buildroot] [PATCH 0/4 v3] core/pkg-kernel-config: ensure linux
+	supports modules (branch yem/kernel-module)
+In-Reply-To: <cover.1441284678.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 3 Sep 2015 14:54:19 +0200")
+References: <cover.1441284678.git.yann.morin.1998@free.fr>
+Message-ID: <87io7qmo44.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccda2ae98d5dbf2cb30d73d42a1ac8739a9e44b8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2015.08.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The directory $(TARGET_DIR)/etc/init.d/ must exist before installing
-S10udev init script.
-Add the missing "-D" option to create the "init.d" directory.
+ > Hello All!
+ > This series fixes two standing issues with the way we handle packages
+ > that build kernel modules:
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1037475b9b9e1ec8092e4f90c3e33f9c485867ff)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/eudev/eudev.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ >   - first, the current check is broken, because $(LINUX_DIR) should be
+ >     double-$ed, as it is used in a macro from an infra,
 
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index b916acd..1aa74b3 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -57,7 +57,7 @@ EUDEV_CONF_OPTS += --disable-selinux
- endif
- 
- define EUDEV_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-+	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
- endef
- 
- # Required by default rules for input devices
+ >   - second, it is currently possible to (try to) build such packages
+ >     without the kernel config havong CONFIG_MODULES set.
+
+ > NOTE: The tree is currently *broken* for any package that uses the
+ > kernel-module infra. The release is broken, too.
+
+ > So, these three patches fix that:
+
+ >   - introduce a new internal variable to tell the kernel to enable
+ >     support for modules, LINUX_NEEDS_MODULES, that should be set
+ >     whenever a package wants to build a kernel modules, and is
+ >     automatically set by the kernel-module infra,
+
+ >   - the (broken) check is no longer needed so removed,
+
+ >   - a few packages that build kernel modules without using the
+ >     kernel-module infra are fixed to manually set that variable.
+
+
+ > Thanks to Peter for suggesting the solution, and to No? and Jan for
+ > their previous attempts that eventually led to this series.
+
+Committed series, thanks.
+
+-- 
+Bye, Peter Korsgaard
