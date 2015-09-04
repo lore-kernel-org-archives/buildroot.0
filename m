@@ -1,29 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2015 16:07:48 +0200
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.9.7-P3
-In-Reply-To: <1441370392-9334-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Sep 2015 09:39:52 -0300")
-References: <1441370392-9334-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egiemg5n.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 4 Sep 2015 15:21:12 +0100
+Subject: [Buildroot] [PATCHv3 04/15] directfb: do not use inexistant
+ configure options
+In-Reply-To: <1441144876-2628-5-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441144876-2628-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <55E9A8D8.4010105@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Dear Thomas Petazzoni,
 
- > Fixes:
- > CVE-2015-5722 - denial-of-service vector which can be exploited remotely
- > against a BIND server that is performing validation on DNSSEC-signed
- > records.
- > CVE-2015-5986 - denial-of-service vector which can be used against a
- > BIND server that is performing recursion and (under limited conditions)
- > an authoritative-only nameserver.
+On 09/01/2015 11:01 PM, Thomas Petazzoni wrote:
+> From: Peter Seiderer <ps.report@gmx.net>
+> 
+> The --disable-sysfs and --disable-explicit-deps options are not
+> supported by DirectFB anymore, so don't use them.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+which version introduces such a change? Is it 1.7.7? If so, I think this
+patch should be squashed with the one that does the version bump to
+1.7.7. Otherwise, ignore my comment.
 
-Committed, thanks.
+Regards,
 
--- 
-Bye, Peter Korsgaard
+Vincent.
+
+> 
+> [Thomas: rework commit log.]
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/directfb/directfb.mk | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+> index c27e982..da12acb 100644
+> --- a/package/directfb/directfb.mk
+> +++ b/package/directfb/directfb.mk
+> @@ -14,11 +14,9 @@ DIRECTFB_INSTALL_STAGING = YES
+>  DIRECTFB_AUTORECONF = YES
+>  
+>  DIRECTFB_CONF_OPTS = \
+> -	--disable-explicit-deps \
+>  	--enable-zlib \
+>  	--enable-freetype \
+>  	--enable-fbdev \
+> -	--disable-sysfs \
+>  	--disable-sdl \
+>  	--disable-vnc \
+>  	--disable-osx \
+> 
