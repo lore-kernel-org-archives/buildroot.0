@@ -1,10 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 14:20:24 +0100
-Subject: [Buildroot] [PATCH v2 6/6] targetcli-fb: systemd support
-In-Reply-To: <1441266926-2942-6-git-send-email-cvubrugier@fastmail.fm>
+Date: Fri, 4 Sep 2015 14:20:30 +0100
+Subject: [Buildroot] [PATCH v2 4/6] python-configshell-fb: bump version
+In-Reply-To: <1441266926-2942-4-git-send-email-cvubrugier@fastmail.fm>
 References: <1441266926-2942-1-git-send-email-cvubrugier@fastmail.fm>
- <1441266926-2942-6-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <55E99A98.1030309@imgtec.com>
+ <1441266926-2942-4-git-send-email-cvubrugier@fastmail.fm>
+Message-ID: <55E99A9E.7040302@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +14,49 @@ To: buildroot@busybox.net
 Dear Christophe Vu-Brugier,
 
 On 09/03/2015 08:55 AM, Christophe Vu-Brugier wrote:
-> The systemd service file is taken from Fedora.
+> Also add new dependency to python-six.
 > 
 > Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> ---
->  package/targetcli-fb/target.service  | 14 ++++++++++++++
->  package/targetcli-fb/targetcli-fb.mk |  8 +++++++-
->  2 files changed, 21 insertions(+), 1 deletion(-)
->  create mode 100644 package/targetcli-fb/target.service
 > 
-> diff --git a/package/targetcli-fb/target.service b/package/targetcli-fb/target.service
-> new file mode 100644
-> index 0000000..400284e
-> --- /dev/null
-> +++ b/package/targetcli-fb/target.service
-> @@ -0,0 +1,14 @@
-> +[Unit]
-> +Description=Restore LIO kernel target configuration
-> +Requires=sys-kernel-config.mount
-> +After=sys-kernel-config.mount network.target local-fs.target
-> +
-> +[Service]
-> +Type=oneshot
-> +RemainAfterExit=yes
-> +ExecStart=/usr/bin/targetctl restore
-> +ExecStop=/usr/bin/targetctl clear
-> +SyslogIdentifier=target
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-> index 0a64c46..cf7f29f 100644
-> --- a/package/targetcli-fb/targetcli-fb.mk
-> +++ b/package/targetcli-fb/targetcli-fb.mk
-> @@ -12,7 +12,13 @@ TARGETCLI_FB_SETUP_TYPE = setuptools
->  TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
+> ---
+> Changes since v1:
+>  * Select BR2_PACKAGE_PYTHON_SIX in Config.in
+> 
+> ---
+>  package/python-configshell-fb/Config.in                | 1 +
+>  package/python-configshell-fb/python-configshell-fb.mk | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/python-configshell-fb/Config.in b/package/python-configshell-fb/Config.in
+> index 85f47a8..a680ce0 100644
+> --- a/package/python-configshell-fb/Config.in
+> +++ b/package/python-configshell-fb/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_CONFIGSHELL_FB
+>  	select BR2_PACKAGE_PYTHON_PYPARSING
+>  	select BR2_PACKAGE_PYTHON3_READLINE if BR2_PACKAGE_PYTHON3
+>  	select BR2_PACKAGE_PYTHON_READLINE if BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_SIX
+>  	select BR2_PACKAGE_PYTHON_URWID
+>  	help
+>  	  configshell-fb is a Python library that provides a framework
+> diff --git a/package/python-configshell-fb/python-configshell-fb.mk b/package/python-configshell-fb/python-configshell-fb.mk
+> index 76ef48d..d0671d5 100644
+> --- a/package/python-configshell-fb/python-configshell-fb.mk
+> +++ b/package/python-configshell-fb/python-configshell-fb.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
 >  
->  define TARGETCLI_FB_INSTALL_INIT_SYSV
-> -	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target
-> +	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target \
-> +		$(TARGET_DIR)/etc/init.d/S50target
-> +endef
-> +
-> +define TARGETCLI_FB_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -m 0644 -D package/targetcli-fb/target.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/target.service
->  endef
+> -PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb15
+> +PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb18
+>  PYTHON_CONFIGSHELL_FB_SITE = $(call github,agrover,configshell-fb,$(PYTHON_CONFIGSHELL_FB_VERSION))
+>  PYTHON_CONFIGSHELL_FB_LICENSE = Apache-2.0
+>  PYTHON_CONFIGSHELL_FB_LICENSE_FILES = COPYING
+>  PYTHON_CONFIGSHELL_FB_SETUP_TYPE = setuptools
+> -PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-urwid
+> +PYTHON_CONFIGSHELL_FB_DEPENDENCIES = python-pyparsing python-six python-urwid
 >  
->  # Targetcli stores its configuration in /etc/target/saveconfig.json
+>  $(eval $(python-package))
 > 
 
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
@@ -69,14 +64,14 @@ Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Compile test for MIPS architecture:
 
-$ file output/target/usr/lib/systemd/system/target.service
-output/target/usr/lib/systemd/system/target.service: ASCII text
+$ grep ^PYTHON_CONFIGSHELL_FB_VERSION
+package/python-configshell-fb/python-configshell-fb.mk
+PYTHON_CONFIGSHELL_FB_VERSION = v1.1.fb18
 
-Although I'm a bit confused since I googled about it and it seems the
-target.service file should be installed by python-rtslib-fb instead:
-
-https://github.com/agrover/targetcli-fb/issues/39#issuecomment-37868163
-https://wiki.archlinux.org/index.php/ISCSI_Target#Setup_with_LIO_Target
+$ file
+output/target/usr/lib/python2.7/site-packages/configshell_fb/console.pyc
+output/target/usr/lib/python2.7/site-packages/configshell_fb/console.pyc: DBase
+3 data file (1435076290 records)
 
 Regards,
 
