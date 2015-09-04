@@ -1,99 +1,52 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 4 Sep 2015 14:39:52 +0100
-Subject: [Buildroot] [PATCH] qt5base: Fix compile errors in qurl.h /
-	qeglplatformscreen.cpp
-In-Reply-To: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
-References: <1441286530-63345-1-git-send-email-marc.andre@netline.ch>
-Message-ID: <55E99F28.3030409@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 4 Sep 2015 16:07:37 +0200
+Subject: [Buildroot] [git commit] bind: security bump to version 9.9.7-P3
+Message-ID: <20150904140747.1F75C81E40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marc Andre,
+commit: http://git.buildroot.net/buildroot/commit/?id=38d1a66bda57cb4c47156021ee976c2583b55822
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 09/03/2015 02:22 PM, Marc Andre wrote:
-> Update the already existing fix for EGL/X11 header issue to fix
-> an additional problem encountered on my system where I had
-> compile errors in qeglplatformscreen.cpp. The problem was related
-> to the wrong order of includes. The X11 headers must always be
-> included last, as indicated in
-> http://lists.qt-project.org/pipermail/development/2013-March/010511.html
+Fixes:
+CVE-2015-5722 - denial-of-service vector which can be exploited remotely
+against a BIND server that is performing validation on DNSSEC-signed
+records.
+CVE-2015-5986 - denial-of-service vector which can be used against a
+BIND server that is performing recursion and (under limited conditions)
+an authoritative-only nameserver.
 
-I have seen that message in the mailing list and Thiago says:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.hash |    4 ++--
+ package/bind/bind.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-"Please reorder the includes in that file. The X11 includes must
-*always* be the last include in the .cpp. If you can, submit that fix to
-codereview.qt-project.org."
-
-Have you submitted that fix to codereview.qt-project.org? It would be
-good to fix it upstream.
-
-> I decided instead of adding a new patch to update the existing patch,
-> because it is an additional fix for the same problem. If you don't agree
-> I am happy to submit a seperate patch.
-> 
-> This version is updated as suggested by Arnout.
-> 
-> Signed-off-by: Marc Andre <marc.andre@netline.ch>
-> ---
->  package/qt5/qt5base/0003-xcb-egl-fixes.patch | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/qt5/qt5base/0003-xcb-egl-fixes.patch b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-> index 53f8453..0777c44 100644
-> --- a/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-> +++ b/package/qt5/qt5base/0003-xcb-egl-fixes.patch
-> @@ -1,11 +1,17 @@
-> -The vivante headers pull in X11 defines which break eglconvenience
-> +Some EGL headers pull in X11 defines which break eglconvenience
->  
->  * Adds a missing include to qeglplatformcontext.cpp
->  * Fix namespace collision on CursorShape, pulled in from X11/X.h
->  * Do not pass MESA_EGL_NO_X11_HEADERS when xcb is use
-> +* Reorder includes to have the X11-header the last include
-> +
-> +Based on patch from Yocto project and buildroot patch from
-> +Jerome Pouiller <jezz@sysmic.org>
-> +Updated to fix issue in qeglplatformscreen (reorder includes, see also
-> +http://lists.qt-project.org/pipermail/development/2013-March/010511.html)
->  
-> -[based on patch from Yocto project]
-
-I'm not sure if this is correct. Yes, you are modifying the patch and
-adding new stuff, but the rest is still based on Yocto Project's patch.
-I think it should stay, or at least say something like:
-
-[part of it based on patch from Yocto project]
-
->  Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> +Signed-off-by: Marc Andre <marc.andre@netline.ch>
->  
->  
->  diff -Nuar a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-> @@ -61,4 +67,19 @@ diff -Nuar a/src/platformsupport/eglconvenience/qeglplatformcontext.cpp b/src/pl
->   #include "qeglplatformscreen_p.h"
->   
->   QT_BEGIN_NAMESPACE
-> +--- qtbase-opensource-src-5.5.0.orig/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:46:57.116883353 +0200
-> ++++ qtbase-opensource-src-5.5.0/src/platformsupport/eglconvenience/qeglplatformscreen.cpp	2015-09-01 14:47:36.560882333 +0200
-> +@@ -31,11 +31,11 @@
-> + **
-> + ****************************************************************************/
-> +
-> +-#include "qeglplatformscreen_p.h"
-> +-#include "qeglplatformwindow_p.h"
-> + #include <QtGui/qwindow.h>
-> + #include <qpa/qwindowsysteminterface.h>
-> + #include <QtPlatformSupport/private/qopenglcompositor_p.h>
-> ++#include "qeglplatformscreen_p.h"
-> ++#include "qeglplatformwindow_p.h"
-> +
-> + QT_BEGIN_NAMESPACE
->   
-> 
-
-Regards,
-
-Vincent.
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 6bc2d1b..4c9fc40 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P2/bind-9.9.7-P2.tar.gz.sha256.asc
+-sha256	f5f433567e5f68d61460d86f691471259a49b6d10d7422acbd88b7fdb038b518	bind-9.9.7-P2.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P3/bind-9.9.7-P3.tar.gz.sha256.asc
++sha256	cb737dce18350890f350dd7d3bc836c62ea440103dfde184c09bc18cfad8a844	bind-9.9.7-P3.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 6201991..95051d1 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.9.7-P2
++BIND_VERSION = 9.9.7-P3
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_INSTALL_STAGING = YES
+ BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
