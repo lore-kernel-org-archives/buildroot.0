@@ -1,117 +1,142 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat,  5 Sep 2015 16:30:43 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gdb (7.10): fix doc build when make
-	info is missing
-In-Reply-To: <1441463443-9335-1-git-send-email-romain.naour@openwide.fr>
-References: <1441463443-9335-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441463443-9335-2-git-send-email-romain.naour@openwide.fr>
+Date: Sat, 5 Sep 2015 16:55:20 +0200
+Subject: [Buildroot] [RFC 00/37] efl bump to 1.14.2
+In-Reply-To: <CAAMcf8Cp0+p4rG+SYc3EHyQaahBe5M9YrkMMF+Uq0RP+tPJFQQ@mail.gmail.com>
+References: <CAAMcf8CO9XsiTBOJX3APO+ZXtyPLDZmHq2EU0LPT3UXKhTC-=g@mail.gmail.com>
+ <55D6F4A8.3000104@openwide.fr>
+ <CAAMcf8COScfy62sEC4uPKHw=LgyLWWtic9ypCF0DZMfu21hzdg@mail.gmail.com>
+ <55DB8FAF.7060509@openwide.fr>
+ <CAAMcf8Cp0+p4rG+SYc3EHyQaahBe5M9YrkMMF+Uq0RP+tPJFQQ@mail.gmail.com>
+Message-ID: <55EB0258.5020904@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If makeinfo is not found in the system then the missing
-script is used to warn the user.
+Hello Vicente,
 
-Before commit e30465112ed4c6320dd19107302057a5f7712cf2 the missing
-script returned 0 after printing the message.
+Sorry for the delay.
 
-Now, missing return 127 (command not found) to the Makefile and
-the build fail.
+Le 25/08/2015 00:09, vj a ?crit :
+> Hello Romain,
+> 
+> On Mon, Aug 24, 2015 at 10:42 PM, Romain Naour <romain.naour@openwide.fr> wrote:
+>> Hi Vicente
+>>
+>> Le 21/08/2015 19:56, vj a ?crit :
+>>> Hello Romain,
+>>>
+>>> On Fri, Aug 21, 2015 at 10:51 AM, Romain Naour <romain.naour@openwide.fr> wrote:
+>>>> Hi Vicente,
+>>>>
+>>>> Le 21/08/2015 02:30, vj a ?crit :
+>>>>> Hello Romain,
+>>>>> I've tested you efl update
+>>>>> https://github.com/RomainNaour/buildroot/tree/efl-1.15.0-v1
+>>>>> It did not work, :(
+>>>>> But applying the two patches below works again!
+>>>>> The first one was already commented in a previous e-mail.
+>>>>
+>>>> Yes, sorry I haven't looked at your issue yet.
+>>>>
+>>>> libmount seems to be optional and can be disabled with --disable-libmount:
+>>>> https://github.com/RomainNaour/buildroot/blob/efl-1.15.0-v1/package/efl/efl.mk#L35
+>>>
+>>> Without that dependency it failed with 1.14.2.
+>>> When I saw the dependency was not there in 1.15.0, I just added it
+>>> again without checking.
+>>> Just now I've tried it again without that patch and it's fine, so, you
+>>> can forget it.
+>>> Sorry for the hassle.
+>>
+>> It's ok ;-) I haven't heavily tested with a minimal config.
+>> Maybe next time can you post the last ~100 build log lines, it not always easy
+>> to reproduce a build issue...
+>>
+>>>
+>>>>
+>>>> But since it's not recommended to disable it, I'll apply your patch :)
+>>>>
+>>>>> The second is related to a regression in efl-1.15.0.
+>>>>
+>>>> Can you report your issue to the efl mailing list ?
+>>>
+>>> I know it would be better to have it fixed upstream, but have no time
+>>> for that now.
+>>> If you would like to, feel free to report it.
+>>> To debug it, it helps enabling the WRN and DGB macros in eina_module.c.
+>>
+>> Well, I can't really report an issue that I can't reproduce.
+> 
+> Do you mean that the fb backend is working for you?
 
-Ignore the code returned by missing in order to build successfully
-gdb even if makeinfo is not installed on the system.
+I mean I don't have this issue because I don't use the fb backend during my test.
 
-upstream status: to be submitted
+> Are you crosscompiling with upstream vanilla gcc>=4 for arm?
 
-Fixes:
-http://autobuild.buildroot.net/results/dee/dee1326baf26ad1eb6e12a7d033428eca50d00bc/build-end.log
+I'm using a toolchain for ARM build by buildroot with a uClibc-ng.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- ...db-fix-doc-build-when-makeinfo-is-missing.patch | 73 ++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 package/gdb/7.10/0001-gdb-fix-doc-build-when-makeinfo-is-missing.patch
+> It might be a compiler bug too.
+> I'm using musl gcc 4.9.3 build with buildroot itself.
+> gcc 5 seems broken for arm crosscompilation.
+> Just for completeness, the compiler I'm using was build with:
+> buildroot.version=2ebbb7fe355c18a0be3d0fb8e50997142113c46b
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_ARM_EABIHF=y
+> BR2_ARM_FPU_NEON=y
+> BR2_HOST_DIR="/opt/arm-buildroot-linux-musleabihf"
+> BR2_OPTIMIZE_3=y
+> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
+> BR2_BINUTILS_VERSION_2_25_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_GCC_ENABLE_LTO=y
+> BR2_GCC_ENABLE_GRAPHITE=y
+> BR2_TARGET_OPTIMIZATION="-march=armv7-a -mtune=cortex-a8
+> -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard"
 
-diff --git a/package/gdb/7.10/0001-gdb-fix-doc-build-when-makeinfo-is-missing.patch b/package/gdb/7.10/0001-gdb-fix-doc-build-when-makeinfo-is-missing.patch
-new file mode 100644
-index 0000000..e57737d
---- /dev/null
-+++ b/package/gdb/7.10/0001-gdb-fix-doc-build-when-makeinfo-is-missing.patch
-@@ -0,0 +1,73 @@
-+From be4bff50cf256d3f82240bd6bea9b43f22e82ce6 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sat, 5 Sep 2015 16:02:28 +0200
-+Subject: [PATCH] gdb: fix doc build when makeinfo is missing
-+
-+If makeinfo is not found in the system then the missing
-+script is used to warn the user.
-+
-+Before commit e30465112ed4c6320dd19107302057a5f7712cf2 the missing
-+script returned 0 after printing the message.
-+
-+Now, missing return 127 (command not found) to the Makefile and
-+the build fail.
-+
-+Ignore the code returned by missing in order to build successfully
-+gdb even if makeinfo is not installed on the system.
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/dee/dee1326baf26ad1eb6e12a7d033428eca50d00bc/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ gdb/doc/Makefile.in | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/gdb/doc/Makefile.in b/gdb/doc/Makefile.in
-+index 85ed95b..acc4e10 100644
-+--- a/gdb/doc/Makefile.in
-++++ b/gdb/doc/Makefile.in
-+@@ -487,7 +487,7 @@ gdb.pdf: ${GDB_DOC_FILES}
-+ # GDB MANUAL: info file
-+ gdb.info: ${GDB_DOC_FILES}
-+ 	$(MAKEINFO_CMD) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) \
-+-		-o gdb.info $(srcdir)/gdb.texinfo
-++		-o gdb.info $(srcdir)/gdb.texinfo | true
-+ 
-+ # GDB MANUAL: roff translations
-+ # Try to use a recent texi2roff.  v2 was put on prep in jan91.
-+@@ -562,15 +562,15 @@ gdb.mm: $(GDB_DOC_FILES) links2roff
-+ # GDB MANUAL: HTML file
-+ 
-+ gdb/index.html: ${GDB_DOC_FILES}
-+-	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo
-++	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo | true
-+ 
-+ stabs.info: $(STABS_DOC_FILES)
-+-	$(MAKEINFO_CMD) -I $(srcdir) -o stabs.info $(srcdir)/stabs.texinfo
-++	$(MAKEINFO_CMD) -I $(srcdir) -o stabs.info $(srcdir)/stabs.texinfo | true
-+ 
-+ # STABS DOCUMENTATION: HTML file
-+ 
-+ stabs/index.html: $(STABS_DOC_FILES)
-+-	$(MAKEHTML) $(MAKEHTMLFLAGS) -I $(srcdir) $(srcdir)/stabs.texinfo
-++	$(MAKEHTML) $(MAKEHTMLFLAGS) -I $(srcdir) $(srcdir)/stabs.texinfo | true
-+ 
-+ # Clean these up before each run.  Avoids a catch 22 with not being
-+ # able to re-generate these files (to fix a corruption) because these
-+@@ -609,10 +609,10 @@ annotate.pdf: $(ANNOTATE_DOC_FILES)
-+ 	$(TEXI2DVI) --pdf -I $(srcdir) $(srcdir)/annotate.texinfo
-+ 
-+ annotate.info: $(ANNOTATE_DOC_FILES)
-+-	$(MAKEINFO_CMD) -I $(srcdir) -o annotate.info $(srcdir)/annotate.texinfo
-++	$(MAKEINFO_CMD) -I $(srcdir) -o annotate.info $(srcdir)/annotate.texinfo | true
-+ 
-+ annotate/index.html: $(ANNOTATE_DOC_FILES)
-+-	$(MAKEHTML) $(MAKEHTMLFLAGS) -I $(srcdir) $(srcdir)/annotate.texinfo
-++	$(MAKEHTML) $(MAKEHTMLFLAGS) -I $(srcdir) $(srcdir)/annotate.texinfo | true
-+ 
-+ # Man pages
-+ gdb.1: $(GDB_DOC_FILES)
-+-- 
-+2.4.3
-+
--- 
-2.4.3
+Theses flags are handled directly by your target configuration in "Target
+options" menu. You don't need to define them in BR2_TARGET_OPTIMIZATION.
+
+> 
+>> See, I reported the issue about SDL2 dependency and it's now fixed in the efl
+>> 1.15.1. So, I can drop the last patch and avoid to autoreconf the package.
+>>
+>> Also, I'm probably not the good person to report an efl issue.
+>> Honestly, I don't know what to do with -fvisibility=default.
+>> It would be better if you can send just an email to the enlightenment mailing
+>> list to report your issue.
+> 
+> Is "enlightenment-devel at lists.sourceforge.net" the correct mailing
+> list for an efl bug?
+
+Yes it is.
+
+Best regards,
+Romain
+
+> 
+>>>
+>>>>
+>>>>> The testing I've done has been with the musl libc and with
+>>>>> BR2_PACKAGE_EFL_RECOMMENDED_CONFIG unset.
+>>>>> Basically the same config as in the previous e-mail.
+>>>>>
+>>>>> A minor issue: check the spelling of recommanded.
+>>>>
+>>>> Ha indeed recommanded is used in Config.in prompt
+>>>> (my French was turned on sorry ;-) )
+>>>>
+>>>> Thanks for testing!
+>>>
+>>> Thanks for adding musl and maintaining efl!
+>>
+>> You're welcome!
+>>
+>> Best regards,
+>> Romain
+> 
+> Regards,
+>   Vicente.
+> 
