@@ -1,47 +1,53 @@
-From: Douglas RAILLARD <public.douglas.raillard@gmail.com>
-Date: Sat,  5 Sep 2015 18:33:44 +0200
-Subject: [Buildroot] [PATCH 3/3] Fix uClibc build for ARM-nommu
-Message-ID: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 05 Sep 2015 19:02:01 +0200
+Subject: [Buildroot] [PATCHv4 1/2] udisks: bump to version 1.0.5
+In-Reply-To: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 2 Sep 2015 15:21:19 +0100")
+References: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87y4gklrzq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Use Thumb in uClibc when targeting Thumb(2) in Buildroot
-* Disable context functions that are not Thumb ready
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: Douglas RAILLARD <public.douglas.raillard@gmail.com>
----
- package/uclibc/uclibc.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ > This version depends on libgudev when using systemd, otherwise it fails
+ > with an error like this one:
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index a2ba230..116efb1 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -94,6 +94,14 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
- UCLIBC_EXTRA_CFLAGS += -marm
- endif
+ > checking for GUDEV... no
+ > configure: error: Package requirements (gudev-1.0 >= 147) were not met:
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ > Changes v3 -> v4: improve the libgudev dependency comment [Thomas]
+ > Changes v2 -> v3: add a comment about the libgudev dependency
+ > Changes v1 -> v2: depend on libgudev when using systemd
+
+ > +++ b/package/udisks/udisks.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
-+# UCLIBC_HAS_CONTEXT_FUNCS is broken with Thumb and Thumb2
-+ifeq (y,$(filter y,$(BR2_ARM_INSTRUCTIONS_THUMB) $(BR2_ARM_INSTRUCTIONS_THUMB2)))
-+define UCLIBC_ARM_THUMB_CONFIG
-+	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-+endef
-+endif
-+
- ifeq ($(BR2_UCLIBC_ARM_BX),y)
- define UCLIBC_ARM_BX_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,USE_BX,$(@D)/.config)
-@@ -376,6 +384,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_ARC_TYPE_CONFIG)
- 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
-+	$(UCLIBC_ARM_THUMB_CONFIG)
- 	$(UCLIBC_ARM_BX_CONFIG)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
- 	$(UCLIBC_MIPS_ISA_CONFIG)
+ > -UDISKS_VERSION = 1.0.4
+ > +UDISKS_VERSION = 1.0.5
+ >  UDISKS_SITE = http://hal.freedesktop.org/releases
+ >  UDISKS_LICENSE = GPLv2+
+ >  UDISKS_LICENSE_FILES = COPYING
+ > @@ -22,6 +22,15 @@ UDISKS_DEPENDENCIES = 	\
+ 
+ >  UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
+ 
+ > +# When eudev is used as the udev provider, libgudev is automatically
+ > +# provided as it is part of eudev. However, when systemd is used as the
+ > +# udev provider, libgudev is not provided, and needs to be built
+ > +# separately. This is why we select the libgudev package only if systemd
+ > +# is used.
+ > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ > +UDISKS_CONF_OPTS += libgudev
+
+Ehh, don't you mean UDISKS_DEPENDENCIES here?
+
 -- 
-2.5.1
+Bye, Peter Korsgaard
