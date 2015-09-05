@@ -1,37 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 5 Sep 2015 14:41:22 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-09-04
-In-Reply-To: <20150905063017.01FAA10139B@stock.ovh.net>
-References: <20150905063017.01FAA10139B@stock.ovh.net>
-Message-ID: <55EAF102.6030807@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Sep 2015 11:44:41 +0200
+Subject: [Buildroot] [PATCHv3] system: add options for /bin /sbin and
+ /lib to be symlinks into /usr
+In-Reply-To: <55EAB410.1070300@mind.be>
+References: <1441397852-23461-1-git-send-email-yann.morin.1998@free.fr>
+ <55EAB410.1070300@mind.be>
+Message-ID: <20150905114441.2e18623d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni, Francois Perrad, all,
+Hello,
 
+On Sat, 5 Sep 2015 11:21:20 +0200, Arnout Vandecappelle wrote:
 
-On 05/09/15 07:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-09-04
+> > +ifeq ($(BR2_ROOTFS_MERGED_USR),)
+> > +EUDEV_CONF_OPTS += --with-rootlibdir=/lib --enable-split-usr
+> > +endif
+> 
+>  It would be nice if someone could do a runtime test with eudev, both the merged
+> and the split case.
 
->        mipsel |          perl-html-parser-3.71 | NOK | http://autobuild.buildroot.net/results/128671dfa23d843698a63220c2fac1f44e1d5845/
+I can add some test cases in my testing infrastructure, to test the
+eudev merged and split cases, and the systemd case. It makes it a lot
+easier than doing manual testing over and over again when you want to
+test new iterations of the patches.
 
-does it make sense building perl modules statically? They are intended 
-to be loaded by the dynamic loader, so..., should we disable all perl 
-modules for static builds? Francois?
+Let me know if there is some interest :)
 
->      mips64el | xdriver_xf86-video-r128-6.1... | NOK | http://autobuild.buildroot.net/results/34fbb7434d94b32de82f7094facbe57abef2573f/
+Thanks,
 
-This looks weird...
-
-r128_dri.c:61:26: fatal error: GL/glxtokens.h: No such file or directory
-
-... because that file should be provided by xproto_glproto which is 
-already installed according to the build-time.log. I'll investigate it.
-
-Regards,
-
-Vincent.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
