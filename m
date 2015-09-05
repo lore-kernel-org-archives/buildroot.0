@@ -1,55 +1,81 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Sep 2015 11:11:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 10.6.6
-Message-ID: <1441444269-1741-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 5 Sep 2015 11:21:20 +0200
+Subject: [Buildroot] [PATCHv3] system: add options for /bin /sbin and
+ /lib to be symlinks into /usr
+In-Reply-To: <1441397852-23461-1-git-send-email-yann.morin.1998@free.fr>
+References: <1441397852-23461-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <55EAB410.1070300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 4 ++--
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+On 04-09-15 22:17, Yann E. MORIN wrote:
+[snip]
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 1aa74b3..a005f45 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -22,16 +22,18 @@ EUDEV_CONF_ENV += LIBS=-lrt
+>  EUDEV_CONF_OPTS =		\
+>  	--disable-manpages	\
+>  	--sbindir=/sbin		\
+> -	--with-rootlibdir=/lib	\
+>  	--libexecdir=/lib	\
+>  	--with-firmware-path=/lib/firmware	\
+>  	--disable-introspection			\
+> -	--enable-split-usr			\
+>  	--enable-libkmod
+>  
+>  EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+>  EUDEV_PROVIDES = udev
+>  
+> +ifeq ($(BR2_ROOTFS_MERGED_USR),)
+> +EUDEV_CONF_OPTS += --with-rootlibdir=/lib --enable-split-usr
+> +endif
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 85666cc..2eaa515 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 10.6.4
-+MESA3D_HEADERS_VERSION = 10.6.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 453ee41..d957357 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/mesa-announce/2015-August/000166.html
--sha256	8f5ac103f0f503de2f7a985b0df349bd4ecdfe7f51c714be146fa5a9a3c07b77	mesa-10.6.4.tar.xz
-+# From http://cgit.freedesktop.org/mesa/mesa/commit/?id=f39bc1c828e14b8e8d71ea02e4c21ea7397a1ab4
-+sha256	570f2154b7340ff5db61ff103bc6e85165b8958798b78a50fa2df488e98e5778	mesa-10.6.6.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 7722af8..d620a30 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.6.4
-+MESA3D_VERSION = 10.6.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+ It would be nice if someone could do a runtime test with eudev, both the merged
+and the split case.
+
+> +
+>  ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
+>  EUDEV_CONF_OPTS += --enable-rule_generator
+>  endif
+> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+[snip]
+>  define SKELETON_INSTALL_TARGET_CMDS
+>  	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
+>  		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+>  		$(SKELETON_PATH)/ $(TARGET_DIR)/
+> -	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> -		$(TARGET_DIR_WARNING_FILE)
+> +	$(SKELETON_USR_SYMLINKS_OR_DIRS)
+>  	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+> -	mkdir -p $(TARGET_DIR)/usr
+
+ Huh, where did the mkdir go? Did you remove it because /usr is already in the
+skeleton?
+
+>  	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+> +	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> +		$(TARGET_DIR_WARNING_FILE)
+
+ And why did you move this one around?
+
+
+ Regards,
+ Arnout
+
+>  endef
+>  
+>  SKELETON_TARGET_GENERIC_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+[snip]
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
