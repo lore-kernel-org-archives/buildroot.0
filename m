@@ -1,39 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Sep 2015 12:13:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libssh: needs MMU support
-Message-ID: <1441447989-9063-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  5 Sep 2015 12:39:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libldns: Fix static build
+Message-ID: <1441449596-2894-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/405/40562b1b68bb7c57a37907eb16fcae88448f5bc6/
-http://autobuild.buildroot.net/results/194/194ee885dd195706bded3ed524ff1685f4f6d4b5/
-http://autobuild.buildroot.net/results/55c/55c00309bc7497529d28e48dce14299adeb11ede/
-http://autobuild.buildroot.net/results/5d4/5d4e40fc4bb9c5a7ede26434c3d6ab325c631ecc/
-http://autobuild.buildroot.net/results/8be/8bead9cfd826843482ccc37e9c1290b8774c8de0/
-http://autobuild.buildroot.net/results/401/40100e6b07c3057ba427975ffdf3c3834c6fb385/
-http://autobuild.buildroot.net/results/d70/d7083a8b197e1833ddaa30620ec1037ed15ec0ce/
-http://autobuild.buildroot.net/results/6a2/6a20f29e65f446165b21cba3d55294e6ea446ff2/
-http://autobuild.buildroot.net/results/718/718fdc0e5c67fd5cb1bceaec97f39285c159fbda/
+http://autobuild.buildroot.net/results/a0e/a0e686cbe5104f48c9ab05aef7b2989abdb23821/
+http://autobuild.buildroot.net/results/527/527b6167fcade1333d8bedffca21e32e410ed8c9/
+http://autobuild.buildroot.net/results/0f2/0f229b6806b5cf18d5b56f80088bba7dc3c6eb28/
+http://autobuild.buildroot.net/results/bad/bad1c0590868c1e97f647172f85b112ff2604994/
+http://autobuild.buildroot.net/results/7db/7dba36ae44560e65a00daf912abe8b43fa8a060d/
+http://autobuild.buildroot.net/results/3bf/3bf24e3e845ad8ebcfd0469787e7b7342ecfe3c5/
+http://autobuild.buildroot.net/results/7c6/7c6985518bb068ef1764dfb44c59c9f583f07c71/
+http://autobuild.buildroot.net/results/211/2117de3dc3d1168bdba0c771b54b3d998e3d62ce/
+http://autobuild.buildroot.net/results/908/90893b2cdbbc02d75be5cbc09b8a244d5b05d386/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libssh/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libldns/libldns.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 080ad18..719ca8c 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBSSH
-         bool "libssh"
-+        depends on BR2_USE_MMU # fork()
-         # Either OpenSSL or libgcrypt are mandatory
-         select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
-         help
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 9a28404..5073c09 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -33,4 +33,13 @@ LIBLDNS_CONF_OPTS += \
+ 	--disable-sha2
+ endif
+ 
++# missing -lz is breaks configure, add it using pkgconf
++# compiling target linktest also fails due -lz being placed at a wrong
++# position during linking, so we avoid this target by only building the
++# target 'lib', which is enough for us
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBLDNS_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
++LIBLDNS_MAKE_OPTS = lib
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.1.4
