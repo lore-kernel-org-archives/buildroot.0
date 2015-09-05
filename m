@@ -1,45 +1,93 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Sep 2015 12:39:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libldns: Fix static build
-Message-ID: <1441449596-2894-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Sep 2015 14:13:08 +0200
+Subject: [Buildroot] [PATCHv3] system: add options for /bin /sbin and
+ /lib to be symlinks into /usr
+In-Reply-To: <55EAB410.1070300@mind.be>
+References: <1441397852-23461-1-git-send-email-yann.morin.1998@free.fr>
+ <55EAB410.1070300@mind.be>
+Message-ID: <20150905121308.GA3604@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://autobuild.buildroot.net/results/a0e/a0e686cbe5104f48c9ab05aef7b2989abdb23821/
-http://autobuild.buildroot.net/results/527/527b6167fcade1333d8bedffca21e32e410ed8c9/
-http://autobuild.buildroot.net/results/0f2/0f229b6806b5cf18d5b56f80088bba7dc3c6eb28/
-http://autobuild.buildroot.net/results/bad/bad1c0590868c1e97f647172f85b112ff2604994/
-http://autobuild.buildroot.net/results/7db/7dba36ae44560e65a00daf912abe8b43fa8a060d/
-http://autobuild.buildroot.net/results/3bf/3bf24e3e845ad8ebcfd0469787e7b7342ecfe3c5/
-http://autobuild.buildroot.net/results/7c6/7c6985518bb068ef1764dfb44c59c9f583f07c71/
-http://autobuild.buildroot.net/results/211/2117de3dc3d1168bdba0c771b54b3d998e3d62ce/
-http://autobuild.buildroot.net/results/908/90893b2cdbbc02d75be5cbc09b8a244d5b05d386/
+Arnout, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libldns/libldns.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On 2015-09-05 11:21 +0200, Arnout Vandecappelle spake thusly:
+> On 04-09-15 22:17, Yann E. MORIN wrote:
+> [snip]
+> > diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> > index 1aa74b3..a005f45 100644
+> > --- a/package/eudev/eudev.mk
+> > +++ b/package/eudev/eudev.mk
+> > @@ -22,16 +22,18 @@ EUDEV_CONF_ENV += LIBS=-lrt
+> >  EUDEV_CONF_OPTS =		\
+> >  	--disable-manpages	\
+> >  	--sbindir=/sbin		\
+> > -	--with-rootlibdir=/lib	\
+> >  	--libexecdir=/lib	\
+> >  	--with-firmware-path=/lib/firmware	\
+> >  	--disable-introspection			\
+> > -	--enable-split-usr			\
+> >  	--enable-libkmod
+> >  
+> >  EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+> >  EUDEV_PROVIDES = udev
+> >  
+> > +ifeq ($(BR2_ROOTFS_MERGED_USR),)
+> > +EUDEV_CONF_OPTS += --with-rootlibdir=/lib --enable-split-usr
+> > +endif
+>  It would be nice if someone could do a runtime test with eudev, both the merged
+> and the split case.
 
-diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
-index 9a28404..5073c09 100644
---- a/package/libldns/libldns.mk
-+++ b/package/libldns/libldns.mk
-@@ -33,4 +33,13 @@ LIBLDNS_CONF_OPTS += \
- 	--disable-sha2
- endif
- 
-+# missing -lz is breaks configure, add it using pkgconf
-+# compiling target linktest also fails due -lz being placed at a wrong
-+# position during linking, so we avoid this target by only building the
-+# target 'lib', which is enough for us
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBLDNS_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
-+LIBLDNS_MAKE_OPTS = lib
-+endif
-+
- $(eval $(autotools-package))
+I did.
+
+The split-usr case is what we have had until now, and it works (I'm
+using it daily with Kodi).
+
+The merged-usr case I build-tested and slightly runtime-tested in the
+same conditions (Kodi), and could see no difference in behaviour with
+the split-usr case.
+
+It's the systemd case that I did not runtime-test (only build-tested).
+
+> >  ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
+> >  EUDEV_CONF_OPTS += --enable-rule_generator
+> >  endif
+> > diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+> [snip]
+> >  define SKELETON_INSTALL_TARGET_CMDS
+> >  	rsync -a --ignore-times $(SYNC_VCS_EXCLUSIONS) \
+> >  		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+> >  		$(SKELETON_PATH)/ $(TARGET_DIR)/
+> > -	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> > -		$(TARGET_DIR_WARNING_FILE)
+> > +	$(SKELETON_USR_SYMLINKS_OR_DIRS)
+> >  	ln -snf lib $(TARGET_DIR)/$(LIB_SYMLINK)
+> > -	mkdir -p $(TARGET_DIR)/usr
+>  Huh, where did the mkdir go? Did you remove it because /usr is already in the
+> skeleton?
+
+Yes, it's not needed because we indeed already have it in the skeleton.
+I should probably have said so in the commit log, indeed.
+
+> >  	ln -snf lib $(TARGET_DIR)/usr/$(LIB_SYMLINK)
+> > +	$(INSTALL) -m 0644 support/misc/target-dir-warning.txt \
+> > +		$(TARGET_DIR_WARNING_FILE)
+>  And why did you move this one around?
+
+IMHO, it makes more sense to add it last, after the skeleton has been
+entirely constructed. Granted, it's mostly eye-candy, still I find it
+much nicer to look at this code now than as it was before.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
