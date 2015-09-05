@@ -1,45 +1,56 @@
-From: =?UTF-8?B?Q8OpZHJpYyBNYXJpZQ==?= <cedric.marie@openmailbox.org>
-Date: Sat, 05 Sep 2015 23:18:48 +0200
-Subject: [Buildroot] CMake and VERBOSE variable
-In-Reply-To: <55E4D689.30103@mind.be>
-References: <9943347198fceae1227501e1d00f818a@openmailbox.org>
- <5578B394.1010503@mind.be> <a5c10080f12174d721c5f1ebad30b3f1@openmailbox.org>
- <5579E9EF.4070402@mind.be> <0d88f0bd848eeb62c868dc2d5dffe496@openmailbox.org>
- <55870F2F.4080700@mind.be> <4fd6c4c54bc90972d20b6f04b62b227e@openmailbox.org>
- <CAHXCMMJWjiKVCi-vjWftDgAxq7JDN+You3Go-NCvQVS81AC1Cw@mail.gmail.com>
- <7f746aa9c68a301002cdca28b6cb3f51@openmailbox.org>
- <CAHXCMM+-eyJRSa5c8WAtqptC0MTbJNBb4bZdhBBaY3yxYvAauw@mail.gmail.com>
- <0494936f4284565201a58a70d0a3c08d@openmailbox.org>
- <ae20692cc561152ac16a33820206a599@openmailbox.org> <55D9016F.5080602@mind.be>
- <20150831092822.521c2c72@free-electrons.com> <55E449F9.90407@openmailbox.org>
- <55E4D689.30103@mind.be>
-Message-ID: <55EB5C38.5090303@openmailbox.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 5 Sep 2015 23:50:33 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gdb (7.9): fix doc build when
+ makeinfo is missing
+In-Reply-To: <20150905200930.7e018f2a@free-electrons.com>
+References: <1441463443-9335-1-git-send-email-romain.naour@openwide.fr>
+ <20150905200930.7e018f2a@free-electrons.com>
+Message-ID: <55EB63A9.8000104@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-I've just sent the patch with my modifications.
+Le 05/09/2015 20:09, Thomas Petazzoni a ?crit :
+> Romain,
+> 
+> On Sat,  5 Sep 2015 16:30:42 +0200, Romain Naour wrote:
+> 
+>> + gdb/index.html: ${GDB_DOC_FILES}
+>> +-	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo
+>> ++	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo | true
+> 
+> Can you try instead to just prepend a - at the beginning of the line?
+> 
+> 	-$(MAKEHTML) ....
+> 
 
- >> we turn it to quiet by
- >> forcing explicit V=0.
->   Perhaps we could do that when V=0 is passed explicitly on buildroot's top-level
-> make.
+It doesn't work. What's the meaning of a - in this case ?
 
-That's what I've done. I'm not sure whether it should be added in 
-Buildroot doc (8.1: make tips) or not, since it is specific to autotools 
-and has no effect on other packages.
+> Or better yet, for a properly upstreamable solution, a --enable-doc
+> option to explicitly enable or disable the doc. Or something that
+> detects if makeinfo is available, and if it isn't, that doesn't try to
+> generate the documentation.
 
+It's not easy to add a new options in configure.ac since a specific version of
+autoconf is needed. Also it prevent to use GDB_AUTORECONF...
 
->   BTW, this stuff should also be tested from an output directory and with a
-> non-022 umask.
+configure.ac:34: error: Please use exactly Autoconf 2.64 instead of 2.69.
 
-I have checked with O=... and with a different umask: the V option is 
-correctly forwarded.
+Another solution is to remove "doc" directory from SUBDIRS in gdb/Makefile.in:
+-SUBDIRS = doc @subdirs@ data-directory $(GNULIB_BUILDDIR)
++SUBDIRS = @subdirs@ data-directory $(GNULIB_BUILDDIR)
 
+Thoughts ?
 
--- 
-C?dric
+Best regards,
+Romain
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
