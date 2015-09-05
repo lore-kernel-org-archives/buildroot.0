@@ -1,35 +1,45 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 5 Sep 2015 17:24:23 +0200
-Subject: [Buildroot] [PATCH 2/3] uclibc: fix coreutils cut bug,
- enable needed config symbols
-Message-ID: <20150905152423.GA23237@waldemar-brodkorb.de>
+Date: Sat, 5 Sep 2015 17:25:22 +0200
+Subject: [Buildroot] [PATCH 3/3] uclibc: symlinks are automatically created
+ by uClibc-ng makefile
+Message-ID: <20150905152522.GA23333@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes https://bugs.buildroot.org/show_bug.cgi?id=4099
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/uclibc/uClibc-ng.config |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uclibc.mk |   15 ---------------
+ 1 file changed, 15 deletions(-)
 
-diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-index 6523585..c17603d 100644
---- a/package/uclibc/uClibc-ng.config
-+++ b/package/uclibc/uClibc-ng.config
-@@ -24,8 +24,8 @@ UCLIBC_HAS_LIBNSL_STUB=y
- UCLIBC_HAS_CTYPE_CHECKED=y
- UCLIBC_HAS_HEXADECIMAL_FLOATS=y
- UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
--# UCLIBC_HAS_STDIO_GETC_MACRO is not set
--# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
-+UCLIBC_HAS_STDIO_GETC_MACRO=y
-+UCLIBC_HAS_STDIO_PUTC_MACRO=y
- UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
- UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
- UCLIBC_HAS_PRINTF_M_SPEC=y
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index a2ba230..eaac9dc 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -434,21 +434,6 @@ define UCLIBC_INSTALL_UTILS_TARGET
+ endef
+ endif
+ 
+-# gcc produces binaries that use ld{64,}-uClibc.so.0 as the program
+-# interpreter, but since uClibc-ng version is 1.0.0, it generates
+-# ld{64,}-uClibc.so.1. In order to avoid changing gcc, we simply
+-# create the necessary symbolic links here.
+-ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+-define UCLIBC_INSTALL_LDSO_SYMLINKS
+-	if [ -e $(TARGET_DIR)/lib/ld64-uClibc.so.1 ]; then \
+-		(cd $(TARGET_DIR)/lib;ln -sf ld64-uClibc.so.1 ld64-uClibc.so.0) \
+-	fi
+-	if [ -e $(TARGET_DIR)/lib/ld-uClibc.so.1 ]; then \
+-		(cd $(TARGET_DIR)/lib;ln -sf ld-uClibc.so.1 ld-uClibc.so.0) \
+-	fi
+-endef
+-endif
+-
+ define UCLIBC_INSTALL_TARGET_CMDS
+ 	$(MAKE1) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
 -- 
 1.7.10.4
