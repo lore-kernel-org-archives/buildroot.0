@@ -1,39 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Sep 2015 15:25:58 +0200
-Subject: [Buildroot] [PATCH 3/3] Fix uClibc build for ARM-nommu
-In-Reply-To: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
-References: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
-Message-ID: <20150906152558.6472329b@free-electrons.com>
+Date: Sun, 6 Sep 2015 15:26:47 +0200
+Subject: [Buildroot] [PATCH 2/3] uclibc: fix coreutils cut bug,
+ enable needed config symbols
+In-Reply-To: <878u8jlwlg.fsf@dell.be.48ers.dk>
+References: <20150905152423.GA23237@waldemar-brodkorb.de>
+ <878u8jlwlg.fsf@dell.be.48ers.dk>
+Message-ID: <20150906152647.3094d7f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Douglas RAILLARD,
+Peter, Waldemar,
 
-On Sat,  5 Sep 2015 18:33:44 +0200, Douglas RAILLARD wrote:
+On Sun, 06 Sep 2015 11:34:51 +0200, Peter Korsgaard wrote:
+> >>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+> 
+>  > Fixes https://bugs.buildroot.org/show_bug.cgi?id=4099
+>  > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> I slightly tweaked the description to make it clear this is for
+> uClibc-ng and committed, thanks.
 
-> +# UCLIBC_HAS_CONTEXT_FUNCS is broken with Thumb and Thumb2
-> +ifeq (y,$(filter y,$(BR2_ARM_INSTRUCTIONS_THUMB) $(BR2_ARM_INSTRUCTIONS_THUMB2)))
+This is not only for uClibc-ng, it should also be done in
+uClibc-0.9.33.config and uClibc-snapshot.config, as far as I understand.
 
-Why such a complicated condition? BR2_ARM_INSTRUCTIONS_THUMB and
-BR2_ARM_INSTRUCTIONS_THUMB2 are in a "choice" ... "endchoice" block, so
-only one of the two can be set to 'y' at any given time. So you can do:
-
-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
-
-instead.
-
-> +define UCLIBC_ARM_THUMB_CONFIG
-> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-> +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-> +endef
-> +endif
-
-Other than that, it looks good to me.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
