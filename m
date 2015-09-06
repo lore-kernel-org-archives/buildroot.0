@@ -1,56 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Sep 2015 22:44:47 +0200
-Subject: [Buildroot] [git commit] uclibc: fix coreutils cut bug,
-	enable needed config symbols
-Message-ID: <20150906204737.925A4818F5@busybox.osuosl.org>
+Date: Sun, 6 Sep 2015 22:45:25 +0200
+Subject: [Buildroot] [git commit] package/libsoundtouch: needs c++
+Message-ID: <20150906204737.B454B81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26ae113d1186951c4969000f5de2ec67e7f1ba3e
+commit: http://git.buildroot.net/buildroot/commit/?id=c42e3d554c06a0f3aa544d809093cfa7013a5193
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Symbols needed for all versions/flavours of uClibc.
+Fixes
+http://autobuild.buildroot.net/results/a92/a92fcb94492edfdf15c1e18c13b03d75c0210382/
+http://autobuild.buildroot.net/results/d1d/d1d9a17a93f5ab61b4fbab67e0b61e79709d411f/
+http://autobuild.buildroot.net/results/d55/d5548c5dbbb94bef8eccf614962d0a4fe5c91133/
+http://autobuild.buildroot.net/results/798/798f103e066f94314e5664b8bcad7337e40a3fd7/
+http://autobuild.buildroot.net/results/484/48407da02451382a1cf7e0c16efa7db8a338ded0/
+http://autobuild.buildroot.net/results/4a0/4a0ac131884c0bc231c9f1dfd356cb533fbe5f0b/
+http://autobuild.buildroot.net/results/162/1629703bc3160143875a1771f1ac25a079ec94ff/
+http://autobuild.buildroot.net/results/be1/be1b69d0394de37615d3a3d2d4c4e25125b71ec2/
+http://autobuild.buildroot.net/results/32b/32b9512de01af6417d2db668dc2d75953119f8ab/
+http://autobuild.buildroot.net/results/1c0/1c0d433d435639f4355098fc6915c3588f922cad/
 
-Fixes https://bugs.buildroot.org/show_bug.cgi?id=4099
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uClibc-0.9.33.config   |    4 ++--
- package/uclibc/uClibc-snapshot.config |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libsoundtouch/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/uClibc-0.9.33.config b/package/uclibc/uClibc-0.9.33.config
-index afee4fd..104eb5c 100644
---- a/package/uclibc/uClibc-0.9.33.config
-+++ b/package/uclibc/uClibc-0.9.33.config
-@@ -204,8 +204,8 @@ UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
- # UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
- # UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
- # UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
--# UCLIBC_HAS_STDIO_GETC_MACRO is not set
--# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
-+UCLIBC_HAS_STDIO_GETC_MACRO=y
-+UCLIBC_HAS_STDIO_PUTC_MACRO=y
- UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
- # UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
- UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
-diff --git a/package/uclibc/uClibc-snapshot.config b/package/uclibc/uClibc-snapshot.config
-index f999a75..cbb4737 100644
---- a/package/uclibc/uClibc-snapshot.config
-+++ b/package/uclibc/uClibc-snapshot.config
-@@ -24,8 +24,8 @@ UCLIBC_HAS_LIBNSL_STUB=y
- UCLIBC_HAS_CTYPE_CHECKED=y
- UCLIBC_HAS_HEXADECIMAL_FLOATS=y
- UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
--# UCLIBC_HAS_STDIO_GETC_MACRO is not set
--# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
-+UCLIBC_HAS_STDIO_GETC_MACRO=y
-+UCLIBC_HAS_STDIO_PUTC_MACRO=y
- UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
- UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
- UCLIBC_HAS_PRINTF_M_SPEC=y
+diff --git a/package/libsoundtouch/Config.in b/package/libsoundtouch/Config.in
+index 396036f..fdbc075 100644
+--- a/package/libsoundtouch/Config.in
++++ b/package/libsoundtouch/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBSOUNDTOUCH
+ 	bool "libsoundtouch"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  SoundTouch is an open-source audio processing library for
+ 	  changing the Tempo, Pitch and Playback Rates of audio streams
+ 	  or audio files.
+ 
+ 	  http://www.surina.net/soundtouch
++
++comment "libsoundtouch needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
