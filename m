@@ -1,76 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Sep 2015 22:48:42 +0200
-Subject: [Buildroot] [git commit] perl: bump to version 5.22.0
-Message-ID: <20150906204918.653A681D6B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Sep 2015 22:51:36 +0200
+Subject: [Buildroot] [PATCH v2 2/3] elf2flt: fix build when LTO is
+	enabled
+In-Reply-To: <1441554499-23595-1-git-send-email-public.douglas.raillard@gmail.com>
+References: <20150906152401.67d5df05@free-electrons.com>
+ <1441554499-23595-1-git-send-email-public.douglas.raillard@gmail.com>
+Message-ID: <20150906205136.GG3580@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=072986df1c6d9a80e058f3621a6ed17360288f44
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Douglas, All,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl/perl.hash   |   10 +++++-----
- package/perl/perl.mk     |    8 ++++----
- support/scripts/scancpan |    2 +-
- 3 files changed, 10 insertions(+), 10 deletions(-)
+On 2015-09-06 17:48 +0200, Douglas RAILLARD spake thusly:
+> Signed-off-by: Douglas RAILLARD <public.douglas.raillard@gmail.com>
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 0ee587e..2e3af95 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,7 +1,7 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.20.2.tar.bz2.{md5,sha1,sha256}.txt
--md5    21062666f1c627aeb6dbff3c6952738b                                 perl-5.20.2.tar.bz2
--sha1   63126c683b4c79c35008a47d56f7beae876c569f                         perl-5.20.2.tar.bz2
--sha256 e5a4713bc65e1da98ebd833dce425c000768bfe84d17ec5183ec5ca249db71ab perl-5.20.2.tar.bz2
-+# Hashes from: http://www.cpan.org/src/5.0/perl-5.22.0.tar.bz2.{md5,sha1,sha256}.txt
-+md5    f67b152160431b3180fb766bdc2d02e2                                 perl-5.22.0.tar.bz2
-+sha1   400338c91c56420d98142cbfcb84d418cae2c98c                         perl-5.22.0.tar.bz2
-+sha256 3689fdb519133d039f49e12834764ff4c1de8f8d925dea44a952ca110d0ac9f7 perl-5.22.0.tar.bz2
- 
- # No upstream hashes for the following
--sha256 36cabbc937cc66e59c8ae414d7753190d54a022cae0012c09ee5bbee78bc0aa0 perl-5.20.2-cross-0.9.7.tar.gz
-+sha256 92ac19149eacfeb5dbddae229fecabdc1bef7ad130da2ea6c05a166167ac696a perl-5.22.0-cross-1.0.0.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 1e6a054..b9f90e4 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -4,16 +4,16 @@
- #
- ################################################################################
- 
--PERL_VERSION_MAJOR = 20
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_VERSION_MAJOR = 22
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic or GPLv1+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 0.9.7
--PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
-+PERL_CROSS_VERSION = 1.0.0
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = http://raw.github.com/arsv/perl-cross/releases
- PERL_CROSS_SOURCE = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index c7180c8..e7bd2bb 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -471,7 +471,7 @@ unshift @INC, sub {
- } # END OF FATPACK CODE
- 
- 
--use 5.020;      # same major version as target perl
-+use 5.022;      # same major version as target perl
- use strict;
- use warnings;
- use Fatal qw(open close);
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/elf2flt/elf2flt.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+> index 3fcada4..bec270b 100644
+> --- a/package/elf2flt/elf2flt.mk
+> +++ b/package/elf2flt/elf2flt.mk
+> @@ -21,6 +21,12 @@ HOST_ELF2FLT_CONF_OPTS = \
+>  	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
+>  	--target=$(GNU_TARGET_NAME)
+>  
+> -HOST_ELF2FLT_CONF_ENV = LIBS=-lz
+> +HOST_ELF2FLT_LIBS = -lz
+> +
+> +ifeq ($(BR2_GCC_ENABLE_LTO),y)
+> +HOST_ELF2FLT_LIBS += -ldl
+> +endif
+> +
+> +HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
+>  
+>  $(eval $(host-autotools-package))
+> -- 
+> 2.5.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
