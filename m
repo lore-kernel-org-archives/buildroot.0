@@ -1,52 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Sep 2015 11:32:24 +0200
-Subject: [Buildroot] [git commit] uclibc: update to 1.0.6
-Message-ID: <20150906093845.6732081922@busybox.osuosl.org>
+Date: Sun, 6 Sep 2015 11:37:09 +0200
+Subject: [Buildroot] [git commit] uclibc: symlinks are now automatically
+	created by uClibc-ng makefile
+Message-ID: <20150906093845.7B9C2800FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5b47168f16b4e9d9a05a866bcb1b448d9cc382c3
+commit: http://git.buildroot.net/buildroot/commit/?id=d1e19882be8676e6a7f451517d786703c6ccd6cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes boost compile problem with ARC.
-New function mkostemps required for efl are available.
-Static sudo compiles are possible.
-Full changes:
-http://mailman.uclibc-ng.org/pipermail/devel/2015-August/000463.html
+So the workaround can be dropped now that we've moved to uClibc-ng 1.0.6.
 
+[Peter: Extend commit message]
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/Config.in   |    2 +-
- package/uclibc/uclibc.hash |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uclibc.mk |   15 ---------------
+ 1 files changed, 0 insertions(+), 15 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index bf40a13..898d99d 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -65,7 +65,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	string
- 	default "0.9.33.2"	if BR2_UCLIBC_VERSION_0_9_33
- 	default "arc-2015.06" if BR2_UCLIBC_VERSION_ARC_GIT
--	default "1.0.5"		if BR2_UCLIBC_VERSION_NG
-+	default "1.0.6"		if BR2_UCLIBC_VERSION_NG
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index a2ba230..eaac9dc 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -434,21 +434,6 @@ define UCLIBC_INSTALL_UTILS_TARGET
+ endef
+ endif
  
- config BR2_UCLIBC_CONFIG
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 9ccf061..6cd76dd 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -2,7 +2,7 @@
- sha256	62333167b79afb0b25a843513288c67b59547acf653e8fbe62ee64e71ebd1587	uClibc-0.9.33.2.tar.xz
- 
- # From http://www.uclibc-ng.org/
--sha256  7a16bc9ff03b8f74f1f0cf921412f08e48a15285d9d555560d5cca915a28df5f        uClibc-ng-1.0.5.tar.xz
-+sha256  afb2ec318fe5b115165e3fdc22964a2fd2b68e03a652ac36164ed096b4bb795c        uClibc-ng-1.0.6.tar.xz
- 
- # No hash for the ARC variant, comes from the github-helper
- none	xxx	uClibc-arc-2015.06.tar.gz
+-# gcc produces binaries that use ld{64,}-uClibc.so.0 as the program
+-# interpreter, but since uClibc-ng version is 1.0.0, it generates
+-# ld{64,}-uClibc.so.1. In order to avoid changing gcc, we simply
+-# create the necessary symbolic links here.
+-ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+-define UCLIBC_INSTALL_LDSO_SYMLINKS
+-	if [ -e $(TARGET_DIR)/lib/ld64-uClibc.so.1 ]; then \
+-		(cd $(TARGET_DIR)/lib;ln -sf ld64-uClibc.so.1 ld64-uClibc.so.0) \
+-	fi
+-	if [ -e $(TARGET_DIR)/lib/ld-uClibc.so.1 ]; then \
+-		(cd $(TARGET_DIR)/lib;ln -sf ld-uClibc.so.1 ld-uClibc.so.0) \
+-	fi
+-endef
+-endif
+-
+ define UCLIBC_INSTALL_TARGET_CMDS
+ 	$(MAKE1) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
