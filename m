@@ -1,104 +1,190 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Sep 2015 21:54:20 +0200
-Subject: [Buildroot] [PATCH 3/5] package/freerdp: re-add support for
-	gstreamer
+Date: Sun,  6 Sep 2015 21:54:21 +0200
+Subject: [Buildroot] [PATCH 4/5] package/freerdp: prepare for adding another
+	client
 In-Reply-To: <cover.1441569038.git.yann.morin.1998@free.fr>
 References: <cover.1441569038.git.yann.morin.1998@free.fr>
-Message-ID: <6bfca930d5e10ea07fffaf7680067658bc68b797.1441569038.git.yann.morin.1998@free.fr>
+Message-ID: <b26d6437e140b49c39a7a4887b9bbf4ec6f2754d.1441569038.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously, we expected the user to select gstreamer-0.x on his own,
-to enable gstreamer support in FreeRDP. This could have been a bit
-confusing to the user, as he may have enabled gst-1.x but FreeRDP did
-only support gst-0.x.
+Currently, the only client we can build is the X11 client.
 
-Also, gstreamer support needs xlib-libxrandr, which was missing in
-FreeRDP's dependencies, so it was never enabled (AFAICS).
+FreeRDP now has support for building a wayland client.
 
-(Re-)introduce support for gstreamer-0.x and gstreamer-1.x, since both
-are supported.
+However, that means we need to rethink the way we build FreeRDP, because
+of some "inconsistencies" in its build system. This is because FreeRDP's
+buildsystem does not have orthogonal options; some of the options can be
+used for different components.
 
-We're doing it in a choice, and forcibly select whichever version the
-user chooses, rather than automatically detect it as previosuly done.
-We can select gstreamer, as their dependencies are anyway already
-covered by the ones of FreeRDP.
+For example, the set of X11 libraries needed to build the server is a
+superset of the X11 libraries needed to build the X11 client. So,
+whenever the server is enabled, it means the X11 libraries required to
+build the X11 client are available.
 
-This also now requires xlib-libxrandr, so hide the choice if X.org is
-not enabled, still offer the option of not using gstreamer if it is.
+Now, if the user also wants to build the waland client (but not the X11
+client), there is no way to tell FreeRDP not to build the X11 client,
+because there is a single option, WITH_CLIENT, to drive whether any of
+the clients is built. The decision is made on the availability of the
+required libraries. And since the server is enabled, the X11 libs
+required to build the X11 client are available. So, we end up with the
+X11 client, even though it is not wanted.
+
+And conversely with wayland...
+
+So, we redesign the way we build FreeRDP. WE do not care what is
+actually built; we just build whatever is buildable with the current
+set of enabled libraries. But at install time (both in staging/ and
+target/) we remove whatever the user does not want.
+
+We also take the opportunity to rename the X11 client option, so it is
+coherent with the soon-to-be-introduced wayland client.
+
+Note: since FreeRDP has gained new dependencies, we can not just
+introduce the legacy option as-is, otherwise we run the risk that it
+selects the new option even though the new FreeRDP dependencies are not
+enabled, spitting out the infamous 'unmet direct dependencies" kconfig
+error.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/freerdp/Config.in  | 28 ++++++++++++++++++++++++++++
- package/freerdp/freerdp.mk | 14 +++++++++++++-
- 2 files changed, 41 insertions(+), 1 deletion(-)
+ Config.in.legacy           | 10 +++++++++
+ package/freerdp/Config.in  |  6 +++---
+ package/freerdp/freerdp.mk | 53 ++++++++++++++++++++++++++++++++++++++--------
+ 3 files changed, 57 insertions(+), 12 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3330566..5a4ef2e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -105,6 +105,16 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2015.11"
++
++# Since FreeRDP has new depednencies, protect this legacy to avoid the
++# infamous "unmet direct dependencies" kconfig error.
++config BR2_PACKAGE_FREERDP_CLIENT
++	bool "freerdp client option renamed"
++	depends on BR2_PACKAGE_FREERDP
++	select BR2_PACKAGE_FREERDP_CLIENT_X11
++
++###############################################################################
+ comment "Legacy options removed in 2015.08"
+ 
+ config BR2_PACKAGE_KODI_PVR_ADDONS
 diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index ab8c3f5..ca57cef 100644
+index ca57cef..7758025 100644
 --- a/package/freerdp/Config.in
 +++ b/package/freerdp/Config.in
-@@ -23,6 +23,34 @@ config BR2_PACKAGE_FREERDP
+@@ -59,14 +59,14 @@ config BR2_PACKAGE_FREERDP_SERVER
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
  
- if BR2_PACKAGE_FREERDP
- 
-+choice
-+	bool "gstreamer support"
-+	depends on BR2_PACKAGE_XORG7 # xlib-libxrandr
-+
-+config BR2_PACKAGE_FREERDP_GSTREAMER_NO
-+	bool "none"
-+
-+config BR2_PACKAGE_FREERDP_GSTREAMER1
-+	bool "gstreamer-1.x"
-+	# gstreamer-1.x dependencies already dependencies of FreeRDP
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+
-+config BR2_PACKAGE_FREERDP_GSTREAMER
-+	bool "gstreamer-0.x"
-+	# gstreamer-0.x dependencies already dependencies of FreeRDP
-+	select BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE
-+	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+
-+endchoice
-+
-+comment "gstreamer support needs X.Org"
-+	depends on !BR2_PACKAGE_XORG7
-+
- config BR2_PACKAGE_FREERDP_SERVER
- 	bool "server"
+-config BR2_PACKAGE_FREERDP_CLIENT
+-	bool "client"
++config BR2_PACKAGE_FREERDP_CLIENT_X11
++	bool "X11 client"
+ 	default y
  	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 
+-comment "server and client need X.Org"
++comment "server and X11 client need X.Org"
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+ endif
 diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 9205169..3517933 100644
+index 3517933..be95ef1 100644
 --- a/package/freerdp/freerdp.mk
 +++ b/package/freerdp/freerdp.mk
-@@ -15,7 +15,19 @@ FREERDP_INSTALL_STAGING = YES
+@@ -85,18 +85,38 @@ ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
+ FREERDP_CONF_OPTS += -DWITH_SERVER=ON
+ endif
  
- FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
+-ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_X11),y)
+ FREERDP_CONF_OPTS += -DWITH_CLIENT=ON
+ endif
  
--FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF -DWITH_GSTREAMER_1_0=OFF
-+ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER),y)
-+FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
-+FREERDP_DEPENDENCIES += gstreamer gst-plugins-base
+ #---------------------------------------
+ # X.Org libs for client and/or server
+ 
+-ifneq ($(BR2_PACKAGE_FREERDP_SERVER)$(BR2_PACKAGE_FREERDP_CLIENT),)
++# The FreeRDP buildsystem uses non-orthogonal options. For example it
++# is not possible to build the server and the wayland client without
++# also building the X client. That's because the dependencies of the
++# server (the X libraries) are a superset of those of the X client.
++# So, as soon as FreeRDP is configured for the server and the wayland
++# client, it will believe it also has to build the X client, because
++# the libraries it needs are enabled.
++#
++# Furthermore, the shadow server is always built, even if there's nothing
++# it can serve (i.e. the X libs are disabled).
++#
++# So, we do not care whether we build too much; we remove, as
++# post-install hooks, whatever we do not want.
+ 
+-# Those two are mandatory for both the server and the client
++# If Xorg is enabled, and the server or the X client are, then libX11
++# and libXext are forcibly enabled at the Kconfig level. However, if
++# Xorg is enabled but neither the server nor the X client are, then
++# there's nothing that guarantees those two libs are enabled. So we
++# really must check for them.
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBX11),yy)
+ FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXext
+ FREERDP_CONF_OPTS += -DWITH_X11=ON
 +else
-+FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
++FREERDP_CONF_OPTS += -DWITH_X11=OFF
 +endif
+ 
+ # The following libs are either optional or mandatory only for either
+ # the server or the client. A mandatory library for either one is
+@@ -171,12 +191,6 @@ else
+ FREERDP_CONF_OPTS += -DWITH_XV=OFF
+ endif
+ 
+-else # ! SERVER && ! CLIENT
+-
+-FREERDP_CONF_OPTS += -DWITH_X11=OFF
+-
+-endif # ! SERVER && ! CLIENT
+-
+ #---------------------------------------
+ # Post-install hooks to cleanup and install missing stuff
+ 
+@@ -189,6 +203,27 @@ endef
+ FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_RM_SHADOW_SERVER
+ endif # ! server
+ 
++# X client is always built as soon as a client is enabled and the
++# necessary libs are enabeld (e.g. because of the server), so manually
++# remove it if the user does not want it.
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_X11),)
++define FREERDP_RM_CLIENT_X11
++	rm -f $(TARGET_DIR)/usr/bin/xfreerdp
++	rm -f $(TARGET_DIR)/usr/lib/libxfreerdp-client*
++endef
++FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_RM_CLIENT_X11
++define FREERDP_RM_CLIENT_X11_LIB
++	rm -f $(STAGING_DIR)/usr/lib/libxfreerdp-client*
++endef
++FREERDP_POST_INSTALL_STAGING_HOOKS += FREERDP_RM_CLIENT_X11_LIB
++endif # ! X client
 +
-+ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER1),y)
-+FREERDP_CONF_OPTS += -DWITH_GSTREAMER_1_0=ON
-+FREERDP_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+else
-+FREERDP_CONF_OPTS += -DWITH_GSTREAMER_1_0=OFF
-+endif
++# Remove static libraries in unusual dir
++define FREERDP_CLEANUP
++	rm -rf $(TARGET_DIR)/usr/lib/freerdp
++endef
++FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_CLEANUP
++
+ FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
  
- ifeq ($(BR2_PACKAGE_CUPS),y)
- FREERDP_CONF_OPTS += -DWITH_CUPS=ON
+ # Install the server key and certificate, so that a client can connect.
 -- 
 1.9.1
