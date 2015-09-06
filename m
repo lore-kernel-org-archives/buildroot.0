@@ -1,46 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Sep 2015 14:35:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoundtouch: needs c++
-Message-ID: <1441542956-6600-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun,  6 Sep 2015 15:14:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libyuv: not available on aarch64
+Message-ID: <1441545295-26498-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+aarch64 is a NEON-enabled arch according to the source code[1] but the
+files containing the NEON-specific functions[2] are not added to the
+build using CMake.
+
+Until this is fixed we disable libyuv for aarch64.
+
 Fixes
-http://autobuild.buildroot.net/results/a92/a92fcb94492edfdf15c1e18c13b03d75c0210382/
-http://autobuild.buildroot.net/results/d1d/d1d9a17a93f5ab61b4fbab67e0b61e79709d411f/
-http://autobuild.buildroot.net/results/d55/d5548c5dbbb94bef8eccf614962d0a4fe5c91133/
-http://autobuild.buildroot.net/results/798/798f103e066f94314e5664b8bcad7337e40a3fd7/
-http://autobuild.buildroot.net/results/484/48407da02451382a1cf7e0c16efa7db8a338ded0/
-http://autobuild.buildroot.net/results/4a0/4a0ac131884c0bc231c9f1dfd356cb533fbe5f0b/
-http://autobuild.buildroot.net/results/162/1629703bc3160143875a1771f1ac25a079ec94ff/
-http://autobuild.buildroot.net/results/be1/be1b69d0394de37615d3a3d2d4c4e25125b71ec2/
-http://autobuild.buildroot.net/results/32b/32b9512de01af6417d2db668dc2d75953119f8ab/
-http://autobuild.buildroot.net/results/1c0/1c0d433d435639f4355098fc6915c3588f922cad/
+http://autobuild.buildroot.net/results/0c5/0c559f1b1b9bc9f2e2a131e34f034ce4e34fa75b/
+http://autobuild.buildroot.net/results/bf3/bf324985e9bbcd61196304de1d0313a0e216a0a8/
+http://autobuild.buildroot.net/results/d55/d552e5e46c263ff9860192a993ee9ed11d7783a6/
+http://autobuild.buildroot.net/results/2d7/2d73ccdfd5d06bd6dfdc4e303fe48a554460fa1c/
+http://autobuild.buildroot.net/results/972/97207ed46a519368e242f0621e4363d522e21ee8/
+http://autobuild.buildroot.net/results/d84/d84d54d85183296c57c9131d946e4517ddcaa84d/
+http://autobuild.buildroot.net/results/c18/c189149b8d2a0242da06ec68863db23cd0fa65b8/
+http://autobuild.buildroot.net/results/73a/73a026644179708692c43166a8ffba3ce0e19d95/
+
+[1] https://freeswitch.org/stash/projects/SD/repos/libyuv/browse/include/libyuv/row.h#263
+[2] https://freeswitch.org/stash/projects/SD/repos/libyuv/browse/BUILD.gn#101
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libsoundtouch/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libyuv/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libsoundtouch/Config.in b/package/libsoundtouch/Config.in
-index 396036f..fdbc075 100644
---- a/package/libsoundtouch/Config.in
-+++ b/package/libsoundtouch/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBSOUNDTOUCH
- 	bool "libsoundtouch"
-+	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libyuv/Config.in b/package/libyuv/Config.in
+index 29dcaa4..4a7c376 100644
+--- a/package/libyuv/Config.in
++++ b/package/libyuv/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBYUV
+ 	bool "libyuv"
++	depends on !BR2_aarch64 # not supported by buildsystem
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
  	help
- 	  SoundTouch is an open-source audio processing library for
- 	  changing the Tempo, Pitch and Playback Rates of audio streams
- 	  or audio files.
+@@ -9,4 +10,5 @@ config BR2_PACKAGE_LIBYUV
+ 	  https://code.google.com/p/libyuv
  
- 	  http://www.surina.net/soundtouch
-+
-+comment "libsoundtouch needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+ comment "libyuv needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_aarch64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
 -- 
 2.1.4
