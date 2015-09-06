@@ -1,135 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Sep 2015 00:46:27 +0200
-Subject: [Buildroot] [PATCH 0/6] [RFC] Adds test infrastructure for
- packages
-In-Reply-To: <1441015151-3108-1-git-send-email-denis.thulin@openwide.fr>
-References: <1441015151-3108-1-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <55ECC243.4010307@mind.be>
+Date: Mon, 7 Sep 2015 01:01:43 +0200
+Subject: [Buildroot] [PATCH 1/1] python-colorama: new package
+In-Reply-To: <20150804194319.52c69bf2@free-electrons.com>
+References: <1438634219-22000-1-git-send-email-farina@datacom.ind.br>
+ <20150804105537.3a5e47f6@free-electrons.com>
+ <55C0BEC6.8040207@datacom.ind.br>
+ <20150804153825.3a46c00e@free-electrons.com>
+ <55C0CACA.4010105@datacom.ind.br>
+ <20150804194319.52c69bf2@free-electrons.com>
+Message-ID: <55ECC5D7.1000308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Denis,
-
-On 31-08-15 11:59, Denis THULIN wrote:
-> This patch series adds a test generation infrastructure for packages to
-> Buildroot.
-> The generated tests are robotframework tests.
+On 04-08-15 19:43, Thomas Petazzoni wrote:
+> Hello,
 > 
-> While it is always necessary to test that packages are installed
-> correctly and work in an intended way, Buildroot does not currently
-> provide any tests of package nor any way to automate the process of
-> creating tests depending on your configuration or even share tests you
-> have written for packages. You have to write tests manually almost
-> everytime you start a new project with buildroot. This can cost a lot
-> of time.
+> On Tue, 04 Aug 2015 11:23:06 -0300, DATACOM - Farina wrote:
+> 
+>> Our boards has PowerPC/ARM/MIPS running Linux. And also has ARM 
+>> microcontrollers.
+>>
+>> So, when we build the main firmware (Linux + rootfs) with Buildroot, we 
+>> also build the microcontroller firmware that goes inside the rootfs 
+>> (using a secondary toolchain).
+>>
+>> With this way, we have just one build-system (Buildroot), with 
+>> everything we need integrated on it.
+>>
+>> My apologies if it is not the Buildroot idea, but this kind of 
+>> integration is facilitating our work.
+> 
+> Interesting use of Buildroot, definitely! I think it makes a lot of
+> sense to use Buildroot this way, so I understand better what you did.
+> I'm still a bit reluctant to add host packages in Buildroot without
+> users, but at least there is a very useful and interesting use case
+> behind it, so I might be tempted to apply your patch with the host
+> package included.
+> 
+> I'm obviously interested by the opinion of other Buildroot developers.
 
- Just to be clear: the intention of this series is to make it possible to
-include in the buildroot package a way to specify some tests to run on the host
-and on the target, where the purpose of these tests is to validate that the
-package has been built correctly. So it is not exactly testing the buildroot
-infrastructure (like what Thomas is trying to do), and it's not really running
-the tests included with the package itself (these are not built and installed),
-but something in-between.
-
-
- However, as far as I can see, this patch series only solves a small part of the
-problem. It basically creates and installs a bunch of .robot files, and that's
-it, right? You still have to make the robot framework run on these files. And
-you still have to express in the robot framework or in jenkins the dependencies
-to make sure the tests are first built and then executed. Correct?
-
-
- In addition, it seems to me that the munging done by the TEST_BUILD macro has
-little to offer above simply copying the .robot file from the package directory
-to the test directory. But possibly I don't sufficiently understand what's going on.
-
-
- And finally, buildroot tries not to enforce any particular policy or tool on
-the user. So, much as I like robot, requiring the tests to use this specific
-framework is definitely a no-go (at least, if it's meant to be used by end
-users). Especially since it means that a rootfs with python3 can't be tested...
-
-
- I'm not entirely sure what the way to go is. It definitely is nice to have some
-kind of test description as part of the packages - I like that more than the way
-Thomas did it in buildroot-runtime-test, where the buildroot tree is basically
-replicated externally for the tests. But the exact location of the test files is
-just a minor detail I guess.
-
-
- Bottom line: I'm not in favour of this series either. Of course, the first
-patch adding python-robotframework is still relevant independently.
-
+ I'm not so inclined to include this non-buildable package. I think it's
+possible to have a package/python-colorama/python-colorama.mk in BR2_EXTERNAL
+that includes the $(host-python-package).
 
  Regards,
  Arnout
-
-> 
-> This patch series is intented as a solution for that problem.
-> 
-> Why Robotframework Tests:
-> Robotframework is a widely used test automation framework that allow
-> writing tests in various languages (Python, Java and even C), provides
-> useful test librairies and allow writing tests in various syntaxes.
-> Robotframework tests are meant to be easy to read by people whom did
-> not write the tests, and that can definitly be useful.
-> 
-> List of patches from the series :
-> * Patch 1/6 adds a test generation step before install target step.
-> * Patch 2/6 adds useful keywords for testing through Telnet and Qemu
-> * Patch 3/6 adds menuconfig options to ease the configuration required
->   for testing through telnet and Qemu
-> * Patch 4/6 adds documentation for patches 1,2 and 3
-> * Patch 5/6 adds exemple tests for package python-flask
-> * patch 6/6 adds exemple tests for package python (inspired by tests
->   from https://github.com/tpetazzoni/buildroot-runtime-test)
-> 
-> Denis THULIN (6):
->   python-robotframework: New package
->   Adds package test infrastructure
->   tests: create variable files through kconfig
->   tests: Adds user manual entry
->   flask: Adds robotframework tests
->   python: Adds tests
-> 
->  Config.in                                          |   6 +
->  Makefile                                           |   9 +-
->  docs/manual/common-usage.txt                       |   2 +
->  docs/manual/test-infrastructure.txt                | 239 +++++++++++++++++++++
->  package/Config.in                                  |   1 +
->  package/Config.in.host                             |   1 +
->  package/Makefile.in                                |   1 +
->  package/pkg-generic.mk                             |  20 +-
->  package/pkg-test.mk                                |  94 ++++++++
->  package/python-flask/python-flask.mk               |   5 +
->  .../target_test_material/target_test.robot         |  25 +++
->  package/python-robotframework/Config.in            |   9 +
->  package/python-robotframework/Config.in.host       |   8 +
->  .../python-robotframework.hash                     |   4 +
->  .../python-robotframework/python-robotframework.mk |  16 ++
->  package/python/python.mk                           |  17 ++
->  package/python/python.robot                        |  32 +++
->  tests/Config.in                                    |   8 +
->  tests/host/resource.robot                          |   7 +
->  tests/target/resource.robot                        |   1 +
->  tests/tests.mk                                     |  20 ++
->  21 files changed, 522 insertions(+), 3 deletions(-)
->  create mode 100644 docs/manual/test-infrastructure.txt
->  create mode 100644 package/pkg-test.mk
->  create mode 100644 package/python-flask/target_test_material/target_test.robot
->  create mode 100644 package/python-robotframework/Config.in
->  create mode 100644 package/python-robotframework/Config.in.host
->  create mode 100644 package/python-robotframework/python-robotframework.hash
->  create mode 100644 package/python-robotframework/python-robotframework.mk
->  create mode 100644 package/python/python.robot
->  create mode 100644 tests/Config.in
->  create mode 100644 tests/host/resource.robot
->  create mode 100644 tests/target/resource.robot
->  create mode 100644 tests/tests.mk
-> 
 
 
 -- 
