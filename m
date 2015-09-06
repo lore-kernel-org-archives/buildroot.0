@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2015 22:25:05 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/gdb (7.9): remove
+Date: Sun, 6 Sep 2015 22:25:32 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/gdb (7.10): remove
  documentation
-In-Reply-To: <1441531217-21814-1-git-send-email-romain.naour@openwide.fr>
+In-Reply-To: <1441531217-21814-2-git-send-email-romain.naour@openwide.fr>
 References: <1441531217-21814-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20150906202505.GC3580@free.fr>
+ <1441531217-21814-2-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20150906202532.GD3580@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -39,17 +40,17 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  .../gdb/7.9.1/0004-gdb-disable-documentation.patch | 43 ++++++++++++++++++++++
+>  .../gdb/7.10/0001-gdb-disable-documentation.patch  | 43 ++++++++++++++++++++++
 >  1 file changed, 43 insertions(+)
->  create mode 100644 package/gdb/7.9.1/0004-gdb-disable-documentation.patch
+>  create mode 100644 package/gdb/7.10/0001-gdb-disable-documentation.patch
 > 
-> diff --git a/package/gdb/7.9.1/0004-gdb-disable-documentation.patch b/package/gdb/7.9.1/0004-gdb-disable-documentation.patch
+> diff --git a/package/gdb/7.10/0001-gdb-disable-documentation.patch b/package/gdb/7.10/0001-gdb-disable-documentation.patch
 > new file mode 100644
-> index 0000000..c04ff50
+> index 0000000..04543e2
 > --- /dev/null
-> +++ b/package/gdb/7.9.1/0004-gdb-disable-documentation.patch
+> +++ b/package/gdb/7.10/0001-gdb-disable-documentation.patch
 > @@ -0,0 +1,43 @@
-> +From 5b7cb9de2cebb6a26ad649dfef346b43e0cacfbb Mon Sep 17 00:00:00 2001
+> +From 6676140c4b5b28f7364c39a935cb8793f7d7991d Mon Sep 17 00:00:00 2001
 > +From: Romain Naour <romain.naour@openwide.fr>
 > +Date: Sun, 6 Sep 2015 10:54:28 +0200
 > +Subject: [PATCH] gdb: disable documentation
@@ -77,10 +78,10 @@ Yann E. MORIN.
 > + 1 file changed, 1 insertion(+), 1 deletion(-)
 > +
 > +diff --git a/gdb/Makefile.in b/gdb/Makefile.in
-> +index 7937801..f4da17e 100644
+> +index dfaa8a3..ab162b6 100644
 > +--- a/gdb/Makefile.in
 > ++++ b/gdb/Makefile.in
-> +@@ -1065,7 +1065,7 @@ COMMON_OBS = $(DEPFILES) $(CONFIG_OBS) $(YYOBJ) \
+> +@@ -1088,7 +1088,7 @@ COMMON_OBS = $(DEPFILES) $(CONFIG_OBS) $(YYOBJ) \
 > + 
 > + TSOBS = inflow.o
 > + 
