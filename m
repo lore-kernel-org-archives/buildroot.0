@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Sep 2015 15:53:39 +0200
+Date: Sun, 6 Sep 2015 15:54:26 +0200
 Subject: [Buildroot] [PATCH 2/3] uclibc: fix coreutils cut bug,
  enable needed config symbols
-In-Reply-To: <87vbbnk6xn.fsf@dell.be.48ers.dk>
+In-Reply-To: <20150906132929.GK8475@waldemar-brodkorb.de>
 References: <20150905152423.GA23237@waldemar-brodkorb.de>
  <878u8jlwlg.fsf@dell.be.48ers.dk>
  <20150906152647.3094d7f3@free-electrons.com>
- <87vbbnk6xn.fsf@dell.be.48ers.dk>
-Message-ID: <20150906155339.734b025a@free-electrons.com>
+ <20150906132929.GK8475@waldemar-brodkorb.de>
+Message-ID: <20150906155426.770b7aef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Waldemar,
 
-On Sun, 06 Sep 2015 15:34:28 +0200, Peter Korsgaard wrote:
+On Sun, 6 Sep 2015 15:29:29 +0200, Waldemar Brodkorb wrote:
 
->  >> I slightly tweaked the description to make it clear this is for
->  >> uClibc-ng and committed, thanks.
-> 
->  > This is not only for uClibc-ng, it should also be done in
->  > uClibc-0.9.33.config and uClibc-snapshot.config, as far as I understand.
-> 
-> Possibly, but that was not what the patch did.
+> Yes, would be required.
+> What about your idea to deprecate uClibc-0.9.33 and snapshot?
 
-Well, that's precisely what I'm saying: you changed the commit log to
-"make it clear it's for uclibc-ng", and I'm saying that the issue is
-not uClibc-ng specific. It also applies to other uClibc versions.
+It's an unrelated decision. For now, they are still supported, so the
+fix should also be made for them.
+
+Best regards,
 
 Thomas
 -- 
