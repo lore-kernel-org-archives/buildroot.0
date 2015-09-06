@@ -1,76 +1,84 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 6 Sep 2015 11:18:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gdb (7.9): fix doc build when
- makeinfo is missing
-In-Reply-To: <20150906103117.28fb8741@free-electrons.com>
-References: <1441463443-9335-1-git-send-email-romain.naour@openwide.fr>
- <20150905200930.7e018f2a@free-electrons.com> <55EB63A9.8000104@openwide.fr>
- <20150906103117.28fb8741@free-electrons.com>
-Message-ID: <55EC04EE.4030408@openwide.fr>
+Date: Sun,  6 Sep 2015 11:20:16 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/gdb (7.9): remove documentation
+Message-ID: <1441531217-21814-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+If makeinfo is not found in the system then the missing
+script is used to warn the user.
 
-Le 06/09/2015 10:31, Thomas Petazzoni a ?crit :
-> Romain,
-> 
-> On Sat, 5 Sep 2015 23:50:33 +0200, Romain Naour wrote:
-> 
->>>> + gdb/index.html: ${GDB_DOC_FILES}
->>>> +-	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo
->>>> ++	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo | true
->>>
->>> Can you try instead to just prepend a - at the beginning of the line?
->>>
->>> 	-$(MAKEHTML) ....
->>>
->>
->> It doesn't work. What's the meaning of a - in this case ?
-> 
-> It tells make to ignore the return value of the command, and continue
-> executing the Makefile even if the command failed.
-> 
-> See https://www.gnu.org/software/make/manual/html_node/Errors.html:
-> 
-> """
-> To ignore errors in a recipe line, write a ?-? at the beginning of the
-> line?s text (after the initial tab). The ?-? is discarded before the
-> line is passed to the shell for execution.
-> """
+Before commit e30465112ed4c6320dd19107302057a5f7712cf2 the missing
+script returned 0 after printing the message.
 
-Ok thanks.
+Now, missing return 127 (command not found) to the Makefile and
+the build fail.
 
-> 
->> It's not easy to add a new options in configure.ac since a specific version of
->> autoconf is needed. Also it prevent to use GDB_AUTORECONF...
->>
->> configure.ac:34: error: Please use exactly Autoconf 2.64 instead of 2.69.
->>
->> Another solution is to remove "doc" directory from SUBDIRS in gdb/Makefile.in:
->> -SUBDIRS = doc @subdirs@ data-directory $(GNULIB_BUILDDIR)
->> +SUBDIRS = @subdirs@ data-directory $(GNULIB_BUILDDIR)
->>
->> Thoughts ?
-> 
-> Argh. So maybe, removing the "doc" directory from SUBDIRS from
-> Makefile.in is the easiest solution. In parallel to that, if you are
-> brave enough to write a patch for upstream gdb to make building the
-> documentation optional, and submit it, it would allow to solve the
-> problem for future versions of gdb. Or at least report the bug to the
-> gdb folks.
+As suggested [1], disable the documentation by removing "doc"
+directory from SUBDIRS.
 
-Ok, I'll update my patches to remove the "doc" directory and I'll see what I can
-do with upstream.
+[1] http://lists.busybox.net/pipermail/buildroot/2015-September/138824.html
 
-Best regards,
-Romain
+Fixes:
+http://autobuild.buildroot.net/results/dee/dee1326baf26ad1eb6e12a7d033428eca50d00bc/build-end.log
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ .../gdb/7.9.1/0004-gdb-disable-documentation.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/gdb/7.9.1/0004-gdb-disable-documentation.patch
+
+diff --git a/package/gdb/7.9.1/0004-gdb-disable-documentation.patch b/package/gdb/7.9.1/0004-gdb-disable-documentation.patch
+new file mode 100644
+index 0000000..c04ff50
+--- /dev/null
++++ b/package/gdb/7.9.1/0004-gdb-disable-documentation.patch
+@@ -0,0 +1,43 @@
++From 5b7cb9de2cebb6a26ad649dfef346b43e0cacfbb Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@openwide.fr>
++Date: Sun, 6 Sep 2015 10:54:28 +0200
++Subject: [PATCH] gdb: disable documentation
++
++If makeinfo is not found in the system then the missing
++script is used to warn the user.
++
++Before commit e30465112ed4c6320dd19107302057a5f7712cf2 the missing
++script returned 0 after printing the message.
++
++Now, missing return 127 (command not found) to the Makefile and
++the build fail.
++
++As suggested [1], disable the documentation by removing "doc"
++directory from SUBDIRS.
++
++[1] http://lists.busybox.net/pipermail/buildroot/2015-September/138824.html
++
++Fixes:
++http://autobuild.buildroot.net/results/dee/dee1326baf26ad1eb6e12a7d033428eca50d00bc/build-end.log
++
++Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++---
++ gdb/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gdb/Makefile.in b/gdb/Makefile.in
++index 7937801..f4da17e 100644
++--- a/gdb/Makefile.in
+++++ b/gdb/Makefile.in
++@@ -1065,7 +1065,7 @@ COMMON_OBS = $(DEPFILES) $(CONFIG_OBS) $(YYOBJ) \
++ 
++ TSOBS = inflow.o
++ 
++-SUBDIRS = doc @subdirs@ data-directory $(GNULIB_BUILDDIR)
+++SUBDIRS = @subdirs@ data-directory $(GNULIB_BUILDDIR)
++ CLEANDIRS = $(SUBDIRS)
++ 
++ # List of subdirectories in the build tree that must exist.
++-- 
++2.4.3
++
+-- 
+2.4.3
