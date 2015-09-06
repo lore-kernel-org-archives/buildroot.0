@@ -1,86 +1,61 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun,  6 Sep 2015 11:20:17 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/gdb (7.10): remove documentation
-In-Reply-To: <1441531217-21814-1-git-send-email-romain.naour@openwide.fr>
-References: <1441531217-21814-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441531217-21814-2-git-send-email-romain.naour@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 Sep 2015 11:28:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libldns: Fix static build
+In-Reply-To: <1441449596-2894-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Sat, 5 Sep 2015 12:39:56 +0200")
+References: <1441449596-2894-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87h9n7lwve.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If makeinfo is not found in the system then the missing
-script is used to warn the user.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Before commit e30465112ed4c6320dd19107302057a5f7712cf2 the missing
-script returned 0 after printing the message.
+ > http://autobuild.buildroot.net/results/a0e/a0e686cbe5104f48c9ab05aef7b2989abdb23821/
+ > http://autobuild.buildroot.net/results/527/527b6167fcade1333d8bedffca21e32e410ed8c9/
+ > http://autobuild.buildroot.net/results/0f2/0f229b6806b5cf18d5b56f80088bba7dc3c6eb28/
+ > http://autobuild.buildroot.net/results/bad/bad1c0590868c1e97f647172f85b112ff2604994/
+ > http://autobuild.buildroot.net/results/7db/7dba36ae44560e65a00daf912abe8b43fa8a060d/
+ > http://autobuild.buildroot.net/results/3bf/3bf24e3e845ad8ebcfd0469787e7b7342ecfe3c5/
+ > http://autobuild.buildroot.net/results/7c6/7c6985518bb068ef1764dfb44c59c9f583f07c71/
+ > http://autobuild.buildroot.net/results/211/2117de3dc3d1168bdba0c771b54b3d998e3d62ce/
+ > http://autobuild.buildroot.net/results/908/90893b2cdbbc02d75be5cbc09b8a244d5b05d386/
 
-Now, missing return 127 (command not found) to the Makefile and
-the build fail.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/libldns/libldns.mk | 9 +++++++++
+ >  1 file changed, 9 insertions(+)
 
-As suggested [1], disable the documentation by removing "doc"
-directory from SUBDIRS.
+ > diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+ > index 9a28404..5073c09 100644
+ > --- a/package/libldns/libldns.mk
+ > +++ b/package/libldns/libldns.mk
+ > @@ -33,4 +33,13 @@ LIBLDNS_CONF_OPTS += \
+ >  	--disable-sha2
+ >  endif
+ 
+ > +# missing -lz is breaks configure, add it using pkgconf
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-September/138824.html
+Drop the extra 'is'.
 
-Fixes:
-http://autobuild.buildroot.net/results/dee/dee1326baf26ad1eb6e12a7d033428eca50d00bc/build-end.log
+I got a bit confused about this as we already have host-pkgconf as a
+dependency for the openssl support, but looking at the configure script
+I see it isn't used.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- .../gdb/7.10/0001-gdb-disable-documentation.patch  | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/gdb/7.10/0001-gdb-disable-documentation.patch
+As this is specific to the openssl backend this should be inside the
+openssl conditional (and host-pkgconf should only be added for static
+builds).
 
-diff --git a/package/gdb/7.10/0001-gdb-disable-documentation.patch b/package/gdb/7.10/0001-gdb-disable-documentation.patch
-new file mode 100644
-index 0000000..04543e2
---- /dev/null
-+++ b/package/gdb/7.10/0001-gdb-disable-documentation.patch
-@@ -0,0 +1,43 @@
-+From 6676140c4b5b28f7364c39a935cb8793f7d7991d Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@openwide.fr>
-+Date: Sun, 6 Sep 2015 10:54:28 +0200
-+Subject: [PATCH] gdb: disable documentation
-+
-+If makeinfo is not found in the system then the missing
-+script is used to warn the user.
-+
-+Before commit e30465112ed4c6320dd19107302057a5f7712cf2 the missing
-+script returned 0 after printing the message.
-+
-+Now, missing return 127 (command not found) to the Makefile and
-+the build fail.
-+
-+As suggested [1], disable the documentation by removing "doc"
-+directory from SUBDIRS.
-+
-+[1] http://lists.busybox.net/pipermail/buildroot/2015-September/138824.html
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/dee/dee1326baf26ad1eb6e12a7d033428eca50d00bc/build-end.log
-+
-+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-+---
-+ gdb/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gdb/Makefile.in b/gdb/Makefile.in
-+index dfaa8a3..ab162b6 100644
-+--- a/gdb/Makefile.in
-++++ b/gdb/Makefile.in
-+@@ -1088,7 +1088,7 @@ COMMON_OBS = $(DEPFILES) $(CONFIG_OBS) $(YYOBJ) \
-+ 
-+ TSOBS = inflow.o
-+ 
-+-SUBDIRS = doc @subdirs@ data-directory $(GNULIB_BUILDDIR)
-++SUBDIRS = @subdirs@ data-directory $(GNULIB_BUILDDIR)
-+ CLEANDIRS = $(SUBDIRS)
-+ 
-+ # List of subdirectories in the build tree that must exist.
-+-- 
-+2.4.3
-+
+ > +# compiling target linktest also fails due -lz being placed at a wrong
+ > +# position during linking, so we avoid this target by only building the
+ > +# target 'lib', which is enough for us
+
+For consistency and to ensure we'll notice soon if the lib target in the
+future no longer is enough I would prefer to do this unconditionally.
+
+Committed with those fixes, thanks.
+
 -- 
-2.4.3
+Bye, Peter Korsgaard
