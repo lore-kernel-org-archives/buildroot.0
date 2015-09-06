@@ -1,70 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2015 22:27:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoundtouch: needs c++
-In-Reply-To: <1441542956-6600-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1441542956-6600-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20150906202706.GE3580@free.fr>
+From: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+Date: Sun, 6 Sep 2015 22:44:28 +0200
+Subject: [Buildroot] [PATCH 3/3] Fix uClibc build for ARM-nommu
+In-Reply-To: <20150906180100.0f23f83c@free-electrons.com>
+References: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
+ <20150906152558.6472329b@free-electrons.com> <55EC5D29.9030708@gmail.com>
+ <20150906180100.0f23f83c@free-electrons.com>
+Message-ID: <55ECA5AC.6040800@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Thomas
 
-On 2015-09-06 14:35 +0200, Bernd Kuhls spake thusly:
-> Fixes
-> http://autobuild.buildroot.net/results/a92/a92fcb94492edfdf15c1e18c13b03d75c0210382/
-> http://autobuild.buildroot.net/results/d1d/d1d9a17a93f5ab61b4fbab67e0b61e79709d411f/
-> http://autobuild.buildroot.net/results/d55/d5548c5dbbb94bef8eccf614962d0a4fe5c91133/
-> http://autobuild.buildroot.net/results/798/798f103e066f94314e5664b8bcad7337e40a3fd7/
-> http://autobuild.buildroot.net/results/484/48407da02451382a1cf7e0c16efa7db8a338ded0/
-> http://autobuild.buildroot.net/results/4a0/4a0ac131884c0bc231c9f1dfd356cb533fbe5f0b/
-> http://autobuild.buildroot.net/results/162/1629703bc3160143875a1771f1ac25a079ec94ff/
-> http://autobuild.buildroot.net/results/be1/be1b69d0394de37615d3a3d2d4c4e25125b71ec2/
-> http://autobuild.buildroot.net/results/32b/32b9512de01af6417d2db668dc2d75953119f8ab/
-> http://autobuild.buildroot.net/results/1c0/1c0d433d435639f4355098fc6915c3588f922cad/
+On 06/09/2015 18:01, Thomas Petazzoni wrote:
+> However, I am not sure this makes sense. Gcc only understands a -mthumb
+> option, which means Thumb on ARMv4/v5, and Thumb-2 on ARMv7 (at least
+> for ARMv7-A). So I believe we should remove the "select
+> BR2_ARM_CPU_HAS_THUMB" from this BR2_cortex_m3 option.
+
+There does not seem to be a way to force gcc to generate Thumb instead
+of Thumb2 on ARMv7-M, so in reality, Cortex-M3 only supports Thumb2 when
+using gcc toolchain.
+However, BR2_PTHREADS_OLD does compile with Thumb2.
+If it compiles for Thumb too, the test on BR2_TOOLCHAIN_HAS_THREADS is
+maybe too generic, it should be on BR2_PTHREADS_NATIVE instead.
+We should then test BR2_PTHREADS_OLD with a true Thumb target (i.e.
+where -mthumb generates Thumb and not Thumb2). If that works, we should
+probably replace:
+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy) with
+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_PTHREADS_NATIVE),yy)
+or something like that.
+
+
+> Then, we should test if building uclibc in Thumb 2 mode on ARMv7-A with
+> NPTL enabled works. Depending on whether it works or not, the choice
+> will be different. If it doesn't work, and indeed building the NPTL
+> code in Thumb-2 is broken, then we will have to:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  1/ Enforce building with the ARM instruction set on ARMv7-A
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Regards,
-Yann E. MORIN.
+Building for cortex-A8 with BR2_ARM_INSTRUCTIONS_THUMB2 selected and
+BR2_PTHREADS_NATIVE works. I checked that the uClibc configuration was
+set for Thumb and NPTL accordingly.
+This is strange because Waldemar said that NPTL is not Thumb ready yet,
+and it fails when building for Cortex-M3.
+My guess is that inline ARM assembly used in uClibc is given to gas as
+is, so as long as the target can handle ARM, gas happily output ARM
+instructions, even if gcc has generated Thumb2 assembly for the C code,
+but it is only speculations.
 
-> ---
->  package/libsoundtouch/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libsoundtouch/Config.in b/package/libsoundtouch/Config.in
-> index 396036f..fdbc075 100644
-> --- a/package/libsoundtouch/Config.in
-> +++ b/package/libsoundtouch/Config.in
-> @@ -1,8 +1,12 @@
->  config BR2_PACKAGE_LIBSOUNDTOUCH
->  	bool "libsoundtouch"
-> +	depends on BR2_INSTALL_LIBSTDCPP
->  	help
->  	  SoundTouch is an open-source audio processing library for
->  	  changing the Tempo, Pitch and Playback Rates of audio streams
->  	  or audio files.
->  
->  	  http://www.surina.net/soundtouch
-> +
-> +comment "libsoundtouch needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> -- 
-> 2.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 2/ Prevent from selecting NPTL as the thread implementation on ARMv7-M
+
+Is there an already implemented way of telling if ARMv7-M target is
+selected ?
+Testing BR2_ARM_INSTRUCTIONS_THUMB2 is not enough because NPTL builds on
+Cortex-A8 with BR2_ARM_INSTRUCTIONS_THUMB2.
+
+
+Best,
+
+Douglas
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+Douglas RAILLARD
