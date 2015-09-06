@@ -1,77 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Sep 2015 18:01:00 +0200
-Subject: [Buildroot] [PATCH 3/3] Fix uClibc build for ARM-nommu
-In-Reply-To: <55EC5D29.9030708@gmail.com>
-References: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
- <20150906152558.6472329b@free-electrons.com>
- <55EC5D29.9030708@gmail.com>
-Message-ID: <20150906180100.0f23f83c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  6 Sep 2015 21:54:18 +0200
+Subject: [Buildroot] [PATCH 0/5] package/freedp: bump version (branch
+	yem/freerdp)
+Message-ID: <cover.1441569038.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Douglas,
+Hello All!
 
-On Sun, 6 Sep 2015 17:35:05 +0200, Douglas RAILLARD wrote:
+With this series comes a big bump of FreeRDP.
 
-> >> +define UCLIBC_ARM_THUMB_CONFIG
-> >> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
-> >> +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-> >> +endef
-> >> +endif
-> > 
-> > Other than that, it looks good to me.
-> 
-> One thing that this patch does not reflect is that the only threading
-> backend which works (and compiles) on ARM Thumb is BR2_PTHREADS_OLD.
-> Should we warn the user or is its responsibility to choose what is
-> appropriate for this target ?
+This was prompted by the weston's RDP backend, that requires a recent
+version of FreeRDP.
 
-No, we have to make sure that the user cannot do a selection that is
-known to not work.
+Basically, FreeRDP's API has changed somewhat in thier master branch,
+and some packages (e.g. weston) have started to use it uncoditionally.
 
-This problem is already partially handled by the following piece of
-code in uclibc.mk:
+So this series:
 
-# Thumb build is broken with threads, build in ARM mode
-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-UCLIBC_EXTRA_CFLAGS += -marm
-endif
+  - bumps FreeRDP to the currently latest (and greates?) FreeRDP
+  - restores the weston RDP ackend
+  - upgrades and enhances the gstreamer support in FreeRDP
+  - introduces the wayland client in FreeRDP
 
-But this only handles the case of ARM platforms that support the
-original Thumb instruction set, and which also support the regular ARM
-instruction set. This is for example the case on ARMv4 or ARMv5
-(possibly ARMv6, but I'm not sure).
+Regards,
+Yann E. MORIN.
 
-The Cortex-M3 is defined in Buildroot as:
 
-config BR2_cortex_m3
-        bool "cortex-M3"
-        select BR2_ARM_CPU_HAS_THUMB
-        select BR2_ARM_CPU_HAS_THUMB2
+The following changes since commit dd7bac42c201a14b844d1ef99e55c0ef2c33ddcb:
 
-However, I am not sure this makes sense. Gcc only understands a -mthumb
-option, which means Thumb on ARMv4/v5, and Thumb-2 on ARMv7 (at least
-for ARMv7-A). So I believe we should remove the "select
-BR2_ARM_CPU_HAS_THUMB" from this BR2_cortex_m3 option.
+  dos2unix: update homepage link (2015-09-06 11:41:36 +0200)
 
-Then, we should test if building uclibc in Thumb 2 mode on ARMv7-A with
-NPTL enabled works. Depending on whether it works or not, the choice
-will be different. If it doesn't work, and indeed building the NPTL
-code in Thumb-2 is broken, then we will have to:
+are available in the git repository at:
 
- 1/ Enforce building with the ARM instruction set on ARMv7-A
+  git://git.busybox.net/~ymorin/git/buildroot yem/freerdp
 
- 2/ Prevent from selecting NPTL as the thread implementation on ARMv7-M
+for you to fetch changes up to cfef88063641104f06cac70e48390a1ea06305b9:
 
-Does that make sense?
+  package/freerdp: introduce the wayland client (2015-09-06 20:52:17 +0200)
 
-Thanks!
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/freerdp: bump to master
+      package/weston: restore the freerdp backend
+      package/freerdp: re-add support for gstreamer
+      package/freerdp: prepare for adding another client
+      package/freerdp: introduce the wayland client
 
-Thomas
+ Config.in.legacy                                   |  10 ++
+ package/freerdp/0001-add-support-for-uclibc.patch  | 127 ---------------------
+ ...s.patch => 0001-fix-building-shared-libs.patch} |   7 +-
+ ...patch => 0002-add-support-for-tz-package.patch} |   0
+ .../0003-dont-use-unavailable-c99-math.patch       |  95 ---------------
+ package/freerdp/Config.in                          |  47 ++++++--
+ package/freerdp/freerdp.mk                         | 114 ++++++++++++++----
+ package/weston/Config.in                           |   6 +-
+ 8 files changed, 149 insertions(+), 257 deletions(-)
+ delete mode 100644 package/freerdp/0001-add-support-for-uclibc.patch
+ rename package/freerdp/{0002-fix-building-shared-libs.patch => 0001-fix-building-shared-libs.patch} (92%)
+ rename package/freerdp/{0004-add-support-for-tz-package.patch => 0002-add-support-for-tz-package.patch} (100%)
+ delete mode 100644 package/freerdp/0003-dont-use-unavailable-c99-math.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
