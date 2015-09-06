@@ -1,54 +1,66 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 6 Sep 2015 10:07:43 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2015-09-04
-In-Reply-To: <55EAF102.6030807@imgtec.com>
-References: <20150905063017.01FAA10139B@stock.ovh.net>
- <55EAF102.6030807@imgtec.com>
-Message-ID: <CAB0FRstfKF27=owEevMMOGZrsy1WoVzXBaLtPkkm5oqAcp4k4A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Sep 2015 10:31:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gdb (7.9): fix doc build when
+ makeinfo is missing
+In-Reply-To: <55EB63A9.8000104@openwide.fr>
+References: <1441463443-9335-1-git-send-email-romain.naour@openwide.fr>
+ <20150905200930.7e018f2a@free-electrons.com>
+ <55EB63A9.8000104@openwide.fr>
+Message-ID: <20150906103117.28fb8741@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2015-09-05 15:41 GMT+02:00 Vicente Olivert Riera <Vincent.Riera@imgtec.com>:
-> Dear Thomas Petazzoni, Francois Perrad, all,
->
->
-> On 05/09/15 07:30, Thomas Petazzoni wrote:
->>
->> Build statistics for 2015-09-04
->
->
->>        mipsel |          perl-html-parser-3.71 | NOK |
->> http://autobuild.buildroot.net/results/128671dfa23d843698a63220c2fac1f44e1d5845/
->
->
-> does it make sense building perl modules statically? They are intended to be
-> loaded by the dynamic loader, so..., should we disable all perl modules for
-> static builds? Francois?
->
+Romain,
 
-You're right.
-Perl modules which are native/C extension, must be disabled for static builds.
-This job is done by support/scripts/scancpan.
-I just found a weakness in this script.
-I'll cook a patch.
+On Sat, 5 Sep 2015 23:50:33 +0200, Romain Naour wrote:
 
-Fran?ois
+> >> + gdb/index.html: ${GDB_DOC_FILES}
+> >> +-	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo
+> >> ++	$(MAKEHTML) $(MAKEHTMLFLAGS) $(READLINE_TEXI_INCFLAG) -I ${GDBMI_DIR} -I $(srcdir) $(srcdir)/gdb.texinfo | true
+> > 
+> > Can you try instead to just prepend a - at the beginning of the line?
+> > 
+> > 	-$(MAKEHTML) ....
+> > 
+> 
+> It doesn't work. What's the meaning of a - in this case ?
 
->>      mips64el | xdriver_xf86-video-r128-6.1... | NOK |
->> http://autobuild.buildroot.net/results/34fbb7434d94b32de82f7094facbe57abef2573f/
->
->
-> This looks weird...
->
-> r128_dri.c:61:26: fatal error: GL/glxtokens.h: No such file or directory
->
-> ... because that file should be provided by xproto_glproto which is already
-> installed according to the build-time.log. I'll investigate it.
->
-> Regards,
->
-> Vincent.
+It tells make to ignore the return value of the command, and continue
+executing the Makefile even if the command failed.
+
+See https://www.gnu.org/software/make/manual/html_node/Errors.html:
+
+"""
+To ignore errors in a recipe line, write a ?-? at the beginning of the
+line?s text (after the initial tab). The ?-? is discarded before the
+line is passed to the shell for execution.
+"""
+
+> It's not easy to add a new options in configure.ac since a specific version of
+> autoconf is needed. Also it prevent to use GDB_AUTORECONF...
+> 
+> configure.ac:34: error: Please use exactly Autoconf 2.64 instead of 2.69.
+> 
+> Another solution is to remove "doc" directory from SUBDIRS in gdb/Makefile.in:
+> -SUBDIRS = doc @subdirs@ data-directory $(GNULIB_BUILDDIR)
+> +SUBDIRS = @subdirs@ data-directory $(GNULIB_BUILDDIR)
+> 
+> Thoughts ?
+
+Argh. So maybe, removing the "doc" directory from SUBDIRS from
+Makefile.in is the easiest solution. In parallel to that, if you are
+brave enough to write a patch for upstream gdb to make building the
+documentation optional, and submit it, it would allow to solve the
+problem for future versions of gdb. Or at least report the bug to the
+gdb folks.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
