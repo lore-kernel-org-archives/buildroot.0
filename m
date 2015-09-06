@@ -1,32 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Sep 2015 10:50:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libssh: needs MMU support
-In-Reply-To: <1441447989-9063-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sat, 5 Sep 2015 12:13:09 +0200")
-References: <1441447989-9063-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87lhckkk3r.fsf@dell.be.48ers.dk>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Sun, 6 Sep 2015 14:33:15 +0530
+Subject: [Buildroot] Buildroot kconfig option
+Message-ID: <CAKpDV8vL7GHk3cQ5Jk5o4G654KfQpQAfopsrA0Fotvu+vsaKMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Hi,
 
- > Fixes
- > http://autobuild.buildroot.net/results/405/40562b1b68bb7c57a37907eb16fcae88448f5bc6/
- > http://autobuild.buildroot.net/results/194/194ee885dd195706bded3ed524ff1685f4f6d4b5/
- > http://autobuild.buildroot.net/results/55c/55c00309bc7497529d28e48dce14299adeb11ede/
- > http://autobuild.buildroot.net/results/5d4/5d4e40fc4bb9c5a7ede26434c3d6ab325c631ecc/
- > http://autobuild.buildroot.net/results/8be/8bead9cfd826843482ccc37e9c1290b8774c8de0/
- > http://autobuild.buildroot.net/results/401/40100e6b07c3057ba427975ffdf3c3834c6fb385/
- > http://autobuild.buildroot.net/results/d70/d7083a8b197e1833ddaa30620ec1037ed15ec0ce/
- > http://autobuild.buildroot.net/results/6a2/6a20f29e65f446165b21cba3d55294e6ea446ff2/
- > http://autobuild.buildroot.net/results/718/718fdc0e5c67fd5cb1bceaec97f39285c159fbda/
+I am downloading kernel directly using buildroot. Then select "
+Using an in-tree defconfig file" then
+type the name of the defconfig.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Here i am using a already existing defconfig file in kernel source tree.
 
-Committed, thanks.
+Now it could be the case existing configuration in Linux kernel source may
+not be as per my requirement.
 
--- 
-Bye, Peter Korsgaard
+My question is, can i perform kconfig operation on the kernel source
+downloaded by buildroot , so that i can tune kernel as per my requirement ?
+
+Buildroot manual says :--
+"use make linux-menuconfig to open the Linux configuration editor"
+http://buildroot.uclibc.org/downloads/manual/manual.html#configure
+
+Or i download kernel source separately & configure it separately & tell
+buildroot to use it ?
+
+How you use to deal with this situation related to kernel kconfig ?
+
+Regards,
+Katoch
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150906/571f032c/attachment.html>
