@@ -1,187 +1,134 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 6 Sep 2015 23:50:36 +0200
-Subject: [Buildroot] [PATCH] Handle verbosity in infrastructures
-In-Reply-To: <1441487237-10040-1-git-send-email-cedric.marie@openmailbox.org>
-References: <1441487237-10040-1-git-send-email-cedric.marie@openmailbox.org>
-Message-ID: <55ECB52C.3070806@mind.be>
+Date: Mon, 7 Sep 2015 00:46:27 +0200
+Subject: [Buildroot] [PATCH 0/6] [RFC] Adds test infrastructure for
+ packages
+In-Reply-To: <1441015151-3108-1-git-send-email-denis.thulin@openwide.fr>
+References: <1441015151-3108-1-git-send-email-denis.thulin@openwide.fr>
+Message-ID: <55ECC243.4010307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi C?dric,
+ Hi Denis,
 
-On 05-09-15 23:07, C?dric Marie wrote:
-> The verbosity of the build step is controlled in a different way for
-> every type of infrastructure. It is not possible to export a variable
-> that could be understood by all of them.
+On 31-08-15 11:59, Denis THULIN wrote:
+> This patch series adds a test generation infrastructure for packages to
+> Buildroot.
+> The generated tests are robotframework tests.
 > 
-> As a consequence, in root Makefile:
-> * 'VERBOSE' is removed.
-> * 'KBUILD_VERBOSE' and 'quiet' are also removed, because they are not
->   used.
+> While it is always necessary to test that packages are installed
+> correctly and work in an intended way, Buildroot does not currently
+> provide any tests of package nor any way to automate the process of
+> creating tests depending on your configuration or even share tests you
+> have written for packages. You have to write tests manually almost
+> everytime you start a new project with buildroot. This can cost a lot
+> of time.
 
- Perhaps the removal of KBUILD_VERBOSE and quiet should be a separate patch,
-since that's a change that shouldn't make any difference. The verbose-handling
-in cmake and autotools, on the other hand, do change the behaviour.
-
-> * 'Q' is kept because it is used by Buildroot.
-> 
-> Instead, each infrastructure should add a specific variable to export
-> at build time, when V is set in the command line ('make V=1').
-> 
-> * CMake adds 'VERBOSE=1' when V=1
-> * Autotools forward 'V=0' and 'V=1'. The default behaviour depends on
->   the package. It is kept unchanged, unless explicitly modified by
->   'make V=0' or 'make V=1'.
-> 
-> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
-> ---
->  Makefile                 | 18 +++---------------
->  package/pkg-autotools.mk | 16 ++++++++++++++--
->  package/pkg-cmake.mk     | 12 ++++++++++--
->  3 files changed, 27 insertions(+), 19 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 23e2ee6..4a6c9ef 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -218,23 +218,11 @@ endif
->  
->  # To put more focus on warnings, be less verbose as default
->  # Use 'make V=1' to see the full commands
-> +Q = @
->  ifeq ("$(origin V)", "command line")
-> -  KBUILD_VERBOSE = $(V)
-> -endif
-> -ifndef KBUILD_VERBOSE
-> -  KBUILD_VERBOSE = 0
-> -endif
-> -
-> -ifeq ($(KBUILD_VERBOSE),1)
-> -  quiet =
-> +ifeq ($(V),1)
->    Q =
-> -ifndef VERBOSE
-> -  VERBOSE = 1
->  endif
-> -export VERBOSE
-> -else
-> -  quiet = quiet_
-> -  Q = @
->  endif
->  
->  # we want bash as shell
-> @@ -245,7 +233,7 @@ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
->  # kconfig uses CONFIG_SHELL
->  CONFIG_SHELL := $(SHELL)
->  
-> -export SHELL CONFIG_SHELL quiet Q KBUILD_VERBOSE
-> +export SHELL CONFIG_SHELL Q
->  
->  ifndef HOSTAR
->  HOSTAR := ar
-> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-> index 4787914..18ab1ae 100644
-> --- a/package/pkg-autotools.mk
-> +++ b/package/pkg-autotools.mk
-> @@ -94,6 +94,18 @@ define AUTORECONF_HOOK
->  	$(Q)cd $($(PKG)_SRCDIR) && $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
->  endef
->  
-> +# During build step:
-> +# 'make V=0' disables the verbose mode (if enabled by the package)
-> +# 'make V=1' enables the verbose mode (if not already enabled by the package)
-
- Add a comment here that we use the package's default unless V=0/1 was passed on
-the command line.
-
-> +AUTOTOOLS_VERBOSE =
-
- Not needed to initialize it empty.
-
-> +ifeq ("$(origin V)", "command line")
-> +ifeq ($(V),0)
-> +  AUTOTOOLS_VERBOSE = V=0
-> +else ifeq ($(V),1)
-> +  AUTOTOOLS_VERBOSE = V=1
-> +endif
-
- This can just be:
-AUTOTOOLS_VERBOSE = V=$(V)
-
- Also, no indentation inside make conditions.
+ Just to be clear: the intention of this series is to make it possible to
+include in the buildroot package a way to specify some tests to run on the host
+and on the target, where the purpose of these tests is to validate that the
+package has been built correctly. So it is not exactly testing the buildroot
+infrastructure (like what Thomas is trying to do), and it's not really running
+the tests included with the package itself (these are not built and installed),
+but something in-between.
 
 
- I also don't really like that the $(origin V) condition is repeated, but the
-alternatives don't look better either.
+ However, as far as I can see, this patch series only solves a small part of the
+problem. It basically creates and installs a bunch of .robot files, and that's
+it, right? You still have to make the robot framework run on these files. And
+you still have to express in the robot framework or in jenkins the dependencies
+to make sure the tests are first built and then executed. Correct?
 
 
-> +endif
-> +
->  ################################################################################
->  # inner-autotools-package -- defines how the configuration, compilation and
->  # installation of an autotools package should be done, implements a
-> @@ -271,11 +283,11 @@ endif
->  ifndef $(2)_BUILD_CMDS
->  ifeq ($(4),target)
->  define $(2)_BUILD_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_SRCDIR)
-> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_SRCDIR) $(AUTOTOOLS_VERBOSE)
->  endef
->  else
->  define $(2)_BUILD_CMDS
-> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_SRCDIR)
-> +	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_SRCDIR) $(AUTOTOOLS_VERBOSE)
->  endef
->  endif
->  endif
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 574eccc..8e57a9c 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -35,6 +35,14 @@ ifneq ($(QUIET),)
->  CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
->  endif
->  
-> +# 'make V=1' enables the verbose mode during build step
-> +CMAKE_VERBOSE =
-
- Again, not needed to initialize it empty.
-
-> +ifeq ("$(origin V)", "command line")
-> +ifeq ($(V),1)
-> +  CMAKE_VERBOSE = VERBOSE=1
-
- So no indentation here either.
+ In addition, it seems to me that the munging done by the TEST_BUILD macro has
+little to offer above simply copying the .robot file from the package directory
+to the test directory. But possibly I don't sufficiently understand what's going on.
 
 
- Otherwise, looks good to me :-)
+ And finally, buildroot tries not to enforce any particular policy or tool on
+the user. So, much as I like robot, requiring the tests to use this specific
+framework is definitely a no-go (at least, if it's meant to be used by end
+users). Especially since it means that a rootfs with python3 can't be tested...
+
+
+ I'm not entirely sure what the way to go is. It definitely is nice to have some
+kind of test description as part of the packages - I like that more than the way
+Thomas did it in buildroot-runtime-test, where the buildroot tree is basically
+replicated externally for the tests. But the exact location of the test files is
+just a minor detail I guess.
+
+
+ Bottom line: I'm not in favour of this series either. Of course, the first
+patch adding python-robotframework is still relevant independently.
+
 
  Regards,
  Arnout
 
-> +endif
-> +endif
-> +
->  ################################################################################
->  # inner-cmake-package -- defines how the configuration, compilation and
->  # installation of a CMake package should be done, implements a few hooks to
-> @@ -159,11 +167,11 @@ $(2)_DEPENDENCIES += host-cmake
->  ifndef $(2)_BUILD_CMDS
->  ifeq ($(4),target)
->  define $(2)_BUILD_CMDS
-> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR) $(CMAKE_VERBOSE)
->  endef
->  else
->  define $(2)_BUILD_CMDS
-> -	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
-> +	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR) $(CMAKE_VERBOSE)
->  endef
->  endif
->  endif
+> 
+> This patch series is intented as a solution for that problem.
+> 
+> Why Robotframework Tests:
+> Robotframework is a widely used test automation framework that allow
+> writing tests in various languages (Python, Java and even C), provides
+> useful test librairies and allow writing tests in various syntaxes.
+> Robotframework tests are meant to be easy to read by people whom did
+> not write the tests, and that can definitly be useful.
+> 
+> List of patches from the series :
+> * Patch 1/6 adds a test generation step before install target step.
+> * Patch 2/6 adds useful keywords for testing through Telnet and Qemu
+> * Patch 3/6 adds menuconfig options to ease the configuration required
+>   for testing through telnet and Qemu
+> * Patch 4/6 adds documentation for patches 1,2 and 3
+> * Patch 5/6 adds exemple tests for package python-flask
+> * patch 6/6 adds exemple tests for package python (inspired by tests
+>   from https://github.com/tpetazzoni/buildroot-runtime-test)
+> 
+> Denis THULIN (6):
+>   python-robotframework: New package
+>   Adds package test infrastructure
+>   tests: create variable files through kconfig
+>   tests: Adds user manual entry
+>   flask: Adds robotframework tests
+>   python: Adds tests
+> 
+>  Config.in                                          |   6 +
+>  Makefile                                           |   9 +-
+>  docs/manual/common-usage.txt                       |   2 +
+>  docs/manual/test-infrastructure.txt                | 239 +++++++++++++++++++++
+>  package/Config.in                                  |   1 +
+>  package/Config.in.host                             |   1 +
+>  package/Makefile.in                                |   1 +
+>  package/pkg-generic.mk                             |  20 +-
+>  package/pkg-test.mk                                |  94 ++++++++
+>  package/python-flask/python-flask.mk               |   5 +
+>  .../target_test_material/target_test.robot         |  25 +++
+>  package/python-robotframework/Config.in            |   9 +
+>  package/python-robotframework/Config.in.host       |   8 +
+>  .../python-robotframework.hash                     |   4 +
+>  .../python-robotframework/python-robotframework.mk |  16 ++
+>  package/python/python.mk                           |  17 ++
+>  package/python/python.robot                        |  32 +++
+>  tests/Config.in                                    |   8 +
+>  tests/host/resource.robot                          |   7 +
+>  tests/target/resource.robot                        |   1 +
+>  tests/tests.mk                                     |  20 ++
+>  21 files changed, 522 insertions(+), 3 deletions(-)
+>  create mode 100644 docs/manual/test-infrastructure.txt
+>  create mode 100644 package/pkg-test.mk
+>  create mode 100644 package/python-flask/target_test_material/target_test.robot
+>  create mode 100644 package/python-robotframework/Config.in
+>  create mode 100644 package/python-robotframework/Config.in.host
+>  create mode 100644 package/python-robotframework/python-robotframework.hash
+>  create mode 100644 package/python-robotframework/python-robotframework.mk
+>  create mode 100644 package/python/python.robot
+>  create mode 100644 tests/Config.in
+>  create mode 100644 tests/host/resource.robot
+>  create mode 100644 tests/target/resource.robot
+>  create mode 100644 tests/tests.mk
 > 
 
 
