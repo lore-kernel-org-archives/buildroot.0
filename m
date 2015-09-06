@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Sep 2015 15:24:01 +0200
-Subject: [Buildroot] [PATCH 2/3] Fix elf2flt build when LTO is enabled
-In-Reply-To: <1441470809-23403-1-git-send-email-public.douglas.raillard@gmail.com>
-References: <1441470809-23403-1-git-send-email-public.douglas.raillard@gmail.com>
-Message-ID: <20150906152401.67d5df05@free-electrons.com>
+Date: Sun, 6 Sep 2015 15:25:58 +0200
+Subject: [Buildroot] [PATCH 3/3] Fix uClibc build for ARM-nommu
+In-Reply-To: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
+References: <1441470824-23456-1-git-send-email-public.douglas.raillard@gmail.com>
+Message-ID: <20150906152558.6472329b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,28 @@ To: buildroot@busybox.net
 
 Dear Douglas RAILLARD,
 
-On Sat,  5 Sep 2015 18:33:29 +0200, Douglas RAILLARD wrote:
+On Sat,  5 Sep 2015 18:33:44 +0200, Douglas RAILLARD wrote:
 
-> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-> index 3fcada4..d028259 100644
-> --- a/package/elf2flt/elf2flt.mk
-> +++ b/package/elf2flt/elf2flt.mk
-> @@ -21,6 +21,12 @@ HOST_ELF2FLT_CONF_OPTS = \
->  	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
->  	--target=$(GNU_TARGET_NAME)
->  
-> +
+> +# UCLIBC_HAS_CONTEXT_FUNCS is broken with Thumb and Thumb2
+> +ifeq (y,$(filter y,$(BR2_ARM_INSTRUCTIONS_THUMB) $(BR2_ARM_INSTRUCTIONS_THUMB2)))
 
-Unnecessary new line addition.
+Why such a complicated condition? BR2_ARM_INSTRUCTIONS_THUMB and
+BR2_ARM_INSTRUCTIONS_THUMB2 are in a "choice" ... "endchoice" block, so
+only one of the two can be set to 'y' at any given time. So you can do:
 
->  HOST_ELF2FLT_CONF_ENV = LIBS=-lz
->  
-> +ifeq ($(BR2_GCC_ENABLE_LTO),y)
-> +	HOST_ELF2FLT_CONF_ENV = LIBS="-lz -ldl"
+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),y)
 
-Don't intend variables.
+instead.
 
-Also, please change this to:
+> +define UCLIBC_ARM_THUMB_CONFIG
+> +	$(call KCONFIG_ENABLE_OPT,COMPILE_IN_THUMB_MODE,$(@D)/.config)
+> +	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
+> +endef
+> +endif
 
-HOST_ELF2FLT_LIBS = -lz
+Other than that, it looks good to me.
 
-ifeq ($(BR2_GCC_ENABLE_LTO),y)
-HOST_ELF2FLT_LIBS += -ldl
-endif
-
-HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
