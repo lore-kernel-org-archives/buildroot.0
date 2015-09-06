@@ -1,190 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Sep 2015 21:54:21 +0200
-Subject: [Buildroot] [PATCH 4/5] package/freerdp: prepare for adding another
+Date: Sun,  6 Sep 2015 21:54:22 +0200
+Subject: [Buildroot] [PATCH 5/5] package/freerdp: introduce the wayland
 	client
 In-Reply-To: <cover.1441569038.git.yann.morin.1998@free.fr>
 References: <cover.1441569038.git.yann.morin.1998@free.fr>
-Message-ID: <b26d6437e140b49c39a7a4887b9bbf4ec6f2754d.1441569038.git.yann.morin.1998@free.fr>
+Message-ID: <cfef88063641104f06cac70e48390a1ea06305b9.1441569038.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the only client we can build is the X11 client.
-
-FreeRDP now has support for building a wayland client.
-
-However, that means we need to rethink the way we build FreeRDP, because
-of some "inconsistencies" in its build system. This is because FreeRDP's
-buildsystem does not have orthogonal options; some of the options can be
-used for different components.
-
-For example, the set of X11 libraries needed to build the server is a
-superset of the X11 libraries needed to build the X11 client. So,
-whenever the server is enabled, it means the X11 libraries required to
-build the X11 client are available.
-
-Now, if the user also wants to build the waland client (but not the X11
-client), there is no way to tell FreeRDP not to build the X11 client,
-because there is a single option, WITH_CLIENT, to drive whether any of
-the clients is built. The decision is made on the availability of the
-required libraries. And since the server is enabled, the X11 libs
-required to build the X11 client are available. So, we end up with the
-X11 client, even though it is not wanted.
-
-And conversely with wayland...
-
-So, we redesign the way we build FreeRDP. WE do not care what is
-actually built; we just build whatever is buildable with the current
-set of enabled libraries. But at install time (both in staging/ and
-target/) we remove whatever the user does not want.
-
-We also take the opportunity to rename the X11 client option, so it is
-coherent with the soon-to-be-introduced wayland client.
-
-Note: since FreeRDP has gained new dependencies, we can not just
-introduce the legacy option as-is, otherwise we run the risk that it
-selects the new option even though the new FreeRDP dependencies are not
-enabled, spitting out the infamous 'unmet direct dependencies" kconfig
-error.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- Config.in.legacy           | 10 +++++++++
- package/freerdp/Config.in  |  6 +++---
- package/freerdp/freerdp.mk | 53 ++++++++++++++++++++++++++++++++++++++--------
- 3 files changed, 57 insertions(+), 12 deletions(-)
+ package/freerdp/Config.in  |  5 +++++
+ package/freerdp/freerdp.mk | 22 ++++++++++++++++++----
+ 2 files changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3330566..5a4ef2e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -105,6 +105,16 @@ comment "----------------------------------------------------"
- endif
- 
- ###############################################################################
-+comment "Legacy options removed in 2015.11"
-+
-+# Since FreeRDP has new depednencies, protect this legacy to avoid the
-+# infamous "unmet direct dependencies" kconfig error.
-+config BR2_PACKAGE_FREERDP_CLIENT
-+	bool "freerdp client option renamed"
-+	depends on BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_FREERDP_CLIENT_X11
-+
-+###############################################################################
- comment "Legacy options removed in 2015.08"
- 
- config BR2_PACKAGE_KODI_PVR_ADDONS
 diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index ca57cef..7758025 100644
+index 7758025..a007b0b 100644
 --- a/package/freerdp/Config.in
 +++ b/package/freerdp/Config.in
-@@ -59,14 +59,14 @@ config BR2_PACKAGE_FREERDP_SERVER
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXFIXES
- 
--config BR2_PACKAGE_FREERDP_CLIENT
--	bool "client"
-+config BR2_PACKAGE_FREERDP_CLIENT_X11
-+	bool "X11 client"
- 	default y
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 
--comment "server and client need X.Org"
-+comment "server and X11 client need X.Org"
+@@ -69,6 +69,11 @@ config BR2_PACKAGE_FREERDP_CLIENT_X11
+ comment "server and X11 client need X.Org"
  	depends on !BR2_PACKAGE_XORG7
  
++# Dependencies for wayland are already dependencies of FreeRDP
++config BR2_PACKAGE_FREERDP_CLIENT_WL
++	bool "wayland client"
++	select BR2_PACKAGE_WAYLAND
++
  endif
+ 
+ comment "freerdp needs a toolchain w/ wchar, dynamic library, threads"
 diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 3517933..be95ef1 100644
+index be95ef1..ace092c 100644
 --- a/package/freerdp/freerdp.mk
 +++ b/package/freerdp/freerdp.mk
-@@ -85,18 +85,38 @@ ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
+@@ -85,12 +85,12 @@ ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
  FREERDP_CONF_OPTS += -DWITH_SERVER=ON
  endif
  
--ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
-+ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_X11),y)
+-ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_X11),y)
++ifneq ($(BR2_PACKAGE_FREERDP_CLIENT_X11)$(BR2_PACKAGE_FREERDP_CLIENT_WL),)
  FREERDP_CONF_OPTS += -DWITH_CLIENT=ON
  endif
  
  #---------------------------------------
- # X.Org libs for client and/or server
+-# X.Org libs for client and/or server
++# Libraries for client and/or server
  
--ifneq ($(BR2_PACKAGE_FREERDP_SERVER)$(BR2_PACKAGE_FREERDP_CLIENT),)
-+# The FreeRDP buildsystem uses non-orthogonal options. For example it
-+# is not possible to build the server and the wayland client without
-+# also building the X client. That's because the dependencies of the
-+# server (the X libraries) are a superset of those of the X client.
-+# So, as soon as FreeRDP is configured for the server and the wayland
-+# client, it will believe it also has to build the X client, because
-+# the libraries it needs are enabled.
-+#
-+# Furthermore, the shadow server is always built, even if there's nothing
-+# it can serve (i.e. the X libs are disabled).
-+#
-+# So, we do not care whether we build too much; we remove, as
-+# post-install hooks, whatever we do not want.
- 
--# Those two are mandatory for both the server and the client
-+# If Xorg is enabled, and the server or the X client are, then libX11
-+# and libXext are forcibly enabled at the Kconfig level. However, if
-+# Xorg is enabled but neither the server nor the X client are, then
-+# there's nothing that guarantees those two libs are enabled. So we
-+# really must check for them.
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBX11),yy)
- FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXext
- FREERDP_CONF_OPTS += -DWITH_X11=ON
-+else
-+FREERDP_CONF_OPTS += -DWITH_X11=OFF
-+endif
- 
- # The following libs are either optional or mandatory only for either
- # the server or the client. A mandatory library for either one is
-@@ -171,12 +191,6 @@ else
+ # The FreeRDP buildsystem uses non-orthogonal options. For example it
+ # is not possible to build the server and the wayland client without
+@@ -191,6 +191,13 @@ else
  FREERDP_CONF_OPTS += -DWITH_XV=OFF
  endif
  
--else # ! SERVER && ! CLIENT
--
--FREERDP_CONF_OPTS += -DWITH_X11=OFF
--
--endif # ! SERVER && ! CLIENT
--
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++FREERDP_DEPENDENCIES += wayland
++FREERDP_CONF_OPTS += -DWITH_WAYLAND=ON
++else
++FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
++endif
++
  #---------------------------------------
  # Post-install hooks to cleanup and install missing stuff
  
-@@ -189,6 +203,27 @@ endef
- FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_RM_SHADOW_SERVER
- endif # ! server
+@@ -218,14 +225,21 @@ endef
+ FREERDP_POST_INSTALL_STAGING_HOOKS += FREERDP_RM_CLIENT_X11_LIB
+ endif # ! X client
  
-+# X client is always built as soon as a client is enabled and the
-+# necessary libs are enabeld (e.g. because of the server), so manually
-+# remove it if the user does not want it.
-+ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_X11),)
-+define FREERDP_RM_CLIENT_X11
-+	rm -f $(TARGET_DIR)/usr/bin/xfreerdp
-+	rm -f $(TARGET_DIR)/usr/lib/libxfreerdp-client*
++# Wayland client is always built as soon as wayland is enabled, so
++# manually remove it if the user does not want it.
++ifeq ($(BR2_PACKAGE_FREERDP_CLIENT_WL),)
++define FREERDP_RM_CLIENT_WL
++	rm -f $(TARGET_DIR)/usr/bin/wlfreerdp
 +endef
-+FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_RM_CLIENT_X11
-+define FREERDP_RM_CLIENT_X11_LIB
-+	rm -f $(STAGING_DIR)/usr/lib/libxfreerdp-client*
-+endef
-+FREERDP_POST_INSTALL_STAGING_HOOKS += FREERDP_RM_CLIENT_X11_LIB
-+endif # ! X client
++FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_RM_CLIENT_WL
++endif
 +
-+# Remove static libraries in unusual dir
-+define FREERDP_CLEANUP
-+	rm -rf $(TARGET_DIR)/usr/lib/freerdp
-+endef
-+FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_CLEANUP
-+
- FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
+ # Remove static libraries in unusual dir
+ define FREERDP_CLEANUP
+ 	rm -rf $(TARGET_DIR)/usr/lib/freerdp
+ endef
+ FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_CLEANUP
  
+-FREERDP_CONF_OPTS += -DWITH_WAYLAND=OFF
+-
  # Install the server key and certificate, so that a client can connect.
+ # A user can override them with its own in a post-build script, if needed.
+ # We install them even if the server is not enabled, since another server
 -- 
 1.9.1
