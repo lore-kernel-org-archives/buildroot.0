@@ -1,41 +1,26 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 6 Sep 2015 12:36:46 +0300
-Subject: [Buildroot] [PATCH v3 1/5] dos2unix: add target support
-In-Reply-To: <874mjamde8.fsf@dell.be.48ers.dk>
-References: <35a5aad580e5c2cae7eb79522f11a1aded941caf.1441253454.git.baruch@tkos.co.il>
- <874mjamde8.fsf@dell.be.48ers.dk>
-Message-ID: <20150906093646.GD2213@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 Sep 2015 11:38:20 +0200
+Subject: [Buildroot] [PATCH 3/3] uclibc: symlinks are automatically
+	created by uClibc-ng makefile
+In-Reply-To: <20150905152522.GA23333@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Sat, 5 Sep 2015 17:25:22 +0200")
+References: <20150905152522.GA23333@waldemar-brodkorb.de>
+Message-ID: <874mj7lwfn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-On Fri, Sep 04, 2015 at 05:07:27PM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > From: James Knight <james.knight@rockwellcollins.com>
->  > Allow the `dos2unix` utility to be built and installed on the target
->  > system.
-> 
->  > [baruch: properly handle target gettext]
->  > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->  > ---
->  > v3:
->  >   * Show only if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS is enabled (Peter)
->  >   * Add busybox to _DEPENDENCIES
-> 
-> Committed series, thanks!
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Thanks. All patches except the last one (5/5: dos2unix: update homepage link) 
-are in the master branch. What happened to the last one?
+The commit message could imho have been a bit more detailed. It used to
+be a problem, but with v1.0.6 this is fixed and we can drop the local
+workaround.
 
-baruch
+Committed with the description extended, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
