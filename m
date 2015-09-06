@@ -1,49 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Sep 2015 22:45:25 +0200
-Subject: [Buildroot] [git commit] package/libsoundtouch: needs c++
-Message-ID: <20150906204737.B454B81D43@busybox.osuosl.org>
+Date: Sun, 06 Sep 2015 22:49:06 +0200
+Subject: [Buildroot] [PATCH 1/2] perl: bump to version 5.22.0
+In-Reply-To: <1441434966-29518-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Sat, 5 Sep 2015 08:36:05 +0200")
+References: <1441434966-29518-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87egibjmt9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c42e3d554c06a0f3aa544d809093cfa7013a5193
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/a92/a92fcb94492edfdf15c1e18c13b03d75c0210382/
-http://autobuild.buildroot.net/results/d1d/d1d9a17a93f5ab61b4fbab67e0b61e79709d411f/
-http://autobuild.buildroot.net/results/d55/d5548c5dbbb94bef8eccf614962d0a4fe5c91133/
-http://autobuild.buildroot.net/results/798/798f103e066f94314e5664b8bcad7337e40a3fd7/
-http://autobuild.buildroot.net/results/484/48407da02451382a1cf7e0c16efa7db8a338ded0/
-http://autobuild.buildroot.net/results/4a0/4a0ac131884c0bc231c9f1dfd356cb533fbe5f0b/
-http://autobuild.buildroot.net/results/162/1629703bc3160143875a1771f1ac25a079ec94ff/
-http://autobuild.buildroot.net/results/be1/be1b69d0394de37615d3a3d2d4c4e25125b71ec2/
-http://autobuild.buildroot.net/results/32b/32b9512de01af6417d2db668dc2d75953119f8ab/
-http://autobuild.buildroot.net/results/1c0/1c0d433d435639f4355098fc6915c3588f922cad/
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsoundtouch/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Committed both, thanks.
 
-diff --git a/package/libsoundtouch/Config.in b/package/libsoundtouch/Config.in
-index 396036f..fdbc075 100644
---- a/package/libsoundtouch/Config.in
-+++ b/package/libsoundtouch/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_LIBSOUNDTOUCH
- 	bool "libsoundtouch"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  SoundTouch is an open-source audio processing library for
- 	  changing the Tempo, Pitch and Playback Rates of audio streams
- 	  or audio files.
- 
- 	  http://www.surina.net/soundtouch
-+
-+comment "libsoundtouch needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+-- 
+Bye, Peter Korsgaard
