@@ -1,61 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2015 22:51:36 +0200
-Subject: [Buildroot] [PATCH v2 2/3] elf2flt: fix build when LTO is
-	enabled
-In-Reply-To: <1441554499-23595-1-git-send-email-public.douglas.raillard@gmail.com>
-References: <20150906152401.67d5df05@free-electrons.com>
- <1441554499-23595-1-git-send-email-public.douglas.raillard@gmail.com>
-Message-ID: <20150906205136.GG3580@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 6 Sep 2015 22:57:13 +0200
+Subject: [Buildroot] [git commit branch/2015.08.x] Update for 2015.08.1
+Message-ID: <20150906205829.2820B81D7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Douglas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=e009e7d8615eec10d2c0c2676ef5a276f0a6a5e2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2015.08.x
 
-On 2015-09-06 17:48 +0200, Douglas RAILLARD spake thusly:
-> Signed-off-by: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  |    6 ++++++
+ Makefile |    2 +-
+ 2 files changed, 7 insertions(+), 1 deletions(-)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/elf2flt/elf2flt.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-> index 3fcada4..bec270b 100644
-> --- a/package/elf2flt/elf2flt.mk
-> +++ b/package/elf2flt/elf2flt.mk
-> @@ -21,6 +21,12 @@ HOST_ELF2FLT_CONF_OPTS = \
->  	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
->  	--target=$(GNU_TARGET_NAME)
->  
-> -HOST_ELF2FLT_CONF_ENV = LIBS=-lz
-> +HOST_ELF2FLT_LIBS = -lz
-> +
-> +ifeq ($(BR2_GCC_ENABLE_LTO),y)
-> +HOST_ELF2FLT_LIBS += -ldl
-> +endif
-> +
-> +HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
->  
->  $(eval $(host-autotools-package))
-> -- 
-> 2.5.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/CHANGES b/CHANGES
+index 89df9a4..dad9102 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,9 @@
++2015.08.1, Released September 6th, 2015
++
++	Fix kernel module infrastructure modules support check
++
++	Updated/fixed packages: eudev
++
+ 2015.08, Released August 31st, 2015
+ 
+ 	Minor fixes.
+diff --git a/Makefile b/Makefile
+index 2254a8f..5a87dfa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,7 +41,7 @@ else # umask
+ all:
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2015.08
++export BR2_VERSION := 2015.08.1
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
