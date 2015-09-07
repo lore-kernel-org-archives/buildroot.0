@@ -1,36 +1,49 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 7 Sep 2015 14:08:34 +0100
-Subject: [Buildroot] [PATCH] docs/website: add a space between attributes
-Message-ID: <1441631314-47198-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Mon, 7 Sep 2015 15:09:03 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-09-06
+In-Reply-To: <20150907063016.E32C8100E4D@stock.ovh.net>
+References: <20150907063016.E32C8100E4D@stock.ovh.net>
+Message-ID: <20150907150903.038d8740@PAL-U515208D001>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Error highlighted by the W3 HTML validator:
+Hi,
 
-Error: No space between attributes.
-At line 71, column 64
-e="width:100%;"href="/download
+On Mon,  7 Sep 2015 08:30:16 +0200 (CEST), Thomas Petazzoni wrote :
+>       x86_64 |               drbd-utils-8.9.1 | NOK | http://autobuild.buildroot.net/results/b6aa71e60f2db5f3378186e06a11d7bbca0f2eb5/
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- docs/website/index.html |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+drbd-utils (even after an upgrade to version 8.9.3) does not build with
+musl. drbd_endian.h contains the following snippet:
 
-diff --git a/docs/website/index.html b/docs/website/index.html
-index 36075bc..c6882fb 100644
---- a/docs/website/index.html
-+++ b/docs/website/index.html
-@@ -19,7 +19,7 @@
-           <a class="btn btn-primary btn-lg" style="width:100%;" href="/about.html"><span class="glyphicon glyphicon-info-sign"></span> Learn more ??</a>
-           </div>
-           <div class="col-sm-6" style="margin-top:1em; padding-left:0px;">
--          <a class="btn btn-primary btn-lg" style="width:100%;"href="/download.html"><span class="glyphicon glyphicon-cloud-download"></span> Download ??</a>
-+          <a class="btn btn-primary btn-lg" style="width:100%;" href="/download.html"><span class="glyphicon glyphicon-cloud-download"></span> Download ??</a>
-           </div>
-         </div>
-       </div>
+  #include <stdint.h>
+  #include <endian.h>
+
+  #ifndef BITS_PER_LONG
+  # define BITS_PER_LONG __WORDSIZE
+  #endif
+
+  ...
+
+  #if BITS_PER_LONG == 32
+  # ...
+  #elif BITS_PER_LONG == 64
+  # ...
+  #else
+  # error "sorry, unsupported word length on this box" /* Our error */
+  #endif
+
+
+__WORDSIZE is not defined in musl unless <sys/reg.h> is included (which
+I find weird). I will ask upstream if we can simply define
+BITS_PER_LONG as follows:
+
+  #define BITS_PER_LONG (sizeof(long) * 8)
+
+Best regards,
+
 -- 
-1.7.1
+Christophe Vu-Brugier
