@@ -1,260 +1,72 @@
-From: Guillermo A. Amaral <g@maral.me>
-Date: Mon,  7 Sep 2015 12:10:41 -0700
-Subject: [Buildroot] [PATCH v3 1/1] bitlbee: Added package
-Message-ID: <1441653041-10620-1-git-send-email-g@maral.me>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 7 Sep 2015 21:27:47 +0200
+Subject: [Buildroot] [PATCH] check: new package
+In-Reply-To: <55EDBB68.9020907@free-electrons.com>
+References: <1441633062-8282-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <55EDA1DE.4020904@mind.be> <55EDBB68.9020907@free-electrons.com>
+Message-ID: <55EDE533.30103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BitlBee brings IM (instant messaging) to IRC clients. It's a great
-solution for people who have an IRC client running all the time and
-don't want to run an additional MSN/AIM/whatever client.
+On 07-09-15 18:29, Gustavo Zacarias wrote:
+> On 07/09/15 11:40, Arnout Vandecappelle wrote:
+> 
+>>> +# From http://sourceforge.net/projects/check/files/check/0.10.0/
+>>> +md5    53c5e5c77d090e103a17f3ed7fd7d8b8    check-0.10.0.tar.gz
+>>> +sha1    35d3a53446aea7b21a770faedb358d0fc7cba76d    check-0.10.0.tar.gz
+>>
+>>   Don't we usually add a locally calculated sha256 if only sha1 is available
+>> upstream? (Honest question, I don't remember.)
+> 
+> Hi Arnout.
+> We normally consider md5 weak (docs), sha1 is so-so but we don't (yet) consider
+> it too weak.
+> For sourceforge they normally provide md5 and sha1, given than an intersection
+> of hashes is harder to crack than any single one alone it's good to add md5 - as
+> long as there's another better one backing it up as well.
 
-Bitlbee patch upstreamed:
+ OK, thanks for the reminder.
 
-    https://github.com/bitlbee/bitlbee/commit/f5bbaba3b2015f039221945431f98027cb3d2d49
+> 
+>>   Why do we need a host package?
+> 
+> Some people may use checkmk which is a host tool, which i remove for the target
+> (probably needs full gawk instead of busybox awk, and not very useful in the
+> target IMO).
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
+ I fully agree on removing checkmk on the target. I can also see that you'd want
+it on the host, but the user has no way to select it since there is no
+Config.in.host... So the user would have to do an explicit 'make host-check' to
+get it. It also won't be tested in the autobuilders.
 
----
+ So in principle, we only have host packages that are dependencies of other
+packages or that have a Config.in.host entry. An exception is when there is
+another package that uses it but that has not yet been accepted. Probably the
+reverse also exists: a host dependency that is no longer needed but the host
+package still exists.
 
-Changes v2 -> v3:
-    - Bitlbee cross-compilation changes upstreamed.
+ Thomas recently proposed to violate this principle in the context of the
+python-colorama package [1], to which I replied no [2]. But of course that's
+still open for discussion.
 
-Changes v1 -> v2:
-    - Bitlbee cross-compilation patch updated.
 
-Signed-off-by: Guillermo A. Amaral <g@maral.me>
----
- package/Config.in                                  |  1 +
- .../0001-Improved-cross-compiler-support.patch     | 76 ++++++++++++++++++++++
- package/bitlbee/Config.in                          | 56 ++++++++++++++++
- package/bitlbee/bitlbee.mk                         | 57 ++++++++++++++++
- 4 files changed, 190 insertions(+)
- create mode 100644 package/bitlbee/0001-Improved-cross-compiler-support.patch
- create mode 100644 package/bitlbee/Config.in
- create mode 100644 package/bitlbee/bitlbee.mk
+ Regards,
+ Arnout
 
-diff --git a/package/Config.in b/package/Config.in
-index 9bd4190..952596d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1203,6 +1203,7 @@ menu "Networking applications"
- 	source "package/batctl/Config.in"
- 	source "package/bcusdk/Config.in"
- 	source "package/bind/Config.in"
-+	source "package/bitlbee/Config.in"
- 	source "package/bluez_utils/Config.in"
- 	source "package/bluez5_utils/Config.in"
- 	source "package/bmon/Config.in"
-diff --git a/package/bitlbee/0001-Improved-cross-compiler-support.patch b/package/bitlbee/0001-Improved-cross-compiler-support.patch
-new file mode 100644
-index 0000000..47d5250
---- /dev/null
-+++ b/package/bitlbee/0001-Improved-cross-compiler-support.patch
-@@ -0,0 +1,76 @@
-+From 523cd4c5861edae31b45404272c1dc048f9484eb Mon Sep 17 00:00:00 2001
-+From: "Guillermo A. Amaral" <g@maral.me>
-+Date: Sun, 30 Aug 2015 15:22:58 -0700
-+Subject: [PATCH] Improved cross compiler support.
-+
-+* Added a configure option for sysroot.
-+* Prevent pkgconfig environment variables to be clobbered.
-+* Prevent PATH environment variable pollution.
-+* Backward compatible.
-+
-+Signed-off-by: Guillermo A. Amaral <g@maral.me>
-+---
-+ configure | 31 +++++++++++++++++++++++++++----
-+ 1 file changed, 27 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 921c9b4..5a0527d 100755
-+--- a/configure
-++++ b/configure
-+@@ -22,6 +22,7 @@ pidfile='/var/run/bitlbee.pid'
-+ ipcsocket=''
-+ pcdir='$prefix/lib/pkgconfig'
-+ systemlibdirs="/lib64 /usr/lib64 /usr/local/lib64 /lib /usr/lib /usr/local/lib"
-++sysroot=''
-+ 
-+ # Set these to default-on to let it be overriden by either the user or purple
-+ #
-+@@ -148,6 +149,7 @@ Option		Description				Default
-+ 
-+ 
-+ --target=...	Cross compilation target 		same as host
-++--sysroot=...	Cross compilation sysroot 		$sysroot
-+ EOF
-+ 		exit;
-+ 	fi
-+@@ -239,12 +241,33 @@ EOF
-+ 
-+ 
-+ if [ -n "$target" ]; then
-+-	PKG_CONFIG_LIBDIR=/usr/$target/lib/pkgconfig
-+-	export PKG_CONFIG_LIBDIR
-+-	PATH=/usr/$target/bin:$PATH
-++	# prepend sysroot to system lib dirs
-++
-++	systemlibdirs_cross=''
-++	for i in $systemlibdirs; do
-++		systemlibdirs_cross="$systemlibdirs_cross $sysroot$i"
-++	done
-++	systemlibdirs=$systemlibdirs_cross
-++	unset systemlibdirs_cross
-++
-++	# backward compatibility
-++
-++	if [ -z "$PKG_CONFIG_LIBDIR" ]; then
-++		PKG_CONFIG_LIBDIR=/usr/$target/lib/pkgconfig
-++		export PKG_CONFIG_LIBDIR
-++	fi
-++
-++	if [ -d /usr/$target/bin ]; then
-++		PATH=/usr/$target/bin:$PATH
-++	fi
-++
-++	if [ -d /usr/$target/lib ]; then
-++		systemlibdirs="$systemlibdirs /usr/$target/lib"
-++	fi
-++
-+ 	CC=$target-cc
-+ 	LD=$target-ld
-+-	systemlibdirs="/usr/$target/lib"
-++	STRIP=$target-strip
-+ fi
-+ 
-+ if [ "$asan" = "1" ]; then
-+-- 
-+2.4.6
-+
-diff --git a/package/bitlbee/Config.in b/package/bitlbee/Config.in
-new file mode 100644
-index 0000000..29abb78
---- /dev/null
-+++ b/package/bitlbee/Config.in
-@@ -0,0 +1,56 @@
-+config BR2_PACKAGE_BITLBEE
-+	bool "bitlbee"
-+	select BR2_PACKAGE_LIBGLIB2
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  An IRC to other chat networks gateway
-+
-+	  http://www.bitlbee.org/
-+
-+if BR2_PACKAGE_BITLBEE
-+
-+config BR2_PACKAGE_BITLBEE_MSN
-+	bool "Enable MSN Part"
-+	help
-+	  MSN Messenger support.
-+
-+config BR2_PACKAGE_BITLBEE_JABBER
-+	bool "Enable Jabber Part"
-+	help
-+	  Jabber/XMPP support.
-+
-+config BR2_PACKAGE_BITLBEE_OSCAR
-+	bool "Enable Oscar Part"
-+	help
-+	  OSCAR/ICQ support.
-+
-+config BR2_PACKAGE_BITLBEE_YAHOO
-+	bool "Enable Yahoo Part"
-+	help
-+	  Yahoo Messenger support.
-+
-+config BR2_PACKAGE_BITLBEE_TWITTER
-+	bool "Enable Twitter Part"
-+	help
-+	  Twitter support.
-+
-+choice
-+	prompt "SSL Backend"
-+	help
-+	  Select an SSL backend.
-+
-+config BR2_PACKAGE_BITLBEE_OPENSSL
-+	bool "OpenSSL"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Use OpenSSL backend.
-+
-+config BR2_PACKAGE_BITLBEE_GNUTLS
-+	bool "GnuTLS"
-+	select BR2_PACKAGE_GNUTLS
-+	help
-+	  Use GnuTLS backend.
-+
-+endchoice
-+
-+endif
-diff --git a/package/bitlbee/bitlbee.mk b/package/bitlbee/bitlbee.mk
-new file mode 100644
-index 0000000..86c26c0
---- /dev/null
-+++ b/package/bitlbee/bitlbee.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# bitlbee
-+#
-+################################################################################
-+
-+BITLBEE_VERSION = 3.4.1
-+BITLBEE_SITE = $(call github,bitlbee,bitlbee,$(BITLBEE_VERSION))
-+BITLBEE_LICENSE = GPL-2.0
-+BITLBEE_LICENSE_FILES = COPYING
-+BITLBEE_DEPENDENCIES = libglib2
-+BITLBEE_CONF_OPTS = --doc=0
-+
-+BITLBEE_CONF_OPTS += --msn=$(if $(BR2_PACKAGE_BITLBEE_MSN),1,0)
-+BITLBEE_CONF_OPTS += --jabber=$(if $(BR2_PACKAGE_BITLBEE_JABBER),1,0)
-+BITLBEE_CONF_OPTS += --oscar=$(if $(BR2_PACKAGE_BITLBEE_OSCAR),1,0)
-+BITLBEE_CONF_OPTS += --yahoo=$(if $(BR2_PACKAGE_BITLBEE_YAHOO),1,0)
-+BITLBEE_CONF_OPTS += --twitter=$(if $(BR2_PACKAGE_BITLBEE_TWITTER),1,0)
-+
-+ifeq ($(BR2_PACKAGE_BITLBEE_OPENSSL),y)
-+BITLBEE_CONF_OPTS += --ssl=openssl
-+BITLBEE_DEPENDENCIES += openssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BITLBEE_GNUTLS),y)
-+BITLBEE_CONF_OPTS += --ssl=gnutls
-+BITLBEE_DEPENDENCIES += gnutls
-+endif
-+
-+define BITLBEE_CONFIGURE_CMDS
-+	(cd $(@D); \
-+		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
-+		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
-+		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
-+		./configure \
-+		--cpu=$(ARCH) \
-+		--arch=$(TARGET_OS) \
-+		--prefix=/usr \
-+		--etcdir=/etc/bitlbee \
-+		--target=$(GNU_TARGET_NAME) \
-+		--sysroot=$(STAGING_DIR) \
-+		$(BITLBEE_CONF_OPTS) \
-+	)
-+endef
-+
-+define BITLBEE_BUILD_CMDS
-+	PATH="$(PATH):$(HOST_DIR)/usr/bin" \
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define BITLBEE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -d $(TARGET_DIR)/var/lib/bitlbee
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install-etc install
-+endef
-+
-+$(eval $(generic-package))
+[1] http://lists.busybox.net/pipermail/buildroot/2015-August/135344.html
+[2] http://lists.busybox.net/pipermail/buildroot/2015-September/138893.html
+
+> Regards.
+> 
+
+
 -- 
-2.4.6
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
