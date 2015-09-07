@@ -1,65 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Sep 2015 21:27:47 +0200
-Subject: [Buildroot] [PATCH] check: new package
-In-Reply-To: <55EDBB68.9020907@free-electrons.com>
-References: <1441633062-8282-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <55EDA1DE.4020904@mind.be> <55EDBB68.9020907@free-electrons.com>
-Message-ID: <55EDE533.30103@mind.be>
+Date: Mon, 7 Sep 2015 21:38:14 +0200
+Subject: [Buildroot] Right board to use -- buildroot begniers
+In-Reply-To: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
+References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
+Message-ID: <55EDE7A6.4060902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-09-15 18:29, Gustavo Zacarias wrote:
-> On 07/09/15 11:40, Arnout Vandecappelle wrote:
+On 07-09-15 14:36, Dinesh Guleria wrote:
+> Hi,
 > 
->>> +# From http://sourceforge.net/projects/check/files/check/0.10.0/
->>> +md5    53c5e5c77d090e103a17f3ed7fd7d8b8    check-0.10.0.tar.gz
->>> +sha1    35d3a53446aea7b21a770faedb358d0fc7cba76d    check-0.10.0.tar.gz
->>
->>   Don't we usually add a locally calculated sha256 if only sha1 is available
->> upstream? (Honest question, I don't remember.)
+> I am new to buildroot & looking forward to try my hands on creating :--:
+> linux Kernel
+> Rfile system
+> Uboot
 > 
-> Hi Arnout.
-> We normally consider md5 weak (docs), sha1 is so-so but we don't (yet) consider
-> it too weak.
-> For sourceforge they normally provide md5 and sha1, given than an intersection
-> of hashes is harder to crack than any single one alone it's good to add md5 - as
-> long as there's another better one backing it up as well.
-
- OK, thanks for the reminder.
-
+> For embedded system.
 > 
->>   Why do we need a host package?
+> I want to know from your experience which board shall i go for :--
+> Raspberrypi b version
+
+ Problem with Raspberry Pi is that it's rather difficult to understand the SoC,
+and its software support is pretty unusual (i.e., far from upstream).
+
+> AT91SAM9260
+
+ That's a SoC, not a board. There are a bunch of devboards with the processor,
+but can you still get them? Probably the at91sam9g45m10ek or
+atmel_sama5d3_xplained are a better fit.
+
+ The MIPS creator CI20 is also nice. But that's not ARM, of course.
+
+> What i think as something is already existing in buildroot & linux kernel for
+> support of these two boards, so its good for freshers to learn all these process
+> on these boards.
 > 
-> Some people may use checkmk which is a host tool, which i remove for the target
-> (probably needs full gawk instead of busybox awk, and not very useful in the
-> target IMO).
+> Means 32 bit controller whose specs are clearly define so that one can try hand
+> on creating/configuring memory drivers for sdram or Nand , creating device
+> drivers , configuring uboot & architecture specific files, porting linux &
+> rfsystem & uboot made by yourself ?
 
- I fully agree on removing checkmk on the target. I can also see that you'd want
-it on the host, but the user has no way to select it since there is no
-Config.in.host... So the user would have to do an explicit 'make host-check' to
-get it. It also won't be tested in the autobuilders.
+ These things are _not_ something I would advise for an absolute beginner.
+Experienced consultants like me plan two to four weeks of full-time work for
+porting everything from a devboard to a custom board. So starting from scratch
+is definitely an ambitious goal.
 
- So in principle, we only have host packages that are dependencies of other
-packages or that have a Config.in.host entry. An exception is when there is
-another package that uses it but that has not yet been accepted. Probably the
-reverse also exists: a host dependency that is no longer needed but the host
-package still exists.
+Start out with just building and installing the boot loader, kernel and rootfs
+for which support already exists. Then maybe you can bump the U-Boot and kernel
+version (and contribute patches, of course).
 
- Thomas recently proposed to violate this principle in the context of the
-python-colorama package [1], to which I replied no [2]. But of course that's
-still open for discussion.
-
+ Anyway, any devboard you can get probably already has U-Boot and kernel
+support, otherwise they wouldn't be able to sell it. So unless you're developing
+a custom board, re-implementing those from scratch is just duplicate work.
 
  Regards,
  Arnout
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-August/135344.html
-[2] http://lists.busybox.net/pipermail/buildroot/2015-September/138893.html
-
-> Regards.
+> 
+> Regards,
+> Katoch
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 
