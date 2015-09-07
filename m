@@ -1,79 +1,71 @@
-From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-Date: Mon,  7 Sep 2015 10:36:06 +0200
-Subject: [Buildroot] [PATCH 5/5] package/at: added previous patches from
-	v3.1.13 and left out obsolete patches
-Message-ID: <1441614966-10707-1-git-send-email-francesco.nwokeka@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Sep 2015 10:30:22 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2015-09-06
+In-Reply-To: <20150907063016.E32C8100E4D@stock.ovh.net>
+References: <20150907063016.E32C8100E4D@stock.ovh.net>
+Message-ID: <55ED592E.60802@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
----
- package/at/0003-getloadavg.c-fix.patch             | 30 ++++++++++++++++++++++
- package/at/0004-parsetime.l-include-config-h.patch | 16 ++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 package/at/0003-getloadavg.c-fix.patch
- create mode 100644 package/at/0004-parsetime.l-include-config-h.patch
+Dear Thomas Petazzoni,
 
-diff --git a/package/at/0003-getloadavg.c-fix.patch b/package/at/0003-getloadavg.c-fix.patch
-new file mode 100644
-index 0000000..e073927
---- /dev/null
-+++ b/package/at/0003-getloadavg.c-fix.patch
-@@ -0,0 +1,30 @@
-+[PATCH]: fix getloadavg.c compilation, revert to 3.1.10 version
-+
-+getloadavg.c shipped with 3.1.13 doesn't compile because it references
-+headers not shipped. Fix it by simply reverting to the 3.1.10 version.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ getloadavg.c |    7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+Index: at-3.1.13/getloadavg.c
-+===================================================================
-+--- at-3.1.13.orig/getloadavg.c
-++++ at-3.1.13/getloadavg.c
-+@@ -66,11 +66,12 @@ Boston, MA  02110-1301  USA */
-+ 
-+ /* This should always be first.  */
-+ #ifdef HAVE_CONFIG_H
-+-#include <config.h>
-++#include "config.h"
-+ #endif
-+ 
-+-#include "lisp.h"
-+-#include "sysfile.h" /* for encapsulated open, close, read, write */
-++#include <sys/types.h>
-++#include <sys/stat.h>
-++#include <fcntl.h>
-+ 
-+ #ifndef HAVE_GETLOADAVG
-+ 
-diff --git a/package/at/0004-parsetime.l-include-config-h.patch b/package/at/0004-parsetime.l-include-config-h.patch
-new file mode 100644
-index 0000000..f4111eb
---- /dev/null
-+++ b/package/at/0004-parsetime.l-include-config-h.patch
-@@ -0,0 +1,16 @@
-+Make sure to include config.h so that NEEDS_* macros are properly
-+taken into account. This was a problem for NEEDS_YYWRAP, which was set
-+to 1 in config.h, but the corresponding code wasn't compiled in.
-+
-+Index: at-3.1.13/parsetime.l
-+===================================================================
-+--- at-3.1.13.orig/parsetime.l
-++++ at-3.1.13/parsetime.l
-+@@ -4,6 +4,7 @@
-+ #include <time.h>
-+ #include "y.tab.h"
-+ #include "parsetime.h"
-++#include "config.h"
-+ 
-+ char *last_token = NULL;
-+ char **my_argv;
--- 
-2.5.1
+On 09/07/2015 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2015-09-06
+> ===============================
+
+>     mips64el | xdriver_xf86-video-r128-6.1... | NOK | http://autobuild.buildroot.net/results/0c469ad4f94c2834cae0e615395a82bc3d2d0946/
+
+I have investigated that and I have found the problem.
+
+The package xproto_glproto installs the needed headers to $(STAGING_DIR):
+
+[snip]
+make[2]: Entering directory `/br/output/build/xproto_glproto-1.4.17'
+make[2]: Nothing to be done for `install-exec-am'.
+ /bin/mkdir -p
+'/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/GL'
+ /bin/mkdir -p
+'/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/GL/internal'
+ /bin/mkdir -p
+'/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig'
+ /usr/bin/install -c -m 644 glcore.h
+'/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/GL/internal'
+ /usr/bin/install -c -m 644 glxint.h glxmd.h glxproto.h glxtokens.h
+'/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/GL'
+ /usr/bin/install -c -m 644 glproto.pc
+'/home/ldap/vriera/git-clones/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig'
+make[2]: Leaving directory `/br/output/build/xproto_glproto-1.4.17'
+[snip]
+
+But later, the package mesa3d deletes that directory at the end of its
+'install_to_staging' phase:
+
+[snip]
+make[1]: Leaving directory `/br/output/build/mesa3d-10.6.6'
+rm -f
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/dri.pc
+rm -f
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/gl.pc
+rm -rf
+/br/output/host/usr/mips64el-buildroot-linux-gnu/sysroot/usr/include/GL/
+>>> mesa3d 10.6.6 Fixing libtool files
+>>> mesa3d 10.6.6 Installing to target
+[snip]
+
+And then the package xdriver_xf86-video-r128 can't find the headers that
+it needs:
+
+[snip]
+r128_dri.c:61:26: fatal error: GL/glxtokens.h: No such file or directory
+ #include "GL/glxtokens.h"
+[snip]
+
+I'm not sure how to fix this, though. Ideas welcome.
+
+Regards,
+
+Vincent.
