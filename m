@@ -1,59 +1,134 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 7 Sep 2015 09:35:03 +0100
-Subject: [Buildroot] [PATCH] openntpd: fix linking problem when building
-	statically
-Message-ID: <1441614903-38623-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+Date: Mon,  7 Sep 2015 10:35:23 +0200
+Subject: [Buildroot] [PATCH 3/5] package/at: added reworked
+	"Makefile.in-replace-IROOT-by-DESTDIR" patch
+Message-ID: <1441614923-10494-1-git-send-email-francesco.nwokeka@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The problem looks like this:
-
-  CCLD     ntpd
-../compat/.libs/libcompat.a(libcompat_la-arc4random.o): In function
-`arc4random':
-/br/output/build/openntpd-5.7p4/compat/arc4random.c:183: undefined
-reference to `pthread_mutex_lock'
-/br/output/build/openntpd-5.7p4/compat/arc4random.c:185: undefined
-reference to `pthread_mutex_unlock'
-../compat/.libs/libcompat.a(libcompat_la-arc4random.o): In function
-`arc4random_buf':
-/br/output/build/openntpd-5.7p4/compat/arc4random.c:192: undefined
-reference to `pthread_mutex_lock'
-/br/output/build/openntpd-5.7p4/compat/arc4random.c:194: undefined
-reference to `pthread_mutex_unlock'
-/br/output/build/openntpd-5.7p4/compat/arc4random.c:194: undefined
-reference to `pthread_mutex_unlock'
-collect2: error: ld returned 1 exit status
-
-Adding -pthread to LDFLAGS fixes the problem.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/b12/b120b6da87ae4eb355d06f2fd8f4fc8050410897/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
 ---
- package/openntpd/openntpd.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ ...0001-Makefile.in-replace-IROOT-by-DESTDIR.patch | 109 +++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
+ create mode 100644 package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
 
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index d51f902..816001a 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -9,6 +9,11 @@ OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
- OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
- OPENNTPD_LICENSE_FILES = COPYING
- 
-+# openntpd needs -pthread if linking statically
-+ifeq ($(BR2_STATIC_LIBS),y)
-+OPENNTPD_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -pthread"
-+endif
+diff --git a/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch b/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
+new file mode 100644
+index 0000000..90c0f17
+--- /dev/null
++++ b/package/at/0001-Makefile.in-replace-IROOT-by-DESTDIR.patch
+@@ -0,0 +1,109 @@
++From de18666063c1c7dbd9795078375f54fe5238b2ff Mon Sep 17 00:00:00 2001
++From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
++Date: Fri, 4 Sep 2015 19:15:19 +0200
++Subject: [PATCH 1/1] Makefile.in: replace IROOT by DESTDIR
 +
- define OPENNTPD_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 package/openntpd/ntpd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/ntpd.service
++This patch replaces IROOT by DESTDIR, which is the autotools standard
++variable. For backwards compatibilty IROOT overwrites the DESTDIR.
++
++Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
++
++Adjusted patch to v3.1.16
++
++Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
++---
++ Makefile.in | 68 ++++++++++++++++++++++++++++++++-----------------------------
++ 1 file changed, 36 insertions(+), 32 deletions(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index 5dd2767..4297f87 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -17,6 +17,10 @@ atdocdir	= $(docdir)/at
++ etcdir		= @ETCDIR@
++ systemdsystemunitdir = @systemdsystemunitdir@
++ 
+++ifdef IROOT
+++DESTDIR		= $(IROOT)
+++endif
+++
++ DAEMON_USERNAME	= @DAEMON_USERNAME@
++ DAEMON_GROUPNAME= @DAEMON_GROUPNAME@
++ LOADAVG_MX	= @LOADAVG_MX@
++@@ -91,41 +95,41 @@ atrun: atrun.in
++ 	$(CC) -c $(CFLAGS) $(DEFS) $*.c
++ 
++ install: all
++-	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(etcdir)
++-	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(bindir)
++-	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(sbindir)
++-	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(docdir)
++-	$(INSTALL) -g root -o root -m 755 -d $(IROOT)$(atdocdir)
++-	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 755 -d $(IROOT)$(ATSPOOL_DIR) $(IROOT)$(ATJOB_DIR)
++-	chmod 1770 $(IROOT)$(ATSPOOL_DIR) $(IROOT)$(ATJOB_DIR)
++-	touch $(IROOT)$(LFILE)
++-	chmod 600 $(IROOT)$(LFILE)
++-	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(IROOT)$(LFILE)
++-	test -f $(IROOT)$(etcdir)/at.allow || test -f $(IROOT)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(IROOT)$(etcdir)/
++-	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(IROOT)$(bindir)
++-	$(LN_S) -f at $(IROOT)$(bindir)/atq
++-	$(LN_S) -f at $(IROOT)$(bindir)/atrm
++-	$(INSTALL) -g root -o root -m 755 batch $(IROOT)$(bindir)
++-	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man1dir)
++-	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man5dir)
++-	$(INSTALL) -d -o root -g root -m 755 $(IROOT)$(man8dir)
++-	$(INSTALL) -g root -o root -m 755 atd $(IROOT)$(sbindir)
++-	$(INSTALL) -g root -o root -m 755 atrun $(IROOT)$(sbindir)
++-	$(INSTALL) -g root -o root -m 644 at.1 $(IROOT)$(man1dir)/
++-	cd $(IROOT)$(man1dir) && $(LN_S) -f at.1 atq.1 && $(LN_S) -f at.1 batch.1 && $(LN_S) -f at.1 atrm.1
++-	$(INSTALL) -g root -o root -m 644 atd.8 $(IROOT)$(man8dir)/
+++	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(etcdir)
+++	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(bindir)
+++	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(sbindir)
+++	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(docdir)
+++	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(atdocdir)
+++	$(INSTALL) -g root -o root -m 755 -d $(DESTDIR)$(ATSPOOL_DIR) $(DESTDIR)$(ATJOB_DIR)
+++	chmod 1770 $(DESTDIR)$(ATSPOOL_DIR) $(DESTDIR)$(ATJOB_DIR)
+++	touch $(DESTDIR)$(LFILE)
+++	chmod 600 $(DESTDIR)$(LFILE)
+++	chown $(DAEMON_USERNAME):$(DAEMON_GROUPNAME) $(DESTDIR)$(LFILE)
+++	test -f $(DESTDIR)$(etcdir)/at.allow || test -f $(DESTDIR)$(etcdir)/at.deny || $(INSTALL) -o root -g $(DAEMON_GROUPNAME) -m 640 at.deny $(DESTDIR)$(etcdir)/
+++	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 at $(DESTDIR)$(bindir)
+++	$(LN_S) -f at $(DESTDIR)$(bindir)/atq
+++	$(LN_S) -f at $(DESTDIR)$(bindir)/atrm
+++	$(INSTALL) -g root -o root -m 755 batch $(DESTDIR)$(bindir)
+++	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man1dir)
+++	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man5dir)
+++	$(INSTALL) -d -o root -g root -m 755 $(DESTDIR)$(man8dir)
+++	$(INSTALL) -g root -o root -m 755 atd $(DESTDIR)$(sbindir)
+++	$(INSTALL) -g root -o root -m 755 atrun $(DESTDIR)$(sbindir)
+++	$(INSTALL) -g root -o root -m 644 at.1 $(DESTDIR)$(man1dir)/
+++	cd $(DESTDIR)$(man1dir) && $(LN_S) -f at.1 atq.1 && $(LN_S) -f at.1 batch.1 && $(LN_S) -f at.1 atrm.1
+++	$(INSTALL) -g root -o root -m 644 atd.8 $(DESTDIR)$(man8dir)/
++ 	sed "s,\$${exec_prefix},$(exec_prefix),g" <atrun.8>tmpman
++-	$(INSTALL) -g root -o root -m 644 tmpman $(IROOT)$(man8dir)/atrun.8
+++	$(INSTALL) -g root -o root -m 644 tmpman $(DESTDIR)$(man8dir)/atrun.8
++ 	rm -f tmpman
++-	$(INSTALL) -g root -o root -m 644 at.allow.5 $(IROOT)$(man5dir)/
++-	cd $(IROOT)$(man5dir) && $(LN_S) -f at.allow.5 at.deny.5
++-	$(INSTALL) -g root -o root -m 644 $(DOCS) $(IROOT)$(atdocdir)
++-	rm -f $(IROOT)$(mandir)/cat1/at.1* $(IROOT)$(mandir)/cat1/batch.1* \
++-		$(IROOT)$(mandir)/cat1/atq.1*
++-	rm -f $(IROOT)$(mandir)/cat1/atd.8*
+++	$(INSTALL) -g root -o root -m 644 at.allow.5 $(DESTDIR)$(man5dir)/
+++	cd $(DESTDIR)$(man5dir) && $(LN_S) -f at.allow.5 at.deny.5
+++	$(INSTALL) -g root -o root -m 644 $(DOCS) $(DESTDIR)$(atdocdir)
+++	rm -f $(DESTDIR)$(mandir)/cat1/at.1* $(DESTDIR)$(mandir)/cat1/batch.1* \
+++		$(DESTDIR)$(mandir)/cat1/atq.1*
+++	rm -f $(DESTDIR)$(mandir)/cat1/atd.8*
++ 	if test x"$(systemdsystemunitdir)" != xno; then \
++-		$(INSTALL) -o root -g root -m 755 -d $(IROOT)$(systemdsystemunitdir); \
++-		$(INSTALL) -o root -g root -m 644 atd.service $(IROOT)$(systemdsystemunitdir); \
+++		$(INSTALL) -o root -g root -m 755 -d $(DESTDIR)$(systemdsystemunitdir); \
+++		$(INSTALL) -o root -g root -m 644 atd.service $(DESTDIR)$(systemdsystemunitdir); \
++ 	fi
++ 
++ dist: checkin $(DIST) $(LIST) Filelist.asc
++-- 
++2.5.1
++
 -- 
-1.7.1
+2.5.1
