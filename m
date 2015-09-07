@@ -1,32 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Sep 2015 00:10:57 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: finish removal of SH2A
-	toolchains
-In-Reply-To: <1441661293-1638-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 7 Sep 2015 23:28:13 +0200")
-References: <1441661293-1638-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y4ghhocu.fsf@dell.be.48ers.dk>
+Date: Mon, 7 Sep 2015 23:47:34 +0200
+Subject: [Buildroot] [git commit] lvm2: bump to version 2.02.130
+Message-ID: <20150907221137.DA3AC81E76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=596dcde25c16f63ad649e21f203606e851cef7d3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Commit c68c365d2937920df1f2062e4821ebb6d21d195e ("toolchain-external:
- > remove CS sh2 toolchains") removed the definitions of the
- > BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103 and
- > BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009, but did not actually
- > remove the code that was using those options.
+Release announcement:
 
- > So this commit removes the parts of the code that are currently dead
- > due to this: the definition of the prefix of those toolchains, the
- > hashes, and the URLs.
+https://www.redhat.com/archives/lvm-devel/2015-September/msg00048.html
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lvm2/lvm2.hash |    4 +++-
+ package/lvm2/lvm2.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index eda465d..6aae05a 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,4 @@
+ # From ftp://sources.redhat.com/pub/lvm2/md5.sum
+-md5  2d24ba982c8a85e8c837210f087a6a51  LVM2.2.02.125.tgz
++md5 e7ae07e413120713549cc6dd2a558c75  LVM2.2.02.130.tgz
++# Locally calculated
++sha256 1d9af1ce498453639bb353d593980eca5c7ca9cc7734ace61454191f7c669d29  LVM2.2.02.130.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 0930a10..73a27ad 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.125
++LVM2_VERSION = 2.02.130
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
