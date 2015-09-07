@@ -1,59 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Sep 2015 14:15:58 +0200
-Subject: [Buildroot] [PATCH] docs/manual: add the "mark as superseded"
-	hint
-In-Reply-To: <1441627745-1553-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441627745-1553-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <55ED7FFE.9040102@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  7 Sep 2015 09:21:38 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.0.3
+Message-ID: <1441628498-14686-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-On 07-09-15 14:09, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  docs/manual/contribute.txt |    3 +++
->  1 files changed, 3 insertions(+), 0 deletions(-)
-> 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 5f0762f..e24a0c5 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -298,6 +298,9 @@ $ git format-patch --subject-prefix "PATCH v4" \
->      -M -s -o outgoing origin/master
->  ---------------------
->  
-> +When you provide a new version of a patch, please mark the old one as
-> +superseded in http://patchwork.buildroot.org[patchwork].
-
- It may be useful to add that it's necessary to create an account to be able to
-do that:
-
-You need to create an account on patchwork to be able to modify the status of
-your patches. Note that you can only change the status of patches you submitted
-yourself.
-
-
- Regards,
- Arnout
-
-> +
->  [[reporting-bugs]]
->  === Reporting issues/bugs or getting help
->  
-> 
-
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index a054d6e..2d80b60 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.2.tar.bz2.sha256
+-sha256	beb3caf8654010fcdca61c810a3a7532237fc567ee4271deb674b5efbbe3b466	harfbuzz-1.0.2.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.3.tar.bz2.sha256
++sha256	ebdc875ea06d010722dec13d92bc40002ab6a77071d62e71aad564ff76a63df7	harfbuzz-1.0.3.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 3fa9642..60dcd94 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 1.0.2
++HARFBUZZ_VERSION = 1.0.3
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.6
