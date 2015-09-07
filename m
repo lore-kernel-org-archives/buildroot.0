@@ -1,75 +1,84 @@
-From: Alex Potapenko <opotapenko@gmail.com>
-Date: Mon, 7 Sep 2015 20:49:02 +0300
-Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
- trying to load shared library
-In-Reply-To: <55EDAA89.20809@mind.be>
-References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
- <55EDA03A.2070302@mind.be>
- <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
- <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
- <55EDAA89.20809@mind.be>
-Message-ID: <CAF5aO=+dvVTzhdJW7D7udiEmomAU_ZWTCSXF5OP0zcmhuHcUqQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  7 Sep 2015 19:52:37 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/libyuv: Fix aarch64 support
+Message-ID: <1441648357-19862-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, top posting was an accident: I first pressed 'Reply' instead of
-'Reply to all', then typed the message, and then noticed it. Thought if I
-only change the recipients, not the topic, it'll be OK.
-Anyway, /system/lib appears in strace output only because of
-LD_LIBRARY_PATH env variable, which is populated by android as
-'/system/lib' and is respected by uclibc. If I empty this variable, those
-entries go away.
+aarch64 is a NEON-enabled arch according to the source code[1] but the
+files containing the NEON-specific functions[2] were not added to the
+build using CMake.
 
-Optware-ng is designed to reside in /opt, be firmware-independed and run
-fine as long as the arch is right. At least if it doesn't pick up wrong
-libs first because of LD_LIBRARY_PATH containing conflicting libs. That is
-why I expected it to work with my phone, arch seems right... But it
-doesn't! And that's the mystery, the strace EOVERFLOW error tells me
-nothing, and I don't even know where to look, what to try, etc.
+Fixes
+http://autobuild.buildroot.net/results/c8d/c8d9bff33484b598ff85a26771ce51295bec550d/
+http://autobuild.buildroot.net/results/7f3/7f3a09157c4c385434458b6aafec202376e75706/
+http://autobuild.buildroot.net/results/991/9917d7bb18305c6a6bcbd9fe2aa986d452f7d4a4/
+http://autobuild.buildroot.net/results/6bf/6bf9e48b53f77b8a7bb8a667ea3f63298a4685ce/
+http://autobuild.buildroot.net/results/ccf/ccff5d1cb3de8642e3fa24a6b01b31a503df67f9/
+http://autobuild.buildroot.net/results/0c5/0c559f1b1b9bc9f2e2a131e34f034ce4e34fa75b/
+http://autobuild.buildroot.net/results/bf3/bf324985e9bbcd61196304de1d0313a0e216a0a8/
+http://autobuild.buildroot.net/results/d55/d552e5e46c263ff9860192a993ee9ed11d7783a6/
+http://autobuild.buildroot.net/results/2d7/2d73ccdfd5d06bd6dfdc4e303fe48a554460fa1c/
+http://autobuild.buildroot.net/results/972/97207ed46a519368e242f0621e4363d522e21ee8/
+http://autobuild.buildroot.net/results/d84/d84d54d85183296c57c9131d946e4517ddcaa84d/
+http://autobuild.buildroot.net/results/c18/c189149b8d2a0242da06ec68863db23cd0fa65b8/
+http://autobuild.buildroot.net/results/73a/73a026644179708692c43166a8ffba3ce0e19d95/
 
-Thanks
-7 ???. 2015 18:17 "Arnout Vandecappelle" <arnout@mind.be> ????:
+[1] https://freeswitch.org/stash/projects/SD/repos/libyuv/browse/include/libyuv/row.h#263
+[2] https://freeswitch.org/stash/projects/SD/repos/libyuv/browse/BUILD.gn#101
 
-> On 07-09-15 16:53, Alex Potapenko wrote:
-> > Thank you for your response, Arnout!
-> > Unfortunately, that is not the reason here. I use Buildroot to build the
-> > toolchain only. And then use modified Optware build system to
-> cross-compile the
-> > packages. armeabi feed is built with '
-> > -Wl,--dynamic-linker=/opt/lib/ld-uClibc.so.0' ld flag, so they know
-> where the
-> > linker resides.
->
->  Weird, since strace shows that it is looking inside /system and
-> lc-uClibc.so
-> would never do that...
->
->  Your kernel does have CONFIG_AEABI I hope?
->
->
->  Could you try to build without the --dynamic-linker and install in / ?
-> Just to
-> exclude that potential issue.
->
->
->  Regards,
->  Arnout
->
->  PS Please don't top-post.
->
-> [snip]
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150907/72f17c57/attachment.html>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Added missing source files for aarch64 to CMake
+
+ package/libyuv/0002-aarch64.patch | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/libyuv/0002-aarch64.patch
+
+diff --git a/package/libyuv/0002-aarch64.patch b/package/libyuv/0002-aarch64.patch
+new file mode 100644
+index 0000000..c783cff
+--- /dev/null
++++ b/package/libyuv/0002-aarch64.patch
+@@ -0,0 +1,36 @@
++Add missing source files for aarch64.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.org/CMakeLists.txt libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea/CMakeLists.txt
++--- libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.org/CMakeLists.txt	2015-06-20 00:04:06.000000000 +0200
+++++ libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea/CMakeLists.txt	2015-09-07 19:29:42.898034988 +0200
++@@ -14,6 +14,7 @@
++   ${ly_src_dir}/compare.cc
++   ${ly_src_dir}/compare_common.cc
++   ${ly_src_dir}/compare_neon.cc
+++  ${ly_src_dir}/compare_neon64.cc
++   ${ly_src_dir}/compare_gcc.cc
++   ${ly_src_dir}/compare_win.cc
++   ${ly_src_dir}/convert.cc
++@@ -31,10 +32,12 @@
++   ${ly_src_dir}/rotate_argb.cc
++   ${ly_src_dir}/rotate_mips.cc
++   ${ly_src_dir}/rotate_neon.cc
+++  ${ly_src_dir}/rotate_neon64.cc
++   ${ly_src_dir}/row_any.cc
++   ${ly_src_dir}/row_common.cc
++   ${ly_src_dir}/row_mips.cc
++   ${ly_src_dir}/row_neon.cc
+++  ${ly_src_dir}/row_neon64.cc
++   ${ly_src_dir}/row_gcc.cc
++   ${ly_src_dir}/row_win.cc
++   ${ly_src_dir}/scale.cc
++@@ -43,6 +46,7 @@
++   ${ly_src_dir}/scale_common.cc
++   ${ly_src_dir}/scale_mips.cc
++   ${ly_src_dir}/scale_neon.cc
+++  ${ly_src_dir}/scale_neon64.cc
++   ${ly_src_dir}/scale_gcc.cc
++   ${ly_src_dir}/scale_win.cc
++   ${ly_src_dir}/video_common.cc
+-- 
+2.1.4
