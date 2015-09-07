@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Sep 2015 23:46:18 +0200
-Subject: [Buildroot] [PATCHv4 1/2] udisks: bump to version 1.0.5
-In-Reply-To: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 2 Sep 2015 15:21:19 +0100")
+Date: Mon, 07 Sep 2015 23:46:31 +0200
+Subject: [Buildroot] [PATCHv4 2/2] udisks: fix build with newer glibc
+	versions
+In-Reply-To: <1441203680-29193-2-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 2 Sep 2015 15:21:20 +0100")
 References: <1441203680-29193-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <871te9kimt.fsf@dell.be.48ers.dk>
+ <1441203680-29193-2-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87wpw1j420.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +15,20 @@ To: buildroot@busybox.net
 
 >>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > This version depends on libgudev when using systemd, otherwise it fails
- > with an error like this one:
+ > Backport an upstream patch to fix the build with newer glibc versions.
+ > This is how the failure looks like:
 
- > checking for GUDEV... no
- > configure: error: Package requirements (gudev-1.0 >= 147) were not met:
+ > job-drive-detach.c: In function 'sysfs_exists':
+ > job-drive-detach.c:44:15: error: storage size of 'statbuf' isn't known
+ >    struct stat statbuf;
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/ab3/ab36c2a1d2ca41a4d9ec6bab7d8d45678dbc5dcd/
 
  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Committed after changing the _CONF_OPTS to _DEPENDENCIES, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
