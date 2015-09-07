@@ -1,115 +1,1919 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Mon, 07 Sep 2015 16:08:38 +0200
-Subject: [Buildroot] [PATCH] Handle verbosity in infrastructures
-In-Reply-To: <55ED7E62.6080806@mind.be>
-References: <1441487237-10040-1-git-send-email-cedric.marie@openmailbox.org>
- <55ECB52C.3070806@mind.be>
- <e7d3e11a111e0f1a4da139146991a588@openmailbox.org>
- <55ED7E62.6080806@mind.be>
-Message-ID: <fb34984c55052f386dd7e0b9534c6a39@openmailbox.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 7 Sep 2015 15:09:36 +0100
+Subject: [Buildroot] [PATCHv2] docs/website: news.html code cleanup
+Message-ID: <1441634976-49840-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 2015-09-07 14:09, Arnout Vandecappelle a ?crit?:
->  Good point, you're right. Perhaps add a comment to clarify that.
-> # Override value passed in the environment
+- li tags closed
+- removed useless p tag after h2
+- fixed issues to make it validate on W3
 
-OK. I'll add a comment.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+  - Removed closing body and html tags. I was using them when I was
+    debugging and I forgot to remove them before committing.
 
->  Garbage in, garbage out :-)
+ docs/website/news.html |  852 ++++++++++++++++++++++--------------------------
+ 1 files changed, 382 insertions(+), 470 deletions(-)
 
-Yes, but the error will only occur when it comes to compiling an 
-autotools package. It may be disturbing to be notified so late, that the 
-option was not correct. Well, in my case, it is simply ignored, so we're 
-not notified at all... that's no better.
-
-make V=0/1 is Buildroot "API", and althought it is the same as autotools 
-"API", I think we should "translate" it, and prevent Buildroot from 
-forwarding invalid values. Just my opinion, and my experience in C 
-language :-)
-
-So maybe - if you agree that it should be checked - that should be done 
-at the beginning, in root Makefile.
-
-
->  If you do a git blame, you should see that all the lines with wrong 
-> indentation
-> are more than 2 years old. Lately we've been paying attention to 
-> consistent
-> indentation, but nobody has bothered to update existing Makefiles.
-
-OK, I had noticed the two different kinds of indentation, but didn't git 
-blame to check which one was the more recent.
-I'll fix it.
-
-
->  Well, you can actually put the two conditions on a single line but it 
-> looks
-> even worse:
-> 
-> ifeq ("$(origin V)"$(V), "command line"1)
-
-In fact, I thought about it, but I didn't have the idea to exclude $(V) 
-out of the "" (i.e. I thought of: ifeq ("$(origin V)$(V)", "command 
-line1"). And I thought that exporting 'V=command line1' in the shell 
-would "hack" the test and make it invalid. Yes, I know, I'm thinking 
-about very particular use cases :-)
-
-But I agree that - even with your method that fix this problem - it 
-doesn't look very nice.
-
-
->  I don't remember saying anything about BR2_VERBOSE, and I also can't 
-> find it in
-> the mails I sent (but I didn't check too carefully).
-
-
-It was not very clear because I didn't write any code to explain what I 
-meant, but I initially proposed to check $(origin V) and $(V) in the 
-root Makefile, and export BR2_VERBOSE (0 or 1). Then, in 
-infrastructures, it was not necessary to check $(origin V) anymore, but 
-simply check BR2_VERBOSE value.
-
-export BR2_VERBOSE=
-ifeq ("$(origin V)", "command line")
-ifeq ($(V),0)
-BR2_VERBOSE=0
-else ifeq ($(V),1)
-BR2_VERBOSE=1
-endif
-
-Then, in pkg-cmake.mk:
-ifeq ($(BR2_VERBOSE),1)
-CMAKE_VERBOSE = VERBOSE=1
-endif
-
-
-> I may have said something
-> about exporting such a variable - since nobody uses it there's no point
-> exporting it. Also, it doesn't match the naming convention: if it is a 
-> purely
-> internal (non-exported) variable, it should be just VERBOSE; if it is 
-> an
-> exported variable, it should be BR_VERBOSE because it is not 
-> user-visible or
-> Kconfig related (only user-visible or Kconfig options should have the 
-> BR2_
-> prefix, all others should have a BR_ prefix).
-
-OK, so I should use BR_VERBOSE.
-
-
->  Documentation updates should probably be in a separate patch since it 
-> usually
-> gets some more discussion about wording etc. and that shouldn't stop 
-> the
-> acceptance of the code change itself.
-
-OK. 3 patches so far :-)
-
-
+diff --git a/docs/website/news.html b/docs/website/news.html
+index aeb0223..5946e15 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -5,11 +5,9 @@
+ 
+ <h2>News</h2>
+ 
+-<p>
+-
+ <ul>
+-  <li><b>6 September 2015 -- 2015.08.1 released</b>
+-
++  <li>
++    <b>6 September 2015 -- 2015.08.1 released</b>
+     <p>The 2015.08.1 bugfix release is out - Thanks to everyone
+     contributing. This release fixes critical issues discovered since
+     the 2015.08 release. See the
+@@ -17,9 +15,9 @@
+     file for more details,
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.08.1.tar.bz2">2015.08.1 release</a>.</p>
+-
+-  <li><b>31 August 2015 -- 2015.08 released</b>
+-
++  </li>
++  <li>
++    <b>31 August 2015 -- 2015.08 released</b>
+     <p>The stable 2015.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.08">CHANGES</a>
+@@ -27,38 +25,36 @@
+     <a href="http://lists.buildroot.org/pipermail/buildroot/2015-August/138336.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.08.tar.bz2">2015.08 release</a>.</p>
+-
+-  <li><b>24 August 2015 -- 2015.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>24 August 2015 -- 2015.08-rc2 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see
+     the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.08-rc2">CHANGES</a>
+     file for details, and
+     the <a href="http://lists.busybox.net/pipermail/buildroot/2015-August/137879.html">release
+     announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.08-rc2.tar.bz2">2015.08-rc2
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>5 August 2015 -- 2015.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>5 August 2015 -- 2015.08-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see
+     the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.08-rc1">CHANGES</a>
+     file for details, read
+     the <a href="http://lists.busybox.net/pipermail/buildroot/2015-August/135417.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.08-rc1.tar.bz2">2015.08-rc1
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>31 May 2015 -- 2015.05 released</b>
+-
++  </li>
++  <li>
++    <b>31 May 2015 -- 2015.05 released</b>
+     <p>The stable 2015.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05">CHANGES</a>
+@@ -66,34 +62,32 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2015-May/129209.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.05.tar.bz2">2015.05 release</a>.</p>
+-
+- <li><b>22 May 2015 -- 2015.05-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>22 May 2015 -- 2015.05-rc3 released</b>
+     <p>Release candidate 3 is out with more cleanups and security / build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.02-rc5.tar.bz2">2015.05-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>11 May 2015 -- 2015.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>11 May 2015 -- 2015.05-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.05-rc2.tar.bz2">2015.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>4 May 2015 -- 2015.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>4 May 2015 -- 2015.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.05-rc1">CHANGES</a>
+@@ -105,9 +99,9 @@
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>1 March 2015 -- 2015.02 released</b>
+-
++  </li>
++  <li>
++    <b>1 March 2015 -- 2015.02 released</b>
+     <p>The stable 2015.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02">CHANGES</a>
+@@ -115,112 +109,104 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2015-March/120396.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.02.tar.bz2">2015.02 release</a>.</p>
+-
+- <li><b>24 February 2015 -- 2015.02-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>24 February 2015 -- 2015.02-rc3 released</b>
+     <p>Release candidate 3 is out with more cleanups and security / build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.02-rc3.tar.bz2">2015.02-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>15 February 2015 -- 2015.02-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>15 February 2015 -- 2015.02-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.02-rc2.tar.bz2">2015.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>8 February 2015 -- 2015.02-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>8 February 2015 -- 2015.02-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2015.02-rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2015-February/118982.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2015.02-rc1.tar.bz2">2015.02-rc1
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>1 December 2014 -- 2014.11 released</b>
+-
++  </li>
++  <li>
++    <b>1 December 2014 -- 2014.11 released</b>
+     <p>The stable 2014.11 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11">CHANGES</a>
+     file for more details,
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.11.tar.bz2">2014.11 release</a>.</p>
+-
+-  <li><b>28 November 2014 -- 2014.11-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>28 November 2014 -- 2014.11-rc3 released</b>
+     <p>Release candidate 3 is out with more cleanups and build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.11-rc3.tar.bz2">2014.11-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>21 November 2014 -- 2014.11-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>21 November 2014 -- 2014.11-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.11-rc2.tar.bz2">2014.11-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>13 November 2014 -- Report from Buildroot Developers Meeting</b>
+-
++  </li>
++  <li>
++    <b>13 November 2014 -- Report from Buildroot Developers Meeting</b>
+     <p>A report from the recent
+     <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2014">
+     Buildroot Developers Meeting</a> is now
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-October/109966.html">available</a>.</p>
+-
+     <p>Once again, thanks to all the participants and to
+     <a href="http://www.mind.be">Mind</a> for sponsoring the event.</p>
+-
+     <p>The next Developer Days will take place on February 2nd and 3rd
+     in Brussels, Belgium, right after <a
+     href="http://fosdem.org">FOSDEM</a>. See the <a
+     href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2015">wiki</a>
+     for more details.</p>
+-
+-  <li><b>12 November 2014 -- 2014.11-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>12 November 2014 -- 2014.11-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.11-rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-November/111946.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.11-rc1.tar.bz2">2014.11-rc1
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>1 September 2014 -- 2014.08 released</b>
+-
++  </li>
++  <li>
++    <b>1 September 2014 -- 2014.08 released</b>
+     <p>The stable 2014.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.08">CHANGES</a>
+@@ -228,48 +214,45 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-September/105257.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.08.tar.bz2">2014.08 release</a>.</p>
+-
+-  <li><b>26 August 2014 -- 2014.08-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>26 August 2014 -- 2014.08-rc3 released</b>
+     <p>Release candidate 3 is out with more cleanups and build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.08-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.08-rc3.tar.bz2">2014.08-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>18 August 2014 -- 2014.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>18 August 2014 -- 2014.08-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.08-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.08-rc2.tar.bz2">2014.08-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>8 August 2014 -- 2014.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>8 August 2014 -- 2014.08-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.08-rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-August/103972.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.08-rc1.tar.bz2">2014.08-rc1
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>31 May 2014 -- 2014.05 released</b>
+-
++  </li>
++  <li>
++    <b>31 May 2014 -- 2014.05 released</b>
+     <p>The stable 2014.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05">CHANGES</a>
+@@ -277,166 +260,156 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-May/097863.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.05.tar.bz2">2014.05 release</a>.</p>
+-
+-  <li><b>28 May 2014 -- 2014.05-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>28 May 2014 -- 2014.05-rc3 released</b>
+     <p>Release candidate 3 is out with more cleanups and build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.05-rc3.tar.bz2">2014.05-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>21 May 2014 -- 2014.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>21 May 2014 -- 2014.05-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.05-rc2.tar.bz2">2014.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>13 May 2014 -- 2014.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>13 May 2014 -- 2014.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05-rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-May/096492.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.05-rc1.tar.bz2">2014.05-rc1
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>27 February 2014 -- 2014.02 released</b>
+-
++  </li>
++  <li>
++    <b>27 February 2014 -- 2014.02 released</b>
+     <p>The stable 2014.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02">CHANGES</a>
+     file for more details,
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.02.tar.bz2">2014.02 release</a>.</p>
+-
+-  <li><b>25 February 2014 -- 2014.02-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>25 February 2014 -- 2014.02-rc3 released</b>
+     <p>Release candidate 3 is out with more cleanups and build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.02-rc3.tar.bz2">2014.02-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>20 February 2014 -- 2014.02-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>20 February 2014 -- 2014.02-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.02-rc2.tar.bz2">2014.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="lists.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>11 February 2014 -- 2014.02-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>11 February 2014 -- 2014.02-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.02-rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-February/089055.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2014.02-rc1.tar.bz2">2014.02-rc1
+     release candidate</a>, and report any problems found to the
+     <a href="support.html">mailing list</a> or
+     <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>9 February 2014 -- Report from Buildroot Developers Meeting</b>
+-
++  </li>
++  <li>
++    <b>9 February 2014 -- Report from Buildroot Developers Meeting</b>
+     <p>A report from the recent
+     <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014">
+     Buildroot Developers Meeting</a> is now
+     <a href="http://lists.busybox.net/pipermail/buildroot/2014-February/088373.html">available</a>.</p>
+-
+     <p>Once again, thanks to all the participants and to
+     <a href="http://www.google.com">Google</a> and
+     <a href="http://www.mind.be">Mind</a> for sponsoring the event.</p>
+ 
+-  <li><b>30 January 2014 -- Upcoming Buildroot Developers meeting</b>
+-
++  </li>
++  <li>
++    <b>30 January 2014 -- Upcoming Buildroot Developers meeting</b>
+     <p>The upcoming Buildroot Developers meeting will take place in
+     Brussels on February, 3rd and 4th, after the
+     <a href="http://www.fosdem.org">FOSDEM</a> conference. Additional
+     details about the meeting can be found on the corresponding
+     <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014">
+     wiki page</a>.</p>
+-
+     <p>Persons not able to join the meeting in Brussels can participate
+     remotely using Google Hangouts. Simply give your Google address to
+     <code>thomas.petazzoni at free-electrons.com</code>.</p>
+-
+     <p>This meeting is sponsored by
+     <a href="http://www.google.com">Google</a> (for the meeting room)
+     and <a href="http://www.mind.be">Mind</a> (for the dinner).
+     Thanks to our sponsors!</p>
+-
+-  <li><b>30 November 2013 -- 2013.11 released</b>
+-
++  </li>
++  <li>
++    <b>30 November 2013 -- 2013.11 released</b>
+     <p>The stable 2013.11 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11">CHANGES</a>
+     file for more details, read the <a href="http://lists.busybox.net/pipermail/buildroot/2013-November/083600.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.11.tar.bz2">2013.11 release</a>.</p>
+-
+-  <li><b>30 November 2013 -- Slides from Embedded Linux Conference Europe</b>
+-
++  </li>
++  <li>
++    <b>30 November 2013 -- Slides from Embedded Linux Conference Europe</b>
+     <p>The slides from the Buildroot presentation at the recent
+     <a href="http://events.linuxfoundation.org/events/embedded-linux-conference-europe">Embedded Linux Conference Europe 2013</a>
+     are now
+     <a href="http://elinux.org/images/2/23/Buildroot-whats-new-elce2013.pdf">available</a>.</p>
+-
+-  <li><b>18 November 2013 -- 2013.11-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>18 November 2013 -- 2013.11-rc3 released</b>
+     <p>Another week, another release candidate with more fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11-rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.11-rc3.tar.bz2">2013.11-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>18 November 2013 -- 2013.11-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>18 November 2013 -- 2013.11-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11-rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.11-rc2.tar.bz2">2013.11-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>13 November 2013 -- Announcement of the next Buildroot Developer Days</b>
+-
++  </li>
++  <li>
++    <b>13 November 2013 -- Announcement of the next Buildroot Developer Days</b>
+     <p>The next <i>Buildroot Developer Days</i> meeting will take
+     place on Monday 3rd and Tuesday 4th February 2014 in Brussels,
+     Belgium - Just after
+@@ -446,47 +419,42 @@
+     experience with the tool. It will allow developers to work on
+     Buildroot and discuss current issues, the future directions, and
+     more.</p>
+-
+     <p>In addition to the Buildroot event, we encourage embedded Linux
+     developers to propose talks for the Embedded and Mobile Developer
+     Room at FOSDEM. See
+     the <a href="https://lists.fosdem.org/pipermail/fosdem/2013-October/001870.html">CFP</a>.</p>
+-
+     <p>We would like to thank our
+     sponsor <a href="http://www.google.com">Google</a> for sponsoring
+     the event by providing all the needed logistics.</p>
+-
+     <p>For more details, see the
+     <a href="http://www.elinux.org/Buildroot:DeveloperDaysFOSDEM2014">wiki
+     page</a> dedicated to the meeting.</p>
+-
+-  <li><b>12 November 2013 -- 2013.11-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>12 November 2013 -- 2013.11-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.11_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2013-November/082514.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.11-rc1.tar.bz2">2013.11-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>11 November 2013 -- Report from Buildroot Developers Meeting</b>
+-
++  </li>
++  <li>
++    <b>11 November 2013 -- Report from Buildroot Developers Meeting</b>
+     <p>A report from the recent
+     <a href="http://elinux.org/Buildroot:DeveloperDaysELCE2013">
+     Buildroot Developers Meeting</a> is now
+     <a href="http://lists.busybox.net/pipermail/buildroot/2013-November/082401.html">available</a>.</p>
+-
+     <p>Once again, thanks to all the participants and to
+     <a href="http://www.imgtec.com/">Imagination Technologies</a>
+     for sponsoring the event.</p>
+-
+-  <li><b>17 September 2013 -- 2013.08.1 released</b>
+-
++  </li>
++  <li>
++    <b>17 September 2013 -- 2013.08.1 released</b>
+     <p>The 2013.08.1 bugfix release is out - Thanks to everyone
+     contributing. This release fixes critical issues discovered since
+     the 2013.08 release. See the
+@@ -494,9 +462,9 @@
+     file for more details,
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.08.1.tar.bz2">2013.08.1 release</a>.</p>
+-
+-  <li><b>16 September 2013 -- Buildroot Developer Days</b>
+-
++  </li>
++  <li>
++    <b>16 September 2013 -- Buildroot Developer Days</b>
+     <p>The next <i>Buildroot Developer Days</i> meeting will take
+     place on Saturday October 26th and Sunday October 27th 2013 in
+     Edinburgh, UK - Just after the <a
+@@ -506,61 +474,57 @@
+     contributors, or Buildroot users having a prior experience with
+     the tool. It will allow developers to work on Buildroot and
+     discuss current issues, the future directions, and more.</p>
+-
+     <p>For more details, see the
+     <a href="http://www.elinux.org/Buildroot:DeveloperDaysELCE2013">wiki
+     page</a> dedicated to the meeting.</p>
+-
+-  <li><b>31 August 2013 -- 2013.08 released</b>
+-
++  </li>
++  <li>
++    <b>31 August 2013 -- 2013.08 released</b>
+     <p>The stable 2013.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.08">CHANGES</a>
+     file for more details, read the <a href="http://lists.busybox.net/pipermail/buildroot/2013-August/077224.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.08.tar.bz2">2013.08 release</a>.</p>
+-
+-  <li><b>29 August 2013 -- 2013.08-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>29 August 2013 -- 2013.08-rc3 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.08_rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.08-rc3.tar.bz2">2013.08-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>16 August 2013 -- 2013.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>16 August 2013 -- 2013.08-rc2 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see
+     the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.08_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.08-rc2.tar.bz2">2013.08-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>5 August 2013 -- 2013.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>5 August 2013 -- 2013.08-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see
+     the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.08_rc1">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.08-rc1.tar.bz2">2013.08-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>31 May 2013 -- 2013.05 released</b>
+-
++  </li>
++  <li>
++    <b>31 May 2013 -- 2013.05 released</b>
+     <p>The stable 2013.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05">CHANGES</a>
+@@ -568,127 +532,118 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2013-May/073121.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.05.tar.bz2">2013.05 release</a>.</p>
+-
+-  <li><b>25 May 2013 -- 2013.05-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>25 May 2013 -- 2013.05-rc3 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05_rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.05-rc3.tar.bz2">2013.05-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>15 May 2013 -- 2013.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>15 May 2013 -- 2013.05-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.05-rc2.tar.bz2">2013.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>8 May 2013 -- 2013.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>8 May 2013 -- 2013.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.05_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2013-May/071737.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.05-rc1.tar.bz2">2013.05-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>28 February 2013 -- 2013.02 released</b>
+-
++  </li>
++  <li>
++    <b>28 February 2013 -- 2013.02 released</b>
+     <p>The stable 2013.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.02">CHANGES</a>
+     file for more details
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.02.tar.bz2">2013.02 release</a>.</p>
+-
+-  <li><b>26 February 2013 -- 2013.02-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>26 February 2013 -- 2013.02-rc3 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.02_rc3">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.02-rc3.tar.bz2">2013.02-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>19 February 2013 -- 2013.02-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>19 February 2013 -- 2013.02-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.02_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.02-rc2.tar.bz2">2013.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>10 February 2013 -- 2013.02-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>10 February 2013 -- 2013.02-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2013.02_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2013-February/067148.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2013.02-rc1.tar.bz2">2013.02-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>10 February 2013 -- Report from Buildroot Developers Meeting</b>
+-
++  </li>
++  <li>
++    <b>10 February 2013 -- Report from Buildroot Developers Meeting</b>
+     <p>A report from the recent Buildroot Developers Meeting is now
+     <a href="http://lists.busybox.net/pipermail/buildroot/2013-February/067105.html">available</a>.
+     <a href="http://emlinews.net">Embedded Linux News</a> also has a
+     <a href="http://www.emlinews.net/2013/02/buildroot-developers-meeting-report/">
+     writeup about the event</a>, including photos.</p>
+-
+     <p>Once again, thanks to all the participants and to
+     <a href="http://www.google.com">Google</a> for sponsoring the event.</p>
+-
+-  <li><b>12 January 2013 -- Next Buildroot Developers Meeting next to FOSDEM, Brussels</b>
+-
++  </li>
++  <li>
++    <b>12 January 2013 -- Next Buildroot Developers Meeting next to FOSDEM, Brussels</b>
+     <p>The next Buildroot Developers Meeting will take place on Monday
+     4th February 2013 and Tuesday 5th February 2013 in Brussels,
+     Belgium. Those dates have been chosen to immediately follow the
+     great <a href="http://www.fosdem.org">FOSDEM</a> conference.</p>
+-
+     <p>Attending this meeting is free, after registration by
+     contacting <a href="mailto:thomas.petazzoni@free-electrons.com">Thomas
+     Petazzoni</a>. For more details about the meeting, please see
+     the <a href="http://elinux.org/Buildroot:DeveloperDaysFOSDEM2013">related
+     Wiki page</a>.</p>
+-
+     <p>We would like to
+     thank <a href="http://www.google.com">Google</a> for providing the
+     meeting location and the Internet connection, and offering free
+     lunch and refreshments to the participants.</p>
+-
+-  <li><b>3 January 2013 -- 2012.11.1 released</b>
+-
++  </li>
++  <li>
++    <b>3 January 2013 -- 2012.11.1 released</b>
+     <p>The 2012.11.1 bugfix release is out - Thanks to everyone
+     contributing. This release fixes critical issues discovered since
+     the 2012.11 release, most importantly with non-largefile builds on
+@@ -698,43 +653,42 @@
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.11.1.tar.bz2">2012.11.1 release</a>.</p>
+ 
+-  <li><b>2 December 2012 -- 2012.11 released</b>
+-
++  </li>
++  <li>
++    <b>2 December 2012 -- 2012.11 released</b>
+     <p>The stable 2012.11 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.11">CHANGES</a>
+     file for more details
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.11.tar.bz2">2012.11 release</a>.</p>
+-
+-  <li><b>30 November 2012 -- 2012.11-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>30 November 2012 -- 2012.11-rc2 released</b>
+     <p>RC2 is out with more bugfixes - See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.11_rc2">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.11-rc2.tar.bz2">2012.11-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>17 November 2012 -- 2012.11-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>17 November 2012 -- 2012.11-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.11_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2012-November/061995.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.11-rc1.tar.bz2">2012.11-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>17 November 2012 -- Buildroot Developer Day</b>
+-
++  </li>
++  <li>
++    <b>17 November 2012 -- Buildroot Developer Day</b>
+     <p>A report from the recent <i>Buildroot Developer Days</i> meeting
+     in Barcelona, Spain is now <a
+     href="http://lists.busybox.net/pipermail/buildroot/2012-November/061558.html">available</a>.
+@@ -747,56 +701,53 @@
+     </p>
+     <p>The next Developer Days will take place on February 4th and 5th
+     in Brussels, Belgium, right after <a href="http://fosdem.org">FOSDEM</a>.</p>
+-
+-   <li><b>31 August 2012 -- 2012.08 released</b>
+-
++  </li>
++  <li>
++    <b>31 August 2012 -- 2012.08 released</b>
+     <p>The stable 2012.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08">CHANGES</a>
+     file for more details and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.08.tar.bz2">2012.08 release</a>.</p>
+-
+-   <li><b>25 August 2012 -- 2012.08-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>25 August 2012 -- 2012.08-rc3 released</b>
+      <p>We have a new release candidate! Various fixes, and addition
+      of licensing informations on many
+      packages. See <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc3">CHANGES</a>
+      file for details</p>
+-
+      <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+      <a href="/downloads/buildroot-2012.08-rc3.tar.bz2">2012.08-rc3
+      release candidate</a>, and report any problems found to the <a
+      href="support.html">mailing list</a> or <a
+      href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-   <li><b>15 August 2012 -- 2012.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>15 August 2012 -- 2012.08-rc2 released</b>
+      <p>We have a new release candidate! Various fixes, and addition
+      of licensing informations on many
+      packages. See <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc2">CHANGES</a>
+      file for details</p>
+-
+      <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+      <a href="/downloads/buildroot-2012.08-rc2.tar.bz2">2012.08-rc2
+      release candidate</a>, and report any problems found to the <a
+      href="support.html">mailing list</a> or <a
+      href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-   <li><b>1 August 2012 -- 2012.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>1 August 2012 -- 2012.08-rc1 released</b>
+      <p>We have a new release candidate! Lots of changes all over the
+      tree, see the <a
+      href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc1">CHANGES</a>
+      file for details</p>
+-
+      <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+      <a href="/downloads/buildroot-2012.08-rc1.tar.bz2">2012.08-rc1
+      release candidate</a>, and report any problems found to the <a
+      href="support.html">mailing list</a> or <a
+      href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>22 July 2012 -- Buildroot Developer Day</b>
+-
++  </li>
++  <li>
++    <b>22 July 2012 -- Buildroot Developer Day</b>
+     <p>The next <i>Buildroot Developer Day</i> meeting will take place
+     on Saturday November 3th and Sunday November 4th 2012 in
+     Barcelona, Spain, just before
+@@ -811,8 +762,9 @@
+     the <a href="http://elinux.org/Buildroot#Buildroot_Developers_Meeting.2C_3-4_November_2012.2C_Barcelona_Spain">wiki
+     page</a> dedicated to the meeting.</p>
+ 
+-  <li><b>30 May 2012 -- 2012.05 released</b>
+-
++  </li>
++  <li>
++    <b>30 May 2012 -- 2012.05 released</b>
+     <p>The stable 2012.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
+@@ -820,63 +772,59 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2012-May/054342.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
+-
+-  <li><b>25 May 2012 -- 2012.05-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>25 May 2012 -- 2012.05-rc3 released</b>
+     <p>RC3 is out with more bugfixes - See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc3">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05-rc3.tar.bz2">2012.05-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>18 May 2012 -- 2012.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>18 May 2012 -- 2012.05-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05-rc2.tar.bz2">2012.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>10 May 2012 -- 2012.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>10 May 2012 -- 2012.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2012-May/053736.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05-rc1.tar.bz2">2012.05-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>20 April 2012 -- Autobuilder Results Online</b>
+-
++  </li>
++  <li>
++    <b>20 April 2012 -- Autobuilder Results Online</b>
+     <p>The status of the autobuilders, which do repeated
+     <code>randpackageconfig</code> builds for continuous integration
+     testing, is now online at <a
+     href='http://autobuild.buildroot.org'>autobuild.buildroot.org</a>. The
+     code behind it can be found in <a
+     href='http://git.buildroot.net/buildroot-test/'>git</a>.</p>
+-
+     <p>Thanks to Thomas Petazzoni for running the web interface, and
+     to <a href='http://gcc.gnu.org/wiki/CompileFarm'>The GCC Compile
+     Farm</a> and <a href='http://free-electrons.com/'>Free
+     Electrons</a> for hosting builders. Thomas also sends out a daily
+     summary of the build status to the mailing list.</p>
+-
+-  <li><b>29 February 2012 -- 2012.02 released</b>
+-
++  </li>
++  <li>
++    <b>29 February 2012 -- 2012.02 released</b>
+     <p>The stable 2012.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02">CHANGES</a>
+@@ -884,57 +832,55 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2012-February/050752.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.02.tar.bz2">2012.02 release</a>.</p>
+-
+-  <li><b>27 February 2012 -- 2012.02-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>27 February 2012 -- 2012.02-rc3 released</b>
+     <p>RC3 is out with more bugfixes - See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.02-rc3.tar.bz2">2012.02-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>19 February 2012 -- 2012.02-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>19 February 2012 -- 2012.02-rc2 released</b>
+     <p>Another week, another release candidate with more cleanups and
+     build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.02-rc2.tar.bz2">2012.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>12 February 2012 -- 2012.02-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>12 February 2012 -- 2012.02-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2012-February/050234.html">announcement</a>.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.02-rc1.tar.bz2">2012.02-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+ 
+-  <li><b>31 January 2012 -- Buildroot Developer Day</b>
+-
++  </li>
++  <li>
++    <b>31 January 2012 -- Buildroot Developer Day</b>
+     <p>Another <i>Buildroot Developer Day</i> will take place on
+     Friday, February 3rd in Brussels, Belgium - The day before <a
+     href="http://fosdem.org">FOSDEM</a>. See the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html">announcement</a>
+     or the <a href="http://free-electrons.com/blog/bdd-2012-brussels/">Free Electrons blog</a>
+     for more info.</p>
+-
+-  <li><b>30 November 2011 -- 2011.11 released</b>
+-
++  </li>
++  <li>
++    <b>30 November 2011 -- 2011.11 released</b>
+     <p>The stable 2011.11 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11">CHANGES</a>
+@@ -942,117 +888,112 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-November/047926.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.11.tar.bz2">2011.11 release</a>.</p>
+-
+-  <li><b>26 November 2011 -- 2011.11-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>26 November 2011 -- 2011.11-rc3 released</b>
+     <p>RC3 is out with more bugfixes - See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc3">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.11-rc3.tar.bz2">2011.11-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>18 November 2011 -- 2011.11-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>18 November 2011 -- 2011.11-rc2 released</b>
+     <p>Another week, another release candidate with a bunch of
+     cleanups and build fixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.11-rc2.tar.bz2">2011.11-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>11 November 2011 -- 2011.11-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>11 November 2011 -- 2011.11-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-November/047395.html">announcement</a>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.11-rc1.tar.bz2">2011.11-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+ 
+-  <li><b>31 August 2011 -- 2011.08 released</b>
+-
++  </li>
++  <li>
++    <b>31 August 2011 -- 2011.08 released</b>
+     <p>The stable 2011.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.08">CHANGES</a>
+     file for more details, and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.08.tar.bz2">2011.08 release</a>.</p>
+-
+-  <li><b>29 August 2011 -- 2011.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>29 August 2011 -- 2011.08-rc2 released</b>
+     <p>RC2 is out with more bugfixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.08_rc2">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-August/045211.html">announcement</a>.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.08-rc2.tar.bz2">2011.08-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>4 August 2011 -- 2011.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>4 August 2011 -- 2011.08-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.08_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-August/044855.html">announcement</a>.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.08-rc1.tar.bz2">2011.08-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>27 May 2011 -- 2011.05 released</b>
+-
++  </li>
++  <li>
++    <b>27 May 2011 -- 2011.05 released</b>
+     <p>The stable 2011.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.05">CHANGES</a>
+     file for more details, and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.05.tar.bz2">2011.05 release</a>.</p>
+-
+-  <li><b>24 May 2011 -- 2011.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>24 May 2011 -- 2011.05-rc2 released</b>
+     <p>RC2 is out with more bugfixes. See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.05_rc2">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.05-rc2.tar.bz2">2011.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>18 May 2011 -- 2011.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>18 May 2011 -- 2011.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.05_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-May/043317.html">announcement</a>.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.05-rc1.tar.bz2">2011.05-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+ 
+-  <li><b>28 February 2011 -- 2011.02 released</b>
+-
++  </li>
++  <li>
++    <b>28 February 2011 -- 2011.02 released</b>
+     <p>The stable 2011.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.02">CHANGES</a>
+@@ -1060,35 +1001,33 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-February/041662.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.02.tar.bz2">2011.02 release</a>.</p>
+-
+-  <li><b>24 February 2011 -- 2011.02-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>24 February 2011 -- 2011.02-rc2 released</b>
+     <p>RC2 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.02_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.02-rc2.tar.bz2">2011.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>14 February 2011 -- 2011.02-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>14 February 2011 -- 2011.02-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.02_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2011-February/041365.html">announcement</a>.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.02-rc1.tar.bz2">2011.02-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>30 November 2010 -- 2010.11 released</b>
+-
++  </li>
++  <li>
++    <b>30 November 2010 -- 2010.11 released</b>
+     <p>The stable 2010.11 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11">CHANGES</a>
+@@ -1096,35 +1035,33 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2010-November/039135.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.11.tar.bz2">2010.11 release</a>.</p>
+-
+-  <li><b>25 November 2010 -- 2010.11-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>25 November 2010 -- 2010.11-rc2 released</b>
+     <p>RC2 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc2">CHANGES</a>
+     file for details.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.11-rc2.tar.bz2">2010.11-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>8 November 2010 -- 2010.11-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>8 November 2010 -- 2010.11-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.11_rc1">CHANGES</a>
+     file for details, and read the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2010-November/038645.html">announcement</a>.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.11-rc1.tar.bz2">2010.11-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>28 September 2010 - Buildroot Developer Day</b>
+-
++  </li>
++  <li>
++    <b>28 September 2010 - Buildroot Developer Day</b>
+     <p>A <i>Buildroot Developer Day</i> will take place on
+     Friday, October 29th in Cambridge, UK - Just the day after the
+     <a href="http://www.embeddedlinuxconference.com/elc_europe10/">Embedded
+@@ -1133,12 +1070,11 @@
+     project and its future. See the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2010-September/037930.html">announcement</a>
+     for more info.</p>
+-
+     <p>Thanks to Thomas Petazzoni for taking care of the practical
+     arrangements.</p>
+-
+-  <li><b>31 August 2010 -- 2010.08 released</b>
+-
++  </li>
++  <li>
++    <b>31 August 2010 -- 2010.08 released</b>
+     <p>The stable 2010.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.08">CHANGES</a>
+@@ -1146,38 +1082,35 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2010-August/037078.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.08.tar.bz2">2010.08 release</a>.</p>
+-
+-  <li><b>30 August 2010 -- 2010.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>30 August 2010 -- 2010.08-rc2 released</b>
+     <p>RC2 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.08_rc2">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.08-rc2.tar.bz2">2010.08-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-    This is very much expected to be the final release
++    <p>This is very much expected to be the final release
+     candidate, so give it a good test and expect a final 2010.08
+     release before September unless critical issues are found.</p>
+-
+-  <li><b>30 July 2010 -- 2010.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>30 July 2010 -- 2010.08-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.08_rc1">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.08-rc1.tar.bz2">2010.08-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>30 May 2010 -- 2010.05 released</b>
+-
++  </li>
++  <li>
++    <b>30 May 2010 -- 2010.05 released</b>
+     <p>The stable 2010.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.05">CHANGES</a>
+@@ -1185,87 +1118,83 @@
+     <a href="http://lists.busybox.net/pipermail/buildroot/2010-May/034878.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.05.tar.bz2">2010.05 release</a>.</p>
+-
+-  <li><b>27 May 2010 -- 2010.05-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>27 May 2010 -- 2010.05-rc3 released</b>
+     <p>RC3 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.05_rc3">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.05-rc3.tar.bz2">2010.05-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>11 May 2010 -- 2010.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>11 May 2010 -- 2010.05-rc2 released</b>
+     <p>Another week, another release candidate with a bunch of
+     cleanups and build fixes.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.05-rc2.tar.bz2">2010.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>3 May 2010 -- 2010.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>3 May 2010 -- 2010.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.05_rc1">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.05-rc1.tar.bz2">2010.05-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>2 May 2010 - FOSDEM slides online</b>
+-
++  </li>
++  <li>
++    <b>2 May 2010 - FOSDEM slides online</b>
+     <p>The slides from the <a
+     href="http://fosdem.org/2010/schedule/events/emb_cross_build">Cross
+     Build Systems: Present & Future</a> session at <a
+     href="http://fosdem.org/2010">FOSDEM</a> are now <a
+     href="http://send-patches.org/news/20100211-1-FOSDEM-Crossdev-Workshop.pdf">online</a>.
+-
+-  <li><b>26 February 2010 -- 2010.02 released</b>
+-
++  </li>
++  <li>
++    <b>26 February 2010 -- 2010.02 released</b>
+     <p>The stable 2010.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.02">CHANGES</a>
+     file for more details, and go to the <a href="/downloads/">downloads page</a>
+     to pick up the <a href="/downloads/buildroot-2010.02.tar.bz2">2010.02
+     release</a>.</p>
+-
+-  <li><b>23 February 2010 -- 2010.02-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>23 February 2010 -- 2010.02-rc2 released</b>
+     <p>RC2 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.02_rc2">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.02-rc2.tar.bz2">2010.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+ 
+-  <li><b>9 February 2010 -- 2010.02-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>9 February 2010 -- 2010.02-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2010.02_rc1">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2010.02-rc1.tar.bz2">2010.02-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>1 December 2009 -- 2009.11 released</b>
+-
++  </li>
++  <li>
++    <b>1 December 2009 -- 2009.11 released</b>
+     <p>The stable 2009.11 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2009-December/030672.html">announcement</a>
+@@ -1273,52 +1202,48 @@
+     for more details, and go to the <a href="/downloads/">downloads page</a>
+     to pick up the <a href="/downloads/buildroot-2009.11.tar.bz2">2009.11
+     release</a>.</p>
+-
+-  <li><b>29 November 2009 -- 2009.11-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>29 November 2009 -- 2009.11-rc2 released</b>
+     <p>RC2 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.11_rc2">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.11-rc2.tar.bz2">2009.11-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>23 November 2009 -- 2009.11-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>23 November 2009 -- 2009.11-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.11_rc1">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.11-rc1.tar.bz2">2009.11-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>7 September 2009 -- First Buildroot Developer Day</b>
+-
++  </li>
++  <li>
++    <b>7 September 2009 -- First Buildroot Developer Day</b>
+     <p>The first <i>Buildroot Developer Day</i> will take place on
+     Saturday, October 17th in Grenoble, France, just the day after
+     Embedded Linux Conference Europe. This <i>Developer Day</i> aims
+     at allowing Buildroot developers to meet and exchange ideas on the
+     project and its future.</p>
+-
+     <p>As the number of places is limited, interested candidates are
+     invited to send an e-mail to Peter Korsgaard (<code>jacmet at
+     uclibc dot org</code>) and Thomas Petazzoni (<code>thomas dot
+     petazzoni at free-electrons dot com</code>).</p>
+-
+     <p>This <i>Developer Day</i> will take place thanks to the
+     sponsoring of <a href="http://www.calao-systems.com">Calao
+     Systems</a> and <a href="http://www.free-electrons.com">Free
+     Electrons</a>.</p>
+-
+-  <li><b>31 August 2009 -- 2009.08 released</b>
+-
++  </li>
++  <li>
++    <b>31 August 2009 -- 2009.08 released</b>
+     <p>The stable 2009.08 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2009-August/029018.html">announcement</a>
+@@ -1326,48 +1251,46 @@
+     for more details, and go to the <a href="/downloads/">downloads page</a>
+     to pick up the <a href="/downloads/buildroot-2009.08.tar.bz2">2009.08
+     release</a>.</p>
+-
+-  <li><b>26 August 2009 -- 2009.08-rc3 released</b>
++  </li>
++  <li>
++    <b>26 August 2009 -- 2009.08-rc3 released</b>
+     <p>A number of bugfixes have been added to the tree since RC2
+     (especially thanks to Thomas Petazzoni) - See the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.08_rc3">CHANGES</a>
+     file for details. This is very much expected to be the final release
+     candidate, so give it a good test and expect a final 2009.08
+     release next weekend unless critical issues are found.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.08-rc3.tar.bz2">2009.08-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>6 August 2009 -- 2009.08-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>6 August 2009 -- 2009.08-rc2 released</b>
+     <p>RC2 is out with more cleanups and bugfixes, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.08_rc2">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.08-rc2.tar.bz2">2009.08-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>2 August 2009 -- 2009.08-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>2 August 2009 -- 2009.08-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.08_rc1">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.08-rc1.tar.bz2">2009.08-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>1 June 2009 -- 2009.05 released</b>
+-
++  </li>
++  <li>
++    <b>1 June 2009 -- 2009.05 released</b>
+     <p>The stable 2009.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2009-June/027640.html">announcement</a>
+@@ -1375,120 +1298,116 @@
+     for more details, and go to the <a href="/downloads/">downloads page</a>
+     to pick up the <a href="/downloads/buildroot-2009.05.tar.bz2">2009.05
+     release</a>.</p>
+-
+-  <li><b>27 May 2009 -- 2009.05-rc3 released</b>
+-
++  </li>
++  <li>
++    <b>27 May 2009 -- 2009.05-rc3 released</b>
+     <p>We had a number of fixes post-RC2, so RC3 is out (see <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.05_rc3">CHANGES</a>
+     for details). Now is the moment to test and verify that everything
+     is working for your favorite config - Expect a final 2009.05 very soon.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.05-rc3.tar.bz2">2009.05-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>19 May 2009 -- 2009.05-rc2 released</b>
+-
++  </li>
++  <li>
++    <b>19 May 2009 -- 2009.05-rc2 released</b>
+     <p>RC2 is out with more cleanups and bug fixes (see <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.05_rc2">CHANGES</a>).
+     Unless big issues are found, expect this to be the last release
+     candidate before the release - So give it a good test.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.05-rc2.tar.bz2">2009.05-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>14 May 2009 -- Buildroot.org</b>
+-
++  </li>
++  <li>
++    <b>14 May 2009 -- Buildroot.org</b>
+     <p>Earl Levine has been so kind to donate the <b>buildroot.org</b>
+     domain to us, so the website can now also be reached at <a
+     href="http://www.buildroot.org">www.buildroot.org</a> (and git at
+     <a href="http://git.buildroot.org/buildroot">git.buildroot.org</a>).
+-
+     Thanks a lot Earl!</p>
+-
+-  <li><b>5 May 2009 -- 2009.05-rc1 released</b>
+-
++  </li>
++  <li>
++    <b>5 May 2009 -- 2009.05-rc1 released</b>
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2009.05_rc1">CHANGES</a>
+     file for details.
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.05-rc1.tar.bz2">2009.05-rc1
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>3 May 2009 -- Moved to git</b>
+-
++  </li>
++  <li>
++    <b>3 May 2009 -- Moved to git</b>
+     <p>We've moved the source code from <a
+     href="http://subversion.tigris.org">Subversion</a> to <a
+     href="http://git-scm.org">Git</a>. You can browse the repo online
+     <a href="http://git.buildroot.net/buildroot">here</a>, and clone
+-    the repo using:
++    the repo using:</p>
+     <pre>git clone git://git.buildroot.net/buildroot</pre>
+-    See the <a href="/git.html">Git Access</a> page for more details.
+-    </p>
+-
+-  <li><b>27 March 2009 -- new Logo</b>
+-
++    <p>See the <a href="/git.html">Git Access</a> page for more details.</p>
++  </li>
++  <li>
++    <b>27 March 2009 -- new Logo</b>
+     <p>We have a <a href="images/logo.png">logo</a>! We have so far
+     been using the <a href="http://busybox.net">Busybox</a> logo on
+     the website, as the website was a copy of the <a
+     href="http://busybox.net">Busybox</a> one - But not anymore, we
+     now have a shiny new logo of our own.</p>
+-
+-  <li><b>12 February 2009 -- 2009.02 released</b>
++  </li>
++  <li>
++    <b>12 February 2009 -- 2009.02 released</b>
+     <p>The stable 2009.02 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://lists.busybox.net/pipermail/buildroot/2009-February/025974.html">announcement</a>
+     for more details, and go to the <a href="/downloads/">downloads page</a>
+     to pick up the <a href="/downloads/buildroot-2009.02.tar.bz2">2009.02
+     release</a>.</p>
+-
+-  <li><b>9 February 2009 -- 2009.02-rc4 released</b>
++  </li>
++  <li>
++    <b>9 February 2009 -- 2009.02-rc4 released</b>
+     <p>We had more than 50 changes since RC3, several of them
+     toolchain related, so decided to make a RC4 as well. This is
+     very much expected to be the final release candidate, so give it
+     a good test and expect a final 2009.02 release this week unless
+     critical issues are found.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.02-rc4.tar.bz2">2009.02-rc4
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>31 January 2009 -- 2009.02-rc3 released</b>
+-      <p>RC3 is out with more cleanups and bug fixes. Unless big issues
++  </li>
++  <li>
++    <b>31 January 2009 -- 2009.02-rc3 released</b>
++    <p>RC3 is out with more cleanups and bug fixes. Unless big issues
+     are found, expect this to be the last release candidate before the
+     release - So give it a good test.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.02-rc3.tar.bz2">2009.02-rc3
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>23 January 2009 -- 2009.02-rc2 released</b>
++  </li>
++  <li>
++    <b>23 January 2009 -- 2009.02-rc2 released</b>
+     <p>Another week, another release candidate with a bunch of
+     cleanups and build fixes.</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.02-rc2.tar.bz2">2009.02-rc2
+     release candidate</a>, and report any problems found to the <a
+     href="support.html">mailing list</a> or <a
+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
+-
+-  <li><b>16 January 2009 -- Release candidate and new maintainer</b>
++  </li>
++  <li>
++    <b>16 January 2009 -- Release candidate and new maintainer</b>
+     <p>It has been a long time coming, but we finally have a new
+     release candidate! - And a new maintainer to match (Peter Korsgaard).</p>
+-
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2009.02-rc1.tar.bz2">2009.02-rc1
+     release candidate</a>, and report any problems found to the <a
+@@ -1496,39 +1415,32 @@
+     href="https://bugs.uclibc.org">bug tracker</a>. The plan is to
+     release 2009.02 in time for <a
+     href="http://www.fosdem.org/2009/">FOSDEM</a>.</p>
+-
+-  <li><b>16 July 2006 -- Buildroot mailing list</b>
++  </li>
++  <li>
++    <b>16 July 2006 -- Buildroot mailing list</b>
+     <p>Buildroot now has its own <a href=support.html>mailing list</a>.</p>
+-
+-  <li><b>21 February 2005 -- Buildroot webpage added</b><p>
+-
+-    Buildroot is a set of Makefiles and patches that makes it easy generate a
++  </li>
++  <li>
++    <b>21 February 2005 -- Buildroot webpage added</b>
++    <p>Buildroot is a set of Makefiles and patches that makes it easy generate a
+     cross-compilation toolchain and root filesystem for your target Linux
+     system using the <a href= "http://www.uclibc.org/">uClibc C library</a>.
+     Buildroot is useful mainly for people working with small or embedded
+     systems.  Embedded systems often use processors that are not the regular
+     x86 processors everyone is used to using on their PC. It can be PowerPC
+     processors, MIPS processors, ARM processors, etc.  And to be extra safe,
+-    you do not need to be root to build or run buildroot.
+-
+-    <p>
+-
+-    And as of today buildroot even has its own webpage, making it a first class
++    you do not need to be root to build or run buildroot.</p>
++    <p>And as of today buildroot even has its own webpage, making it a first class
+     citizen of uclibc.org and busybox.net, and more importantly, make it easy
+-    to find and point to buildroot.
+-
+-    <p>
+-
+-    If you find a bug in buildroot, or wish to submit a patch to fix a problem
++    to find and point to buildroot.</p>
++    <p>If you find a bug in buildroot, or wish to submit a patch to fix a problem
+     or add a shiny new feature, please use the <a
+     href="https://bugs.uclibc.org/">Bug and Patch Tracking System</a> to post
+-    the details, to make certain your work is not lost.
+-
+-
++    the details, to make certain your work is not lost.</p>
++  </li>
+ </ul>
+ 
+ </div><!--/.col-sm-10 -->
+ </div><!--/.row -->
+ 
+ <!--#include file="footer.html" -->
+-
 -- 
-C?dric
+1.7.1
