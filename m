@@ -1,59 +1,64 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Sep 2015 16:33:30 +0200
-Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
- trying to load shared library
-In-Reply-To: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
-References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
-Message-ID: <55EDA03A.2070302@mind.be>
+Date: Mon, 7 Sep 2015 16:40:30 +0200
+Subject: [Buildroot] [PATCH] check: new package
+In-Reply-To: <1441633062-8282-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1441633062-8282-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <55EDA1DE.4020904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-09-15 15:24, Alex Potapenko wrote:
-> Dear all,
-> 
-> I'm experiencing a very odd issue on which neither my knowledge, nor googling
-> don't shed any light. I am Optware-ng developer (Optware fork), and I use
-> toolchains built using Buildroot to cross-compile packages for three archs. One
-> of them, armeabi (cortex-A9), was stated to work on AmLogic s812 android box
-> (cortex-A9 cpu) (https://github.com/alllexx88/Optware-ng/issues/6). However,
-> when I tried to reproduce a similar setup on my android phone Samsung Galaxy SII
-> I9100 (cortex-A9 as well), I encountered the issue of all dynamically linked
-> programs failing:
-> 
->     root at GT-I9100:/opt # /opt/bin/nano
->     /opt/bin/nano: can't load library 'libz.so.1'
->     root at GT-I9100:/opt # /opt/bin/file
->     /opt/bin/file: can't load library 'libmagic.so.1'
+On 07-09-15 15:37, gustavo.zacarias at free-electrons.com wrote:
+[snip]
+> diff --git a/package/check/check.hash b/package/check/check.hash
+> new file mode 100644
+> index 0000000..0c3a924
+> --- /dev/null
+> +++ b/package/check/check.hash
+> @@ -0,0 +1,3 @@
+> +# From http://sourceforge.net/projects/check/files/check/0.10.0/
+> +md5	53c5e5c77d090e103a17f3ed7fd7d8b8	check-0.10.0.tar.gz
+> +sha1	35d3a53446aea7b21a770faedb358d0fc7cba76d	check-0.10.0.tar.gz
 
- Since you're calling /opt/bin/nano, I guess you have installed the buildroot
-rootfs in /opt/. However, the rootfs assumes it will be put in / so the dynamic
-linker is configured as /lib/ld-uClibc-1.0.5.so (or the glibc or musl linker).
-Since that doesn't exist, the kernel will fall back to the default dynamic
-linker, which doesn't know about the shared libraries in /opt and probably even
-has a different ABI, so it fails miserably.
+ Don't we usually add a locally calculated sha256 if only sha1 is available
+upstream? (Honest question, I don't remember.)
 
- Solution: install stuff in /. Since all of the Android stuff is in /system,
-there shouldn't be any conflict with the Android install.
+> diff --git a/package/check/check.mk b/package/check/check.mk
+> new file mode 100644
+> index 0000000..9b88321
+> --- /dev/null
+> +++ b/package/check/check.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# check
+> +#
+> +################################################################################
+> +
+> +CHECK_VERSION = 0.10.0
+> +CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)
+> +CHECK_INSTALL_STAGING = YES
+> +CHECK_DEPENDENCIES = host-pkgconf
+> +CHECK_LICENSE = LGPLv2.1+
+> +CHECK_LICENSE_FILES = COPYING.LESSER
+> +
+> +# Having checkmk in the target makes no sense
+> +define CHECK_REMOVE_CHECKMK
+> +	rm -f $(TARGET_DIR)/usr/bin/checkmk
+> +endef
+> +CHECK_POST_INSTALL_TARGET_HOOKS += CHECK_REMOVE_CHECKMK
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+ Why do we need a host package?
 
  Regards,
  Arnout
 
-
 > 
-> 
-> Static binaries work fine:
-> 
->     root at GT-I9100:/opt # /opt/bin/ipkg -h
->     /opt/bin/ipkg: unrecognized option `-h'
->     ipkg: ipkg must have one sub-command argument
->     ipkg version 0.99.163
->     usage: ipkg [options...] sub-command [arguments...]
->     where sub-command is one of:
-> 
-[snip]
 
 
 -- 
