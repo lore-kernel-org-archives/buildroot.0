@@ -1,64 +1,88 @@
-From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
-Date: Mon, 07 Sep 2015 16:52:29 +0200
-Subject: [Buildroot] [PATCH] Handle verbosity in infrastructures
-In-Reply-To: <55ED9DF4.8030803@mind.be>
-References: <1441487237-10040-1-git-send-email-cedric.marie@openmailbox.org>
- <55ECB52C.3070806@mind.be>
- <e7d3e11a111e0f1a4da139146991a588@openmailbox.org>
- <55ED7E62.6080806@mind.be>
- <fb34984c55052f386dd7e0b9534c6a39@openmailbox.org>
- <55ED9DF4.8030803@mind.be>
-Message-ID: <b701abff08bfc208af6f14fb7c0d63d9@openmailbox.org>
+From: Alex Potapenko <opotapenko@gmail.com>
+Date: Mon, 7 Sep 2015 17:53:19 +0300
+Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
+ trying to load shared library
+In-Reply-To: <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
+References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
+ <55EDA03A.2070302@mind.be>
+ <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
+Message-ID: <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 2015-09-07 16:23, Arnout Vandecappelle a ?crit?:
->> export BR2_VERBOSE=
-> 
->  Yeah, this I remember. It's the export that I have a problem with. 
-> Nothing
-> (currently) uses this variable so there is no need to export it. I also 
-> don't
-> see which scripts would ever use it, since most scripts already are 
-> verbose by
-> default.
+Thank you for your response, Arnout!
+Unfortunately, that is not the reason here. I use Buildroot to build the
+toolchain only. And then use modified Optware build system to cross-compile
+the packages. armeabi feed is built with '
+-Wl,--dynamic-linker=/opt/lib/ld-uClibc.so.0' ld flag, so they know where
+the linker resides.
+7 ???. 2015 17:33 "Arnout Vandecappelle" <arnout@mind.be> ????:
 
-You're right. I should study the use of export more carefully!... I 
-thought exporting was necessary for the variable to be visible in 
-pkg-cmake.mk and pkg-autotools.mk.
-But there is no recursive make, we're in the same make process, so there 
-is no need to export it.
+On 07-09-15 15:24, Alex Potapenko wrote:
+> Dear all,
+>
+> I'm experiencing a very odd issue on which neither my knowledge, nor
+googling
+> don't shed any light. I am Optware-ng developer (Optware fork), and I use
+> toolchains built using Buildroot to cross-compile packages for three
+archs. One
+> of them, armeabi (cortex-A9), was stated to work on AmLogic s812 android
+box
+> (cortex-A9 cpu) (https://github.com/alllexx88/Optware-ng/issues/6).
+However,
+> when I tried to reproduce a similar setup on my android phone Samsung
+Galaxy SII
+> I9100 (cortex-A9 as well), I encountered the issue of all dynamically
+linked
+> programs failing:
+>
+>     root at GT-I9100:/opt # /opt/bin/nano
+>     /opt/bin/nano: can't load library 'libz.so.1'
+>     root at GT-I9100:/opt # /opt/bin/file
+>     /opt/bin/file: can't load library 'libmagic.so.1'
+
+ Since you're calling /opt/bin/nano, I guess you have installed the
+buildroot
+rootfs in /opt/. However, the rootfs assumes it will be put in / so the
+dynamic
+linker is configured as /lib/ld-uClibc-1.0.5.so (or the glibc or musl
+linker).
+Since that doesn't exist, the kernel will fall back to the default dynamic
+linker, which doesn't know about the shared libraries in /opt and probably
+even
+has a different ABI, so it fails miserably.
+
+ Solution: install stuff in /. Since all of the Android stuff is in /system,
+there shouldn't be any conflict with the Android install.
+
+ Regards,
+ Arnout
 
 
->  Well, no, because it shouldn't be exported so it's purely internal to 
-> the
-> makefiles so VERBOSE is enough.
+>
+>
+> Static binaries work fine:
+>
+>     root at GT-I9100:/opt # /opt/bin/ipkg -h
+>     /opt/bin/ipkg: unrecognized option `-h'
+>     ipkg: ipkg must have one sub-command argument
+>     ipkg version 0.99.163
+>     usage: ipkg [options...] sub-command [arguments...]
+>     where sub-command is one of:
+>
+[snip]
 
-Yes, I should use VERBOSE.
 
-
->  Actually, the VERBOSE already existed and is in fact used in one case:
-> package/qt/qt.mk
-
-OK, so I'll check that the compilation of Qt is kept unchanged with my 
-modification.
-With my initial patch, it was broken! :(
-
-
->  Or maybe 4:
-> 
-> 1. Remove KBUILD_VERBOSE and quiet (this one will be uncontroversial I 
-> think)
-> 2. Define VERBOSE based on V= passed on command line
-> 3. Use VERBOSE in autotools and cmake
-> 4. Update documentation.
-
-OK.
-
-Regards,
-
--- 
-C?dric
+--
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150907/b417b21d/attachment.html>
