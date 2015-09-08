@@ -1,65 +1,66 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 8 Sep 2015 23:30:41 +0200
-Subject: [Buildroot] [PATCH] grub2: pass target NM, OBJCOPY and STRIP
-Message-ID: <1441747841-7905-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Sep 2015 23:50:39 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/gdb: host-texinfo needed for
+ full gdb
+In-Reply-To: <1441740443-7280-1-git-send-email-brendanheading@gmail.com>
+References: <1441740443-7280-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <55EF582F.1090407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=8256
+On 08-09-15 21:27, Brendan Heading wrote:
+> Fixes :
+> http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 
-grub2's build system interprets CC, CFLAGS and CPPFLAGS as for the host
-and uses TARGET_CC etc. for the target. However, NM, OBJCOPY and STRIP
-are used for the target. We currently pass the host-versions of these
-tools as part of $(HOST_CONFIGURE_OPTS).
+ So, we now have three versions to fix this:
 
-While we're at it, also pass TARGET_LDFLAGS.
+Romain patches gdb to avoid recursing in the doc directory [1][2]
+Vicente does the same but with a sed instead of patch [3].
+Brendan adds host-texinfo to dependencies (this patch) [4].
 
-This problem had not been noticed up to now because usually we build on
-an x86 machine for the x86 architecture, so the binutils are compatible.
-However, this is not true on an i386 when building for x86_64.
+ Which one do we choose?
 
-Cc: Christophe Bricout <christophebricout@yahoo.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-I only did a build test, with an i386 host, so I haven't even verified
-that the bug is really solved. Christophe, can you do that and add
-your Tested-by tag if it works for you?
----
- boot/grub2/grub2.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ host-texinfo takes a bit of time to build because it also depends on
+host-ncurses, but it's not a huge problem.
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 1fc910e..88a46f4 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -40,15 +40,22 @@ endif
- 
- # Grub2 is kind of special: it considers CC, LD and so on to be the
- # tools to build the native tools (i.e to be executed on the build
--# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
--# build the bootloader itself.
-+# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS,
-+# TARGET_LDFLAGS to build the bootloader itself. However, to add to
-+# the confusion, it also uses NM, OBJCOPY and STRIP to build the
-+# bootloader itself; none of these are used to build the native
-+# tools.
- 
- GRUB2_CONF_ENV = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CPP="$(HOSTCC) -E" \
- 	TARGET_CC="$(TARGET_CC)" \
- 	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
--	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
-+	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
-+	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
-+	NM="$(TARGET_NM)" \
-+	OBJCOPY="$(TARGET_OBJCOPY)" \
-+	STRIP="$(TARGET_STRIP)"
- 
- GRUB2_CONF_OPTS = \
- 	--target=$(GRUB2_TARGET) \
+ The best solution is adding an upstreamable --disable-doc, but that will take a
+bit of work still (esp. because we can't easily autoreconfigure).
+
+ So for me Brendan's patch is fine. What do the others think?
+
+
+ Regards,
+ Arnout
+
+
+[1] http://patchwork.ozlabs.org/patch/514907/
+[2] http://patchwork.ozlabs.org/patch/514908/
+[3] http://patchwork.ozlabs.org/patch/515401/
+[4] http://patchwork.ozlabs.org/patch/515527/
+
+> 
+> .. and many others.
+> 
+> when building the full gdb (ie not just gdbserver) on the host or target
+> the "make install" phase seems to expect makeinfo (from texinfo) to be
+> present.
+> 
+> Added a dependency so that the host always depends on host-texinfo, and
+> the target depends on it if the full GDB is being built. No need to set
+> ac_cv_prog_MAKEINFO anymore as it doesn't seem to achieve the desired
+> effect.
+> 
+> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+[snip]
+
+
 -- 
-2.5.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
