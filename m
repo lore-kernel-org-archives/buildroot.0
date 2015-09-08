@@ -1,49 +1,78 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Sep 2015 15:58:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/host-gdb: fix autobuild failure
-In-Reply-To: <CA+BsyQ7HibpSPRV_Z=WGit8rCgeV8SETstTbPScuU5qmjq1Zkw@mail.gmail.com>
-References: <1441721106-27234-1-git-send-email-brendanheading@gmail.com>	<55EEED12.6000909@mind.be>	<55EEEE0D.5050009@imgtec.com>	<CA+BsyQ5b=EF8jc6-TWa2udxCnP64SHnXq-3OnUNpx-d8YSWadA@mail.gmail.com>	<55EEF529.1030009@imgtec.com>
- <CA+BsyQ7HibpSPRV_Z=WGit8rCgeV8SETstTbPScuU5qmjq1Zkw@mail.gmail.com>
-Message-ID: <55EEF783.4010401@imgtec.com>
+From: Alex Potapenko <opotapenko@gmail.com>
+Date: Tue, 8 Sep 2015 17:59:26 +0300
+Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
+ trying to load shared library
+In-Reply-To: <20150908090719.GA14056@waldemar-brodkorb.de>
+References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
+ <55EDA03A.2070302@mind.be>
+ <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
+ <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
+ <55EDAA89.20809@mind.be>
+ <CAF5aO=+dvVTzhdJW7D7udiEmomAU_ZWTCSXF5OP0zcmhuHcUqQ@mail.gmail.com>
+ <55EDF64F.7020707@mind.be>
+ <20150908090719.GA14056@waldemar-brodkorb.de>
+Message-ID: <CAF5aO=+gjgRuocbAvLicJWPkEkiiuUMFtTG6mDV-roq0cz-_fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Thank you for your responses, Arnout and Waldemar!
 
-On 09/08/2015 03:53 PM, Brendan Heading wrote:
->>> Looking into why, and will submit an updated patch when I crack it.
->>> Probably a difference with the config, or there's a patch being added
->>> somewhere.
->>
->> Perhaps you trying to build the target gdb in the same buildroot tree
->> where you have built the host gdb? (which will have makeinfo available
->> because host-texinfo has been built).
-> 
-> No, host-texinfo is not being built at all.
-> 
-> I found the cause - by default the full gdb is not built, only
-> gdbserver. It seems that a gdbserver-only build does not trigger the
-> documentation element of "make install" in gdb.
 
-Indeed, I was reproducing the autobuild failure with the full gdb.
+> Well, you're still top-posting... [1]
 
-> I need to make a better patch as there's already logic in the build to
-> only depend on texinfo under certain circumstances - and I also need
-> to test all the combinations (three different GDB versions are
-> supported). Hopefully will send it through today.
+...
 
-When you do it, could you please use a better subject? "fix autobuild
-failure" doesn't give any information about what the patch does.
-"host-texinfo needed for full gdb" gives more information, for instance.
+[1] https://en.wikipedia.org/wiki/Posting_style#Top-posting
 
-Regards,
 
-Vincent.
+Very foolish of me, I misunderstood the meaning of this notion. I now
+understand what it means and will avoid doing so.
 
-> regards
-> 
-> Brendan
-> 
+I would like to know if your nano configure says something like
+> this:
+> checking for _FILE_OFFSET_BITS value needed for large files... 64
+> Is your filesystem on the Android device bigger than 2 GB?
+> (where /opt and nano + libraries lives in)
+
+
+Yes, looking at nano config.log reveals this:
+
+> configure:5147: checking for _FILE_OFFSET_BITS value needed for large files
+> ...
+> configure:5204: result: 64
+
+
+And /data partition that contains /opt is exactly 2 GB. Does this mean that
+it is a 32 bit file system, while the toolchain uses 64 bit file system
+interface? Will it work if I create an ext2 partition larger than 2 GB on
+my memory card and mount it as /opt?
+
+ It would help if you would have your phone's kernel config. Do you have it?
+
+
+Unfortunately, no, I don't have the exact config used to build the kernel.
+I know it was compiled from this source:
+https://github.com/CyanogenMod/android_kernel_samsung_smdk4412
+
+I ran `make exynos4_defconfig`, then manually selected arch (exynos4) and
+mach (not sure I selected right, but that probably doesn't matter here).
+See the result attached.
+
+Thanks a lot!
+
+-- 
+Best regards,
+Alex Potapenko
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/ea77de0e/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: kernel-config
+Type: application/octet-stream
+Size: 33757 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/ea77de0e/attachment.obj>
