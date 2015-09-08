@@ -1,39 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Sep 2015 16:06:51 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-09-07
-In-Reply-To: <55EEEACA.6020202@imgtec.com>
-References: <20150908063019.593E81015AE@stock.ovh.net>
- <55EEEACA.6020202@imgtec.com>
-Message-ID: <20150908160651.175c9846@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Sep 2015 16:13:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/host-gdb: fix autobuild failure
+In-Reply-To: <1441721106-27234-1-git-send-email-brendanheading@gmail.com>
+References: <1441721106-27234-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <55EEED12.6000909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente,
-
-On Tue, 8 Sep 2015 15:03:54 +0100, Vicente Olivert Riera wrote:
-
-> On 09/08/2015 07:30 AM, Thomas Petazzoni wrote:
-> > Build statistics for 2015-09-07
+On 08-09-15 16:05, Brendan Heading wrote:
+> Fixes :
 > 
-> >     mips64el |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/1196ac448c77320b59b63b6133d2d1af1245bf69/
+> http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 > 
-> This is a race condition and I have reported it upstream:
+> .. and many others.
 > 
->   https://github.com/TresysTechnology/setools3/issues/5
+> host-gdb is broken on all architectures at the moment, as it seems to
+> require makeinfo during "make install" even if configure
+> failed to detect it. Instead of trying to hack it, let's simply make gdb
+> dependent on host-texinfo.
+
+ Any idea why this is not needed for target gdb?
+
+ Regards,
+ Arnout
+
 > 
-> Should we build setools with -j1 until upstream fixes the problem?
+> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> ---
+>  package/gdb/gdb.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 338de20..efe195a 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -40,7 +40,7 @@ endif
+>  # For the host variant, we really want to build with XML support,
+>  # which is needed to read XML descriptions of target architectures. We
+>  # also need ncurses.
+> -HOST_GDB_DEPENDENCIES = host-expat host-ncurses
+> +HOST_GDB_DEPENDENCIES = host-expat host-ncurses host-texinfo
+>  
+>  # Apply the Xtensa specific patches
+>  XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
+> 
 
-Yes, if you verified that building with -j1 fixed the problem, then
-yes, we should use it for the moment.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
