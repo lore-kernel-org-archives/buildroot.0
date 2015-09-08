@@ -1,76 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Sep 2015 17:32:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] docs/website: contribute.txt update
- with useful tips on patch versioning and patch submission
-In-Reply-To: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
-References: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
- <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
-Message-ID: <55EEFF8A.3050704@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 8 Sep 2015 16:38:04 +0100
+Subject: [Buildroot] [PATCHv2] package/efl/libevas: remove unsafe paths
+Message-ID: <1441726684-28308-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-09-15 17:28, Francesco Nwokeka wrote:
-> Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
-> 
-> Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-> 
-> ---
-> v1 -> v2: adjusted previous patch with observations from mailing list
-> 
-> Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-> ---
->  docs/manual/contribute.txt | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index 40579f9..e8707cc 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-> @@ -298,6 +298,13 @@ $ git format-patch --subject-prefix "PATCH v4" \
->      -M -s -o outgoing origin/master
->  ---------------------
->  
-> +Since git version 1.8.1, you can also use +-v <n>+ (where <n> is the
-> +version number):
-> +
-> +---------------------
-> +$ git format-patch -v4 -M -s -o outgoing origin/master
-> +---------------------
-> +
->  When you provide a new version of a patch, please mark the old one as
->  superseded in http://patchwork.buildroot.org[patchwork]. You need to
->  create an account on http://patchwork.buildroot.org[patchwork] to be
-> @@ -306,6 +313,12 @@ the status of patches you submitted yourself, which means the email
->  address you register in http://patchwork.buildroot.org[patchwork] should
->  match the one you use for sending patches to the mailing list.
->  
-> +You can also add the +--in-reply-to <message-id>+ flag when
-> +submitting a patch to the mailing list. The id of the mail
-> +to reply to can be found under the "Message Id" tag on the patchwork website.
+Fixes:
 
- Minor nit: in other places we always use
-http://patchwork.buildroot.org[patchwork] instead of 'the patchwork website'.
+  http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
 
- Otherwise, looks good to me:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+  - Use % instead of # in the sed instruction (Suggested Arnout)
+  - Remove the useless host-post-patch-hook (Suggested Arnout)
+ 
+ package/efl/libevas/libevas.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> +The advantage of *in-reply-to* is that patchwork will automatically mark the
-> +previous patch as superseded.
-> +
->  [[reporting-bugs]]
->  === Reporting issues/bugs or getting help
->  
-> 
-
-
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 8113162..716f1a8 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -17,6 +17,12 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
+ HOST_LIBEVAS_DEPENDENCIES = \
+ 	host-pkgconf host-zlib host-libeina \
+ 	host-freetype host-libpng host-libjpeg
++
++define LIBEVAS_REMOVE_UNSAFE_PATHS
++$(SED) 's%-I/usr/include%%g' $(@D)/configure
++endef
++LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
++
+ HOST_LIBEVAS_CONF_OPTS += \
+ 	--enable-image-loader-png \
+ 	--enable-image-loader-jpeg \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.7.1
