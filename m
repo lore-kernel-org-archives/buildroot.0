@@ -1,212 +1,316 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:19:34 +0200
-Subject: [Buildroot] [PACH v2 00/38] efl bump to 1.15.1
-Message-ID: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
+Date: Tue,  8 Sep 2015 23:19:44 +0200
+Subject: [Buildroot] [PACH v2 10/38] package/efl: new package
+In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
+References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-11-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series bump the efl package to the latest release and also update all
-other packages which use efl.
+Add the efl package which contains an updated version of the following
+libraries:
+libecore, libedje, libeet, libfreet, libeina, libeio, libembryo, libthumb, libevas.
+It also contains eldbus, ephysics, and escape, see [1].
 
-The elf related packages are no longer in package/efl directory to
-follow the Buildroot recommendations.
+For now, the bump to efl 1.15.x is not complete.
+This allows to build at least a default configuration whithout X11 support or
+graphics acceleration.
+This support can be added by a follow up patches series.
 
-This series has been tested under Qemu for x86 using the kernel based on
-linux config povided in board/qemu/x86. I've enabled CONFIG_FB_CIRRUS
-and some other video related options during testing.
-An example defconfig can be added in a followup patch.
+Also, add BR2_PACKAGE_EFL_RECOMMENDED_CONFIG config option in order to select
+all recommended packages that allows to build efl-core whithout the extra-long
+--enable-i-really-know-what-i-am-doing...
 
-It also been tested on ARM with a uClibc-ng 1.0.5 + a patch
-which has been merged in uClibc-ng 1.0.6 release.
-Legacy uClibc toolchains are not supported due to missing mkstemps().
+At the end of the configure script, the summary tab will show that
+alsa support is allways disabled even if alsa-utils has been build
+before efl-core package.
 
-/!\ Warning for autobuilders /!\
-All uClibc-ng toolchains must be rebuilt with the latest release.
+"Ecore_Audio.....: yes (-alsa +pulseaudio +sndfile)"
+This is intentional.
 
-The sdl2 support has been removed from this series since sdl2 package
-is not merged upstream yet.
+An initial runtime test has been done under Qemu with a glibc x86 toolchain.
 
-Patches  1 to  3 add some new packages used by efl
-Patches  4 to  8 move existing efl packages outside or package/efl directory.
-                 There is no efl package at this point.
-Patches  9 to 21 add a new efl package updated to 1.14.2.
-Patches 22 to 27 update all other packages which use efl.
-Patches 28 to 37 remove old efl packages.
-Patch 38 add a new package libemotion-generic-players
+An additional runtime test has been done with a uClibc-ng 1.0.5 toolchain
+patched with [2] in order to add mkstemps() which is used by Eina library.
+This patch has been upstreamed in uClubc-ng 1.0.6 release.
 
-This is a first part, other packages which use efl are ready and will be
-sent in a followup series:
+Another test has been done with a musl toolchain by Vicente Bergas (Thanks!)
 
-* rage
-* terminology
-* empc
-* ecrire
-* python-efl
-* econnman
-* libetrophy
-* elemines
-* libcanberra
-* e-cho
+[1] See https://phab.enlightenment.org/phame/live/3/post/efl_1_8/
+[2] http://mailman.uclibc-ng.org/pipermail/devel/2015-August/000432.html
 
-Thanks to Vicente Bergas for testing on musl!
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Tested-by: Vicente Bergas <vicencb@gmail.com>
+---
+v2: remove glibc only dependency
+    update commit log accordingly
+    fix typo in Config.in (Vicente Bergas)
+---
+ package/Config.in     |   1 +
+ package/efl/Config.in |  68 +++++++++++++++++++++
+ package/efl/efl.mk    | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 229 insertions(+)
+ create mode 100644 package/efl/Config.in
 
-Since v1:
-* EFL bump to 1.15.1 instead of 1.14.2
-* libelementary bump to 1.15.1 instead of 1.14.2
-* enlightenment bump to 0.19.9 instead of 0.19.7
-
-Best regards,
-Romain Naour
-
-Bernd Kuhls (1):
-  package/x11r7/xlib_libXpresent: new package
-
-Romain Naour (37):
-  package/x11r7/xproto_printproto: new package
-  package/x11r7/xlib_libXp: new package
-  package/efl: remove shared version number
-  package/expedite: move to package directory
-  package/libelementary: move to package directory
-  package/libevas-generic-loaders: move to package directory
-  package/efl: move one directory higher
-  package/efl: new host-package
-  package/efl: new package
-  package/efl: regenerate the configure script
-  package/efl: add harfbuzz dependency
-  package/efl: add wayland dependency
-  package/efl: add libcurl dependency
-  package/efl: add libblkid dependency
-  package/efl: add webp dependency
-  package/efl: add frame buffer config option
-  package/efl: add jp2k config option
-  package/efl: add X11 support
-  package/efl: add OpenGL/OpenGLES support
-  package/efl: add Xpresent dependency
-  package/libevas-generic-loaders: bump to version 1.15.0
-  package/libevas-generic-loaders: add libraw dependency
-  package/libelementary: bump to version 1.15.1
-  package/libelementary: add host package
-  package/enlightenment: bump to version 0.19.9
-  package/expedite: bump to efl-1.15 branch
-  package/libethumb: remove package
-  package/libedje: remove package
-  package/libembryo: remove package
-  package/libeio: remove package
-  package/libefreet: remove package
-  package/libedbus: remove package
-  package/libecore: remove package
-  package/libevas: remove package
-  package/libeet: remove package
-  package/libeina: remove package
-  package/libemotion-generic-players: new package
-
- Config.in.legacy                                   |  70 ++++
- package/Config.in                                  |   6 +-
- package/efl/Config.in                              | 165 ++++++++--
- package/efl/efl.hash                               |   2 +
- package/efl/efl.mk                                 | 357 ++++++++++++++++++++-
- package/efl/expedite/Config.in                     |  15 -
- package/efl/expedite/expedite.mk                   |  20 --
- package/efl/libecore/Config.in                     |  46 ---
- package/efl/libecore/libecore.mk                   | 114 -------
- package/efl/libedbus/Config.in                     |  44 ---
- package/efl/libedbus/libedbus.mk                   |  37 ---
- package/efl/libedje/Config.in                      |  28 --
- package/efl/libedje/libedje.mk                     |  28 --
- package/efl/libeet/Config.in                       |  11 -
- package/efl/libeet/libeet.mk                       |  27 --
- package/efl/libefreet/Config.in                    |  10 -
- package/efl/libefreet/libefreet.mk                 |  17 -
- package/efl/libeina/Config.in                      |   6 -
- package/efl/libeina/libeina.mk                     |  18 --
- package/efl/libeio/Config.in                       |  22 --
- package/efl/libeio/libeio.mk                       |  16 -
- package/efl/libelementary/Config.in                |  17 -
- package/efl/libelementary/libelementary.mk         |  32 --
- package/efl/libembryo/Config.in                    |   9 -
- package/efl/libembryo/libembryo.mk                 |  18 --
- package/efl/libethumb/Config.in                    |  15 -
- package/efl/libethumb/libethumb.mk                 |  27 --
- package/efl/libevas-generic-loaders/Config.in      |  29 --
- .../libevas-generic-loaders.mk                     |  31 --
- package/efl/libevas/0001-giflib.patch              |  98 ------
- package/efl/libevas/Config.in                      | 211 ------------
- package/efl/libevas/libevas.mk                     | 247 --------------
- package/enlightenment/Config.in                    |  36 +--
- package/enlightenment/enlightenment.hash           |   2 +
- package/enlightenment/enlightenment.mk             |  22 +-
- package/expedite/Config.in                         |  17 +
- package/expedite/expedite.mk                       |  25 ++
- package/libelementary/Config.in                    |  18 ++
- package/libelementary/libelementary.hash           |   2 +
- package/libelementary/libelementary.mk             |  37 +++
- package/libemotion-generic-players/Config.in       |  20 ++
- .../libemotion-generic-players.hash                |   2 +
- .../libemotion-generic-players.mk                  |  17 +
- package/libevas-generic-loaders/Config.in          |  36 +++
- .../libevas-generic-loaders.hash                   |   2 +
- .../libevas-generic-loaders.mk                     |  37 +++
- package/x11r7/Config.in                            |   3 +
- package/x11r7/xlib_libXp/Config.in                 |  11 +
- package/x11r7/xlib_libXp/xlib_libXp.mk             |  20 ++
- package/x11r7/xlib_libXpresent/Config.in           |  19 ++
- .../x11r7/xlib_libXpresent/xlib_libXpresent.hash   |   4 +
- package/x11r7/xlib_libXpresent/xlib_libXpresent.mk |  22 ++
- package/x11r7/xproto_printproto/Config.in          |   7 +
- .../x11r7/xproto_printproto/xproto_printproto.hash |   2 +
- .../x11r7/xproto_printproto/xproto_printproto.mk   |  16 +
- 55 files changed, 916 insertions(+), 1254 deletions(-)
- create mode 100644 package/efl/efl.hash
- delete mode 100644 package/efl/expedite/Config.in
- delete mode 100644 package/efl/expedite/expedite.mk
- delete mode 100644 package/efl/libecore/Config.in
- delete mode 100644 package/efl/libecore/libecore.mk
- delete mode 100644 package/efl/libedbus/Config.in
- delete mode 100644 package/efl/libedbus/libedbus.mk
- delete mode 100644 package/efl/libedje/Config.in
- delete mode 100644 package/efl/libedje/libedje.mk
- delete mode 100644 package/efl/libeet/Config.in
- delete mode 100644 package/efl/libeet/libeet.mk
- delete mode 100644 package/efl/libefreet/Config.in
- delete mode 100644 package/efl/libefreet/libefreet.mk
- delete mode 100644 package/efl/libeina/Config.in
- delete mode 100644 package/efl/libeina/libeina.mk
- delete mode 100644 package/efl/libeio/Config.in
- delete mode 100644 package/efl/libeio/libeio.mk
- delete mode 100644 package/efl/libelementary/Config.in
- delete mode 100644 package/efl/libelementary/libelementary.mk
- delete mode 100644 package/efl/libembryo/Config.in
- delete mode 100644 package/efl/libembryo/libembryo.mk
- delete mode 100644 package/efl/libethumb/Config.in
- delete mode 100644 package/efl/libethumb/libethumb.mk
- delete mode 100644 package/efl/libevas-generic-loaders/Config.in
- delete mode 100644 package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
- delete mode 100644 package/efl/libevas/0001-giflib.patch
- delete mode 100644 package/efl/libevas/Config.in
- delete mode 100644 package/efl/libevas/libevas.mk
- create mode 100644 package/enlightenment/enlightenment.hash
- create mode 100644 package/expedite/Config.in
- create mode 100644 package/expedite/expedite.mk
- create mode 100644 package/libelementary/Config.in
- create mode 100644 package/libelementary/libelementary.hash
- create mode 100644 package/libelementary/libelementary.mk
- create mode 100644 package/libemotion-generic-players/Config.in
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.hash
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.mk
- create mode 100644 package/libevas-generic-loaders/Config.in
- create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
- create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.mk
- create mode 100644 package/x11r7/xlib_libXp/Config.in
- create mode 100644 package/x11r7/xlib_libXp/xlib_libXp.mk
- create mode 100644 package/x11r7/xlib_libXpresent/Config.in
- create mode 100644 package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
- create mode 100644 package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
- create mode 100644 package/x11r7/xproto_printproto/Config.in
- create mode 100644 package/x11r7/xproto_printproto/xproto_printproto.hash
- create mode 100644 package/x11r7/xproto_printproto/xproto_printproto.mk
-
+diff --git a/package/Config.in b/package/Config.in
+index 0036963..4ab269f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -230,6 +230,7 @@ comment "Graphic libraries"
+ 	source "package/directfb/Config.in"
+ 	source "package/directfb-examples/Config.in"
+ 	source "package/divine/Config.in"
++	source "package/efl/Config.in"
+ 	source "package/fbdump/Config.in"
+ 	source "package/fbgrab/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+new file mode 100644
+index 0000000..712d915
+--- /dev/null
++++ b/package/efl/Config.in
+@@ -0,0 +1,68 @@
++config BR2_PACKAGE_EFL
++	bool "efl"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_HAS_UDEV # libudev
++	depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR # use wchar_t
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_JPEG # Emile needs libjpeg
++	select BR2_PACKAGE_LUA # Evas lua 5.1 or 5.2
++	help
++	  Enlightenment Foundation Libraries
++
++	  https://enlightenment.org
++
++if BR2_PACKAGE_EFL
++
++config BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
++	bool "Use recommended and tested configurations"
++	select BR2_PACKAGE_BULLET
++	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_LIBFRIBIDI
++	select BR2_PACKAGE_LIBSNDFILE
++	select BR2_PACKAGE_PULSEAUDIO
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	default y
++	help
++	  Avoid to use untested or not recommanded configurations,
++	  otherwise we need to add a very long and obscure option
++	  to start the build.
++
++comment "libevas loaders"
++
++config BR2_PACKAGE_EFL_PNG
++	bool "libevas png loader"
++	select BR2_PACKAGE_LIBPNG
++	help
++	  This enables the loader code that loads png files using
++	  libpng.
++
++config BR2_PACKAGE_EFL_JPEG
++	bool "libevas jpeg loader"
++	help
++	  This enables the loader code that loads jpeg files using
++	  libjpeg.
++
++config BR2_PACKAGE_EFL_GIF
++	bool "libevas gif loader"
++	select BR2_PACKAGE_GIFLIB
++	help
++	  This enables the loader code that loads gif files using
++	  libungif.
++
++config BR2_PACKAGE_EFL_TIFF
++	bool "libevas tiff loader"
++	select BR2_PACKAGE_TIFF
++	help
++	  This enables the loader code that loads tiff files.
++
++endif # BR2_PACKAGE_EFL
++
++comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index d079231..781fa4a 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -10,6 +10,166 @@ EFL_SITE = http://download.enlightenment.org/rel/libs/efl/
+ EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
+ EFL_LICENSE_FILES = COPYING
+ 
++EFL_INSTALL_STAGING = YES
++
++EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg lua udev zlib
++
++# Configure options:
++# --disable-cxx-bindings: disable C++11 bindings.
++# --enable-lua-old: disable Elua and remove luajit dependency.
++# --with-x11=none: remove dependency on X.org.
++EFL_CONF_OPTS = \
++	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++	--disable-cxx-bindings \
++	--enable-lua-old \
++	--with-x11=none
++
++# Disable untested configuration warning.
++ifeq ($(BR2_PACKAGE_EFL_RECOMMENDED_CONFIG),)
++EFL_CONF_OPTS += --enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
++endif
++
++# Libmount is used heavily inside Eeze for support of removable devices etc.
++# and disabling this will hurt support for Enlightenment and its filemanager.
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
++EFL_DEPENDENCIES += util-linux
++EFL_CONF_OPTS += --enable-libmount
++else
++EFL_CONF_OPTS += --disable-libmount
++endif
++
++# If fontconfig is disabled, this is going to make general font
++# searching not work, and only some very direct 'load /path/file.ttf'
++# will work alongside some old-school ttf file path searching. This
++# is very likely not what you want, so highly reconsider turning
++# fontconfig off. Having it off will lead to visual problems like
++# missing text in many UI areas etc.
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++EFL_CONF_OPTS += --enable-fontconfig
++EFL_DEPENDENCIES += fontconfig
++else
++EFL_CONF_OPTS += --disable-fontconfig
++endif
++
++# Fribidi is used for handling right-to-left text (like Arabic,
++# Hebrew, Farsi, Persian etc.) and is very likely not a feature
++# you want to disable unless you know for absolute certain you
++# will never encounter and have to display such scripts. Also
++# note that we don't test with fribidi disabled so you may also
++# trigger code paths with bugs that are never normally used.
++ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
++EFL_CONF_OPTS += --enable-fribidi
++EFL_DEPENDENCIES += libfribidi
++else
++EFL_CONF_OPTS += --disable-fribidi
++endif
++
++# If Gstreamer 1.x support is disabled, it will heavily limit your media
++# support options and render some functionality as useless, leading to
++# visible application bugs.
++ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
++EFL_CONF_OPTS += --enable-gstreamer1
++EFL_DEPENDENCIES += gstreamer1 gst1-plugins-base
++else
++EFL_CONF_OPTS += --disable-gstreamer1
++endif
++
++# You have chosen to disable physics support. This disables lots of
++# core functionality and is effectively never tested. You are going
++# to find features that suddenly don't work and as a result cause
++# a series of breakages. This is simply not tested so you are on
++# your own in terms of ensuring everything works if you do this
++ifeq ($(BR2_PACKAGE_BULLET),y)
++EFL_CONF_OPTS += --enable-physics
++EFL_DEPENDENCIES += bullet
++else
++EFL_CONF_OPTS += --disable-physics
++endif
++
++# You disabled audio support in Ecore. This is not tested and may
++# Create bugs for you due to it creating untested code paths.
++# Reconsider disabling audio.
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++EFL_CONF_OPTS += --enable-audio
++EFL_DEPENDENCIES += libsndfile
++else
++EFL_CONF_OPTS += --disable-audio
++endif
++
++# The only audio output method supported by Ecore right now is via
++# Pulseaudio. You have disabled that and likely have broken a whole
++# bunch of things in the process. Reconsider your configure options.
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++EFL_CONF_OPTS += --enable-pulseaudio
++EFL_DEPENDENCIES += pulseaudio
++else
++EFL_CONF_OPTS += --disable-pulseaudio
++endif
++
++# There is no alsa support yet in Ecore_Audio.
++# configure will disable alsa support even if alsa-lib is selected.
++
++ifeq ($(BR2_PACKAGE_TSLIB),y)
++EFL_DEPENDENCIES += tslib
++EFL_CONF_OPTS += --enable-tslib
++else
++EFL_CONF_OPTS += --disable-tslib
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++EFL_DEPENDENCIES += libglib2
++# we can also say "always"
++EFL_CONF_OPTS += --with-glib=yes
++else
++EFL_CONF_OPTS += --with-glib=no
++endif
++
++# Prefer openssl (the default) over gnutls.
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++EFL_DEPENDENCIES += openssl
++EFL_CONF_OPTS += --with-crypto=openssl
++else
++ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
++EFL_DEPENDENCIES += gnutls libgcrypt
++EFL_CONF_OPTS += --with-crypto=gnutls \
++	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
++else
++EFL_CONF_OPTS += --with-crypto=none
++endif
++endif # BR2_PACKAGE_OPENSSL
++
++# image loader: handle only loaders that requires dependencies.
++# All other loaders are builded by default statically.
++ifeq ($(BR2_PACKAGE_EFL_PNG),y)
++EFL_CONF_OPTS += --enable-image-loader-png=yes
++EFL_DEPENDENCIES += libpng
++else
++EFL_CONF_OPTS += --enable-image-loader-png=no
++endif
++
++ifeq ($(BR2_PACKAGE_EFL_JPEG),y)
++EFL_CONF_OPTS += --enable-image-loader-jpeg=yes
++else
++EFL_CONF_OPTS += --enable-image-loader-jpeg=no
++endif
++
++ifeq ($(BR2_PACKAGE_EFL_GIF),y)
++EFL_CONF_OPTS += --enable-image-loader-gif=yes
++EFL_DEPENDENCIES += giflib
++else
++EFL_CONF_OPTS += --enable-image-loader-gif=no
++endif
++
++ifeq ($(BR2_PACKAGE_EFL_TIFF),y)
++EFL_CONF_OPTS += --enable-image-loader-tiff=yes
++EFL_DEPENDENCIES += tiff
++else
++EFL_CONF_OPTS += --enable-image-loader-tiff=no
++endif
++
++$(eval $(autotools-package))
++
+ ################################################################################
+ #
+ # host-efl
 -- 
 2.4.3
