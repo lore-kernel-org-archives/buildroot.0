@@ -1,42 +1,60 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Sep 2015 16:38:04 +0100
-Subject: [Buildroot] [PATCHv2] package/efl/libevas: remove unsafe paths
-Message-ID: <1441726684-28308-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+Date: Tue,  8 Sep 2015 17:47:19 +0200
+Subject: [Buildroot] [PATCH v3 1/1] docs/website: contribute.txt update with
+	useful tips on patch versioning and patch submission
+In-Reply-To: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
+References: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
+Message-ID: <1441727239-17284-1-git-send-email-francesco.nwokeka@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
 
-  http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
+Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-Changes v1 -> v2:
-  - Use % instead of # in the sed instruction (Suggested Arnout)
-  - Remove the useless host-post-patch-hook (Suggested Arnout)
- 
- package/efl/libevas/libevas.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+v1 -> v2: adjusted previous patch with observations from mailing list
+v2 -> v3: Replaced "the patchwork website" with a link to the project website
 
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-index 8113162..716f1a8 100644
---- a/package/efl/libevas/libevas.mk
-+++ b/package/efl/libevas/libevas.mk
-@@ -17,6 +17,12 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
- HOST_LIBEVAS_DEPENDENCIES = \
- 	host-pkgconf host-zlib host-libeina \
- 	host-freetype host-libpng host-libjpeg
+Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+---
+ docs/manual/contribute.txt | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 40579f9..4dae676 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -298,6 +298,13 @@ $ git format-patch --subject-prefix "PATCH v4" \
+     -M -s -o outgoing origin/master
+ ---------------------
+ 
++Since git version 1.8.1, you can also use +-v <n>+ (where <n> is the
++version number):
 +
-+define LIBEVAS_REMOVE_UNSAFE_PATHS
-+$(SED) 's%-I/usr/include%%g' $(@D)/configure
-+endef
-+LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
++---------------------
++$ git format-patch -v4 -M -s -o outgoing origin/master
++---------------------
 +
- HOST_LIBEVAS_CONF_OPTS += \
- 	--enable-image-loader-png \
- 	--enable-image-loader-jpeg \
+ When you provide a new version of a patch, please mark the old one as
+ superseded in http://patchwork.buildroot.org[patchwork]. You need to
+ create an account on http://patchwork.buildroot.org[patchwork] to be
+@@ -306,6 +313,13 @@ the status of patches you submitted yourself, which means the email
+ address you register in http://patchwork.buildroot.org[patchwork] should
+ match the one you use for sending patches to the mailing list.
+ 
++You can also add the +--in-reply-to <message-id>+ flag when
++submitting a patch to the mailing list. The id of the mail
++to reply to can be found under the "Message Id" tag on
++http://patchwork.buildroot.org[patchwork].
++The advantage of *in-reply-to* is that patchwork will automatically mark the
++previous patch as superseded.
++
+ [[reporting-bugs]]
+ === Reporting issues/bugs or getting help
+ 
 -- 
-1.7.1
+2.5.1
