@@ -1,52 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Sep 2015 21:57:59 +0200
-Subject: [Buildroot] [PATCHv2] package/efl/libevas: remove unsafe paths
-In-Reply-To: <1441726684-28308-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441726684-28308-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <55EF3DC7.3090900@mind.be>
+Date: Tue, 8 Sep 2015 22:24:39 +0200
+Subject: [Buildroot] What would it take to add LZIP support for package
+ downloads?
+In-Reply-To: <55EF176E.4050001@ou.edu>
+References: <55EF176E.4050001@ou.edu>
+Message-ID: <55EF4407.8040404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-09-15 17:38, Vicente Olivert Riera wrote:
-> Fixes:
+On 08-09-15 19:14, Steve Kenton wrote:
+> I'm trying to set up a package for ddrescue
+> https://www.gnu.org/software/ddrescue/
 > 
->   http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
+> and it's only available compressed with lzip (tar.lz)
+> http://www.nongnu.org/lzip/lzip.html
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->   - Use % instead of # in the sed instruction (Suggested Arnout)
->   - Remove the useless host-post-patch-hook (Suggested Arnout)
->  
->  package/efl/libevas/libevas.mk |    6 ++++++
->  1 files changed, 6 insertions(+), 0 deletions(-)
+> A manual trial run seems to indicate that it's not a supported format for downloaded packages
 > 
-> diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-> index 8113162..716f1a8 100644
-> --- a/package/efl/libevas/libevas.mk
-> +++ b/package/efl/libevas/libevas.mk
-> @@ -17,6 +17,12 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
->  HOST_LIBEVAS_DEPENDENCIES = \
->  	host-pkgconf host-zlib host-libeina \
->  	host-freetype host-libpng host-libjpeg
-> +
-> +define LIBEVAS_REMOVE_UNSAFE_PATHS
-> +$(SED) 's%-I/usr/include%%g' $(@D)/configure
+>>>> ddrescue 1.19 Extracting
+> /ssd/bcdist/buildroot-2015.05/dl/ddrescue-1.19.tar.lz | tar --strip-components=1 -C /ssd/bcdist/buildroot-2015.05/output/build/ddrescue-1.19  -xf -
+> /bin/bash: /ssd/bcdist/buildroot-2015.05/dl/ddrescue-1.19.tar.lz: Permission denied
+> tar: This does not look like a tar archive
+> tar: Exiting with failure status due to previous errors
+> 
+> So, what would it take to add lzip support for downloaded packages?
+> Easy or Oh My?
 
- Sorry, one more nit: commands are indented with a tab.
+ The simple solution is to extend the suitable-extractor function with .lz ->
+lzip, and let dependencies.sh check that it's installed on the host. That's a
+one-line change. But I don't think that many distros have lzip installed, so
+it's a bit of a hassle for the user.
+
+ The intermediate solution is to make the ddrescue package depend on host-lzip
+(which obviously you have to add as well), and define a custom extractor.
+
+ The full solution is to extend the DL_TOOLS_DEPENDENCIES handling with
+dependencies on the host package rather than checks in dependencies.sh.
+
+ I propose you go for the simple solution :-)
+
 
  Regards,
  Arnout
 
-> +endef
-> +LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
-> +
->  HOST_LIBEVAS_CONF_OPTS += \
->  	--enable-image-loader-png \
->  	--enable-image-loader-jpeg \
+> 
+> Steve Kenton
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 
