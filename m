@@ -1,316 +1,152 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:19:44 +0200
-Subject: [Buildroot] [PACH v2 10/38] package/efl: new package
+Date: Tue,  8 Sep 2015 23:19:39 +0200
+Subject: [Buildroot] [PACH v2 05/38] package/expedite: move to package
+	directory
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-11-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-6-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the efl package which contains an updated version of the following
-libraries:
-libecore, libedje, libeet, libfreet, libeina, libeio, libembryo, libthumb, libevas.
-It also contains eldbus, ephysics, and escape, see [1].
-
-For now, the bump to efl 1.15.x is not complete.
-This allows to build at least a default configuration whithout X11 support or
-graphics acceleration.
-This support can be added by a follow up patches series.
-
-Also, add BR2_PACKAGE_EFL_RECOMMENDED_CONFIG config option in order to select
-all recommended packages that allows to build efl-core whithout the extra-long
---enable-i-really-know-what-i-am-doing...
-
-At the end of the configure script, the summary tab will show that
-alsa support is allways disabled even if alsa-utils has been build
-before efl-core package.
-
-"Ecore_Audio.....: yes (-alsa +pulseaudio +sndfile)"
-This is intentional.
-
-An initial runtime test has been done under Qemu with a glibc x86 toolchain.
-
-An additional runtime test has been done with a uClibc-ng 1.0.5 toolchain
-patched with [2] in order to add mkstemps() which is used by Eina library.
-This patch has been upstreamed in uClubc-ng 1.0.6 release.
-
-Another test has been done with a musl toolchain by Vicente Bergas (Thanks!)
-
-[1] See https://phab.enlightenment.org/phame/live/3/post/efl_1_8/
-[2] http://mailman.uclibc-ng.org/pipermail/devel/2015-August/000432.html
+Add efl reverse dependencies.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Vicente Bergas <vicencb@gmail.com>
 ---
-v2: remove glibc only dependency
-    update commit log accordingly
-    fix typo in Config.in (Vicente Bergas)
----
- package/Config.in     |   1 +
- package/efl/Config.in |  68 +++++++++++++++++++++
- package/efl/efl.mk    | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 229 insertions(+)
- create mode 100644 package/efl/Config.in
+ package/Config.in                |  1 +
+ package/efl/Config.in            |  1 -
+ package/efl/expedite/Config.in   | 15 ---------------
+ package/efl/expedite/expedite.mk | 20 --------------------
+ package/expedite/Config.in       | 18 ++++++++++++++++++
+ package/expedite/expedite.mk     | 20 ++++++++++++++++++++
+ 6 files changed, 39 insertions(+), 36 deletions(-)
+ delete mode 100644 package/efl/expedite/Config.in
+ delete mode 100644 package/efl/expedite/expedite.mk
+ create mode 100644 package/expedite/Config.in
+ create mode 100644 package/expedite/expedite.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 0036963..4ab269f 100644
+index 9bd4190..9b8cd00 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -230,6 +230,7 @@ comment "Graphic libraries"
- 	source "package/directfb/Config.in"
- 	source "package/directfb-examples/Config.in"
- 	source "package/divine/Config.in"
-+	source "package/efl/Config.in"
- 	source "package/fbdump/Config.in"
- 	source "package/fbgrab/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -66,6 +66,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/dropwatch/Config.in"
+ 	source "package/dstat/Config.in"
+ 	source "package/duma/Config.in"
++	source "package/expedite/Config.in"
+ 	source "package/fio/Config.in"
+ 	source "package/gdb/Config.in"
+ 	source "package/google-breakpad/Config.in"
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-new file mode 100644
-index 0000000..712d915
---- /dev/null
+index 3d31a26..cb91660 100644
+--- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -0,0 +1,68 @@
-+config BR2_PACKAGE_EFL
-+	bool "efl"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_UDEV # libudev
-+	depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR # use wchar_t
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_JPEG # Emile needs libjpeg
-+	select BR2_PACKAGE_LUA # Evas lua 5.1 or 5.2
-+	help
-+	  Enlightenment Foundation Libraries
-+
-+	  https://enlightenment.org
-+
-+if BR2_PACKAGE_EFL
-+
-+config BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
-+	bool "Use recommended and tested configurations"
-+	select BR2_PACKAGE_BULLET
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_GSTREAMER1
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE
-+	select BR2_PACKAGE_LIBFRIBIDI
-+	select BR2_PACKAGE_LIBSNDFILE
-+	select BR2_PACKAGE_PULSEAUDIO
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-+	default y
-+	help
-+	  Avoid to use untested or not recommanded configurations,
-+	  otherwise we need to add a very long and obscure option
-+	  to start the build.
-+
-+comment "libevas loaders"
-+
-+config BR2_PACKAGE_EFL_PNG
-+	bool "libevas png loader"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  This enables the loader code that loads png files using
-+	  libpng.
-+
-+config BR2_PACKAGE_EFL_JPEG
-+	bool "libevas jpeg loader"
-+	help
-+	  This enables the loader code that loads jpeg files using
-+	  libjpeg.
-+
-+config BR2_PACKAGE_EFL_GIF
-+	bool "libevas gif loader"
-+	select BR2_PACKAGE_GIFLIB
-+	help
-+	  This enables the loader code that loads gif files using
-+	  libungif.
-+
-+config BR2_PACKAGE_EFL_TIFF
-+	bool "libevas tiff loader"
-+	select BR2_PACKAGE_TIFF
-+	help
-+	  This enables the loader code that loads tiff files.
-+
-+endif # BR2_PACKAGE_EFL
-+
-+comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index d079231..781fa4a 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -10,6 +10,166 @@ EFL_SITE = http://download.enlightenment.org/rel/libs/efl/
- EFL_LICENSE = BSD-2c, LGPLv2.1+, GPLv2+
- EFL_LICENSE_FILES = COPYING
+@@ -10,7 +10,6 @@ menuconfig BR2_PACKAGE_EFL
  
-+EFL_INSTALL_STAGING = YES
+ if BR2_PACKAGE_EFL
+ 
+-source "package/efl/expedite/Config.in"
+ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
+deleted file mode 100644
+index 1e12108..0000000
+--- a/package/efl/expedite/Config.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-config BR2_PACKAGE_EXPEDITE
+-	bool "expedite"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LIBEET
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	help
+-	  Expedite is the official Evas benchmark tool. It can test different
+-	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
+-	  DirectFB and so on. Its tests are quite extensive, trying to
+-	  reproduce real world usage cases.
+-
+-comment "expedite needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
+deleted file mode 100644
+index 9b232f8..0000000
+--- a/package/efl/expedite/expedite.mk
++++ /dev/null
+@@ -1,20 +0,0 @@
+-################################################################################
+-#
+-# expedite
+-#
+-################################################################################
+-
+-EXPEDITE_VERSION = 1.7.10
+-EXPEDITE_SITE = http://download.enlightenment.org/releases
+-EXPEDITE_LICENSE = BSD-2c
+-EXPEDITE_LICENSE_FILES = COPYING
+-
+-EXPEDITE_DEPENDENCIES = libevas libeina libeet
+-
+-ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
+-EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
+-	--x-includes=$(STAGING_DIR)/usr/include \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
+-endif
+-
+-$(eval $(autotools-package))
+diff --git a/package/expedite/Config.in b/package/expedite/Config.in
+new file mode 100644
+index 0000000..82bceb9
+--- /dev/null
++++ b/package/expedite/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_EXPEDITE
++	bool "expedite"
++	select BR2_PACKAGE_EFL
++	select BR2_PACKAGE_LIBEINA
++	select BR2_PACKAGE_LIBEVAS
++	select BR2_PACKAGE_LIBEET
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
++	depends on BR2_USE_MMU # efl
++	depends on BR2_USE_WCHAR # efl
++	help
++	  Expedite is the official Evas benchmark tool. It can test different
++	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
++	  DirectFB and so on. Its tests are quite extensive, trying to
++	  reproduce real world usage cases.
 +
-+EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg lua udev zlib
++comment "expedite needs a toolchain w/ C++, threads, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
+new file mode 100644
+index 0000000..9b232f8
+--- /dev/null
++++ b/package/expedite/expedite.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# expedite
++#
++################################################################################
 +
-+# Configure options:
-+# --disable-cxx-bindings: disable C++11 bindings.
-+# --enable-lua-old: disable Elua and remove luajit dependency.
-+# --with-x11=none: remove dependency on X.org.
-+EFL_CONF_OPTS = \
-+	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
-+	--disable-cxx-bindings \
-+	--enable-lua-old \
-+	--with-x11=none
++EXPEDITE_VERSION = 1.7.10
++EXPEDITE_SITE = http://download.enlightenment.org/releases
++EXPEDITE_LICENSE = BSD-2c
++EXPEDITE_LICENSE_FILES = COPYING
 +
-+# Disable untested configuration warning.
-+ifeq ($(BR2_PACKAGE_EFL_RECOMMENDED_CONFIG),)
-+EFL_CONF_OPTS += --enable-i-really-know-what-i-am-doing-and-that-this-will-probably-break-things-and-i-will-fix-them-myself-and-send-patches-aba
-+endif
++EXPEDITE_DEPENDENCIES = libevas libeina libeet
 +
-+# Libmount is used heavily inside Eeze for support of removable devices etc.
-+# and disabling this will hurt support for Enlightenment and its filemanager.
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-+EFL_DEPENDENCIES += util-linux
-+EFL_CONF_OPTS += --enable-libmount
-+else
-+EFL_CONF_OPTS += --disable-libmount
-+endif
-+
-+# If fontconfig is disabled, this is going to make general font
-+# searching not work, and only some very direct 'load /path/file.ttf'
-+# will work alongside some old-school ttf file path searching. This
-+# is very likely not what you want, so highly reconsider turning
-+# fontconfig off. Having it off will lead to visual problems like
-+# missing text in many UI areas etc.
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+EFL_CONF_OPTS += --enable-fontconfig
-+EFL_DEPENDENCIES += fontconfig
-+else
-+EFL_CONF_OPTS += --disable-fontconfig
-+endif
-+
-+# Fribidi is used for handling right-to-left text (like Arabic,
-+# Hebrew, Farsi, Persian etc.) and is very likely not a feature
-+# you want to disable unless you know for absolute certain you
-+# will never encounter and have to display such scripts. Also
-+# note that we don't test with fribidi disabled so you may also
-+# trigger code paths with bugs that are never normally used.
-+ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
-+EFL_CONF_OPTS += --enable-fribidi
-+EFL_DEPENDENCIES += libfribidi
-+else
-+EFL_CONF_OPTS += --disable-fribidi
-+endif
-+
-+# If Gstreamer 1.x support is disabled, it will heavily limit your media
-+# support options and render some functionality as useless, leading to
-+# visible application bugs.
-+ifeq ($(BR2_PACKAGE_GSTREAMER1)$(BR2_PACKAGE_GST1_PLUGINS_BASE),yy)
-+EFL_CONF_OPTS += --enable-gstreamer1
-+EFL_DEPENDENCIES += gstreamer1 gst1-plugins-base
-+else
-+EFL_CONF_OPTS += --disable-gstreamer1
-+endif
-+
-+# You have chosen to disable physics support. This disables lots of
-+# core functionality and is effectively never tested. You are going
-+# to find features that suddenly don't work and as a result cause
-+# a series of breakages. This is simply not tested so you are on
-+# your own in terms of ensuring everything works if you do this
-+ifeq ($(BR2_PACKAGE_BULLET),y)
-+EFL_CONF_OPTS += --enable-physics
-+EFL_DEPENDENCIES += bullet
-+else
-+EFL_CONF_OPTS += --disable-physics
-+endif
-+
-+# You disabled audio support in Ecore. This is not tested and may
-+# Create bugs for you due to it creating untested code paths.
-+# Reconsider disabling audio.
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+EFL_CONF_OPTS += --enable-audio
-+EFL_DEPENDENCIES += libsndfile
-+else
-+EFL_CONF_OPTS += --disable-audio
-+endif
-+
-+# The only audio output method supported by Ecore right now is via
-+# Pulseaudio. You have disabled that and likely have broken a whole
-+# bunch of things in the process. Reconsider your configure options.
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+EFL_CONF_OPTS += --enable-pulseaudio
-+EFL_DEPENDENCIES += pulseaudio
-+else
-+EFL_CONF_OPTS += --disable-pulseaudio
-+endif
-+
-+# There is no alsa support yet in Ecore_Audio.
-+# configure will disable alsa support even if alsa-lib is selected.
-+
-+ifeq ($(BR2_PACKAGE_TSLIB),y)
-+EFL_DEPENDENCIES += tslib
-+EFL_CONF_OPTS += --enable-tslib
-+else
-+EFL_CONF_OPTS += --disable-tslib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+EFL_DEPENDENCIES += libglib2
-+# we can also say "always"
-+EFL_CONF_OPTS += --with-glib=yes
-+else
-+EFL_CONF_OPTS += --with-glib=no
-+endif
-+
-+# Prefer openssl (the default) over gnutls.
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+EFL_DEPENDENCIES += openssl
-+EFL_CONF_OPTS += --with-crypto=openssl
-+else
-+ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
-+EFL_DEPENDENCIES += gnutls libgcrypt
-+EFL_CONF_OPTS += --with-crypto=gnutls \
-+	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+else
-+EFL_CONF_OPTS += --with-crypto=none
-+endif
-+endif # BR2_PACKAGE_OPENSSL
-+
-+# image loader: handle only loaders that requires dependencies.
-+# All other loaders are builded by default statically.
-+ifeq ($(BR2_PACKAGE_EFL_PNG),y)
-+EFL_CONF_OPTS += --enable-image-loader-png=yes
-+EFL_DEPENDENCIES += libpng
-+else
-+EFL_CONF_OPTS += --enable-image-loader-png=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_JPEG),y)
-+EFL_CONF_OPTS += --enable-image-loader-jpeg=yes
-+else
-+EFL_CONF_OPTS += --enable-image-loader-jpeg=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_GIF),y)
-+EFL_CONF_OPTS += --enable-image-loader-gif=yes
-+EFL_DEPENDENCIES += giflib
-+else
-+EFL_CONF_OPTS += --enable-image-loader-gif=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_TIFF),y)
-+EFL_CONF_OPTS += --enable-image-loader-tiff=yes
-+EFL_DEPENDENCIES += tiff
-+else
-+EFL_CONF_OPTS += --enable-image-loader-tiff=no
++ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
++EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
++	--x-includes=$(STAGING_DIR)/usr/include \
++	--x-libraries=$(STAGING_DIR)/usr/lib
 +endif
 +
 +$(eval $(autotools-package))
-+
- ################################################################################
- #
- # host-efl
 -- 
 2.4.3
