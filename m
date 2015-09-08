@@ -1,32 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Sep 2015 15:26:20 +0200
-Subject: [Buildroot] Right board to use -- buildroot begniers
-In-Reply-To: <CAKpDV8tWg7ZU6UUZSvp=jM6CM2KnTSNvzy6cfx0OhkCMY+gxwg@mail.gmail.com>
-References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
- <55EDE7A6.4060902@mind.be>
- <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
- <55EE8B90.9060708@mind.be> <20150908120122.7662cb86@free-electrons.com>
- <20150908112832.GC3237@piout.net>
- <CAKpDV8tWg7ZU6UUZSvp=jM6CM2KnTSNvzy6cfx0OhkCMY+gxwg@mail.gmail.com>
-Message-ID: <55EEE1FC.4070801@mind.be>
+Date: Tue, 8 Sep 2015 15:34:41 +0200
+Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
+In-Reply-To: <0cef4a73d23345bbaf2f88905d0ed82f@openmailbox.org>
+References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
+ <55EDFE3E.8030205@mind.be> <d72ff365b4711836e5c1990f7b72923c@openmailbox.org>
+ <55EED4CA.3040304@mind.be> <0cef4a73d23345bbaf2f88905d0ed82f@openmailbox.org>
+Message-ID: <55EEE3F1.3000508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-09-15 14:34, Dinesh Guleria wrote:
->>> Atmel's plan is to deprecate their Buildroot fork
->>> It is deprecated, this will be announced this week.
-> I did not understood this statement on one hand you are saying buildroot
-> supports Atmel SAM soc & on other hand you are saying support will be
-> depreciated from next week.
+On 08-09-15 15:01, C?dric Marie wrote:
+> Le 2015-09-08 14:30, Arnout Vandecappelle a ?crit :
+>>>> 1. Remove KBUILD_VERBOSE and quiet (this one will be uncontroversial I think)
+>>>> 2. Define VERBOSE based on V= passed on command line
+>>>> 3. Use VERBOSE in autotools and cmake
+>>>> 4. Update documentation.
+> 
+>>  No, since VERBOSE already exists, my proposed step 2 is useless.
+> 
+> OK. Please note that I will change it a little bit:
+> - remove export VERBOSE
+> - VERBOSE=1 if V=1, even if VERBOSE is already defined (i.e. remove "ifndef
+> VERBOSE" test)
+> - VERBOSE=0 if V=0
+> - VERBOSE=(empty) otherwise to prevent this variable from being inherited from
+> the shell.
 
- The linux4sam fork of buildroot will be deprecated, because the official
-buildroot has sufficient support for Atmel chips.
+ Good!
 
- I hope they'll also update the linux4sam wiki pages to remove all references to
-that fork...
+ Note in the commit log why it has to be that way (for cmake, I guess).
 
  Regards,
  Arnout
