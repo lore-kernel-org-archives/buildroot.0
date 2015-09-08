@@ -1,70 +1,87 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Sep 2015 09:17:36 +0200
-Subject: [Buildroot] Right board to use -- buildroot begniers
-In-Reply-To: <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
-References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
- <55EDE7A6.4060902@mind.be>
- <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
-Message-ID: <55EE8B90.9060708@mind.be>
+Date: Tue, 8 Sep 2015 10:01:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/at: updated version from
+ 3.1.13 to 3.1.16
+In-Reply-To: <6141234.WAqyL1Ty6r@deathstar>
+References: <11269096.cxoRZRC0e7@deathstar> <55EDE328.5020802@mind.be>
+ <6141234.WAqyL1Ty6r@deathstar>
+Message-ID: <55EE95EC.90300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Dinesh,
+ Hi Francesco,
 
- [Please don't top-post]
+ Please keep the list in CC.
 
-On 08-09-15 04:13, Dinesh Guleria wrote:
-> Thanks Arnout, for your reply.
+ [Note to list: I snipped away some of Francesco's feedback.]
+
+On 08-09-15 09:24, Francesco Nwokeka wrote:
+> Hi Arnout,
 > 
-> This one is quiet expensive :--
-> http://www.element14.com/community/docs/DOC-38394/l/evaluation-kit-for-at91sam9g45
+> 
+> On Monday 07 September 2015 21:19:04 Arnout Vandecappelle wrote:
+>>  Hi Francesco,
+>>
+>>  First of all, please use git send-email to send patches, like you did
+>> previously. The patch below is whitespace-corrupted and doesn't apply. Much
+>> as I like KMail, it's not suitable for sending patches.
+> 
+> The patch is too big to send via git-sendmail and i get an error like the  
+> following when trying to do so:
+> 
+> "Net::SMTP::SSL: Net::Cmd::datasend(): unexpected EOF on command channel: 
+>  at /usr/lib/git-core/git-send-email line 1320. 
+> [Net::SMTP::SSL] Connection closed at /usr/lib/git-core/git-send-email 
+> line 1320. "
+> 
+> Here[1] they state that the patch is too big and apply a temporary fix by 
+> modifying the code @ /usr/lib/git-core/git-send-email (but I'd prefer to avoid 
+> doing that). I'm still searching for a possible fix.
 
- Ah yes I forgot that - I got mine for free :-)
+ Wow, so perl introduced a limit of 16KB on e-mail? Great move...
 
- Check out the linuxgizmos article [1] for a nice overview of low-cost boards.
-Some of them have a buildroot defconfig. If you take one which doesn't, you can
-develop it yourself and contribute :-)
+I believe you can configure kmail to not do any line splitting. If you do that,
+sending with kmail should be OK.
+
+Alternatively, you can use python-smtp to send mail. But that will be a bit more
+work to set up...
+
+> 
+> 
+> [1]http://git.661346.n2.nabble.com/git-send-email-Connection-Closed-td7635648.html
+> 
+>> On 07-09-15 15:05, Francesco Nwokeka wrote:
+[snip]
+>>> -+	$(INSTALL) -g $(DAEMON_GROUPNAME) -o $(DAEMON_USERNAME) -m 6755 -s 
+> at
+>>> $(DESTDIR)$(bindir)
+>>
+>>  This change is unrelated and actually belongs to patch 0005 (where it was
+>> originally).
+> 
+> Patch 0005 doesn't exist. It's all in one now. 
+
+ No, you renamed patch 0005 to patch 0002, and according to its comment it still
+does make install for non-root and avoid stripping.
+
+ Of course, if you remove patch 0004 (which became 0001) then all this becomes
+irrelevant, because you _have_ to do those changes in patch 0005 (which will
+become 0001 then).
 
 
-> It seems to be good bet for beginners  as it is low cost, what do you say ?
-> http://www.element14.com/community/docs/DOC-65651?CMP=KNC-PS-G-APAC-GEN-MAN
+> What's wrong with these parts 
+> of the patch?
 
- That's the atmel_sama5d3_xplained I mentioned. Wow, it is still relatively
-expensive...
-
-> Does it comes with uboot installed ?
-
- I have no idea, but it is fully supported by Buildroot, both for booting from
-SD card and booting from flash.
-
-
-> Does this buildroot support SAMA5D3 & board in above link ? 
-
- Yes.
-
-
-> http://www.at91.com/linux4sam/bin/view/Linux4SAM/BuildRoot
-
- Well, the linux4sam fork is relatively old. In addition, there are some changes
-in it that are incorrect. So I'd stick to upstream buildroot :-)
+ The patch is doing things that are not explained in its comment.
 
 
  Regards,
  Arnout
 
-[1] http://linuxgizmos.com/ringing-in-2015-with-40-linux-friendly-hacker-sbcs/
-
-> 
-> Please suggest.
-> 
-> Regards,
-> Dinesh
-> 
 [snip]
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
