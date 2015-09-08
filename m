@@ -1,95 +1,71 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:20:12 +0200
-Subject: [Buildroot] [PACH v2 38/38] package/libemotion-generic-players: new
-	package
-In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-39-git-send-email-romain.naour@openwide.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue,  8 Sep 2015 23:28:49 +0200
+Subject: [Buildroot] [RFC 1/6] Move mounting /sys from fstab to inittab
+In-Reply-To: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1441747734-18730-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/Config.in                                    |  1 +
- package/libemotion-generic-players/Config.in         | 20 ++++++++++++++++++++
- .../libemotion-generic-players.hash                  |  2 ++
- .../libemotion-generic-players.mk                    | 17 +++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/libemotion-generic-players/Config.in
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.hash
- create mode 100644 package/libemotion-generic-players/libemotion-generic-players.mk
+We are going to launch mdev from inittab, to have dynamic /dev without
+devtmpfs. However, mdev needs /sys to detect devices.
 
-diff --git a/package/Config.in b/package/Config.in
-index a5e2509..0fc70b2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -242,6 +242,7 @@ endif
- 	source "package/freerdp/Config.in"
- 	source "package/imagemagick/Config.in"
- 	source "package/libelementary/Config.in"
-+	source "package/libemotion-generic-players/Config.in"
- 	source "package/libevas-generic-loaders/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-diff --git a/package/libemotion-generic-players/Config.in b/package/libemotion-generic-players/Config.in
-new file mode 100644
-index 0000000..8253cfb
---- /dev/null
-+++ b/package/libemotion-generic-players/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LIBEMOTION_GENERIC_PLAYERS
-+	bool "libemotion generic players"
-+	select BR2_PACKAGE_EFL
-+	select BR2_PACKAGE_VLC # needs libvlc
-+	depends on BR2_INSTALL_LIBSTDCPP # efl vlc
-+	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # vlc
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 # vlc
-+	depends on BR2_USE_MMU # efl
-+	depends on !BR2_STATIC_LIBS # efl
-+	depends on BR2_USE_WCHAR # efl
-+	help
-+	  A media object library for Evas and Ecore.
-+
-+	  https://www.enlightenment.org
-+	  https://docs.enlightenment.org/stable/efl/emotion_main.html
-+
-+comment "libemotion generic players needs udev /dev management and a (e)glibc toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/libemotion-generic-players/libemotion-generic-players.hash b/package/libemotion-generic-players/libemotion-generic-players.hash
-new file mode 100644
-index 0000000..80c8123
---- /dev/null
-+++ b/package/libemotion-generic-players/libemotion-generic-players.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/emotion_generic_players/emotion_generic_players-1.15.0.tar.xz.sha256
-+sha256	9f6d5e9041ac7c014d663dac56d1b39ac42a45abe954d09d0edbf6e759e55f5f	emotion_generic_players-1.15.0.tar.xz
-diff --git a/package/libemotion-generic-players/libemotion-generic-players.mk b/package/libemotion-generic-players/libemotion-generic-players.mk
-new file mode 100644
-index 0000000..86f6858
---- /dev/null
-+++ b/package/libemotion-generic-players/libemotion-generic-players.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libemotion-generic-players
-+#
-+################################################################################
-+
-+LIBEMOTION_GENERIC_PLAYERS_VERSION = 1.15.0
-+LIBEMOTION_GENERIC_PLAYERS_SOURCE = emotion_generic_players-$(LIBEMOTION_GENERIC_PLAYERS_VERSION).tar.xz
-+LIBEMOTION_GENERIC_PLAYERS_SITE = http://download.enlightenment.org/rel/libs/emotion_generic_players/
-+LIBEMOTION_GENERIC_PLAYERS_LICENSE = GPLv2
-+LIBEMOTION_GENERIC_PLAYERS_LICENSE_FILES = COPYING
-+
-+LIBEMOTION_GENERIC_PLAYERS_INSTALL_STAGING = YES
-+
-+LIBEMOTION_GENERIC_PLAYERS_DEPENDENCIES = efl vlc
-+
-+$(eval $(autotools-package))
+So, mount /sys before the place where mdev will be activated.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/busybox/inittab   |  1 +
+ package/sysvinit/inittab  | 13 +++++++------
+ system/skeleton/etc/fstab |  1 -
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/package/busybox/inittab b/package/busybox/inittab
+index b1892c1..6703fc5 100644
+--- a/package/busybox/inittab
++++ b/package/busybox/inittab
+@@ -15,6 +15,7 @@
+ 
+ # Startup the system
+ null::sysinit:/bin/mount -t proc proc /proc
++null::sysinit:/bin/mount -t sysfs sysfs /sys
+ null::sysinit:/bin/mount -o remount,rw /
+ null::sysinit:/bin/mkdir -p /dev/pts
+ null::sysinit:/bin/mkdir -p /dev/shm
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index fc0c9b5..6ebf6fa 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -5,12 +5,13 @@
+ id:3:initdefault:
+ 
+ si0::sysinit:/bin/mount -t proc proc /proc
+-si1::sysinit:/bin/mount -o remount,rw /
+-si2::sysinit:/bin/mkdir -p /dev/pts
+-si3::sysinit:/bin/mkdir -p /dev/shm
+-si4::sysinit:/bin/mount -a
+-si5::sysinit:/bin/hostname -F /etc/hostname
+-si6::sysinit:/etc/init.d/rcS
++si1::sysinit:/bin/mount -t sysfs sysfs /sys
++si2::sysinit:/bin/mount -o remount,rw /
++si3::sysinit:/bin/mkdir -p /dev/pts
++si4::sysinit:/bin/mkdir -p /dev/shm
++si5::sysinit:/bin/mount -a
++si6::sysinit:/bin/hostname -F /etc/hostname
++si7::sysinit:/etc/init.d/rcS
+ 
+ # S0:1:respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+ 
+diff --git a/system/skeleton/etc/fstab b/system/skeleton/etc/fstab
+index 2b418a0..489f256 100644
+--- a/system/skeleton/etc/fstab
++++ b/system/skeleton/etc/fstab
+@@ -5,4 +5,3 @@ devpts		/dev/pts	devpts	defaults,gid=5,mode=620	0	0
+ tmpfs		/dev/shm	tmpfs	mode=0777	0	0
+ tmpfs		/tmp		tmpfs	mode=1777	0	0
+ tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
+-sysfs		/sys		sysfs	defaults	0	0
 -- 
-2.4.3
+1.9.1
