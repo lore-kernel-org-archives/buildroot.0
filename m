@@ -1,36 +1,83 @@
-From: Alex Potapenko <opotapenko@gmail.com>
-Date: Tue, 8 Sep 2015 18:58:33 +0300
-Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
- trying to load shared library
-In-Reply-To: <CAF5aO=LPauPtHe2EeYmBQ-2BQjcL+POfZVHAWxaujQ01vMmQKA@mail.gmail.com>
-References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
- <55EDA03A.2070302@mind.be>
- <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
- <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
- <55EDAA89.20809@mind.be>
- <CAF5aO=+dvVTzhdJW7D7udiEmomAU_ZWTCSXF5OP0zcmhuHcUqQ@mail.gmail.com>
- <55EDF64F.7020707@mind.be>
- <20150908090719.GA14056@waldemar-brodkorb.de>
- <CAF5aO=+gjgRuocbAvLicJWPkEkiiuUMFtTG6mDV-roq0cz-_fQ@mail.gmail.com>
- <55EEFDA1.6070104@mind.be>
- <CAF5aO=LPauPtHe2EeYmBQ-2BQjcL+POfZVHAWxaujQ01vMmQKA@mail.gmail.com>
-Message-ID: <CAF5aO=+9ooyZfHE8yR2T=1cU+Snukctp54m66gDUvxW0WvJ5yQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Sep 2015 18:00:54 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/host-gdb: host-texinfo
+ needed for full gdb
+In-Reply-To: <1441727849-4997-1-git-send-email-brendanheading@gmail.com>
+References: <1441727849-4997-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <55EF0636.1090309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-P.S. LFS is enabled:
+On 08-09-15 17:57, Brendan Heading wrote:
+> Fixes :
+> http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
+> 
+> .. and many others.
+> 
+> when building the full gdb (ie not just gdbserver) on the host or target
+> the "make install" phase seems to expect makeinfo (from texinfo) to be
+> present.
+> 
+> Added a dependency so that the host always depends on host-texinfo, and
+> the target depends on it if the full GDB is being built. No need to set
+> ac_cv_prog_MAKEINFO anymore as it doesn't seem to achieve the desired
+> effect.
+> 
+> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> ---
+> v1 -> v2: fixed for target, removed duplication in gdb.mk. Used better
+> subject suggested by Vicente.
+> ---
+>  package/gdb/gdb.mk | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 338de20..d144d6b 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -33,7 +33,8 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
+>  GDB_SUBDIR = gdb/gdbserver
+>  HOST_GDB_SUBDIR = .
+>  else
+> -GDB_DEPENDENCIES = ncurses \
+> +# need makeinfo if building the full debugger
+> +GDB_DEPENDENCIES = ncurses host-texinfo \
+>  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+>  endif
+>  
+> @@ -165,14 +166,8 @@ else
+>  HOST_GDB_CONF_OPTS += --without-python
+>  endif
+>  
+> -ifeq ($(GDB_FROM_GIT),y)
+> -GDB_DEPENDENCIES += host-texinfo
+> +#since we always build the full GDB on the host, texinfo/makeinfo is required
 
-> UCLIBC_HAS_LFS=y
+ Minor nit: missing space between # and since
 
 
-in the custom config
+ Regards,
+ Arnout
+
+>  HOST_GDB_DEPENDENCIES += host-texinfo
+> -else
+> -# don't generate documentation
+> -GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+> -HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+> -endif
+>  
+>  # legacy $arch-linux-gdb symlink
+>  define HOST_GDB_ADD_SYMLINK
+> 
+
 
 -- 
-Best regards,
-Alex Potapenko
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/2d5fd06b/attachment.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
