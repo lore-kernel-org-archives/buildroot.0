@@ -1,57 +1,73 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Sep 2015 15:39:59 +0200
-Subject: [Buildroot] [PATCH] gdb: prevent building the documentation
-In-Reply-To: <1441718565-24492-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441718565-24492-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <55EEE52F.4020904@mind.be>
+Date: Tue, 8 Sep 2015 15:46:36 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/website: contribute.txt update
+ with useful tips on patch versioning and patch submission
+In-Reply-To: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
+References: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
+Message-ID: <55EEE6BC.4070207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-09-15 15:22, Vicente Olivert Riera wrote:
-> gdb needs makeinfo to build the documentation. Since we do not provide a
-> host-makeinfo package this will fail in any system where makeinfo is
-> missing. However, we can workaround this problem by preventing gdb to
-> build the documentation.
+On 08-09-15 15:22, Francesco Nwokeka wrote:
+> Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
 > ---
->  package/gdb/gdb.mk |    6 ++++++
->  1 files changed, 6 insertions(+), 0 deletions(-)
+>  docs/manual/contribute.txt | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 338de20..7a8f8c7 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -114,6 +114,12 @@ else
->  GDB_CONF_OPTS += --without-zlib
->  endif
+> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> index 40579f9..1ab8ef8 100644
+> --- a/docs/manual/contribute.txt
+> +++ b/docs/manual/contribute.txt
+> @@ -298,6 +298,12 @@ $ git format-patch --subject-prefix "PATCH v4" \
+>      -M -s -o outgoing origin/master
+>  ---------------------
 >  
-> +# Prevent gdb to build the documentation
-> +define GDB_DISABLE_DOC
-> +$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
-> +endef
-> +GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
+> +or the +-v <n>+ flag (where <n> is the version number):
+> +
+> +---------------------
+> +$ git format-patch -v4 -M -s -o outgoing origin/master
+> +---------------------
+> +
 
- Since it is patching the source, it should be POST_PATCH_HOOKS rather than
-PRE_CONFIGURE_HOOKS.
+This option exists since git v1.8.1
 
- That does mean that people using OVERRIDE_SRCDIR should do this fix in the
-overridden source, but I think that's OK.
+>  When you provide a new version of a patch, please mark the old one as
+>  superseded in http://patchwork.buildroot.org[patchwork]. You need to
+>  create an account on http://patchwork.buildroot.org[patchwork] to be
+> @@ -306,6 +312,9 @@ the status of patches you submitted yourself, which means the email
+>  address you register in http://patchwork.buildroot.org[patchwork] should
+>  match the one you use for sending patches to the mailing list.
+>  
+> +[NOTE]
+
+ I don't think this tag is needed.
+
+> +_You can also add the +--in-reply-to "<previous-version-id>"+ flag when submitting a patch to the mailing list (via git sendmail). The id of the mail to reply to can be found under the "Message Id" tag on the patchwork website. The advantage of *in-reply-to* is that patchwork will automatically mark the previous patch as superseded_
+
+ Please split lines at 80 columns.
+
+ The italics is also not needed.
+
+ <previous-version-id> should be <message-id>.
+
+ --in-reply-to is an option of format-patch, so there's no need to mention the
+(via git sendmail) (which is anyway wrong, since it's git send-email).
+
+
 
  Regards,
  Arnout
 
+
 > +
->  # This removes some unneeded Python scripts and XML target description
->  # files that are not useful for a normal usage of the debugger.
->  define GDB_REMOVE_UNNEEDED_FILES
+>  [[reporting-bugs]]
+>  === Reporting issues/bugs or getting help
+>  
 > 
 
 
