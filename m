@@ -1,28 +1,39 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue, 8 Sep 2015 15:41:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/host-gdb: fix autobuild failure
-In-Reply-To: <55EEEE0D.5050009@imgtec.com>
-References: <1441721106-27234-1-git-send-email-brendanheading@gmail.com>
- <55EEED12.6000909@mind.be> <55EEEE0D.5050009@imgtec.com>
-Message-ID: <CA+BsyQ5b=EF8jc6-TWa2udxCnP64SHnXq-3OnUNpx-d8YSWadA@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 8 Sep 2015 15:42:29 +0100
+Subject: [Buildroot] [PATCH] package/efl/libevas: remove unsafe paths
+Message-ID: <1441723349-31061-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> It is needed for the target as well. You can build the target gdb
-> without building the host gdb, in which case the host-texinfo package
-> would not be installed and you would face the failure again.
->
-> Brendan, please, can you add the dependency for target gdb as well?
+Fixes:
 
-I'm looking at it, but strangely, I'm not able to reproduce the same
-problem with target GDB - it appears to build just fine without the
-texinfo dependency.
+  http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
 
-Looking into why, and will submit an updated patch when I crack it.
-Probably a difference with the config, or there's a patch being added
-somewhere.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/efl/libevas/libevas.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-Brendan
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 8113162..9ffedce 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -17,6 +17,13 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
+ HOST_LIBEVAS_DEPENDENCIES = \
+ 	host-pkgconf host-zlib host-libeina \
+ 	host-freetype host-libpng host-libjpeg
++
++define LIBEVAS_REMOVE_UNSAFE_PATHS
++$(SED) 's#-I/usr/include##g' $(@D)/configure
++endef
++LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
++HOST_LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
++
+ HOST_LIBEVAS_CONF_OPTS += \
+ 	--enable-image-loader-png \
+ 	--enable-image-loader-jpeg \
+-- 
+1.7.1
