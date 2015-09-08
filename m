@@ -1,52 +1,56 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Tue, 8 Sep 2015 23:33:01 +0530
-Subject: [Buildroot] Right board to use -- buildroot begniers
-In-Reply-To: <55EF09F7.6040401@lucaceresoli.net>
-References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
- <55EDE7A6.4060902@mind.be>
- <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
- <55EE8B90.9060708@mind.be>
- <CAKpDV8uJiT88YYY2gxNohTmQoP2toaFpWFjDSGTSaG2kENaPCg@mail.gmail.com>
- <55EF09F7.6040401@lucaceresoli.net>
-Message-ID: <CAKpDV8tdyO4fJ_=sbfF_sGoU2UzgBFCVSZdAup1QUU=C=VzjAQ@mail.gmail.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue,  8 Sep 2015 19:52:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/valgrind: disable for static-only
+	builds
+Message-ID: <1441738339-2011-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the info.
+Fixes:
+http://autobuild.buildroot.net/results/3b6/3b6f253f30afaee428ea0fc559be210dcec61dae
+http://autobuild.buildroot.net/results/60e/60e5a49360e2ee9482b4d548789f874a6502c429
+http://autobuild.buildroot.net/results/5cc/5ccc2e48fa4deb90ab214c82e8921ec494555457
+http://autobuild.buildroot.net/results/452/4524184b407bb6f9b55f8f85c8e0b475ff105420
 
-Regards,
-Dinesh
-On 8 Sep 2015 21:46, "Luca Ceresoli" <luca@lucaceresoli.net> wrote:
+Valgrind ordinarily works by preloading a shared object to replace malloc,
+free and friends. Some combinations of toolchain/libc allow this to build
+with -static, but others complain.
 
-> Dear Dinesh,
->
-> Dinesh Guleria wrote:
->
->> So i will go for atmel_sama5d3_xplained .
->>
->> http://www.element14.com/community/docs/DOC-38394/l/evaluation-kit-for-at91sam9g45
->>
->>  >> I have no idea, but it is fully supported by Buildroot, both for
->> booting from
->> SD card and booting from flash.
->>
->> With seggers j- link can i flash uboot to the Nand flash of this board ?
->>
->
-> To flash the bootloader on the sama5d3_xplained board you don't need
-> any JTAG interface. You just need to remove the NAND CS jumper on the
-> board and connect on UART with the sam-ba tool.
->
-> The labs from the Free Electrons training material have detailed
-> information on how to do that:
-> http://free-electrons.com/doc/training/embedded-linux/
->
-> --
-> Luca
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/58099dcd/attachment.html>
+Since it makes little sense to try to build this on a static-only system,
+this patch disables it on static platforms entirely.
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+v1 - theoretically we could try to support valgrind static builds on
+platforms where it appears to work (eg i686). However this would add a lot
+of conditional stuff, so I figured it would be easier just to disable it
+outright.
+---
+ package/valgrind/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 8da007b..5635ada 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -4,11 +4,15 @@ config BR2_PACKAGE_VALGRIND
+ 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+ 		   BR2_x86_64
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
+ 
+ 	  http://valgrind.org/
+ 
++comment "valgrind needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++
+ if BR2_PACKAGE_VALGRIND
+ 
+ config BR2_PACKAGE_VALGRIND_MEMCHECK
+-- 
+2.4.3
