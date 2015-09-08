@@ -1,85 +1,80 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue,  8 Sep 2015 17:54:22 +0300
-Subject: [Buildroot] [PATCH] arc: add HS38 VDK virtual boards
-Message-ID: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
+From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+Date: Tue, 08 Sep 2015 16:57:13 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/website: contribute.txt update
+	with useful tips on patch versioning and patch submission
+In-Reply-To: <55EEE6BC.4070207@mind.be>
+References: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
+ <55EEE6BC.4070207@mind.be>
+Message-ID: <1619019.BvyX3KbBJD@deathstar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Virtualizer Development Kits (VDKs) are software development kits
-containing design-specific virtual prototypes as well as debug and
-analysis tools and sample software.
+On Tuesday 08 September 2015 15:46:36 Arnout Vandecappelle wrote:
+> On 08-09-15 15:22, Francesco Nwokeka wrote:
+> > Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
+> > 
+> > Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+> > ---
+> >  docs/manual/contribute.txt | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> > index 40579f9..1ab8ef8 100644
+> > --- a/docs/manual/contribute.txt
+> > +++ b/docs/manual/contribute.txt
+> > @@ -298,6 +298,12 @@ $ git format-patch --subject-prefix "PATCH v4" \
+> >      -M -s -o outgoing origin/master
+> >  ---------------------
+> >  
+> > +or the +-v <n>+ flag (where <n> is the version number):
+> > +
+> > +---------------------
+> > +$ git format-patch -v4 -M -s -o outgoing origin/master
+> > +---------------------
+> > +
+> 
+> This option exists since git v1.8.1
 
-With this change we add support for VDK based on ARC HS38 core.
+Am I to specify the git version on the documentation or was it just a "fyi" statement?
 
-Note that FS-overlay is required to allow instantiation of console on
-both serial port and LCD screen simultaneously.
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
----
- configs/snps_hs38_smp_vdk_defconfig | 21 +++++++++++++++++++++
- configs/snps_hs38_vdk_defconfig     | 21 +++++++++++++++++++++
- 2 files changed, 42 insertions(+)
- create mode 100644 configs/snps_hs38_smp_vdk_defconfig
- create mode 100644 configs/snps_hs38_vdk_defconfig
+> >  When you provide a new version of a patch, please mark the old one as
+> >  superseded in http://patchwork.buildroot.org[patchwork]. You need to
+> >  create an account on http://patchwork.buildroot.org[patchwork] to be
+> > @@ -306,6 +312,9 @@ the status of patches you submitted yourself, which means the email
+> >  address you register in http://patchwork.buildroot.org[patchwork] should
+> >  match the one you use for sending patches to the mailing list.
+> >  
+> > +[NOTE]
+> 
+>  I don't think this tag is needed.
+> 
+> > +_You can also add the +--in-reply-to "<previous-version-id>"+ flag when submitting a patch to the mailing list (via git sendmail). The id of the mail to reply to can be found under the "Message Id" tag on the patchwork website. The advantage of *in-reply-to* is that patchwork will automatically mark the previous patch as superseded_
+> 
+>  Please split lines at 80 columns.
+> 
+>  The italics is also not needed.
+> 
+>  <previous-version-id> should be <message-id>.
+> 
+>  --in-reply-to is an option of format-patch, so there's no need to mention the
+> (via git sendmail) (which is anyway wrong, since it's git send-email).
 
-diff --git a/configs/snps_hs38_smp_vdk_defconfig b/configs/snps_hs38_smp_vdk_defconfig
-new file mode 100644
-index 0000000..b38cb1e
---- /dev/null
-+++ b/configs/snps_hs38_smp_vdk_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="hs38_vdk"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# Headers
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2"
-+BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38_smp"
-+BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/snps_hs38_vdk_defconfig b/configs/snps_hs38_vdk_defconfig
-new file mode 100644
-index 0000000..49ad496
---- /dev/null
-+++ b/configs/snps_hs38_vdk_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_arcle=y
-+BR2_archs38=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="hs38_vdk"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
-+BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+BR2_TARGET_ROOTFS_EXT2=y
-+
-+# Headers
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2"
-+BR2_LINUX_KERNEL_DEFCONFIG="vdk_hs38"
-+BR2_LINUX_KERNEL_VMLINUX=y
--- 
-2.4.3
+Noted and updated
+
+
+>  Regards,
+>  Arnout
+> 
+> 
+> > +
+> >  [[reporting-bugs]]
+> >  === Reporting issues/bugs or getting help
+> >  
+> > 
+> 
+> 
+> 
