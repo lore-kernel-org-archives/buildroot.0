@@ -1,77 +1,31 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  8 Sep 2015 08:49:43 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/shairport-sync: bump to version
-	2.4
-Message-ID: <1441694983-3818-1-git-send-email-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Sep 2015 09:06:36 +0200
+Subject: [Buildroot] [PATCH v3 1/1] bitlbee: Added package
+In-Reply-To: <CAPeEpDr5QRLhq3cWsbgxQEwqy1Xmsn1BJBN8j095tQ49UBkeYQ@mail.gmail.com>
+References: <1441653041-10620-1-git-send-email-g@maral.me>
+ <55EE1420.5060602@mind.be>
+ <CAPeEpDr5QRLhq3cWsbgxQEwqy1Xmsn1BJBN8j095tQ49UBkeYQ@mail.gmail.com>
+Message-ID: <55EE88FC.3060603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.4 of shairport-sync introduces new optional features (metadata,
-stdout, pipe) which we enable by default. The impact on the binary size is
-about 18 kB (110 kB vs 92 kB) for an ARM target.
+On 08-09-15 01:05, Guillermo Amaral wrote:
+> Cool, I'll fix it up then, thank for the notes Arnout! 
 
-Also add a new dependency to libconfig and install the default config script.
+ One more thing: when you send an updated version, please also mark the previous
+version of the patch as Superseded in patchwork. I already did that now for v2,
+but not for this v3.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-Changes v1 -> v2:
- * Add missing dependency libconfig (Baruch)
----
- package/shairport-sync/Config.in         |  1 +
- package/shairport-sync/shairport-sync.mk | 11 ++++++++---
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/shairport-sync/Config.in b/package/shairport-sync/Config.in
-index c1d81a7..c558a64 100644
---- a/package/shairport-sync/Config.in
-+++ b/package/shairport-sync/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SHAIRPORT_SYNC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
-+	select BR2_PACKAGE_LIBCONFIG
- 	select BR2_PACKAGE_LIBDAEMON
- 	select BR2_PACKAGE_POLARSSL if !BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_POPT
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 881cced..dc36c0e 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,17 +4,20 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.2.4
-+SHAIRPORT_SYNC_VERSION = 2.4
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
- SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
--SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libdaemon popt host-pkgconf
-+SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
- 
- # Touching configure.ac with the patches
- SHAIRPORT_SYNC_AUTORECONF = YES
- 
--SHAIRPORT_SYNC_CONF_OPTS = --with-alsa
-+SHAIRPORT_SYNC_CONF_OPTS = --with-alsa \
-+	--with-metadata \
-+	--with-pipe \
-+	--with-stdout
- 
- # Avahi or tinysvcmdns (shaiport-sync bundles its own version of tinysvcmdns).
- # Avahi support needs libavahi-client, which is built by avahi if avahi-daemon
-@@ -45,6 +48,8 @@ endif
- define SHAIRPORT_SYNC_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/shairport-sync \
- 		$(TARGET_DIR)/usr/bin/shairport-sync
-+	$(INSTALL) -D -m 0644 $(@D)/scripts/shairport-sync.conf \
-+		$(TARGET_DIR)/etc/shairport-sync.conf
- endef
- 
- define SHAIRPORT_SYNC_INSTALL_INIT_SYSV
 -- 
-2.5.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
