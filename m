@@ -1,96 +1,98 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:20:11 +0200
-Subject: [Buildroot] [PACH v2 37/38] package/libeina: remove package
+Date: Tue,  8 Sep 2015 23:20:04 +0200
+Subject: [Buildroot] [PACH v2 30/38] package/libembryo: remove package
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-38-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-31-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeina is now available in efl package.
+Libembryo is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- Config.in.legacy           |  7 +++++++
- package/Config.in          |  1 -
- package/libeina/Config.in  | 12 ------------
- package/libeina/libeina.mk | 18 ------------------
- 4 files changed, 7 insertions(+), 31 deletions(-)
- delete mode 100644 package/libeina/Config.in
- delete mode 100644 package/libeina/libeina.mk
+ Config.in.legacy               |  7 +++++++
+ package/Config.in              |  1 -
+ package/libembryo/Config.in    | 14 --------------
+ package/libembryo/libembryo.mk | 18 ------------------
+ 4 files changed, 7 insertions(+), 33 deletions(-)
+ delete mode 100644 package/libembryo/Config.in
+ delete mode 100644 package/libembryo/libembryo.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 45c142d..6b78208 100644
+index 2187f3d..f6c98b2 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2015.08"
  
-+config BR2_PACKAGE_LIBEINA
-+	bool "libeina package has been removed"
++config BR2_PACKAGE_LIBEMBRYO
++	bool "libembryo package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  The libeina package has been removed with the efl bump to 1.14.
++	  The libembryo package has been removed with the efl bump to 1.14.
 +
- config BR2_PACKAGE_LIBEET
- 	bool "libeet package has been removed"
+ config BR2_PACKAGE_LIBEDJE
+ 	bool "libedje package has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 537048e..a5e2509 100644
+index a8bb998..9c07e08 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -241,7 +241,6 @@ endif
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
- 	source "package/imagemagick/Config.in"
--	source "package/libeina/Config.in"
+@@ -248,7 +248,6 @@ endif
+ 	source "package/libeio/Config.in"
+ 	source "package/libedbus/Config.in"
  	source "package/libelementary/Config.in"
+-	source "package/libembryo/Config.in"
+ 	source "package/libevas/Config.in"
  	source "package/libevas-generic-loaders/Config.in"
  	source "package/linux-fusion/Config.in"
-diff --git a/package/libeina/Config.in b/package/libeina/Config.in
+diff --git a/package/libembryo/Config.in b/package/libembryo/Config.in
 deleted file mode 100644
-index 13a74eb..0000000
---- a/package/libeina/Config.in
+index 937876f..0000000
+--- a/package/libembryo/Config.in
 +++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_LIBEINA
--	bool "libeina"
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_LIBEMBRYO
+-	bool "libembryo"
+-	select BR2_PACKAGE_LIBEINA
 -	depends on BR2_USE_MMU # efl
 -	depends on BR2_USE_WCHAR # efl
--	
 -	help
--	  Eina is a tiny library to handle data types (list, hash, etc.)
+-	  Embryo is primarily a shared library that gives you an API
+-	  to load and control interpreted programs compiled into an
+-	  abstract machine bytecode that it understands.
 -
--	  http://trac.enlightenment.org/e/wiki/Eina
+-	  http://trac.enlightenment.org/e/wiki/Embryo
 -
--comment "libeina needs a toolchain w/ wchar"
+-comment "libembryo needs a toolchain w/ wchar"
 -	depends on !BR2_USE_WCHAR
-diff --git a/package/libeina/libeina.mk b/package/libeina/libeina.mk
+diff --git a/package/libembryo/libembryo.mk b/package/libembryo/libembryo.mk
 deleted file mode 100644
-index ae9f1c6..0000000
---- a/package/libeina/libeina.mk
+index fc45e42..0000000
+--- a/package/libembryo/libembryo.mk
 +++ /dev/null
 @@ -1,18 +0,0 @@
 -################################################################################
 -#
--# libeina
+-# libembryo
 -#
 -################################################################################
 -
--LIBEINA_VERSION = 1.7.10
--LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
--LIBEINA_SITE = http://download.enlightenment.org/releases
--LIBEINA_LICENSE = LGPLv2.1+
--LIBEINA_LICENSE_FILES = COPYING
+-LIBEMBRYO_VERSION = 1.7.10
+-LIBEMBRYO_SOURCE = embryo-$(LIBEMBRYO_VERSION).tar.bz2
+-LIBEMBRYO_SITE = http://download.enlightenment.org/releases
+-LIBEMBRYO_LICENSE = BSD-2c, Embryo license
+-LIBEMBRYO_LICENSE_FILES = COPYING
 -
--LIBEINA_INSTALL_STAGING = YES
+-LIBEMBRYO_INSTALL_STAGING = YES
 -
--LIBEINA_DEPENDENCIES = host-pkgconf
+-LIBEMBRYO_DEPENDENCIES = host-pkgconf libeina
 -
 -$(eval $(autotools-package))
 -$(eval $(host-autotools-package))
