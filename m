@@ -1,40 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Sep 2015 15:34:41 +0200
-Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
-In-Reply-To: <0cef4a73d23345bbaf2f88905d0ed82f@openmailbox.org>
-References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
- <55EDFE3E.8030205@mind.be> <d72ff365b4711836e5c1990f7b72923c@openmailbox.org>
- <55EED4CA.3040304@mind.be> <0cef4a73d23345bbaf2f88905d0ed82f@openmailbox.org>
-Message-ID: <55EEE3F1.3000508@mind.be>
+Date: Tue, 8 Sep 2015 15:39:59 +0200
+Subject: [Buildroot] [PATCH] gdb: prevent building the documentation
+In-Reply-To: <1441718565-24492-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441718565-24492-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <55EEE52F.4020904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-09-15 15:01, C?dric Marie wrote:
-> Le 2015-09-08 14:30, Arnout Vandecappelle a ?crit :
->>>> 1. Remove KBUILD_VERBOSE and quiet (this one will be uncontroversial I think)
->>>> 2. Define VERBOSE based on V= passed on command line
->>>> 3. Use VERBOSE in autotools and cmake
->>>> 4. Update documentation.
+On 08-09-15 15:22, Vicente Olivert Riera wrote:
+> gdb needs makeinfo to build the documentation. Since we do not provide a
+> host-makeinfo package this will fail in any system where makeinfo is
+> missing. However, we can workaround this problem by preventing gdb to
+> build the documentation.
 > 
->>  No, since VERBOSE already exists, my proposed step 2 is useless.
+> Fixes:
 > 
-> OK. Please note that I will change it a little bit:
-> - remove export VERBOSE
-> - VERBOSE=1 if V=1, even if VERBOSE is already defined (i.e. remove "ifndef
-> VERBOSE" test)
-> - VERBOSE=0 if V=0
-> - VERBOSE=(empty) otherwise to prevent this variable from being inherited from
-> the shell.
+>   http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/gdb/gdb.mk |    6 ++++++
+>  1 files changed, 6 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index 338de20..7a8f8c7 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -114,6 +114,12 @@ else
+>  GDB_CONF_OPTS += --without-zlib
+>  endif
+>  
+> +# Prevent gdb to build the documentation
+> +define GDB_DISABLE_DOC
+> +$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
+> +endef
+> +GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
 
- Good!
+ Since it is patching the source, it should be POST_PATCH_HOOKS rather than
+PRE_CONFIGURE_HOOKS.
 
- Note in the commit log why it has to be that way (for cmake, I guess).
+ That does mean that people using OVERRIDE_SRCDIR should do this fix in the
+overridden source, but I think that's OK.
 
  Regards,
  Arnout
+
+> +
+>  # This removes some unneeded Python scripts and XML target description
+>  # files that are not useful for a normal usage of the debugger.
+>  define GDB_REMOVE_UNNEEDED_FILES
+> 
 
 
 -- 
