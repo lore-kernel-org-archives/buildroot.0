@@ -1,77 +1,38 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Sep 2015 17:02:00 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/host-gdb: host-texinfo
- needed for full gdb
-In-Reply-To: <1441727849-4997-1-git-send-email-brendanheading@gmail.com>
-References: <1441727849-4997-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <55EF0678.4060807@imgtec.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 8 Sep 2015 18:16:55 +0200
+Subject: [Buildroot] Right board to use -- buildroot begniers
+In-Reply-To: <CAKpDV8uJiT88YYY2gxNohTmQoP2toaFpWFjDSGTSaG2kENaPCg@mail.gmail.com>
+References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
+ <55EDE7A6.4060902@mind.be>
+ <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
+ <55EE8B90.9060708@mind.be>
+ <CAKpDV8uJiT88YYY2gxNohTmQoP2toaFpWFjDSGTSaG2kENaPCg@mail.gmail.com>
+Message-ID: <55EF09F7.6040401@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Dear Dinesh,
 
-On 09/08/2015 04:57 PM, Brendan Heading wrote:
-> Fixes :
-> http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
-> 
-> .. and many others.
-> 
-> when building the full gdb (ie not just gdbserver) on the host or target
+Dinesh Guleria wrote:
+> So i will go for atmel_sama5d3_xplained .
+> http://www.element14.com/community/docs/DOC-38394/l/evaluation-kit-for-at91sam9g45
+>
+>  >> I have no idea, but it is fully supported by Buildroot, both for
+> booting from
+> SD card and booting from flash.
+>
+> With seggers j- link can i flash uboot to the Nand flash of this board ?
 
-then don't use "package/host-gdb" in the subject since both of them are
-affected.
+To flash the bootloader on the sama5d3_xplained board you don't need
+any JTAG interface. You just need to remove the NAND CS jumper on the
+board and connect on UART with the sam-ba tool.
 
-Regards,
+The labs from the Free Electrons training material have detailed
+information on how to do that:
+http://free-electrons.com/doc/training/embedded-linux/
 
-Vincent.
-
-> the "make install" phase seems to expect makeinfo (from texinfo) to be
-> present.
-> 
-> Added a dependency so that the host always depends on host-texinfo, and
-> the target depends on it if the full GDB is being built. No need to set
-> ac_cv_prog_MAKEINFO anymore as it doesn't seem to achieve the desired
-> effect.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
-> v1 -> v2: fixed for target, removed duplication in gdb.mk. Used better
-> subject suggested by Vicente.
-> ---
->  package/gdb/gdb.mk | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 338de20..d144d6b 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -33,7 +33,8 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
->  GDB_SUBDIR = gdb/gdbserver
->  HOST_GDB_SUBDIR = .
->  else
-> -GDB_DEPENDENCIES = ncurses \
-> +# need makeinfo if building the full debugger
-> +GDB_DEPENDENCIES = ncurses host-texinfo \
->  	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  endif
->  
-> @@ -165,14 +166,8 @@ else
->  HOST_GDB_CONF_OPTS += --without-python
->  endif
->  
-> -ifeq ($(GDB_FROM_GIT),y)
-> -GDB_DEPENDENCIES += host-texinfo
-> +#since we always build the full GDB on the host, texinfo/makeinfo is required
->  HOST_GDB_DEPENDENCIES += host-texinfo
-> -else
-> -# don't generate documentation
-> -GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
-> -HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
-> -endif
->  
->  # legacy $arch-linux-gdb symlink
->  define HOST_GDB_ADD_SYMLINK
-> 
+-- 
+Luca	
