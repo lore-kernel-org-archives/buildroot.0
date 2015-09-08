@@ -1,80 +1,49 @@
-From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-Date: Tue, 08 Sep 2015 16:57:13 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/website: contribute.txt update
-	with useful tips on patch versioning and patch submission
-In-Reply-To: <55EEE6BC.4070207@mind.be>
-References: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
- <55EEE6BC.4070207@mind.be>
-Message-ID: <1619019.BvyX3KbBJD@deathstar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 8 Sep 2015 15:58:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/host-gdb: fix autobuild failure
+In-Reply-To: <CA+BsyQ7HibpSPRV_Z=WGit8rCgeV8SETstTbPScuU5qmjq1Zkw@mail.gmail.com>
+References: <1441721106-27234-1-git-send-email-brendanheading@gmail.com>	<55EEED12.6000909@mind.be>	<55EEEE0D.5050009@imgtec.com>	<CA+BsyQ5b=EF8jc6-TWa2udxCnP64SHnXq-3OnUNpx-d8YSWadA@mail.gmail.com>	<55EEF529.1030009@imgtec.com>
+ <CA+BsyQ7HibpSPRV_Z=WGit8rCgeV8SETstTbPScuU5qmjq1Zkw@mail.gmail.com>
+Message-ID: <55EEF783.4010401@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 08 September 2015 15:46:36 Arnout Vandecappelle wrote:
-> On 08-09-15 15:22, Francesco Nwokeka wrote:
-> > Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
-> > 
-> > Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-> > ---
-> >  docs/manual/contribute.txt | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> > index 40579f9..1ab8ef8 100644
-> > --- a/docs/manual/contribute.txt
-> > +++ b/docs/manual/contribute.txt
-> > @@ -298,6 +298,12 @@ $ git format-patch --subject-prefix "PATCH v4" \
-> >      -M -s -o outgoing origin/master
-> >  ---------------------
-> >  
-> > +or the +-v <n>+ flag (where <n> is the version number):
-> > +
-> > +---------------------
-> > +$ git format-patch -v4 -M -s -o outgoing origin/master
-> > +---------------------
-> > +
-> 
-> This option exists since git v1.8.1
+Dear Brendan Heading,
 
-Am I to specify the git version on the documentation or was it just a "fyi" statement?
+On 09/08/2015 03:53 PM, Brendan Heading wrote:
+>>> Looking into why, and will submit an updated patch when I crack it.
+>>> Probably a difference with the config, or there's a patch being added
+>>> somewhere.
+>>
+>> Perhaps you trying to build the target gdb in the same buildroot tree
+>> where you have built the host gdb? (which will have makeinfo available
+>> because host-texinfo has been built).
+> 
+> No, host-texinfo is not being built at all.
+> 
+> I found the cause - by default the full gdb is not built, only
+> gdbserver. It seems that a gdbserver-only build does not trigger the
+> documentation element of "make install" in gdb.
 
+Indeed, I was reproducing the autobuild failure with the full gdb.
 
-> >  When you provide a new version of a patch, please mark the old one as
-> >  superseded in http://patchwork.buildroot.org[patchwork]. You need to
-> >  create an account on http://patchwork.buildroot.org[patchwork] to be
-> > @@ -306,6 +312,9 @@ the status of patches you submitted yourself, which means the email
-> >  address you register in http://patchwork.buildroot.org[patchwork] should
-> >  match the one you use for sending patches to the mailing list.
-> >  
-> > +[NOTE]
-> 
->  I don't think this tag is needed.
-> 
-> > +_You can also add the +--in-reply-to "<previous-version-id>"+ flag when submitting a patch to the mailing list (via git sendmail). The id of the mail to reply to can be found under the "Message Id" tag on the patchwork website. The advantage of *in-reply-to* is that patchwork will automatically mark the previous patch as superseded_
-> 
->  Please split lines at 80 columns.
-> 
->  The italics is also not needed.
-> 
->  <previous-version-id> should be <message-id>.
-> 
->  --in-reply-to is an option of format-patch, so there's no need to mention the
-> (via git sendmail) (which is anyway wrong, since it's git send-email).
+> I need to make a better patch as there's already logic in the build to
+> only depend on texinfo under certain circumstances - and I also need
+> to test all the combinations (three different GDB versions are
+> supported). Hopefully will send it through today.
 
-Noted and updated
+When you do it, could you please use a better subject? "fix autobuild
+failure" doesn't give any information about what the patch does.
+"host-texinfo needed for full gdb" gives more information, for instance.
 
+Regards,
 
->  Regards,
->  Arnout
+Vincent.
+
+> regards
 > 
-> 
-> > +
-> >  [[reporting-bugs]]
-> >  === Reporting issues/bugs or getting help
-> >  
-> > 
-> 
-> 
+> Brendan
 > 
