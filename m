@@ -1,46 +1,59 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 8 Sep 2015 21:41:45 +0200
-Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
- trying to load shared library
-In-Reply-To: <CAF5aO=+9ooyZfHE8yR2T=1cU+Snukctp54m66gDUvxW0WvJ5yQ@mail.gmail.com>
-References: <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
- <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
- <55EDAA89.20809@mind.be>
- <CAF5aO=+dvVTzhdJW7D7udiEmomAU_ZWTCSXF5OP0zcmhuHcUqQ@mail.gmail.com>
- <55EDF64F.7020707@mind.be>
- <20150908090719.GA14056@waldemar-brodkorb.de>
- <CAF5aO=+gjgRuocbAvLicJWPkEkiiuUMFtTG6mDV-roq0cz-_fQ@mail.gmail.com>
- <55EEFDA1.6070104@mind.be>
- <CAF5aO=LPauPtHe2EeYmBQ-2BQjcL+POfZVHAWxaujQ01vMmQKA@mail.gmail.com>
- <CAF5aO=+9ooyZfHE8yR2T=1cU+Snukctp54m66gDUvxW0WvJ5yQ@mail.gmail.com>
-Message-ID: <20150908194145.GR8475@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Sep 2015 21:57:59 +0200
+Subject: [Buildroot] [PATCHv2] package/efl/libevas: remove unsafe paths
+In-Reply-To: <1441726684-28308-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441726684-28308-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <55EF3DC7.3090900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex,
-Alex Potapenko wrote,
-
-> P.S. LFS is enabled:
+On 08-09-15 17:38, Vicente Olivert Riera wrote:
+> Fixes:
 > 
->     UCLIBC_HAS_LFS=y
+>   http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
 > 
-> ?
-> in the custom config
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v1 -> v2:
+>   - Use % instead of # in the sed instruction (Suggested Arnout)
+>   - Remove the useless host-post-patch-hook (Suggested Arnout)
+>  
+>  package/efl/libevas/libevas.mk |    6 ++++++
+>  1 files changed, 6 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+> index 8113162..716f1a8 100644
+> --- a/package/efl/libevas/libevas.mk
+> +++ b/package/efl/libevas/libevas.mk
+> @@ -17,6 +17,12 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
+>  HOST_LIBEVAS_DEPENDENCIES = \
+>  	host-pkgconf host-zlib host-libeina \
+>  	host-freetype host-libpng host-libjpeg
+> +
+> +define LIBEVAS_REMOVE_UNSAFE_PATHS
+> +$(SED) 's%-I/usr/include%%g' $(@D)/configure
 
-Can you compile attached test program and execute
-it on your target with a file in /opt and some other partition.
-I want to see if the problem is really related to fstat.
-Please link it statically.
+ Sorry, one more nit: commands are indented with a tab.
 
-best regards
- Waldemar
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: fstat-tst.c
-Type: text/x-csrc
-Size: 615 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/a6145be2/attachment.c>
+ Regards,
+ Arnout
+
+> +endef
+> +LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
+> +
+>  HOST_LIBEVAS_CONF_OPTS += \
+>  	--enable-image-loader-png \
+>  	--enable-image-loader-jpeg \
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
