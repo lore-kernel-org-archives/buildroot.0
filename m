@@ -1,83 +1,63 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:20:01 +0200
-Subject: [Buildroot] [PACH v2 27/38] package/expedite: bump to efl-1.15
-	branch
+Date: Tue,  8 Sep 2015 23:19:57 +0200
+Subject: [Buildroot] [PACH v2 23/38] package/libevas-generic-loaders: add
+	libraw dependency
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-28-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-24-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since expedite hasn't been released since 1.7.10 release,
-use efl-1.15 branch in the git tree.
-
-Autoreconf the package since there is no configure script
-in the git tree.
-
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: bump to 1.15 branch
----
- package/expedite/Config.in   | 14 +++++++-------
- package/expedite/expedite.mk | 11 ++++++++---
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ package/libevas-generic-loaders/Config.in                  | 5 +++++
+ package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/expedite/Config.in b/package/expedite/Config.in
-index 5d48af3..755309f 100644
---- a/package/expedite/Config.in
-+++ b/package/expedite/Config.in
-@@ -1,11 +1,10 @@
- config BR2_PACKAGE_EXPEDITE
- 	bool "expedite"
--	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEET
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
-+	select BR2_PACKAGE_EFL
-+	depends on BR2_INSTALL_LIBSTDCPP # efl
-+	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
- 	depends on BR2_USE_MMU # efl
-+	depends on !BR2_STATIC_LIBS # efl
- 	depends on BR2_USE_WCHAR # efl
- 	help
- 	  Expedite is the official Evas benchmark tool. It can test different
-@@ -13,5 +12,6 @@ config BR2_PACKAGE_EXPEDITE
- 	  DirectFB and so on. Its tests are quite extensive, trying to
- 	  reproduce real world usage cases.
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 78247e2..779faae 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -16,6 +16,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
--comment "expedite needs a toolchain w/ C++, threads, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+comment "expedite needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/expedite/expedite.mk b/package/expedite/expedite.mk
-index 9b232f8..7cab3ad 100644
---- a/package/expedite/expedite.mk
-+++ b/package/expedite/expedite.mk
-@@ -4,12 +4,17 @@
- #
- ################################################################################
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
--EXPEDITE_VERSION = 1.7.10
--EXPEDITE_SITE = http://download.enlightenment.org/releases
-+# efl-1.15 branch
-+EXPEDITE_VERSION = 3ce8b3f1451700f9a2da60c2e717c644220e2449
-+EXPEDITE_SITE = http://git.enlightenment.org/tools/expedite.git
-+EXPEDITE_SITE_METHOD = git
- EXPEDITE_LICENSE = BSD-2c
- EXPEDITE_LICENSE_FILES = COPYING
- 
--EXPEDITE_DEPENDENCIES = libevas libeina libeet
-+EXPEDITE_DEPENDENCIES = host-efl efl
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
++	bool "Libraw loader"
++	help
++	  This option enables the Evas generic Libraw loader
 +
-+# There is no configure script in the git tree.
-+EXPEDITE_AUTORECONF = YES
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	select BR2_PACKAGE_LIBRSVG
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index c4a586d..70a2a8f 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
- EXPEDITE_CONF_OPTS += --with-x=$(STAGING_DIR) \
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = efl zlib
+ 
+-# For now, we only support the SVG loader
+ # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
+-	--disable-libraw \
+ 	--disable-gstreamer
+ 
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
++else
++LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
+ LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
 -- 
 2.4.3
