@@ -1,56 +1,68 @@
 From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue,  8 Sep 2015 19:52:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/valgrind: disable for static-only
-	builds
-Message-ID: <1441738339-2011-1-git-send-email-brendanheading@gmail.com>
+Date: Tue,  8 Sep 2015 20:27:23 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/gdb: host-texinfo needed for
+	full gdb
+Message-ID: <1441740443-7280-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/3b6/3b6f253f30afaee428ea0fc559be210dcec61dae
-http://autobuild.buildroot.net/results/60e/60e5a49360e2ee9482b4d548789f874a6502c429
-http://autobuild.buildroot.net/results/5cc/5ccc2e48fa4deb90ab214c82e8921ec494555457
-http://autobuild.buildroot.net/results/452/4524184b407bb6f9b55f8f85c8e0b475ff105420
+Fixes :
+http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 
-Valgrind ordinarily works by preloading a shared object to replace malloc,
-free and friends. Some combinations of toolchain/libc allow this to build
-with -static, but others complain.
+.. and many others.
 
-Since it makes little sense to try to build this on a static-only system,
-this patch disables it on static platforms entirely.
+when building the full gdb (ie not just gdbserver) on the host or target
+the "make install" phase seems to expect makeinfo (from texinfo) to be
+present.
+
+Added a dependency so that the host always depends on host-texinfo, and
+the target depends on it if the full GDB is being built. No need to set
+ac_cv_prog_MAKEINFO anymore as it doesn't seem to achieve the desired
+effect.
 
 Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 ---
-v1 - theoretically we could try to support valgrind static builds on
-platforms where it appears to work (eg i686). However this would add a lot
-of conditional stuff, so I figured it would be easier just to disable it
-outright.
----
- package/valgrind/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+v1->v2: fixed for target, removed duplication in gdb.mk. Used better
+subject suggested by Vicente.
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 8da007b..5635ada 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -4,11 +4,15 @@ config BR2_PACKAGE_VALGRIND
- 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
- 		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
- 		   BR2_x86_64
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  Tool for debugging and profiling Linux programs.
+v2->v3: fix typos, fixed subject to reflect that the issue applies to
+gdb in general (host and target).
+---
+ package/gdb/gdb.mk | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 338de20..3114fd4 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -33,7 +33,8 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
+ GDB_SUBDIR = gdb/gdbserver
+ HOST_GDB_SUBDIR = .
+ else
+-GDB_DEPENDENCIES = ncurses \
++# need makeinfo if building the full debugger
++GDB_DEPENDENCIES = ncurses host-texinfo \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ endif
  
- 	  http://valgrind.org/
+@@ -165,14 +166,8 @@ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
  
-+comment "valgrind needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
- if BR2_PACKAGE_VALGRIND
+-ifeq ($(GDB_FROM_GIT),y)
+-GDB_DEPENDENCIES += host-texinfo
++# since we always build the full GDB on the host, texinfo/makeinfo is required
+ HOST_GDB_DEPENDENCIES += host-texinfo
+-else
+-# don't generate documentation
+-GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-endif
  
- config BR2_PACKAGE_VALGRIND_MEMCHECK
+ # legacy $arch-linux-gdb symlink
+ define HOST_GDB_ADD_SYMLINK
 -- 
 2.4.3
