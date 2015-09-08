@@ -1,92 +1,112 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:19:54 +0200
-Subject: [Buildroot] [PACH v2 20/38] package/efl: add OpenGL/OpenGLES support
+Date: Tue,  8 Sep 2015 23:19:56 +0200
+Subject: [Buildroot] [PACH v2 22/38] package/libevas-generic-loaders: bump
+	to version 1.15.0
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-21-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-23-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Update url and add a hash file.
+
+Also add efl reverse dependencies.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/efl/Config.in | 26 ++++++++++++++++++++++++++
- package/efl/efl.mk    | 17 +++++++++++++++--
- 2 files changed, 41 insertions(+), 2 deletions(-)
+v2: bump to 1.15
+    remove glibc only dependency
+---
+ package/libevas-generic-loaders/Config.in            | 20 +++++++++-----------
+ .../libevas-generic-loaders.hash                     |  2 ++
+ .../libevas-generic-loaders.mk                       |  9 +++++----
+ 3 files changed, 16 insertions(+), 15 deletions(-)
+ create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 47f511f..b8c64ab 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -80,6 +80,32 @@ comment "for libecore XCB support disable recommanded configurations"
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 47e5aa2..78247e2 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -1,15 +1,18 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
+-	select BR2_PACKAGE_LIBEINA
++	select BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_ZLIB
+-	depends on BR2_USE_WCHAR # efl
++	depends on BR2_INSTALL_LIBSTDCPP # efl
++	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
+ 	depends on BR2_USE_MMU # efl
++	depends on !BR2_STATIC_LIBS # efl
++	depends on BR2_USE_WCHAR # efl
+ 	help
+ 	  These are additional "generic" loaders for Evas that are
+ 	  stand-alone executables that evas may run from its generic
+ 	  loader module.
  
- endchoice
+-	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
++	  https://www.enlightenment.org/
  
-+if BR2_PACKAGE_EFL_X_XLIB
-+
-+choice
-+	prompt "select libevas OpenGL support"
-+
-+config BR2_PACKAGE_EFL_X_XLIB_GLX_FULL
-+	bool "libevas OpenGL full support"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+
-+comment "libevas OpenGLES support needs libgl"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-+
-+config BR2_PACKAGE_EFL_X_XLIB_GLX_ES
-+	bool "libevas OpenGLES support"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "libevas OpenGLES support needs libgles"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+config BR2_PACKAGE_EFL_X_XLIB_GLX_NONE
-+	bool "libevas disable OpenGL support"
-+
-+endchoice
-+
-+endif # BR2_PACKAGE_EFL_X_XLIB
-+
- endif # BR2_PACKAGE_EFL_X
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
- comment "libevas loaders"
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 07d9eed..39d4cfc 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -172,8 +172,7 @@ endif
- ifeq ($(BR2_PACKAGE_EFL_X),y)
- EFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
- 	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib \
--	--with-opengl=none
-+	--x-libraries=$(STAGING_DIR)/usr/lib
+@@ -17,17 +20,12 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+-	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	help
+ 	  This option enables the Evas generic SVG loader
  
- EFL_DEPENDENCIES += \
- 	xlib_libX11 \
-@@ -183,6 +182,20 @@ EFL_CONF_OPTS += --with-x=no \
- 	--with-x11=none
+-comment "SVG loader needs a toolchain w/ threads, C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-
  endif
  
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_FULL),y)
-+EFL_CONF_OPTS += --with-opengl=full
-+EFL_DEPENDENCIES += libgl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_ES),y)
-+EFL_CONF_OPTS += --with-opengl=es
-+EFL_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_NONE),y)
-+EFL_CONF_OPTS += --with-opengl=none
-+endif
-+
- ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
- EFL_DEPENDENCIES += \
- 	xlib_libX11 \
+-comment "libevas generic loaders needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
++comment "libevas generic loaders needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+new file mode 100644
+index 0000000..32723ba
+--- /dev/null
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
++sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index ac6b1cc..c4a586d 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -4,17 +4,18 @@
+ #
+ ################################################################################
+ 
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.10
+-LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
+-LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
++LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
++LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders/
+ LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
+ LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
+ 
+ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = efl zlib
+ 
+ # For now, we only support the SVG loader
++# poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
 -- 
 2.4.3
