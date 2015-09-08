@@ -1,60 +1,65 @@
-From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-Date: Tue,  8 Sep 2015 17:47:19 +0200
-Subject: [Buildroot] [PATCH v3 1/1] docs/website: contribute.txt update with
-	useful tips on patch versioning and patch submission
-In-Reply-To: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
-References: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
-Message-ID: <1441727239-17284-1-git-send-email-francesco.nwokeka@gmail.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue,  8 Sep 2015 16:57:29 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/host-gdb: host-texinfo needed
+	for full gdb
+Message-ID: <1441727849-4997-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
+Fixes :
+http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 
-Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+.. and many others.
 
+when building the full gdb (ie not just gdbserver) on the host or target
+the "make install" phase seems to expect makeinfo (from texinfo) to be
+present.
+
+Added a dependency so that the host always depends on host-texinfo, and
+the target depends on it if the full GDB is being built. No need to set
+ac_cv_prog_MAKEINFO anymore as it doesn't seem to achieve the desired
+effect.
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 ---
-v1 -> v2: adjusted previous patch with observations from mailing list
-v2 -> v3: Replaced "the patchwork website" with a link to the project website
-
-Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+v1 -> v2: fixed for target, removed duplication in gdb.mk. Used better
+subject suggested by Vicente.
 ---
- docs/manual/contribute.txt | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/gdb/gdb.mk | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 40579f9..4dae676 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -298,6 +298,13 @@ $ git format-patch --subject-prefix "PATCH v4" \
-     -M -s -o outgoing origin/master
- ---------------------
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 338de20..d144d6b 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -33,7 +33,8 @@ ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
+ GDB_SUBDIR = gdb/gdbserver
+ HOST_GDB_SUBDIR = .
+ else
+-GDB_DEPENDENCIES = ncurses \
++# need makeinfo if building the full debugger
++GDB_DEPENDENCIES = ncurses host-texinfo \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ endif
  
-+Since git version 1.8.1, you can also use +-v <n>+ (where <n> is the
-+version number):
-+
-+---------------------
-+$ git format-patch -v4 -M -s -o outgoing origin/master
-+---------------------
-+
- When you provide a new version of a patch, please mark the old one as
- superseded in http://patchwork.buildroot.org[patchwork]. You need to
- create an account on http://patchwork.buildroot.org[patchwork] to be
-@@ -306,6 +313,13 @@ the status of patches you submitted yourself, which means the email
- address you register in http://patchwork.buildroot.org[patchwork] should
- match the one you use for sending patches to the mailing list.
+@@ -165,14 +166,8 @@ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
  
-+You can also add the +--in-reply-to <message-id>+ flag when
-+submitting a patch to the mailing list. The id of the mail
-+to reply to can be found under the "Message Id" tag on
-+http://patchwork.buildroot.org[patchwork].
-+The advantage of *in-reply-to* is that patchwork will automatically mark the
-+previous patch as superseded.
-+
- [[reporting-bugs]]
- === Reporting issues/bugs or getting help
+-ifeq ($(GDB_FROM_GIT),y)
+-GDB_DEPENDENCIES += host-texinfo
++#since we always build the full GDB on the host, texinfo/makeinfo is required
+ HOST_GDB_DEPENDENCIES += host-texinfo
+-else
+-# don't generate documentation
+-GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-endif
  
+ # legacy $arch-linux-gdb symlink
+ define HOST_GDB_ADD_SYMLINK
 -- 
-2.5.1
+2.4.3
