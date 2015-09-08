@@ -1,107 +1,82 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:19:37 +0200
-Subject: [Buildroot] [PACH v2 03/38] package/x11r7/xlib_libXpresent: new
-	package
+Date: Tue,  8 Sep 2015 23:19:36 +0200
+Subject: [Buildroot] [PACH v2 02/38] package/x11r7/xlib_libXp: new package
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-4-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-3-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Although xlib_libXp is no longer provided with X.org
+since 7.4 release [1], some packages may need it.
 
-[Romain:
-  - update the help text with the one from:
-    https://ftp-master.debian.org/new/libxpresent_1.0.0-1.html
-  - add host-pkgconf dependency]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[1] http://www.x.org/wiki/Releases/ModuleVersions
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/x11r7/Config.in                            |  1 +
- package/x11r7/xlib_libXpresent/Config.in           | 19 +++++++++++++++++++
- .../x11r7/xlib_libXpresent/xlib_libXpresent.hash   |  4 ++++
- package/x11r7/xlib_libXpresent/xlib_libXpresent.mk | 22 ++++++++++++++++++++++
- 4 files changed, 46 insertions(+)
- create mode 100644 package/x11r7/xlib_libXpresent/Config.in
- create mode 100644 package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
- create mode 100644 package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
+ package/x11r7/Config.in                |  1 +
+ package/x11r7/xlib_libXp/Config.in     | 11 +++++++++++
+ package/x11r7/xlib_libXp/xlib_libXp.mk | 20 ++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/x11r7/xlib_libXp/Config.in
+ create mode 100644 package/x11r7/xlib_libXp/xlib_libXp.mk
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 7922a5b..d25e5bc 100644
+index ed2b797..7922a5b 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -42,6 +42,7 @@ if BR2_PACKAGE_XORG7
+@@ -40,6 +40,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xlib_libXi/Config.in
+ 		source package/x11r7/xlib_libXinerama/Config.in
  		source package/x11r7/xlib_libXmu/Config.in
- 		source package/x11r7/xlib_libXp/Config.in
++		source package/x11r7/xlib_libXp/Config.in
  		source package/x11r7/xlib_libXpm/Config.in
-+		source package/x11r7/xlib_libXpresent/Config.in
  		source package/x11r7/xlib_libXrandr/Config.in
  		source package/x11r7/xlib_libXrender/Config.in
- 		source package/x11r7/xlib_libXres/Config.in
-diff --git a/package/x11r7/xlib_libXpresent/Config.in b/package/x11r7/xlib_libXpresent/Config.in
+diff --git a/package/x11r7/xlib_libXp/Config.in b/package/x11r7/xlib_libXp/Config.in
 new file mode 100644
-index 0000000..8da839e
+index 0000000..e1060da
 --- /dev/null
-+++ b/package/x11r7/xlib_libXpresent/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_XLIB_LIBXPRESENT
-+	bool "libXpresent"
++++ b/package/x11r7/xlib_libXp/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_XLIB_LIBXP
++	bool "libXp"
 +	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXAU
 +	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XPROTO_PRESENTPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XPROTO_PRINTPROTO
++	select BR2_PACKAGE_XUTIL_UTIL_MACROS
 +	help
-+	  X11 Present extension library
-+	  libXpresent provides an X Window System client interface to the
-+	  Present extension to the X protocol. The Present extension
-+	  provides a way for applications to update their window contents
-+	  from a pixmap in a well defined fashion, synchronizing with the
-+	  display refresh and potentially using a more efficient mechanism
-+	  than copying the contents of the source pixmap.
-+
-+	  More information about X.Org can be found at:
-+	  <URL:http://www.X.org>
-diff --git a/package/x11r7/xlib_libXpresent/xlib_libXpresent.hash b/package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
++	  X.Org Print Client Library
++	  libXp provides public APIs to allow client applications to render
++	  to non-display devices.
+diff --git a/package/x11r7/xlib_libXp/xlib_libXp.mk b/package/x11r7/xlib_libXp/xlib_libXp.mk
 new file mode 100644
-index 0000000..9d057c0
+index 0000000..1fcb0f4
 --- /dev/null
-+++ b/package/x11r7/xlib_libXpresent/xlib_libXpresent.hash
-@@ -0,0 +1,4 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-April/002584.html
-+md5	edd87ac15bb666081898dd7382fcbff5	libXpresent-1.0.0.tar.bz2
-+sha1	8893cca785dc94f4a001b53f4308588ff6c3900a	libXpresent-1.0.0.tar.bz2
-+sha256	c11ae015141a9afbe10f4f2b8ee00b11adca6373dc1b9808d7c6c138b2da7b8a	libXpresent-1.0.0.tar.bz2
-diff --git a/package/x11r7/xlib_libXpresent/xlib_libXpresent.mk b/package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
-new file mode 100644
-index 0000000..5f8f546
---- /dev/null
-+++ b/package/x11r7/xlib_libXpresent/xlib_libXpresent.mk
-@@ -0,0 +1,22 @@
++++ b/package/x11r7/xlib_libXp/xlib_libXp.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# xlib_libXpresent
++# xlib_libXp
 +#
 +################################################################################
 +
-+XLIB_LIBXPRESENT_VERSION = 1.0.0
-+XLIB_LIBXPRESENT_SOURCE = libXpresent-$(XLIB_LIBXPRESENT_VERSION).tar.bz2
-+XLIB_LIBXPRESENT_SITE = http://xorg.freedesktop.org/archive/individual/lib
-+XLIB_LIBXPRESENT_LICENSE = MIT
-+XLIB_LIBXPRESENT_LICENSE_FILES = COPYING
-+XLIB_LIBXPRESENT_INSTALL_STAGING = YES
-+XLIB_LIBXPRESENT_DEPENDENCIES = \
-+	host-pkgconf \
++XLIB_LIBXP_VERSION = 1.0.3
++XLIB_LIBXP_SOURCE = libXp-$(XLIB_LIBXP_VERSION).tar.bz2
++XLIB_LIBXP_SITE = http://xorg.freedesktop.org/releases/individual/lib/
++XLIB_LIBXP_LICENSE = MIT
++XLIB_LIBXP_LICENSE_FILES = COPYING
++XLIB_LIBXP_INSTALL_STAGING = YES
++XLIB_LIBXP_DEPENDENCIES = host-pkgconf \
 +	xlib_libX11 \
++	xlib_libXau \
 +	xlib_libXext \
-+	xlib_libXfixes \
-+	xlib_libXrandr \
-+	xproto_presentproto \
-+	xproto_xproto
++	xproto_printproto \
++	xutil_util-macros
 +
 +$(eval $(autotools-package))
 -- 
