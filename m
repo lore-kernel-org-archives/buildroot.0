@@ -1,48 +1,61 @@
-From: Alex Potapenko <opotapenko@gmail.com>
-Date: Tue, 8 Sep 2015 18:29:07 +0300
-Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
- trying to load shared library
-In-Reply-To: <55EEFDA1.6070104@mind.be>
-References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
- <55EDA03A.2070302@mind.be>
- <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
- <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
- <55EDAA89.20809@mind.be>
- <CAF5aO=+dvVTzhdJW7D7udiEmomAU_ZWTCSXF5OP0zcmhuHcUqQ@mail.gmail.com>
- <55EDF64F.7020707@mind.be>
- <20150908090719.GA14056@waldemar-brodkorb.de>
- <CAF5aO=+gjgRuocbAvLicJWPkEkiiuUMFtTG6mDV-roq0cz-_fQ@mail.gmail.com>
- <55EEFDA1.6070104@mind.be>
-Message-ID: <CAF5aO=LPauPtHe2EeYmBQ-2BQjcL+POfZVHAWxaujQ01vMmQKA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Sep 2015 17:29:21 +0200
+Subject: [Buildroot] [PATCH] package/efl/libevas: remove unsafe paths
+In-Reply-To: <1441723349-31061-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441723349-31061-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <55EEFED1.7010700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->  The -EOVERFLOW suggests the reverse: it's a large filesystem and we're
-> making a
-> 32-bit syscall.
->  However, since we're building with LARGEFILE (which is forced in current
-> buildroot), all syscalls should be largefile syscalls so this issue should
-> not
-> occur...
->  However, in your 2015.08 config, I see you're using a custom uClibc
-> config.
-> You're not turning off any largefile options there, are you?
+On 08-09-15 16:42, Vicente Olivert Riera wrote:
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/efl/libevas/libevas.mk |    7 +++++++
+>  1 files changed, 7 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+> index 8113162..9ffedce 100644
+> --- a/package/efl/libevas/libevas.mk
+> +++ b/package/efl/libevas/libevas.mk
+> @@ -17,6 +17,13 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
+>  HOST_LIBEVAS_DEPENDENCIES = \
+>  	host-pkgconf host-zlib host-libeina \
+>  	host-freetype host-libpng host-libjpeg
+> +
+> +define LIBEVAS_REMOVE_UNSAFE_PATHS
+> +$(SED) 's#-I/usr/include##g' $(@D)/configure
+
+ We currently have 1 package using #, 2 packages using ^, and 11 packages using
+%. So let's stick to %.
+
+> +endef
+> +LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
+> +HOST_LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
+
+ For the host it's not unsafe... Useless, but not unsafe.
 
 
-That custom config is the config from 2015.02. I upgraded the toolchain to
-use gcc-5.2.0 (Buildroot 2015.08) from gcc-4.9.2 (Buildroot 2015.02), but
-didn't want to re-build entire feeds, so have done this for compatibility.
-If it was forced back in 2015.02, it should be OK.
+ Regards,
+ Arnout
 
-Thanks
+> +
+>  HOST_LIBEVAS_CONF_OPTS += \
+>  	--enable-image-loader-png \
+>  	--enable-image-loader-jpeg \
+> 
+
 
 -- 
-Best regards,
-Alex Potapenko
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/ea96b67e/attachment.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
