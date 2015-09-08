@@ -1,112 +1,54 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:19:56 +0200
-Subject: [Buildroot] [PACH v2 22/38] package/libevas-generic-loaders: bump
-	to version 1.15.0
+Date: Tue,  8 Sep 2015 23:19:59 +0200
+Subject: [Buildroot] [PACH v2 25/38] package/libelementary: add host package
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-23-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-26-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update url and add a hash file.
-
-Also add efl reverse dependencies.
+libelementary for the target needs elm_prefs_cc in order to
+cross-compile correctly.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: bump to 1.15
-    remove glibc only dependency
----
- package/libevas-generic-loaders/Config.in            | 20 +++++++++-----------
- .../libevas-generic-loaders.hash                     |  2 ++
- .../libevas-generic-loaders.mk                       |  9 +++++----
- 3 files changed, 16 insertions(+), 15 deletions(-)
- create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
+ package/libelementary/libelementary.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-index 47e5aa2..78247e2 100644
---- a/package/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -1,15 +1,18 @@
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	bool "libevas generic loaders"
--	select BR2_PACKAGE_LIBEINA
-+	select BR2_PACKAGE_EFL
- 	select BR2_PACKAGE_ZLIB
--	depends on BR2_USE_WCHAR # efl
-+	depends on BR2_INSTALL_LIBSTDCPP # efl
-+	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
- 	depends on BR2_USE_MMU # efl
-+	depends on !BR2_STATIC_LIBS # efl
-+	depends on BR2_USE_WCHAR # efl
- 	help
- 	  These are additional "generic" loaders for Evas that are
- 	  stand-alone executables that evas may run from its generic
- 	  loader module.
+diff --git a/package/libelementary/libelementary.mk b/package/libelementary/libelementary.mk
+index fb16d6a..74a8d7a 100644
+--- a/package/libelementary/libelementary.mk
++++ b/package/libelementary/libelementary.mk
+@@ -12,14 +12,26 @@ LIBELEMENTARY_LICENSE_FILES = COPYING
  
--	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
-+	  https://www.enlightenment.org/
+ LIBELEMENTARY_INSTALL_STAGING = YES
  
- if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+-LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl
++LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl host-libelementary
  
-@@ -17,17 +20,12 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
--	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
--	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_ARCH_HAS_ATOMICS # cairo
- 	help
- 	  This option enables the Evas generic SVG loader
+ LIBELEMENTARY_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
++	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
+ 	--with-doxygen=no \
+ 	--disable-elementary-test
  
--comment "SVG loader needs a toolchain w/ threads, C++"
--	depends on BR2_ARCH_HAS_ATOMICS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--
- endif
- 
--comment "libevas generic loaders needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+comment "libevas generic loaders needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_USE_MMU
-diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
-new file mode 100644
-index 0000000..32723ba
---- /dev/null
-+++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
-@@ -0,0 +1,2 @@
-+# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
-+sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
-diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-index ac6b1cc..c4a586d 100644
---- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-+++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-@@ -4,17 +4,18 @@
- #
- ################################################################################
- 
--LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.10
--LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
--LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases
-+LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
-+LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
-+LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders/
- LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
- LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
- 
- LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
- 
--LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
-+LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = efl zlib
- 
- # For now, we only support the SVG loader
-+# poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
- 	--disable-poppler \
- 	--disable-spectre \
++# We need a host package in order to provide elm_prefs_cc and
++# elementary_codegen.
++HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl
++HOST_LIBELEMENTARY_CONF_OPTS = \
++	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++ 	--with-doxygen=no \
++ 	--disable-elementary-test
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.4.3
