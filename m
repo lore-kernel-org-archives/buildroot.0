@@ -1,63 +1,126 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue,  8 Sep 2015 23:19:57 +0200
-Subject: [Buildroot] [PACH v2 23/38] package/libevas-generic-loaders: add
-	libraw dependency
+Date: Tue,  8 Sep 2015 23:20:03 +0200
+Subject: [Buildroot] [PACH v2 29/38] package/libedje: remove package
 In-Reply-To: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
 References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1441747212-27421-24-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1441747212-27421-30-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Libedje is now available in efl package.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/libevas-generic-loaders/Config.in                  | 5 +++++
- package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ Config.in.legacy           |  7 +++++++
+ package/Config.in          |  1 -
+ package/libedje/Config.in  | 30 ------------------------------
+ package/libedje/libedje.mk | 28 ----------------------------
+ 4 files changed, 7 insertions(+), 59 deletions(-)
+ delete mode 100644 package/libedje/Config.in
+ delete mode 100644 package/libedje/libedje.mk
 
-diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-index 78247e2..779faae 100644
---- a/package/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -16,6 +16,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2ba0474..2187f3d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.08"
  
- if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 
-+config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
-+	bool "Libraw loader"
++config BR2_PACKAGE_LIBEDJE
++	bool "libedje package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
 +	help
-+	  This option enables the Evas generic Libraw loader
++	  The libedje package has been removed with the efl bump to 1.14.
 +
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
- 	select BR2_PACKAGE_LIBRSVG
-diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-index c4a586d..70a2a8f 100644
---- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-+++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-@@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
- 
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = efl zlib
- 
--# For now, we only support the SVG loader
- # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
- 	--disable-poppler \
- 	--disable-spectre \
--	--disable-libraw \
- 	--disable-gstreamer
- 
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
-+LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
-+else
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
+ config BR2_PACKAGE_LIBETHUMB
+ 	bool "libethumb package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 74c49b3..a8bb998 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -243,7 +243,6 @@ endif
+ 	source "package/imagemagick/Config.in"
+ 	source "package/libecore/Config.in"
+ 	source "package/libeet/Config.in"
+-	source "package/libedje/Config.in"
+ 	source "package/libefreet/Config.in"
+ 	source "package/libeina/Config.in"
+ 	source "package/libeio/Config.in"
+diff --git a/package/libedje/Config.in b/package/libedje/Config.in
+deleted file mode 100644
+index 299e86b..0000000
+--- a/package/libedje/Config.in
++++ /dev/null
+@@ -1,30 +0,0 @@
+-comment "libedje needs a toolchain w/ threads, wchar"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_LIBEDJE
+-	bool "libedje"
+-	select BR2_PACKAGE_LIBEINA
+-	select BR2_PACKAGE_LIBEET
+-	select BR2_PACKAGE_LIBECORE
+-	select BR2_PACKAGE_LIBECORE_EVAS
+-	select BR2_PACKAGE_LIBEMBRYO
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LUA
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	depends on BR2_USE_MMU # efl
+-	depends on BR2_USE_WCHAR # efl
+-	help
+-	  A graphical layout and animation library for animated
+-	  resizable, compressed and scalable themes.
+-
+-	  http://trac.enlightenment.org/e/wiki/Edje
+-
+-if BR2_PACKAGE_LIBEDJE
+-
+-config BR2_PACKAGE_LIBEDJE_CC
+-	bool "build edje_cc"
+-	help
+-	  Build and install the Edje compiler for the target. Normally this
+-	  is not required.
+-
+-endif
+diff --git a/package/libedje/libedje.mk b/package/libedje/libedje.mk
+deleted file mode 100644
+index 59189e4..0000000
+--- a/package/libedje/libedje.mk
++++ /dev/null
+@@ -1,28 +0,0 @@
+-################################################################################
+-#
+-# libedje
+-#
+-################################################################################
+-
+-LIBEDJE_VERSION = 1.7.10
+-LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
+-LIBEDJE_SITE = http://download.enlightenment.org/releases
+-LIBEDJE_LICENSE = GPLv2+ (epp binary), BSD-2c (everything else)
+-LIBEDJE_LICENSE_FILES = COPYING
+-
+-LIBEDJE_INSTALL_STAGING = YES
+-
+-LIBEDJE_DEPENDENCIES = \
+-	host-pkgconf lua libeina libeet libecore libevas \
+-	libembryo
+-
+-ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
+-LIBEDJE_CONF_OPTS += --enable-edje-cc
+-else
+-LIBEDJE_CONF_OPTS += --disable-edje-cc
+-endif
+-
+-HOST_LIBEDJE_CONF_OPTS = --enable-edje-cc
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
