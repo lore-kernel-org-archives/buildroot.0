@@ -1,39 +1,287 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Sep 2015 15:42:29 +0100
-Subject: [Buildroot] [PATCH] package/efl/libevas: remove unsafe paths
-Message-ID: <1441723349-31061-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue,  8 Sep 2015 17:43:49 +0300
+Subject: [Buildroot] [PATCH v2] arc: axs10x - bump Linux kernel & headers to
+	4.2 release
+Message-ID: <1441723429-28377-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Linux kernel 4.2 was finally released, so bumping from
+4.2-rc5 to final release.
 
-  http://autobuild.buildroot.net/results/7f2/7f2baef97c4ff3b9111becc1e0b79780c6e9db6f/
+Updating Linux headers to 4.2 branch since they are introduced in
+Buildroot as well already.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Also adding 1 back-ported patch that makes SD/MMC cards usable on AXS boards.
+This patch will be a part of 4.3 (already in linux-next) and hopefully
+will make its way in 4.2.1.
+
+Once that patch appears in 4.2.x it must be removed from here.
+
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 ---
- package/efl/libevas/libevas.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-index 8113162..9ffedce 100644
---- a/package/efl/libevas/libevas.mk
-+++ b/package/efl/libevas/libevas.mk
-@@ -17,6 +17,13 @@ LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
- HOST_LIBEVAS_DEPENDENCIES = \
- 	host-pkgconf host-zlib host-libeina \
- 	host-freetype host-libpng host-libjpeg
+Changes compared to v1:
+ * Kernel headers bumped to 4.2
+
+ ...handle-data-blocks-than-4kB-if-IDMAC-is-u.patch | 198 +++++++++++++++++++++
+ configs/snps_axs101_defconfig                      |   7 +-
+ configs/snps_axs103_defconfig                      |   7 +-
+ 3 files changed, 206 insertions(+), 6 deletions(-)
+ create mode 100644 board/synopsys/axs10x/patches/linux/0001-mmc-dw_mmc-handle-data-blocks-than-4kB-if-IDMAC-is-u.patch
+
+diff --git a/board/synopsys/axs10x/patches/linux/0001-mmc-dw_mmc-handle-data-blocks-than-4kB-if-IDMAC-is-u.patch b/board/synopsys/axs10x/patches/linux/0001-mmc-dw_mmc-handle-data-blocks-than-4kB-if-IDMAC-is-u.patch
+new file mode 100644
+index 0000000..93986b0
+--- /dev/null
++++ b/board/synopsys/axs10x/patches/linux/0001-mmc-dw_mmc-handle-data-blocks-than-4kB-if-IDMAC-is-u.patch
+@@ -0,0 +1,198 @@
++From 969872e334937bd0956887a925f20f7a446af5f6 Mon Sep 17 00:00:00 2001
++From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
++Date: Thu, 25 Jun 2015 11:25:07 +0300
++Subject: [PATCH] mmc: dw_mmc: handle data blocks > than 4kB if IDMAC is used
 +
-+define LIBEVAS_REMOVE_UNSAFE_PATHS
-+$(SED) 's#-I/usr/include##g' $(@D)/configure
-+endef
-+LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
-+HOST_LIBEVAS_POST_PATCH_HOOKS += LIBEVAS_REMOVE_UNSAFE_PATHS
++As per DW MobileStorage databook "each descriptor can transfer up to 4kB
++of data in chained mode", moreover buffer size that is put in "des1" is
++limited to 13 bits, i.e. for example on attempt to
++IDMAC_SET_BUFFER1_SIZE(desc, 8192) size value that's effectively written
++will be 0.
 +
- HOST_LIBEVAS_CONF_OPTS += \
- 	--enable-image-loader-png \
- 	--enable-image-loader-jpeg \
++On the platform with 8kB PAGE_SIZE I see dw_mmc gets data blocks in
++SG-list of 8kB size and that leads to unpredictable behavior of the
++SD/MMC controller.
++
++In particular on write to FAT partition of SD-card the controller will
++stuck in the middle of DMA transaction.
++
++Solution to the problem is simple - we need to pass large (> 4kB) data
++buffers to the controller via multiple descriptors. And that's what
++that change does.
++
++What's interesting I did try original driver on same platform but
++configured with 4kB PAGE_SIZE and may confirm that data blocks passed
++in SG-list to dw_mmc never exeed 4kB limit - that explains why nobody
++ever faced a problem I did.
++
++Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
++Cc: Seungwon Jeon <tgih.jun@samsung.com>
++Cc: Jaehoon Chung <jh80.chung@samsung.com>
++Cc: Ulf Hansson <ulf.hansson@linaro.org>
++Cc: arc-linux-dev at synopsys.com
++Cc: linux-kernel at vger.kernel.org
++Signed-off-by: Jaehoon Chung <jh80.chung@samsung.com>
++---
++ drivers/mmc/host/dw_mmc.c | 109 ++++++++++++++++++++++++++++++----------------
++ 1 file changed, 71 insertions(+), 38 deletions(-)
++
++diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
++index 40e9d8e..e41fb74 100644
++--- a/drivers/mmc/host/dw_mmc.c
+++++ b/drivers/mmc/host/dw_mmc.c
++@@ -99,6 +99,9 @@ struct idmac_desc {
++ 
++ 	__le32		des3;	/* buffer 2 physical address */
++ };
+++
+++/* Each descriptor can transfer up to 4KB of data in chained mode */
+++#define DW_MCI_DESC_DATA_LENGTH	0x1000
++ #endif /* CONFIG_MMC_DW_IDMAC */
++ 
++ static bool dw_mci_reset(struct dw_mci *host);
++@@ -462,66 +465,96 @@ static void dw_mci_idmac_complete_dma(struct dw_mci *host)
++ static void dw_mci_translate_sglist(struct dw_mci *host, struct mmc_data *data,
++ 				    unsigned int sg_len)
++ {
+++	unsigned int desc_len;
++ 	int i;
++ 	if (host->dma_64bit_address == 1) {
++-		struct idmac_desc_64addr *desc = host->sg_cpu;
+++		struct idmac_desc_64addr *desc_first, *desc_last, *desc;
+++
+++		desc_first = desc_last = desc = host->sg_cpu;
++ 
++-		for (i = 0; i < sg_len; i++, desc++) {
+++		for (i = 0; i < sg_len; i++) {
++ 			unsigned int length = sg_dma_len(&data->sg[i]);
++ 			u64 mem_addr = sg_dma_address(&data->sg[i]);
++ 
++-			/*
++-			 * Set the OWN bit and disable interrupts for this
++-			 * descriptor
++-			 */
++-			desc->des0 = IDMAC_DES0_OWN | IDMAC_DES0_DIC |
++-						IDMAC_DES0_CH;
++-			/* Buffer length */
++-			IDMAC_64ADDR_SET_BUFFER1_SIZE(desc, length);
++-
++-			/* Physical address to DMA to/from */
++-			desc->des4 = mem_addr & 0xffffffff;
++-			desc->des5 = mem_addr >> 32;
+++			for ( ; length ; desc++) {
+++				desc_len = (length <= DW_MCI_DESC_DATA_LENGTH) ?
+++					   length : DW_MCI_DESC_DATA_LENGTH;
+++
+++				length -= desc_len;
+++
+++				/*
+++				 * Set the OWN bit and disable interrupts
+++				 * for this descriptor
+++				 */
+++				desc->des0 = IDMAC_DES0_OWN | IDMAC_DES0_DIC |
+++							IDMAC_DES0_CH;
+++
+++				/* Buffer length */
+++				IDMAC_64ADDR_SET_BUFFER1_SIZE(desc, desc_len);
+++
+++				/* Physical address to DMA to/from */
+++				desc->des4 = mem_addr & 0xffffffff;
+++				desc->des5 = mem_addr >> 32;
+++
+++				/* Update physical address for the next desc */
+++				mem_addr += desc_len;
+++
+++				/* Save pointer to the last descriptor */
+++				desc_last = desc;
+++			}
++ 		}
++ 
++ 		/* Set first descriptor */
++-		desc = host->sg_cpu;
++-		desc->des0 |= IDMAC_DES0_FD;
+++		desc_first->des0 |= IDMAC_DES0_FD;
++ 
++ 		/* Set last descriptor */
++-		desc = host->sg_cpu + (i - 1) *
++-				sizeof(struct idmac_desc_64addr);
++-		desc->des0 &= ~(IDMAC_DES0_CH | IDMAC_DES0_DIC);
++-		desc->des0 |= IDMAC_DES0_LD;
+++		desc_last->des0 &= ~(IDMAC_DES0_CH | IDMAC_DES0_DIC);
+++		desc_last->des0 |= IDMAC_DES0_LD;
++ 
++ 	} else {
++-		struct idmac_desc *desc = host->sg_cpu;
+++		struct idmac_desc *desc_first, *desc_last, *desc;
+++
+++		desc_first = desc_last = desc = host->sg_cpu;
++ 
++-		for (i = 0; i < sg_len; i++, desc++) {
+++		for (i = 0; i < sg_len; i++) {
++ 			unsigned int length = sg_dma_len(&data->sg[i]);
++ 			u32 mem_addr = sg_dma_address(&data->sg[i]);
++ 
++-			/*
++-			 * Set the OWN bit and disable interrupts for this
++-			 * descriptor
++-			 */
++-			desc->des0 = cpu_to_le32(IDMAC_DES0_OWN |
++-					IDMAC_DES0_DIC | IDMAC_DES0_CH);
++-			/* Buffer length */
++-			IDMAC_SET_BUFFER1_SIZE(desc, length);
+++			for ( ; length ; desc++) {
+++				desc_len = (length <= DW_MCI_DESC_DATA_LENGTH) ?
+++					   length : DW_MCI_DESC_DATA_LENGTH;
+++
+++				length -= desc_len;
+++
+++				/*
+++				 * Set the OWN bit and disable interrupts
+++				 * for this descriptor
+++				 */
+++				desc->des0 = cpu_to_le32(IDMAC_DES0_OWN |
+++							 IDMAC_DES0_DIC |
+++							 IDMAC_DES0_CH);
+++
+++				/* Buffer length */
+++				IDMAC_SET_BUFFER1_SIZE(desc, desc_len);
++ 
++-			/* Physical address to DMA to/from */
++-			desc->des2 = cpu_to_le32(mem_addr);
+++				/* Physical address to DMA to/from */
+++				desc->des2 = cpu_to_le32(mem_addr);
+++
+++				/* Update physical address for the next desc */
+++				mem_addr += desc_len;
+++
+++				/* Save pointer to the last descriptor */
+++				desc_last = desc;
+++			}
++ 		}
++ 
++ 		/* Set first descriptor */
++-		desc = host->sg_cpu;
++-		desc->des0 |= cpu_to_le32(IDMAC_DES0_FD);
+++		desc_first->des0 |= cpu_to_le32(IDMAC_DES0_FD);
++ 
++ 		/* Set last descriptor */
++-		desc = host->sg_cpu + (i - 1) * sizeof(struct idmac_desc);
++-		desc->des0 &= cpu_to_le32(~(IDMAC_DES0_CH | IDMAC_DES0_DIC));
++-		desc->des0 |= cpu_to_le32(IDMAC_DES0_LD);
+++		desc_last->des0 &= cpu_to_le32(~(IDMAC_DES0_CH |
+++					       IDMAC_DES0_DIC));
+++		desc_last->des0 |= cpu_to_le32(IDMAC_DES0_LD);
++ 	}
++ 
++ 	wmb();
++@@ -2394,7 +2427,7 @@ static int dw_mci_init_slot(struct dw_mci *host, unsigned int id)
++ #ifdef CONFIG_MMC_DW_IDMAC
++ 		mmc->max_segs = host->ring_size;
++ 		mmc->max_blk_size = 65536;
++-		mmc->max_seg_size = 0x1000;
+++		mmc->max_seg_size = DW_MCI_DESC_DATA_LENGTH;
++ 		mmc->max_req_size = mmc->max_seg_size * host->ring_size;
++ 		mmc->max_blk_count = mmc->max_req_size / 512;
++ #else
++-- 
++2.4.3
++
+diff --git a/configs/snps_axs101_defconfig b/configs/snps_axs101_defconfig
+index 1f1acac..45c6a4c 100644
+--- a/configs/snps_axs101_defconfig
++++ b/configs/snps_axs101_defconfig
+@@ -10,13 +10,14 @@ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+ # Headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.1"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++BR2_DEFAULT_KERNEL_VERSION="4.2"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2"
++BR2_LINUX_KERNEL_PATCH="board/synopsys/axs10x/patches/linux"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs101"
+ 
+ # Bootloader
+diff --git a/configs/snps_axs103_defconfig b/configs/snps_axs103_defconfig
+index 4efdfd1..fefe474 100644
+--- a/configs/snps_axs103_defconfig
++++ b/configs/snps_axs103_defconfig
+@@ -11,13 +11,14 @@ BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
+ 
+ # Headers
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="4.1"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
++BR2_DEFAULT_KERNEL_VERSION="4.2"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2-rc5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2"
++BR2_LINUX_KERNEL_PATCH="board/synopsys/axs10x/patches/linux"
+ BR2_LINUX_KERNEL_DEFCONFIG="axs103_smp"
+ 
+ # Bootloader
 -- 
-1.7.1
+2.4.3
