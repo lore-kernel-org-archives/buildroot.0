@@ -1,38 +1,57 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 8 Sep 2015 18:16:55 +0200
-Subject: [Buildroot] Right board to use -- buildroot begniers
-In-Reply-To: <CAKpDV8uJiT88YYY2gxNohTmQoP2toaFpWFjDSGTSaG2kENaPCg@mail.gmail.com>
-References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
- <55EDE7A6.4060902@mind.be>
- <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
- <55EE8B90.9060708@mind.be>
- <CAKpDV8uJiT88YYY2gxNohTmQoP2toaFpWFjDSGTSaG2kENaPCg@mail.gmail.com>
-Message-ID: <55EF09F7.6040401@lucaceresoli.net>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Tue, 8 Sep 2015 18:44:09 +0200
+Subject: [Buildroot] Buildroot developer meeting: October 3-4 in Dublin,
+	Ireland
+Message-ID: <21705_1441730651_55EF105B_21705_10043_1_20150908164409.GA21982@r-lnx-ilmarinen>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dinesh,
+Hello All,
 
-Dinesh Guleria wrote:
-> So i will go for atmel_sama5d3_xplained .
-> http://www.element14.com/community/docs/DOC-38394/l/evaluation-kit-for-at91sam9g45
->
->  >> I have no idea, but it is fully supported by Buildroot, both for
-> booting from
-> SD card and booting from flash.
->
-> With seggers j- link can i flash uboot to the Nand flash of this board ?
+As Thomas already announced earlier [0], the next Buildroot Developers
+meeting will take place next October, the 3rd and 4th 2015, in Dublin,
+Ireland, the week-end right before the Embedded Linux Conference Europe
+in the same city.
 
-To flash the bootloader on the sama5d3_xplained board you don't need
-any JTAG interface. You just need to remove the NAND CS jumper on the
-board and connect on UART with the sam-ba tool.
+I'm very happy to announce that Orange will be hosting the event in its
+Orange Business Services offices in Dublin, located:
+    Garryard House
+    Earlsfort Terrace
+    Dublin 2
 
-The labs from the Free Electrons training material have detailed
-information on how to do that:
-http://free-electrons.com/doc/training/embedded-linux/
+For administrative reasons, participants will have to register to the
+event before Friday, Sep. 25th, so that access badges are printed. For
+this reason, people that are not registered will not be granted access
+to the site. Registration is free, and can be made on this page:
+    http://elinux.org/Buildroot:DeveloperDaysELCE2015
+
+Regards,
+Yann E. MORIN.
+
+[0] http://lists.busybox.net/pipermail/buildroot/2015-July/131837.html
 
 -- 
-Luca	
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 299.124.769 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+|         824.769 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
