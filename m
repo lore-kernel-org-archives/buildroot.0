@@ -1,58 +1,48 @@
-From: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-Date: Tue,  8 Sep 2015 17:28:04 +0200
-Subject: [Buildroot] [PATCH v2 1/1] docs/website: contribute.txt update with
-	useful tips on patch versioning and patch submission
-In-Reply-To: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
-References: <1441718566-6551-1-git-send-email-francesco.nwokeka@gmail.com>
-Message-ID: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
+From: Alex Potapenko <opotapenko@gmail.com>
+Date: Tue, 8 Sep 2015 18:29:07 +0300
+Subject: [Buildroot] EOVERFLOW fstat() error on cortex-A9 android when
+ trying to load shared library
+In-Reply-To: <55EEFDA1.6070104@mind.be>
+References: <CAF5aO=Ko183BGatMakjXot=EsnXbaodOHZPRmnMa8nqH=vZkEw@mail.gmail.com>
+ <55EDA03A.2070302@mind.be>
+ <CAF5aO=LYm6GYVXv0gJW9fS3A8JXMAeZwnEokG0Htpac4SZuJVQ@mail.gmail.com>
+ <CAF5aO=LiY_3XBn+HgA8-nwJk51GQkgGQqbnpmdQoyS64zxDTWA@mail.gmail.com>
+ <55EDAA89.20809@mind.be>
+ <CAF5aO=+dvVTzhdJW7D7udiEmomAU_ZWTCSXF5OP0zcmhuHcUqQ@mail.gmail.com>
+ <55EDF64F.7020707@mind.be>
+ <20150908090719.GA14056@waldemar-brodkorb.de>
+ <CAF5aO=+gjgRuocbAvLicJWPkEkiiuUMFtTG6mDV-roq0cz-_fQ@mail.gmail.com>
+ <55EEFDA1.6070104@mind.be>
+Message-ID: <CAF5aO=LPauPtHe2EeYmBQ-2BQjcL+POfZVHAWxaujQ01vMmQKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
+>
+>  The -EOVERFLOW suggests the reverse: it's a large filesystem and we're
+> making a
+> 32-bit syscall.
+>  However, since we're building with LARGEFILE (which is forced in current
+> buildroot), all syscalls should be largefile syscalls so this issue should
+> not
+> occur...
+>  However, in your 2015.08 config, I see you're using a custom uClibc
+> config.
+> You're not turning off any largefile options there, are you?
 
-Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
 
----
-v1 -> v2: adjusted previous patch with observations from mailing list
+That custom config is the config from 2015.02. I upgraded the toolchain to
+use gcc-5.2.0 (Buildroot 2015.08) from gcc-4.9.2 (Buildroot 2015.02), but
+didn't want to re-build entire feeds, so have done this for compatibility.
+If it was forced back in 2015.02, it should be OK.
 
-Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
----
- docs/manual/contribute.txt | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Thanks
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 40579f9..e8707cc 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -298,6 +298,13 @@ $ git format-patch --subject-prefix "PATCH v4" \
-     -M -s -o outgoing origin/master
- ---------------------
- 
-+Since git version 1.8.1, you can also use +-v <n>+ (where <n> is the
-+version number):
-+
-+---------------------
-+$ git format-patch -v4 -M -s -o outgoing origin/master
-+---------------------
-+
- When you provide a new version of a patch, please mark the old one as
- superseded in http://patchwork.buildroot.org[patchwork]. You need to
- create an account on http://patchwork.buildroot.org[patchwork] to be
-@@ -306,6 +313,12 @@ the status of patches you submitted yourself, which means the email
- address you register in http://patchwork.buildroot.org[patchwork] should
- match the one you use for sending patches to the mailing list.
- 
-+You can also add the +--in-reply-to <message-id>+ flag when
-+submitting a patch to the mailing list. The id of the mail
-+to reply to can be found under the "Message Id" tag on the patchwork website.
-+The advantage of *in-reply-to* is that patchwork will automatically mark the
-+previous patch as superseded.
-+
- [[reporting-bugs]]
- === Reporting issues/bugs or getting help
- 
 -- 
-2.5.1
+Best regards,
+Alex Potapenko
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150908/ea96b67e/attachment.html>
