@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Sep 2015 15:46:17 +0200
-Subject: [Buildroot] [PATCHv5 1/4] pkg-generic: add step_pkg_size global
- instrumentation hook
-In-Reply-To: <55F02FEC.7080703@imgtec.com>
-References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1441228505-23235-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <55F02FEC.7080703@imgtec.com>
-Message-ID: <20150909154617.4c91d847@free-electrons.com>
+Date: Wed, 9 Sep 2015 15:47:48 +0200
+Subject: [Buildroot] [PATCHv3 03/15] qt: fix directfb-1.7.7 compiler
+ errors
+In-Reply-To: <55F0361B.4030109@imgtec.com>
+References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441144876-2628-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <55F0361B.4030109@imgtec.com>
+Message-ID: <20150909154748.651a41b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,21 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Wed, 9 Sep 2015 14:11:08 +0100, Vicente Olivert Riera wrote:
-
-> > +# This hook will be called before the target installation of a
-> > +# package. We store in a file named .br_filelist_before the list of
-> > +# files currently installed in the target. Note that the MD5 is also
-> > +# stored, in order to identify if the files are overwritten.
-> > +define step_pkg_size_start
-> > +	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
+On Wed, 9 Sep 2015 14:37:31 +0100, Vicente Olivert Riera wrote:
+> Dear Thomas Petazzoni,
 > 
-> why only "-type f"? Packages can also install other type of files such
-> as links, for instance. Don't you want to track them as well?
+> On 09/01/2015 11:01 PM, Thomas Petazzoni wrote:
+> > From: Peter Seiderer <ps.report@gmx.net>
+> 
+> Any comments about where this patch comes from? Is it an upstream patch,
+> or has this patch been submitted upstream?
 
-It doesn't make sense to "md5sum" a symbolic link: what you will md5 is
-the target of the link, i.e another file of the file system that is
-already taken into account by the size statistics mechanism.
+It has been written by Peter, as far as I know. It has not been
+submitted upstream so far, and qt 4.x is in deep maintenance mode, so I
+doubt it will be adopted. But I can try to submit it in a bug report to
+Qt 4.x. Or maybe Peter you could do it?
 
-We are really only interested in calculating the size of the
-filesystem, so the only thing of interest are real file. We assume that
-the size of things like device files, directories or symbolic links is
-negligible and not relevant for our analysis.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
