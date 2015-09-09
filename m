@@ -1,54 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Sep 2015 12:54:57 +0200
-Subject: [Buildroot] [RFC 2/6] system: clarify /dev management using
- devtmpfs + {mdev, eudev}
-In-Reply-To: <55F00FA4.1040307@lucaceresoli.net>
-References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-3-git-send-email-luca@lucaceresoli.net>
- <55EFFE90.8090200@mind.be> <55F00FA4.1040307@lucaceresoli.net>
-Message-ID: <55F01001.8050206@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 9 Sep 2015 12:02:46 +0100
+Subject: [Buildroot] [PATCHv2] gdb: prevent building the documentation
+Message-ID: <1441796566-12110-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Force gdb to not build the documentation. This way we avoid depending on
+host-texinfo. This is a temporary fix until upstream accepts a proposed
+--disable-docs configure option.
 
+Since the documentation will not be build at all, we can remove the
+parts related to host-texinfo and MAKEINFO in the gdb.mk file.
 
-On 09-09-15 12:53, Luca Ceresoli wrote:
-> Dear Arnout,
-> 
-> thanks for you review.
-> 
-> Arnout Vandecappelle wrote:
->> On 08-09-15 23:28, Luca Ceresoli wrote:
->>> We're going to introduce /dev management with mdev only (no devtmpfs),
->>> which will be called "Dynamic using mdev only".
->>>
->>> In preparation to that addition, clarify the current /dev managements
->>> systems which use devtmpfs with an additional tool. Otherwise
->>> "Dynamic using mdev" and "Dynamic using mdev only" wight look quite
->>> undistinguishable to mortals...
->>
->>   I would squash the change to the manual with patch 5/6 and squash the changes
->> to the Config.in prompts into patch 3/6, since these changes are related.
-> 
-> Well, to be picky about bisectability, the changes in this patch should
-> stay together. Otherwise at some commit we'd have "Dynamic using
-> devtmpfs + mdev" in kconfig but "Dynamic using mdev" in the docs.
+Fixes:
 
- OK, so then keep this patch and include my Reviewed-by.
+  http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 
- Regards,
- Arnout
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Changes v1 -> v2:
+  - Indent the sed command
+  - Use a post-patch-hook instead of pre-configure-hook
+  - Remove the parts related to host-texinfo and MAKEINFO
+  - Ammend the commit log to be more appropriate
 
+ package/gdb/gdb.mk |   15 ++++++---------
+ 1 files changed, 6 insertions(+), 9 deletions(-)
 
-[snip]
-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 338de20..01b35b0 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -53,6 +53,12 @@ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ endif
+ 
++# Prevent gdb to build the documentation
++define GDB_DISABLE_DOC
++	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
++endef
++GDB_POST_PATCH_HOOKS += GDB_DISABLE_DOC
++
+ # When gdb sources are fetched from the binutils-gdb repository, they
+ # also contain the binutils sources, but binutils shouldn't be built,
+ # so we disable it.
+@@ -165,15 +171,6 @@ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
+ 
+-ifeq ($(GDB_FROM_GIT),y)
+-GDB_DEPENDENCIES += host-texinfo
+-HOST_GDB_DEPENDENCIES += host-texinfo
+-else
+-# don't generate documentation
+-GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-endif
+-
+ # legacy $arch-linux-gdb symlink
+ define HOST_GDB_ADD_SYMLINK
+ 	cd $(HOST_DIR)/usr/bin && \
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.7.1
