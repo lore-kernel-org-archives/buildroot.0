@@ -1,54 +1,90 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  9 Sep 2015 22:21:02 +0200
-Subject: [Buildroot] [PATCH 13/14] nitrogen6x_defconfig: bump version to
-	3.14.28-1.0.0
+Date: Wed,  9 Sep 2015 22:20:52 +0200
+Subject: [Buildroot] [PATCH 03/14] imx-kobs: add new package
 In-Reply-To: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1441830063-8190-14-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1441830063-8190-4-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot version is updated to v2015.07.
+Based on the Yocto 3.14.28-1.0.0_ga update:
+https://github.com/Freescale/meta-fsl-arm/commit/6c44744
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- configs/nitrogen6x_defconfig | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Hi,
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 71b01f0..51c5161 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -14,21 +14,22 @@ BR2_TARGET_ROOTFS_EXT2_2r1=y
+This package has only been built as I have no i.MX device that has a
+NAND Flash.
+
+Regards,
+Gary
+---
+ package/freescale-imx/Config.in              |  1 +
+ package/freescale-imx/imx-kobs/Config.in     | 10 ++++++++++
+ package/freescale-imx/imx-kobs/imx-kobs.hash |  2 ++
+ package/freescale-imx/imx-kobs/imx-kobs.mk   | 12 ++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/freescale-imx/imx-kobs/Config.in
+ create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.hash
+ create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.mk
+
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index dffe76f..a958dbd 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -42,6 +42,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+ 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
  
- # Lock headers to match kernel
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/21eb4146/u-boot-21eb4146.tar.gz"
-+# Last version of branch boundary-v2015.07
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/5115a9e/u-boot-5115a9e.tar.gz"
- 
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_3.10.53_1.1.1_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/98c0fdbe/linux-imx6-98c0fdbe.tar.gz"
-+# Last version of branch boundary-imx_3.14.28_1.0.0_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++source "package/freescale-imx/imx-kobs/Config.in"
+ source "package/freescale-imx/imx-lib/Config.in"
+ source "package/freescale-imx/imx-vpu/Config.in"
+ source "package/freescale-imx/firmware-imx/Config.in"
+diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
+new file mode 100644
+index 0000000..fc2344e
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_IMX_KOBS
++	bool "imx-kobs"
++	depends on BR2_arm # Only relevant for i.MX
++	help
++	  The imx-kobs tool is used for writing images to NAND on i.MX
++	  platforms.
++
++	  This library is provided by Freescale as-is and doesn't have
++	  an upstream.
++
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
+new file mode 100644
+index 0000000..13373ea
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256 cfac042f5c96731205c397a4a6b3ed966f804569ae4d0e2685d22fdf6bdc9eb7  imx-kobs-3.14.28-1.0.0.tar.gz
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+new file mode 100644
+index 0000000..02c5cad
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# imx-kobs
++#
++################################################################################
++
++IMX_KOBS_VERSION = $(FREESCALE_IMX_VERSION)
++IMX_KOBS_SITE = $(FREESCALE_IMX_SITE)
++IMX_KOBS_LICENSE = GPLv2+
++IMX_KOBS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
 2.5.1
