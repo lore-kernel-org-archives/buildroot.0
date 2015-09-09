@@ -1,64 +1,85 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  9 Sep 2015 22:21:01 +0200
-Subject: [Buildroot] [PATCH 12/14] qmx6_defconfig: bump version to
-	3.14.28_1.0.0
+Date: Wed,  9 Sep 2015 22:20:53 +0200
+Subject: [Buildroot] [PATCH 04/14] imx-gpu-viv: bump version to 5.0.11 p4.5
 In-Reply-To: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1441830063-8190-13-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1441830063-8190-5-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add the package hash file.
+
+3.14.28-1.0.1 patch release has the following bug fixes:
+
+MGS-554 [#1644] Fix the false alert with GPU commit dirty
+MGS-528 [#ccc] Wayland does not free window memory until the application
+exits
+GRPH-56 [#ccc] Add environment variable to turn off memory fill
+GRPH-55 [ccc] Add alpha channel for direct texture viv extension
+MA-6540 [#1672] Fix native fence FD leak found by Android? CTS
+MGS-663 [#1686] P4 release can't be built statically
+MA-6527 [#1666] Fix android.webgl.cts.WebGLTest CTS failure
+MGS-511-2 [#1593] Qt 3D app cannot run on i.MX 6SoloX board
+MGS-658 [#ccc] Fix build warning of isInApiTraceMode for static link
+Revert MGS-352 [#1453] Creating context on 5.x is slower than 4.x due to
+process name
+read
+MGS-578 [#1657] GoogleEarth APK encounters a shader compile error
+MGS-507 [#1323] RenderToTexture has distorted pictures on screen in DL
+board
+MGS-547 [#ccc] Add YVYU format test in g2d_overlay_test
+MGS-547 [#1640] YVYU format gets wrong result when 2D is built
+MGS-564 [#ccc] Resolve race condition in display frame sync
+MGS-367 [#1589] "CTRL+C" to close the "tutorial7_es20" causes GPU to
+hang
+MGS-543 [#1604] Remove some unsupported extensions in gles10
+MGS-436 [#ccc] Memory leak in glimagesink video loop playback
+MA-6267 [#1600] Fix ES3.0 benchmark UBenchEnhanced can't run
+MA-6208-1 [#1543] Fix build error
+MA-6208 [#1543] Fix com.drawelements.deqp.gles3 CTS failure
+MGS-511 [#1593] Qt 3D app cannot run on i.MX 6SoloX board
+MGS-512 [#1493] Fix es30 conformance failures related to glReadPixels
+MGS-502 [#ccc] libCLC failure
+MGS-500 [#ccc] Disable apitrace for static build
+
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-freescale/commit/8f74380a
+
+This package has been tested with both X11 and Framebuffer backends:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
+
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Hi,
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 3 +++
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
 
-This update has only been built, it'd be great if anyone could give
-it a try on the actual hardware.
-
-Regards,
-Gary
----
- configs/qmx6_defconfig | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-index d693d82..a829b4c 100644
---- a/configs/qmx6_defconfig
-+++ b/configs/qmx6_defconfig
-@@ -1,17 +1,17 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+new file mode 100644
+index 0000000..aa1bdee
+--- /dev/null
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256	b5b9c8e216b2bc4281c2443e07eab90547de0abd705614756ed68c7ad2fcf97a  imx-gpu-viv-5.0.11.p4.5-sfp.bin
++sha256	0591b495cd1c2547ae007d405b90729e2fb90603a5728b39d1a99cb4e1cf1eb4  imx-gpu-viv-5.0.11.p4.5-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index ef2399f..aa1e3b6 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Notice you need a recent version of u-boot (with DT support) to be able
- # to boot this kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
--# Last version of branch cgt_imx_3.10.53_1.1.0
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cea0de46e2c8f0a5c67f46005e84ae1d418731bc"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/imx6_kernel_3.14.git"
-+# Last version of branch cgt_qmx6_3.14.28_1.0.0
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="105820d6bd251deb49c3dd3f71fa0d76adce97c7"
- BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30ba236ef6df04e4cca58c3e06c4f63c2db12115"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4d3b64e93064ed3d97ef7d91ff0f61a693a460fc"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
- 
+-IMX_GPU_VIV_BASE_VERSION = 5.0.11.p4.1
++IMX_GPU_VIV_BASE_VERSION = 5.0.11.p4.5
+ ifeq ($(BR2_ARM_EABIHF),y)
+ IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
+ else
 -- 
 2.5.1
