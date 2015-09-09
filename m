@@ -1,85 +1,66 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Sep 2015 13:12:19 +0100
-Subject: [Buildroot] [PATCHv3] gdb: prevent building the documentation
-Message-ID: <1441800739-14854-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 9 Sep 2015 14:29:36 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+ (without devtmpfs)
+In-Reply-To: <55EFF9FF.1020402@mind.be>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+ <55EFF9FF.1020402@mind.be>
+Message-ID: <55F02630.5050500@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Force gdb to not build the documentation. This way we avoid depending on
-host-texinfo. This is a temporary fix until upstream accepts a proposed
---disable-docs configure option.
+Dear Arnout,
 
-Since the documentation will not be build at all, we can remove the
-parts related to host-texinfo and MAKEINFO in the gdb.mk file.
+Arnout Vandecappelle wrote:
+> On 08-09-15 23:28, Luca Ceresoli wrote:
+>> +++ b/package/busybox/inittab
+>> @@ -16,6 +16,7 @@
+>>   # Startup the system
+>>   null::sysinit:/bin/mount -t proc proc /proc
+>>   null::sysinit:/bin/mount -t sysfs sysfs /sys
+>> +#null::sysinit:/sbin/activate-mdev
+>
+>   Excuse my stupidity, but wouldn't it be enough to add the following here:
+>
+> null::sysinit:/bin/mount -t tmpfs mdev /dev
+>
+> and keep on using S10mdev? That is less invasive, and it should work since it's
+> more or less the same as what is done in the cpio/initramfs case.
 
-Fixes:
+Good idea, with a couple caveats.
 
-  http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
+The first problem is we'd have an empty /dev since the mount until the
+execution of S10mdev. This prevents busybox init from executing all
+lines in inittab after the mount, since they would try to open
+/dev/null. Symptom: "can't open /dev/null: No such file or directory".
+The fix should be simply:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v2 -> v3:
-  - Use the post-patch-hook also for host-gdb (Brendan Heading)
-  - Remove unnecessary GDB_FROM_GIT (Romain Naour)
-Changes v1 -> v2:
-  - Indent the sed command
-  - Use a post-patch-hook instead of pre-configure-hook
-  - Remove the parts related to host-texinfo and MAKEINFO
-  - Ammend the commit log to be more appropriate
+-null::sysinit:/bin/mkdir -p /dev/pts
+-null::sysinit:/bin/mkdir -p /dev/shm
+-null::sysinit:/bin/mount -a
+-null::sysinit:/bin/hostname -F /etc/hostname
++::sysinit:/bin/mkdir -p /dev/pts
++::sysinit:/bin/mkdir -p /dev/shm
++::sysinit:/bin/mount -a
++::sysinit:/bin/hostname -F /etc/hostname
 
- package/gdb/gdb.mk |   18 +++++++-----------
- 1 files changed, 7 insertions(+), 11 deletions(-)
+Lines up to the /dev mount might be changed as well to have a more
+uniform style, but it's not strictly needed.
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 338de20..66640f8 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -11,13 +11,11 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
- ifeq ($(BR2_arc),y)
- GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
--GDB_FROM_GIT = y
- endif
- 
- ifeq ($(BR2_microblaze),y)
- GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
--GDB_FROM_GIT = y
- endif
- 
- # Use .tar.bz2 for 7.7.x since there was no .tar.xz release back then
-@@ -53,6 +51,13 @@ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
- HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
- endif
- 
-+# Prevent gdb to build the documentation
-+define GDB_DISABLE_DOC
-+	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
-+endef
-+GDB_POST_PATCH_HOOKS += GDB_DISABLE_DOC
-+HOST_GDB_POST_PATCH_HOOKS += GDB_DISABLE_DOC
-+
- # When gdb sources are fetched from the binutils-gdb repository, they
- # also contain the binutils sources, but binutils shouldn't be built,
- # so we disable it.
-@@ -165,15 +170,6 @@ else
- HOST_GDB_CONF_OPTS += --without-python
- endif
- 
--ifeq ($(GDB_FROM_GIT),y)
--GDB_DEPENDENCIES += host-texinfo
--HOST_GDB_DEPENDENCIES += host-texinfo
--else
--# don't generate documentation
--GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
--HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
--endif
--
- # legacy $arch-linux-gdb symlink
- define HOST_GDB_ADD_SYMLINK
- 	cd $(HOST_DIR)/usr/bin && \
+I'll check if sysvinit init has any issues.
+
+But ehen, if any user has an S05something that uses /dev, it would
+break. In order to reduce the risk to nearly zero, we might move
+S10mdev to S00mdev, so it runs (most likely) as the first script.
+
+This would slightly change the current behaviour for all cases, and
+start S01logging after mdev, not before. I tested it quickly and it
+looks like it works. Can you think of any problem with moving S10mdev
+to S00mdev?
+
 -- 
-1.7.1
+Luca
