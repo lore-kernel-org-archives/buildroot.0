@@ -1,26 +1,25 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  9 Sep 2015 22:20:57 +0200
-Subject: [Buildroot] [PATCH 08/14] libfslvpuwrap: bump version to 1.0.58
+Date: Wed,  9 Sep 2015 22:20:50 +0200
+Subject: [Buildroot] [PATCH 01/14] freescale-imx: bump to 3.14.28-1.0.0_ga
+	release
 In-Reply-To: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1441830063-8190-9-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1441830063-8190-2-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change license file + add hash file.
+Add hash files for the updated packages.
 
-Changelog:
-- Update the license file with new version and use COPYING
-- Remove the folder /usr/share to avoid empty folder installation
+Also update the license of firmware-imx.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/1506776
+5521d77c9f191b5808cb3bad4af9484ac
 
-This package has been implicitely tested through gstreamer as the
-plugins rely on it for vpu decoding:
+Those packages have been implicitely tested through gstreamer as the
+plugins rely on them for vpu decoding for instance:
  # gst-launch-0.10 playbin
  # uri=file:///root/tears_of_steel_1080p.webm
  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
@@ -29,39 +28,55 @@ plugins rely on it for vpu decoding:
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/libfslvpuwrap/libfslvpuwrap.hash | 2 ++
- package/libfslvpuwrap/libfslvpuwrap.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
- create mode 100644 package/libfslvpuwrap/libfslvpuwrap.hash
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 2 ++
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ package/freescale-imx/freescale-imx.mk               | 2 +-
+ package/freescale-imx/imx-lib/imx-lib.hash           | 2 ++
+ 4 files changed, 6 insertions(+), 2 deletions(-)
+ create mode 100644 package/freescale-imx/firmware-imx/firmware-imx.hash
+ create mode 100644 package/freescale-imx/imx-lib/imx-lib.hash
 
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.hash b/package/libfslvpuwrap/libfslvpuwrap.hash
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
 new file mode 100644
-index 0000000..e7ca1a8
+index 0000000..0b89c4b
 --- /dev/null
-+++ b/package/libfslvpuwrap/libfslvpuwrap.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256	a278eb18ec24230166ac39e2eadf7b934798f0432654c2e24c4cb69c3ac1cf0f  libfslvpuwrap-1.0.58.bin
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index 625f586..7669c63 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -4,14 +4,14 @@
++sha256 1f09acd4d605efc78a0672068a658cb16274811d2f444cf3ae7aaa075266746f  firmware-imx-3.14.28-1.0.0.bin
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 71e49e6..9cab5c2 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -10,7 +10,7 @@ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
+ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ 	Atheros license (ath6k)
+-FIRMWARE_IMX_LICENSE_FILES = EULA licenses/vpu/EULA
++FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
+ FIRMWARE_IMX_REDISTRIBUTE = NO
+ 
+ FIRMWARE_IMX_BLOBS = ath6k sdma vpu
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 26c591b..d4f8967 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFSLVPUWRAP_VERSION = 1.0.57
-+LIBFSLVPUWRAP_VERSION = 1.0.58
- LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
- LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
- LIBFSLVPUWRAP_INSTALL_STAGING = YES
+-FREESCALE_IMX_VERSION = 3.10.53-1.1.0
++FREESCALE_IMX_VERSION = 3.14.28-1.0.0
+ FREESCALE_IMX_SITE = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO
  
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
--LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
-+LIBFSLVPUWRAP_LICENSE_FILES = EULA COPYING
- LIBFSLVPUWRAP_REDISTRIBUTE = NO
- 
- define LIBFSLVPUWRAP_EXTRACT_CMDS
+ # Helper for self-extracting binaries distributed by Freescale.
+diff --git a/package/freescale-imx/imx-lib/imx-lib.hash b/package/freescale-imx/imx-lib/imx-lib.hash
+new file mode 100644
+index 0000000..85f0a40
+--- /dev/null
++++ b/package/freescale-imx/imx-lib/imx-lib.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256 46022817d25f154b60247fdcbb87216e23e553bd88ec9664b1b5d5911e7aa2a2  imx-lib-3.14.28-1.0.0.tar.gz
 -- 
 2.5.1
