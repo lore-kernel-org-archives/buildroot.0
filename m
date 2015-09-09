@@ -1,55 +1,68 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Sep 2015 14:50:15 +0100
-Subject: [Buildroot] [PATCHv5 1/4] pkg-generic: add step_pkg_size global
- instrumentation hook
-In-Reply-To: <20150909154617.4c91d847@free-electrons.com>
-References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>	<1441228505-23235-2-git-send-email-thomas.petazzoni@free-electrons.com>	<55F02FEC.7080703@imgtec.com>
- <20150909154617.4c91d847@free-electrons.com>
-Message-ID: <55F03917.7080304@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Sep 2015 15:54:27 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+ (without devtmpfs)
+In-Reply-To: <55F02630.5050500@lucaceresoli.net>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+ <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
+Message-ID: <20150909155427.53f9c8b5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Luca Ceresoli,
 
-Dear Thomas Petazzoni,
+On Wed, 9 Sep 2015 14:29:36 +0200, Luca Ceresoli wrote:
 
-On 09/09/2015 02:46 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
+> The first problem is we'd have an empty /dev since the mount until the
+> execution of S10mdev. This prevents busybox init from executing all
+> lines in inittab after the mount, since they would try to open
+> /dev/null. Symptom: "can't open /dev/null: No such file or directory".
+> The fix should be simply:
 > 
-> On Wed, 9 Sep 2015 14:11:08 +0100, Vicente Olivert Riera wrote:
+> -null::sysinit:/bin/mkdir -p /dev/pts
+> -null::sysinit:/bin/mkdir -p /dev/shm
+> -null::sysinit:/bin/mount -a
+> -null::sysinit:/bin/hostname -F /etc/hostname
+> +::sysinit:/bin/mkdir -p /dev/pts
+> +::sysinit:/bin/mkdir -p /dev/shm
+> +::sysinit:/bin/mount -a
+> +::sysinit:/bin/hostname -F /etc/hostname
 > 
->>> +# This hook will be called before the target installation of a
->>> +# package. We store in a file named .br_filelist_before the list of
->>> +# files currently installed in the target. Note that the MD5 is also
->>> +# stored, in order to identify if the files are overwritten.
->>> +define step_pkg_size_start
->>> +	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
->>
->> why only "-type f"? Packages can also install other type of files such
->> as links, for instance. Don't you want to track them as well?
-> 
-> It doesn't make sense to "md5sum" a symbolic link: what you will md5 is
-> the target of the link, i.e another file of the file system that is
-> already taken into account by the size statistics mechanism.
-> 
-> We are really only interested in calculating the size of the
-> filesystem, so the only thing of interest are real file. We assume that
-> the size of things like device files, directories or symbolic links is
-> negligible and not relevant for our analysis.
+> Lines up to the /dev mount might be changed as well to have a more
+> uniform style, but it's not strictly needed.
 
-Ok, I was looking at the packages-file-list.txt file as a way to know
-which files are installed by each package (which is useful IMHO), and
-then I noticed that packages like busybox only had a few files when it
-actually installs lots of links. But, if this is only to calculate the
-size of the file system, then it's fine.
+It actually looks better to me to *not* redirect the output of those
+commands to /dev/null. I don't know why we are doing this, but it means
+that if any of those commands wants to display something, it is
+redirected to oblivion. Not good. So it looks better to continue using
+the stdout/stderr set up by the kernel for the init process.
 
-Regards,
+BTW, does this means that in the minimal static device table, we only
+need /dev/console? That's the only device that is opened by the kernel
+directly, I believe /dev/null was only needed for those lines.
 
-Vincent.
-
-> Best regards,
+> But ehen, if any user has an S05something that uses /dev, it would
+> break. In order to reduce the risk to nearly zero, we might move
+> S10mdev to S00mdev, so it runs (most likely) as the first script.
 > 
-> Thomas
-> 
+> This would slightly change the current behaviour for all cases, and
+> start S01logging after mdev, not before. I tested it quickly and it
+> looks like it works. Can you think of any problem with moving S10mdev
+> to S00mdev?
+
+In principle, it seems better to me if the devices are all set up
+before starting anything else, so if it works, I'm all for S00mdev. The
+only question is whether mdev logs things to syslog, and if so what
+happens to those messages that are emitted before syslog is started.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
