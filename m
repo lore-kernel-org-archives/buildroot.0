@@ -1,11 +1,11 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Sep 2015 14:11:08 +0100
-Subject: [Buildroot] [PATCHv5 1/4] pkg-generic: add step_pkg_size global
- instrumentation hook
-In-Reply-To: <1441228505-23235-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1441228505-23235-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <55F02FEC.7080703@imgtec.com>
+Date: Wed, 9 Sep 2015 14:37:31 +0100
+Subject: [Buildroot] [PATCHv3 03/15] qt: fix directfb-1.7.7 compiler
+	errors
+In-Reply-To: <1441144876-2628-4-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441144876-2628-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <55F0361B.4030109@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,80 +14,194 @@ To: buildroot@busybox.net
 
 Dear Thomas Petazzoni,
 
-On 09/02/2015 10:15 PM, Thomas Petazzoni wrote:
-> This patch adds a global instrumentation hook that collects the list
-> of files installed in $(TARGET_DIR) by each package, and stores this
-> list into a file called $(BUILD_DIR)/packages-file-list.txt. It can
-> later be used to determine the size contribution of each package to
-> the target root filesystem.
-> 
-> Note that in order to detect if a file installed by one package is
-> later overriden by another package, we calculate the md5 of installed
-> files and compare them at each installation of a new package.
-> 
-> Collecting the list of files installed by each package is done
-> unconditionally, as tests have shown that the performance impact of
-> doing this is negligible.
-> 
+On 09/01/2015 11:01 PM, Thomas Petazzoni wrote:
+> From: Peter Seiderer <ps.report@gmx.net>
+
+Any comments about where this patch comes from? Is it an upstream patch,
+or has this patch been submitted upstream?
+
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> Tested-by: Ryan Barnett <ryanbarnett3@gmail.com>
 > ---
->  package/pkg-generic.mk | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
+>  ...ion-constructor-error-for-legacy-c-compil.patch | 163 +++++++++++++++++++++
+>  1 file changed, 163 insertions(+)
+>  create mode 100644 package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 6a7d97e..2c8fe29 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -55,6 +55,38 @@ define step_time
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  
-> +# Hooks to collect statistics about installed files
+> diff --git a/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch b/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+> new file mode 100644
+> index 0000000..d7d387a
+> --- /dev/null
+> +++ b/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+> @@ -0,0 +1,163 @@
+> +From ea46f47fb3c475ba2d7581c15185b8d43e63b8c2 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Fri, 27 Feb 2015 21:30:52 +0100
+> +Subject: [PATCH] Fix conversion/constructor error for legacy c++ compiler.
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
 > +
-> +# This hook will be called before the target installation of a
-> +# package. We store in a file named .br_filelist_before the list of
-> +# files currently installed in the target. Note that the MD5 is also
-> +# stored, in order to identify if the files are overwritten.
-> +define step_pkg_size_start
-> +	(cd $(TARGET_DIR) ; find . -type f -print0 | xargs -0 md5sum) | sort > \
-
-why only "-type f"? Packages can also install other type of files such
-as links, for instance. Don't you want to track them as well?
-
-> +		$($(PKG)_DIR)/.br_filelist_before
-> +endef
+> +Fixes the following compile error with legacy c++ compiler:
 > +
-> +# This hook will be called after the target installation of a
-> +# package. We store in a file named .br_filelist_after the list of
-> +# files (and their MD5) currently installed in the target. We then do
-> +# a diff with the .br_filelist_before to compute the list of files
-> +# installed by this package.
-> +define step_pkg_size_end
-> +	(cd $(TARGET_DIR); find . -type f -print0 | xargs -0 md5sum) | sort > \
+> +error: in C++98 ?blitRect? must be initialized by constructor, not by ?{...}?
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Same here.
+you are submitting this patch to Buildroot, so, shouldn't you add your
+SoB here as well?
 
 Regards,
 
 Vincent.
 
-> +		$($(PKG)_DIR)/.br_filelist_after
-> +	comm -13 $($(PKG)_DIR)/.br_filelist_before $($(PKG)_DIR)/.br_filelist_after | \
-> +		while read hash file ; do \
-> +			echo "$(1),$${file}" >> $(BUILD_DIR)/packages-file-list.txt ; \
-> +		done
-> +endef
+> +---
+> + src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp   | 14 +++++++-------
+> + src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp        |  6 +++---
+> + src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp        |  6 +++---
+> + src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp |  2 +-
+> + 4 files changed, 14 insertions(+), 14 deletions(-)
 > +
-> +define step_pkg_size
-> +	$(if $(filter install-target,$(2)),\
-> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
-> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
-> +endef
-> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+> +diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
+> +index 876d0c2..ed69386 100644
+> +--- a/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
+> ++++ b/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
+> +@@ -942,7 +942,7 @@ void QDirectFBPaintEngine::drawBufferSpan(const uint *buffer, int bufsize,
+> +     IDirectFBSurface *src = d->surfaceCache->getSurface(buffer, bufsize);
+> +     // ### how does this play with setDFBColor
+> +     src->SetColor(src, 0, 0, 0, const_alpha);
+> +-    const DFBRectangle rect = { 0, 0, length, 1 };
+> ++    const DFBRectangle rect = (DFBRectangle_C){ 0, 0, length, 1 };
+> +     d->surface->Blit(d->surface, src, &rect, x, y);
+> + }
+> + 
+> +@@ -1223,14 +1223,14 @@ void QDirectFBPaintEnginePrivate::blit(const QRectF &dest, IDirectFBSurface *s,
+> +     const QRect dr = engine->state()->matrix.mapRect(dest).toRect();
+> +     if (dr.isEmpty())
+> +         return;
+> +-    const DFBRectangle sRect = { sr.x(), sr.y(), sr.width(), sr.height() };
+> ++    const DFBRectangle sRect = (DFBRectangle_C){ sr.x(), sr.y(), sr.width(), sr.height() };
+> +     DFBResult result;
+> + 
+> +     if (dr.size() == sr.size()) {
+> +         result = surface->Blit(surface, s, &sRect, dr.x(), dr.y());
+> +     } else {
+> +         Q_ASSERT(supportsStretchBlit());
+> +-        const DFBRectangle dRect = { dr.x(), dr.y(), dr.width(), dr.height() };
+> ++        const DFBRectangle dRect = (DFBRectangle_C){ dr.x(), dr.y(), dr.width(), dr.height() };
+> +         result = surface->StretchBlit(surface, s, &sRect, &dRect);
+> +     }
+> +     if (result != DFB_OK)
+> +@@ -1261,7 +1261,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
+> +     if (newClip.isNull())
+> +         return;
+> + 
+> +-    const DFBRegion clip = {
+> ++    const DFBRegion clip = (DFBRegion_C){
+> +         newClip.x(),
+> +         newClip.y(),
+> +         newClip.right(),
+> +@@ -1295,7 +1295,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
+> +         while (y <= destinationRect.bottom()) {
+> +             qreal x = startX;
+> +             while (x <= destinationRect.right()) {
+> +-                const DFBRectangle destination = { qRound(x), qRound(y), mappedSize.width(), mappedSize.height() };
+> ++                const DFBRectangle destination = (DFBRectangle_C){ qRound(x), qRound(y), (int)mappedSize.width(), (int)mappedSize.height() };
+> +                 surface->StretchBlit(surface, sourceSurface, 0, &destination);
+> +                 x += mappedSize.width();
+> +             }
+> +@@ -1337,7 +1337,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
+> +     if (currentClip.isEmpty()) {
+> +         surface->SetClip(surface, 0);
+> +     } else {
+> +-        const DFBRegion clip = {
+> ++        const DFBRegion clip = (DFBRegion_C){
+> +             currentClip.x(),
+> +             currentClip.y(),
+> +             currentClip.right(),
+> +@@ -1356,7 +1356,7 @@ void QDirectFBPaintEnginePrivate::updateClip()
+> +         surface->SetClip(surface, NULL);
+> +         clipType = NoClip;
+> +     } else if (clipData->hasRectClip) {
+> +-        const DFBRegion r = {
+> ++        const DFBRegion r = (DFBRegion_C){
+> +             clipData->clipRect.x(),
+> +             clipData->clipRect.y(),
+> +             clipData->clipRect.right(),
+> +diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
+> +index 412e684..c59c47d 100644
+> +--- a/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
+> ++++ b/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
+> +@@ -363,7 +363,7 @@ void QDirectFBPixmapData::copy(const QPixmapData *data, const QRect &rect)
+> +     } else {
+> +         dfbSurface->SetBlittingFlags(dfbSurface, DSBLIT_NOFX);
+> +     }
+> +-    const DFBRectangle blitRect = { rect.x(), rect.y(),
+> ++    const DFBRectangle blitRect = (DFBRectangle_C){ rect.x(), rect.y(),
+> +                                     rect.width(), rect.height() };
+> +     w = rect.width();
+> +     h = rect.height();
+> +@@ -465,7 +465,7 @@ QPixmap QDirectFBPixmapData::transformed(const QTransform &transform,
+> +     }
+> +     data->dfbSurface->SetBlittingFlags(data->dfbSurface, flags);
+> + 
+> +-    const DFBRectangle destRect = { 0, 0, size.width(), size.height() };
+> ++    const DFBRectangle destRect = (DFBRectangle_C){ 0, 0, size.width(), size.height() };
+> +     data->dfbSurface->StretchBlit(data->dfbSurface, dfbSurface, 0, &destRect);
+> +     data->w = size.width();
+> +     data->h = size.height();
+> +@@ -551,7 +551,7 @@ bool QDirectFBPixmapData::scroll(int dx, int dy, const QRect &rect)
+> +         return false;
+> +     }
+> + 
+> +-    const DFBRectangle source = { rect.x(), rect.y(), rect.width(), rect.height() };
+> ++    const DFBRectangle source = (DFBRectangle_C){ rect.x(), rect.y(), rect.width(), rect.height() };
+> +     result = dfbSurface->Blit(dfbSurface, dfbSurface, &source, source.x + dx, source.y + dy);
+> +     if (result != DFB_OK) {
+> +         DirectFBError("QDirectFBPixmapData::scroll", result);
+> +diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
+> +index eab9580..d26e5bf 100644
+> +--- a/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
+> ++++ b/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
+> +@@ -1635,7 +1635,7 @@ void QDirectFBScreen::solidFill(const QColor &color, const QRegion &region)
+> + static inline void clearRect(IDirectFBSurface *surface, const QColor &color, const QRect &rect)
+> + {
+> +     Q_ASSERT(surface);
+> +-    const DFBRegion region = { rect.left(), rect.top(), rect.right(), rect.bottom() };
+> ++    const DFBRegion region = (DFBRegion_C){ rect.left(), rect.top(), rect.right(), rect.bottom() };
+> +     // could just reinterpret_cast this to a DFBRegion
+> +     surface->SetClip(surface, &region);
+> +     surface->Clear(surface, color.red(), color.green(), color.blue(), color.alpha());
+> +@@ -1716,14 +1716,14 @@ void QDirectFBScreen::flipSurface(IDirectFBSurface *surface, DFBSurfaceFlipFlags
+> +             const DFBSurfaceFlipFlags nonWaitFlags = flipFlags & ~DSFLIP_WAIT;
+> +             for (int i=0; i<rects.size(); ++i) {
+> +                 const QRect &r = rects.at(i);
+> +-                const DFBRegion dfbReg = { r.x() + offset.x(), r.y() + offset.y(),
+> ++                const DFBRegion dfbReg = (DFBRegion_C){ r.x() + offset.x(), r.y() + offset.y(),
+> +                                            r.right() + offset.x(),
+> +                                            r.bottom() + offset.y() };
+> +                 surface->Flip(surface, &dfbReg, i + 1 < rects.size() ? nonWaitFlags : flipFlags);
+> +             }
+> +         } else {
+> +             const QRect r = region.boundingRect();
+> +-            const DFBRegion dfbReg = { r.x() + offset.x(), r.y() + offset.y(),
+> ++            const DFBRegion dfbReg = (DFBRegion_C){ r.x() + offset.x(), r.y() + offset.y(),
+> +                                        r.right() + offset.x(),
+> +                                        r.bottom() + offset.y() };
+> +             surface->Flip(surface, &dfbReg, flipFlags);
+> +diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
+> +index 4dff907..25ad06b 100644
+> +--- a/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
+> ++++ b/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
+> +@@ -333,7 +333,7 @@ bool QDirectFBWindowSurface::scroll(const QRegion &region, int dx, int dy)
+> +     }
+> +     dfbSurface->SetBlittingFlags(dfbSurface, DSBLIT_NOFX);
+> +     const QRect r = region.boundingRect();
+> +-    const DFBRectangle rect = { r.x(), r.y(), r.width(), r.height() };
+> ++    const DFBRectangle rect = (DFBRectangle_C){ r.x(), r.y(), r.width(), r.height() };
+> +     dfbSurface->Blit(dfbSurface, dfbSurface, &rect, r.x() + dx, r.y() + dy);
+> +     return true;
+> + }
+> +-- 
+> +2.1.4
 > +
->  # User-supplied script
->  ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
->  define step_user
 > 
