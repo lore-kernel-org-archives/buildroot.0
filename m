@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Sep 2015 11:21:03 +0200
-Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
- (without devtmpfs)
-In-Reply-To: <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+Date: Wed, 9 Sep 2015 11:26:26 +0200
+Subject: [Buildroot] [RFC 0/6] mdev-only /dev management (without
+ devtmpfs)
+In-Reply-To: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
 References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
-Message-ID: <55EFF9FF.1020402@mind.be>
+Message-ID: <55EFFB42.2050106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 08-09-15 23:28, Luca Ceresoli wrote:
-> +++ b/package/busybox/inittab
-> @@ -16,6 +16,7 @@
->  # Startup the system
->  null::sysinit:/bin/mount -t proc proc /proc
->  null::sysinit:/bin/mount -t sysfs sysfs /sys
-> +#null::sysinit:/sbin/activate-mdev
+> There is one rough edge that I'd like to have comments about: variable
+> naming. The new method implemented by this patchset is dynamic and uses
+> mdev, so it should ba named BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV and
+> described in kconfig as "dynamic using mdev". But hey, that name and
+> description are already used for the current "devtmpfs + mdev" method! So
+> we might want to rename all variables to encompass the new use case in a
+> clean way. Thid would also imply lagacy management etc.
 
- Excuse my stupidity, but wouldn't it be enough to add the following here:
+ Since we don't like legacy management :-) I'd propose to say that DYNAMIC
+actually means DEVTMPFS. So the new option would be called
+BR2_ROOTFS_DEVICE_CREATION_MDEV: it's not devtmpfs, and there's no need for the
+explicit 'only' part.
 
-null::sysinit:/bin/mount -t tmpfs mdev /dev
-
-and keep on using S10mdev? That is less invasive, and it should work since it's
-more or less the same as what is done in the cpio/initramfs case.
-
+ What do you think?
 
  Regards,
  Arnout
-
->  null::sysinit:/bin/mount -o remount,rw /
->  null::sysinit:/bin/mkdir -p /dev/pts
->  null::sysinit:/bin/mkdir -p /dev/shm
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
 
 
 -- 
