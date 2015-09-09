@@ -1,23 +1,50 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 9 Sep 2015 11:53:05 +0100
-Subject: [Buildroot] [PATCH] gdb: prevent building the documentation
-In-Reply-To: <55F00F15.3080009@imgtec.com>
-References: <1441718565-24492-1-git-send-email-Vincent.Riera@imgtec.com>
- <55F00E88.8020208@mind.be> <55F00F15.3080009@imgtec.com>
-Message-ID: <CA+BsyQ4E3YH4jzH-t5=xnunZDPGQuP8u9x3u35hEui9=gpBC7w@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 9 Sep 2015 12:53:24 +0200
+Subject: [Buildroot] [RFC 2/6] system: clarify /dev management using
+ devtmpfs + {mdev, eudev}
+In-Reply-To: <55EFFE90.8090200@mind.be>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-3-git-send-email-luca@lucaceresoli.net>
+ <55EFFE90.8090200@mind.be>
+Message-ID: <55F00FA4.1040307@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>  Still, that can be done as a follow-up patch, so:
+Dear Arnout,
+
+thanks for you review.
+
+Arnout Vandecappelle wrote:
+> On 08-09-15 23:28, Luca Ceresoli wrote:
+>> We're going to introduce /dev management with mdev only (no devtmpfs),
+>> which will be called "Dynamic using mdev only".
+>>
+>> In preparation to that addition, clarify the current /dev managements
+>> systems which use devtmpfs with an additional tool. Otherwise
+>> "Dynamic using mdev" and "Dynamic using mdev only" wight look quite
+>> undistinguishable to mortals...
 >
-> nah..., I will send a v2. Note the sed command is not indented ;-)
+>   I would squash the change to the manual with patch 5/6 and squash the changes
+> to the Config.in prompts into patch 3/6, since these changes are related.
 
-I will help test depending on when the patch comes through.
+Well, to be picky about bisectability, the changes in this patch should
+stay together. Otherwise at some commit we'd have "Dynamic using
+devtmpfs + mdev" in kconfig but "Dynamic using mdev" in the docs.
 
-It'd be nice to get this in quick - there's a huge amount of noise
-related to this in the autobuild output.
+>
+>   But the updated text looks good to me, so:
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>
+>   Oh, perhaps you could add a brief help text to the choice options? You can more
+> or less copy and paste the text from the manual. If you do add help text, do it
+> as a separate patch at the end of the series so it doesn't have to be updated
+> again after the introduction of mdev-only.
 
-Brendan
+Good idea, I'll do it in the next iteration.
+
+-- 
+Luca
