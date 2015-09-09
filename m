@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Sep 2015 15:47:48 +0200
-Subject: [Buildroot] [PATCHv3 03/15] qt: fix directfb-1.7.7 compiler
- errors
-In-Reply-To: <55F0361B.4030109@imgtec.com>
-References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1441144876-2628-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <55F0361B.4030109@imgtec.com>
-Message-ID: <20150909154748.651a41b8@free-electrons.com>
+Date: Wed, 9 Sep 2015 15:49:13 +0200
+Subject: [Buildroot] [PATCHv3] gdb: prevent building the documentation
+In-Reply-To: <1441800739-14854-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441800739-14854-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150909154913.72954fbc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +12,24 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Wed, 9 Sep 2015 14:37:31 +0100, Vicente Olivert Riera wrote:
-> Dear Thomas Petazzoni,
+On Wed, 9 Sep 2015 13:12:19 +0100, Vicente Olivert Riera wrote:
+> Force gdb to not build the documentation. This way we avoid depending on
+> host-texinfo. This is a temporary fix until upstream accepts a proposed
+> --disable-docs configure option.
 > 
-> On 09/01/2015 11:01 PM, Thomas Petazzoni wrote:
-> > From: Peter Seiderer <ps.report@gmx.net>
+> Since the documentation will not be build at all, we can remove the
+> parts related to host-texinfo and MAKEINFO in the gdb.mk file.
 > 
-> Any comments about where this patch comes from? Is it an upstream patch,
-> or has this patch been submitted upstream?
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-It has been written by Peter, as far as I know. It has not been
-submitted upstream so far, and qt 4.x is in deep maintenance mode, so I
-doubt it will be adopted. But I can try to submit it in a bug report to
-Qt 4.x. Or maybe Peter you could do it?
+Maybe we could do a similar thing for the binutils package (which is
+the only other user of the host-texinfo package), and then remove the
+host-texinfo package altogether. That's obviously a completely separate
+set of changes.
 
 Thanks,
 
