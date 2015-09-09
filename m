@@ -1,41 +1,64 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Sep 2015 15:53:49 +0100
-Subject: [Buildroot] [PATCH] binutils: remove unnecessary host-texinfo
-	dependency
-Message-ID: <1441810429-57871-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 9 Sep 2015 16:01:25 +0100
+Subject: [Buildroot] [PATCH] package/texinfo: remove package
+Message-ID: <1441810885-58227-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-texinfo dependency was only necessary when building the git version
-of binutils, however, this upstream commit allows binutils to build
-without makeinfo (a binary provided by host-texinfo)...
+Having checked that binutils doesn't need to depend on host-texinfo...
 
-https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=bba33ab1e0f7d2ebd8f8435f92ed12e2a3c558a4
+  http://patchwork.ozlabs.org/patch/515914/
 
-...so we can safely remove the host-texinfo dependency.
+...and having fixed gdb to not build the documentation...
+
+  http://patchwork.ozlabs.org/patch/515821/
+
+...we can now safely remove this host package since there aren't any
+packages depending on it.
+
+[Note: this patch needs on http://patchwork.ozlabs.org/patch/515821/]
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/binutils/binutils.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/texinfo/texinfo.hash |    2 --
+ package/texinfo/texinfo.mk   |   17 -----------------
+ 2 files changed, 0 insertions(+), 19 deletions(-)
+ delete mode 100644 package/texinfo/texinfo.hash
+ delete mode 100644 package/texinfo/texinfo.mk
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 535c019..2074fae 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -30,8 +30,8 @@ BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
- BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
- 
- ifeq ($(BINUTILS_FROM_GIT),y)
--BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
--HOST_BINUTILS_DEPENDENCIES += host-texinfo host-flex host-bison
-+BINUTILS_DEPENDENCIES += host-flex host-bison
-+HOST_BINUTILS_DEPENDENCIES += host-flex host-bison
- endif
- 
- # When binutils sources are fetched from the binutils-gdb repository,
+diff --git a/package/texinfo/texinfo.hash b/package/texinfo/texinfo.hash
+deleted file mode 100644
+index 656c390..0000000
+--- a/package/texinfo/texinfo.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated after checking pgp signature
+-sha256	1303e91a1c752b69a32666a407e9fbdd6e936def4b09bc7de30f416301530d68	texinfo-4.13a.tar.gz
+diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
+deleted file mode 100644
+index 184288b..0000000
+--- a/package/texinfo/texinfo.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# texinfo
+-#
+-################################################################################
+-
+-# We are intentionally not using the latest version 5.x, because it
+-# causes issues with the documentation building process when creating
+-# a toolchain with the Crosstool-NG backend.
+-
+-TEXINFO_VERSION = 4.13a
+-TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
+-TEXINFO_LICENSE = GPLv3+
+-TEXINFO_LICENSE_FILES = COPYING
+-TEXINFO_DEPENDENCIES = ncurses
+-
+-$(eval $(host-autotools-package))
 -- 
 1.7.1
