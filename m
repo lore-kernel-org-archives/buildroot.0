@@ -1,27 +1,26 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 9 Sep 2015 14:58:22 +0100
-Subject: [Buildroot] [PATCHv3] gdb: prevent building the documentation
-In-Reply-To: <20150909154913.72954fbc@free-electrons.com>
-References: <1441800739-14854-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150909154913.72954fbc@free-electrons.com>
-Message-ID: <CA+BsyQ4j5udg-jsL-A7Spm6jiDtxfaN4sTF1_MYdbFD7XB8rYQ@mail.gmail.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Wed, 9 Sep 2015 09:54:22 -0400
+Subject: [Buildroot] [PATCHv3] system: add options for /bin /sbin and
+ /lib to be symlinks into /usr
+In-Reply-To: <1441397852-23461-1-git-send-email-yann.morin.1998@free.fr>
+References: <1441397852-23461-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CANPyyuMX7+7D-R=JK+D611mM1O9f5ok8zYwuMtm2O6UwOBXuuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Maybe we could do a similar thing for the binutils package (which is
-> the only other user of the host-texinfo package), and then remove the
-> host-texinfo package altogether. That's obviously a completely separate
-> set of changes.
+Yann,
 
-Why not keep host-texinfo around, even if it is not used by any
-package which is included with buildroot ?
+On Fri, Sep 4, 2015 at 4:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> systemd is increasingly expecting things to live in /usr/bin, /usr/sbin
+> or /usr/lib nad not in /bin, /sbin or /lib. It has inherited those
+> expectations from a Fedora change:
+>     https://fedoraproject.org/wiki/Features/UsrMove
 
-It would be useful to people maintaining their own packages within
-buildroot, now or in the future, where it's easier for them to add the
-dependency rather than figure out how/where to patch the package to
-prevent it from building documentation.
+I'm out on vacation, but I'll be back at work on Monday and will test
+the latest revision then.
 
-Brendan
+Thanks,
+Mike
