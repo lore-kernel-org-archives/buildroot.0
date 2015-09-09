@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Sep 2015 11:26:26 +0200
-Subject: [Buildroot] [RFC 0/6] mdev-only /dev management (without
- devtmpfs)
-In-Reply-To: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+Date: Wed, 9 Sep 2015 11:34:48 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+ (without devtmpfs)
+In-Reply-To: <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
 References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <55EFFB42.2050106@mind.be>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <55EFFD38.5010104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 08-09-15 23:28, Luca Ceresoli wrote:
-> There is one rough edge that I'd like to have comments about: variable
-> naming. The new method implemented by this patchset is dynamic and uses
-> mdev, so it should ba named BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV and
-> described in kconfig as "dynamic using mdev". But hey, that name and
-> description are already used for the current "devtmpfs + mdev" method! So
-> we might want to rename all variables to encompass the new use case in a
-> clean way. Thid would also imply lagacy management etc.
+> First, we need the BR2_ROOTFS_STATIC_DEVICE_TABLE just like the static
+> /dev management, in order to have the very basic devices such as /dev/null
+> and /dev/console until mdev is enabled.
 
- Since we don't like legacy management :-) I'd propose to say that DYNAMIC
-actually means DEVTMPFS. So the new option would be called
-BR2_ROOTFS_DEVICE_CREATION_MDEV: it's not devtmpfs, and there's no need for the
-explicit 'only' part.
+ Actually, I don't think this is a good idea: we're asking the user to configure
+a static device table which is not going to be used anyway.
 
- What do you think?
+ I think it's better to move /dev/null and /dev/console to device_table.txt -
+i.e., include them in every rootfs. It just increases the size with a few
+hundred bytes, it doesn't hurt because devtmpfs is normally automounted over it
+right away, and it is better for the cpio/initramfs case because you won't get
+the 'Unable to open initial console' message anymore (I think). Plus, the
+redirects can be removed from fs/cpio/init since they'll be automatic.
+
+ What do the other developers think?
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
