@@ -1,162 +1,301 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed,  9 Sep 2015 22:20:51 +0200
-Subject: [Buildroot] [PATCH 02/14] kobs-ng: remove obsolete package
+Date: Wed,  9 Sep 2015 22:21:03 +0200
+Subject: [Buildroot] [PATCH 14/14] board/boundarydevices: update u-boot
+	script for 3.14 kernels
 In-Reply-To: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1441830063-8190-3-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1441830063-8190-15-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In favor of imx-kobs maintained by Freescale.
+This script will support coming platforms such as iMX6SoloX or
+iMX6QuadPlus.
+
+One important change is that the script now relies on U-Boot to make the
+display detection in order to simplify the script.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/Config.in                          |  1 -
- package/kobs-ng/0001-fix-mtd-defines.patch | 73 ------------------------------
- package/kobs-ng/Config.in                  |  9 ----
- package/kobs-ng/kobs-ng.hash               |  2 -
- package/kobs-ng/kobs-ng.mk                 | 13 ------
- 5 files changed, 98 deletions(-)
- delete mode 100644 package/kobs-ng/0001-fix-mtd-defines.patch
- delete mode 100644 package/kobs-ng/Config.in
- delete mode 100644 package/kobs-ng/kobs-ng.hash
- delete mode 100644 package/kobs-ng/kobs-ng.mk
+ board/boundarydevices/nitrogen6x/6x_bootscript.txt | 223 ++++++++-------------
+ 1 file changed, 84 insertions(+), 139 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9bd4190..5f6914b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -162,7 +162,6 @@ menu "Filesystem and flash utilities"
- 	source "package/genext2fs/Config.in"
- 	source "package/genpart/Config.in"
- 	source "package/genromfs/Config.in"
--	source "package/kobs-ng/Config.in"
- 	source "package/makedevs/Config.in"
- 	source "package/mmc-utils/Config.in"
- 	source "package/mtd/Config.in"
-diff --git a/package/kobs-ng/0001-fix-mtd-defines.patch b/package/kobs-ng/0001-fix-mtd-defines.patch
-deleted file mode 100644
-index 3ffba71..0000000
---- a/package/kobs-ng/0001-fix-mtd-defines.patch
-+++ /dev/null
-@@ -1,73 +0,0 @@
--Newer kernel headers renamed mtd mode defines and no longer support
--MEMSETOOBSEL. Allow code to work with both older and newer kernel
--versions.
+diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
+index ac86fe5..694a9b6 100644
+--- a/board/boundarydevices/nitrogen6x/6x_bootscript.txt
++++ b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
+@@ -1,186 +1,131 @@
+ setenv bootargs ''
+ 
+-if ${fs}load ${dtype} ${disk}:1 10800000 uEnv.txt ; then
+-    env import -t 10800000 $filesize
+-fi
 -
--Signed-off-by: Paul B. Henson <henson@acm.org>
--Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
+-if itest.s "x" == "x$dtbname" ; then
+-	dtbname="imx6";
+-	if itest.s x6SOLO == "x$cpu" ; then
+-		dtbname=${dtbname}dl-;
+-	elif itest.s x6DL == "x$cpu" ; then
+-		dtbname=${dtbname}dl-;
++a_script=0x10800000
++a_uImage=0x10800000
++a_fdt=0x13000000
++
++setenv initrd_high 0xffffffff
++if itest.s "x" == "x${dtbname}" ; then
++	if itest.s x6SOLO == "x${cpu}" ; then
++		dtbname=imx6dl-${board}.dtb;
++	elif itest.s x6DL == "x${cpu}" ; then
++		dtbname=imx6dl-${board}.dtb;
++	elif itest.s x6QP == "x${cpu}" ; then
++		dtbname=imx6qp-${board}.dtb;
++	elif itest.s x6SX == "x${cpu}" ; then
++		if itest.s "x1" != "x$m4enabled" ; then
++			dtbname=imx6sx-${board}.dtb;
++		else
++			run m4boot;
++			dtbname=imx6sx-${board}-m4.dtb;
++		fi
++		a_script=0x80800000
++		a_uImage=0x80800000
++		a_fdt=0x83000000
+ 	else
+-		dtbname=${dtbname}q-;
+-	fi
+-	if itest.s x == "x$board" ; then
+-		board=sabrelite
++		dtbname=imx6q-${board}.dtb;
+ 	fi
+-	dtbname=${dtbname}${board}.dtb;
++fi
++
++if load ${dtype} ${disk}:1 ${a_script} uEnv.txt ; then
++    env import -t ${a_script} ${filesize}
+ fi
+ 
+ if itest.s x == x${bootdir} ; then
+ 	bootdir=/boot/
+ fi
+ 
+-setenv fdt_addr 0x12000000
+-if ${fs}load ${dtype} ${disk}:1 $fdt_addr ${bootdir}$dtbname ; then
+-	fdt addr $fdt_addr
++if itest.s x${bootpart} == x ; then
++	bootpart=1
++fi
++
++if load ${dtype} ${disk}:${bootpart} ${a_fdt} ${bootdir}${dtbname} ; then
++	fdt addr ${a_fdt}
+ 	setenv fdt_high 0xffffffff
+ else
+-	echo "!!!! Error loading ${bootdir}$dtbname";
++	echo "!!!! Error loading ${bootdir}${dtbname}";
+ 	exit;
+ fi
+ 
+-# ------------------- HDMI detection
+-i2c dev 1 ;
+-if i2c probe 0x50 ; then
+-	echo "------ have HDMI monitor";
+-	if itest.s x == x$allow_noncea ; then
+-		setenv bootargs $bootargs mxc_hdmi.only_cea=1;
+-		echo "only CEA modes allowed on HDMI port";
+-	else
+-		setenv bootargs $bootargs mxc_hdmi.only_cea=0;
+-		echo "non-CEA modes allowed on HDMI, audio may be affected";
+-	fi
+-else
+-	fdt rm hdmi_display
+-	echo "------ no HDMI monitor";
+-fi
 -
--diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.c kobs-ng-3.0.35-4.0.0/src/mtd.c
----- kobs-ng-3.0.35-4.0.0-orig/src/mtd.c	2012-12-17 22:37:40.000000000 -0800
--+++ kobs-ng-3.0.35-4.0.0/src/mtd.c	2013-07-28 19:39:59.000000000 -0700
--@@ -852,8 +852,11 @@
-- 		mp = &md->part[i];
-- 
-- 		if (mp->fd != -1) {
--+/* Newer kernels dropped MEMSETOOBSEL */
--+#ifdef MEMSETOOBSEL
-- 			(void)ioctl(mp->fd, MEMSETOOBSEL,
-- 					&mp->old_oobinfo);
--+#endif
-- 			close(mp->fd);
-- 		}
-- 
--@@ -896,6 +899,8 @@
-- 				continue;
-- 			}
-- 
--+/* Newer kernels dropped MEMSETOOBSEL */
--+#ifdef MEMSETOOBSEL
-- 			if (r == -ENOTTY) {
-- 				r = ioctl(mp->fd, MEMSETOOBSEL, &mp->old_oobinfo);
-- 				if (r != 0) {
--@@ -904,6 +909,7 @@
-- 				}
-- 				mp->oobinfochanged = 0;
-- 			}
--+#endif
-- 		} else {
-- 			r = ioctl(mp->fd, MTDFILEMODE, (void *)MTD_MODE_RAW);
-- 			if (r != 0 && r != -ENOTTY) {
--@@ -911,6 +917,8 @@
-- 				continue;
-- 			}
-- 
--+/* Newer kernels dropped MEMSETOOBSEL */
--+#ifdef MEMSETOOBSEL
-- 			if (r == -ENOTTY) {
-- 				r = ioctl(mp->fd, MEMSETOOBSEL, &none_oobinfo);
-- 				if (r != 0) {
--@@ -920,6 +928,7 @@
-- 				mp->oobinfochanged = 1;
-- 			} else
-- 				mp->oobinfochanged = 2;
--+#endif
-- 		}
-- 
-- 		mp->ecc = ecc;
--diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.h kobs-ng-3.0.35-4.0.0/src/mtd.h
----- kobs-ng-3.0.35-4.0.0-orig/src/mtd.h	2012-12-17 22:37:40.000000000 -0800
--+++ kobs-ng-3.0.35-4.0.0/src/mtd.h	2013-07-28 19:33:57.000000000 -0700
--@@ -31,6 +31,13 @@
-- #include "BootControlBlocks.h"
-- #include "rom_nand_hamming_code_ecc.h"
-- 
--+// Newer kernel headers renamed define
--+#include <linux/version.h>
--+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 2, 0)
--+# define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
--+# define MTD_MODE_RAW MTD_FILE_MODE_RAW
--+#endif
--+
-- //------------------------------------------------------------------------------
-- // Re-definitions of true and false, because the standard ones aren't good
-- // enough?
-diff --git a/package/kobs-ng/Config.in b/package/kobs-ng/Config.in
-deleted file mode 100644
-index 1f6b2d1..0000000
---- a/package/kobs-ng/Config.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_KOBS_NG
--	bool "kobs-ng"
--	depends on BR2_arm
--	help
--	  The kobs-ng tool is used for writing images to NAND on i.MX
--	  platforms.
+-# ------------------- LVDS detection
+-if itest.s "x" != "x$lvds_1080p" ; then
+-	echo "----- 1080P dual channel LVDS";
+-	fdt rm okaya1024x600
+-	fdt rm lg1280x800
+-	fdt rm hannstar;
+-	fdt set ldb split-mode 1
+-	fdt set lvds_display interface_pix_fmt "RGB24"
+-	fdt set ldb/lvds-channel at 0 fsl,data-width <24>
+-else
+-	fdt rm ldb split-mode
+-	fdt rm lvds1080p
 -
--	  This utility is provided by Freescale as-is and doesn't have an
--	  upstream.
-diff --git a/package/kobs-ng/kobs-ng.hash b/package/kobs-ng/kobs-ng.hash
-deleted file mode 100644
-index 3e527da..0000000
---- a/package/kobs-ng/kobs-ng.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# From http://repository.timesys.com/buildsources/k/kobs-ng/kobs-ng-3.0.35-4.0.0/kobs-ng-3.0.35-4.0.0.tar.gz.md5sum
--md5	26104c577f59a6b81782a5bd16aadd82	kobs-ng-3.0.35-4.0.0.tar.gz
-diff --git a/package/kobs-ng/kobs-ng.mk b/package/kobs-ng/kobs-ng.mk
-deleted file mode 100644
-index 13d1faf..0000000
---- a/package/kobs-ng/kobs-ng.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# kobs-ng
--#
--################################################################################
+-	# -------- LVDS0 (bottom on Nitrogen6_Max)
+-	setenv have_lvds
+-	i2c dev 2
+-	if i2c probe 0x04 ; then
+-		echo "------ have Freescale display";
+-		setenv have_lvds 1
+-	else
+-		echo "------ no Freescale display";
+-		fdt rm hannstar;
+-	fi
++# first enable tfp410
++i2c dev 1
++i2c mw 38 8.1 bd
+ 
+-	if i2c probe 0x38 ; then
+-		if itest.s "xLDB-WXGA" == "x$panel"; then
+-			screenres=1280,800
+-			fdt rm okaya1024x600
+-		else
+-			screenres=1024,600
+-			fdt rm lg1280x800
+-		fi
+-		setenv have_lvds 1
+-		setenv bootargs $bootargs ft5x06_ts.screenres=$screenres
+-		if itest.s "x" -ne "x$calibration" ; then
+-			setenv bootargs $bootargs ft5x06_ts.calibration=$calibration
+-		fi
+-	else
+-		echo "------ no ft5x06 touch controller";
+-		fdt rm okaya1024x600
+-		fdt rm lg1280x800
+-	fi
 -
--# kobs-ng versions have never made much sense :(
--KOBS_NG_VERSION = 3.0.35-4.0.0
--KOBS_NG_SITE = http://repository.timesys.com/buildsources/k/kobs-ng/kobs-ng-$(KOBS_NG_VERSION)
--KOBS_NG_LICENSE = GPLv2+
--KOBS_NG_LICENSE_FILES = COPYING
+-	if itest.s "x" == "x$have_lvds"; then
+-		fdt rm lvds_display;
+-	fi
 -
--$(eval $(autotools-package))
+-	# -------- LVDS1 (top on Nitrogen6_Max)
+-	if itest.s "xhannstar" == "x$lvds1_panel" ; then
+-		echo "configure LVDS1 for Hannstar panel"
+-		fdt rm okaya1024x600_2;
+-		fdt rm lg1280x800_2;
+-		fdt set lvds_display_2 status okay
+-	elif itest.s "xokaya1024x600" == "x$lvds1_panel" ; then
+-		echo "configure LVDS1 for 1024x600 panel"
+-		fdt rm hannstar_2;
+-		fdt rm lg1280x800_2;
+-		fdt set lvds_display_2 status okay
+-	elif itest.s "xlg1280x800" == "x$lvds1_panel" ; then
+-		echo "configure LVDS1 for 1280x800 panel"
+-		fdt rm hannstar_2;
+-		fdt rm okaya1024x600_2;
+-		fdt set lvds_display_2 status okay
+-	else
+-		fdt rm lvds_display_2 ; # ignore errors on boards != 6_max
+-	fi
++cmd_xxx_present=
++fdt resize
++if itest.s "x" != "x${cmd_custom}" ; then
++	run cmd_custom
++	cmd_xxx_present=1;
+ fi
+ 
+-# ------------------- LCD detection
+-setenv have_lcd '';
+-if i2c probe 0x48 ; then
+-	setenv have_lcd 1;
+-	echo "------- found TSC2004 touch controller";
+-	if itest.s "x" -eq "x$tsc_calibration" ; then
+-		setenv bootargs $bootargs tsc2004.calibration=-67247,-764,272499173,324,69283,-8653010,65536
++if itest.s "x" != "x${cmd_hdmi}" ; then
++	run cmd_hdmi
++	cmd_xxx_present=1;
++	if itest.s x == x${allow_noncea} ; then
++		setenv bootargs ${bootargs} mxc_hdmi.only_cea=1;
++		echo "only CEA modes allowed on HDMI port";
+ 	else
+-		setenv bootargs $bootargs tsc2004.calibration=$tsc_calibration
++		setenv bootargs ${bootargs} mxc_hdmi.only_cea=0;
++		echo "non-CEA modes allowed on HDMI, audio may be affected";
+ 	fi
+-elif i2c probe 0x4d ; then
+-	setenv have_lcd 1;
+-	echo "------- found AR1020 touch controller";
+ fi
+ 
+-if itest.s "x" != "x$ignore_lcd" ; then
+-	echo "------ ignoring LCD display";
+-	setenv have_lcd '';
++if itest.s "x" != "x${cmd_lcd}" ; then
++	run cmd_lcd
++	cmd_xxx_present=1;
++fi
++if itest.s "x" != "x${cmd_lvds}" ; then
++	run cmd_lvds
++	cmd_xxx_present=1;
++fi
++if itest.s "x" != "x${cmd_lvds2}" ; then
++	run cmd_lvds2
++	cmd_xxx_present=1;
+ fi
+ 
+-if itest.s "x" != "x$have_lcd" ; then
+-	echo "----- found LCD display";
+-else
+-	fdt rm lcd_display;
++if itest.s "x" == "x${cmd_xxx_present}" ; then
++	echo "!!!!!!!!!!!!!!!!"
++	echo "warning: your u-boot may be outdated, please upgrade"
++	echo "!!!!!!!!!!!!!!!!"
+ fi
+ 
+-setenv bootargs "$bootargs console=ttymxc1,115200 vmalloc=400M consoleblank=0 rootwait"
++setenv bootargs "${bootargs} console=${console},115200 vmalloc=400M consoleblank=0 rootwait fixrtc"
+ 
+-if itest.s x$bootpart == x ; then
+-	bootpart=1
+-fi
++bpart=1
+ 
+ if test "sata" = "${dtype}" ; then
+-	setenv bootargs "$bootargs root=/dev/sda$bootpart" ;
++	setenv bootargs "${bootargs} root=/dev/sda${bpart}" ;
++elif test "usb" = "${dtype}" ; then
++	setenv bootargs "${bootargs} root=/dev/sda${bpart}" ;
+ else
+-        if test "usb" = "${dtype}" ; then
+-                setenv bootargs "$bootargs root=/dev/sda$bootpart" ;
+-        elif itest 0 -eq ${disk}; then
+-                setenv bootargs "$bootargs root=/dev/mmcblk2p$bootpart" ;
+-        else
+-                setenv bootargs "$bootargs root=/dev/mmcblk3p$bootpart" ;
+-        fi
++	setenv bootargs "${bootargs} root=/dev/mmcblk${disk}p${bpart}"
+ fi
+ 
+ if itest.s "x" != "x${disable_giga}" ; then
+-	setenv bootargs $bootargs fec.disable_giga=1
++	setenv bootargs ${bootargs} fec.disable_giga=1
++fi
++
++if itest.s "x" != "x${wlmac}" ; then
++	setenv bootargs ${bootargs} wlcore.mac=${wlmac}
+ fi
+ 
+-if itest.s "x" != "x$wlmac" ; then
+-	setenv bootargs $bootargs wlcore.mac=$wlmac
++if itest.s "x" != "x${gpumem}" ; then
++	setenv bootargs ${bootargs} galcore.contiguousSize=${gpumem}
+ fi
+ 
+-if itest.s "x" != "x$gpumem" ; then
+-	setenv bootargs $bootargs galcore.contiguousSize=$gpumem
++if itest.s "x" != "x${cma}" ; then
++	setenv bootargs ${bootargs} cma=${cma}
+ fi
+ 
+-if itest.s "x" != "x$show_fdt" ; then
++if itest.s "x" != "x${show_fdt}" ; then
+ 	fdt print /
+ fi
+ 
+-if itest.s "x" != "x$show_env" ; then
++if itest.s "x" != "x${show_env}" ; then
+ 	printenv
+ fi
+ 
+-if ${fs}load ${dtype} ${disk}:1 10800000 ${bootdir}uImage ; then
+-	bootm 10800000 - $fdt_addr
++if load ${dtype} ${disk}:${bootpart} ${a_uImage} ${bootdir}/uImage ; then
++	bootm ${a_uImage} - ${a_fdt}
+ fi
+ echo "Error loading kernel image"
 -- 
 2.5.1
