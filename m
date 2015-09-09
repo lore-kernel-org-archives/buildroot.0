@@ -1,46 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Sep 2015 23:23:26 +0200
-Subject: [Buildroot] [git commit] xtables-addons: bump to version 2.8
-Message-ID: <20150909212400.CD4BC81EF2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 9 Sep 2015 23:38:32 +0200
+Subject: [Buildroot] USB interface as a USB CDCEther (Communications
+ Device Class Ethernet)
+In-Reply-To: <BY1PR0701MB1674D9AADA422080C4F6E419E6520@BY1PR0701MB1674.namprd07.prod.outlook.com>
+References: <BY1PR0701MB1674C543022D2A35D29CA9FCE6520@BY1PR0701MB1674.namprd07.prod.outlook.com>
+ <BY1PR0701MB1674D9AADA422080C4F6E419E6520@BY1PR0701MB1674.namprd07.prod.outlook.com>
+Message-ID: <55F0A6D8.4040309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16d314845120b9d9c4b3fe318c8c8f4162c18932
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09-09-15 20:49, Donahue, Bill wrote:
+> Hi,
+> 
+> I am trying to set up the micro USB on my i.MX6 Rexboard to support Ethernet
+> messages over USB.
+> 
+> I am using theLinux Kernel 4.1.4 and I have attached my config settings below.
+> 
+> I have the board plugged into my Linux laptop but I can?t see the USB listed in
+> the /dev directory, how can I configure this?
 
-With support for linux kernel 4.2
+ It's a network device, so no /dev node. You should have a network device called
+usb0. Do 'ifconfig -a' to check if it appears. Then you can assign a static IP
+address to both ends with ifconfig.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xtables-addons/xtables-addons.hash |    6 +++---
- package/xtables-addons/xtables-addons.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 02e646f..5b60d12 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.7/
--md5	81bd7ba82e5f7bfd1458fc97ddf72e1d	xtables-addons-2.7.tar.xz
--sha1	82c13237ef2a62e57832b160832f4b9c4fb8c7c5	xtables-addons-2.7.tar.xz
-+# From http://sourceforge.net/projects/xtables-addons/files/Xtables-addons/2.8/
-+md5	246ec2f1f75c32c6e04ae9ae75b578c9	xtables-addons-2.8.tar.xz
-+sha1	fb3a992e8ff3fe1967b8c6f22eba0c3475aceaf7	xtables-addons-2.8.tar.xz
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index d16341f..687a66a 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTABLES_ADDONS_VERSION = 2.7
-+XTABLES_ADDONS_VERSION = 2.8
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+ Regards,
+ Arnout
+
+ PS This question is not really buildroot-related, obviously.
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
