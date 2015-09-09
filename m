@@ -1,55 +1,35 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 9 Sep 2015 16:29:24 +0100
-Subject: [Buildroot] [PATCHv3] gdb: prevent building the documentation
-In-Reply-To: <20150909171426.19f79d78@free-electrons.com>
-References: <1441800739-14854-1-git-send-email-Vincent.Riera@imgtec.com>	<20150909154913.72954fbc@free-electrons.com>	<55F044FC.6040608@imgtec.com>	<20150909164526.4467be61@free-electrons.com>	<55F046E3.9040401@imgtec.com>
- <20150909171426.19f79d78@free-electrons.com>
-Message-ID: <55F05054.5080907@imgtec.com>
+From: Donahue, Bill <bill.donahue@thermofisher.com>
+Date: Wed, 9 Sep 2015 18:49:55 +0000
+Subject: [Buildroot] USB interface as a USB CDCEther (Communications
+ Device Class Ethernet)
+In-Reply-To: <BY1PR0701MB1674C543022D2A35D29CA9FCE6520@BY1PR0701MB1674.namprd07.prod.outlook.com>
+References: <BY1PR0701MB1674C543022D2A35D29CA9FCE6520@BY1PR0701MB1674.namprd07.prod.outlook.com>
+Message-ID: <BY1PR0701MB1674D9AADA422080C4F6E419E6520@BY1PR0701MB1674.namprd07.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Hi,
 
-On 09/09/2015 04:14 PM, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
-> 
-> On Wed, 9 Sep 2015 15:49:07 +0100, Vicente Olivert Riera wrote:
-> 
->>> But in any case, if host-texinfo is no longer needed to build the ARC
->>> binutils, then indeed we can drop the host-texinfo dependency, and drop
->>> the host-texinfo package as well.
->>
->> Maybe this is the reason why host-texinfo is no longer needed:
->>
->> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=bba33ab1e0f7d2ebd8f8435f92ed12e2a3c558a4
-> 
-> Very possible indeed. But that would only fix the problem for release
-> tarballs, as the commit log suggests. In binutils, we were depending on
-> host-texinfo only for ARC, because for ARC, we are pulling the binutils
-> sources from git, not from a release tarball.
+I am trying to set up the micro USB on my i.MX6 Rex board to support Ethernet messages over USB.
 
-well, for ARC we are also downloading a tarball:
+I am using the Linux Kernel 4.1.4 and I have attached my config settings below.
 
-https://github.com/foss-for-synopsys-dwc-arc-processors/binutils-gdb/archive/arc-2015.06.tar.gz
+I have the board plugged into my Linux laptop but I can't see the USB listed in the /dev directory, how can I configure this?
 
-But yeah, that tarball doesn't include the fixes introduced by that
-commit. However, it includes an interesting comment in
-bfs/doc/Makefile.{am,in} (the two files that commit patches):
+Thanks,
 
-# We do not depend on chew directly so that we can distribute the info
-# files, and permit people to rebuild them, without requiring the makeinfo
-# program.  If somebody tries to rebuild info, but none of the .texi files
-# have changed, then nothing will be rebuilt.
-
-Regards,
-
-Vincent.
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+Bill
+[cid:4b417216-f678-41be-a8d5-2fdefba1a8c7]
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150909/178e99c1/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image001.jpg
+Type: image/jpeg
+Size: 87638 bytes
+Desc: image001.jpg
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150909/178e99c1/attachment.jpg>
