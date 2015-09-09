@@ -1,58 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Sep 2015 11:51:24 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/gdb: host-texinfo needed for
- full gdb
-In-Reply-To: <55EF582F.1090407@mind.be>
-References: <1441740443-7280-1-git-send-email-brendanheading@gmail.com>
- <55EF582F.1090407@mind.be>
-Message-ID: <20150909115124.28919804@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Wed,  9 Sep 2015 11:53:47 +0200
+Subject: [Buildroot] [PATCH] package/stress-ng: new package
+Message-ID: <1441792427-15297-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ package/Config.in                |  1 +
+ package/stress-ng/Config.in      | 25 +++++++++++++++++++++++++
+ package/stress-ng/stress-ng.hash |  2 ++
+ package/stress-ng/stress-ng.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/stress-ng/Config.in
+ create mode 100644 package/stress-ng/stress-ng.hash
+ create mode 100644 package/stress-ng/stress-ng.mk
 
-On Tue, 8 Sep 2015 23:50:39 +0200, Arnout Vandecappelle wrote:
-
-> Romain patches gdb to avoid recursing in the doc directory [1][2]
-> Vicente does the same but with a sed instead of patch [3].
-> Brendan adds host-texinfo to dependencies (this patch) [4].
-> 
->  Which one do we choose?
-> 
->  host-texinfo takes a bit of time to build because it also depends on
-> host-ncurses, but it's not a huge problem.
-> 
->  The best solution is adding an upstreamable --disable-doc, but that will take a
-> bit of work still (esp. because we can't easily autoreconfigure).
-> 
->  So for me Brendan's patch is fine. What do the others think?
-
-On my side, I think I'd prefer for now a $(SED) to remove the doc
-directory from the SUBDIRS, in Makefile.in (avoids autoreconf, avoids
-per-gdb version patches). And then, Romain has contributed to gdb a
-patch to disable the documentation, but as you said, it will take a
-while before this patch 1/ gets accepted and 2/ is used in all gdb
-versions packaged in Buildroot.
-
-I think I would actually prefer to also do the same trick for all
-packages that need host-texinfo, and remove the host-texinfo package.
-The host-texinfo package (as is documented in texinfo.mk) was
-originally added only because Crosstool-NG needed it as a dependency,
-back when we had a Crosstool-NG backend. Now that this backend is done,
-I'm not sure it make a lot of sense to build a tool to build
-documentation, which nobody will ever use/read.
-
-So I would favor Vicente's patch in fact. Yes, it is not nice to $(SED)
-stuff, but it is a whole lot better than building host-texinfo,
-host-ncurses, and some totally unused documentation.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 9bd4190..b53e089 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -97,6 +97,7 @@ endif
+ 	source "package/spidev_test/Config.in"
+ 	source "package/strace/Config.in"
+ 	source "package/stress/Config.in"
++	source "package/stress-ng/Config.in"
+ 	source "package/sysdig/Config.in"
+ 	source "package/sysprof/Config.in"
+ 	source "package/tinymembench/Config.in"
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+new file mode 100644
+index 0000000..cdf9984
+--- /dev/null
++++ b/package/stress-ng/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_STRESS_NG
++	bool "stress-ng"
++	depends on BR2_USE_MMU # fork()
++	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
++	# disabled on uClibc: stress-aio.c needs aio.h
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	# perf.c needs PERF_COUNT_HW_STALLED_CYCLES_FRONTEND
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on !BR2_microblaze # keyutils
++	depends on !BR2_STATIC_LIBS # keyutils
++	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
++	select BR2_PACKAGE_ATTR # stress-xattr.c needs xattr.h
++	help
++	  stress-ng will stress test a computer system in various
++	  selectable ways. It was designed to exercise various physical
++	  subsystems of a computer as well as the various operating
++	  system kernel interfaces.
++
++	  http://kernel.ubuntu.com/~cking/stress-ng/
++
++comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.0"
++	depends on !BR2_microblaze
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
++		|| !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+new file mode 100644
+index 0000000..4979303
+--- /dev/null
++++ b/package/stress-ng/stress-ng.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	9d17dffafdf8dd71eb5c191973b65d4eb2964ecc31f1d01ad188fd03a0c49f6c	stress-ng-0.04.16.tar.gz
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+new file mode 100644
+index 0000000..e4e4fec
+--- /dev/null
++++ b/package/stress-ng/stress-ng.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# stress-ng
++#
++################################################################################
++
++STRESS_NG_VERSION = 0.04.16
++STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng/
++STRESS_NG_LICENSE = GPLv2
++STRESS_NG_LICENSE_FILES = COPYING
++
++STRESS_NG_DEPENDENCIES = attr keyutils
++
++define STRESS_NG_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define STRESS_NG_INSTALL_TARGET_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
