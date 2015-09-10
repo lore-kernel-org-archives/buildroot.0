@@ -1,44 +1,71 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Sep 2015 10:19:04 +0200
-Subject: [Buildroot] Xorg Segmentation fault now. Please help
-In-Reply-To: <CAEzGmjDwBwLt8kynQpjj-2sKtOX6Un7TLXX1i7sH6vBODda+9A@mail.gmail.com>
-References: <CAEzGmjDwBwLt8kynQpjj-2sKtOX6Un7TLXX1i7sH6vBODda+9A@mail.gmail.com>
-Message-ID: <55F13CF8.3070706@mind.be>
+Date: Thu, 10 Sep 2015 10:26:36 +0200
+Subject: [Buildroot] problem with stack protection,
+ threads and static binaries
+In-Reply-To: <1441871700.4298.49.camel@fahlgren-laptop>
+References: <1441871700.4298.49.camel@fahlgren-laptop>
+Message-ID: <55F13EBC.9060100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-09-15 09:15, Lennart Ramberg wrote:
-> Hello,
+On 10-09-15 09:55, Daniel Fahlgren wrote:
+> Hi,
 > 
-> After having been away from Buildroot since last year, I'm at it again.
-> But I had a setback;
+> I've encountered a problem when enabling stack protection
+> (BR2_ENABLE_SSP) in combination with static binaries that uses threads.
+> The problem is that during start up the program gets a segfault in
+> __pthread_initialize_minimal_internal(), and I think this might be the
+> same issue as described in [1].
 > 
-> With 2014.11 the xorg-server runs allright.
-> Jumping to 2015.08.1 the xorg-server won't run.
-> Why might this be? Please help.
+> Investigation shows that the offending instruction is a:
 > 
-> Below is a part of my /var/log/Xorg.0.log after I executed 'X',
-> as well as my defconfig (and there is nothing suspicious in the overlays).
-> And I did a 'make clean all' first.
+>   mov    %fs:0x28,%rax
+> 
+> where %fs is 0x00. The reason for that is that the pthread library is
+> compiled with stack protection but __pthread_initialize_minimal_internal
+> is called before __libc_setup_tls in static binaries.
 
- I know nothing about X, but here are a few tips:
+ This sounds like a uClibc issue. Could you verify by testing with uClibc 0.9.33
+and/or musl and/or glibc? And then take it to the uClibc-ng mailing list:
+http://mailman.uclibc-ng.org/cgi-bin/mailman/listinfo/devel/
 
-- I see you are using ccache. That is still not 100% reliable, so perhaps try
-again with turning ccache off and do a make clean all.
+Just to be sure, putting Waldemar in Cc.
 
-- You could disable the intel driver and enable e.g. VESA or fbdev to isolate
-where the issue is.
 
-- You could try to vary the kernel and gcc versions.
+> 
+> I have created an ugly patch to verify my hypothesis. With that patch
+> the test program works, but what is the proper way to solve this issue?
+> 
+> Attached files (also at https://www.acc.umu.se/~guru/buildroot/)
+> 
+> add_broken_package.patch - add a test package to buildroot
+> pthread-broken-1.0.0.tar.gz - the test package
+> buildroot.config - buildroot config to use
+> static-pthread.patch - my proof-of-concept patch
 
- And of course, check the Xorg bug tracker.
-
+ Wow, great bug information! But in the future, please use a defconfig instead
+of a full config to reduce the list load.
 
  Regards,
  Arnout
+
+> 
+> Best regards,
+> Daniel Fahlgren
+> 
+> 1:
+> http://lists.busybox.net/pipermail/buildroot/2014-February/088561.html
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
