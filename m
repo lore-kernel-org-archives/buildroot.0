@@ -1,50 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 14:03:20 +0200
-Subject: [Buildroot] [git commit] linux-fusion: use a more traditional style
-	to define LINUX_FUSION_MAKE_OPTS
-Message-ID: <20150910122136.ECDEE80E4B@busybox.osuosl.org>
+Date: Thu, 10 Sep 2015 13:56:24 +0200
+Subject: [Buildroot] [git commit] divine: remove package
+Message-ID: <20150910122136.C10F3807B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2fc084c675c12000f8c976d74254da73155305b
+commit: http://git.buildroot.net/buildroot/commit/?id=ae46e8f9e37c24b960015ef1522fedabb1dabd41
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a single assignment to define the value of LINUX_FUSION_MAKE_OPTS
-instead of a sequence of += assignments.
+This commit removes the divine package, since the corresponding
+functionality has been merged in DirectFB itself since 1.7.x.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-fusion/linux-fusion.mk |   16 ++++++++--------
- 1 files changed, 8 insertions(+), 8 deletions(-)
+ Config.in.legacy         |   13 +++++++++++++
+ package/Config.in        |    1 -
+ package/divine/Config.in |    8 --------
+ package/divine/divine.mk |   19 -------------------
+ 4 files changed, 13 insertions(+), 28 deletions(-)
 
-diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
-index 4d113e7..ba4bb31 100644
---- a/package/linux-fusion/linux-fusion.mk
-+++ b/package/linux-fusion/linux-fusion.mk
-@@ -20,14 +20,14 @@ endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3330566..3d4551c 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -105,6 +105,19 @@ comment "----------------------------------------------------"
+ endif
  
- LINUX_FUSION_ETC_DIR = $(TARGET_DIR)/etc/udev/rules.d
+ ###############################################################################
++comment "Legacy options removed in 2015.11"
++
++config BR2_PACKAGE_DIVINE
++	bool "divine package removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_DIRECTFB_DIVINE
++	help
++	  This option has been removed because the divine package no
++	  longer exists: it was merged inside DirectFB itself. This
++	  feature can now be enabled using the
++	  BR2_PACKAGE_DIRECTFB_DIVINE option.
++
++###############################################################################
+ comment "Legacy options removed in 2015.08"
  
--LINUX_FUSION_MAKE_OPTS = KERNEL_VERSION=$(LINUX_VERSION_PROBED)
--LINUX_FUSION_MAKE_OPTS += KERNEL_BUILD=$(LINUX_DIR)
--LINUX_FUSION_MAKE_OPTS += KERNEL_SOURCE=$(LINUX_DIR)
+ config BR2_PACKAGE_KODI_PVR_ADDONS
+diff --git a/package/Config.in b/package/Config.in
+index b53e089..f7ed07a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -229,7 +229,6 @@ comment "Graphic libraries"
+ 	source "package/cegui06/Config.in"
+ 	source "package/directfb/Config.in"
+ 	source "package/directfb-examples/Config.in"
+-	source "package/divine/Config.in"
+ 	source "package/fbdump/Config.in"
+ 	source "package/fbgrab/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/divine/Config.in b/package/divine/Config.in
+deleted file mode 100644
+index 7909004..0000000
+--- a/package/divine/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_DIVINE
+-	bool "directfb virtual input extension"
+-	depends on BR2_PACKAGE_DIRECTFB
+-	help
+-	  DiVine provides a DirectFB input driver that reads input
+-	  events from a pipe and dispatches them via a virtual input
+-	  device. It also installs the tool 'spooky' that allows to
+-	  send input events to DirectFB applications.
+diff --git a/package/divine/divine.mk b/package/divine/divine.mk
+deleted file mode 100644
+index 322e5fc..0000000
+--- a/package/divine/divine.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-################################################################################
+-#
+-# divine
+-#
+-################################################################################
 -
--LINUX_FUSION_MAKE_OPTS += SYSROOT=$(TARGET_DIR)
--LINUX_FUSION_MAKE_OPTS += ARCH=$(KERNEL_ARCH)
--LINUX_FUSION_MAKE_OPTS += CROSS_COMPILE=$(TARGET_CROSS)
--LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_VERSION_PROBED)/kernel
-+LINUX_FUSION_MAKE_OPTS = \
-+	KERNEL_VERSION=$(LINUX_VERSION_PROBED) \
-+	KERNEL_BUILD=$(LINUX_DIR) \
-+	KERNEL_SOURCE=$(LINUX_DIR) \
-+	SYSROOT=$(TARGET_DIR) \
-+	ARCH=$(KERNEL_ARCH) \
-+	CROSS_COMPILE=$(TARGET_CROSS) \
-+	KERNEL_MODLIB=/lib/modules/$(LINUX_VERSION_PROBED)/kernel
- 
- define LINUX_FUSION_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LINUX_FUSION_MAKE_OPTS) -C $(@D)
+-# tagged version 1.6.3, tarball is missing files
+-DIVINE_VERSION = 83cafc257a42b9465cd9d6185bf66b8c1b7ed704
+-DIVINE_SITE = git://git.directfb.org/git/directfb/extras/DiVine.git
+-DIVINE_LICENSE = LGPLv2.1+
+-DIVINE_LICENSE_FILES = COPYING
+-DIVINE_INSTALL_STAGING = YES
+-DIVINE_DEPENDENCIES = directfb
+-DIVINE_CONFIG_SCRIPTS = divine-config
+-
+-# package has no configure script so we have to generate it
+-DIVINE_AUTORECONF = YES
+-
+-$(eval $(autotools-package))
