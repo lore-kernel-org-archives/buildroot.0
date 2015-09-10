@@ -1,57 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Sep 2015 18:13:04 +0200
-Subject: [Buildroot] [PATCH] modem-manager: now needs libgudev under
- systemd
-In-Reply-To: <55F18E83.1020007@imgtec.com>
-References: <1441889437-13931-1-git-send-email-yegorslists@googlemail.com>
- <55F18E83.1020007@imgtec.com>
-Message-ID: <20150910181304.076e392d@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Sep 2015 18:30:27 +0200
+Subject: [Buildroot] [PATCH 09/14] gst-fsl-plugins: bump version to 4.0.3
+In-Reply-To: <20150910141745.5af8e0bd@free-electrons.com>
+References: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1441830063-8190-10-git-send-email-gary.bisson@boundarydevices.com>
+ <20150910141745.5af8e0bd@free-electrons.com>
+Message-ID: <55F1B023.1080506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, Yegor,
-
-On Thu, 10 Sep 2015 15:06:59 +0100, Vicente Olivert Riera wrote:
-
-> when you say that "modem-manager: now needs libgudev for systemd", what
-> do you mean exactly by "now"? I would expect something like "since
-> version X" or a better explanation.
-
-Well, I think you're being a bit too picky here. It is indeed nicer
-when the information is more specific, but since there is a clear
-autobuilder failure, I think Yegor's commit log is good enough. Better
-is better, for sure :-)
-
-
-> > @@ -1,11 +1,12 @@
-> >  config BR2_PACKAGE_MODEM_MANAGER
-> >  	bool "modemmanager"
-> >  	depends on BR2_PACKAGE_HAS_UDEV
-> > -	select BR2_PACKAGE_DBUS
-> >  	depends on BR2_USE_WCHAR # libglib2 and gnutls
-> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
-> >  	depends on BR2_USE_MMU # dbus
-> > +	select BR2_PACKAGE_DBUS
+On 10-09-15 14:17, Thomas Petazzoni wrote:
+> Gary,
 > 
-> I know you are trying to keep all the depends together and all the
-> selects together, but since this is not related with the goal that your
-> patch is trying to achieve, I would do it in a separate patch.
+> On Wed,  9 Sep 2015 22:20:58 +0200, Gary Bisson wrote:
+> 
+>> Quick comment on this one, I might delete this package during next cycle
+>> as it is not maintained any more and has been removed from Yocto:
+>> https://github.com/Freescale/meta-fsl-arm/commit/83b240e
+>>
+>> Let me know your thoughts on this.
+> 
+> GStreamer 0.10.x is anyway no longer being developed, I'm not sure it's
+> really being maintained anymore either. 
 
-While I do agree that separating logical changes into separate commits
-is important, we shouldn't be too zealous about that either. So I'm
-personally fine with such small (but related) side changes. It's better
-when the commit log contains something such as:
+ It has never been maintained. They stopped making 0.10 releases as soon as 1.0
+(actually 0.11) existed.
 
-While at it, group the existing dbus select together with the dbus-glib
-select, so that all "select" statements are together.
 
-Best regards,
+> We're keeping it in Buildroot
+> for those people who are using platforms that don't have GStreamer 1.x
+> plugins, or who have applications written with the GStreamer 0.10.x
+> API.
+> 
+> We will have to decide at some point to mark GStreamer 0.10 as
+> deprecated. Not sure when will be the right, I'm not a GStreamer user
+> personally, so I don't know until when we should support 0.10.
 
-Thomas
+ We can deprecate it as soon as all packages that depend on it disappear. Which
+is probably never.
+
+
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
