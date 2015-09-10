@@ -1,79 +1,123 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 10 Sep 2015 15:06:59 +0100
-Subject: [Buildroot] [PATCH] modem-manager: now needs libgudev under
- systemd
-In-Reply-To: <1441889437-13931-1-git-send-email-yegorslists@googlemail.com>
-References: <1441889437-13931-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <55F18E83.1020007@imgtec.com>
+Date: Thu, 10 Sep 2015 15:16:46 +0100
+Subject: [Buildroot] [PATCH] mtd: add missing -lintl from util-linux
+ when building statically
+In-Reply-To: <20150910140626.GR2191@tarshish>
+References: <1441881890-6521-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150910134556.GQ2191@tarshish> <55F18CE8.5090909@imgtec.com>
+ <20150910140626.GR2191@tarshish>
+Message-ID: <55F190CE.9000501@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Baruch Siach,
 
-when you say that "modem-manager: now needs libgudev for systemd", what
-do you mean exactly by "now"? I would expect something like "since
-version X" or a better explanation.
-
-On 09/10/2015 01:50 PM, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On 09/10/2015 03:06 PM, Baruch Siach wrote:
+> Hi Vincent,
 > 
-> Fixes: http://autobuild.buildroot.net/results/d59/d597a81271a082c8252e2333906815c437b6576d/
+> On Thu, Sep 10, 2015 at 03:00:08PM +0100, Vicente Olivert Riera wrote:
+>> On 09/10/2015 02:45 PM, Baruch Siach wrote:
+>>> On Thu, Sep 10, 2015 at 11:44:50AM +0100, Vicente Olivert Riera wrote:
+>>>> mtd depends on util-linux when BR2_PACKAGE_MTD_MKFSUBIFS is selected.
+>>>> Also, util-linux depends on gettext and will need to link with -lintl if
+>>>> BR2_NEEDS_GETTEXT_IF_LOCALE is selected. So, when mtd tries to link with
+>>>> util-linux's uuid (-luuid) it should add -lintl as well, but it fails
+>>>> when building statically. The uuid.pc file lists -lintl as one of the
+>>>> needed libraries, but since mtd package doesn't have a configure phase
+>>>> we can't do the following:
+>>>>
+>>>> MTD_DEPENDENCIES += host-pkgconf
+>>>> MTD_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs uuid"`
+>>>
+>>> So why not something like:
+>>>
+>>> MTD_MKFS_UBIFS_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs uuid"`
+>>>
+>>> and use $(MTD_MKFS_UBIFS_LIBS) instead of hard coding -lintl in the sed 
+>>> expression.
+>>
+>> do you mean like this?:
+>>
+>> $(SED) '/^LDLIBS_mkfs\.ubifs/ s/$$/$$(MTD_MKFS_UBIFS_LIBS)/' $(@D)/Makefile
+>>
+>> That will end up with the string "$(MTD_MKFS_UBIFS_LIBS)" written in the
+>> Makefile.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/modem-manager/Config.in        | 3 ++-
->  package/modem-manager/modem-manager.mk | 4 ++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index 59b8d88..1cd502b 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -1,11 +1,12 @@
->  config BR2_PACKAGE_MODEM_MANAGER
->  	bool "modemmanager"
->  	depends on BR2_PACKAGE_HAS_UDEV
-> -	select BR2_PACKAGE_DBUS
->  	depends on BR2_USE_WCHAR # libglib2 and gnutls
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->  	depends on BR2_USE_MMU # dbus
-> +	select BR2_PACKAGE_DBUS
+> What happens when you put a single $ in $(MTD_MKFS_UBIFS_LIBS)?
 
-I know you are trying to keep all the depends together and all the
-selects together, but since this is not related with the goal that your
-patch is trying to achieve, I would do it in a separate patch.
+It fails with an error like this one:
 
->  	select BR2_PACKAGE_DBUS_GLIB
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
->  	help
->  	  ModemManager is a DBus-activated daemon which controls mobile
->  	  broadband (2G/3G/4G) devices and connections.
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 0e6b36a..36c8c0d 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -12,6 +12,10 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
->  MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
->  MODEM_MANAGER_INSTALL_STAGING = YES
->  
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +MODEM_MANAGER_DEPENDENCIES += libgudev
-> +endif
-> +
+>>> mtd 1.5.2 Building
+/bin/sed -i -e '/^LDLIBS_mkfs\.ubifs/ s/$/
+"`/br/output/host/usr/bin/pkg-config --libs uuid`"/'
+/br/output/build/mtd-1.5.2/Makefile
+/bin/sed: -e expression #1, char 31: unknown option to `s'
+make: *** [/br/output/build/mtd-1.5.2/.stamp_built] Error 1
 
-Perhaps an explanation like the one included in this patch would useful
-to understand why libgudev is needed:
-
-http://git.buildroot.net/buildroot/commit/?id=46a615bb6439a4fe69f1bfc6a347852b993d46a2
+Before sending this patch I already tried to put the result of the
+pkg-config command in a variable and use it in the sed command, and I
+faced both problems, having the variable name written in the Makefile,
+and this error I said above.
 
 Regards,
 
 Vincent.
 
->  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
->  MODEM_MANAGER_DEPENDENCIES += libqmi
->  MODEM_MANAGER_CONF_OPTS += --with-qmi
+>>> This way you can remove the condition from the sed expression.
+>>
+>> What condition? I don't what you mean Baruch, sorry.
+> 
+> The
+> 
+>    ifeq ($(BR2_STATIC_LIBS)$(BR2_NEEDS_GETTEXT_IF_LOCALE),yy)
+> 
+> condition. pkg-config should know the right answer in any case.
+> 
+>> If you provide a patch that it fixes the problem following a different
+>> approach, I would be happy to review it and test it.
+> 
+> I'll try doing so in the evening, if you don't beat me to it.
+> 
+> baruch
+> 
+>>>> So, in further investigations I have seen that mtd hardcodes the libs
+>>>> for mkfs.ubifs in the Makefile, in a variable called LDLIBS_mkfs.ubifs,
+>>>> and that variable can't be overwritten by passing options or environment
+>>>> variables to make.
+>>>>
+>>>> So, to fix the problem, we use a sed command to append -lintl to the
+>>>> LDLIBS_mkfs.ubifs variable only when building statically, because it's
+>>>> the case when it fails, and only when BR2_NEEDS_GETTEXT_IF_LOCALE is
+>>>> selected, because is the case when you also need -lintl when linking
+>>>> with util-linux.
+>>>>
+>>>> Fixes:
+>>>>
+>>>>   http://autobuild.buildroot.net/results/2dd/2ddd714446d9eb75701bd48c117dc5bbbd291a76/
+>>>>
+>>>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>>>> ---
+>>>>  package/mtd/mtd.mk |    6 ++++++
+>>>>  1 files changed, 6 insertions(+), 0 deletions(-)
+>>>>
+>>>> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+>>>> index 0fb9fc2..a34c840 100644
+>>>> --- a/package/mtd/mtd.mk
+>>>> +++ b/package/mtd/mtd.mk
+>>>> @@ -18,6 +18,12 @@ endif
+>>>>  
+>>>>  ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
+>>>>  MTD_DEPENDENCIES += util-linux zlib lzo
+>>>> +ifeq ($(BR2_STATIC_LIBS)$(BR2_NEEDS_GETTEXT_IF_LOCALE),yy)
+>>>> +define MTD_ADD_MISSING_LINTL
+>>>> +	$(SED) '/^LDLIBS_mkfs\.ubifs/ s/$$/ -lintl/' $(@D)/Makefile
+>>>> +endef
+>>>> +MTD_PRE_BUILD_HOOKS += MTD_ADD_MISSING_LINTL
+>>>> +endif
+>>>>  endif
+>>>>  
+>>>>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 > 
