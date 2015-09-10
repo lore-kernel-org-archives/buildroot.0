@@ -1,44 +1,33 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Thu, 10 Sep 2015 19:54:18 +0000
-Subject: [Buildroot] [PATCH v4 2/2] Patch to assembler to strip LOCK prefix.
-Message-ID: <1441914858.20486.9.camel@intel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Sep 2015 22:07:03 +0200
+Subject: [Buildroot] [PATCH] system: make systemd's kernel headers
+	comment fit
+In-Reply-To: <1441904157-19302-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 10 Sep 2015 18:55:57 +0200")
+References: <1441904157-19302-1-git-send-email-arnout@mind.be>
+Message-ID: <87oahaf388.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The lock prefix is usually stripped by passing to the compiler
--Wa,momit-lock-prefix=yes via EXTRA_CFLAGS. However I couldn't find
-a way to get buildroot to pass CFLAGS/EXTRA_CFLAGS around.
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-I tried using BR2_TARGET_OPTIMIZATION, and creating a new processor type
-but the flag kept stripping it out. I found the most reliable way to 
-achieve the behavior was to make stripping the LOCK prefix the assembler's 
-default behavior, hence the patch
+ > The comment line that explains that systemd needs a glibc toolchain and
+ > kernel headers >= 3.10 doesn't fit in the dialog box, which makes it
+ > look as if headers >= 3.1 are needed.
 
-Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
----
- .../galileo/patches/binutils/2.25/default-lock-prefix.patch   | 11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch
+ > Abbreviate the comment a little by removing an 'an'. It still doesn't
+ > fit completely (only one trailing * is shown), but at least it's
+ > readable.
 
-diff --git a/board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch b/board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch
-new file mode 100644
-index 0000000..7814ae4
---- /dev/null
-+++ b/board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch
-@@ -0,0 +1,11 @@
-+--- a/gas/config/tc-i386.orig	2015-07-24 15:54:51.359080778 +0100
-++++ b/gas/config/tc-i386.c	2015-07-24 15:54:59.692192247 +0100
-+@@ -545,7 +545,7 @@ static int allow_index_reg = 0;
-+ 
-+ /* 1 if the assembler should ignore LOCK prefix, even if it was
-+    specified explicitly.  */
-+-static int omit_lock_prefix = 0;
-++static int omit_lock_prefix = 1;
-+ 
-+ static enum check_kind
-+   {
+ > While we're at it, change the quoting style to " like we always use.
+
+ > Reported-by: eschu on IRC
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
+
 -- 
-2.1.0
+Bye, Peter Korsgaard
