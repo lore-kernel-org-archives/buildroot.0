@@ -1,100 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 13:56:24 +0200
-Subject: [Buildroot] [git commit] divine: remove package
-Message-ID: <20150910122136.C10F3807B4@busybox.osuosl.org>
+Date: Thu, 10 Sep 2015 13:52:46 +0200
+Subject: [Buildroot] [git commit] directfb: remove broken X.org support
+Message-ID: <20150910122136.8F1F080E4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae46e8f9e37c24b960015ef1522fedabb1dabd41
+commit: http://git.buildroot.net/buildroot/commit/?id=271c9c52a22cf12392e3d665353e4f6d63382797
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit removes the divine package, since the corresponding
-functionality has been merged in DirectFB itself since 1.7.x.
+The BR2_PACKAGE_XSERVER option never existed, so it was never possible
+for DirectFB to pass --enable-x11. Moreover, doing this without having
+at least some dependency on certain X libraries will clearly not work.
+
+Consequently, let's remove this bogus X.org support, and disable X11
+support unconditionally (until someone is interested enough to bring
+this back to life).
+
+The option was actually named BR2_PACKAGE_DIRECTFB_XSERVER but was not
+used by the .mk file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy         |   13 +++++++++++++
- package/Config.in        |    1 -
- package/divine/Config.in |    8 --------
- package/divine/divine.mk |   19 -------------------
- 4 files changed, 13 insertions(+), 28 deletions(-)
+ package/directfb/Config.in   |    4 ----
+ package/directfb/directfb.mk |    9 ++-------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3330566..3d4551c 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -105,6 +105,19 @@ comment "----------------------------------------------------"
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 3ab40f9..98acec5 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -45,10 +45,6 @@ config BR2_PACKAGE_DIRECTFB_TRACE
+ 	help
+ 	  Enable call tracing for DirectFB applications
+ 
+-config BR2_PACKAGE_DIRECTFB_XSERVER
+-	bool "build with X server backend"
+-	depends on BR2_PACKAGE_XORG7
+-
+ config BR2_PACKAGE_DIRECTFB_UNIQUE
+ 	bool "enable unique window manager"
+ 	depends on BR2_UNIMPLEMENTED
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index da12acb..acb3e3a 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -22,7 +22,8 @@ DIRECTFB_CONF_OPTS = \
+ 	--disable-osx \
+ 	--disable-video4linux \
+ 	--disable-video4linux2 \
+-	--without-tools
++	--without-tools \
++	--disable-x11
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DIRECTFB_CONF_OPTS += --disable-dynload
+@@ -52,12 +53,6 @@ ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
+ DIRECTFB_CONF_OPTS += --enable-trace
  endif
  
- ###############################################################################
-+comment "Legacy options removed in 2015.11"
-+
-+config BR2_PACKAGE_DIVINE
-+	bool "divine package removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_DIRECTFB_DIVINE
-+	help
-+	  This option has been removed because the divine package no
-+	  longer exists: it was merged inside DirectFB itself. This
-+	  feature can now be enabled using the
-+	  BR2_PACKAGE_DIRECTFB_DIVINE option.
-+
-+###############################################################################
- comment "Legacy options removed in 2015.08"
- 
- config BR2_PACKAGE_KODI_PVR_ADDONS
-diff --git a/package/Config.in b/package/Config.in
-index b53e089..f7ed07a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -229,7 +229,6 @@ comment "Graphic libraries"
- 	source "package/cegui06/Config.in"
- 	source "package/directfb/Config.in"
- 	source "package/directfb-examples/Config.in"
--	source "package/divine/Config.in"
- 	source "package/fbdump/Config.in"
- 	source "package/fbgrab/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/divine/Config.in b/package/divine/Config.in
-deleted file mode 100644
-index 7909004..0000000
---- a/package/divine/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_DIVINE
--	bool "directfb virtual input extension"
--	depends on BR2_PACKAGE_DIRECTFB
--	help
--	  DiVine provides a DirectFB input driver that reads input
--	  events from a pipe and dispatches them via a virtual input
--	  device. It also installs the tool 'spooky' that allows to
--	  send input events to DirectFB applications.
-diff --git a/package/divine/divine.mk b/package/divine/divine.mk
-deleted file mode 100644
-index 322e5fc..0000000
---- a/package/divine/divine.mk
-+++ /dev/null
-@@ -1,19 +0,0 @@
--################################################################################
--#
--# divine
--#
--################################################################################
+-ifeq ($(BR2_PACKAGE_XSERVER),y)
+-DIRECTFB_CONF_OPTS += --enable-x11
+-else
+-DIRECTFB_CONF_OPTS += --disable-x11
+-endif
 -
--# tagged version 1.6.3, tarball is missing files
--DIVINE_VERSION = 83cafc257a42b9465cd9d6185bf66b8c1b7ed704
--DIVINE_SITE = git://git.directfb.org/git/directfb/extras/DiVine.git
--DIVINE_LICENSE = LGPLv2.1+
--DIVINE_LICENSE_FILES = COPYING
--DIVINE_INSTALL_STAGING = YES
--DIVINE_DEPENDENCIES = directfb
--DIVINE_CONFIG_SCRIPTS = divine-config
--
--# package has no configure script so we have to generate it
--DIVINE_AUTORECONF = YES
--
--$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_DIRECTFB_UNIQUE),y)
+ DIRECTFB_CONF_OPTS += --enable-unique
+ else
