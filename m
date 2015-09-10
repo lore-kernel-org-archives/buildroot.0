@@ -1,70 +1,136 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Sep 2015 23:26:26 +0300
-Subject: [Buildroot] [PATCH] mtd: add missing -lintl from util-linux
- when building statically
-In-Reply-To: <55F190CE.9000501@imgtec.com>
-References: <1441881890-6521-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150910134556.GQ2191@tarshish> <55F18CE8.5090909@imgtec.com>
- <20150910140626.GR2191@tarshish> <55F190CE.9000501@imgtec.com>
-Message-ID: <20150910202626.GA1822@tarshish>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 10 Sep 2015 23:12:10 +0200
+Subject: [Buildroot] [RFC v2] support/misc: Adding Vagrant file for
+	provisioning
+Message-ID: <1441919530-5421-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+This patch adds a Vagrant file to buildroot. With this file
+you can provision a complete buildroot developing environment
+in minutes on all major platforms.
 
-On Thu, Sep 10, 2015 at 03:16:46PM +0100, Vicente Olivert Riera wrote:
-> On 09/10/2015 03:06 PM, Baruch Siach wrote:
-> > On Thu, Sep 10, 2015 at 03:00:08PM +0100, Vicente Olivert Riera wrote:
-> >> On 09/10/2015 02:45 PM, Baruch Siach wrote:
-> >>> On Thu, Sep 10, 2015 at 11:44:50AM +0100, Vicente Olivert Riera wrote:
-> >>>> mtd depends on util-linux when BR2_PACKAGE_MTD_MKFSUBIFS is selected.
-> >>>> Also, util-linux depends on gettext and will need to link with -lintl if
-> >>>> BR2_NEEDS_GETTEXT_IF_LOCALE is selected. So, when mtd tries to link with
-> >>>> util-linux's uuid (-luuid) it should add -lintl as well, but it fails
-> >>>> when building statically. The uuid.pc file lists -lintl as one of the
-> >>>> needed libraries, but since mtd package doesn't have a configure phase
-> >>>> we can't do the following:
-> >>>>
-> >>>> MTD_DEPENDENCIES += host-pkgconf
-> >>>> MTD_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs uuid"`
-> >>>
-> >>> So why not something like:
-> >>>
-> >>> MTD_MKFS_UBIFS_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs uuid"`
-> >>>
-> >>> and use $(MTD_MKFS_UBIFS_LIBS) instead of hard coding -lintl in the sed 
-> >>> expression.
-> >>
-> >> do you mean like this?:
-> >>
-> >> $(SED) '/^LDLIBS_mkfs\.ubifs/ s/$$/$$(MTD_MKFS_UBIFS_LIBS)/' $(@D)/Makefile
-> >>
-> >> That will end up with the string "$(MTD_MKFS_UBIFS_LIBS)" written in the
-> >> Makefile.
-> > 
-> > What happens when you put a single $ in $(MTD_MKFS_UBIFS_LIBS)?
-> 
-> It fails with an error like this one:
-> 
-> >>> mtd 1.5.2 Building
-> /bin/sed -i -e '/^LDLIBS_mkfs\.ubifs/ s/$/
-> "`/br/output/host/usr/bin/pkg-config --libs uuid`"/'
-> /br/output/build/mtd-1.5.2/Makefile
-> /bin/sed: -e expression #1, char 31: unknown option to `s'
-> make: *** [/br/output/build/mtd-1.5.2/.stamp_built] Error 1
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changelog:
 
-The problem is that you need to use $(shell ...) when you want make to do 
-command substitution. Also, since the output of pkg-config might include a 
-library path with the '/' directory separator, you need to use a different 
-character to delimit the sed 's' command. Please see 
-http://patchwork.ozlabs.org/patch/516419/ for my suggested solution.
+v1->v2:
+* Autodetecting of latest buildroot version from CHANGES file.
+* Better documentation
 
-baruch
+ docs/manual/getting.txt    | 14 ++++++++++++++
+ docs/website/download.html | 16 ++++++++++++++++
+ support/misc/Vagrantfile   | 47 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 77 insertions(+)
+ create mode 100644 support/misc/Vagrantfile
 
+diff --git a/docs/manual/getting.txt b/docs/manual/getting.txt
+index 3437f93..8b3ebb0 100644
+--- a/docs/manual/getting.txt
++++ b/docs/manual/getting.txt
+@@ -10,6 +10,20 @@ November. Release numbers are in the format YYYY.MM, so for example
+ 
+ Release tarballs are available at http://buildroot.org/downloads/[].
+ 
++An official Vagrantfile is distributed within buildroot for your needs.
++If you want to setup an isolated buildroot environment on Linux or
++Mac Os X, paste this line onto your terminal:
++
++--------------------
++curl -O http://git.buildroot.net/buildroot/tree/support/misc/Vagrantfile; vagrant up
++--------------------
++
++If you are on windows, paste this into your powershell:
++
++--------------------
++Invoke-WebRequest http://git.buildroot.net/buildroot/tree/support/misc/Vagrantfile -OutFile Vagrantfile; vagrant up
++--------------------
++
+ If you want to follow development, you can use the daily snapshots or
+ make a clone of the Git repository. Refer to the
+ http://buildroot.org/download[Download page] of the Buildroot website
+diff --git a/docs/website/download.html b/docs/website/download.html
+index ef87b1c..7d3fd1b 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -32,6 +32,22 @@ This and earlier releases (and their PGP signatures) can always be downloaded fr
+ 
+ <p>
+ 
++<p>
++An official Vagrantfile is distributed within buildroot for your needs.
++If you want to setup an isolated buildroot environment on Linux or
++Mac Os X, paste this line onto your terminal:
++
++<pre>
++curl -O http://git.buildroot.net/buildroot/tree/support/misc/Vagrantfile; vagrant up
++</pre>
++
++If you are on windows, paste this into your powershell:
++
++<pre>
++Invoke-WebRequest http://git.buildroot.net/buildroot/tree/support/misc/Vagrantfile -OutFile Vagrantfile; vagrant up
++</pre>
++</p>
++
+ You can also obtain daily snapshots of the latest Buildroot source tree if you
+ want to follow development, but cannot or do not wish to use Git.
+ 
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+new file mode 100644
+index 0000000..36cb3e0
+--- /dev/null
++++ b/support/misc/Vagrantfile
+@@ -0,0 +1,47 @@
++################################################################################
++#
++# Vagrantfile
++#
++################################################################################
++
++### Change here for more memory/cores or different version ###
++VM_MEMORY=1024
++VM_CORES=1
++
++require 'open-uri'
++open("http://git.buildroot.net/buildroot/plain/CHANGES") do |f|
++  BUILDROOT_VERSION=f.read.lines.first.split(",")[0]
++end
++
++$sudo_script = <<SCRIPT
++sudo apt-get update
++sudo apt-get -y install build-essential libncurses5-dev \
++  git bzr cvs mercurial subversion
++sudo apt-get -y autoremove
++SCRIPT
++
++$script = <<SCRIPT
++echo "Downloading buildroot #{BUILDROOT_VERSION}"
++wget -q -c http://buildroot.org/downloads/buildroot-#{BUILDROOT_VERSION}.tar.gz
++tar axf buildroot-#{BUILDROOT_VERSION}.tar.gz
++SCRIPT
++
++Vagrant.configure("2") do |config|
++  config.vm.box = "ubuntu/trusty64"
++
++  config.vm.provider :vmware_fusion do |v, override|
++    v.vmx['displayname'] = 'Buildroot #{BUILDROOT_VERSION}'
++    v.vmx["memsize"] = VM_MEMORY
++    v.vmx["numvcpus"] = VM_CORES
++  end
++
++  config.vm.provider :virtualbox do |v, override|
++    v.name = "Buildroot"
++    v.customize ["modifyvm", :id, "--name", "Buildroot #{BUILDROOT_VERSION}"]
++    v.customize ["modifyvm", :id, "--memory", VM_MEMORY]
++    v.customize ["modifyvm", :id, "--cpus", VM_CORES]
++  end
++
++  config.vm.provision "shell", inline: $sudo_script
++  config.vm.provision "shell", privileged: false, inline: $script
++end
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.9.1
