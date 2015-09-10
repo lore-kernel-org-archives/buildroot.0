@@ -1,45 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 22:06:55 +0200
-Subject: [Buildroot] [git commit] system: make systemd's kernel headers
-	comment fit
-Message-ID: <20150910200800.CB89181F74@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 10 Sep 2015 23:08:11 +0300
+Subject: [Buildroot] [PATCH] mtd: fix static build with uuid
+Message-ID: <ab22e25c132ca43eeb35c3a5f827b2f5deb23143.1441915691.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b287378d3c0fca20d7fec4fbf3c097115afcbd5a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The uuid library might depend on gettext. Use pkg-config to discover uuid
+dependencies at build time, and edit Makefile accordingly to avoid missing
+symbols when linking statically.
 
-The comment line that explains that systemd needs a glibc toolchain and
-kernel headers >= 3.10 doesn't fit in the dialog box, which makes it
-look as if headers >= 3.1 are needed.
+Fixes:
+http://autobuild.buildroot.net/results/2dd/2ddd714446d9eb75701bd48c117dc5bbbd291a76/
+http://autobuild.buildroot.net/results/3af/3af4ef252c8cb2b22134d91ce48e5930c60ec437/
+http://autobuild.buildroot.net/results/648/648341fce974e8f016eee57c95d7511a886eef49/
 
-Abbreviate the comment a little by removing an 'an'. It still doesn't
-fit completely (only one trailing * is shown), but at least it's
-readable.
-
-While we're at it, change the quoting style to " like we always use.
-
-Reported-by: eschu on IRC
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- system/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mtd/mtd.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index fad829d..03521fd 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -90,7 +90,7 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	select BR2_PACKAGE_SYSTEMD
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 0fb9fc2c1acc..c2cb9377d570 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -16,8 +16,14 @@ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+ MTD_DEPENDENCIES = zlib lzo
+ endif
  
--comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
-+comment "systemd needs (e)glibc toolchain, headers >= 3.10"
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
- 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
++MTD_MKFSUBIFS_LIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs uuid)
++
+ ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
+-MTD_DEPENDENCIES += util-linux zlib lzo
++MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
++define MTD_ADD_MISSING_LINTL
++	$(SED) '/^LDLIBS_mkfs\.ubifs/ s%$$% $(MTD_MKFSUBIFS_LIBS)%' $(@D)/Makefile
++endef
++MTD_POST_PATCH_HOOKS += MTD_ADD_MISSING_LINTL
+ endif
  
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-- 
+2.5.1
