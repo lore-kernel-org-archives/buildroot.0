@@ -1,81 +1,48 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 10 Sep 2015 15:58:08 +0100
-Subject: [Buildroot] [PATCH v2] modem-manager: select libgudev,
- if systemd is enabled
-In-Reply-To: <1441896775-22688-1-git-send-email-yegorslists@googlemail.com>
-References: <1441896775-22688-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <55F19A80.4020607@imgtec.com>
+Date: Thu, 10 Sep 2015 16:58:25 +0100
+Subject: [Buildroot] [PATCH] setools: fix race condition
+Message-ID: <1441900705-40009-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+As reported upstream:
 
-On 09/10/2015 03:52 PM, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> When eudev is used as the udev provider, libgudev is automatically
-> provided as it is part of eudev. However, when systemd is used as
-> the udev provider, libgudev is not provided, and needs to be built
-> separately. This is why we select the libgudev package only if
-> systemd is used.
-> 
-> Fixes: http://autobuild.buildroot.net/results/d59/d597a81271a082c8252e2333906815c437b6576d/
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+  https://github.com/TresysTechnology/setools3/issues/5
 
-Regards,
+setools tries to compile a .c file before being generated and then it
+produces an error like this one:
 
-Vincent.
+error: policy_scan.c: No such file or directory
 
-> ---
-> Changes:
-> 	v2: change patch name (Vicente Olivert Riera)
-> 	    add fix description (Vicente Olivert Riera)
-> 	    add explanations to Config.in and *.mk files (Vicente Olivert Riera)
-> 
->  package/modem-manager/Config.in        | 6 ++++++
->  package/modem-manager/modem-manager.mk | 9 +++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index 59b8d88..80688f2 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -6,6 +6,12 @@ config BR2_PACKAGE_MODEM_MANAGER
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->  	depends on BR2_USE_MMU # dbus
->  	select BR2_PACKAGE_DBUS_GLIB
-> +	# When eudev is used as the udev provider, libgudev is automatically
-> +	# provided as it is part of eudev. However, when systemd is used as
-> +	# the udev provider, libgudev is not provided, and needs to be built
-> +	# separately. This is why we select the libgudev package only if
-> +	# systemd is used.
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
->  	help
->  	  ModemManager is a DBus-activated daemon which controls mobile
->  	  broadband (2G/3G/4G) devices and connections.
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 0e6b36a..9f311fe 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -12,6 +12,15 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
->  MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
->  MODEM_MANAGER_INSTALL_STAGING = YES
->  
-> +# When eudev is used as the udev provider, libgudev is automatically
-> +# provided as it is part of eudev. However, when systemd is used as the
-> +# udev provider, libgudev is not provided, and needs to be built
-> +# separately. This is why we select the libgudev package only if systemd
-> +# is used.
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +MODEM_MANAGER_DEPENDENCIES += libgudev
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
->  MODEM_MANAGER_DEPENDENCIES += libqmi
->  MODEM_MANAGER_CONF_OPTS += --with-qmi
-> 
+Until upstream fixes the problem we can workaround this by using MAKE1
+as the SETOOLS_MAKE.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/119/1196ac448c77320b59b63b6133d2d1af1245bf69/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/setools/setools.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index a2bfd42..71301c7 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -12,6 +12,10 @@ SETOOLS_INSTALL_STAGING = YES
+ SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
+ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+ 
++# Race condition reported upstream:
++# https://github.com/TresysTechnology/setools3/issues/5
++SETOOLS_MAKE = $(MAKE1)
++
+ # configure.ac is patched by the cross compile patch,
+ # so autoreconf is necessary
+ SETOOLS_AUTORECONF = YES
+-- 
+1.7.1
