@@ -1,71 +1,39 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 10 Sep 2015 16:52:55 +0200
-Subject: [Buildroot] [PATCH v2] modem-manager: select libgudev,
-	if systemd is enabled
-Message-ID: <1441896775-22688-1-git-send-email-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 10 Sep 2015 16:57:02 +0200
+Subject: [Buildroot] [RFC] Add pyudev package
+In-Reply-To: <CAGm1_kvo5wPvVgxSjK+CG7QGmMsdP-eNqNAwhOs+Q6B2QsXekA@mail.gmail.com>
+References: <1441881232-8107-1-git-send-email-yegorslists@googlemail.com>
+ <20150910143930.00227183@free-electrons.com>
+ <CAGm1_kvo5wPvVgxSjK+CG7QGmMsdP-eNqNAwhOs+Q6B2QsXekA@mail.gmail.com>
+Message-ID: <CAGm1_ksKKpqeHVYH3=Pt1iheON8mihkBL7LXTPmqKTwKOo50cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Thu, Sep 10, 2015 at 4:30 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hi Thomas,
+>
+> On Thu, Sep 10, 2015 at 2:39 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear yegorslists at googlemail.com,
+>>
+>> On Thu, 10 Sep 2015 12:33:51 +0200, yegorslists at googlemail.com wrote:
+>>> This package provides Python bindings for udev. The package can be successfully
+>>> installed, but it fails to find libudev via find_library(). See [1] for details.
+>>> I have even tried to install binutils, but it fails anyway.
+>>>
+>>> This issue is quite old [2], but so far there is no official solution.
+>>
+>> I haven't looked in detail, but isn't the solution to patch the Python
+>> find_library() function to make it not rely on gcc/objdump?
+>
+> It would be the best solution. Have you seen such a patch in the wild?
+> So far there was not much feedback in Python's bug tracker.
 
-When eudev is used as the udev provider, libgudev is automatically
-provided as it is part of eudev. However, when systemd is used as
-the udev provider, libgudev is not provided, and needs to be built
-separately. This is why we select the libgudev package only if
-systemd is used.
+Found this mail in our mailing list:
+http://lists.busybox.net/pipermail/buildroot/2013-October/081483.html
 
-Fixes: http://autobuild.buildroot.net/results/d59/d597a81271a082c8252e2333906815c437b6576d/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: change patch name (Vicente Olivert Riera)
-	    add fix description (Vicente Olivert Riera)
-	    add explanations to Config.in and *.mk files (Vicente Olivert Riera)
-
- package/modem-manager/Config.in        | 6 ++++++
- package/modem-manager/modem-manager.mk | 9 +++++++++
- 2 files changed, 15 insertions(+)
-
-diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-index 59b8d88..80688f2 100644
---- a/package/modem-manager/Config.in
-+++ b/package/modem-manager/Config.in
-@@ -6,6 +6,12 @@ config BR2_PACKAGE_MODEM_MANAGER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	select BR2_PACKAGE_DBUS_GLIB
-+	# When eudev is used as the udev provider, libgudev is automatically
-+	# provided as it is part of eudev. However, when systemd is used as
-+	# the udev provider, libgudev is not provided, and needs to be built
-+	# separately. This is why we select the libgudev package only if
-+	# systemd is used.
-+	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
- 	help
- 	  ModemManager is a DBus-activated daemon which controls mobile
- 	  broadband (2G/3G/4G) devices and connections.
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 0e6b36a..9f311fe 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -12,6 +12,15 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
- MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
- MODEM_MANAGER_INSTALL_STAGING = YES
- 
-+# When eudev is used as the udev provider, libgudev is automatically
-+# provided as it is part of eudev. However, when systemd is used as the
-+# udev provider, libgudev is not provided, and needs to be built
-+# separately. This is why we select the libgudev package only if systemd
-+# is used.
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+MODEM_MANAGER_DEPENDENCIES += libgudev
-+endif
-+
- ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
- MODEM_MANAGER_DEPENDENCIES += libqmi
- MODEM_MANAGER_CONF_OPTS += --with-qmi
--- 
-2.1.4
+Yegor
