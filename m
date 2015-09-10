@@ -1,49 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 14:20:56 +0200
-Subject: [Buildroot] [PATCHv3 00/15] DirectFB stack bump
-In-Reply-To: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 2 Sep 2015 00:01:01 +0200")
-References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y4gefot3.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Sep 2015 13:52:12 +0200
+Subject: [Buildroot] [git commit] directfb: do not use inexistant configure
+	options
+Message-ID: <20150910122136.832D681F74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=87f7ace1b55ebd1c6ed2209af20a5ba677e59550
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > Here is the third version of the DirectFB bump. The previous version
- > was submitted in February by Peter Seiderer, so it's time to move
- > forward on this topic. There are too many changes compared to Peter's
- > version to really list all of them, it's better to think of this
- > series almost as a new one: it combines changes from Peter with
- > changes I had also prepared on my side.
+The --disable-sysfs and --disable-explicit-deps options are not
+supported by DirectFB anymore, so don't use them.
 
- > The patch series bumps DirectFB, DirectFB-examples and linux-fusion,
- > but also does a number of related cleanups (remove unused/useless
- > options, simplify the DirectFB-examples package, remove no longer
- > useful packages, etc.).
+[Thomas: rework commit log.]
 
- > I did quite a bit of build testing: I built 10 different Buildroot
- > configurations, to test each of the 10 direct reverse dependencies of
- > DirectFB:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/directfb/directfb.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
- >  - Cairo
- >  - EFL (libevas and libecore)
- >  - GStreamer 0.10 DirectFB bad plugin
- >  - Gstreamer 1.x DirectFB bad plugin
- >  - Links with DirectFB support
- >  - Lite
- >  - Qt4 with DirectFB backend (required a patch)
- >  - Qt5 with DirectFB backend
- >  - SDL with DirectFB backend
- >  - VLC with DirectFB backend
-
- > All of them built successfully.
-
-Great, thanks for all the testing. Committed series!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index c27e982..da12acb 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -14,11 +14,9 @@ DIRECTFB_INSTALL_STAGING = YES
+ DIRECTFB_AUTORECONF = YES
+ 
+ DIRECTFB_CONF_OPTS = \
+-	--disable-explicit-deps \
+ 	--enable-zlib \
+ 	--enable-freetype \
+ 	--enable-fbdev \
+-	--disable-sysfs \
+ 	--disable-sdl \
+ 	--disable-vnc \
+ 	--disable-osx \
