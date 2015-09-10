@@ -1,144 +1,189 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 13:54:40 +0200
-Subject: [Buildroot] [git commit] directfb: add options for divine and sawman
-Message-ID: <20150910122136.A5CD081F76@busybox.osuosl.org>
+Date: Thu, 10 Sep 2015 13:51:55 +0200
+Subject: [Buildroot] [git commit] qt: fix directfb-1.7.7 compile errors
+Message-ID: <20150910122136.7BFAD81F76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5ac8f64916e2b428566cb1d08c58b1543d11ec7
+commit: http://git.buildroot.net/buildroot/commit/?id=0b4ed3874f88d8e6a125027d4fbdc089b6bf0fa2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since DirectFB 1.7.x, the divine (virtual input) and sawman (window
-manager) features have been merged in DirectFB itself rather than
-being shipped as separate tarballs. This commit creates additional
-options to enable those features.
-
-Upcoming commits will get rid of the existing divine and sawman
-Buildroot packages.
-
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../directfb/0005-add-missing-idivine-header.patch |   65 ++++++++++++++++++++
- package/directfb/Config.in                         |   10 +++
- package/directfb/directfb.mk                       |   12 ++++
- 3 files changed, 87 insertions(+), 0 deletions(-)
+ ...ion-constructor-error-for-legacy-c-compil.patch |  163 ++++++++++++++++++++
+ 1 files changed, 163 insertions(+), 0 deletions(-)
 
-diff --git a/package/directfb/0005-add-missing-idivine-header.patch b/package/directfb/0005-add-missing-idivine-header.patch
+diff --git a/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch b/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
 new file mode 100644
-index 0000000..7823eb7
+index 0000000..d7d387a
 --- /dev/null
-+++ b/package/directfb/0005-add-missing-idivine-header.patch
-@@ -0,0 +1,65 @@
-+Add idivine.h, which is missing from DirectFB tarballs
++++ b/package/qt/0008-Fix-conversion-constructor-error-for-legacy-c-compil.patch
+@@ -0,0 +1,163 @@
++From ea46f47fb3c475ba2d7581c15185b8d43e63b8c2 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Fri, 27 Feb 2015 21:30:52 +0100
++Subject: [PATCH] Fix conversion/constructor error for legacy c++ compiler.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+The idivine.h file was taken from the DirectFB Git repository.
++Fixes the following compile error with legacy c++ compiler:
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++error: in C++98 ???blitRect??? must be initialized by constructor, not by ???{...}???
 +
-+Index: b/lib/divine/idivine.h
-+===================================================================
-+--- /dev/null
-++++ b/lib/divine/idivine.h
-+@@ -0,0 +1,54 @@
-++/*
-++   (c) Copyright 2012-2013  DirectFB integrated media GmbH
-++   (c) Copyright 2001-2013  The world wide DirectFB Open Source Community (directfb.org)
-++   (c) Copyright 2000-2004  Convergence (integrated media) GmbH
-++
-++   All rights reserved.
-++
-++   Written by Denis Oliver Kropp <dok@directfb.org>,
-++              Andreas Shimokawa <andi@directfb.org>,
-++              Marek Pikarski <mass@directfb.org>,
-++              Sven Neumann <neo@directfb.org>,
-++              Ville Syrj????l???? <syrjala@sci.fi> and
-++              Claudio Ciccani <klan@users.sf.net>.
-++
-++   This library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2 of the License, or (at your option) any later version.
-++
-++   This library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with this library; if not, write to the
-++   Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-++   Boston, MA 02111-1307, USA.
-++*/
-++
-++
-++
-++#ifndef __IDIVINE_H__
-++#define __IDIVINE_H__
-++
-++#include <divine.h>
-++
-++/*
-++ * private data struct of IDiVine
-++ */
-++typedef struct {
-++     int                         ref;      /* reference counter */
-++
-++     DiVine                     *divine;
-++} IDiVine_data;
-++
-++/*
-++ * IDiVine constructor/destructor
-++ */
-++DFBResult IDiVine_Construct( IDiVine *thiz );
-++
-++void      IDiVine_Destruct ( IDiVine *thiz );
-++
-++#endif
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index d71858e..f8865e8 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -45,6 +45,16 @@ config BR2_PACKAGE_DIRECTFB_TRACE
- 	help
- 	  Enable call tracing for DirectFB applications
- 
-+config BR2_PACKAGE_DIRECTFB_DIVINE
-+	bool "divine"
-+	help
-+	  Enable the DiVine feature (virtual input)
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp   | 14 +++++++-------
++ src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp        |  6 +++---
++ src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp        |  6 +++---
++ src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp |  2 +-
++ 4 files changed, 14 insertions(+), 14 deletions(-)
 +
-+config BR2_PACKAGE_DIRECTFB_SAWMAN
-+	bool "sawman"
-+	help
-+	  Enable the SawMan feature (window manager)
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
++index 876d0c2..ed69386 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbpaintengine.cpp
++@@ -942,7 +942,7 @@ void QDirectFBPaintEngine::drawBufferSpan(const uint *buffer, int bufsize,
++     IDirectFBSurface *src = d->surfaceCache->getSurface(buffer, bufsize);
++     // ### how does this play with setDFBColor
++     src->SetColor(src, 0, 0, 0, const_alpha);
++-    const DFBRectangle rect = { 0, 0, length, 1 };
+++    const DFBRectangle rect = (DFBRectangle_C){ 0, 0, length, 1 };
++     d->surface->Blit(d->surface, src, &rect, x, y);
++ }
++ 
++@@ -1223,14 +1223,14 @@ void QDirectFBPaintEnginePrivate::blit(const QRectF &dest, IDirectFBSurface *s,
++     const QRect dr = engine->state()->matrix.mapRect(dest).toRect();
++     if (dr.isEmpty())
++         return;
++-    const DFBRectangle sRect = { sr.x(), sr.y(), sr.width(), sr.height() };
+++    const DFBRectangle sRect = (DFBRectangle_C){ sr.x(), sr.y(), sr.width(), sr.height() };
++     DFBResult result;
++ 
++     if (dr.size() == sr.size()) {
++         result = surface->Blit(surface, s, &sRect, dr.x(), dr.y());
++     } else {
++         Q_ASSERT(supportsStretchBlit());
++-        const DFBRectangle dRect = { dr.x(), dr.y(), dr.width(), dr.height() };
+++        const DFBRectangle dRect = (DFBRectangle_C){ dr.x(), dr.y(), dr.width(), dr.height() };
++         result = surface->StretchBlit(surface, s, &sRect, &dRect);
++     }
++     if (result != DFB_OK)
++@@ -1261,7 +1261,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
++     if (newClip.isNull())
++         return;
++ 
++-    const DFBRegion clip = {
+++    const DFBRegion clip = (DFBRegion_C){
++         newClip.x(),
++         newClip.y(),
++         newClip.right(),
++@@ -1295,7 +1295,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
++         while (y <= destinationRect.bottom()) {
++             qreal x = startX;
++             while (x <= destinationRect.right()) {
++-                const DFBRectangle destination = { qRound(x), qRound(y), mappedSize.width(), mappedSize.height() };
+++                const DFBRectangle destination = (DFBRectangle_C){ qRound(x), qRound(y), (int)mappedSize.width(), (int)mappedSize.height() };
++                 surface->StretchBlit(surface, sourceSurface, 0, &destination);
++                 x += mappedSize.width();
++             }
++@@ -1337,7 +1337,7 @@ void QDirectFBPaintEnginePrivate::drawTiledPixmap(const QRectF &dest, const QPix
++     if (currentClip.isEmpty()) {
++         surface->SetClip(surface, 0);
++     } else {
++-        const DFBRegion clip = {
+++        const DFBRegion clip = (DFBRegion_C){
++             currentClip.x(),
++             currentClip.y(),
++             currentClip.right(),
++@@ -1356,7 +1356,7 @@ void QDirectFBPaintEnginePrivate::updateClip()
++         surface->SetClip(surface, NULL);
++         clipType = NoClip;
++     } else if (clipData->hasRectClip) {
++-        const DFBRegion r = {
+++        const DFBRegion r = (DFBRegion_C){
++             clipData->clipRect.x(),
++             clipData->clipRect.y(),
++             clipData->clipRect.right(),
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
++index 412e684..c59c47d 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbpixmap.cpp
++@@ -363,7 +363,7 @@ void QDirectFBPixmapData::copy(const QPixmapData *data, const QRect &rect)
++     } else {
++         dfbSurface->SetBlittingFlags(dfbSurface, DSBLIT_NOFX);
++     }
++-    const DFBRectangle blitRect = { rect.x(), rect.y(),
+++    const DFBRectangle blitRect = (DFBRectangle_C){ rect.x(), rect.y(),
++                                     rect.width(), rect.height() };
++     w = rect.width();
++     h = rect.height();
++@@ -465,7 +465,7 @@ QPixmap QDirectFBPixmapData::transformed(const QTransform &transform,
++     }
++     data->dfbSurface->SetBlittingFlags(data->dfbSurface, flags);
++ 
++-    const DFBRectangle destRect = { 0, 0, size.width(), size.height() };
+++    const DFBRectangle destRect = (DFBRectangle_C){ 0, 0, size.width(), size.height() };
++     data->dfbSurface->StretchBlit(data->dfbSurface, dfbSurface, 0, &destRect);
++     data->w = size.width();
++     data->h = size.height();
++@@ -551,7 +551,7 @@ bool QDirectFBPixmapData::scroll(int dx, int dy, const QRect &rect)
++         return false;
++     }
++ 
++-    const DFBRectangle source = { rect.x(), rect.y(), rect.width(), rect.height() };
+++    const DFBRectangle source = (DFBRectangle_C){ rect.x(), rect.y(), rect.width(), rect.height() };
++     result = dfbSurface->Blit(dfbSurface, dfbSurface, &source, source.x + dx, source.y + dy);
++     if (result != DFB_OK) {
++         DirectFBError("QDirectFBPixmapData::scroll", result);
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
++index eab9580..d26e5bf 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbscreen.cpp
++@@ -1635,7 +1635,7 @@ void QDirectFBScreen::solidFill(const QColor &color, const QRegion &region)
++ static inline void clearRect(IDirectFBSurface *surface, const QColor &color, const QRect &rect)
++ {
++     Q_ASSERT(surface);
++-    const DFBRegion region = { rect.left(), rect.top(), rect.right(), rect.bottom() };
+++    const DFBRegion region = (DFBRegion_C){ rect.left(), rect.top(), rect.right(), rect.bottom() };
++     // could just reinterpret_cast this to a DFBRegion
++     surface->SetClip(surface, &region);
++     surface->Clear(surface, color.red(), color.green(), color.blue(), color.alpha());
++@@ -1716,14 +1716,14 @@ void QDirectFBScreen::flipSurface(IDirectFBSurface *surface, DFBSurfaceFlipFlags
++             const DFBSurfaceFlipFlags nonWaitFlags = flipFlags & ~DSFLIP_WAIT;
++             for (int i=0; i<rects.size(); ++i) {
++                 const QRect &r = rects.at(i);
++-                const DFBRegion dfbReg = { r.x() + offset.x(), r.y() + offset.y(),
+++                const DFBRegion dfbReg = (DFBRegion_C){ r.x() + offset.x(), r.y() + offset.y(),
++                                            r.right() + offset.x(),
++                                            r.bottom() + offset.y() };
++                 surface->Flip(surface, &dfbReg, i + 1 < rects.size() ? nonWaitFlags : flipFlags);
++             }
++         } else {
++             const QRect r = region.boundingRect();
++-            const DFBRegion dfbReg = { r.x() + offset.x(), r.y() + offset.y(),
+++            const DFBRegion dfbReg = (DFBRegion_C){ r.x() + offset.x(), r.y() + offset.y(),
++                                        r.right() + offset.x(),
++                                        r.bottom() + offset.y() };
++             surface->Flip(surface, &dfbReg, flipFlags);
++diff --git a/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp b/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
++index 4dff907..25ad06b 100644
++--- a/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
+++++ b/src/plugins/gfxdrivers/directfb/qdirectfbwindowsurface.cpp
++@@ -333,7 +333,7 @@ bool QDirectFBWindowSurface::scroll(const QRegion &region, int dx, int dy)
++     }
++     dfbSurface->SetBlittingFlags(dfbSurface, DSBLIT_NOFX);
++     const QRect r = region.boundingRect();
++-    const DFBRectangle rect = { r.x(), r.y(), r.width(), r.height() };
+++    const DFBRectangle rect = (DFBRectangle_C){ r.x(), r.y(), r.width(), r.height() };
++     dfbSurface->Blit(dfbSurface, dfbSurface, &rect, r.x() + dx, r.y() + dy);
++     return true;
++ }
++-- 
++2.1.4
 +
- config BR2_PACKAGE_DIRECTFB_ATI128
- 	bool "compile ati128 graphics driver"
- 	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index d44e658..ea579f5 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -53,6 +53,18 @@ ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
- DIRECTFB_CONF_OPTS += --enable-trace
- endif
- 
-+ifeq ($(BR2_PACKAGE_DIRECTFB_DIVINE),y)
-+DIRECTFB_CONF_OPTS += --enable-divine
-+else
-+DIRECTFB_CONF_OPTS += --disable-divine
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DIRECTFB_SAWMAN),y)
-+DIRECTFB_CONF_OPTS += --enable-sawman
-+else
-+DIRECTFB_CONF_OPTS += --disable-sawman
-+endif
-+
- DIRECTFB_GFX = \
- 	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_CLE266),cle266) \
