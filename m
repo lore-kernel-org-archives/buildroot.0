@@ -1,56 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 13:55:58 +0200
-Subject: [Buildroot] [git commit] directfb: add new TIFF option
-Message-ID: <20150910122136.ADCCD81F77@busybox.osuosl.org>
+Date: Thu, 10 Sep 2015 13:53:47 +0200
+Subject: [Buildroot] [git commit] directfb: remove
+	BR2_PACKAGE_DIRECTFB_UNIQUE option
+Message-ID: <20150910122136.9C23F807B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d16db90e3111f2d191664d5773b47638b6ad6d48
+commit: http://git.buildroot.net/buildroot/commit/?id=26e6da5958d42ff4201c756c4483ef883b176740
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: don't enable option by default.]
+This option depends on BR2_UNIMPLEMENTED (which does not exist) since
+2009. Since BR2_UNIMPLEMENTED does not exist, it was not possible to
+enable BR2_PACKAGE_DIRECTFB_UNIQUE, which means that nobody cared
+about making it available, and that we don't need to add any
+Config.in.legacy handling to remove this option.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/directfb/Config.in   |    4 ++++
- package/directfb/directfb.mk |    7 +++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ package/directfb/Config.in   |    4 ----
+ package/directfb/directfb.mk |    6 ------
+ 2 files changed, 0 insertions(+), 10 deletions(-)
 
 diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index f8865e8..548f602 100644
+index 98acec5..d71858e 100644
 --- a/package/directfb/Config.in
 +++ b/package/directfb/Config.in
-@@ -125,6 +125,10 @@ config BR2_PACKAGE_DIRECTFB_GIF
- 	bool "enable GIF support"
- 	default y
+@@ -45,10 +45,6 @@ config BR2_PACKAGE_DIRECTFB_TRACE
+ 	help
+ 	  Enable call tracing for DirectFB applications
  
-+config BR2_PACKAGE_DIRECTFB_TIFF
-+	bool "enable TIFF support"
-+	select BR2_PACKAGE_TIFF
-+
- config BR2_PACKAGE_DIRECTFB_IMLIB2
- 	bool "enable IMLIB2 support"
- 	select BR2_PACKAGE_IMLIB2
+-config BR2_PACKAGE_DIRECTFB_UNIQUE
+-	bool "enable unique window manager"
+-	depends on BR2_UNIMPLEMENTED
+-
+ config BR2_PACKAGE_DIRECTFB_ATI128
+ 	bool "compile ati128 graphics driver"
+ 	depends on BR2_i386 || BR2_x86_64
 diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index ea579f5..5e68b7b 100644
+index acb3e3a..d44e658 100644
 --- a/package/directfb/directfb.mk
 +++ b/package/directfb/directfb.mk
-@@ -106,6 +106,13 @@ else
- DIRECTFB_CONF_OPTS += --disable-gif
+@@ -53,12 +53,6 @@ ifeq ($(BR2_PACKAGE_DIRECTFB_TRACE),y)
+ DIRECTFB_CONF_OPTS += --enable-trace
  endif
  
-+ifeq ($(BR2_PACKAGE_DIRECTFB_TIFF),y)
-+DIRECTFB_CONF_OPTS += --enable-tiff
-+DIRECTFB_DEPENDENCIES += tiff
-+else
-+DIRECTFB_CONF_OPTS += --disable-tiff
-+endif
-+
- ifeq ($(BR2_PACKAGE_DIRECTFB_PNG),y)
- DIRECTFB_CONF_OPTS += --enable-png
- DIRECTFB_DEPENDENCIES += libpng
+-ifeq ($(BR2_PACKAGE_DIRECTFB_UNIQUE),y)
+-DIRECTFB_CONF_OPTS += --enable-unique
+-else
+-DIRECTFB_CONF_OPTS += --disable-unique
+-endif
+-
+ DIRECTFB_GFX = \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_CLE266),cle266) \
