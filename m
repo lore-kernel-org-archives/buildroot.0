@@ -1,50 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2015 22:07:30 +0200
-Subject: [Buildroot] [git commit] setools: fix race condition
-Message-ID: <20150910200800.CD6937FAD5@busybox.osuosl.org>
+Date: Thu, 10 Sep 2015 22:06:55 +0200
+Subject: [Buildroot] [git commit] system: make systemd's kernel headers
+	comment fit
+Message-ID: <20150910200800.CB89181F74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ac68fe2c9b4cea91c7a30429ebf75279ede8e70
+commit: http://git.buildroot.net/buildroot/commit/?id=b287378d3c0fca20d7fec4fbf3c097115afcbd5a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As reported upstream:
+The comment line that explains that systemd needs a glibc toolchain and
+kernel headers >= 3.10 doesn't fit in the dialog box, which makes it
+look as if headers >= 3.1 are needed.
 
-  https://github.com/TresysTechnology/setools3/issues/5
+Abbreviate the comment a little by removing an 'an'. It still doesn't
+fit completely (only one trailing * is shown), but at least it's
+readable.
 
-setools tries to compile a .c file before being generated and then it
-produces an error like this one:
+While we're at it, change the quoting style to " like we always use.
 
-error: policy_scan.c: No such file or directory
-
-Until upstream fixes the problem we can workaround this by using MAKE1
-as the SETOOLS_MAKE.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/119/1196ac448c77320b59b63b6133d2d1af1245bf69/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reported-by: eschu on IRC
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/setools/setools.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ system/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index a2bfd42..71301c7 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -12,6 +12,10 @@ SETOOLS_INSTALL_STAGING = YES
- SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
- SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+diff --git a/system/Config.in b/system/Config.in
+index fad829d..03521fd 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -90,7 +90,7 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_PACKAGE_SYSTEMD
  
-+# Race condition reported upstream:
-+# https://github.com/TresysTechnology/setools3/issues/5
-+SETOOLS_MAKE = $(MAKE1)
-+
- # configure.ac is patched by the cross compile patch,
- # so autoreconf is necessary
- SETOOLS_AUTORECONF = YES
+-comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
++comment "systemd needs (e)glibc toolchain, headers >= 3.10"
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+ 		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
+ 
