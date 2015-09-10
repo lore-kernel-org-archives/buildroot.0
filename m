@@ -1,77 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Sep 2015 10:26:36 +0200
-Subject: [Buildroot] problem with stack protection,
- threads and static binaries
-In-Reply-To: <1441871700.4298.49.camel@fahlgren-laptop>
-References: <1441871700.4298.49.camel@fahlgren-laptop>
-Message-ID: <55F13EBC.9060100@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 10 Sep 2015 09:56:40 +0100
+Subject: [Buildroot] [PATCHv4] gdb: prevent building the documentation
+Message-ID: <1441875400-16473-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-09-15 09:55, Daniel Fahlgren wrote:
-> Hi,
-> 
-> I've encountered a problem when enabling stack protection
-> (BR2_ENABLE_SSP) in combination with static binaries that uses threads.
-> The problem is that during start up the program gets a segfault in
-> __pthread_initialize_minimal_internal(), and I think this might be the
-> same issue as described in [1].
-> 
-> Investigation shows that the offending instruction is a:
-> 
->   mov    %fs:0x28,%rax
-> 
-> where %fs is 0x00. The reason for that is that the pthread library is
-> compiled with stack protection but __pthread_initialize_minimal_internal
-> is called before __libc_setup_tls in static binaries.
+Force gdb to not build the documentation. This way we avoid depending on
+host-texinfo. This is a temporary fix until upstream accepts a proposed
+--disable-docs configure option.
 
- This sounds like a uClibc issue. Could you verify by testing with uClibc 0.9.33
-and/or musl and/or glibc? And then take it to the uClibc-ng mailing list:
-http://mailman.uclibc-ng.org/cgi-bin/mailman/listinfo/devel/
+Since the documentation will not be build at all, we can remove the
+parts related to host-texinfo and MAKEINFO in the gdb.mk file.
 
-Just to be sure, putting Waldemar in Cc.
+Fixes:
 
+  http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 
-> 
-> I have created an ugly patch to verify my hypothesis. With that patch
-> the test program works, but what is the proper way to solve this issue?
-> 
-> Attached files (also at https://www.acc.umu.se/~guru/buildroot/)
-> 
-> add_broken_package.patch - add a test package to buildroot
-> pthread-broken-1.0.0.tar.gz - the test package
-> buildroot.config - buildroot config to use
-> static-pthread.patch - my proof-of-concept patch
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Brendan Heading <brendanheading@gmail.com>
+---
+Changes v3 -> v4:
+  - Use a pre-configure-hook instead of post-patch-hook as the last one
+    is not called in the OVERRIDE_SRCDIR case (Arnout Vandecappelle)
+Changes v2 -> v3:
+  - Use the post-patch-hook also for host-gdb (Brendan Heading)
+  - Remove unnecessary GDB_FROM_GIT (Romain Naour)
+Changes v1 -> v2:
+  - Indent the sed command
+  - Use a post-patch-hook instead of pre-configure-hook
+  - Remove the parts related to host-texinfo and MAKEINFO
+  - Ammend the commit log to be more appropriate
 
- Wow, great bug information! But in the future, please use a defconfig instead
-of a full config to reduce the list load.
+ package/gdb/gdb.mk |   18 +++++++-----------
+ 1 files changed, 7 insertions(+), 11 deletions(-)
 
- Regards,
- Arnout
-
-> 
-> Best regards,
-> Daniel Fahlgren
-> 
-> 1:
-> http://lists.busybox.net/pipermail/buildroot/2014-February/088561.html
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 338de20..58a1232 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -11,13 +11,11 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.xz
+ ifeq ($(BR2_arc),y)
+ GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+-GDB_FROM_GIT = y
+ endif
+ 
+ ifeq ($(BR2_microblaze),y)
+ GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+-GDB_FROM_GIT = y
+ endif
+ 
+ # Use .tar.bz2 for 7.7.x since there was no .tar.xz release back then
+@@ -53,6 +51,13 @@ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+ endif
+ 
++# Prevent gdb to build the documentation
++define GDB_DISABLE_DOC
++	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
++endef
++GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
++HOST_GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
++
+ # When gdb sources are fetched from the binutils-gdb repository, they
+ # also contain the binutils sources, but binutils shouldn't be built,
+ # so we disable it.
+@@ -165,15 +170,6 @@ else
+ HOST_GDB_CONF_OPTS += --without-python
+ endif
+ 
+-ifeq ($(GDB_FROM_GIT),y)
+-GDB_DEPENDENCIES += host-texinfo
+-HOST_GDB_DEPENDENCIES += host-texinfo
+-else
+-# don't generate documentation
+-GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-endif
+-
+ # legacy $arch-linux-gdb symlink
+ define HOST_GDB_ADD_SYMLINK
+ 	cd $(HOST_DIR)/usr/bin && \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.7.1
