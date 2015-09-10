@@ -1,67 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 10 Sep 2015 17:11:43 +0100
-Subject: [Buildroot] [PATCH 1/1]
- package/x11r7/xdriver_xf86-input-vmmouse: dep on udev
-In-Reply-To: <1441888256-15742-1-git-send-email-brendanheading@gmail.com>
-References: <1441888256-15742-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <55F1ABBF.4070809@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Sep 2015 18:13:04 +0200
+Subject: [Buildroot] [PATCH] modem-manager: now needs libgudev under
+ systemd
+In-Reply-To: <55F18E83.1020007@imgtec.com>
+References: <1441889437-13931-1-git-send-email-yegorslists@googlemail.com>
+ <55F18E83.1020007@imgtec.com>
+Message-ID: <20150910181304.076e392d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+Vicente, Yegor,
 
-On 09/10/2015 01:30 PM, Brendan Heading wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/cd3/cd3730ed0272c3f335ee90e0cbc4027b07945db3/
-> 
-> The xdriver_xf86-input-vmmouse driver depends on udev.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Thu, 10 Sep 2015 15:06:59 +0100, Vicente Olivert Riera wrote:
 
-Regards,
+> when you say that "modem-manager: now needs libgudev for systemd", what
+> do you mean exactly by "now"? I would expect something like "since
+> version X" or a better explanation.
 
-Vincent.
+Well, I think you're being a bit too picky here. It is indeed nicer
+when the information is more specific, but since there is a clear
+autobuilder failure, I think Yegor's commit log is good enough. Better
+is better, for sure :-)
 
-> ---
-> The driver requires udev, or an option to allow it to build without udev.
-> I followed the precedent set by libinput and evdev by adding the
-> dependency.
-> ---
->  package/x11r7/xdriver_xf86-input-vmmouse/Config.in                    | 4 ++++
->  .../x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk    | 2 +-
->  2 files changed, 5 insertions(+), 1 deletion(-)
+
+> > @@ -1,11 +1,12 @@
+> >  config BR2_PACKAGE_MODEM_MANAGER
+> >  	bool "modemmanager"
+> >  	depends on BR2_PACKAGE_HAS_UDEV
+> > -	select BR2_PACKAGE_DBUS
+> >  	depends on BR2_USE_WCHAR # libglib2 and gnutls
+> >  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+> >  	depends on BR2_USE_MMU # dbus
+> > +	select BR2_PACKAGE_DBUS
 > 
-> diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-> index de989eb..73e1a29 100644
-> --- a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-> +++ b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-> @@ -1,8 +1,12 @@
->  config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
->  	bool "xf86-input-vmmouse"
->  	depends on BR2_i386 || BR2_x86_64
-> +	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
->  	select BR2_PACKAGE_XPROTO_INPUTPROTO
->  	select BR2_PACKAGE_XPROTO_RANDRPROTO
->  	select BR2_PACKAGE_XPROTO_XPROTO
->  	help
->  	  VMWare mouse input driver
-> +
-> +comment "xf86-input-vmmouse requires udev to be enabled"
-> +	depends on !BR2_PACKAGE_HAS_UDEV
-> diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-> index 53ceec8..3b49c2d 100644
-> --- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-> +++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-> @@ -9,6 +9,6 @@ XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMO
->  XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
->  XDRIVER_XF86_INPUT_VMMOUSE_LICENSE = MIT
->  XDRIVER_XF86_INPUT_VMMOUSE_LICENSE_FILES = COPYING
-> -XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
-> +XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto udev
->  
->  $(eval $(autotools-package))
-> 
+> I know you are trying to keep all the depends together and all the
+> selects together, but since this is not related with the goal that your
+> patch is trying to achieve, I would do it in a separate patch.
+
+While I do agree that separating logical changes into separate commits
+is important, we shouldn't be too zealous about that either. So I'm
+personally fine with such small (but related) side changes. It's better
+when the commit log contains something such as:
+
+While at it, group the existing dbus select together with the dbus-glib
+select, so that all "select" statements are together.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
