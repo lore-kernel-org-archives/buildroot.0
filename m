@@ -1,48 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 10 Sep 2015 16:58:25 +0100
-Subject: [Buildroot] [PATCH] setools: fix race condition
-Message-ID: <1441900705-40009-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Sep 2015 18:03:48 +0200
+Subject: [Buildroot] [RFC] Add pyudev package
+In-Reply-To: <CAGm1_ksKKpqeHVYH3=Pt1iheON8mihkBL7LXTPmqKTwKOo50cw@mail.gmail.com>
+References: <1441881232-8107-1-git-send-email-yegorslists@googlemail.com>
+ <20150910143930.00227183@free-electrons.com>
+ <CAGm1_kvo5wPvVgxSjK+CG7QGmMsdP-eNqNAwhOs+Q6B2QsXekA@mail.gmail.com>
+ <CAGm1_ksKKpqeHVYH3=Pt1iheON8mihkBL7LXTPmqKTwKOo50cw@mail.gmail.com>
+Message-ID: <20150910180348.4b8e66b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported upstream:
+Dear Yegor Yefremov,
 
-  https://github.com/TresysTechnology/setools3/issues/5
+On Thu, 10 Sep 2015 16:57:02 +0200, Yegor Yefremov wrote:
 
-setools tries to compile a .c file before being generated and then it
-produces an error like this one:
+> >> I haven't looked in detail, but isn't the solution to patch the Python
+> >> find_library() function to make it not rely on gcc/objdump?
+> >
+> > It would be the best solution. Have you seen such a patch in the wild?
+> > So far there was not much feedback in Python's bug tracker.
+> 
+> Found this mail in our mailing list:
+> http://lists.busybox.net/pipermail/buildroot/2013-October/081483.html
 
-error: policy_scan.c: No such file or directory
+Yes, that's probably the sort of changes we need to make. The only
+issue is that the change is architecture/platform/C library specific,
+so it's a bit annoying, but maybe we can come up with something smart
+to handle that, or something stupid that we progressively extend to
+cover the different platforms.
 
-Until upstream fixes the problem we can workaround this by using MAKE1
-as the SETOOLS_MAKE.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/119/1196ac448c77320b59b63b6133d2d1af1245bf69/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/setools/setools.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index a2bfd42..71301c7 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -12,6 +12,10 @@ SETOOLS_INSTALL_STAGING = YES
- SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
- SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
- 
-+# Race condition reported upstream:
-+# https://github.com/TresysTechnology/setools3/issues/5
-+SETOOLS_MAKE = $(MAKE1)
-+
- # configure.ac is patched by the cross compile patch,
- # so autoreconf is necessary
- SETOOLS_AUTORECONF = YES
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
