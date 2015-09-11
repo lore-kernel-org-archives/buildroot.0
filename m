@@ -1,39 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Sep 2015 19:24:29 -0300
-Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
-Message-ID: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 12 Sep 2015 01:24:20 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: clarify the comment about
+	*-gcc-ar... LTO wrappers
+Message-ID: <1442013860-28656-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libtasn1/libtasn1.hash | 2 +-
- package/libtasn1/libtasn1.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index 653e018..41e10a6 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	89b3b5dce119273431544ecb305081f3530911001bb12e5d76588907edb71bda	libtasn1-4.5.tar.gz
-+sha256	3462fc25e2d2536878c39a8825f5e36ba2e2611b27ef535e064f4c56258e508b	libtasn1-4.6.tar.gz
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index eeff76c..6818f30 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTASN1_VERSION = 4.5
-+LIBTASN1_VERSION = 4.6
- LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 4b4b463..967e9ec 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -666,11 +666,12 @@ endif
+ # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+ # symlinks for everything else. Skip gdb symlink when we are building our
+ # own gdb to prevent two gdb's in output/host/usr/bin.
+-# When the link-time-optimization flag '-flto' is used, then the compiler
+-# and binutils have to support lto. ar/ranlib need to be called with the
+-# lto plugin. The wrappers *-gcc-ar and *-gcc-ranlib provided by GCC could
+-# be used as drop-ins for ar/runlib when Makefiles are used which do not
+-# pass the lto arguments.
++# The LTO support in gcc creates wrappers for ar, ranlib and nm which load
++# the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
++# *-gcc-nm and should be used instead of the real programs when -flto is
++# used. However, we should not add the toolchain wrapper for them, and they
++# match the *cc-* pattern. Therefore, an additional case is added for *-ar,
++# *-ranlib and *-nm.
+ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+ 	$(Q)mkdir -p $(HOST_DIR)/usr/bin
 -- 
-2.4.6
+2.5.1
