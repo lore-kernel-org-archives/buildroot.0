@@ -1,72 +1,107 @@
-From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
-Date: Fri, 11 Sep 2015 11:04:34 -0700
-Subject: [Buildroot] vconfig failure
-Message-ID: <944894A3EB1D044A9003B2F944389BB20474C348C3@svr-wa-exch1.atg.lc>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Sep 2015 17:01:53 -0300
+Subject: [Buildroot] [PATCH] samba: bump to version 4.3.0
+Message-ID: <1442001713-9454-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot Busybox,
+New patch status: sent upstream.
 
-My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I made the former meet the latter?s requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP. I can build two images with no problems: the 4.0.4 zImage with the rootfilesystem integrated; armada-385-db-ap.dtb. They are able to be booted up using U-Boot-1.73. Now my target system has eth2 (dhcp) for the normal access; eth0 (static) for a 192.168.0.0 local segment access.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0002-build-improve-stack-protector-check.patch | 56 ++++++++++++++++++++++
+ package/samba4/samba4.hash                         |  2 +-
+ package/samba4/samba4.mk                           |  4 +-
+ 3 files changed, 59 insertions(+), 3 deletions(-)
+ create mode 100644 package/samba4/0002-build-improve-stack-protector-check.patch
 
-
-
-I am working on the VLAN enabling on the eth0 interface. I have made the VLAN kernel module (8021q.ko) built into my zImage by adding two lines in my mvebu_v7_defconfig file:
-
-
-
-CONFIG_VLAN_8021Q=y
-
-CONFIG_MACVLAN=y
-
-
-
-Running the system I built yesterday, my ip command result is:
-
-
-
-# ip addr add 192.168.1.1/27 dev eth0.1
-
-ip: can't find device 'eth0.1'
-
-
-
-Then I tried the vconfig command. It gave me:
-
-
-
-# vconfig add eth0 1
-
-vconfig: ioctl error for add: Package not installed
-
-
-
-I am resolving this error now. Your experience sharing is extremely welcome. The attachments are the two configuration files for your review.
-
-
-
-Tommy
-
-
-________________________________
-This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150911/a32ee3b4/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: mvebu_v7_defconfig
-Type: application/octet-stream
-Size: 2957 bytes
-Desc: mvebu_v7_defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150911/a32ee3b4/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config.sep11fri15
-Type: application/octet-stream
-Size: 54030 bytes
-Desc: config.sep11fri15
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150911/a32ee3b4/attachment-0001.obj>
+diff --git a/package/samba4/0002-build-improve-stack-protector-check.patch b/package/samba4/0002-build-improve-stack-protector-check.patch
+new file mode 100644
+index 0000000..51ffc04
+--- /dev/null
++++ b/package/samba4/0002-build-improve-stack-protector-check.patch
+@@ -0,0 +1,56 @@
++From e4ef92852023f4e2f192d3c47220dc75930a615c Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Fri, 11 Sep 2015 16:41:31 -0300
++Subject: [PATCH] build: improve stack protector check
++
++Testing a toolchain for proper -fstack-protector must go beyond ensuring
++the compiler and linker accept the option.
++If the test C program does nothing with the stack then guards aren't
++inserted and/or are optimized away giving the false impression that it
++works when in fact the libc might not support it.
++
++Update the check to a program that uses the stack, hence making a link
++fail if proper support isn't available, for example in non-ssp enabled
++uclibc toolchains like this:
++
++test.c:(.text.startup+0x64): undefined reference to `__stack_chk_fail'
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ buildtools/wafsamba/samba_autoconf.py | 20 +++++++++++++++++---
++ 1 file changed, 17 insertions(+), 3 deletions(-)
++
++diff --git a/buildtools/wafsamba/samba_autoconf.py b/buildtools/wafsamba/samba_autoconf.py
++index c5f132c..ef34b00 100644
++--- a/buildtools/wafsamba/samba_autoconf.py
+++++ b/buildtools/wafsamba/samba_autoconf.py
++@@ -657,9 +657,23 @@ def SAMBA_CONFIG_H(conf, path=None):
++     if not IN_LAUNCH_DIR(conf):
++         return
++ 
++-    if conf.CHECK_CFLAGS(['-fstack-protector']) and conf.CHECK_LDFLAGS(['-fstack-protector']):
++-        conf.ADD_CFLAGS('-fstack-protector')
++-        conf.ADD_LDFLAGS('-fstack-protector')
+++    # we need to build real code that can't be optimized away to test
+++    if conf.check(fragment='''
+++        #include <stdio.h>
+++
+++        int main(void)
+++        {
+++            char t[100000];
+++            while (fgets(t, sizeof(t), stdin));
+++            return 0;
+++        }
+++        ''',
+++        execute=0,
+++        ccflags='-fstack-protector',
+++        ldflags='-fstack-protector',
+++        msg='Checking if toolchain accepts -fstack-protector'):
+++            conf.ADD_CFLAGS('-fstack-protector')
+++            conf.ADD_LDFLAGS('-fstack-protector')
++ 
++     if Options.options.debug:
++         conf.ADD_CFLAGS('-g', testflags=True)
++-- 
++2.4.6
++
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index e2b3969..d242f94 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
++sha256	d8dbb6b29dec1d9aa295655c4aa4eadd1e5367ef7047be22f4d6a18ba8acdb63	samba-4.3.0.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index c88cc9f..6f3fb58 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.2.3
+-SAMBA4_SITE = http://ftp.samba.org/pub/samba
++SAMBA4_VERSION = 4.3.0
++SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPLv3+
+-- 
+2.4.6
