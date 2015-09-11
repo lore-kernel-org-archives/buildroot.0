@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Sep 2015 19:49:04 +0200
-Subject: [Buildroot] [git commit] libgcrypt: bump version to 1.6.4
-Message-ID: <20150913100729.9A64981E4D@busybox.osuosl.org>
+Date: Fri, 11 Sep 2015 19:48:43 +0200
+Subject: [Buildroot] [git commit] git: bump version to 2.5.2
+Message-ID: <20150913100729.9652E81E56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e5ddfbf85494de81254b02f566c0335f9070a3e
+commit: http://git.buildroot.net/buildroot/commit/?id=d4d2bcfa1e5003734aad964e68bb1f8fe883b6c1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgcrypt/libgcrypt.hash |    4 ++--
- package/libgcrypt/libgcrypt.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 9cad1c4..e845a51 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 81caf39..6201986 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
 @@ -1,2 +1,2 @@
--# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000364.html
--sha1	9456e7b64db9df8360a1407a38c8c958da80bbf1	libgcrypt-1.6.3.tar.bz2
-+# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00000.html
-+sha1 ed52add1ce635deeb2f5c6650e52667debd4ec70  libgcrypt-1.6.4.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 9153fb8..53d1d6c 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  c31a5f5f72e025f8fe26845032a06683c7e5c1a73236c2353b5606ddd22e0494  git-2.4.5.tar.xz
++sha256  4b4760a90ede51accee703bd6815f1f79afef68670acdcf3ea31dcc846a40c9b  git-2.5.2.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index e2d04aa..bd852df 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.6.3
-+LIBGCRYPT_VERSION = 1.6.4
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-GIT_VERSION = 2.4.5
++GIT_VERSION = 2.5.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
