@@ -1,36 +1,94 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 11 Sep 2015 10:50:48 +0100
-Subject: [Buildroot] [PATCH buildroot-test 2/2] autobuild-run: amend a
-	comment to be more precise
-In-Reply-To: <1441965048-30856-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441965048-30856-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1441965048-30856-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 11 Sep 2015 12:00:09 +0200
+Subject: [Buildroot] [PATCH] configs: add nitrogen6sx_defconfig for Boundary
+	Devices SoloX board
+Message-ID: <1441965609-4092-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Saying "The ctng toolchain has a too old glibc version" is not very
-accurate. Is better to say "This MIPS toolchain uses eglibc-2.18".
+This board is using the exact same kernel and u-boot revision as the
+Nitrogen6x. They also share the same u-boot "autoboot" script.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+The differences between the two configurations are:
+- getty port is ttymxc0 instead of ttymxc1
+- uImage load address is 0x80008000
+- different device tree
+
+http://boundarydevices.com/product/nit6_solox-imx6/
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- scripts/autobuild-run |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hi all,
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 6e98b2c..2b309fa 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -393,7 +393,7 @@ def fixup_config(**kwargs):
-     if 'BR2_PACKAGE_STRONGSWAN=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-         return False
--    # The ctng toolchain has a too old glibc version, which lacks SYS_getdents64
-+    # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
-     if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
-        'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
-         return False
+I didn't include this patch as part of the Freescale packages update
+as it is an addition. However this patch depends on the updates to be
+applied for graphics support and so on.
+http://lists.busybox.net/pipermail/buildroot/2015-September/139278.html
+
+I wish we could do an include of another defconfig, that'd simplify
+future config updates as it could look like:
+
+include nitrogen6x_defconfig
+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-nitrogen6sx"
+
+That would also be very useful for all the Freescale sabre boards
+where every config is almost the same apart from uboot configuration
+or device tree name.
+
+Regards,
+Gary
+---
+ configs/nitrogen6sx_defconfig | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 configs/nitrogen6sx_defconfig
+
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+new file mode 100644
+index 0000000..70006d5
+--- /dev/null
++++ b/configs/nitrogen6sx_defconfig
+@@ -0,0 +1,37 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# system
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_2r1=y
++
++# Lock headers to match kernel
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.28"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# Last version of branch boundary-v2015.07
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/5115a9e/u-boot-5115a9e.tar.gz"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# Last version of branch boundary-imx_3.14.28_1.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-nitrogen6sx"
 -- 
-1.7.1
+2.5.1
