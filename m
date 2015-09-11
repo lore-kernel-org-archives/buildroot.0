@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 11 Sep 2015 13:45:30 +0100
-Subject: [Buildroot] [PATCH 1/3] mesa3d: bump version to 10.6.7
-Message-ID: <1441975532-34622-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 11 Sep 2015 13:45:31 +0100
+Subject: [Buildroot] [PATCH 2/3] libgcrypt: bump version to 1.6.4
+In-Reply-To: <1441975532-34622-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441975532-34622-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1441975532-34622-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/mesa3d/mesa3d.hash |    4 ++--
- package/mesa3d/mesa3d.mk   |    2 +-
+ package/libgcrypt/libgcrypt.hash |    4 ++--
+ package/libgcrypt/libgcrypt.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d957357..4461638 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 9cad1c4..e845a51 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
 @@ -1,2 +1,2 @@
--# From http://cgit.freedesktop.org/mesa/mesa/commit/?id=f39bc1c828e14b8e8d71ea02e4c21ea7397a1ab4
--sha256	570f2154b7340ff5db61ff103bc6e85165b8958798b78a50fa2df488e98e5778	mesa-10.6.6.tar.xz
-+# From http://cgit.freedesktop.org/mesa/mesa/commit/?id=ded289e3480a8e9421754d920d7ee5f174d9c5a5
-+sha256 feb1f640b915dada88a7c793dfaff0ae23580f8903f87a6b76469253de0d28d8  mesa-10.6.7.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 2242360..0244523 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+-# From http://lists.gnupg.org/pipermail/gnupg-announce/2015q1/000364.html
+-sha1	9456e7b64db9df8360a1407a38c8c958da80bbf1	libgcrypt-1.6.3.tar.bz2
++# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00000.html
++sha1 ed52add1ce635deeb2f5c6650e52667debd4ec70  libgcrypt-1.6.4.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 9153fb8..53d1d6c 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 10.6.6
-+MESA3D_VERSION = 10.6.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LIBGCRYPT_VERSION = 1.6.3
++LIBGCRYPT_VERSION = 1.6.4
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
 1.7.1
