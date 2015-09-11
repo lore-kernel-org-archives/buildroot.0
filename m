@@ -1,16 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Sep 2015 19:45:22 +0200
+Date: Fri, 11 Sep 2015 19:46:32 +0200
 Subject: [Buildroot] [PATCH] util-linux: bump version to 2.27
 In-Reply-To: <1441977987-43640-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1441977987-43640-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150911194522.265041cd@free-electrons.com>
+Message-ID: <20150911194632.67ddf349@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Vicente,
 
 On Fri, 11 Sep 2015 14:26:27 +0100, Vicente Olivert Riera wrote:
 > Removed 0002-program-invocation-short-name.patch since the changes it
@@ -29,14 +29,13 @@ On Fri, 11 Sep 2015 14:26:27 +0100, Vicente Olivert Riera wrote:
 >   https://www.kernel.org/pub/linux/utils/util-linux/v2.27/v2.27-ReleaseNotes
 > 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  .../0002-program-invocation-short-name.patch       |   11 -----------
->  package/util-linux/util-linux.hash                 |    4 ++--
->  package/util-linux/util-linux.mk                   |    4 ++--
->  3 files changed, 4 insertions(+), 15 deletions(-)
->  delete mode 100644 package/util-linux/0002-program-invocation-short-name.patch
 
-Applied, thanks.
+Speaking of util-linux, it would be good if we could make progress on
+the following patches:
+
+  http://patchwork.ozlabs.org/patch/494867/
+  http://patchwork.ozlabs.org/patch/494866/
+  http://patchwork.ozlabs.org/patch/494868/
 
 Thomas
 -- 
