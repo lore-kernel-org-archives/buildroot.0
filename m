@@ -1,81 +1,83 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 11 Sep 2015 09:19:54 +0100
-Subject: [Buildroot] [PATCH v3] modem-manager: select libgudev,
- if systemd is enabled
-In-Reply-To: <1441955387-6002-1-git-send-email-yegorslists@googlemail.com>
-References: <1441955387-6002-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <55F28EAA.6030405@imgtec.com>
+Date: Fri, 11 Sep 2015 10:16:56 +0100
+Subject: [Buildroot] [PATCH v2] mtd: fix static build with uuid
+In-Reply-To: <2ee5281619493115a4a6bd865596d3d328087cd7.1441944517.git.baruch@tkos.co.il>
+References: <2ee5281619493115a4a6bd865596d3d328087cd7.1441944517.git.baruch@tkos.co.il>
+Message-ID: <55F29C08.7040403@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor Yefremov,
+Dear Baruch Siach,
 
-On 09/11/2015 08:09 AM, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On 09/11/2015 05:08 AM, Baruch Siach wrote:
+> The uuid library might depend on gettext. Use pkg-config to discover uuid
+> dependencies at build time, and edit Makefile accordingly to avoid missing
+> symbols when linking statically.
 > 
-> When eudev is used as the udev provider, libgudev is automatically
-> provided as it is part of eudev. However, when systemd is used as
-> the udev provider, libgudev is not provided, and needs to be built
-> separately. This is why we select the libgudev package only if
-> systemd is used.
+> Based on a patch from Vicente Olivert Riera.
 > 
-> Fixes: http://autobuild.buildroot.net/results/d59/d597a81271a082c8252e2333906815c437b6576d/
+> Fixes:
+> http://autobuild.buildroot.net/results/2dd/2ddd714446d9eb75701bd48c117dc5bbbd291a76/
+> http://autobuild.buildroot.net/results/3af/3af4ef252c8cb2b22134d91ce48e5930c60ec437/
+> http://autobuild.buildroot.net/results/648/648341fce974e8f016eee57c95d7511a886eef49/
 > 
-> While at it, group the existing dbus select together with the dbus-glib
-> select, so that all "select" statements are together.
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2:
+>    * Use backticks instead of $(shell ...) make function (Arnout)
+> ---
+>  package/mtd/mtd.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 0fb9fc2c1acc..89cfac15756a 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -16,8 +16,14 @@ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+>  MTD_DEPENDENCIES = zlib lzo
+>  endif
+>  
+> +MTD_MKFSUBIFS_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs uuid`
+> +
+>  ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
+> -MTD_DEPENDENCIES += util-linux zlib lzo
+> +MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
+> +define MTD_ADD_MISSING_LINTL
+> +	$(SED) "/^LDLIBS_mkfs\.ubifs/ s%$$% $(MTD_MKFSUBIFS_LIBS)%" $(@D)/Makefile
+> +endef
+> +MTD_POST_PATCH_HOOKS += MTD_ADD_MISSING_LINTL
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> 
+
+I have tested it and it works. My mistake was using / instead of % in
+the sed command.
+
+Since this fails only for static, why don't you put your changes
+enclosed into an "ifeq ($(BR2_STATIC_LIBS),y)" clause?
+
+
+ ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
+ MTD_DEPENDENCIES += util-linux zlib lzo
++ifeq ($(BR2_STATIC_LIBS),y)
++MTD_DEPENDENCIES += host-pkgconf
++MTD_MKFSUBIFS_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs uuid`
++define MTD_ADD_MISSING_LINTL
++       $(SED) "/^LDLIBS_mkfs\.ubifs/ s%$$% $(MTD_MKFSUBIFS_LIBS)%"
+$(@D)/Makefile
++endef
++MTD_POST_PATCH_HOOKS += MTD_ADD_MISSING_LINTL
++endif
+ endif
+
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+
 
 Regards,
 
 Vincent.
-
-> ---
-> Changes:
-> 	v3: reduce comments and put select/depends reodering again (Thomas Petazzoni)
->         v2: change patch name (Vicente Olivert Riera)
->             add fix description (Vicente Olivert Riera)
->             add explanations to Config.in and *.mk files (Vicente Olivert Riera)
-> 
->  package/modem-manager/Config.in        | 3 ++-
->  package/modem-manager/modem-manager.mk | 4 ++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-> index 59b8d88..1cd502b 100644
-> --- a/package/modem-manager/Config.in
-> +++ b/package/modem-manager/Config.in
-> @@ -1,11 +1,12 @@
->  config BR2_PACKAGE_MODEM_MANAGER
->  	bool "modemmanager"
->  	depends on BR2_PACKAGE_HAS_UDEV
-> -	select BR2_PACKAGE_DBUS
->  	depends on BR2_USE_WCHAR # libglib2 and gnutls
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
->  	depends on BR2_USE_MMU # dbus
-> +	select BR2_PACKAGE_DBUS
->  	select BR2_PACKAGE_DBUS_GLIB
-> +	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
->  	help
->  	  ModemManager is a DBus-activated daemon which controls mobile
->  	  broadband (2G/3G/4G) devices and connections.
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 0e6b36a..36c8c0d 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -12,6 +12,10 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
->  MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
->  MODEM_MANAGER_INSTALL_STAGING = YES
->  
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +MODEM_MANAGER_DEPENDENCIES += libgudev
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
->  MODEM_MANAGER_DEPENDENCIES += libqmi
->  MODEM_MANAGER_CONF_OPTS += --with-qmi
-> 
