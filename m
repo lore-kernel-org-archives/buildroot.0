@@ -1,70 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Sep 2015 01:51:05 +0200
-Subject: [Buildroot] [PATCH] mtd: fix static build with uuid
-In-Reply-To: <ab22e25c132ca43eeb35c3a5f827b2f5deb23143.1441915691.git.baruch@tkos.co.il>
-References: <ab22e25c132ca43eeb35c3a5f827b2f5deb23143.1441915691.git.baruch@tkos.co.il>
-Message-ID: <55F21769.80303@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 11 Sep 2015 07:08:37 +0300
+Subject: [Buildroot] [PATCH v2] mtd: fix static build with uuid
+Message-ID: <2ee5281619493115a4a6bd865596d3d328087cd7.1441944517.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-09-15 22:08, Baruch Siach wrote:
-> The uuid library might depend on gettext. Use pkg-config to discover uuid
-> dependencies at build time, and edit Makefile accordingly to avoid missing
-> symbols when linking statically.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/2dd/2ddd714446d9eb75701bd48c117dc5bbbd291a76/
-> http://autobuild.buildroot.net/results/3af/3af4ef252c8cb2b22134d91ce48e5930c60ec437/
-> http://autobuild.buildroot.net/results/648/648341fce974e8f016eee57c95d7511a886eef49/
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/mtd/mtd.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-> index 0fb9fc2c1acc..c2cb9377d570 100644
-> --- a/package/mtd/mtd.mk
-> +++ b/package/mtd/mtd.mk
-> @@ -16,8 +16,14 @@ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
->  MTD_DEPENDENCIES = zlib lzo
->  endif
->  
-> +MTD_MKFSUBIFS_LIBS = $(shell $(PKG_CONFIG_HOST_BINARY) --libs uuid)
+The uuid library might depend on gettext. Use pkg-config to discover uuid
+dependencies at build time, and edit Makefile accordingly to avoid missing
+symbols when linking statically.
 
- I recently replaced all $(shell ...) instances with backticks. See
-http://git.buildroot.org/buildroot/commit/?id=7d69a79624b1f3 for an explanation why.
+Based on a patch from Vicente Olivert Riera.
 
-> +
->  ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
-> -MTD_DEPENDENCIES += util-linux zlib lzo
-> +MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
-> +define MTD_ADD_MISSING_LINTL
-> +	$(SED) '/^LDLIBS_mkfs\.ubifs/ s%$$% $(MTD_MKFSUBIFS_LIBS)%' $(@D)/Makefile
+Fixes:
+http://autobuild.buildroot.net/results/2dd/2ddd714446d9eb75701bd48c117dc5bbbd291a76/
+http://autobuild.buildroot.net/results/3af/3af4ef252c8cb2b22134d91ce48e5930c60ec437/
+http://autobuild.buildroot.net/results/648/648341fce974e8f016eee57c95d7511a886eef49/
 
- Of course that means you have to use " instead of ' here, else the backtick
-isn't expanded.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2:
+   * Use backticks instead of $(shell ...) make function (Arnout)
+---
+ package/mtd/mtd.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-
- Regards,
- Arnout
-
-> +endef
-> +MTD_POST_PATCH_HOOKS += MTD_ADD_MISSING_LINTL
->  endif
->  
->  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> 
-
-
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 0fb9fc2c1acc..89cfac15756a 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -16,8 +16,14 @@ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+ MTD_DEPENDENCIES = zlib lzo
+ endif
+ 
++MTD_MKFSUBIFS_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs uuid`
++
+ ifeq ($(BR2_PACKAGE_MTD_MKFSUBIFS),y)
+-MTD_DEPENDENCIES += util-linux zlib lzo
++MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
++define MTD_ADD_MISSING_LINTL
++	$(SED) "/^LDLIBS_mkfs\.ubifs/ s%$$% $(MTD_MKFSUBIFS_LIBS)%" $(@D)/Makefile
++endef
++MTD_POST_PATCH_HOOKS += MTD_ADD_MISSING_LINTL
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.1
