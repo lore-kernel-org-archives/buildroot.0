@@ -1,171 +1,69 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 11 Sep 2015 11:39:50 +0200
-Subject: [Buildroot] [PATCH v2 11/14] freescale_imx6*_defconfig: bump
-	version to 3.14.28-1.0.0_ga
+Date: Fri, 11 Sep 2015 11:39:49 +0200
+Subject: [Buildroot] [PATCH v2 10/14] gst1-imx: bump version to 0.11.1
 In-Reply-To: <1441964394-3817-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1441964394-3817-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1441964394-3817-12-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1441964394-3817-11-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+(0.11.1)
+- vpu: decoder: Keep track of unfinished gstvideo frames
+- blitter fixes and enhancements
+- ipu: All pages are now cleared when page flipping is used
+- compositor: Added support for cropping input streams
+- imxv4l2src fixes and enhancements
+(0.11.0)
+- new common codebase for rectangular regions and video canvases
+- new blitter-based video sink with full support for vsync to
+  eliminate tearing
+- complete rewrite of blitter base code
+- new compositor elements
+- vpu: decoder: Memory leaks fixed
+- vpu: encoder: Bitrate can now be set on the fly
+- eglvivsink: In Wayland, window x/y coordinates are now supported
+- several v4l2src fixes
+(0.10.2)
+- v4l2src: renamed imxv4l2src to imxv4l2videosrc to avoid name
+  collisions with the FSL plugins
+- v4l2src: Call the buffer pool baseclass stop() function (fixes
+  segfaults)
+- uniaudio: Create correct config header even if no codecs were found
+- audio: new MP3 encoder element using the libfslcodec MP3 encoder
+- g2d/ipu/pxp blitter sink: Respect aspect ratio also in 90/270 degree
+  rotations
+- pxp: Remove broken/unsupported formats
+- eglvivsink: Fix double mutex unlock
+- phys mem meta naming cleanup
+
+Tested with the following commands:
+ # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxeglvivsink
+
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Hi,
+ package/gstreamer1/gst1-imx/gst1-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This update has only been built, it'd be great if anyone could give
-it a try on the actual hardware.
-
-Regards,
-Gary
----
- configs/freescale_imx6dlsabreauto_defconfig | 8 ++++----
- configs/freescale_imx6dlsabresd_defconfig   | 8 ++++----
- configs/freescale_imx6qsabreauto_defconfig  | 8 ++++----
- configs/freescale_imx6qsabresd_defconfig    | 8 ++++----
- configs/freescale_imx6sololiteevk_defconfig | 4 ++--
- 5 files changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index 6a80712..0de8eea 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -7,8 +7,8 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
+diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
+index 9ba7550..8ede8ad 100644
+--- a/package/gstreamer1/gst1-imx/gst1-imx.mk
++++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # toolchain
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+-GST1_IMX_VERSION = 0.10.1
++GST1_IMX_VERSION = 0.11.1
+ GST1_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GST1_IMX_VERSION))
  
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index 0aac2de..3010d7d 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -7,8 +7,8 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
- 
- # toolchain
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-index f0d6a5e..70367a7 100644
---- a/configs/freescale_imx6qsabreauto_defconfig
-+++ b/configs/freescale_imx6qsabreauto_defconfig
-@@ -7,8 +7,8 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
- 
- # toolchain
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index a705534..3fad77a 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -7,8 +7,8 @@ BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
- 
- # toolchain
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index d4cca4e..5d98e9a 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -9,7 +9,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -24,4 +24,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
+ GST1_IMX_LICENSE = LGPLv2+
 -- 
 2.5.1
