@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Sep 2015 11:27:41 +0200
-Subject: [Buildroot] [PATCH] android-tools: add target and adbd support
-In-Reply-To: <1441963430-1326-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1441963430-1326-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20150911112741.1d9a97d7@free-electrons.com>
+Date: Fri, 11 Sep 2015 11:34:14 +0200
+Subject: [Buildroot] [RFC v2] support/misc: Adding Vagrant file for
+ provisioning
+In-Reply-To: <CAHsRNLj0ogoFvjapJoCix9=7Cv4yv53VeASYG70+_CF2wXrgLQ@mail.gmail.com>
+References: <1441919530-5421-1-git-send-email-angelo.compagnucci@gmail.com>
+ <CAHsRNLj0ogoFvjapJoCix9=7Cv4yv53VeASYG70+_CF2wXrgLQ@mail.gmail.com>
+Message-ID: <20150911113414.5826a5af@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary,
+Gabe, Angelo,
 
-On Fri, 11 Sep 2015 11:23:50 +0200, Gary Bisson wrote:
-> Required to switch from the Debian to the Ubuntu package as the former
-> doesn't offer adbd support. That change allows to get rid the
-> AndroidConfig.h as everything is defined in the Makefiles.
+On Thu, 10 Sep 2015 14:56:45 -0700, Gabe Evans wrote:
+
+> > +require 'open-uri'
+> > +open("http://git.buildroot.net/buildroot/plain/CHANGES") do |f|
+> > +  BUILDROOT_VERSION=f.read.lines.first.split(",")[0]
+> > +end
 > 
-> Regarding adbd, the target is required to have the FunctionFS USB Gadget
-> configuration. Then the following commands enable the use of adb:
->  # modprobe g_ffs idVendor=0x18d1 idProduct=0x4e42 \
->    iSerialNumber="buildroot"
->  # mkdir -p /dev/usb-ffs/adb
->  # mount -t functionfs adb /dev/usb-ffs/adb -o uid=2000,gid=2000
->  # adbd &
+> As it is now, CHANGES will be redownloaded every time a vagrant
+> command is issued. Can this be moved into $script so that it's only
+> executed once during provisioning? This bit could be written in shell
+> with something like:
 > 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+>     curl -s http://git.buildroot.net/buildroot/plain/CHANGES | head -1
+> | awk -F ',' '{print $1}'
+> 
+> Though, I'm not sure if there's a better way to determine the current
+> released Buildroot version.
 
-Thanks for working on this!
+Does it make sense for this provisioning script to randomly pick-up the
+latest Buildroot version? Angelo is selling this provisioning script as
+a way for several users to have an identical, reproducible, build
+environment. But if it randomly picks up the latest Buildroot version,
+it kind of defeats that purpose.
 
-> This is a first draft and I'll obviously need to respin once a v3 of
-> their patch will be delivered. I don't know if it would even be
-> better to squash both patches and have one android-tools patch only.
-
-I think you can squash both patches, and send a single patch
-implementing the entire package. Feel free to re-use my patch and put
-your authorship instead of mine, I don't care.
-
-> I was surprised not to see "select" in the Config.in.host for zlib
-> or openssl but only at dependencies in the .mk file. Is that on
-> purpose?
-
-Host packages don't have Config.in options, except for a few exceptions.
-
-Best regards,
+So shouldn't the Buildroot version simply be hardcoded in the script
+and/or passed as argument in some way?
 
 Thomas
 -- 
