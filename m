@@ -1,49 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Sep 2015 08:57:35 +0200
-Subject: [Buildroot] [PATCHv3 02/15] directfb: mark as available only
-	for gcc >= 4.5
-In-Reply-To: <8737ymh3eb.fsf@dell.be.48ers.dk>
-References: <1441144876-2628-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1441144876-2628-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <8737ymh3eb.fsf@dell.be.48ers.dk>
-Message-ID: <20150911085735.4ec436c3@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 11 Sep 2015 09:09:47 +0200
+Subject: [Buildroot] [PATCH v3] modem-manager: select libgudev,
+	if systemd is enabled
+Message-ID: <1441955387-6002-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu, 10 Sep 2015 14:20:28 +0200, Peter Korsgaard wrote:
+When eudev is used as the udev provider, libgudev is automatically
+provided as it is part of eudev. However, when systemd is used as
+the udev provider, libgudev is not provided, and needs to be built
+separately. This is why we select the libgudev package only if
+systemd is used.
 
-> Not directly related to this commit, but even though directfb is a
-> library I think it makes more sense to use 'depends on' (and default y)
-> for these options for "big libraries", as:
-> 
-> - People are likely to explicitly enable those libraroes if they want
->   them
-> 
-> - Gstreamer support size is insignificant compared to the library, and
->   people are likely to want E.G. directfb support in gstreamer if they
->   enable directfb and gstreamer, so the default y is nice
-> 
-> - We don't need to propagate the (often fairly complicated) library
->   dependencies to the users
-> 
-> This applies for E.G. wayland and Qt as well.
-> 
-> But that can (should) be handled outside this series.
+Fixes: http://autobuild.buildroot.net/results/d59/d597a81271a082c8252e2333906815c437b6576d/
 
-I agree. In fact for DirectFB there is already a mix of "select" and
-"depends on". But we can't blame anyone: it's not always very clear
-which one to use, so we have to clarify such things once a package
-starts to be used by a significant number of other packages.
+While at it, group the existing dbus select together with the dbus-glib
+select, so that all "select" statements are together.
 
-Best regards,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+	v3: reduce comments and put select/depends reodering again (Thomas Petazzoni)
+        v2: change patch name (Vicente Olivert Riera)
+            add fix description (Vicente Olivert Riera)
+            add explanations to Config.in and *.mk files (Vicente Olivert Riera)
 
-Thomas
+ package/modem-manager/Config.in        | 3 ++-
+ package/modem-manager/modem-manager.mk | 4 ++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+index 59b8d88..1cd502b 100644
+--- a/package/modem-manager/Config.in
++++ b/package/modem-manager/Config.in
+@@ -1,11 +1,12 @@
+ config BR2_PACKAGE_MODEM_MANAGER
+ 	bool "modemmanager"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_DBUS
+ 	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
++	select BR2_PACKAGE_LIBGUDEV if BR2_INIT_SYSTEMD
+ 	help
+ 	  ModemManager is a DBus-activated daemon which controls mobile
+ 	  broadband (2G/3G/4G) devices and connections.
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 0e6b36a..36c8c0d 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -12,6 +12,10 @@ MODEM_MANAGER_LICENSE_FILES = COPYING
+ MODEM_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib host-intltool
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++MODEM_MANAGER_DEPENDENCIES += libgudev
++endif
++
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBQMI),y)
+ MODEM_MANAGER_DEPENDENCIES += libqmi
+ MODEM_MANAGER_CONF_OPTS += --with-qmi
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
