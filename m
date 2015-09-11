@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Sep 2015 19:48:27 +0200
-Subject: [Buildroot] [PATCH] util-linux: show utilities alphabetically
- ordered
-In-Reply-To: <1441113650-51415-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441113650-51415-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150911194827.4edea02a@free-electrons.com>
+Date: Fri, 11 Sep 2015 19:48:49 +0200
+Subject: [Buildroot] [PATCH] git: bump version to 2.5.2
+In-Reply-To: <1441972670-16962-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441972670-16962-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150911194849.5114b73d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,12 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Tue, 1 Sep 2015 14:20:50 +0100, Vicente Olivert Riera wrote:
-> The list of util-linux utilities we can find on its Config.in file it
-> seems to be alphabetically ordered in purpose. However, there are some
-> of them which are in the wrong place. This patch fixes that.
-> 
+On Fri, 11 Sep 2015 12:57:50 +0100, Vicente Olivert Riera wrote:
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/util-linux/Config.in |   24 ++++++++++++------------
->  1 files changed, 12 insertions(+), 12 deletions(-)
+>  package/git/git.hash |    2 +-
+>  package/git/git.mk   |    2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
