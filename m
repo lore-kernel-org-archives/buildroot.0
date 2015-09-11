@@ -1,58 +1,67 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 11 Sep 2015 11:39:45 +0200
-Subject: [Buildroot] [PATCH v2 06/14] libfslcodec: bump version to 4.0.3
+Date: Fri, 11 Sep 2015 11:39:47 +0200
+Subject: [Buildroot] [PATCH v2 08/14] libfslvpuwrap: bump version to 1.0.58
 In-Reply-To: <1441964394-3817-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1441964394-3817-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1441964394-3817-7-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1441964394-3817-9-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update license file + add hash file.
+Change license file + add hash file.
+
+Changelog:
+- Update the license file with new version and use COPYING
+- Remove the folder /usr/share to avoid empty folder installation
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/93b4c8c
+https://github.com/Freescale/meta-fsl-arm/commit/1506776
 
-This package has been implicitely tested through gstreamer as the 0.10
-plugin relies on it:
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+This package has been implicitely tested through gstreamer as the
+plugins rely on it for vpu decoding:
+ # gst-launch-0.10 playbin
+ # uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/libfslcodec/libfslcodec.hash | 2 ++
- package/libfslcodec/libfslcodec.mk   | 4 ++--
+ package/libfslvpuwrap/libfslvpuwrap.hash | 2 ++
+ package/libfslvpuwrap/libfslvpuwrap.mk   | 4 ++--
  2 files changed, 4 insertions(+), 2 deletions(-)
- create mode 100644 package/libfslcodec/libfslcodec.hash
+ create mode 100644 package/libfslvpuwrap/libfslvpuwrap.hash
 
-diff --git a/package/libfslcodec/libfslcodec.hash b/package/libfslcodec/libfslcodec.hash
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.hash b/package/libfslvpuwrap/libfslvpuwrap.hash
 new file mode 100644
-index 0000000..6a41be1
+index 0000000..e7ca1a8
 --- /dev/null
-+++ b/package/libfslcodec/libfslcodec.hash
++++ b/package/libfslvpuwrap/libfslvpuwrap.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256	0d0ff933eed0a021763115b9c8ae812c6376a19bbd95e555d89ea7404f6c8f2f  libfslcodec-4.0.3.bin
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index 665588a..473d662 100644
---- a/package/libfslcodec/libfslcodec.mk
-+++ b/package/libfslcodec/libfslcodec.mk
-@@ -4,13 +4,13 @@
++sha256	a278eb18ec24230166ac39e2eadf7b934798f0432654c2e24c4cb69c3ac1cf0f  libfslvpuwrap-1.0.58.bin
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+index 625f586..7669c63 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--LIBFSLCODEC_VERSION = 4.0.2
-+LIBFSLCODEC_VERSION = 4.0.3
- LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
- LIBFSLCODEC_INSTALL_STAGING = YES
+-LIBFSLVPUWRAP_VERSION = 1.0.57
++LIBFSLVPUWRAP_VERSION = 1.0.58
+ LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
+ LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
+ LIBFSLVPUWRAP_INSTALL_STAGING = YES
  
- LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
--LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
-+LIBFSLCODEC_LICENSE_FILES = EULA COPYING
- LIBFSLCODEC_REDISTRIBUTE = NO
+ LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
+-LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
++LIBFSLVPUWRAP_LICENSE_FILES = EULA COPYING
+ LIBFSLVPUWRAP_REDISTRIBUTE = NO
  
- define LIBFSLCODEC_EXTRACT_CMDS
+ define LIBFSLVPUWRAP_EXTRACT_CMDS
 -- 
 2.5.1
