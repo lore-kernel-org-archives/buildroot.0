@@ -1,75 +1,52 @@
-From: Dinesh Guleria <din.gulu.er@gmail.com>
-Date: Sat, 12 Sep 2015 16:41:37 +0530
-Subject: [Buildroot] Right board to use -- buildroot begniers
-In-Reply-To: <CAKpDV8tdyO4fJ_=sbfF_sGoU2UzgBFCVSZdAup1QUU=C=VzjAQ@mail.gmail.com>
-References: <CAKpDV8sGQrmePsmbhrQo0YMGTLLTZb4Rsq90W3Y4nfMZTrcS+A@mail.gmail.com>
- <55EDE7A6.4060902@mind.be>
- <CAKpDV8udG2fRi8RWJbb=5nPNJ3SnYUE6dsPPmD11vnwUFzLL1A@mail.gmail.com>
- <55EE8B90.9060708@mind.be>
- <CAKpDV8uJiT88YYY2gxNohTmQoP2toaFpWFjDSGTSaG2kENaPCg@mail.gmail.com>
- <55EF09F7.6040401@lucaceresoli.net>
- <CAKpDV8tdyO4fJ_=sbfF_sGoU2UzgBFCVSZdAup1QUU=C=VzjAQ@mail.gmail.com>
-Message-ID: <CAKpDV8umsJpoW=M+bduE_7zeY_1V=NxWrnxcaqiYjxS-m51dDg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 12 Sep 2015 16:06:05 +0200
+Subject: [Buildroot] using buildroot to statically build uclibc
+In-Reply-To: <CAEjFr-Zk4HTs7NPYOtheUzGbHVtZmmAb5daRR_MrW4yS22daGA@mail.gmail.com>
+References: <CAEjFr-Zk4HTs7NPYOtheUzGbHVtZmmAb5daRR_MrW4yS22daGA@mail.gmail.com>
+Message-ID: <55F4314D.80606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please suggest will it be worth buying these accessories with following
-board :--
-http://www.element14.com/community/mobile/mobile-access.jspa#jive-content?content=%2Fapi%2Fcore%2Fv3%2Fcontents%2F625493
+On 11-09-15 11:50, Doha Ehab wrote:
+> Hello ,
+>  I am trying to statically build uclibc using buildroot to use it to cross
+> compile mpich . when I generate uclibc toolchain using make menuconfig the
+> executables in output/usr/host/bin are dynamically linked .
 
-This LCD supports 16/24 bit RGB TFT display. So will it be compatible with
-this board ?
+ output/usr/host/bin contains executables for the host. These are linked
+dynamically and have an rpath setting to make sure the correct libraries are
+found in output/usr/host/lib.
 
+ The executables on the target (output/target and output/images) should be
+statically linked.
 
-*WIFI_Dongle :--*
-http://www.element14.com/community/mobile/mobile-access.jspa#jive-content?content=%2Fcommunity%2Fapi%2Fcore%2Fv3%2Fcontents%3Ffilter%3DentityDescriptor(102%2C68464)
-*4.3 LCD MODULE AND ADAPTER BOARD :--*
-http://www.element14.com/community/mobile/mobile-access.jspa#jive-content?content=%2Fcommunity%2Fapi%2Fcore%2Fv3%2Fcontents%3Ffilter%3DentityDescriptor(102%2C68483)
-*Converter Cable - USB to 3-pin TTL UART :--*
-http://www.element14.com/community/mobile/mobile-access.jspa#jive-content?content=%2Fcommunity%2Fapi%2Fcore%2Fv3%2Fcontents%3Ffilter%3DentityDescriptor(102%2C76605)
+ There is no way in buildroot to link the host binaries statically.
 
-Regards,
-Dinesh
+ Regards,
+ Arnout
 
-On Tue, Sep 8, 2015 at 11:33 PM, Dinesh Guleria <din.gulu.er@gmail.com>
-wrote:
-
-> Thanks for the info.
->
+> do I have to build uclibc from output/build/toolchain folder in order to get the
+> statically linked executables .
+> I'm new to this if I'm missing something kindly direct me .
+> 
 > Regards,
-> Dinesh
-> On 8 Sep 2015 21:46, "Luca Ceresoli" <luca@lucaceresoli.net> wrote:
->
->> Dear Dinesh,
->>
->> Dinesh Guleria wrote:
->>
->>> So i will go for atmel_sama5d3_xplained .
->>>
->>> http://www.element14.com/community/docs/DOC-38394/l/evaluation-kit-for-at91sam9g45
->>>
->>>  >> I have no idea, but it is fully supported by Buildroot, both for
->>> booting from
->>> SD card and booting from flash.
->>>
->>> With seggers j- link can i flash uboot to the Nand flash of this board ?
->>>
->>
->> To flash the bootloader on the sama5d3_xplained board you don't need
->> any JTAG interface. You just need to remove the NAND CS jumper on the
->> board and connect on UART with the sam-ba tool.
->>
->> The labs from the Free Electrons training material have detailed
->> information on how to do that:
->> http://free-electrons.com/doc/training/embedded-linux/
->>
->> --
->> Luca
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150912/eb3e0727/attachment.html>
+> Doha
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
