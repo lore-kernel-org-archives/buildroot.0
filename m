@@ -1,121 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Sep 2015 08:30:16 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-09-11
-Message-ID: <20150912063017.0EBCC10190C@stock.ovh.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 12 Sep 2015 09:42:01 +0100
+Subject: [Buildroot] [PATCH] samba: bump to version 4.3.0
+In-Reply-To: <1442001713-9454-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1442001713-9454-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <55F3E559.6010805@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-09-11
-===============================
+Dear Gustavo Zacarias,
 
-        success : 213
-       failures : 62 
-       timeouts : 0  
-          TOTAL : 275
+On 11/09/15 21:01, Gustavo Zacarias wrote:
+> New patch status: sent upstream.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Classification of failures by reason
-====================================
+Tested using a toolchain without stack smashing protection.
 
-                host-gdb-7.9.1 | 13
-                directfb-1.7.7 | 5 
-libbroadvoice-f65b0f50c8c76... | 4 
-libyuv-1ebf86795cb213a37f06... | 4 
-                  mono-4.0.2.5 | 4 
-                     gdb-7.9.1 | 3 
-                   erlang-17.5 | 2 
-              strongswan-5.3.3 | 2 
-                 qt5base-5.5.0 | 2 
-                  boost-1.58.0 | 2 
-                busybox-1.23.2 | 2 
-            gst-ffmpeg-0.10.13 | 1 
-                  guile-2.0.11 | 1 
-                    vtun-3.0.3 | 1 
-                 sudo-1.8.14p3 | 1 
-                minidlna-1.1.4 | 1 
-                 mesa3d-10.6.7 | 1 
-               iptables-1.4.21 | 1 
-                    ruby-2.2.3 | 1 
-            ibrdtn-tools-1.0.1 | 1 
-                 setools-3.3.8 | 1 
-                   bdwgc-7.4.2 | 1 
-                oprofile-1.0.0 | 1 
-                    iostat-2.2 | 1 
-                 mplayer-1.1.1 | 1 
-               linknx-0.0.1.32 | 1 
-                   slang-2.3.0 | 1 
-             stress-ng-0.04.16 | 1 
-                   tinc-1.0.24 | 1 
-                   perl-5.22.0 | 1 
+Regards,
 
-Detail of failures
-===================
+Vincent.
 
-       sparc |                    bdwgc-7.4.2 | NOK | http://autobuild.buildroot.net/results/f9ad0f73cb12d5acc25b07b6a3246f3888e8942a/
-       sparc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/af40ac3fdb74f49ca8d5f60de6e146fc7e6db5f8/
-       sparc |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/6b181a899f87027c406d8b2efcc0e5904931725d/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/a738c6288d889790b0c8bb6b200a39fc5b562716/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/59ae0be994127e71eb17811a6e4b08261fe06fce/
-        i686 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/5f8699c78983b9e96f1853947faeec6ee1bb0889/
-      x86_64 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/5bf8a7f2522ae71f84d281cab604c255fe6f2f5c/
-         arm |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/f160f5c312a0b3437fd89f275ac4e7d0d358ed81/
-      x86_64 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/d2f58255d48037c0aa2757aa6a72cb07f6a0a44a/
-      x86_64 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/8c7901fffeafb3b475d6074f4d78caf153baac8c/
-       sparc |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/a3b5cdf2069d5558c5169be88f428f6c14d1868b/
-       sparc |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/88cedc2defbb88d242c5c58558efb16acd70db87/
-        i686 |                      gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/63f6324742e091d7a9edda0e6a425b44e6ebc499/
-      x86_64 |                      gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/236cdc0caea9ec22e640e11ffe56ce09f7f73338/
-    mips64el |                      gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/904746420097ce3b042b3d851fecfca2f5f13f2e/
-         sh4 |             gst-ffmpeg-0.10.13 | NOK | http://autobuild.buildroot.net/results/811dd9fc84811ed18c52f59de90dec5ec74aa42d/
-      x86_64 |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/1b4297a1d17d2064de2d09f617793d05f0ae685d/
-         arm |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/b52da99f4781dd06ff6679c0e8b2fce28a3357f6/
-         arm |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/5923711c2d906b6950ecff3f10ddf588605e5399/
-      x86_64 |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/d216ca06871554b0d5bf267317d82b8ba6b5654c/
-      xtensa |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/1993d3769d88945ba4b8f88eeee747c2dc9d4a22/
-        bfin |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/affe11cf709b12729bd7475a9690163af9404f8f/
-    mips64el |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/968cb98302c01fd206db65dfb412073b1ee017bc/
-        bfin |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/886c25bca760bde3548c7784a640a1377c9a582c/
-     powerpc |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/4c9d1aaf305593d2f5ae23fc0cfe8249ccbf09d2/
-    mips64el |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/52798d9d3900f34fc4b1d40dd71f5211dbf14561/
-         arm |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/be52961fd66047c0d3a4da1bfd8bbc517e9502b1/
-         arm |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/ad69b3dbfdedf7fc5cd01a1ade1d4a088454de60/
-    mips64el |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/777a9c321a3367ea097786c25ed98e131433859f/
-     powerpc |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/76b8d4172b930eba5478ba396b56aa1cffbb4cbf/
-         arm |             ibrdtn-tools-1.0.1 | NOK | http://autobuild.buildroot.net/results/d36ccc1c00e769408b40707a6adf9ced63435535/
-      x86_64 |                     iostat-2.2 | NOK | http://autobuild.buildroot.net/results/815c2ca39d143a8c9f1a1d6f7a47b60316ae7d80/
-         arm |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/82fda6145ad39443bbce0610b5305a9c9121931c/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/3fb0acdfeca1f8b917515027bd28dbbe8558e2e3/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/0b6eae850bc69107814cd2afc273a03d30b21f5b/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/c4b3861906e30dec849baaec370cd598fe4371ac/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/673fc02df0aefc2025973a6315877edff49d2c3c/
-     aarch64 | libyuv-1ebf86795cb213a37f06... | NOK | http://autobuild.buildroot.net/results/1a573e07898bfb8929d7b28ffc551a968833f176/
-     aarch64 | libyuv-1ebf86795cb213a37f06... | NOK | http://autobuild.buildroot.net/results/6a1a9add6e173791ce137f9f0b2be86d13eac631/
-     aarch64 | libyuv-1ebf86795cb213a37f06... | NOK | http://autobuild.buildroot.net/results/7363b388be5df9424f70d89d6528c40106a460f4/
-     aarch64 | libyuv-1ebf86795cb213a37f06... | NOK | http://autobuild.buildroot.net/results/6a19d99fbcd2fc3f64e5977b17798208490371df/
-      xtensa |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/ff64799cdcbc2d35d4016b4e11933baa15dd9e06/
-     aarch64 |                  mesa3d-10.6.7 | NOK | http://autobuild.buildroot.net/results/43a4892e008653c4459399301a2ec42d292c2050/
-         arm |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/9824688c1b44acfeb953cd76229e62ee652362bc/
-         arm |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/2db8b345caf403578ded8dd36ad6f9aa3b317262/
-     powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/77b6cecbd5923c7a12c91155be2c30aea657cf19/
-     powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/0c216ae0847e5b67ab304f4cae4bcbacbb0f0ac6/
-     powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/77a091e0ccb931fec8c9940b159cd62dce2528fc/
-      xtensa |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/9a0c03ab3ee5a9dd1adbb30619204afdafbe18c2/
-         arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/fe0451af90ca22e640f735a29cdc39c69e208514/
-     powerpc |                    perl-5.22.0 | NOK | http://autobuild.buildroot.net/results/c2a6e7f8b0e41277028eb100eb27eadeb66994f5/
-    mips64el |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/697867a1faa1855d296a999e128d1698824ec265/
-    mips64el |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/7d7486b5f34087bb26bf9f57ac76fef9eaf1f08a/
-         arm |                     ruby-2.2.3 | NOK | http://autobuild.buildroot.net/results/8fe8787f2212cd8b648d863a26a0718ed3fcbad7/
-        i686 |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/a91a8e56129088ac5c6536aca02e3ba87fac9c3e/
-         arm |                    slang-2.3.0 | NOK | http://autobuild.buildroot.net/results/f92849715f04476c14050ac741d740f8493a29c8/
-         arm |              stress-ng-0.04.16 | NOK | http://autobuild.buildroot.net/results/ec18a1a5b65436f8e0a3106ec880a18c9fb3b4a3/
-     powerpc |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/6c6172065736441cf6267c8a64914e34859cf3cf/
-    mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/c537ea79f43498de4940599daacee70362219a83/
-     powerpc |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/1c28ab72b7a242c08c45d203a0f426d6206a80f2/
-         arm |                    tinc-1.0.24 | NOK | http://autobuild.buildroot.net/results/e8dbdc4ec6d43db76c3fedd002b1b7df79319934/
-         arm |                     vtun-3.0.3 | NOK | http://autobuild.buildroot.net/results/ab01f8e0467e85322c63b81bb7e84fd251e5d556/
-
-
--- 
-http://autobuild.buildroot.net
+> ---
+>   .../0002-build-improve-stack-protector-check.patch | 56 ++++++++++++++++++++++
+>   package/samba4/samba4.hash                         |  2 +-
+>   package/samba4/samba4.mk                           |  4 +-
+>   3 files changed, 59 insertions(+), 3 deletions(-)
+>   create mode 100644 package/samba4/0002-build-improve-stack-protector-check.patch
+>
+> diff --git a/package/samba4/0002-build-improve-stack-protector-check.patch b/package/samba4/0002-build-improve-stack-protector-check.patch
+> new file mode 100644
+> index 0000000..51ffc04
+> --- /dev/null
+> +++ b/package/samba4/0002-build-improve-stack-protector-check.patch
+> @@ -0,0 +1,56 @@
+> +From e4ef92852023f4e2f192d3c47220dc75930a615c Mon Sep 17 00:00:00 2001
+> +From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +Date: Fri, 11 Sep 2015 16:41:31 -0300
+> +Subject: [PATCH] build: improve stack protector check
+> +
+> +Testing a toolchain for proper -fstack-protector must go beyond ensuring
+> +the compiler and linker accept the option.
+> +If the test C program does nothing with the stack then guards aren't
+> +inserted and/or are optimized away giving the false impression that it
+> +works when in fact the libc might not support it.
+> +
+> +Update the check to a program that uses the stack, hence making a link
+> +fail if proper support isn't available, for example in non-ssp enabled
+> +uclibc toolchains like this:
+> +
+> +test.c:(.text.startup+0x64): undefined reference to `__stack_chk_fail'
+> +
+> +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +---
+> + buildtools/wafsamba/samba_autoconf.py | 20 +++++++++++++++++---
+> + 1 file changed, 17 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/buildtools/wafsamba/samba_autoconf.py b/buildtools/wafsamba/samba_autoconf.py
+> +index c5f132c..ef34b00 100644
+> +--- a/buildtools/wafsamba/samba_autoconf.py
+> ++++ b/buildtools/wafsamba/samba_autoconf.py
+> +@@ -657,9 +657,23 @@ def SAMBA_CONFIG_H(conf, path=None):
+> +     if not IN_LAUNCH_DIR(conf):
+> +         return
+> +
+> +-    if conf.CHECK_CFLAGS(['-fstack-protector']) and conf.CHECK_LDFLAGS(['-fstack-protector']):
+> +-        conf.ADD_CFLAGS('-fstack-protector')
+> +-        conf.ADD_LDFLAGS('-fstack-protector')
+> ++    # we need to build real code that can't be optimized away to test
+> ++    if conf.check(fragment='''
+> ++        #include <stdio.h>
+> ++
+> ++        int main(void)
+> ++        {
+> ++            char t[100000];
+> ++            while (fgets(t, sizeof(t), stdin));
+> ++            return 0;
+> ++        }
+> ++        ''',
+> ++        execute=0,
+> ++        ccflags='-fstack-protector',
+> ++        ldflags='-fstack-protector',
+> ++        msg='Checking if toolchain accepts -fstack-protector'):
+> ++            conf.ADD_CFLAGS('-fstack-protector')
+> ++            conf.ADD_LDFLAGS('-fstack-protector')
+> +
+> +     if Options.options.debug:
+> +         conf.ADD_CFLAGS('-g', testflags=True)
+> +--
+> +2.4.6
+> +
+> diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+> index e2b3969..d242f94 100644
+> --- a/package/samba4/samba4.hash
+> +++ b/package/samba4/samba4.hash
+> @@ -1,2 +1,2 @@
+>   # Locally calculated after checking pgp signature
+> -sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
+> +sha256	d8dbb6b29dec1d9aa295655c4aa4eadd1e5367ef7047be22f4d6a18ba8acdb63	samba-4.3.0.tar.gz
+> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+> index c88cc9f..6f3fb58 100644
+> --- a/package/samba4/samba4.mk
+> +++ b/package/samba4/samba4.mk
+> @@ -4,8 +4,8 @@
+>   #
+>   ################################################################################
+>
+> -SAMBA4_VERSION = 4.2.3
+> -SAMBA4_SITE = http://ftp.samba.org/pub/samba
+> +SAMBA4_VERSION = 4.3.0
+> +SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+>   SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+>   SAMBA4_INSTALL_STAGING = YES
+>   SAMBA4_LICENSE = GPLv3+
+>
