@@ -1,96 +1,75 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 12 Sep 2015 12:26:33 +0200
-Subject: [Buildroot] [PATCH 1/1] stress-ng: Depend on kernel headers >=
- 3.3
-In-Reply-To: <20150911195928.51c339dc@free-electrons.com>
-References: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
- <20150911195928.51c339dc@free-electrons.com>
-Message-ID: <55F3FDD9.1030709@openwide.fr>
+Date: Sat, 12 Sep 2015 12:38:57 +0200
+Subject: [Buildroot] [PACH v2 11/38] package/efl: regenerate the
+	configure script
+In-Reply-To: <1441747212-27421-12-git-send-email-romain.naour@openwide.fr>
+References: <1441747212-27421-1-git-send-email-romain.naour@openwide.fr>
+ <1441747212-27421-12-git-send-email-romain.naour@openwide.fr>
+Message-ID: <55F400C1.9070505@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-Le 11/09/2015 19:59, Thomas Petazzoni a ?crit :
-> Julien,
+Le 08/09/2015 23:19, Romain Naour a ?crit :
+> Workaround a build issue with eldbus-codegen:
 > 
-> On Fri, 11 Sep 2015 18:19:11 +0200, Julien Corjon wrote:
->> perf.c need PERF_COUNT_HW_REF_CPU_CYCLES instruction which is available
->> only since 3.3 kernel version
->>
->> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
->> ---
->>  package/stress-ng/Config.in | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
->> index cdf9984..1e475b1 100644
->> --- a/package/stress-ng/Config.in
->> +++ b/package/stress-ng/Config.in
->> @@ -4,8 +4,8 @@ config BR2_PACKAGE_STRESS_NG
->>  	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
->>  	# disabled on uClibc: stress-aio.c needs aio.h
->>  	depends on BR2_TOOLCHAIN_USES_GLIBC
->> -	# perf.c needs PERF_COUNT_HW_STALLED_CYCLES_FRONTEND
->> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
->> +	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
->> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+>   CCLD     bin/eldbus/eldbus-codegen
+>   CXXLD    bin/eolian_cxx/eolian_cxx
+>   CCLD     lib/ecore_x/ecore_x_vsync
+>   CCLD     lib/evas/common/libevas_op_blend_sse3.la
+>   CCLD     lib/evas/common/libevas_convert_rgb_32.la
+>   CCLD     lib/ecore_ipc/libecore_ipc.la
+> [...]/i686-ctng-linux-gnu/bin/ld: warning: libefl.so.1, needed by lib/ecore/.libs/libecore.so, not found (try using -rpath or -rpath-link)
+> lib/ecore/.libs/libecore.so: undefined reference to `efl_control_suspend_set'
+> lib/ecore/.libs/libecore.so: undefined reference to `efl_control_interface_get'
+> collect2: error: ld returned 1 exit status
+> Makefile:19135: recipe for target 'bin/eldbus/eldbus-codegen' failed
+> make[6]: *** [bin/eldbus/eldbus-codegen] Error 1
 > 
-> This seems wrong, because stress-ng.h has the definitions for all the
-> PERF_COUNT_* values:
+> A dependency on libefl seems to be missing for eldbus but by
+> regenerating eldbus-codegen build correctly.
 > 
-> #if defined(__linux__) && defined(__NR_perf_event_open)
-> #define STRESS_PERF_STATS       (1)
-> #define STRESS_PERF_INVALID     (~0ULL)
-> enum {
->         STRESS_PERF_HW_CPU_CYCLES = 0,
->         STRESS_PERF_HW_INSTRUCTIONS,
->         STRESS_PERF_HW_CACHE_REFERENCES,
->         STRESS_PERF_HW_CACHE_MISSES,
->         STRESS_PERF_HW_BRANCH_INSTRUCTIONS,
->         STRESS_PERF_HW_BRANCH_MISSES,
->         STRESS_PERF_HW_BUS_CYCLES,
->         STRESS_PERF_HW_REF_CPU_CYCLES,
->         STRESS_PERF_HW_STALLED_CYCLES_FRONTEND,
->         STRESS_PERF_HW_STALLED_CYCLES_BACKEND,
+> Reported upstream: https://phab.enlightenment.org/T2718
 > 
->         STRESS_PERF_SW_PAGE_FAULTS_MIN,
->         STRESS_PERF_SW_PAGE_FAULTS_MAJ,
->         STRESS_PERF_SW_CONTEXT_SWITCHES,
->         STRESS_PERF_SW_CPU_MIGRATIONS,
->         STRESS_PERF_SW_ALIGNMENT_FAULTS,
+> Also, gettextsize is needed since *.po files were generated with
+
+s/gettextsize/gettextize/
+
+> an "old" gettext version (0.18):
 > 
-> Can you figure out why it doesn't get used?
+> Making all in po
+> *** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version 0.18 but the autoconf macros are from gettext version 0.19
+> Makefile:149: recipe for target 'check-macro-version' failed
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  package/efl/efl.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+> index 781fa4a..3061d2e 100644
+> --- a/package/efl/efl.mk
+> +++ b/package/efl/efl.mk
+> @@ -14,6 +14,11 @@ EFL_INSTALL_STAGING = YES
+>  
+>  EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg lua udev zlib
+>  
+> +# regenerate the configure script:
+> +# https://phab.enlightenment.org/T2718
+> +EFL_AUTORECONF = YES
+> +EFL_GETTEXTSIZE = YES
 
-Here is the complete build failure with a toolchain using 3.2 kernel headers:
-[...]i586-buildroot-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Os -Wall -Wextra -DVERSION="0.04.16" -O2 -c -o perf.o perf.c
-perf.c:77:48: erreur: ?PERF_COUNT_HW_REF_CPU_CYCLES? undeclared here (not in a
-function)
-{ STRESS_PERF_ ## config, PERF_TYPE_ ## type, PERF_COUNT_ ## config, label }
-^
-perf.c:110:2: note: in expansion of macro ?PERF_INFO?
-PERF_INFO(HARDWARE, HW_REF_CPU_CYCLES, "Total Cycles"),
-^
-Makefile:164: recipe for target 'perf.o' failed
+s/EFL_GETTEXTSIZE/EFL_GETTEXTIZE/
 
-This error is due to PERF_INFO macro from perf.c using PERF_COUNT_* values directly.
+Sorry for the typos, will fix it.
 
-During my testing, I used an very old toolchain with 2.6 headers so I had an
-error with PERF_COUNT_HW_STALLED_CYCLES_FRONTEND and I missed
-PERF_COUNT_HW_REF_CPU_CYCLES.
-
-I'm agree with the patch proposed by Julien, so
-Acked-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
 Romain
-
-> 
-> Thanks,
-> 
-> Thomas
+> +
+>  # Configure options:
+>  # --disable-cxx-bindings: disable C++11 bindings.
+>  # --enable-lua-old: disable Elua and remove luajit dependency.
 > 
