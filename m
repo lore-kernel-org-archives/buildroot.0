@@ -1,44 +1,147 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 12 Sep 2015 10:34:02 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-09-11
-In-Reply-To: <20150912063017.0EBCC10190C@stock.ovh.net>
-References: <20150912063017.0EBCC10190C@stock.ovh.net>
-Message-ID: <55F3F18A.6080606@imgtec.com>
+Date: Sat, 12 Sep 2015 10:44:50 +0100
+Subject: [Buildroot] [PATCH 1/4] package/cups: Un-deprecate,
+ and update CUPS to 2.1.0
+In-Reply-To: <1441965911-22138-2-git-send-email-olivier.schonken@gmail.com>
+References: <1441965911-22138-1-git-send-email-olivier.schonken@gmail.com>
+ <1441965911-22138-2-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <55F3F412.90907@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Olivier Schonken,
 
-On 12/09/15 07:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-09-11
+please mark your old series as superseded in Patchwork:
 
->      mips64el |                      gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/904746420097ce3b042b3d851fecfca2f5f13f2e/
->      mips64el |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/968cb98302c01fd206db65dfb412073b1ee017bc/
->      mips64el |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/52798d9d3900f34fc4b1d40dd71f5211dbf14561/
->      mips64el |                 host-gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/777a9c321a3367ea097786c25ed98e131433859f/
+http://patchwork.ozlabs.org/patch/459154/
+http://patchwork.ozlabs.org/patch/459155/
+http://patchwork.ozlabs.org/patch/459156/
+http://patchwork.ozlabs.org/patch/459157/
 
-Already fixed by:
+More comments below. Please keep reading.
 
- 
-http://git.buildroot.net/buildroot/commit/?id=3aecfbd03dd2a8d49c97f1e68df42b077dbbd396
+On 09/11/2015 11:05 AM, Olivier Schonken wrote:
 
->      mips64el |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/697867a1faa1855d296a999e128d1698824ec265/
->      mips64el |                  qt5base-5.5.0 | NOK | http://autobuild.buildroot.net/results/7d7486b5f34087bb26bf9f57ac76fef9eaf1f08a/
+[snip]
 
-Patch to fix it:
+> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+> index c028ef4..0056462 100644
+> --- a/package/cups/cups.mk
+> +++ b/package/cups/cups.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -CUPS_VERSION = 1.3.11
+> +CUPS_VERSION = 2.1.0
+>  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
+>  CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
+>  CUPS_LICENSE = GPLv2 LGPLv2
 
-   https://patchwork.ozlabs.org/patch/507916/
+For me it fails to build statically for MIPS architecture because it's
+using -fPIE and -pie. I would suggest you to add the following changes
+to your patch in order to fix this:
 
->      mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/c537ea79f43498de4940599daacee70362219a83/
 
-Patch to fix it:
+@@ -12,6 +12,15 @@ CUPS_LICENSE_FILES = LICENSE.txt
+  CUPS_INSTALL_STAGING = YES
+  CUPS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
+DSTROOT=$(STAGING_DIR) install
+  CUPS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR)
+install
++
++# Don't use -fPIE and -pie for static builds
++ifeq ($(BR2_STATIC_LIBS),y)
++define CUPS_REMOVE_PIEFLAGS
++       $(SED) s/@PIEFLAGS@// $(@D)/Makedefs.in
++endef
++CUPS_PRE_CONFIGURE_HOOKS += CUPS_REMOVE_PIEFLAGS
++endif
++
+  CUPS_CONF_OPTS = \
+         --without-perl \
+         --without-java \
 
-   https://patchwork.ozlabs.org/patch/516660/
+
+Sorry for sending this email again, but the previous one was taken as a 
+new patch. I want my comments to be seen on Patchwork as a reply to your 
+patch.
 
 Regards,
 
 Vincent.
+
+> @@ -16,16 +16,14 @@ CUPS_CONF_OPTS = \
+>  	--without-perl \
+>  	--without-java \
+>  	--without-php \
+> -	--disable-gnutls \
+>  	--disable-gssapi \
+>  	--libdir=/usr/lib
+>  CUPS_CONFIG_SCRIPTS = cups-config
+>
+> -CUPS_DEPENDENCIES = \
+> -	$(if $(BR2_PACKAGE_ZLIB),zlib) \
+> -	$(if $(BR2_PACKAGE_LIBPNG),libpng) \
+> -	$(if $(BR2_PACKAGE_JPEG),jpeg) \
+> -	$(if $(BR2_PACKAGE_TIFF),tiff)
+> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> +CUPS_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
+> +CUPS_DEPENDENCIES += systemd
+> +endif
+>
+>  ifeq ($(BR2_PACKAGE_DBUS),y)
+>  CUPS_CONF_OPTS += --enable-dbus
+> @@ -34,8 +32,11 @@ else
+>  CUPS_CONF_OPTS += --disable-dbus
+>  endif
+>
+> -ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+> -CUPS_DEPENDENCIES += xlib_libX11
+> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> +CUPS_CONF_OPTS += --enable-gnutls
+> +CUPS_DEPENDENCIES += gnutls
+> +else
+> +CUPS_CONF_OPTS += --disable-gnutls
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_PYTHON),y)
+> @@ -45,18 +46,25 @@ else
+>  CUPS_CONF_OPTS += --without-python
+>  endif
+>
+> -ifeq ($(BR2_PACKAGE_CUPS_PDFTOPS),y)
+> -CUPS_CONF_OPTS += --enable-pdftops
+> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
+> +CUPS_CONF_OPTS += --enable-libusb
+> +CUPS_DEPENDENCIES += libusb
+>  else
+> -CUPS_CONF_OPTS += --disable-pdftops
+> +CUPS_CONF_OPTS += --disable-libusb
+>  endif
+>
+> -# standard autoreconf fails with autoheader failures
+> -define CUPS_FIXUP_AUTOCONF
+> -	cd $(@D) && $(AUTOCONF)
+> -endef
+> -CUPS_DEPENDENCIES += host-autoconf
+> +ifeq ($(BR2_PACKAGE_LIBPAPER),y)
+> +CUPS_CONF_OPTS += --enable-libpaper
+> +CUPS_DEPENDENCIES += libpaper
+> +else
+> +CUPS_CONF_OPTS += --disable-libpaper
+> +endif
+>
+> -CUPS_PRE_CONFIGURE_HOOKS += CUPS_FIXUP_AUTOCONF
+> +ifeq ($(BR2_PACKAGE_CUPS_AVAHI),y)
+> +CUPS_DEPENDENCIES += avahi
+> +CUPS_CONF_OPTS += --enable-avahi
+> +else
+> +CUPS_CONF_OPTS += --disable-avahi
+> +endif
+>
+>  $(eval $(autotools-package))
+>
