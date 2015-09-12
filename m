@@ -1,147 +1,115 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 12 Sep 2015 10:44:50 +0100
-Subject: [Buildroot] [PATCH 1/4] package/cups: Un-deprecate,
- and update CUPS to 2.1.0
-In-Reply-To: <1441965911-22138-2-git-send-email-olivier.schonken@gmail.com>
-References: <1441965911-22138-1-git-send-email-olivier.schonken@gmail.com>
- <1441965911-22138-2-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <55F3F412.90907@imgtec.com>
+Date: Sat, 12 Sep 2015 10:50:40 +0100
+Subject: [Buildroot] [PATCH 1/3] liburcu: Add support for aarch64 and
+ bump version to 0.8.7
+In-Reply-To: <1442009293-4289-1-git-send-email-benjamin.h.shelton@intel.com>
+References: <1442009293-4289-1-git-send-email-benjamin.h.shelton@intel.com>
+Message-ID: <55F3F570.8010903@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Olivier Schonken,
+Dear Ben Shelton,
 
-please mark your old series as superseded in Patchwork:
-
-http://patchwork.ozlabs.org/patch/459154/
-http://patchwork.ozlabs.org/patch/459155/
-http://patchwork.ozlabs.org/patch/459156/
-http://patchwork.ozlabs.org/patch/459157/
-
-More comments below. Please keep reading.
-
-On 09/11/2015 11:05 AM, Olivier Schonken wrote:
-
-[snip]
-
-> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-> index c028ef4..0056462 100644
-> --- a/package/cups/cups.mk
-> +++ b/package/cups/cups.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -CUPS_VERSION = 1.3.11
-> +CUPS_VERSION = 2.1.0
->  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.bz2
->  CUPS_SITE = http://www.cups.org/software/$(CUPS_VERSION)
->  CUPS_LICENSE = GPLv2 LGPLv2
-
-For me it fails to build statically for MIPS architecture because it's
-using -fPIE and -pie. I would suggest you to add the following changes
-to your patch in order to fix this:
-
-
-@@ -12,6 +12,15 @@ CUPS_LICENSE_FILES = LICENSE.txt
-  CUPS_INSTALL_STAGING = YES
-  CUPS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
-DSTROOT=$(STAGING_DIR) install
-  CUPS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR)
-install
-+
-+# Don't use -fPIE and -pie for static builds
-+ifeq ($(BR2_STATIC_LIBS),y)
-+define CUPS_REMOVE_PIEFLAGS
-+       $(SED) s/@PIEFLAGS@// $(@D)/Makedefs.in
-+endef
-+CUPS_PRE_CONFIGURE_HOOKS += CUPS_REMOVE_PIEFLAGS
-+endif
-+
-  CUPS_CONF_OPTS = \
-         --without-perl \
-         --without-java \
-
-
-Sorry for sending this email again, but the previous one was taken as a 
-new patch. I want my comments to be seen on Patchwork as a reply to your 
-patch.
+I think "bumping the version" and "adding support for a new 
+architecture" should be separate patches.
 
 Regards,
 
 Vincent.
 
-> @@ -16,16 +16,14 @@ CUPS_CONF_OPTS = \
->  	--without-perl \
->  	--without-java \
->  	--without-php \
-> -	--disable-gnutls \
->  	--disable-gssapi \
->  	--libdir=/usr/lib
->  CUPS_CONFIG_SCRIPTS = cups-config
+On 11/09/15 23:08, Ben Shelton wrote:
+> Bring over a patch from OpenEmbedded to treat aarch64 like arm in the build
+> process, which allows the build to succeed.
 >
-> -CUPS_DEPENDENCIES = \
-> -	$(if $(BR2_PACKAGE_ZLIB),zlib) \
-> -	$(if $(BR2_PACKAGE_LIBPNG),libpng) \
-> -	$(if $(BR2_PACKAGE_JPEG),jpeg) \
-> -	$(if $(BR2_PACKAGE_TIFF),tiff)
-> +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-> +CUPS_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
-> +CUPS_DEPENDENCIES += systemd
-> +endif
+> Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
+> ---
+>   package/liburcu/0002-support-aarch64.patch | 21 +++++++++++++++++++++
+>   package/liburcu/Config.in                  |  4 ++--
+>   package/liburcu/liburcu.hash               |  6 +++---
+>   package/liburcu/liburcu.mk                 |  3 ++-
+>   4 files changed, 28 insertions(+), 6 deletions(-)
+>   create mode 100644 package/liburcu/0002-support-aarch64.patch
 >
->  ifeq ($(BR2_PACKAGE_DBUS),y)
->  CUPS_CONF_OPTS += --enable-dbus
-> @@ -34,8 +32,11 @@ else
->  CUPS_CONF_OPTS += --disable-dbus
->  endif
+> diff --git a/package/liburcu/0002-support-aarch64.patch b/package/liburcu/0002-support-aarch64.patch
+> new file mode 100644
+> index 0000000..6830e25
+> --- /dev/null
+> +++ b/package/liburcu/0002-support-aarch64.patch
+> @@ -0,0 +1,21 @@
+> +libucru: recognize aarch64
+> +
+> +Make the same as "arm" internally.
+> +
+> +Upstream-Status: Pending
+> +
+> +Signed-off-by: joe.slater at windriver.com
+> +[moved to buildroot from openembedded-core]
+> +Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
+> +
+> +
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
+> + 	[alpha*], [ARCHTYPE="alpha"],
+> + 	[ia64], [ARCHTYPE="gcc"],
+> + 	[arm*], [ARCHTYPE="arm"],
+> ++	[aarch64], [ARCHTYPE="arm"],
+> + 	[mips*], [ARCHTYPE="mips"],
+> + 	[tile*], [ARCHTYPE="gcc"],
+> + 	[ARCHTYPE="unknown"]
+> diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+> index e7cbe93..a4e8dc8 100644
+> --- a/package/liburcu/Config.in
+> +++ b/package/liburcu/Config.in
+> @@ -1,6 +1,6 @@
+>   config BR2_PACKAGE_LIBURCU
+>   	bool "liburcu"
+> -	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+>   	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS
+>   	help
+> @@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBURCU
+>   	  http://lttng.org/urcu
 >
-> -ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-> -CUPS_DEPENDENCIES += xlib_libX11
-> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> +CUPS_CONF_OPTS += --enable-gnutls
-> +CUPS_DEPENDENCIES += gnutls
-> +else
-> +CUPS_CONF_OPTS += --disable-gnutls
->  endif
+>   comment "liburcu needs a toolchain w/ threads"
+> -	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+>   	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+>   	depends on !BR2_TOOLCHAIN_HAS_THREADS
 >
->  ifeq ($(BR2_PACKAGE_PYTHON),y)
-> @@ -45,18 +46,25 @@ else
->  CUPS_CONF_OPTS += --without-python
->  endif
+> diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+> index 2b1693d..64ba901 100644
+> --- a/package/liburcu/liburcu.hash
+> +++ b/package/liburcu/liburcu.hash
+> @@ -1,4 +1,4 @@
+> -# http://www.lttng.org/files/urcu/userspace-rcu-0.8.6.tar.bz2.sha1
+> -sha1  f10e9bf812557cd0c2a35a277e04010ec278d25d  userspace-rcu-0.8.6.tar.bz2
+> +# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
+> +sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
+>   # Locally generated
+> -sha256 b1a5d3bce014ba7a702759bc60b692c1cd46ff0e8a5b53f0d0a95e22db74ab21 userspace-rcu-0.8.6.tar.bz2
+> +sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
+> diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+> index 1582d07..c886a1c 100644
+> --- a/package/liburcu/liburcu.mk
+> +++ b/package/liburcu/liburcu.mk
+> @@ -4,12 +4,13 @@
+>   #
+>   ################################################################################
 >
-> -ifeq ($(BR2_PACKAGE_CUPS_PDFTOPS),y)
-> -CUPS_CONF_OPTS += --enable-pdftops
-> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
-> +CUPS_CONF_OPTS += --enable-libusb
-> +CUPS_DEPENDENCIES += libusb
->  else
-> -CUPS_CONF_OPTS += --disable-pdftops
-> +CUPS_CONF_OPTS += --disable-libusb
->  endif
+> -LIBURCU_VERSION = 0.8.6
+> +LIBURCU_VERSION = 0.8.7
+>   LIBURCU_SITE = http://lttng.org/files/urcu
+>   LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+>   LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
+>   LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
 >
-> -# standard autoreconf fails with autoheader failures
-> -define CUPS_FIXUP_AUTOCONF
-> -	cd $(@D) && $(AUTOCONF)
-> -endef
-> -CUPS_DEPENDENCIES += host-autoconf
-> +ifeq ($(BR2_PACKAGE_LIBPAPER),y)
-> +CUPS_CONF_OPTS += --enable-libpaper
-> +CUPS_DEPENDENCIES += libpaper
-> +else
-> +CUPS_CONF_OPTS += --disable-libpaper
-> +endif
+> +LIBURCU_AUTORECONF = YES
+>   LIBURCU_INSTALL_STAGING = YES
 >
-> -CUPS_PRE_CONFIGURE_HOOKS += CUPS_FIXUP_AUTOCONF
-> +ifeq ($(BR2_PACKAGE_CUPS_AVAHI),y)
-> +CUPS_DEPENDENCIES += avahi
-> +CUPS_CONF_OPTS += --enable-avahi
-> +else
-> +CUPS_CONF_OPTS += --disable-avahi
-> +endif
->
->  $(eval $(autotools-package))
+>   $(eval $(autotools-package))
 >
