@@ -1,39 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 13 Sep 2015 09:18:19 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.3.18
-Message-ID: <1442146699-10721-1-git-send-email-gustavo@zacarias.com.ar>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 13 Sep 2015 14:56:28 +0200
+Subject: [Buildroot] [V2] perl: fix static build
+Message-ID: <1442148988-8900-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+see http://autobuild.buildroot.net/results/502/502e6a6280451acc48e5f500e774b2bd04c7229e/
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 4496a2b..088059b 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b40f158030a92f450a07b20300a3996710ca19800848d9f6fd62493170c5bbb4	gnutls-3.3.17.1.tar.xz
-+sha256	7a87e7f486d1ada10007356917a412cde6c6114dac018e3569e3aa09e9f29395	gnutls-3.3.18.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 82d9d29..9fbdb49 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17.1
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/0001-fix-EUMM.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/perl/0001-fix-EUMM.patch
+
+diff --git a/package/perl/0001-fix-EUMM.patch b/package/perl/0001-fix-EUMM.patch
+new file mode 100644
+index 0000000..e2b24ff
+--- /dev/null
++++ b/package/perl/0001-fix-EUMM.patch
+@@ -0,0 +1,18 @@
++fix EUMM 7.04_01 which comes with Perl 5.22.0
++
++with static lib build, we cannot call _find_magic_vstring(),
++which does a `require B;` and B is not a pure Perl module.
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++--- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker/version/vpp.pm
+++++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker/version/vpp.pm
++@@ -933,7 +933,7 @@ sub _un_vstring {
++     if ( length($value) >= 3 && $value !~ /[._]/
++ 	&& _is_non_alphanumeric($value)) {
++ 	my $tvalue;
++-	if ( $] ge 5.008_001 ) {
+++	if ( $Config{usedl} && ( $] ge 5.008_001 ) ) {
++ 	    $tvalue = _find_magic_vstring($value);
++ 	    $value = $tvalue if length $tvalue;
++ 	}
 -- 
-2.4.6
+2.1.4
