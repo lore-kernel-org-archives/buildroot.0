@@ -1,122 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:13:01 +0200
-Subject: [Buildroot] [git commit] libnetfilter_conntrack: bump to version
-	1.0.5
-Message-ID: <20150913103259.4A11681696@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 12:32:53 +0200
+Subject: [Buildroot] [git commit] conntrack-tools: bump to version 1.4.3
+Message-ID: <20150913103259.5811E80150@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62d46c6dc7594c68a0866cb4a6ff1e1c80caa0b8
+commit: http://git.buildroot.net/buildroot/commit/?id=566c8cb2c5d175f643b257843483ffc742c149a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Patches upstream so drop them along with autoreconf.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnetfilter_conntrack/0001-uclinux.patch  |   26 -------------------
- .../0002-src-Makefile.am-drop-hardcoded-ldl.patch  |   27 --------------------
- .../libnetfilter_conntrack.hash                    |    6 ++--
- .../libnetfilter_conntrack.mk                      |    4 +--
- 4 files changed, 4 insertions(+), 59 deletions(-)
+ package/conntrack-tools/conntrack-tools.hash |    6 +++---
+ package/conntrack-tools/conntrack-tools.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnetfilter_conntrack/0001-uclinux.patch b/package/libnetfilter_conntrack/0001-uclinux.patch
-deleted file mode 100644
-index ef79a80..0000000
---- a/package/libnetfilter_conntrack/0001-uclinux.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From bdf4afdcb68f62fcd05536b8cb68478d3ea31c68 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 10 Sep 2013 15:46:19 -0300
--Subject: [PATCH] configure: uclinux is also linux
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 12e1d16..1edfd66 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -19,7 +19,7 @@ AC_PROG_INSTALL
-- AC_PROG_LN_S
-- 
-- case "$host" in 
---*-*-linux*) ;;
--+*-*-linux* | *-*-uclinux*) ;;
-- *) AC_MSG_ERROR([Linux only, dude!]);;
-- esac
-- 
---- 
--1.8.1.5
--
-diff --git a/package/libnetfilter_conntrack/0002-src-Makefile.am-drop-hardcoded-ldl.patch b/package/libnetfilter_conntrack/0002-src-Makefile.am-drop-hardcoded-ldl.patch
-deleted file mode 100644
-index e5ad3ba..0000000
---- a/package/libnetfilter_conntrack/0002-src-Makefile.am-drop-hardcoded-ldl.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From b8d32eff8dbfff5a93b6ea6ee9f5747e16cb32c4 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 14 Jan 2015 10:53:20 -0300
--Subject: [PATCH] src/Makefile.am: drop hardcoded -ldl
--
--This breaks static builds where the toolchain completely lacks libdl.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- src/Makefile.am | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/Makefile.am b/src/Makefile.am
--index 7d6c905..374598a 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -11,6 +11,6 @@ lib_LTLIBRARIES = libnetfilter_conntrack.la
-- libnetfilter_conntrack_la_LIBADD = conntrack/libnfconntrack.la \
-- 				   expect/libnfexpect.la \
-- 				   ${LIBNFNETLINK_LIBS} ${LIBMNL_LIBS}
---libnetfilter_conntrack_la_LDFLAGS = -Wc,-nostartfiles -lnfnetlink -ldl 	\
--+libnetfilter_conntrack_la_LDFLAGS = -Wc,-nostartfiles -lnfnetlink \
-- 				    -version-info $(LIBVERSION)
-- libnetfilter_conntrack_la_SOURCES = main.c callback.c
---- 
--2.0.5
--
-diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
-index 13fde40..67d1e40 100644
---- a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
-+++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
+diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
+index ecb0811..7ff1cf7 100644
+--- a/package/conntrack-tools/conntrack-tools.hash
++++ b/package/conntrack-tools/conntrack-tools.hash
 @@ -1,3 +1,3 @@
--# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.4.tar.bz2.{md5sum,sha1sum}
--md5	18cf80c4b339a3285e78822dbd4f08d7 	libnetfilter_conntrack-1.0.4.tar.bz2
--sha1	34fae1a30cbd51d46945e9f35790118c3462b0c6	libnetfilter_conntrack-1.0.4.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.5.tar.bz2.{md5sum,sha1sum}
-+md5	6aa1bd3c1d0723235ac897087b4cd4e5	libnetfilter_conntrack-1.0.5.tar.bz2
-+sha1	9aed8733d98af39d57fffd929c2bea70f1dcba06	libnetfilter_conntrack-1.0.5.tar.bz2
-diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-index 7841f27..33f1294 100644
---- a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-+++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-@@ -4,13 +4,11 @@
+-# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.2.tar.bz2.{md5sum,sha1sum}
+-md5	b1f9d006e7bf000a77395ff7cd3fac16	conntrack-tools-1.4.2.tar.bz2
+-sha1	50b89305bb689973d42a163c480dc77a5c0f6fe0	conntrack-tools-1.4.2.tar.bz2
++# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.3.tar.bz2.{md5sum,sha1sum}
++md5	966a5d8f846ddf5304bcd12685c0707f	conntrack-tools-1.4.3.tar.bz2
++sha1	509db30f34b283f4a74a7e638ba0ca713d3fe98c	conntrack-tools-1.4.3.tar.bz2
+diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
+index 983f954..eac5841 100644
+--- a/package/conntrack-tools/conntrack-tools.mk
++++ b/package/conntrack-tools/conntrack-tools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNETFILTER_CONNTRACK_VERSION = 1.0.4
-+LIBNETFILTER_CONNTRACK_VERSION = 1.0.5
- LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
- LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
- LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
- LIBNETFILTER_CONNTRACK_DEPENDENCIES = host-pkgconf libnfnetlink libmnl
--# For 0001-uclinux.patch & 0002-src-Makefile.am-drop-hardcoded-ldl.patch
--LIBNETFILTER_CONNTRACK_AUTORECONF = YES
- LIBNETFILTER_CONNTRACK_LICENSE = GPLv2+
- LIBNETFILTER_CONNTRACK_LICENSE_FILES = COPYING
- 
+-CONNTRACK_TOOLS_VERSION = 1.4.2
++CONNTRACK_TOOLS_VERSION = 1.4.3
+ CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
+ CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
+ CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
