@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:32:53 +0200
-Subject: [Buildroot] [git commit] conntrack-tools: bump to version 1.4.3
-Message-ID: <20150913103259.5811E80150@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 12:33:05 +0200
+Subject: [Buildroot] [git commit] connman: bump to version 1.30
+Message-ID: <20150913103308.7B7708177E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=566c8cb2c5d175f643b257843483ffc742c149a6
+commit: http://git.buildroot.net/buildroot/commit/?id=63da5180b83f843254733ec82867a73e5d104ecd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/conntrack-tools/conntrack-tools.hash |    6 +++---
- package/conntrack-tools/conntrack-tools.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/connman/connman.hash |    2 +-
+ package/connman/connman.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
-index ecb0811..7ff1cf7 100644
---- a/package/conntrack-tools/conntrack-tools.hash
-+++ b/package/conntrack-tools/conntrack-tools.hash
-@@ -1,3 +1,3 @@
--# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.2.tar.bz2.{md5sum,sha1sum}
--md5	b1f9d006e7bf000a77395ff7cd3fac16	conntrack-tools-1.4.2.tar.bz2
--sha1	50b89305bb689973d42a163c480dc77a5c0f6fe0	conntrack-tools-1.4.2.tar.bz2
-+# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.3.tar.bz2.{md5sum,sha1sum}
-+md5	966a5d8f846ddf5304bcd12685c0707f	conntrack-tools-1.4.3.tar.bz2
-+sha1	509db30f34b283f4a74a7e638ba0ca713d3fe98c	conntrack-tools-1.4.3.tar.bz2
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 983f954..eac5841 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index 3f266f5..06bd48d 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256	2a5a69693566f7fd59b2e677fa89356ada6d709998aa665caef8707b1e7a8594  connman-1.29.tar.xz
++sha256	5c5e464bacc9c27ed4e7269fb9b5059f07947f5be26433b59212133663ffa991  connman-1.30.tar.xz
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 5250c20..87d81ce 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONNTRACK_TOOLS_VERSION = 1.4.2
-+CONNTRACK_TOOLS_VERSION = 1.4.3
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
+-CONNMAN_VERSION = 1.29
++CONNMAN_VERSION = 1.30
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
