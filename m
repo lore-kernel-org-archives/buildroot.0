@@ -1,83 +1,254 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Sep 2015 23:30:55 +0200
-Subject: [Buildroot] [git commit] package/libyuv: Fix aarch64 support
-Message-ID: <20150913215906.AB67581992@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Sep 2015 00:00:58 +0200
+Subject: [Buildroot] [PATCH 3/3] Adding support for uclibcpp library
+In-Reply-To: <1442127768-26447-3-git-send-email-cjwfirmware@vxmdesign.com>
+References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
+ <1442127768-26447-3-git-send-email-cjwfirmware@vxmdesign.com>
+Message-ID: <20150914000058.778ddf3e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e64c5685acc5fa913628b44a08e4d3928f45215d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Chris,
 
-aarch64 is a NEON-enabled arch according to the source code[1] but the
-files containing the NEON-specific functions[2] were not added to the
-build using CMake.
+The commit title should probably be:
 
-Fixes
-http://autobuild.buildroot.net/results/c8d/c8d9bff33484b598ff85a26771ce51295bec550d/
-http://autobuild.buildroot.net/results/7f3/7f3a09157c4c385434458b6aafec202376e75706/
-http://autobuild.buildroot.net/results/991/9917d7bb18305c6a6bcbd9fe2aa986d452f7d4a4/
-http://autobuild.buildroot.net/results/6bf/6bf9e48b53f77b8a7bb8a667ea3f63298a4685ce/
-http://autobuild.buildroot.net/results/ccf/ccff5d1cb3de8642e3fa24a6b01b31a503df67f9/
-http://autobuild.buildroot.net/results/0c5/0c559f1b1b9bc9f2e2a131e34f034ce4e34fa75b/
-http://autobuild.buildroot.net/results/bf3/bf324985e9bbcd61196304de1d0313a0e216a0a8/
-http://autobuild.buildroot.net/results/d55/d552e5e46c263ff9860192a993ee9ed11d7783a6/
-http://autobuild.buildroot.net/results/2d7/2d73ccdfd5d06bd6dfdc4e303fe48a554460fa1c/
-http://autobuild.buildroot.net/results/972/97207ed46a519368e242f0621e4363d522e21ee8/
-http://autobuild.buildroot.net/results/d84/d84d54d85183296c57c9131d946e4517ddcaa84d/
-http://autobuild.buildroot.net/results/c18/c189149b8d2a0242da06ec68863db23cd0fa65b8/
-http://autobuild.buildroot.net/results/73a/73a026644179708692c43166a8ffba3ce0e19d95/
+	toolchain: add support for the uclibcpp library
 
-[1] https://freeswitch.org/stash/projects/SD/repos/libyuv/browse/include/libyuv/row.h#263
-[2] https://freeswitch.org/stash/projects/SD/repos/libyuv/browse/BUILD.gn#101
+On Sun, 13 Sep 2015 03:02:48 -0400, Chris Wardman wrote:
+> uclibcpp is built as an alternative to the standard libstdc++ library
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libyuv/0002-aarch64.patch |   36 ++++++++++++++++++++++++++++++++++++
- 1 files changed, 36 insertions(+), 0 deletions(-)
+The question is how does it replace the libstdc++ provided by gcc? Does
+it simply overwrite it? So you're building C++ support in gcc normally
+and then overwrite the libstdc++ from gcc with uclibcpp ?
 
-diff --git a/package/libyuv/0002-aarch64.patch b/package/libyuv/0002-aarch64.patch
-new file mode 100644
-index 0000000..c783cff
---- /dev/null
-+++ b/package/libyuv/0002-aarch64.patch
-@@ -0,0 +1,36 @@
-+Add missing source files for aarch64.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.org/CMakeLists.txt libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea/CMakeLists.txt
-+--- libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.org/CMakeLists.txt	2015-06-20 00:04:06.000000000 +0200
-++++ libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea/CMakeLists.txt	2015-09-07 19:29:42.898034988 +0200
-+@@ -14,6 +14,7 @@
-+   ${ly_src_dir}/compare.cc
-+   ${ly_src_dir}/compare_common.cc
-+   ${ly_src_dir}/compare_neon.cc
-++  ${ly_src_dir}/compare_neon64.cc
-+   ${ly_src_dir}/compare_gcc.cc
-+   ${ly_src_dir}/compare_win.cc
-+   ${ly_src_dir}/convert.cc
-+@@ -31,10 +32,12 @@
-+   ${ly_src_dir}/rotate_argb.cc
-+   ${ly_src_dir}/rotate_mips.cc
-+   ${ly_src_dir}/rotate_neon.cc
-++  ${ly_src_dir}/rotate_neon64.cc
-+   ${ly_src_dir}/row_any.cc
-+   ${ly_src_dir}/row_common.cc
-+   ${ly_src_dir}/row_mips.cc
-+   ${ly_src_dir}/row_neon.cc
-++  ${ly_src_dir}/row_neon64.cc
-+   ${ly_src_dir}/row_gcc.cc
-+   ${ly_src_dir}/row_win.cc
-+   ${ly_src_dir}/scale.cc
-+@@ -43,6 +46,7 @@
-+   ${ly_src_dir}/scale_common.cc
-+   ${ly_src_dir}/scale_mips.cc
-+   ${ly_src_dir}/scale_neon.cc
-++  ${ly_src_dir}/scale_neon64.cc
-+   ${ly_src_dir}/scale_gcc.cc
-+   ${ly_src_dir}/scale_win.cc
-+   ${ly_src_dir}/video_common.cc
+Also, how compatible is it with the C++ standard? I.e will people be
+able to build arbitrary C++ libraries/applications with this smaller
+C++ library, or is it limited to a certain subset of the C++ standard?
+
+> diff --git a/package/uclibcpp/0.2.4/uclibcpp-0001-minor-fixes.patch b/package/uclibcpp/0.2.4/uclibcpp-0001-minor-fixes.patch
+> new file mode 100644
+> index 0000000..851b87e
+> --- /dev/null
+> +++ b/package/uclibcpp/0.2.4/uclibcpp-0001-minor-fixes.patch
+
+The patches shouldn't start with the package name, so a proper name is:
+
+	0001-minor-fixes.patch
+
+However, I believe this patch is really mixing too many things. Can you
+split this uclibcpp patch into smaller piece, each fixing one
+particular problem?
+
+Also, since we're supporting only one version of uclibcpp at a time,
+there is no need to put the patch in a 0.2.4/ subdirectory of
+package/uclibcpp/. Just put them directly in package/uclibcpp.
+
+> +I have no clude why they wrote the Unwind_Exception_Class variable that way, but that doesn't compile
+
+Please wrap the patch description to 80 columns, and don't use first
+person wording.
+
+> +diff -uNr uClibc++-0.2.4/src/_ct_chr.cpp uc_new/src/_ct_chr.cpp
+> +--- uClibc++-0.2.4/src/_ct_chr.cpp	1969-12-31 19:00:00.000000000 -0500
+> ++++ uc_new/src/_ct_chr.cpp	2015-01-15 16:29:21.478634145 -0500
+> +@@ -0,0 +1,18 @@
+> ++#include <_ansi.h>
+> ++#include <ctype.h>
+> ++
+> ++int _DEFUN(isspace, (c),int c){
+> ++  switch(c){
+> ++  case ' ': 
+> ++  case '\r':
+> ++  case '\n':
+> ++  case '\b':
+> ++  case '\t':
+> ++    return true;
+> ++  }
+> ++  return false;
+> ++}
+> ++
+> ++int _DEFUN(isdigit, (c), int c){
+> ++  return ('0' <= c && c <= '9');
+> ++}
+
+newlib is not providing isspace() and isdigit() ?
+
+> diff --git a/package/uclibcpp/Config.in b/package/uclibcpp/Config.in
+> new file mode 100644
+> index 0000000..d0a962a
+> --- /dev/null
+> +++ b/package/uclibcpp/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_UCLIBCPP
+> +       bool "uClibc++ C++ library"
+> +       depends on BR2_TOOLCHAIN_BUILDROOT_NEWLIB
+> +       depends on BR2_TOOLCHAIN_BUILDROOT_CXX
+> +       help
+
+Please use tab for indentation.
+
+> +	Uclibc++ library support. Smaller than libvstdc++
+
+And one tab + two spaces for the help text. Also, fix the typo in the
+description (libvstdc++ -> libstdc++) and maybe extend the description
+with more details (difference between the original libstdc++ and
+uclibcpp one).
+
+> +
+> +
+> +
+
+Unneeded empty lines.
+
+> diff --git a/package/uclibcpp/uclibcpp.config b/package/uclibcpp/uclibcpp.config
+> new file mode 100644
+> index 0000000..4e2d0ec
+> --- /dev/null
+> +++ b/package/uclibcpp/uclibcpp.config
+> @@ -0,0 +1,54 @@
+> +#
+> +# Automatically generated make config: don't edit
+> +#
+> +
+> +#
+> +# Target Features and Options
+> +#
+> +UCLIBCXX_HAS_FLOATS=y
+> +UCLIBCXX_HAS_LONG_DOUBLE=y
+> +UCLIBCXX_HAS_TLS=y
+> +WARNINGS="-Wall"
+> +BUILD_EXTRA_LIBRARIES=""
+> +HAVE_DOT_CONFIG=y
+> +
+> +#
+> +# String and I/O Stream Support
+> +#
+> +# UCLIBCXX_HAS_WCHAR is not set
+> +UCLIBCXX_IOSTREAM_BUFSIZE=32
+> +UCLIBCXX_HAS_LFS=y
+> +UCLIBCXX_SUPPORT_CDIR=y
+> +UCLIBCXX_SUPPORT_CIN=y
+> +UCLIBCXX_SUPPORT_COUT=y
+> +UCLIBCXX_SUPPORT_CERR=y
+> +# UCLIBCXX_SUPPORT_CLOG is not set
+> +
+> +#
+> +# STL and Code Expansion
+> +#
+> +UCLIBCXX_STL_BUFFER_SIZE=32
+> +UCLIBCXX_CODE_EXPANSION=y
+> +UCLIBCXX_EXPAND_CONSTRUCTORS_DESTRUCTORS=y
+> +UCLIBCXX_EXPAND_STRING_CHAR=y
+> +UCLIBCXX_EXPAND_VECTOR_BASIC=y
+> +UCLIBCXX_EXPAND_IOS_CHAR=y
+> +UCLIBCXX_EXPAND_STREAMBUF_CHAR=y
+> +UCLIBCXX_EXPAND_ISTREAM_CHAR=y
+> +UCLIBCXX_EXPAND_OSTREAM_CHAR=y
+> +UCLIBCXX_EXPAND_FSTREAM_CHAR=y
+> +UCLIBCXX_EXPAND_SSTREAM_CHAR=y
+> +
+> +#
+> +# Library Installation Options
+> +#
+> +UCLIBCXX_RUNTIME_PREFIX="/usr"
+> +UCLIBCXX_RUNTIME_INCLUDE_SUBDIR="/include"
+> +UCLIBCXX_RUNTIME_LIB_SUBDIR="/lib"
+> +UCLIBCXX_RUNTIME_BIN_SUBDIR="/bin"
+> +UCLIBCXX_EXCEPTION_SUPPORT=y
+> +IMPORT_LIBSUP=y
+> +# IMPORT_LIBGCC_EH is not set
+> +BUILD_STATIC_LIB=y
+> +BUILD_ONLY_STATIC_LIB=y
+> +# DODEBUG is not set
+> diff --git a/package/uclibcpp/uclibcpp.mk b/package/uclibcpp/uclibcpp.mk
+> new file mode 100644
+> index 0000000..dfe8ede
+> --- /dev/null
+> +++ b/package/uclibcpp/uclibcpp.mk
+> @@ -0,0 +1,28 @@
+
+Missing comment header. Also please add a hash file (see
+http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-hash).
+Maybe I forgot to say that in my review of your newlib package, but
+please do it there as well.
+
+> +UCLIBCPP_VERSION = 0.2.4
+> +UCLIBCPP_SOURCE = uClibc++-$(UCLIBCPP_VERSION).tar.bz2
+
+The last version is from May 2012, like uClibc itself. Is it a dead
+project like uClibc ? If so, then I'm a bit worried in packaging
+something so fundamental as the standard C++ library if it isn't
+maintained.
+
+There has been a few commits since the last release, see
+http://git.uclibc.org/uClibc++/log/. But it still doesn't seem to be
+very active. According to the website, there is not even a mailing list
+for it.
+
+You could use the .tar.xz tarball instead of .tar.bz2.
+
+> +UCLIBCPP_LICENSE = LGPLv3
+
+Some quick inspection indicates LGPLv2.1+
+
+> +UCLIBCPP_SITE = http://cxx.uclibc.org/src/
+> +
+> +UCLIBCPP_INSTALL_STAGING = YES
+> +
+> +UCLIBCPP_DEPENDENCIES = host-gcc-final
+
+All target packages depend on "toolchain", which has host-gcc-final as
+part of its dependencies. However maybe, what you need is to have this
+uclibcpp package built *before* any other target package that uses C++,
+no? If so, then toolchain/toolchain/toolchain.mk needs to be modified
+to add uclibcpp as a dependency when it is enabled. And of course,
+uclibcpp.mk should specify UCLIBCPP_ADD_TOOLCHAIN_DEPENDENCY = NO.
+
+> +
+> +UCLIBCPP_KCONFIG_FILE = $(TOPDIR)/package/uclibcpp/uclibcpp.config
+
+$(TOPDIR)/ not needed.
+
+> +
+> +UCLIBCPP_MAKE_FLAGS = CROSS=$(TARGET_CROSS)
+> +
+> +define UCLIBCPP_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(UCLIBCPP_MAKE_FLAGS)
+> +endef
+> +
+> +define UCLIBCPP_INSTALL_STAGING_CMDS
+> +	$(MAKE) -C $(@D) PREFIX=$(STAGING_DIR) install
+> +endef
+> +
+> +define UCLIBCPP_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install
+> +endef
+> +
+> +$(eval $(kconfig-package))
+> +
+> +
+
+Unneeded empty lines at the end of the file.
+
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 88ebe8c..3904f44 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -60,5 +60,6 @@ endchoice
+>  source "toolchain/toolchain-buildroot/Config.in"
+>  source "toolchain/toolchain-external/Config.in"
+>  source "toolchain/toolchain-common.in"
+> +source "package/uclibcpp/Config.in"
+
+This should go in toolchain/toolchain-buildroot/Config.in.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
