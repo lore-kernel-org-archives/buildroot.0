@@ -1,56 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 21:16:43 +0200
-Subject: [Buildroot] [PATCH] host-gcc-final: don't install a dead symlink
-In-Reply-To: <1442068315-23186-1-git-send-email-arnout@mind.be>
-References: <1442068315-23186-1-git-send-email-arnout@mind.be>
-Message-ID: <20150913211643.5ea1e647@free-electrons.com>
+Date: Sun, 13 Sep 2015 21:17:02 +0200
+Subject: [Buildroot] [git commit] perl: fix static build
+Message-ID: <20150913191808.66B6D81D7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=a85a97a9583a31bce51ef2215220a0a6431997be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Sep 2015 16:31:55 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Nothing is installed into $(HOST_DIR)/usr/$(GNU_TARGET_NAME) by
-> host-gcc-final (only by binutils), so no 'gcc' executable exists
-> there. Therefore, the cc -> gcc symlink that is created in that
-> directory is dead.
-> 
-> Since this was not working, the symlink is clearly not needed, so
-> remove its installation command.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/gcc/gcc-final/gcc-final.mk | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 86b3c78..3426ba4 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -92,9 +92,6 @@ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
->  		ln -snf $(GNU_TARGET_NAME)-gcc \
->  			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
->  	fi
-> -	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
-> -		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
-> -	fi
+see http://autobuild.buildroot.net/results/502/502e6a6280451acc48e5f500e774b2bd04c7229e/
 
-Hum, are you sure? When I look at an external toolchain built with
-Buildroot, I see:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl/0001-fix-EUMM.patch |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
-$ ls -l arm-buildroot-linux-uclibcgnueabi/bin/cc 
-lrwxrwxrwx 1 thomas thomas 3 ao?t   8 16:14 arm-buildroot-linux-uclibcgnueabi/bin/cc -> gcc
-$ ls -l arm-buildroot-linux-uclibcgnueabi/bin/gcc
--rwxr-xr-x 1 thomas thomas 595798 ao?t   8 16:14 arm-buildroot-linux-uclibcgnueabi/bin/gcc
-
-This is the only file named 'cc' in the toolchain.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perl/0001-fix-EUMM.patch b/package/perl/0001-fix-EUMM.patch
+new file mode 100644
+index 0000000..e2b24ff
+--- /dev/null
++++ b/package/perl/0001-fix-EUMM.patch
+@@ -0,0 +1,18 @@
++fix EUMM 7.04_01 which comes with Perl 5.22.0
++
++with static lib build, we cannot call _find_magic_vstring(),
++which does a `require B;` and B is not a pure Perl module.
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++--- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker/version/vpp.pm
+++++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker/version/vpp.pm
++@@ -933,7 +933,7 @@ sub _un_vstring {
++     if ( length($value) >= 3 && $value !~ /[._]/
++ 	&& _is_non_alphanumeric($value)) {
++ 	my $tvalue;
++-	if ( $] ge 5.008_001 ) {
+++	if ( $Config{usedl} && ( $] ge 5.008_001 ) ) {
++ 	    $tvalue = _find_magic_vstring($value);
++ 	    $value = $tvalue if length $tvalue;
++ 	}
