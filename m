@@ -1,46 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:35:33 +0200
-Subject: [Buildroot] [git commit] squid: bump to version 3.5.8
-Message-ID: <20150913103629.E95BE800C7@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 12:36:34 +0200
+Subject: [Buildroot] [PATCH] samba: bump to version 4.3.0
+In-Reply-To: <1442001713-9454-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1442001713-9454-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150913123634.774d55cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19e0ab628de048225e206ce5e32b93edbbca4678
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/squid/squid.hash |    6 +++---
- package/squid/squid.mk   |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On Fri, 11 Sep 2015 17:01:53 -0300, Gustavo Zacarias wrote:
+> New patch status: sent upstream.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  .../0002-build-improve-stack-protector-check.patch | 56 ++++++++++++++++++++++
+>  package/samba4/samba4.hash                         |  2 +-
+>  package/samba4/samba4.mk                           |  4 +-
+>  3 files changed, 59 insertions(+), 3 deletions(-)
+>  create mode 100644 package/samba4/0002-build-improve-stack-protector-check.patch
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 472df2d..97205e3 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.7.tar.xz.asc
--md5	e24943386555ca922130a7e034badba7	squid-3.5.7.tar.xz
--sha1	e7dcc0cbcee6fd10a8c8bf3e9bff0dc6359ccc48	squid-3.5.7.tar.xz
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.8.tar.xz.asc
-+md5	0b4eae643b009215688fcf5f1a7803a7	squid-3.5.8.tar.xz
-+sha1	4ba4b43cf9abaf7e5015ad4d2d9b628213e55044	squid-3.5.8.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index e8fd079..75a2d35 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).8
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
