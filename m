@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Sep 2015 19:48:43 +0200
-Subject: [Buildroot] [git commit] git: bump version to 2.5.2
-Message-ID: <20150913100729.9652E81E56@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 12:07:22 +0200
+Subject: [Buildroot] [git commit] libtasn1: bump to version 4.6
+Message-ID: <20150913100729.9901281869@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d4d2bcfa1e5003734aad964e68bb1f8fe883b6c1
+commit: http://git.buildroot.net/buildroot/commit/?id=38f6f0fa33302761243affd8046c2b3ebd72f84c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/git/git.hash |    2 +-
- package/git/git.mk   |    2 +-
+ package/libtasn1/libtasn1.hash |    2 +-
+ package/libtasn1/libtasn1.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 81caf39..6201986 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
+index 653e018..41e10a6 100644
+--- a/package/libtasn1/libtasn1.hash
++++ b/package/libtasn1/libtasn1.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  c31a5f5f72e025f8fe26845032a06683c7e5c1a73236c2353b5606ddd22e0494  git-2.4.5.tar.xz
-+sha256  4b4760a90ede51accee703bd6815f1f79afef68670acdcf3ea31dcc846a40c9b  git-2.5.2.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index e2d04aa..bd852df 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+ # Locally calculated after checking pgp signature
+-sha256	89b3b5dce119273431544ecb305081f3530911001bb12e5d76588907edb71bda	libtasn1-4.5.tar.gz
++sha256	3462fc25e2d2536878c39a8825f5e36ba2e2611b27ef535e064f4c56258e508b	libtasn1-4.6.tar.gz
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index eeff76c..6818f30 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.4.5
-+GIT_VERSION = 2.5.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+-LIBTASN1_VERSION = 4.5
++LIBTASN1_VERSION = 4.6
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
