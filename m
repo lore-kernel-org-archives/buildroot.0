@@ -1,98 +1,80 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 13 Sep 2015 16:27:50 +0200
-Subject: [Buildroot] [PATCH 1/1] stress-ng: Depend on kernel headers >=
- 3.3
-In-Reply-To: <55F3FDD9.1030709@openwide.fr>
-References: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
- <20150911195928.51c339dc@free-electrons.com> <55F3FDD9.1030709@openwide.fr>
-Message-ID: <55F587E6.3020501@openwide.fr>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Sun, 13 Sep 2015 09:41:43 -0700
+Subject: [Buildroot] [PATCH 1/1] add python simple template module
+Message-ID: <1442162503-5817-1-git-send-email-stevecalfee@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien, All
+Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
+---
+ package/Config.in                            |  1 +
+ package/python-pyratemp/Config.in            |  9 +++++++++
+ package/python-pyratemp/python-pyratemp.hash |  4 ++++
+ package/python-pyratemp/python-pyratemp.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-pyratemp/Config.in
+ create mode 100644 package/python-pyratemp/python-pyratemp.hash
+ create mode 100644 package/python-pyratemp/python-pyratemp.mk
 
-Le 12/09/2015 12:26, Romain Naour a ?crit :
-> Hi Thomas,
-> 
-> Le 11/09/2015 19:59, Thomas Petazzoni a ?crit :
->> Julien,
->>
->> On Fri, 11 Sep 2015 18:19:11 +0200, Julien Corjon wrote:
->>> perf.c need PERF_COUNT_HW_REF_CPU_CYCLES instruction which is available
->>> only since 3.3 kernel version
->>>
->>> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
->>> ---
->>>  package/stress-ng/Config.in | 8 ++++----
->>>  1 file changed, 4 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
->>> index cdf9984..1e475b1 100644
->>> --- a/package/stress-ng/Config.in
->>> +++ b/package/stress-ng/Config.in
->>> @@ -4,8 +4,8 @@ config BR2_PACKAGE_STRESS_NG
->>>  	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
->>>  	# disabled on uClibc: stress-aio.c needs aio.h
->>>  	depends on BR2_TOOLCHAIN_USES_GLIBC
->>> -	# perf.c needs PERF_COUNT_HW_STALLED_CYCLES_FRONTEND
->>> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
->>> +	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
->>> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
->>
->> This seems wrong, because stress-ng.h has the definitions for all the
->> PERF_COUNT_* values:
->>
->> #if defined(__linux__) && defined(__NR_perf_event_open)
->> #define STRESS_PERF_STATS       (1)
->> #define STRESS_PERF_INVALID     (~0ULL)
->> enum {
->>         STRESS_PERF_HW_CPU_CYCLES = 0,
->>         STRESS_PERF_HW_INSTRUCTIONS,
->>         STRESS_PERF_HW_CACHE_REFERENCES,
->>         STRESS_PERF_HW_CACHE_MISSES,
->>         STRESS_PERF_HW_BRANCH_INSTRUCTIONS,
->>         STRESS_PERF_HW_BRANCH_MISSES,
->>         STRESS_PERF_HW_BUS_CYCLES,
->>         STRESS_PERF_HW_REF_CPU_CYCLES,
->>         STRESS_PERF_HW_STALLED_CYCLES_FRONTEND,
->>         STRESS_PERF_HW_STALLED_CYCLES_BACKEND,
->>
->>         STRESS_PERF_SW_PAGE_FAULTS_MIN,
->>         STRESS_PERF_SW_PAGE_FAULTS_MAJ,
->>         STRESS_PERF_SW_CONTEXT_SWITCHES,
->>         STRESS_PERF_SW_CPU_MIGRATIONS,
->>         STRESS_PERF_SW_ALIGNMENT_FAULTS,
->>
->> Can you figure out why it doesn't get used?
-> 
-> Here is the complete build failure with a toolchain using 3.2 kernel headers:
-> [...]i586-buildroot-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 -Os -Wall -Wextra -DVERSION="0.04.16" -O2 -c -o perf.o perf.c
-> perf.c:77:48: erreur: ?PERF_COUNT_HW_REF_CPU_CYCLES? undeclared here (not in a
-> function)
-> { STRESS_PERF_ ## config, PERF_TYPE_ ## type, PERF_COUNT_ ## config, label }
-> ^
-> perf.c:110:2: note: in expansion of macro ?PERF_INFO?
-> PERF_INFO(HARDWARE, HW_REF_CPU_CYCLES, "Total Cycles"),
-> ^
-> Makefile:164: recipe for target 'perf.o' failed
-> 
-> This error is due to PERF_INFO macro from perf.c using PERF_COUNT_* values directly.
-> 
-> During my testing, I used an very old toolchain with 2.6 headers so I had an
-> error with PERF_COUNT_HW_STALLED_CYCLES_FRONTEND and I missed
-> PERF_COUNT_HW_REF_CPU_CYCLES.
-> 
-> I'm agree with the patch proposed by Julien, so
-> Acked-by: Romain Naour <romain.naour@openwide.fr>
-
-Julien, if you respin the patch, can you add this autobuilder reference ?
-http://autobuild.buildroot.net/results/889/88909b118dc927f31ed5c3b5f3513734a88085a9/build-end.log
-
-Thanks!
-
-Best regards,
-Romain
+diff --git a/package/Config.in b/package/Config.in
+index 030477a..2784339 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -643,6 +643,7 @@ menu "external python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyqt/Config.in"
++	source "package/python-pyratemp/Config.in"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pyroute2/Config.in"
+ 	source "package/python-pysendfile/Config.in"
+diff --git a/package/python-pyratemp/Config.in b/package/python-pyratemp/Config.in
+new file mode 100644
+index 0000000..1e7309e
+--- /dev/null
++++ b/package/python-pyratemp/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYRATEMP
++	bool "python-pyratemp"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  python-pyratemp is a Python library for doing html templates.
++	  written entirely in Python, that is designed to be very easy to use
++	  and very like writing Python.
++
++	  https://pypi.python.org/pypi/pyratemp/
+diff --git a/package/python-pyratemp/python-pyratemp.hash b/package/python-pyratemp/python-pyratemp.hash
+new file mode 100644
+index 0000000..0abb9e0
+--- /dev/null
++++ b/package/python-pyratemp/python-pyratemp.hash
+@@ -0,0 +1,4 @@
++# From http://www.simple-is-better.org/template
++# Locally calculated:
++sha256 c45ed656ada482a02fe780495f37a695e7671accb04f918f7e7f18abf877bc71 pyratemp-0.3.2.tgz
++
+diff --git a/package/python-pyratemp/python-pyratemp.mk b/package/python-pyratemp/python-pyratemp.mk
+new file mode 100644
+index 0000000..4c78154
+--- /dev/null
++++ b/package/python-pyratemp/python-pyratemp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyratemp
++#
++################################################################################
++
++PYTHON_PYRATEMP_VERSION = 0.3.2
++PYTHON_PYRATEMP_SOURCE = pyratemp-$(PYTHON_PYRATEMP_VERSION).tgz
++PYTHON_PYRATEMP_SITE = http://www.simple-is-better.org/template
++PYTHON_PYRATEMP_LICENSE = MIT
++PYTHON_PYRATEMP_LICENSE_FILES = LICENSE
++PYTHON_PYRATEMP_SETUP_TYPE = distutils
++
++$(eval $(python-package))
+-- 
+1.9.1
