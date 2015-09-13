@@ -1,110 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:36:22 +0200
-Subject: [Buildroot] [git commit] samba: bump to version 4.3.0
-Message-ID: <20150913103630.2C1EE7FB71@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 12:35:33 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.5.8
+Message-ID: <20150913103629.E95BE800C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c0090de3c92531d5b326b48d38d3451df305d6b0
+commit: http://git.buildroot.net/buildroot/commit/?id=19e0ab628de048225e206ce5e32b93edbbca4678
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-New patch status: sent upstream.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-build-improve-stack-protector-check.patch |   56 ++++++++++++++++++++
- package/samba4/samba4.hash                         |    2 +-
- package/samba4/samba4.mk                           |    4 +-
- 3 files changed, 59 insertions(+), 3 deletions(-)
+ package/squid/squid.hash |    6 +++---
+ package/squid/squid.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/0002-build-improve-stack-protector-check.patch b/package/samba4/0002-build-improve-stack-protector-check.patch
-new file mode 100644
-index 0000000..51ffc04
---- /dev/null
-+++ b/package/samba4/0002-build-improve-stack-protector-check.patch
-@@ -0,0 +1,56 @@
-+From e4ef92852023f4e2f192d3c47220dc75930a615c Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Fri, 11 Sep 2015 16:41:31 -0300
-+Subject: [PATCH] build: improve stack protector check
-+
-+Testing a toolchain for proper -fstack-protector must go beyond ensuring
-+the compiler and linker accept the option.
-+If the test C program does nothing with the stack then guards aren't
-+inserted and/or are optimized away giving the false impression that it
-+works when in fact the libc might not support it.
-+
-+Update the check to a program that uses the stack, hence making a link
-+fail if proper support isn't available, for example in non-ssp enabled
-+uclibc toolchains like this:
-+
-+test.c:(.text.startup+0x64): undefined reference to `__stack_chk_fail'
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ buildtools/wafsamba/samba_autoconf.py | 20 +++++++++++++++++---
-+ 1 file changed, 17 insertions(+), 3 deletions(-)
-+
-+diff --git a/buildtools/wafsamba/samba_autoconf.py b/buildtools/wafsamba/samba_autoconf.py
-+index c5f132c..ef34b00 100644
-+--- a/buildtools/wafsamba/samba_autoconf.py
-++++ b/buildtools/wafsamba/samba_autoconf.py
-+@@ -657,9 +657,23 @@ def SAMBA_CONFIG_H(conf, path=None):
-+     if not IN_LAUNCH_DIR(conf):
-+         return
-+ 
-+-    if conf.CHECK_CFLAGS(['-fstack-protector']) and conf.CHECK_LDFLAGS(['-fstack-protector']):
-+-        conf.ADD_CFLAGS('-fstack-protector')
-+-        conf.ADD_LDFLAGS('-fstack-protector')
-++    # we need to build real code that can't be optimized away to test
-++    if conf.check(fragment='''
-++        #include <stdio.h>
-++
-++        int main(void)
-++        {
-++            char t[100000];
-++            while (fgets(t, sizeof(t), stdin));
-++            return 0;
-++        }
-++        ''',
-++        execute=0,
-++        ccflags='-fstack-protector',
-++        ldflags='-fstack-protector',
-++        msg='Checking if toolchain accepts -fstack-protector'):
-++            conf.ADD_CFLAGS('-fstack-protector')
-++            conf.ADD_LDFLAGS('-fstack-protector')
-+ 
-+     if Options.options.debug:
-+         conf.ADD_CFLAGS('-g', testflags=True)
-+-- 
-+2.4.6
-+
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index e2b3969..d242f94 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b6dfa5ae4818d891ee2fcff04a5912f4a4fb2394b4f5e66a2a15b428da094c7c	samba-4.2.3.tar.gz
-+sha256	d8dbb6b29dec1d9aa295655c4aa4eadd1e5367ef7047be22f4d6a18ba8acdb63	samba-4.3.0.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index c88cc9f..6f3fb58 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,8 +4,8 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 472df2d..97205e3 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.7.tar.xz.asc
+-md5	e24943386555ca922130a7e034badba7	squid-3.5.7.tar.xz
+-sha1	e7dcc0cbcee6fd10a8c8bf3e9bff0dc6359ccc48	squid-3.5.7.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.8.tar.xz.asc
++md5	0b4eae643b009215688fcf5f1a7803a7	squid-3.5.8.tar.xz
++sha1	4ba4b43cf9abaf7e5015ad4d2d9b628213e55044	squid-3.5.8.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index e8fd079..75a2d35 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SAMBA4_VERSION = 4.2.3
--SAMBA4_SITE = http://ftp.samba.org/pub/samba
-+SAMBA4_VERSION = 4.3.0
-+SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
- SAMBA4_LICENSE = GPLv3+
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).7
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).8
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
