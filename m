@@ -1,53 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 23:29:42 +0200
-Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
-In-Reply-To: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
-References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20150913232942.736dea75@free-electrons.com>
+Date: Sun, 13 Sep 2015 23:31:14 +0200
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: fix static link with
+ readline
+In-Reply-To: <1442178981-24635-1-git-send-email-0intro@gmail.com>
+References: <1442178981-24635-1-git-send-email-0intro@gmail.com>
+Message-ID: <20150913233114.327f1428@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+David,
 
-On Sun, 13 Sep 2015 23:13:03 +0200, Yann E. MORIN wrote:
-> Kodi segfaults as soon as it tries to load a python module:
+Thanks for this contribution!
+
+On Sun, 13 Sep 2015 23:16:21 +0200, David du Colombier wrote:
+> When linking statically, the order of libraries on the
+> linker command matters, since readline depends on ncurses.
 > 
->     Could not find platform independent libraries <prefix>
->     Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
->     ImportError: No module named site
->     Segmentation fault
+> Signed-off-by: David du Colombier <0intro@gmail.com>
+> ---
+>  package/wpa_supplicant/0005-fix-readline-libs-ordering.patch | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>  create mode 100644 package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
 > 
-> Turns out that keeping .py modules (with or without .pyc) fixes the
-> issue.
-> 
-> Currently, Kodi selects python, but since the format of modules is a
-> choice, we can not select it.
-> 
-> Fix that by inverting the dependency on python from Kodi:
->   - turn it into a depends rather than a select,
->   - add the dependency to ! pyc-only
->   - update the comment accordingly.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> diff --git a/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
+> new file mode 100644
+> index 0000000..b2439f0
+> --- /dev/null
+> +++ b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
 
-Do we actually understand why it doesn't work? There is really no
-reason for .py files to be necessary. Does it happen with Python 2 or
-Python 3? Apparently, Kodi selects Python 2, so there really shouldn't
-be any problem with having just .pyc files (Python 3 can be more
-tricky in that respect.
+Thanks for the patch, but patches in Buildroot have to have a
+description and a Signed-off-by line. See
+http://buildroot.uclibc.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
 
-> changes v1 -> v2:
->   - fix spurious 'i' (vim insert)
+Also, could you submit this patch to upstream wpa_supplicant?
 
-But it wasn't enough it seems :)
+Thanks!
 
-> -comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
-> +comment "kodi needs python and .py modiules, and a toolchain w/ C++, threads, wchar, dynamic library"
-
-                                      ^^^^^^^^
 Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
