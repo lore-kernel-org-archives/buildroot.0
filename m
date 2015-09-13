@@ -1,62 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:37:58 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: trivial clean up of
- messages
-In-Reply-To: <1442005078-17556-1-git-send-email-arnout@mind.be>
-References: <1442005078-17556-1-git-send-email-arnout@mind.be>
-Message-ID: <20150913123758.2a781303@free-electrons.com>
+Date: Sun, 13 Sep 2015 12:38:25 +0200
+Subject: [Buildroot] [git commit] toolchain-external: clarify the comment
+	about *-gcc-ar... LTO wrappers
+Message-ID: <20150913103829.AA33D81DD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=797318b48362f610c3fdce5e56c735223d74381a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Sep 2015 22:57:58 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Before this commit, the output of the toolchain-external build steps
-> looked like this (abbreviated for clarity):
-> 
-> >>> toolchain-external undefined Building
-> >>> toolchain-external undefined Installing to staging directory
-> >>> toolchain-external undefined Copying external toolchain sysroot to staging...
-> >>> toolchain-external undefined Building ext-toolchain wrapper
-> mkdir -p output/host/usr/bin; cd output/host/usr/bin; for i in ...
-> /usr/bin/gcc -O2 -Ioutput/host/usr/include -DBR_SYSROOT='...
-> if test -f output/host/usr/bin/i686-pc-linux-gnu-gdb ; then mkdir -p ...
-> >>> toolchain-external undefined Fixing libtool files
-> >>> toolchain-external undefined Installing to target
-> >>> toolchain-external undefined Copying external toolchain libraries to target...
-> if test -e output/target/lib/ld-uClibc.so.1; then ln -sf ld-uClibc.so.1 output/target/lib/ld-uClibc.so.0 ; fi
-> if test -e output/target/lib/ld64-uClibc.so.1; then ln -sf ld64-uClibc.so.1 output/target/lib/ld64-uClibc.so.0 ; fi
-> 
-> All the long lines with conditions and loops in them are not usefull,
-> so put $(Q) in front of them. The line with mkdir can better be split
-> on a separate line so the cd stands out more. There are two redundant
-> semicolons that can be removed. The installation of gdbinit could
-> use an extra message so the user can see what is going on.
-> 
-> After this commit, the toolchain-external build steps look like this:
-> >>> toolchain-external undefined Building
-> >>> toolchain-external undefined Installing to staging directory
-> >>> toolchain-external undefined Copying external toolchain sysroot to staging...
-> >>> toolchain-external undefined Building ext-toolchain wrapper
-> /usr/bin/gcc -O2 -Ioutput/host/usr/include -DBR_SYSROOT='...
-> >>> toolchain-external undefined Installing gdbinit
-> >>> toolchain-external undefined Fixing libtool files
-> >>> toolchain-external undefined Installing to target
-> >>> toolchain-external undefined Copying external toolchain libraries to target...
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk |   11 ++++++-----
+ 1 files changed, 6 insertions(+), 5 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 4b4b463..967e9ec 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -666,11 +666,12 @@ endif
+ # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+ # symlinks for everything else. Skip gdb symlink when we are building our
+ # own gdb to prevent two gdb's in output/host/usr/bin.
+-# When the link-time-optimization flag '-flto' is used, then the compiler
+-# and binutils have to support lto. ar/ranlib need to be called with the
+-# lto plugin. The wrappers *-gcc-ar and *-gcc-ranlib provided by GCC could
+-# be used as drop-ins for ar/runlib when Makefiles are used which do not
+-# pass the lto arguments.
++# The LTO support in gcc creates wrappers for ar, ranlib and nm which load
++# the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
++# *-gcc-nm and should be used instead of the real programs when -flto is
++# used. However, we should not add the toolchain wrapper for them, and they
++# match the *cc-* pattern. Therefore, an additional case is added for *-ar,
++# *-ranlib and *-nm.
+ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+ 	$(Q)mkdir -p $(HOST_DIR)/usr/bin
