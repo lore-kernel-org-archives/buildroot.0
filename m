@@ -1,28 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:35:53 +0200
-Subject: [Buildroot] [PATCH] squid: bump to version 3.5.8
-In-Reply-To: <1442004223-19430-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1442004223-19430-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150913123553.7be1d57e@free-electrons.com>
+Date: Sun, 13 Sep 2015 12:35:46 +0200
+Subject: [Buildroot] [git commit] mdadm: bump to version 3.3.4
+Message-ID: <20150913103630.1F0987FB71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b059bb2edea70d1f58fbe1cbcaf6f0eda7118d6f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Sep 2015 17:43:43 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/squid/squid.hash | 6 +++---
->  package/squid/squid.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mdadm/mdadm.hash |    2 +-
+ package/mdadm/mdadm.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
+index 45b79dd..7f228d9 100644
+--- a/package/mdadm/mdadm.hash
++++ b/package/mdadm/mdadm.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
+-sha256	0f3a7e1a76b13892b79f9fceaf99ecb23513260389a768ac644ffa3ae06e5b8c	mdadm-3.3.2.tar.xz
++sha256	8ae5f45306b873190e91f410709b00e51997b633c072b33f8efd9f7df022ca68	mdadm-3.3.4.tar.xz
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index 88f358f..7558c18 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MDADM_VERSION = 3.3.2
++MDADM_VERSION = 3.3.4
+ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPLv2+
