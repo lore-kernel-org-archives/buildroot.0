@@ -1,35 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 23:23:32 +0200
-Subject: [Buildroot] using buildroot to statically build uclibc
-In-Reply-To: <CAEjFr-YUow8iFvMhv-DK3y390P3HunZD4nMUUpREMzk-2NtgWA@mail.gmail.com>
-References: <CAEjFr-Zk4HTs7NPYOtheUzGbHVtZmmAb5daRR_MrW4yS22daGA@mail.gmail.com>
- <55F4314D.80606@mind.be>
- <CAEjFr-YUow8iFvMhv-DK3y390P3HunZD4nMUUpREMzk-2NtgWA@mail.gmail.com>
-Message-ID: <20150913232332.54418192@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Sep 2015 23:24:10 +0200
+Subject: [Buildroot] [PATCH 2/2] blackbox: remove deprecated package
+In-Reply-To: <1441133132-11343-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 1 Sep 2015 15:45:32 -0300")
+References: <1441133132-11343-1-git-send-email-gustavo@zacarias.com.ar>
+ <1441133132-11343-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bnd6au85.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Sat, 12 Sep 2015 19:53:15 +0300, Doha Ehab wrote:
-> So in order to use the generated uclibc to cross compile mpich (and link
-> everything statically) I have to extract the rootfs.tar and use it to
-> statically build the mpich is that correct ?
+ > Also update legacy as well.
+ > And remove the BR2_DEPRECATED_SINCE_2014_08 symbol since it's unused
+ > now.
 
-No: Buildroot does not generate a development environment for the
-target (i.e we don't build a compiler).
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Instead, you should create a Buildroot package for mpich, so that it
-gets cross-compiled as part of the Buildroot build. See the Buildroot
-manual for all the details about adding a new package.
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
