@@ -1,39 +1,38 @@
-From: David du Colombier <0intro@gmail.com>
-Date: Sun, 13 Sep 2015 23:16:21 +0200
-Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: fix static link with
-	readline
-Message-ID: <1442178981-24635-1-git-send-email-0intro@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Sep 2015 23:13:20 +0200
+Subject: [Buildroot] [git commit] dhrystone: pass HZ=100 to fix build issue
+	on musl
+Message-ID: <20150913211806.7B92181D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When linking statically, the order of libraries on the
-linker command matters, since readline depends on ncurses.
+commit: http://git.buildroot.net/buildroot/commit/?id=38c291cd955c8bc3d66f332de6bbdc23c94dded2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: David du Colombier <0intro@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/1b6cb1b40431bf484db2d99bfdc8237cbae6a9d7/
+http://autobuild.buildroot.net/results/20e669d6e4bc3d872a355ef658ddad8f34676624/
+
+musl doesn't provide sys/param.h to figure out the value of HZ, but as we
+know we are building for Linux, and on Linux the clock_t values returned
+from times(2) are defined in terms of USER_HZ which is always 100, we can
+just as well tell dhrystone to use that directly.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/0005-fix-readline-libs-ordering.patch | 11 +++++++++++
- 1 file changed, 11 insertions(+)
- create mode 100644 package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
+ package/dhrystone/Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
-new file mode 100644
-index 0000000..b2439f0
---- /dev/null
-+++ b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
-@@ -0,0 +1,11 @@
-+--- ./wpa_supplicant/Makefile
-++++ ./wpa_supplicant/Makefile
-+@@ -1379,7 +1379,7 @@
-+ 
-+ ifdef CONFIG_READLINE
-+ OBJS_c += ../src/utils/edit_readline.o
-+-LIBS_c += -lncurses -lreadline
-++LIBS_c += -lreadline -lncurses
-+ else
-+ ifdef CONFIG_WPA_CLI_EDIT
-+ OBJS_c += ../src/utils/edit.o
--- 
-1.8.3.1
+diff --git a/package/dhrystone/Makefile b/package/dhrystone/Makefile
+index d628ddb..f7a212b 100644
+--- a/package/dhrystone/Makefile
++++ b/package/dhrystone/Makefile
+@@ -1,4 +1,4 @@
+-CPPFLAGS += -DNO_PROTOTYPES=1
++CPPFLAGS += -DNO_PROTOTYPES=1 -DHZ=100
+ LDLIBS += -lm
+ 
+ all: dhrystone
