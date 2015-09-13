@@ -1,7 +1,7 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Sep 2015 23:11:40 +0200
-Subject: [Buildroot] [PATCH] package/kodi: needs .py modules
-Message-ID: <1442178700-26158-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 13 Sep 2015 23:13:03 +0200
+Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
+Message-ID: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,12 +27,16 @@ Fix that by inverting the dependency on python from Kodi:
   - update the comment accordingly.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+---
+changes v1 -> v2:
+  - fix spurious 'i' (vim insert)
 ---
  package/kodi/Config.in | 8 +++++---
  1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 797f59d..2d29f2e 100644
+index 797f59d..6d6c47b 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
 @@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
@@ -44,7 +48,7 @@ index 797f59d..2d29f2e 100644
  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
 -		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS i\
++		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
 +		|| !BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON_PYC_ONLY
  	depends on BR2_USE_MMU
  
