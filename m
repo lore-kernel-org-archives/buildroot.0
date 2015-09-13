@@ -1,74 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Sep 2015 23:13:03 +0200
-Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
-Message-ID: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Sep 2015 23:13:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dhrystone: fix musl compilation
+	issue
+In-Reply-To: <1441111142-8561-1-git-send-email-brendanheading@gmail.com>
+ (Brendan Heading's message of "Tue, 1 Sep 2015 13:39:02 +0100")
+References: <1441111142-8561-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <87k2ruauqf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi segfaults as soon as it tries to load a python module:
+>>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
 
-    Could not find platform independent libraries <prefix>
-    Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
-    ImportError: No module named site
-    Segmentation fault
+ > Fixes:
+ > http://autobuild.buildroot.net/results/1b6cb1b40431bf484db2d99bfdc8237cbae6a9d7/
+ > http://autobuild.buildroot.net/results/20e669d6e4bc3d872a355ef658ddad8f34676624/
 
-Turns out that keeping .py modules (with or without .pyc) fixes the
-issue.
+ > Include a more appropriate header file to pick up the definition of HZ
+ > from the kernel headers.
 
-Currently, Kodi selects python, but since the format of modules is a
-choice, we can not select it.
+ > Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 
-Fix that by inverting the dependency on python from Kodi:
-  - turn it into a depends rather than a select,
-  - add the dependency to ! pyc-only
-  - update the comment accordingly.
+ > ---
+ > v1 - This looks a bit hacky, but it seems to compile fine against
+ > the uclibc, glibc and musl toolchain combos without any other packages
+ > enabled. Comments welcome.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Looking at the implementation I see we end up using the times(2)
+interface, which returns clock_t values. The kernel defines clock_t in
+terms of USER_HZ which is always 100 (see kernel/time/time.c::jiffies_to_clock_t()).
+So it is simpler to just pass -DHZ=100 to dhrystone.
 
----
-changes v1 -> v2:
-  - fix spurious 'i' (vim insert)
----
- package/kodi/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+So I have committed a fix to do so instead, thanks.
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 797f59d..6d6c47b 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
- 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 
--comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
-+comment "kodi needs python and .py modiules, and a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON_PYC_ONLY
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_KODI_EGL_GLES
-@@ -65,7 +66,6 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_UCP
--	select BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON_BSDDB
- 	select BR2_PACKAGE_PYTHON_BZIP2
- 	select BR2_PACKAGE_PYTHON_CURSES
-@@ -94,6 +94,8 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # python
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_PYTHON
-+	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
- 	help
- 	  Kodi is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
 -- 
-1.9.1
+Bye, Peter Korsgaard
