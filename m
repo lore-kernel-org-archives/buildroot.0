@@ -1,255 +1,329 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Sep 2015 23:28:26 +0200
-Subject: [Buildroot] [git commit] linux-headers: remove deprecated versions
-	3.{0, 11, 13, 15}
-Message-ID: <20150913212900.89D2881D8A@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 23:28:42 +0200
+Subject: [Buildroot] [git commit] blackbox: remove deprecated package
+Message-ID: <20150913212900.93FFC7FA96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4ac4bc32836454845bd33a6e2539c6338dd94f6c
+commit: http://git.buildroot.net/buildroot/commit/?id=a658c4d178d7de77e5c09c14594cbb4005dbb638
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove for the upcoming 2015.11 release, they've been deprecated for a
-year now.
-Also remove some previously forgotten selection removals in legacy.
+Also update legacy as well.
+And remove the BR2_DEPRECATED_SINCE_2014_08 symbol since it's unused
+now.
 
-[Peter: drop 3.0.x kernel patch]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                   |   56 +++++++++++++++++---
- ...tall-fix-__packed-in-exported-kernel-head.patch |   46 ----------------
- package/linux-headers/Config.in.host               |   28 ----------
- 3 files changed, 48 insertions(+), 82 deletions(-)
+ Config.in                                          |    4 -
+ Config.in.legacy                                   |    7 ++
+ package/Config.in                                  |    1 -
+ package/blackbox/0001-Fix-configure-ac.patch       |   34 ------
+ package/blackbox/0002-gcc43.patch                  |  106 --------------------
+ .../blackbox/0003-gcc46-textpropertytostring.patch |   34 ------
+ package/blackbox/Config.in                         |   18 ----
+ package/blackbox/blackbox.hash                     |    2 -
+ package/blackbox/blackbox.mk                       |   23 ----
+ 9 files changed, 7 insertions(+), 222 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index 8b1bd8d..74aeb46 100644
+--- a/Config.in
++++ b/Config.in
+@@ -296,10 +296,6 @@ config BR2_DEPRECATED
+ 
+ if BR2_DEPRECATED
+ 
+-config BR2_DEPRECATED_SINCE_2014_08
+-	bool
+-	default y
+-
+ config BR2_DEPRECATED_SINCE_2015_02
+ 	bool
+ 	default y
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 52031fe..fbe61d8 100644
+index fbe61d8..18231fd 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -107,6 +107,46 @@ endif
+@@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2015.11"
  
-+config BR2_KERNEL_HEADERS_3_0
-+	bool "kernel headers version 3.0.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_2
++config BR2_PACKAGE_BLACKBOX
++	bool "blackbox package has been removed"
 +	select BR2_LEGACY
 +	help
-+	  Version 3.0.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.2.x of the headers have been
-+	  automatically selected in your configuration.
++	  Upstream is dead and the package has been deprecated for
++	  some time. There are other alternative maintained WMs.
 +
-+config BR2_KERNEL_HEADERS_3_11
-+	bool "kernel headers version 3.11.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_12
-+	select BR2_LEGACY
-+	help
-+	  Version 3.11.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.12.x of the headers have been
-+	  automatically selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_13
-+	bool "kernel headers version 3.13.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_14
-+	select BR2_LEGACY
-+	help
-+	  Version 3.13.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.14.x of the headers have been
-+	  automatically selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_3_15
-+	bool "kernel headers version 3.15.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_18
-+	select BR2_LEGACY
-+	help
-+	  Version 3.15.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.18.x of the headers have been
-+	  automatically selected in your configuration.
-+
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
- 	bool "DirectFB example df_andi has been removed"
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
-@@ -862,12 +902,12 @@ config BR2_PACKAGE_LIBELF
+ config BR2_KERNEL_HEADERS_3_0
+ 	bool "kernel headers version 3.0.x are no longer supported"
+ 	select BR2_KERNEL_HEADERS_3_2
+diff --git a/package/Config.in b/package/Config.in
+index 030477a..fc35f12 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -296,7 +296,6 @@ comment "X libraries and helper libraries"
+ 	source "package/x11r7/xkeyboard-config/Config.in"
  
- config BR2_KERNEL_HEADERS_3_8
- 	bool "kernel headers version 3.8.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_9
-+	select BR2_KERNEL_HEADERS_3_10
- 	select BR2_LEGACY
- 	help
- 	  Version 3.8.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.9.x of the headers have been
-+	  As an alternative, version 3.10.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_PACKAGE_GETTEXT_TOOLS
-@@ -1020,22 +1060,22 @@ config BR2_PACKAGE_EVTEST_CAPTURE
- 
- config BR2_KERNEL_HEADERS_3_6
- 	bool "kernel headers version 3.6.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_9
-+	select BR2_KERNEL_HEADERS_3_10
- 	select BR2_LEGACY
- 	help
- 	  Version 3.6.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.8.x of the headers have been
-+	  As an alternative, version 3.10.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_KERNEL_HEADERS_3_7
- 	bool "kernel headers version 3.7.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_9
-+	select BR2_KERNEL_HEADERS_3_10
- 	select BR2_LEGACY
- 	help
- 	  Version 3.7.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.8.x of the headers have been
-+	  As an alternative, version 3.10.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_PACKAGE_VALA
-@@ -1215,12 +1255,12 @@ config BR2_KERNEL_HEADERS_3_3
- 
- config BR2_KERNEL_HEADERS_3_5
- 	bool "kernel headers version 3.5.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_9
-+	select BR2_KERNEL_HEADERS_3_10
- 	select BR2_LEGACY
- 	help
- 	  Version 3.5.x of the Linux kernel headers have been deprecated
- 	  for more than four buildroot releases and are now removed.
--	  As an alternative, version 3.8.x of the headers have been
-+	  As an alternative, version 3.10.x of the headers have been
- 	  automatically selected in your configuration.
- 
- config BR2_GDB_VERSION_7_2
-diff --git a/package/linux-headers/3.0.101/0001-headers_install-fix-__packed-in-exported-kernel-head.patch b/package/linux-headers/3.0.101/0001-headers_install-fix-__packed-in-exported-kernel-head.patch
+ comment "X window managers"
+-	source "package/blackbox/Config.in"
+ 	source "package/enlightenment/Config.in"
+ 	source "package/fluxbox/Config.in"
+ 	source "package/matchbox/Config.in"
+diff --git a/package/blackbox/0001-Fix-configure-ac.patch b/package/blackbox/0001-Fix-configure-ac.patch
 deleted file mode 100644
-index 8777b71..0000000
---- a/package/linux-headers/3.0.101/0001-headers_install-fix-__packed-in-exported-kernel-head.patch
+index 1804473..0000000
+--- a/package/blackbox/0001-Fix-configure-ac.patch
 +++ /dev/null
-@@ -1,46 +0,0 @@
--From f210735fe2f17a6225432ee3d1239bcf23a8659c Mon Sep 17 00:00:00 2001
--From: Markus Trippelsdorf <markus@trippelsdorf.de>
--Date: Fri, 24 Jun 2011 15:51:00 +0200
--Subject: [PATCH] headers_install: fix __packed in exported kernel headers
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,34 +0,0 @@
+-blackbox: merge existing patch and fix lpthread
 -
--checkpatch.pl warns about using __attribute__((packed)) in kernel
--headers: "__packed is preferred over __attribute__((packed))". If one
--follows that advice it could cause problems in the exported header
--files, because the outside world doesn't know about this shortcut.
+-Merge the current configure patch into this one so it will patch 
+-configure.ac instead. Also add pthread to libs to fix a linkage problem.
 -
--For example busybox will fail to compile:
-- CC      miscutils/ubi_attach_detach.o
-- In file included from miscutils/ubi_attach_detach.c:27:0:
-- /usr/include/mtd/ubi-user.h:330:3: error: conflicting types for ???__packed???
-- /usr/include/mtd/ubi-user.h:314:3: note: previous declaration of ???__packed??? was here
--...
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---- blackbox-0.70.1/configure.ac.orig	2013-12-17 11:02:38.799055141 +0000
+-+++ blackbox-0.70.1/configure.ac	2013-12-17 11:09:08.421204545 +0000
+-@@ -8,14 +8,6 @@ AC_CONFIG_SRCDIR([src/blackbox.cc])
+- dnl Determine default prefix
+- test "x$prefix" = "xNONE" && prefix="$ac_default_prefix"
+- 
+--dnl Look in the most logical places for external libraries
+--CPPFLAGS="$CPPFLAGS -I$prefix/include"
+--LDFLAGS="$LDFLAGS -L$prefix/lib"
+--if test "x$prefix" != "x/usr/local"; then
+--  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+--  LDFLAGS="$LDFLAGS -L/usr/local/lib"
+--fi
+--
+- dnl Locate required external software
+- AC_PROG_CC
+- 
+-@@ -128,6 +120,10 @@ int main(int, char **)
+-                   [AC_MSG_RESULT([no])]
+-                  )
+- 
+-+dnl required pthread
+-+AC_CHECK_LIB([pthread],
+-+	     [pthread_cancel],
+-+	     [LIBS="$LIBS -lpthread"])
+- dnl needed for some X11 libs
+- AC_CHECK_LIB([nsl],
+-              [t_open],
+diff --git a/package/blackbox/0002-gcc43.patch b/package/blackbox/0002-gcc43.patch
+deleted file mode 100644
+index 1026bd5..0000000
+--- a/package/blackbox/0002-gcc43.patch
++++ /dev/null
+@@ -1,106 +0,0 @@
+-diff -Naupr blackbox-0.70.1.orig/lib/Image.cc blackbox-0.70.1/lib/Image.cc
+---- blackbox-0.70.1.orig/lib/Image.cc	2005-04-08 17:41:09.000000000 +0200
+-+++ blackbox-0.70.1/lib/Image.cc	2008-02-24 08:31:28.000000000 +0100
+-@@ -42,8 +42,9 @@
+- 
+- #include <assert.h>
+- #include <math.h>
+--#include <stdio.h>
+--#include <stdlib.h>
+-+#include <cstdio>
+-+#include <cstdlib>
+-+#include <cstring>
+- 
+- // #define COLORTABLE_DEBUG
+- // #define MITSHM_DEBUG
+-diff -Naupr blackbox-0.70.1.orig/lib/Resource.cc blackbox-0.70.1/lib/Resource.cc
+---- blackbox-0.70.1.orig/lib/Resource.cc	2005-04-06 23:16:50.000000000 +0200
+-+++ blackbox-0.70.1/lib/Resource.cc	2008-02-24 08:33:11.000000000 +0100
+-@@ -28,7 +28,8 @@
+- #include <X11/Xlib.h>
+- #include <X11/Xresource.h>
+- 
+--#include <stdio.h>
+-+#include <cstdio>
+-+#include <cstring>
+- 
+- 
+- bt::Resource::Resource(void)
+-diff -Naupr blackbox-0.70.1.orig/lib/XDG.cc blackbox-0.70.1/lib/XDG.cc
+---- blackbox-0.70.1.orig/lib/XDG.cc	2005-04-06 16:04:38.000000000 +0200
+-+++ blackbox-0.70.1/lib/XDG.cc	2008-02-24 08:34:11.000000000 +0100
+-@@ -25,7 +25,8 @@
+- #include "Util.hh"
+- #include "XDG.hh"
+- 
+--#include <stdlib.h>
+-+#include <cstdlib>
+-+#include <algorithm>
+- 
+- 
+- // make sure directory names end with a slash
+-diff -Naupr blackbox-0.70.1.orig/src/BlackboxResource.cc blackbox-0.70.1/src/BlackboxResource.cc
+---- blackbox-0.70.1.orig/src/BlackboxResource.cc	2005-10-18 09:34:46.000000000 +0200
+-+++ blackbox-0.70.1/src/BlackboxResource.cc	2008-02-24 08:34:49.000000000 +0100
+-@@ -33,6 +33,8 @@
+- #include <X11/Xutil.h>
+- #include <X11/cursorfont.h>
+- 
+-+#include <cstring>
+-+
+- 
+- BlackboxResource::BlackboxResource(const std::string& rc): rc_file(rc) {
+-   screen_resources = 0;
+-diff -Naupr blackbox-0.70.1.orig/src/main.cc blackbox-0.70.1/src/main.cc
+---- blackbox-0.70.1.orig/src/main.cc	2005-01-03 10:42:57.000000000 +0100
+-+++ blackbox-0.70.1/src/main.cc	2008-02-24 08:37:16.000000000 +0100
+-@@ -34,7 +34,8 @@
+- #include "blackbox.hh"
+- #include "../version.h"
+- 
+--#include <stdio.h>
+-+#include <cstdio>
+-+#include <cstring>
+- 
+- 
+- static void showHelp(int exitval) {
+-diff -Naupr blackbox-0.70.1.orig/src/Screen.cc blackbox-0.70.1/src/Screen.cc
+---- blackbox-0.70.1.orig/src/Screen.cc	2005-10-18 10:07:22.000000000 +0200
+-+++ blackbox-0.70.1/src/Screen.cc	2008-02-24 08:35:46.000000000 +0100
+-@@ -45,8 +45,9 @@
+- #include <sys/types.h>
+- #include <sys/stat.h>
+- #include <assert.h>
+--#include <ctype.h>
+- #include <dirent.h>
+-+#include <cctype>
+-+#include <cstring>
+- 
+- 
+- static bool running = true;
+-diff -Naupr blackbox-0.70.1.orig/src/ScreenResource.cc blackbox-0.70.1/src/ScreenResource.cc
+---- blackbox-0.70.1.orig/src/ScreenResource.cc	2005-04-13 07:54:08.000000000 +0200
+-+++ blackbox-0.70.1/src/ScreenResource.cc	2008-02-24 08:36:31.000000000 +0100
+-@@ -33,6 +33,8 @@
+- 
+- #include <assert.h>
+- 
+-+#include <cstring>
+-+
+- 
+- static const int iconify_width  = 9;
+- static const int iconify_height = 9;
+-diff -Naupr blackbox-0.70.1.orig/util/bsetroot.cc blackbox-0.70.1/util/bsetroot.cc
+---- blackbox-0.70.1.orig/util/bsetroot.cc	2005-03-15 08:01:37.000000000 +0100
+-+++ blackbox-0.70.1/util/bsetroot.cc	2008-02-24 08:38:41.000000000 +0100
+-@@ -30,7 +30,9 @@
+- #include <cctype>
+- 
+- #include <X11/Xatom.h>
+--#include <stdio.h>
+-+#include <cstdio>
+-+#include <cstdlib>
+-+#include <cstring>
+- 
+- 
+- // ignore all X errors
+diff --git a/package/blackbox/0003-gcc46-textpropertytostring.patch b/package/blackbox/0003-gcc46-textpropertytostring.patch
+deleted file mode 100644
+index af03be4..0000000
+--- a/package/blackbox/0003-gcc46-textpropertytostring.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-[PATCH] fix build issue with gcc 4.6+
 -
--Fix the problem by substituting __packed with __attribute__((packed)) in
--the header_install.pl script.
+-Debian patch from http://patch-tracker.debian.org/patch/series/dl/blackbox/0.70.1-13/textpropertytostring-unconditional.diff
 -
--Cc: Artem Bityutskiy <Artem.Bityutskiy@nokia.com>
--CC: Joe Perches <joe@perches.com>
--Signed-off-by: Markus Trippelsdorf <markus@trippelsdorf.de>
--Signed-off-by: Michal Marek <mmarek@suse.cz>
-----
-- scripts/headers_install.pl |    1 +
-- 1 files changed, 1 insertions(+), 0 deletions(-)
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 -
--diff --git a/scripts/headers_install.pl b/scripts/headers_install.pl
--index efb3be1..48462be 100644
----- a/scripts/headers_install.pl
--+++ b/scripts/headers_install.pl
--@@ -35,6 +35,7 @@ foreach my $file (@files) {
-- 		$line =~ s/([\s(])__iomem\s/$1/g;
-- 		$line =~ s/\s__attribute_const__\s/ /g;
-- 		$line =~ s/\s__attribute_const__$//g;
--+		$line =~ s/\b__packed\b/__attribute__((packed))/g;
-- 		$line =~ s/^#include <linux\/compiler.h>//;
-- 		$line =~ s/(^|\s)(inline)\b/$1__$2__/g;
-- 		$line =~ s/(^|\s)(asm)\b(\s|[(]|$)/$1__$2__$3/g;
---- 
--1.7.5.4
+-Description: Declare bt::textPropertyToString unconditionally.
+-Author: Jakub Wilk <jwilk@debian.org>
+-Forwarded: no
+-Bug-Debian: http://bugs.debian.org/614468
+-Last-Update: 2011-03-12
 -
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3a9603e..49a8dc2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -11,12 +11,6 @@ choice
- 	  You must select the correct set of header files to match
- 	  the kernel you intend to use on your target system.
- 
--	config BR2_KERNEL_HEADERS_3_0
--		bool "Linux 3.0.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2014_08
--		depends on !BR2_arc && !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+---- a/lib/Util.hh
+-+++ b/lib/Util.hh
+-@@ -25,6 +25,8 @@
+- #ifndef __Util_hh
+- #define __Util_hh
+- 
+-+#include <X11/Xutil.h>
+-+
+- #include <limits.h>
+- #include <string>
+- 
+-@@ -94,10 +96,8 @@
+- 
+-   std::string tolower(const std::string &string);
+- 
+--#ifdef _XUTIL_H_
+-   std::string textPropertyToString(::Display *display,
+-                                    ::XTextProperty& text_prop);
+--#endif
+- 
+- } // namespace bt
+- 
+diff --git a/package/blackbox/Config.in b/package/blackbox/Config.in
+deleted file mode 100644
+index 8b61c73..0000000
+--- a/package/blackbox/Config.in
++++ /dev/null
+@@ -1,18 +0,0 @@
+-config BR2_PACKAGE_BLACKBOX
+-	bool "blackbox"
+-	depends on BR2_PACKAGE_XORG7
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_MMU # fork()
+-	# upstream dead since 2005
+-	depends on BR2_DEPRECATED_SINCE_2014_08
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	help
+-	  Blackbox is a fast, lightweight window manager for the X
+-	  Window System.
 -
- 	config BR2_KERNEL_HEADERS_3_2
- 		bool "Linux 3.2.x kernel headers"
- 		depends on !BR2_arc && !BR2_nios2
-@@ -32,34 +26,16 @@ choice
- 		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 
--	config BR2_KERNEL_HEADERS_3_11
--		bool "Linux 3.11.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2014_08
--		depends on !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+-	  http://blackboxwm.sourceforge.net/
 -
- 	config BR2_KERNEL_HEADERS_3_12
- 		bool "Linux 3.12.x kernel headers"
- 		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 
--	config BR2_KERNEL_HEADERS_3_13
--		bool "Linux 3.13.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2014_08
--		depends on !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+-comment "blackbox needs a toolchain w/ C++"
+-	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/blackbox/blackbox.hash b/package/blackbox/blackbox.hash
+deleted file mode 100644
+index 5aae1a9..0000000
+--- a/package/blackbox/blackbox.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed:
+-sha256  92c2be347253f29b10063d579b4267a21516cb322a41b5e83d770fa6d44afd21  blackbox-0.70.1.tar.bz2
+diff --git a/package/blackbox/blackbox.mk b/package/blackbox/blackbox.mk
+deleted file mode 100644
+index a73bc5b..0000000
+--- a/package/blackbox/blackbox.mk
++++ /dev/null
+@@ -1,23 +0,0 @@
+-################################################################################
+-#
+-# blackbox
+-#
+-################################################################################
 -
- 	config BR2_KERNEL_HEADERS_3_14
- 		bool "Linux 3.14.x kernel headers"
- 		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 
--	config BR2_KERNEL_HEADERS_3_15
--		bool "Linux 3.15.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2014_08
--		depends on !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+-BLACKBOX_VERSION = 0.70.1
+-BLACKBOX_SOURCE = blackbox-$(BLACKBOX_VERSION).tar.bz2
+-BLACKBOX_SITE = http://downloads.sourceforge.net/project/blackboxwm/blackboxwm/Blackbox%20$(BLACKBOX_VERSION)
+-BLACKBOX_CONF_OPTS = \
+-	--x-includes=$(STAGING_DIR)/usr/include/X11 \
+-	--x-libraries=$(STAGING_DIR)/usr/lib
+-BLACKBOX_DEPENDENCIES = xlib_libX11
+-BLACKBOX_LICENSE = MIT
+-BLACKBOX_LICENSE_FILES = LICENSE
 -
- 	config BR2_KERNEL_HEADERS_3_16
- 		bool "Linux 3.16.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2015_02
-@@ -215,15 +191,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.71"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.108"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.87"	if BR2_KERNEL_HEADERS_3_10
--	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.47"	if BR2_KERNEL_HEADERS_3_12
--	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.51"	if BR2_KERNEL_HEADERS_3_14
--	default "3.15.10"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.20"	if BR2_KERNEL_HEADERS_3_18
+-ifneq ($(BR2_ENABLE_LOCALE),y)
+-BLACKBOX_DEPENDENCIES += libiconv
+-endif
+-
+-BLACKBOX_AUTORECONF = YES
+-
+-$(eval $(autotools-package))
