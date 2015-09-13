@@ -1,30 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 21:18:37 +0200
-Subject: [Buildroot] [V2] perl: fix static build
-In-Reply-To: <1442148988-8900-1-git-send-email-francois.perrad@gadz.org>
-References: <1442148988-8900-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20150913211837.2036a390@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Sep 2015 21:52:30 +0200
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
+In-Reply-To: <20150913121206.64758da8@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 13 Sep 2015 12:12:06 +0200")
+References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
+ <55F3EFAC.7060306@imgtec.com>
+ <20150913121206.64758da8@free-electrons.com>
+Message-ID: <87fv2icd1d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 13 Sep 2015 14:56:28 +0200, Francois Perrad wrote:
-> see http://autobuild.buildroot.net/results/502/502e6a6280451acc48e5f500e774b2bd04c7229e/
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl/0001-fix-EUMM.patch | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->  create mode 100644 package/perl/0001-fix-EUMM.patch
+Hi,
 
-Applied, thanks.
+ > BTW, the fact that you are regularly verifying that the binaries built
+ > by Buildroot are built for MIPS, I am wondering if it wouldn't be worth
+ > the effort to add a final check at the end of the build to verify that
+ > all binaries are built for the proper architecture/ABI. I remember that
+ > some time ago, the nfs-utils package was installing binaries built for
+ > the host machine into the target filesystem.
 
-Thomas
+Yes, it could be a nice test. How would we do it? With readelf? We would
+need to filter out any shell scripts and similar.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
