@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 20:01:22 +0200
-Subject: [Buildroot] [git commit] gnutls: bump to version 3.3.18
-Message-ID: <20150913180154.55BFB81DA9@busybox.osuosl.org>
+Date: Sun, 13 Sep 2015 20:04:43 +0200
+Subject: [Buildroot] [PATCH 1/1] add python simple template module
+In-Reply-To: <1442162503-5817-1-git-send-email-stevecalfee@gmail.com>
+References: <1442162503-5817-1-git-send-email-stevecalfee@gmail.com>
+Message-ID: <20150913200443.38a3512d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d36ed1a7b88939bb1949e8d3a99eb3ec6f01922e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Steve Calfee,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gnutls/gnutls.hash |    2 +-
- package/gnutls/gnutls.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The title of the commit should be:
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 4496a2b..088059b 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	b40f158030a92f450a07b20300a3996710ca19800848d9f6fd62493170c5bbb4	gnutls-3.3.17.1.tar.xz
-+sha256	7a87e7f486d1ada10007356917a412cde6c6114dac018e3569e3aa09e9f29395	gnutls-3.3.18.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 82d9d29..9fbdb49 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.3
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17.1
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+	python-pyratemp: new package
+
+On Sun, 13 Sep 2015 09:41:43 -0700, Steve Calfee wrote:
+
+
+> diff --git a/package/python-pyratemp/python-pyratemp.hash b/package/python-pyratemp/python-pyratemp.hash
+> new file mode 100644
+> index 0000000..0abb9e0
+> --- /dev/null
+> +++ b/package/python-pyratemp/python-pyratemp.hash
+> @@ -0,0 +1,4 @@
+> +# From http://www.simple-is-better.org/template
+> +# Locally calculated:
+
+Having those two comments together do not make sense. Either the hash
+is provided by the official upstream website and you should write the
+first line, or the hash is not available from the upstream website, in
+which case you use a locally calculated hash.
+
+> +sha256 c45ed656ada482a02fe780495f37a695e7671accb04f918f7e7f18abf877bc71 pyratemp-0.3.2.tgz
+> +
+
+Unneeded empty line.
+
+Could you fix those minor issues, as well as Yegor's comment, and send
+a v2 version of this patch?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
