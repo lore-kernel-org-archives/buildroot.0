@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Sep 2015 12:33:21 +0200
-Subject: [Buildroot] [PATCH 1/2] libnetfilter_conntrack: bump to version
- 1.0.5
-In-Reply-To: <1442006582-20537-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1442006582-20537-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150913123321.59e12dbe@free-electrons.com>
+Date: Sun, 13 Sep 2015 12:33:26 +0200
+Subject: [Buildroot] [PATCH] connman: bump to version 1.30
+In-Reply-To: <1442003442-26220-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1442003442-26220-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150913123326.2b84b3bd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +12,14 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Fri, 11 Sep 2015 18:23:01 -0300, Gustavo Zacarias wrote:
-> Patches upstream so drop them along with autoreconf.
-> 
+On Fri, 11 Sep 2015 17:30:42 -0300, Gustavo Zacarias wrote:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libnetfilter_conntrack/0001-uclinux.patch  | 26 ---------------------
->  .../0002-src-Makefile.am-drop-hardcoded-ldl.patch  | 27 ----------------------
->  .../libnetfilter_conntrack.hash                    |  6 ++---
->  .../libnetfilter_conntrack.mk                      |  4 +---
->  4 files changed, 4 insertions(+), 59 deletions(-)
->  delete mode 100644 package/libnetfilter_conntrack/0001-uclinux.patch
->  delete mode 100644 package/libnetfilter_conntrack/0002-src-Makefile.am-drop-hardcoded-ldl.patch
+>  package/connman/connman.hash | 2 +-
+>  package/connman/connman.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
