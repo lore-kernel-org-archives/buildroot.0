@@ -1,8 +1,8 @@
 From: David du Colombier <0intro@gmail.com>
-Date: Sun, 13 Sep 2015 23:50:36 +0200
-Subject: [Buildroot] [PATCH v2 1/1] wpa_supplicant: fix static link with
+Date: Sun, 13 Sep 2015 23:52:46 +0200
+Subject: [Buildroot] [PATCH v3 1/1] wpa_supplicant: fix static link with
 	readline
-Message-ID: <1442181036-4119-1-git-send-email-0intro@gmail.com>
+Message-ID: <1442181166-5754-1-git-send-email-0intro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +14,16 @@ linker command matters, since readline depends on ncurses.
 
 Signed-off-by: David du Colombier <0intro@gmail.com>
 ---
- .../0005-fix-readline-libs-ordering.patch          | 24 ++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ .../0005-fix-readline-libs-ordering.patch          | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
  create mode 100644 package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
 
 diff --git a/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
 new file mode 100644
-index 0000000..ae7cf9e
+index 0000000..2a9b832
 --- /dev/null
 +++ b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,26 @@
 +commit 631f0893038743cebd2def39df61aceb48bd43a9
 +Author: David du Colombier <0intro@gmail.com>
 +Date:   Sun Sep 13 23:40:43 2015 +0200
@@ -34,6 +34,8 @@ index 0000000..ae7cf9e
 +    it should be set before ncurses on the linker
 +    command line to be able to be statically linked
 +    successfully.
++
++    Signed-off-by: David du Colombier <0intro@gmail.com>
 +
 +diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
 +index 1597412..581db02 100644
