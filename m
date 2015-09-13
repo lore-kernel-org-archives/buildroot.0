@@ -1,39 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Sep 2015 23:13:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhrystone: fix musl compilation
-	issue
-In-Reply-To: <1441111142-8561-1-git-send-email-brendanheading@gmail.com>
- (Brendan Heading's message of "Tue, 1 Sep 2015 13:39:02 +0100")
-References: <1441111142-8561-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <87k2ruauqf.fsf@dell.be.48ers.dk>
+From: David du Colombier <0intro@gmail.com>
+Date: Sun, 13 Sep 2015 23:16:21 +0200
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: fix static link with
+	readline
+Message-ID: <1442178981-24635-1-git-send-email-0intro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
+When linking statically, the order of libraries on the
+linker command matters, since readline depends on ncurses.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/1b6cb1b40431bf484db2d99bfdc8237cbae6a9d7/
- > http://autobuild.buildroot.net/results/20e669d6e4bc3d872a355ef658ddad8f34676624/
+Signed-off-by: David du Colombier <0intro@gmail.com>
+---
+ package/wpa_supplicant/0005-fix-readline-libs-ordering.patch | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
 
- > Include a more appropriate header file to pick up the definition of HZ
- > from the kernel headers.
-
- > Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-
- > ---
- > v1 - This looks a bit hacky, but it seems to compile fine against
- > the uclibc, glibc and musl toolchain combos without any other packages
- > enabled. Comments welcome.
-
-Looking at the implementation I see we end up using the times(2)
-interface, which returns clock_t values. The kernel defines clock_t in
-terms of USER_HZ which is always 100 (see kernel/time/time.c::jiffies_to_clock_t()).
-So it is simpler to just pass -DHZ=100 to dhrystone.
-
-So I have committed a fix to do so instead, thanks.
-
+diff --git a/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
+new file mode 100644
+index 0000000..b2439f0
+--- /dev/null
++++ b/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
+@@ -0,0 +1,11 @@
++--- ./wpa_supplicant/Makefile
+++++ ./wpa_supplicant/Makefile
++@@ -1379,7 +1379,7 @@
++ 
++ ifdef CONFIG_READLINE
++ OBJS_c += ../src/utils/edit_readline.o
++-LIBS_c += -lncurses -lreadline
+++LIBS_c += -lreadline -lncurses
++ else
++ ifdef CONFIG_WPA_CLI_EDIT
++ OBJS_c += ../src/utils/edit.o
 -- 
-Bye, Peter Korsgaard
+1.8.3.1
