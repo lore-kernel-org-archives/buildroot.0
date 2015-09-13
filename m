@@ -1,38 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Sep 2015 23:13:20 +0200
-Subject: [Buildroot] [git commit] dhrystone: pass HZ=100 to fix build issue
-	on musl
-Message-ID: <20150913211806.7B92181D4F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Sep 2015 23:20:43 +0200
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
+In-Reply-To: <87fv2icd1d.fsf@dell.be.48ers.dk>
+References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
+ <55F3EFAC.7060306@imgtec.com>
+ <20150913121206.64758da8@free-electrons.com>
+ <87fv2icd1d.fsf@dell.be.48ers.dk>
+Message-ID: <20150913232043.415b5d1a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38c291cd955c8bc3d66f332de6bbdc23c94dded2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-Fixes:
-http://autobuild.buildroot.net/results/1b6cb1b40431bf484db2d99bfdc8237cbae6a9d7/
-http://autobuild.buildroot.net/results/20e669d6e4bc3d872a355ef658ddad8f34676624/
+On Sun, 13 Sep 2015 21:52:30 +0200, Peter Korsgaard wrote:
 
-musl doesn't provide sys/param.h to figure out the value of HZ, but as we
-know we are building for Linux, and on Linux the clock_t values returned
-from times(2) are defined in terms of USER_HZ which is always 100, we can
-just as well tell dhrystone to use that directly.
+>  > BTW, the fact that you are regularly verifying that the binaries built
+>  > by Buildroot are built for MIPS, I am wondering if it wouldn't be worth
+>  > the effort to add a final check at the end of the build to verify that
+>  > all binaries are built for the proper architecture/ABI. I remember that
+>  > some time ago, the nfs-utils package was installing binaries built for
+>  > the host machine into the target filesystem.
+> 
+> Yes, it could be a nice test. How would we do it? With readelf? We would
+> need to filter out any shell scripts and similar.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dhrystone/Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Either readelf, or just "file". But maybe readelf is fine as it's
+available in the toolchain. We can skip scripts by testing the first
+two bytes of each file and see if they are #!, no?
 
-diff --git a/package/dhrystone/Makefile b/package/dhrystone/Makefile
-index d628ddb..f7a212b 100644
---- a/package/dhrystone/Makefile
-+++ b/package/dhrystone/Makefile
-@@ -1,4 +1,4 @@
--CPPFLAGS += -DNO_PROTOTYPES=1
-+CPPFLAGS += -DNO_PROTOTYPES=1 -DHZ=100
- LDLIBS += -lm
- 
- all: dhrystone
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
