@@ -1,34 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 15:09:00 +0200
-Subject: [Buildroot] [git commit] docs: use lists.buildroot.org to refer
-	to the mailman archives
-In-Reply-To: <55F6C3DE.5060308@imgtec.com> (Vicente Olivert Riera's message of
- "Mon, 14 Sep 2015 13:55:58 +0100")
-References: <20150914125247.7065281E64@busybox.osuosl.org>
- <55F6C3DE.5060308@imgtec.com>
-Message-ID: <87y4g987wz.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 14 Sep 2015 14:40:10 +0100
+Subject: [Buildroot] [PATCH] micropython: new package
+In-Reply-To: <1442226102-15878-1-git-send-email-judge.packham@gmail.com>
+References: <1442226102-15878-1-git-send-email-judge.packham@gmail.com>
+Message-ID: <55F6CE3A.8000108@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Dear Chris Packham,
 
- > Hi Peter,
- > On 09/14/2015 01:50 PM, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=e77d6c60b98893f2075d9baa5778216ffb0be9ca
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> Now that mailman handles lists.buildroot.org lets use that everywhere in the
- >> documentation as well.
+more comments:
 
- > that's good, but..., why do you keep sending the emails to
- > buildroot at busybox.net? ;-P
+On 09/14/2015 11:21 AM, Chris Packham wrote:
+> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+> new file mode 100644
+> index 0000000..9b5e7d2
+> --- /dev/null
+> +++ b/package/micropython/micropython.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +# micropython
+> +################################################################################
+> +MICROPYTHON_VERSION = v1.4.5
+> +MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+> +MICROPYTHON_LICENSE = MIT
+> +MICROPYTHON_LICENSE_FILES = LICENSE
+> +MICROPYTHON_DEPENDENCIES = libffi
 
-That's the git notification email hook, I'll get the osuosl.org guys to
-fix it.
+micropython calls pkg-config in order to obtain the libraries and cflags
+for libffi:
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+ifeq ($(MICROPY_PY_FFI),1)
+LIBFFI_LDFLAGS_MOD := $(shell pkg-config --libs libffi)
+LIBFFI_CFLAGS_MOD := $(shell pkg-config --cflags libffi)
+CFLAGS_MOD += $(LIBFFI_CFLAGS_MOD) -DMICROPY_PY_FFI=1
+
+So please, add host-pkgconf to MICROPYTHON_DEPENDENCIES. Otherwise it
+will fail to compile with an error like this one:
+
+LINK micropython
+build/modffi.o: In function `ffifunc_call':
+modffi.c:(.text+0x24c): undefined reference to `ffi_call'
+modffi.c:(.text+0x260): undefined reference to `ffi_call'
+build/modffi.o: In function `mod_ffi_callback':
+modffi.c:(.text+0x7b0): undefined reference to `ffi_closure_alloc'
+... and many more
+
+> +
+> +ifeq ($(BR2_powerpc),y)
+> +MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+> +endif
+> +
+> +define MICROPYTHON_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D)/unix \
+
+Please add $(TARGET_MAKE_ENV) before $(MAKE). You need that in order to
+Buildroot set the PATH variable so the pkg-config executable and the
+libffi.pc file can be found.
+
+Regards,
+
+Vincent.
+
+> +		CROSS_COMPILE=$(TARGET_CROSS) \
+> +		DESTDIR=$(TARGET_DIR) \
+> +		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
+> +		install
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
