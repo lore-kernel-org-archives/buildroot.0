@@ -1,67 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Sep 2015 22:19:12 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 14 Sep 2015 22:53:30 +0200
 Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
- (without devtmpfs)
-In-Reply-To: <20150914213404.4fdd36a5@free-electrons.com>
+	(without devtmpfs)
+In-Reply-To: <20150909155427.53f9c8b5@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 9 Sep 2015 15:54:27 +0200")
 References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
  <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
- <20150909132929.5c01433e@free-electrons.com>
- <55F6F060.2060901@lucaceresoli.net>
- <20150914213404.4fdd36a5@free-electrons.com>
-Message-ID: <55F72BC0.7050306@mind.be>
+ <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
+ <20150909155427.53f9c8b5@free-electrons.com>
+Message-ID: <87bnd43eph.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+
+Hi,
 
 
-On 14-09-15 21:34, Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
-> 
-> On Mon, 14 Sep 2015 18:05:52 +0200, Luca Ceresoli wrote:
-> 
->> But now I removed that patch, and replaced with a different
->> implementation based on Arnout's suggestion of using BUSYBOX_DEVICES.
-> 
-> I am not sure using BUSYBOX_DEVICES is fully correct. The reason
-> why /dev/console is needed is *not* because of Busybox, but because of
-> the kernel that is opening /dev/console before handing control over
-> to the init application:
-> 
->   http://lxr.free-electrons.com/source/init/main.c#L1011
-> 
-> If you do BUSYBOX_DEVICES with just /dev/console, then you will also
-> need a SYSVINIT_DEVICES with just /dev/console.
-> 
-> Though I admit my comment here is mainly nitpicking :)
+ > In principle, it seems better to me if the devices are all set up
+ > before starting anything else, so if it works, I'm all for S00mdev. The
+ > only question is whether mdev logs things to syslog, and if so what
+ > happens to those messages that are emitted before syslog is started.
 
- But of course you are right. This is part of the system/skeleton handling, and
-now skeleton is a package, we can make it part of SKELETON_DEVICES.
+It doesn't:
 
- Regards,
- Arnout
+git grep log mdev.c
+mdev.c://usage:       "If /dev/mdev.log file exists, debug log will be appended to it."
+mdev.c:static void open_mdev_log(const char *seq, unsigned my_pid)
+mdev.c: int logfd = open("mdev.log", O_WRONLY | O_APPEND);
+mdev.c: if (logfd >= 0) {
+mdev.c:         xmove_fd(logfd, STDERR_FILENO);
+mdev.c:         open_mdev_log(seq, my_pid);
 
-> 
->>> One thing I dislike a bit is that there is quite a bit overlap between
->>> S10mdev and activate-mdev. As Arnout suggested, can you just mount a
->>> tmpfs in /dev in the inittab in the "mdev without devtmpfs" case, and
->>> then keep the normal S10mdev script?
->>
->> v2 will do things this way.
-> 
-> Great!
-> 
-> Thanks!
-> 
-> Thomas
-> 
+So only to stderr (and /dev/mdev.log if it exists).
 
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
