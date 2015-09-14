@@ -1,43 +1,116 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 23:39:41 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
-	to be symlinks into /usr
-In-Reply-To: <55F73B74.1020708@mind.be> (Arnout Vandecappelle's message of
- "Mon, 14 Sep 2015 23:26:12 +0200")
-References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
- <20150904101128.4206779d@free-electrons.com>
- <55E9540C.9060000@mind.be> <20150904163121.GD4540@free.fr>
- <8737yg3dt0.fsf@dell.be.48ers.dk> <55F73B74.1020708@mind.be>
-Message-ID: <87vbbcznmq.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Sep 2015 18:45:15 -0300
+Subject: [Buildroot] [PATCH] kompexsqlite: new package
+Message-ID: <1442267115-2530-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in                                  |  1 +
+ ...kefile-use-autoconf-CXX-for-proper-builds.patch | 27 ++++++++++++++++++++++
+ package/kompexsqlite/Config.in                     | 12 ++++++++++
+ package/kompexsqlite/kompexsqlite.hash             |  2 ++
+ package/kompexsqlite/kompexsqlite.mk               | 14 +++++++++++
+ 5 files changed, 56 insertions(+)
+ create mode 100644 package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
+ create mode 100644 package/kompexsqlite/Config.in
+ create mode 100644 package/kompexsqlite/kompexsqlite.hash
+ create mode 100644 package/kompexsqlite/kompexsqlite.mk
 
-Hi,
-
->> Is there any reason why we explicitly add the symlinks for /bin / /sbin
- >> and /lib and don't just do:
- >> 
- >> ln -sf . usr
-
- >  Well, in Fedora I think the idea was that / could be an initramfs and /usr
- > would be mounted read-only. But since we don't directly support that use case,
- > making /usr a symlink would indeed be an option.
-
- >  However, I'm not really in favour of it. I don't see that it brings
- > a lot of benefit, other than reducing the number of symlinks from 3
- > to 1. But it does create /share and /local which looks weird could
- > potentially conflict with existing user directories (e.g. a
- > mountpoint for windows shares...). Also it makes it more complicated
- > for the user to implement a fedora-like mounted /usr.
-
-Ok - fine, having 1 or 3 symlinks isn't really a big deal. Just symlinking /usr
-seemed the simplest possible solution.
-
+diff --git a/package/Config.in b/package/Config.in
+index eb6968c..5cd9f4d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -764,6 +764,7 @@ menu "Database"
+ 	source "package/berkeleydb/Config.in"
+ 	source "package/cppdb/Config.in"
+ 	source "package/gdbm/Config.in"
++	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/mysql/Config.in"
+ 	source "package/postgresql/Config.in"
+diff --git a/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch b/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
+new file mode 100644
+index 0000000..408c100
+--- /dev/null
++++ b/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
+@@ -0,0 +1,27 @@
++From 769693d9ddf63b04dd4aad6cad080f3cee3f997e Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Thu, 11 Jun 2015 14:08:38 -0300
++Subject: [PATCH] Makefile: use autoconf CXX for proper builds
++
++Status: applied upstream.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ Makefile.in | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile.in b/Makefile.in
++index 91fb8b2..fe862cd 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -23,6 +23,7 @@ mandir = $(prefix)/share/man/man3
++ headerdir = $(prefix)/include/kompex
++ 
++ CC = @CC@
+++CXX = @CXX@
++ CFLAGS = @CFLAGS@
++ CPPFLAGS = $(CFLAGS) @CPPFLAGS@
++ LDFLAGS = @LDFLAGS@
++-- 
++2.3.6
++
+diff --git a/package/kompexsqlite/Config.in b/package/kompexsqlite/Config.in
+new file mode 100644
+index 0000000..b6d7d7f
+--- /dev/null
++++ b/package/kompexsqlite/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_KOMPEXSQLITE
++	bool "kompexsqlite"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	help
++	  The Kompex SQLite Wrapper is an open source C++ wrapper
++	  library for SQLite.
++
++	  http://sqlitewrapper.kompex-online.com/index.php
++
++comment "kompexsqlite needs a toolchain w/ C++, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
+new file mode 100644
+index 0000000..3c94adf
+--- /dev/null
++++ b/package/kompexsqlite/kompexsqlite.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	v1.10.12-1.tar.gz
+diff --git a/package/kompexsqlite/kompexsqlite.mk b/package/kompexsqlite/kompexsqlite.mk
+new file mode 100644
+index 0000000..7f57680
+--- /dev/null
++++ b/package/kompexsqlite/kompexsqlite.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# kompexsqlite
++#
++################################################################################
++
++KOMPEXSQLITE_VERSION = v1.10.12-1
++KOMPEXSQLITE_SOURCE = $(KOMPEXSQLITE_VERSION).tar.gz
++KOMPEXSQLITE_SITE = https://github.com/Aethelflaed/kompex-sqlite-wrapper/archive
++KOMPEXSQLITE_INSTALL_STAGING = YES
++KOMPEXSQLITE_LICENSE = LGPLv3+ (wrapper), Public Domain (bundled sqlite)
++KOMPEXSQLITE_LICENSE_FILES = LICENSE.txt
++
++$(eval $(autotools-package))
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.4.6
