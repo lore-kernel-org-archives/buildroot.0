@@ -1,30 +1,25 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 14 Sep 2015 21:11:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.7.4
-Message-ID: <1442257883-20359-1-git-send-email-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 14 Sep 2015 21:32:36 +0200
+Subject: [Buildroot] [PATCH v2] barebox: bump to version 2015.09.0
+In-Reply-To: <1442249404-20437-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Mon, 14 Sep 2015 18:50:04 +0200")
+References: <1442247387-19589-1-git-send-email-fabio.porcedda@gmail.com>
+ <1442249404-20437-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87613c6bl7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/libuv/libuv.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 68979e0..7709ad1 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.7.0
-+LIBUV_VERSION = v1.7.4
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > ---
+ > v2:
+ >  - Add missing Sign off line
+
+Committed, thanks.
+
 -- 
-2.5.2
+Bye, Peter Korsgaard
