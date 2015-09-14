@@ -1,52 +1,71 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 14 Sep 2015 09:49:13 +0100
-Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
-In-Reply-To: <20150913232043.415b5d1a@free-electrons.com>
-References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
- <55F3EFAC.7060306@imgtec.com> <20150913121206.64758da8@free-electrons.com>
- <87fv2icd1d.fsf@dell.be.48ers.dk>
- <20150913232043.415b5d1a@free-electrons.com>
-Message-ID: <55F68A09.2020204@imgtec.com>
+Date: Mon, 14 Sep 2015 09:59:15 +0100
+Subject: [Buildroot] [PATCH v2] stress-ng: Depend on kernel headers >=
+	3.3
+In-Reply-To: <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com>
+References: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
+ <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <55F68C63.9080405@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Julien Corjon,
 
-On 09/13/2015 10:20 PM, Thomas Petazzoni wrote:
-> Peter,
+On 09/14/2015 08:43 AM, Julien Corjon wrote:
+> perf.c need PERF_COUNT_HW_REF_CPU_CYCLES generic PMU event which
+> is available only since 3.3 kernel version
 > 
-> On Sun, 13 Sep 2015 21:52:30 +0200, Peter Korsgaard wrote:
+> Fixes:
+>   http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
+>   http://autobuild.buildroot.net/results/dac6a85fdd721b959175caf5629b91dee717c3c6
+>   http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
 > 
->>  > BTW, the fact that you are regularly verifying that the binaries built
->>  > by Buildroot are built for MIPS, I am wondering if it wouldn't be worth
->>  > the effort to add a final check at the end of the build to verify that
->>  > all binaries are built for the proper architecture/ABI. I remember that
->>  > some time ago, the nfs-utils package was installing binaries built for
->>  > the host machine into the target filesystem.
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-It's a good idea.
+Could you please mark as superseded your previous patch?
 
->> Yes, it could be a nice test. How would we do it? With readelf? We would
->> need to filter out any shell scripts and similar.
-> 
-> Either readelf, or just "file". But maybe readelf is fine as it's
-> available in the toolchain. We can skip scripts by testing the first
-> two bytes of each file and see if they are #!, no?
-
-Or use "file -i" and grep for "charset=binary".
-
-Also, your script to calculate the size of the rootfs is a good start
-point since it already collects all the files in target :-) We could
-reuse part of that code, or directly use the .txt file that it generates.
+http://patchwork.ozlabs.org/patch/516900/
 
 Regards,
 
 Vincent.
 
-> Best regards,
+> ---
+> v1 -> v2 : 
+>   - Fixe commit log (suggested by Vincente Olivert Riera)
+>   - Add autobuild references (suggested by Romain Naour)
+>  package/stress-ng/Config.in | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> Thomas
+> diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+> index cdf9984..1e475b1 100644
+> --- a/package/stress-ng/Config.in
+> +++ b/package/stress-ng/Config.in
+> @@ -4,8 +4,8 @@ config BR2_PACKAGE_STRESS_NG
+>  	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
+>  	# disabled on uClibc: stress-aio.c needs aio.h
+>  	depends on BR2_TOOLCHAIN_USES_GLIBC
+> -	# perf.c needs PERF_COUNT_HW_STALLED_CYCLES_FRONTEND
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+> +	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+>  	depends on !BR2_microblaze # keyutils
+>  	depends on !BR2_STATIC_LIBS # keyutils
+>  	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
+> @@ -18,8 +18,8 @@ config BR2_PACKAGE_STRESS_NG
+>  
+>  	  http://kernel.ubuntu.com/~cking/stress-ng/
+>  
+> -comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.0"
+> +comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.3"
+>  	depends on !BR2_microblaze
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
+> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
+>  		|| !BR2_TOOLCHAIN_USES_GLIBC
 > 
