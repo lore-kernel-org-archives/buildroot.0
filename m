@@ -1,55 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 23:03:32 +0200
-Subject: [Buildroot] [RFC 0/6] mdev-only /dev management (without
-	devtmpfs)
-In-Reply-To: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Tue, 8 Sep 2015 23:28:48 +0200")
-References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <877fns3e8r.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Sep 2015 23:12:59 +0200
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+	to be symlinks into /usr
+In-Reply-To: <20150904163121.GD4540@free.fr> (Yann E. MORIN's message of "Fri, 
+ 4 Sep 2015 18:31:21 +0200")
+References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+ <20150904101128.4206779d@free-electrons.com>
+ <55E9540C.9060000@mind.be> <20150904163121.GD4540@free.fr>
+Message-ID: <8737yg3dt0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hi,
- > this patchset adds a new /dev management mechanism, using mdev for
- > dynamic device creation but without relying on devtmpfs.
+Hi,
 
- > The main motivation is the need of dynamic /dev management and/or firmware
- > loading assisted by mdev on targets that are bound to kernels < 2.6.32,
- > and thus cannot use devtmpfs.
+>> I will always turn this option on, even in non-systemd, because it makes for a
+ >> better environment. See the Fedora document for a long explanation why split
+ >> /usr is just legacy baggage. Other parts of your system will also work better
+ >> when this option is turned on - no more confusion between busybox installing
+ >> something in /bin and the full package putting it in /usr/bin. No more worries
+ >> about a shebang being correct.
+ >> 
+ >> So no, I don't want this to be hidden.
 
-Is combining such old (<2009) kernel with modern userspace really a good
-idea?
+ > Ditto, I do not want this to be hidden. I want to have the choice of
+ > using a merged-usr even without systemd (and I even have a use-case in
+ > my head for that).
 
-git grep -l _AT_LEAST package/ | wc -l
-48
+And as explained, we might even want to default it to y in the future,
+just because it is simpler when you have a single rootfs.
 
-But that is most likely not all of them, as none of the autobuilders use
-such ancient kernel headers.
+Is there any reason why we explicitly add the symlinks for /bin / /sbin
+and /lib and don't just do:
 
-How old is < 2.6.32? If you look@the commit adding devtmpfs to the
-kernel, it seems quite self contained and easy to backport:
-
-git show --stat --oneline 2b2af54a5bb6f7e8
-2b2af54 Driver Core: devtmpfs - kernel-maintained tmpfs-based /dev
- drivers/base/Kconfig     |  25 ++++
- drivers/base/Makefile    |   1 +
- drivers/base/base.h      |   6 +
- drivers/base/core.c      |   3 +
- drivers/base/devtmpfs.c  | 367 +++++++++++++++++++++++++++++++++++++++++++++++
- drivers/base/init.c      |   1 +
- include/linux/device.h   |  10 ++
- include/linux/shmem_fs.h |   3 +
- init/do_mounts.c         |   2 +-
- init/main.c              |   2 +
- mm/shmem.c               |   9 +-
- 11 files changed, 422 insertions(+), 7 deletions(-)
-
-Have you considered doing that instead?
+ln -sf . usr
 
 -- 
 Bye, Peter Korsgaard
