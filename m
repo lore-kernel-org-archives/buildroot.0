@@ -1,41 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 22:53:30 +0200
-Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
-	(without devtmpfs)
-In-Reply-To: <20150909155427.53f9c8b5@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 9 Sep 2015 15:54:27 +0200")
+Date: Mon, 14 Sep 2015 23:03:32 +0200
+Subject: [Buildroot] [RFC 0/6] mdev-only /dev management (without
+	devtmpfs)
+In-Reply-To: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 8 Sep 2015 23:28:48 +0200")
 References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
- <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
- <20150909155427.53f9c8b5@free-electrons.com>
-Message-ID: <87bnd43eph.fsf@dell.be.48ers.dk>
+Message-ID: <877fns3e8r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Hi,
+ > Hi,
+ > this patchset adds a new /dev management mechanism, using mdev for
+ > dynamic device creation but without relying on devtmpfs.
 
+ > The main motivation is the need of dynamic /dev management and/or firmware
+ > loading assisted by mdev on targets that are bound to kernels < 2.6.32,
+ > and thus cannot use devtmpfs.
 
- > In principle, it seems better to me if the devices are all set up
- > before starting anything else, so if it works, I'm all for S00mdev. The
- > only question is whether mdev logs things to syslog, and if so what
- > happens to those messages that are emitted before syslog is started.
+Is combining such old (<2009) kernel with modern userspace really a good
+idea?
 
-It doesn't:
+git grep -l _AT_LEAST package/ | wc -l
+48
 
-git grep log mdev.c
-mdev.c://usage:       "If /dev/mdev.log file exists, debug log will be appended to it."
-mdev.c:static void open_mdev_log(const char *seq, unsigned my_pid)
-mdev.c: int logfd = open("mdev.log", O_WRONLY | O_APPEND);
-mdev.c: if (logfd >= 0) {
-mdev.c:         xmove_fd(logfd, STDERR_FILENO);
-mdev.c:         open_mdev_log(seq, my_pid);
+But that is most likely not all of them, as none of the autobuilders use
+such ancient kernel headers.
 
-So only to stderr (and /dev/mdev.log if it exists).
+How old is < 2.6.32? If you look@the commit adding devtmpfs to the
+kernel, it seems quite self contained and easy to backport:
+
+git show --stat --oneline 2b2af54a5bb6f7e8
+2b2af54 Driver Core: devtmpfs - kernel-maintained tmpfs-based /dev
+ drivers/base/Kconfig     |  25 ++++
+ drivers/base/Makefile    |   1 +
+ drivers/base/base.h      |   6 +
+ drivers/base/core.c      |   3 +
+ drivers/base/devtmpfs.c  | 367 +++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/base/init.c      |   1 +
+ include/linux/device.h   |  10 ++
+ include/linux/shmem_fs.h |   3 +
+ init/do_mounts.c         |   2 +-
+ init/main.c              |   2 +
+ mm/shmem.c               |   9 +-
+ 11 files changed, 422 insertions(+), 7 deletions(-)
+
+Have you considered doing that instead?
 
 -- 
 Bye, Peter Korsgaard
