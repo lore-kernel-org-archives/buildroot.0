@@ -1,35 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 14:36:33 +0200
-Subject: [Buildroot] [PATCH v2] stress-ng: Depend on kernel headers >=
-	3.3
-In-Reply-To: <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com> (Julien
- Corjon's message of "Mon, 14 Sep 2015 09:43:45 +0200")
-References: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
- <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <87a8sp9nzi.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 14 Sep 2015 13:37:31 +0100
+Subject: [Buildroot] [PATCH v3 3/3] util-linux: put package options in a
+ sub-menu
+In-Reply-To: <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
+References: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
+ <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <55F6BF8B.4000905@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Corjon <corjon.j@ecagroup.com> writes:
+Dear Danomi Manchego,
 
- > perf.c need PERF_COUNT_HW_REF_CPU_CYCLES generic PMU event which
- > is available only since 3.3 kernel version
+On 07/14/2015 03:57 AM, Danomi Manchego wrote:
+> Hide all the util-linux options in a menuconfig, as the option
+> list is quite long.
 
- > Fixes:
- >   http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
- >   http://autobuild.buildroot.net/results/dac6a85fdd721b959175caf5629b91dee717c3c6
- >   http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
+I also think the list is quite long and util-linux deserves its own submenu.
 
- > Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
- > ---
- > v1 -> v2 : 
- >   - Fixe commit log (suggested by Vincente Olivert Riera)
- >   - Add autobuild references (suggested by Romain Naour)
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Committed, thanks.
+I checked that util-linux option is actually converted into a submenu:
 
--- 
-Bye, Peter Korsgaard
+[*] util-linux  --->
+
+Regards,
+
+Vincent.
+
+> ---
+>  package/util-linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index 042cae0..c8d16d2 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -1,4 +1,4 @@
+> -config BR2_PACKAGE_UTIL_LINUX
+> +menuconfig BR2_PACKAGE_UTIL_LINUX
+>  	bool "util-linux"
+>  	depends on BR2_USE_WCHAR
+>  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+> 
