@@ -1,85 +1,100 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 15 Sep 2015 10:44:08 +1200
+Date: Tue, 15 Sep 2015 11:01:08 +1200
 Subject: [Buildroot] [PATCH] micropython: new package
-In-Reply-To: <55F6CE3A.8000108@imgtec.com>
+In-Reply-To: <20150914155829.1d326cc0@free-electrons.com>
 References: <1442226102-15878-1-git-send-email-judge.packham@gmail.com>
- <55F6CE3A.8000108@imgtec.com>
-Message-ID: <CAFOYHZAaHutNvzZsGeVzT_ufnjhxMTyX0CBYdvqjN27ZsiFh_g@mail.gmail.com>
+ <20150914155829.1d326cc0@free-electrons.com>
+Message-ID: <CAFOYHZDbMnHj=Lmh27YUSwpMSjD_9R4VFomXVo4nWF8Gg3c4tQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
-
-On Tue, Sep 15, 2015 at 1:40 AM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> Dear Chris Packham,
+On Tue, Sep 15, 2015 at 1:58 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Chris,
 >
-> more comments:
+> Thanks for this contribution.
 >
-> On 09/14/2015 11:21 AM, Chris Packham wrote:
->> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
->> new file mode 100644
->> index 0000000..9b5e7d2
->> --- /dev/null
->> +++ b/package/micropython/micropython.mk
->> @@ -0,0 +1,22 @@
->> +################################################################################
->> +# micropython
->> +################################################################################
->> +MICROPYTHON_VERSION = v1.4.5
->> +MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
->> +MICROPYTHON_LICENSE = MIT
->> +MICROPYTHON_LICENSE_FILES = LICENSE
->> +MICROPYTHON_DEPENDENCIES = libffi
->
-> micropython calls pkg-config in order to obtain the libraries and cflags
-> for libffi:
->
-> ifeq ($(MICROPY_PY_FFI),1)
-> LIBFFI_LDFLAGS_MOD := $(shell pkg-config --libs libffi)
-> LIBFFI_CFLAGS_MOD := $(shell pkg-config --cflags libffi)
-> CFLAGS_MOD += $(LIBFFI_CFLAGS_MOD) -DMICROPY_PY_FFI=1
->
-> So please, add host-pkgconf to MICROPYTHON_DEPENDENCIES. Otherwise it
-> will fail to compile with an error like this one:
->
-> LINK micropython
-> build/modffi.o: In function `ffifunc_call':
-> modffi.c:(.text+0x24c): undefined reference to `ffi_call'
-> modffi.c:(.text+0x260): undefined reference to `ffi_call'
-> build/modffi.o: In function `mod_ffi_callback':
-> modffi.c:(.text+0x7b0): undefined reference to `ffi_closure_alloc'
-> ... and many more
->
->> +
->> +ifeq ($(BR2_powerpc),y)
->> +MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
->> +endif
->> +
->> +define MICROPYTHON_INSTALL_TARGET_CMDS
->> +     $(MAKE) -C $(@D)/unix \
->
-> Please add $(TARGET_MAKE_ENV) before $(MAKE). You need that in order to
-> Buildroot set the PATH variable so the pkg-config executable and the
-> libffi.pc file can be found.
->
-> Regards,
->
-> Vincent.
->
->> +             CROSS_COMPILE=$(TARGET_CROSS) \
->> +             DESTDIR=$(TARGET_DIR) \
->> +             CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
->> +             install
->> +endef
->> +
->> +$(eval $(generic-package))
+> On Mon, 14 Sep 2015 22:21:42 +1200, Chris Packham wrote:
+>> MicroPython - a lean and efficient Python implementation for
+>> microcontrollers and constrained systems.
 >>
+>> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+>> ---
+>>
+>> Hi Buildroot,
+>>
+>> Thought you might be interested in mircopython a minimal python 3
+>> implementation. It's designed for micro controllers but is also well suited
+>> to other general purpose embedded CPUs.
+>
+> Some quick questions that come to mind:
+>
+>  * What happens if we have Micropython installed next to the regular
+>    Python 2 or Python 3 interpreters / standard library on the same
+>    system? Do they conflict or not?
+
+They're installed in with different executable names and library paths
+so they should co-exist happily.
+
+>
+>  * What about all the Python external modules (package/python-*/) we
+>    have in Buildroot? Do they work with Micropython?
+
+Probably depends on the module, but I assume the answer is mostly no.
+Some of the "standard" libraries in micropython-lib are stubs to quote
+the readme: "micropython-lib is a highly experimental community
+project". Getting into buildroot is one way of helping them to move
+out of "experimental" status.
+
+>> diff --git a/package/micropython-lib/Config.in b/package/micropython-lib/Config.in
+>> new file mode 100644
+>> index 0000000..a7e017b
+>> --- /dev/null
+>> +++ b/package/micropython-lib/Config.in
+>> @@ -0,0 +1,7 @@
+>> +config BR2_PACKAGE_MICROPYTHON_LIB
+>> +     bool "micropython-lib"
+>> +     depends on BR2_PACKAGE_MICROPYTHON
+>> +     help
+>> +       Core Python libraries ported to MicroPython.
+>> +
+>> +       http://micropython.org
+>> diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
+>> new file mode 100644
+>> index 0000000..c0e6a2a
+>> --- /dev/null
+>> +++ b/package/micropython-lib/micropython-lib.mk
+>> @@ -0,0 +1,12 @@
+>> +################################################################################
+>> +# micropython-lib
+>> +################################################################################
+>
+> Nitpick: use the standard header for all packages. You lack an empty
+> line before and after the package name. See all other Buildroot
+> packages. Ditto for the micropython package.
 >
 
-OK thanks. Will look at these comments and the ones from the other
-mail. I was using qemu_x86_defconfig for testing so it probably picked
-up things from my host environment.
+Will do.
+
+>> +MICROPYTHON_LIB_VERSION = v0.5
+>> +MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
+>> +MICROPYTHON_LIB_LICENSE_FILES = LICENSE
+>
+> You should define MICROPYTHON_LIB_LICENSE as well.
+
+That's an interesting problem. It's actually multiple licenses
+(depending on the source of the library) so nothing in the "normal"[1]
+list fits. I could say "various" or enumerate the ones I can identify
+but it would be hard to be accurate.
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+[1] - http://buildroot.org/downloads/manual/manual.html#legal-info-list-licenses
