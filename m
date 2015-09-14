@@ -1,32 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 21:33:09 +0200
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.7.4
-Message-ID: <20150914193422.17E3F7FD6A@busybox.osuosl.org>
+Date: Mon, 14 Sep 2015 21:31:22 +0200
+Subject: [Buildroot] [git commit] barebox: bump to version 2015.09.0
+Message-ID: <20150914193422.125A681E4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ff17173c3823b6492ab81214800d2b8a006094b
+commit: http://git.buildroot.net/buildroot/commit/?id=b2ffab2236f8b7945b2f1ccbe6aa27fbf90d5d8a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/barebox/Config.in    |    4 ++--
+ boot/barebox/barebox.hash |    6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 68979e0..7709ad1 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index f6f8f15..bb27b61 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
--LIBUV_VERSION = v1.7.0
-+LIBUV_VERSION = v1.7.4
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2015.07.0"
++	bool "2015.09.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2015.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index ee09f8d..57a8eff 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
+-md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
++# http://www.barebox.org/download/barebox-2015.09.0.tar.bz2.md5
++md5 8ce178b4e19cc350fcdbdd8c539eaf37 barebox-2015.09.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
++sha256 32759e368627aa6c1b51eb8f4c3f767c4ac37dda1d6495a2664c4f54f9db1626 barebox-2015.09.0.tar.bz2
