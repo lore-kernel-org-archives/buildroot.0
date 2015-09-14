@@ -1,44 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Sep 2015 00:09:05 +0200
-Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
-In-Reply-To: <20150913232043.415b5d1a@free-electrons.com>
-References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
- <55F3EFAC.7060306@imgtec.com> <20150913121206.64758da8@free-electrons.com>
- <87fv2icd1d.fsf@dell.be.48ers.dk>
- <20150913232043.415b5d1a@free-electrons.com>
-Message-ID: <55F74581.5070301@mind.be>
+Date: Tue, 15 Sep 2015 00:23:12 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+ (without devtmpfs)
+In-Reply-To: <55F6CFFE.3000407@lucaceresoli.net>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+ <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
+ <20150909155427.53f9c8b5@free-electrons.com>
+ <55F6CFFE.3000407@lucaceresoli.net>
+Message-ID: <55F748D0.1060905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13-09-15 23:20, Thomas Petazzoni wrote:
-> Peter,
+On 14-09-15 15:47, Luca Ceresoli wrote:
+> Dear Thomas,
 > 
-> On Sun, 13 Sep 2015 21:52:30 +0200, Peter Korsgaard wrote:
-> 
->>  > BTW, the fact that you are regularly verifying that the binaries built
->>  > by Buildroot are built for MIPS, I am wondering if it wouldn't be worth
->>  > the effort to add a final check at the end of the build to verify that
->>  > all binaries are built for the proper architecture/ABI. I remember that
->>  > some time ago, the nfs-utils package was installing binaries built for
->>  > the host machine into the target filesystem.
+> Thomas Petazzoni wrote:
+>> Dear Luca Ceresoli,
 >>
->> Yes, it could be a nice test. How would we do it? With readelf? We would
->> need to filter out any shell scripts and similar.
+>> On Wed, 9 Sep 2015 14:29:36 +0200, Luca Ceresoli wrote:
+[snip]
+>>> This would slightly change the current behaviour for all cases, and
+>>> start S01logging after mdev, not before. I tested it quickly and it
+>>> looks like it works. Can you think of any problem with moving S10mdev
+>>> to S00mdev?
+>>
+>> In principle, it seems better to me if the devices are all set up
+>> before starting anything else, so if it works, I'm all for S00mdev. The
+>> only question is whether mdev logs things to syslog, and if so what
+>> happens to those messages that are emitted before syslog is started.
 > 
-> Either readelf, or just "file". But maybe readelf is fine as it's
-> available in the toolchain. We can skip scripts by testing the first
-> two bytes of each file and see if they are #!, no?
+> At a quick code inspection it looks like mdev does not use syslog.
+> I'll do some testing.
 
- file has the advantage of also working for scripts, and should even work for
-FLAT binaries (which readelf wouldn't like). But it doesn't show the CPU, ISA
-and FP details, which are useful to check as well.
+ mdev doesn't but any script it calls might.
 
- So the perfect approach would be: file, and readelf if file says it's an ELF.
+ Also, if a crash happens during mdev coldplugging, it's an advantage if the
+kernel messages can be captured by syslog.
 
- Or, of course, python-magic and python-pyelftools :-)
+ So I'd prefer to keep syslog before mdev.
+
+ FYI: systemd starts journald and udev in parallel (at least as far as I can
+make out from the service files).
 
  Regards,
  Arnout
