@@ -1,22 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 21:34:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.7.4
-In-Reply-To: <1442257883-20359-1-git-send-email-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Mon, 14 Sep 2015 21:11:23
- +0200")
-References: <1442257883-20359-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <871te06bim.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Sep 2015 21:33:09 +0200
+Subject: [Buildroot] [git commit] package/libuv: bump to version 1.7.4
+Message-ID: <20150914193422.17E3F7FD6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9ff17173c3823b6492ab81214800d2b8a006094b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libuv/libuv.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 68979e0..7709ad1 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.7.0
++LIBUV_VERSION = v1.7.4
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
