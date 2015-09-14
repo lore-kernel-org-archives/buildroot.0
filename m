@@ -1,71 +1,124 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 14 Sep 2015 09:59:15 +0100
-Subject: [Buildroot] [PATCH v2] stress-ng: Depend on kernel headers >=
-	3.3
-In-Reply-To: <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com>
-References: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
- <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <55F68C63.9080405@imgtec.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 14 Sep 2015 22:21:42 +1200
+Subject: [Buildroot] [PATCH] micropython: new package
+Message-ID: <1442226102-15878-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julien Corjon,
+MicroPython - a lean and efficient Python implementation for
+microcontrollers and constrained systems.
 
-On 09/14/2015 08:43 AM, Julien Corjon wrote:
-> perf.c need PERF_COUNT_HW_REF_CPU_CYCLES generic PMU event which
-> is available only since 3.3 kernel version
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
->   http://autobuild.buildroot.net/results/dac6a85fdd721b959175caf5629b91dee717c3c6
->   http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
-> 
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
 
-Could you please mark as superseded your previous patch?
+Hi Buildroot,
+    
+Thought you might be interested in mircopython a minimal python 3
+implementation. It's designed for micro controllers but is also well suited
+to other general purpose embedded CPUs.
+    
+Cheers,
+Chris
 
-http://patchwork.ozlabs.org/patch/516900/
+ package/Config.in                          |  2 ++
+ package/micropython-lib/Config.in          |  7 +++++++
+ package/micropython-lib/micropython-lib.mk | 12 ++++++++++++
+ package/micropython/Config.in              |  8 ++++++++
+ package/micropython/micropython.mk         | 22 ++++++++++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 package/micropython-lib/Config.in
+ create mode 100644 package/micropython-lib/micropython-lib.mk
+ create mode 100644 package/micropython/Config.in
+ create mode 100644 package/micropython/micropython.mk
 
-Regards,
-
-Vincent.
-
-> ---
-> v1 -> v2 : 
->   - Fixe commit log (suggested by Vincente Olivert Riera)
->   - Add autobuild references (suggested by Romain Naour)
->  package/stress-ng/Config.in | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
-> index cdf9984..1e475b1 100644
-> --- a/package/stress-ng/Config.in
-> +++ b/package/stress-ng/Config.in
-> @@ -4,8 +4,8 @@ config BR2_PACKAGE_STRESS_NG
->  	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
->  	# disabled on uClibc: stress-aio.c needs aio.h
->  	depends on BR2_TOOLCHAIN_USES_GLIBC
-> -	# perf.c needs PERF_COUNT_HW_STALLED_CYCLES_FRONTEND
-> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-> +	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
->  	depends on !BR2_microblaze # keyutils
->  	depends on !BR2_STATIC_LIBS # keyutils
->  	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
-> @@ -18,8 +18,8 @@ config BR2_PACKAGE_STRESS_NG
->  
->  	  http://kernel.ubuntu.com/~cking/stress-ng/
->  
-> -comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.0"
-> +comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.3"
->  	depends on !BR2_microblaze
->  	depends on BR2_USE_MMU
-> -	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
-> +	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
->  		|| !BR2_TOOLCHAIN_USES_GLIBC
-> 
+diff --git a/package/Config.in b/package/Config.in
+index fc35f12..986fe16 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -509,6 +509,8 @@ menu "Lua libraries/modules"
+ endmenu
+ endif
+ 	source "package/lutok/Config.in"
++	source "package/micropython/Config.in"
++	source "package/micropython-lib/Config.in"
+ 	source "package/moarvm/Config.in"
+ 	source "package/mono/Config.in"
+ if BR2_PACKAGE_MONO
+diff --git a/package/micropython-lib/Config.in b/package/micropython-lib/Config.in
+new file mode 100644
+index 0000000..a7e017b
+--- /dev/null
++++ b/package/micropython-lib/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_MICROPYTHON_LIB
++	bool "micropython-lib"
++	depends on BR2_PACKAGE_MICROPYTHON
++	help
++	  Core Python libraries ported to MicroPython.
++
++	  http://micropython.org
+diff --git a/package/micropython-lib/micropython-lib.mk b/package/micropython-lib/micropython-lib.mk
+new file mode 100644
+index 0000000..c0e6a2a
+--- /dev/null
++++ b/package/micropython-lib/micropython-lib.mk
+@@ -0,0 +1,12 @@
++################################################################################
++# micropython-lib
++################################################################################
++MICROPYTHON_LIB_VERSION = v0.5
++MICROPYTHON_LIB_SITE = $(call github,micropython,micropython-lib,$(MICROPYTHON_LIB_VERSION))
++MICROPYTHON_LIB_LICENSE_FILES = LICENSE
++
++define MICROPYTHON_LIB_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR)/usr/lib/micropython install
++endef
++
++$(eval $(generic-package))
+diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+new file mode 100644
+index 0000000..ca60f01
+--- /dev/null
++++ b/package/micropython/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MICROPYTHON
++	bool "micropython"
++	select BR2_PACKAGE_LIBFFI
++	help
++	  MicroPython - a lean and efficient Python implementation for
++	  microcontrollers and constrained systems.
++
++	  http://micropython.org
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+new file mode 100644
+index 0000000..9b5e7d2
+--- /dev/null
++++ b/package/micropython/micropython.mk
+@@ -0,0 +1,22 @@
++################################################################################
++# micropython
++################################################################################
++MICROPYTHON_VERSION = v1.4.5
++MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
++MICROPYTHON_LICENSE = MIT
++MICROPYTHON_LICENSE_FILES = LICENSE
++MICROPYTHON_DEPENDENCIES = libffi
++
++ifeq ($(BR2_powerpc),y)
++MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
++endif
++
++define MICROPYTHON_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D)/unix \
++		CROSS_COMPILE=$(TARGET_CROSS) \
++		DESTDIR=$(TARGET_DIR) \
++		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
++		install
++endef
++
++$(eval $(generic-package))
+-- 
+2.5.0
