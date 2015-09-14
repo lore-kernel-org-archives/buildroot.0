@@ -1,56 +1,27 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Mon, 14 Sep 2015 09:43:45 +0200
-Subject: [Buildroot] [PATCH v2] stress-ng: Depend on kernel headers >= 3.3
-In-Reply-To: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
-References: <1441988351-9923-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <1442216625-12120-1-git-send-email-corjon.j@ecagroup.com>
+From: David du Colombier <0intro@gmail.com>
+Date: Mon, 14 Sep 2015 09:54:39 +0200
+Subject: [Buildroot] [PATCH v3 1/1] wpa_supplicant: fix static link with
+	readline
+In-Reply-To: <87egi1a5gf.fsf@dell.be.48ers.dk>
+References: <1442181166-5754-1-git-send-email-0intro@gmail.com>
+ <87egi1a5gf.fsf@dell.be.48ers.dk>
+Message-ID: <CANUoZoGmB2YdJ0w2U6Ucg0oa_vfiUeujA0s-M2Qq5aiK=XBBrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-perf.c need PERF_COUNT_HW_REF_CPU_CYCLES generic PMU event which
-is available only since 3.3 kernel version
+> Committed, thanks.
+>
+> I wanted to add a reference to upstream as you mentioned that you had
+> submitted it upstream, but I don't see it on the list:
+>
+> http://lists.shmoo.com/pipermail/hostap/2015-September/thread.html
+>
+> What happened?
 
-Fixes:
-  http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
-  http://autobuild.buildroot.net/results/dac6a85fdd721b959175caf5629b91dee717c3c6
-  http://autobuild.buildroot.net/results/88909b118dc927f31ed5c3b5f3513734a88085a9
+It seems the post is still waiting for moderation.
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
----
-v1 -> v2 : 
-  - Fixe commit log (suggested by Vincente Olivert Riera)
-  - Add autobuild references (suggested by Romain Naour)
- package/stress-ng/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
-index cdf9984..1e475b1 100644
---- a/package/stress-ng/Config.in
-+++ b/package/stress-ng/Config.in
-@@ -4,8 +4,8 @@ config BR2_PACKAGE_STRESS_NG
- 	# disabled on musl: stress-malloc.c needs mallopt() and M_MMAP_THRESHOLD
- 	# disabled on uClibc: stress-aio.c needs aio.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
--	# perf.c needs PERF_COUNT_HW_STALLED_CYCLES_FRONTEND
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
- 	depends on !BR2_microblaze # keyutils
- 	depends on !BR2_STATIC_LIBS # keyutils
- 	select BR2_PACKAGE_KEYUTILS # stress-key.c needs keyutils.h
-@@ -18,8 +18,8 @@ config BR2_PACKAGE_STRESS_NG
- 
- 	  http://kernel.ubuntu.com/~cking/stress-ng/
- 
--comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.0"
-+comment "stress-ng needs a glibc toolchain w/ dynamic library, headers >= 3.3"
- 	depends on !BR2_microblaze
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
- 		|| !BR2_TOOLCHAIN_USES_GLIBC
 -- 
-2.1.4
+David du Colombier
