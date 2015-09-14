@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 07:41:57 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x series
-Message-ID: <20150914054238.02272818BD@busybox.osuosl.org>
+Date: Mon, 14 Sep 2015 08:19:12 +0200
+Subject: [Buildroot] [PATCH v3 1/1] wpa_supplicant: fix static link with
+	readline
+In-Reply-To: <1442181166-5754-1-git-send-email-0intro@gmail.com> (David du
+ Colombier's message of "Sun, 13 Sep 2015 23:52:46 +0200")
+References: <1442181166-5754-1-git-send-email-0intro@gmail.com>
+Message-ID: <87egi1a5gf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e064dd72232ab13da647689f077400bd5f695eb6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "David" == David du Colombier <0intro@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > When linking statically, the order of libraries on the
+ > linker command matters, since readline depends on ncurses.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f4de1f2..fcd276b 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -198,7 +198,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.14.52"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.20"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.21"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.7"		if BR2_KERNEL_HEADERS_4_1
+ > Signed-off-by: David du Colombier <0intro@gmail.com>
+
+Committed, thanks.
+
+I wanted to add a reference to upstream as you mentioned that you had
+submitted it upstream, but I don't see it on the list:
+
+http://lists.shmoo.com/pipermail/hostap/2015-September/thread.html
+
+What happened?
+
+-- 
+Bye, Peter Korsgaard
