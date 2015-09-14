@@ -1,58 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Sep 2015 00:23:12 +0200
-Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
- (without devtmpfs)
-In-Reply-To: <55F6CFFE.3000407@lucaceresoli.net>
-References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
- <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
- <20150909155427.53f9c8b5@free-electrons.com>
- <55F6CFFE.3000407@lucaceresoli.net>
-Message-ID: <55F748D0.1060905@mind.be>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 14 Sep 2015 23:26:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ibrcommon: fix basename call under
+	musl
+Message-ID: <1442269611-30641-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14-09-15 15:47, Luca Ceresoli wrote:
-> Dear Thomas,
-> 
-> Thomas Petazzoni wrote:
->> Dear Luca Ceresoli,
->>
->> On Wed, 9 Sep 2015 14:29:36 +0200, Luca Ceresoli wrote:
-[snip]
->>> This would slightly change the current behaviour for all cases, and
->>> start S01logging after mdev, not before. I tested it quickly and it
->>> looks like it works. Can you think of any problem with moving S10mdev
->>> to S00mdev?
->>
->> In principle, it seems better to me if the devices are all set up
->> before starting anything else, so if it works, I'm all for S00mdev. The
->> only question is whether mdev logs things to syslog, and if so what
->> happens to those messages that are emitted before syslog is started.
-> 
-> At a quick code inspection it looks like mdev does not use syslog.
-> I'll do some testing.
+Fixes:
+http://autobuild.buildroot.net/results/9c3/9c3889fe80e58b7a35c242332f993992044d2f6b/
 
- mdev doesn't but any script it calls might.
+ibrcommon was relying on a glibc extension to basename(3) which allowed it
+to accept a const char* parameter (instead of char*). Fixed by testing
+for __GLIBC__; if not defined (such as when musl is in use) a fallback
+block is used which creates a temporary copy of the path.
 
- Also, if a crash happens during mdev coldplugging, it's an advantage if the
-kernel messages can be captured by syslog.
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ ...data-File.cpp-support-POSIX-basename-call.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
 
- So I'd prefer to keep syslog before mdev.
-
- FYI: systemd starts journald and udev in parallel (at least as far as I can
-make out from the service files).
-
- Regards,
- Arnout
-
+diff --git a/package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch b/package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
+new file mode 100644
+index 0000000..b7c1839
+--- /dev/null
++++ b/package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
+@@ -0,0 +1,55 @@
++From d667b13a87cf3207599a19eb981a893a1d7a67ee Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Mon, 14 Sep 2015 23:25:52 +0100
++Subject: [PATCH 1/1] ibrcommon/data/File.cpp: support POSIX basename call
++
++Firstly, and somewhat strangely, musl chooses not to provide a basename(3)
++prototype within <string.h> whenever __cplusplus is defined. This can be
++solved by including the <libgen.h> header defined by POSIX 1003.1 whenever
++__GLIBC__ is not defined.
++
++However, this leads to a second problem. POSIX defines the function as
++char* basename(char*) and this is the only version supported by musl.
++However, the std::string.cstr() method returns a const char*.
++
++POSIX says that the string parameter can be modified. However the GNU
++implementation never modifies it. glibc therefore supports an extension
++when compiling under C++ by also supplying
++const char* basename(const char*). This extension is not present on musl
++which is the cause of the failure.
++
++The solution is reasonably straightforward; test if __GLIBC__ is defined
++before calling basename. If not, use the fallback already provided for
++other platforms whereby basename() is called on a temporary copy.
++
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++Upstream-status: pending
++---
++ ibrcommon/data/File.cpp | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/ibrcommon/data/File.cpp b/ibrcommon/data/File.cpp
++index 31af4ae..68e9b4f 100644
++--- a/ibrcommon/data/File.cpp
+++++ b/ibrcommon/data/File.cpp
++@@ -35,7 +35,7 @@
++ #include <cerrno>
++ #include <fstream>
++ 
++-#if !defined(HAVE_FEATURES_H) || defined(ANDROID)
+++#if !defined(HAVE_FEATURES_H) || !defined(__GLIBC__) || defined(ANDROID)
++ #include <libgen.h>
++ #endif
++ 
++@@ -225,7 +225,7 @@ namespace ibrcommon
++ 
++ 	std::string File::getBasename() const
++ 	{
++-#if !defined(ANDROID) && defined(HAVE_FEATURES_H)
+++#if !defined(ANDROID) && defined(HAVE_FEATURES_H) && defined(__GLIBC__)
++ 		return std::string(basename(_path.c_str()));
++ #else
++ 		char path[_path.length()+1];
++-- 
++2.4.3
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.3
