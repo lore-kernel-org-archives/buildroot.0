@@ -1,49 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 14 Sep 2015 13:37:31 +0100
-Subject: [Buildroot] [PATCH v3 3/3] util-linux: put package options in a
- sub-menu
-In-Reply-To: <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
-References: <1436842628-29469-1-git-send-email-danomimanchego123@gmail.com>
- <1436842628-29469-3-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <55F6BF8B.4000905@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 14 Sep 2015 14:41:28 +0200
+Subject: [Buildroot] Mailing list address
+In-Reply-To: <CAFOYHZCP=wKo23h1r9cDizkLQ-nNQW_o21+Otjm0V=NYJVvVRw@mail.gmail.com>
+ (Chris Packham's message of "Mon, 14 Sep 2015 22:35:34 +1200")
+References: <CAFOYHZCP=wKo23h1r9cDizkLQ-nNQW_o21+Otjm0V=NYJVvVRw@mail.gmail.com>
+Message-ID: <87613d9nrb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
-On 07/14/2015 03:57 AM, Danomi Manchego wrote:
-> Hide all the util-linux options in a menuconfig, as the option
-> list is quite long.
+ > Hi All,
+ > Just noticed that README[1] mentions "buildroot at buildroot.org" but the
+ > buildroot website[2] says "buildroot at busybox.net". I just sent a patch
+ > to the former, assuming it must be an alias to the latter. I haven't
+ > seen a bounce but haven't seen it show up on the list yet.
 
-I also think the list is quite long and util-linux deserves its own submenu.
+ > Is the address supposed to work as I've assumed or is it just a plain
+ > typo in README?
 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+It's purely a historical issue. In the beginning we didn't have
+@buildroot.{org,net}, so the mailing list used @busybox.net. This has in
+the mean time been fixed, but the mailman configuration is not updated
+yet so it still lists @busybox.net.
 
-I checked that util-linux option is actually converted into a submenu:
+I'll contact the osuosl.org guys to get that fixed, thanks for letting
+us know.
 
-[*] util-linux  --->
-
-Regards,
-
-Vincent.
-
-> ---
->  package/util-linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index 042cae0..c8d16d2 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -1,4 +1,4 @@
-> -config BR2_PACKAGE_UTIL_LINUX
-> +menuconfig BR2_PACKAGE_UTIL_LINUX
->  	bool "util-linux"
->  	depends on BR2_USE_WCHAR
->  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-> 
+-- 
+Bye, Peter Korsgaard
