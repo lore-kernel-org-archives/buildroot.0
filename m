@@ -1,116 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Sep 2015 18:45:15 -0300
-Subject: [Buildroot] [PATCH] kompexsqlite: new package
-Message-ID: <1442267115-2530-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Sep 2015 00:09:05 +0200
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
+In-Reply-To: <20150913232043.415b5d1a@free-electrons.com>
+References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
+ <55F3EFAC.7060306@imgtec.com> <20150913121206.64758da8@free-electrons.com>
+ <87fv2icd1d.fsf@dell.be.48ers.dk>
+ <20150913232043.415b5d1a@free-electrons.com>
+Message-ID: <55F74581.5070301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                                  |  1 +
- ...kefile-use-autoconf-CXX-for-proper-builds.patch | 27 ++++++++++++++++++++++
- package/kompexsqlite/Config.in                     | 12 ++++++++++
- package/kompexsqlite/kompexsqlite.hash             |  2 ++
- package/kompexsqlite/kompexsqlite.mk               | 14 +++++++++++
- 5 files changed, 56 insertions(+)
- create mode 100644 package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
- create mode 100644 package/kompexsqlite/Config.in
- create mode 100644 package/kompexsqlite/kompexsqlite.hash
- create mode 100644 package/kompexsqlite/kompexsqlite.mk
+On 13-09-15 23:20, Thomas Petazzoni wrote:
+> Peter,
+> 
+> On Sun, 13 Sep 2015 21:52:30 +0200, Peter Korsgaard wrote:
+> 
+>>  > BTW, the fact that you are regularly verifying that the binaries built
+>>  > by Buildroot are built for MIPS, I am wondering if it wouldn't be worth
+>>  > the effort to add a final check at the end of the build to verify that
+>>  > all binaries are built for the proper architecture/ABI. I remember that
+>>  > some time ago, the nfs-utils package was installing binaries built for
+>>  > the host machine into the target filesystem.
+>>
+>> Yes, it could be a nice test. How would we do it? With readelf? We would
+>> need to filter out any shell scripts and similar.
+> 
+> Either readelf, or just "file". But maybe readelf is fine as it's
+> available in the toolchain. We can skip scripts by testing the first
+> two bytes of each file and see if they are #!, no?
 
-diff --git a/package/Config.in b/package/Config.in
-index eb6968c..5cd9f4d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -764,6 +764,7 @@ menu "Database"
- 	source "package/berkeleydb/Config.in"
- 	source "package/cppdb/Config.in"
- 	source "package/gdbm/Config.in"
-+	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
- 	source "package/mysql/Config.in"
- 	source "package/postgresql/Config.in"
-diff --git a/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch b/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
-new file mode 100644
-index 0000000..408c100
---- /dev/null
-+++ b/package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
-@@ -0,0 +1,27 @@
-+From 769693d9ddf63b04dd4aad6cad080f3cee3f997e Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Thu, 11 Jun 2015 14:08:38 -0300
-+Subject: [PATCH] Makefile: use autoconf CXX for proper builds
-+
-+Status: applied upstream.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ Makefile.in | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 91fb8b2..fe862cd 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -23,6 +23,7 @@ mandir = $(prefix)/share/man/man3
-+ headerdir = $(prefix)/include/kompex
-+ 
-+ CC = @CC@
-++CXX = @CXX@
-+ CFLAGS = @CFLAGS@
-+ CPPFLAGS = $(CFLAGS) @CPPFLAGS@
-+ LDFLAGS = @LDFLAGS@
-+-- 
-+2.3.6
-+
-diff --git a/package/kompexsqlite/Config.in b/package/kompexsqlite/Config.in
-new file mode 100644
-index 0000000..b6d7d7f
---- /dev/null
-+++ b/package/kompexsqlite/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_KOMPEXSQLITE
-+	bool "kompexsqlite"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  The Kompex SQLite Wrapper is an open source C++ wrapper
-+	  library for SQLite.
-+
-+	  http://sqlitewrapper.kompex-online.com/index.php
-+
-+comment "kompexsqlite needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
-diff --git a/package/kompexsqlite/kompexsqlite.hash b/package/kompexsqlite/kompexsqlite.hash
-new file mode 100644
-index 0000000..3c94adf
---- /dev/null
-+++ b/package/kompexsqlite/kompexsqlite.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	73bec94fe5dd3a24bd8668b3a131a84dbe39a992579eebab1236aa0e73b2c9cc	v1.10.12-1.tar.gz
-diff --git a/package/kompexsqlite/kompexsqlite.mk b/package/kompexsqlite/kompexsqlite.mk
-new file mode 100644
-index 0000000..7f57680
---- /dev/null
-+++ b/package/kompexsqlite/kompexsqlite.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# kompexsqlite
-+#
-+################################################################################
-+
-+KOMPEXSQLITE_VERSION = v1.10.12-1
-+KOMPEXSQLITE_SOURCE = $(KOMPEXSQLITE_VERSION).tar.gz
-+KOMPEXSQLITE_SITE = https://github.com/Aethelflaed/kompex-sqlite-wrapper/archive
-+KOMPEXSQLITE_INSTALL_STAGING = YES
-+KOMPEXSQLITE_LICENSE = LGPLv3+ (wrapper), Public Domain (bundled sqlite)
-+KOMPEXSQLITE_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(autotools-package))
+ file has the advantage of also working for scripts, and should even work for
+FLAT binaries (which readelf wouldn't like). But it doesn't show the CPU, ISA
+and FP details, which are useful to check as well.
+
+ So the perfect approach would be: file, and readelf if file says it's an ELF.
+
+ Or, of course, python-magic and python-pyelftools :-)
+
+ Regards,
+ Arnout
+
 -- 
-2.4.6
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
