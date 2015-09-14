@@ -1,34 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 14:41:28 +0200
-Subject: [Buildroot] Mailing list address
-In-Reply-To: <CAFOYHZCP=wKo23h1r9cDizkLQ-nNQW_o21+Otjm0V=NYJVvVRw@mail.gmail.com>
- (Chris Packham's message of "Mon, 14 Sep 2015 22:35:34 +1200")
-References: <CAFOYHZCP=wKo23h1r9cDizkLQ-nNQW_o21+Otjm0V=NYJVvVRw@mail.gmail.com>
-Message-ID: <87613d9nrb.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Sep 2015 14:46:33 +0200
+Subject: [Buildroot] [git commit] docs/manual: use bugs.buildroot.org for
+	bugtracker
+Message-ID: <20150914125247.6BDE98166B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=162b30bcc37e34a7d107148c520c67e7fec9682d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi All,
- > Just noticed that README[1] mentions "buildroot at buildroot.org" but the
- > buildroot website[2] says "buildroot at busybox.net". I just sent a patch
- > to the former, assuming it must be an alias to the latter. I haven't
- > seen a bounce but haven't seen it show up on the list yet.
+Now that we have a bugs.buildroot.org CNAME for bugzilla lets use that in
+the manual as well.
 
- > Is the address supposed to work as I've assumed or is it just a plain
- > typo in README?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/contribute.txt |    2 +-
+ docs/manual/resources.txt  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It's purely a historical issue. In the beginning we didn't have
-@buildroot.{org,net}, so the mailing list used @busybox.net. This has in
-the mean time been fixed, but the mailman configuration is not updated
-yet so it still lists @busybox.net.
-
-I'll contact the osuosl.org guys to get that fixed, thanks for letting
-us know.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 40579f9..4d7a833 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -25,7 +25,7 @@ for more information on obtaining a Buildroot git tree.
+ === Reproducing, analyzing and fixing bugs
+ 
+ A first way of contributing is to have a look at the open bug reports in
+-the https://bugs.busybox.net/buglist.cgi?product=buildroot[Buildroot bug
++the https://bugs.buildroot.org/buglist.cgi?product=buildroot[Buildroot bug
+ tracker]. As we strive to keep the bug count as small as possible, all
+ help in reproducing, analyzing and fixing reported bugs is more than
+ welcome. Don't hesitate to add a comment to bug reports reporting your
+diff --git a/docs/manual/resources.txt b/docs/manual/resources.txt
+index b327f9e..d2d815e 100644
+--- a/docs/manual/resources.txt
++++ b/docs/manual/resources.txt
+@@ -42,7 +42,7 @@ better as it will reach more people, both developers and users.
+ Bug tracker::
+ +
+ Bugs in Buildroot can be reported via the mailing list or alternatively
+-via the https://bugs.busybox.net/buglist.cgi?product=buildroot[Buildroot
++via the https://bugs.buildroot.org/buglist.cgi?product=buildroot[Buildroot
+ bugtracker]. Please refer to xref:reporting-bugs[] before creating a bug
+ report.
+ 
