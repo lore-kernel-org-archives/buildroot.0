@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Sep 2015 23:32:48 +0200
-Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
- to be symlinks into /usr
-In-Reply-To: <8737yg3dt0.fsf@dell.be.48ers.dk>
-References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
- <20150904101128.4206779d@free-electrons.com>
- <55E9540C.9060000@mind.be> <20150904163121.GD4540@free.fr>
- <8737yg3dt0.fsf@dell.be.48ers.dk>
-Message-ID: <20150914233248.7138f758@free-electrons.com>
+Date: Mon, 14 Sep 2015 23:34:02 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+ (without devtmpfs)
+In-Reply-To: <87bnd43eph.fsf@dell.be.48ers.dk>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+ <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
+ <20150909155427.53f9c8b5@free-electrons.com>
+ <87bnd43eph.fsf@dell.be.48ers.dk>
+Message-ID: <20150914233402.3575da80@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Dear Peter Korsgaard,
 
-On Mon, 14 Sep 2015 23:12:59 +0200, Peter Korsgaard wrote:
+On Mon, 14 Sep 2015 22:53:30 +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+> Hi,
+> 
+> 
+>  > In principle, it seems better to me if the devices are all set up
+>  > before starting anything else, so if it works, I'm all for S00mdev. The
+>  > only question is whether mdev logs things to syslog, and if so what
+>  > happens to those messages that are emitted before syslog is started.
+> 
+> It doesn't:
+> 
+> git grep log mdev.c
+> mdev.c://usage:       "If /dev/mdev.log file exists, debug log will be appended to it."
+> mdev.c:static void open_mdev_log(const char *seq, unsigned my_pid)
+> mdev.c: int logfd = open("mdev.log", O_WRONLY | O_APPEND);
+> mdev.c: if (logfd >= 0) {
+> mdev.c:         xmove_fd(logfd, STDERR_FILENO);
+> mdev.c:         open_mdev_log(seq, my_pid);
+> 
+> So only to stderr (and /dev/mdev.log if it exists).
 
-> >> I will always turn this option on, even in non-systemd, because it makes for a
->  >> better environment. See the Fedora document for a long explanation why split
->  >> /usr is just legacy baggage. Other parts of your system will also work better
->  >> when this option is turned on - no more confusion between busybox installing
->  >> something in /bin and the full package putting it in /usr/bin. No more worries
->  >> about a shebang being correct.
->  >> 
->  >> So no, I don't want this to be hidden.
-> 
->  > Ditto, I do not want this to be hidden. I want to have the choice of
->  > using a merged-usr even without systemd (and I even have a use-case in
->  > my head for that).
-> 
-> And as explained, we might even want to default it to y in the future,
-> just because it is simpler when you have a single rootfs.
-> 
-> Is there any reason why we explicitly add the symlinks for /bin / /sbin
-> and /lib and don't just do:
-> 
-> ln -sf . usr
+Then we can safely start mdev before the syslog/klogd stuff, right?
 
-Then you have /share, /local and so on?
+Thanks,
 
 Thomas
 -- 
