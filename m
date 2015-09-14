@@ -1,52 +1,58 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 14 Sep 2015 11:50:15 +0100
-Subject: [Buildroot] [PATCH 3/3] gupnp-av: new package
-In-Reply-To: <1442226095-4316-4-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1442226095-4316-1-git-send-email-rahul.bedarkar@imgtec.com>
- <1442226095-4316-4-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <55F6A667.4040608@imgtec.com>
+Date: Mon, 14 Sep 2015 11:56:33 +0100
+Subject: [Buildroot] Mailing list address
+In-Reply-To: <CAFOYHZCP=wKo23h1r9cDizkLQ-nNQW_o21+Otjm0V=NYJVvVRw@mail.gmail.com>
+References: <CAFOYHZCP=wKo23h1r9cDizkLQ-nNQW_o21+Otjm0V=NYJVvVRw@mail.gmail.com>
+Message-ID: <55F6A7E1.4090500@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rahul Bedarkar,
+Dear Chris Packham,
 
-On 09/14/2015 11:21 AM, Rahul Bedarkar wrote:
-[snip]
-> diff --git a/package/gupnp-av/gupnp-av.mk b/package/gupnp-av/gupnp-av.mk
-> new file mode 100644
-> index 0000000..e377b6b
-> --- /dev/null
-> +++ b/package/gupnp-av/gupnp-av.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# gupnp-av
-> +#
-> +################################################################################
-> +
-> +GUPNP_AV_VERSION = 0.11.6
-> +GUPNP_AV_SOURCE = gupnp-av-$(GUPNP_AV_VERSION).tar.xz
-> +GUPNP_AV_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp-av/0.11
+On 09/14/2015 11:35 AM, Chris Packham wrote:
+> Hi All,
+> 
+> Just noticed that README[1] mentions "buildroot at buildroot.org" but the
+> buildroot website[2] says "buildroot at busybox.net". I just sent a patch
+> to the former, assuming it must be an alias to the latter.
 
-same here:
+Yes, one is an alias of the other.
 
-GUPNP_AV_VERSION_MAJOR = 0.11
-GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).6
-GUPNP_AV_SOURCE = gupnp-av-$(GUPNP_AV_VERSION).tar.xz
-GUPNP_AV_SITE =
-http://ftp.gnome.org/pub/gnome/sources/gupnp-av/$(GUPNP_AV_VERSION_MAJOR)
+> I haven't
+> seen a bounce but haven't seen it show up on the list yet.
+
+I do see your patch on the list, and also in Patchwork:
+
+http://patchwork.ozlabs.org/patch/517337/
+
+> Is the address supposed to work as I've assumed or is it just a plain
+> typo in README?
+
+No, is not a typo. The buildroot.org address works and it's the one
+everyone should use, IMHO.
+
+> I'll re-send my patch to the other address in a couple of minutes.
+
+Now we have your patch twice:
+
+http://patchwork.ozlabs.org/patch/517346/
+
+Can you please mark this one as "superseded" or "rejected" or "not
+applicable" (I guess we need a "Duplicate" option) in Patchwork?
 
 Regards,
 
 Vincent.
 
-> +GUPNP_AV_LICENSE = LGPLv2+
-> +GUPNP_AV_LICENSE_FILES = COPYING
-> +GUPNP_AV_INSTALL_STAGING = YES
-> +GUPNP_AV_DEPENDENCIES = host-pkgconf libglib2 libxml2 gupnp
-> +
-> +$(eval $(autotools-package))
+> 
+> --
+> [1] - http://git.buildroot.net/buildroot/tree/README#n22
+> [2] - http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
