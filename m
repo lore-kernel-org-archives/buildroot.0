@@ -1,55 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Sep 2015 21:31:22 +0200
-Subject: [Buildroot] [git commit] barebox: bump to version 2015.09.0
-Message-ID: <20150914193422.125A681E4A@busybox.osuosl.org>
+Date: Mon, 14 Sep 2015 21:36:51 +0200
+Subject: [Buildroot] [git commit] gst-plugins-bad: depend on directfb
+	instead of selecting it for directfb plugin
+Message-ID: <20150914194447.4CDD6819C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2ffab2236f8b7945b2f1ccbe6aa27fbf90d5d8a
+commit: http://git.buildroot.net/buildroot/commit/?id=1b7275b563e6e11a3708ba5cc2878b8b4f327fec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+As discussed here:
+http://lists.busybox.net/pipermail/buildroot/2015-September/139213.html
+
+It makes more sense to use 'depends on' (and default to y) for a big
+dependency like directfb.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in    |    4 ++--
- boot/barebox/barebox.hash |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gstreamer/gst-plugins-bad/Config.in |    9 ++-------
+ 1 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index f6f8f15..bb27b61 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index 339c6a6..6aa93de 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -260,13 +260,8 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CURL
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2015.07.0"
-+	bool "2015.09.0"
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DIRECTFB
+ 	bool "directfb"
+-	select BR2_PACKAGE_DIRECTFB
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # directfb
+-
+-comment "directfb needs a toolchain w/ C++, threads, gcc >= 4.5"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on BR2_PACKAGE_DIRECTFB
++	default y
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2015.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2015.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index ee09f8d..57a8eff 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2015.07.0.tar.bz2.md5
--md5 8747cb02b607c2a92280f4c7db820828 barebox-2015.07.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2015.09.0.tar.bz2.md5
-+md5 8ce178b4e19cc350fcdbdd8c539eaf37 barebox-2015.09.0.tar.bz2
- 
- # Locally calculated
--sha256 0971be9a328b5e6b26912e3fa29ededdc061d4c3cf16d327e24d83cd5ca06695 barebox-2015.07.0.tar.bz2
-+sha256 32759e368627aa6c1b51eb8f4c3f767c4ac37dda1d6495a2664c4f54f9db1626 barebox-2015.09.0.tar.bz2
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
+ 	bool "dvb"
