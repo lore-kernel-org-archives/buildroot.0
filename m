@@ -1,9 +1,10 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 15 Sep 2015 16:45:08 +0100
-Subject: [Buildroot] [PATCH v2 1/5] liburcu: Bump version to 0.8.7
-In-Reply-To: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
+Date: Tue, 15 Sep 2015 16:46:20 +0100
+Subject: [Buildroot] [PATCH v2 3/5] lttng-libust: Bump version to 2.6.2
+In-Reply-To: <1442327721-24458-3-git-send-email-benjamin.h.shelton@intel.com>
 References: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
-Message-ID: <55F83D04.9080107@imgtec.com>
+ <1442327721-24458-3-git-send-email-benjamin.h.shelton@intel.com>
+Message-ID: <55F83D4C.7060405@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,12 +12,6 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Dear Ben Shelton,
-
-please mark your previous series as superseded:
-
-http://patchwork.ozlabs.org/patch/517036/
-http://patchwork.ozlabs.org/patch/517035/
-http://patchwork.ozlabs.org/patch/517037/
 
 On 09/15/2015 03:35 PM, Ben Shelton wrote:
 > Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
@@ -27,33 +22,30 @@ Regards,
 Vincent.
 
 > ---
->  package/liburcu/liburcu.hash | 6 +++---
->  package/liburcu/liburcu.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/lttng-libust/lttng-libust.hash | 4 ++--
+>  package/lttng-libust/lttng-libust.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
-> index 2b1693d..64ba901 100644
-> --- a/package/liburcu/liburcu.hash
-> +++ b/package/liburcu/liburcu.hash
-> @@ -1,4 +1,4 @@
-> -# http://www.lttng.org/files/urcu/userspace-rcu-0.8.6.tar.bz2.sha1
-> -sha1  f10e9bf812557cd0c2a35a277e04010ec278d25d  userspace-rcu-0.8.6.tar.bz2
-> +# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
-> +sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
->  # Locally generated
-> -sha256 b1a5d3bce014ba7a702759bc60b692c1cd46ff0e8a5b53f0d0a95e22db74ab21 userspace-rcu-0.8.6.tar.bz2
-> +sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
-> diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-> index 1582d07..8d06966 100644
-> --- a/package/liburcu/liburcu.mk
-> +++ b/package/liburcu/liburcu.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+> index 65db612..aafc2ba 100644
+> --- a/package/lttng-libust/lttng-libust.hash
+> +++ b/package/lttng-libust/lttng-libust.hash
+> @@ -1,2 +1,2 @@
+> -# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.0.tar.bz2.sha1
+> -sha1  774fc2052781ba6fd789d422223c739d5f64482d  lttng-ust-2.6.0.tar.bz2
+> +# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.2.tar.bz2.sha1
+> +sha1  bfa9cbdabd8698cf5b98667eac5c39775127f634  lttng-ust-2.6.2.tar.bz2
+> diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+> index 2afcd61..4976ff4 100644
+> --- a/package/lttng-libust/lttng-libust.mk
+> +++ b/package/lttng-libust/lttng-libust.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -LIBURCU_VERSION = 0.8.6
-> +LIBURCU_VERSION = 0.8.7
->  LIBURCU_SITE = http://lttng.org/files/urcu
->  LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
->  LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
+>  LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+> -LTTNG_LIBUST_VERSION = 2.6.0
+> +LTTNG_LIBUST_VERSION = 2.6.2
+>  LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+>  LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
+>  LTTNG_LIBUST_LICENSE_FILES = COPYING
 > 
