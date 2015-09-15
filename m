@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 23:13:07 +0200
-Subject: [Buildroot] [PATCH] Enable mplayer to be built in arm64
- architectures
-In-Reply-To: <6130a3068f57c9a23499f06ba5ab168c1fd4b38b.1442322610.git.jpinto@synopsys.com>
-References: <6130a3068f57c9a23499f06ba5ab168c1fd4b38b.1442322610.git.jpinto@synopsys.com>
-Message-ID: <20150915231307.6b9cef7b@free-electrons.com>
+Date: Tue, 15 Sep 2015 23:18:02 +0200
+Subject: [Buildroot] [PATCH v3] Buildroot' patch to add support for
+ aarch64 in mplayer configure script
+In-Reply-To: <e6993588b5107e1110e43ed583416f4784933eef.1442336078.git.jpinto@synopsys.com>
+References: <e6993588b5107e1110e43ed583416f4784933eef.1442336078.git.jpinto@synopsys.com>
+Message-ID: <20150915231802.1e19b09c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Joao,
 
-Same thing as the other patch: use your full name as the author and
-Signed-off-by. So you should change your $HOME/.gitconfig to something
-like:
+Your e-mail is two patches concataned to each other. Can you make that
+a single patch instead?
 
-[user]
-        name = Joao Pinto
-        email = Joao.Pinto at synopsys.com
+Also, the title should be adjusted, as I explained in a previous
+message. See some more comments below.
 
-Also, the commit title should be:
+On Tue, 15 Sep 2015 18:00:48 +0100, jpinto wrote:
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> Tested-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  package/mplayer/0007-enable-aarch64.patch | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>  create mode 100644 package/mplayer/0007-enable-aarch64.patch
+> 
+> diff --git a/package/mplayer/0007-enable-aarch64.patch b/package/mplayer/0007-enable-aarch64.patch
+> new file mode 100644
+> index 0000000..7f75756
+> --- /dev/null
+> +++ b/package/mplayer/0007-enable-aarch64.patch
+> @@ -0,0 +1,13 @@
 
-	mplayer: enable for building on aarch64
+All patches in Buildroot should have a description and a Signed-off-by
+line. See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+for details.
 
-The main idea is that all patches should have their title prefixed by
-the package they are touching.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
