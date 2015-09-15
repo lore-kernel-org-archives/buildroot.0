@@ -1,46 +1,41 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Mon, 14 Sep 2015 21:54:57 -0500
-Subject: [Buildroot] [PATCHv5 4/4] docs/manual: add section about size
-	graphing
-In-Reply-To: <20150903104326.GE3689@free.fr>
-References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1441228505-23235-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <20150903103700.GD3689@free.fr> <20150903104326.GE3689@free.fr>
-Message-ID: <CALq67GBoSnTY-G7w3SjdsUpO0QWPqhv5c=2Gsd3RNS-Z1u2=xA@mail.gmail.com>
+Date: Mon, 14 Sep 2015 22:59:49 -0500
+Subject: [Buildroot] [PATCH 0/2] openssl parallel build
+Message-ID: <1442289591-30376-1-git-send-email-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Yann,
+All,
 
-On Thu, Sep 3, 2015 at 5:43 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2015-09-03 12:37 +0200, Yann E. MORIN spake thusly:
->> Thomas, All,
->>
->> On 2015-09-02 23:15 +0200, Thomas Petazzoni spake thusly:
->> > +* +output/build/package-size-stats.csv+, a CSV file giving the size
->> > +  contribution of each package to the overall root filesystem size
->>
->> Ditto, that was not generated.
->
-> Sorry, ditch that comment. It *was* generated.
->
-> It's just that I only looked at the base filename, and expected it in
-> the graphs/ sub-dir, not in build/ . That's by looking at patch 3 that I
-> noticed they were put in there.
->
-> I think it makes more sense to put those .csv files in the graphs/
-> sub-dir.
+I have adopted Thomas P's patches that we submitted but in May in order
+enable parallel build of openssl. I have updated the patches to use the 
+latest patches available from gentoo and have tested builds only on i386,
+ARM, and MIPS.
 
-I agree with Yann in that the CSV files make the most sense to be put
-in graphs/ sub-dir. In fact, I have modified this locally while carry
-this patch to place them there.
+Original Patches:
 
-On a side note - it would be great to see this feature merged :)
+http://patchwork.ozlabs.org/patch/473086/
+http://patchwork.ozlabs.org/patch/473087/
 
 Thanks,
 -Ryan
+
+Thomas Petazzoni (2):
+  openssl: use git formatted patches
+  openssl: enable parallel build and installation
+
+ ...time-building-manpages-if-we-re-not-going.patch | 28 +++++++++
+ ...odev-Fix-issue-with-signature-generation.patch} | 71 +++++++++++++---------
+ package/openssl/001-do-not-build-docs.patch        | 13 ----
+ package/openssl/openssl.hash                       |  2 +
+ package/openssl/openssl.mk                         | 12 ++--
+ 5 files changed, 79 insertions(+), 47 deletions(-)
+ create mode 100644 package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+ rename package/openssl/{003-cryptodev-Fix-issue-with-signature-generation.patch => 0002-cryptodev-Fix-issue-with-signature-generation.patch} (82%)
+ delete mode 100644 package/openssl/001-do-not-build-docs.patch
+
+-- 
+1.9.1
