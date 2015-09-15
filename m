@@ -1,28 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Sep 2015 09:46:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 8331] kexec fails due to missing /usr/sbin/shutdown
-In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
-References: <bug-8331-163@https.bugs.busybox.net/>
-Message-ID: <20150915094610.3A7827FAA5@busybox.osuosl.org>
+From: Wetzel Andreas <Andreas.Wetzel@nanotronic.ch>
+Date: Tue, 15 Sep 2015 09:38:12 +0000
+Subject: [Buildroot] [PATCH] openvpn: add option for --enable-password-save
+Message-ID: <9811803ba55043e0b0bf8a6451c40cf2@LysExc01.nanotronic.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8331
+Added configuration option BR2_PACKAGE_OPENVPN_PWSAVE that
+adds --enable-password-save to OPENVPN_CONF_OPTS if selected.
 
---- Comment #9 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 09:46:10 UTC ---
-(In reply to comment #7)
-> What is your use case for needing it?
+Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+---
+ package/openvpn/Config.in  | 6 ++++++
+ package/openvpn/openvpn.mk | 4 ++++
+ 2 files changed, 10 insertions(+)
 
-I think he is loading a new kernel image using "kexec --load", and then he
-wants to reboot the board in order to boot with that kernel image, which should
-be able to do it with "kexec --exec", without calling shutdown.
-
-Dr I J Ormshaw, please confirm.
-
+diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+index 5edb479..2b5962d 100644
+--- a/package/openvpn/Config.in
++++ b/package/openvpn/Config.in
+@@ -27,6 +27,12 @@ config BR2_PACKAGE_OPENVPN_SMALL
+          You loose eurephia, debugging info, help messages and more.
+          It saves around 100 KiB in binary file size.
+ 
++config BR2_PACKAGE_OPENVPN_PWSAVE
++    bool "Allow passwords in files"
++    help
++      Allow --askpass and --auth-user-pass passwords to be
++      read from a file.
++
+ choice
+        prompt "Crypto backend"
+        default BR2_PACKAGE_OPENVPN_CRYPTO_OPENSSL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 1caa9a0..cdae3f0 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -41,6 +41,10 @@ else
+ OPENVPN_CONF_OPTS += --disable-lzo
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENVPN_PWSAVE),y)
++OPENVPN_CONF_OPTS += --enable-password-save
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENVPN_CRYPTO_OPENSSL),y)
+ OPENVPN_CONF_OPTS += --with-crypto-library=openssl
+ OPENVPN_DEPENDENCIES += openssl
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2.1.4
