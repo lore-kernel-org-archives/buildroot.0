@@ -1,45 +1,113 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue, 15 Sep 2015 20:56:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
-	protector when not available
-Message-ID: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Sep 2015 22:03:53 +0200
+Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
+In-Reply-To: <55F8493C.2030804@mind.be>
+References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+ <55F8493C.2030804@mind.be>
+Message-ID: <20150915200353.GB3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/22e/22eced2dc9ca1bc90ef193b4dc40891c47157e89/
+Arnout, All,
 
-ruby, by default, attempts to use the stack protector if configure detects
-that it exists. The stack protector detection does not attempt to link
-libssp, which can cause a false positive.
+On 2015-09-15 18:37 +0200, Arnout Vandecappelle spake thusly:
+> On 13-09-15 23:13, Yann E. MORIN wrote:
+> > Kodi segfaults as soon as it tries to load a python module:
+> > 
+> >     Could not find platform independent libraries <prefix>
+> >     Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
+> >     ImportError: No module named site
+> >     Segmentation fault
+> > 
+> > Turns out that keeping .py modules (with or without .pyc) fixes the
+> > issue.
+> > 
+> > Currently, Kodi selects python, but since the format of modules is a
+> > choice, we can not select it.
+> 
+>  I think it's a lot more user-friendly to do
+> 
+> 	select BR2_PACKAGE_PYTHON_PY_PYC
 
-Instead, check if the stack protector is enabled in the buildroot
-toolchain config, and set the stack_protector=no environment variable to
-force the stack protector off.
+Two problems with that option:
+  - first, it is not acceptable; one must *not* select a symbol that is
+    part of a choice
+  - Kconfig won't even act on that select, in fact:
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- package/ruby/ruby.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+    $ cat select-choice.in
+    config FOO
+        bool "foo"
+        select BAR_B
+    
+    choice BAR
+        bool "bar"
+    
+    config BAR_A
+        bool "bar-a"
+    
+    config BAR_B
+        bool "bar-b"
+    
+    config BAR_C
+        bool "bar-c"
+    
+    endchoice
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 243cd0b..9f78c33 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -36,6 +36,11 @@ RUBY_CONF_ENV = ac_cv_func_dl_iterate_phdr=no
- RUBY_CONF_OPTS += --with-out-ext=fiddle
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
-+# Don't force -fstack-protector when SSP is not available in toolchain
-+RUBY_CONF_ENV += stack_protector=no
-+endif
-+
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- RUBY_DEPENDENCIES += berkeleydb
+    $ cat .config
+    #
+    # Automatically generated file; DO NOT EDIT.
+    # Configuration
+    #
+    CONFIG_FOO=y
+    CONFIG_BAR_A=y
+    # CONFIG_BAR_B is not set
+    # CONFIG_BAR_C is not set
+
+So, as you can see, even though FOO is set, BAR_B is not, even though
+FOO selects it.
+
+>  That removes the possibility for the user to select the PY_ONLY option, but I
+> don't think that that's so terribly important. And it does make life a whole lot
+> simpler for someone who wants to select Kodi. They already have to go and enable
+> an EGL provider, so let's not make their life harder by requiring manual
+> selection of python with the correct, non-default _PY_PYC option...
+
+One alternative (if we are *that* concerned with user-friendliness),
+would be to introduce an intermediate symbol that allows to get rid of
+.py, something like:
+
+    config BR2_PKG_PYTHON_WANTS_PY
+        bool
+
+    choice
+        bool "module fomat"
+
+    config BR2_PKG_PYTHON_PY_ONLY
+        bool ".py only"
+
+    config BR2_PKG_PYTHON_PYC_ONLY
+        bool ".pyc only"
+        depends on !BR2_PKG_PYTHON_WANTS_PY
+
+    endchoice
+
+(note: .py+.pyc option voluntarily omitted).
+
+and then Kodi would select BR2_PKG_PYTHON_WANTS_PY.
+
+But that's just ugly, even just for the sake of simplicity.
+
+Regards,
+Yann E. MORIN.
+
+
 -- 
-2.4.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
