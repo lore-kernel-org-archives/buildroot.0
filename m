@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Sep 2015 09:22:22 +0000 (UTC)
+Date: Tue, 15 Sep 2015 09:41:50 +0000 (UTC)
 Subject: [Buildroot] [Bug 8331] kexec fails due to missing /usr/sbin/shutdown
 In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
 References: <bug-8331-163@https.bugs.busybox.net/>
-Message-ID: <20150915092222.CAA9E7FA14@busybox.osuosl.org>
+Message-ID: <20150915094150.41C9781EA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,25 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=8331
 
---- Comment #6 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 09:22:22 UTC ---
-(In reply to comment #0)
-> Chaining a new kernel using kexec fails as /usr/sbin/shutdown is missing.
+--- Comment #7 from Peter Korsgaard <jacmet@uclibc.org> 2015-09-15 09:41:50 UTC ---
+(In reply to comment #5)
+> Systemd is providing /usr/sbin/shutdown
 
-That's not correct. /usr/sbin/shutdown does exists. The problem is that kexec
-is trying to find it at /sbin instead of /usr/sbin.
 
-(In reply to comment #3)
-> I also raised a similay bug report 8336, to which I had a responce citing
-> http://patchwork.ozlabs.org/patch/514750/ as a fix.  That patch should also fix
-> this bug.
+Ok, so there's two issues:
 
-Currently in Buildroot there are two ways to have shutdown installed in your
-target. The first one is using sysvinit as you init system, which will install
-shutdown in /sbin. The second one is using systemd as your init system, which
-will install shutdown in /usr/sbin.
+- Not all of our init implementations provide shutdown (busybox doesn't,
+sysvinit has /sbin/shutdown, systemd has /usr/sbin/shutdown
 
-Once we get the patch from Yann merged, kexec will be able to find shutdown
-because /sbin will be a symlink to /usr/sbin if you use systemd as your init
-system. So, yes, that patches fixes your problem.
+- Systemd doesn't install it where kexec looks for it
 
-The thing is that here we have highlighted a different problem. Busybox doesn't
-install shutdown, so kexec will never be able to find it, either if you have
-/sbin as a real directory or being a symlink to /usr/sbin. It simply doesn't
-exist.
+I see that kexec-lite doesn't have such code.
+
+I've never used kexec, but looking at the kexec code I'm not sure what the
+shutdown code is for, it seems to just be a wrapper around shutting down that
+isn't normally used (as it gets checked before do_exec).
+
+What is your use case for needing it?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
