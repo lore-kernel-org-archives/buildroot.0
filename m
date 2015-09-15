@@ -1,33 +1,35 @@
 From: jpinto <Joao.Pinto@synopsys.com>
-Date: Tue, 15 Sep 2015 14:20:58 +0100
-Subject: [Buildroot] [PATCH] Enable vlc to run as root
-Message-ID: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442322597.git.jpinto@synopsys.com>
+Date: Tue, 15 Sep 2015 14:21:14 +0100
+Subject: [Buildroot] [PATCH] Enable mplayer to be built in arm64
+	architectures
+Message-ID: <6130a3068f57c9a23499f06ba5ab168c1fd4b38b.1442322610.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A great number of embedded system only include the root user. 
-This patch has the goal of enabling vlc to be ran as root.
+This patch enables the mplayer application to be built for a arm64 based
+system. It was tested in a ARM Juno r1 (ARMv8 development board).
 
 Signed-off-by: jpinto <jpinto@synopsys.com>
 Tested-by: jpinto <jpinto@synopsys.com>
 ---
- package/vlc/vlc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/mplayer/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 6f7fd58..4e84b12 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -54,6 +54,7 @@ VLC_CONF_OPTS += \
- 	--disable-mfx \
- 	--disable-vdpau \
- 	--disable-addonmanagermodules \
-+	--enable-run-as-root \
+diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+index 79ff3b1..7a8b03f 100644
+--- a/package/mplayer/Config.in
++++ b/package/mplayer/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+ 	default y
+ 	# Those architectures are not supported by MPlayer
+ 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
+-		|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
++		|| BR2_microblaze || BR2_nios2)
+ 	# Broken support for <ARMv5
+ 	depends on !BR2_ARM_CPU_ARMV4
  
- # Building static and shared doesn't work, so force static off.
- ifeq ($(BR2_STATIC_LIBS),)
 -- 
 1.8.1.5
