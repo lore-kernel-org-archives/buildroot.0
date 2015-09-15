@@ -1,93 +1,85 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Sep 2015 18:37:16 +0200
-Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
-In-Reply-To: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
-References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <55F8493C.2030804@mind.be>
+Date: Tue, 15 Sep 2015 18:47:27 +0200
+Subject: [Buildroot] [PATCH 1/2] openssl: use git formatted patches
+In-Reply-To: <1442289591-30376-2-git-send-email-ryanbarnett3@gmail.com>
+References: <1442289591-30376-1-git-send-email-ryanbarnett3@gmail.com>
+ <1442289591-30376-2-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <55F84B9F.8060908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13-09-15 23:13, Yann E. MORIN wrote:
-> Kodi segfaults as soon as it tries to load a python module:
+On 15-09-15 05:59, Ryan Barnett wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
->     Could not find platform independent libraries <prefix>
->     Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
->     ImportError: No module named site
->     Segmentation fault
+> Using Git formatted patches makes it easier to adjust the patches when
+> needed.
 > 
-> Turns out that keeping .py modules (with or without .pyc) fixes the
-> issue.
+> [Ryan: removed unnecessary patch and updated offsets]
 > 
-> Currently, Kodi selects python, but since the format of modules is a
-> choice, we can not select it.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> ---
+>  ...time-building-manpages-if-we-re-not-going.patch | 27 +++++++++
+>  ...odev-Fix-issue-with-signature-generation.patch} | 70 +++++++++++++---------
+>  package/openssl/001-do-not-build-docs.patch        | 13 ----
+>  3 files changed, 68 insertions(+), 42 deletions(-)
+>  create mode 100644 package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+>  rename package/openssl/{003-cryptodev-Fix-issue-with-signature-generation.patch => 0002-cryptodev-Fix-issue-with-signature-generation.patch} (82%)
+>  delete mode 100644 package/openssl/001-do-not-build-docs.patch
+> 
+> diff --git a/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch b/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+> new file mode 100644
+> index 0000000..93e2118
+> --- /dev/null
+> +++ b/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+> @@ -0,0 +1,27 @@
+> +From 53980448064b362a58e4ab2aca6f38fec93c07c3 Mon Sep 17 00:00:00 2001
+> +From: Mike Frysinger <vapier@gentoo.org>
+> +Date: Sat, 16 May 2015 18:53:51 +0200
+> +Subject: [PATCH 1/3] Dont waste time building manpages if we're not going to
+            ^^^^^^^^^^
+ Please generate patches with -N to avoid the 1/3: it's incorrect (there are
+only 2 patches) and it causes additional churn when patches are regenerated.
 
- I think it's a lot more user-friendly to do
+ I also like to add --subject-prefix= to remove the [PATCH] part, which is not
+at all useful in this context. But others may disagree.
 
-	select BR2_PACKAGE_PYTHON_PY_PYC
+> + use em.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +---
+> + Makefile.org | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+[snip]
+> diff --git a/package/openssl/001-do-not-build-docs.patch b/package/openssl/001-do-not-build-docs.patch
 
- That removes the possibility for the user to select the PY_ONLY option, but I
-don't think that that's so terribly important. And it does make life a whole lot
-simpler for someone who wants to select Kodi. They already have to go and enable
-an EGL provider, so let's not make their life harder by requiring manual
-selection of python with the correct, non-default _PY_PYC option...
+ If you resend, perhaps you can add -M20% so the rename is detected?
 
  Regards,
  Arnout
 
-
-> 
-> Fix that by inverting the dependency on python from Kodi:
->   - turn it into a depends rather than a select,
->   - add the dependency to ! pyc-only
->   - update the comment accordingly.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> changes v1 -> v2:
->   - fix spurious 'i' (vim insert)
-> ---
->  package/kodi/Config.in | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index 797f59d..6d6c47b 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
->  	bool
->  	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  
-> -comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
-> +comment "kodi needs python and .py modiules, and a toolchain w/ C++, threads, wchar, dynamic library"
->  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-> +		|| !BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON_PYC_ONLY
->  	depends on BR2_USE_MMU
->  
->  config BR2_PACKAGE_KODI_EGL_GLES
-> @@ -65,7 +66,6 @@ menuconfig BR2_PACKAGE_KODI
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_PCRE
->  	select BR2_PACKAGE_PCRE_UCP
-> -	select BR2_PACKAGE_PYTHON
->  	select BR2_PACKAGE_PYTHON_BSDDB
->  	select BR2_PACKAGE_PYTHON_BZIP2
->  	select BR2_PACKAGE_PYTHON_CURSES
-> @@ -94,6 +94,8 @@ menuconfig BR2_PACKAGE_KODI
->  	depends on BR2_USE_WCHAR
->  	depends on !BR2_STATIC_LIBS # python
->  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_PYTHON
-> +	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
->  	help
->  	  Kodi is an award-winning free and open source (GPL) software
->  	  media player and entertainment hub for digital media.
+> deleted file mode 100644
+> index 135a9d3..0000000
+> --- a/package/openssl/001-do-not-build-docs.patch
+> +++ /dev/null
+> @@ -1,13 +0,0 @@
+> -Dont waste time building manpages if we're not going to use em.
+> -
+> ---- openssl/Makefile.org
+> -+++ openssl/Makefile.org
+> -@@ -792,7 +792,7 @@
+> - dist_pem_h:
+> - 	(cd crypto/pem; $(MAKE) CC='${CC}' SDIRS='${SDIRS}' CFLAG='${CFLAG}' pem.h; $(MAKE) clean)
+> - 
+> --install: all install_docs install_sw
+> -+install: all install_sw
+> - 
+> - install_sw:
+> - 	@$(PERL) $(TOP)/util/mkdir-p.pl $(INSTALL_PREFIX)$(INSTALLTOP)/bin \
 > 
 
 
