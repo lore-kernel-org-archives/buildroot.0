@@ -1,36 +1,45 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 15 Sep 2015 21:49:02 +0200
-Subject: [Buildroot] [PATCH] micropython: new package
-In-Reply-To: <CAFOYHZAWy7NpB2eXw20RmRaw6j3ySvxeWf9n6mhKrGL_9jhdfw@mail.gmail.com>
-References: <1442226102-15878-1-git-send-email-judge.packham@gmail.com>
- <20150914155829.1d326cc0@free-electrons.com> <55F6D5C5.9090504@imgtec.com>
- <CAFOYHZAWy7NpB2eXw20RmRaw6j3ySvxeWf9n6mhKrGL_9jhdfw@mail.gmail.com>
-Message-ID: <1442346542.1886.2.camel@embedded.rocks>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue, 15 Sep 2015 20:56:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
+	protector when not available
+Message-ID: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Di, 2015-09-15 at 11:03 +1200, Chris Packham wrote:
-> On Tue, Sep 15, 2015 at 2:12 AM, Vicente Olivert Riera
-> <Vincent.Riera@imgtec.com> wrote:
-> > Dear Thomas Petazzoni,
-> > 
-> > It shouldn't conflict as micropython installs the library files
-> > under
-> > /usr/lib/micropython/ directory. And the installed binaries are
-> > /usr/local/bin/{pip-}micropython. Perhaps this should be changed to
-> > install them in /usr instead of /usr/local.
-> 
-> The local part seems hard-coded to me. But we could always sed it on
-> the way through.
+Fixes:
+http://autobuild.buildroot.net/results/22e/22eced2dc9ca1bc90ef193b4dc40891c47157e89/
 
-Adding PREFIX=$(TARGET_DIR)/usr to MICROPYTHON_INSTALL_TARGET_CMDS
-works for me:
+ruby, by default, attempts to use the stack protector if configure detects
+that it exists. The stack protector detection does not attempt to link
+libssp, which can cause a false positive.
 
-$ ls output/target/usr/bin/
-micropython  pip-micropython
+Instead, check if the stack protector is enabled in the buildroot
+toolchain config, and set the stack_protector=no environment variable to
+force the stack protector off.
 
-Best regards
-J?rg Krause
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ package/ruby/ruby.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 243cd0b..9f78c33 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -36,6 +36,11 @@ RUBY_CONF_ENV = ac_cv_func_dl_iterate_phdr=no
+ RUBY_CONF_OPTS += --with-out-ext=fiddle
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++# Don't force -fstack-protector when SSP is not available in toolchain
++RUBY_CONF_ENV += stack_protector=no
++endif
++
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ RUBY_DEPENDENCIES += berkeleydb
+-- 
+2.4.3
