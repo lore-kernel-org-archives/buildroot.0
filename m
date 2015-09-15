@@ -1,53 +1,96 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 15 Sep 2015 10:11:56 -0700
-Subject: [Buildroot] User question UTF-8
-Message-ID: <CAJJ6jxvdrYbALJfdd=oKMO4xwsg9o6MfwR_YGLyvOsCgfV77Hw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Sep 2015 19:53:54 +0200
+Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
+ library
+In-Reply-To: <20150915093523.0597731f@free-electrons.com>
+References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
+ <20150913101738.238ebc06@free-electrons.com>
+ <CAOudHSVcePTAq7PLON-0Zig-JkJtTNnu-RzHtkYf0f00pe8atw@mail.gmail.com>
+ <20150915093523.0597731f@free-electrons.com>
+Message-ID: <20150915175354.GA3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thomas, Cjw, All,
 
-I am trying to port a python application to buildroot/busybox. It
-needs to read disk files from removable drives. The filenames may
-contain utf-8 chars.
+On 2015-09-15 09:35 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 15 Sep 2015 00:06:46 -0400, Cjw X wrote:
+> > >>  # Compute GNU_TARGET_NAME
+> > >> +ifeq ($(BR2_TOOLCHAIN_NO_VENDOR),y)
+> > >> +GNU_TARGET_NAME = $(ARCH)-$(TARGET_OS)-$(LIBC)$(ABI)
+> > >
+> > > Is it really mandatory to *not* have a vendor part of the tuple?
+> > 
+> > I've tried building arm-buildroot-none-eabi and
+> > arm-buildroot-none-newlibeabi, both of which, based on my
+> > understanding, should compile, but none of the tools build with that
+> > target. Binutils doesn't compile, nor does gcc. I spent some time
+> > looking at this, but never found an elegant solution.
+> 
+> Interesting. I guess we'll have to experiment a bit with this.
+> 
+> I'm adding Yann in Cc. Yann, have you experienced such thing when
+> adding bare-metal/newlib support in Crosstool-NG? I've quickly looked
+> at the Crosstool-NG code, and I don't see the vendor part of the tuple
+> being skipped specifically for bare metal/newlib toolchains, but maybe
+> I missed it.
 
-Currently ls from busybox prints ? for the utf-8 non-ascii chars. Both
-from console on minicom and from ssh (which should handle utf-8).
+In fact, that's not the 'vendor' part that is to be removed; it's the
+'kernel' part.
 
-There seems to be lots of config knobs.
+A canonical tuple is usually a three-part tuple: arch-vendor-os. But in
+the case of linux, the 'os' field is split in two: the 'kernel' and
+'userland', like so:  arch-vendor-kernel-userland.
 
-I assume utf-8 chars are somehow related to locales? I enabled locales
-in the internal glib toolchain.
+But really, the 'os' or 'userland' fields mostly denote the ABI being
+used.
 
-BR2_arm=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ENABLE_LOCALE_PURGE=y
-BR2_GENERATE_LOCALE="en_US.UTF-8"
-BR2_TARGET_OPTIMIZATION="-Os -pipe"
-# BR2_TARGET_GENERIC_GETTY is not set
-# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-BR2_PACKAGE_LIBPTHREAD_STUBS=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_SHEEVAPLUG=y
+So we end up with things like:
 
+  - targets for running Linux:
+    - i386-blabla-linux-gnu
+    - powerpc-unknown-linux-gnuspe
+    - arm-none-linux-gnueabihf
+    - and so on...
 
-Busybox also has locale settings:
-grep LOCAL output/build/busybox-1.23.2/.config
-CONFIG_LOCALE_SUPPORT=y
-# CONFIG_UNICODE_USING_LOCALE is not set
-# CONFIG_FEATURE_UNIX_LOCAL is not set
-# CONFIG_HUSH_LOCAL is not set
+  - targets running bare-metal:
+    - i386-blabla-elf
+    - powerpc-unknown-spe
+    - arm-none-eabihf
+    - and so on...
 
-From googling, Linux always supports anything for filenames, since it
-just uses bytes not unicode for filenames.
+So, for bare-metal:
 
-But I seem to be missing something. My generated system does not seem
-to properly handle utf-8. I am guessing until that works the python os
-module is also not going to handle utf-8. And indeed it does not work
-now.
+  - tuples are made of only three-part (in fact the historical canonical
+    form),
 
-Regards, Steve
+  - the part that is "omitted" from the four-part variant is not the
+    vendor string; rather the 'kernel' and 'userland' fields are merged
+    into one.
+
+However, I'm not sure it is possible to run newlib as the C library
+under Linux (i.e. as a replacement for glibc/uClibc/musl). IIRC, newlib
+really targets kernel-less systems. It seems there are linux support
+files in the newlib source, but I doubt tht is often tested or even
+compeltely supported; a cursory look at the interwebs does not return
+promissing results...
+
+And in nay case, I'm afraid a lot of packages would not build against
+newlib.
+
+All that to say that I need to look at the patch, and I otherwise do not
+see the point for having newlib in Buildroot...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
