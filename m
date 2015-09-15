@@ -1,84 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Sep 2015 22:45:29 +0200
-Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
- library
-In-Reply-To: <20150913101738.238ebc06@free-electrons.com>
+Date: Tue, 15 Sep 2015 22:52:08 +0200
+Subject: [Buildroot] [PATCH 2/3] New entry for the Cortex-M4 processor
+In-Reply-To: <20150913102136.01d94129@free-electrons.com>
 References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
- <20150913101738.238ebc06@free-electrons.com>
-Message-ID: <20150915204528.GD3650@free.fr>
+ <1442127768-26447-2-git-send-email-cjwfirmware@vxmdesign.com>
+ <20150913102136.01d94129@free-electrons.com>
+Message-ID: <20150915205208.GE3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Cris, All,
+Thomas, All,
 
-On 2015-09-13 10:17 +0200, Thomas Petazzoni spake thusly:
-> 
-> On Sun, 13 Sep 2015 03:02:46 -0400, Chris Wardman wrote:
-> > This patch add support for a newlib library build of the gcc toolchain.
-> > This is designed to build arm-none-eabi- toolchain, and it was tested against an stm32f4discovery board.
-> > 
-> > Hopefully this will help people build bare metal code for arm processors
+On 2015-09-13 10:21 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 13 Sep 2015 03:02:47 -0400, Chris Wardman wrote:
 [--SNIP--]
-> > diff --git a/package/newlib/newlib.mk b/package/newlib/newlib.mk
-> > new file mode 100644
-> > index 0000000..02008e5
-> > --- /dev/null
-> > +++ b/package/newlib/newlib.mk
-> > @@ -0,0 +1,48 @@
-> > +################################################################################
-> > +#
-> > +# newlib
-> > +#
-> > +################################################################################
-> > +
-> > +NEWLIB_VERSION = 2.2.0
-> > +NEWLIB_SITE = ftp://sourceware.org/pub/newlib
-> > +NEWLIB_LICENSE = MIT
-> > +NEWLIB_LICENSE_FILES = COPYRIGHT
-> > +
-> > +NEWLIB_DEPENDENCIES = host-gcc-initial
-> > +NEWLIB_ADD_TOOLCHAIN_DEPENDENCY = NO
-> > +NEWLIB_INSTALL_STAGING = YES
-> > +
-> > +define NEWLIB_CONFIGURE_CMDS
-> > +	(cd $(@D); \
-> > +		$(TARGET_MAKE_ENV) \
-> > +		./configure \
-> > +			--target=$(GNU_TARGET_NAME) \
-> > +			--host=$(GNU_HOST_NAME) \
-> > +			--build=$(GNU_HOST_NAME) \
-> > +			--prefix=$(STAGING_DIR) \
-> > +			--includedir=$(STAGING_DIR)/usr/include \
-> > +			--oldincludedir=$(STAGING_DIR)/usr/include \
-> > +			--with-build-sysroot=$(STAGING_DIR) \
-> > +			--enable-newlib-io-long-long \
-> > +			--enable-newlib-register-fini \
-> > +			--disable-newlib-supplied-syscalls \
-> > +			--disable-nls)
+> > diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> > index 4d10f4c..2692402 100644
+> > --- a/arch/Config.in.arm
+> > +++ b/arch/Config.in.arm
+> > @@ -156,6 +156,11 @@ config BR2_cortex_m3
+> >  	bool "cortex-M3"
+> >  	select BR2_ARM_CPU_HAS_THUMB
+> >  	select BR2_ARM_CPU_HAS_THUMB2
+> > +config BR2_cortex_m4
+> > +       bool "cortex-M4"
+> > +        select BR2_ARM_CPU_HAS_THUMB
+> > +        select BR2_ARM_CPU_HAR_THUMB2
+> > +        select BR2_ARM_CPU_ARMV7M
 > 
-> Why don't you use the autotools-package infrastructure? newlib is using
-> autoconf, so I believe it does make sense to use the autotools-package
-> infrastructure.
+> Please use tab for indentation. Also, while Cortex-M3 also does it, I
+> think selecting both Thumb and Thumb-2 is not correct: Cortex-M3/M4
+> only support Thumb-2, no? Or at least, gcc only provides a -mthumb
+> option that will generate Thumb-2 code, so there is no way to generate
+> classic Thumb code on ARMv7-M platforms. Though since the problem
+> already exists for Cortex-M3, we can keep it this way for Cortex-M4 as
+> well for now.
 
-Because newlib does not interpret --build, --host and --target like the
-other autotools-based packages do. newlib basically ignores --build,
-considers --host as the buld machine, and --target as the host. :-/
+It is my understanding that -mthumb will generate Thumb2 instructions on
+cores that have Thumb2 (e.g. Cortex), and Thumb (aka Thumb1) on cores
+that do not have Thumb2.
 
-[--SNIP--]
-> > +define NEWLIB_INSTALL_STAGING_CMDS
-> > +	mkdir -p $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib
-> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-> 
-> Except the mkdir, the install command is not needed if you use the
-> autotools-package infrastructure.
+Also, since Thumb2 is a strict superset of Thumb, then having Thumb2
+means having Thumb, at least from an instruction set point of view.
 
-In which case a pre-install hook can be used to do the mkdir.
+I believe Thumb2 should select Thumb.
 
-But it would probably not be needed if $(GNU_TARGET_NAME) is a symlink
-to "." .
+
+What I meant is: if a package needs Thumb (e.g. to use assembly code
+that uses Thumb instructions) then that assembly code is still entirely
+valid when the core is Thumb2-capable.
 
 Regards,
 Yann E. MORIN.
