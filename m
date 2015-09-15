@@ -1,43 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 23:48:22 +0200
-Subject: [Buildroot] [git commit] lttng-libust: Bump version to 2.6.2
-Message-ID: <20150915215730.CD0387FEBC@busybox.osuosl.org>
+Date: Tue, 15 Sep 2015 23:48:10 +0200
+Subject: [Buildroot] [git commit] liburcu: Add support for aarch64
+Message-ID: <20150915215730.BEA3E7FEBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e6ba875a31da766beeae62770cd5a8ade60942e
+commit: http://git.buildroot.net/buildroot/commit/?id=0ae594247be21ce2836b774123eac68419e8e8e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Bring over a patch from OpenEmbedded to treat aarch64 like arm in the build
+process, which allows the build to succeed.
+
 Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-libust/lttng-libust.hash |    4 ++--
- package/lttng-libust/lttng-libust.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/liburcu/0002-support-aarch64.patch |   21 +++++++++++++++++++++
+ package/liburcu/Config.in                  |    4 ++--
+ package/liburcu/liburcu.mk                 |    1 +
+ 3 files changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
-index 65db612..aafc2ba 100644
---- a/package/lttng-libust/lttng-libust.hash
-+++ b/package/lttng-libust/lttng-libust.hash
-@@ -1,2 +1,2 @@
--# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.0.tar.bz2.sha1
--sha1  774fc2052781ba6fd789d422223c739d5f64482d  lttng-ust-2.6.0.tar.bz2
-+# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.2.tar.bz2.sha1
-+sha1  bfa9cbdabd8698cf5b98667eac5c39775127f634  lttng-ust-2.6.2.tar.bz2
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 2afcd61..4976ff4 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/liburcu/0002-support-aarch64.patch b/package/liburcu/0002-support-aarch64.patch
+new file mode 100644
+index 0000000..6830e25
+--- /dev/null
++++ b/package/liburcu/0002-support-aarch64.patch
+@@ -0,0 +1,21 @@
++libucru: recognize aarch64
++
++Make the same as "arm" internally.
++
++Upstream-Status: Pending
++
++Signed-off-by: joe.slater at windriver.com
++[moved to buildroot from openembedded-core]
++Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
++
++
++--- a/configure.ac
+++++ b/configure.ac
++@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
++ 	[alpha*], [ARCHTYPE="alpha"],
++ 	[ia64], [ARCHTYPE="gcc"],
++ 	[arm*], [ARCHTYPE="arm"],
+++	[aarch64], [ARCHTYPE="arm"],
++ 	[mips*], [ARCHTYPE="mips"],
++ 	[tile*], [ARCHTYPE="gcc"],
++ 	[ARCHTYPE="unknown"]
+diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+index e7cbe93..a4e8dc8 100644
+--- a/package/liburcu/Config.in
++++ b/package/liburcu/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBURCU
+ 	bool "liburcu"
+-	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBURCU
+ 	  http://lttng.org/urcu
  
- LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
--LTTNG_LIBUST_VERSION = 2.6.0
-+LTTNG_LIBUST_VERSION = 2.6.2
- LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
- LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
- LTTNG_LIBUST_LICENSE_FILES = COPYING
+ comment "liburcu needs a toolchain w/ threads"
+-	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
++	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 8d06966..c886a1c 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -10,6 +10,7 @@ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
+ LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
+ 
++LIBURCU_AUTORECONF = YES
+ LIBURCU_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
