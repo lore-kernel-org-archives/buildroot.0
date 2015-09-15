@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 23:18:02 +0200
-Subject: [Buildroot] [PATCH v3] Buildroot' patch to add support for
- aarch64 in mplayer configure script
-In-Reply-To: <e6993588b5107e1110e43ed583416f4784933eef.1442336078.git.jpinto@synopsys.com>
-References: <e6993588b5107e1110e43ed583416f4784933eef.1442336078.git.jpinto@synopsys.com>
-Message-ID: <20150915231802.1e19b09c@free-electrons.com>
+Date: Tue, 15 Sep 2015 23:21:41 +0200
+Subject: [Buildroot] User question UTF-8
+In-Reply-To: <CAJJ6jxvdrYbALJfdd=oKMO4xwsg9o6MfwR_YGLyvOsCgfV77Hw@mail.gmail.com>
+References: <CAJJ6jxvdrYbALJfdd=oKMO4xwsg9o6MfwR_YGLyvOsCgfV77Hw@mail.gmail.com>
+Message-ID: <20150915232141.306098f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joao,
+Dear Steve Calfee,
 
-Your e-mail is two patches concataned to each other. Can you make that
-a single patch instead?
+On Tue, 15 Sep 2015 10:11:56 -0700, Steve Calfee wrote:
 
-Also, the title should be adjusted, as I explained in a previous
-message. See some more comments below.
+> I am trying to port a python application to buildroot/busybox. It
+> needs to read disk files from removable drives. The filenames may
+> contain utf-8 chars.
 
-On Tue, 15 Sep 2015 18:00:48 +0100, jpinto wrote:
-> 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> Tested-by: Joao Pinto <jpinto@synopsys.com>
-> ---
->  package/mplayer/0007-enable-aarch64.patch | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->  create mode 100644 package/mplayer/0007-enable-aarch64.patch
-> 
-> diff --git a/package/mplayer/0007-enable-aarch64.patch b/package/mplayer/0007-enable-aarch64.patch
-> new file mode 100644
-> index 0000000..7f75756
-> --- /dev/null
-> +++ b/package/mplayer/0007-enable-aarch64.patch
-> @@ -0,0 +1,13 @@
+Are you actually sure they are UTF-8 encoded? I don't think characters
+in FAT16/32 filesystems are typically encoded as UTF-8, but rather some
+weird Windows-specific code page encoding.
 
-All patches in Buildroot should have a description and a Signed-off-by
-line. See
-http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-for details.
+According to
+https://msdn.microsoft.com/en-us/library/windows/desktop/dd317748(v=vs.85).aspx:
 
-Thanks,
+"""
+NTFS stores file names in Unicode. In contrast, the older FAT12, FAT16,
+and FAT32 file systems use the OEM character set. For more information,
+see Code Pages.
+"""
+
+> Currently ls from busybox prints ? for the utf-8 non-ascii chars. Both
+> from console on minicom and from ssh (which should handle utf-8).
+
+Can you instead try if a UTF-8 encoded text file prints correctly? If
+it does, then the problem is really more of a filesystem character
+encoding issue than a problem in the UTF-8 support.
+
+Best regards,
 
 Thomas
 -- 
