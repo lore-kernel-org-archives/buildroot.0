@@ -1,45 +1,100 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Tue, 15 Sep 2015 19:49:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sudo: disable use of stack
-	protector when not available
-Message-ID: <1442342953-20312-1-git-send-email-brendanheading@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Sep 2015 18:37:16 +0200
+Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
+In-Reply-To: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <55F8493C.2030804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d93/d9390b929328e6253b883f000f6f09972df90f47/
+On 13-09-15 23:13, Yann E. MORIN wrote:
+> Kodi segfaults as soon as it tries to load a python module:
+> 
+>     Could not find platform independent libraries <prefix>
+>     Consider setting $PYTHONHOME to <prefix>[:<exec_prefix>]
+>     ImportError: No module named site
+>     Segmentation fault
+> 
+> Turns out that keeping .py modules (with or without .pyc) fixes the
+> issue.
+> 
+> Currently, Kodi selects python, but since the format of modules is a
+> choice, we can not select it.
 
-sudo, by default, attempts to use the stack protector if configure detects
-that it exists. The stack protector detection does not attempt to link
-libssp, which can cause a false positive.
+ I think it's a lot more user-friendly to do
 
-Instead, check if the stack protector is enabled in the buildroot
-toolchain config, and pass --disable-hardening if it is not - similar to
-psmisc and sox.
+	select BR2_PACKAGE_PYTHON_PY_PYC
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
- package/sudo/sudo.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ That removes the possibility for the user to select the PY_ONLY option, but I
+don't think that that's so terribly important. And it does make life a whole lot
+simpler for someone who wants to select Kodi. They already have to go and enable
+an EGL provider, so let's not make their life harder by requiring manual
+selection of python with the correct, non-default _PY_PYC option...
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 4327c8a..b839ee4 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -30,6 +30,11 @@ else
- SUDO_CONF_OPTS += --without-pam
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
-+# Don't force -fstack-protector when SSP is not available in toolchain
-+SUDO_CONF_OPTS += --disable-hardening
-+endif
-+
- # mksigname/mksiglist needs to run on build host to generate source files
- define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
- 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+ Regards,
+ Arnout
+
+
+> 
+> Fix that by inverting the dependency on python from Kodi:
+>   - turn it into a depends rather than a select,
+>   - add the dependency to ! pyc-only
+>   - update the comment accordingly.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> ---
+> changes v1 -> v2:
+>   - fix spurious 'i' (vim insert)
+> ---
+>  package/kodi/Config.in | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+> index 797f59d..6d6c47b 100644
+> --- a/package/kodi/Config.in
+> +++ b/package/kodi/Config.in
+> @@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+>  	bool
+>  	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+>  
+> -comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
+> +comment "kodi needs python and .py modiules, and a toolchain w/ C++, threads, wchar, dynamic library"
+>  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+> -		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
+> +		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+> +		|| !BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON_PYC_ONLY
+>  	depends on BR2_USE_MMU
+>  
+>  config BR2_PACKAGE_KODI_EGL_GLES
+> @@ -65,7 +66,6 @@ menuconfig BR2_PACKAGE_KODI
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_PCRE
+>  	select BR2_PACKAGE_PCRE_UCP
+> -	select BR2_PACKAGE_PYTHON
+>  	select BR2_PACKAGE_PYTHON_BSDDB
+>  	select BR2_PACKAGE_PYTHON_BZIP2
+>  	select BR2_PACKAGE_PYTHON_CURSES
+> @@ -94,6 +94,8 @@ menuconfig BR2_PACKAGE_KODI
+>  	depends on BR2_USE_WCHAR
+>  	depends on !BR2_STATIC_LIBS # python
+>  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_PYTHON
+> +	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
+>  	help
+>  	  Kodi is an award-winning free and open source (GPL) software
+>  	  media player and entertainment hub for digital media.
+> 
+
+
 -- 
-2.4.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
