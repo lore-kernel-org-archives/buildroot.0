@@ -1,41 +1,45 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 15 Sep 2015 20:11:14 +0200
-Subject: [Buildroot] How to deactivate UCLIBC_CTOR_DTOR in uclibc-ng?
-In-Reply-To: <CAJtjsKYJNhzudtxwfewNr=76PLdzY04Vjaf69_VOL7=W7yAFiA@mail.gmail.com>
-References: <CAJtjsKYJNhzudtxwfewNr=76PLdzY04Vjaf69_VOL7=W7yAFiA@mail.gmail.com>
-Message-ID: <20150915181113.GC8475@waldemar-brodkorb.de>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Tue, 15 Sep 2015 19:49:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sudo: disable use of stack
+	protector when not available
+Message-ID: <1442342953-20312-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Johan Oudinet wrote,
+Fixes:
+http://autobuild.buildroot.net/results/d93/d9390b929328e6253b883f000f6f09972df90f47/
 
-> Hi,
-> 
-> I try to move a project that uses uclibc-0.9.33 to uclibc-ng but it
-> fails at link time due to undefined references to __fini_array_end and
-> __fini_array_start.
-> In uClibc-0.9.33, the UCLIBC_CTOR_DTOR option default was no. In
-> uClibc-ng, it defaults to yes. I would like to set it back to no but I
-> failed doing so in Buildroot.
-> make uclibc-menuconfig does not show the option.
-> I've tried using KCONFIG_DISABLE_OPT and KCONFIG_SET_OPT function in
-> the .mk file to disable it and set it to 'N', respectively, but
-> without success.
-> When I grep for the option in the generated .config, it's still set to yes:
-> $ grep CTOR_DTOR build/uclibc-1.0.5/.config
-> UCLIBC_CTOR_DTOR=y
+sudo, by default, attempts to use the stack protector if configure detects
+that it exists. The stack protector detection does not attempt to link
+libssp, which can cause a false positive.
 
-It is hidden on by default. Disabling it breaks f.e. toolchain
-building on ARM. I have not checked other architectures.
-Anyway, disabling this option just is a microoptimization saving few
-bytes. Are you really sure, the reason for your compile problem is
-this option?
+Instead, check if the stack protector is enabled in the buildroot
+toolchain config, and pass --disable-hardening if it is not - similar to
+psmisc and sox.
 
-Can you show us some more compile logs with the failing gcc command?
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+ package/sudo/sudo.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-best regards
- Waldemar
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 4327c8a..b839ee4 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -30,6 +30,11 @@ else
+ SUDO_CONF_OPTS += --without-pam
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
++# Don't force -fstack-protector when SSP is not available in toolchain
++SUDO_CONF_OPTS += --disable-hardening
++endif
++
+ # mksigname/mksiglist needs to run on build host to generate source files
+ define SUDO_BUILD_MKSIGNAME_MKSIGLIST_HOST
+ 	$(MAKE) $(HOST_CONFIGURE_OPTS) \
+-- 
+2.4.3
