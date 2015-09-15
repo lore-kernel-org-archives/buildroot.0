@@ -1,50 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 09:35:23 +0200
-Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
- library
-In-Reply-To: <CAOudHSVcePTAq7PLON-0Zig-JkJtTNnu-RzHtkYf0f00pe8atw@mail.gmail.com>
-References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
- <20150913101738.238ebc06@free-electrons.com>
- <CAOudHSVcePTAq7PLON-0Zig-JkJtTNnu-RzHtkYf0f00pe8atw@mail.gmail.com>
-Message-ID: <20150915093523.0597731f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 15 Sep 2015 07:40:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 8331] kexec fails due to missing /usr/sbin/shutdown
+In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
+References: <bug-8331-163@https.bugs.busybox.net/>
+Message-ID: <20150915074003.1B026805F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8331
 
-On Tue, 15 Sep 2015 00:06:46 -0400, Cjw X wrote:
-> So, I'm going through comments and investigating. Everything seems
-> pretty reasonable.
-
-Great, thanks.
-
-> >>  # Compute GNU_TARGET_NAME
-> >> +ifeq ($(BR2_TOOLCHAIN_NO_VENDOR),y)
-> >> +GNU_TARGET_NAME = $(ARCH)-$(TARGET_OS)-$(LIBC)$(ABI)
-> >
-> > Is it really mandatory to *not* have a vendor part of the tuple?
+--- Comment #2 from Dr I J Ormshaw <ian_ormshaw@waters.com> 2015-09-15 07:40:02 UTC ---
+(In reply to comment #1)
+> Hmm, looking at the kexec source code I see:
 > 
-> I've tried building arm-buildroot-none-eabi and
-> arm-buildroot-none-newlibeabi, both of which, based on my
-> understanding, should compile, but none of the tools build with that
-> target. Binutils doesn't compile, nor does gcc. I spent some time
-> looking at this, but never found an elegant solution.
+> static int my_shutdown(void)
+> {
+>         char *args[] = {
+>                 "shutdown",
+>                 "-r",
+>                 "now",
+>                 NULL
+>         };
+> 
+>         execv("/sbin/shutdown", args);
+>         execv("/etc/shutdown", args);
+>         execv("/bin/shutdown", args);
+> 
+>         perror("shutdown");
+>         return -1;
+> }
+> 
+> So having shutdown in /sbin seems fine?
+> 
+> Can you please provide more info about your config and what goes wrong?
 
-Interesting. I guess we'll have to experiment a bit with this.
+The problem is that there is no shutdown in /sbin, shutdown is in /usr/sbin. I
+had to create a link in /sbin to /usr/sbin/shutdown.
 
-I'm adding Yann in Cc. Yann, have you experienced such thing when
-adding bare-metal/newlib support in Crosstool-NG? I've quickly looked
-at the Crosstool-NG code, and I don't see the vendor part of the tuple
-being skipped specifically for bare metal/newlib toolchains, but maybe
-I missed it.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
