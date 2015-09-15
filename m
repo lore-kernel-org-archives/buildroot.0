@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Sep 2015 09:42:19 +0000 (UTC)
+Date: Tue, 15 Sep 2015 09:46:10 +0000 (UTC)
 Subject: [Buildroot] [Bug 8331] kexec fails due to missing /usr/sbin/shutdown
 In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
 References: <bug-8331-163@https.bugs.busybox.net/>
-Message-ID: <20150915094219.D371E7FFC3@busybox.osuosl.org>
+Message-ID: <20150915094610.3A7827FAA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,15 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=8331
 
---- Comment #8 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 09:42:19 UTC ---
-By the way, is this helpful for you?
+--- Comment #9 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 09:46:10 UTC ---
+(In reply to comment #7)
+> What is your use case for needing it?
 
-http://unix.stackexchange.com/questions/37323/kexec-from-within-initramfs
+I think he is loading a new kernel image using "kexec --load", and then he
+wants to reboot the board in order to boot with that kernel image, which should
+be able to do it with "kexec --exec", without calling shutdown.
 
-From the kexec man page:
-
--e (--exec)
-      Run the currently loaded kernel. Note that it will  reboot  into
-      the loaded kernel without calling shutdown(8).
+Dr I J Ormshaw, please confirm.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
