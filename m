@@ -1,47 +1,86 @@
 From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 15 Sep 2015 08:56:39 -0700
-Subject: [Buildroot] [PATCH 1/1] add python simple template module
-In-Reply-To: <CAGm1_ksTKFB82=0_UWXJW=HsMC21t+pr7bT6OTJp_2MmfJRVfA@mail.gmail.com>
-References: <1442162503-5817-1-git-send-email-stevecalfee@gmail.com>
- <20150913200443.38a3512d@free-electrons.com>
- <CAJJ6jxuir9vNJCPYGVJAoFrjSCcQ2rArXJ+MtB5wNCujasf1Pg@mail.gmail.com>
- <CAGm1_ksTKFB82=0_UWXJW=HsMC21t+pr7bT6OTJp_2MmfJRVfA@mail.gmail.com>
-Message-ID: <CAJJ6jxvKnS_aMxNdbFg0r6rkC-Y9r82ATfh7htTzs-Qi+d9JbQ@mail.gmail.com>
+Date: Tue, 15 Sep 2015 09:07:09 -0700
+Subject: [Buildroot] [PATCH V3 1/1] python-pyratemp: new package
+Message-ID: <1442333229-15152-1-git-send-email-stevecalfee@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+add python simple template module
 
-On Mon, Sep 14, 2015 at 11:23 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Hi Steve,
->
-> On Tue, Sep 15, 2015 at 2:41 AM, Steve Calfee <stevecalfee@gmail.com> wrote:
->> Hi Thomas,
->>
->> I just rebuilt and found that the .hash file has to have an eol after
->> that last line. So please reject the V2 version and I will send in
->> another one tomorrow which will survive through a make clean.
->
-> while you are at it, please add both md5 and sha256 to the *.hash
-> file. Your package is ony PyPi, that already provides MD5. In addition
-> we add stronger sha256 checksum. Just take a look at tornado package:
->
-> http://git.buildroot.net/buildroot/tree/package/python-tornado/python-tornado.hash
->
-> Yegor
+Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
 
-This last comment about an example helped a lot. I did not realize
-that there was a generic download source at pypi. Much better. So I
-changed to that source and included the original md5 as you suggested
-as well as my sha256.
+---
+V3 - Changed to pypi source and included the original md5 as well as my sha256.
 
-The other thing I did not know was how to determine
-PYTHON_PYRATEMP_SETUP_TYPE. I guess I stopped at the tutorial in the
-manual. The next section "python-package reference" helpfully told me
-how to determine the type.
+Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
+---
+ package/Config.in                            |  1 +
+ package/python-pyratemp/Config.in            |  8 ++++++++
+ package/python-pyratemp/python-pyratemp.hash |  4 ++++
+ package/python-pyratemp/python-pyratemp.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-pyratemp/Config.in
+ create mode 100644 package/python-pyratemp/python-pyratemp.hash
+ create mode 100644 package/python-pyratemp/python-pyratemp.mk
 
-Regards, Steve
+diff --git a/package/Config.in b/package/Config.in
+index 783fbb4..8c8d099 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -645,6 +645,7 @@ menu "external python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyqt/Config.in"
++	source "package/python-pyratemp/Config.in"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pysendfile/Config.in"
+ 	source "package/python-pysnmp/Config.in"
+diff --git a/package/python-pyratemp/Config.in b/package/python-pyratemp/Config.in
+new file mode 100644
+index 0000000..f86f6c4
+--- /dev/null
++++ b/package/python-pyratemp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYRATEMP
++	bool "python-pyratemp"
++	help
++	  python-pyratemp is a Python library for doing html templates.
++	  written entirely in Python, that is designed to be very easy to use
++	  and very like writing Python.
++
++	  https://pypi.python.org/pypi/pyratemp/
+diff --git a/package/python-pyratemp/python-pyratemp.hash b/package/python-pyratemp/python-pyratemp.hash
+new file mode 100644
+index 0000000..f3f29a3
+--- /dev/null
++++ b/package/python-pyratemp/python-pyratemp.hash
+@@ -0,0 +1,4 @@
++#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=e4bbe5d4a98016efef882b2b2f47defb
++md5     e4bbe5d4a98016efef882b2b2f47defb pyratemp-0.3.2.tgz
++# Locally calculated:
++sha256 c45ed656ada482a02fe780495f37a695e7671accb04f918f7e7f18abf877bc71 pyratemp-0.3.2.tgz
+diff --git a/package/python-pyratemp/python-pyratemp.mk b/package/python-pyratemp/python-pyratemp.mk
+new file mode 100644
+index 0000000..055fb30
+--- /dev/null
++++ b/package/python-pyratemp/python-pyratemp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyratemp
++#
++################################################################################
++
++PYTHON_PYRATEMP_VERSION = 0.3.2
++PYTHON_PYRATEMP_SOURCE = pyratemp-$(PYTHON_PYRATEMP_VERSION).tgz
++PYTHON_PYRATEMP_SITE = https://pypi.python.org/packages/source/p/pyratemp
++PYTHON_PYRATEMP_LICENSE = MIT
++PYTHON_PYRATEMP_LICENSE_FILES = LICENSE
++PYTHON_PYRATEMP_SETUP_TYPE = distutils
++
++$(eval $(python-package))
+-- 
+1.9.1
