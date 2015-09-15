@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 23:48:47 +0200
-Subject: [Buildroot] [git commit] lttng-tools: Enable aarch64 build
-Message-ID: <20150915215730.E11C97FEBC@busybox.osuosl.org>
+Date: Wed, 16 Sep 2015 00:01:17 +0200
+Subject: [Buildroot] [PATCH v2 1/5] liburcu: Bump version to 0.8.7
+In-Reply-To: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
+References: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
+Message-ID: <20150916000117.326e9cf5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb166374eeab72c9276a921875686549ac269667
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Ben Shelton,
 
-Now that liburcu builds for aarch64, lttng-tools has all its dependencies met
-for aarch64, so allow it to build for this architecture.
+On Tue, 15 Sep 2015 09:35:17 -0500, Ben Shelton wrote:
+> Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
+> ---
+>  package/liburcu/liburcu.hash | 6 +++---
+>  package/liburcu/liburcu.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lttng-tools/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+I've applied the entire patch series, thanks!
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index 4d4b923..4c5b5f6 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	# liburcu only works on some architectures and requires thread support
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_USE_WCHAR # util-linux
-@@ -30,7 +30,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	  http://lttng.org
- 
- comment "lttng-tools needs a toolchain w/ threads, wchar"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+There's one thing that could have been done better though (but it can
+be handled as follow-up patches): instead of propagating the
+availability of liburcu on AArch64 to all its reverse dependencies, we
+could have instead switched to the BR2_PACKAGE_<foo>_ARCH_SUPPORTS
+model, which makes such changes a lot simpler.
+
+See for example how BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS is defined and
+used. Follow-up patches welcome, as I said :-)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
