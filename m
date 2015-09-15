@@ -1,94 +1,44 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 15 Sep 2015 09:37:15 +0100
-Subject: [Buildroot] [PATCH 1/2] qt/qt5base: force gstreamer on configure
-In-Reply-To: <20150808151617.2f10d4b3@free-electrons.com>
-References: <1438855575-4767-1-git-send-email-corjon.j@ecagroup.com>
- <20150808151617.2f10d4b3@free-electrons.com>
-Message-ID: <55F7D8BB.9040301@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 15 Sep 2015 09:22:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 8331] kexec fails due to missing /usr/sbin/shutdown
+In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
+References: <bug-8331-163@https.bugs.busybox.net/>
+Message-ID: <20150915092222.CAA9E7FA14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/08/2015 14:16, Thomas Petazzoni wrote:
-> Dear Julien Corjon,
->
-> On Thu,  6 Aug 2015 12:06:14 +0200, Julien Corjon wrote:
->> Fixes: http://autobuild.buildroot.net/results/0ee0f879e8563954c64b3940cdec39d2e6de937a/
->>
->> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
->> ---
->>   package/qt5/qt5base/qt5base.mk | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->
-> I'm sorry, but I don't think this is really the source of the problem.
-> I did reproduce this build failure, and even if GStreamer is built
-> before Qt5 (which is the case in the build failure you're linking in
-> the commit log), Qt5 concludes that GStreamer is not available.
->
-> And this is because for some reason, Qt5 now seems to ignore the
-> PKG_CONFIG environment variable that we pass to it. I've added some
-> debugging messages to the packagesExist() function, and it uses just
-> "pkg-config" (i.e the system pkg-config, not the one built and
-> installed by Buildroot in $(HOST_DIR)/usr/bin).
->
-> While I think that your patch should be applied (it's good to make
-> optional dependencies explicit), I also think the pkg-config problem
-> should be investigated and fixed.
->
+https://bugs.busybox.net/show_bug.cgi?id=8331
 
-I have just been testing 2015.08 and have immediately hit exactly the 
-same issue. I have done some digging into qt5 and I think I see the 
-issue. The problem is that qmake never looks at environment variables, 
-only things passed on the command line. The patch below fixes the issue 
-for me by explicitly passing PKG_CONFIG on the command line. What is 
-unclear is why I am suddenly seeing the issue in 5.5.0 but not 5.4.1 as 
-that bit of code seems the same in both versions.
+--- Comment #6 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 09:22:22 UTC ---
+(In reply to comment #0)
+> Chaining a new kernel using kexec fails as /usr/sbin/shutdown is missing.
 
-I'll report the issue upstream and see what they say.
+That's not correct. /usr/sbin/shutdown does exists. The problem is that kexec
+is trying to find it at /sbin instead of /usr/sbin.
 
-Should I spin this into a patch?
+(In reply to comment #3)
+> I also raised a similay bug report 8336, to which I had a responce citing
+> http://patchwork.ozlabs.org/patch/514750/ as a fix.  That patch should also fix
+> this bug.
 
---- qt5base-5.5.0/config.tests/unix/compile.test.orig	2015-09-15 
-08:53:45.202320408 +0100
-+++ qt5base-5.5.0/config.tests/unix/compile.test	2015-09-15 
-08:54:02.720770491 +0100
-@@ -67,7 +67,7 @@ test -r Makefile && $MAKE distclean >/de
-  # Make sure output from possible previous tests is gone
-  rm -f "$EXE" "${EXE}.exe"
+Currently in Buildroot there are two ways to have shutdown installed in your
+target. The first one is using sysvinit as you init system, which will install
+shutdown in /sbin. The second one is using systemd as your init system, which
+will install shutdown in /usr/sbin.
 
--set -- "$OUTDIR/bin/qmake" -nocache -spec "$QMKSPEC" 
-"CONFIG+=$QMAKE_CONFIG" "CONFIG+=android_app" "CONFIG-=debug_and_release 
-app_bundle lib_bundle" "LIBS*=$LFLAGS" "LIBS+=$MAC_ARCH_LFLAGS" 
-"INCLUDEPATH*=$INCLUDEPATH" "QMAKE_CXXFLAGS*=$CXXFLAGS" 
-"QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" "$SRCDIR/$TEST/$EXE.pro" -o 
-"$OUTDIR/$TEST/Makefile"
-+set -- "$OUTDIR/bin/qmake" "PKG_CONFIG=$PKG_CONFIG" -nocache -spec 
-"$QMKSPEC" "CONFIG+=$QMAKE_CONFIG" "CONFIG+=android_app" 
-"CONFIG-=debug_and_release app_bundle lib_bundle" "LIBS*=$LFLAGS" 
-"LIBS+=$MAC_ARCH_LFLAGS" "INCLUDEPATH*=$INCLUDEPATH" 
-"QMAKE_CXXFLAGS*=$CXXFLAGS" "QMAKE_CXXFLAGS+=$MAC_ARCH_CXXFLAGS" 
-"$SRCDIR/$TEST/$EXE.pro" -o "$OUTDIR/$TEST/Makefile"
-  if [ "$VERBOSE" = "yes" ]; then
-      OUTDIR=$OUTDIR "$@" && $MAKE && SUCCESS=yes
-  else
+Once we get the patch from Yann merged, kexec will be able to find shutdown
+because /sbin will be a symlink to /usr/sbin if you use systemd as your init
+system. So, yes, that patches fixes your problem.
 
-
-Regards
-Will
-
+The thing is that here we have highlighted a different problem. Busybox doesn't
+install shutdown, so kexec will never be able to find it, either if you have
+/sbin as a real directory or being a symlink to /usr/sbin. It simply doesn't
+exist.
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7471 9224
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7471 9224
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
