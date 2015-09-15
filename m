@@ -1,112 +1,222 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Sep 2015 22:39:17 +0200
-Subject: [Buildroot] [PATCH 1/2] openssl: use git formatted patches
-In-Reply-To: <CALq67GBOBNRFFaR4d7ttf+Qw2Y4LCSv7b7kwcD6Z1Je5Bh=u8Q@mail.gmail.com>
-References: <1442289591-30376-1-git-send-email-ryanbarnett3@gmail.com>
- <1442289591-30376-2-git-send-email-ryanbarnett3@gmail.com>
- <55F84B9F.8060908@mind.be>
- <CALq67GBOBNRFFaR4d7ttf+Qw2Y4LCSv7b7kwcD6Z1Je5Bh=u8Q@mail.gmail.com>
-Message-ID: <55F881F5.4000009@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Sep 2015 22:41:01 +0200
+Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
+ library
+In-Reply-To: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
+References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
+Message-ID: <20150915204101.GC3650@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Chris, All,
 
+On 2015-09-13 03:02 -0400, Chris Wardman spake thusly:
+> This patch add support for a newlib library build of the gcc toolchain.
+> This is designed to build arm-none-eabi- toolchain, and it was tested against an stm32f4discovery board.
+> 
+> Hopefully this will help people build bare metal code for arm processors
 
-On 15-09-15 21:44, Ryan Barnett wrote:
-> Arnout,
-> 
-> On Tue, Sep 15, 2015 at 11:47 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 15-09-15 05:59, Ryan Barnett wrote:
->>> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>
->>> Using Git formatted patches makes it easier to adjust the patches when
->>> needed.
->>>
->>> [Ryan: removed unnecessary patch and updated offsets]
->>>
->>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
->>> ---
->>>  ...time-building-manpages-if-we-re-not-going.patch | 27 +++++++++
->>>  ...odev-Fix-issue-with-signature-generation.patch} | 70 +++++++++++++---------
->>>  package/openssl/001-do-not-build-docs.patch        | 13 ----
->>>  3 files changed, 68 insertions(+), 42 deletions(-)
->>>  create mode 100644 package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->>>  rename package/openssl/{003-cryptodev-Fix-issue-with-signature-generation.patch => 0002-cryptodev-Fix-issue-with-signature-generation.patch} (82%)
->>>  delete mode 100644 package/openssl/001-do-not-build-docs.patch
->>>
->>> diff --git a/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch b/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->>> new file mode 100644
->>> index 0000000..93e2118
->>> --- /dev/null
->>> +++ b/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->>> @@ -0,0 +1,27 @@
->>> +From 53980448064b362a58e4ab2aca6f38fec93c07c3 Mon Sep 17 00:00:00 2001
->>> +From: Mike Frysinger <vapier@gentoo.org>
->>> +Date: Sat, 16 May 2015 18:53:51 +0200
->>> +Subject: [PATCH 1/3] Dont waste time building manpages if we're not going to
->>             ^^^^^^^^^^
->>  Please generate patches with -N to avoid the 1/3: it's incorrect (there are
->> only 2 patches) and it causes additional churn when patches are regenerated.
-> 
-> When I was adopting these patches, I was lazy and didn't make any
-> changes from Thomas's last patch other than just dropping the
-> unnecessary third patch.
-> 
->>  I also like to add --subject-prefix= to remove the [PATCH] part, which is not
->> at all useful in this context. But others may disagree.
-> 
-> I agree with this.
-> 
-> Do we want to update our buildroot documentation to reflect this?
-> 
-> Secondly, do you think it would be useful to add a new subsection that
-> documents how to properly use git to generate patches for use within
-> buildroot?
-> 
-> http://nightly.buildroot.org/manual.html#patch-policy
+OK, I eventually had a bit of time to gave a cusory glance at the
+patch...
 
- Both suggestions sound really nice!
+> Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
+[--SNIP--]
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 545694f..7f4d74e 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -37,10 +37,16 @@ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
+>  endif
+>  
+>  # Compute GNU_TARGET_NAME
+> +ifeq ($(BR2_TOOLCHAIN_NO_VENDOR),y)
+> +GNU_TARGET_NAME = $(ARCH)-$(TARGET_OS)-$(LIBC)$(ABI)
+> +else
+>  GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+> +endif
+>  
+>  # FLAT binary format needs uclinux
+> -ifeq ($(BR2_BINFMT_FLAT),y)
+> +ifeq ($(BR2_TOOLCHAIN_USES_NEWLIB),y)
+> +TARGET_OS = none
 
-> 
->>> + use em.
->>> +
->>> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> +---
->>> + Makefile.org | 2 +-
->>> + 1 file changed, 1 insertion(+), 1 deletion(-)
->>> +
->> [snip]
->>> diff --git a/package/openssl/001-do-not-build-docs.patch b/package/openssl/001-do-not-build-docs.patch
->>
->>  If you resend, perhaps you can add -M20% so the rename is detected?
-> 
-> Sure. Might just stick with '-M'.
-> 
-> Is 20% similarity more acceptable amount than just -M (by default it
-> is 50%)? In our buildroot documentation we list just using -M when
-> sending patches upstream.
+See how you have to set TARGET_OS=none here? With the change above we've
+been discussing previously, this would construct a three-part tuple as
+(because LIBC is empty, too, below):
+    $(ARCH)-none-$(ABI)
 
- I thought you already did use -M, otherwise the other patch wouldn't have been
-detected as a rename. The default -M50% is normally good enough - if more than
-half the lines change, it's probably not a reall rename. Only in this case, the
-file was pretty small to begin with and all the git headers double its size, so
--M50% won't hit it. So if you see that in your format-patch output you can
-decide to go for a smaller -M.
+which is directly in line with what I previosuly explained. Yeah me! :-)
 
- Obviously, it makes no difference for what gets committed in the end. It just
-looks nicer for the reviewers.
+> +else ifeq ($(BR2_BINFMT_FLAT),y)
+>  TARGET_OS = uclinux
+>  else
+>  TARGET_OS = linux
+> @@ -50,6 +56,8 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+>  LIBC = uclibc
+>  else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+>  LIBC = musl
+> +else ifeq ($(BR2_TOOLCHAIN_USES_NEWLIB),y)
+> +LIBC = 
 
- Regards,
- Arnout
+... here.
+
+>  else
+>  LIBC = gnu
+>  endif
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+
+I haven't had a look at the gcc part yet...
+
+[--SNIP--]
+> diff --git a/package/newlib/newlib-0001-configure-tooldir-path.patch b/package/newlib/newlib-0001-configure-tooldir-path.patch
+> new file mode 100644
+> index 0000000..c162678
+> --- /dev/null
+> +++ b/package/newlib/newlib-0001-configure-tooldir-path.patch
+> @@ -0,0 +1,25 @@
+> +This patch is required to fix how the newlib headers are installed. 
+> +
+> +The cross compiler expects headers to be in 
+> +.../host/usr/arm-none-eabi/sysroot/usr/include/newlib.h
+> +by default newlib installed the headers into 
+> +.../host/usr/arm-none-eabi/sysroot/arm-none-eabi/include/newlib.h
+
+Wouldn't that be the case for creating the symlink arm-none-eabi -> . as
+we're doing for some external toolchains?
+
+> +${exec_prefix} provides the .../host/usr/arm-none-eabi/sysroot path
+> +${target_noncanonical} provides an extra arm-none-eabi/ that must be removed. 
+> +
+> +Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
+> +
+> +
+> +diff -uNr newlib-old/configure newlib-new/configure
+> +--- newlib-old/configure	2014-07-05 17:09:07.000000000 -0400
+> ++++ newlib-new/configure	2014-12-25 00:59:01.727549186 -0500
+> +@@ -6985,7 +6985,7 @@
+> + 
+> + # Some systems (e.g., one of the i386-aix systems the gas testers are
+> + # using) don't handle "\$" correctly, so don't use it here.
+> +-tooldir='${exec_prefix}'/${target_noncanonical}
+> ++tooldir='${exec_prefix}'/usr
+> + build_tooldir=${tooldir}
+
+But the patch looks pretty clean...
+
+> + # Create a .gdbinit file which runs the one in srcdir
+> diff --git a/package/newlib/newlib.mk b/package/newlib/newlib.mk
+> new file mode 100644
+> index 0000000..02008e5
+> --- /dev/null
+> +++ b/package/newlib/newlib.mk
+> @@ -0,0 +1,48 @@
+> +################################################################################
+> +#
+> +# newlib
+> +#
+> +################################################################################
+> +
+> +NEWLIB_VERSION = 2.2.0
+> +NEWLIB_SITE = ftp://sourceware.org/pub/newlib
+> +NEWLIB_LICENSE = MIT
+> +NEWLIB_LICENSE_FILES = COPYRIGHT
+> +
+> +NEWLIB_DEPENDENCIES = host-gcc-initial
+> +NEWLIB_ADD_TOOLCHAIN_DEPENDENCY = NO
+> +NEWLIB_INSTALL_STAGING = YES
+> +
+> +define NEWLIB_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(TARGET_MAKE_ENV) \
+> +		./configure \
+> +			--target=$(GNU_TARGET_NAME) \
+> +			--host=$(GNU_HOST_NAME) \
+> +			--build=$(GNU_HOST_NAME) \
+
+From what I recall, newlib does not use --build. So you should not have
+to specify it. At l;east, it was still the case in newlib-2.2.0,
+released 2014-12-18.
+
+> +			--prefix=$(STAGING_DIR) \
+> +			--includedir=$(STAGING_DIR)/usr/include \
+> +			--oldincludedir=$(STAGING_DIR)/usr/include \
+> +			--with-build-sysroot=$(STAGING_DIR) \
+
+I don't think --includedir, --oldincludedir or --with-build-sysroot are
+needed.
+
+> +			--enable-newlib-io-long-long \
+> +			--enable-newlib-register-fini \
+> +			--disable-newlib-supplied-syscalls \
+
+What about --enable-newlib-io-float or --enable-newlib-io-long-double or
+--enable-newlib-io-c99-formats?
+
+(I don't really care they be enabled or disabled, just I would not use
+the defaults; we prefer to force these kind of things explcitly, rather
+than have nasty surprises, especially when a new version changes the
+defaults, and especially since a toolchain component is pretty much
+critical.)
+
+> +			--disable-nls)
+> +
+> +endef
+> +
+> +define NEWLIB_APPLY_PATCHES
+> +	$(APPLY_PATCHES) $(@D) package/newlib \*.patch
+> +endef
+> +
+> +define NEWLIB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define NEWLIB_INSTALL_STAGING_CMDS
+> +	mkdir -p $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Maybe you can make that an autootols package, since it *is* an autotools
+package. It's just that we're redefining the configure command.
+
+But you're also not providing target-install commands, so you may also
+want to add:
+
+    NEWLIB_INSTALL_TARGET = NO
+
+And then you can indeed make it an autootls-package. :-)
+
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 13e2b15..c11db73 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -94,6 +94,14 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+>  	  This option selects musl as the C library for the
+>  	  cross-compilation toolchain.
+>  
+> +config BR2_TOOLCHAIN_BUILDROOT_NEWLIB
+> +       bool "newlib (experimental)"
+> +       depends on BR2_arm
+
+Why only arm? newlib has support for other architectures. In fact, I
+would gues that all architectures that Buildroot supports are also
+supported in newlib.
+
+Note: for glibc and uClibc, we have a choice to select the version. Do
+we also want to add such a version selection (especially a custom
+version) for newlib, too?
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
