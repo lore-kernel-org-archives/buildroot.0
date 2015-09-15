@@ -1,94 +1,109 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Tue, 15 Sep 2015 14:34:24 -0500
-Subject: [Buildroot] [PATCH 2/2] openssl: enable parallel build and
-	installation
-In-Reply-To: <55F84C5B.2080004@mind.be>
-References: <1442289591-30376-1-git-send-email-ryanbarnett3@gmail.com>
- <1442289591-30376-3-git-send-email-ryanbarnett3@gmail.com>
- <55F84C5B.2080004@mind.be>
-Message-ID: <CALq67GCTRkExTKSYDy-7eV=k0==L5m2SY53Puo6BJqHSo50csw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Sep 2015 21:39:24 +0200
+Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
+ library
+In-Reply-To: <20150915175354.GA3650@free.fr>
+References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
+ <20150913101738.238ebc06@free-electrons.com>
+ <CAOudHSVcePTAq7PLON-0Zig-JkJtTNnu-RzHtkYf0f00pe8atw@mail.gmail.com>
+ <20150915093523.0597731f@free-electrons.com>
+ <20150915175354.GA3650@free.fr>
+Message-ID: <20150915213924.62547101@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Yann, Peter, Chris,
 
-On Tue, Sep 15, 2015 at 11:50 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 15-09-15 05:59, Ryan Barnett wrote:
->
->> diff --git a/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch b/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->> index 93e2118..f54f2fa 100644
->> --- a/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->> +++ b/package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
->> @@ -1,19 +1,20 @@
->> -From 53980448064b362a58e4ab2aca6f38fec93c07c3 Mon Sep 17 00:00:00 2001
->> +From 12de3d3aa9525c551ebbd7fcff9d9d2b08e58aad Mon Sep 17 00:00:00 2001
->>  From: Mike Frysinger <vapier@gentoo.org>
->>  Date: Sat, 16 May 2015 18:53:51 +0200
->> -Subject: [PATCH 1/3] Dont waste time building manpages if we're not going to
->> +Subject: [PATCH 1/2] Dont waste time building manpages if we're not going to
->>   use em.
->>
->>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> +Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
->
->  You should probably have added your Sob in the first patch already. This is
-> just useless churn.
+On Tue, 15 Sep 2015 19:53:54 +0200, Yann E. MORIN wrote:
 
-Agreed. Will respin with this fixed.
+> > I'm adding Yann in Cc. Yann, have you experienced such thing when
+> > adding bare-metal/newlib support in Crosstool-NG? I've quickly looked
+> > at the Crosstool-NG code, and I don't see the vendor part of the tuple
+> > being skipped specifically for bare metal/newlib toolchains, but maybe
+> > I missed it.
+> 
+> In fact, that's not the 'vendor' part that is to be removed; it's the
+> 'kernel' part.
+> 
+> A canonical tuple is usually a three-part tuple: arch-vendor-os. But in
+> the case of linux, the 'os' field is split in two: the 'kernel' and
+> 'userland', like so:  arch-vendor-kernel-userland.
+> 
+> But really, the 'os' or 'userland' fields mostly denote the ABI being
+> used.
+> 
+> So we end up with things like:
+> 
+>   - targets for running Linux:
+>     - i386-blabla-linux-gnu
+>     - powerpc-unknown-linux-gnuspe
+>     - arm-none-linux-gnueabihf
+>     - and so on...
+> 
+>   - targets running bare-metal:
+>     - i386-blabla-elf
+>     - powerpc-unknown-spe
+>     - arm-none-eabihf
+>     - and so on...
+> 
+> So, for bare-metal:
+> 
+>   - tuples are made of only three-part (in fact the historical canonical
+>     form),
+> 
+>   - the part that is "omitted" from the four-part variant is not the
+>     vendor string; rather the 'kernel' and 'userland' fields are merged
+>     into one.
 
->> diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
->> index 355be79..7e67737 100644
->> --- a/package/openssl/openssl.hash
->> +++ b/package/openssl/openssl.hash
->> @@ -1,2 +1,4 @@
->>  # From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
->>  sha256       671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8        openssl-1.0.2d.tar.gz
->> +# Locally computed
->> +sha256       deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f        openssl-1.0.2d-parallel-build.patch?revision=1.1
->> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
->> index 3d87919..c7459dd 100644
->> --- a/package/openssl/openssl.mk
->> +++ b/package/openssl/openssl.mk
->> @@ -13,6 +13,8 @@ OPENSSL_DEPENDENCIES = zlib
->>  HOST_OPENSSL_DEPENDENCIES = host-zlib
->>  OPENSSL_TARGET_ARCH = generic32
->>  OPENSSL_CFLAGS = $(TARGET_CFLAGS)
->> +OPENSSL_PATCH = \
->> +     https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?revision=1.1
->>
->
->  Is there a non-https URL available by any chance?
+Thanks a lot for this explanation! It makes a lot more sense now. So,
+Chris, I guess you have to rework your patch set in this direction:
+it's not the vendor part of the tuple that is omitted.
 
-I will be updating to utilize the latest patch available from Gentoo's
-git repo as pointed out by Mike Frysinger. It doesn't appear that
-gentoo's website is accessible from a non-https connection. The
-updated path will be:
+> However, I'm not sure it is possible to run newlib as the C library
+> under Linux (i.e. as a replacement for glibc/uClibc/musl). IIRC, newlib
+> really targets kernel-less systems. It seems there are linux support
+> files in the newlib source, but I doubt tht is often tested or even
+> compeltely supported; a cursory look at the interwebs does not return
+> promissing results...
+> 
+> And in nay case, I'm afraid a lot of packages would not build against
+> newlib.
+> 
+> All that to say that I need to look at the patch, and I otherwise do not
+> see the point for having newlib in Buildroot...
 
-https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
+Chris is the person who submitted the support for the NuttX operating
+system, which is another operating system kernel than Linux. In this
+context, newlib is the C library of choice.
 
-For more information on non-https site, I tired http:// request of the
-url and am redirected to https:// address:
+Now, there is indeed the question of how to handle all the existing
+packages that would anyway only build with a normal Linux C library.
+It's an open debate.
 
-~$ wget http://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch
-Proxy request sent, awaiting response... 301 Moved Permanently
-Location: https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch
-[following]
---2015-09-15 14:26:15--
-https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch
-Proxy request sent, awaiting response... 200 OK
-Length: 9504 (9.3K) [text/x-diff]
-Saving to: ?openssl-1.0.2d-parallel-build.patch?
+Maybe we first need to get an agreement on whether we want to merge
+something such a newlib toolchain support and NuttX support. On my
+side, I believe I am quite favorable to that, but I was also favorable
+to Luca's patch series on the mdev stuff without devtmpfs, which is why
+Luca started working on this, but in the end, it got turned down. So
+this time around, it would be better if Peter could have a look at the
+original patch from Chris (which definitely wasn't mergeable as is, but
+was giving an idea of what was needed), and give his opinion on whether
+we want something like this in Buildroot or not.
 
-100%[===================================================================================================================================================================>]
-9,504       --.-K/s   in 0s
+My view is that Buildroot is probably easier to use than Crosstool-NG,
+even to build a simple bare-metal toolchain. Crosstool-NG has too many
+options, and too many combinations that fail to build. There is a
+discussion on-going on the crossgcc@ mailing list about that, but I can
+see the interest in having a simpler to use tool to build bare-metal
+toolchains.
 
-2015-09-15 14:26:16 (65.6 MB/s) -
-?openssl-1.0.2d-parallel-build.patch? saved [9504/9504]
+Best regards,
 
-I will respin with your suggestions later tonight.
-
-Thanks,
--Ryan
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
