@@ -1,50 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Sep 2015 23:05:57 +0200
-Subject: [Buildroot] LD_LIBRARY_PATH variable
-In-Reply-To: <CAJ2oMh+nrOjF8VK0FmCj7KuL=29rF_vtqEO7A+99OTh5Ov00RQ@mail.gmail.com>
-References: <CAJ2oMh+nrOjF8VK0FmCj7KuL=29rF_vtqEO7A+99OTh5Ov00RQ@mail.gmail.com>
-Message-ID: <55F88835.3060403@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Sep 2015 23:11:24 +0200
+Subject: [Buildroot] [PATCH] Enable vlc to run as root
+In-Reply-To: <55F821BD.4010006@synopsys.com>
+References: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442322597.git.jpinto@synopsys.com>
+ <55F81E45.1020305@imgtec.com> <55F821BD.4010006@synopsys.com>
+Message-ID: <20150915231124.76245a4f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15-09-15 22:55, Ran Shalit wrote:
-> Hello,
+Hello,
+
+On Tue, 15 Sep 2015 14:48:45 +0100, Joao Pinto wrote:
+
+> >> This patch has the goal of enabling vlc to be ran as root.
+> >>
+> >> Signed-off-by: jpinto <jpinto@synopsys.com>
+> >> Tested-by: jpinto <jpinto@synopsys.com>
+> > 
+> > Use your full name here.
 > 
-> I have some strange issue, in which I have to export LD_LIBRARY_PATH
-> (.../output/host/usr/lib), otherwise the build fails on not ""cannot
-> open shared object file: No such file or directory.... " during build
-> (with the make command without any arguments).
-> The strange thing is that I done it several times before without
-> specifying the export command, so I really don't understand what
-> happened in my host environment that requires this additional command.
-> 
-> But now I get a new error during build:
-> fakeroot: preload library `libfakeroot.so' not found, aborting.
-> 
-> On checking I do see that it exist in .../output/host/usr/lib
-> Is there any idea what's wrong ?
+> Ok, in future patches I will do it.
 
- Have you moved your output directory to a different location? Everything that
-is built for the host will look for shared libraries using an absolute path, so
-if you move it to a different place, it will fail. There were some patches to
-convert the absolute paths to relative paths using patchelf, but that was not
-yet ready for committing.
+We actually need your full name for this patch as well. Signed-off-by
+is a legal statement, so we need people to use their full name.
 
- But specifically for fakeroot: that's just a script, and the path is hardcoded
-in it. Look in host/usr/bin/fakeroot.
+Can you send a v2 of your patch?
 
+> > I don't know if running vlc as root is disabled by default due to
+> > security reasons, but if so, perhaps we could do this selectable by the
+> > user via menuconfig.
 
- Regards,
- Arnout
+I don't think this is necessary. We don't do that for any of the other
+packages in Buildroot. So from my point of view, the patch is OK, it
+only needs to be resubmitted with a full name (as the From and in
+Signed-off-by).
 
+Thanks!
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
