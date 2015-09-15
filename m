@@ -1,41 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 23:44:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sudo: disable use of stack
- protector when not available
-In-Reply-To: <CA+BsyQ7-YdWiOQ9E0X_+vppuB0hNdVPNV7kai9UW+1Kz5G8s3w@mail.gmail.com>
-References: <1442342953-20312-1-git-send-email-brendanheading@gmail.com>
- <20150915233014.27cc4a34@free-electrons.com>
- <CA+BsyQ7-YdWiOQ9E0X_+vppuB0hNdVPNV7kai9UW+1Kz5G8s3w@mail.gmail.com>
-Message-ID: <20150915234417.4658d78e@free-electrons.com>
+Date: Tue, 15 Sep 2015 23:45:19 +0200
+Subject: [Buildroot] [git commit] python-pyratemp: new package
+Message-ID: <20150915214537.021CD81E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=50aef967ca9327952dff6c4e1926bc08250e336d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Sep 2015 22:41:11 +0100, Brendan Heading wrote:
+add python simple template module
 
-> My guess is that this is down to differences between how SSP is
-> implemented on certain arches. powerpc has a few stack protector
-> related failures in similar circumstances (I submitted a patch for
-> ruby with a similar fix). It seems that the compiler and linker
-> sometimes accept -fstack-protector even when SSP is unsupported.
+Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                            |    1 +
+ package/python-pyratemp/Config.in            |    8 ++++++++
+ package/python-pyratemp/python-pyratemp.hash |    4 ++++
+ package/python-pyratemp/python-pyratemp.mk   |   14 ++++++++++++++
+ 4 files changed, 27 insertions(+), 0 deletions(-)
 
-I also thought of an architecture specific issue, but I tried with
-http://autobuild.buildroot.org/toolchains/configs/br-powerpc-e500mc-full.config
-and it also built just fine.
-
-I have nothing against your patch in principle, it can only be good to
-explicitly disable stack protector usage when the necessary support is
-not there. I'm just curious to understand why the detection does work
-in certain cases and not in others.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index fc35f12..e1f3270 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -642,6 +642,7 @@ menu "external python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyqt/Config.in"
++	source "package/python-pyratemp/Config.in"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pyroute2/Config.in"
+ 	source "package/python-pysendfile/Config.in"
+diff --git a/package/python-pyratemp/Config.in b/package/python-pyratemp/Config.in
+new file mode 100644
+index 0000000..9a299d1
+--- /dev/null
++++ b/package/python-pyratemp/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYRATEMP
++	bool "python-pyratemp"
++	help
++	  python-pyratemp is a Python library for doing html
++	  templates.  written entirely in Python, that is designed to
++	  be very easy to use and very like writing Python.
++
++	  https://pypi.python.org/pypi/pyratemp/
+diff --git a/package/python-pyratemp/python-pyratemp.hash b/package/python-pyratemp/python-pyratemp.hash
+new file mode 100644
+index 0000000..f3f29a3
+--- /dev/null
++++ b/package/python-pyratemp/python-pyratemp.hash
+@@ -0,0 +1,4 @@
++#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=e4bbe5d4a98016efef882b2b2f47defb
++md5     e4bbe5d4a98016efef882b2b2f47defb pyratemp-0.3.2.tgz
++# Locally calculated:
++sha256 c45ed656ada482a02fe780495f37a695e7671accb04f918f7e7f18abf877bc71 pyratemp-0.3.2.tgz
+diff --git a/package/python-pyratemp/python-pyratemp.mk b/package/python-pyratemp/python-pyratemp.mk
+new file mode 100644
+index 0000000..055fb30
+--- /dev/null
++++ b/package/python-pyratemp/python-pyratemp.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pyratemp
++#
++################################################################################
++
++PYTHON_PYRATEMP_VERSION = 0.3.2
++PYTHON_PYRATEMP_SOURCE = pyratemp-$(PYTHON_PYRATEMP_VERSION).tgz
++PYTHON_PYRATEMP_SITE = https://pypi.python.org/packages/source/p/pyratemp
++PYTHON_PYRATEMP_LICENSE = MIT
++PYTHON_PYRATEMP_LICENSE_FILES = LICENSE
++PYTHON_PYRATEMP_SETUP_TYPE = distutils
++
++$(eval $(python-package))
