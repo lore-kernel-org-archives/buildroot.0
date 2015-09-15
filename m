@@ -1,37 +1,64 @@
-From: Herve Codina <Herve.CODINA@celad.com>
-Date: Tue, 15 Sep 2015 15:27:06 +0200
-Subject: [Buildroot] [PATCH 1/1] target-finalize: remove extra
-	/usr/libexec/*.a and *.la files
-Message-ID: <1442323626-31294-1-git-send-email-Herve.CODINA@celad.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Sep 2015 14:33:57 +0100
+Subject: [Buildroot] [PATCH] Enable vlc to run as root
+In-Reply-To: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442322597.git.jpinto@synopsys.com>
+References: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442322597.git.jpinto@synopsys.com>
+Message-ID: <55F81E45.1020305@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, sudo for instance, install .la files in $(TARGET_DIR)/usr/libexec.
-These files are not needed on target.
+Dear Joao Pinto,
 
-This patch simply removes *.a and *.la files from $(TARGET_DIR)/usr/libexec if it exists
+Regards,
 
-Signed-off-by: Herve Codina <Herve.CODINA@celad.com>
----
- Makefile |    3 +++
- 1 file changed, 3 insertions(+)
+Vincent.
 
-diff --git a/Makefile b/Makefile
-index 23e2ee6..9bf5fbc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -565,6 +565,9 @@ target-finalize: $(PACKAGES)
- 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
-+	if test -d $(TARGET_DIR)/usr/libexec; then \
-+		find $(TARGET_DIR)/usr/libexec \( -name '*.a' -o -name '*.la' \) -print0 | \
-+		xargs -0 rm -f; fi
- ifneq ($(BR2_PACKAGE_GDB),y)
- 	rm -rf $(TARGET_DIR)/usr/share/gdb
- endif
--- 
-1.7.9.5
+On 09/15/2015 02:20 PM, jpinto wrote:
+> A great number of embedded system only include the root user.
+
+systems
+
+> This patch has the goal of enabling vlc to be ran as root.
+> 
+> Signed-off-by: jpinto <jpinto@synopsys.com>
+> Tested-by: jpinto <jpinto@synopsys.com>
+
+Use your full name here.
+
+> ---
+>  package/vlc/vlc.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+> index 6f7fd58..4e84b12 100644
+> --- a/package/vlc/vlc.mk
+> +++ b/package/vlc/vlc.mk
+> @@ -54,6 +54,7 @@ VLC_CONF_OPTS += \
+>  	--disable-mfx \
+>  	--disable-vdpau \
+>  	--disable-addonmanagermodules \
+> +	--enable-run-as-root \
+
+I don't know if running vlc as root is disabled by default due to
+security reasons, but if so, perhaps we could do this selectable by the
+user via menuconfig.
+
+Also, there is a guy here [1] saying that although he configured it with
+--enable-run-as-root, it still not working:
+
+[1]
+http://www.hackersgarage.com/vlc-is-not-supposed-to-be-run-as-root-sorry-solution.html
+
+Have you done a runtime test to check that it actually works?
+
+Regards,
+
+Vincent.
+
+>  
+>  # Building static and shared doesn't work, so force static off.
+>  ifeq ($(BR2_STATIC_LIBS),)
+> 
