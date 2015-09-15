@@ -1,26 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Sep 2015 13:07:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 8331] kexec wants shutdown in /sbin,
- but systemd installs it in /usr/sbin
-In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
-References: <bug-8331-163@https.bugs.busybox.net/>
-Message-ID: <20150915130758.730547FE04@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2015 15:14:56 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+	(without devtmpfs)
+In-Reply-To: <20150915150303.61e5449e@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 15 Sep 2015 15:03:03 +0200")
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+ <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
+ <20150909155427.53f9c8b5@free-electrons.com>
+ <87bnd43eph.fsf@dell.be.48ers.dk>
+ <20150914233402.3575da80@free-electrons.com>
+ <87zj0oznp2.fsf@dell.be.48ers.dk>
+ <20150915093030.622d2366@free-electrons.com>
+ <87zj0oumrg.fsf@dell.be.48ers.dk>
+ <20150915114159.758baca9@free-electrons.com>
+ <87k2rrvqlh.fsf@dell.be.48ers.dk> <55F80E9C.7070208@mind.be>
+ <20150915150303.61e5449e@free-electrons.com>
+Message-ID: <87bnd3vn73.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8331
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
---- Comment #12 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 13:07:58 UTC ---
-(In reply to comment #11)
-> For busybox you can use the "-e (--exec)" option
+Hi,
 
-Ignore that line (the last one of my previous comment). I forgot to remove it
-before sending my message.
+ > But then, who creates /dev/console when devtmpfs is not available? We
+ > have it unconditionally?
+
+I would say so, especially as we also "need" it for initramfs.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Venlig hilsen,
+Peter Korsgaard 
