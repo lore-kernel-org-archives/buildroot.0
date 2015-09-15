@@ -1,51 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 15 Sep 2015 07:48:18 +0000 (UTC)
-Subject: [Buildroot] [Bug 8331] kexec fails due to missing /usr/sbin/shutdown
-In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
-References: <bug-8331-163@https.bugs.busybox.net/>
-Message-ID: <20150915074818.840CF81E96@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Sep 2015 09:56:47 +0200
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
+In-Reply-To: <55F74581.5070301@mind.be>
+References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
+ <55F3EFAC.7060306@imgtec.com>
+ <20150913121206.64758da8@free-electrons.com>
+ <87fv2icd1d.fsf@dell.be.48ers.dk>
+ <20150913232043.415b5d1a@free-electrons.com>
+ <55F74581.5070301@mind.be>
+Message-ID: <20150915095647.140ee099@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8331
+Arnout,
 
---- Comment #3 from Dr I J Ormshaw <ian_ormshaw@waters.com> 2015-09-15 07:48:18 UTC ---
-(In reply to comment #2)
-> (In reply to comment #1)
-> > Hmm, looking at the kexec source code I see:
-> > 
-> > static int my_shutdown(void)
-> > {
-> >         char *args[] = {
-> >                 "shutdown",
-> >                 "-r",
-> >                 "now",
-> >                 NULL
-> >         };
-> > 
-> >         execv("/sbin/shutdown", args);
-> >         execv("/etc/shutdown", args);
-> >         execv("/bin/shutdown", args);
-> > 
-> >         perror("shutdown");
-> >         return -1;
-> > }
-> > 
-> > So having shutdown in /sbin seems fine?
-> > 
-> > Can you please provide more info about your config and what goes wrong?
+On Tue, 15 Sep 2015 00:09:05 +0200, Arnout Vandecappelle wrote:
+
+>  file has the advantage of also working for scripts, and should even work for
+> FLAT binaries (which readelf wouldn't like). But it doesn't show the CPU, ISA
+> and FP details, which are useful to check as well.
 > 
-> The problem is that there is no shutdown in /sbin, shutdown is in /usr/sbin. I
-> had to create a link in /sbin to /usr/sbin/shutdown.
+>  So the perfect approach would be: file, and readelf if file says it's an ELF.
 
-I also raised a similay bug report 8336, to which I had a responce citing
-http://patchwork.ozlabs.org/patch/514750/ as a fix.  That patch should also fix
-this bug.
+Right.
 
+>  Or, of course, python-magic and python-pyelftools :-)
+
+Indeed, but then we would have to make the test optional so that
+Buildroot can continue to work on systems where those additional Python
+modules are not available. Which isn't as good as an unconditional
+test that relies on already available utilities.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
