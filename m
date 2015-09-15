@@ -1,37 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2015 15:14:56 +0200
-Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
-	(without devtmpfs)
-In-Reply-To: <20150915150303.61e5449e@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 15 Sep 2015 15:03:03 +0200")
-References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
- <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
- <20150909155427.53f9c8b5@free-electrons.com>
- <87bnd43eph.fsf@dell.be.48ers.dk>
- <20150914233402.3575da80@free-electrons.com>
- <87zj0oznp2.fsf@dell.be.48ers.dk>
- <20150915093030.622d2366@free-electrons.com>
- <87zj0oumrg.fsf@dell.be.48ers.dk>
- <20150915114159.758baca9@free-electrons.com>
- <87k2rrvqlh.fsf@dell.be.48ers.dk> <55F80E9C.7070208@mind.be>
- <20150915150303.61e5449e@free-electrons.com>
-Message-ID: <87bnd3vn73.fsf@dell.be.48ers.dk>
+From: jpinto <Joao.Pinto@synopsys.com>
+Date: Tue, 15 Sep 2015 14:20:58 +0100
+Subject: [Buildroot] [PATCH] Enable vlc to run as root
+Message-ID: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442322597.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+A great number of embedded system only include the root user. 
+This patch has the goal of enabling vlc to be ran as root.
 
-Hi,
+Signed-off-by: jpinto <jpinto@synopsys.com>
+Tested-by: jpinto <jpinto@synopsys.com>
+---
+ package/vlc/vlc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > But then, who creates /dev/console when devtmpfs is not available? We
- > have it unconditionally?
-
-I would say so, especially as we also "need" it for initramfs.
-
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 6f7fd58..4e84b12 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -54,6 +54,7 @@ VLC_CONF_OPTS += \
+ 	--disable-mfx \
+ 	--disable-vdpau \
+ 	--disable-addonmanagermodules \
++	--enable-run-as-root \
+ 
+ # Building static and shared doesn't work, so force static off.
+ ifeq ($(BR2_STATIC_LIBS),)
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.8.1.5
