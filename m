@@ -1,53 +1,46 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Mon, 14 Sep 2015 17:41:47 -0700
-Subject: [Buildroot] [PATCH 1/1] add python simple template module
-In-Reply-To: <20150913200443.38a3512d@free-electrons.com>
-References: <1442162503-5817-1-git-send-email-stevecalfee@gmail.com>
- <20150913200443.38a3512d@free-electrons.com>
-Message-ID: <CAJJ6jxuir9vNJCPYGVJAoFrjSCcQ2rArXJ+MtB5wNCujasf1Pg@mail.gmail.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Mon, 14 Sep 2015 21:54:57 -0500
+Subject: [Buildroot] [PATCHv5 4/4] docs/manual: add section about size
+	graphing
+In-Reply-To: <20150903104326.GE3689@free.fr>
+References: <1441228505-23235-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1441228505-23235-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20150903103700.GD3689@free.fr> <20150903104326.GE3689@free.fr>
+Message-ID: <CALq67GBoSnTY-G7w3SjdsUpO0QWPqhv5c=2Gsd3RNS-Z1u2=xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, Yann,
 
-On Sun, Sep 13, 2015 at 11:04 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Steve Calfee,
+On Thu, Sep 3, 2015 at 5:43 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
 >
-> The title of the commit should be:
+> On 2015-09-03 12:37 +0200, Yann E. MORIN spake thusly:
+>> Thomas, All,
+>>
+>> On 2015-09-02 23:15 +0200, Thomas Petazzoni spake thusly:
+>> > +* +output/build/package-size-stats.csv+, a CSV file giving the size
+>> > +  contribution of each package to the overall root filesystem size
+>>
+>> Ditto, that was not generated.
 >
->         python-pyratemp: new package
+> Sorry, ditch that comment. It *was* generated.
 >
-> On Sun, 13 Sep 2015 09:41:43 -0700, Steve Calfee wrote:
+> It's just that I only looked at the base filename, and expected it in
+> the graphs/ sub-dir, not in build/ . That's by looking at patch 3 that I
+> noticed they were put in there.
 >
->
->> diff --git a/package/python-pyratemp/python-pyratemp.hash b/package/python-pyratemp/python-pyratemp.hash
->> new file mode 100644
->> index 0000000..0abb9e0
->> --- /dev/null
->> +++ b/package/python-pyratemp/python-pyratemp.hash
->> @@ -0,0 +1,4 @@
->> +# From http://www.simple-is-better.org/template
->> +# Locally calculated:
->
-> Having those two comments together do not make sense. Either the hash
-> is provided by the official upstream website and you should write the
-> first line, or the hash is not available from the upstream website, in
-> which case you use a locally calculated hash.
->
->> +sha256 c45ed656ada482a02fe780495f37a695e7671accb04f918f7e7f18abf877bc71 pyratemp-0.3.2.tgz
->> +
->
-> Unneeded empty line.
->
+> I think it makes more sense to put those .csv files in the graphs/
+> sub-dir.
 
-Thanks for the review.
+I agree with Yann in that the CSV files make the most sense to be put
+in graphs/ sub-dir. In fact, I have modified this locally while carry
+this patch to place them there.
 
-I just rebuilt and found that the .hash file has to have an eol after
-that last line. So please reject the V2 version and I will send in
-another one tomorrow which will survive through a make clean.
+On a side note - it would be great to see this feature merged :)
 
-Regards, Steve
+Thanks,
+-Ryan
