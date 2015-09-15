@@ -1,52 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 15:03:03 +0200
-Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
- (without devtmpfs)
-In-Reply-To: <55F80E9C.7070208@mind.be>
-References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
- <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
- <20150909155427.53f9c8b5@free-electrons.com>
- <87bnd43eph.fsf@dell.be.48ers.dk>
- <20150914233402.3575da80@free-electrons.com>
- <87zj0oznp2.fsf@dell.be.48ers.dk>
- <20150915093030.622d2366@free-electrons.com>
- <87zj0oumrg.fsf@dell.be.48ers.dk>
- <20150915114159.758baca9@free-electrons.com>
- <87k2rrvqlh.fsf@dell.be.48ers.dk> <55F80E9C.7070208@mind.be>
-Message-ID: <20150915150303.61e5449e@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 15 Sep 2015 13:05:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 8331] kexec wants shutdown in /sbin,
+ but systemd installs it in /usr/sbin
+In-Reply-To: <bug-8331-163@https.bugs.busybox.net/>
+References: <bug-8331-163@https.bugs.busybox.net/>
+Message-ID: <20150915130552.896C67FF9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+https://bugs.busybox.net/show_bug.cgi?id=8331
 
-On Tue, 15 Sep 2015 14:27:08 +0200, Arnout Vandecappelle wrote:
-> 
-> 
-> On 15-09-15 14:01, Peter Korsgaard wrote:
-> > Or alternatively, extend the S10mdev logic to detect that it need to
-> > create a tmpfs on /dev (by looking for devtmpfs in /proc/filesystems or
-> > detecting that /dev is RO) and have all the fixup there. That way it
-> > atleast doesn't add any more complications to the rest of Buildroot /
-> > users.
-> 
->  That's a great idea, because it actually simplifies the buildroot code (no
-> longer needed to force devtmpfs in the kernel when mdev is selected).
-> 
->  To detect, it's as simple as:
-> 
-> if [ "$(cut -d ' ' -f 2,3 /proc/mounts | sed -n '/^\/dev /s///p')" != devtmpfs ]
+Vicente Olivert Riera <vincent.riera@imgtec.com> changed:
 
-But then, who creates /dev/console when devtmpfs is not available? We
-have it unconditionally?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |NEW
+            Summary|kexec fails due to missing  |kexec wants shutdown in
+                   |/usr/sbin/shutdown          |/sbin, but systemd installs
+                   |                            |it in /usr/sbin
 
-Best regards,
+--- Comment #11 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-09-15 13:05:52 UTC ---
+(In reply to comment #10)
+> Using kexec -l followed bu kexec -e will not shut down services correctly.
 
-Thomas
+Well, but that's because you are using systemd, right? That would work with
+busybox.
+
+> but I think I should be able to use:
+> 
+> kexec -l 
+> 
+> followed by 
+> 
+> systemctl isolate kexec.target
+> 
+> to achieve what I want, as I think systemd should kexec the loaded kernel once
+> services are shutdown.
+
+Or, in the meantime, you can create the symlink to workaround the problem until
+the patch from Yann gets applied.
+
+You could also send a patch to kexec upstream in order to add...
+
+execv("/usr/sbin/shutdown", args);
+
+...to the my_shutdown() function, so it would also work on systemd although you
+don't have the /bin, /sbin and /lib symlinks stuff.
+
+So, to summarize and make progress on this issue:
+
+- systemd: symlink workaround until Yann's patch OR fix kexec upstream
+- sysvinit: already works
+- busybox: use "kexec -e"
+
+Should we mark this bug as RESOLVED DUPLICATE (of #8336), Peter?
+For busybox you can use the "-e (--exec)" option
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
