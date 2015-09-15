@@ -1,85 +1,31 @@
-From: Ben Shelton <benjamin.h.shelton@intel.com>
-Date: Tue, 15 Sep 2015 09:35:18 -0500
-Subject: [Buildroot] [PATCH v2 2/5] liburcu: Add support for aarch64
-In-Reply-To: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
-References: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
-Message-ID: <1442327721-24458-2-git-send-email-benjamin.h.shelton@intel.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 15 Sep 2015 16:36:19 +0200
+Subject: [Buildroot] How to deactivate UCLIBC_CTOR_DTOR in uclibc-ng?
+Message-ID: <CAJtjsKYJNhzudtxwfewNr=76PLdzY04Vjaf69_VOL7=W7yAFiA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bring over a patch from OpenEmbedded to treat aarch64 like arm in the build
-process, which allows the build to succeed.
+Hi,
 
-Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
----
- package/liburcu/0002-support-aarch64.patch | 21 +++++++++++++++++++++
- package/liburcu/Config.in                  |  4 ++--
- package/liburcu/liburcu.mk                 |  1 +
- 3 files changed, 24 insertions(+), 2 deletions(-)
- create mode 100644 package/liburcu/0002-support-aarch64.patch
+I try to move a project that uses uclibc-0.9.33 to uclibc-ng but it
+fails at link time due to undefined references to __fini_array_end and
+__fini_array_start.
+In uClibc-0.9.33, the UCLIBC_CTOR_DTOR option default was no. In
+uClibc-ng, it defaults to yes. I would like to set it back to no but I
+failed doing so in Buildroot.
+make uclibc-menuconfig does not show the option.
+I've tried using KCONFIG_DISABLE_OPT and KCONFIG_SET_OPT function in
+the .mk file to disable it and set it to 'N', respectively, but
+without success.
+When I grep for the option in the generated .config, it's still set to yes:
+$ grep CTOR_DTOR build/uclibc-1.0.5/.config
+UCLIBC_CTOR_DTOR=y
 
-diff --git a/package/liburcu/0002-support-aarch64.patch b/package/liburcu/0002-support-aarch64.patch
-new file mode 100644
-index 0000000..6830e25
---- /dev/null
-+++ b/package/liburcu/0002-support-aarch64.patch
-@@ -0,0 +1,21 @@
-+libucru: recognize aarch64
-+
-+Make the same as "arm" internally.
-+
-+Upstream-Status: Pending
-+
-+Signed-off-by: joe.slater at windriver.com
-+[moved to buildroot from openembedded-core]
-+Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
-+
-+
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
-+ 	[alpha*], [ARCHTYPE="alpha"],
-+ 	[ia64], [ARCHTYPE="gcc"],
-+ 	[arm*], [ARCHTYPE="arm"],
-++	[aarch64], [ARCHTYPE="arm"],
-+ 	[mips*], [ARCHTYPE="mips"],
-+ 	[tile*], [ARCHTYPE="gcc"],
-+ 	[ARCHTYPE="unknown"]
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index e7cbe93..a4e8dc8 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBURCU
- 	bool "liburcu"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_LIBURCU
- 	  http://lttng.org/urcu
- 
- comment "liburcu needs a toolchain w/ threads"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
-index 8d06966..c886a1c 100644
---- a/package/liburcu/liburcu.mk
-+++ b/package/liburcu/liburcu.mk
-@@ -10,6 +10,7 @@ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
- LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
- LIBURCU_LICENSE_FILES = lgpl-2.1.txt lgpl-relicensing.txt gpl-2.0.txt LICENSE
- 
-+LIBURCU_AUTORECONF = YES
- LIBURCU_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+Any idea how to deactivate UCLIBC_CTOR_DTOR?
+
+Best,
 -- 
-1.9.5
+Johan
