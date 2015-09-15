@@ -1,10 +1,10 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Tue, 15 Sep 2015 14:23:52 +0200
-Subject: [Buildroot] [PATCH v2 2/4] package/hplip: Un-deprecate and bump
-	version to 3.15.7
+Date: Tue, 15 Sep 2015 14:23:53 +0200
+Subject: [Buildroot] [PATCH v2 3/4] package/gutenprint: Un-deprecate and
+	bump version to 5.2.10
 In-Reply-To: <1442319834-20549-1-git-send-email-olivier.schonken@gmail.com>
 References: <1442319834-20549-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1442319834-20549-3-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1442319834-20549-4-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/hplip/Config.in  | 1 -
- package/hplip/hplip.hash | 2 +-
- package/hplip/hplip.mk   | 4 +++-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/gutenprint/Config.in       | 1 -
+ package/gutenprint/gutenprint.hash | 2 +-
+ package/gutenprint/gutenprint.mk   | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/hplip/Config.in b/package/hplip/Config.in
-index a8a5f69..780c69e 100644
---- a/package/hplip/Config.in
-+++ b/package/hplip/Config.in
+diff --git a/package/gutenprint/Config.in b/package/gutenprint/Config.in
+index 686dbce..2826594 100644
+--- a/package/gutenprint/Config.in
++++ b/package/gutenprint/Config.in
 @@ -1,7 +1,6 @@
- config BR2_PACKAGE_HPLIP
- 	bool "hplip"
+ config BR2_PACKAGE_GUTENPRINT
+ 	bool "gutenprint"
  	# because of cups security issues
 -	depends on BR2_DEPRECATED_SINCE_2015_05
  	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_PACKAGE_CUPS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-diff --git a/package/hplip/hplip.hash b/package/hplip/hplip.hash
-index fb7d4e7..98f4262 100644
---- a/package/hplip/hplip.hash
-+++ b/package/hplip/hplip.hash
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+diff --git a/package/gutenprint/gutenprint.hash b/package/gutenprint/gutenprint.hash
+index 3cfe0e1..36c12cc 100644
+--- a/package/gutenprint/gutenprint.hash
++++ b/package/gutenprint/gutenprint.hash
 @@ -1,2 +1,2 @@
  # Locally computed:
--sha256  a8122cd824398ac6374154f86152e24fdf5c0100b5c1d6518e853308362e627d  hplip-3.13.10.tar.gz
-+sha256  d310903048f3600f93422e5a8c39ddd682511e0849cd9abc5e943f9a10bdd49d	hplip-3.15.7.tar.gz
-diff --git a/package/hplip/hplip.mk b/package/hplip/hplip.mk
-index 2cdddca..65f57e2 100644
---- a/package/hplip/hplip.mk
-+++ b/package/hplip/hplip.mk
-@@ -4,7 +4,7 @@
- #
+-sha256  4b27e4f06f32d30271df89ecb6089bb11bcf2caec5f60b0909e083095354bca0  gutenprint-5.2.9.tar.bz2
++sha256  431f352b412dfb9809d126a85a37a1fcd1c1826275ace8cdcd4fd9a6ee360e59  gutenprint-5.2.10.tar.bz2
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 3ff05b6..0bdc3bc 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HPLIP_VERSION = 3.13.10
-+HPLIP_VERSION = 3.15.7
- HPLIP_SITE = http://downloads.sourceforge.net/hplip/hplip
- HPLIP_AUTORECONF = YES
- HPLIP_DEPENDENCIES = cups libusb jpeg
-@@ -29,6 +29,8 @@ HPLIP_CONF_OPTS = \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--includedir=$(STAGING_DIR)/usr/include
- 
-+HPLIP_MAKE_OPTS += LDFLAGS+=-lpthread
-+
- ifeq ($(BR2_PACKAGE_DBUS),y)
- HPLIP_CONF_OPTS += --enable-dbus-build
- HPLIP_DEPENDENCIES += dbus
+ GUTENPRINT_VERSION_MAJOR = 5.2
+-GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).9
++GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).10
+ GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint-$(GUTENPRINT_VERSION_MAJOR)/$(GUTENPRINT_VERSION)
+ GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
+ GUTENPRINT_LICENSE = GPLv2+
 -- 
 1.9.1
