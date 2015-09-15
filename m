@@ -1,44 +1,42 @@
 From: Ben Shelton <benjamin.h.shelton@intel.com>
-Date: Tue, 15 Sep 2015 09:35:21 -0500
-Subject: [Buildroot] [PATCH v2 5/5] lttng-tools: Enable aarch64 build
+Date: Tue, 15 Sep 2015 09:35:19 -0500
+Subject: [Buildroot] [PATCH v2 3/5] lttng-libust: Bump version to 2.6.2
 In-Reply-To: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
 References: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
-Message-ID: <1442327721-24458-5-git-send-email-benjamin.h.shelton@intel.com>
+Message-ID: <1442327721-24458-3-git-send-email-benjamin.h.shelton@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that liburcu builds for aarch64, lttng-tools has all its dependencies met
-for aarch64, so allow it to build for this architecture.
-
 Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
 ---
- package/lttng-tools/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/lttng-libust/lttng-libust.hash | 4 ++--
+ package/lttng-libust/lttng-libust.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index 4d4b923..4c5b5f6 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	# liburcu only works on some architectures and requires thread support
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_USE_WCHAR # util-linux
-@@ -30,7 +30,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	  http://lttng.org
+diff --git a/package/lttng-libust/lttng-libust.hash b/package/lttng-libust/lttng-libust.hash
+index 65db612..aafc2ba 100644
+--- a/package/lttng-libust/lttng-libust.hash
++++ b/package/lttng-libust/lttng-libust.hash
+@@ -1,2 +1,2 @@
+-# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.0.tar.bz2.sha1
+-sha1  774fc2052781ba6fd789d422223c739d5f64482d  lttng-ust-2.6.0.tar.bz2
++# http://www.lttng.org/files/lttng-ust/lttng-ust-2.6.2.tar.bz2.sha1
++sha1  bfa9cbdabd8698cf5b98667eac5c39775127f634  lttng-ust-2.6.2.tar.bz2
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index 2afcd61..4976ff4 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- comment "lttng-tools needs a toolchain w/ threads, wchar"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
+ LTTNG_LIBUST_SITE = http://lttng.org/files/lttng-ust
+-LTTNG_LIBUST_VERSION = 2.6.0
++LTTNG_LIBUST_VERSION = 2.6.2
+ LTTNG_LIBUST_SOURCE = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
+ LTTNG_LIBUST_LICENSE = LGPLv2.1; MIT for system headers; GPLv2 for liblttng-ust-ctl/ustctl.c (used by lttng-sessiond)
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
 -- 
 1.9.5
