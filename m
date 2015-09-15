@@ -1,41 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Sep 2015 09:56:47 +0200
-Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.6
-In-Reply-To: <55F74581.5070301@mind.be>
-References: <1442010269-372-1-git-send-email-gustavo@zacarias.com.ar>
- <55F3EFAC.7060306@imgtec.com>
- <20150913121206.64758da8@free-electrons.com>
- <87fv2icd1d.fsf@dell.be.48ers.dk>
- <20150913232043.415b5d1a@free-electrons.com>
- <55F74581.5070301@mind.be>
-Message-ID: <20150915095647.140ee099@free-electrons.com>
+From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Date: Tue, 15 Sep 2015 13:34:38 +0530
+Subject: [Buildroot] [PATCH v2 0/3] new packages gssdp, gupnp and gupnp-av
+Message-ID: <1442304281-16222-1-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+This series of patch adds three new packages gssdp, gupnp and
+gupnp-av.
 
-On Tue, 15 Sep 2015 00:09:05 +0200, Arnout Vandecappelle wrote:
+Changes v1 -> v2:
+	PATCH 1/3 - libsoup also needs threads and MMU so add it to list in comment
+	          - add <PKG>-VERSION_MAJOR variable (suggested by Vincent Olivert Riera)
+	PATCH 2/3 - gssdp also needs wchar, threads and MMU so add it to list in comment
+	          - util-linux also needs wchar so add it to list in comment (suggested by Vincent Olivert Riera)
+	          - add <PKG>-VERSION_MAJOR variable (suggested by Vincent Olivert Riera)
+	PATCH 3/3 - gupnp also needs wchar, threads and MMU so add it to list in comment
+	          - add <PKG>-VERSION_MAJOR variable (suggested by Vincent Olivert Riera)
 
->  file has the advantage of also working for scripts, and should even work for
-> FLAT binaries (which readelf wouldn't like). But it doesn't show the CPU, ISA
-> and FP details, which are useful to check as well.
-> 
->  So the perfect approach would be: file, and readelf if file says it's an ELF.
+Rahul Bedarkar (3):
+  gssdp: new package
+  gupnp: new package
+  gupnp-av: new package
 
-Right.
+ package/Config.in              |  3 +++
+ package/gssdp/Config.in        | 15 +++++++++++++++
+ package/gssdp/gssdp.hash       |  2 ++
+ package/gssdp/gssdp.mk         | 16 ++++++++++++++++
+ package/gupnp-av/Config.in     | 17 +++++++++++++++++
+ package/gupnp-av/gupnp-av.hash |  2 ++
+ package/gupnp-av/gupnp-av.mk   | 16 ++++++++++++++++
+ package/gupnp/Config.in        | 20 ++++++++++++++++++++
+ package/gupnp/gupnp.hash       |  2 ++
+ package/gupnp/gupnp.mk         | 16 ++++++++++++++++
+ 10 files changed, 109 insertions(+)
+ create mode 100644 package/gssdp/Config.in
+ create mode 100644 package/gssdp/gssdp.hash
+ create mode 100644 package/gssdp/gssdp.mk
+ create mode 100644 package/gupnp-av/Config.in
+ create mode 100644 package/gupnp-av/gupnp-av.hash
+ create mode 100644 package/gupnp-av/gupnp-av.mk
+ create mode 100644 package/gupnp/Config.in
+ create mode 100644 package/gupnp/gupnp.hash
+ create mode 100644 package/gupnp/gupnp.mk
 
->  Or, of course, python-magic and python-pyelftools :-)
-
-Indeed, but then we would have to make the test optional so that
-Buildroot can continue to work on systems where those additional Python
-modules are not available. Which isn't as good as an unconditional
-test that relies on already available utilities.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
