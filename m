@@ -1,49 +1,46 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 16 Sep 2015 09:54:37 +1200
-Subject: [Buildroot] [PATCHv2] micropython: new package
-In-Reply-To: <1442275305-10690-1-git-send-email-judge.packham@gmail.com>
-References: <1442226102-15878-1-git-send-email-judge.packham@gmail.com>
- <1442275305-10690-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <CAFOYHZBmchw4SpcVDLGnM4TfYrsSHN2-OHRHQyR=FpHXziYu=w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Sep 2015 23:46:29 +0200
+Subject: [Buildroot] [git commit] liburcu: Bump version to 0.8.7
+Message-ID: <20150915215730.B579A81E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 15, 2015 at 12:01 PM, Chris Packham <judge.packham@gmail.com> wrote:
-> Micro Python is a lean and fast implementation of the Python 3
-> programming language that is optimised to run on a microcontroller.
->
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->
-> Hi Buildroot,
->
-> Thought you might be interested in mircopython a minimal python 3
-> implementation. It's designed for micro controllers but is also well suited
-> to other general purpose embedded CPUs.
->
-> Cheers,
-> Chris
->
-> Changes since v1:
-> - Add dependency on host-pkgconf.
-> - Use $(TARGET_MAKE_ENV) in make invocation for micropython
->   (micropython-lib doesn't need it because it doesn't use anything setup by
->   it).
-> - Override PREFIX to install to /usr/bin instead of /usr/local/bin
-> - Update/add some comments.
->
-<snip>
+commit: http://git.buildroot.net/buildroot/commit/?id=8a38963e267b7ffb57bef31501e7de4b2f5329aa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'll send a v3 mopping up the additional comments at some point.
+Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/liburcu/liburcu.hash |    6 +++---
+ package/liburcu/liburcu.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-One issue I am facing is that the build process for micropython ties
-into git to generate it's version string which works when built from a
-clone of the micropython git repo. But when run via buildroot it ends
-up getting the version based on the buildroot git repo so the version
-number displayed is 2015.10-... instead of 1.4.5. I'll do some
-investigation to see if I can override the automatic logic but I was
-wondering if there are any other packages with similar problems and
-how they were addressed.
+diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+index 2b1693d..64ba901 100644
+--- a/package/liburcu/liburcu.hash
++++ b/package/liburcu/liburcu.hash
+@@ -1,4 +1,4 @@
+-# http://www.lttng.org/files/urcu/userspace-rcu-0.8.6.tar.bz2.sha1
+-sha1  f10e9bf812557cd0c2a35a277e04010ec278d25d  userspace-rcu-0.8.6.tar.bz2
++# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
++sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
+ # Locally generated
+-sha256 b1a5d3bce014ba7a702759bc60b692c1cd46ff0e8a5b53f0d0a95e22db74ab21 userspace-rcu-0.8.6.tar.bz2
++sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
+diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+index 1582d07..8d06966 100644
+--- a/package/liburcu/liburcu.mk
++++ b/package/liburcu/liburcu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURCU_VERSION = 0.8.6
++LIBURCU_VERSION = 0.8.7
+ LIBURCU_SITE = http://lttng.org/files/urcu
+ LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+ LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
