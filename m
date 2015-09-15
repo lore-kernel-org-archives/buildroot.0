@@ -1,40 +1,59 @@
-From: David du Colombier <0intro@gmail.com>
-Date: Tue, 15 Sep 2015 17:06:55 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/ci20: add u-boot version 2013.10
-	(2015-09-15)
-In-Reply-To: <1442329615-17465-1-git-send-email-0intro@gmail.com>
-References: <1442329615-17465-1-git-send-email-0intro@gmail.com>
-Message-ID: <1442329615-17465-2-git-send-email-0intro@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Sep 2015 16:45:08 +0100
+Subject: [Buildroot] [PATCH v2 1/5] liburcu: Bump version to 0.8.7
+In-Reply-To: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
+References: <1442327721-24458-1-git-send-email-benjamin.h.shelton@intel.com>
+Message-ID: <55F83D04.9080107@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David du Colombier <0intro@gmail.com>
----
- configs/ci20_defconfig | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Dear Ben Shelton,
 
-diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
-index ec814ba..e87181a 100644
---- a/configs/ci20_defconfig
-+++ b/configs/ci20_defconfig
-@@ -15,3 +15,15 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="93b4df0786f07643eb61daee8934a3f3a05fd280"
- BR2_LINUX_KERNEL_DEFCONFIG="ci20"
-+
-+# u-boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
-+BR2_TARGET_UBOOT_BOARDNAME="ci20_mmc"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_u-boot"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
-+BR2_TARGET_UBOOT_VERSION="a4f583551d0025eb957ee5c9cb68657a429e4914"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
--- 
-1.8.3.1
+please mark your previous series as superseded:
+
+http://patchwork.ozlabs.org/patch/517036/
+http://patchwork.ozlabs.org/patch/517035/
+http://patchwork.ozlabs.org/patch/517037/
+
+On 09/15/2015 03:35 PM, Ben Shelton wrote:
+> Signed-off-by: Ben Shelton <benjamin.h.shelton@intel.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Regards,
+
+Vincent.
+
+> ---
+>  package/liburcu/liburcu.hash | 6 +++---
+>  package/liburcu/liburcu.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/liburcu/liburcu.hash b/package/liburcu/liburcu.hash
+> index 2b1693d..64ba901 100644
+> --- a/package/liburcu/liburcu.hash
+> +++ b/package/liburcu/liburcu.hash
+> @@ -1,4 +1,4 @@
+> -# http://www.lttng.org/files/urcu/userspace-rcu-0.8.6.tar.bz2.sha1
+> -sha1  f10e9bf812557cd0c2a35a277e04010ec278d25d  userspace-rcu-0.8.6.tar.bz2
+> +# http://www.lttng.org/files/urcu/userspace-rcu-0.8.7.tar.bz2.sha1
+> +sha1  5306999b8a3296f3dea91246d92e0a993d732898  userspace-rcu-0.8.7.tar.bz2
+>  # Locally generated
+> -sha256 b1a5d3bce014ba7a702759bc60b692c1cd46ff0e8a5b53f0d0a95e22db74ab21 userspace-rcu-0.8.6.tar.bz2
+> +sha256 b523f22c4726ca6bb77a77d258e76d8c33c89724433bd65313024b98e55c4295 userspace-rcu-0.8.7.tar.bz2
+> diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
+> index 1582d07..8d06966 100644
+> --- a/package/liburcu/liburcu.mk
+> +++ b/package/liburcu/liburcu.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBURCU_VERSION = 0.8.6
+> +LIBURCU_VERSION = 0.8.7
+>  LIBURCU_SITE = http://lttng.org/files/urcu
+>  LIBURCU_SOURCE = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
+>  LIBURCU_LICENSE = LGPLv2.1+ for the library; MIT-like license for few source files listed in LICENSE; GPLv2+ for test; GPLv3 for few *.m4 files
+> 
