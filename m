@@ -1,44 +1,31 @@
-From: Cjw X <cjwfirmware@vxmdesign.com>
-Date: Wed, 16 Sep 2015 13:36:20 -0400
-Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
-	library
-In-Reply-To: <20150913101738.238ebc06@free-electrons.com>
-References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
- <20150913101738.238ebc06@free-electrons.com>
-Message-ID: <CAOudHSU5sVhW4ono_QprXuyazYjMiHcRzfvW2TNg9qLVZ8R=Bg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 16 Sep 2015 17:36:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 8341] Getting EGL Error: Could not create the egl
+ surface: error = 0x300b on RPI-2b board.
+In-Reply-To: <bug-8341-163@https.bugs.busybox.net/>
+References: <bug-8341-163@https.bugs.busybox.net/>
+Message-ID: <20150916173636.134FA81ED7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=8341
 
-I've gotten newlib moved over to the autotools infrastructure. I
-should be able to post updated patches tonight.
+--- Comment #5 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2015-09-16 17:36:35 UTC ---
+Just in case, test again after selecting BR2_PACKAGE_RPI_FIRMWARE_X and setting
+the following in package/rpi-firmware/config.txt (or using a post-build script,
+or directly on your SD card):
 
->
->> +define NEWLIB_INSTALL_STAGING_CMDS
->> +     mkdir -p $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib
->> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->
-> Except the mkdir, the install command is not needed if you use the
-> autotools-package infrastructure.
+  gpu_mem_256=128
+  gpu_mem_512=256
+  gpu_mem_1024=512
 
-So, that mkdir command needs to be run, and the it is most closely
-associated with the staging install.
-Is there some way to run mkdir then without overriding the
-install_staging define? I haven't found anything in the docs.
+Make sure that rpi-firmware has been rebuilt after these configuration changes
+before testing.
 
-Thanks,
--Chris
-
-
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
