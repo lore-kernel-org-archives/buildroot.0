@@ -1,31 +1,44 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Wed, 16 Sep 2015 14:58:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sudo: disable use of stack
- protector when not available
-In-Reply-To: <CA+BsyQ66bdvxv1b11NNFAbenC4snpdoB2BajsM5COQB5uCQ75A@mail.gmail.com>
-References: <1442342953-20312-1-git-send-email-brendanheading@gmail.com>
- <20150915233014.27cc4a34@free-electrons.com>
- <CA+BsyQ7-YdWiOQ9E0X_+vppuB0hNdVPNV7kai9UW+1Kz5G8s3w@mail.gmail.com>
- <20150915234417.4658d78e@free-electrons.com>
- <CA+BsyQ4UcfDLxGK5+_AbdVcngzUM_fn=ab6fxHOLFp3pepDi7Q@mail.gmail.com>
- <CA+BsyQ66bdvxv1b11NNFAbenC4snpdoB2BajsM5COQB5uCQ75A@mail.gmail.com>
-Message-ID: <CA+BsyQ5NiTyR0NqXSQvWaBzVPsv1wWeXGX=Y4d7YbAFCJCRwow@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 16 Sep 2015 15:25:27 +0100
+Subject: [Buildroot] [PATCH] libselinux: use correct definition of ARCH
+In-Reply-To: <20150916134100.48bb83be@free-electrons.com>
+References: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150916123943.16869e63@free-electrons.com> <55F94891.4070908@imgtec.com>
+ <20150916134100.48bb83be@free-electrons.com>
+Message-ID: <55F97BD7.8080609@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I'll try to find out what's going on tomorrow.
+Hi Thomas,
 
-Thomas,
+On 09/16/2015 12:41 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 16 Sep 2015 11:46:41 +0100, Vicente Olivert Riera wrote:
+> 
+>>> I'm surprised we never caught this through the autobuilder testing, but
+>>> I guess all autobuilder machines are x86_64 based, which will not
+>>> exhibit the problem.
+>>
+>> Yeah, I set a new autobuilder to run only MIPS builds since currently
+>> there aren't many autobuild failures to look at (I needed more!), and I
+>> put it on a x86 virtual machine just to also catch possible issues due
+>> to building on a 32-bit host machine, and because I already had another
+>> autobuilder running on a x86_64 host. And look, I have already catch one! :D
+> 
+> Great! Do you want an account to submit your build results
+> automatically to autobuild.buildroot.org?
 
-I've found that the SSP detection seems to go wrong with a buildroot
-toolchain and when uclibc-ng is in use. regular uclibc and glibc
-appear work fine.
+yes, please.
 
-I'm looking in and around the uclibc feature checking. It smells as if
-there's probably a difference with uclibc-ng which is not being
-accounted for, but I've not spotted it just yet.
+Thanks,
 
-Brendan
+Vincent.
+
+> Best regards,
+> 
+> Thomas
+> 
