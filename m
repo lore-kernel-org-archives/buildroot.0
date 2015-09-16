@@ -1,27 +1,49 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 16 Sep 2015 10:18:46 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-09-15
-In-Reply-To: <20150916063011.B01A8102A34@stock.ovh.net>
-References: <20150916063011.B01A8102A34@stock.ovh.net>
-Message-ID: <55F933F6.3060104@imgtec.com>
+Date: Wed, 16 Sep 2015 11:10:03 +0100
+Subject: [Buildroot] [PATCH] libselinux: use correct definition of ARCH
+Message-ID: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+The Makefile of libselinux performs the following check:
 
-On 09/16/2015 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2015-09-15
+ARCH := $(patsubst i%86,i386,$(shell uname -m))
+ifneq (,$(filter i386,$(ARCH)))
+TLSFLAGS += -mno-tls-direct-seg-refs
+endif
 
->     mips64el |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/29d9efbe36e90aa10dc4edc8dc75b1851acaa4f5/
+Which means that if the host machine is an x86, then TLSFLAGS will
+contain -mno-tls-direct-seg-refs. That command line option causes
+libselinux to fail when building it for target architectures where the
+compiler doesn't support that option, i.e. MIPS:
 
-Nothing to fix here. Is an "out of memory" issue:
+mips-img-linux-gnu-gcc: error: unrecognized command line option
+?-mno-tls-direct-seg-refs?
 
-ld: out of memory allocating 524284 bytes after a total of 1278287872 bytes
+So to fix that problem we can set the ARCH variable to $(KERNEL_ARCH),
+and then append it to the LIBSELINUX_MAKE_OPTS.
 
-Regards,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/libselinux/libselinux.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Vincent.
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index e6a7c6b..d4b96c4 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -15,7 +15,8 @@ LIBSELINUX_INSTALL_STAGING = YES
+ 
+ LIBSELINUX_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread"
++	LDFLAGS="$(TARGET_LDFLAGS) -lpcre -lpthread" \
++	ARCH=$(KERNEL_ARCH)
+ 
+ define LIBSELINUX_BUILD_CMDS
+ 	# DESTDIR is needed during the compile to compute library and
+-- 
+1.7.1
