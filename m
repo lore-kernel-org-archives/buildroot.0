@@ -1,55 +1,49 @@
-From: jpinto <Joao.Pinto@synopsys.com>
-Date: Wed, 16 Sep 2015 10:10:48 +0100
-Subject: [Buildroot] [PATCH v3] Enable mplayer to be built in arm64
-	architectures
-Message-ID: <7b568f198d2a7b9f6d9c99f2e503641eae0d4ecf.1442394054.git.jpinto@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 16 Sep 2015 10:11:24 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/ci20: bump kernel version to
+ 3.18 (2015-09-14)
+In-Reply-To: <1442329615-17465-1-git-send-email-0intro@gmail.com>
+References: <1442329615-17465-1-git-send-email-0intro@gmail.com>
+Message-ID: <55F9323C.1070800@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-configure: Added support for aarch64
-Config.in: Added support for aarch64
+Dear David du Colombier,
 
-This patch adds support for ARM64 systems to Mplayer 1.1.1 available
-at buildroot.
+On 09/15/2015 04:06 PM, David du Colombier wrote:
+> Signed-off-by: David du Colombier <0intro@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-Tested-by: Joao Pinto <jpinto@synopsys.com>
+Regards,
 
----
-diff --git a/package/mplayer/0007-mplayer-enable-aarch64.patch b/package/mplayer/0007-mplayer-enable-aarch64.patch
-new file mode 100644
-index 0000000..7f75756
---- /dev/null
-+++ b/package/mplayer/0007-mplayer-enable-aarch64.patch
-@@ -0,0 +1,13 @@
-+--- b/configure	2015-09-15 17:30:46.187307557 +0100
-++++ a/configure	2015-09-15 17:31:11.729307537 +0100
-+@@ -2496,6 +2496,10 @@
-+     arch='arc'
-+     iproc='arc'
-+     ;;
-++  aarch64)
-++    arch='arm64'
-++    iproc='arm64'
-++    ;;
-+ 
-+   *)
-+     echo "The architecture of your CPU ($host_arch) is not supported by this configure script"
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index 79ff3b1..7a8b03f 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 	default y
- 	# Those architectures are not supported by MPlayer
- 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
--		|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
-+		|| BR2_microblaze || BR2_nios2)
- 	# Broken support for <ARMv5
- 	depends on !BR2_ARM_CPU_ARMV4
-  
--- 
-1.8.1.5
+Vincent.
+
+> ---
+>  configs/ci20_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+> index a7b7622..ec814ba 100644
+> --- a/configs/ci20_defconfig
+> +++ b/configs/ci20_defconfig
+> @@ -5,13 +5,13 @@ BR2_mips_32r2=y
+>  
+>  # system
+>  BR2_KERNEL_HEADERS_VERSION=y
+> -BR2_DEFAULT_KERNEL_VERSION="3.0.8"
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+> +BR2_DEFAULT_KERNEL_VERSION="3.18"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS4"
+>  
+>  # kernel
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/MIPS/CI20_linux.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ba11adc7ac8792b0eb7415a1cc9c0968604a6fac"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="93b4df0786f07643eb61daee8934a3f3a05fd280"
+>  BR2_LINUX_KERNEL_DEFCONFIG="ci20"
+> 
