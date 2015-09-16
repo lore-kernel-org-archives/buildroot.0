@@ -1,66 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2015 23:43:21 +0200
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 16 Sep 2015 22:46:55 +0100
 Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
  protector when not available
-In-Reply-To: <CA+BsyQ4dFvFDR_e_vQ++8LoH9DfR9w2urypZ17795mEd5ZH2yA@mail.gmail.com>
+In-Reply-To: <20150916234321.7d49a220@free-electrons.com>
 References: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
  <20150916224451.45bbe561@free-electrons.com>
  <CA+BsyQ4dFvFDR_e_vQ++8LoH9DfR9w2urypZ17795mEd5ZH2yA@mail.gmail.com>
-Message-ID: <20150916234321.7d49a220@free-electrons.com>
+ <20150916234321.7d49a220@free-electrons.com>
+Message-ID: <CA+BsyQ7Hr2XLUo5zFb=XOd062NMsU-K7mXS68kV3z-irEfvUxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+> Thanks for the update. However, notice that the toolchain at
+> http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.08-rc1-38-gad0f85e.tar.bz2
+> is capable of building sudo and ruby, even if:
+>
+>  1/ It is using uClibc-ng 1.0.5
+>  2/ It has SSP disabled: #undef __UCLIBC_HAS_SSP__
+>
+> So it's not simply a matter of uClibc vs. uClibc-ng, since one
+> uClibc-ng toolchains works fine.
 
-On Wed, 16 Sep 2015 22:29:01 +0100, Brendan Heading wrote:
+Thomas,
 
-> Yes I agree. This is a toolchain compilation issue and the right place
-> to solve it is there.
-> 
-> By way of an update, during the host-gcc-final build there is a check
-> for the symbol __stack_chk_fail. Under glibc and uclibc this test
-> fails, as expected. But under uclibc-ng, this test passes (ie returns
-> "yes") when it should actually fail, even though the symbol is
-> definitely not present. Inside the configure script there is some
-> logic that can cause it to return "yes" (for example, buildroot added
-> a patch such that when musl is detected it's hardcoded to always
-> return yes) so I'm trying to work out what code path in there is doing
-> this.
-> 
-> The presence of this symbol leads, ultimately, to slightly different
-> GCC specs. If it thinks that the target C library does not provide
-> SSP, GCC tries to link in its own SSP support libraries. This is the
-> path that is supposed to be executed. However, in the uclibc-ng case
-> we are wrongly detecting that the C library *does* have SSP even
-> though it doesn't. This causes the specs *not* to link the SSP support
-> libraries.
-> 
-> The reason why configure doesn't flag up a linker error in these
-> circumstances is because the conftest.c program is too simple. A
-> "hello world" type program does no stack operations and hence GCC
-> never emits any of the stack checking calls. So the problem slips
-> through the configure script.
-> 
-> So, once I've found out why uclibc-ng is triggering the false positive
-> in the GCC build I'll send in a patch.
+thanks for the tip - I will find out why that scenario seems to work,
+after I've identified the failure mode of the one I'm looking at now.
 
-Thanks for the update. However, notice that the toolchain at
-http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.08-rc1-38-gad0f85e.tar.bz2
-is capable of building sudo and ruby, even if:
-
- 1/ It is using uClibc-ng 1.0.5
- 2/ It has SSP disabled: #undef __UCLIBC_HAS_SSP__
-
-So it's not simply a matter of uClibc vs. uClibc-ng, since one
-uClibc-ng toolchains works fine.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Brendan
