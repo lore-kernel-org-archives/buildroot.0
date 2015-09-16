@@ -1,143 +1,31 @@
-From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
-Date: Wed, 16 Sep 2015 14:52:58 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5base: Patch Qt config to detect
-	sunxi-mali
-Message-ID: <1442407978-30060-1-git-send-email-daniel.nystrom@timeterminal.se>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Wed, 16 Sep 2015 14:58:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sudo: disable use of stack
+ protector when not available
+In-Reply-To: <CA+BsyQ66bdvxv1b11NNFAbenC4snpdoB2BajsM5COQB5uCQ75A@mail.gmail.com>
+References: <1442342953-20312-1-git-send-email-brendanheading@gmail.com>
+ <20150915233014.27cc4a34@free-electrons.com>
+ <CA+BsyQ7-YdWiOQ9E0X_+vppuB0hNdVPNV7kai9UW+1Kz5G8s3w@mail.gmail.com>
+ <20150915234417.4658d78e@free-electrons.com>
+ <CA+BsyQ4UcfDLxGK5+_AbdVcngzUM_fn=ab6fxHOLFp3pepDi7Q@mail.gmail.com>
+ <CA+BsyQ66bdvxv1b11NNFAbenC4snpdoB2BajsM5COQB5uCQ75A@mail.gmail.com>
+Message-ID: <CA+BsyQ5NiTyR0NqXSQvWaBzVPsv1wWeXGX=Y4d7YbAFCJCRwow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently Qt 5.5 only detects and build the eglfs_mali device
-integration if the commercial Mali driver package from ARM is used.
-This patch makes sure the Qt configure script also test for the
-sunxi-mali driver package. It also removes the dependency of
-the proprietary fbdev_window.h.
+> I'll try to find out what's going on tomorrow.
 
-This issue is set to be fixed in upcoming Qt 5.6:
-https://codereview.qt-project.org/#/c/125837/
+Thomas,
 
-Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
----
- .../qt5base/0010-fix-eglfs-for-sunxi-mali.patch    | 109 +++++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
+I've found that the SSP detection seems to go wrong with a buildroot
+toolchain and when uclibc-ng is in use. regular uclibc and glibc
+appear work fine.
 
-diff --git a/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch b/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
-new file mode 100644
-index 0000000..a578af3
---- /dev/null
-+++ b/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
-@@ -0,0 +1,109 @@
-+Fix Qt5 configure script not autodetecting sunxi-mali drivers rendering
-+in eglfs_mali not being built. The patch also fix compatibility issues
-+regarding header files only included in the proprietary version.
-+
-+This will be fixed in Qt 5.6.
-+
-+ref: https://codereview.qt-project.org/#/c/125837/
-+
-+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-+
-+diff --git a/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp
-+new file mode 100644
-+index 0000000..1914d64
-+--- /dev/null
-++++ b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp
-+@@ -0,0 +1,44 @@
-++/****************************************************************************
-++**
-++** Copyright (C) 2015 The Qt Company Ltd.
-++** Contact: http://www.qt.io/licensing/
-++**
-++** This file is part of the config.tests of the Qt Toolkit.
-++**
-++** $QT_BEGIN_LICENSE:LGPL21$
-++** Commercial License Usage
-++** Licensees holding valid commercial Qt licenses may use this file in
-++** accordance with the commercial license agreement provided with the
-++** Software or, alternatively, in accordance with the terms contained in
-++** a written agreement between you and The Qt Company. For licensing terms
-++** and conditions see http://www.qt.io/terms-conditions. For further
-++** information use the contact form at http://www.qt.io/contact-us.
-++**
-++** GNU Lesser General Public License Usage
-++** Alternatively, this file may be used under the terms of the GNU Lesser
-++** General Public License version 2.1 or version 3 as published by the Free
-++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
-++** following information to ensure the GNU Lesser General Public License
-++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-++**
-++** As a special exception, The Qt Company gives you certain additional
-++** rights. These rights are described in The Qt Company LGPL Exception
-++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-++**
-++** $QT_END_LICENSE$
-++**
-++****************************************************************************/
-++
-++#include <EGL/egl.h>
-++#include <GLES2/gl2.h>
-++
-++int main(int, char **)
-++{
-++    EGLDisplay dpy = 0;
-++    EGLContext ctx = 0;
-++    mali_native_window *w = 0;
-++    eglDestroyContext(dpy, ctx);
-++    return 0;
-++}
-+diff --git a/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro
-+new file mode 100644
-+index 0000000..85bcf64
-+--- /dev/null
-++++ b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro
-+@@ -0,0 +1,5 @@
-++SOURCES = eglfs-mali-2.cpp
-++
-++CONFIG -= qt
-++
-++LIBS += -lEGL -lGLESv2
-+diff --git a/configure b/configure
-+index cea62fb..09781bc 100755
-+--- a/configure
-++++ b/configure
-+@@ -5624,7 +5624,8 @@ if [ "$CFG_EGLFS" != "no" ]; then
-+         else
-+             CFG_EGLFS_BRCM=no
-+         fi
-+-        if compileTest qpa/eglfs-mali "eglfs-mali"; then
-++        if compileTest qpa/eglfs-mali "eglfs-mali" \
-++            || compileTest qpa/eglfs-mali-2 "eglfs-mali-2"; then
-+             CFG_EGLFS_MALI=yes
-+         else
-+             CFG_EGLFS_MALI=no
-+diff --git a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
-+index 455d780..43decdf 100644
-+--- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
-++++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
-+@@ -32,7 +32,6 @@
-+ ****************************************************************************/
-+
-+ #include "qeglfsmaliintegration.h"
-+-#include <EGL/fbdev_window.h>
-+
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+@@ -43,6 +42,11 @@
-+
-+ QT_BEGIN_NAMESPACE
-+
-++struct fbdev_window {
-++    unsigned short width;
-++    unsigned short height;
-++};
-++
-+ void QEglFSMaliIntegration::platformInit()
-+ {
-+     // Keep the non-overridden base class functions based on fb0 working.
--- 
-1.9.1
+I'm looking in and around the uclibc feature checking. It smells as if
+there's probably a difference with uclibc-ng which is not being
+accounted for, but I've not spotted it just yet.
+
+Brendan
