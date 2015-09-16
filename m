@@ -1,124 +1,175 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Sep 2015 09:32:32 +0200
-Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
-	(without devtmpfs)
-In-Reply-To: <55F89C46.3010904@lucaceresoli.net> (Luca Ceresoli's message of
- "Wed, 16 Sep 2015 00:31:34 +0200")
-References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
- <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
- <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
- <20150909155427.53f9c8b5@free-electrons.com>
- <87bnd43eph.fsf@dell.be.48ers.dk>
- <20150914233402.3575da80@free-electrons.com>
- <87zj0oznp2.fsf@dell.be.48ers.dk>
- <20150915093030.622d2366@free-electrons.com>
- <87zj0oumrg.fsf@dell.be.48ers.dk> <55F89C46.3010904@lucaceresoli.net>
-Message-ID: <8737yevmy7.fsf@dell.be.48ers.dk>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Wed, 16 Sep 2015 09:35:11 +0200
+Subject: [Buildroot] [PATCH v2] microzed: add Avnet Microzed support
+Message-ID: <1442388911-3719-1-git-send-email-d.viti@infosolution.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+Changes are based on Zedboard: Xilinx does not provide a specific DTS
+for Microzed in the kernel tree. It is suggested [1] to use the
+zynq-zed.dts and change the RAM size
 
-Hi,
+[1] https://forums.xilinx.com/t5/Embedded-Linux/Microzed-default-device-tree-dts/td-p/432856
 
- >> Sure, I get that. I just question the sensibility of combining a 6+ year
- >> old kernel with modern user space.
-
- > I agree with you on the principle, but in the practice I have devices
- > running very fine on 2.6.30 and some user space applications using
- > C++11.
-
-Ok, and are you actively doing system level development, or "just"
-adjusting a single application on a mature product? E.G. are you
-interested in getting the latest versions of all the libraries or rather
-freeze the entire system except for your application?
-
-
- > Yes, I used a fairly recent toolchain (gcc 4.8 IIRC), which is
- > of course a bad idea, I know... But in the practice it works.
-
-Then you presumably already had to backport kernel fixes to build with
-4.8? E.G. I've worked on a system stuck on 2.6.37 where I had to
-backport this to get it to run with gcc 4.7+:
-
-commit 8428e84d42179c2a00f5f6450866e70d802d1d05
-Author: Catalin Marinas <catalin.marinas@arm.com>
-Date:   Mon Nov 7 18:05:53 2011 +0100
-
-    ARM: 7150/1: Allow kernel unaligned accesses on ARMv6+ processors
+Signed-off-by: Davide Viti <d.viti@infosolution.it>
+---
+Changes v1 -> v2:
+  - Mention reason for using Zedboard DTS (Jan Viktorin)
+  - remove unnecessary spaces from board/avnet/microzed/readme.txt
     
-    Recent gcc versions generate unaligned accesses by default on ARMv6 and
-    later processors. This patch ensures that the SCTLR.A bit is always
-    cleared on such processors to avoid kernel traping before
-    alignment_init() is called.
-    
-    Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-    Tested-by: John Linn <John.Linn@xilinx.com>
-    Acked-by: Nicolas Pitre <nico@linaro.org>
-    Cc: stable at vger.kernel.org
-    Signed-off-by: Russell King <rmk+kernel@arm.linux.org.uk>
+ board/avnet/microzed/readme.txt                    | 65 ++++++++++++++++++++++
+ ...eate-microzed-specific-U-Boot-environment.patch | 34 +++++++++++
+ configs/microzed_defconfig                         | 26 +++++++++
+ 3 files changed, 125 insertions(+)
+ create mode 100644 board/avnet/microzed/readme.txt
+ create mode 100644 board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch
+ create mode 100644 configs/microzed_defconfig
 
-
- > I had to spend a little time to check some packages that try to use
- > kernel features not available in the running kernel. IIRC I only had
- > issues with dhcpcd which tends to use recently-introduced
- > syscalls. Other packaged run without problems.
-
-I've personally had issues with network-manager (and dhcpcd like you
-said) as well.
-
-
- >> I agree that it isn't a _LOT_ of complexity, but it isn't non trivial
- >> either.
-
- > FWIW, it's even less complex in the v2 patchset that's half-brewed here.
-
-True.
-
-
->> > I'm not sure how complicated it is to backport devtmpfs. However I
- >> > would suspect that it isn't that easy.
- >> 
- >> Take a look at 2b2af54a5bb6f7e80ccf78f20084b93c398c3a8b in the
- >> kernel. To me it looks quite self contained, so backporting it to
- >> something close to 2.6.32 doesn't look too bad.
-
- > I think I had a look a couple of years ago when I did the first project
- > on the same SoC. I think I had a look and found it non trival, but the
- > product to create had no hotplugging capabilities and no firmware
- > loading needs, so I just went for a static /dev.
-
- > Now I have a real goal, so I might try harder to look into backporting
- > devtmpfs.
-
-It seems doable to backport devtmpfs support to 2.6.30.
-
-I just tried cherry-picking 6fcf53acccf85b4 + 2b2af54a5bb6f7e80ccf7 and
-I only get a trivial conflict about some header files getting added to
-init/main.c
-
-To give it a quick test I tweaked our qemu_x86_defconfig to build 2.6.30
-+ the two backports and booted it:
-
-Welcome to Buildroot
-buildroot login: root
-# uname -a
-Linux buildroot 2.6.30-00193-g9a8d49a #3 Wed Sep 16 09:27:23 CEST 2015 i686 GNU/Linux
-# grep devtmpfs /proc/mounts 
-devtmpfs /dev devtmpfs rw,size=63272k,nr_inodes=15818 0 0
-
-(I did have to fix the kernel a bit to get it to build with sourcery
-codebench 2011.09, E.G. gcc 4.6.1 - But that was just s/-m elf_x86/-m32/)
-
- >> I agree, the patches themselves are very nice work!
-
- > Thanks both! :)
-
-You're welcome.
-
+diff --git a/board/avnet/microzed/readme.txt b/board/avnet/microzed/readme.txt
+new file mode 100644
+index 0000000..f729545
+--- /dev/null
++++ b/board/avnet/microzed/readme.txt
+@@ -0,0 +1,65 @@
++This is the buildroot board support for the Avnet Microzed. The Microzed is
++a development board based on the Xilinx Zynq-7000 based All-Programmable
++System-On-Chip.
++
++Microzed information including schematics, reference designs, and manuals are
++available from http://www.zedboard.org .
++
++Steps to create a working system for Microzed:
++
++1) make microzed_defconfig
++2) make
++3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
++	uImage, zynq-zed.dtb into your SD card
++4) boot your Microzed
++
++The expected output:
++
++ U-Boot SPL 2015.07 (Sep 15 2015 - 16:10:56)
++ mmc boot
++ reading system.dtb
++ spl_load_image_fat_os: error reading image system.dtb, err - -1
++ reading u-boot-dtb.img
++ reading u-boot-dtb.img
++
++
++ U-Boot 2015.07 (Sep 15 2015 - 16:10:56 +0200)
++
++ Model: Zynq MicroZED Board
++ I2C:   ready
++ DRAM:  ECC disabled 1 GiB
++ MMC:   zynq_sdhci: 0
++ Using default environment
++ ...
++
++When using an older U-Boot then 2015.07, a working ps7_init.c
++file is required to be installed into the U-Boot directory
++structure. From 2015.07, the major Zynq-based boards are
++supported without any manual intervention.
++
++Resulting system
++----------------
++A FAT32 partition should be created at the beginning of the SD Card
++and the following files should be installed:
++	/BOOT.BIN
++	/zynq-zed.dtb
++	/uImage
++	/rootfs-cpio.uboot
++	/u-boot-dtb.img
++
++
++All needed files can be taken from output/images/
++
++BOOT.BIN, uImage and u-boot-dtb.img are direct copies of the same files
++available on output/images/
++
++There is a patch attached that redefines the U-Boot's environment
++to work with Buildroot out-of-the-box.
++
++You can alter the booting procedure by creating a file uEnv.txt
++in the root of the SD card. It is a plain text file in format
++<key>=<value> one per line:
++
++kernel_image=myimage
++modeboot=myboot
++myboot=...
+diff --git a/board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch b/board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch
+new file mode 100644
+index 0000000..55c1585
+--- /dev/null
++++ b/board/avnet/microzed/uboot/0001-zynq-Create-microzed-specific-U-Boot-environment.patch
+@@ -0,0 +1,34 @@
++This is a copy of the patch supplied for Zedboard
++
++--- a/include/configs/zynq_microzed.h	2015-07-14 19:32:21.000000000 +0200
+++++ b/include/configs/zynq_microzed.h	2015-09-02 12:19:35.728503472 +0200
++@@ -22,4 +22,29 @@
++ 
++ #include <configs/zynq-common.h>
++ 
+++#undef CONFIG_EXTRA_ENV_SETTINGS
+++#define CONFIG_EXTRA_ENV_SETTINGS \
+++	"envload=mmc info && if fatload mmc 0 0x1000 uEnv.txt;"\
+++	" then echo Importing uEnv.txt; env import -t 0x1000"  \
+++	" $filesize; fi;\0"                                    \
+++	"bootcmd=run $modeboot\0"                              \
+++	"modeboot=sdboot\0"                                    \
+++	"baudrate=115200\0"                                    \
+++	"bootenv=uEnv.txt\0"                                   \
+++	"devicetree_image=zynq-zed.dtb\0"                      \
+++	"kernel_image=uImage\0"                                \
+++	"ramdisk_image=rootfs.cpio.uboot\0"                    \
+++	"fpga_image=system.bit\0"                              \
+++	"sdboot=echo Booting from SD...;"                      \
+++	" run envload; run fpgaboot;"                          \
+++	" fatload mmc 0 0x1000000 ${kernel_image}"             \
+++	" && fatload mmc 0 0x2000000 ${ramdisk_image}"         \
+++	" && fatload mmc 0 0x3000000 ${devicetree_image}"      \
+++	" && bootm 0x1000000 0x2000000 0x3000000\0"            \
+++	"fpgaboot=if fatload mmc 0 0x1000000 ${fpga_image};"   \
+++	" then echo Booting FPGA from ${fpga_image};"          \
+++	" fpga info 0 && fpga loadb 0 0x1000000 $filesize;"    \
+++	" else echo FPGA image ${fpga_image} was not found,"   \
+++	" skipping...; fi;\0"
+++
++ #endif /* __CONFIG_ZYNQ_MICROZED_H */
+diff --git a/configs/microzed_defconfig b/configs/microzed_defconfig
+new file mode 100644
+index 0000000..5a94275
+--- /dev/null
++++ b/configs/microzed_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_ENABLE_NEON=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.8"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2015.1"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="zynq_microzed"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.07"
++BR2_TARGET_UBOOT_PATCH="$(TOPDIR)/board/avnet/microzed/uboot"
++BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_ZYNQ_IMAGE=y
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.1.4
