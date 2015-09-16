@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2015 22:24:01 +0200
-Subject: [Buildroot] [git commit] vlc: enable to run as root
-Message-ID: <20150916203431.0BA2981DFA@busybox.osuosl.org>
+Date: Wed, 16 Sep 2015 22:34:43 +0200
+Subject: [Buildroot] [PATCH v2] Enable vlc to run as root
+In-Reply-To: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442391509.git.jpinto@synopsys.com>
+References: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442391509.git.jpinto@synopsys.com>
+Message-ID: <20150916223443.0101b320@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4a81fc2c6826344bdc86acef4283ed7e86c1fb4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-A number of embedded systems only include the root user, so this patch
-changes the VLC package so that running VLC as root is allowed, like
-it is for all other Buildroot packages.
+On Wed, 16 Sep 2015 09:26:49 +0100, jpinto wrote:
+> From: Joao Pinto <jpinto@synopsys.com>
+> 
+> A great number of embedded systems only include the root user.
+> This patch has the goal of enabling vlc to be ran as root.
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> Tested-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  package/vlc/vlc.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-[Thomas: tweak commit log, remove incorrect Tested-by.]
+Thanks, I've applied after tweaking the commit.
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/vlc.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Best regards,
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 6f7fd58..4e84b12 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -54,6 +54,7 @@ VLC_CONF_OPTS += \
- 	--disable-mfx \
- 	--disable-vdpau \
- 	--disable-addonmanagermodules \
-+	--enable-run-as-root \
- 
- # Building static and shared doesn't work, so force static off.
- ifeq ($(BR2_STATIC_LIBS),)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
