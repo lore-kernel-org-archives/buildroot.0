@@ -1,35 +1,36 @@
 From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 16 Sep 2015 06:50:45 -0500
-Subject: [Buildroot] [v2 1/2] openssl: use git formatted patches
-In-Reply-To: <20150916071758.GD11632@tarshish>
-References: <1442362348-14731-1-git-send-email-ryanbarnett3@gmail.com>
- <1442362348-14731-2-git-send-email-ryanbarnett3@gmail.com>
- <20150916071758.GD11632@tarshish>
-Message-ID: <CALq67GAn=iKYW3+beS3_upfQ3bTATc2KuL5EwHksaNk9Nkj8pA@mail.gmail.com>
+Date: Wed, 16 Sep 2015 07:06:23 -0500
+Subject: [Buildroot] [v3 0/2] openssl: parallel build
+Message-ID: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baurch,
+I have adopted Thomas P's patches that we submitted but in May in order
+enable parallel build of openssl. I have updated the patches to use the
+latest patches available from gentoo and have tested builds only on i386,
+ARM, and MIPS.
 
-On Wed, Sep 16, 2015 at 2:17 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Ryan,
->
+Original Patches:
 
-[..]
+http://patchwork.ozlabs.org/patch/473086/
+http://patchwork.ozlabs.org/patch/473087/
 
->>  Without this patch digest acceleration via cryptodev is broken.
->>
->> -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->
-> Why do you remove Gustavo's signoff?
+Ryan Barnett (2):
+  openssl: use git formatted patches
+  openssl: enable parallel build and installation
 
-Didn't mean do just missed that line when importing the patch into git
-to format the patch.
+ ...time-building-manpages-if-we-re-not-going.patch | 27 ++++++++
+ ...odev-Fix-issue-with-signature-generation.patch} | 71 +++++++++++++---------
+ package/openssl/001-do-not-build-docs.patch        | 13 ----
+ package/openssl/openssl.hash                       |  2 +
+ package/openssl/openssl.mk                         | 12 ++--
+ 5 files changed, 78 insertions(+), 47 deletions(-)
+ create mode 100644 package/openssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+ rename package/openssl/{003-cryptodev-Fix-issue-with-signature-generation.patch => 0002-cryptodev-Fix-issue-with-signature-generation.patch} (82%)
+ delete mode 100644 package/openssl/001-do-not-build-docs.patch
 
-I will send a v3 of the patches.
-
-Thanks,
--Ryan
+-- 
+1.9.1
