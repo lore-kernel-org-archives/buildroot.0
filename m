@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2015 13:41:00 +0200
-Subject: [Buildroot] [PATCH] libselinux: use correct definition of ARCH
-In-Reply-To: <55F94891.4070908@imgtec.com>
-References: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150916123943.16869e63@free-electrons.com>
- <55F94891.4070908@imgtec.com>
-Message-ID: <20150916134100.48bb83be@free-electrons.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Wed, 16 Sep 2015 06:50:45 -0500
+Subject: [Buildroot] [v2 1/2] openssl: use git formatted patches
+In-Reply-To: <20150916071758.GD11632@tarshish>
+References: <1442362348-14731-1-git-send-email-ryanbarnett3@gmail.com>
+ <1442362348-14731-2-git-send-email-ryanbarnett3@gmail.com>
+ <20150916071758.GD11632@tarshish>
+Message-ID: <CALq67GAn=iKYW3+beS3_upfQ3bTATc2KuL5EwHksaNk9Nkj8pA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Baurch,
 
-On Wed, 16 Sep 2015 11:46:41 +0100, Vicente Olivert Riera wrote:
+On Wed, Sep 16, 2015 at 2:17 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Ryan,
+>
 
-> > I'm surprised we never caught this through the autobuilder testing, but
-> > I guess all autobuilder machines are x86_64 based, which will not
-> > exhibit the problem.
-> 
-> Yeah, I set a new autobuilder to run only MIPS builds since currently
-> there aren't many autobuild failures to look at (I needed more!), and I
-> put it on a x86 virtual machine just to also catch possible issues due
-> to building on a 32-bit host machine, and because I already had another
-> autobuilder running on a x86_64 host. And look, I have already catch one! :D
+[..]
 
-Great! Do you want an account to submit your build results
-automatically to autobuild.buildroot.org?
+>>  Without this patch digest acceleration via cryptodev is broken.
+>>
+>> -Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>
+> Why do you remove Gustavo's signoff?
 
-Best regards,
+Didn't mean do just missed that line when importing the patch into git
+to format the patch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I will send a v3 of the patches.
+
+Thanks,
+-Ryan
