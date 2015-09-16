@@ -1,55 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2015 22:44:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
- protector when not available
-In-Reply-To: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
-References: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150916224451.45bbe561@free-electrons.com>
+Date: Wed, 16 Sep 2015 22:52:32 +0200
+Subject: [Buildroot] [git commit] gupnp-av: new package
+Message-ID: <20150916205246.94D1181EDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+commit: http://git.buildroot.net/buildroot/commit/?id=e3f69525b4d5a9fabbfff7f9d490bc20253fc966
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Sep 2015 20:56:59 +0100, Brendan Heading wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/22e/22eced2dc9ca1bc90ef193b4dc40891c47157e89/
-> 
-> ruby, by default, attempts to use the stack protector if configure detects
-> that it exists. The stack protector detection does not attempt to link
-> libssp, which can cause a false positive.
-> 
-> Instead, check if the stack protector is enabled in the buildroot
-> toolchain config, and set the stack_protector=no environment variable to
-> force the stack protector off.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+GUPnP A/V reference manual https://developer.gnome.org/gupnp-av/
+says latest available stable version is 0.11.2 but there are
+couple of bug fixes releases after that in same series. It looks
+like manual is not up-to-date. Use latest version 0.11.6
+of series 0.11 instead.
 
-I have the same concern/question for this patch as the one for the sudo
-patch. With an ARM uClibc toolchain that is pre-built
-(http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config),
-Ruby builds just fine because:
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in              |    1 +
+ package/gupnp-av/Config.in     |   17 +++++++++++++++++
+ package/gupnp-av/gupnp-av.hash |    2 ++
+ package/gupnp-av/gupnp-av.mk   |   16 ++++++++++++++++
+ 4 files changed, 36 insertions(+), 0 deletions(-)
 
-checking whether -fstack-protector is accepted as CFLAGS... yes
-checking whether -fstack-protector is accepted as LDFLAGS... no
-
-So it knows that SSP support is not available.
-
-However, with the PowerPC toolchain of the autobuilder failure you're
-pointing to:
-
-checking whether -fstack-protector is accepted as CFLAGS... yes
-checking whether -fstack-protector is accepted as LDFLAGS... yes
-
-So same as for the sudo patch: I'm fine with applying your patches, but
-I'd prefer first to understand why we see this difference in behavior.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 1712bf1..e2f669a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -983,6 +983,7 @@ menu "Networking"
+ 	source "package/glib-networking/Config.in"
+ 	source "package/gssdp/Config.in"
+ 	source "package/gupnp/Config.in"
++	source "package/gupnp-av/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
+ 	source "package/libcgi/Config.in"
+diff --git a/package/gupnp-av/Config.in b/package/gupnp-av/Config.in
+new file mode 100644
+index 0000000..5320b82
+--- /dev/null
++++ b/package/gupnp-av/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_GUPNP_AV
++	bool "gupnp-av"
++	depends on BR2_USE_WCHAR # glib2, gupnp
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, gupnp
++	depends on BR2_USE_MMU # glib2, gupnp
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_GUPNP
++	select BR2_PACKAGE_LIBXML2
++	help
++	  GUPnP-AV is a collection of helpers for building AV (audio/video)
++	  applications using GUPnP.
++
++	  http://www.gupnp.org/
++
++comment "gupnp-av needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gupnp-av/gupnp-av.hash b/package/gupnp-av/gupnp-av.hash
+new file mode 100644
+index 0000000..0101ed4
+--- /dev/null
++++ b/package/gupnp-av/gupnp-av.hash
+@@ -0,0 +1,2 @@
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-av/0.11/gupnp-av-0.11.6.sha256sum:
++sha256 401991336babb18c4ebed16e75e0b4d3e5848cff7bb878bbfd54a5d15203c4cc gupnp-av-0.11.6.tar.xz
+diff --git a/package/gupnp-av/gupnp-av.mk b/package/gupnp-av/gupnp-av.mk
+new file mode 100644
+index 0000000..6360c93
+--- /dev/null
++++ b/package/gupnp-av/gupnp-av.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# gupnp-av
++#
++################################################################################
++
++GUPNP_AV_VERSION_MAJOR = 0.11
++GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).6
++GUPNP_AV_SOURCE = gupnp-av-$(GUPNP_AV_VERSION).tar.xz
++GUPNP_AV_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp-av/$(GUPNP_AV_VERSION_MAJOR)
++GUPNP_AV_LICENSE = LGPLv2+
++GUPNP_AV_LICENSE_FILES = COPYING
++GUPNP_AV_INSTALL_STAGING = YES
++GUPNP_AV_DEPENDENCIES = host-pkgconf libglib2 libxml2 gupnp
++
++$(eval $(autotools-package))
