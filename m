@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2015 12:36:26 +0200
-Subject: [Buildroot] [PATCH v2] Enable vlc to run as root
-In-Reply-To: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442391509.git.jpinto@synopsys.com>
-References: <712f10f4f1eb6452279b88cb749906e66f711d8a.1442391509.git.jpinto@synopsys.com>
-Message-ID: <20150916123626.01f38cbd@free-electrons.com>
+Date: Wed, 16 Sep 2015 12:39:43 +0200
+Subject: [Buildroot] [PATCH] libselinux: use correct definition of ARCH
+In-Reply-To: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150916123943.16869e63@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joao,
+Dear Vicente Olivert Riera,
 
-Thanks for this new iteration. It looks good, except for one minor nit
-that isn't very important, but worth mentioning.
-
-On Wed, 16 Sep 2015 09:26:49 +0100, jpinto wrote:
-> From: Joao Pinto <jpinto@synopsys.com>
+On Wed, 16 Sep 2015 11:10:03 +0100, Vicente Olivert Riera wrote:
+> The Makefile of libselinux performs the following check:
 > 
-> A great number of embedded systems only include the root user.
-> This patch has the goal of enabling vlc to be ran as root.
+> ARCH := $(patsubst i%86,i386,$(shell uname -m))
+> ifneq (,$(filter i386,$(ARCH)))
+> TLSFLAGS += -mno-tls-direct-seg-refs
+> endif
 > 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> Tested-by: Joao Pinto <jpinto@synopsys.com>
+> Which means that if the host machine is an x86, then TLSFLAGS will
+> contain -mno-tls-direct-seg-refs. That command line option causes
+> libselinux to fail when building it for target architectures where the
+> compiler doesn't support that option, i.e. MIPS:
+> 
+> mips-img-linux-gnu-gcc: error: unrecognized command line option
+> ?-mno-tls-direct-seg-refs?
+> 
+> So to fix that problem we can set the ARCH variable to $(KERNEL_ARCH),
+> and then append it to the LIBSELINUX_MAKE_OPTS.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-It doesn't make sense to include a Tested-by from you on your patch. We
-obviously expect that you have tested your own patch. Tested-by tags
-(as well as Acked-by or Reviewed-by tags) are meant to be given by
-*other* developers, after testing and/or reviewing your patch.
+Looks good to me:
 
-The other minor nit is that the title of the commit still doesn't match
-the Buildroot best practice, which consists in using titles having the
-following format:
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-	<package>: <description>
-
-So in your case, it should be:
-
-	vlc: enable to run as root
-
-Both issues can be fixed by the Buildroot maintainer when he applies
-the patch, but I wanted to let you know so you can make things better
-for your next contribution!
+I'm surprised we never caught this through the autobuilder testing, but
+I guess all autobuilder machines are x86_64 based, which will not
+exhibit the problem.
 
 Thanks!
 
