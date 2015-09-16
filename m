@@ -1,103 +1,143 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 16 Sep 2015 07:06:25 -0500
-Subject: [Buildroot] [v3 2/2] openssl: enable parallel build and installation
-In-Reply-To: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
-References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
-Message-ID: <1442405185-4103-3-git-send-email-ryanbarnett3@gmail.com>
+From: =?UTF-8?q?Daniel=20Nystr=C3=B6m?= <daniel.nystrom@timeterminal.se>
+Date: Wed, 16 Sep 2015 14:52:58 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5base: Patch Qt config to detect
+	sunxi-mali
+Message-ID: <1442407978-30060-1-git-send-email-daniel.nystrom@timeterminal.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a patch that is originally based on a patch Thomas P.
-submitted for an earlier version of this package. I have adopted this
-patch to use the latest available Gentoo parallel patch. I have also
-seen about a minute improvement on my build times of openssl.
+Currently Qt 5.5 only detects and build the eglfs_mali device
+integration if the commercial Mali driver package from ARM is used.
+This patch makes sure the Qt configure script also test for the
+sunxi-mali driver package. It also removes the dependency of
+the proprietary fbdev_window.h.
 
-Part of Thomas P's original message:
+This issue is set to be fixed in upcoming Qt 5.6:
+https://codereview.qt-project.org/#/c/125837/
 
-On my build server, the current build of OpenSSL takes 1 minutes and
-20 seconds. With this commit applied, enabling parallel build and
-installation, the build only takes 28 seconds.
-
-All the patches are downloaded from Gentoo.
-
-There is apparently some interest in upstream OpenSSL to enable
-parallel build, see for example commit
-https://github.com/openssl/openssl/commit/c3f22253b139793ff3b91ff7e6969e180cf06815. This
-commit is not part of any OpenSSL release, but we can hope that the
-problem will resolved in the future.
-
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-CC: Gustavo Zacarias <gustavo@zacarias.com.ar>
-CC: Arnout Vandecappelle <arnout@mind.be>
-
+Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
 ---
-Changes from v2 to v3:
- - No changes
+ .../qt5base/0010-fix-eglfs-for-sunxi-mali.patch    | 109 +++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
+ create mode 100644 package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
 
-Changes from v1 to v2:
- - Removed changes to existing patches in openssl (suggested by Arnout)
- - Updated parallel patch URL to use Gentoo gitweb (suggested by Mike)
-
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
----
- package/openssl/openssl.hash |  2 ++
- package/openssl/openssl.mk   | 12 +++++++-----
- 2 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 355be79..9eaa363 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,2 +1,4 @@
- # From https://www.openssl.org/source/openssl-1.0.2d.tar.gz.sha256
- sha256	671c36487785628a703374c652ad2cebea45fa920ae5681515df25d9f2c9a8c8	openssl-1.0.2d.tar.gz
-+# Locally computed
-+sha256	deaf6f3af41874ecc6d63841ea14b8e6c71cea81d4a511a754bc90c9a993147f	openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 3d87919..c1fc420 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -13,6 +13,8 @@ OPENSSL_DEPENDENCIES = zlib
- HOST_OPENSSL_DEPENDENCIES = host-zlib
- OPENSSL_TARGET_ARCH = generic32
- OPENSSL_CFLAGS = $(TARGET_CFLAGS)
-+OPENSSL_PATCH = \
-+	https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/openssl/files/openssl-1.0.2d-parallel-build.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d
- 
- ifeq ($(BR2_USE_MMU),)
- OPENSSL_CFLAGS += -DHAVE_FORK=0
-@@ -99,23 +101,23 @@ OPENSSL_POST_CONFIGURE_HOOKS += OPENSSL_FIXUP_STATIC_MAKEFILE
- endif
- 
- define HOST_OPENSSL_BUILD_CMDS
--	$(MAKE1) -C $(@D)
-+	$(MAKE) -C $(@D)
- endef
- 
- define OPENSSL_BUILD_CMDS
--	$(MAKE1) -C $(@D)
-+	$(MAKE) -C $(@D)
- endef
- 
- define OPENSSL_INSTALL_STAGING_CMDS
--	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
-+	$(MAKE) -C $(@D) INSTALL_PREFIX=$(STAGING_DIR) install
- endef
- 
- define HOST_OPENSSL_INSTALL_CMDS
--	$(MAKE1) -C $(@D) install
-+	$(MAKE) -C $(@D) install
- endef
- 
- define OPENSSL_INSTALL_TARGET_CMDS
--	$(MAKE1) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
-+	$(MAKE) -C $(@D) INSTALL_PREFIX=$(TARGET_DIR) install
- 	rm -rf $(TARGET_DIR)/usr/lib/ssl
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
+diff --git a/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch b/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
+new file mode 100644
+index 0000000..a578af3
+--- /dev/null
++++ b/package/qt5/qt5base/0010-fix-eglfs-for-sunxi-mali.patch
+@@ -0,0 +1,109 @@
++Fix Qt5 configure script not autodetecting sunxi-mali drivers rendering
++in eglfs_mali not being built. The patch also fix compatibility issues
++regarding header files only included in the proprietary version.
++
++This will be fixed in Qt 5.6.
++
++ref: https://codereview.qt-project.org/#/c/125837/
++
++Signed-off-by: Daniel Nystr?m <daniel.nystrom@timeterminal.se>
++
++diff --git a/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp
++new file mode 100644
++index 0000000..1914d64
++--- /dev/null
+++++ b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.cpp
++@@ -0,0 +1,44 @@
+++/****************************************************************************
+++**
+++** Copyright (C) 2015 The Qt Company Ltd.
+++** Contact: http://www.qt.io/licensing/
+++**
+++** This file is part of the config.tests of the Qt Toolkit.
+++**
+++** $QT_BEGIN_LICENSE:LGPL21$
+++** Commercial License Usage
+++** Licensees holding valid commercial Qt licenses may use this file in
+++** accordance with the commercial license agreement provided with the
+++** Software or, alternatively, in accordance with the terms contained in
+++** a written agreement between you and The Qt Company. For licensing terms
+++** and conditions see http://www.qt.io/terms-conditions. For further
+++** information use the contact form at http://www.qt.io/contact-us.
+++**
+++** GNU Lesser General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU Lesser
+++** General Public License version 2.1 or version 3 as published by the Free
+++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+++** following information to ensure the GNU Lesser General Public License
+++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+++**
+++** As a special exception, The Qt Company gives you certain additional
+++** rights. These rights are described in The Qt Company LGPL Exception
+++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+++**
+++** $QT_END_LICENSE$
+++**
+++****************************************************************************/
+++
+++#include <EGL/egl.h>
+++#include <GLES2/gl2.h>
+++
+++int main(int, char **)
+++{
+++    EGLDisplay dpy = 0;
+++    EGLContext ctx = 0;
+++    mali_native_window *w = 0;
+++    eglDestroyContext(dpy, ctx);
+++    return 0;
+++}
++diff --git a/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro
++new file mode 100644
++index 0000000..85bcf64
++--- /dev/null
+++++ b/config.tests/qpa/eglfs-mali-2/eglfs-mali-2.pro
++@@ -0,0 +1,5 @@
+++SOURCES = eglfs-mali-2.cpp
+++
+++CONFIG -= qt
+++
+++LIBS += -lEGL -lGLESv2
++diff --git a/configure b/configure
++index cea62fb..09781bc 100755
++--- a/configure
+++++ b/configure
++@@ -5624,7 +5624,8 @@ if [ "$CFG_EGLFS" != "no" ]; then
++         else
++             CFG_EGLFS_BRCM=no
++         fi
++-        if compileTest qpa/eglfs-mali "eglfs-mali"; then
+++        if compileTest qpa/eglfs-mali "eglfs-mali" \
+++            || compileTest qpa/eglfs-mali-2 "eglfs-mali-2"; then
++             CFG_EGLFS_MALI=yes
++         else
++             CFG_EGLFS_MALI=no
++diff --git a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
++index 455d780..43decdf 100644
++--- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
+++++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_mali/qeglfsmaliintegration.cpp
++@@ -32,7 +32,6 @@
++ ****************************************************************************/
++
++ #include "qeglfsmaliintegration.h"
++-#include <EGL/fbdev_window.h>
++
++ #include <unistd.h>
++ #include <fcntl.h>
++@@ -43,6 +42,11 @@
++
++ QT_BEGIN_NAMESPACE
++
+++struct fbdev_window {
+++    unsigned short width;
+++    unsigned short height;
+++};
+++
++ void QEglFSMaliIntegration::platformInit()
++ {
++     // Keep the non-overridden base class functions based on fb0 working.
 -- 
 1.9.1
