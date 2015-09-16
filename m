@@ -1,59 +1,38 @@
-From: jpinto <Joao.Pinto@synopsys.com>
-Date: Wed, 16 Sep 2015 12:24:41 +0100
-Subject: [Buildroot] [PATCH] mplayer: enable building on ARM64
-Message-ID: <b4065180404deb324af702186c37e497bc1740b8.1442402281.git.jpinto@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Sep 2015 13:41:00 +0200
+Subject: [Buildroot] [PATCH] libselinux: use correct definition of ARCH
+In-Reply-To: <55F94891.4070908@imgtec.com>
+References: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150916123943.16869e63@free-electrons.com>
+ <55F94891.4070908@imgtec.com>
+Message-ID: <20150916134100.48bb83be@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
----
- 0007-mplayer-enable-aarch64.patch | 20 ++++++++++++++++++++
- Config.in                         |  2 +-
- 2 files changed, 21 insertions(+), 1 deletion(-)
- create mode 100644 0007-mplayer-enable-aarch64.patch
+On Wed, 16 Sep 2015 11:46:41 +0100, Vicente Olivert Riera wrote:
 
-diff --git a/0007-mplayer-enable-aarch64.patch b/0007-mplayer-enable-aarch64.patch
-new file mode 100644
-index 0000000..a41ab2a
---- /dev/null
-+++ b/0007-mplayer-enable-aarch64.patch
-@@ -0,0 +1,20 @@
-+Add support for ARM64 architecture
-+
-+This patch adds aarch64 as a supported architecture to the configure script.
-+
-+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-+---
-+
-+--- b/configure	2015-09-15 17:30:46.187307557 +0100
-++++ a/configure	2015-09-15 17:31:11.729307537 +0100
-+@@ -2496,6 +2496,10 @@
-+     arch='arc'
-+     iproc='arc'
-+     ;;
-++  aarch64)
-++    arch='arm64'
-++    iproc='arm64'
-++    ;;
-+ 
-+   *)
-+     echo "The architecture of your CPU ($host_arch) is not supported by this configure script"
-diff --git a/Config.in b/Config.in
-index 79ff3b1..7a8b03f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 	default y
- 	# Those architectures are not supported by MPlayer
- 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
--		|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
-+		|| BR2_microblaze || BR2_nios2)
- 	# Broken support for <ARMv5
- 	depends on !BR2_ARM_CPU_ARMV4
- 
+> > I'm surprised we never caught this through the autobuilder testing, but
+> > I guess all autobuilder machines are x86_64 based, which will not
+> > exhibit the problem.
+> 
+> Yeah, I set a new autobuilder to run only MIPS builds since currently
+> there aren't many autobuild failures to look at (I needed more!), and I
+> put it on a x86 virtual machine just to also catch possible issues due
+> to building on a 32-bit host machine, and because I already had another
+> autobuilder running on a x86_64 host. And look, I have already catch one! :D
+
+Great! Do you want an account to submit your build results
+automatically to autobuild.buildroot.org?
+
+Best regards,
+
+Thomas
 -- 
-1.8.1.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
