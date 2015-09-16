@@ -1,31 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 16 Sep 2015 17:36:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 8341] Getting EGL Error: Could not create the egl
- surface: error = 0x300b on RPI-2b board.
-In-Reply-To: <bug-8341-163@https.bugs.busybox.net/>
-References: <bug-8341-163@https.bugs.busybox.net/>
-Message-ID: <20150916173636.134FA81ED7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Sep 2015 19:38:42 +0200
+Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
+ library
+In-Reply-To: <CAOudHSU5sVhW4ono_QprXuyazYjMiHcRzfvW2TNg9qLVZ8R=Bg@mail.gmail.com>
+References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
+ <20150913101738.238ebc06@free-electrons.com>
+ <CAOudHSU5sVhW4ono_QprXuyazYjMiHcRzfvW2TNg9qLVZ8R=Bg@mail.gmail.com>
+Message-ID: <20150916193842.7083a71f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8341
+Hello Chris,
 
---- Comment #5 from Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com> 2015-09-16 17:36:35 UTC ---
-Just in case, test again after selecting BR2_PACKAGE_RPI_FIRMWARE_X and setting
-the following in package/rpi-firmware/config.txt (or using a post-build script,
-or directly on your SD card):
+On Wed, 16 Sep 2015 13:36:20 -0400, Cjw X wrote:
 
-  gpu_mem_256=128
-  gpu_mem_512=256
-  gpu_mem_1024=512
+> I've gotten newlib moved over to the autotools infrastructure. I
+> should be able to post updated patches tonight.
 
-Make sure that rpi-firmware has been rebuilt after these configuration changes
-before testing.
+Good. However, don't hold your breath. While I think adding newlib
+support is interesting in Buildroot, it may not be the opinion of
+others.
 
+> > Except the mkdir, the install command is not needed if you use the
+> > autotools-package infrastructure.
+> 
+> So, that mkdir command needs to be run, and the it is most closely
+> associated with the staging install.
+> Is there some way to run mkdir then without overriding the
+> install_staging define? I haven't found anything in the docs.
+
+Search for <pkg>_PRE_INSTALL_STAGING_HOOKS in the documentation, and
+generally the concept of hooks. See
+http://buildroot.org/downloads/manual/manual.html#hooks.
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
