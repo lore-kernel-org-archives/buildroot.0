@@ -1,59 +1,38 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Wed, 16 Sep 2015 09:28:44 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Sep 2015 10:42:37 +0200
 Subject: [Buildroot] [PATCH v3] Buildroot' patch to add support for
  aarch64 in mplayer configure script
-In-Reply-To: <55F88C33.1070503@mind.be>
+In-Reply-To: <55F9283C.1070709@synopsys.com>
 References: <e6993588b5107e1110e43ed583416f4784933eef.1442336078.git.jpinto@synopsys.com>
- <20150915231802.1e19b09c@free-electrons.com> <55F88C33.1070503@mind.be>
-Message-ID: <55F9283C.1070709@synopsys.com>
+ <20150915231802.1e19b09c@free-electrons.com>
+ <55F88C33.1070503@mind.be> <55F9283C.1070709@synopsys.com>
+Message-ID: <20150916104237.72af7bd0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout!
+Dear Joao Pinto,
 
-On 9/15/2015 10:22 PM, Arnout Vandecappelle wrote:
-> On 15-09-15 23:18, Thomas Petazzoni wrote:
->> Hello Joao,
->>
->> Your e-mail is two patches concataned to each other. Can you make that
->> a single patch instead?
->>
->> Also, the title should be adjusted, as I explained in a previous
->> message. See some more comments below.
->>
->> On Tue, 15 Sep 2015 18:00:48 +0100, jpinto wrote:
->>>
->>> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
->>> Tested-by: Joao Pinto <jpinto@synopsys.com>
->>> ---
->>>  package/mplayer/0007-enable-aarch64.patch | 13 +++++++++++++
->>>  1 file changed, 13 insertions(+)
->>>  create mode 100644 package/mplayer/0007-enable-aarch64.patch
->>>
->>> diff --git a/package/mplayer/0007-enable-aarch64.patch b/package/mplayer/0007-enable-aarch64.patch
->>> new file mode 100644
->>> index 0000000..7f75756
->>> --- /dev/null
->>> +++ b/package/mplayer/0007-enable-aarch64.patch
->>> @@ -0,0 +1,13 @@
->>
->> All patches in Buildroot should have a description and a Signed-off-by
->> line. See
->> http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
->> for details.
-> 
->  Once that is done, could you also send the patch upstream?
+On Wed, 16 Sep 2015 09:28:44 +0100, Joao Pinto wrote:
 
-When you say upstream, you mean send it to mplayer authors?
+> >> All patches in Buildroot should have a description and a Signed-off-by
+> >> line. See
+> >> http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+> >> for details.
+> > 
+> >  Once that is done, could you also send the patch upstream?
+> 
+> When you say upstream, you mean send it to mplayer authors?
 
-> 
->  Regards,
->  Arnout
-> 
-> 
+Yes, exactly. We don't really like to keep patches on packages forever,
+so when they can be sent upstream, it's better.
 
-Regards,
-Joao
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
