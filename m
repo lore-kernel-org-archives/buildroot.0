@@ -1,35 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Sep 2015 11:09:05 +0200
-Subject: [Buildroot] [PATCH 1/6] python-urwid: bump version and add
-	checksums
-In-Reply-To: <20150916090029.GJ11632@tarshish> (Baruch Siach's message of
- "Wed, 16 Sep 2015 12:00:29 +0300")
-References: <1441095032-5656-1-git-send-email-cvubrugier@fastmail.fm>
- <20150901100816.GM17874@tarshish> <87oah6avor.fsf@dell.be.48ers.dk>
- <20150916090029.GJ11632@tarshish>
-Message-ID: <87twquu3wu.fsf@dell.be.48ers.dk>
+From: jpinto <Joao.Pinto@synopsys.com>
+Date: Wed, 16 Sep 2015 10:10:48 +0100
+Subject: [Buildroot] [PATCH v3] Enable mplayer to be built in arm64
+	architectures
+Message-ID: <7b568f198d2a7b9f6d9c99f2e503641eae0d4ecf.1442394054.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+configure: Added support for aarch64
+Config.in: Added support for aarch64
 
-Hi,
+This patch adds support for ARM64 systems to Mplayer 1.1.1 available
+at buildroot.
 
- >> Yeah, the upstream pypi hash URLs are kind of odd. These are the
- >> official links though.
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Tested-by: Joao Pinto <jpinto@synopsys.com>
 
- > The .hash file is all about trust, IMO. Seeing md5 that is an identity 
- > function of the URL just makes me feel uneasy. The package URL at 
- > https://pypi.python.org/pypi/urwid/1.3.0 contains the same link (next to the 
- > file name), but it looks less easy to trick.
-
-Yes, I agree. As long as we have a stronger hash locally computed it
-isn't a big deal, but it would be good if the pypi guys could do
-something more sensible. I'm not sure who to contact about that though.
-
+---
+diff --git a/package/mplayer/0007-mplayer-enable-aarch64.patch b/package/mplayer/0007-mplayer-enable-aarch64.patch
+new file mode 100644
+index 0000000..7f75756
+--- /dev/null
++++ b/package/mplayer/0007-mplayer-enable-aarch64.patch
+@@ -0,0 +1,13 @@
++--- b/configure	2015-09-15 17:30:46.187307557 +0100
+++++ a/configure	2015-09-15 17:31:11.729307537 +0100
++@@ -2496,6 +2496,10 @@
++     arch='arc'
++     iproc='arc'
++     ;;
+++  aarch64)
+++    arch='arm64'
+++    iproc='arm64'
+++    ;;
++ 
++   *)
++     echo "The architecture of your CPU ($host_arch) is not supported by this configure script"
+diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+index 79ff3b1..7a8b03f 100644
+--- a/package/mplayer/Config.in
++++ b/package/mplayer/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+ 	default y
+ 	# Those architectures are not supported by MPlayer
+ 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
+-		|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
++		|| BR2_microblaze || BR2_nios2)
+ 	# Broken support for <ARMv5
+ 	depends on !BR2_ARM_CPU_ARMV4
+  
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+1.8.1.5
