@@ -1,42 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Sep 2015 22:19:32 +0200
-Subject: [Buildroot] [PATCH] libselinux: use correct definition of ARCH
-In-Reply-To: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1442398203-46701-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150916221932.0cb29019@free-electrons.com>
+Date: Wed, 16 Sep 2015 22:22:08 +0200
+Subject: [Buildroot] [v3 1/2] openssl: use git formatted patches
+In-Reply-To: <1442405185-4103-2-git-send-email-ryanbarnett3@gmail.com>
+References: <1442405185-4103-1-git-send-email-ryanbarnett3@gmail.com>
+ <1442405185-4103-2-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <20150916222208.64dc6ce0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Ryan,
 
-On Wed, 16 Sep 2015 11:10:03 +0100, Vicente Olivert Riera wrote:
-> The Makefile of libselinux performs the following check:
-> 
-> ARCH := $(patsubst i%86,i386,$(shell uname -m))
-> ifneq (,$(filter i386,$(ARCH)))
-> TLSFLAGS += -mno-tls-direct-seg-refs
-> endif
-> 
-> Which means that if the host machine is an x86, then TLSFLAGS will
-> contain -mno-tls-direct-seg-refs. That command line option causes
-> libselinux to fail when building it for target architectures where the
-> compiler doesn't support that option, i.e. MIPS:
-> 
-> mips-img-linux-gnu-gcc: error: unrecognized command line option
-> ?-mno-tls-direct-seg-refs?
-> 
-> So to fix that problem we can set the ARCH variable to $(KERNEL_ARCH),
-> and then append it to the LIBSELINUX_MAKE_OPTS.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/libselinux/libselinux.mk |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
+On Wed, 16 Sep 2015 07:06:24 -0500, Ryan Barnett wrote:
 
-Applied, thanks.
+> +Subject: [1/2] Dont waste time building manpages if we're not going to use em.
+
+Arnout also suggested to get rid of [1/2] (and [2/2] for the second
+patch), since this information becomes obsolete when we add a new patch.
+
+I've applied after doing this change. Thanks!
 
 Thomas
 -- 
