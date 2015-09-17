@@ -1,73 +1,68 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Thu, 17 Sep 2015 15:19:12 +0100
-Subject: [Buildroot] [PATCH] sysvinit: build fixed for arm64
-	architectures
-In-Reply-To: <20150917135624.GQ11632@tarshish>
-References: <2cd1307d42dd411b54c212cc53439d1ead0af01c.1442497341.git.jpinto@synopsys.com>
- <20150917135624.GQ11632@tarshish>
-Message-ID: <55FACBE0.1040100@synopsys.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 17 Sep 2015 15:37:58 +0100
+Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting SSP
+	under uclibc-ng
+Message-ID: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Fixes:
+http://autobuild.buildroot.net/results/123/123a5b3f72ba8c1a4aa1cea5b7b846a04fd4e923/
+http://autobuild.buildroot.net/results/38c/38cfa4e7249a8770b06dbd392acba79303d3f9bc/
 
-On 9/17/2015 2:56 PM, Baruch Siach wrote:
-> Hi Joao,
-> 
-> On Thu, Sep 17, 2015 at 02:46:02PM +0100, jpinto wrote:
->> sysvinit was not able to be built for arm64 architectures. This patch was made 
->> to fix the problem.
->>
->> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
->> ---
->>  package/sysvinit/0001-fix-libcrypt-test.patch | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
->> index 207270d..7233d38 100644
->> --- a/package/sysvinit/0001-fix-libcrypt-test.patch
->> +++ b/package/sysvinit/0001-fix-libcrypt-test.patch
->> @@ -1,17 +1,25 @@
->>  Make the libcrypt test somewhat cross-compilation compliant
->>  
->>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> +Signed-off-by: Joao Pinto <jpinto@synopsys.com>
->>  
->>  Index: b/src/Makefile
->>  ===================================================================
->>  --- a/src/Makefile
->>  +++ b/src/Makefile
->> -@@ -78,7 +78,7 @@
->> +@@ -78,7 +78,14 @@
->>   endif
->>   
->>   # Additional libs for GNU libc.
->>  -ifneq ($(wildcard /usr/lib*/libcrypt.a),)
->> ++inc_additional_lib =
->>  +ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
->> ++  inc_additional_lib = yes
->> ++else ifneq ($(wildcard $(SYSROOT)/usr/lib*/aarch64*/libcrypt.a),)
-> 
-> This looks to specific to that toolchain. Why not generalize
-> 
->  else ifneq ($(wildcard $(SYSROOT)/usr/lib*/*/libcrypt.a),)
-> 
-> ?
+.. and others.
 
-Sounds like a good idea. Gonna send v2 patch in a sec.
+GCC's configure stage assumes that if the glibc version, as denoted by
+__GLIBC__ and __GLIBC_MINOR__, is greater or equal to 2.4 then stack
+protection must be available in the C library. This results in the compiler
+not attempting to link SSP helpers during the final link.
 
-> 
-> baruch
-> 
->> ++  inc_additional_lib = yes
->> ++endif
->> ++
->> ++ifdef inc_additional_lib
->>     SULOGINLIBS	+= -lcrypt
->>   endif
-> 
+The problem is seen with uclibc-ng 1.0.6 (and likely greater) where they
+updated the __GLIBC_MINOR__ value to 10. It will be seen in any libc
+that permits stack protection to be disabled while exporting a glibc
+version >= 2.4.
 
-Joao
+This patch overrides GCC to expect/not expect SSP support in libc based on
+the toolchain's capability as understood by buildroot.
+
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+---
+Patch V1 :
+This fix definitely solves the problem, however I doubt it's acceptable to
+export environment variables in this way.
+
+I had initially tried adding it to HOST_GCC_COMMON_CONF_ENV, and I
+confirmed that this is passed into GCC's top level configure, however it
+does not seem to propagate to the gcc/configure script. Another way would
+be to patch GCC, however this would involve maintaining patches for all
+the supported GCC versions.
+
+Improvement suggestions welcome!
+---
+ package/gcc/gcc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 501fcea..43835af 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -123,6 +123,14 @@ endif
+ HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+ HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+ 
++# Work around issue with detecting SSP support in the C library
++
++ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
++export gcc_cv_libc_provides_ssp=yes
++else
++export gcc_cv_libc_provides_ssp=no
++endif
++
+ # libitm needs sparc V9+
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libitm
+-- 
+2.4.3
