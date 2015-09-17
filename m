@@ -1,54 +1,59 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 17 Sep 2015 17:31:27 +0200
-Subject: [Buildroot] [2/2,
-	v2] wpa_supplicant: Have Hotspot 2.0 depend on nl80211
-In-Reply-To: <1437119950-25976-2-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <1437119950-25976-2-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <20150917153127.GA28715@t450s.lan>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 Sep 2015 16:11:31 +0000 (UTC)
+Subject: [Buildroot] [Bug 8346] New: wf111 package removes all kernel module
+	dependencies
+Message-ID: <bug-8346-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nicolas,
+https://bugs.busybox.net/show_bug.cgi?id=8346
 
-On Fri, Jul 17, 2015 at 09:59:10AM +0200, Nicolas Cavallari wrote:
-> Hotspot 2.0 uses ANQP whose implementation needs offchannel/
-> remain-on-channel capabilities from the driver, which only exist in the
-> nl80211 driver.  Compiling would work, but the feature would not work.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
-> 
-> v2: added signoff.
->  package/wpa_supplicant/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-> index 29dc4b9..22cf7f8 100644
-> --- a/package/wpa_supplicant/Config.in
-> +++ b/package/wpa_supplicant/Config.in
-> @@ -41,6 +41,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
->  
->  config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
->  	bool "Enable HS20"
-> +	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
->  	help
->  	  Enable Hotspot 2.0 and IEEE 802.11u interworking functionality.
->
+           Summary: wf111 package removes all kernel module dependencies
+           Product: buildroot
+           Version: 2015.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mstarr at hedonline.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-First I'm not sure on the procedure to test the Hotspot 2.0 but I think
-we should at least add a comment like:
 
-comment "HS20 needs NL80211 support"
-	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+Created attachment 6161
+  --> https://bugs.busybox.net/attachment.cgi?id=6161
+Patch to fix wf111 overwriting module files during install
 
-Because right now if you unselect NL80211 WPA option the HS20 just
-disappears.
+If the wf111 package is selected and the source is given, the package builds
+and runs depmod in its output directory.  Then in the install target the
+contents of the output directory are copied to the target/lib/modules/<VERSION>
+directory.  When the install step occurs the module.* files are overwritten
+with the wf111 files resulting in only the wf111 driver kernel module showing
+up on the target.
 
-Or maybe selecting NL80211 would be even better if absolutely required
-at runtime.
+This is detected by running "modprobe -l" on the target hardware and it will
+only show the extra/unifi_sdio.ko kernel module.  This prevents loading of any
+other kernel modules enabled in the kernel configuration.
 
-Regards,
-Gary
+As a solution the WF111_INSTALL_CMDS is removed and under the WF111_BUILD_CMDS,
+ the following can be added to the make command:
+OUTPUT=$(TARGET_DIR).
+
+This points the build to install to the target directory and not the local
+output directory.  This in turn catches all the other kernel modules when
+depmod is run.  The only issue with this is that under the build target of
+wf111, it will also be installing the software too which is usually handled
+under the install target.
+
+Attached is a patch that makes the changes suggested above.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
