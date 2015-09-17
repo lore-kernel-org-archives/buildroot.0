@@ -1,44 +1,48 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Thu, 17 Sep 2015 01:27:01 +0100
-Subject: [Buildroot] =?utf-8?q?problem_booting_from_ext2_=C2=B5sd_card?=
-In-Reply-To: <55FA01A4.5070107@proximus.be>
-References: <55FA01A4.5070107@proximus.be>
-Message-ID: <CA+BsyQ6yskQ6TFpZQCTMWtZka+TBNaNj2XzgWhu7RqskLN0HhA@mail.gmail.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Wed, 16 Sep 2015 19:38:12 -0500
+Subject: [Buildroot] [PATCH] make: requires dynamic libraries
+Message-ID: <1442450292-13794-1-git-send-email-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17 September 2015 at 00:56, Johan Sagaert <sagaert.johan@proximus.be> wrote:
-> Hi
-> just extracted my rootfs to a ?sd card
-> configured u-boot to boot from it
->
-> Any idea ? i have a single ext2 partition on a 4GB transcend class 10 card.
-> not sure where to start searching...
-> Tried several cards with equal results.
-> used cfdisk as tool.
+While attempting to build make in a static library only configuration
+the following error will be shown:
 
-It looks a bit like your ext2 partition has been set up to be much
-larger than 4GB.
+ gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or
+ directory
+  #   include <dlfcn.h>
 
-> mmc0: new high speed SDHC card at address 59b4
-> mmcblk0: mmc0:59b4 USD   3.74 GiB
->  mmcblk0: p1
+Fix this by depending make on !BR2_STATIC_LIBS.
 
-As you already highlighted - 4GB SD card.
+Fixes:
+  http://autobuild.buildroot.net/results/814/8143ae0afac139845e5016058d85c800dc8527ad
 
-> attempt to access beyond end of device
-> mmcblk0p1: rw=0, want=11524007040, limit=7857074
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+---
+ package/make/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-So with a block size of 512 bytes, 7857074 blocks = 3.83GB (give or
-take) which matches up with your SD card.
-
-However something is trying to access block 11524007040. that ain't right.
-
-I suspect that somehow, the ext2 filesystem on the card has been
-corrupted, or has been created incorrectly, or incorrectly copied to
-the card. How did you format it ?
-
-Brendan
+diff --git a/package/make/Config.in b/package/make/Config.in
+index f576b7b..11adbab 100644
+--- a/package/make/Config.in
++++ b/package/make/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MAKE
+ 	bool "make"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlopen()
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  A tool which controls the generation of executables and other
+@@ -11,3 +12,6 @@ config BR2_PACKAGE_MAKE
+ 	  useful to run the uClibc test suite on the target.
+ 
+ 	  http://www.gnu.org/software/make/
++
++comment "make needs a toolchain w/ dynamic libraries"
++	depends on BR2_STATIC_LIBS
+-- 
+1.9.1
