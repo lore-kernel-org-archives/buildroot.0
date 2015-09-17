@@ -1,61 +1,47 @@
-From: jpinto <Joao.Pinto@synopsys.com>
-Date: Thu, 17 Sep 2015 10:40:27 +0100
-Subject: [Buildroot] [PATCH v2] mplayer: enable building on ARM64
-Message-ID: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 17 Sep 2015 07:25:05 -0300
+Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
+ protector when not available
+In-Reply-To: <CA+BsyQ7Hr2XLUo5zFb=XOd062NMsU-K7mXS68kV3z-irEfvUxw@mail.gmail.com>
+References: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
+ <20150916224451.45bbe561@free-electrons.com>
+ <CA+BsyQ4dFvFDR_e_vQ++8LoH9DfR9w2urypZ17795mEd5ZH2yA@mail.gmail.com>
+ <20150916234321.7d49a220@free-electrons.com>
+ <CA+BsyQ7Hr2XLUo5zFb=XOd062NMsU-K7mXS68kV3z-irEfvUxw@mail.gmail.com>
+Message-ID: <55FA9501.9040109@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 16/09/15 18:46, Brendan Heading wrote:
 
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
----
- package/mplayer/0007-mplayer-enable-aarch64.patch | 22 ++++++++++++++++++++++
- package/mplayer/Config.in                         |  2 +-
- 2 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100644 package/mplayer/0007-mplayer-enable-aarch64.patch
+>> Thanks for the update. However, notice that the toolchain at
+>> http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.08-rc1-38-gad0f85e.tar.bz2
+>> is capable of building sudo and ruby, even if:
+>>
+>>   1/ It is using uClibc-ng 1.0.5
+>>   2/ It has SSP disabled: #undef __UCLIBC_HAS_SSP__
+>>
+>> So it's not simply a matter of uClibc vs. uClibc-ng, since one
+>> uClibc-ng toolchains works fine.
+>
+> Thomas,
+>
+> thanks for the tip - I will find out why that scenario seems to work,
+> after I've identified the failure mode of the one I'm looking at now.
 
-diff --git a/package/mplayer/0007-mplayer-enable-aarch64.patch b/package/mplayer/0007-mplayer-enable-aarch64.patch
-new file mode 100644
-index 0000000..dc59f5f
---- /dev/null
-+++ b/package/mplayer/0007-mplayer-enable-aarch64.patch
-@@ -0,0 +1,22 @@
-+Add support for ARM64 architecture
-+
-+This patch adds aarch64 as a supported architecture to the configure script.
-+
-+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-+---
-+
-+--- b/configure	2015-09-15 17:30:46.187307557 +0100
-++++ a/configure	2015-09-15 17:31:11.729307537 +0100
-+@@ -2496,6 +2496,10 @@
-+     arch='arc'
-+     iproc='arc'
-+     ;;
-++  aarch64)
-++    arch='arm64'
-++    iproc='arm64'
-++    ;;
-+ 
-+   *)
-+     echo "The architecture of your CPU ($host_arch) is not supported by this configure script"
-+
-+
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index 79ff3b1..7a8b03f 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 	default y
- 	# Those architectures are not supported by MPlayer
- 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
--		|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
-+		|| BR2_microblaze || BR2_nios2)
- 	# Broken support for <ARMv5
- 	depends on !BR2_ARM_CPU_ARMV4
- 
--- 
-1.8.1.5
+Hi.
+See 
+http://git.buildroot.net/buildroot/tree/package/samba4/0002-build-improve-stack-protector-check.patch
+I've pointed Vicente to that problem when bumping to samba 4.3.0, and 
+from the test in Ruby's configure.in i'm 99% certain we're seeing the 
+same issue - the compiler optimizes away any stack usage when the test 
+program does nothing, hence building/linking inserts no guards, thus "it 
+works" (though not quite in reality).
+The solution is having a foolproof test that can't be optimized away, 
+unfortunately many packagers/developers use this simplified test that is 
+flawed, it will require a lot of education to properly fix :)
+(test program formulated together with Vicente and Arnout).
+Regards.
