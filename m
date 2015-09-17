@@ -1,63 +1,77 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 17 Sep 2015 16:21:44 -0300 (BRT)
-Subject: [Buildroot] [PATCH V4 1/1] gmock: new package
-In-Reply-To: <55BB80D3.1090209@openwide.fr>
-References: <1431713119-2821-1-git-send-email-casantos@datacom.ind.br>
- <1438343622-6128-1-git-send-email-casantos@datacom.ind.br>
- <55BB80D3.1090209@openwide.fr>
-Message-ID: <1576236607.15822847.1442517704482.JavaMail.zimbra@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Sep 2015 22:15:46 +0200
+Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
+ runtime
+In-Reply-To: <20150917190424.GU11632@tarshish>
+References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
+ <20150917150112.GR11632@tarshish>
+ <alpine.DEB.2.02.1509171814510.13941@orcam81.orcam.lan>
+ <20150917162003.GT11632@tarshish>
+ <alpine.DEB.2.02.1509171922410.13941@orcam81.orcam.lan>
+ <20150917192315.6db18115@free-electrons.com>
+ <20150917190424.GU11632@tarshish>
+Message-ID: <20150917221546.247fe210@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Baruch,
 
-Gentle reminder: this change still needs to be applied:
+On Thu, 17 Sep 2015 22:04:24 +0300, Baruch Siach wrote:
 
-    http://patchwork.ozlabs.org/patch/502506/
-
-Carlos Santos (Casantos)
-DATACOM, P&D
-
------ Original Message -----
-> From: "Romain Naour" <romain.naour@openwide.fr>
-> To: "Carlos Santos" <casantos@datacom.ind.br>, buildroot at buildroot.org
-> Sent: Friday, July 31, 2015 11:06:11 AM
-> Subject: Re: [Buildroot] [PATCH V4 1/1] gmock: new package
-
-> Hi Carlos,
+> Based on the following snippet from Buildroot top level Makefile I would 
+> assume that $(SHELL) is /bin/bash on my host machine:
 > 
-> Le 31/07/2015 13:53, Carlos Santos a ?crit :
->> Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
->> specifics in mind, Google C++ Mocking Framework (or Google Mock for
->> short) is a library for writing and using C++ mock classes.
->> 
->> Google Mock:
->> 
->>   * lets you create mock classes trivially using simple macros,
->>   * supports a rich set of matchers and actions,
->>   * handles unordered, partially ordered, or completely ordered
->>     expectations,
->>   * is extensible by users, and
->>   * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
->>     Symbian.
->> 
->>   http://code.google.com/p/googlemock/
->> 
->> There are both host and target packages. The target one has include
->> files required to compile the tests and the static libraries required
->> to link/run them. The host package installs gmock_gen, a Python script
->> used to generate code mocks.
->> 
->> Notice that GMock 1.7.0 requires the Python 2 host package even if
->> Python 3 is selected as a target package.
->> 
->> Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> # we want bash as shell
+> SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+>          else if [ -x /bin/bash ]; then echo /bin/bash; \
+>          else echo sh; fi; fi)
 > 
-> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+> However, 'make printvars' shows
 > 
-> Best regards,
-> Romain Naour
+>    SHELL=/bin/sh (/bin/sh)
+
+Here:
+
+SHELL=/bin/bash (/bin/bash)
+
+> $(SHELL) expands to /bin/sh in the gzip Makefile, and generated scripts carry 
+> the /bin/sh shebang. I have no idea how.
+> 
+> As for the original problem, I managed to override the environment $(SHELL) as 
+> indicated in the gzip INSTALL file:
+> 
+>    GZIP_CONF_ENV = CONFIG_SHELL=/bin/bash
+> 
+> So the right fix, I guess, is just
+> 
+>    GZIP_CONF_ENV = CONFIG_SHELL=/bin/sh
+
+It is not a completely correct fix. According to
+https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/config_002estatus-Invocation.html,
+CONFIG_SHELL is:
+
+"""
+The shell with which to run configure. It must be Bourne-compatible,
+and the absolute name of the shell should be passed. The default is a
+shell that supports LINENO if available, and /bin/sh otherwise.
+"""
+
+I believe there is no proper way with the current gzip build system to
+fix the problem. It is inherently wrong to assume that the $(SHELL)
+used on the host will be available on the target. The only sane option
+I believe is to have a --with-shell=<foo> option, which if not given
+defaults to $(SHELL) to retain the existing behavior.
+
+Another simpler option is to simply add a post-install target hook that
+will adjust the shebang of the shell scripts installed by gzip.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
