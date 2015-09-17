@@ -1,68 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 17 Sep 2015 16:56:24 +0300
-Subject: [Buildroot] [PATCH] sysvinit: build fixed for arm64
-	architectures
-In-Reply-To: <2cd1307d42dd411b54c212cc53439d1ead0af01c.1442497341.git.jpinto@synopsys.com>
-References: <2cd1307d42dd411b54c212cc53439d1ead0af01c.1442497341.git.jpinto@synopsys.com>
-Message-ID: <20150917135624.GQ11632@tarshish>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 17 Sep 2015 15:16:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
+ protector when not available
+In-Reply-To: <55FA9501.9040109@zacarias.com.ar>
+References: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
+ <20150916224451.45bbe561@free-electrons.com>
+ <CA+BsyQ4dFvFDR_e_vQ++8LoH9DfR9w2urypZ17795mEd5ZH2yA@mail.gmail.com>
+ <20150916234321.7d49a220@free-electrons.com>
+ <CA+BsyQ7Hr2XLUo5zFb=XOd062NMsU-K7mXS68kV3z-irEfvUxw@mail.gmail.com>
+ <55FA9501.9040109@zacarias.com.ar>
+Message-ID: <CA+BsyQ41u5r2JmWPV+bP=ji+bhbtSinYYCOYuwjJKR1_0Yd8AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joao,
+>> thanks for the tip - I will find out why that scenario seems to work,
+>> after I've identified the failure mode of the one I'm looking at now.
+>
+> Hi.
+> See
+> http://git.buildroot.net/buildroot/tree/package/samba4/0002-build-improve-stack-protector-check.patch
+> I've pointed Vicente to that problem when bumping to samba 4.3.0, and from
+> the test in Ruby's configure.in i'm 99% certain we're seeing the same issue
+> - the compiler optimizes away any stack usage when the test program does
+> nothing, hence building/linking inserts no guards, thus "it works" (though
+> not quite in reality).
 
-On Thu, Sep 17, 2015 at 02:46:02PM +0100, jpinto wrote:
-> sysvinit was not able to be built for arm64 architectures. This patch was made 
-> to fix the problem.
-> 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> ---
->  package/sysvinit/0001-fix-libcrypt-test.patch | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
-> index 207270d..7233d38 100644
-> --- a/package/sysvinit/0001-fix-libcrypt-test.patch
-> +++ b/package/sysvinit/0001-fix-libcrypt-test.patch
-> @@ -1,17 +1,25 @@
->  Make the libcrypt test somewhat cross-compilation compliant
->  
->  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +Signed-off-by: Joao Pinto <jpinto@synopsys.com>
->  
->  Index: b/src/Makefile
->  ===================================================================
->  --- a/src/Makefile
->  +++ b/src/Makefile
-> -@@ -78,7 +78,7 @@
-> +@@ -78,7 +78,14 @@
->   endif
->   
->   # Additional libs for GNU libc.
->  -ifneq ($(wildcard /usr/lib*/libcrypt.a),)
-> ++inc_additional_lib =
->  +ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
-> ++  inc_additional_lib = yes
-> ++else ifneq ($(wildcard $(SYSROOT)/usr/lib*/aarch64*/libcrypt.a),)
+Gustavo,
 
-This looks to specific to that toolchain. Why not generalize
+Yes, that's exactly what I'm seeing.
 
- else ifneq ($(wildcard $(SYSROOT)/usr/lib*/*/libcrypt.a),)
+A regular main() which does nothing will not show the problem. I found
+that if the test is extended so that a simple function is called,
+which takes a pointer to an array and updates it, will properly test
+what the compiler does, but some more testing would be needed to make
+sure that it holds up under more aggressive optimisation flags (such
+as using LTO).
 
-?
+> The solution is having a foolproof test that can't be optimized away,
+> unfortunately many packagers/developers use this simplified test that is
+> flawed, it will require a lot of education to properly fix :)
+> (test program formulated together with Vicente and Arnout).
 
-baruch
+There are probably quite a few packages that have this problem.
 
-> ++  inc_additional_lib = yes
-> ++endif
-> ++
-> ++ifdef inc_additional_lib
->     SULOGINLIBS	+= -lcrypt
->   endif
+However, there's definitely a problem with GCC. I posted a lengthy
+explanation last night, but basically GCC assumes that if glibc
+version 2.4 or greater is in use (as determined by __GLIBC__ and
+__GLIBC_MINOR__) then the C library includes stack protection support,
+which is a false assumption in the case of uclibc-ng.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+I'm about to submit an initial patch which works, but it's not a very
+satisfactory solution - I will CC you for comments.
+
+regards
+
+Brendan
