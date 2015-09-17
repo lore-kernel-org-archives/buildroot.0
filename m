@@ -1,251 +1,88 @@
-From: Cjw X <cjwfirmware@vxmdesign.com>
-Date: Thu, 17 Sep 2015 03:41:33 -0400
-Subject: [Buildroot] [PATCH 1/3] Experimental addition of the newlib
-	library
-In-Reply-To: <20150915204101.GC3650@free.fr>
-References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
- <20150915204101.GC3650@free.fr>
-Message-ID: <CAOudHSWwEXM2L+6m+P9A546TPOakTAYQFt4QgtUPcxk2hEqKxA@mail.gmail.com>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Thu, 17 Sep 2015 10:03:37 +0200
+Subject: [Buildroot] =?utf-8?q?problem_booting_from_ext2_=C2=B5sd_card?=
+In-Reply-To: <CA+BsyQ6yskQ6TFpZQCTMWtZka+TBNaNj2XzgWhu7RqskLN0HhA@mail.gmail.com>
+References: <55FA01A4.5070107@proximus.be>
+ <CA+BsyQ6yskQ6TFpZQCTMWtZka+TBNaNj2XzgWhu7RqskLN0HhA@mail.gmail.com>
+Message-ID: <55FA73D9.6080800@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Thanks Brendan,  see below.
 
-I just sent out a patch that I think addresses the reviews given.
-
-Some minor comments below.
-
-On Tue, Sep 15, 2015 at 4:41 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Chris, All,
->
-> On 2015-09-13 03:02 -0400, Chris Wardman spake thusly:
->> This patch add support for a newlib library build of the gcc toolchain.
->> This is designed to build arm-none-eabi- toolchain, and it was tested against an stm32f4discovery board.
+Brendan Heading schreef op 17/09/2015 om 2:27:
+> On 17 September 2015 at 00:56, Johan Sagaert <sagaert.johan@proximus.be> wrote:
+>> Hi
+>> just extracted my rootfs to a ?sd card
+>> configured u-boot to boot from it
 >>
->> Hopefully this will help people build bare metal code for arm processors
+>> Any idea ? i have a single ext2 partition on a 4GB transcend class 10 card.
+>> not sure where to start searching...
+>> Tried several cards with equal results.
+>> used cfdisk as tool.
+> It looks a bit like your ext2 partition has been set up to be much
+> larger than 4GB.
 >
-> OK, I eventually had a bit of time to gave a cusory glance at the
-> patch...
+>> mmc0: new high speed SDHC card at address 59b4
+>> mmcblk0: mmc0:59b4 USD   3.74 GiB
+>>   mmcblk0: p1
+> As you already highlighted - 4GB SD card.
 >
->> Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
-> [--SNIP--]
->> diff --git a/package/Makefile.in b/package/Makefile.in
->> index 545694f..7f4d74e 100644
->> --- a/package/Makefile.in
->> +++ b/package/Makefile.in
->> @@ -37,10 +37,16 @@ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
->>  endif
->>
->>  # Compute GNU_TARGET_NAME
->> +ifeq ($(BR2_TOOLCHAIN_NO_VENDOR),y)
->> +GNU_TARGET_NAME = $(ARCH)-$(TARGET_OS)-$(LIBC)$(ABI)
->> +else
->>  GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
->> +endif
->>
->>  # FLAT binary format needs uclinux
->> -ifeq ($(BR2_BINFMT_FLAT),y)
->> +ifeq ($(BR2_TOOLCHAIN_USES_NEWLIB),y)
->> +TARGET_OS = none
+>> attempt to access beyond end of device
+>> mmcblk0p1: rw=0, want=11524007040, limit=7857074
+> So with a block size of 512 bytes, 7857074 blocks = 3.83GB (give or
+> take) which matches up with your SD card.
 >
-> See how you have to set TARGET_OS=none here? With the change above we've
-> been discussing previously, this would construct a three-part tuple as
-> (because LIBC is empty, too, below):
->     $(ARCH)-none-$(ABI)
+> However something is trying to access block 11524007040. that ain't right.
 >
-> which is directly in line with what I previosuly explained. Yeah me! :-)
->
->> +else ifeq ($(BR2_BINFMT_FLAT),y)
->>  TARGET_OS = uclinux
->>  else
->>  TARGET_OS = linux
->> @@ -50,6 +56,8 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
->>  LIBC = uclibc
->>  else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
->>  LIBC = musl
->> +else ifeq ($(BR2_TOOLCHAIN_USES_NEWLIB),y)
->> +LIBC =
->
-> ... here.
->
->>  else
->>  LIBC = gnu
->>  endif
->> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
->
-> I haven't had a look at the gcc part yet...
->
-> [--SNIP--]
->> diff --git a/package/newlib/newlib-0001-configure-tooldir-path.patch b/package/newlib/newlib-0001-configure-tooldir-path.patch
->> new file mode 100644
->> index 0000000..c162678
->> --- /dev/null
->> +++ b/package/newlib/newlib-0001-configure-tooldir-path.patch
->> @@ -0,0 +1,25 @@
->> +This patch is required to fix how the newlib headers are installed.
->> +
->> +The cross compiler expects headers to be in
->> +.../host/usr/arm-none-eabi/sysroot/usr/include/newlib.h
->> +by default newlib installed the headers into
->> +.../host/usr/arm-none-eabi/sysroot/arm-none-eabi/include/newlib.h
->
-> Wouldn't that be the case for creating the symlink arm-none-eabi -> . as
-> we're doing for some external toolchains?
->
->> +${exec_prefix} provides the .../host/usr/arm-none-eabi/sysroot path
->> +${target_noncanonical} provides an extra arm-none-eabi/ that must be removed.
->> +
->> +Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
->> +
->> +
->> +diff -uNr newlib-old/configure newlib-new/configure
->> +--- newlib-old/configure     2014-07-05 17:09:07.000000000 -0400
->> ++++ newlib-new/configure     2014-12-25 00:59:01.727549186 -0500
->> +@@ -6985,7 +6985,7 @@
->> +
->> + # Some systems (e.g., one of the i386-aix systems the gas testers are
->> + # using) don't handle "\$" correctly, so don't use it here.
->> +-tooldir='${exec_prefix}'/${target_noncanonical}
->> ++tooldir='${exec_prefix}'/usr
->> + build_tooldir=${tooldir}
->
-> But the patch looks pretty clean...
->
->> + # Create a .gdbinit file which runs the one in srcdir
->> diff --git a/package/newlib/newlib.mk b/package/newlib/newlib.mk
->> new file mode 100644
->> index 0000000..02008e5
->> --- /dev/null
->> +++ b/package/newlib/newlib.mk
->> @@ -0,0 +1,48 @@
->> +################################################################################
->> +#
->> +# newlib
->> +#
->> +################################################################################
->> +
->> +NEWLIB_VERSION = 2.2.0
->> +NEWLIB_SITE = ftp://sourceware.org/pub/newlib
->> +NEWLIB_LICENSE = MIT
->> +NEWLIB_LICENSE_FILES = COPYRIGHT
->> +
->> +NEWLIB_DEPENDENCIES = host-gcc-initial
->> +NEWLIB_ADD_TOOLCHAIN_DEPENDENCY = NO
->> +NEWLIB_INSTALL_STAGING = YES
->> +
->> +define NEWLIB_CONFIGURE_CMDS
->> +     (cd $(@D); \
->> +             $(TARGET_MAKE_ENV) \
->> +             ./configure \
->> +                     --target=$(GNU_TARGET_NAME) \
->> +                     --host=$(GNU_HOST_NAME) \
->> +                     --build=$(GNU_HOST_NAME) \
->
-> From what I recall, newlib does not use --build. So you should not have
-> to specify it. At l;east, it was still the case in newlib-2.2.0,
-> released 2014-12-18.
->
->> +                     --prefix=$(STAGING_DIR) \
->> +                     --includedir=$(STAGING_DIR)/usr/include \
->> +                     --oldincludedir=$(STAGING_DIR)/usr/include \
->> +                     --with-build-sysroot=$(STAGING_DIR) \
->
-> I don't think --includedir, --oldincludedir or --with-build-sysroot are
-> needed.
->
->> +                     --enable-newlib-io-long-long \
->> +                     --enable-newlib-register-fini \
->> +                     --disable-newlib-supplied-syscalls \
->
-> What about --enable-newlib-io-float or --enable-newlib-io-long-double or
-> --enable-newlib-io-c99-formats?
->
-> (I don't really care they be enabled or disabled, just I would not use
-> the defaults; we prefer to force these kind of things explcitly, rather
-> than have nasty surprises, especially when a new version changes the
-> defaults, and especially since a toolchain component is pretty much
-> critical.)
->
+> I suspect that somehow, the ext2 filesystem on the card has been
+> corrupted, or has been created incorrectly, or incorrectly copied to
+> the card. How did you format it ?
+I used an usb (?) sd card reader connected to my linux host.(debian 6)
 
-I never went through the flag options in detail. I took the options
-from a 'known good' build of the toolchain which was designed to run
-with this target.
+Then used cfdisk to create a single partition type 83 and maximum size 
+as suggested by cfdisk.
 
-At one point I did try to go through the options in detail, but found
-that I did not get the results I expected.
+#! /bin/sh
+IMAGES_DIR=/home/johan/srcmain
+ROOTFS=$IMAGES_DIR/rootfs.tar
+DRIVE=/dev/sdb
+PART1=$DRIVE'1'
 
-If we decide to include newlib in the buildroot, I think it would be
-very valuable to figure out the different options and potentially add
-config options to select them (or make them dependent on other
-selections).
+echo formatting $PART1
+mkfs.ext2 $PART1 -L rootfs
 
-I think it would also be valuable to provide the option to use
-specific versions newlib.
+echo Set check interval to NONE for $PART1
+tune2fs -c 0 -i 0 $PART1
 
-Thanks!
--Chris
+echo mount drive $PART1
+mount -t ext2 $PART1 /mnt/usd -o noatime,nodiratime
+
+echo extracting ...
+tar -xvf $ROOTFS -C /mnt/usd
+
+echo syncing ...
+sync
+
+echo unmount
+umount $DRIVE?
 
 
+The only thing i can think of is that my debian host is messing up the 
+partition.
+and also tried  cfdisk /z
 
->> +                     --disable-nls)
->> +
->> +endef
->> +
->> +define NEWLIB_APPLY_PATCHES
->> +     $(APPLY_PATCHES) $(@D) package/newlib \*.patch
->> +endef
->> +
->> +define NEWLIB_BUILD_CMDS
->> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->> +endef
->> +
->> +define NEWLIB_INSTALL_STAGING_CMDS
->> +     mkdir -p $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib
->> +     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->> +endef
->> +
->> +$(eval $(generic-package))
->
-> Maybe you can make that an autootols package, since it *is* an autotools
-> package. It's just that we're redefining the configure command.
->
-> But you're also not providing target-install commands, so you may also
-> want to add:
->
->     NEWLIB_INSTALL_TARGET = NO
->
-> And then you can indeed make it an autootls-package. :-)
->
->> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
->> index 13e2b15..c11db73 100644
->> --- a/toolchain/toolchain-buildroot/Config.in
->> +++ b/toolchain/toolchain-buildroot/Config.in
->> @@ -94,6 +94,14 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->>         This option selects musl as the C library for the
->>         cross-compilation toolchain.
->>
->> +config BR2_TOOLCHAIN_BUILDROOT_NEWLIB
->> +       bool "newlib (experimental)"
->> +       depends on BR2_arm
->
-> Why only arm? newlib has support for other architectures. In fact, I
-> would gues that all architectures that Buildroot supports are also
-> supported in newlib.
->
-> Note: for glibc and uClibc, we have a choice to select the version. Do
-> we also want to add such a version selection (especially a custom
-> version) for newlib, too?
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Maybe i should bring up my board over nfs and do the partitioning from 
+my board where it will
+be used later.
+
+Best Regards , Johan
+
+> Brendan
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
