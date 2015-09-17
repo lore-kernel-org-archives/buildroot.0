@@ -1,75 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Sep 2015 22:20:21 +0200
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting
- SSP under uclibc-ng
-In-Reply-To: <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
-References: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
- <20150917191421.53dd3542@free-electrons.com>
- <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
-Message-ID: <20150917222021.4096b754@free-electrons.com>
+Date: Thu, 17 Sep 2015 23:07:53 +0200
+Subject: [Buildroot] sysvinit-2.88 build is failing for ARM64
+In-Reply-To: <20150917111217.GP11632@tarshish>
+References: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
+ <55FA95DB.80408@synopsys.com> <20150917103540.GO11632@tarshish>
+ <55FA986B.9080208@synopsys.com> <55FA9C24.2060901@synopsys.com>
+ <20150917111217.GP11632@tarshish>
+Message-ID: <20150917230753.2ad46e4c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Brendan,
+Baruch, Joao,
 
-On Thu, 17 Sep 2015 18:29:12 +0100, Brendan Heading wrote:
+On Thu, 17 Sep 2015 14:12:17 +0300, Baruch Siach wrote:
 
-> > Cc'ing Waldemar here. It's an interesting consequence of bumping the
-> > GLIBC_MINOR version exposed by uClibc, which happened recently to solve
-> > an eventfd_read() problem in Boost on ARC, investigated by Alexey (also
-> > in Cc).
+> On Thu, Sep 17, 2015 at 11:55:32AM +0100, Joao Pinto wrote:
+> > The library is checked as:
+> > ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
+> > 
+> > And the library is located at:
+> > output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/libcrypt.a
+> > 
+> > Maybe for ARM64 we have to make an extra check?
 > 
-> Yup, that's exactly what has exposed the problem. And the "problem" is
-> really a deficiency in the way GCC detects SSP support in the libc.
+> This check is from package/sysvinit/0001-fix-libcrypt-test.patch. You'll 
+> probably need to adjust that patch to match this Linaro toolchain.
 
-Correct.
+In fact, this path-based check is really crappy. I believe it's a lot
+better to ask gcc directly:
 
-> > Exporting that globally is really horrible.
-> 
-> Yeah I knew that exporting it globally was not going to fly - I just
-> submitted it as a starting point for discussion how to solve this.
+HAS_LIBCRYPT=$(shell f=`mktemp` && echo 'int main(void) {}' | $(CC) -o $$f -xc - -lcrypt >/dev/null 2>&1 && echo y && rm -f $$f)
+ifeq ($(HAS_LIBCRYPT),y)
+SULOGINLIBS += -lcrypt
+endif
 
-Sure, no problem with that. It's already much appreciated that you did
-all this investigation.
-
-> > I think the appropriate fix
-> > is probably to teach gcc about uClibc, like we're doing for musl already
-> > (http://git.buildroot.net/buildroot/tree/package/gcc/4.9.3/900-musl-support.patch#n452).
-> > So we could do a check here like:
-> >
-> >  *uclibc*)
-> >         test if __UCLIBC_HAS_SSP__ is defined or not. If yes -> we have
-> >         SSP, if not -> we don't have SSP.
-> >
-> > And contribute that to upstream gcc.
-> >
-> > What do you think?
-> 
-> It is up to you. My only quibble would be that layering another patch
-> in this area (where there are already patches adding stuff as you
-> noted) might get a bit fiddly. Are we okay with patches being
-> order-dependent ? This does mean that they're not so easy to submit
-> upstream ..
-
-We are fine with patches being order-dependent. That's fine we have a
-sequence number for all patches in the first place.
-
-So far, the effort to push upstream our gcc patches has been very
-limited. It would be good to push some of them upstream, but in the
-mean time, our stack of gcc patches is not that big, and is not causing
-too many problems when bumping gcc.
-
-> Aside from that .. GCC actually already has a block which checks
-> UCLIBC_HAS_SSP. The problem is that it reaches it only if the glibc
-> version check returns that the version is 2.3 or lower. The fix might
-> simply be to reorder the check.
-
-If it's that simple, then it should be done :) In any case, version
-based tests are often not a good idea, so when uClibc is used, gcc
-should really rely on UCLIBC_HAS_SSP.
+Best regards,
 
 Thomas
 -- 
