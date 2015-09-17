@@ -1,54 +1,94 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 17 Sep 2015 22:10:23 +0000
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting
- SSP under uclibc-ng
-In-Reply-To: <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
-References: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
- <20150917191421.53dd3542@free-electrons.com>
- <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
-Message-ID: <1442527823.17912.40.camel@synopsys.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Sep 2015 00:27:21 +0200
+Subject: [Buildroot] musl/gettext issue
+In-Reply-To: <20150916221636.039df52b@free-electrons.com>
+References: <20150916221636.039df52b@free-electrons.com>
+Message-ID: <55FB3E49.5050606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Brendan,
-
-On Thu, 2015-09-17 at 18:29 +0100, Brendan Heading wrote:
-The problem is seen with uclibc-ng 1.0.6 (and likely greater) where they
-> > > updated the __GLIBC_MINOR__ value to 10. It will be seen in any libc
-> > > that permits stack protection to be disabled while exporting a glibc
-> > > version >= 2.4.
-> > 
-> > Cc'ing Waldemar here. It's an interesting consequence of bumping the
-> > GLIBC_MINOR version exposed by uClibc, which happened recently to solve
-> > an eventfd_read() problem in Boost on ARC, investigated by Alexey (also
-> > in Cc).
+On 16-09-15 22:16, Thomas Petazzoni wrote:
+[snip]
+> But that doesn't work with a glibc configuration: BR2_PACKAGE_GETTEXT
+> can be enabled, but we don't have a libintl library, because GNU
+> gettext doesn't build one in a glibc configuration. We try to link
+> against libintl, but it's not there, and the build fails.
 > 
-> Yup, that's exactly what has exposed the problem. And the "problem" is
-> really a deficiency in the way GCC detects SSP support in the libc.
+> So, I see two possible options here:
+> 
+>  1/ Simply do not allow the GNU gettext package to be built with glibc
+>     and musl since they provide the gettext functionality internally.
 
-Well I expected new issues to show up after that change but I'm surprised
-it's the first one reported - so IMHO we're dealing quite well.
+ Problem: something like ecryptfs-utils, which needs the gettext program at
+runtime...
 
-As for the nature of that new problem I'd say it's also expected.
-Because I see people use glibc version to determine which feature
-or set of features could be used. And IMHO that's not very correct
-especially compared to checking each particular feature via compilation.
 
-And frankly I was not very happy with that blind bump of GLIBC_MINOR
-from one magical version (I was not able to find any justification why
-it was the value it was) to another not justified also... just in attempt
-to pretend we're now covering more things in uClibc. But it was low
-hanging fruit and so we decided to go that way instead of fixing
-affected projects... which in its turn could be not that easy as
-patch submission in either uClibc or Buildroot :)
+>     The only problem with this approach is that while httping is happy
+>     with the POSIX compliant gettext functionality of musl, some other
+>     programs such as Bison
+>     (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=786885) will
+>     really need GNU gettext functionality.
 
-> __stack_chk symbols. Would be interested in hearing from Alexey and
-> Waldemar
+ This one could perhaps be solved by adding a BR2_HAS_GNU_GETTEXT. But again, of
+course, it must be possible to select gettext in that case.
 
-I think I'll vote for GCC patch as well. So there will be a check for
-__UCLIBC_HAS_SSP__ regardless that GLIBC_MINOR value.
 
--Alexey
+> 
+>  2/ Allows force to use GNU gettext in musl configurations. This simply
+>     consists in:
+> 
+>  config BR2_NEEDS_GETTEXT
+>         bool
+> -       default y if BR2_TOOLCHAIN_USES_UCLIBC
+> +       default y if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+> 
+>      I have tested this solution and it does work (obviously).
+> 
+>      The drawback is obviously that we are going to build/install GNU
+>      gettext even for cases where the internal gettext implementation
+>      of musl would have been sufficient.
+
+ That sounds like a bad idea. What's the point of using musl if you're going to
+add a bunch of GNU extensions to it?
+
+
+ Another option is that we add a different flag to indicate the dependency on
+libintl:
+
+config BR2_PACKAGE_GETTEXT_WITH_LIBINTL
+	bool
+	default y
+	depends on BR2_PACKAGE_GETTEXT
+	depends on BR2_STATIC_LIBS
+	depends on !BR2_TOOLCHAIN_USES_GLIBC
+
+
+ HTTPING_LDFLAGS = $(TARGET_LDFLAGS) \
+        $(if $(BR2_PACKAGE_GETTEXT_WITH_LIBINTL),-lintl) \
+
+
+ There's just about 30 packages that ned to be adapted.
+
+ Regards,
+ Arnout
+
+> 
+> Do you see some other options? Any opinion between the two proposed
+> options?
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
