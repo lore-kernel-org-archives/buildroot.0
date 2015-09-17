@@ -1,88 +1,75 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Thu, 17 Sep 2015 19:33:24 +0300 (IDT)
-Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
- runtime
-In-Reply-To: <20150917162003.GT11632@tarshish>
-References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
- <20150917150112.GR11632@tarshish>
- <alpine.DEB.2.02.1509171814510.13941@orcam81.orcam.lan>
- <20150917162003.GT11632@tarshish>
-Message-ID: <alpine.DEB.2.02.1509171922410.13941@orcam81.orcam.lan>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 17 Sep 2015 18:02:30 +0100
+Subject: [Buildroot] [PATCH] libseccomp: Add new config option to build
+ and install tests
+In-Reply-To: <1442498020-661-1-git-send-email-markos.chandras@imgtec.com>
+References: <1442498020-661-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <55FAF226.9080800@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-See inlines...
+Dear Markos Chandras,
 
-On Thu, 17 Sep 2015, Baruch Siach wrote:
+On 09/17/2015 02:53 PM, Markos Chandras wrote:
+[snip]
+> diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+> index a188298006b1..6edf96f92bfa 100644
+> --- a/package/libseccomp/libseccomp.mk
+> +++ b/package/libseccomp/libseccomp.mk
+> @@ -17,4 +17,23 @@ define LIBSECCOMP_FIXUP_M4_DIR
+>  endef
+>  LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
+>  
+> +ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
+> +
+> +define LIBSECCOMP_TESTS_BUILD
+> +	$(MAKE) -C $(@D)/tests check-build
 
-> Date: Thu, 17 Sep 2015 19:20:03 +0300
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben Avraham <yba@tkos.co.il>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
->     runtime
+You should be adding $(TARGET_MAKE_ENV) in front of $(MAKE). Anyway,
+there is a better solution which will make this define unnecessary. See
+comments below.
+
+> +endef
+
+Instead of doing a define to build the tests, you can change the target
+and use the 'check-build' one, which will not only build the tests and
+tools, but also will trigger the 'all' target. So:
+
+ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
+# The 'check-build' target builds the tests and tools, and also
+# triggers the 'all' target.
+LIBSECCOMP_MAKE_OPTS += check-build
+
+> +define LIBSECCOMP_TESTS_INSTALL
+> +	mkdir -p $(TARGET_DIR)/usr/libseccomp/{tests,tools} && \
+> +	for x in tests tools; do \
+> +		find $(@D)/$$x -maxdepth 1 \( -name "*.tests" -o -perm -a=x \) \
+> +			-type f -exec cp {} $(TARGET_DIR)/usr/libseccomp/$$x/ \; ; \
+> +	done
+> +endef
+> +
+
+I would remove this empty line since you are adding to the hooks
+variable the define immediately above.
+
+> +LIBSECCOMP_POST_BUILD_HOOKS += LIBSECCOMP_TESTS_BUILD
+
+This post-build hook is not needed since the define has been replaced by
+the LIBSECCOMP_MAKE_OPTS line.
+
+> +LIBSECCOMP_POST_INSTALL_TARGET_HOOKS += LIBSECCOMP_TESTS_INSTALL
+> +
+
+And I would remove this empty line as well.
+
+Regards,
+
+Vincent.
+
+> +endif
+> +
+>  $(eval $(autotools-package))
 > 
-> Hi Yonatan,
->
-> On Thu, Sep 17, 2015 at 06:16:42PM +0300, Jonathan Ben Avraham wrote:
->> On Thu, 17 Sep 2015, Baruch Siach wrote:
->>
->>> Date: Thu, 17 Sep 2015 18:01:12 +0300
->>> From: Baruch Siach <baruch@tkos.co.il>
->>> To: Jonathan Ben-Avraham <yba@tkos.co.il>
->>> Cc: buildroot at buildroot.org
->>> Subject: Re: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
->>>    runtime
->>>
->>> On Thu, Sep 17, 2015 at 05:46:32PM +0300, Jonathan Ben-Avraham wrote:
->>>> From: Jonathan Ben Avraham <yba@tkos.co.il>
->>>>
->>>> The GNU gzip package provides eleven executable files, all but one of
->>>> which are bash shell scripts. If we allow inclusion of gzip without
->>>> bash, then on executing commands such as lxc-checkconfig that actually
->>>> use these shell scripts, you will get errors like 'zgrep: not found',
->>>> even though the zgrep executable is in PATH.
->>>
->>> Which /bin/sh shell show this problem?
->>>
->>> On my host the command
->>>
->>>  busybox sh /bin/zgrep pattern file.gz
->>>
->>> and also
->>>
->>>  dash /bin/zgrep pattern file.gz
->>>
->>> work as expected.
->>
->> You tested *all* of the scripts or just this one?
->
-> I didn't test all of them. I'm just trying to reproduce the 'zgrep: not found'
-> problem that you report in the commit log, to see what went wrong.
->
->> What if ash breaks even *one*?
->
-> Then we should probably patch the problem and send upstream. gzip bundled
-> scripts are pretty trivial, and AFAICS, should work under any POSIX-like
-> shell.
-
-But we would at least need to ln -s /bin/<ash|dash> /bin/bash in 
-Buildroot, no? so maybe the upstream fix is to change the hashbangs from 
-/bin/bash to /bin/sh. Do you really think that the gzip upstream would 
-accept this?
-
-  - yba
-
-
-> baruch
->
->
-
--- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
