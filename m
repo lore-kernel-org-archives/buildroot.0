@@ -1,65 +1,61 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Thu, 17 Sep 2015 19:21:57 +0200
-Subject: [Buildroot] [2/2,
-	v2] wpa_supplicant: Have Hotspot 2.0 depend on nl80211
-In-Reply-To: <20150917153127.GA28715@t450s.lan>
-References: <1437119950-25976-2-git-send-email-nicolas.cavallari@green-communications.fr>
- <20150917153127.GA28715@t450s.lan>
-Message-ID: <55FAF6B5.5080903@green-communications.fr>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 17 Sep 2015 18:29:12 +0100
+Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting
+ SSP under uclibc-ng
+In-Reply-To: <20150917191421.53dd3542@free-electrons.com>
+References: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
+ <20150917191421.53dd3542@free-electrons.com>
+Message-ID: <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/09/2015 17:31, Gary Bisson wrote:
-> Hi Nicolas,
-> 
-> On Fri, Jul 17, 2015 at 09:59:10AM +0200, Nicolas Cavallari wrote:
->> Hotspot 2.0 uses ANQP whose implementation needs offchannel/
->> remain-on-channel capabilities from the driver, which only exist in the
->> nl80211 driver.  Compiling would work, but the feature would not work.
->>
->> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->> ---
->>
->> v2: added signoff.
->>  package/wpa_supplicant/Config.in | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
->> index 29dc4b9..22cf7f8 100644
->> --- a/package/wpa_supplicant/Config.in
->> +++ b/package/wpa_supplicant/Config.in
->> @@ -41,6 +41,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
->>  
->>  config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
->>  	bool "Enable HS20"
->> +	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
->>  	help
->>  	  Enable Hotspot 2.0 and IEEE 802.11u interworking functionality.
->>
-> 
-> First I'm not sure on the procedure to test the Hotspot 2.0 but I think
-> we should at least add a comment like:
-> 
-> comment "HS20 needs NL80211 support"
-> 	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211
-> 
-> Because right now if you unselect NL80211 WPA option the HS20 just
-> disappears.
-> 
-> Or maybe selecting NL80211 would be even better if absolutely required
-> at runtime.
+>> The problem is seen with uclibc-ng 1.0.6 (and likely greater) where they
+>> updated the __GLIBC_MINOR__ value to 10. It will be seen in any libc
+>> that permits stack protection to be disabled while exporting a glibc
+>> version >= 2.4.
+>
+> Cc'ing Waldemar here. It's an interesting consequence of bumping the
+> GLIBC_MINOR version exposed by uClibc, which happened recently to solve
+> an eventfd_read() problem in Boost on ARC, investigated by Alexey (also
+> in Cc).
 
+Yup, that's exactly what has exposed the problem. And the "problem" is
+really a deficiency in the way GCC detects SSP support in the libc.
 
-The more i think of it, the more I feel like the current behavior is
-acceptable as is and this patch is unnecessary.
+> Exporting that globally is really horrible.
 
-Sure, using a vanilla wpa_supplicant, the features needed by Hotspot 2.0
-are only implemented by the nl80211 driver, but there may be other
-non-vanilla drivers added by out-of-tree patches which also implement it.
+Yeah I knew that exporting it globally was not going to fly - I just
+submitted it as a starting point for discussion how to solve this.
 
-These patches may be in a buildroot global patch directory.  We
-shouldn't force nl80211 to be enabled to enable Hotspot 2.0 because this
-is the only possibility that we know.
+> I think the appropriate fix
+> is probably to teach gcc about uClibc, like we're doing for musl already
+> (http://git.buildroot.net/buildroot/tree/package/gcc/4.9.3/900-musl-support.patch#n452).
+> So we could do a check here like:
+>
+>  *uclibc*)
+>         test if __UCLIBC_HAS_SSP__ is defined or not. If yes -> we have
+>         SSP, if not -> we don't have SSP.
+>
+> And contribute that to upstream gcc.
+>
+> What do you think?
+
+It is up to you. My only quibble would be that layering another patch
+in this area (where there are already patches adding stuff as you
+noted) might get a bit fiddly. Are we okay with patches being
+order-dependent ? This does mean that they're not so easy to submit
+upstream ..
+
+Aside from that .. GCC actually already has a block which checks
+UCLIBC_HAS_SSP. The problem is that it reaches it only if the glibc
+version check returns that the version is 2.3 or lower. The fix might
+simply be to reorder the check.
+
+I'm curious why GCC have done this rather than doing a check for the
+__stack_chk symbols. Would be interested in hearing from Alexey and
+Waldemar.
+
+Brendan
