@@ -1,68 +1,61 @@
-From: Douglas RAILLARD <public.douglas.raillard@gmail.com>
-Date: Thu, 17 Sep 2015 11:40:01 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain: Add support for Cortex-M4
- processor
-In-Reply-To: <1442474492-13774-2-git-send-email-cjwfirmware@vxmdesign.com>
-References: <1442474492-13774-1-git-send-email-cjwfirmware@vxmdesign.com>
- <1442474492-13774-2-git-send-email-cjwfirmware@vxmdesign.com>
-Message-ID: <55FA8A71.7080700@gmail.com>
+From: jpinto <Joao.Pinto@synopsys.com>
+Date: Thu, 17 Sep 2015 10:40:27 +0100
+Subject: [Buildroot] [PATCH v2] mplayer: enable building on ARM64
+Message-ID: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
 
-On 17/09/2015 09:21, Chris Wardman wrote:
-> This patch adds support for the Cortex-M4 processor. Cortex-M4 is almost
-> completely identical to the Cortex-M3 processor. Cortex-M4 uses the same
-> Thumb2/Thumb instruction set. Not sure if the extra M4 DSP instructions are
-> currently supported.
-> 
-> Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
-> ---
->  arch/Config.in.arm | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 4d10f4c..5055cb5 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -156,6 +156,11 @@ config BR2_cortex_m3
->  	bool "cortex-M3"
->  	select BR2_ARM_CPU_HAS_THUMB
->  	select BR2_ARM_CPU_HAS_THUMB2
-> +config BR2_cortex_m4
-> +	bool "cortex-M4"
-> +	select BR2_ARM_CPU_HAS_THUMB
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+---
+ package/mplayer/0007-mplayer-enable-aarch64.patch | 22 ++++++++++++++++++++++
+ package/mplayer/Config.in                         |  2 +-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+ create mode 100644 package/mplayer/0007-mplayer-enable-aarch64.patch
 
-It is not clear if selecting BR2_ARM_CPU_HAS_THUMB for Cortex M is
-relevant or if this leads to other problems:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/126372
-
-> +	select BR2_ARM_CPU_HAR_THUMB2
-> +	select BR2_ARM_CPU_ARMV7M
-
-If adding the BR2_ARM_CPU_ARMV7M option is okay, this could also be used
-to preset some options for uClibc-ng.
-
->  config BR2_fa526
->  	bool "fa526/626"
->  	select BR2_ARM_CPU_HAS_ARM
-> @@ -419,6 +424,7 @@ config BR2_GCC_TARGET_CPU
->  	default "cortex-a12"	if BR2_cortex_a12
->  	default "cortex-a15"	if BR2_cortex_a15
->  	default "cortex-m3"	if BR2_cortex_m3
-> +	default "cortex-m4"     if BR2_cortex_m4
->  	default "fa526"		if BR2_fa526
->  	default "marvell-pj4"	if BR2_pj4
->  	default "strongarm"	if BR2_strongarm
-> 
-
-Best regards,
-
-Douglas
+diff --git a/package/mplayer/0007-mplayer-enable-aarch64.patch b/package/mplayer/0007-mplayer-enable-aarch64.patch
+new file mode 100644
+index 0000000..dc59f5f
+--- /dev/null
++++ b/package/mplayer/0007-mplayer-enable-aarch64.patch
+@@ -0,0 +1,22 @@
++Add support for ARM64 architecture
++
++This patch adds aarch64 as a supported architecture to the configure script.
++
++Signed-off-by: Joao Pinto <jpinto@synopsys.com>
++---
++
++--- b/configure	2015-09-15 17:30:46.187307557 +0100
+++++ a/configure	2015-09-15 17:31:11.729307537 +0100
++@@ -2496,6 +2496,10 @@
++     arch='arc'
++     iproc='arc'
++     ;;
+++  aarch64)
+++    arch='arm64'
+++    iproc='arm64'
+++    ;;
++ 
++   *)
++     echo "The architecture of your CPU ($host_arch) is not supported by this configure script"
++
++
+diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+index 79ff3b1..7a8b03f 100644
+--- a/package/mplayer/Config.in
++++ b/package/mplayer/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+ 	default y
+ 	# Those architectures are not supported by MPlayer
+ 	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
+-		|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
++		|| BR2_microblaze || BR2_nios2)
+ 	# Broken support for <ARMv5
+ 	depends on !BR2_ARM_CPU_ARMV4
+ 
 -- 
-
-Douglas RAILLARD
+1.8.1.5
