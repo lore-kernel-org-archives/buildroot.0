@@ -1,55 +1,66 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Thu, 17 Sep 2015 22:22:52 +0100
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting
- SSP under uclibc-ng
-In-Reply-To: <20150917222021.4096b754@free-electrons.com>
-References: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
- <20150917191421.53dd3542@free-electrons.com>
- <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
- <20150917222021.4096b754@free-electrons.com>
-Message-ID: <CA+BsyQ4m2kBQkc4k702Tj8c9Y5N-eYhjy6CM-7wWRPHEpjWtCw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Sep 2015 23:27:42 +0200
+Subject: [Buildroot] [PATCH] make: requires dynamic libraries
+In-Reply-To: <1442450292-13794-1-git-send-email-ryanbarnett3@gmail.com>
+References: <1442450292-13794-1-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <20150917232742.6b253d01@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Yeah I knew that exporting it globally was not going to fly - I just
->> submitted it as a starting point for discussion how to solve this.
->
-> Sure, no problem with that. It's already much appreciated that you did
-> all this investigation.
+Ryan,
 
-Thank you for that!
+On Wed, 16 Sep 2015 19:38:12 -0500, Ryan Barnett wrote:
+> While attempting to build make in a static library only configuration
+> the following error will be shown:
+> 
+>  gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or
+>  directory
+>   #   include <dlfcn.h>
+> 
+> Fix this by depending make on !BR2_STATIC_LIBS.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/814/8143ae0afac139845e5016058d85c800dc8527ad
+> 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 
-> We are fine with patches being order-dependent. That's fine we have a
-> sequence number for all patches in the first place.
->
-> So far, the effort to push upstream our gcc patches has been very
-> limited. It would be good to push some of them upstream, but in the
-> mean time, our stack of gcc patches is not that big, and is not causing
-> too many problems when bumping gcc.
+Unfortunately, I believe this is not the proper fix. If you use
+http://autobuild.buildroot.org/toolchains/configs/br-arm-full-static.config
+and build just the make package, it builds just fine:
 
-Yeah I also get the sense that getting patches upstream in GCC might
-be difficult, and when I was googling this I saw other examples of
-people running into problems similar to this. I would guess it's
-especially unlikely we would get patches into the versions that are in
-maintenance mode. We might have more luck with next (ie GCC 6.0).
+$ file output/target/usr/bin/make 
+output/target/usr/bin/make: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), statically linked, stripped
 
->> Aside from that .. GCC actually already has a block which checks
->> UCLIBC_HAS_SSP. The problem is that it reaches it only if the glibc
->> version check returns that the version is 2.3 or lower. The fix might
->> simply be to reorder the check.
->
-> If it's that simple, then it should be done :) In any case, version
-> based tests are often not a good idea, so when uClibc is used, gcc
-> should really rely on UCLIBC_HAS_SSP.
+The file gc_pthread_redirects.h comes, I believe, from bdwgc, which got
+built before make in the autobuild test case you're pointing to. This
+header file is known to incorrectly include <dlfcn.h>, unless
+GC_NO_DLOPEN is specified. See what is done in guile.mk for example to
+pass GC_NO_DLOPEN when BR2_STATIC_LIBS=y.
 
-Okay, I am now looking at putting together an interim patch set. I
-don't think there is any point in trying to submit them into
-maintenance releases of the existing versions but it's worth taking a
-shot at getting them into -next.
+I believe the chain is that you have bdwgc that gets built, then guile,
+then make. In this case, make detects the availability of guile and
+uses it, which is the reason why gc_pthread_redirects.h gets included
+by make.
 
-regards
+So I suggest one of the two options:
 
-Brendan
+ * Make the optional dependency of make on guile explicit in make.mk,
+   and pass GC_NO_DLOPEN when we're building statically.
+
+ * Disable guile support completely in make. I don't think we care
+   about having guile support in make in the context of Buildroot, so
+   this is probably the easiest solution.
+
+Consequently, I've marked your patch as Rejected in patchwork. Can you
+send a patch implementing one of the two options above?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
