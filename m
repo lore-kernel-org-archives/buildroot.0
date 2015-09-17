@@ -1,272 +1,242 @@
-From: Cjw X <cjwfirmware@vxmdesign.com>
-Date: Thu, 17 Sep 2015 03:07:46 -0400
-Subject: [Buildroot] [PATCH 3/3] Adding support for uclibcpp library
-In-Reply-To: <20150914000058.778ddf3e@free-electrons.com>
-References: <1442127768-26447-1-git-send-email-cjwfirmware@vxmdesign.com>
- <1442127768-26447-3-git-send-email-cjwfirmware@vxmdesign.com>
- <20150914000058.778ddf3e@free-electrons.com>
-Message-ID: <CAOudHSV6Jy10Uwk=O9HpTchhhoRFdd4iMZT1ViPUNtGVK2-Ssg@mail.gmail.com>
+From: Chris Wardman <cjwfirmware@vxmdesign.com>
+Date: Thu, 17 Sep 2015 03:21:31 -0400
+Subject: [Buildroot] [PATCH 1/2] toolchain: add support for the newlib
+	library
+Message-ID: <1442474492-13774-1-git-send-email-cjwfirmware@vxmdesign.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+This patch adds support to build gcc with the newlib library. This library
+will not build against linux, but does enable user to build bare metal images
+and other small kernels for processors.
 
-(Sorry for the second email Thomas, didn't send the list)
+This has been tested against building arm-buildroot-eabi- and tested against
+an STM32F4Discovery board with an STM32F407 processor.
 
-You have some very valid concerns. For extremely small footprint
-devices that want to use C++ I think this package will be useful, but
-for now I'm not even using C++ in my embedded projects, so it is not
-critical.
+Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
+---
+ package/Makefile.in                                |  6 +++
+ package/gcc/gcc-final/gcc-final.mk                 |  4 ++
+ package/gcc/gcc.mk                                 |  4 ++
+ .../0001-newlib-fix-include-install-location.patch | 40 +++++++++++++++++++
+ package/newlib/Config.in                           |  5 +++
+ package/newlib/newlib.mk                           | 45 ++++++++++++++++++++++
+ toolchain/Config.in                                |  6 +++
+ toolchain/toolchain-buildroot/Config.in            |  9 +++++
+ 8 files changed, 119 insertions(+)
+ create mode 100644 package/newlib/0001-newlib-fix-include-install-location.patch
+ create mode 100644 package/newlib/Config.in
+ create mode 100644 package/newlib/newlib.mk
 
-I don't think it is being maintained and it has some other issues, so,
-I am going to leave this patch out for now.
-
-Thanks!
--Chris
-
-On Sun, Sep 13, 2015 at 6:00 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Chris,
->
-> The commit title should probably be:
->
->         toolchain: add support for the uclibcpp library
->
-> On Sun, 13 Sep 2015 03:02:48 -0400, Chris Wardman wrote:
->> uclibcpp is built as an alternative to the standard libstdc++ library
->
-> The question is how does it replace the libstdc++ provided by gcc? Does
-> it simply overwrite it? So you're building C++ support in gcc normally
-> and then overwrite the libstdc++ from gcc with uclibcpp ?
->
-> Also, how compatible is it with the C++ standard? I.e will people be
-> able to build arbitrary C++ libraries/applications with this smaller
-> C++ library, or is it limited to a certain subset of the C++ standard?
->
->> diff --git a/package/uclibcpp/0.2.4/uclibcpp-0001-minor-fixes.patch b/package/uclibcpp/0.2.4/uclibcpp-0001-minor-fixes.patch
->> new file mode 100644
->> index 0000000..851b87e
->> --- /dev/null
->> +++ b/package/uclibcpp/0.2.4/uclibcpp-0001-minor-fixes.patch
->
-> The patches shouldn't start with the package name, so a proper name is:
->
->         0001-minor-fixes.patch
->
-> However, I believe this patch is really mixing too many things. Can you
-> split this uclibcpp patch into smaller piece, each fixing one
-> particular problem?
->
-> Also, since we're supporting only one version of uclibcpp at a time,
-> there is no need to put the patch in a 0.2.4/ subdirectory of
-> package/uclibcpp/. Just put them directly in package/uclibcpp.
->
->> +I have no clude why they wrote the Unwind_Exception_Class variable that way, but that doesn't compile
->
-> Please wrap the patch description to 80 columns, and don't use first
-> person wording.
->
->> +diff -uNr uClibc++-0.2.4/src/_ct_chr.cpp uc_new/src/_ct_chr.cpp
->> +--- uClibc++-0.2.4/src/_ct_chr.cpp   1969-12-31 19:00:00.000000000 -0500
->> ++++ uc_new/src/_ct_chr.cpp   2015-01-15 16:29:21.478634145 -0500
->> +@@ -0,0 +1,18 @@
->> ++#include <_ansi.h>
->> ++#include <ctype.h>
->> ++
->> ++int _DEFUN(isspace, (c),int c){
->> ++  switch(c){
->> ++  case ' ':
->> ++  case '\r':
->> ++  case '\n':
->> ++  case '\b':
->> ++  case '\t':
->> ++    return true;
->> ++  }
->> ++  return false;
->> ++}
->> ++
->> ++int _DEFUN(isdigit, (c), int c){
->> ++  return ('0' <= c && c <= '9');
->> ++}
->
-> newlib is not providing isspace() and isdigit() ?
->
->> diff --git a/package/uclibcpp/Config.in b/package/uclibcpp/Config.in
->> new file mode 100644
->> index 0000000..d0a962a
->> --- /dev/null
->> +++ b/package/uclibcpp/Config.in
->> @@ -0,0 +1,9 @@
->> +config BR2_PACKAGE_UCLIBCPP
->> +       bool "uClibc++ C++ library"
->> +       depends on BR2_TOOLCHAIN_BUILDROOT_NEWLIB
->> +       depends on BR2_TOOLCHAIN_BUILDROOT_CXX
->> +       help
->
-> Please use tab for indentation.
->
->> +     Uclibc++ library support. Smaller than libvstdc++
->
-> And one tab + two spaces for the help text. Also, fix the typo in the
-> description (libvstdc++ -> libstdc++) and maybe extend the description
-> with more details (difference between the original libstdc++ and
-> uclibcpp one).
->
->> +
->> +
->> +
->
-> Unneeded empty lines.
->
->> diff --git a/package/uclibcpp/uclibcpp.config b/package/uclibcpp/uclibcpp.config
->> new file mode 100644
->> index 0000000..4e2d0ec
->> --- /dev/null
->> +++ b/package/uclibcpp/uclibcpp.config
->> @@ -0,0 +1,54 @@
->> +#
->> +# Automatically generated make config: don't edit
->> +#
->> +
->> +#
->> +# Target Features and Options
->> +#
->> +UCLIBCXX_HAS_FLOATS=y
->> +UCLIBCXX_HAS_LONG_DOUBLE=y
->> +UCLIBCXX_HAS_TLS=y
->> +WARNINGS="-Wall"
->> +BUILD_EXTRA_LIBRARIES=""
->> +HAVE_DOT_CONFIG=y
->> +
->> +#
->> +# String and I/O Stream Support
->> +#
->> +# UCLIBCXX_HAS_WCHAR is not set
->> +UCLIBCXX_IOSTREAM_BUFSIZE=32
->> +UCLIBCXX_HAS_LFS=y
->> +UCLIBCXX_SUPPORT_CDIR=y
->> +UCLIBCXX_SUPPORT_CIN=y
->> +UCLIBCXX_SUPPORT_COUT=y
->> +UCLIBCXX_SUPPORT_CERR=y
->> +# UCLIBCXX_SUPPORT_CLOG is not set
->> +
->> +#
->> +# STL and Code Expansion
->> +#
->> +UCLIBCXX_STL_BUFFER_SIZE=32
->> +UCLIBCXX_CODE_EXPANSION=y
->> +UCLIBCXX_EXPAND_CONSTRUCTORS_DESTRUCTORS=y
->> +UCLIBCXX_EXPAND_STRING_CHAR=y
->> +UCLIBCXX_EXPAND_VECTOR_BASIC=y
->> +UCLIBCXX_EXPAND_IOS_CHAR=y
->> +UCLIBCXX_EXPAND_STREAMBUF_CHAR=y
->> +UCLIBCXX_EXPAND_ISTREAM_CHAR=y
->> +UCLIBCXX_EXPAND_OSTREAM_CHAR=y
->> +UCLIBCXX_EXPAND_FSTREAM_CHAR=y
->> +UCLIBCXX_EXPAND_SSTREAM_CHAR=y
->> +
->> +#
->> +# Library Installation Options
->> +#
->> +UCLIBCXX_RUNTIME_PREFIX="/usr"
->> +UCLIBCXX_RUNTIME_INCLUDE_SUBDIR="/include"
->> +UCLIBCXX_RUNTIME_LIB_SUBDIR="/lib"
->> +UCLIBCXX_RUNTIME_BIN_SUBDIR="/bin"
->> +UCLIBCXX_EXCEPTION_SUPPORT=y
->> +IMPORT_LIBSUP=y
->> +# IMPORT_LIBGCC_EH is not set
->> +BUILD_STATIC_LIB=y
->> +BUILD_ONLY_STATIC_LIB=y
->> +# DODEBUG is not set
->> diff --git a/package/uclibcpp/uclibcpp.mk b/package/uclibcpp/uclibcpp.mk
->> new file mode 100644
->> index 0000000..dfe8ede
->> --- /dev/null
->> +++ b/package/uclibcpp/uclibcpp.mk
->> @@ -0,0 +1,28 @@
->
-> Missing comment header. Also please add a hash file (see
-> http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-hash).
-> Maybe I forgot to say that in my review of your newlib package, but
-> please do it there as well.
->
->> +UCLIBCPP_VERSION = 0.2.4
->> +UCLIBCPP_SOURCE = uClibc++-$(UCLIBCPP_VERSION).tar.bz2
->
-> The last version is from May 2012, like uClibc itself. Is it a dead
-> project like uClibc ? If so, then I'm a bit worried in packaging
-> something so fundamental as the standard C++ library if it isn't
-> maintained.
->
-> There has been a few commits since the last release, see
-> http://git.uclibc.org/uClibc++/log/. But it still doesn't seem to be
-> very active. According to the website, there is not even a mailing list
-> for it.
->
-> You could use the .tar.xz tarball instead of .tar.bz2.
->
->> +UCLIBCPP_LICENSE = LGPLv3
->
-> Some quick inspection indicates LGPLv2.1+
->
->> +UCLIBCPP_SITE = http://cxx.uclibc.org/src/
->> +
->> +UCLIBCPP_INSTALL_STAGING = YES
->> +
->> +UCLIBCPP_DEPENDENCIES = host-gcc-final
->
-> All target packages depend on "toolchain", which has host-gcc-final as
-> part of its dependencies. However maybe, what you need is to have this
-> uclibcpp package built *before* any other target package that uses C++,
-> no? If so, then toolchain/toolchain/toolchain.mk needs to be modified
-> to add uclibcpp as a dependency when it is enabled. And of course,
-> uclibcpp.mk should specify UCLIBCPP_ADD_TOOLCHAIN_DEPENDENCY = NO.
->
->> +
->> +UCLIBCPP_KCONFIG_FILE = $(TOPDIR)/package/uclibcpp/uclibcpp.config
->
-> $(TOPDIR)/ not needed.
->
->> +
->> +UCLIBCPP_MAKE_FLAGS = CROSS=$(TARGET_CROSS)
->> +
->> +define UCLIBCPP_BUILD_CMDS
->> +     $(MAKE) -C $(@D) $(UCLIBCPP_MAKE_FLAGS)
->> +endef
->> +
->> +define UCLIBCPP_INSTALL_STAGING_CMDS
->> +     $(MAKE) -C $(@D) PREFIX=$(STAGING_DIR) install
->> +endef
->> +
->> +define UCLIBCPP_INSTALL_TARGET_CMDS
->> +     $(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install
->> +endef
->> +
->> +$(eval $(kconfig-package))
->> +
->> +
->
-> Unneeded empty lines at the end of the file.
->
->> diff --git a/toolchain/Config.in b/toolchain/Config.in
->> index 88ebe8c..3904f44 100644
->> --- a/toolchain/Config.in
->> +++ b/toolchain/Config.in
->> @@ -60,5 +60,6 @@ endchoice
->>  source "toolchain/toolchain-buildroot/Config.in"
->>  source "toolchain/toolchain-external/Config.in"
->>  source "toolchain/toolchain-common.in"
->> +source "package/uclibcpp/Config.in"
->
-> This should go in toolchain/toolchain-buildroot/Config.in.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 545694f..dedc622 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -37,7 +37,11 @@ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
+ endif
+ 
+ # Compute GNU_TARGET_NAME
++ifeq ($(BR2_TOOLCHAIN_NO_OS_TUPLE),y)
++GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(ABI)
++else
+ GNU_TARGET_NAME = $(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
++endif
+ 
+ # FLAT binary format needs uclinux
+ ifeq ($(BR2_BINFMT_FLAT),y)
+@@ -50,6 +54,8 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ LIBC = uclibc
+ else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+ LIBC = musl
++else ifeq ($(BR2_TOOLCHAIN_USES_NEWLIB),y)
++LIBC = newlib
+ else
+ LIBC = gnu
+ endif
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 86b3c78..ba8d644 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -72,6 +72,10 @@ else
+ HOST_GCC_FINAL_CONF_OPTS += --enable-shared
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_NEWLIB),y)
++HOST_GCC_FINAL_CONF_OPTS += --with-newlib
++endif
++
+ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_CONF_OPTS += --enable-libgomp
+ else
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 501fcea..26451d4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -100,6 +100,10 @@ HOST_GCC_COMMON_CONF_OPTS = \
+ HOST_GCC_COMMON_CONF_ENV = \
+ 	MAKEINFO=missing
+ 
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_NEWLIB),y)
++HOST_GCC_COMMON_CONF_OPTS += --with-gnu-as
++endif
++
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+diff --git a/package/newlib/0001-newlib-fix-include-install-location.patch b/package/newlib/0001-newlib-fix-include-install-location.patch
+new file mode 100644
+index 0000000..a0b5951
+--- /dev/null
++++ b/package/newlib/0001-newlib-fix-include-install-location.patch
+@@ -0,0 +1,40 @@
++Newlib fix for the include install location
++
++Newlib normally installs its headers in a directory labled after the target 
++like (/usr/arm-buildroot-eabi/include/), but buildroot already creates a 
++location for the headers that conflicts with newlib's default settings.
++
++This patch does a minor correction to the path so the headers are installed in
++the proper location. 
++
++It should just modify configure.ac, and then buildroot can run the autoconf 
++tools, but newlib requires a specific version of the autoconf tools to be run.
++So, this patch modifies both configure and configure.ac since it is a simple
++change, though it is a slight hack. 
++
++Signed-off-by: Chris Wardman <cjwfirmware@vxmdesign.com>
++
++diff -uNr newlib-old/configure newlib-new/configure
++--- newlib-old/configure	2014-07-05 17:09:07.000000000 -0400
+++++ newlib-new/configure	2015-09-16 13:44:08.814638168 -0400
++@@ -6985,7 +6985,7 @@
++ 
++ # Some systems (e.g., one of the i386-aix systems the gas testers are
++ # using) don't handle "\$" correctly, so don't use it here.
++-tooldir='${exec_prefix}'/${target_noncanonical}
+++tooldir='${exec_prefix}'
++ build_tooldir=${tooldir}
++ 
++ # Create a .gdbinit file which runs the one in srcdir
++diff -uNr newlib-old/configure.ac newlib-new/configure.ac
++--- newlib-old/configure.ac	2014-07-05 17:09:07.000000000 -0400
+++++ newlib-new/configure.ac	2015-09-16 13:44:22.726638079 -0400
++@@ -2414,7 +2414,7 @@
++ 
++ # Some systems (e.g., one of the i386-aix systems the gas testers are
++ # using) don't handle "\$" correctly, so don't use it here.
++-tooldir='${exec_prefix}'/${target_noncanonical}
+++tooldir='${exec_prefix}'
++ build_tooldir=${tooldir}
++ 
++ # Create a .gdbinit file which runs the one in srcdir
+diff --git a/package/newlib/Config.in b/package/newlib/Config.in
+new file mode 100644
+index 0000000..c801385
+--- /dev/null
++++ b/package/newlib/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_NEWLIB
++	bool
++	depends on BR2_TOOLCHAIN_USES_NEWLIB
++	default y
++
+diff --git a/package/newlib/newlib.mk b/package/newlib/newlib.mk
+new file mode 100644
+index 0000000..e3ba4df
+--- /dev/null
++++ b/package/newlib/newlib.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# newlib
++#
++################################################################################
++
++NEWLIB_VERSION = 2.2.0-1
++NEWLIB_SITE = ftp://sourceware.org/pub/newlib
++NEWLIB_LICENSE = MIT
++NEWLIB_LICENSE_FILES = COPYRIGHT
++
++NEWLIB_DEPENDENCIES = host-gcc-initial
++NEWLIB_ADD_TOOLCHAIN_DEPENDENCY = NO
++NEWLIB_INSTALL_STAGING = YES
++NEWLIB_INSTALL_TARGET = NO
++################################################################################
++# So, I've looked into this a bit. The default configure command sets flags
++# which don't work with gcc initial. 
++################################################################################
++
++define NEWLIB_CONFIGURE_CMDS
++       (cd $(@D); \
++	$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="" \
++		CC="" \
++		LDFLAGS="" \
++		./configure \
++			--target=$(GNU_TARGET_NAME) \
++			--host=$(GNU_HOST_NAME) \
++			--prefix=/usr \
++			--includedir=$(STAGING_DIR)/usr/include \
++			--oldincludedir=$(STAGING_DIR)/usr/include \
++			--with-build-sysroot=$(STAGING_DIR) \
++			--enable-newlib-io-long-long \
++			--enable-newlib-register-fini \
++			--disable-newlib-supplied-syscalls \
++			--disable-nls)	   
++endef
++
++define NEWLIB_PRE_INSTALL_STAGING_HOOKS
++	mkdir -p $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib
++endef
++
++$(eval $(autotools-package))
++
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index a851ce4..8b2ab1e 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -28,6 +28,12 @@ config BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
++config BR2_TOOLCHAIN_USES_NEWLIB
++	bool
++
++config BR2_TOOLCHAIN_NO_OS_TUPLE
++	bool
++
+ choice
+ 	prompt "Toolchain type"
+ 	help
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 13e2b15..d88ff5f 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -94,6 +94,14 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	  This option selects musl as the C library for the
+ 	  cross-compilation toolchain.
+ 
++config BR2_TOOLCHAIN_BUILDROOT_NEWLIB
++	bool "newlib (experimental)"
++	depends on BR2_arm
++	select BR2_TOOLCHAIN_USES_NEWLIB
++	select BR2_TOOLCHAIN_NO_OS_TUPLE
++	help
++	  This will build the newlib library for a toolchain without an OS
++
+ endchoice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+@@ -104,6 +112,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
++	default "newlib" if BR2_TOOLCHAIN_BUILDROOT_NEWLIB
+ 
+ source "package/uclibc/Config.in"
+ source "package/glibc/Config.in"
+-- 
+1.9.1
