@@ -1,52 +1,125 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 18 Sep 2015 00:39:16 +0300
-Subject: [Buildroot] sysvinit-2.88 build is failing for ARM64
-In-Reply-To: <20150917230753.2ad46e4c@free-electrons.com>
-References: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
- <55FA95DB.80408@synopsys.com> <20150917103540.GO11632@tarshish>
- <55FA986B.9080208@synopsys.com> <55FA9C24.2060901@synopsys.com>
- <20150917111217.GP11632@tarshish>
- <20150917230753.2ad46e4c@free-electrons.com>
-Message-ID: <20150917213916.GW11632@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Sep 2015 23:36:51 +0200
+Subject: [Buildroot] [git commit] micropython: new package
+Message-ID: <20150917214802.3E9E581EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=9646e80fca281030eb5d3125f499a60231476373
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Sep 17, 2015 at 11:07:53PM +0200, Thomas Petazzoni wrote:
-> On Thu, 17 Sep 2015 14:12:17 +0300, Baruch Siach wrote:
-> > On Thu, Sep 17, 2015 at 11:55:32AM +0100, Joao Pinto wrote:
-> > > The library is checked as:
-> > > ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
-> > > 
-> > > And the library is located at:
-> > > output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/libcrypt.a
-> > > 
-> > > Maybe for ARM64 we have to make an extra check?
-> > 
-> > This check is from package/sysvinit/0001-fix-libcrypt-test.patch. You'll 
-> > probably need to adjust that patch to match this Linaro toolchain.
-> 
-> In fact, this path-based check is really crappy. I believe it's a lot
-> better to ask gcc directly:
-> 
-> HAS_LIBCRYPT=$(shell f=`mktemp` && echo 'int main(void) {}' | $(CC) -o $$f -xc - -lcrypt >/dev/null 2>&1 && echo y && rm -f $$f)
+Micro Python is a lean and fast implementation of the Python 3
+programming language that is optimised to run on a microcontroller.
 
-Why not use /dev/null for gcc output instead of a temporary file? Something 
-like:
+[Thomas: fix minor typo in Config.in noticed by Vicente.]
 
-HAS_LIBCRYPT=$(shell echo 'int main(void) {}' | $(CC) -o /dev/null -xc - -lcrypt >/dev/null 2>&1 && echo y)
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |    1 +
+ package/micropython/0001-fix-version.patch |   22 +++++++++++++++++++
+ package/micropython/Config.in              |   12 ++++++++++
+ package/micropython/micropython.mk         |   32 ++++++++++++++++++++++++++++
+ 4 files changed, 67 insertions(+), 0 deletions(-)
 
-baruch
-
-> ifeq ($(HAS_LIBCRYPT),y)
-> SULOGINLIBS += -lcrypt
-> endif
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/Config.in b/package/Config.in
+index e2f669a..e702e5f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -509,6 +509,7 @@ menu "Lua libraries/modules"
+ endmenu
+ endif
+ 	source "package/lutok/Config.in"
++	source "package/micropython/Config.in"
+ 	source "package/moarvm/Config.in"
+ 	source "package/mono/Config.in"
+ if BR2_PACKAGE_MONO
+diff --git a/package/micropython/0001-fix-version.patch b/package/micropython/0001-fix-version.patch
+new file mode 100644
+index 0000000..1bf2992
+--- /dev/null
++++ b/package/micropython/0001-fix-version.patch
+@@ -0,0 +1,22 @@
++Always use the fallback behaviour for determining the version number
++
++When built from within buildroot the micropython build process detects
++that it is inside a git repository and ends up using the buildroot
++version number instead of the correct micropython version number.
++
++Signed-off-by: Chris Packham <judge.packham@gmail.com>
++---
++diff -Naur micropython-v1.4.5-old/py/makeversionhdr.py micropython-v1.4.5/py/makeversionhdr.py
++--- micropython-v1.4.5-old/py/makeversionhdr.py	2015-08-12 00:42:30.000000000 +1200
+++++ micropython-v1.4.5/py/makeversionhdr.py	2015-09-16 10:21:06.698962836 +1200
++@@ -70,9 +70,7 @@
++ 
++ def make_version_header(filename):
++     # Get version info using git, with fallback to docs/conf.py
++-    info = get_version_info_from_git()
++-    if info is None:
++-        info = get_version_info_from_docs_conf()
+++    info = get_version_info_from_docs_conf()
++ 
++     git_tag, git_hash, ver = info
++ 
+diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+new file mode 100644
+index 0000000..c62b3ab
+--- /dev/null
++++ b/package/micropython/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_MICROPYTHON
++	bool "micropython"
++	select BR2_PACKAGE_LIBFFI
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Micro Python is a lean and fast implementation of the Python 3
++	  programming language that is optimised to run on a microcontroller.
++
++	  http://micropython.org
++
++comment "micropython needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+new file mode 100644
+index 0000000..2d7c924
+--- /dev/null
++++ b/package/micropython/micropython.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# micropython
++#
++################################################################################
++
++MICROPYTHON_VERSION = v1.4.5
++MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
++MICROPYTHON_LICENSE = MIT
++MICROPYTHON_LICENSE_FILES = LICENSE
++MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
++
++# Use fallback implementation for exception handling on architectures that don't
++# have explicit support.
++ifeq ($(BR2_powerpc),y)
++MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
++endif
++
++define MICROPYTHON_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
++		CROSS_COMPILE=$(TARGET_CROSS) \
++		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
++endef
++
++define MICROPYTHON_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
++		DESTDIR=$(TARGET_DIR) \
++		PREFIX=$(TARGET_DIR)/usr \
++		install
++endef
++
++$(eval $(generic-package))
