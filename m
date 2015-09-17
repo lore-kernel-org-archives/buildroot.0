@@ -1,71 +1,68 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Thu, 17 Sep 2015 14:53:40 +0100
-Subject: [Buildroot] [PATCH] libseccomp: Add new config option to build and
-	install tests
-Message-ID: <1442498020-661-1-git-send-email-markos.chandras@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 17 Sep 2015 16:56:24 +0300
+Subject: [Buildroot] [PATCH] sysvinit: build fixed for arm64
+	architectures
+In-Reply-To: <2cd1307d42dd411b54c212cc53439d1ead0af01c.1442497341.git.jpinto@synopsys.com>
+References: <2cd1307d42dd411b54c212cc53439d1ead0af01c.1442497341.git.jpinto@synopsys.com>
+Message-ID: <20150917135624.GQ11632@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new config option to allow building and installing the libseccomp
-testsuite on the target. It's useful for testing the kernels'
-seccomp behavior for the target architecture.
+Hi Joao,
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/libseccomp/Config.in     |  9 +++++++++
- package/libseccomp/libseccomp.mk | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
+On Thu, Sep 17, 2015 at 02:46:02PM +0100, jpinto wrote:
+> sysvinit was not able to be built for arm64 architectures. This patch was made 
+> to fix the problem.
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  package/sysvinit/0001-fix-libcrypt-test.patch | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
+> index 207270d..7233d38 100644
+> --- a/package/sysvinit/0001-fix-libcrypt-test.patch
+> +++ b/package/sysvinit/0001-fix-libcrypt-test.patch
+> @@ -1,17 +1,25 @@
+>  Make the libcrypt test somewhat cross-compilation compliant
+>  
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+>  
+>  Index: b/src/Makefile
+>  ===================================================================
+>  --- a/src/Makefile
+>  +++ b/src/Makefile
+> -@@ -78,7 +78,7 @@
+> +@@ -78,7 +78,14 @@
+>   endif
+>   
+>   # Additional libs for GNU libc.
+>  -ifneq ($(wildcard /usr/lib*/libcrypt.a),)
+> ++inc_additional_lib =
+>  +ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
+> ++  inc_additional_lib = yes
+> ++else ifneq ($(wildcard $(SYSROOT)/usr/lib*/aarch64*/libcrypt.a),)
 
-diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
-index 4c34c5466592..760a6f321142 100644
---- a/package/libseccomp/Config.in
-+++ b/package/libseccomp/Config.in
-@@ -15,6 +15,15 @@ config BR2_PACKAGE_LIBSECCOMP
- 
- 	  https://github.com/seccomp/libseccomp
- 
-+config BR2_PACKAGE_LIBSECCOMP_TESTS
-+	bool "Install libseccomp tests"
-+	depends on BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
-+	help
-+	  Build and install the libseccomp testsuite.
-+
-+comment "libseccomp testsuite needs bash as running shell"
-+	depends on !BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
-+
- comment "libseccomp needs a toolchain w/ headers >= 3.12"
- 	depends on BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_i386 || BR2_x86_64
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-index a188298006b1..6edf96f92bfa 100644
---- a/package/libseccomp/libseccomp.mk
-+++ b/package/libseccomp/libseccomp.mk
-@@ -17,4 +17,23 @@ define LIBSECCOMP_FIXUP_M4_DIR
- endef
- LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
- 
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
-+
-+define LIBSECCOMP_TESTS_BUILD
-+	$(MAKE) -C $(@D)/tests check-build
-+endef
-+
-+define LIBSECCOMP_TESTS_INSTALL
-+	mkdir -p $(TARGET_DIR)/usr/libseccomp/{tests,tools} && \
-+	for x in tests tools; do \
-+		find $(@D)/$$x -maxdepth 1 \( -name "*.tests" -o -perm -a=x \) \
-+			-type f -exec cp {} $(TARGET_DIR)/usr/libseccomp/$$x/ \; ; \
-+	done
-+endef
-+
-+LIBSECCOMP_POST_BUILD_HOOKS += LIBSECCOMP_TESTS_BUILD
-+LIBSECCOMP_POST_INSTALL_TARGET_HOOKS += LIBSECCOMP_TESTS_INSTALL
-+
-+endif
-+
- $(eval $(autotools-package))
+This looks to specific to that toolchain. Why not generalize
+
+ else ifneq ($(wildcard $(SYSROOT)/usr/lib*/*/libcrypt.a),)
+
+?
+
+baruch
+
+> ++  inc_additional_lib = yes
+> ++endif
+> ++
+> ++ifdef inc_additional_lib
+>     SULOGINLIBS	+= -lcrypt
+>   endif
+
 -- 
-2.5.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
