@@ -1,74 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Sep 2015 22:15:46 +0200
-Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
- runtime
-In-Reply-To: <20150917190424.GU11632@tarshish>
-References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
- <20150917150112.GR11632@tarshish>
- <alpine.DEB.2.02.1509171814510.13941@orcam81.orcam.lan>
- <20150917162003.GT11632@tarshish>
- <alpine.DEB.2.02.1509171922410.13941@orcam81.orcam.lan>
- <20150917192315.6db18115@free-electrons.com>
- <20150917190424.GU11632@tarshish>
-Message-ID: <20150917221546.247fe210@free-electrons.com>
+Date: Thu, 17 Sep 2015 22:20:21 +0200
+Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting
+ SSP under uclibc-ng
+In-Reply-To: <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
+References: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
+ <20150917191421.53dd3542@free-electrons.com>
+ <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
+Message-ID: <20150917222021.4096b754@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Brendan,
 
-On Thu, 17 Sep 2015 22:04:24 +0300, Baruch Siach wrote:
+On Thu, 17 Sep 2015 18:29:12 +0100, Brendan Heading wrote:
 
-> Based on the following snippet from Buildroot top level Makefile I would 
-> assume that $(SHELL) is /bin/bash on my host machine:
+> > Cc'ing Waldemar here. It's an interesting consequence of bumping the
+> > GLIBC_MINOR version exposed by uClibc, which happened recently to solve
+> > an eventfd_read() problem in Boost on ARC, investigated by Alexey (also
+> > in Cc).
 > 
-> # we want bash as shell
-> SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
->          else if [ -x /bin/bash ]; then echo /bin/bash; \
->          else echo sh; fi; fi)
+> Yup, that's exactly what has exposed the problem. And the "problem" is
+> really a deficiency in the way GCC detects SSP support in the libc.
+
+Correct.
+
+> > Exporting that globally is really horrible.
 > 
-> However, 'make printvars' shows
+> Yeah I knew that exporting it globally was not going to fly - I just
+> submitted it as a starting point for discussion how to solve this.
+
+Sure, no problem with that. It's already much appreciated that you did
+all this investigation.
+
+> > I think the appropriate fix
+> > is probably to teach gcc about uClibc, like we're doing for musl already
+> > (http://git.buildroot.net/buildroot/tree/package/gcc/4.9.3/900-musl-support.patch#n452).
+> > So we could do a check here like:
+> >
+> >  *uclibc*)
+> >         test if __UCLIBC_HAS_SSP__ is defined or not. If yes -> we have
+> >         SSP, if not -> we don't have SSP.
+> >
+> > And contribute that to upstream gcc.
+> >
+> > What do you think?
 > 
->    SHELL=/bin/sh (/bin/sh)
+> It is up to you. My only quibble would be that layering another patch
+> in this area (where there are already patches adding stuff as you
+> noted) might get a bit fiddly. Are we okay with patches being
+> order-dependent ? This does mean that they're not so easy to submit
+> upstream ..
 
-Here:
+We are fine with patches being order-dependent. That's fine we have a
+sequence number for all patches in the first place.
 
-SHELL=/bin/bash (/bin/bash)
+So far, the effort to push upstream our gcc patches has been very
+limited. It would be good to push some of them upstream, but in the
+mean time, our stack of gcc patches is not that big, and is not causing
+too many problems when bumping gcc.
 
-> $(SHELL) expands to /bin/sh in the gzip Makefile, and generated scripts carry 
-> the /bin/sh shebang. I have no idea how.
-> 
-> As for the original problem, I managed to override the environment $(SHELL) as 
-> indicated in the gzip INSTALL file:
-> 
->    GZIP_CONF_ENV = CONFIG_SHELL=/bin/bash
-> 
-> So the right fix, I guess, is just
-> 
->    GZIP_CONF_ENV = CONFIG_SHELL=/bin/sh
+> Aside from that .. GCC actually already has a block which checks
+> UCLIBC_HAS_SSP. The problem is that it reaches it only if the glibc
+> version check returns that the version is 2.3 or lower. The fix might
+> simply be to reorder the check.
 
-It is not a completely correct fix. According to
-https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/config_002estatus-Invocation.html,
-CONFIG_SHELL is:
-
-"""
-The shell with which to run configure. It must be Bourne-compatible,
-and the absolute name of the shell should be passed. The default is a
-shell that supports LINENO if available, and /bin/sh otherwise.
-"""
-
-I believe there is no proper way with the current gzip build system to
-fix the problem. It is inherently wrong to assume that the $(SHELL)
-used on the host will be available on the target. The only sane option
-I believe is to have a --with-shell=<foo> option, which if not given
-defaults to $(SHELL) to retain the existing behavior.
-
-Another simpler option is to simply add a post-install target hook that
-will adjust the shebang of the shell scripts installed by gzip.
-
-Best regards,
+If it's that simple, then it should be done :) In any case, version
+based tests are often not a good idea, so when uClibc is used, gcc
+should really rely on UCLIBC_HAS_SSP.
 
 Thomas
 -- 
