@@ -1,74 +1,51 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 17 Sep 2015 08:30:15 -0500
-Subject: [Buildroot] [PATCH v3 1/5] package/cups: Un-deprecate,
- and update CUPS to 2.1.0
-In-Reply-To: <1442492616-12626-2-git-send-email-olivier.schonken@gmail.com>
-References: <1442492616-12626-1-git-send-email-olivier.schonken@gmail.com>
- <1442492616-12626-2-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <CAMQcK5+fqZ1UGBVpHkeCXv9r0-GKpCFeEm27ChpoWuSuqKL_YQ@mail.gmail.com>
+From: jpinto <Joao.Pinto@synopsys.com>
+Date: Thu, 17 Sep 2015 14:46:02 +0100
+Subject: [Buildroot] [PATCH] sysvinit: build fixed for arm64 architectures
+Message-ID: <2cd1307d42dd411b54c212cc53439d1ead0af01c.1442497341.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Olivier,
+sysvinit was not able to be built for arm64 architectures. This patch was made 
+to fix the problem.
 
-On Thu, Sep 17, 2015 at 7:23 AM, Olivier Schonken
-<olivier.schonken@gmail.com> wrote:
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+---
+ package/sysvinit/0001-fix-libcrypt-test.patch | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-[..]
-
-> diff --git a/package/cups/0001-Remove-building-html-from-man-makefile.patch b/package/cups/0001-Remove-building-html-from-man-makefile.patch
-> new file mode 100644
-> index 0000000..5468c92
-> --- /dev/null
-> +++ b/package/cups/0001-Remove-building-html-from-man-makefile.patch
-> @@ -0,0 +1,27 @@
-> +From da960a1384625d2550ffbf5765a10fe9b3aa5a51 Mon Sep 17 00:00:00 2001
-> +From: Olivier Schonken <olivier.schonken@gmail.com>
-> +Date: Wed, 18 Mar 2015 20:30:39 +0200
-> +Subject: [PATCH] Remove building html from man makefile
-> +
-> +Building and using mantohtml causes problems for cross-compiling
-> +
-> +Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-> +---
-> + man/Makefile | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Would it make more sense to just disable the build of the
-documentation all together?
-
-Usually it has been the practice to disable the building of man pages
-or any documentation since they are stripped from the target anyways.
-I'm not sure if this is possible or not from a conf option because I
-haven't look around on the package.
-
-> +diff --git a/man/Makefile b/man/Makefile
-> +index dc1a8c0..0ad42a1 100644
-> +--- a/man/Makefile
-> ++++ b/man/Makefile
-> +@@ -73,7 +73,7 @@ MAN8 =       cupsaccept.$(MAN8EXT) \
-> + # Make everything...
-> + #
-> +
-> +-all:  $(MAN1) $(MAN5) $(MAN7) $(MAN8) html
-> ++all:  $(MAN1) $(MAN5) $(MAN7) $(MAN8)
-> +
-> +
-> + #
-> +--
-> +1.9.1
-
-[..]
-
-Thanks,
--Ryan
-
+diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
+index 207270d..7233d38 100644
+--- a/package/sysvinit/0001-fix-libcrypt-test.patch
++++ b/package/sysvinit/0001-fix-libcrypt-test.patch
+@@ -1,17 +1,25 @@
+ Make the libcrypt test somewhat cross-compilation compliant
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+ 
+ Index: b/src/Makefile
+ ===================================================================
+ --- a/src/Makefile
+ +++ b/src/Makefile
+-@@ -78,7 +78,7 @@
++@@ -78,7 +78,14 @@
+  endif
+  
+  # Additional libs for GNU libc.
+ -ifneq ($(wildcard /usr/lib*/libcrypt.a),)
+++inc_additional_lib =
+ +ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
+++  inc_additional_lib = yes
+++else ifneq ($(wildcard $(SYSROOT)/usr/lib*/aarch64*/libcrypt.a),)
+++  inc_additional_lib = yes
+++endif
+++
+++ifdef inc_additional_lib
+    SULOGINLIBS	+= -lcrypt
+  endif
+  
 -- 
-Ryan Barnett / Sr Software Engineer
-Airborne Information Systems / Security Systems and Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-ryan.barnett at rockwellcollins.com
-www.rockwellcollins.com
+1.8.1.5
