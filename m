@@ -1,55 +1,37 @@
 From: Olivier Schonken <olivier.schonken@gmail.com>
-Date: Thu, 17 Sep 2015 14:23:34 +0200
-Subject: [Buildroot] [PATCH v3 3/5] package/gutenprint: Un-deprecate and
-	bump version to 5.2.10
+Date: Thu, 17 Sep 2015 14:23:35 +0200
+Subject: [Buildroot] [PATCH v3 4/5] Enable xpdf-headers in poppler to enable
+	building of cups-filters
 In-Reply-To: <1442492616-12626-1-git-send-email-olivier.schonken@gmail.com>
 References: <1442492616-12626-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <1442492616-12626-4-git-send-email-olivier.schonken@gmail.com>
+Message-ID: <1442492616-12626-5-git-send-email-olivier.schonken@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add --enable-xpdf-headers to poppler.mk. Required for succesfull
+build of cups-filters.
+
 Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
 ---
- package/gutenprint/Config.in       | 1 -
- package/gutenprint/gutenprint.hash | 2 +-
- package/gutenprint/gutenprint.mk   | 2 +-
- 3 files changed, 2 insertions(+), 3 deletions(-)
+ package/poppler/poppler.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gutenprint/Config.in b/package/gutenprint/Config.in
-index 686dbce..2826594 100644
---- a/package/gutenprint/Config.in
-+++ b/package/gutenprint/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_GUTENPRINT
- 	bool "gutenprint"
- 	# because of cups security issues
--	depends on BR2_DEPRECATED_SINCE_2015_05
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_CUPS
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-diff --git a/package/gutenprint/gutenprint.hash b/package/gutenprint/gutenprint.hash
-index 3cfe0e1..36c12cc 100644
---- a/package/gutenprint/gutenprint.hash
-+++ b/package/gutenprint/gutenprint.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  4b27e4f06f32d30271df89ecb6089bb11bcf2caec5f60b0909e083095354bca0  gutenprint-5.2.9.tar.bz2
-+sha256  431f352b412dfb9809d126a85a37a1fcd1c1826275ace8cdcd4fd9a6ee360e59  gutenprint-5.2.10.tar.bz2
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 3ff05b6..0bdc3bc 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 6142cba..1113e4b 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -11,7 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPLv2+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_INSTALL_STAGING = YES
+-POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
++POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
++	--enable-xpdf-headers
  
- GUTENPRINT_VERSION_MAJOR = 5.2
--GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).9
-+GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).10
- GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint-$(GUTENPRINT_VERSION_MAJOR)/$(GUTENPRINT_VERSION)
- GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
- GUTENPRINT_LICENSE = GPLv2+
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ POPPLER_CONF_OPTS += --enable-cms=lcms2
 -- 
 1.9.1
