@@ -1,46 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Sep 2015 23:07:53 +0200
-Subject: [Buildroot] sysvinit-2.88 build is failing for ARM64
-In-Reply-To: <20150917111217.GP11632@tarshish>
-References: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
- <55FA95DB.80408@synopsys.com> <20150917103540.GO11632@tarshish>
- <55FA986B.9080208@synopsys.com> <55FA9C24.2060901@synopsys.com>
- <20150917111217.GP11632@tarshish>
-Message-ID: <20150917230753.2ad46e4c@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Thu, 17 Sep 2015 22:22:52 +0100
+Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: fix problem with detecting
+ SSP under uclibc-ng
+In-Reply-To: <20150917222021.4096b754@free-electrons.com>
+References: <1442500678-4457-1-git-send-email-brendanheading@gmail.com>
+ <20150917191421.53dd3542@free-electrons.com>
+ <CA+BsyQ7RqCVPi6h9VUJpdQ49pVZwLnCGzRtL+wN1JUhs+T7_WA@mail.gmail.com>
+ <20150917222021.4096b754@free-electrons.com>
+Message-ID: <CA+BsyQ4m2kBQkc4k702Tj8c9Y5N-eYhjy6CM-7wWRPHEpjWtCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, Joao,
+>> Yeah I knew that exporting it globally was not going to fly - I just
+>> submitted it as a starting point for discussion how to solve this.
+>
+> Sure, no problem with that. It's already much appreciated that you did
+> all this investigation.
 
-On Thu, 17 Sep 2015 14:12:17 +0300, Baruch Siach wrote:
+Thank you for that!
 
-> On Thu, Sep 17, 2015 at 11:55:32AM +0100, Joao Pinto wrote:
-> > The library is checked as:
-> > ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
-> > 
-> > And the library is located at:
-> > output/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/libcrypt.a
-> > 
-> > Maybe for ARM64 we have to make an extra check?
-> 
-> This check is from package/sysvinit/0001-fix-libcrypt-test.patch. You'll 
-> probably need to adjust that patch to match this Linaro toolchain.
+> We are fine with patches being order-dependent. That's fine we have a
+> sequence number for all patches in the first place.
+>
+> So far, the effort to push upstream our gcc patches has been very
+> limited. It would be good to push some of them upstream, but in the
+> mean time, our stack of gcc patches is not that big, and is not causing
+> too many problems when bumping gcc.
 
-In fact, this path-based check is really crappy. I believe it's a lot
-better to ask gcc directly:
+Yeah I also get the sense that getting patches upstream in GCC might
+be difficult, and when I was googling this I saw other examples of
+people running into problems similar to this. I would guess it's
+especially unlikely we would get patches into the versions that are in
+maintenance mode. We might have more luck with next (ie GCC 6.0).
 
-HAS_LIBCRYPT=$(shell f=`mktemp` && echo 'int main(void) {}' | $(CC) -o $$f -xc - -lcrypt >/dev/null 2>&1 && echo y && rm -f $$f)
-ifeq ($(HAS_LIBCRYPT),y)
-SULOGINLIBS += -lcrypt
-endif
+>> Aside from that .. GCC actually already has a block which checks
+>> UCLIBC_HAS_SSP. The problem is that it reaches it only if the glibc
+>> version check returns that the version is 2.3 or lower. The fix might
+>> simply be to reorder the check.
+>
+> If it's that simple, then it should be done :) In any case, version
+> based tests are often not a good idea, so when uClibc is used, gcc
+> should really rely on UCLIBC_HAS_SSP.
 
-Best regards,
+Okay, I am now looking at putting together an interim patch set. I
+don't think there is any point in trying to submit them into
+maintenance releases of the existing versions but it's worth taking a
+shot at getting them into -next.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+regards
+
+Brendan
