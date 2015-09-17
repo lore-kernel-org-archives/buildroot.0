@@ -1,85 +1,43 @@
-From: Jonathan Ben Avraham <yba@tkos.co.il>
-Date: Thu, 17 Sep 2015 18:20:34 +0300 (IDT)
-Subject: [Buildroot] [PATCH 2/2] Add dependency on gzip to lxc for
- runtime
-In-Reply-To: <20150917150353.GS11632@tarshish>
-References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
- <1442501193-6059-2-git-send-email-yba@tkos.co.il>
- <20150917150353.GS11632@tarshish>
-Message-ID: <alpine.DEB.2.02.1509171816500.13941@orcam81.orcam.lan>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 17 Sep 2015 17:26:03 +0200
+Subject: [Buildroot] [1/2,
+ v2] wpa_supplicant: Add an explicit option to enable nl80211.
+In-Reply-To: <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
+References: <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <20150917152603.GA28602@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-See inlines...
+Hi Nicolas,
 
-On Thu, 17 Sep 2015, Baruch Siach wrote:
-
-> Date: Thu, 17 Sep 2015 18:03:53 +0300
-> From: Baruch Siach <baruch@tkos.co.il>
-> To: Jonathan Ben-Avraham <yba@tkos.co.il>
-> Cc: buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 2/2] Add dependency on gzip to lxc for runtime
+On Fri, Jul 17, 2015 at 09:59:09AM +0200, Nicolas Cavallari wrote:
+> Currently, nl80211 support is conditionnal with libnl being enabled,
+> using implicit dependencies.  This causes problems since it is not
+> obvious and wpa_supplicant without nl80211 isn't what most user expects.
 > 
-> Hi Yonatan,
->
-> On Thu, Sep 17, 2015 at 05:46:33PM +0300, Jonathan Ben-Avraham wrote:
->> From: Jonathan Ben Avraham <yba@tkos.co.il>
->>
->> lxc executables such as lxc-checkconfig require scripts provided by
->> gzip such as zgrep.
->>
->> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
->> ---
->>  package/lxc/Config.in |    6 ++++--
->>  1 file changed, 4 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/lxc/Config.in b/package/lxc/Config.in
->> index ffd9b4a..e774eee 100644
->> --- a/package/lxc/Config.in
->> +++ b/package/lxc/Config.in
->> @@ -9,6 +9,7 @@ config BR2_PACKAGE_LXC
->>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
->>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
->>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
->> +	depends on BR2_PACKAGE_GZIP
->
-> We generally use 'select' for non obvious dependencies like this one. You'll
-> also need to propagate the wchar dependency of gzip here.
+> If nl80211 isn't enabled, then buildroot only enables the wext driver,
+> which will only work if some deprecated kernel feature isn't left
+> disabled, or if using a outdated out-of-tree linux driver which doesn't
+> use the cfg80211 infrastructure.
+> 
+> This makes nl80211 support an explicit option, which
+> "select BR2_PACKAGE_LIBNL" accordingly.  To handle upgrades nicely, it
+> would have been nice to have "default y if BR2_PACKAGE_LIBNL", but
+> Kconfig treats this as a circular dependency.  So instead, this enables
+> the option by default, which is less worse than not enabling nl80211
+> when it was previously implicitely enabled.
 
-I didn't use 'select' because of its implicit, sneaky nature. Bash is too 
-heavy to just "select" it into a rootfs without the user explicitly 
-putting an 'X' in the checkbox.
+Actually I like the fact that it is enabled by default. As you said,
+most users now want NL80211.
 
-  - yba
+Only one remark, why are there two spaces after every dots in your
+commit logs. Is it a custom git hook? ;-)
 
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-> baruch
->
->>  	help
->>  	  Linux Containers (LXC), provides the ability to group and isolate
->>  	  of a set of processes in a jail by virtualizing and accounting the
->> @@ -16,10 +17,11 @@ config BR2_PACKAGE_LXC
->>
->>  	  https://linuxcontainers.org/
->>
->> -comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library"
->> +comment "lxc needs gzip, toolchain w/ threads, headers >= 3.0, dynamic library"
->>  	depends on BR2_USE_MMU
->>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
->>  	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
->>  	depends on !BR2_TOOLCHAIN_HAS_THREADS \
->>  		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
->> -		|| BR2_STATIC_LIBS
->> +		|| BR2_STATIC_LIBS \
->> +		|| !BR2_PACKAGE_GZIP
->
->
-
--- 
-  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
+Regards,
+Gary
