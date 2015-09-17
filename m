@@ -1,7 +1,9 @@
 From: Jonathan Ben-Avraham <yba@tkos.co.il>
-Date: Thu, 17 Sep 2015 17:46:32 +0300
-Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for runtime
-Message-ID: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
+Date: Thu, 17 Sep 2015 17:46:33 +0300
+Subject: [Buildroot] [PATCH 2/2] Add dependency on gzip to lxc for runtime
+In-Reply-To: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
+References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
+Message-ID: <1442501193-6059-2-git-send-email-yba@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,43 +12,39 @@ To: buildroot@busybox.net
 
 From: Jonathan Ben Avraham <yba@tkos.co.il>
 
-The GNU gzip package provides eleven executable files, all but one of
-which are bash shell scripts. If we allow inclusion of gzip without
-bash, then on executing commands such as lxc-checkconfig that actually
-use these shell scripts, you will get errors like 'zgrep: not found',
-even though the zgrep executable is in PATH.
-
-This patch also sharpens up the help text and eliminates the claim to
-provide gzcat.
+lxc executables such as lxc-checkconfig require scripts provided by
+gzip such as zgrep.
 
 Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
 ---
- package/gzip/Config.in |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ package/lxc/Config.in |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/gzip/Config.in b/package/gzip/Config.in
-index a251425..9e2dc0d 100644
---- a/package/gzip/Config.in
-+++ b/package/gzip/Config.in
-@@ -1,11 +1,14 @@
- config BR2_PACKAGE_GZIP
- 	bool "gzip"
--	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_WCHAR && BR2_PACKAGE_BASH
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index ffd9b4a..e774eee 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_LXC
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
++	depends on BR2_PACKAGE_GZIP
  	help
--	  Standard GNU compressor. Provides things like gzip,
--	  gunzip, gzcat, etc...
-+	  The GNU implementation of gzip (http://www.gzip.org).
-+	  Provides: gunzip, gzexe, gzip, zcat, zcmp, zdiff, zforce,
-+	  zgrep, zless, zmore, and znew. All of the executables except
-+	  gzip are Bourne-Again shell scripts. Busybox provides a gzip
-+	  applet.
+ 	  Linux Containers (LXC), provides the ability to group and isolate
+ 	  of a set of processes in a jail by virtualizing and accounting the
+@@ -16,10 +17,11 @@ config BR2_PACKAGE_LXC
  
- 	  http://www.gnu.org/software/gzip/gzip.html
+ 	  https://linuxcontainers.org/
  
--comment "gzip needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+comment "gzip needs bash and a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR || !BR2_PACKAGE_BASH
+-comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library"
++comment "lxc needs gzip, toolchain w/ threads, headers >= 3.0, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201405
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS \
++		|| !BR2_PACKAGE_GZIP
 -- 
 1.7.9.5
