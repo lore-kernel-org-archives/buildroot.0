@@ -1,10 +1,10 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 17 Sep 2015 17:26:03 +0200
-Subject: [Buildroot] [1/2,
- v2] wpa_supplicant: Add an explicit option to enable nl80211.
-In-Reply-To: <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <1437119950-25976-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <20150917152603.GA28602@t450s.lan>
+Date: Thu, 17 Sep 2015 17:31:27 +0200
+Subject: [Buildroot] [2/2,
+	v2] wpa_supplicant: Have Hotspot 2.0 depend on nl80211
+In-Reply-To: <1437119950-25976-2-git-send-email-nicolas.cavallari@green-communications.fr>
+References: <1437119950-25976-2-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <20150917153127.GA28715@t450s.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,42 @@ To: buildroot@busybox.net
 
 Hi Nicolas,
 
-On Fri, Jul 17, 2015 at 09:59:09AM +0200, Nicolas Cavallari wrote:
-> Currently, nl80211 support is conditionnal with libnl being enabled,
-> using implicit dependencies.  This causes problems since it is not
-> obvious and wpa_supplicant without nl80211 isn't what most user expects.
+On Fri, Jul 17, 2015 at 09:59:10AM +0200, Nicolas Cavallari wrote:
+> Hotspot 2.0 uses ANQP whose implementation needs offchannel/
+> remain-on-channel capabilities from the driver, which only exist in the
+> nl80211 driver.  Compiling would work, but the feature would not work.
 > 
-> If nl80211 isn't enabled, then buildroot only enables the wext driver,
-> which will only work if some deprecated kernel feature isn't left
-> disabled, or if using a outdated out-of-tree linux driver which doesn't
-> use the cfg80211 infrastructure.
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> ---
 > 
-> This makes nl80211 support an explicit option, which
-> "select BR2_PACKAGE_LIBNL" accordingly.  To handle upgrades nicely, it
-> would have been nice to have "default y if BR2_PACKAGE_LIBNL", but
-> Kconfig treats this as a circular dependency.  So instead, this enables
-> the option by default, which is less worse than not enabling nl80211
-> when it was previously implicitely enabled.
+> v2: added signoff.
+>  package/wpa_supplicant/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+> index 29dc4b9..22cf7f8 100644
+> --- a/package/wpa_supplicant/Config.in
+> +++ b/package/wpa_supplicant/Config.in
+> @@ -41,6 +41,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
+>  
+>  config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
+>  	bool "Enable HS20"
+> +	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+>  	help
+>  	  Enable Hotspot 2.0 and IEEE 802.11u interworking functionality.
+>
 
-Actually I like the fact that it is enabled by default. As you said,
-most users now want NL80211.
+First I'm not sure on the procedure to test the Hotspot 2.0 but I think
+we should at least add a comment like:
 
-Only one remark, why are there two spaces after every dots in your
-commit logs. Is it a custom git hook? ;-)
+comment "HS20 needs NL80211 support"
+	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211
 
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Tested-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Because right now if you unselect NL80211 WPA option the HS20 just
+disappears.
+
+Or maybe selecting NL80211 would be even better if absolutely required
+at runtime.
 
 Regards,
 Gary
