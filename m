@@ -1,47 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Sep 2015 07:25:05 -0300
-Subject: [Buildroot] [PATCH 1/1] package/ruby: disable use of stack
- protector when not available
-In-Reply-To: <CA+BsyQ7Hr2XLUo5zFb=XOd062NMsU-K7mXS68kV3z-irEfvUxw@mail.gmail.com>
-References: <1442347019-28368-1-git-send-email-brendanheading@gmail.com>
- <20150916224451.45bbe561@free-electrons.com>
- <CA+BsyQ4dFvFDR_e_vQ++8LoH9DfR9w2urypZ17795mEd5ZH2yA@mail.gmail.com>
- <20150916234321.7d49a220@free-electrons.com>
- <CA+BsyQ7Hr2XLUo5zFb=XOd062NMsU-K7mXS68kV3z-irEfvUxw@mail.gmail.com>
-Message-ID: <55FA9501.9040109@zacarias.com.ar>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Thu, 17 Sep 2015 11:28:43 +0100
+Subject: [Buildroot] sysvinit-2.88 build is failing for ARM64
+In-Reply-To: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
+References: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
+Message-ID: <55FA95DB.80408@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/09/15 18:46, Brendan Heading wrote:
 
->> Thanks for the update. However, notice that the toolchain at
->> http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.08-rc1-38-gad0f85e.tar.bz2
->> is capable of building sudo and ruby, even if:
->>
->>   1/ It is using uClibc-ng 1.0.5
->>   2/ It has SSP disabled: #undef __UCLIBC_HAS_SSP__
->>
->> So it's not simply a matter of uClibc vs. uClibc-ng, since one
->> uClibc-ng toolchains works fine.
->
-> Thomas,
->
-> thanks for the tip - I will find out why that scenario seems to work,
-> after I've identified the failure mode of the one I'm looking at now.
+Hello,
 
-Hi.
-See 
-http://git.buildroot.net/buildroot/tree/package/samba4/0002-build-improve-stack-protector-check.patch
-I've pointed Vicente to that problem when bumping to samba 4.3.0, and 
-from the test in Ruby's configure.in i'm 99% certain we're seeing the 
-same issue - the compiler optimizes away any stack usage when the test 
-program does nothing, hence building/linking inserts no guards, thus "it 
-works" (though not quite in reality).
-The solution is having a foolproof test that can't be optimized away, 
-unfortunately many packagers/developers use this simplified test that is 
-flawed, it will require a lot of education to properly fix :)
-(test program formulated together with Vicente and Arnout).
-Regards.
+I am trying to build sysvinit-2.88 for ARM64 and it is failing as shown bellow:
+
+Error log:
+
+droot-linux-gnu/sysroot -C
+/media/Dev_Disk/buildroot-junor1/output/build/sysvinit-2.88/src
+make[1]: Entering directory
+`/media/Dev_Disk/buildroot-junor1/output/build/sysvinit-2.88/src'
+/media/Dev_Disk/buildroot-junor1/output/host/usr/bin/aarch64-linux-gnu-gcc
+sulogin.o    -o sulogin
+/media/Dev_Disk/buildroot-junor1/output/host/usr/bin/aarch64-linux-gnu-gcc
+last.o oldutmp.h   -o last
+sulogin.o: In function `main':
+sulogin.c:(.text.startup+0x648): undefined reference to `crypt'
+collect2: error: ld returned 1 exit status
+make[1]: *** [sulogin] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory
+`/media/Dev_Disk/buildroot-junor1/output/build/sysvinit-2.88/src'
+make: ***
+[/media/Dev_Disk/buildroot-junor1/output/build/sysvinit-2.88/.stamp_built] Error 2
+
+I have checked from mailing history that this problem has already been addressed
+and tested against X86_64. Did anyone tested in ARM64?
+In the meanwhile I will try to fix this problem and I will send the fix patch.
+
+Thanks,
+Joao
