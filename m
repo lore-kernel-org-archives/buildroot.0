@@ -1,8 +1,8 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 18 Sep 2015 17:47:29 +0200
+Date: Fri, 18 Sep 2015 18:37:16 +0200
 Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
  (without devtmpfs)
-In-Reply-To: <8737yevmy7.fsf@dell.be.48ers.dk>
+In-Reply-To: <87fv2fvp5m.fsf@dell.be.48ers.dk>
 References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
  <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
  <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
@@ -11,9 +11,11 @@ References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
  <20150914233402.3575da80@free-electrons.com>
  <87zj0oznp2.fsf@dell.be.48ers.dk>
  <20150915093030.622d2366@free-electrons.com>
- <87zj0oumrg.fsf@dell.be.48ers.dk> <55F89C46.3010904@lucaceresoli.net>
- <8737yevmy7.fsf@dell.be.48ers.dk>
-Message-ID: <55FC3211.3010009@lucaceresoli.net>
+ <87zj0oumrg.fsf@dell.be.48ers.dk>
+ <20150915114159.758baca9@free-electrons.com>
+ <87k2rrvqlh.fsf@dell.be.48ers.dk> <55F80E9C.7070208@mind.be>
+ <87fv2fvp5m.fsf@dell.be.48ers.dk>
+Message-ID: <55FC3DBC.1080800@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,81 +25,47 @@ To: buildroot@busybox.net
 Dear Peter,
 
 Peter Korsgaard wrote:
->>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 >
 > Hi,
 >
->   >> Sure, I get that. I just question the sensibility of combining a 6+ year
->   >> old kernel with modern user space.
+>   > On 15-09-15 14:01, Peter Korsgaard wrote:
+>   >> Or alternatively, extend the S10mdev logic to detect that it need to
+>   >> create a tmpfs on /dev (by looking for devtmpfs in /proc/filesystems or
+>   >> detecting that /dev is RO) and have all the fixup there. That way it
+>   >> atleast doesn't add any more complications to the rest of Buildroot /
+>   >> users.
 >
->   > I agree with you on the principle, but in the practice I have devices
->   > running very fine on 2.6.30 and some user space applications using
->   > C++11.
+>   >  That's a great idea, because it actually simplifies the buildroot code (no
+>   > longer needed to force devtmpfs in the kernel when mdev is selected).
 >
-> Ok, and are you actively doing system level development, or "just"
-> adjusting a single application on a mature product? E.G. are you
-> interested in getting the latest versions of all the libraries or rather
-> freeze the entire system except for your application?
+>   >  To detect, it's as simple as:
+>
+>   > if [ "$(cut -d ' ' -f 2,3 /proc/mounts | sed -n '/^\/dev /s///p')" != devtmpfs ]
+>
+> Or simply 'grep -q devtmpfs /proc/filesystems'. It doesn't check if /dev
+> is really a devtmpfs, but as we force DEVTMPFS_MOUNT=y (and the cpio
+> init wrapper) that is probably good enough.
+>
+> For mdev, I think it makes more sense to check if /dev is writable, as
+> that is the really what mdev requires (E.G. we could be in an initramfs
+> on a <2.6.32 kernel or similar.
+>
 
-I work both on new products and on mature products. But the latter
-receive consistent updates at times, which might add a lot more packages
-or change the dependencies.
+Theoretically correct, but having a dynamic /dev management on flash
+storage seems a very bad idea.
 
-In both cases I want a recent a fairly recent set of packages.
+In addition, i'm not sure I can write a good test to check whether it's
+writable. [ -w /dev] does not consider if the filesystem is mounted
+read-only. Checking if "/" has the "ro" option in /proc/mounts can be
+done. But I'm not sure there are other possible configuration that make
+/dev not writable for other reasons. SELinux maybe?
 
-A few months ago I had to bump a library to a version that was not yet
-stable at that time, and thus not yet in Buildroot, because it
-implemented a method that we needed in an application.
-
->   > Yes, I used a fairly recent toolchain (gcc 4.8 IIRC), which is
->   > of course a bad idea, I know... But in the practice it works.
->
-> Then you presumably already had to backport kernel fixes to build with
-> 4.8? E.G. I've worked on a system stuck on 2.6.37 where I had to
-> backport this to get it to run with gcc 4.7+:
-
-Nope. Maybe because I'm currently working mostly on ARM9 machines, and
-ARM9 is definitely "mature".
-
-However I had to forced an "old" Sourcery toolchain (2013.05) for an
-ARM9 project because I was getting mysterious runtime errors with
-2014.05, the latest available in BR at that time.
-
->>>> I'm not sure how complicated it is to backport devtmpfs. However I
->   >> > would suspect that it isn't that easy.
->   >>
->   >> Take a look at 2b2af54a5bb6f7e80ccf78f20084b93c398c3a8b in the
->   >> kernel. To me it looks quite self contained, so backporting it to
->   >> something close to 2.6.32 doesn't look too bad.
->
->   > I think I had a look a couple of years ago when I did the first project
->   > on the same SoC. I think I had a look and found it non trival, but the
->   > product to create had no hotplugging capabilities and no firmware
->   > loading needs, so I just went for a static /dev.
->
->   > Now I have a real goal, so I might try harder to look into backporting
->   > devtmpfs.
->
-> It seems doable to backport devtmpfs support to 2.6.30.
->
-> I just tried cherry-picking 6fcf53acccf85b4 + 2b2af54a5bb6f7e80ccf7 and
-> I only get a trivial conflict about some header files getting added to
-> init/main.c
->
-> To give it a quick test I tweaked our qemu_x86_defconfig to build 2.6.30
-> + the two backports and booted it:
->
-> Welcome to Buildroot
-> buildroot login: root
-> # uname -a
-> Linux buildroot 2.6.30-00193-g9a8d49a #3 Wed Sep 16 09:27:23 CEST 2015 i686 GNU/Linux
-> # grep devtmpfs /proc/mounts
-> devtmpfs /dev devtmpfs rw,size=63272k,nr_inodes=15818 0 0
->
-> (I did have to fix the kernel a bit to get it to build with sourcery
-> codebench 2011.09, E.G. gcc 4.6.1 - But that was just s/-m elf_x86/-m32/)
-
-Interesting. I'll have a look... sometime.
+Mmh, overall I think the best idea is to base mdev either on devtmpfs
+or on a generic tmpfs. It's more or less what Arnout's test does, except
+it does not take into account the case where a tmpfs (but not devtmpfs)
+is already mounted. But this should happen only if a user tweaks inittab
+to do so.
 
 -- 
 Luca
