@@ -1,60 +1,162 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 18 Sep 2015 23:44:26 +0200
-Subject: [Buildroot] [PATCH v2] host-gcc-final: don't install a potentially
-	dead symlink
-Message-ID: <1442612666-19806-1-git-send-email-arnout@mind.be>
+From: kei <kei-k@ca2.so-net.ne.jp>
+Date: Sat, 19 Sep 2015 07:56:58 +0900
+Subject: [Buildroot] squeezelite: new package
+In-Reply-To: <55FC26B7.8090501@imgtec.com>
+References: <201509181337.t8IDbRNo011752@ms-omx03.plus.so-net.ne.jp>
+ <55FC26B7.8090501@imgtec.com>
+Message-ID: <A5F34969-2B8F-4A54-8E14-DBCDC2068E19@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc used to be installed into $(HOST_DIR)/usr/$(GNU_TARGET_NAME) but
-since gcc 4.9 this is no longer the case.  Therefore, the cc -> gcc
-symlink that is created in that we create in that directory is dead.
+I chacked squeezelite forks on github, but all seems to be just copy (or backups) of google code.
+So for now, original google code repo will be good one.
+What do you think ?
 
-There don't seem to have been any problems due to the missing gcc and
-cc in $(HOST_DIR)/usr/$(GNU_TARGET_NAME), things seems to build fine
-without it. The cc -> gcc symlinks in general should not be needed
-anyway, since we always pass the appropriate CC variable to the
-package build system.
+Kawashima
 
-Therefore, let's remove the cc -> gcc symlink in
-$(HOST_DIR)/usr/$(GNU_TARGET_NAME) - also for pre-4.9 gcc versions.
+On 2015/09/18, at 23:59, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-In addition to the explanation above, this patch is also preparation
-for an upcoming patch series that implements the wrapper for the
-internal toolchain. All the -gcc, -cc and -g++ instances have to be
-symlinked to the wrapper, and the original (even if it was already
-a symlink) has to be moved to *.real. So removing this redundant
-thing helps keeping the internal toolchain wrapper implementation
-a little simpler.
-
-I'll repost this patch as part of that series, but since it can be
-committed indepedently I already have it here.
-
-Patch changelog:
-v2: Rewrote the commit message, after a comment from Thomas P. that
-    $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/gcc actually exists.
----
- package/gcc/gcc-final/gcc-final.mk | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 3336ed3..c31c80e 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -92,9 +92,6 @@ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
- 		ln -snf $(GNU_TARGET_NAME)-gcc \
- 			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
- 	fi
--	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
--		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
--	fi
- endef
- 
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
--- 
-2.5.1
+> Dear Hiroshi Kawashima,
+> 
+> first of all, thanks for your contribution. I'm not the maintainer but
+> please allow me to reply.
+> 
+> Could you please send your patches in git format? Which means, clone the
+> Buildroot repository:
+> 
+> git clone git://git.buildroot.net/buildroot
+> 
+> Do all the changes you need to do. Add the modified files:
+> 
+> git add package/Config.in
+> git add package/squeezelite/Config.in
+> git add squeezelite/squeezelite.mk
+> 
+> Commit your changes:
+> 
+> git commit -s
+> 
+> And then send your commit by email using git:
+> 
+> git send-email --to=buildroot at buildroot.org -1
+> 
+> There is more information here:
+> 
+> http://buildroot.org/manual.html#submitting-patches
+> 
+> I also noticed that this project is hosted on Google code, which has
+> archived the project. And there are lots of forks on GitHub. Is one of
+> them the new official one? Because this problem will not receive more
+> updates on Google code, so any fixes that need to be done upstream will
+> need to go somewhere.
+> 
+> Regards,
+> 
+> Vincent.
+> 
+> On 09/18/2015 02:37 PM, kei-k at ca2.so-net.ne.jp wrote:
+>> Dear, maintener.
+>> 
+>> squeezelite is very famous and attractive sound client for
+>> Logitech Media Server.
+>> 
+>> I deeply appreciate if you pull this patch.
+>> 
+>> Thank you.
+>> 
+>> ==============================================================================
+>> diff -ruN buildroot/package/Config.in buildroot-new/package/Config.in
+>> --- buildroot/package/Config.in	2015-09-18 15:02:07.865545530 +0900
+>> +++ buildroot-new/package/Config.in	2015-09-18 22:02:46.293517263 +0900
+>> @@ -33,6 +33,7 @@
+>> 	source "package/opus-tools/Config.in"
+>> 	source "package/pulseaudio/Config.in"
+>> 	source "package/sox/Config.in"
+>> +	source "package/squeezelite/Config.in"
+>> 	source "package/tidsp-binaries/Config.in"
+>> 	source "package/tovid/Config.in"
+>> 	source "package/tstools/Config.in"
+>> diff -ruN buildroot/package/squeezelite/Config.in buildroot-new/package/squeezelite/Config.in
+>> --- buildroot/package/squeezelite/Config.in	1970-01-01 09:00:00.000000000 +0900
+>> +++ buildroot-new/package/squeezelite/Config.in	2015-09-18 16:07:51.000000000 +0900
+>> @@ -0,0 +1,30 @@
+>> +config BR2_PACKAGE_SQUEEZELITE
+>> +	bool "squeezelite"
+>> +	depends on BR2_USE_WCHAR	# flac
+>> +	select BR2_PACKAGE_ALSA_LIB
+>> +	select BR2_PACKAGE_FLAC
+>> +	select BR2_PACKAGE_LIBMAD
+>> +	select BR2_PACKAGE_LIBVORBIS
+>> +	select BR2_PACKAGE_FAAD2
+>> +	select BR2_PACKAGE_MPG123
+>> +	select BR2_PACKAGE_LIBSOXR
+>> +	help
+>> +	  Logitech Media Server client
+>> +	  https://code.google.com/p/squeezelite/
+>> +
+>> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+>> +	bool "Enable resampling function"
+>> +	default y
+>> +	depends on BR2_PACKAGE_SQUEEZELITE
+>> +	help
+>> +	  Enable resampling function
+>> +
+>> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
+>> +	bool "Use OpenMP for resampling"
+>> +	default y
+>> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+>> +	help
+>> +	  Enable OpenMP support for resampling
+>> +
+>> +comment "squeezelite needs a toolchain w/ wchar (incur from flac)"
+>> +	depends on !BR2_USE_WCHAR
+>> diff -ruN buildroot/package/squeezelite/squeezelite.mk buildroot-new/package/squeezelite/squeezelite.mk
+>> --- buildroot/package/squeezelite/squeezelite.mk	1970-01-01 09:00:00.000000000 +0900
+>> +++ buildroot-new/package/squeezelite/squeezelite.mk	2015-09-18 22:28:22.290163636 +0900
+>> @@ -0,0 +1,34 @@
+>> +################################################################################
+>> +#
+>> +# squeezelite -- Logitech Media Server client
+>> +#
+>> +################################################################################
+>> +
+>> +SQUEEZELITE_VERSION = v1.8
+>> +SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
+>> +SQUEEZELITE_SITE_METHOD = git
+>> +SQUEEZELITE_LICENSE = GPLv3
+>> +SQUEEZELITE_LICENSE_FILE = LICENSE.txt
+>> +SQUEEZELITE_INSTALL_STAGING = NO
+>> +SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
+>> +
+>> +#SQUEEZELITE_OPTS = "-DLINKALL"
+>> +SQUEEZELITE_OPTS = ""
+>> +
+>> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
+>> +	SQUEEZELITE_OPTS += -DRESAMPLE
+>> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
+>> +		SQUEEZELITE_OPTS += -DRESAMPLE_MP
+>> +	endif
+>> +endif
+>> +
+>> +define SQUEEZELITE_BUILD_CMDS
+>> +    $(MAKE) OPTS="$(SQUEEZELITE_OPTS)" \
+>> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+>> +endef
+>> +
+>> +define SQUEEZELITE_INSTALL_TARGET_CMDS
+>> +    $(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> 
+>> ==============================================================================
+>> ============================================================
+>>    Hiroshi Kawashima
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>> 
