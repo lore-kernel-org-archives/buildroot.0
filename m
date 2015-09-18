@@ -1,106 +1,51 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Fri, 18 Sep 2015 21:43:10 +1200
-Subject: [Buildroot] [PATCH v4 0/2] Micropython package
-In-Reply-To: <55FBD989.7020102@imgtec.com>
-References: <CAFOYHZB-oynjvUKa9CkHvBpvw+kuSuPLgWrZZwEOr7YSQOvW0g@mail.gmail.com>
- <1442446199-15963-1-git-send-email-judge.packham@gmail.com>
- <20150918093222.13fa5739@free-electrons.com>
- <CAFOYHZCxy2PWfdPXiTrxDzf4LnLnPCwATyia200X2kHucNqJSA@mail.gmail.com>
- <55FBD989.7020102@imgtec.com>
-Message-ID: <CAFOYHZDSreZL_4FWoF7WzyChSx=Me1QO8NqtK25w8Js9NWyH8A@mail.gmail.com>
+Date: Fri, 18 Sep 2015 21:51:52 +1200
+Subject: [Buildroot] [PATCH] micropython: Set MPZ_DIG_SIZE=32 for 64 bit
+	targets
+In-Reply-To: <CAFOYHZDSreZL_4FWoF7WzyChSx=Me1QO8NqtK25w8Js9NWyH8A@mail.gmail.com>
+References: <CAFOYHZDSreZL_4FWoF7WzyChSx=Me1QO8NqtK25w8Js9NWyH8A@mail.gmail.com>
+Message-ID: <1442569912-13452-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 18, 2015 at 9:29 PM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> Dear Chris Packham,
->
-> On 09/18/2015 09:22 AM, Chris Packham wrote:
->> On Fri, Sep 18, 2015 at 7:32 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> Chris,
->>>
->>> On Thu, 17 Sep 2015 11:29:57 +1200, Chris Packham wrote:
->>>
->>>> Chris Packham (2):
->>>>   micropython: new package
->>>>   micropython-lib: new packages
->>>
->>> There are a number of build failures caused by Micropython in the
->>> autobuilders:
->>>
->>>  * On MIPS64
->>>    http://autobuild.buildroot.org/results/99a/99a610c72877fef53d93e1a923bd5c71b3376618/build-end.log
->>>
->>>  * On Xtensa
->>>    http://autobuild.buildroot.org/results/670/670907760d6b3e7eb46b433647b392cec3bafdcd/build-end.log
->>>
->>>  * On SH4A
->>>    http://autobuild.buildroot.org/results/f5a/f5a2c563b8bdab9e345960a5b92d31f3f92dba00/build-end.log
->>>
->>> See http://autobuild.buildroot.org/?reason=micropython-v1.4.5 for the
->>> complete list of build failures.
->>>
->>> If you could look into these, it would be helpful.
->>
->> Xtensa and SH4A look like they need MICROPY_GCREGS_SETJMP I'll send a
->> patch for them shortly. The MIPS64 one looks different so might need
->> some investigation.
->
-> as the build error says, a right shift is being performed in the
-> py/objint_mpz.c file, and the offending one is at line #54:
->
-> MP_SSIZE_MAX >> MPZ_DIG_SIZE * 4
->
-> in MIPS64 n64 the MP_SSIZE_MAX is 64-bit wide and the value of
-> MPZ_DIG_SIZE 16, so MPZ_DIG_SIZE * 4 is 64. That shift causes a warning
-> because its trying to shift 64 bits of a 64-bit variable:
->
-> py/objint_mpz.c:54:5: error: right shift count >= width of type [-Werror]
->
-> MIPS32 and MIPS64 n32 are fine because MP_SSIZE_MAX is 32-bit wide and
-> the #if clauses in the py/objint_mpz.c protect that to happen.
->
-> Look at this test for MIPS32:
->
-> $ mips-linux-gnu-gcc -mips32r2 -EB ssize_t.c -o ssize_t
-> $ qemu-mips ssize_t
-> MP_SSIZE_MAX: 32 bits
-> MPZ_DIG_SIZE: 16
-> right-shifting 0 bits
-> right-shifting 16 bits
->
-> And now look at the same test for MIPS64 n64:
->
-> $ mips-linux-gnu-gcc -mips64r2 -mabi=64 -EB ssize_t.c -o ssize_t
-> ssize_t.c: In function 'main':
-> ssize_t.c:24:2: warning: right shift count >= width of type
->   (MP_SSIZE_MAX >> MPZ_DIG_SIZE * 4) & DIG_MASK;
->   ^
-> $ qemu-mips64 ssize_t
-> MP_SSIZE_MAX: 64 bits
-> MPZ_DIG_SIZE: 16
-> right-shifting 0 bits
-> right-shifting 16 bits
-> right-shifting 32 bits
-> right-shifting 48 bits
-> right-shifting 64 bits
->
-> I don't know what's the purpose of the code in py/objint_mpz.c and I
-> don't know if they really want to do a 64-bit shift of a 64-bit
-> variable. But the thing is that since it's compiled with the -Werror
-> flag, that warning makes the compilation to fail.
->
-> If they really want to do such a shift, then they should remove the
-> -Werror. But if they don't want to do such a shift, then more #if
-> clauses are needed in order to prevent that to happen. Perhaps you could
-> talk with upstream about this.
->
+From the micropython source:
 
-I raised an issue [1]. But in the meantime I think I've found the
-right setting to pass for a 64 bit target. Patch to follow.
+  This mpz module implements arbitrary precision integers.
 
-[1] - https://github.com/micropython/micropython/issues/1465
+  The storage for each digit is defined by mpz_dig_t.  The actual number
+  of bits in mpz_dig_t that are used is defined by MPZ_DIG_SIZE.  The
+  machine must also provide a type that is twice as wide as mpz_dig_t,
+  in both signed and unsigned versions
+
+  MPZ_DIG_SIZE can be between 4 and 8*sizeof(mpz_dig_t), but it makes
+  most sense to have it as large as possible.
+
+Micropython detects x86_64 targets and sets MPZ_DIG_SIZE appropriately
+but for other 64-bit targets we need to explicitly pass
+-DMPZ_DIG_SIZE=32 in CFLAGS.
+
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/micropython/micropython.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 6266882..1ac2e8d 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -16,6 +16,10 @@ ifeq ($(BR2_powerpc)$(BR2_sh)$(BR2_xtensa),y)
+ MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+ endif
+ 
++ifeq ($(BR2_ARCH_IS_64),y)
++MICROPYTHON_CFLAGS += -DMPZ_DIG_SIZE=32
++endif
++
+ define MICROPYTHON_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/unix \
+ 		CROSS_COMPILE=$(TARGET_CROSS) \
+-- 
+2.5.0
