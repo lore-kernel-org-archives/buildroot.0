@@ -1,25 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 18 Sep 2015 09:39:06 +0100
-Subject: [Buildroot] [PATCH v2] libseccomp: Add new config option to
- build and install tests
-In-Reply-To: <55FBCD1B.8050509@imgtec.com>
-References: <55FAF226.9080800@imgtec.com>
- <1442564371-10498-1-git-send-email-markos.chandras@imgtec.com>
- <55FBCD1B.8050509@imgtec.com>
-Message-ID: <55FBCDAA.2000806@imgtec.com>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Fri, 18 Sep 2015 14:11:36 +0530
+Subject: [Buildroot] buildroot development activities - query
+Message-ID: <CAKpDV8vCmUxg90GwMiqQFbdzR2uR8R2xiTA=ft+a6fU4H0DgPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry all,
+Hello Everyone,
 
-my email client did something weird with my tested-by tag and patchwork
-is not detecting it correctly. Now it will.
+I have joind buildroot list last month only. At present i am going through
+the Linux material on Free electron site.
 
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+I use to find that community is vary active & many mails (related to
+patches applied) flow into my inbox every day.
+
+I am curious to know these mails are about development of buildroot itself
+or using buildroot to make embedded linux system ?
+
+Being a buildroot community members how one can contribute back ?
+
+Please suggest.
 
 Regards,
-
-Vincent.
+Katoch
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150918/f25abb13/attachment.html>
