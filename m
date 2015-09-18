@@ -1,79 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Sep 2015 09:41:02 +0200
-Subject: [Buildroot] musl/gettext issue
-In-Reply-To: <55FB3E49.5050606@mind.be>
-References: <20150916221636.039df52b@free-electrons.com>
- <55FB3E49.5050606@mind.be>
-Message-ID: <20150918094102.10d6c65e@free-electrons.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Fri, 18 Sep 2015 09:19:31 +0100
+Subject: [Buildroot] [PATCH v2] libseccomp: Add new config option to build
+	and install tests
+In-Reply-To: <55FAF226.9080800@imgtec.com>
+References: <55FAF226.9080800@imgtec.com>
+Message-ID: <1442564371-10498-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add new config option to allow building and installing the libseccomp
+testsuite on the target. It's useful for testing the kernels'
+seccomp behavior for the target architecture.
 
-On Fri, 18 Sep 2015 00:27:21 +0200, Arnout Vandecappelle wrote:
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+changes since v1:
+- Drop compile hook for tests and use MAKE_OPTS instead
+---
+ package/libseccomp/Config.in     |  9 +++++++++
+ package/libseccomp/libseccomp.mk | 16 ++++++++++++++++
+ 2 files changed, 25 insertions(+)
 
-> >  1/ Simply do not allow the GNU gettext package to be built with glibc
-> >     and musl since they provide the gettext functionality internally.
-> 
->  Problem: something like ecryptfs-utils, which needs the gettext program at
-> runtime...
-
-Ah, right, correct.
-
-> >     The only problem with this approach is that while httping is happy
-> >     with the POSIX compliant gettext functionality of musl, some other
-> >     programs such as Bison
-> >     (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=786885) will
-> >     really need GNU gettext functionality.
-> 
->  This one could perhaps be solved by adding a BR2_HAS_GNU_GETTEXT. But again, of
-> course, it must be possible to select gettext in that case.
-
-Indeed.
-
-> >  2/ Allows force to use GNU gettext in musl configurations. This simply
-> >     consists in:
-> > 
-> >  config BR2_NEEDS_GETTEXT
-> >         bool
-> > -       default y if BR2_TOOLCHAIN_USES_UCLIBC
-> > +       default y if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-> > 
-> >      I have tested this solution and it does work (obviously).
-> > 
-> >      The drawback is obviously that we are going to build/install GNU
-> >      gettext even for cases where the internal gettext implementation
-> >      of musl would have been sufficient.
-> 
->  That sounds like a bad idea. What's the point of using musl if you're going to
-> add a bunch of GNU extensions to it?
-
-Absolutely, hence me not wanting to do something like that.
-
->  Another option is that we add a different flag to indicate the dependency on
-> libintl:
-> 
-> config BR2_PACKAGE_GETTEXT_WITH_LIBINTL
-> 	bool
-> 	default y
-> 	depends on BR2_PACKAGE_GETTEXT
-> 	depends on BR2_STATIC_LIBS
-
-Why this depends on BR2_STATIC_LIBS ? Linking against libintl is also
-needed in dynamic linking scenarios.
-
-The build failure of
-http://autobuild.buildroot.org/results/ede/ede5ee3316ea2b6790dcb930a6bc71adc8922bfc/
-requires linking with libintl, even if it's a dynamic linking
-configuration.
-
-Best regards,
-
-Thomas
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+index 4c34c5466592..760a6f321142 100644
+--- a/package/libseccomp/Config.in
++++ b/package/libseccomp/Config.in
+@@ -15,6 +15,15 @@ config BR2_PACKAGE_LIBSECCOMP
+ 
+ 	  https://github.com/seccomp/libseccomp
+ 
++config BR2_PACKAGE_LIBSECCOMP_TESTS
++	bool "Install libseccomp tests"
++	depends on BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
++	help
++	  Build and install the libseccomp testsuite.
++
++comment "libseccomp testsuite needs bash as running shell"
++	depends on !BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
++
+ comment "libseccomp needs a toolchain w/ headers >= 3.12"
+ 	depends on BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || \
+ 		BR2_mips64el || BR2_i386 || BR2_x86_64
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index a188298006b1..5ebd8c54ac1f 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -17,4 +17,20 @@ define LIBSECCOMP_FIXUP_M4_DIR
+ endef
+ LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
+ 
++ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
++
++LIBSECCOMP_MAKE_OPTS += check-build
++
++define LIBSECCOMP_TESTS_INSTALL
++	mkdir -p $(TARGET_DIR)/usr/libseccomp/{tests,tools} && \
++	for x in tests tools; do \
++		find $(@D)/$$x -maxdepth 1 \( -name "*.tests" -o -perm -a=x \) \
++			-type f -exec cp {} $(TARGET_DIR)/usr/libseccomp/$$x/ \; ; \
++	done
++endef
++
++LIBSECCOMP_POST_INSTALL_TARGET_HOOKS += LIBSECCOMP_TESTS_INSTALL
++
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.2
