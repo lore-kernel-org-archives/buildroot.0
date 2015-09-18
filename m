@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Sep 2015 09:26:04 +0200
-Subject: [Buildroot] sysvinit-2.88 build is failing for ARM64
-In-Reply-To: <20150917213916.GW11632@tarshish>
-References: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
- <55FA95DB.80408@synopsys.com> <20150917103540.GO11632@tarshish>
- <55FA986B.9080208@synopsys.com> <55FA9C24.2060901@synopsys.com>
- <20150917111217.GP11632@tarshish>
- <20150917230753.2ad46e4c@free-electrons.com>
- <20150917213916.GW11632@tarshish>
-Message-ID: <20150918092604.6029c0a6@free-electrons.com>
+Date: Fri, 18 Sep 2015 09:32:22 +0200
+Subject: [Buildroot] [PATCH v4 0/2] Micropython package
+In-Reply-To: <1442446199-15963-1-git-send-email-judge.packham@gmail.com>
+References: <CAFOYHZB-oynjvUKa9CkHvBpvw+kuSuPLgWrZZwEOr7YSQOvW0g@mail.gmail.com>
+ <1442446199-15963-1-git-send-email-judge.packham@gmail.com>
+Message-ID: <20150918093222.13fa5739@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Chris,
 
-On Fri, 18 Sep 2015 00:39:16 +0300, Baruch Siach wrote:
+On Thu, 17 Sep 2015 11:29:57 +1200, Chris Packham wrote:
 
-> Why not use /dev/null for gcc output instead of a temporary file? Something 
-> like:
-> 
-> HAS_LIBCRYPT=$(shell echo 'int main(void) {}' | $(CC) -o /dev/null -xc - -lcrypt >/dev/null 2>&1 && echo y)
+> Chris Packham (2):
+>   micropython: new package
+>   micropython-lib: new packages
 
-Because it is known to not work with all toolchains:
+There are a number of build failures caused by Micropython in the
+autobuilders:
 
-   http://git.buildroot.net/buildroot/commit/toolchain/helpers.mk?id=375bc18850f0f8fec90e1e478c0e9d2159377a64
+ * On MIPS64
+   http://autobuild.buildroot.org/results/99a/99a610c72877fef53d93e1a923bd5c71b3376618/build-end.log
 
-Best regards,
+ * On Xtensa
+   http://autobuild.buildroot.org/results/670/670907760d6b3e7eb46b433647b392cec3bafdcd/build-end.log
+
+ * On SH4A
+   http://autobuild.buildroot.org/results/f5a/f5a2c563b8bdab9e345960a5b92d31f3f92dba00/build-end.log
+
+See http://autobuild.buildroot.org/?reason=micropython-v1.4.5 for the
+complete list of build failures.
+
+If you could look into these, it would be helpful.
+
+Thanks!
 
 Thomas
 -- 
