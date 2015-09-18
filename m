@@ -1,58 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Sep 2015 22:42:45 +0200
-Subject: [Buildroot] buildroot development activities - query
-In-Reply-To: <CAKpDV8vCmUxg90GwMiqQFbdzR2uR8R2xiTA=ft+a6fU4H0DgPA@mail.gmail.com>
-References: <CAKpDV8vCmUxg90GwMiqQFbdzR2uR8R2xiTA=ft+a6fU4H0DgPA@mail.gmail.com>
-Message-ID: <55FC7745.80207@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 18 Sep 2015 23:44:26 +0200
+Subject: [Buildroot] [PATCH v2] host-gcc-final: don't install a potentially
+	dead symlink
+Message-ID: <1442612666-19806-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Katoch,
+gcc used to be installed into $(HOST_DIR)/usr/$(GNU_TARGET_NAME) but
+since gcc 4.9 this is no longer the case.  Therefore, the cc -> gcc
+symlink that is created in that we create in that directory is dead.
 
- [I always get a little confused when people sign their mail with a name
-completely different from their address :-)]
+There don't seem to have been any problems due to the missing gcc and
+cc in $(HOST_DIR)/usr/$(GNU_TARGET_NAME), things seems to build fine
+without it. The cc -> gcc symlinks in general should not be needed
+anyway, since we always pass the appropriate CC variable to the
+package build system.
 
-On 18-09-15 10:41, Dinesh Guleria wrote:
-> Hello Everyone,
-> 
-> I have joind buildroot list last month only. At present i am going through the
-> Linux material on Free electron site.
-> 
-> I use to find that community is vary active & many mails (related to patches
-> applied) flow into my inbox every day.
-> 
-> I am curious to know these mails are about development of buildroot itself or
-> using buildroot to make embedded linux system ?
+Therefore, let's remove the cc -> gcc symlink in
+$(HOST_DIR)/usr/$(GNU_TARGET_NAME) - also for pre-4.9 gcc versions.
 
- In buildroot, we consider that there is not much difference between a user and
-a developer. In most cases when you really use buildroot for a product, you will
-need to e.g. add packages to it. Because of this, we decided a couple of years
-ago that it doesn't make sense to split the mailing list in a -users and
--developers list.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+In addition to the explanation above, this patch is also preparation
+for an upcoming patch series that implements the wrapper for the
+internal toolchain. All the -gcc, -cc and -g++ instances have to be
+symlinked to the wrapper, and the original (even if it was already
+a symlink) has to be moved to *.real. So removing this redundant
+thing helps keeping the internal toolchain wrapper implementation
+a little simpler.
 
- However, this is up for discussion again at the developer meeting two weeks
-from now. If you have an opinion, now is the time to speak up!
+I'll repost this patch as part of that series, but since it can be
+committed indepedently I already have it here.
 
+Patch changelog:
+v2: Rewrote the commit message, after a comment from Thomas P. that
+    $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/gcc actually exists.
+---
+ package/gcc/gcc-final/gcc-final.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-> Being a buildroot community members how one can contribute back ?
-
-http://buildroot.org/manual.html#_contributing_to_buildroot
-
- You're already subscribed to the list, so the first step is done :-)
-
-
- Regards,
- Arnout
-
-
-
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 3336ed3..c31c80e 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -92,9 +92,6 @@ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+ 		ln -snf $(GNU_TARGET_NAME)-gcc \
+ 			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+ 	fi
+-	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
+-		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
+-	fi
+ endef
+ 
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.1
