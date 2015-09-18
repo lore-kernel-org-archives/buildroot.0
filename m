@@ -1,73 +1,53 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Fri, 18 Sep 2015 09:19:31 +0100
-Subject: [Buildroot] [PATCH v2] libseccomp: Add new config option to build
-	and install tests
-In-Reply-To: <55FAF226.9080800@imgtec.com>
-References: <55FAF226.9080800@imgtec.com>
-Message-ID: <1442564371-10498-1-git-send-email-markos.chandras@imgtec.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Fri, 18 Sep 2015 20:22:52 +1200
+Subject: [Buildroot] [PATCH v4 0/2] Micropython package
+In-Reply-To: <20150918093222.13fa5739@free-electrons.com>
+References: <CAFOYHZB-oynjvUKa9CkHvBpvw+kuSuPLgWrZZwEOr7YSQOvW0g@mail.gmail.com>
+ <1442446199-15963-1-git-send-email-judge.packham@gmail.com>
+ <20150918093222.13fa5739@free-electrons.com>
+Message-ID: <CAFOYHZCxy2PWfdPXiTrxDzf4LnLnPCwATyia200X2kHucNqJSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new config option to allow building and installing the libseccomp
-testsuite on the target. It's useful for testing the kernels'
-seccomp behavior for the target architecture.
+On Fri, Sep 18, 2015 at 7:32 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Chris,
+>
+> On Thu, 17 Sep 2015 11:29:57 +1200, Chris Packham wrote:
+>
+>> Chris Packham (2):
+>>   micropython: new package
+>>   micropython-lib: new packages
+>
+> There are a number of build failures caused by Micropython in the
+> autobuilders:
+>
+>  * On MIPS64
+>    http://autobuild.buildroot.org/results/99a/99a610c72877fef53d93e1a923bd5c71b3376618/build-end.log
+>
+>  * On Xtensa
+>    http://autobuild.buildroot.org/results/670/670907760d6b3e7eb46b433647b392cec3bafdcd/build-end.log
+>
+>  * On SH4A
+>    http://autobuild.buildroot.org/results/f5a/f5a2c563b8bdab9e345960a5b92d31f3f92dba00/build-end.log
+>
+> See http://autobuild.buildroot.org/?reason=micropython-v1.4.5 for the
+> complete list of build failures.
+>
+> If you could look into these, it would be helpful.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
-changes since v1:
-- Drop compile hook for tests and use MAKE_OPTS instead
----
- package/libseccomp/Config.in     |  9 +++++++++
- package/libseccomp/libseccomp.mk | 16 ++++++++++++++++
- 2 files changed, 25 insertions(+)
+Xtensa and SH4A look like they need MICROPY_GCREGS_SETJMP I'll send a
+patch for them shortly. The MIPS64 one looks different so might need
+some investigation.
 
-diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
-index 4c34c5466592..760a6f321142 100644
---- a/package/libseccomp/Config.in
-+++ b/package/libseccomp/Config.in
-@@ -15,6 +15,15 @@ config BR2_PACKAGE_LIBSECCOMP
- 
- 	  https://github.com/seccomp/libseccomp
- 
-+config BR2_PACKAGE_LIBSECCOMP_TESTS
-+	bool "Install libseccomp tests"
-+	depends on BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
-+	help
-+	  Build and install the libseccomp testsuite.
-+
-+comment "libseccomp testsuite needs bash as running shell"
-+	depends on !BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
-+
- comment "libseccomp needs a toolchain w/ headers >= 3.12"
- 	depends on BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || \
- 		BR2_mips64el || BR2_i386 || BR2_x86_64
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-index a188298006b1..5ebd8c54ac1f 100644
---- a/package/libseccomp/libseccomp.mk
-+++ b/package/libseccomp/libseccomp.mk
-@@ -17,4 +17,20 @@ define LIBSECCOMP_FIXUP_M4_DIR
- endef
- LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
- 
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
-+
-+LIBSECCOMP_MAKE_OPTS += check-build
-+
-+define LIBSECCOMP_TESTS_INSTALL
-+	mkdir -p $(TARGET_DIR)/usr/libseccomp/{tests,tools} && \
-+	for x in tests tools; do \
-+		find $(@D)/$$x -maxdepth 1 \( -name "*.tests" -o -perm -a=x \) \
-+			-type f -exec cp {} $(TARGET_DIR)/usr/libseccomp/$$x/ \; ; \
-+	done
-+endef
-+
-+LIBSECCOMP_POST_INSTALL_TARGET_HOOKS += LIBSECCOMP_TESTS_INSTALL
-+
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.5.2
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
