@@ -1,167 +1,103 @@
-From: kei <kei-k@ca2.so-net.ne.jp>
-Date: Sat, 19 Sep 2015 00:21:00 +0900
-Subject: [Buildroot] squeezelite: new package
-In-Reply-To: <55FC26B7.8090501@imgtec.com>
-References: <201509181337.t8IDbRNo011752@ms-omx03.plus.so-net.ne.jp>
- <55FC26B7.8090501@imgtec.com>
-Message-ID: <5C8F3C94-51CB-4848-8B77-FEF2D69F6F94@ca2.so-net.ne.jp>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 18 Sep 2015 17:47:29 +0200
+Subject: [Buildroot] [RFC 3/6] system: add mdev-only /dev management
+ (without devtmpfs)
+In-Reply-To: <8737yevmy7.fsf@dell.be.48ers.dk>
+References: <1441747734-18730-1-git-send-email-luca@lucaceresoli.net>
+ <1441747734-18730-4-git-send-email-luca@lucaceresoli.net>
+ <55EFF9FF.1020402@mind.be> <55F02630.5050500@lucaceresoli.net>
+ <20150909155427.53f9c8b5@free-electrons.com>
+ <87bnd43eph.fsf@dell.be.48ers.dk>
+ <20150914233402.3575da80@free-electrons.com>
+ <87zj0oznp2.fsf@dell.be.48ers.dk>
+ <20150915093030.622d2366@free-electrons.com>
+ <87zj0oumrg.fsf@dell.be.48ers.dk> <55F89C46.3010904@lucaceresoli.net>
+ <8737yevmy7.fsf@dell.be.48ers.dk>
+Message-ID: <55FC3211.3010009@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent,
+Dear Peter,
 
-Thank you for your suggestion.
-I will send  git format patch.
+Peter Korsgaard wrote:
+>>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>
+> Hi,
+>
+>   >> Sure, I get that. I just question the sensibility of combining a 6+ year
+>   >> old kernel with modern user space.
+>
+>   > I agree with you on the principle, but in the practice I have devices
+>   > running very fine on 2.6.30 and some user space applications using
+>   > C++11.
+>
+> Ok, and are you actively doing system level development, or "just"
+> adjusting a single application on a mature product? E.G. are you
+> interested in getting the latest versions of all the libraries or rather
+> freeze the entire system except for your application?
 
-About google code archive issue, yes, I also concern about it.
-Let me check forks,  and will send better patch later.
+I work both on new products and on mature products. But the latter
+receive consistent updates at times, which might add a lot more packages
+or change the dependencies.
 
-Thank you,
-Kawashima
+In both cases I want a recent a fairly recent set of packages.
 
-On 2015/09/18, at 23:59, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
+A few months ago I had to bump a library to a version that was not yet
+stable at that time, and thus not yet in Buildroot, because it
+implemented a method that we needed in an application.
 
-> Dear Hiroshi Kawashima,
-> 
-> first of all, thanks for your contribution. I'm not the maintainer but
-> please allow me to reply.
-> 
-> Could you please send your patches in git format? Which means, clone the
-> Buildroot repository:
-> 
-> git clone git://git.buildroot.net/buildroot
-> 
-> Do all the changes you need to do. Add the modified files:
-> 
-> git add package/Config.in
-> git add package/squeezelite/Config.in
-> git add squeezelite/squeezelite.mk
-> 
-> Commit your changes:
-> 
-> git commit -s
-> 
-> And then send your commit by email using git:
-> 
-> git send-email --to=buildroot at buildroot.org -1
-> 
-> There is more information here:
-> 
-> http://buildroot.org/manual.html#submitting-patches
-> 
-> I also noticed that this project is hosted on Google code, which has
-> archived the project. And there are lots of forks on GitHub. Is one of
-> them the new official one? Because this problem will not receive more
-> updates on Google code, so any fixes that need to be done upstream will
-> need to go somewhere.
-> 
-> Regards,
-> 
-> Vincent.
-> 
-> On 09/18/2015 02:37 PM, kei-k at ca2.so-net.ne.jp wrote:
->> Dear, maintener.
->> 
->> squeezelite is very famous and attractive sound client for
->> Logitech Media Server.
->> 
->> I deeply appreciate if you pull this patch.
->> 
->> Thank you.
->> 
->> ==============================================================================
->> diff -ruN buildroot/package/Config.in buildroot-new/package/Config.in
->> --- buildroot/package/Config.in	2015-09-18 15:02:07.865545530 +0900
->> +++ buildroot-new/package/Config.in	2015-09-18 22:02:46.293517263 +0900
->> @@ -33,6 +33,7 @@
->> 	source "package/opus-tools/Config.in"
->> 	source "package/pulseaudio/Config.in"
->> 	source "package/sox/Config.in"
->> +	source "package/squeezelite/Config.in"
->> 	source "package/tidsp-binaries/Config.in"
->> 	source "package/tovid/Config.in"
->> 	source "package/tstools/Config.in"
->> diff -ruN buildroot/package/squeezelite/Config.in buildroot-new/package/squeezelite/Config.in
->> --- buildroot/package/squeezelite/Config.in	1970-01-01 09:00:00.000000000 +0900
->> +++ buildroot-new/package/squeezelite/Config.in	2015-09-18 16:07:51.000000000 +0900
->> @@ -0,0 +1,30 @@
->> +config BR2_PACKAGE_SQUEEZELITE
->> +	bool "squeezelite"
->> +	depends on BR2_USE_WCHAR	# flac
->> +	select BR2_PACKAGE_ALSA_LIB
->> +	select BR2_PACKAGE_FLAC
->> +	select BR2_PACKAGE_LIBMAD
->> +	select BR2_PACKAGE_LIBVORBIS
->> +	select BR2_PACKAGE_FAAD2
->> +	select BR2_PACKAGE_MPG123
->> +	select BR2_PACKAGE_LIBSOXR
->> +	help
->> +	  Logitech Media Server client
->> +	  https://code.google.com/p/squeezelite/
->> +
->> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
->> +	bool "Enable resampling function"
->> +	default y
->> +	depends on BR2_PACKAGE_SQUEEZELITE
->> +	help
->> +	  Enable resampling function
->> +
->> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
->> +	bool "Use OpenMP for resampling"
->> +	default y
->> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
->> +	help
->> +	  Enable OpenMP support for resampling
->> +
->> +comment "squeezelite needs a toolchain w/ wchar (incur from flac)"
->> +	depends on !BR2_USE_WCHAR
->> diff -ruN buildroot/package/squeezelite/squeezelite.mk buildroot-new/package/squeezelite/squeezelite.mk
->> --- buildroot/package/squeezelite/squeezelite.mk	1970-01-01 09:00:00.000000000 +0900
->> +++ buildroot-new/package/squeezelite/squeezelite.mk	2015-09-18 22:28:22.290163636 +0900
->> @@ -0,0 +1,34 @@
->> +################################################################################
->> +#
->> +# squeezelite -- Logitech Media Server client
->> +#
->> +################################################################################
->> +
->> +SQUEEZELITE_VERSION = v1.8
->> +SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
->> +SQUEEZELITE_SITE_METHOD = git
->> +SQUEEZELITE_LICENSE = GPLv3
->> +SQUEEZELITE_LICENSE_FILE = LICENSE.txt
->> +SQUEEZELITE_INSTALL_STAGING = NO
->> +SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
->> +
->> +#SQUEEZELITE_OPTS = "-DLINKALL"
->> +SQUEEZELITE_OPTS = ""
->> +
->> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
->> +	SQUEEZELITE_OPTS += -DRESAMPLE
->> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
->> +		SQUEEZELITE_OPTS += -DRESAMPLE_MP
->> +	endif
->> +endif
->> +
->> +define SQUEEZELITE_BUILD_CMDS
->> +    $(MAKE) OPTS="$(SQUEEZELITE_OPTS)" \
->> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
->> +endef
->> +
->> +define SQUEEZELITE_INSTALL_TARGET_CMDS
->> +    $(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
->> +endef
->> +
->> +$(eval $(generic-package))
->> 
->> ==============================================================================
->> ============================================================
->>    Hiroshi Kawashima
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->> 
+>   > Yes, I used a fairly recent toolchain (gcc 4.8 IIRC), which is
+>   > of course a bad idea, I know... But in the practice it works.
+>
+> Then you presumably already had to backport kernel fixes to build with
+> 4.8? E.G. I've worked on a system stuck on 2.6.37 where I had to
+> backport this to get it to run with gcc 4.7+:
+
+Nope. Maybe because I'm currently working mostly on ARM9 machines, and
+ARM9 is definitely "mature".
+
+However I had to forced an "old" Sourcery toolchain (2013.05) for an
+ARM9 project because I was getting mysterious runtime errors with
+2014.05, the latest available in BR at that time.
+
+>>>> I'm not sure how complicated it is to backport devtmpfs. However I
+>   >> > would suspect that it isn't that easy.
+>   >>
+>   >> Take a look at 2b2af54a5bb6f7e80ccf78f20084b93c398c3a8b in the
+>   >> kernel. To me it looks quite self contained, so backporting it to
+>   >> something close to 2.6.32 doesn't look too bad.
+>
+>   > I think I had a look a couple of years ago when I did the first project
+>   > on the same SoC. I think I had a look and found it non trival, but the
+>   > product to create had no hotplugging capabilities and no firmware
+>   > loading needs, so I just went for a static /dev.
+>
+>   > Now I have a real goal, so I might try harder to look into backporting
+>   > devtmpfs.
+>
+> It seems doable to backport devtmpfs support to 2.6.30.
+>
+> I just tried cherry-picking 6fcf53acccf85b4 + 2b2af54a5bb6f7e80ccf7 and
+> I only get a trivial conflict about some header files getting added to
+> init/main.c
+>
+> To give it a quick test I tweaked our qemu_x86_defconfig to build 2.6.30
+> + the two backports and booted it:
+>
+> Welcome to Buildroot
+> buildroot login: root
+> # uname -a
+> Linux buildroot 2.6.30-00193-g9a8d49a #3 Wed Sep 16 09:27:23 CEST 2015 i686 GNU/Linux
+> # grep devtmpfs /proc/mounts
+> devtmpfs /dev devtmpfs rw,size=63272k,nr_inodes=15818 0 0
+>
+> (I did have to fix the kernel a bit to get it to build with sourcery
+> codebench 2011.09, E.G. gcc 4.6.1 - But that was just s/-m elf_x86/-m32/)
+
+Interesting. I'll have a look... sometime.
+
+-- 
+Luca
