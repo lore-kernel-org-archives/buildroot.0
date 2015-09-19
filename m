@@ -1,126 +1,39 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sat, 19 Sep 2015 19:05:31 +0100
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: improve checking of stack
-	smashing support with uclibc
-Message-ID: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 19 Sep 2015 22:34:45 +0300
+Subject: [Buildroot] sysvinit-2.88 build is failing for ARM64
+In-Reply-To: <20150918092604.6029c0a6@free-electrons.com>
+References: <ec4144432f3279ce0594dd6adbd847f5e4a7fb13.1442482205.git.jpinto@synopsys.com>
+ <55FA95DB.80408@synopsys.com> <20150917103540.GO11632@tarshish>
+ <55FA986B.9080208@synopsys.com> <55FA9C24.2060901@synopsys.com>
+ <20150917111217.GP11632@tarshish>
+ <20150917230753.2ad46e4c@free-electrons.com>
+ <20150917213916.GW11632@tarshish>
+ <20150918092604.6029c0a6@free-electrons.com>
+Message-ID: <20150919193445.GC2782@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/123/123a5b3f72ba8c1a4aa1cea5b7b846a04fd4e923/
-http://autobuild.buildroot.net/results/38c/38cfa4e7249a8770b06dbd392acba79303d3f9bc/
+Hi Thomas,
 
-.. and others.
+On Fri, Sep 18, 2015 at 09:26:04AM +0200, Thomas Petazzoni wrote:
+> On Fri, 18 Sep 2015 00:39:16 +0300, Baruch Siach wrote:
+> > Why not use /dev/null for gcc output instead of a temporary file? 
+> > Something like:
+> > 
+> > HAS_LIBCRYPT=$(shell echo 'int main(void) {}' | $(CC) -o /dev/null -xc - -lcrypt >/dev/null 2>&1 && echo y)
+> 
+> Because it is known to not work with all toolchains:
+> 
+>    http://git.buildroot.net/buildroot/commit/toolchain/helpers.mk?id=375bc18850f0f8fec90e1e478c0e9d2159377a64
 
-Improve GCC's checking of stack smashing support, adding a specific case
-statement for uclibc, and removing the check done after checking the
-glibc version.
+Good to know, thanks. Maybe it's time for /dev/null.d/.
 
-Signed-off-by: Brendan Heading <brendanheading@gmail.com>
----
-Patch V1 - this initial version only fixes 4.7.4 - wanted to check that
-we are heading the right way before I fix all the other versions.
+baruch
 
-Note that I manually modified configure, rather than regenerating it from
-configure.ac.
-
-Original plan was to reverse the order of the existing __GLIBC_MINOR__ and
-uclibc check. However, the uclibc check falls through if it does not
-detect uclibc, so I figure it better to add the separate case statement.
----
- ...ing-of-stack-smashing-support-with-uclibc.patch | 81 ++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
-
-diff --git a/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch b/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
-new file mode 100644
-index 0000000..8f5d961
---- /dev/null
-+++ b/package/gcc/4.7.4/920-gcc-improve-checking-of-stack-smashing-support-with-uclibc.patch
-@@ -0,0 +1,81 @@
-+From 39bbd72364c34da7ba78f26354512eb5229cebdc Mon Sep 17 00:00:00 2001
-+From: Brendan Heading <brendanheading@gmail.com>
-+Date: Fri, 18 Sep 2015 14:54:25 +0100
-+Subject: [PATCH 1/1] gcc: improve checking of stack smashing support with
-+ uclibc
-+
-+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-+---
-+ gcc/configure    | 15 +++++++++------
-+ gcc/configure.ac | 15 +++++++++------
-+ 2 files changed, 18 insertions(+), 12 deletions(-)
-+
-+diff --git a/gcc/configure b/gcc/configure
-+index 63cba0a..d1ac2ea 100755
-+--- a/gcc/configure
-++++ b/gcc/configure
-+@@ -26797,6 +26797,15 @@ else
-+        *-*-musl*)
-+          # All versions of musl provide stack protector
-+ 	 gcc_cv_libc_provides_ssp=yes;;
-++       *-*-uclibc*)
-++      if $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC__[ 	]+1' \
-++        $target_header_dir/features.h > /dev/null && \
-++	     test -f $target_header_dir/bits/uClibc_config.h && \
-++	     $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC_HAS_SSP__[ 	]+1' \
-++	     $target_header_dir/bits/uClibc_config.h > /dev/null; then
-++	  gcc_cv_libc_provides_ssp=yes
-++      fi
-++      ;;
-+        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
-+       # glibc 2.4 and later provides __stack_chk_fail and
-+       # either __stack_chk_guard, or TLS access to stack guard canary.
-+@@ -26811,12 +26820,6 @@ else
-+ 	     && $EGREP '^[ 	]*#[ 	]*define[ 	]+__GLIBC_MINOR__[ 	]+([1-9][0-9]|[4-9])' \
-+ 	     $target_header_dir/features.h > /dev/null; then
-+ 	  gcc_cv_libc_provides_ssp=yes
-+-	elif $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC__[ 	]+1' \
-+-	     $target_header_dir/features.h > /dev/null && \
-+-	     test -f $target_header_dir/bits/uClibc_config.h && \
-+-	     $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC_HAS_SSP__[ 	]+1' \
-+-	     $target_header_dir/bits/uClibc_config.h > /dev/null; then
-+-	  gcc_cv_libc_provides_ssp=yes
-+ 	fi
-+       # all versions of Bionic support stack protector
-+       elif test -f $target_header_dir/sys/cdefs.h \
-+diff --git a/gcc/configure.ac b/gcc/configure.ac
-+index ea1c147..5954cc7 100644
-+--- a/gcc/configure.ac
-++++ b/gcc/configure.ac
-+@@ -4672,6 +4672,15 @@ AC_CACHE_CHECK(__stack_chk_fail in target C library,
-+        *-*-musl*)
-+          # All versions of musl provide stack protector
-+ 	 gcc_cv_libc_provides_ssp=yes;;
-++       *-*-uclibc*)
-++      if $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC__[ 	]+1' \
-++         $target_header_dir/features.h > /dev/null && \
-++	 test -f $target_header_dir/bits/uClibc_config.h && \
-++	 $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC_HAS_SSP__[ 	]+1' \
-++	 $target_header_dir/bits/uClibc_config.h > /dev/null; then
-++        gcc_cv_libc_provides_ssp=yes
-++      fi
-++      ;;
-+        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
-+       [# glibc 2.4 and later provides __stack_chk_fail and
-+       # either __stack_chk_guard, or TLS access to stack guard canary.
-+@@ -4686,12 +4695,6 @@ AC_CACHE_CHECK(__stack_chk_fail in target C library,
-+ 	     && $EGREP '^[ 	]*#[ 	]*define[ 	]+__GLIBC_MINOR__[ 	]+([1-9][0-9]|[4-9])' \
-+ 	     $target_header_dir/features.h > /dev/null; then
-+ 	  gcc_cv_libc_provides_ssp=yes
-+-	elif $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC__[ 	]+1' \
-+-	     $target_header_dir/features.h > /dev/null && \
-+-	     test -f $target_header_dir/bits/uClibc_config.h && \
-+-	     $EGREP '^[ 	]*#[ 	]*define[ 	]+__UCLIBC_HAS_SSP__[ 	]+1' \
-+-	     $target_header_dir/bits/uClibc_config.h > /dev/null; then
-+-	  gcc_cv_libc_provides_ssp=yes
-+ 	fi
-+       # all versions of Bionic support stack protector
-+       elif test -f $target_header_dir/sys/cdefs.h \
-+-- 
-+2.4.3
-+
 -- 
-2.4.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
