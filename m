@@ -1,57 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:38:51 +0200
-Subject: [Buildroot] [git commit] libfslcodec: bump version to 4.0.3
-Message-ID: <20150919134123.ABB38801C8@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 15:38:42 +0200
+Subject: [Buildroot] [git commit] xdriver_xf86-video-imx-viv: bump to
+	version 5.0.11 p4.5
+Message-ID: <20150919134123.715CC7FC34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bd786276a3147bbd273efb46a654242d82c9fc1
+commit: http://git.buildroot.net/buildroot/commit/?id=c5abe552d49118498dcf2d54948a0494656dab29
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update license file + add hash file.
+Modify the version to match the version of imx-gpu-viv. Also add the
+package hash file.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/93b4c8c
+https://github.com/Freescale/meta-freescale/commit/45582680
 
-This package has been implicitely tested through gstreamer as the 0.10
-plugin relies on it:
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+The following xorg.conf was used in order to force the use of the
+vivante module:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+
+Note that the X server must be started with the "noreset" option to
+avoid crashes when closing X apps.
+ # X -noreset
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslcodec/libfslcodec.hash |    2 ++
- package/libfslcodec/libfslcodec.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-imx-viv.hash                |    2 ++
+ .../xdriver_xf86-video-imx-viv.mk                  |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libfslcodec/libfslcodec.hash b/package/libfslcodec/libfslcodec.hash
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
 new file mode 100644
-index 0000000..6a41be1
+index 0000000..9b3c7d3
 --- /dev/null
-+++ b/package/libfslcodec/libfslcodec.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256	0d0ff933eed0a021763115b9c8ae812c6376a19bbd95e555d89ea7404f6c8f2f  libfslcodec-4.0.3.bin
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index 665588a..473d662 100644
---- a/package/libfslcodec/libfslcodec.mk
-+++ b/package/libfslcodec/libfslcodec.mk
-@@ -4,13 +4,13 @@
++sha256	1a0b25a91b493e99dfa94a802290320ea998ebd45d7aab0f73d7c7bb521b7e84  xserver-xorg-video-imx-viv-5.0.11.p4.5.tar.gz
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index f5cb946..a3a3167 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFSLCODEC_VERSION = 4.0.2
-+LIBFSLCODEC_VERSION = 4.0.3
- LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
- LIBFSLCODEC_INSTALL_STAGING = YES
- 
- LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
--LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
-+LIBFSLCODEC_LICENSE_FILES = EULA COPYING
- LIBFSLCODEC_REDISTRIBUTE = NO
- 
- define LIBFSLCODEC_EXTRACT_CMDS
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p4.5
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
