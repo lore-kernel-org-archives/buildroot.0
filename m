@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 14:18:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/luaposix: add patch to fix musl
- compatibility
-In-Reply-To: <1442272959-3181-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1442272959-3181-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150919141846.4ff8917a@free-electrons.com>
+Date: Sat, 19 Sep 2015 14:20:20 +0200
+Subject: [Buildroot] [PATCH] kompexsqlite: new package
+In-Reply-To: <1442267115-2530-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1442267115-2530-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20150919142020.269fe9f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg,
+Dear Gustavo Zacarias,
 
-On Tue, 15 Sep 2015 01:22:39 +0200, J?rg Krause wrote:
-> Backport patch from upstream to fix musl build error:
-> 
-> ```
-> In file included from ext/posix/posix.c:25:0:
-> ext/posix/sched.c: In function 'Psched_setscheduler':
-> ext/posix/sched.c:74:9: error: variable 'sched_param' has initializer but incomplete type
->   struct sched_param sched_param = {0};
-> ```
-> 
-> Fixed upstream by commit 11cc8a2973569ec7fb1e7c2466dca0282944b124.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On Mon, 14 Sep 2015 18:45:15 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/Config.in                                  |  1 +
+>  ...kefile-use-autoconf-CXX-for-proper-builds.patch | 27 ++++++++++++++++++++++
+>  package/kompexsqlite/Config.in                     | 12 ++++++++++
+>  package/kompexsqlite/kompexsqlite.hash             |  2 ++
+>  package/kompexsqlite/kompexsqlite.mk               | 14 +++++++++++
+>  5 files changed, 56 insertions(+)
+>  create mode 100644 package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
+>  create mode 100644 package/kompexsqlite/Config.in
+>  create mode 100644 package/kompexsqlite/kompexsqlite.hash
+>  create mode 100644 package/kompexsqlite/kompexsqlite.mk
 
-Since the patch touches the configure.ac script, you should have added
-<pkg>_AUTORECONF = YES in the .mk file. Otherwise, the build fails.
+I've applied, thanks!
 
-I've done this change, and applied your patch.
+One thing that I wasn't sure about: the location in "Databases", and
+not somewhere under "Libraries". Because kompexsqlite is really only a
+library. But it's true that the sqlite package is also under
+"Databases" and even if it provides a sqlite3 command line tool, sqlite
+is mainly useful as a library.
 
-Thanks a lot!
+So I've kept kompexsqlite with the other databases packages for now. If
+some people disagree, we can change it later.
+
+Thanks!
 
 Thomas
 -- 
