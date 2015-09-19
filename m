@@ -1,81 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:07:33 +0200
-Subject: [Buildroot] [git commit] check: new package
-Message-ID: <20150919131709.7A145818EC@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 15:17:19 +0200
+Subject: [Buildroot] [PATCH v2] check: new package
+In-Reply-To: <1442666511-17751-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1442666511-17751-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <20150919151719.7b00e8ed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9878cec4e49344a0520ecac02bd84e1a98e17c24
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear gustavo.zacarias at free-electrons.com,
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in        |    1 +
- package/check/Config.in  |    6 ++++++
- package/check/check.hash |    3 +++
- package/check/check.mk   |   20 ++++++++++++++++++++
- 4 files changed, 30 insertions(+), 0 deletions(-)
+On Sat, 19 Sep 2015 09:41:51 -0300, gustavo.zacarias at free-electrons.com
+wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+>  package/Config.in        |  1 +
+>  package/check/Config.in  |  6 ++++++
+>  package/check/check.hash |  3 +++
+>  package/check/check.mk   | 20 ++++++++++++++++++++
+>  4 files changed, 30 insertions(+)
+>  create mode 100644 package/check/Config.in
+>  create mode 100644 package/check/check.hash
+>  create mode 100644 package/check/check.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 45f2345..1bd2759 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -111,6 +111,7 @@ menu "Development tools"
- 	source "package/binutils/Config.in"
- 	source "package/bsdiff/Config.in"
- 	source "package/bustle/Config.in"
-+	source "package/check/Config.in"
- 	source "package/cmake/Config.in"
- 	source "package/cppunit/Config.in"
- 	source "package/cvs/Config.in"
-diff --git a/package/check/Config.in b/package/check/Config.in
-new file mode 100644
-index 0000000..04682e1
---- /dev/null
-+++ b/package/check/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_CHECK
-+	bool "check"
-+	help
-+	  Check is a unit testing framework for C.
-+
-+	  http://check.sourceforge.net/
-diff --git a/package/check/check.hash b/package/check/check.hash
-new file mode 100644
-index 0000000..0c3a924
---- /dev/null
-+++ b/package/check/check.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/check/files/check/0.10.0/
-+md5	53c5e5c77d090e103a17f3ed7fd7d8b8	check-0.10.0.tar.gz
-+sha1	35d3a53446aea7b21a770faedb358d0fc7cba76d	check-0.10.0.tar.gz
-diff --git a/package/check/check.mk b/package/check/check.mk
-new file mode 100644
-index 0000000..92dd033
---- /dev/null
-+++ b/package/check/check.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# check
-+#
-+################################################################################
-+
-+CHECK_VERSION = 0.10.0
-+CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)
-+CHECK_INSTALL_STAGING = YES
-+CHECK_DEPENDENCIES = host-pkgconf
-+CHECK_LICENSE = LGPLv2.1+
-+CHECK_LICENSE_FILES = COPYING.LESSER
-+
-+# Having checkmk in the target makes no sense
-+define CHECK_REMOVE_CHECKMK
-+	rm -f $(TARGET_DIR)/usr/bin/checkmk
-+endef
-+CHECK_POST_INSTALL_TARGET_HOOKS += CHECK_REMOVE_CHECKMK
-+
-+$(eval $(autotools-package))
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
