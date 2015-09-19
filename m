@@ -1,56 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:38:42 +0200
-Subject: [Buildroot] [git commit] xdriver_xf86-video-imx-viv: bump to
-	version 5.0.11 p4.5
-Message-ID: <20150919134123.715CC7FC34@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 15:39:21 +0200
+Subject: [Buildroot] [git commit] libfslparser: bump version to 4.0.3
+Message-ID: <20150919134123.C13527FC34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5abe552d49118498dcf2d54948a0494656dab29
+commit: http://git.buildroot.net/buildroot/commit/?id=1e3bb736216bae7ed169ef6eecaeff89d35a60a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Modify the version to match the version of imx-gpu-viv. Also add the
-package hash file.
+Update license file + add hash file.
+
+Changelog:
+- Upgrade MP4 and MPEG2 parser
+- Update COPYING with new version of license file
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-freescale/commit/45582680
+https://github.com/Freescale/meta-fsl-arm/commit/a7c90ea6
 
-The following xorg.conf was used in order to force the use of the
-vivante module:
-https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
-
-Note that the X server must be started with the "noreset" option to
-avoid crashes when closing X apps.
- # X -noreset
+This package has been implicitely tested through gstreamer as the 0.10
+plugin relies on it:
+ # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xdriver_xf86-video-imx-viv.hash                |    2 ++
- .../xdriver_xf86-video-imx-viv.mk                  |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/libfslparser/libfslparser.hash |    2 ++
+ package/libfslparser/libfslparser.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+diff --git a/package/libfslparser/libfslparser.hash b/package/libfslparser/libfslparser.hash
 new file mode 100644
-index 0000000..9b3c7d3
+index 0000000..19ee12e
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/libfslparser/libfslparser.hash
 @@ -0,0 +1,2 @@
 +# locally computed
-+sha256	1a0b25a91b493e99dfa94a802290320ea998ebd45d7aab0f73d7c7bb521b7e84  xserver-xorg-video-imx-viv-5.0.11.p4.5.tar.gz
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index f5cb946..a3a3167 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -4,7 +4,7 @@
++sha256	9db10ca6a61c8fdbe91b55b65d084dcbb5f9cfb58b088996c7dd2d6dc8385730  libfslparser-4.0.3.bin
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
+index 116a0a2..2b53d62 100644
+--- a/package/libfslparser/libfslparser.mk
++++ b/package/libfslparser/libfslparser.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = $(FREESCALE_IMX_VERSION)
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p4.5
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
- XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
- XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
+-LIBFSLPARSER_VERSION = 4.0.2
++LIBFSLPARSER_VERSION = 4.0.3
+ LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+ LIBFSLPARSER_INSTALL_STAGING = YES
+ 
+ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
+-LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
++LIBFSLPARSER_LICENSE_FILES = EULA COPYING
+ LIBFSLPARSER_REDISTRIBUTE = NO
+ 
+ define LIBFSLPARSER_EXTRACT_CMDS
