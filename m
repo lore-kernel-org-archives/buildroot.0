@@ -1,110 +1,185 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 08:30:17 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-09-18
-Message-ID: <20150919063018.4152F10185F@stock.ovh.net>
+From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 19 Sep 2015 08:34:25 +0000
+Subject: [Buildroot] [PATCH 1/1] Signed-off-by: Hiroshi
+	Kawashima	<kei-k@ca2.so-net.ne.jp>
+In-Reply-To: <201509190155.t8J1t0tf027928@ms-omx02.plus.so-net.ne.jp>
+References: <201509190155.t8J1t0tf027928@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <38121FAB319C3344930C920E7B518313252D32D7@LEMAIL01.le.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2015-09-18
-===============================
+Dear Hiroshi Kawashima,
 
-        success : 200
-       failures : 52 
-       timeouts : 1  
-          TOTAL : 253
+you have put your SoB in the subject, when it should be at the bottom
+of your commit log.
 
-Classification of failures by reason
-====================================
+Also, it's good to use the standard subject when adding new packages:
 
-            micropython-v1.4.5 | 10
-                busybox-1.23.2 | 6 
-                 sudo-1.8.14p3 | 5 
-              strongswan-5.3.3 | 3 
-libbroadvoice-f65b0f50c8c76... | 3 
-                coreutils-8.24 | 2 
-                      qt-4.8.7 | 2 
-freerdp-770c67d340d5f0a7b48... | 2 
-                  guile-2.0.11 | 1 
-                  mono-4.0.2.5 | 1 
-                  boost-1.58.0 | 1 
-                oprofile-1.0.0 | 1 
-                  libftdi-0.20 | 1 
-               util-linux-2.27 | 1 
-                   erlang-17.5 | 1 
-mjpg-streamer-730b5bcdc378b... | 1 
-              gst1-libav-1.4.5 | 1 
-         conntrack-tools-1.4.3 | 1 
-               iptables-1.4.21 | 1 
-                     tslib-1.1 | 1 
-               dvbsnoop-1.4.50 | 1 
-                 dropwatch-1.4 | 1 
-   150K ..make: *** wait: N... | 1 
-sconeserver-3b886c3dda6eda3... | 1 
-                 opencv3-3.0.0 | 1 
-            ibrdtn-tools-1.0.1 | 1 
-           qt5multimedia-5.5.0 | 1 
-            kodi-15.1-Isengard | 1 
+<PKG>: new package
 
-Detail of failures
-===================
+See an example here:
 
-    mips64el |    150K ..make: *** wait: N... | TIM | http://autobuild.buildroot.net/results/8e59f20f5d9c84477ab20a21bdf2de86d4466d3d/
-         arm |                   boost-1.58.0 | NOK | http://autobuild.buildroot.net/results/fc00d7aad0d34c4d47c6dcb97f2556f621849503/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/7339cc0637ab9fe2e9ffcde03486912e50ae8676/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/8cfd39327fe18228942f56c19cc85eaa220864d4/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/ef29b1d6f4d259ad57e98812fc66f338c3809404/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/d11225b44ee4b550c1326a7d6dd9b3716fb1fd7c/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/443ce162ac140d8877b9799f17139fef44277794/
-       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/5395b5816f2fbbcc7c8b8601b77f7ed539e98f5d/
-         arm |          conntrack-tools-1.4.3 | NOK | http://autobuild.buildroot.net/results/66b8022307ca643d218f6673ebabeac8f1b1e625/
-         arm |                 coreutils-8.24 | NOK | http://autobuild.buildroot.net/results/783b21c8d355b317926aa0e1f774912a3ef35002/
-         arm |                 coreutils-8.24 | NOK | http://autobuild.buildroot.net/results/017f8dcee720d466a2034af2f2f1e4b7b792b5e6/
-      x86_64 |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/4d745916f4f308b0ac46ee3aa4407c5d575ce606/
-      x86_64 |                dvbsnoop-1.4.50 | NOK | http://autobuild.buildroot.net/results/831e7c895c85c49068623ab0cde7a3a32f6cf14c/
-       sparc |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/660ac1bc3b8501e04260d49f17d594730507fdbf/
-       sparc | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/760e20b0b38bddf0b132a8b823a19c9471622fc3/
-       sparc | freerdp-770c67d340d5f0a7b48... | NOK | http://autobuild.buildroot.net/results/a431cc261cfe0648390d934e63087a2d2ff5be90/
-         sh4 |               gst1-libav-1.4.5 | NOK | http://autobuild.buildroot.net/results/77c095bafb79b006dfd3fddff94020f39079970b/
-         arm |                   guile-2.0.11 | NOK | http://autobuild.buildroot.net/results/c628b5b7791239c864709ac757b01ab5e483503d/
-         arm |             ibrdtn-tools-1.0.1 | NOK | http://autobuild.buildroot.net/results/e49cf73597a7c538c84670c9644529ea00f9826f/
-         arm |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/c4c6c2413dd6473a5b0fec0d720e729eb9596b4c/
-        i686 |             kodi-15.1-Isengard | NOK | http://autobuild.buildroot.net/results/8f30771d0dc56a1174c1a6a477ca72cbb2f876b7/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/81d30f52fd2062c74484b68d13b97d6f13db2743/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/c0b9ae32f8f330e7ddaf57678bf643f6887c5310/
-         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/df18eaf4f7c341e44f4e5ec88c180e5d57be45ec/
-      x86_64 |                   libftdi-0.20 | NOK | http://autobuild.buildroot.net/results/4393ca3951ad007acac768d292ebe507bb273de9/
-      xtensa |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/670907760d6b3e7eb46b433647b392cec3bafdcd/
-      xtensa |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/82f9117856a04d40484bd65a731efcd8596875ba/
-        bfin |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/4af55c0a115409f8347350ed55924de0c5c0260c/
-    mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/a5e54f8969ede81073c26a06567e2d3c2711eb67/
-    mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/dce01a3b9224361e464e65bdc9671a3785689b0d/
-    mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/99a610c72877fef53d93e1a923bd5c71b3376618/
-         arc |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/006b330be90462a3197f78938979e9d27a2f2b2e/
-    mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/936232bf86a7831ee5c900586b1bbfd5a3590790/
-        sh4a |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/f5a2c563b8bdab9e345960a5b92d31f3f92dba00/
-    mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/d912d52477754cf2863b73c9680af21bd89ce82b/
-      x86_64 | mjpg-streamer-730b5bcdc378b... | NOK | http://autobuild.buildroot.net/results/74c6006c4d7a97fa69c6feee204631861daffea9/
-     powerpc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/3493047fe351e69a0ee3f4df28d0e9514507de5d/
-         sh4 |                  opencv3-3.0.0 | NOK | http://autobuild.buildroot.net/results/0af24bd0243b633a99a85e8419791832922382f8/
-         arm |                 oprofile-1.0.0 | NOK | http://autobuild.buildroot.net/results/afa99241ba408cadfd8e12f1f23e530cac783da7/
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/35670f168309b9a41d212c75355b9c645f458e76/
-         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/b8f34afa8686e890a1a3882a52081bb6a3b9c13b/
-        sh4a |            qt5multimedia-5.5.0 | NOK | http://autobuild.buildroot.net/results/54abfb9a258549c1e2fc47452f8b406c1fb8c47b/
-         arm | sconeserver-3b886c3dda6eda3... | NOK | http://autobuild.buildroot.net/results/c1409484773126a9449e8ce62f0b8e8f832c6233/
-    mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/14e0ec7465f3968047fbf323959532104ebe5665/
-    mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/875be1fc8ff2d9f0e2145c2a4d870c0c7d25b6f3/
-    mips64el |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/063c31adfb2733d8d10de52763e9056bfd0f5149/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/a4c3a64b87d04b9b876c8f38c9bbf0416ecdad4a/
-      x86_64 |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/ff8474a6828e0d30553e65d57e3ba68a7602c196/
-     powerpc |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/0167e4001f4e6325b257ccd14e2535e495b6785e/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/aa1bb63dd23d679bb4011d6e046ac88cb5cb9d4c/
-         arm |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/ed38aad78ef05884748e9ce581838b9fe5d384c5/
-         arm |                      tslib-1.1 | NOK | http://autobuild.buildroot.net/results/b068f9cbfa1d704e9ee0133942ef3ea67aa5f8f0/
-        i686 |                util-linux-2.27 | NOK | http://autobuild.buildroot.net/results/b5b22b006dee6795372a7ddc11a36fe47288e1b1/
+http://git.buildroot.net/buildroot/commit
+/?id=9646e80fca281030eb5d3125f499a60231476373
 
+Also, when sending a new version, you have to add v2 (or the version
+number) after PATCH in your subject and a small changelog so other can
+know what changed between versions. And don't forget yo mark your
+previous patch as superseded in Patchwork. Worth reading this:
 
--- 
-http://autobuild.buildroot.net
+http://nightly.buildroot.org/manual.html#submitting-patches
+
+More comments below; please keep reading.
+
+On 19/09/15 02:55, Hiroshi Kawashima wrote:
+> Adding new package, squeezelite is a sound client for Logitech Media Server.
+> ---
+>   package/squeezelite/Config.in      |   30 ++++++++++++++++++++++++++++++
+>   package/squeezelite/squeezelite.mk |   34 ++++++++++++++++++++++++++++++++++
+>   2 files changed, 64 insertions(+), 0 deletions(-)
+>   create mode 100644 package/squeezelite/Config.in
+>   create mode 100644 package/squeezelite/squeezelite.mk
+> 
+> diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
+> new file mode 100644
+> index 0000000..33e1d08
+> --- /dev/null
+> +++ b/package/squeezelite/Config.in
+> @@ -0,0 +1,30 @@
+> +config BR2_PACKAGE_SQUEEZELITE
+> +	bool "squeezelite"
+> +	depends on BR2_USE_WCHAR	# flac
+
+No tab before the comment. Just a space.
+
+You are also missing a dependency on MMU introduced by MPG123, so:
+
+depends on BR2_USE_MMU # mpg123
+
+And you are also missing a dependency on THREADS introduced by
+ALSA_LIB, so:
+
+depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_FLAC
+> +	select BR2_PACKAGE_LIBMAD
+> +	select BR2_PACKAGE_LIBVORBIS
+> +	select BR2_PACKAGE_FAAD2
+> +	select BR2_PACKAGE_MPG123
+> +	select BR2_PACKAGE_LIBSOXR
+> +	help
+> +	  Logitech Media Server client
+> +	  https://code.google.com/p/squeezelite/
+> +
+> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+> +	bool "Enable resampling function"
+> +	default y
+> +	depends on BR2_PACKAGE_SQUEEZELITE
+> +	help
+> +	  Enable resampling function
+> +
+> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
+> +	bool "Use OpenMP for resampling"
+> +	default y
+> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+> +	help
+> +	  Enable OpenMP support for resampling
+> +
+> +comment "squeezelite needs a toolchain w/ wchar (incur from flac)"
+
+I would place this comment at the end of the BR2_PACKAGE_SQUEEZELITE,
+before defining the BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE and
+BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP.
+
+The "(incur from flac)" comment is not needed.
+
+You need to add "threads" to the comment as well. It should look like
+this:
+
+comment "squeezelite needs a toolchain w/ wchar, threads"
+
+> +	depends on !BR2_USE_WCHAR
+
+And you also need to put the MMU and THREAD dependencies here, so it
+should look like this:
+
+depends on BR2_USE_MMU
+depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+
+> diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
+> new file mode 100644
+> index 0000000..1ea3007
+> --- /dev/null
+> +++ b/package/squeezelite/squeezelite.mk
+> @@ -0,0 +1,34 @@
+> +################################################################################
+> +#
+> +# squeezelite -- Logitech Media Server client
+
+Only the package name here. No description.
+
+> +#
+> +################################################################################
+> +
+> +SQUEEZELITE_VERSION = v1.8
+> +SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
+> +SQUEEZELITE_SITE_METHOD = git
+> +SQUEEZELITE_LICENSE = GPLv3
+> +SQUEEZELITE_LICENSE_FILE = LICENSE.txt
+> +SQUEEZELITE_INSTALL_STAGING = NO
+
+It won't be installed in staging by default, so this line is not needed.
+
+> +SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
+> +
+> +#SQUEEZELITE_OPTS = "-DLINKALL"
+
+What's this? If it's not used, then remove it.
+
+> +SQUEEZELITE_OPTS = ""
+
+You don't need to initialize this. Anyway, keep reading as there are
+more comments regarding this variable.
+
+> +
+> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
+> +	SQUEEZELITE_OPTS += -DRESAMPLE
+
+Better to use a variable name like SQUEEZELITE_MAKE_OPTS which is
+commonly used in Buildroot.
+
+> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
+> +		SQUEEZELITE_OPTS += -DRESAMPLE_MP
+
+Same here.
+
+> +	endif
+> +endif
+> +
+> +define SQUEEZELITE_BUILD_CMDS
+> +    $(MAKE) OPTS="$(SQUEEZELITE_OPTS)" \
+
+$(TARGET_MAKE_ENV) always in front of $(MAKE). And also use
+$(SQUEEZELITE_MAKE_OPTS).
+
+> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> +endef
+> +
+> +define SQUEEZELITE_INSTALL_TARGET_CMDS
+> +    $(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
+
+Also, when you add a new package, you need to add it to the right
+category in package/Config.in, otherwise the users won't be able to
+select it from the menuconfig.
+
+Regards,
+
+Vincent.
