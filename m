@@ -1,48 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:06:19 +0200
-Subject: [Buildroot] [PATCH 1/1] target-finalize: remove extra
- /usr/libexec/*.a and *.la files
-In-Reply-To: <1442323626-31294-1-git-send-email-Herve.CODINA@celad.com>
-References: <1442323626-31294-1-git-send-email-Herve.CODINA@celad.com>
-Message-ID: <20150919150619.568b140f@free-electrons.com>
+Date: Sat, 19 Sep 2015 15:07:33 +0200
+Subject: [Buildroot] [git commit] check: new package
+Message-ID: <20150919131709.7A145818EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Herve,
+commit: http://git.buildroot.net/buildroot/commit/?id=9878cec4e49344a0520ecac02bd84e1a98e17c24
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Sep 2015 15:27:06 +0200, Herve Codina wrote:
-> Some packages, sudo for instance, install .la files in $(TARGET_DIR)/usr/libexec.
-> These files are not needed on target.
-> 
-> This patch simply removes *.a and *.la files from $(TARGET_DIR)/usr/libexec if it exists
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in        |    1 +
+ package/check/Config.in  |    6 ++++++
+ package/check/check.hash |    3 +++
+ package/check/check.mk   |   20 ++++++++++++++++++++
+ 4 files changed, 30 insertions(+), 0 deletions(-)
 
-I initially hesitated a bit first, because normally, plugins should be
-installed in /usr/lib/<package>/. This can be done with
---with-plugindir, which moves a certain number of files installed by
-default in /usr/libexec, but there are still a few libraries here
-nonetheless. So your approach seems better.
-
-> @@ -565,6 +565,9 @@ target-finalize: $(PACKAGES)
->  	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
->  	find $(TARGET_DIR)/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
->  	find $(TARGET_DIR)/usr/lib \( -name '*.a' -o -name '*.la' \) -print0 | xargs -0 rm -f
-> +	if test -d $(TARGET_DIR)/usr/libexec; then \
-> +		find $(TARGET_DIR)/usr/libexec \( -name '*.a' -o -name '*.la' \) -print0 | \
-> +		xargs -0 rm -f; fi
-
-I've simplified that into a single "find" invocation for lib/, usr/lib
-and usr/libexec.
-
-See
-http://git.buildroot.net/buildroot/commit/?id=87f3edecc65975085982515f3618c81bcfd9c023
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 45f2345..1bd2759 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -111,6 +111,7 @@ menu "Development tools"
+ 	source "package/binutils/Config.in"
+ 	source "package/bsdiff/Config.in"
+ 	source "package/bustle/Config.in"
++	source "package/check/Config.in"
+ 	source "package/cmake/Config.in"
+ 	source "package/cppunit/Config.in"
+ 	source "package/cvs/Config.in"
+diff --git a/package/check/Config.in b/package/check/Config.in
+new file mode 100644
+index 0000000..04682e1
+--- /dev/null
++++ b/package/check/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CHECK
++	bool "check"
++	help
++	  Check is a unit testing framework for C.
++
++	  http://check.sourceforge.net/
+diff --git a/package/check/check.hash b/package/check/check.hash
+new file mode 100644
+index 0000000..0c3a924
+--- /dev/null
++++ b/package/check/check.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/check/files/check/0.10.0/
++md5	53c5e5c77d090e103a17f3ed7fd7d8b8	check-0.10.0.tar.gz
++sha1	35d3a53446aea7b21a770faedb358d0fc7cba76d	check-0.10.0.tar.gz
+diff --git a/package/check/check.mk b/package/check/check.mk
+new file mode 100644
+index 0000000..92dd033
+--- /dev/null
++++ b/package/check/check.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# check
++#
++################################################################################
++
++CHECK_VERSION = 0.10.0
++CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)
++CHECK_INSTALL_STAGING = YES
++CHECK_DEPENDENCIES = host-pkgconf
++CHECK_LICENSE = LGPLv2.1+
++CHECK_LICENSE_FILES = COPYING.LESSER
++
++# Having checkmk in the target makes no sense
++define CHECK_REMOVE_CHECKMK
++	rm -f $(TARGET_DIR)/usr/bin/checkmk
++endef
++CHECK_POST_INSTALL_TARGET_HOOKS += CHECK_REMOVE_CHECKMK
++
++$(eval $(autotools-package))
