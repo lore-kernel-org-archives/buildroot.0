@@ -1,58 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:57:15 +0200
-Subject: [Buildroot] [git commit] docs/manual: add useful tips on patch
-	versioning and patch submission
-Message-ID: <20150919135725.229EF81842@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 15:57:52 +0200
+Subject: [Buildroot] [PATCH v3 1/1] docs/website: contribute.txt update
+ with useful tips on patch versioning and patch submission
+In-Reply-To: <1441727239-17284-1-git-send-email-francesco.nwokeka@gmail.com>
+References: <1441726084-15422-1-git-send-email-francesco.nwokeka@gmail.com>
+ <1441727239-17284-1-git-send-email-francesco.nwokeka@gmail.com>
+Message-ID: <20150919155752.01f7a2d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59fa7b7f7c78dd3733abe010ba2c34d107245c56
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francesco Nwokeka,
 
-Added an alternative on patch versioning (the -v option) and added a
-tip on how to automatically mark a previous commit as superseded.
+On Tue,  8 Sep 2015 17:47:19 +0200, Francesco Nwokeka wrote:
+> Added an alternative on patch versioning (the -v option) and added a tip on how to automatically mark a previous commit as superseded
+> 
+> Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
+> 
+> ---
+> v1 -> v2: adjusted previous patch with observations from mailing list
+> v2 -> v3: Replaced "the patchwork website" with a link to the project website
 
-[Thomas: minor tweaks.]
+Applied after doing some minor tweaks (commit title too long, and minor
+rewording about in-reply-to).
 
-Signed-off-by: Francesco Nwokeka <francesco.nwokeka@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/contribute.txt |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+Thanks!
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 4d7a833..b74897d 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -298,6 +298,13 @@ $ git format-patch --subject-prefix "PATCH v4" \
-     -M -s -o outgoing origin/master
- ---------------------
- 
-+Since git version 1.8.1, you can also use +-v <n>+ (where <n> is the
-+version number):
-+
-+---------------------
-+$ git format-patch -v4 -M -s -o outgoing origin/master
-+---------------------
-+
- When you provide a new version of a patch, please mark the old one as
- superseded in http://patchwork.buildroot.org[patchwork]. You need to
- create an account on http://patchwork.buildroot.org[patchwork] to be
-@@ -306,6 +313,13 @@ the status of patches you submitted yourself, which means the email
- address you register in http://patchwork.buildroot.org[patchwork] should
- match the one you use for sending patches to the mailing list.
- 
-+You can also add the +--in-reply-to <message-id>+ option when
-+submitting a patch to the mailing list. The id of the mail to reply to
-+can be found under the "Message Id" tag on
-+http://patchwork.buildroot.org[patchwork].  The advantage of
-+*in-reply-to* is that patchwork will automatically mark the previous
-+version of the patch as superseded.
-+
- [[reporting-bugs]]
- === Reporting issues/bugs or getting help
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
