@@ -1,36 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:32:06 +0200
-Subject: [Buildroot] [PATCH 1/2] cmake: bump to version 3.3.2
-In-Reply-To: <1442666531-17795-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1442666531-17795-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20150919153206.018a8ac6@free-electrons.com>
+Date: Sat, 19 Sep 2015 15:31:55 +0200
+Subject: [Buildroot] [git commit] configs: add nitrogen6sx_defconfig for
+	Boundary Devices SoloX board
+Message-ID: <20150919133224.2E5028193E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear gustavo.zacarias at free-electrons.com,
+commit: http://git.buildroot.net/buildroot/commit/?id=7f81e34c49b7c49446f017e3676e5abbbe12c864
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Sep 2015 09:42:11 -0300, gustavo.zacarias at free-electrons.com
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> xtensa patch is upstream so there's no need for it any longer.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  ...IML-Teach-ABI.h-about-Xtensa-architecture.patch | 30 ----------------------
->  package/cmake/Config.in                            |  7 +++--
->  package/cmake/cmake.hash                           |  4 +--
->  package/cmake/cmake.mk                             |  6 ++---
->  4 files changed, 10 insertions(+), 37 deletions(-)
->  delete mode 100644 package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
+This board is using the exact same kernel and u-boot revision as the
+Nitrogen6x. They also share the same u-boot "autoboot" script.
 
-Applied, thanks.
+The differences between the two configurations are:
+- getty port is ttymxc0 instead of ttymxc1
+- uImage load address is 0x80008000
+- different device tree
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+http://boundarydevices.com/product/nit6_solox-imx6/
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/nitrogen6sx_defconfig |   37 +++++++++++++++++++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
+
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+new file mode 100644
+index 0000000..70006d5
+--- /dev/null
++++ b/configs/nitrogen6sx_defconfig
+@@ -0,0 +1,37 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# system
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_2r1=y
++
++# Lock headers to match kernel
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.28"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="nitrogen6sx"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# Last version of branch boundary-v2015.07
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/5115a9e/u-boot-5115a9e.tar.gz"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# Last version of branch boundary-imx_3.14.28_1.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-nitrogen6sx"
