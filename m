@@ -1,121 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 14:01:58 +0200
-Subject: [Buildroot] [git commit] package/lua-periphery: bump to version
-	1.0.6
-Message-ID: <20150919120612.8551C8182A@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 14:14:16 +0200
+Subject: [Buildroot] [git commit] package/luaposix: add patch to fix musl
+	compatibility
+Message-ID: <20150919121439.3CB0E8180F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=08647c6328223b1070c64fe618d09a1a87b30ce3
+commit: http://git.buildroot.net/buildroot/commit/?id=d54751e2d451cf2737971bd901e88501349d0dd6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove patch 0001-fix-build-flags.patch. The uCLibc issue is fixed
-upstream.
+Backport patch from upstream to fix musl build error:
 
-Add patch taken and slighly adopted from the c-periphery package to fix build
-issue with musl.
+```
+In file included from ext/posix/posix.c:25:0:
+ext/posix/sched.c: In function 'Psched_setscheduler':
+ext/posix/sched.c:74:9: error: variable 'sched_param' has initializer but incomplete type
+  struct sched_param sched_param = {0};
+```
 
-Build was tested with an uCLibc toolchain and a musl toolchain.
+Fixed upstream by commit 11cc8a2973569ec7fb1e7c2466dca0282944b124.
+
+[Thomas: add missing <pkg>_AUTORECONF=YES.]
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...Add-missing-header-for-musl-compatibility.patch |   34 ++++++++++++++++++++
- package/lua-periphery/0001-fix-build-flags.patch   |   21 ------------
- package/lua-periphery/lua-periphery.hash           |    2 +-
- package/lua-periphery/lua-periphery.mk             |    4 +-
- 4 files changed, 37 insertions(+), 24 deletions(-)
+ ...round-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch |   59 ++++++++++++++++++++
+ package/luaposix/luaposix.mk                       |    2 +
+ 2 files changed, 61 insertions(+), 0 deletions(-)
 
-diff --git a/package/lua-periphery/0001-Add-missing-header-for-musl-compatibility.patch b/package/lua-periphery/0001-Add-missing-header-for-musl-compatibility.patch
+diff --git a/package/luaposix/0001-sched-workaround-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch b/package/luaposix/0001-sched-workaround-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch
 new file mode 100644
-index 0000000..22c748c
+index 0000000..3853e9f
 --- /dev/null
-+++ b/package/lua-periphery/0001-Add-missing-header-for-musl-compatibility.patch
-@@ -0,0 +1,34 @@
-+From 1d8cb0ad54099c3d7261aaa19a2c0786f16736d0 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 8 Aug 2015 22:42:39 +0200
-+Subject: [PATCH] Add missing header for musl compatibility
++++ b/package/luaposix/0001-sched-workaround-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch
+@@ -0,0 +1,59 @@
++From de2a9b45e7b4a89affa3ac6d0a010cc627ab4a87 Mon Sep 17 00:00:00 2001
++From: "Gary V. Vaughan" <gary@vaughan.pe>
++Date: Mon, 6 Apr 2015 18:39:46 -0700
++Subject: [PATCH 1/1] sched: workaround glibc _POSIX_PRIORITY_SCHEDULING bug.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+<linux/ioctl.h> is needed to get the definition of _IOC_SIZEBITS and
-+solve the following build failure:
++Close #223.
++* configure.ac (AC_CHECK_HEADERS): Add sched.h.
++* ext/posix/sched.c: Remove unistd.h; Predicate use of priority
++scheduling APIs on presence of sched.h instead of
++_POSIX_PRIORITY_SCHEDULING macro erroneously defined by glibc on
++Linux.
++Reported by ncopa at github.com.
 +
-+src/spi.c: In function 'spi_transfer':
-+src/spi.c:100:24: error: '_IOC_SIZEBITS' undeclared (first use in this function)
-+     if (ioctl(spi->fd, SPI_IOC_MESSAGE(1), &spi_xfer) < 1)
++Backported from: 11cc8a2973569ec7fb1e7c2466dca0282944b124
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Port from c-periphery]
++Signed-off-by: Gary V. Vaughan <gary@vaughan.pe>
++[Backport]
 +Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +---
-+ src/spi.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ configure.ac      | 2 +-
++ ext/posix/sched.c | 5 +++--
++ 2 files changed, 4 insertions(+), 3 deletions(-)
 +
-+diff --git a/lua-periphery/c-periphery/src/spi.c b/lua-periphery/c-periphery/src/spi.c
-+index 52a8d3d..1a6b17c 100644
-+--- a/lua-periphery/c-periphery/src/spi.c
-++++ b/lua-periphery/c-periphery/src/spi.c
-+@@ -16,6 +16,7 @@
-+ #include <errno.h>
++diff --git a/configure.ac b/configure.ac
++index aa18318..89a2feb 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -114,7 +114,7 @@ gl_INIT
 + 
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ #include <linux/spi/spidev.h>
++ ## Check for header files
++ AC_HEADER_STDC
++-AC_CHECK_HEADERS([crypt.h strings.h sys/statvfs.h])
+++AC_CHECK_HEADERS([crypt.h sched.h strings.h sys/statvfs.h])
++ AC_CHECK_HEADERS([net/if.h linux/netlink.h], [], [], [
++ #include <sys/socket.h>
++ ])
++diff --git a/ext/posix/sched.c b/ext/posix/sched.c
++index 13b196b..f338d73 100644
++--- a/ext/posix/sched.c
+++++ b/ext/posix/sched.c
++@@ -21,9 +21,10 @@
 + 
-+ #include "spi.h"
++ #include <config.h>
++ 
++-#include <unistd.h>	/* for _POSIX_PRIORITY_SCHEDULING */
+++/* cannot use unistd.h for _POSIX_PRIORITY_SCHEDULING, because on Linux
+++   glibc it is defined even though the APIs are not implemented :-(     */
++ 
++-#ifdef _POSIX_PRIORITY_SCHEDULING
+++#ifdef HAVE_SCHED_H
++ #include <sched.h>
++ #endif
++ 
 +-- 
-+2.5.0
++2.5.2
 +
-diff --git a/package/lua-periphery/0001-fix-build-flags.patch b/package/lua-periphery/0001-fix-build-flags.patch
-deleted file mode 100644
-index 1ac220c..0000000
---- a/package/lua-periphery/0001-fix-build-flags.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Fix build flags to build properly with uClibc
--
--Building with -std=c99 -D_DEFAULT_SOURCE hides the struct timespec and
--nanosleep() definitions from <time.h> in uClibc. Work around that by
--using -std=gnu99 instead.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/lua-periphery/Makefile
--===================================================================
----- a/lua-periphery/Makefile
--+++ b/lua-periphery/Makefile
--@@ -16,7 +16,7 @@
-- 
-- ###########################################################################
-- 
---CFLAGS += -std=c99 -pedantic -D_DEFAULT_SOURCE
--+CFLAGS += -std=gnu99 -pedantic
-- CFLAGS += -Wall -Wextra -Wno-unused-parameter $(DEBUG) -fPIC -I. $(LUA_CFLAGS)
-- LDFLAGS += -shared
-- 
-diff --git a/package/lua-periphery/lua-periphery.hash b/package/lua-periphery/lua-periphery.hash
-index 39209df..7f6e63f 100644
---- a/package/lua-periphery/lua-periphery.hash
-+++ b/package/lua-periphery/lua-periphery.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  f94f4af342e531ff25b037b8b7c127db50b7464c0bbce4c5ea3b49fd215ada60    lua-periphery-1.0.5-2.src.rock
-+sha256  53762ed9b8a2edfcc5b4c535ef73e6a425f2577e036bb15994ca16a39b16ebab  lua-periphery-1.0.6-1.src.rock
-diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
-index 541079f..48eba39 100644
---- a/package/lua-periphery/lua-periphery.mk
-+++ b/package/lua-periphery/lua-periphery.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
+index ea4ab02..24b567f 100644
+--- a/package/luaposix/luaposix.mk
++++ b/package/luaposix/luaposix.mk
+@@ -9,6 +9,8 @@ LUAPOSIX_SITE = $(call github,luaposix,luaposix,release-v$(LUAPOSIX_VERSION))
+ LUAPOSIX_LICENSE = MIT
+ LUAPOSIX_LICENSE_FILES = COPYING
+ LUAPOSIX_DEPENDENCIES = luainterpreter host-lua ncurses
++# 0001-sched-workaround-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch
++LUAPOSIX_AUTORECONF = YES
+ LUAPOSIX_CONF_OPTS = --libdir="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" --datarootdir="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
  
--LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.5
--LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-2
-+LUA_PERIPHERY_VERSION_UPSTREAM = 1.0.6
-+LUA_PERIPHERY_VERSION = $(LUA_PERIPHERY_VERSION_UPSTREAM)-1
- LUA_PERIPHERY_SUBDIR = lua-periphery
- LUA_PERIPHERY_LICENSE = MIT
- LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
+ $(eval $(autotools-package))
