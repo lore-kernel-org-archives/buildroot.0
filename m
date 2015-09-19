@@ -1,37 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:44:57 +0200
-Subject: [Buildroot] [PATCH v2 02/14] imx-kobs: add new package
-In-Reply-To: <1441964394-3817-3-git-send-email-gary.bisson@boundarydevices.com>
-References: <1441964394-3817-1-git-send-email-gary.bisson@boundarydevices.com>
- <1441964394-3817-3-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20150919154457.54e66ef9@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 19 Sep 2015 15:51:50 +0200
+Subject: [Buildroot] [PATCH 1/1] Signed-off-by: Hiroshi Kawashima
+ <kei-k@ca2.so-net.ne.jp>
+In-Reply-To: <38121FAB319C3344930C920E7B518313252D32D7@LEMAIL01.le.imgtec.org>
+References: <201509190155.t8J1t0tf027928@ms-omx02.plus.so-net.ne.jp>
+ <38121FAB319C3344930C920E7B518313252D32D7@LEMAIL01.le.imgtec.org>
+Message-ID: <55FD6876.70803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
-
-On Fri, 11 Sep 2015 11:39:41 +0200, Gary Bisson wrote:
-> Based on the Yocto 3.14.28-1.0.0_ga update:
-> https://github.com/Freescale/meta-fsl-arm/commit/6c44744
+On 19-09-15 10:34, Vincent Olivert Riera wrote:
+[snip]
+> On 19/09/15 02:55, Hiroshi Kawashima wrote:
+[snip]
+>> +comment "squeezelite needs a toolchain w/ wchar (incur from flac)"
 > 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> I would place this comment at the end of the BR2_PACKAGE_SQUEEZELITE,
+> before defining the BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE and
+> BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP.
 
-This package does not build on musl, due to loff_t being undefined.
-Since it fails on some MTD related code, maybe you should look into
-mtd-utils commits to see how they fixed the musl compatibility
-problems. I believe using the loff_t type is wrong, and another type
-should be used, like off_t.
+ No, wrong. The comment should always be either at the beginning or at the end
+of the file. Otherwise, the indentation of the sub-options will be wrong (i.e.,
+they won't be indented).
 
-So I've marked this patch, and the kobs-ng deprecation patch as
-"Changes Requested".
 
-Best regards,
 
-Thomas
+ Regards,
+ Arnout
+
+[snip]
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
