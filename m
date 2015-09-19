@@ -1,7 +1,7 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Sat, 19 Sep 2015 09:41:51 -0300
-Subject: [Buildroot] [PATCH v2] check: new package
-Message-ID: <1442666511-17751-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Date: Sat, 19 Sep 2015 09:42:11 -0300
+Subject: [Buildroot] [PATCH 1/2] cmake: bump to version 3.3.2
+Message-ID: <1442666531-17795-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +10,112 @@ To: buildroot@busybox.net
 
 From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
+xtensa patch is upstream so there's no need for it any longer.
+
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/Config.in        |  1 +
- package/check/Config.in  |  6 ++++++
- package/check/check.hash |  3 +++
- package/check/check.mk   | 20 ++++++++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/check/Config.in
- create mode 100644 package/check/check.hash
- create mode 100644 package/check/check.mk
+ ...IML-Teach-ABI.h-about-Xtensa-architecture.patch | 30 ----------------------
+ package/cmake/Config.in                            |  7 +++--
+ package/cmake/cmake.hash                           |  4 +--
+ package/cmake/cmake.mk                             |  6 ++---
+ 4 files changed, 10 insertions(+), 37 deletions(-)
+ delete mode 100644 package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index edd4f30..8df3cc8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -111,6 +111,7 @@ menu "Development tools"
- 	source "package/binutils/Config.in"
- 	source "package/bsdiff/Config.in"
- 	source "package/bustle/Config.in"
-+	source "package/check/Config.in"
- 	source "package/cmake/Config.in"
- 	source "package/cppunit/Config.in"
- 	source "package/cvs/Config.in"
-diff --git a/package/check/Config.in b/package/check/Config.in
-new file mode 100644
-index 0000000..04682e1
---- /dev/null
-+++ b/package/check/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_CHECK
-+	bool "check"
-+	help
-+	  Check is a unit testing framework for C.
-+
-+	  http://check.sourceforge.net/
-diff --git a/package/check/check.hash b/package/check/check.hash
-new file mode 100644
-index 0000000..0c3a924
---- /dev/null
-+++ b/package/check/check.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/check/files/check/0.10.0/
-+md5	53c5e5c77d090e103a17f3ed7fd7d8b8	check-0.10.0.tar.gz
-+sha1	35d3a53446aea7b21a770faedb358d0fc7cba76d	check-0.10.0.tar.gz
-diff --git a/package/check/check.mk b/package/check/check.mk
-new file mode 100644
-index 0000000..92dd033
---- /dev/null
-+++ b/package/check/check.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# check
-+#
-+################################################################################
-+
-+CHECK_VERSION = 0.10.0
-+CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)
-+CHECK_INSTALL_STAGING = YES
-+CHECK_DEPENDENCIES = host-pkgconf
-+CHECK_LICENSE = LGPLv2.1+
-+CHECK_LICENSE_FILES = COPYING.LESSER
-+
-+# Having checkmk in the target makes no sense
-+define CHECK_REMOVE_CHECKMK
-+	rm -f $(TARGET_DIR)/usr/bin/checkmk
-+endef
-+CHECK_POST_INSTALL_TARGET_HOOKS += CHECK_REMOVE_CHECKMK
-+
-+$(eval $(autotools-package))
+diff --git a/package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch b/package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
+deleted file mode 100644
+index 7d8eec6..0000000
+--- a/package/cmake/0002-KWIML-Teach-ABI.h-about-Xtensa-architecture.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From ded79a976e2b63bbfd7a63f27ec00bd071410e27 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Tue, 17 Mar 2015 15:51:04 +0300
+-Subject: [PATCH] KWIML: Teach ABI.h about Xtensa architecture
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- Utilities/KWIML/ABI.h.in | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/Utilities/KWIML/ABI.h.in b/Utilities/KWIML/ABI.h.in
+-index 21c9139..6300ada 100644
+---- a/Utilities/KWIML/ABI.h.in
+-+++ b/Utilities/KWIML/ABI.h.in
+-@@ -432,6 +432,12 @@ suppression macro @KWIML at _ABI_NO_VERIFY was defined.
+- #  define @KWIML at _ABI_ENDIAN_ID @KWIML at _ABI_ENDIAN_ID_BIG
+- # endif
+- 
+-+/* Xtensa */
+-+#elif defined(__XTENSA_EB__)
+-+# define @KWIML at _ABI_ENDIAN_ID @KWIML at _ABI_ENDIAN_ID_BIG
+-+#elif defined(__XTENSA_EL__)
+-+# define @KWIML at _ABI_ENDIAN_ID @KWIML at _ABI_ENDIAN_ID_LITTLE
+-+
+- /* Unknown CPU */
+- #elif !defined(@KWIML at _ABI_NO_ERROR_ENDIAN)
+- # error "Byte order of target CPU unknown."
+--- 
+-1.8.1.4
+-
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index f3f0f85..6f04a4a 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -14,12 +14,14 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 	bool "ctest"
+ 	select BR2_PACKAGE_CMAKE
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBARCHIVE
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_XZ
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # from jsoncpp
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
+@@ -32,6 +34,7 @@ config BR2_PACKAGE_CMAKE_CTEST
+ 
+ 	  http://www.cmake.org/
+ 
+-comment "ctest needs a toolchain w/ C++, wchar, dynamic library"
++comment "ctest needs a toolchain w/ C++, wchar, dynamic library, gcc >= 4.7"
+ 	depends on BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 76e03d3..8d130d7 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256 45f4d3fa8a2f61cc092ae461aac4cac1bab4ac6706f98274ea7f314dd315c6d0 cmake-3.1.3.tar.gz
++# From http://www.cmake.org/files/v3.3/cmake-3.3.2-SHA-256.txt
++sha256	e75a178d6ebf182b048ebfe6e0657c49f0dc109779170bad7ffcb17463f2fc22	cmake-3.3.2.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 9ca6443..0f888fd 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-CMAKE_VERSION_MAJOR = 3.1
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_VERSION_MAJOR = 3.3
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+ CMAKE_SITE = http://www.cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
+ 
+ HOST_CMAKE_DEPENDENCIES = host-pkgconf
+-CMAKE_DEPENDENCIES = zlib libcurl libarchive expat bzip2 xz
++CMAKE_DEPENDENCIES = zlib jsoncpp libcurl libarchive expat bzip2 xz
+ 
+ CMAKE_CONF_OPTS = \
+ 	-DKWSYS_LFS_WORKS=TRUE \
 -- 
 2.4.6
