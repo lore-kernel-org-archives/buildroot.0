@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 14:20:20 +0200
-Subject: [Buildroot] [PATCH] kompexsqlite: new package
-In-Reply-To: <1442267115-2530-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1442267115-2530-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150919142020.269fe9f1@free-electrons.com>
+Date: Sat, 19 Sep 2015 14:40:17 +0200
+Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
+In-Reply-To: <20150913213513.GA21306@free.fr>
+References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+ <20150913232942.736dea75@free-electrons.com>
+ <20150913213513.GA21306@free.fr>
+Message-ID: <20150919144017.4fdcc90a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hello,
 
-On Mon, 14 Sep 2015 18:45:15 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                                  |  1 +
->  ...kefile-use-autoconf-CXX-for-proper-builds.patch | 27 ++++++++++++++++++++++
->  package/kompexsqlite/Config.in                     | 12 ++++++++++
->  package/kompexsqlite/kompexsqlite.hash             |  2 ++
->  package/kompexsqlite/kompexsqlite.mk               | 14 +++++++++++
->  5 files changed, 56 insertions(+)
->  create mode 100644 package/kompexsqlite/0001-Makefile-use-autoconf-CXX-for-proper-builds.patch
->  create mode 100644 package/kompexsqlite/Config.in
->  create mode 100644 package/kompexsqlite/kompexsqlite.hash
->  create mode 100644 package/kompexsqlite/kompexsqlite.mk
+On Sun, 13 Sep 2015 23:35:13 +0200, Yann E. MORIN wrote:
 
-I've applied, thanks!
+> > Do we actually understand why it doesn't work? There is really no
+> > reason for .py files to be necessary.
+> 
+> Well, what do I know about python? ;-)
+> 
+> I never said I understood the issue. Just that having only .pyc modules
+> make Kodi segfault, while having .py makes it work... :-(
+> 
+> All I got was the trace above. There was nothing (of interest) in Kodi's
+> own log file.
 
-One thing that I wasn't sure about: the location in "Databases", and
-not somewhere under "Libraries". Because kompexsqlite is really only a
-library. But it's true that the sqlite package is also under
-"Databases" and even if it provides a sqlite3 command line tool, sqlite
-is mainly useful as a library.
+As you can imagine, I'm not too happy with this solution. I believe
+Kodi is doing something incorrect, since if you just run Python with
+the .pyc files, and do "import site", it works just fine.
 
-So I've kept kompexsqlite with the other databases packages for now. If
-some people disagree, we can change it later.
+There is some logic in Kodi that tries to set the PYTHONHOME
+environment variable. Can you see in the logs if you see the following
+messages (from xbmc/interfaces/python/XBPython.cpp) :
+
+  CLog::Log(LOGINFO, "initializing python engine.");
+  CLog::Log(LOGDEBUG, "PYTHONHOME -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
+  CLog::Log(LOGDEBUG, "PYTHONPATH -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
+
+Alternatively, can you change Python, in file Modules/getpath.c,
+function calculate_path(), and dump all the environment variables?
+
+I could do it myself, but Kodi is so long to build... :-/
 
 Thanks!
 
