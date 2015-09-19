@@ -1,7 +1,10 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat, 19 Sep 2015 23:33:49 +0200
-Subject: [Buildroot] [PATCH 1/2] package/liblinear: bump to version 2.01
-Message-ID: <1442698430-18748-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Sat, 19 Sep 2015 23:33:50 +0200
+Subject: [Buildroot] [PATCH 2/2] package/liblinear: wrap help text to fit 72
+	columns
+In-Reply-To: <1442698430-18748-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1442698430-18748-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1442698430-18748-2-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/liblinear/liblinear.hash | 2 +-
- package/liblinear/liblinear.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/liblinear/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
-index 8a335cc..1c5b184 100644
---- a/package/liblinear/liblinear.hash
-+++ b/package/liblinear/liblinear.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	0ab97ca81c62457fcfe78f56619a7b2f70c1f7c875b4101827343555b4f6c3f4	liblinear-1.96.tar.gz
-+sha256	ebc71999224f5779574b11e248f1e2ef647b5d839c0380c1c5a4ac8789aa95a9  liblinear-2.01.tar.gz
-diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
-index d712b95..80ba489 100644
---- a/package/liblinear/liblinear.mk
-+++ b/package/liblinear/liblinear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/liblinear/Config.in b/package/liblinear/Config.in
+index 17c5a74..f25c119 100644
+--- a/package/liblinear/Config.in
++++ b/package/liblinear/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_LIBLINEAR
+ 	bool "liblinear"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  liblinear is a linear classifier for data with millions of instances and
+-	  features.
++	  liblinear is a linear classifier for data with millions of instances
++	  and features.
  
--LIBLINEAR_VERSION = 1.96
-+LIBLINEAR_VERSION = 2.01
- LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
- LIBLINEAR_LICENSE = BSD-3c
- LIBLINEAR_LICENSE_FILES = COPYRIGHT
-@@ -14,8 +14,8 @@ LIBLINEAR_CFLAGS = $(TARGET_CFLAGS)
- ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
- # $1: destination directory
- define LIBLINEAR_INSTALL_SHARED
--	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.2 $(1)/usr/lib/liblinear.so.2
--	ln -sf liblinear.so.2 $(1)/usr/lib/liblinear.so
-+	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.3 $(1)/usr/lib/liblinear.so.3
-+	ln -sf liblinear.so.3 $(1)/usr/lib/liblinear.so
- endef
- LIBLINEAR_CFLAGS += -fPIC
- endif
+ 	  http://www.csie.ntu.edu.tw/~cjlin/liblinear/
+ 
 -- 
 2.5.3
