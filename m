@@ -1,185 +1,78 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 19 Sep 2015 08:34:25 +0000
-Subject: [Buildroot] [PATCH 1/1] Signed-off-by: Hiroshi
-	Kawashima	<kei-k@ca2.so-net.ne.jp>
-In-Reply-To: <201509190155.t8J1t0tf027928@ms-omx02.plus.so-net.ne.jp>
-References: <201509190155.t8J1t0tf027928@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <38121FAB319C3344930C920E7B518313252D32D7@LEMAIL01.le.imgtec.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sat, 19 Sep 2015 21:19:35 +1200
+Subject: [Buildroot] [PATCH] micropython: Set MPZ_DIG_SIZE=32 for 64 bit
+	targets
+In-Reply-To: <55FBE11F.2000700@imgtec.com>
+References: <CAFOYHZDSreZL_4FWoF7WzyChSx=Me1QO8NqtK25w8Js9NWyH8A@mail.gmail.com>
+ <1442569912-13452-1-git-send-email-judge.packham@gmail.com>
+ <55FBE11F.2000700@imgtec.com>
+Message-ID: <CAFOYHZA8P9V5qN8XtcYx5H6h7Snk4WN+hZAw2qS0Fj_dBELUhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi Kawashima,
+Hi Vincent,
 
-you have put your SoB in the subject, when it should be at the bottom
-of your commit log.
+On Fri, Sep 18, 2015 at 10:02 PM, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> Dear Chris Packham,
+>
+> On 09/18/2015 10:51 AM, Chris Packham wrote:
+>> From the micropython source:
+>>
+>>   This mpz module implements arbitrary precision integers.
+>>
+>>   The storage for each digit is defined by mpz_dig_t.  The actual number
+>>   of bits in mpz_dig_t that are used is defined by MPZ_DIG_SIZE.  The
+>>   machine must also provide a type that is twice as wide as mpz_dig_t,
+>>   in both signed and unsigned versions
+>>
+>>   MPZ_DIG_SIZE can be between 4 and 8*sizeof(mpz_dig_t), but it makes
+>>   most sense to have it as large as possible.
+>>
+>> Micropython detects x86_64 targets and sets MPZ_DIG_SIZE appropriately
+>> but for other 64-bit targets we need to explicitly pass
+>> -DMPZ_DIG_SIZE=32 in CFLAGS.
+>>
+>> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+>> ---
+>>  package/micropython/micropython.mk | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+>> index 6266882..1ac2e8d 100644
+>> --- a/package/micropython/micropython.mk
+>> +++ b/package/micropython/micropython.mk
+>> @@ -16,6 +16,10 @@ ifeq ($(BR2_powerpc)$(BR2_sh)$(BR2_xtensa),y)
+>>  MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+>>  endif
+>>
+>> +ifeq ($(BR2_ARCH_IS_64),y)
+>> +MICROPYTHON_CFLAGS += -DMPZ_DIG_SIZE=32
+>> +endif
+>> +
+>
+> you have to take into account that MIPS64 n32 is a 64-bit target as
+> well, but it has a MP_SSIZE_MAX of 32-bit. So, if you set MPZ_DIG_SIZE
+> to 32 for all 64-bit arches, then you will see the same failure for the
+> when building for MIPS64 n32.
+>
+> I suggest you to do modify the "ifeq" like this:
+>
+> # MIPS64 n32 is a 64-bit arch, but it has a 32-bit wide SSIZE_MAX which
+> # means we still need the default MPZ_DIG_SIZE of 16.
+> ifeq ($(BR2_ARCH_IS_64)$(BR2_MIPS_NABI32),y)
+>
 
-Also, it's good to use the standard subject when adding new packages:
+I'll take a look. The remote machine I was doing my buildroot hacking
+on has gone AWOL so it may take a while for me to get it back up and
+running (there was a planned server outage so I suspect it's trying to
+access some non-existent mounts).
 
-<PKG>: new package
+When I asked upstream there was a thought that this commit[1] might
+fix the issue. So I'll try adding that as a patch first.
 
-See an example here:
-
-http://git.buildroot.net/buildroot/commit
-/?id=9646e80fca281030eb5d3125f499a60231476373
-
-Also, when sending a new version, you have to add v2 (or the version
-number) after PATCH in your subject and a small changelog so other can
-know what changed between versions. And don't forget yo mark your
-previous patch as superseded in Patchwork. Worth reading this:
-
-http://nightly.buildroot.org/manual.html#submitting-patches
-
-More comments below; please keep reading.
-
-On 19/09/15 02:55, Hiroshi Kawashima wrote:
-> Adding new package, squeezelite is a sound client for Logitech Media Server.
-> ---
->   package/squeezelite/Config.in      |   30 ++++++++++++++++++++++++++++++
->   package/squeezelite/squeezelite.mk |   34 ++++++++++++++++++++++++++++++++++
->   2 files changed, 64 insertions(+), 0 deletions(-)
->   create mode 100644 package/squeezelite/Config.in
->   create mode 100644 package/squeezelite/squeezelite.mk
-> 
-> diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
-> new file mode 100644
-> index 0000000..33e1d08
-> --- /dev/null
-> +++ b/package/squeezelite/Config.in
-> @@ -0,0 +1,30 @@
-> +config BR2_PACKAGE_SQUEEZELITE
-> +	bool "squeezelite"
-> +	depends on BR2_USE_WCHAR	# flac
-
-No tab before the comment. Just a space.
-
-You are also missing a dependency on MMU introduced by MPG123, so:
-
-depends on BR2_USE_MMU # mpg123
-
-And you are also missing a dependency on THREADS introduced by
-ALSA_LIB, so:
-
-depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_FLAC
-> +	select BR2_PACKAGE_LIBMAD
-> +	select BR2_PACKAGE_LIBVORBIS
-> +	select BR2_PACKAGE_FAAD2
-> +	select BR2_PACKAGE_MPG123
-> +	select BR2_PACKAGE_LIBSOXR
-> +	help
-> +	  Logitech Media Server client
-> +	  https://code.google.com/p/squeezelite/
-> +
-> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
-> +	bool "Enable resampling function"
-> +	default y
-> +	depends on BR2_PACKAGE_SQUEEZELITE
-> +	help
-> +	  Enable resampling function
-> +
-> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
-> +	bool "Use OpenMP for resampling"
-> +	default y
-> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
-> +	help
-> +	  Enable OpenMP support for resampling
-> +
-> +comment "squeezelite needs a toolchain w/ wchar (incur from flac)"
-
-I would place this comment at the end of the BR2_PACKAGE_SQUEEZELITE,
-before defining the BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE and
-BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP.
-
-The "(incur from flac)" comment is not needed.
-
-You need to add "threads" to the comment as well. It should look like
-this:
-
-comment "squeezelite needs a toolchain w/ wchar, threads"
-
-> +	depends on !BR2_USE_WCHAR
-
-And you also need to put the MMU and THREAD dependencies here, so it
-should look like this:
-
-depends on BR2_USE_MMU
-depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-
-> diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
-> new file mode 100644
-> index 0000000..1ea3007
-> --- /dev/null
-> +++ b/package/squeezelite/squeezelite.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# squeezelite -- Logitech Media Server client
-
-Only the package name here. No description.
-
-> +#
-> +################################################################################
-> +
-> +SQUEEZELITE_VERSION = v1.8
-> +SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
-> +SQUEEZELITE_SITE_METHOD = git
-> +SQUEEZELITE_LICENSE = GPLv3
-> +SQUEEZELITE_LICENSE_FILE = LICENSE.txt
-> +SQUEEZELITE_INSTALL_STAGING = NO
-
-It won't be installed in staging by default, so this line is not needed.
-
-> +SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
-> +
-> +#SQUEEZELITE_OPTS = "-DLINKALL"
-
-What's this? If it's not used, then remove it.
-
-> +SQUEEZELITE_OPTS = ""
-
-You don't need to initialize this. Anyway, keep reading as there are
-more comments regarding this variable.
-
-> +
-> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
-> +	SQUEEZELITE_OPTS += -DRESAMPLE
-
-Better to use a variable name like SQUEEZELITE_MAKE_OPTS which is
-commonly used in Buildroot.
-
-> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
-> +		SQUEEZELITE_OPTS += -DRESAMPLE_MP
-
-Same here.
-
-> +	endif
-> +endif
-> +
-> +define SQUEEZELITE_BUILD_CMDS
-> +    $(MAKE) OPTS="$(SQUEEZELITE_OPTS)" \
-
-$(TARGET_MAKE_ENV) always in front of $(MAKE). And also use
-$(SQUEEZELITE_MAKE_OPTS).
-
-> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-> +endef
-> +
-> +define SQUEEZELITE_INSTALL_TARGET_CMDS
-> +    $(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
-Also, when you add a new package, you need to add it to the right
-category in package/Config.in, otherwise the users won't be able to
-select it from the menuconfig.
-
-Regards,
-
-Vincent.
+--
+[1] - https://github.com/micropython/micropython/commit/8b4fb4fe140e9cf57fcfa258d0d2d6fe19090fc5
