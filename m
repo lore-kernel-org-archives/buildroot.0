@@ -1,66 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:39:30 +0200
-Subject: [Buildroot] [git commit] libfslvpuwrap: bump version to 1.0.58
-Message-ID: <20150919134123.D7E2D7FC34@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 15:40:38 +0200
+Subject: [Buildroot] [git commit] qmx6_defconfig: bump version to
+	3.14.28_1.0.0
+Message-ID: <20150919134124.2987D7FB61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=339421b813c1a9af2ed500de286bd8eaa8464c6c
+commit: http://git.buildroot.net/buildroot/commit/?id=666e89b93443c416ec6da37eaed6838b05f7b1bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Change license file + add hash file.
-
-Changelog:
-- Update the license file with new version and use COPYING
-- Remove the folder /usr/share to avoid empty folder installation
-
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/1506776
-
-This package has been implicitely tested through gstreamer as the
-plugins rely on it for vpu decoding:
- # gst-launch-0.10 playbin
- # uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! imxvpudec ! imxipuvideosink
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslvpuwrap/libfslvpuwrap.hash |    2 ++
- package/libfslvpuwrap/libfslvpuwrap.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ configs/qmx6_defconfig |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.hash b/package/libfslvpuwrap/libfslvpuwrap.hash
-new file mode 100644
-index 0000000..e7ca1a8
---- /dev/null
-+++ b/package/libfslvpuwrap/libfslvpuwrap.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256	a278eb18ec24230166ac39e2eadf7b934798f0432654c2e24c4cb69c3ac1cf0f  libfslvpuwrap-1.0.58.bin
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index 625f586..7669c63 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
+index d693d82..a829b4c 100644
+--- a/configs/qmx6_defconfig
++++ b/configs/qmx6_defconfig
+@@ -1,17 +1,17 @@
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.53"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.28"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
  
--LIBFSLVPUWRAP_VERSION = 1.0.57
-+LIBFSLVPUWRAP_VERSION = 1.0.58
- LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
- LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
- LIBFSLVPUWRAP_INSTALL_STAGING = YES
+ # Notice you need a recent version of u-boot (with DT support) to be able
+ # to boot this kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+-# Last version of branch cgt_imx_3.10.53_1.1.0
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="cea0de46e2c8f0a5c67f46005e84ae1d418731bc"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/imx6_kernel_3.14.git"
++# Last version of branch cgt_qmx6_3.14.28_1.0.0
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="105820d6bd251deb49c3dd3f71fa0d76adce97c7"
+ BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="cgt_qmx6_pn016103"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_uboot.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="30ba236ef6df04e4cca58c3e06c4f63c2db12115"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="4d3b64e93064ed3d97ef7d91ff0f61a693a460fc"
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.pn016103.imx"
  
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
--LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
-+LIBFSLVPUWRAP_LICENSE_FILES = EULA COPYING
- LIBFSLVPUWRAP_REDISTRIBUTE = NO
- 
- define LIBFSLVPUWRAP_EXTRACT_CMDS
