@@ -1,36 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:17:19 +0200
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Sat, 19 Sep 2015 10:17:52 -0300
 Subject: [Buildroot] [PATCH v2] check: new package
-In-Reply-To: <1442666511-17751-1-git-send-email-gustavo.zacarias@free-electrons.com>
+In-Reply-To: <20150919150359.70f06360@free-electrons.com>
 References: <1442666511-17751-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20150919151719.7b00e8ed@free-electrons.com>
+ <20150919150359.70f06360@free-electrons.com>
+Message-ID: <55FD6080.7020904@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear gustavo.zacarias at free-electrons.com,
+On 19/09/15 10:03, Thomas Petazzoni wrote:
 
-On Sat, 19 Sep 2015 09:41:51 -0300, gustavo.zacarias at free-electrons.com
-wrote:
-> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-> ---
->  package/Config.in        |  1 +
->  package/check/Config.in  |  6 ++++++
->  package/check/check.hash |  3 +++
->  package/check/check.mk   | 20 ++++++++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/check/Config.in
->  create mode 100644 package/check/check.hash
->  create mode 100644 package/check/check.mk
+> Hello,
+>
+> On Sat, 19 Sep 2015 09:41:51 -0300, gustavo.zacarias at free-electrons.com
+> wrote:
+>> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>>
+>> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+>
+> What are the changes compared to v1 ?
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi, just dropped the host package.
+Regards.
