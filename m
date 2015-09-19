@@ -1,54 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 15:40:43 +0200
-Subject: [Buildroot] [git commit] nitrogen6x_defconfig: bump version to
-	3.14.28-1.0.0
-Message-ID: <20150919134124.332477FB61@busybox.osuosl.org>
+Date: Sat, 19 Sep 2015 15:39:30 +0200
+Subject: [Buildroot] [git commit] libfslvpuwrap: bump version to 1.0.58
+Message-ID: <20150919134123.D7E2D7FC34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b8e9b975701e2a964c246d31502a8ca6c9942177
+commit: http://git.buildroot.net/buildroot/commit/?id=339421b813c1a9af2ed500de286bd8eaa8464c6c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-U-Boot version is updated to v2015.07.
+Change license file + add hash file.
+
+Changelog:
+- Update the license file with new version and use COPYING
+- Remove the folder /usr/share to avoid empty folder installation
+
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/1506776
+
+This package has been implicitely tested through gstreamer as the
+plugins rely on it for vpu decoding:
+ # gst-launch-0.10 playbin
+ # uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/nitrogen6x_defconfig |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/libfslvpuwrap/libfslvpuwrap.hash |    2 ++
+ package/libfslvpuwrap/libfslvpuwrap.mk   |    4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 71b01f0..51c5161 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -14,21 +14,22 @@ BR2_TARGET_ROOTFS_EXT2_2r1=y
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.hash b/package/libfslvpuwrap/libfslvpuwrap.hash
+new file mode 100644
+index 0000000..e7ca1a8
+--- /dev/null
++++ b/package/libfslvpuwrap/libfslvpuwrap.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256	a278eb18ec24230166ac39e2eadf7b934798f0432654c2e24c4cb69c3ac1cf0f  libfslvpuwrap-1.0.58.bin
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+index 625f586..7669c63 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
  
- # Lock headers to match kernel
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.53"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+-LIBFSLVPUWRAP_VERSION = 1.0.57
++LIBFSLVPUWRAP_VERSION = 1.0.58
+ LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
+ LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
+ LIBFSLVPUWRAP_INSTALL_STAGING = YES
  
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/21eb4146/u-boot-21eb4146.tar.gz"
-+# Last version of branch boundary-v2015.07
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/5115a9e/u-boot-5115a9e.tar.gz"
+ LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
+-LIBFSLVPUWRAP_LICENSE_FILES = EULA EULA.txt
++LIBFSLVPUWRAP_LICENSE_FILES = EULA COPYING
+ LIBFSLVPUWRAP_REDISTRIBUTE = NO
  
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--# Last version of branch boundary-imx_3.10.53_1.1.1_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/98c0fdbe/linux-imx6-98c0fdbe.tar.gz"
-+# Last version of branch boundary-imx_3.14.28_1.0.0_ga
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/3417c66/linux-imx6-3417c66.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ define LIBFSLVPUWRAP_EXTRACT_CMDS
