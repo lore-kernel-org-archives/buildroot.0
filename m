@@ -1,53 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Sep 2015 14:40:17 +0200
-Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
-In-Reply-To: <20150913213513.GA21306@free.fr>
-References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
- <20150913232942.736dea75@free-electrons.com>
- <20150913213513.GA21306@free.fr>
-Message-ID: <20150919144017.4fdcc90a@free-electrons.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Sat, 19 Sep 2015 09:41:51 -0300
+Subject: [Buildroot] [PATCH v2] check: new package
+Message-ID: <1442666511-17751-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-On Sun, 13 Sep 2015 23:35:13 +0200, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/Config.in        |  1 +
+ package/check/Config.in  |  6 ++++++
+ package/check/check.hash |  3 +++
+ package/check/check.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/check/Config.in
+ create mode 100644 package/check/check.hash
+ create mode 100644 package/check/check.mk
 
-> > Do we actually understand why it doesn't work? There is really no
-> > reason for .py files to be necessary.
-> 
-> Well, what do I know about python? ;-)
-> 
-> I never said I understood the issue. Just that having only .pyc modules
-> make Kodi segfault, while having .py makes it work... :-(
-> 
-> All I got was the trace above. There was nothing (of interest) in Kodi's
-> own log file.
-
-As you can imagine, I'm not too happy with this solution. I believe
-Kodi is doing something incorrect, since if you just run Python with
-the .pyc files, and do "import site", it works just fine.
-
-There is some logic in Kodi that tries to set the PYTHONHOME
-environment variable. Can you see in the logs if you see the following
-messages (from xbmc/interfaces/python/XBPython.cpp) :
-
-  CLog::Log(LOGINFO, "initializing python engine.");
-  CLog::Log(LOGDEBUG, "PYTHONHOME -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
-  CLog::Log(LOGDEBUG, "PYTHONPATH -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
-
-Alternatively, can you change Python, in file Modules/getpath.c,
-function calculate_path(), and dump all the environment variables?
-
-I could do it myself, but Kodi is so long to build... :-/
-
-Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index edd4f30..8df3cc8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -111,6 +111,7 @@ menu "Development tools"
+ 	source "package/binutils/Config.in"
+ 	source "package/bsdiff/Config.in"
+ 	source "package/bustle/Config.in"
++	source "package/check/Config.in"
+ 	source "package/cmake/Config.in"
+ 	source "package/cppunit/Config.in"
+ 	source "package/cvs/Config.in"
+diff --git a/package/check/Config.in b/package/check/Config.in
+new file mode 100644
+index 0000000..04682e1
+--- /dev/null
++++ b/package/check/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CHECK
++	bool "check"
++	help
++	  Check is a unit testing framework for C.
++
++	  http://check.sourceforge.net/
+diff --git a/package/check/check.hash b/package/check/check.hash
+new file mode 100644
+index 0000000..0c3a924
+--- /dev/null
++++ b/package/check/check.hash
+@@ -0,0 +1,3 @@
++# From http://sourceforge.net/projects/check/files/check/0.10.0/
++md5	53c5e5c77d090e103a17f3ed7fd7d8b8	check-0.10.0.tar.gz
++sha1	35d3a53446aea7b21a770faedb358d0fc7cba76d	check-0.10.0.tar.gz
+diff --git a/package/check/check.mk b/package/check/check.mk
+new file mode 100644
+index 0000000..92dd033
+--- /dev/null
++++ b/package/check/check.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# check
++#
++################################################################################
++
++CHECK_VERSION = 0.10.0
++CHECK_SITE = http://downloads.sourceforge.net/project/check/check/$(CHECK_VERSION)
++CHECK_INSTALL_STAGING = YES
++CHECK_DEPENDENCIES = host-pkgconf
++CHECK_LICENSE = LGPLv2.1+
++CHECK_LICENSE_FILES = COPYING.LESSER
++
++# Having checkmk in the target makes no sense
++define CHECK_REMOVE_CHECKMK
++	rm -f $(TARGET_DIR)/usr/bin/checkmk
++endef
++CHECK_POST_INSTALL_TARGET_HOOKS += CHECK_REMOVE_CHECKMK
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.6
