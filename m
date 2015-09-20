@@ -1,35 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 15:05:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/shairport-sync: bump to
- version 2.4
-In-Reply-To: <1441694983-3818-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1441694983-3818-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150920150551.02429e5e@free-electrons.com>
+Date: Sun, 20 Sep 2015 15:08:38 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/at: updated version from
+ 3.1.13 to 3.1.16
+In-Reply-To: <1473000.Q0pm3JyGrD@deathstar>
+References: <11269096.cxoRZRC0e7@deathstar>
+	<1473000.Q0pm3JyGrD@deathstar>
+Message-ID: <20150920150838.1009ed2d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Francesco Nwokeka,
 
-On Tue,  8 Sep 2015 08:49:43 +0200, J?rg Krause wrote:
-> Version 2.4 of shairport-sync introduces new optional features (metadata,
-> stdout, pipe) which we enable by default. The impact on the binary size is
-> about 18 kB (110 kB vs 92 kB) for an ARM target.
-> 
-> Also add a new dependency to libconfig and install the default config script.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> Changes v1 -> v2:
->  * Add missing dependency libconfig (Baruch)
-> ---
->  package/shairport-sync/Config.in         |  1 +
->  package/shairport-sync/shairport-sync.mk | 11 ++++++++---
->  2 files changed, 9 insertions(+), 3 deletions(-)
+On Tue, 08 Sep 2015 14:13:59 +0200, Francesco Nwokeka wrote:
+> Version 3 of the patch to update the "at" package.
 
-Applied, thanks.
+You received some comments from Arnout Vandecappelle on September 8th
+on this patch. Could you take them into account and send an updated
+version of the patch?
+
+I was going to apply by fixing the problems pointed by Arnout, but one
+requires a bit more work:
+
+"""
+> * Merged previous Makefile.in patches into one.  
+
+ Ick, that's not what I intended! We want a separate patch file for each
+separate change. The two patches that you squashed into one do two
+ distinct changes:
+
+ - change IROOT into DESTDIR
+ - don't try to install as root
+
+So it's good to keep them separate.
+
+ My proposal was to drop the first patch and just use IROOT. In
+ buildroot, we can easily use IROOT instead of DESTDIR by setting
+
+AT_INSTALL_TARGET_OPTS = IROOT=$(TARGET_DIR) install
+"""
+
+Could you fix that and send a new version?
+
+Thanks,
 
 Thomas
 -- 
