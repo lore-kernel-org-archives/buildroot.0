@@ -1,77 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 10:22:40 +0200
-Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
- runtime
-In-Reply-To: <alpine.DEB.2.11.1509192310350.1987@tanhuma.tkos.co.il>
-References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
- <20150917150112.GR11632@tarshish>
- <alpine.DEB.2.02.1509171814510.13941@orcam81.orcam.lan>
- <20150917162003.GT11632@tarshish>
- <alpine.DEB.2.02.1509171922410.13941@orcam81.orcam.lan>
- <20150917192315.6db18115@free-electrons.com>
- <20150917190424.GU11632@tarshish>
- <20150917221546.247fe210@free-electrons.com>
- <alpine.DEB.2.11.1509192310350.1987@tanhuma.tkos.co.il>
-Message-ID: <20150920102240.6e8db4f5@free-electrons.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 20 Sep 2015 20:44:35 +1200
+Subject: [Buildroot] [PATCH] micropython: Add upstream patch to fix 64-bit
+	builds
+Message-ID: <1442738675-5141-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan,
+Fixes the following error when building for a 64-bit target
 
-On Sat, 19 Sep 2015 23:36:47 +0300 (IDT), Jonathan Ben Avraham wrote:
+  ../py/objint_mpz.c:54:5: error: right shift count >= width of type [-Werror]
+       (MP_SSIZE_MAX >> MPZ_DIG_SIZE * 4) & DIG_MASK,
+       ^
+  ../py/objint_mpz.c:54:5: error: initializer element is not constant
+  ../py/objint_mpz.c:54:5: error: (near initialization for 'maxsize_dig[4]')
 
-> > I believe there is no proper way with the current gzip build system to
-> > fix the problem. It is inherently wrong to assume that the $(SHELL)
-> > used on the host will be available on the target. The only sane option
-> > I believe is to have a --with-shell=<foo> option, which if not given
-> > defaults to $(SHELL) to retain the existing behavior.
-> 
-> If I understand correctly you mean that the correct fix would require 
-> submitting a patch to the gzip maintainer to add the --with-shell 
-> configure option.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+So this is the upstream patch that fixes the build problem and replaces
+http://lists.busybox.net/pipermail/buildroot/2015-September/139826.html
 
-Correct.
+ package/micropython/micropython.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> This would not obviate the post-install hook you suggest 
-> below because we would need a heuristic to use with gzip --with-shell 
-> option.
-
-I'm not sure to follow you. We would just have to do:
-
-GZIP_CONF_ENV += --with-shell=/the/right/value
-
-> In order to do this post-install hook we would need to know the shells 
-> that the user selected and choose one of them using some heuristic rule 
-> such as:
-> 
-> 1. If the user chose the bash package, then use /bin/bash
-> 2. If the user chose Busybox and not bash then use /bin/ash
-> 3. If the user chose neither Busybox nor bash then use /bin/sh and 
-> hope for the best
-> 
-> If the user then changes the configuration and un-selects bash we would 
-> need to cause the gzip package to be re-built.
-
-No: we don't handle such automatic rebuilds after configuration
-changes. See
-http://buildroot.org/downloads/manual/manual.html#full-rebuild.
-
-> 
-> I wonder if all of this is worth it. IMHO it would be enough to note in 
-> the gzip package help text that the user might need to adjust the 
-> hashbangs of the scripts in some post-build script.
-
-There's some logic in the skeleton package that guarantees that /bin/sh
-points to the system shell selected by the user in his configuration.
-So forcing /bin/sh as the shebang should be fine.
-
-Best regards,
-
-Thomas
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 6266882..f2ad5bf 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -9,6 +9,7 @@ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+ MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
++MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8b4fb4fe140e9cf57fcfa258d0d2d6fe19090fc5.patch
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
