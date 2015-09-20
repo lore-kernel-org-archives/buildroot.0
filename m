@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Sep 2015 20:41:34 +0200
-Subject: [Buildroot] [PATCH 08/18] linux: remove now-redundant ccache
+Date: Sun, 20 Sep 2015 21:23:42 +0200
+Subject: [Buildroot] [PATCH 10/18] barebox: remove now-redundant ccache
 	handling
-In-Reply-To: <1442774504-22799-1-git-send-email-arnout@mind.be>
+In-Reply-To: <1442777030-24036-1-git-send-email-arnout@mind.be>
 References: <1442774504-22799-1-git-send-email-arnout@mind.be>
-Message-ID: <1442774504-22799-9-git-send-email-arnout@mind.be>
+ <1442777030-24036-1-git-send-email-arnout@mind.be>
+Message-ID: <1442777030-24036-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/barebox/barebox.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index bbcc54b..2319576 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -67,7 +67,7 @@ LINUX_MAKE_FLAGS = \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
--	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index e45976d..00e1537 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -52,8 +52,7 @@ else
+ BAREBOX_ARCH = $(KERNEL_ARCH)
+ endif
  
- LINUX_MAKE_ENV = \
+-BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
+-	$(TARGET_CROSS)"
++BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(TARGET_CROSS)"
+ BAREBOX_MAKE_ENV = $(TARGET_MAKE_ENV)
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
 -- 
 2.5.3
