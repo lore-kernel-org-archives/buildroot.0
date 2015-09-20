@@ -1,36 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 14:28:12 +0200
-Subject: [Buildroot] [PATCH] micropython: Add upstream patch to fix
- 64-bit builds
-In-Reply-To: <1442738675-5141-1-git-send-email-judge.packham@gmail.com>
-References: <1442738675-5141-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <20150920142812.115fa071@free-electrons.com>
+Date: Sun, 20 Sep 2015 14:28:23 +0200
+Subject: [Buildroot] [git commit] package/liblinear: bump to version 2.01
+Message-ID: <20150920122944.8E30A8188E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Packham,
+commit: http://git.buildroot.net/buildroot/commit/?id=a7fbe1dfbea5d36efe32f77931b323fe3e3d38b5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Sep 2015 20:44:35 +1200, Chris Packham wrote:
-> Fixes the following error when building for a 64-bit target
-> 
->   ../py/objint_mpz.c:54:5: error: right shift count >= width of type [-Werror]
->        (MP_SSIZE_MAX >> MPZ_DIG_SIZE * 4) & DIG_MASK,
->        ^
->   ../py/objint_mpz.c:54:5: error: initializer element is not constant
->   ../py/objint_mpz.c:54:5: error: (near initialization for 'maxsize_dig[4]')
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
-> So this is the upstream patch that fixes the build problem and replaces
-> http://lists.busybox.net/pipermail/buildroot/2015-September/139826.html
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/liblinear/liblinear.hash |    2 +-
+ package/liblinear/liblinear.mk   |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 8a335cc..1c5b184 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	0ab97ca81c62457fcfe78f56619a7b2f70c1f7c875b4101827343555b4f6c3f4	liblinear-1.96.tar.gz
++sha256	ebc71999224f5779574b11e248f1e2ef647b5d839c0380c1c5a4ac8789aa95a9  liblinear-2.01.tar.gz
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index d712b95..80ba489 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLINEAR_VERSION = 1.96
++LIBLINEAR_VERSION = 2.01
+ LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
+ LIBLINEAR_LICENSE = BSD-3c
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
+@@ -14,8 +14,8 @@ LIBLINEAR_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ # $1: destination directory
+ define LIBLINEAR_INSTALL_SHARED
+-	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.2 $(1)/usr/lib/liblinear.so.2
+-	ln -sf liblinear.so.2 $(1)/usr/lib/liblinear.so
++	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.3 $(1)/usr/lib/liblinear.so.3
++	ln -sf liblinear.so.3 $(1)/usr/lib/liblinear.so
+ endef
+ LIBLINEAR_CFLAGS += -fPIC
+ endif
