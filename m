@@ -1,40 +1,49 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 20 Sep 2015 10:26:42 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-09-19
-In-Reply-To: <20150920063017.5E1E6101C6F@stock.ovh.net>
-References: <20150920063017.5E1E6101C6F@stock.ovh.net>
-Message-ID: <38121FAB319C3344930C920E7B51831325FCF95A@LEMAIL01.le.imgtec.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 20 Sep 2015 12:39:31 +0200
+Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
+ runtime
+In-Reply-To: <20150920102240.6e8db4f5@free-electrons.com>
+References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
+ <20150917150112.GR11632@tarshish>
+ <alpine.DEB.2.02.1509171814510.13941@orcam81.orcam.lan>
+ <20150917162003.GT11632@tarshish>
+ <alpine.DEB.2.02.1509171922410.13941@orcam81.orcam.lan>
+ <20150917192315.6db18115@free-electrons.com>
+ <20150917190424.GU11632@tarshish>
+ <20150917221546.247fe210@free-electrons.com>
+ <alpine.DEB.2.11.1509192310350.1987@tanhuma.tkos.co.il>
+ <20150920102240.6e8db4f5@free-electrons.com>
+Message-ID: <55FE8CE3.4030402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+On 20-09-15 10:22, Thomas Petazzoni wrote:
+> Jonathan,
+> 
+> On Sat, 19 Sep 2015 23:36:47 +0300 (IDT), Jonathan Ben Avraham wrote:
+[snip]
+>> I wonder if all of this is worth it. IMHO it would be enough to note in 
+>> the gzip package help text that the user might need to adjust the 
+>> hashbangs of the scripts in some post-build script.
+> 
+> There's some logic in the skeleton package that guarantees that /bin/sh
+> points to the system shell selected by the user in his configuration.
+> So forcing /bin/sh as the shebang should be fine.
 
-On 20/09/15 07:30, Thomas Petazzoni wrote:
-> Build statistics for 2015-09-19
-> ===============================
+ Well, if the scripts indeed require Bourne extensions, then possibly ash and
+dash will not work... And I have no idea about zsh either.
 
->      mips64el |               host-cmake-3.3.2 | NOK | http://autobuild.buildroot.net/results/2bd81e2ecb09e64ccf9e5c35f1160a9b9e7bd079/
+ Regards,
+ Arnout
 
-I cannot reproduce this one.
 
->      mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/d21bdc389597d5f76c955b8e169c4eb30d596bc8/
-
-Pull request sent:
-
-https://github.com/micropython/micropython/pull/1471
-
->      mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/a941a0fa6345309f3255556af652b417c7c46796/
->      mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/b2766b10b18070407f305728ad776588ac06630e/
->      mips64el |             micropython-v1.4.5 | NOK | http://autobuild.buildroot.net/results/1ff9269b41463d288c16d5b21529234757929eca/
-
-Fixed by:
-
-https://patchwork.ozlabs.org/patch/519976/
-
-Regards,
-
-Vincent.
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
