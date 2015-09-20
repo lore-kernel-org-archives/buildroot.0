@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 19:04:08 +0200
-Subject: [Buildroot] [PATCH] make: requires dynamic libraries
-In-Reply-To: <20150920185821.53cb363b@free-electrons.com>
-References: <1442450292-13794-1-git-send-email-ryanbarnett3@gmail.com>
- <20150917232742.6b253d01@free-electrons.com>
- <CALq67GCCHMGowurww4w=W7wpAzCDUJHnFLhMDnDo1_33SGNnbQ@mail.gmail.com>
- <20150920185821.53cb363b@free-electrons.com>
-Message-ID: <20150920190408.48d568c0@free-electrons.com>
+Date: Sun, 20 Sep 2015 19:06:22 +0200
+Subject: [Buildroot] [PATCH 1/1] lxc needs gzip scripts for
+ lxc-checkconfig runtime
+In-Reply-To: <1442761327-18830-1-git-send-email-yba@tkos.co.il>
+References: <1442761327-18830-1-git-send-email-yba@tkos.co.il>
+Message-ID: <20150920190622.3f7278c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan,
+Dear Jonathan Ben-Avraham,
 
-On Sun, 20 Sep 2015 18:58:21 +0200, Thomas Petazzoni wrote:
-
-> On Sun, 20 Sep 2015 09:40:25 -0500, Ryan Barnett wrote:
+On Sun, 20 Sep 2015 18:02:07 +0300, Jonathan Ben-Avraham wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
 > 
-> > I am going to go disabling guile support in a static only
-> > configuration. I ran into an issue with setting GC_NO_DLOPEN define in
-> > that there then becomes multiple definitions of locale_charset between
-> > libintl and libguile and I wasn't sure how to properly fix it. Looking
-> > at what guile is used for in make, it doesn't appear extremely useful
-> > especially in a static only configuration.
+> lxc executables such as lxc-checkconfig require scripts provided by
+> gzip such as zgrep.
 > 
-> I think we should disable guile support completely, not only for static
-> only builds. I don't really see the usefulness of guile support in
-> make in the context of Buildroot.
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+> ---
+>  package/lxc/Config.in |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+> index ffd9b4a..5377977 100644
+> --- a/package/lxc/Config.in
+> +++ b/package/lxc/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_LXC
+>  	bool "lxc"
+>  	select BR2_PACKAGE_LIBCAP
+> +	select BR2_PACKAGE_GZIP # runtime, for lxc-checkconfig
 
-I didn't see that there is some explicit handling of guile in our
-current make package. It was added by Baruch in commit
-38ee8a8e1651f1de2b2698e4c6bce2e488001cdb.
+BR2_PACKAGE_GZIP depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, so you
+should select it as well.
 
-Baruch, were you specifically interested in guile support in make?
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
