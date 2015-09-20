@@ -1,90 +1,46 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sun, 20 Sep 2015 17:00:04 -0500
-Subject: [Buildroot] [v2 1/1] make: disable guile support when static
- linking enabled
-In-Reply-To: <20150920215134.GA1655@free.fr>
-References: <1442783430-26199-1-git-send-email-ryanbarnett3@gmail.com>
- <20150920215134.GA1655@free.fr>
-Message-ID: <CALq67GCYQJ5HoFFRS8maW-oPmY9zpqUpvZLfaMWr12pAQzcBfw@mail.gmail.com>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Mon, 21 Sep 2015 01:59:49 +0200
+Subject: [Buildroot] =?utf-8?q?problem_booting_from_ext2_=C2=B5sd_card?=
+In-Reply-To: <CA+BsyQ7LQofzLgZKP_Zm4Ykbd+MOfWNw15qPRYAxXjURURuKVg@mail.gmail.com>
+References: <55FA01A4.5070107@proximus.be>	<CA+BsyQ6yskQ6TFpZQCTMWtZka+TBNaNj2XzgWhu7RqskLN0HhA@mail.gmail.com>	<55FA73D9.6080800@proximus.be>
+ <CA+BsyQ7LQofzLgZKP_Zm4Ykbd+MOfWNw15qPRYAxXjURURuKVg@mail.gmail.com>
+Message-ID: <55FF4875.9030403@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Brendan Heading schreef op 17/09/2015 om 13:20:
+>> Then used cfdisk to create a single partition type 83 and maximum size as
+>> suggested by cfdisk.
+> What's the maximum size suggested by cfdisk ?
+>
+> Your script seems to be manually creating the ext2 filesystem and
+> copying the files to it. buildroot can actually generate the ext2/3/4
+> image for you, so you won't need the above script; you'd just need to
+> copy the image directly to the sd (using dd).
+>
+>> The only thing i can think of is that my debian host is messing up the
+>> partition.
+>> and also tried  cfdisk /z
+> Can you mount the partition on your debian host ? If it works there it
+> should also work on your target.
+>
+> I see the output of mke2fs you sent. It appears to be creating a 2GB
+> partition which is the maximum size of an ext2 filesystem, so that
+> looks right.
+>
+> My best suggestion is to bring your Linux system up without mounting
+> the SD card (ie use an initramfs or similar) and then see if you can
+> mount it manually and dump out the partition tables from there.
+>
 
-On Sun, Sep 20, 2015 at 4:51 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Ryan, All,
->
-> On 2015-09-20 16:10 -0500, Ryan Barnett spake thusly:
->> When building in a static only configuration with guile package
->> enabled, the following error happens:
->>
->>  gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or
->>  directory
->>    #   include <dlfcn.h>
->>
->> The file gc_pthread_redirects.h comes from bdwgc, which gets built
->> before make in the autobuild test case you're pointing to. This header
->
-> Maby replace "the autobuild test case you're pointing to" with "the
-> autobuild test case referenced below".
->
->> file is known to incorrectly include <dlfcn.h>, unless GC_NO_DLOPEN is
->> specified.
->>
->> IF GC_NO_DLOPEN is defined, another issue arises due to libguile and
->> libintl both defining locale_charset.
->>
->> Thus disable guile support for make.
->>
->> Fixes:
->>   http://autobuild.buildroot.net/results/814/8143ae0afac139845e5016058d85c800dc8527ad
->>
->> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
->> ---
->>  package/make/make.mk | 9 ++-------
->>  1 file changed, 2 insertions(+), 7 deletions(-)
->>
->> diff --git a/package/make/make.mk b/package/make/make.mk
->> index ebfa2f0..20702dc 100644
->> --- a/package/make/make.mk
->> +++ b/package/make/make.mk
->> @@ -11,16 +11,11 @@ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
->>  MAKE_LICENSE = GPLv3+
->>  MAKE_LICENSE_FILES = COPYING
->>
->> +MAKE_CONF_OPTS = --without-guile
->> +
->>  # Disable the 'load' operation for static builds since it needs dlopen
->>  ifeq ($(BR2_STATIC_LIBS),y)
->>  MAKE_CONF_OPTS += --disable-load
->>  endif
->>
->> -ifeq ($(BR2_PACKAGE_GUILE),y)
->> -MAKE_DEPENDENCIES += guile
->> -MAKE_CONF_OPTS += --with-guile
->> -else
->> -MAKE_CONF_OPTS += --without-guile
->> -endif
->
-> Hm.. not sure we want to unconditionally disable guile support in make.
->
-> What about:
->
->     ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_GUILE),:y)
->     MAKE_DEPENDENCIES += guile
->     MAKE_CONF_OPTS += --with-guile
->     else
->     MAKE_CONF_OPTS += --without-guile
->     endif
+Brendan ;
+The problem was caused by an overloaded power controller on the boards,  
+generating voltage dips on the 3V3 line
+enough to corrupt sd-card communication but not enough to trigger a 
+poweron reset ...
+It's not always software causing trouble....
 
-I had proposed that but Thomas had said just to disable it all
-together and Baruch - who originally submitted the package said that
-he agreed. See http://lists.busybox.net/pipermail/buildroot/2015-September/139980.html
-
-I am going to keep with disabling it unconditionally.
-
-Thanks,
--Ryan
+Regards , Johan
