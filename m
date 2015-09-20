@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 15:02:11 +0200
-Subject: [Buildroot] [PATCH v2] arc: axs10x - bump Linux kernel &
- headers to 4.2 release
-In-Reply-To: <1441723429-28377-1-git-send-email-abrodkin@synopsys.com>
-References: <1441723429-28377-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150920150211.7a7a602d@free-electrons.com>
+Date: Sun, 20 Sep 2015 15:05:05 +0200
+Subject: [Buildroot] [PATCH] arc: add HS38 VDK virtual boards
+In-Reply-To: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
+References: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20150920150505.3743ee98@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +12,24 @@ To: buildroot@busybox.net
 
 Dear Alexey Brodkin,
 
-On Tue,  8 Sep 2015 17:43:49 +0300, Alexey Brodkin wrote:
-> Linux kernel 4.2 was finally released, so bumping from
-> 4.2-rc5 to final release.
-> 
-> Updating Linux headers to 4.2 branch since they are introduced in
-> Buildroot as well already.
-> 
-> Also adding 1 back-ported patch that makes SD/MMC cards usable on AXS boards.
-> This patch will be a part of 4.3 (already in linux-next) and hopefully
-> will make its way in 4.2.1.
-> 
-> Once that patch appears in 4.2.x it must be removed from here.
-> 
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
+On Tue,  8 Sep 2015 17:54:22 +0300, Alexey Brodkin wrote:
+> Virtualizer Development Kits (VDKs) are software development kits
+> containing design-specific virtual prototypes as well as debug and
+> analysis tools and sample software.
 
-Applied after slightly tweaking the commit title, thanks.
+Are these publicly available? I.e can we run ourselves these
+configurations under the virtualizer?
+
+I was going to apply this patch, but I'm not sure it's really useful to
+have a SMP and a non-SMP configuration for exactly the same platform.
+We typically don't have multiple configurations for the same platform:
+people can always go ahead and enable/disable whatever they want in the
+kernel configuration.
+
+What is the motivation for having both? Is the SMP-capable kernel not
+working on the non-SMP emulated hardware?
+
+Thanks,
 
 Thomas
 -- 
