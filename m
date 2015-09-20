@@ -1,127 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 15:58:21 +0200
-Subject: [Buildroot] [PATCH v2 3/4] cubieboard: update build support for
- cubieboard 1/2/3.
-In-Reply-To: <1438067769-10254-3-git-send-email-fancp2007@gmail.com>
-References: <1438067769-10254-1-git-send-email-fancp2007@gmail.com>
- <1438067769-10254-3-git-send-email-fancp2007@gmail.com>
-Message-ID: <20150920155821.3e3c3026@free-electrons.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sun, 20 Sep 2015 09:40:25 -0500
+Subject: [Buildroot] [PATCH] make: requires dynamic libraries
+In-Reply-To: <20150917232742.6b253d01@free-electrons.com>
+References: <1442450292-13794-1-git-send-email-ryanbarnett3@gmail.com>
+ <20150917232742.6b253d01@free-electrons.com>
+Message-ID: <CALq67GCCHMGowurww4w=W7wpAzCDUJHnFLhMDnDo1_33SGNnbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Scott Fan,
+Thomas,
 
-On Tue, 28 Jul 2015 15:16:08 +0800, Scott Fan wrote:
-> This patch update the cb1/cb2's defconfig to mainline u-boot version,
-> and bump their linux-sunxi kernel to latest stage/sunxi-3.4 branch.
-> 
-> Additionally, add defconfig for cubieboard3 (a.k.a. cubietruck).
-> 
-> Finally, support set up the SD card only to boot from network.
+On Thu, Sep 17, 2015 at 4:27 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Ryan,
+>
+> On Wed, 16 Sep 2015 19:38:12 -0500, Ryan Barnett wrote:
+>> While attempting to build make in a static library only configuration
+>> the following error will be shown:
+>>
+>>  gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or
+>>  directory
+>>   #   include <dlfcn.h>
+>>
+>> Fix this by depending make on !BR2_STATIC_LIBS.
+>>
+>> Fixes:
+>>   http://autobuild.buildroot.net/results/814/8143ae0afac139845e5016058d85c800dc8527ad
+>>
+>> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+>
+> Unfortunately, I believe this is not the proper fix. If you use
+> http://autobuild.buildroot.org/toolchains/configs/br-arm-full-static.config
+> and build just the make package, it builds just fine:
+>
+> $ file output/target/usr/bin/make
+> output/target/usr/bin/make: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), statically linked, stripped
+>
+> The file gc_pthread_redirects.h comes, I believe, from bdwgc, which got
+> built before make in the autobuild test case you're pointing to. This
+> header file is known to incorrectly include <dlfcn.h>, unless
+> GC_NO_DLOPEN is specified. See what is done in guile.mk for example to
+> pass GC_NO_DLOPEN when BR2_STATIC_LIBS=y.
+>
+> I believe the chain is that you have bdwgc that gets built, then guile,
+> then make. In this case, make detects the availability of guile and
+> uses it, which is the reason why gc_pthread_redirects.h gets included
+> by make.
 
-Thanks for this patch. There are things that I like (like using the
-in-kernel defconfig + a fragment), but there are also things I don't
-really like. Most notably, the addition of the "boot from network"
-feature. Our defconfig typically build a system that will boot from SD
-or NAND, and we don't aim at supporting dozens of possibilities in
-those defconfigs. They are meant to be a starting point, and the user
-should know how to customize the U-Boot boot command and kernel
-configuration to use network boot instead.
+Thank you for the detailed explanation! I had quickly seen how this
+was addressed in the past via a search of the mailing list.
 
-So, could you rework this by not adding the network boot option?
+> So I suggest one of the two options:
+>
+>  * Make the optional dependency of make on guile explicit in make.mk,
+>    and pass GC_NO_DLOPEN when we're building statically.
+>
+>  * Disable guile support completely in make. I don't think we care
+>    about having guile support in make in the context of Buildroot, so
+>    this is probably the easiest solution.
 
-Also, maybe, instead of doing this crazy SD card setup script, could
-you use the genimage tool, like is done for the Wandboard. See
-configs/wandboard_config, board/wandboard/post-image.sh and
-board/wandboard/genimage.cfg ?
-
-This is optional of course, but I'd prefer to move in this direction
-rather than a complete rewrite of
-board/cubietech/cubieboard/mkcubiecard.sh for no real reason.
-
-> diff --git a/board/cubietech/cubieboard/boot.cmd b/board/cubietech/cubieboard/boot.cmd
-> index 849ed00..519b0e7 100644
-> --- a/board/cubietech/cubieboard/boot.cmd
-> +++ b/board/cubietech/cubieboard/boot.cmd
-> @@ -1,4 +1,5 @@
-> +setenv bootm_boot_mode sec
-
-What is this doing?
-
->  setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait panic=10 ${extra}
-> -fatload mmc 0 0x43000000 script.bin
-> -fatload mmc 0 0x48000000 uImage
-> -bootm 0x48000000
-> +load mmc 0:1 0x43000000 script.bin || load mmc 0:1 0x43000000 boot/script.bin
-> +load mmc 0:1 0x42000000 uImage || load mmc 0:1 0x42000000 boot/uImage
-
-Why do we have the two possible locations for the script.bin and
-uImage ?
-
-> diff --git a/board/cubietech/cubieboard/mkcubiecard.sh b/board/cubietech/cubieboard/mkcubiecard.sh
-> index f1d5a9f..a5bd8ec 100755
-> --- a/board/cubietech/cubieboard/mkcubiecard.sh
-> +++ b/board/cubietech/cubieboard/mkcubiecard.sh
-> @@ -1,4 +1,9 @@
-> -#! /bin/sh
-> +#!/bin/sh
-> +### BEGIN INTRO
-> +# mkcubiecard.sh v0.2:
-> +# 2015, Scott Fan <fancp2007@gmail.com>
-> +# rewrite this script more clear;
-> +# add the 'netboot' argument, to make a network-bootable card.
-
-There are too many things done in one patch. You should do several
-patches doing changes to this script, one patch updating the existing
-cubieboard* defconfig, and one adding the cubietruck defconfig.
-
-And better than rewriting the script: remove it and use genimage
-instead.
-
-> diff --git a/board/cubietech/cubieboard/sun4i-cubieboard.config b/board/cubietech/cubieboard/sun4i-cubieboard.config
-> new file mode 100644
-> index 0000000..43eee73
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard/sun4i-cubieboard.config
-> @@ -0,0 +1,4 @@
-> +CONFIG_IP_PNP=y
-> +CONFIG_IP_PNP_DHCP=y
-> +CONFIG_ROOT_NFS=y
-> +CONFIG_SUNXI_EMAC=y
-> diff --git a/board/cubietech/cubieboard/sun7i-cubieboard2.config b/board/cubietech/cubieboard/sun7i-cubieboard2.config
-> new file mode 100644
-> index 0000000..43eee73
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard/sun7i-cubieboard2.config
-> @@ -0,0 +1,4 @@
-> +CONFIG_IP_PNP=y
-> +CONFIG_IP_PNP_DHCP=y
-> +CONFIG_ROOT_NFS=y
-> +CONFIG_SUNXI_EMAC=y
-> diff --git a/board/cubietech/cubieboard/sun7i-cubietruck.config b/board/cubietech/cubieboard/sun7i-cubietruck.config
-> new file mode 100644
-> index 0000000..ff7813f
-> --- /dev/null
-> +++ b/board/cubietech/cubieboard/sun7i-cubietruck.config
-> @@ -0,0 +1,4 @@
-> +CONFIG_IP_PNP=y
-> +CONFIG_IP_PNP_DHCP=y
-> +CONFIG_ROOT_NFS=y
-> +CONFIG_SUNXI_GMAC=y
-
-As I said above, really good idea to use config fragments! However, it
-would be nicer if the files indicated that it's a kernel configuration
-fragment, so maybe:
-
-	linux-sun7i-cubietruck.config
+I am going to go disabling guile support in a static only
+configuration. I ran into an issue with setting GC_NO_DLOPEN define in
+that there then becomes multiple definitions of locale_charset between
+libintl and libguile and I wasn't sure how to properly fix it. Looking
+at what guile is used for in make, it doesn't appear extremely useful
+especially in a static only configuration.
 
 Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Ryan
