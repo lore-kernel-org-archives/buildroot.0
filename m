@@ -1,61 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 23:04:22 +0200
-Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
-In-Reply-To: <55FF1A8A.5030507@openmailbox.org>
-References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
- <20150920151157.7dc9b021@free-electrons.com>
- <55FF1A8A.5030507@openmailbox.org>
-Message-ID: <20150920230422.4838bded@free-electrons.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sun, 20 Sep 2015 16:10:30 -0500
+Subject: [Buildroot] [v2 1/1] make: disable guile support when static
+	linking enabled
+Message-ID: <1442783430-26199-1-git-send-email-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When building in a static only configuration with guile package
+enabled, the following error happens:
 
-On Sun, 20 Sep 2015 22:43:54 +0200, C?dric Marie wrote:
+ gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or
+ directory
+   #   include <dlfcn.h>
 
-> Le 20/09/2015 15:11, Thomas Petazzoni a ?crit :
-> > Following the discussion you had with Arnout, and your own report that
-> > this patch was breaking things in the Busybox and Linux kernel build, I
-> > marked this patch as "Changes Requested" in patchwork.
-> >
-> > Will you work on a new iteration of this patch?
-> 
-> Yes, I've started to work on a new iteration. It is working fine with 
-> CMake, autotools, and Kbuild packages (I keep on exporting 
-> KBUILD_VERBOSE as suggested by Arnout).
-> 
-> I still have to:
-> 
-> - modify qt.mk because it currently enables verbose mode if VERBOSE is 
-> defined and not empty, but my modification implies that VERBOSE may be 
-> equal to 0, and it should not enable verbose mode in that case!...
-> - check that no other package .mk file is using VERBOSE variable.
-> - write clear comments and commit message.
+The file gc_pthread_redirects.h comes from bdwgc, which gets built
+before make in the autobuild test case you're pointing to. This header
+file is known to incorrectly include <dlfcn.h>, unless GC_NO_DLOPEN is
+specified.
 
-Excellent, thanks!
+IF GC_NO_DLOPEN is defined, another issue arises due to libguile and
+libintl both defining locale_charset.
 
-> Sorry for the delay, but I've got only very occasional free time to 
-> spend on it.
+Thus disable guile support for make.
 
-No problem at all. I just e-mailed you to let you know that your patch
-has been marked "Changes Requested": it means that it is no longer
-visible in the list of pending patches to be considered by the
-maintainers. So when this is done, it is up to the submitter to come
-back at some point with a new iteration of the patch, otherwise the
-topic will simply be forgotten by the maintainers. This is why I
-generally send a notification e-mail when changing a patch to "Changes
-Requested".
+Fixes:
+  http://autobuild.buildroot.net/results/814/8143ae0afac139845e5016058d85c800dc8527ad
 
-There is obviously no problem if the new iteration only comes in
-several weeks or even months.
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+---
+ package/make/make.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-Thanks again,
-
-Thomas
+diff --git a/package/make/make.mk b/package/make/make.mk
+index ebfa2f0..20702dc 100644
+--- a/package/make/make.mk
++++ b/package/make/make.mk
+@@ -11,16 +11,11 @@ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ MAKE_LICENSE = GPLv3+
+ MAKE_LICENSE_FILES = COPYING
+ 
++MAKE_CONF_OPTS = --without-guile
++
+ # Disable the 'load' operation for static builds since it needs dlopen
+ ifeq ($(BR2_STATIC_LIBS),y)
+ MAKE_CONF_OPTS += --disable-load
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GUILE),y)
+-MAKE_DEPENDENCIES += guile
+-MAKE_CONF_OPTS += --with-guile
+-else
+-MAKE_CONF_OPTS += --without-guile
+-endif
+-
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
