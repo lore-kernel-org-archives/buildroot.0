@@ -1,96 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Sep 2015 23:45:52 +0200
-Subject: [Buildroot] [PATCH 4/5] toolchain/external: bump Linaro to 2015.12
-	for ARM (BE)
-In-Reply-To: <cover.1442785491.git.yann.morin.1998@free.fr>
-References: <cover.1442785491.git.yann.morin.1998@free.fr>
-Message-ID: <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
+Date: Sun, 20 Sep 2015 23:51:34 +0200
+Subject: [Buildroot] [v2 1/1] make: disable guile support when static
+ linking enabled
+In-Reply-To: <1442783430-26199-1-git-send-email-ryanbarnett3@gmail.com>
+References: <1442783430-26199-1-git-send-email-ryanbarnett3@gmail.com>
+Message-ID: <20150920215134.GA1655@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That toolchain is only available for x86_64 hosts, so hide it when the
-host is not an x86_64.
+Ryan, All,
 
-Re-use the comment previously added for the ARM toolchain.
+On 2015-09-20 16:10 -0500, Ryan Barnett spake thusly:
+> When building in a static only configuration with guile package
+> enabled, the following error happens:
+> 
+>  gc_pthread_redirects.h:37:22: fatal error: dlfcn.h: No such file or
+>  directory
+>    #   include <dlfcn.h>
+> 
+> The file gc_pthread_redirects.h comes from bdwgc, which gets built
+> before make in the autobuild test case you're pointing to. This header
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- toolchain/toolchain-external/Config.in             | 24 +++++++++++++++++++++-
- .../toolchain-external/toolchain-external.hash     |  1 +
- toolchain/toolchain-external/toolchain-external.mk |  4 ++++
- 3 files changed, 28 insertions(+), 1 deletion(-)
+Maby replace "the autobuild test case you're pointing to" with "the
+autobuild test case referenced below".
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ce3a5f1..3863c3d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
- 	depends on BR2_STATIC_LIBS
- 
- comment "Linaro 2015.02 toolchains need an x86_64 build machine"
--	depends on BR2_arm
-+	depends on BR2_arm || BR2_armeb
- 	depends on (!BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF) \
- 		|| !BR2_HOSTARCH = "x86_64"
- 	depends on !BR2_STATIC_LIBS
-@@ -60,6 +60,28 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09
- 	  with the hard floating point calling convention, and uses
- 	  the VFPv3-D16 FPU instructions.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
-+	bool "Linaro armeb 2015.02"
-+	depends on BR2_armeb
-+	depends on BR2_ARM_CPU_ARMV7A
-+	depends on BR2_HOSTARCH = "x86_64"
-+	depends on BR2_ARM_EABIHF
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	help
-+	  Linaro toolchain for the ARM big endian architecture. It
-+	  uses Linaro GCC 2015.01 (based on gcc 4.9), Linaro GDB
-+	  2015.02 (based on GDB 7.8), eglibc 2.19, Binutils 2014.11
-+	  (based on 2.24) and kernel headers 3.17. It generates code
-+	  that runs on all Cortex-A profile devices, but tuned for
-+	  the Cortex-A9. The code generated is Thumb 2, with the hard
-+	  floating point calling convention, and uses the VFPv3-D16
-+	  FPU instructions.
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09
- 	bool "Linaro armeb 2014.09"
- 	depends on BR2_armeb
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index 7eafe82..8c9e153 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -52,6 +52,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
- sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- sha256 94fca98cb436228a40e8c9b77eec91beee87be170055aea99a6cb1be3d83ee50  gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
- sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-+sha256 3f4b80a3eec1c28f92b17417b123d7f24ec9ed6d82be4929fa6cd4a8c17a1e74  gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
- sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
- 
- # Synopsys DesignWare ARC toolchains
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index be9568e..d3a0e8a 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -315,6 +315,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/15.02/components/toolchain/binaries/armeb-linux-gnueabihf
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+> file is known to incorrectly include <dlfcn.h>, unless GC_NO_DLOPEN is
+> specified.
+> 
+> IF GC_NO_DLOPEN is defined, another issue arises due to libguile and
+> libintl both defining locale_charset.
+> 
+> Thus disable guile support for make.
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/814/8143ae0afac139845e5016058d85c800dc8527ad
+> 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+> ---
+>  package/make/make.mk | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/make/make.mk b/package/make/make.mk
+> index ebfa2f0..20702dc 100644
+> --- a/package/make/make.mk
+> +++ b/package/make/make.mk
+> @@ -11,16 +11,11 @@ MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+>  MAKE_LICENSE = GPLv3+
+>  MAKE_LICENSE_FILES = COPYING
+>  
+> +MAKE_CONF_OPTS = --without-guile
+> +
+>  # Disable the 'load' operation for static builds since it needs dlopen
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  MAKE_CONF_OPTS += --disable-load
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_GUILE),y)
+> -MAKE_DEPENDENCIES += guile
+> -MAKE_CONF_OPTS += --with-guile
+> -else
+> -MAKE_CONF_OPTS += --without-guile
+> -endif
+
+Hm.. not sure we want to unconditionally disable guile support in make.
+
+What about:
+
+    ifeq ($(BR2_STATIC_LIBS):$(BR2_PACKAGE_GUILE),:y)
+    MAKE_DEPENDENCIES += guile
+    MAKE_CONF_OPTS += --with-guile
+    else
+    MAKE_CONF_OPTS += --without-guile
+    endif
+
+Regards,
+Yann E. MORIN.
+
+>  $(eval $(autotools-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
