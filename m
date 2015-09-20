@@ -1,62 +1,38 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sun, 20 Sep 2015 13:28:26 +0000
-Subject: [Buildroot] [PATCH] arc: add HS38 VDK virtual boards
-In-Reply-To: <20150920150505.3743ee98@free-electrons.com>
-References: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
- <20150920150505.3743ee98@free-electrons.com>
-Message-ID: <1442755705.17404.8.camel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Sep 2015 15:33:58 +0200
+Subject: [Buildroot] [git commit] elf2flt: fix build when LTO is enabled
+Message-ID: <20150920133427.496827FA16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=dab6765150e0eb5016869f3c0c0e0047745560e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 2015-09-20 at 15:05 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Tue,  8 Sep 2015 17:54:22 +0300, Alexey Brodkin wrote:
-> > Virtualizer Development Kits (VDKs) are software development kits
-> > containing design-specific virtual prototypes as well as debug and
-> > analysis tools and sample software.
-> 
-> Are these publicly available? I.e can we run ourselves these
-> configurations under the virtualizer?
+Signed-off-by: Douglas RAILLARD <public.douglas.raillard@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elf2flt/elf2flt.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-Unfortunately Virtualizer is a first class Synopsys citizen...
-product and it is only available for those who paid for it.
-
-But if you're interested in running anything on ARC in simulation we
-do have finally simulator engine for open-source projects
-which is available for free after very simple registration and approval
-by SNPS employee.
-
-Just follow this URL and fill in short form with your details and
-in a day or two you'll get download link:
-http://www.synopsys.com/cgi-bin/dwarcnsim/req1.cgi
-
-That simulator has only serial port but allows running both
-ARCv1 (ARCompact family like ARC750/770) and new gen ARCv2 (ARCH S38).
-
-> I was going to apply this patch, but I'm not sure it's really useful to
-> have a SMP and a non-SMP configuration for exactly the same platform.
-> We typically don't have multiple configurations for the same platform:
-> people can always go ahead and enable/disable whatever they want in the
-> kernel configuration.
-> 
-> What is the motivation for having both? Is the SMP-capable kernel not
-> working on the non-SMP emulated hardware?
-
-That's our sad truth.
-The thing is true UP (uniprocessor) HW be it simulator or real HW lacks
-so-called IDU (interrupt-distribution unit) which is required for SMP.
-
-And so SMP kernel might be only run on SMP HW even if we have only one
-core running and the second one is halted.
-
-And vice versa UP kernel won't even start (will panic early) on SMP HW.
-
-That's why we need 2 separate configs for UP and SMP.
-
--Alexey
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index 3fcada4..bec270b 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -21,6 +21,12 @@ HOST_ELF2FLT_CONF_OPTS = \
+ 	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
+ 	--target=$(GNU_TARGET_NAME)
+ 
+-HOST_ELF2FLT_CONF_ENV = LIBS=-lz
++HOST_ELF2FLT_LIBS = -lz
++
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++HOST_ELF2FLT_LIBS += -ldl
++endif
++
++HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
+ 
+ $(eval $(host-autotools-package))
