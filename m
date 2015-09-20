@@ -1,40 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 14:33:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libffi: bump to version 3.2.1
-In-Reply-To: <1442697301-15881-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1442697301-15881-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20150920143331.6d866959@free-electrons.com>
+Date: Sun, 20 Sep 2015 14:35:27 +0200
+Subject: [Buildroot] [git commit] host-gcc-final: don't install a
+	potentially dead symlink
+Message-ID: <20150920123532.91917817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=6d475da9a0037bc6efbdeb482e2f678bb8089e70
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Sep 2015 23:15:01 +0200, J?rg Krause wrote:
-> Also:
->   - unfuzz patches #1 and #2
->   - remove applied patches upstream
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../0001-Fix-installation-location-of-libffi.patch | 17 +++++---
->  ...0002-Fix-use-of-compact-eh-frames-on-MIPS.patch | 26 ++++++++++--
->  package/libffi/0003-fix-typo.patch                 | 41 -------------------
->  ...Add-missing-GNU-stack-markings-in-win32.S.patch | 36 -----------------
->  .../libffi/0005-Fix-paths-in-libffi.pc.in.patch    | 46 ----------------------
->  package/libffi/libffi.hash                         |  2 +-
->  package/libffi/libffi.mk                           |  2 +-
->  7 files changed, 35 insertions(+), 135 deletions(-)
->  delete mode 100644 package/libffi/0003-fix-typo.patch
->  delete mode 100644 package/libffi/0004-Add-missing-GNU-stack-markings-in-win32.S.patch
->  delete mode 100644 package/libffi/0005-Fix-paths-in-libffi.pc.in.patch
+gcc used to be installed into $(HOST_DIR)/usr/$(GNU_TARGET_NAME) but
+since gcc 4.9 this is no longer the case.  Therefore, the cc -> gcc
+symlink that is created in that we create in that directory is dead.
 
-Applied, thanks.
+There don't seem to have been any problems due to the missing gcc and
+cc in $(HOST_DIR)/usr/$(GNU_TARGET_NAME), things seems to build fine
+without it. The cc -> gcc symlinks in general should not be needed
+anyway, since we always pass the appropriate CC variable to the
+package build system.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Therefore, let's remove the cc -> gcc symlink in
+$(HOST_DIR)/usr/$(GNU_TARGET_NAME) - also for pre-4.9 gcc versions.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gcc/gcc-final/gcc-final.mk |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
+
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 86b3c78..3426ba4 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -92,9 +92,6 @@ define HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+ 		ln -snf $(GNU_TARGET_NAME)-gcc \
+ 			$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-cc; \
+ 	fi
+-	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
+-		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
+-	fi
+ endef
+ 
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
