@@ -1,33 +1,1122 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Sep 2015 20:41:32 +0200
-Subject: [Buildroot] [PATCH 06/18] imx-lib: remove now-redundant ccache
-	handling
+Date: Sun, 20 Sep 2015 20:41:29 +0200
+Subject: [Buildroot] [PATCH 03/18] gcc: remove unsafe patch check (poison
+	system dirs) patch
 In-Reply-To: <1442774504-22799-1-git-send-email-arnout@mind.be>
 References: <1442774504-22799-1-git-send-email-arnout@mind.be>
-Message-ID: <1442774504-22799-7-git-send-email-arnout@mind.be>
+Message-ID: <1442774504-22799-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now that the calls to gcc always pass through the toolchain wrapper, it
+is no longer necessary to patch gcc to support poisoning.
+
+This does have the disadvantage that there is no unsafe path check for
+libc, libgcc and libstdc++ (all of these are built before the wrapper
+exists). But we can assume that the toolchain components themselves
+should be pretty safe.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/freescale-imx/imx-lib/imx-lib.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Verified that host-gcc-{initial,final}-patch still work for all
+toolchains.
 
-diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index 92739a8..7046580 100644
---- a/package/freescale-imx/imx-lib/imx-lib.mk
-+++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -21,7 +21,7 @@ IMX_LIB_INCLUDE = \
- IMX_LIB_MAKE_ENV = \
- 	$(TARGET_MAKE_ENV) \
- 	$(TARGET_CONFIGURE_OPTS) \
--	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
- 	INCLUDE="$(IMX_LIB_INCLUDE)"
- 
+Verified that the unsafe path check still works by hacking a package
+Makefile with an additional -I/usr/include
+---
+ .../4.7.4/910-gcc-poison-system-directories.patch  | 207 -------------------
+ .../4.8.5/910-gcc-poison-system-directories.patch  | 207 -------------------
+ .../4.9.3/910-gcc-poison-system-directories.patch  | 207 -------------------
+ .../5.2.0/200-gcc-poison-system-directories.patch  | 207 -------------------
+ .../910-gcc-poison-system-directories.patch        | 221 ---------------------
+ 5 files changed, 1049 deletions(-)
+ delete mode 100644 package/gcc/4.7.4/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/4.8.5/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/4.9.3/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/5.2.0/200-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/arc-2015.06/910-gcc-poison-system-directories.patch
+
+diff --git a/package/gcc/4.7.4/910-gcc-poison-system-directories.patch b/package/gcc/4.7.4/910-gcc-poison-system-directories.patch
+deleted file mode 100644
+index bc2d5c6..0000000
+--- a/package/gcc/4.7.4/910-gcc-poison-system-directories.patch
++++ /dev/null
+@@ -1,207 +0,0 @@
+-From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 29 Mar 2013 08:59:00 +0400
+-Subject: [PATCH 16/35] gcc: poison-system-directories
+-
+-Adapted to Buildroot and gcc 4.7.4 by Thomas Petazzoni, especially the
+-addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+----
+- gcc/Makefile.in     |    2 +-
+- gcc/common.opt      |    4 ++++
+- gcc/config.in       |    6 ++++++
+- gcc/configure       |   20 ++++++++++++++++++--
+- gcc/configure.ac    |   10 ++++++++++
+- gcc/doc/invoke.texi |    9 +++++++++
+- gcc/gcc.c           |    2 ++
+- gcc/incpath.c       |   19 +++++++++++++++++++
+- 8 files changed, 69 insertions(+), 3 deletions(-)
+-
+-Index: b/gcc/common.opt
+-===================================================================
+---- a/gcc/common.opt
+-+++ b/gcc/common.opt
+-@@ -585,6 +585,10 @@
+- Common Var(warn_padded) Warning
+- Warn when padding is required to align structure members
+- 
+-+Wpoison-system-directories
+-+Common Var(flag_poison_system_directories) Init(1) Warning
+-+Warn for -I and -L options using system directories if cross compiling
+-+
+- Wshadow
+- Common Var(warn_shadow) Warning
+- Warn when one local variable shadows another
+-Index: b/gcc/config.in
+-===================================================================
+---- a/gcc/config.in
+-+++ b/gcc/config.in
+-@@ -144,6 +144,12 @@
+- #endif
+- 
+- 
+-+/* Define to warn for use of native system header directories */
+-+#ifndef USED_FOR_TARGET
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+#endif
+-+
+-+
+- /* Define if you want all operations on RTL (the basic data structure of the
+-    optimizer and back end) to be checked for dynamic type safety at runtime.
+-    This is quite expensive. */
+-Index: b/gcc/configure
+-===================================================================
+---- a/gcc/configure
+-+++ b/gcc/configure
+-@@ -918,6 +918,7 @@
+- with_system_zlib
+- enable_maintainer_mode
+- enable_version_specific_runtime_libs
+-+enable_poison_system_directories
+- enable_plugin
+- enable_libquadmath_support
+- with_linker_hash_style
+-@@ -1632,6 +1633,8 @@
+-   --enable-version-specific-runtime-libs
+-                           specify that runtime libraries should be installed
+-                           in a compiler-specific directory
+-+  --enable-poison-system-directories
+-+                          warn for use of native system header directories
+-   --enable-plugin         enable plugin support
+-   --disable-libquadmath-support
+-                           disable libquadmath support for Fortran
+-@@ -27186,6 +27189,19 @@
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+-+
+- # Substitute configuration variables
+- 
+- 
+-Index: b/gcc/configure.ac
+-===================================================================
+---- a/gcc/configure.ac
+-+++ b/gcc/configure.ac
+-@@ -5037,6 +5037,16 @@
+-                 [specify that runtime libraries should be
+-                  installed in a compiler-specific directory])])
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+             AS_HELP_STRING([--enable-poison-system-directories],
+-+                            [warn for use of native system header directories]),,
+-+             [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+           [1],
+-+           [Define to warn for use of native system header directories])
+-+fi
+-+
+- # Substitute configuration variables
+- AC_SUBST(subdirs)
+- AC_SUBST(srcdir)
+-Index: b/gcc/doc/invoke.texi
+-===================================================================
+---- a/gcc/doc/invoke.texi
+-+++ b/gcc/doc/invoke.texi
+-@@ -260,6 +260,7 @@
+- -Woverlength-strings  -Wpacked  -Wpacked-bitfield-compat  -Wpadded @gol
+- -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
+- -Wpointer-arith  -Wno-pointer-to-int-cast @gol
+-+-Wno-poison-system-directories @gol
+- -Wredundant-decls @gol
+- -Wreturn-type  -Wsequence-point  -Wshadow @gol
+- -Wsign-compare  -Wsign-conversion  -Wstack-protector @gol
+-@@ -3880,6 +3881,14 @@
+-  for most targets, it is made up of code and thus requires the stack
+-  to be made executable in order for the program to work properly.
+- 
+-+ at item -Wno-poison-system-directories
+-+ at opindex Wno-poison-system-directories
+-+Do not warn for @option{-I} or @option{-L} options using system
+-+directories such as @file{/usr/include} when cross compiling.  This
+-+option is intended for use in chroot environments when such
+-+directories contain the correct headers and libraries for the target
+-+system rather than the host.
+-+
+- @item -Wfloat-equal
+- @opindex Wfloat-equal
+- @opindex Wno-float-equal
+-Index: b/gcc/gcc.c
+-===================================================================
+---- a/gcc/gcc.c
+-+++ b/gcc/gcc.c
+-@@ -674,6 +674,8 @@
+-     %{flto} %{flto=*} %l " LINK_PIE_SPEC \
+-    "%X %{o*} %{e*} %{N} %{n} %{r}\
+-     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}}\
+-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
+-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
+-     %{static:} %{L*} %(mfwrap) %(link_libgcc) %o\
+-     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
+-     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
+-@@ -3907,6 +3909,12 @@
+-       gcc_assert (!compare_debug_opt);
+-     }
+- 
+-+  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (temp && strlen(temp) > 0)
+-+    {
+-+      save_switch("-Werror=poison-system-directories", 0, NULL, false);
+-+    }
+-+
+-   /* Set up the search paths.  We add directories that we expect to
+-      contain GNU Toolchain components before directories specified by
+-      the machine description so that we will find GNU components (like
+-Index: b/gcc/incpath.c
+-===================================================================
+---- a/gcc/incpath.c
+-+++ b/gcc/incpath.c
+-@@ -30,6 +30,7 @@
+- #include "intl.h"
+- #include "incpath.h"
+- #include "cppdefault.h"
+-+#include "diagnostic-core.h"
+- 
+- /* Microsoft Windows does not natively support inodes.
+-    VMS has non-numeric inodes.  */
+-@@ -373,6 +374,24 @@
+- 	}
+-       fprintf (stderr, _("End of search list.\n"));
+-     }
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (flag_poison_system_directories)
+-+    {
+-+       struct cpp_dir *p;
+-+
+-+       for (p = heads[QUOTE]; p; p = p->next)
+-+         {
+-+          if ((!strncmp (p->name, "/usr/include", 12))
+-+              || (!strncmp (p->name, "/usr/local/include", 18))
+-+              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+-+            warning (OPT_Wpoison_system_directories,
+-+                     "include location \"%s\" is unsafe for "
+-+                     "cross-compilation",
+-+                     p->name);
+-+         }
+-+    }
+-+#endif
+- }
+- 
+- /* Use given -I paths for #include "..." but not #include <...>, and
+diff --git a/package/gcc/4.8.5/910-gcc-poison-system-directories.patch b/package/gcc/4.8.5/910-gcc-poison-system-directories.patch
+deleted file mode 100644
+index 88b2c4e..0000000
+--- a/package/gcc/4.8.5/910-gcc-poison-system-directories.patch
++++ /dev/null
+@@ -1,207 +0,0 @@
+-From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 29 Mar 2013 08:59:00 +0400
+-Subject: [PATCH 16/35] gcc: poison-system-directories
+-
+-Adapted to Buildroot and gcc 4.8.3 by Thomas Petazzoni, especially the
+-addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+----
+- gcc/Makefile.in     |    2 +-
+- gcc/common.opt      |    4 ++++
+- gcc/config.in       |    6 ++++++
+- gcc/configure       |   20 ++++++++++++++++++--
+- gcc/configure.ac    |   10 ++++++++++
+- gcc/doc/invoke.texi |    9 +++++++++
+- gcc/gcc.c           |    2 ++
+- gcc/incpath.c       |   19 +++++++++++++++++++
+- 8 files changed, 69 insertions(+), 3 deletions(-)
+-
+-Index: b/gcc/common.opt
+-===================================================================
+---- a/gcc/common.opt
+-+++ b/gcc/common.opt
+-@@ -595,6 +595,10 @@
+- Common Var(pedantic) Warning
+- Issue warnings needed for strict compliance to the standard
+- 
+-+Wpoison-system-directories
+-+Common Var(flag_poison_system_directories) Init(1) Warning
+-+Warn for -I and -L options using system directories if cross compiling
+-+
+- Wshadow
+- Common Var(warn_shadow) Warning
+- Warn when one local variable shadows another
+-Index: b/gcc/config.in
+-===================================================================
+---- a/gcc/config.in
+-+++ b/gcc/config.in
+-@@ -138,6 +138,12 @@
+- #endif
+- 
+- 
+-+/* Define to warn for use of native system header directories */
+-+#ifndef USED_FOR_TARGET
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+#endif
+-+
+-+
+- /* Define if you want all operations on RTL (the basic data structure of the
+-    optimizer and back end) to be checked for dynamic type safety at runtime.
+-    This is quite expensive. */
+-Index: b/gcc/configure
+-===================================================================
+---- a/gcc/configure
+-+++ b/gcc/configure
+-@@ -917,6 +917,7 @@
+- with_system_zlib
+- enable_maintainer_mode
+- enable_version_specific_runtime_libs
+-+enable_poison_system_directories
+- enable_plugin
+- enable_libquadmath_support
+- with_linker_hash_style
+-@@ -1630,6 +1631,8 @@
+-   --enable-version-specific-runtime-libs
+-                           specify that runtime libraries should be installed
+-                           in a compiler-specific directory
+-+  --enable-poison-system-directories
+-+                          warn for use of native system header directories
+-   --enable-plugin         enable plugin support
+-   --disable-libquadmath-support
+-                           disable libquadmath support for Fortran
+-@@ -27195,6 +27198,19 @@
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+-+
+- # Substitute configuration variables
+- 
+- 
+-Index: b/gcc/configure.ac
+-===================================================================
+---- a/gcc/configure.ac
+-+++ b/gcc/configure.ac
+-@@ -5101,6 +5101,16 @@
+-                 [specify that runtime libraries should be
+-                  installed in a compiler-specific directory])])
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+             AS_HELP_STRING([--enable-poison-system-directories],
+-+                            [warn for use of native system header directories]),,
+-+             [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+           [1],
+-+           [Define to warn for use of native system header directories])
+-+fi
+-+
+- # Substitute configuration variables
+- AC_SUBST(subdirs)
+- AC_SUBST(srcdir)
+-Index: b/gcc/doc/invoke.texi
+-===================================================================
+---- a/gcc/doc/invoke.texi
+-+++ b/gcc/doc/invoke.texi
+-@@ -258,6 +258,7 @@
+- -Woverlength-strings  -Wpacked  -Wpacked-bitfield-compat  -Wpadded @gol
+- -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
+- -Wpointer-arith  -Wno-pointer-to-int-cast @gol
+-+-Wno-poison-system-directories @gol
+- -Wredundant-decls  -Wno-return-local-addr @gol
+- -Wreturn-type  -Wsequence-point  -Wshadow @gol
+- -Wsign-compare  -Wsign-conversion  -Wsizeof-pointer-memaccess @gol
+-@@ -4020,6 +4021,14 @@
+-  for most targets, it is made up of code and thus requires the stack
+-  to be made executable in order for the program to work properly.
+- 
+-+ at item -Wno-poison-system-directories
+-+ at opindex Wno-poison-system-directories
+-+Do not warn for @option{-I} or @option{-L} options using system
+-+directories such as @file{/usr/include} when cross compiling.  This
+-+option is intended for use in chroot environments when such
+-+directories contain the correct headers and libraries for the target
+-+system rather than the host.
+-+
+- @item -Wfloat-equal
+- @opindex Wfloat-equal
+- @opindex Wno-float-equal
+-Index: b/gcc/gcc.c
+-===================================================================
+---- a/gcc/gcc.c
+-+++ b/gcc/gcc.c
+-@@ -741,6 +741,8 @@
+-    "%{fuse-ld=*:-fuse-ld=%*}\
+-     %X %{o*} %{e*} %{N} %{n} %{r}\
+-     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}}\
+-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
+-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
+-     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
+-     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
+-     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
+-@@ -3991,6 +3993,12 @@
+-       gcc_assert (!compare_debug_opt);
+-     }
+- 
+-+  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (temp && strlen(temp) > 0)
+-+    {
+-+      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+-+    }
+-+
+-   /* Set up the search paths.  We add directories that we expect to
+-      contain GNU Toolchain components before directories specified by
+-      the machine description so that we will find GNU components (like
+-Index: b/gcc/incpath.c
+-===================================================================
+---- a/gcc/incpath.c
+-+++ b/gcc/incpath.c
+-@@ -28,6 +28,7 @@
+- #include "intl.h"
+- #include "incpath.h"
+- #include "cppdefault.h"
+-+#include "diagnostic-core.h"
+- 
+- /* Microsoft Windows does not natively support inodes.
+-    VMS has non-numeric inodes.  */
+-@@ -382,6 +383,24 @@
+- 	}
+-       fprintf (stderr, _("End of search list.\n"));
+-     }
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (flag_poison_system_directories)
+-+    {
+-+       struct cpp_dir *p;
+-+
+-+       for (p = heads[QUOTE]; p; p = p->next)
+-+         {
+-+          if ((!strncmp (p->name, "/usr/include", 12))
+-+              || (!strncmp (p->name, "/usr/local/include", 18))
+-+              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+-+            warning (OPT_Wpoison_system_directories,
+-+                     "include location \"%s\" is unsafe for "
+-+                     "cross-compilation",
+-+                     p->name);
+-+         }
+-+    }
+-+#endif
+- }
+- 
+- /* Use given -I paths for #include "..." but not #include <...>, and
+diff --git a/package/gcc/4.9.3/910-gcc-poison-system-directories.patch b/package/gcc/4.9.3/910-gcc-poison-system-directories.patch
+deleted file mode 100644
+index 975f01f..0000000
+--- a/package/gcc/4.9.3/910-gcc-poison-system-directories.patch
++++ /dev/null
+@@ -1,207 +0,0 @@
+-From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 29 Mar 2013 08:59:00 +0400
+-Subject: [PATCH 16/35] gcc: poison-system-directories
+-
+-Adapted to Buildroot and gcc 4.9.1 by Thomas Petazzoni, especially the
+-addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+----
+- gcc/Makefile.in     |    2 +-
+- gcc/common.opt      |    4 ++++
+- gcc/config.in       |    6 ++++++
+- gcc/configure       |   20 ++++++++++++++++++--
+- gcc/configure.ac    |   10 ++++++++++
+- gcc/doc/invoke.texi |    9 +++++++++
+- gcc/gcc.c           |    2 ++
+- gcc/incpath.c       |   19 +++++++++++++++++++
+- 8 files changed, 69 insertions(+), 3 deletions(-)
+-
+-Index: b/gcc/common.opt
+-===================================================================
+---- a/gcc/common.opt
+-+++ b/gcc/common.opt
+-@@ -603,6 +603,10 @@
+- Common Var(pedantic) Warning
+- Issue warnings needed for strict compliance to the standard
+- 
+-+Wpoison-system-directories
+-+Common Var(flag_poison_system_directories) Init(1) Warning
+-+Warn for -I and -L options using system directories if cross compiling
+-+
+- Wshadow
+- Common Var(warn_shadow) Warning
+- Warn when one local variable shadows another
+-Index: b/gcc/config.in
+-===================================================================
+---- a/gcc/config.in
+-+++ b/gcc/config.in
+-@@ -138,6 +138,12 @@
+- #endif
+- 
+- 
+-+/* Define to warn for use of native system header directories */
+-+#ifndef USED_FOR_TARGET
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+#endif
+-+
+-+
+- /* Define if you want all operations on RTL (the basic data structure of the
+-    optimizer and back end) to be checked for dynamic type safety at runtime.
+-    This is quite expensive. */
+-Index: b/gcc/configure
+-===================================================================
+---- a/gcc/configure
+-+++ b/gcc/configure
+-@@ -929,6 +929,7 @@
+- enable_maintainer_mode
+- enable_link_mutex
+- enable_version_specific_runtime_libs
+-+enable_poison_system_directories
+- enable_plugin
+- enable_host_shared
+- enable_libquadmath_support
+-@@ -1657,6 +1658,8 @@
+-   --enable-version-specific-runtime-libs
+-                           specify that runtime libraries should be installed
+-                           in a compiler-specific directory
+-+  --enable-poison-system-directories
+-+                          warn for use of native system header directories
+-   --enable-plugin         enable plugin support
+-   --enable-host-shared    build host code as shared libraries
+-   --disable-libquadmath-support
+-@@ -27765,6 +27768,19 @@
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+-+
+- # Substitute configuration variables
+- 
+- 
+-Index: b/gcc/configure.ac
+-===================================================================
+---- a/gcc/configure.ac
+-+++ b/gcc/configure.ac
+-@@ -5411,6 +5411,16 @@
+-                 [specify that runtime libraries should be
+-                  installed in a compiler-specific directory])])
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+             AS_HELP_STRING([--enable-poison-system-directories],
+-+                            [warn for use of native system header directories]),,
+-+             [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+           [1],
+-+           [Define to warn for use of native system header directories])
+-+fi
+-+
+- # Substitute configuration variables
+- AC_SUBST(subdirs)
+- AC_SUBST(srcdir)
+-Index: b/gcc/doc/invoke.texi
+-===================================================================
+---- a/gcc/doc/invoke.texi
+-+++ b/gcc/doc/invoke.texi
+-@@ -260,6 +260,7 @@
+- -Woverlength-strings  -Wpacked  -Wpacked-bitfield-compat  -Wpadded @gol
+- -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
+- -Wpointer-arith  -Wno-pointer-to-int-cast @gol
+-+-Wno-poison-system-directories @gol
+- -Wredundant-decls  -Wno-return-local-addr @gol
+- -Wreturn-type  -Wsequence-point  -Wshadow @gol
+- -Wsign-compare  -Wsign-conversion -Wfloat-conversion @gol
+-@@ -4209,6 +4210,14 @@
+-  for most targets, it is made up of code and thus requires the stack
+-  to be made executable in order for the program to work properly.
+- 
+-+ at item -Wno-poison-system-directories
+-+ at opindex Wno-poison-system-directories
+-+Do not warn for @option{-I} or @option{-L} options using system
+-+directories such as @file{/usr/include} when cross compiling.  This
+-+option is intended for use in chroot environments when such
+-+directories contain the correct headers and libraries for the target
+-+system rather than the host.
+-+
+- @item -Wfloat-equal
+- @opindex Wfloat-equal
+- @opindex Wno-float-equal
+-Index: b/gcc/gcc.c
+-===================================================================
+---- a/gcc/gcc.c
+-+++ b/gcc/gcc.c
+-@@ -770,6 +770,8 @@
+-    "%{fuse-ld=*:-fuse-ld=%*}\
+-     %X %{o*} %{e*} %{N} %{n} %{r}\
+-     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}} " VTABLE_VERIFICATION_SPEC " \
+-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
+-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
+-     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
+-     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
+-     %{fcilkplus:%:include(libcilkrts.spec)%(link_cilkrts)}\
+-@@ -4034,6 +4036,12 @@
+-       gcc_assert (!compare_debug_opt);
+-     }
+- 
+-+  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (temp && strlen(temp) > 0)
+-+    {
+-+      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+-+    }
+-+
+-   /* Set up the search paths.  We add directories that we expect to
+-      contain GNU Toolchain components before directories specified by
+-      the machine description so that we will find GNU components (like
+-Index: b/gcc/incpath.c
+-===================================================================
+---- a/gcc/incpath.c
+-+++ b/gcc/incpath.c
+-@@ -28,6 +28,7 @@
+- #include "intl.h"
+- #include "incpath.h"
+- #include "cppdefault.h"
+-+#include "diagnostic-core.h"
+- 
+- /* Microsoft Windows does not natively support inodes.
+-    VMS has non-numeric inodes.  */
+-@@ -382,6 +383,24 @@
+- 	}
+-       fprintf (stderr, _("End of search list.\n"));
+-     }
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (flag_poison_system_directories)
+-+    {
+-+       struct cpp_dir *p;
+-+
+-+       for (p = heads[QUOTE]; p; p = p->next)
+-+         {
+-+          if ((!strncmp (p->name, "/usr/include", 12))
+-+              || (!strncmp (p->name, "/usr/local/include", 18))
+-+              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+-+            warning (OPT_Wpoison_system_directories,
+-+                     "include location \"%s\" is unsafe for "
+-+                     "cross-compilation",
+-+                     p->name);
+-+         }
+-+    }
+-+#endif
+- }
+- 
+- /* Use given -I paths for #include "..." but not #include <...>, and
+diff --git a/package/gcc/5.2.0/200-gcc-poison-system-directories.patch b/package/gcc/5.2.0/200-gcc-poison-system-directories.patch
+deleted file mode 100644
+index f41c0c4..0000000
+--- a/package/gcc/5.2.0/200-gcc-poison-system-directories.patch
++++ /dev/null
+@@ -1,207 +0,0 @@
+-From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 29 Mar 2013 08:59:00 +0400
+-Subject: [PATCH 16/35] gcc: poison-system-directories
+-
+-Adapted to Buildroot and gcc 4.9.1 by Thomas Petazzoni, especially the
+-addition of the BR_COMPILER_PARANOID_UNSAFE_PATH environment variable.
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+----
+- gcc/Makefile.in     |    2 +-
+- gcc/common.opt      |    4 ++++
+- gcc/config.in       |    6 ++++++
+- gcc/configure       |   20 ++++++++++++++++++--
+- gcc/configure.ac    |   10 ++++++++++
+- gcc/doc/invoke.texi |    9 +++++++++
+- gcc/gcc.c           |    2 ++
+- gcc/incpath.c       |   19 +++++++++++++++++++
+- 8 files changed, 69 insertions(+), 3 deletions(-)
+-
+-Index: b/gcc/common.opt
+-===================================================================
+---- a/gcc/common.opt
+-+++ b/gcc/common.opt
+-@@ -623,6 +623,10 @@
+- Common Var(warn_return_local_addr) Init(1) Warning
+- Warn about returning a pointer/reference to a local or temporary variable.
+- 
+-+Wpoison-system-directories
+-+Common Var(flag_poison_system_directories) Init(1) Warning
+-+Warn for -I and -L options using system directories if cross compiling
+-+
+- Wshadow
+- Common Var(warn_shadow) Warning
+- Warn when one local variable shadows another
+-Index: b/gcc/config.in
+-===================================================================
+---- a/gcc/config.in
+-+++ b/gcc/config.in
+-@@ -168,6 +168,12 @@
+- #endif
+- 
+- 
+-+/* Define to warn for use of native system header directories */
+-+#ifndef USED_FOR_TARGET
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+#endif
+-+
+-+
+- /* Define if you want all operations on RTL (the basic data structure of the
+-    optimizer and back end) to be checked for dynamic type safety at runtime.
+-    This is quite expensive. */
+-Index: b/gcc/configure
+-===================================================================
+---- a/gcc/configure
+-+++ b/gcc/configure
+-@@ -932,6 +932,7 @@
+- enable_maintainer_mode
+- enable_link_mutex
+- enable_version_specific_runtime_libs
+-+enable_poison_system_directories
+- enable_plugin
+- enable_host_shared
+- enable_libquadmath_support
+-@@ -1661,6 +1662,8 @@
+-   --enable-version-specific-runtime-libs
+-                           specify that runtime libraries should be installed
+-                           in a compiler-specific directory
+-+  --enable-poison-system-directories
+-+                          warn for use of native system header directories
+-   --enable-plugin         enable plugin support
+-   --enable-host-shared    build host code as shared libraries
+-   --disable-libquadmath-support
+-@@ -28087,6 +28090,19 @@
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+-+
+- # Substitute configuration variables
+- 
+- 
+-Index: b/gcc/configure.ac
+-===================================================================
+---- a/gcc/configure.ac
+-+++ b/gcc/configure.ac
+-@@ -5571,6 +5571,16 @@
+-                 [specify that runtime libraries should be
+-                  installed in a compiler-specific directory])])
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+             AS_HELP_STRING([--enable-poison-system-directories],
+-+                            [warn for use of native system header directories]),,
+-+             [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+           [1],
+-+           [Define to warn for use of native system header directories])
+-+fi
+-+
+- # Substitute configuration variables
+- AC_SUBST(subdirs)
+- AC_SUBST(srcdir)
+-Index: b/gcc/doc/invoke.texi
+-===================================================================
+---- a/gcc/doc/invoke.texi
+-+++ b/gcc/doc/invoke.texi
+-@@ -269,6 +269,7 @@
+- -Woverlength-strings  -Wpacked  -Wpacked-bitfield-compat  -Wpadded @gol
+- -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
+- -Wpointer-arith  -Wno-pointer-to-int-cast @gol
+-+-Wno-poison-system-directories @gol
+- -Wredundant-decls  -Wno-return-local-addr @gol
+- -Wreturn-type  -Wsequence-point  -Wshadow  -Wno-shadow-ivar @gol
+- -Wshift-count-negative -Wshift-count-overflow @gol
+-@@ -4432,6 +4433,14 @@
+- most targets, it is made up of code and thus requires the stack to be
+- made executable in order for the program to work properly.
+- 
+-+ at item -Wno-poison-system-directories
+-+ at opindex Wno-poison-system-directories
+-+Do not warn for @option{-I} or @option{-L} options using system
+-+directories such as @file{/usr/include} when cross compiling.  This
+-+option is intended for use in chroot environments when such
+-+directories contain the correct headers and libraries for the target
+-+system rather than the host.
+-+
+- @item -Wfloat-equal
+- @opindex Wfloat-equal
+- @opindex Wno-float-equal
+-Index: b/gcc/gcc.c
+-===================================================================
+---- a/gcc/gcc.c
+-+++ b/gcc/gcc.c
+-@@ -835,6 +835,8 @@
+-    "%{fuse-ld=*:-fuse-ld=%*} " LINK_COMPRESS_DEBUG_SPEC \
+-    "%X %{o*} %{e*} %{N} %{n} %{r}\
+-     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}} " VTABLE_VERIFICATION_SPEC " \
+-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
+-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
+-     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
+-     " CHKP_SPEC " \
+-     %{fopenacc|fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
+-@@ -4244,6 +4246,12 @@
+-       gcc_assert (!compare_debug_opt);
+-     }
+- 
+-+  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (temp && strlen(temp) > 0)
+-+    {
+-+      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+-+    }
+-+
+-   /* Set up the search paths.  We add directories that we expect to
+-      contain GNU Toolchain components before directories specified by
+-      the machine description so that we will find GNU components (like
+-Index: b/gcc/incpath.c
+-===================================================================
+---- a/gcc/incpath.c
+-+++ b/gcc/incpath.c
+-@@ -28,6 +28,7 @@
+- #include "intl.h"
+- #include "incpath.h"
+- #include "cppdefault.h"
+-+#include "diagnostic-core.h"
+- 
+- /* Microsoft Windows does not natively support inodes.
+-    VMS has non-numeric inodes.  */
+-@@ -383,6 +384,24 @@
+- 	}
+-       fprintf (stderr, _("End of search list.\n"));
+-     }
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (flag_poison_system_directories)
+-+    {
+-+       struct cpp_dir *p;
+-+
+-+       for (p = heads[QUOTE]; p; p = p->next)
+-+         {
+-+          if ((!strncmp (p->name, "/usr/include", 12))
+-+              || (!strncmp (p->name, "/usr/local/include", 18))
+-+              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+-+            warning (OPT_Wpoison_system_directories,
+-+                     "include location \"%s\" is unsafe for "
+-+                     "cross-compilation",
+-+                     p->name);
+-+         }
+-+    }
+-+#endif
+- }
+- 
+- /* Use given -I paths for #include "..." but not #include <...>, and
+diff --git a/package/gcc/arc-2015.06/910-gcc-poison-system-directories.patch b/package/gcc/arc-2015.06/910-gcc-poison-system-directories.patch
+deleted file mode 100644
+index 67b3799..0000000
+--- a/package/gcc/arc-2015.06/910-gcc-poison-system-directories.patch
++++ /dev/null
+@@ -1,221 +0,0 @@
+-From 160397ef3c3331099af028f1b8d3e085b07d88ad Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 29 Mar 2013 08:59:00 +0400
+-Subject: [PATCH 16/35] gcc: poison-system-directories
+-
+-Adapted to Buildroot and gcc arc-4.8-R3 by Thomas Petazzoni,
+-especially the addition of the BR_COMPILER_PARANOID_UNSAFE_PATH
+-environment variable.
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+----
+- gcc/Makefile.in     |    2 +-
+- gcc/common.opt      |    4 ++++
+- gcc/config.in       |    6 ++++++
+- gcc/configure       |   20 ++++++++++++++++++--
+- gcc/configure.ac    |   10 ++++++++++
+- gcc/doc/invoke.texi |    9 +++++++++
+- gcc/gcc.c           |    2 ++
+- gcc/incpath.c       |   19 +++++++++++++++++++
+- 8 files changed, 69 insertions(+), 3 deletions(-)
+-
+-Index: b/gcc/common.opt
+-===================================================================
+---- a/gcc/common.opt
+-+++ b/gcc/common.opt
+-@@ -595,6 +595,10 @@
+- Common Var(pedantic) Warning
+- Issue warnings needed for strict compliance to the standard
+- 
+-+Wpoison-system-directories
+-+Common Var(flag_poison_system_directories) Init(1) Warning
+-+Warn for -I and -L options using system directories if cross compiling
+-+
+- Wshadow
+- Common Var(warn_shadow) Warning
+- Warn when one local variable shadows another
+-Index: b/gcc/config.in
+-===================================================================
+---- a/gcc/config.in
+-+++ b/gcc/config.in
+-@@ -138,6 +138,12 @@
+- #endif
+- 
+- 
+-+/* Define to warn for use of native system header directories */
+-+#ifndef USED_FOR_TARGET
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+#endif
+-+
+-+
+- /* Define if you want all operations on RTL (the basic data structure of the
+-    optimizer and back end) to be checked for dynamic type safety at runtime.
+-    This is quite expensive. */
+-Index: b/gcc/configure
+-===================================================================
+---- a/gcc/configure
+-+++ b/gcc/configure
+-@@ -917,6 +917,7 @@
+- with_system_zlib
+- enable_maintainer_mode
+- enable_version_specific_runtime_libs
+-+enable_poison_system_directories
+- enable_plugin
+- enable_libquadmath_support
+- with_linker_hash_style
+-@@ -1630,6 +1631,8 @@
+-   --enable-version-specific-runtime-libs
+-                           specify that runtime libraries should be installed
+-                           in a compiler-specific directory
+-+  --enable-poison-system-directories
+-+                          warn for use of native system header directories
+-   --enable-plugin         enable plugin support
+-   --disable-libquadmath-support
+-                           disable libquadmath support for Fortran
+-@@ -27103,6 +27106,19 @@
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+-+
+- # Substitute configuration variables
+- 
+- 
+-Index: b/gcc/configure.ac
+-===================================================================
+---- a/gcc/configure.ac
+-+++ b/gcc/configure.ac
+-@@ -5063,6 +5063,16 @@
+-                 [specify that runtime libraries should be
+-                  installed in a compiler-specific directory])])
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+             AS_HELP_STRING([--enable-poison-system-directories],
+-+                            [warn for use of native system header directories]),,
+-+             [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+           [1],
+-+           [Define to warn for use of native system header directories])
+-+fi
+-+
+- # Substitute configuration variables
+- AC_SUBST(subdirs)
+- AC_SUBST(srcdir)
+-Index: b/gcc/doc/invoke.texi
+-===================================================================
+---- a/gcc/doc/invoke.texi
+-+++ b/gcc/doc/invoke.texi
+-@@ -258,6 +258,7 @@
+- -Woverlength-strings  -Wpacked  -Wpacked-bitfield-compat  -Wpadded @gol
+- -Wparentheses  -Wpedantic-ms-format -Wno-pedantic-ms-format @gol
+- -Wpointer-arith  -Wno-pointer-to-int-cast @gol
+-+-Wno-poison-system-directories @gol
+- -Wredundant-decls  -Wno-return-local-addr @gol
+- -Wreturn-type  -Wsequence-point  -Wshadow @gol
+- -Wsign-compare  -Wsign-conversion  -Wsizeof-pointer-memaccess @gol
+-@@ -4025,6 +4026,14 @@
+-  for most targets, it is made up of code and thus requires the stack
+-  to be made executable in order for the program to work properly.
+- 
+-+ at item -Wno-poison-system-directories
+-+ at opindex Wno-poison-system-directories
+-+Do not warn for @option{-I} or @option{-L} options using system
+-+directories such as @file{/usr/include} when cross compiling.  This
+-+option is intended for use in chroot environments when such
+-+directories contain the correct headers and libraries for the target
+-+system rather than the host.
+-+
+- @item -Wfloat-equal
+- @opindex Wfloat-equal
+- @opindex Wno-float-equal
+-Index: b/gcc/gcc.c
+-===================================================================
+---- a/gcc/gcc.c
+-+++ b/gcc/gcc.c
+-@@ -740,6 +740,8 @@
+-    "%{fuse-ld=*:-fuse-ld=%*}\
+-     %X %{o*} %{e*} %{N} %{n} %{r}\
+-     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!nostartfiles:%S}}\
+-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
+-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
+-     %{static:} %{L*} %(mfwrap) %(link_libgcc) " SANITIZER_EARLY_SPEC " %o\
+-     %{fopenmp|ftree-parallelize-loops=*:%:include(libgomp.spec)%(link_gomp)}\
+-     %{fgnu-tm:%:include(libitm.spec)%(link_itm)}\
+-@@ -3990,6 +3992,12 @@
+-       gcc_assert (!compare_debug_opt);
+-     }
+- 
+-+  temp = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (temp && strlen(temp) > 0)
+-+    {
+-+      save_switch("-Werror=poison-system-directories", 0, NULL, false, true);
+-+    }
+-+
+-   /* Set up the search paths.  We add directories that we expect to
+-      contain GNU Toolchain components before directories specified by
+-      the machine description so that we will find GNU components (like
+-Index: b/gcc/incpath.c
+-===================================================================
+---- a/gcc/incpath.c
+-+++ b/gcc/incpath.c
+-@@ -28,6 +28,7 @@
+- #include "intl.h"
+- #include "incpath.h"
+- #include "cppdefault.h"
+-+#include "diagnostic-core.h"
+- 
+- /* Microsoft Windows does not natively support inodes.
+-    VMS has non-numeric inodes.  */
+-@@ -382,6 +383,24 @@
+- 	}
+-       fprintf (stderr, _("End of search list.\n"));
+-     }
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (flag_poison_system_directories)
+-+    {
+-+       struct cpp_dir *p;
+-+
+-+       for (p = heads[QUOTE]; p; p = p->next)
+-+         {
+-+          if ((!strncmp (p->name, "/usr/include", 12))
+-+              || (!strncmp (p->name, "/usr/local/include", 18))
+-+              || (!strncmp (p->name, "/usr/X11R6/include", 18)))
+-+            warning (OPT_Wpoison_system_directories,
+-+                     "include location \"%s\" is unsafe for "
+-+                     "cross-compilation",
+-+                     p->name);
+-+         }
+-+    }
+-+#endif
+- }
+- 
+- /* Use given -I paths for #include "..." but not #include <...>, and
+-Index: b/gcc/config/arc/arc.h
+-===================================================================
+---- a/gcc/config/arc/arc.h
+-+++ b/gcc/config/arc/arc.h
+-@@ -205,6 +205,8 @@
+- %{!fsyntax-only:%{!c:%{!M:%{!MM:%{!E:%{!S:\
+-     %(linker) %l " LINK_PIE_SPEC "%X %{o*} %{A} %{d} %{e*} %{m} %{N} %{n} %{r}\
+-     %{s} %{t} %{u*} %{x} %{z} %{Z} %{!A:%{!nostdlib:%{!nostartfiles:%S}}}\
+-+    %{Wno-poison-system-directories:--no-poison-system-directories}\
+-+    %{Werror=poison-system-directories:--error-poison-system-directories}\
+-     %{static:} %{L*} %(mfwrap) %(link_libgcc) %o\
+-     %{fopenmp:%:include(libgomp.spec)%(link_gomp)} %(mflib)\
+-     %{fprofile-arcs|fprofile-generate|coverage:-lgcov}\
 -- 
 2.5.3
