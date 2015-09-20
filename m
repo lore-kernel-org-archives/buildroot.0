@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 14:58:53 +0200
-Subject: [Buildroot] [PATCH] binutils: remove unnecessary host-texinfo
- dependency
-In-Reply-To: <1441810429-57871-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441810429-57871-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150920145853.45d42e90@free-electrons.com>
+Date: Sun, 20 Sep 2015 15:00:41 +0200
+Subject: [Buildroot] [PATCH 0/3 v3] toolchain/external: add Linaro
+ 2014.11 for ARMv7 BE/LE EABIhf and AArch64 (branch
+ yem/toolchain-linaro-2014.11)
+In-Reply-To: <cover.1441660041.git.yann.morin.1998@free.fr>
+References: <cover.1441660041.git.yann.morin.1998@free.fr>
+Message-ID: <20150920150041.03493021@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Yann,
 
-On Wed, 9 Sep 2015 15:53:49 +0100, Vicente Olivert Riera wrote:
-> host-texinfo dependency was only necessary when building the git version
-> of binutils, however, this upstream commit allows binutils to build
-> without makeinfo (a binary provided by host-texinfo)...
-> 
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=bba33ab1e0f7d2ebd8f8435f92ed12e2a3c558a4
-> 
-> ...so we can safely remove the host-texinfo dependency.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/binutils/binutils.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
+On Mon,  7 Sep 2015 23:09:54 +0200, Yann E. MORIN wrote:
+> Yann E. MORIN (3):
+>       toolchain/external: add Linaro ARM 2014.11 ARMv7 EABIhf
+>       toolchain/external: add Linaro ARM BE 2014.11 ARMv7 EABIhf
+>       toolchain/external: add Linaro AArch64 2014.11
 
-Applied, thanks.
+Arnout said there is a newer version 2015.02, that doesn't need so many
+hacks. So I've marked those three patches as "Changes Requested" in
+patchwork.
+
+Will you work on packaging 2015.02 ? Or should someone else pick up the
+task ?
+
+Thanks!
 
 Thomas
 -- 
