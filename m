@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 14:59:18 +0200
-Subject: [Buildroot] [PATCH] package/texinfo: remove package
-In-Reply-To: <1441810885-58227-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441810885-58227-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150920145918.47122142@free-electrons.com>
+Date: Sun, 20 Sep 2015 14:58:53 +0200
+Subject: [Buildroot] [PATCH] binutils: remove unnecessary host-texinfo
+ dependency
+In-Reply-To: <1441810429-57871-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441810429-57871-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150920145853.45d42e90@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,21 @@ To: buildroot@busybox.net
 
 Dear Vicente Olivert Riera,
 
-On Wed, 9 Sep 2015 16:01:25 +0100, Vicente Olivert Riera wrote:
-> Having checked that binutils doesn't need to depend on host-texinfo...
+On Wed, 9 Sep 2015 15:53:49 +0100, Vicente Olivert Riera wrote:
+> host-texinfo dependency was only necessary when building the git version
+> of binutils, however, this upstream commit allows binutils to build
+> without makeinfo (a binary provided by host-texinfo)...
 > 
->   http://patchwork.ozlabs.org/patch/515914/
+> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=bba33ab1e0f7d2ebd8f8435f92ed12e2a3c558a4
 > 
-> ...and having fixed gdb to not build the documentation...
+> ...so we can safely remove the host-texinfo dependency.
 > 
->   http://patchwork.ozlabs.org/patch/515821/
-> 
-> ...we can now safely remove this host package since there aren't any
-> packages depending on it.
-> 
-> [Note: this patch needs on http://patchwork.ozlabs.org/patch/515821/]
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/binutils/binutils.mk |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
 
-This is typically the kind of note that could go below the "---" marker.
-
-Applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
