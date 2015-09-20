@@ -1,106 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Sep 2015 23:18:00 +0200
-Subject: [Buildroot] [PATCH] support/misc: Adding Vagrant file for
- provisioning
-In-Reply-To: <1442471204-8305-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1442471204-8305-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <55FF2288.3010403@mind.be>
+Date: Sun, 20 Sep 2015 23:26:48 +0200
+Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
+In-Reply-To: <55FF1A8A.5030507@openmailbox.org>
+References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
+ <20150920151157.7dc9b021@free-electrons.com>
+ <55FF1A8A.5030507@openmailbox.org>
+Message-ID: <55FF2498.3060105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-09-15 08:26, Angelo Compagnucci wrote:
-> This patch adds a Vagrant file to buildroot. With this file
-> you can provision a complete buildroot developing environment
-> in minutes on all major platforms (Linux/Mac/Windows).
+On 20-09-15 22:43, C?dric Marie wrote:
+> Hi Thomas, Arnout, and all,
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-[snip]
-> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-> new file mode 100644
-> index 0000000..2d9151b
-> --- /dev/null
-> +++ b/support/misc/Vagrantfile
-> @@ -0,0 +1,51 @@
-> +################################################################################
-> +#
-> +# Vagrantfile
-> +#
-> +################################################################################
-> +
-> +### Change here for more memory/cores ###
-> +VM_MEMORY=1024
-> +VM_CORES=1
+> Le 20/09/2015 15:11, Thomas Petazzoni a ?crit :
+>> Following the discussion you had with Arnout, and your own report that
+>> this patch was breaking things in the Busybox and Linux kernel build, I
+>> marked this patch as "Changes Requested" in patchwork.
+>>
+>> Will you work on a new iteration of this patch?
+> 
+> Yes, I've started to work on a new iteration. It is working fine with CMake,
+> autotools, and Kbuild packages (I keep on exporting KBUILD_VERBOSE as suggested
+> by Arnout).
+> 
+> I still have to:
+> 
+> - modify qt.mk because it currently enables verbose mode if VERBOSE is defined
+> and not empty, but my modification implies that VERBOSE may be equal to 0, and
+> it should not enable verbose mode in that case!...
 
- Do we need to do that? And if we do, shouldn't it be higher? 1GB will not allow
-you to build v8 and all its derivatives (webkit, webengine).
+ Well, just unset VERBOSE when V=0. So VERBOSE is either empty or 1. Similar
+with how Config.in works.
 
-> +
-> +Vagrant.configure('2') do |config|
-> +	config.vm.box = 'ubuntu/trusty64'
+> - check that no other package .mk file is using VERBOSE variable.
 
- Is there a way to make it match the host, i.e. run a 32-bit system on a 32-bit
-host?
+git grep -w VERBOSE
+-> only in qt.mk
 
-> +
-> +	config.vm.provider :vmware_fusion do |v, override|
-> +		v.vmx['memsize'] = VM_MEMORY
-> +		v.vmx['numvcpus'] = VM_CORES
-> +	end
-> +
-> +	config.vm.provider :virtualbox do |v, override|
-> +		v.customize ['modifyvm', :id, '--memory', VM_MEMORY]
-> +		v.customize ['modifyvm', :id, '--cpus', VM_CORES]
-> +	end
-> +
-> +	config.vm.provision 'shell' do |s|
-> +		s.inline = 'echo Setting up machine name'
-> +
-> +		require 'open-uri'
-> +		open('http://git.buildroot.net/buildroot/plain/CHANGES') do |f|
-> +			$buildroot_version=f.read.lines.first.split(',')[0]
+> - write clear comments and commit message.
 
- That's not at all reliable, this version will for instance change to an rc just
-before a release. And for instance the 2015.08.1 is not in master's CHANGES.
-
- I think it's better if we add a buildroot-latest.tar.bz2 symlink to the
-downloads directory, then we can just use that.
-
- Failing that, it's better to scrape it from http://buildroot.org/download.html
-
-> +		end
-> +
-> +		config.vm.provider :vmware_fusion do |v, override|
-> +			v.vmx['displayname'] = "Buildroot #{$buildroot_version}"
-> +		end
-> +
-> +		config.vm.provider :virtualbox do |v, override|
-> +			v.customize ['modifyvm', :id, '--name', "Buildroot #{$buildroot_version}"]
-> +		end
-> +	end
-> +
-> +	config.vm.provision 'shell', inline:
-> +		"sudo apt-get -q update
-> +		sudo apt-get -q -y install build-essential libncurses5-dev \
-> +			git bzr cvs mercurial subversion
-
- I would also include libqt4-dev for xconfig, and the dependencies for the
-manual and for the graphs: asciidoc, w3m, dblatex, graphviz, python,
-python-matplotlib. And rsync, is that included by default?
-
+ Yep, very important!
 
  Regards,
  Arnout
 
-> +		sudo apt-get -q -y autoremove"
-> +
-> +	config.vm.provision 'shell', privileged: false, inline:
-> +		"echo 'Downloading and extracting buildroot #{$buildroot_version}'
-> +		wget -q -c http://buildroot.org/downloads/buildroot-#{$buildroot_version}.tar.gz
-> +		tar axf buildroot-#{$buildroot_version}.tar.gz"
-> +end
+> 
+> Sorry for the delay, but I've got only very occasional free time to spend on it.
+> 
 > 
 
 
