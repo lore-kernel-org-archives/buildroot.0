@@ -1,41 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 14:51:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ibrcommon: fix basename call
- under musl
-In-Reply-To: <1442269611-30641-1-git-send-email-brendanheading@gmail.com>
-References: <1442269611-30641-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <20150920145133.5d83fe04@free-electrons.com>
+Date: Sun, 20 Sep 2015 14:52:19 +0200
+Subject: [Buildroot] [git commit] grub2: pass target NM, OBJCOPY and STRIP
+Message-ID: <20150920125550.1BC6C817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brendan Heading,
+commit: http://git.buildroot.net/buildroot/commit/?id=890c9e761b70f28c2f2d6c4cf389e418c6d2b32c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Sep 2015 23:26:51 +0100, Brendan Heading wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/9c3/9c3889fe80e58b7a35c242332f993992044d2f6b/
-> 
-> ibrcommon was relying on a glibc extension to basename(3) which allowed it
-> to accept a const char* parameter (instead of char*). Fixed by testing
-> for __GLIBC__; if not defined (such as when musl is in use) a fallback
-> block is used which creates a temporary copy of the path.
-> 
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
->  ...data-File.cpp-support-POSIX-basename-call.patch | 55 ++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/ibrcommon/0001-ibrcommon-data-File.cpp-support-POSIX-basename-call.patch
+Fixes https://bugs.busybox.net/show_bug.cgi?id=8256
 
-Applied, thanks. However, I believe a better fix would be to use an
-autoconf test rather than really on this crazy set of #ifdef for the
-different platforms.
+grub2's build system interprets CC, CFLAGS and CPPFLAGS as for the host
+and uses TARGET_CC etc. for the target. However, NM, OBJCOPY and STRIP
+are used for the target. We currently pass the host-versions of these
+tools as part of $(HOST_CONFIGURE_OPTS).
 
-Thanks!
+While we're at it, also pass TARGET_LDFLAGS.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This problem had not been noticed up to now because usually we build on
+an x86 machine for the x86 architecture, so the binutils are compatible.
+However, this is not true on an i386 when building for x86_64.
+
+Cc: Christophe Bricout <christophebricout@yahoo.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/grub2/grub2.mk |   13 ++++++++++---
+ 1 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 1fc910e..88a46f4 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -40,15 +40,22 @@ endif
+ 
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
+ # tools to build the native tools (i.e to be executed on the build
+-# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
+-# build the bootloader itself.
++# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS,
++# TARGET_LDFLAGS to build the bootloader itself. However, to add to
++# the confusion, it also uses NM, OBJCOPY and STRIP to build the
++# bootloader itself; none of these are used to build the native
++# tools.
+ 
+ GRUB2_CONF_ENV = \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	CPP="$(HOSTCC) -E" \
+ 	TARGET_CC="$(TARGET_CC)" \
+ 	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+-	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)"
++	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
++	TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
++	NM="$(TARGET_NM)" \
++	OBJCOPY="$(TARGET_OBJCOPY)" \
++	STRIP="$(TARGET_STRIP)"
+ 
+ GRUB2_CONF_OPTS = \
+ 	--target=$(GRUB2_TARGET) \
