@@ -1,56 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Sep 2015 23:45:50 +0200
-Subject: [Buildroot] [PATCH 0/5] toolchain/external: bump the Linaro
-	toolchains (branch yem/toolchain-linaro-2015.02-2)
-Message-ID: <cover.1442785491.git.yann.morin.1998@free.fr>
+Date: Sun, 20 Sep 2015 23:45:49 +0200
+Subject: [Buildroot] [PATCH 1/5] toolchain/external: commonalise comments
+	about Linaro toolchains
+In-Reply-To: <cover.1442785491.git.yann.morin.1998@free.fr>
+References: <cover.1442785491.git.yann.morin.1998@free.fr>
+Message-ID: <376787b59e2113f2b072918ed14fae488f144bd2.1442785491.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Those two comments:
+  - are exactly the same
+  - have the same dependencies (except for arm/armeb)
 
-This series bumps the Linaro toolchains up to the latest stable version,
-2015.02, as noticed by Arnout.
+So, make it a common comment. It will be useful to have that comment
+when we introduce new Linaro toolchain versions.
 
-Those toolchains are only available for x86_64 hosts, so we keep the
-previous version for those stuck in 32-bit land.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ toolchain/toolchain-external/Config.in | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit dab6765150e0eb5016869f3c0c0e0047745560e9:
-
-  elf2flt: fix build when LTO is enabled (2015-09-20 15:33:58 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/toolchain-linaro-2015.02-2
-
-for you to fetch changes up to f534ca154bca1af779660c7cf411203eaeb01eb8:
-
-  toolchain/external: bump Linaro to 2015.12 for AArch64 (LE) (2015-09-20 23:30:05 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      toolchain/external: commonalise comments about Linaro toolchains
-      toolchain/external: rename Linaro arm and AArch64 options
-      toolchain/external: bump Linaro to 2015.12 for ARM (LE)
-      toolchain/external: bump Linaro to 2015.12 for ARM (BE)
-      toolchain/external: bump Linaro to 2015.12 for AArch64 (LE)
-
- Config.in.legacy                                   | 30 ++++++++
- toolchain/toolchain-external/Config.in             | 87 ++++++++++++++++++----
- .../toolchain-external/toolchain-external.hash     |  3 +
- toolchain/toolchain-external/toolchain-external.mk | 18 ++++-
- 4 files changed, 121 insertions(+), 17 deletions(-)
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 18bf98c..0897192 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -6,6 +6,11 @@ choice
+ comment "(e)glibc toolchains only available with shared lib support"
+ 	depends on BR2_STATIC_LIBS
+ 
++comment "Linaro toolchains available for Cortex-A + EABIhf"
++	depends on BR2_arm || BR2_armeb
++	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
++	depends on !BR2_STATIC_LIBS
++
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	bool "Linaro ARM 2014.09"
+ 	depends on BR2_arm
+@@ -28,11 +33,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	  with the hard floating point calling convention, and uses
+ 	  the VFPv3-D16 FPU instructions.
+ 
+-comment "Linaro toolchains available for Cortex-A + EABIhf"
+-	depends on BR2_arm
+-	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+-	depends on !BR2_STATIC_LIBS
+-
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	bool "Linaro armeb 2014.09"
+ 	depends on BR2_armeb
+@@ -55,11 +55,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	  generated is Thumb 2, with the hard floating point calling
+ 	  convention, and uses the VFPv3-D16 FPU instructions.
+ 
+-comment "Linaro toolchains available for Cortex-A + EABIhf"
+-	depends on BR2_armeb
+-	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
+-	depends on !BR2_STATIC_LIBS
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201405
+ 	bool "Sourcery CodeBench ARM 2014.05"
+ 	depends on BR2_arm
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
