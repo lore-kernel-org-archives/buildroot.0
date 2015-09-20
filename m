@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 15:09:19 +0200
-Subject: [Buildroot] [PATCH v3] modem-manager: select libgudev,
- if systemd is enabled
-In-Reply-To: <1441955387-6002-1-git-send-email-yegorslists@googlemail.com>
-References: <1441955387-6002-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20150920150919.7b658f6e@free-electrons.com>
+Date: Sun, 20 Sep 2015 15:11:57 +0200
+Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
+In-Reply-To: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
+References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
+Message-ID: <20150920151157.7dc9b021@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear yegorslists at googlemail.com,
+C?dric,
 
-On Fri, 11 Sep 2015 09:09:47 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Mon,  7 Sep 2015 22:47:26 +0200, C?dric Marie wrote:
+> KBUILD_VERBOSE and quiet variables are set and exported, but they are
+> not used. We can safely remove them.
 > 
-> When eudev is used as the udev provider, libgudev is automatically
-> provided as it is part of eudev. However, when systemd is used as
-> the udev provider, libgudev is not provided, and needs to be built
-> separately. This is why we select the libgudev package only if
-> systemd is used.
+> These variables are inherited from the Makefile of the Linux kernel,
+> and are not used in Buildroot.
 > 
-> Fixes: http://autobuild.buildroot.net/results/d59/d597a81271a082c8252e2333906815c437b6576d/
+> In support/scripts/mkmakefile, quiet value is checked, but the test is
+> always true (quiet is never set to silent_), so the test can be removed
+> as well.
 > 
-> While at it, group the existing dbus select together with the dbus-glib
-> select, so that all "select" statements are together.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: C?dric Marie <cedric.marie@openmailbox.org>
 > ---
-> Changes:
-> 	v3: reduce comments and put select/depends reodering again (Thomas Petazzoni)
->         v2: change patch name (Vicente Olivert Riera)
->             add fix description (Vicente Olivert Riera)
->             add explanations to Config.in and *.mk files (Vicente Olivert Riera)
+>  Makefile                   | 20 ++++++--------------
+>  support/scripts/mkmakefile |  4 +---
+>  2 files changed, 7 insertions(+), 17 deletions(-)
 
-Applied, thanks.
+Following the discussion you had with Arnout, and your own report that
+this patch was breaking things in the Busybox and Linux kernel build, I
+marked this patch as "Changes Requested" in patchwork.
+
+Will you work on a new iteration of this patch?
+
+Thanks!
 
 Thomas
 -- 
