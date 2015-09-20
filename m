@@ -1,153 +1,233 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 20 Sep 2015 20:41:28 +0200
-Subject: [Buildroot] [PATCH 02/18] gcc: use toolchain wrapper
+Date: Sun, 20 Sep 2015 20:41:27 +0200
+Subject: [Buildroot] [PATCH 01/18] toolchain-external: move wrapper to
+	toolchain directory
 In-Reply-To: <1442774504-22799-1-git-send-email-arnout@mind.be>
 References: <1442774504-22799-1-git-send-email-arnout@mind.be>
-Message-ID: <1442774504-22799-3-git-send-email-arnout@mind.be>
+Message-ID: <1442774504-22799-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a toolchain wrapper for external toolchain, but it is also
-beneficial for internal toolchains, for the following reasons:
+The toolchain wrapper will be reused for the internal toolchain, so it
+belongs in the toolchain directory. Also, the ext- prefix is removed
+from it. The build commands are moved to a new toolchain-wrapper.mk.
 
-1. It can make sure that BR2_TARGET_OPTIMIZATION is passed to the
-   compiler even if a package's build system doesn't honor CFLAGS.
-2. It allows us to do the unsafe path check (i.e. -I/usr/include)
-   without patching gcc.
-3. It makes it simpler to implement building each package with a
-   separate staging directory (per-package staging).
-4. It makes it simpler to implement a compiler hash check for ccache.
+The wrapper arguments that are also relevant for the internal toolchain
+wrapper are moved to toolchain-wrapper.mk, the rest stays in
+toolchain-external.mk.
 
-The wrapper is reused from the external toolchain. A third CROSS_PATH_
-option is added to the wrapper: in this case, the real executable is in
-the same directory, with the extension .real.
+While we're at it, move the building of the toolchain wrapper to the
+build step of toolchain-external. There is no specific reason to do
+this, other than that it fits better semantically. Also remove the
+MESSAGE call, otherwise we'd see:
+>>> toolchain-external undefined Building
+>>> toolchain-external undefined Building toolchain wrapper
+/usr/bin/gcc ...
+Having an extra "Building toolchain wrapper' message is pointless.
 
-The creation of the simple symlinks is merged with the creation of the
-wrapper symlinks, otherwise part of the -gcc-ar handling logic would
-have to be repeated.
-
-The complex case-condition could be refactored with the one for the
-external toolchain, but then it becomes even more complex because
-they each have special corner cases. For example, the internal
-toolchain has to handle *.real to avoid creating an extra indirection
-after host-gcc-{final,initial}-rebuild.
-
-Instead of creating the .real files, it would also have been possible
-to install the internal toolchain in $(HOST_DIR)/opt, similar to what
-we do for the external toolchain. However, then we would also have to
-copy things to the sysroot and do more of the magic that the external
-toolchain is doing. So keeping it in $(HOST_DIR)/usr/bin is much
-simpler.
+The useless condition on $(BR2_TARGET_OPTIMIZATION) is removed. It was
+always true because it wasn't qstrip'ped first, so clearly it works
+without that condition as well.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
 Cc: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
 ---
- package/gcc/gcc-final/gcc-final.mk     | 13 +++++--------
- package/gcc/gcc-initial/gcc-initial.mk |  4 ++++
- package/gcc/gcc.mk                     | 35 ++++++++++++++++++++++++++++++++++
- toolchain/toolchain-wrapper.c          |  4 +++-
- 4 files changed, 47 insertions(+), 9 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk | 55 +++++++---------------
+ ...ext-toolchain-wrapper.c => toolchain-wrapper.c} |  0
+ toolchain/toolchain-wrapper.mk                     | 27 +++++++++++
+ 3 files changed, 45 insertions(+), 37 deletions(-)
+ rename toolchain/{toolchain-external/ext-toolchain-wrapper.c => toolchain-wrapper.c} (100%)
+ create mode 100644 toolchain/toolchain-wrapper.mk
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 3426ba4..2c16fdf 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -96,14 +96,11 @@ endef
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 61a5dba..d60d116 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -153,15 +153,14 @@ TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX
+ TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc
+ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++
+ TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
  
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+ ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
+ # TOOLCHAIN_EXTERNAL_BIN points outside HOST_DIR => absolute path
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_ABS='"$(TOOLCHAIN_EXTERNAL_BIN)"'
+ else
+ # TOOLCHAIN_EXTERNAL_BIN points inside HOST_DIR => relative path
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
+ endif
  
--# Create <arch>-linux-<tool> symlinks
--define HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
--	(cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
--		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
--	done)
--endef
+@@ -180,59 +179,54 @@ CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
+ # to select the right multilib variant
+ ifeq ($(BR2_x86_64),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m64
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
+ endif
+ ifneq ($(CC_TARGET_ARCH_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
+ endif
+ ifneq ($(CC_TARGET_CPU_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
+ endif
+ ifneq ($(CC_TARGET_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+ endif
+ ifneq ($(CC_TARGET_FPU_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
+ endif
+ ifneq ($(CC_TARGET_FLOAT_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
+ endif
+ ifneq ($(CC_TARGET_MODE_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
+ endif
+ ifeq ($(BR2_BINFMT_FLAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_BINFMT_FLAT
+ endif
+ ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
+ TOOLCHAIN_EXTERNAL_CFLAGS += -EL
+ endif
+ ifeq ($(BR2_mips)$(BR2_mips64),y)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MIPS_TARGET_BIG_ENDIAN
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MIPS_TARGET_BIG_ENDIAN
+ TOOLCHAIN_EXTERNAL_CFLAGS += -EB
+ endif
+ ifeq ($(BR2_arceb),y)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARC_TARGET_BIG_ENDIAN
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARC_TARGET_BIG_ENDIAN
+ TOOLCHAIN_EXTERNAL_CFLAGS += -EB
+ endif
+-ifneq ($(BR2_TARGET_OPTIMIZATION),)
++
+ TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+-# We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each
+-# flag is a separate argument when used in execv() by the external
+-# toolchain wrapper.
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
+-endif
+ 
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+ endif
+ 
+ # The Linaro ARMhf toolchain expects the libraries in
+@@ -686,15 +680,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
+ endef
+ endif
+ 
+-# We use --hash-style=both to increase the compatibility of
+-# the generated binary with older platforms, except for MIPS,
+-# where the only acceptable hash style is 'sysv'
+-ifeq ($(findstring mips,$(HOSTARCH)),mips)
+-TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = sysv
+-else
+-TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = both
+-endif
 -
--HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
-+HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-+HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-+# Note: this must be done after CREATE_CC_SYMLINKS, otherwise the
-+# -cc symlink to the wrapper is not created.
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+ # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+ # symlinks for everything else. Skip gdb symlink when we are building our
+ # own gdb to prevent two gdb's in output/host/usr/bin.
+@@ -705,8 +690,6 @@ endif
+ # match the *cc-* pattern. Therefore, an additional case is added for *-ar,
+ # *-ranlib and *-nm.
+ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+-	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+-	$(Q)mkdir -p $(HOST_DIR)/usr/bin
+ 	$(Q)cd $(HOST_DIR)/usr/bin; \
+ 	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
+ 		base=$${i##*/}; \
+@@ -715,7 +698,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+ 			;; \
+ 		*cc|*cc-*|*++|*++-*|*cpp) \
+-			ln -sf ext-toolchain-wrapper $$base; \
++			ln -sf toolchain-wrapper $$base; \
+ 			;; \
+ 		*gdb|*gdbtui) \
+ 			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
+@@ -727,10 +710,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 			;; \
+ 		esac; \
+ 	done
+-	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) \
+-		-s -Wl,--hash-style=$(TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE) \
+-		toolchain/toolchain-external/ext-toolchain-wrapper.c \
+-		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
+ endef
  
- # In gcc 4.7.x, the ARM EABIhf library loader path for (e)glibc was not
- # correct, so we create a symbolic link to make things work
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 6bb7997..4b03e47 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -62,4 +62,8 @@ HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
- HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
- endif
+ # This sed magic is taken from Linux headers_install.sh script.
+@@ -769,6 +748,8 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
+ 	fi
+ endef
  
-+HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-+HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-+HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
++TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
 +
- $(eval $(host-autotools-package))
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 501fcea..9044040 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -235,4 +235,39 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+similarity index 100%
+rename from toolchain/toolchain-external/ext-toolchain-wrapper.c
+rename to toolchain/toolchain-wrapper.c
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+new file mode 100644
+index 0000000..8e8a445
+--- /dev/null
++++ b/toolchain/toolchain-wrapper.mk
+@@ -0,0 +1,27 @@
++# This file contains the definition of the toolchain wrapper build commands
 +
-+# The LTO support in gcc creates wrappers for ar, ranlib and nm which load
-+# the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
-+# *-gcc-nm and should be used instead of the real programs when -flto is
-+# used. However, we should not add the toolchain wrapper for them, and they
-+# match the *cc-* pattern. Therefore, an additional case is added for *-ar,
-+# *-ranlib and *-nm.
-+# Avoid that a .real is symlinked a second time.
-+# Also create <arch>-linux-<tool> symlinks.
-+define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
-+	$(Q)cd $(HOST_DIR)/usr/bin; \
-+	for i in $(GNU_TARGET_NAME)-*; do \
-+		case "$$i" in \
-+		*.real) \
-+			;; \
-+		*-ar|*-ranlib|*-nm) \
-+			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			;; \
-+		*cc|*cc-*|*++|*++-*|*cpp) \
-+			rm -f $$i.real; \
-+			mv $$i $$i.real; \
-+			ln -sf toolchain-wrapper $$i; \
-+			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			ln -snf $$i.real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.real; \
-+			;; \
-+		*) \
-+			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			;; \
-+		esac; \
-+	done
++# We use --hash-style=both to increase the compatibility of
++# the generated binary with older platforms, except for MIPS,
++# where the only acceptable hash style is 'sysv'
++ifeq ($(findstring mips,$(HOSTARCH)),mips)
++TOOLCHAIN_WRAPPER_HASH_STYLE = sysv
++else
++TOOLCHAIN_WRAPPER_HASH_STYLE = both
++endif
 +
++TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
++
++# We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each
++# flag is a separate argument when used in execv() by the external
++# toolchain wrapper.
++TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
++
++# For simplicity, build directly into the install location
++define TOOLCHAIN_BUILD_WRAPPER
++	$(Q)mkdir -p $(HOST_DIR)/usr/bin
++	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
++		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
++		toolchain/toolchain-wrapper.c \
++		-o $(HOST_DIR)/usr/bin/toolchain-wrapper
 +endef
-+
-+
- include $(sort $(wildcard package/gcc/*/*.mk))
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index b3b02d8..f3ff04f 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -138,8 +138,10 @@ int main(int argc, char **argv)
- 	/* Fill in the relative paths */
- #ifdef BR_CROSS_PATH_REL
- 	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s", absbasedir, basename);
--#else /* BR_CROSS_PATH_ABS */
-+#elif BR_CROSS_PATH_ABS
- 	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s", basename);
-+#else /* BR_CROSS_PATH_SUFFIX */
-+	ret = snprintf(path, sizeof(path), "%s/usr/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
- #endif
- 	if (ret >= sizeof(path)) {
- 		perror(__FILE__ ": overflow");
 -- 
 2.5.3
