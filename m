@@ -1,52 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 10:17:01 +0200
-Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
-In-Reply-To: <20150919154735.GA3613@free.fr>
-References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
- <20150913232942.736dea75@free-electrons.com>
- <20150913213513.GA21306@free.fr>
- <20150919144017.4fdcc90a@free-electrons.com>
- <20150919154735.GA3613@free.fr>
-Message-ID: <20150920101701.60fc27ad@free-electrons.com>
+Date: Sun, 20 Sep 2015 10:22:40 +0200
+Subject: [Buildroot] [PATCH 1/2] Add dependency on bash to gzip for
+ runtime
+In-Reply-To: <alpine.DEB.2.11.1509192310350.1987@tanhuma.tkos.co.il>
+References: <1442501193-6059-1-git-send-email-yba@tkos.co.il>
+ <20150917150112.GR11632@tarshish>
+ <alpine.DEB.2.02.1509171814510.13941@orcam81.orcam.lan>
+ <20150917162003.GT11632@tarshish>
+ <alpine.DEB.2.02.1509171922410.13941@orcam81.orcam.lan>
+ <20150917192315.6db18115@free-electrons.com>
+ <20150917190424.GU11632@tarshish>
+ <20150917221546.247fe210@free-electrons.com>
+ <alpine.DEB.2.11.1509192310350.1987@tanhuma.tkos.co.il>
+Message-ID: <20150920102240.6e8db4f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Jonathan,
 
-On Sat, 19 Sep 2015 17:47:35 +0200, Yann E. MORIN wrote:
+On Sat, 19 Sep 2015 23:36:47 +0300 (IDT), Jonathan Ben Avraham wrote:
 
-> > There is some logic in Kodi that tries to set the PYTHONHOME
-> > environment variable. Can you see in the logs if you see the following
-> > messages (from xbmc/interfaces/python/XBPython.cpp) :
-> > 
-> >   CLog::Log(LOGINFO, "initializing python engine.");
-> >   CLog::Log(LOGDEBUG, "PYTHONHOME -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
-> >   CLog::Log(LOGDEBUG, "PYTHONPATH -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
+> > I believe there is no proper way with the current gzip build system to
+> > fix the problem. It is inherently wrong to assume that the $(SHELL)
+> > used on the host will be available on the target. The only sane option
+> > I believe is to have a --with-shell=<foo> option, which if not given
+> > defaults to $(SHELL) to retain the existing behavior.
 > 
-> No, those messages I did not see. Only the message about suggesting to
-> set PYTHONHOME followed by the segfault.
+> If I understand correctly you mean that the correct fix would require 
+> submitting a patch to the gzip maintainer to add the --with-shell 
+> configure option.
 
-All the messages you posted are coming from Python itself. I'm
-interested in seeing under what conditions is Kodi starting the Python
-interpreter. But there's lot of code in Kodi, so I'm not sure from
-which place the Python interpreter is started and causing the segfault
-you're seeing.
+Correct.
 
-Any chance you do a debug symbols enabled build to get a backtrace of
-Kodi ?
+> This would not obviate the post-install hook you suggest 
+> below because we would need a heuristic to use with gzip --with-shell 
+> option.
 
-> > Alternatively, can you change Python, in file Modules/getpath.c,
-> > function calculate_path(), and dump all the environment variables?
+I'm not sure to follow you. We would just have to do:
+
+GZIP_CONF_ENV += --with-shell=/the/right/value
+
+> In order to do this post-install hook we would need to know the shells 
+> that the user selected and choose one of them using some heuristic rule 
+> such as:
 > 
-> Sure, I can have a look at it. No promise, though...
+> 1. If the user chose the bash package, then use /bin/bash
+> 2. If the user chose Busybox and not bash then use /bin/ash
+> 3. If the user chose neither Busybox nor bash then use /bin/sh and 
+> hope for the best
+> 
+> If the user then changes the configuration and un-selects bash we would 
+> need to cause the gzip package to be re-built.
 
-Yes, sure. You could also report a bug in the Kodi bug tracker? They
-might at least be able to give some hints about what's going on.
+No: we don't handle such automatic rebuilds after configuration
+changes. See
+http://buildroot.org/downloads/manual/manual.html#full-rebuild.
 
-Thanks,
+> 
+> I wonder if all of this is worth it. IMHO it would be enough to note in 
+> the gzip package help text that the user might need to adjust the 
+> hashbangs of the scripts in some post-build script.
+
+There's some logic in the skeleton package that guarantees that /bin/sh
+points to the system shell selected by the user in his configuration.
+So forcing /bin/sh as the shebang should be fine.
+
+Best regards,
 
 Thomas
 -- 
