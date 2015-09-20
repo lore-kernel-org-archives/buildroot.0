@@ -1,62 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Sep 2015 23:26:48 +0200
-Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
-In-Reply-To: <55FF1A8A.5030507@openmailbox.org>
-References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
- <20150920151157.7dc9b021@free-electrons.com>
- <55FF1A8A.5030507@openmailbox.org>
-Message-ID: <55FF2498.3060105@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 Sep 2015 23:45:50 +0200
+Subject: [Buildroot] [PATCH 0/5] toolchain/external: bump the Linaro
+	toolchains (branch yem/toolchain-linaro-2015.02-2)
+Message-ID: <cover.1442785491.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20-09-15 22:43, C?dric Marie wrote:
-> Hi Thomas, Arnout, and all,
-> 
-> Le 20/09/2015 15:11, Thomas Petazzoni a ?crit :
->> Following the discussion you had with Arnout, and your own report that
->> this patch was breaking things in the Busybox and Linux kernel build, I
->> marked this patch as "Changes Requested" in patchwork.
->>
->> Will you work on a new iteration of this patch?
-> 
-> Yes, I've started to work on a new iteration. It is working fine with CMake,
-> autotools, and Kbuild packages (I keep on exporting KBUILD_VERBOSE as suggested
-> by Arnout).
-> 
-> I still have to:
-> 
-> - modify qt.mk because it currently enables verbose mode if VERBOSE is defined
-> and not empty, but my modification implies that VERBOSE may be equal to 0, and
-> it should not enable verbose mode in that case!...
+Hello All!
 
- Well, just unset VERBOSE when V=0. So VERBOSE is either empty or 1. Similar
-with how Config.in works.
+This series bumps the Linaro toolchains up to the latest stable version,
+2015.02, as noticed by Arnout.
 
-> - check that no other package .mk file is using VERBOSE variable.
+Those toolchains are only available for x86_64 hosts, so we keep the
+previous version for those stuck in 32-bit land.
 
-git grep -w VERBOSE
--> only in qt.mk
+Regards,
+Yann E. MORIN.
 
-> - write clear comments and commit message.
 
- Yep, very important!
+The following changes since commit dab6765150e0eb5016869f3c0c0e0047745560e9:
 
- Regards,
- Arnout
+  elf2flt: fix build when LTO is enabled (2015-09-20 15:33:58 +0200)
 
-> 
-> Sorry for the delay, but I've got only very occasional free time to spend on it.
-> 
-> 
+are available in the git repository at:
 
+  git://git.busybox.net/~ymorin/git/buildroot yem/toolchain-linaro-2015.02-2
+
+for you to fetch changes up to f534ca154bca1af779660c7cf411203eaeb01eb8:
+
+  toolchain/external: bump Linaro to 2015.12 for AArch64 (LE) (2015-09-20 23:30:05 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      toolchain/external: commonalise comments about Linaro toolchains
+      toolchain/external: rename Linaro arm and AArch64 options
+      toolchain/external: bump Linaro to 2015.12 for ARM (LE)
+      toolchain/external: bump Linaro to 2015.12 for ARM (BE)
+      toolchain/external: bump Linaro to 2015.12 for AArch64 (LE)
+
+ Config.in.legacy                                   | 30 ++++++++
+ toolchain/toolchain-external/Config.in             | 87 ++++++++++++++++++----
+ .../toolchain-external/toolchain-external.hash     |  3 +
+ toolchain/toolchain-external/toolchain-external.mk | 18 ++++-
+ 4 files changed, 121 insertions(+), 17 deletions(-)
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
