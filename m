@@ -1,56 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 15:23:03 +0200
-Subject: [Buildroot] [PATCH] package/mono: fix linking options for
- locale_charset
-In-Reply-To: <1441437891-6420-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1441437891-6420-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20150920152303.78dc79ec@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Sun, 20 Sep 2015 13:28:26 +0000
+Subject: [Buildroot] [PATCH] arc: add HS38 VDK virtual boards
+In-Reply-To: <20150920150505.3743ee98@free-electrons.com>
+References: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
+ <20150920150505.3743ee98@free-electrons.com>
+Message-ID: <1442755705.17404.8.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Hi Thomas,
 
-On Sat,  5 Sep 2015 09:24:51 +0200, Angelo Compagnucci wrote:
+On Sun, 2015-09-20 at 15:05 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> 
+> On Tue,  8 Sep 2015 17:54:22 +0300, Alexey Brodkin wrote:
+> > Virtualizer Development Kits (VDKs) are software development kits
+> > containing design-specific virtual prototypes as well as debug and
+> > analysis tools and sample software.
+> 
+> Are these publicly available? I.e can we run ourselves these
+> configurations under the virtualizer?
 
-> + AC_CHECK_HEADERS(getopt.h sys/select.h sys/time.h sys/wait.h pwd.h langinfo.h iconv.h localcharset.h sys/types.h sys/resource.h)
-> ++AC_CHECK_LIB([iconv], [locale_charset],[],[AC_CHECK_LIB([charset], [locale_charset],[LIBS+="-liconv -lcharset"])])
+Unfortunately Virtualizer is a first class Synopsys citizen...
+product and it is only available for those who paid for it.
 
-Why are you doing LIBS+="-liconv -lcharset" when locale_charset() is
-found is libcharset ?
+But if you're interested in running anything on ARC in simulation we
+do have finally simulator engine for open-source projects
+which is available for free after very simple registration and approval
+by SNPS employee.
 
-Here is what the Git configure.ac is doing for the same problem:
+Just follow this URL and fill in short form with your details and
+in a day or two you'll get download link:
+http://www.synopsys.com/cgi-bin/dwarcnsim/req1.cgi
 
-# Define CHARSET_LIB if libiconv does not export the locale_charset symbol
-# and libcharset does
-CHARSET_LIB=
-AC_CHECK_LIB([iconv], [locale_charset],
-       [CHARSET_LIB=-liconv],
-       [AC_CHECK_LIB([charset], [locale_charset],
-                     [CHARSET_LIB=-lcharset])])
-GIT_CONF_SUBST([CHARSET_LIB])
+That simulator has only serial port but allows running both
+ARCv1 (ARCompact family like ARC750/770) and new gen ARCv2 (ARCH S38).
 
-> diff --git a/package/mono/Config.in b/package/mono/Config.in
-> index 0f57703..cf18a03 100644
-> --- a/package/mono/Config.in
-> +++ b/package/mono/Config.in
-> @@ -8,7 +8,6 @@ config BR2_PACKAGE_MONO
->  	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_STATIC_LIBS
-> -	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> I was going to apply this patch, but I'm not sure it's really useful to
+> have a SMP and a non-SMP configuration for exactly the same platform.
+> We typically don't have multiple configurations for the same platform:
+> people can always go ahead and enable/disable whatever they want in the
+> kernel configuration.
+> 
+> What is the motivation for having both? Is the SMP-capable kernel not
+> working on the non-SMP emulated hardware?
 
-What guarantees you that if libiconv is not available, then libcharset
-will be? What will provide the locale_charset() function?
+That's our sad truth.
+The thing is true UP (uniprocessor) HW be it simulator or real HW lacks
+so-called IDU (interrupt-distribution unit) which is required for SMP.
 
-This really need a few more explanations.
+And so SMP kernel might be only run on SMP HW even if we have only one
+core running and the second one is halted.
 
-Thanks!
+And vice versa UP kernel won't even start (will panic early) on SMP HW.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+That's why we need 2 separate configs for UP and SMP.
+
+-Alexey
