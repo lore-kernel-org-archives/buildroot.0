@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 15:05:05 +0200
-Subject: [Buildroot] [PATCH] arc: add HS38 VDK virtual boards
-In-Reply-To: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
-References: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20150920150505.3743ee98@free-electrons.com>
+Date: Sun, 20 Sep 2015 15:05:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/shairport-sync: bump to
+ version 2.4
+In-Reply-To: <1441694983-3818-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1441694983-3818-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20150920150551.02429e5e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear J?rg Krause,
 
-On Tue,  8 Sep 2015 17:54:22 +0300, Alexey Brodkin wrote:
-> Virtualizer Development Kits (VDKs) are software development kits
-> containing design-specific virtual prototypes as well as debug and
-> analysis tools and sample software.
+On Tue,  8 Sep 2015 08:49:43 +0200, J?rg Krause wrote:
+> Version 2.4 of shairport-sync introduces new optional features (metadata,
+> stdout, pipe) which we enable by default. The impact on the binary size is
+> about 18 kB (110 kB vs 92 kB) for an ARM target.
+> 
+> Also add a new dependency to libconfig and install the default config script.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+> Changes v1 -> v2:
+>  * Add missing dependency libconfig (Baruch)
+> ---
+>  package/shairport-sync/Config.in         |  1 +
+>  package/shairport-sync/shairport-sync.mk | 11 ++++++++---
+>  2 files changed, 9 insertions(+), 3 deletions(-)
 
-Are these publicly available? I.e can we run ourselves these
-configurations under the virtualizer?
-
-I was going to apply this patch, but I'm not sure it's really useful to
-have a SMP and a non-SMP configuration for exactly the same platform.
-We typically don't have multiple configurations for the same platform:
-people can always go ahead and enable/disable whatever they want in the
-kernel configuration.
-
-What is the motivation for having both? Is the SMP-capable kernel not
-working on the non-SMP emulated hardware?
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
