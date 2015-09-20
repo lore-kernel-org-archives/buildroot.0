@@ -1,11 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Sep 2015 10:14:55 +0200
-Subject: [Buildroot] [PATCH 1/5] package/libdrm: bump to version 2.4.65
-In-Reply-To: <20150919212207.GD2782@tarshish>
-References: <1442658879-5494-1-git-send-email-bernd.kuhls@t-online.de>
- <20150919135844.2dc9e7e0@free-electrons.com>
- <20150919212207.GD2782@tarshish>
-Message-ID: <20150920101455.61fc30c7@free-electrons.com>
+Date: Sun, 20 Sep 2015 10:17:01 +0200
+Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
+In-Reply-To: <20150919154735.GA3613@free.fr>
+References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
+ <20150913232942.736dea75@free-electrons.com>
+ <20150913213513.GA21306@free.fr>
+ <20150919144017.4fdcc90a@free-electrons.com>
+ <20150919154735.GA3613@free.fr>
+Message-ID: <20150920101701.60fc27ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +16,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 20 Sep 2015 00:22:07 +0300, Baruch Siach wrote:
+On Sat, 19 Sep 2015 17:47:35 +0200, Yann E. MORIN wrote:
 
-> On Sat, Sep 19, 2015 at 01:58:44PM +0200, Thomas Petazzoni wrote:
-> > On Sat, 19 Sep 2015 12:34:35 +0200, Bernd Kuhls wrote:
-> > > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > > ---
-> > >  package/libdrm/libdrm.hash | 4 ++--
-> > >  package/libdrm/libdrm.mk   | 2 +-
-> > >  2 files changed, 3 insertions(+), 3 deletions(-)
+> > There is some logic in Kodi that tries to set the PYTHONHOME
+> > environment variable. Can you see in the logs if you see the following
+> > messages (from xbmc/interfaces/python/XBPython.cpp) :
 > > 
-> > All 5 patches applied, thanks!
+> >   CLog::Log(LOGINFO, "initializing python engine.");
+> >   CLog::Log(LOGDEBUG, "PYTHONHOME -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
+> >   CLog::Log(LOGDEBUG, "PYTHONPATH -> %s", CSpecialProtocol::TranslatePath("special://frameworks").c_str());
 > 
-> I don't see patch 2/5 (package/libmicrohttpd: bump to version 0.9.43) in 
-> current git.
+> No, those messages I did not see. Only the message about suggesting to
+> set PYTHONHOME followed by the segfault.
 
-Oops, sorry about that. It's now fixed.
+All the messages you posted are coming from Python itself. I'm
+interested in seeing under what conditions is Kodi starting the Python
+interpreter. But there's lot of code in Kodi, so I'm not sure from
+which place the Python interpreter is started and causing the segfault
+you're seeing.
 
-I should really switch to the model where git automatically marks the
-patches as applied in patchwork (right now I do it manually on the
-web interface).
+Any chance you do a debug symbols enabled build to get a backtrace of
+Kodi ?
 
-Thanks for your attention!
+> > Alternatively, can you change Python, in file Modules/getpath.c,
+> > function calculate_path(), and dump all the environment variables?
+> 
+> Sure, I can have a look at it. No promise, though...
+
+Yes, sure. You could also report a bug in the Kodi bug tracker? They
+might at least be able to give some hints about what's going on.
+
+Thanks,
 
 Thomas
 -- 
