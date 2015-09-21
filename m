@@ -1,50 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 21 Sep 2015 19:11:33 +0200
-Subject: [Buildroot] [PATCH] Makefile: Remove KBUILD_VERBOSE and quiet
-In-Reply-To: <be665633918344391cf5a86576592c7c@openmailbox.org>
-References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
- <20150920151157.7dc9b021@free-electrons.com>
- <55FF1A8A.5030507@openmailbox.org> <55FF2498.3060105@mind.be>
- <be665633918344391cf5a86576592c7c@openmailbox.org>
-Message-ID: <56003A45.8050306@mind.be>
+Date: Mon, 21 Sep 2015 19:17:18 +0200
+Subject: [Buildroot] [PATCH 2/5] toolchain/external: rename Linaro arm
+ and AArch64 options
+In-Reply-To: <86fd4e995ad6ec4737cdd0b0c3a5c4c0f9a0123a.1442785491.git.yann.morin.1998@free.fr>
+References: <cover.1442785491.git.yann.morin.1998@free.fr>
+ <86fd4e995ad6ec4737cdd0b0c3a5c4c0f9a0123a.1442785491.git.yann.morin.1998@free.fr>
+Message-ID: <56003B9E.4050108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21-09-15 12:23, C?dric Marie wrote:
-> Le 2015-09-20 23:26, Arnout Vandecappelle a ?crit :
->>> - modify qt.mk because it currently enables verbose mode if VERBOSE is defined
->>> and not empty, but my modification implies that VERBOSE may be equal to 0, and
->>> it should not enable verbose mode in that case!...
->>
->>  Well, just unset VERBOSE when V=0. So VERBOSE is either empty or 1. Similar
->> with how Config.in works.
+On 20-09-15 23:45, Yann E. MORIN wrote:
+> We're going to add a new Linaro version (2015.02) for those toolchains,
+> so we want to differentiate them.
 > 
-> Well, the idea was to set VERBOSE in Makefile and use its value in infrastructures.
-> In autotools I need to make the difference between VERBOSE=1 (force verbose),
-> VERBOSE=0 (force non-verbose), and VERBOSE not set (keep package default verbose
-> level).
+> Even though we could simply keep the current options as-is and just
+> introduce the new ones suffixed with the version, it is better to rename
+> the existing options for consistency with the new ones and wiith other
+> multi-versions toolchains (like the CS CodeBench).
 
- Right, sorry, I forgot about that.
+ Sorry to revisit the discussion on IRC, but in be2abf23 Thomas Petazzoni wrote:
 
-> 
-> Unless we decide that finally there is no real interest in forcing non-verbose
-> and adding a new possibility with 'make V=0'.
-> I'm not so sure it can be very usefull, since it will only be taken into account
-> by a few autotools package.
+    Linaro toolchains are released so frequently (every month) that it
+    doesn't make much sense to support 3 consecutive versions. So, like we
+    do for ARM big-endian, let's support only one version at a time.
 
- A few? Isn't it going to be a very large subset of the 1041 autotools packages?
-
-> If you want a quiet output, you'd rather use 'make -s'
-> NB: I found it in Makefile, but it doesn't seem to be documented...
-
- True. 'make -s' is documented in the make documentation of course, but it would
-make sense to also mention it in the buildroot documentation close to the V=1.
+ Are we in agreement that this has changed because it seems they now have stable
+releases? Or let me put this differently: are we sure now that the 2015.02
+version is really considered more stable than 2015.08, or is it just that
+they're too lazy to update their website?
 
  Regards,
  Arnout
+
+
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
