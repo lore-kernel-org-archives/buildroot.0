@@ -1,50 +1,144 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 21 Sep 2015 19:27:41 +0200
-Subject: [Buildroot] [PATCH] configs: add nitrogen6sx_defconfig for
- Boundary Devices SoloX board
-In-Reply-To: <20150921170816.GC2242@tarshish>
-References: <1441965609-4092-1-git-send-email-gary.bisson@boundarydevices.com>
- <20150919153410.06fe7394@free-electrons.com>
- <CAAMH-yt8Y3GruOxEvw9op=-00op9pnVA_L0ddwi1XNT3b1qqwA@mail.gmail.com>
- <20150921170816.GC2242@tarshish>
-Message-ID: <CAAMH-yuCrc_k015kebOKUsZw52W+F6sx24haEa_+_KtG-7G7aQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 21 Sep 2015 19:29:13 +0200
+Subject: [Buildroot] [PATCH 4/5] toolchain/external: bump Linaro to
+ 2015.12 for ARM (BE)
+In-Reply-To: <55FFF7E2.40607@openwide.fr>
+References: <cover.1442785491.git.yann.morin.1998@free.fr>
+ <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
+ <55FFF7E2.40607@openwide.fr>
+Message-ID: <20150921172913.GB3570@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Romain, All,
 
-On Mon, Sep 21, 2015 at 7:08 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Gary,
->
-> On Mon, Sep 21, 2015 at 06:19:03PM +0200, Gary Bisson wrote:
->> On Sat, Sep 19, 2015 at 3:34 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->> > On Fri, 11 Sep 2015 12:00:09 +0200, Gary Bisson wrote:
->> >> This board is using the exact same kernel and u-boot revision as the
->> >> Nitrogen6x. They also share the same u-boot "autoboot" script.
->> >>
->> >> The differences between the two configurations are:
->> >> - getty port is ttymxc0 instead of ttymxc1
->> >> - uImage load address is 0x80008000
->> >
->> > Do you have a reason to keep using uImage instead of using zImage?
->> > uImage are now a bit deprecated on ARM, and zImage is the modern way of
->> > booting the kernel even from U-Boot (using the bootz command).
->>
->> Legacy I guess. I should look into it but the main advantage I see of
->> bootm/uImage is the CRC check. What is the story behind the switch to
->> bootz?
->
-> Multiplatform. See [1], for example.
->
-> [1]
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2011-September/066289.html
+On 2015-09-21 14:28 +0200, Romain Naour spake thusly:
+> Le 20/09/2015 23:45, Yann E. MORIN a ?crit :
+> > That toolchain is only available for x86_64 hosts, so hide it when the
+> > host is not an x86_64.
+> > 
+> > Re-use the comment previously added for the ARM toolchain.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  toolchain/toolchain-external/Config.in             | 24 +++++++++++++++++++++-
+> >  .../toolchain-external/toolchain-external.hash     |  1 +
+> >  toolchain/toolchain-external/toolchain-external.mk |  4 ++++
+> >  3 files changed, 28 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> > index ce3a5f1..3863c3d 100644
+> > --- a/toolchain/toolchain-external/Config.in
+> > +++ b/toolchain/toolchain-external/Config.in
+> > @@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
+> >  	depends on BR2_STATIC_LIBS
+> >  
+> >  comment "Linaro 2015.02 toolchains need an x86_64 build machine"
+> > -	depends on BR2_arm
+> > +	depends on BR2_arm || BR2_armeb
+> >  	depends on (!BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF) \
+> >  		|| !BR2_HOSTARCH = "x86_64"
+> >  	depends on !BR2_STATIC_LIBS
+> > @@ -60,6 +60,28 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09
+> >  	  with the hard floating point calling convention, and uses
+> >  	  the VFPv3-D16 FPU instructions.
+> >  
+> > +config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
+> > +	bool "Linaro armeb 2015.02"
+> > +	depends on BR2_armeb
+> > +	depends on BR2_ARM_CPU_ARMV7A
+> > +	depends on BR2_HOSTARCH = "x86_64"
+> > +	depends on BR2_ARM_EABIHF
+> > +	depends on !BR2_STATIC_LIBS
+> > +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> > +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> > +	select BR2_INSTALL_LIBSTDCPP
+> > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> > +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> > +	help
+> > +	  Linaro toolchain for the ARM big endian architecture. It
+> > +	  uses Linaro GCC 2015.01 (based on gcc 4.9), Linaro GDB
+> > +	  2015.02 (based on GDB 7.8), eglibc 2.19, Binutils 2014.11
+> > +	  (based on 2.24) and kernel headers 3.17. It generates code
+> > +	  that runs on all Cortex-A profile devices, but tuned for
+> > +	  the Cortex-A9. The code generated is Thumb 2, with the hard
+> > +	  floating point calling convention, and uses the VFPv3-D16
+> > +	  FPU instructions.
+> > +
+> >  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09
+> >  	bool "Linaro armeb 2014.09"
+> >  	depends on BR2_armeb
+> 
+> Something is missing in this file ;-)
+> 
+> You forgot to define default value for the toolchain prefix when this
+> toolchain is used.
+> 
+> config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+> [...]
+> +	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2015_02
+> +	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
 
-Thanks for the link. So indeed the mx6qdl vs mx6sx is the perfect
-example to show the need of bootz.
+Damned.
 
-Thanks,
-Gary
+I initially did a series that replaced the existing toolchains with the
+new ones. That one was working as expected.
+
+However, since the new toolchains are only available for x86_64 hosts, I
+did a new series that _added_ the new toolchains and kept the old ones.
+So, I just copy-pasted the new options from the old series, and forgot
+to add the new tuples in the list (even though I did update the entries
+when renaming the old options). Sigh...
+
+Good catch, I'll fix (but will wait for more reviews before I respin).
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> I haven't reviewed entirely your patch series yet, tests are underway.
+> 
+> Best regards,
+> Romain 
+> 
+> > diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+> > index 7eafe82..8c9e153 100644
+> > --- a/toolchain/toolchain-external/toolchain-external.hash
+> > +++ b/toolchain/toolchain-external/toolchain-external.hash
+> > @@ -52,6 +52,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
+> >  sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+> >  sha256 94fca98cb436228a40e8c9b77eec91beee87be170055aea99a6cb1be3d83ee50  gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
+> >  sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+> > +sha256 3f4b80a3eec1c28f92b17417b123d7f24ec9ed6d82be4929fa6cd4a8c17a1e74  gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
+> >  sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+> >  
+> >  # Synopsys DesignWare ARC toolchains
+> > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> > index be9568e..d3a0e8a 100644
+> > --- a/toolchain/toolchain-external/toolchain-external.mk
+> > +++ b/toolchain/toolchain-external/toolchain-external.mk
+> > @@ -315,6 +315,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09),y)
+> >  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+> >  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+> >  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+> > +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02),y)
+> > +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/15.02/components/toolchain/binaries/armeb-linux-gnueabihf
+> > +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
+> > +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+> >  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09),y)
+> >  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+> >  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+> > 
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
