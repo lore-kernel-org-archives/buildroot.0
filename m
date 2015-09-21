@@ -1,47 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 21 Sep 2015 20:08:16 +0300
-Subject: [Buildroot] [PATCH] configs: add nitrogen6sx_defconfig for
- Boundary Devices SoloX board
-In-Reply-To: <CAAMH-yt8Y3GruOxEvw9op=-00op9pnVA_L0ddwi1XNT3b1qqwA@mail.gmail.com>
-References: <1441965609-4092-1-git-send-email-gary.bisson@boundarydevices.com>
- <20150919153410.06fe7394@free-electrons.com>
- <CAAMH-yt8Y3GruOxEvw9op=-00op9pnVA_L0ddwi1XNT3b1qqwA@mail.gmail.com>
-Message-ID: <20150921170816.GC2242@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Sep 2015 19:20:25 +0200
+Subject: [Buildroot] [PATCH v4 1/2] board: add support for Intel Galileo
+ Gen 2
+In-Reply-To: <1442849592.3055.47.camel@intel.com>
+References: <1441914721.20486.6.camel@intel.com>
+ <CAJ3iQcoMbnFxPE+DAV=2PF7xCmQdqz8YGKTkZT5BeFNasbsmyw@mail.gmail.com>
+ <20150921164554.0e4f348f@free-electrons.com>
+ <CAJ3iQcrKO2-yifLBWBq0qQHN9DpbWx0sK7CHGiRB=Kk77qtDzA@mail.gmail.com>
+ <1442849592.3055.47.camel@intel.com>
+Message-ID: <20150921192025.76121f3b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Hello,
 
-On Mon, Sep 21, 2015 at 06:19:03PM +0200, Gary Bisson wrote:
-> On Sat, Sep 19, 2015 at 3:34 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > On Fri, 11 Sep 2015 12:00:09 +0200, Gary Bisson wrote:
-> >> This board is using the exact same kernel and u-boot revision as the
-> >> Nitrogen6x. They also share the same u-boot "autoboot" script.
-> >>
-> >> The differences between the two configurations are:
-> >> - getty port is ttymxc0 instead of ttymxc1
-> >> - uImage load address is 0x80008000
-> >
-> > Do you have a reason to keep using uImage instead of using zImage?
-> > uImage are now a bit deprecated on ARM, and zImage is the modern way of
-> > booting the kernel even from U-Boot (using the bootz command).
-> 
-> Legacy I guess. I should look into it but the main advantage I see of
-> bootm/uImage is the CRC check. What is the story behind the switch to
-> bootz?
+On Mon, 21 Sep 2015 15:33:12 +0000, Kinsella, Ray wrote:
 
-Multiplatform. See [1], for example.
+> Strange - an artifact of the speed of the SD cards perhaps?
+> Need to add rootwait in grub.conf - me thinks.
 
-[1] 
-http://lists.infradead.org/pipermail/linux-arm-kernel/2011-September/066289.html
+The detection of SD card is asynchronous. So even with a given SD card,
+from one boot to the other, you might have some cases where the SD card
+gets detected in time for the root filesystem to be mounted by the
+kernel, and some cases where it doesn't get detected in time. rootwait
+tells the kernel to wait until it appears.
 
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
