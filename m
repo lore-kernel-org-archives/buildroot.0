@@ -1,45 +1,159 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 21 Sep 2015 16:27:46 +1200
-Subject: [Buildroot] [PATCHv2] micropython: Invert fallback detection logic
-In-Reply-To: <20150921033150.GJ2782@tarshish>
-References: <20150921033150.GJ2782@tarshish>
-Message-ID: <1442809666-16297-1-git-send-email-judge.packham@gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 21 Sep 2015 08:19:23 +0200
+Subject: [Buildroot] [PATCH] support/misc: Adding Vagrant file for
+	provisioning
+In-Reply-To: <55FF2288.3010403@mind.be>
+References: <1442471204-8305-1-git-send-email-angelo.compagnucci@gmail.com>
+ <55FF2288.3010403@mind.be>
+Message-ID: <CA+TH9Vkxyf6=vM1gx3BdKs_57b7cnrJwsN4NQRJ6S9tjRx+KVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rather than specifying architectures that do not have explicit support
-in micropython invert the logic and set MICROPY_GCREGS_SETJMP=1 if the
-architecture does not have explicit support. MIPS is listed as being
-supported but this support consists of automatically defining
-MICROPY_GCREGS_SETJMP 1 based on __mips__ being defined.
+Dear Arnout Vandecappelle,
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
-This should clean up most of the remaining build failures. Listing the
-architectures with explicit support makes more sense to me and is
-certainly a shorter list at the moment.
-    
-Changes since v1:
-- Use positive logic ifeq(,) instead of ifneq(,y)
 
- package/micropython/micropython.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+2015-09-20 23:18 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+> On 17-09-15 08:26, Angelo Compagnucci wrote:
+>> This patch adds a Vagrant file to buildroot. With this file
+>> you can provision a complete buildroot developing environment
+>> in minutes on all major platforms (Linux/Mac/Windows).
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> [snip]
+>> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+>> new file mode 100644
+>> index 0000000..2d9151b
+>> --- /dev/null
+>> +++ b/support/misc/Vagrantfile
+>> @@ -0,0 +1,51 @@
+>> +################################################################################
+>> +#
+>> +# Vagrantfile
+>> +#
+>> +################################################################################
+>> +
+>> +### Change here for more memory/cores ###
+>> +VM_MEMORY=1024
+>> +VM_CORES=1
+>
+>  Do we need to do that? And if we do, shouldn't it be higher? 1GB will not allow
+> you to build v8 and all its derivatives (webkit, webengine).
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index f2ad5bf..f8f1e80 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -13,7 +13,7 @@ MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8b4fb4fe14
- 
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
--ifeq ($(BR2_powerpc)$(BR2_sh)$(BR2_xtensa),y)
-+ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
- MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
- endif
- 
+Nope. Raising this numbers means freezing the machine of a user with a
+low end laptop. Probably we could add some notes on the documentation,
+but Vagrant has it's own documentation and this is the standard de
+facto way to set memory/cores of a vagrant VM. This file should be a
+starting point for people wanting to try buildroot and not a one shop
+stop for all their problems.
+
+>> +
+>> +Vagrant.configure('2') do |config|
+>> +     config.vm.box = 'ubuntu/trusty64'
+>
+>  Is there a way to make it match the host, i.e. run a 32-bit system on a 32-bit
+> host?
+
+Honestly I don't think there are 32bit cpus which could run Buildroot
+compilation inside a VM. For me no problem here, all the cpus with
+virt instructions are 64bits and therefore could run a 64bit host.
+
+>> +     config.vm.provider :vmware_fusion do |v, override|
+>> +             v.vmx['memsize'] = VM_MEMORY
+>> +             v.vmx['numvcpus'] = VM_CORES
+>> +     end
+>> +
+>> +     config.vm.provider :virtualbox do |v, override|
+>> +             v.customize ['modifyvm', :id, '--memory', VM_MEMORY]
+>> +             v.customize ['modifyvm', :id, '--cpus', VM_CORES]
+>> +     end
+>> +
+>> +     config.vm.provision 'shell' do |s|
+>> +             s.inline = 'echo Setting up machine name'
+>> +
+>> +             require 'open-uri'
+>> +             open('http://git.buildroot.net/buildroot/plain/CHANGES') do |f|
+>> +                     $buildroot_version=f.read.lines.first.split(',')[0]
+>
+>  That's not at all reliable, this version will for instance change to an rc just
+> before a release. And for instance the 2015.08.1 is not in master's CHANGES.
+>
+>  I think it's better if we add a buildroot-latest.tar.bz2 symlink to the
+> downloads directory, then we can just use that.
+
+Of course! I falled back to this method cause I cannot find find a
+more reliable one.
+
+>  Failing that, it's better to scrape it from http://buildroot.org/download.html
+
+It's really strange that there is not an easy way to get the builroot
+version string easily.
+
+>> +             end
+>> +
+>> +             config.vm.provider :vmware_fusion do |v, override|
+>> +                     v.vmx['displayname'] = "Buildroot #{$buildroot_version}"
+>> +             end
+>> +
+>> +             config.vm.provider :virtualbox do |v, override|
+>> +                     v.customize ['modifyvm', :id, '--name', "Buildroot #{$buildroot_version}"]
+>> +             end
+>> +     end
+>> +
+>> +     config.vm.provision 'shell', inline:
+>> +             "sudo apt-get -q update
+>> +             sudo apt-get -q -y install build-essential libncurses5-dev \
+>> +                     git bzr cvs mercurial subversion
+>
+>  I would also include libqt4-dev for xconfig,
+
+Why? On windows there is not an X server to run the ssh x forwarding
+and the dependencies are really big ones. Nobody stops you to install
+them manually, it's an Ubuntu after all!
+
+> and the dependencies for the
+> manual and for the graphs: asciidoc, w3m, dblatex, graphviz, python,
+> python-matplotlib.
+
+Do you think we should force users to download a complete tex
+distribution only for compiling docs? As stated before users could
+install themselves if needed.
+
+I prefer having a vagrant up setup time as small as possible to be
+operative as soon as possible!
+
+> And rsync, is that included by default?
+
+Yes, it's included in Ubuntu.
+
+Sincerely, Angelo.
+
+>
+>
+>  Regards,
+>  Arnout
+>
+>> +             sudo apt-get -q -y autoremove"
+>> +
+>> +     config.vm.provision 'shell', privileged: false, inline:
+>> +             "echo 'Downloading and extracting buildroot #{$buildroot_version}'
+>> +             wget -q -c http://buildroot.org/downloads/buildroot-#{$buildroot_version}.tar.gz
+>> +             tar axf buildroot-#{$buildroot_version}.tar.gz"
+>> +end
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+
+
 -- 
-2.5.0
+Profile: http://it.linkedin.com/in/compagnucciangelo
