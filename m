@@ -1,45 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Sep 2015 19:08:06 +0200
-Subject: [Buildroot] Generating a defconfig
-In-Reply-To: <56002C63.1070806@synopsys.com>
-References: <56002C63.1070806@synopsys.com>
-Message-ID: <20150921190806.5b845258@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 21 Sep 2015 20:08:16 +0300
+Subject: [Buildroot] [PATCH] configs: add nitrogen6sx_defconfig for
+ Boundary Devices SoloX board
+In-Reply-To: <CAAMH-yt8Y3GruOxEvw9op=-00op9pnVA_L0ddwi1XNT3b1qqwA@mail.gmail.com>
+References: <1441965609-4092-1-git-send-email-gary.bisson@boundarydevices.com>
+ <20150919153410.06fe7394@free-electrons.com>
+ <CAAMH-yt8Y3GruOxEvw9op=-00op9pnVA_L0ddwi1XNT3b1qqwA@mail.gmail.com>
+Message-ID: <20150921170816.GC2242@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joao,
+Hi Gary,
 
-On Mon, 21 Sep 2015 17:12:19 +0100, Joao Pinto wrote:
+On Mon, Sep 21, 2015 at 06:19:03PM +0200, Gary Bisson wrote:
+> On Sat, Sep 19, 2015 at 3:34 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > On Fri, 11 Sep 2015 12:00:09 +0200, Gary Bisson wrote:
+> >> This board is using the exact same kernel and u-boot revision as the
+> >> Nitrogen6x. They also share the same u-boot "autoboot" script.
+> >>
+> >> The differences between the two configurations are:
+> >> - getty port is ttymxc0 instead of ttymxc1
+> >> - uImage load address is 0x80008000
+> >
+> > Do you have a reason to keep using uImage instead of using zImage?
+> > uImage are now a bit deprecated on ARM, and zImage is the modern way of
+> > booting the kernel even from U-Boot (using the bootz command).
+> 
+> Legacy I guess. I should look into it but the main advantage I see of
+> bootm/uImage is the CRC check. What is the story behind the switch to
+> bootz?
 
-> I am about to generate a buildroot' defconfig for ARM Juno r1 board, and I would
-> like to know what is the std procedure to make this on buildroot.
+Multiplatform. See [1], for example.
 
-Just create your Buildroot configuration, and then run:
+[1] 
+http://lists.infradead.org/pipermail/linux-arm-kernel/2011-September/066289.html
 
-	make savedefconfig
+baruch
 
-It will create a file named 'defconfig', which you can simply move to
-configs/<foo>_defconfig.
-
-You can also do it in one step like this:
-
-	make BR2_DEFCONFIG=configs/<foo>_defconfig savedefconfig
-
-Note that for the board defconfig, we have a few rules in Buildroot:
-
- * The version of the kernel headers and kernel must be fixed (you
-   should not use the "latest version" option)
-
- * The configuration should be minimal, i.e nothing but the default
-   userspace package (just Busybox).
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
