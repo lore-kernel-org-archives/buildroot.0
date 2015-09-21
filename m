@@ -1,108 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Sep 2015 16:03:59 +0200
-Subject: [Buildroot] [git commit] luv: new package
-Message-ID: <20150921144444.3117E7FD8D@busybox.osuosl.org>
+Date: Mon, 21 Sep 2015 16:45:54 +0200
+Subject: [Buildroot] [PATCH v4 1/2] board: add support for Intel Galileo
+ Gen 2
+In-Reply-To: <CAJ3iQcoMbnFxPE+DAV=2PF7xCmQdqz8YGKTkZT5BeFNasbsmyw@mail.gmail.com>
+References: <1441914721.20486.6.camel@intel.com>
+ <CAJ3iQcoMbnFxPE+DAV=2PF7xCmQdqz8YGKTkZT5BeFNasbsmyw@mail.gmail.com>
+Message-ID: <20150921164554.0e4f348f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e512a4b9d00bf453e939279937db58afbe9d09e6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gergely Imreh,
 
-libuv bindings for LuaJIT and Lua.
+On Mon, 21 Sep 2015 22:31:39 +0800, Gergely Imreh wrote:
 
-[Thomas:
-  - Move the package to the sub-menu of Lua modules.
-  - Remove no longer needed dependency on
-    BR2_PACKAGE_HAS_LUAINTERPRETER.
-  - Propagate dependencies of libuv (mmu, !static, threads)
-  - Update to upstream version 1.7.4-4.
-  - Add hash file.]
+> I was trying this patch series out, but running into some issues.
+> 
+> The major one is that if I create the "sdcard.img" using the
+> defconfig, write it onto a card, and try to boot from it, I get this
+> kernel panic as the result:
+> 
+> [    3.470356] mmc0: new high speed SDHC card at address 0007
+> [    3.477010] VFS: Cannot open root device "mmcblk0p2" or
+> unknown-block(0,0): error -6
+> [    3.484871] Please append a correct "root=" boot option; here are
+> the available partitions:
+> [    3.493332] Kernel panic - not syncing: VFS: Unable to mount root
+> fs on unknown-block(0,0)
+> [    3.501649] Pid: 1, comm: swapper Not tainted 3.8.7 #1
+> [    3.503281] Call Trace:
+> [    3.503281]  [<c12e5571>] panic+0x64/0x144
+> [    3.503281]  [<c1458cc7>] mount_block_root+0x191/0x1ef
+> [    3.503281]  [<c10b9468>] ? sys_mknod+0x28/0x30
+> [    3.503281]  [<c1458e2c>] mount_root+0x4f/0x57
+> [    3.503281]  [<c1458f74>] prepare_namespace+0x140/0x171
+> [    3.503281]  [<c1458a71>] kernel_init_freeable+0x15e/0x166
+> [    3.503281]  [<c12e2d7b>] kernel_init+0xb/0x140
+> [    3.503281]  [<c12e87fb>] ret_from_kernel_thread+0x1b/0x30
+> [    3.503281]  [<c12e2d70>] ? rest_init+0x60/0x60
+> 
+> Is there anything I might be missing?
+> (Using a Gen2 board)
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in     |    1 +
- package/luv/Config.in |   14 ++++++++++++++
- package/luv/luv.hash  |    2 ++
- package/luv/luv.mk    |   30 ++++++++++++++++++++++++++++++
- 4 files changed, 47 insertions(+), 0 deletions(-)
+Can you add "rootwait" to your kernel command line?
 
-diff --git a/package/Config.in b/package/Config.in
-index 22aef52..5158371 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -502,6 +502,7 @@ menu "Lua libraries/modules"
- 	source "package/luasocket/Config.in"
- 	source "package/luasql-sqlite3/Config.in"
- 	source "package/lunit/Config.in"
-+	source "package/luv/Config.in"
- 	source "package/lzlib/Config.in"
- 	source "package/orbit/Config.in"
- 	source "package/rings/Config.in"
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-new file mode 100644
-index 0000000..787d162
---- /dev/null
-+++ b/package/luv/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LUV
-+	bool "luv"
-+	select BR2_PACKAGE_LIBUV
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
-+	depends on BR2_USE_MMU # libuv
-+	depends on !BR2_STATIC_LIBS # libuv
-+	help
-+	  libuv bindings for LuaJIT and Lua.
-+
-+	  https://github.com/luvit/luv
-+
-+comment "luv needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-new file mode 100644
-index 0000000..307fc19
---- /dev/null
-+++ b/package/luv/luv.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 9ea1c2343e76f653f8e7d3420d2c7718ef4eca67a645a9d17297ae91caa224b5 luv-1.7.4-4.tar.gz
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-new file mode 100644
-index 0000000..8e108a0
---- /dev/null
-+++ b/package/luv/luv.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# luv
-+#
-+################################################################################
-+
-+LUV_VERSION = 1.7.4-4
-+LUV_SOURCE = luv-$(LUV_VERSION).tar.gz
-+LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
-+LUV_LICENSE = Apache-2.0
-+LUV_LICENSE_FILE = LICENSE.txt
-+LUV_DEPENDENCIES = libuv
-+LUV_INSTALL_STAGING = YES
-+
-+LUV_CONF_OPTS += \
-+	-DBUILD_MODULE=OFF \
-+	-DWITH_SHARED_LIBUV=ON \
-+	-DLUA_BUILD_TYPE=System
-+
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+LUV_DEPENDENCIES += luajit
-+LUV_CONF_OPTS += \
-+	-DWITH_LUA_ENGINE=LuaJIT
-+else
-+LUV_DEPENDENCIES += lua
-+LUV_CONF_OPTS += \
-+	-DWITH_LUA_ENGINE=Lua
-+endif
-+
-+$(eval $(cmake-package))
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
