@@ -1,60 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Sep 2015 22:54:37 +0200
-Subject: [Buildroot] Generating a defconfig
-In-Reply-To: <20150921190806.5b845258@free-electrons.com>
-References: <56002C63.1070806@synopsys.com>
- <20150921190806.5b845258@free-electrons.com>
-Message-ID: <20150921205437.GE3570@free.fr>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 21 Sep 2015 15:33:12 +0000
+Subject: [Buildroot] [PATCH v4 1/2] board: add support for Intel Galileo
+ Gen 2
+In-Reply-To: <CAJ3iQcrKO2-yifLBWBq0qQHN9DpbWx0sK7CHGiRB=Kk77qtDzA@mail.gmail.com>
+References: <1441914721.20486.6.camel@intel.com>
+ <CAJ3iQcoMbnFxPE+DAV=2PF7xCmQdqz8YGKTkZT5BeFNasbsmyw@mail.gmail.com>
+ <20150921164554.0e4f348f@free-electrons.com>
+ <CAJ3iQcrKO2-yifLBWBq0qQHN9DpbWx0sK7CHGiRB=Kk77qtDzA@mail.gmail.com>
+Message-ID: <1442849592.3055.47.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joao, Thomas, All,
 
-On 2015-09-21 19:08 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 21 Sep 2015 17:12:19 +0100, Joao Pinto wrote:
-> > I am about to generate a buildroot' defconfig for ARM Juno r1 board, and I would
-> > like to know what is the std procedure to make this on buildroot.
-> 
-> Just create your Buildroot configuration, and then run:
-> 
-> 	make savedefconfig
-> 
-> It will create a file named 'defconfig', which you can simply move to
-> configs/<foo>_defconfig.
-> 
-> You can also do it in one step like this:
-> 
-> 	make BR2_DEFCONFIG=configs/<foo>_defconfig savedefconfig
-> 
-> Note that for the board defconfig, we have a few rules in Buildroot:
-> 
->  * The version of the kernel headers and kernel must be fixed (you
->    should not use the "latest version" option)
-> 
->  * The configuration should be minimal, i.e nothing but the default
->    userspace package (just Busybox).
+Strange - an artifact of the speed of the SD cards perhaps?
+Need to add rootwait in grub.conf - me thinks.
 
-To complement what Thomas said:
+Ray K
 
-    ... and just the minimal set of packages that make the board boot
-    (e.g. the bootloader, a hardware blob and such low-level stuff).
+On Mon, 2015-09-21 at 23:13 +0800, Gergely Imreh wrote:
 
-For example, the raspberrypi defconfig files also enable the
-rpi-firmware package, because it contains the bootloader blob.
 
-Otherwise, as Thomas said: nothing fancy. The strictly minimum to get
-the board up to a shell.
+On 21 September 2015 at 22:45, Thomas Petazzoni
+<thomas.petazzoni at free-electrons.com<mailto:thomas.petazzoni@free-electrons.com>> wrote:
+> Dear Gergely Imreh,
+>
+> On Mon, 21 Sep 2015 22:31:39 +0800, Gergely Imreh wrote:
+>
+>> I was trying this patch series out, but running into some issues.
+>>
+>> The major one is that if I create the "sdcard.img" using the
+>> defconfig, write it onto a card, and try to boot from it, I get this
+>> kernel panic as the result:
+>>
+>> [    3.470356] mmc0: new high speed SDHC card at address 0007
+>> [    3.477010] VFS: Cannot open root device "mmcblk0p2" or
+>> unknown-block(0,0): error -6
+>> [    3.484871] Please append a correct "root=" boot option; here are
+>> the available partitions:
+>> [    3.493332] Kernel panic - not syncing: VFS: Unable to mount root
+>> fs on unknown-block(0,0)
+>> [    3.501649] Pid: 1, comm: swapper Not tainted 3.8.7 #1
+>> [    3.503281] Call Trace:
+>> [    3.503281]  [<c12e5571>] panic+0x64/0x144
+>> [    3.503281]  [<c1458cc7>] mount_block_root+0x191/0x1ef
+>> [    3.503281]  [<c10b9468>] ? sys_mknod+0x28/0x30
+>> [    3.503281]  [<c1458e2c>] mount_root+0x4f/0x57
+>> [    3.503281]  [<c1458f74>] prepare_namespace+0x140/0x171
+>> [    3.503281]  [<c1458a71>] kernel_init_freeable+0x15e/0x166
+>> [    3.503281]  [<c12e2d7b>] kernel_init+0xb/0x140
+>> [    3.503281]  [<c12e87fb>] ret_from_kernel_thread+0x1b/0x30
+>> [    3.503281]  [<c12e2d70>] ? rest_init+0x60/0x60
+>>
+>> Is there anything I might be missing?
+>> (Using a Gen2 board)
+>
+> Can you add "rootwait" to your kernel command line?
+>
 
-Regards,
-Yann E. MORIN.
+That seems to be it. Modifying the board/intel/galileo/grub.cfg to
+have the following line with the added "rootwait" seems to do the
+trick!
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+linux /boot/bzImage root=/dev/mmcblk0p2 rootwait
+console=ttyS1,115200n8 reboot=efi,warm apic=debug rw
+
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net<mailto:buildroot@busybox.net>
+http://lists.busybox.net/mailman/listinfo/buildroot
