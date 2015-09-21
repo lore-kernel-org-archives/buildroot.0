@@ -1,46 +1,45 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 21 Sep 2015 16:25:54 +1200
-Subject: [Buildroot] blackfin and micropython
-Message-ID: <CAFOYHZCPCAEdq_wjxY+P=U+5cmthuEy_TkTzu6HNsLLcXHhBVg@mail.gmail.com>
+Date: Mon, 21 Sep 2015 16:27:46 +1200
+Subject: [Buildroot] [PATCHv2] micropython: Invert fallback detection logic
+In-Reply-To: <20150921033150.GJ2782@tarshish>
+References: <20150921033150.GJ2782@tarshish>
+Message-ID: <1442809666-16297-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Rather than specifying architectures that do not have explicit support
+in micropython invert the logic and set MICROPY_GCREGS_SETJMP=1 if the
+architecture does not have explicit support. MIPS is listed as being
+supported but this support consists of automatically defining
+MICROPY_GCREGS_SETJMP 1 based on __mips__ being defined.
 
-I'm just looking at the micropython build failures and the blackfin
-ones have have me a bit stumped.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+This should clean up most of the remaining build failures. Listing the
+architectures with explicit support makes more sense to me and is
+certainly a shorter list at the moment.
+    
+Changes since v1:
+- Use positive logic ifeq(,) instead of ifneq(,y)
 
-The ones currently showing up[1] are format specifier errors. The code
-in question[2] doesn't look particularly bad and other
-architectures/compilers aren't complaining I guess it is getting
-confused with the math around const byte * and unsigned int. I can
-work around that issue by adding -Wno-error=format to CFLAGS for
-BR2_bfin. But that leads to the next issue.
+ package/micropython/micropython.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  modffi.c:87: error: expected specifier-qualifier-list before ?ffi_closure?
-  modffi.c: In function ?mod_ffi_callback?:
-  modffi.c:248: error: ?mp_obj_fficallback_t? has no member named ?clo?
-
-I think these are because nothing defines FFI_CLOSURES. ffitarget.h
-for bfin seems a lot sparser than for other architectures so I'm
-thinking that's the problem.
-
-I notice python, python3 and guile are not available for bfin. Not
-that they explicitly exclude it but probably because of on of the
-other dependencies they all have.
-
-I'm not really familiar with bfin so I'm wondering if I should pursue
-the libffi angle to try and get something that builds. Or look at the
-dependencies of python/python3 and make micropython unavailable for
-bfin.
-
-Any thoughts/guidance?
-
-Thanks,
-Chris
---
-[1] - http://autobuild.buildroot.org/results/cd2/cd21ee5ca3ca441aa2941e8d2729afa99d0403f0/build-end.log
-[2] - https://github.com/micropython/micropython/blob/master/py/showbc.c#L294
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index f2ad5bf..f8f1e80 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -13,7 +13,7 @@ MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8b4fb4fe14
+ 
+ # Use fallback implementation for exception handling on architectures that don't
+ # have explicit support.
+-ifeq ($(BR2_powerpc)$(BR2_sh)$(BR2_xtensa),y)
++ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+ MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+ endif
+ 
+-- 
+2.5.0
