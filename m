@@ -1,105 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Sep 2015 19:41:44 +0200
-Subject: [Buildroot] [PATCH] valgrind: build for the right MIPS ISA
-	revision level
-In-Reply-To: <1442840551-13640-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1442840551-13640-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150921174144.GC3570@free.fr>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Mon, 21 Sep 2015 11:20:25 -0700
+Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad to
+ resolve the VLAN trunk issue
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+Hi Buildroot Busybox,
 
-On 2015-09-21 14:02 +0100, Vicente Olivert Riera spake thusly:
-> When valgrind detects a 32-bit MIPS architecture adds -march=mips32 to
-> CFLAGS, and when it detects a 64-bit MIPS architecture adds
-> -march=mips64 instead.
+My host is Ubuntu-14.04 LTS. My Buildroot release is 2015.05. I made the former meet the latter's requirements. My target is Marvell ARMADA A385 (ARM-Cortex-A9) DB-88F6820-GP.
 
-Hmm.. This looks like the sentence is missing some verbs. What about:
+While resolving my BuidrootLinux-4.0.4 VLAN trunk reachability issue, I discovered that Buildroot-2015.05 supports Marvell's MV78x000 based  ARMADA XP Family, not the DB-88F6820-GP board I am currently using.
+
+With the current board, I have three approaches to resolve the trunk problem on it, from top to bottom:
 
 
-    When valgrind detects a 32-bit MIPS architecture, it forcibly adds
-    -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
-    it forcibly adds -march=mips64. This causes valgrind to be built
-    always for the first ISA revision level (R1), even when the user has
-    configured Buildroot for the second ISA revision level (R2).
+1.      Pick "Marvell MV78xx0", from the Buildroot-2015.05 "make linux-menuconfig" ARM system type list, for ARMADA A385 to create our .config file.
 
-    Since R2 is backwards compatible with R1, you can run a valgrind
-    built for R1 in an R2 core. This is why nobody noticed about this
-    problem, or at least nobody complained.
+2.      Upgrade Buildroot-2015.05 to 2015.08 to see whether the ARMADA A38x family is included in the ARM system type list.
 
-    But, since (I hope) we will support R6 in Buildroot in the near
-    future, this problem will become very important because R6 is not
-    backwards compatible with R1 or R2, so building valgrind for R1 when
-    your target is R6 will result in a non-working valgrind.
+3.      Get back to buildroot-2012.11-2015_T1.0 which Marvell built their system successfully. Follow Marvell's procedures to build my system.
 
-    Override the CFLAGS variable (which Valgrind appends to its CFLAGS)
-    and pass the right -march option, so they take precedence over
-    Valgrind's wrongfully detected value.
- 
+I hope you would comment on the above approaches.
 
-(I find this new layout more meaningful: it explains the current status
-in Valgrind in ?1, explains why this is a problem in ?2-3, and explains
-how we fix it in ?4.)
+Tommy
 
-But that's mostly nit-picking. ;-)
-
-> This causes valgrind to be built always for the
-> first ISA revision level (R1) which is not correct because our target
-> architecture could have a different ISA revision level (i.e. R2). We
-> need to override the CFLAGS variable and pass the right -march option.
-> 
-> Since R2 is backwards compatible with R1, you can run a valgrind built
-> for R1 in an R2 core. This is why nobody noticed about this problem, or
-> at least nobody complained. But, since (I hope) we will support R6 in
-> Buildroot in the near future, this problem will become very important
-> because R6 is not backwards compatible with R1 or R2, so building
-> valgrind for R1 when your target is R6 will result in a non-working
-> valgrind.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/valgrind/valgrind.mk |   10 ++++++++++
->  1 files changed, 10 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-> index f8f205e..944e721 100644
-> --- a/package/valgrind/valgrind.mk
-> +++ b/package/valgrind/valgrind.mk
-> @@ -13,6 +13,16 @@ VALGRIND_CONF_OPTS = --disable-tls
->  VALGRIND_AUTORECONF = YES
->  VALGRIND_INSTALL_STAGING = YES
->  
-> +# When valgrind detects a 32-bit MIPS architecture adds -march=mips32 to
-> +# CFLAGS, and when it detects a 64-bit MIPS architecture adds
-
-Ditto, the sentence looks weird.
-
-Regards,
-Yann E. MORIN.
-
-> +# -march=mips64 instead. This causes valgrind to be built always for the
-> +# first ISA revision level (R1) which is not correct because our target
-> +# architecture could have a different ISA revision level (i.e. R2). We
-> +# need to override the CFLAGS variable and pass the right -march option.
-> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-> +VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
-> +endif
-> +
->  # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
->  # host tuple to determine whether it's being built for ARMv7 or
->  # not. Therefore, we adjust the host tuple to specify we're on
-> -- 
-> 1.7.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+________________________________
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150921/6fb14d35/attachment.html>
