@@ -1,74 +1,56 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 21 Sep 2015 08:28:41 +0200
-Subject: [Buildroot] [PATCH] package/mono: fix linking options for
-	locale_charset
-In-Reply-To: <20150920152303.78dc79ec@free-electrons.com>
-References: <1441437891-6420-1-git-send-email-angelo.compagnucci@gmail.com>
- <20150920152303.78dc79ec@free-electrons.com>
-Message-ID: <CA+TH9VkoiiqDW7PLHQcv6aMf8jiJF-y_aYdu5WSjSq3mwJm+dg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 21 Sep 2015 07:09:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 8361] Buildroot 2015.08.1 skeleton inittab
+ overwritten by busybox's version
+In-Reply-To: <bug-8361-163@https.bugs.busybox.net/>
+References: <bug-8361-163@https.bugs.busybox.net/>
+Message-ID: <20150921070951.9D2C87FD53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+https://bugs.busybox.net/show_bug.cgi?id=8361
 
-2015-09-20 15:23 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Sat,  5 Sep 2015 09:24:51 +0200, Angelo Compagnucci wrote:
->
->> + AC_CHECK_HEADERS(getopt.h sys/select.h sys/time.h sys/wait.h pwd.h langinfo.h iconv.h localcharset.h sys/types.h sys/resource.h)
->> ++AC_CHECK_LIB([iconv], [locale_charset],[],[AC_CHECK_LIB([charset], [locale_charset],[LIBS+="-liconv -lcharset"])])
->
-> Why are you doing LIBS+="-liconv -lcharset" when locale_charset() is
-> found is libcharset ?
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Cause it segfaults at runtime if only linked with -lcharset.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-> Here is what the Git configure.ac is doing for the same problem:
->
-> # Define CHARSET_LIB if libiconv does not export the locale_charset symbol
-> # and libcharset does
-> CHARSET_LIB=
-> AC_CHECK_LIB([iconv], [locale_charset],
->        [CHARSET_LIB=-liconv],
->        [AC_CHECK_LIB([charset], [locale_charset],
->                      [CHARSET_LIB=-lcharset])])
-> GIT_CONF_SUBST([CHARSET_LIB])
->
->> diff --git a/package/mono/Config.in b/package/mono/Config.in
->> index 0f57703..cf18a03 100644
->> --- a/package/mono/Config.in
->> +++ b/package/mono/Config.in
->> @@ -8,7 +8,6 @@ config BR2_PACKAGE_MONO
->>       depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
->>       depends on BR2_TOOLCHAIN_HAS_THREADS
->>       depends on !BR2_STATIC_LIBS
->> -     select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
->
-> What guarantees you that if libiconv is not available, then libcharset
-> will be? What will provide the locale_charset() function?
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-09-21 07:09:51 UTC ---
+Using a custom skeleton is pretty much a deprecated method of customizing your
+root filesystem. You should instead be using a rootfs overlay or a post-build
+script (see the Buildroot manual for details).
 
-Libcharest is only taken into account if libiconv is present but is not
-exporting the locale_charset function.
-If libiconv is not available, mono will switch to an internal library,
-the appropriate logic is already present in various places in source
-code.
+Specifically regarding inittab, this file is no longer part of the skeleton. It
+is now installed either by Busybox, or by sysvinit, depending on which init
+system you have chosen.
 
-> This really need a few more explanations.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+The previous way of doing things, with a Busybox-style inittab in the skeleton,
+which was used when Busybox was the init system, caused some inconsistencies:
 
+ - It was still on the filesystem when systemd was used as the init system,
+which is not needed
+ - It was overwritten by the sysvinit package when it was chosen as the init
+system, which isn't nice
 
+So the inittab file was moved from the skeleton package to the Busybox and
+sysvinit packages (which require different inittab syntax).
+
+Generally speaking, we do not ensure that files in the skeleton will not be
+overwritten. Then can be overwritten by any package in Buildroot.
+
+However, we do guarantee that the rootfs overlay and post-build script are
+handled *after* all packages have been installed, so you are sure that what you
+have in the rootfs overlay or what you do in the post-build scripts "wins" over
+what packages are doing.
+
+So the behavior you are observing is intentional.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
