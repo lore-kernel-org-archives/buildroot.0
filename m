@@ -1,115 +1,53 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Mon, 21 Sep 2015 14:28:18 +0200
-Subject: [Buildroot] [PATCH 4/5] toolchain/external: bump Linaro to
- 2015.12 for ARM (BE)
-In-Reply-To: <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
-References: <cover.1442785491.git.yann.morin.1998@free.fr>
- <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
-Message-ID: <55FFF7E2.40607@openwide.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 21 Sep 2015 13:29:35 +0100
+Subject: [Buildroot] [PATCH] shairport-sync: fix non-existent meta_dir
+	member of shairport_cfg struct
+Message-ID: <1442838575-11855-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+shairport-sync tries to access to a non-existent member called
+"meta_dir" of a "shairport_cfg" struct:
 
-Le 20/09/2015 23:45, Yann E. MORIN a ?crit :
-> That toolchain is only available for x86_64 hosts, so hide it when the
-> host is not an x86_64.
-> 
-> Re-use the comment previously added for the ARM toolchain.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  toolchain/toolchain-external/Config.in             | 24 +++++++++++++++++++++-
->  .../toolchain-external/toolchain-external.hash     |  1 +
->  toolchain/toolchain-external/toolchain-external.mk |  4 ++++
->  3 files changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index ce3a5f1..3863c3d 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
->  	depends on BR2_STATIC_LIBS
->  
->  comment "Linaro 2015.02 toolchains need an x86_64 build machine"
-> -	depends on BR2_arm
-> +	depends on BR2_arm || BR2_armeb
->  	depends on (!BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF) \
->  		|| !BR2_HOSTARCH = "x86_64"
->  	depends on !BR2_STATIC_LIBS
-> @@ -60,6 +60,28 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09
->  	  with the hard floating point calling convention, and uses
->  	  the VFPv3-D16 FPU instructions.
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
-> +	bool "Linaro armeb 2015.02"
-> +	depends on BR2_armeb
-> +	depends on BR2_ARM_CPU_ARMV7A
-> +	depends on BR2_HOSTARCH = "x86_64"
-> +	depends on BR2_ARM_EABIHF
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	select BR2_INSTALL_LIBSTDCPP
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +	help
-> +	  Linaro toolchain for the ARM big endian architecture. It
-> +	  uses Linaro GCC 2015.01 (based on gcc 4.9), Linaro GDB
-> +	  2015.02 (based on GDB 7.8), eglibc 2.19, Binutils 2014.11
-> +	  (based on 2.24) and kernel headers 3.17. It generates code
-> +	  that runs on all Cortex-A profile devices, but tuned for
-> +	  the Cortex-A9. The code generated is Thumb 2, with the hard
-> +	  floating point calling convention, and uses the VFPv3-D16
-> +	  FPU instructions.
-> +
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09
->  	bool "Linaro armeb 2014.09"
->  	depends on BR2_armeb
+[snip]
+if (config.meta_dir)
+[snip]
 
-Something is missing in this file ;-)
+That struct doesn't have that member so it causes a build failure like
+this one:
 
-You forgot to define default value for the toolchain prefix when this
-toolchain is used.
+mdns_tinysvcmdns.c: In function 'mdns_tinysvcmdns_register':
+mdns_tinysvcmdns.c:121:13: error: 'shairport_cfg' has no member named
+'meta_dir'
+if (config.meta_dir)
 
-config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-[...]
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2015_02
-+	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
+This issue has been reported and fixed upstream:
 
-I haven't reviewed entirely your patch series yet, tests are underway.
+  https://github.com/mikebrady/shairport-sync/issues/128#issuecomment-141947175
 
-Best regards,
-Romain 
+Fixes:
 
-> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-> index 7eafe82..8c9e153 100644
-> --- a/toolchain/toolchain-external/toolchain-external.hash
-> +++ b/toolchain/toolchain-external/toolchain-external.hash
-> @@ -52,6 +52,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
->  sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->  sha256 94fca98cb436228a40e8c9b77eec91beee87be170055aea99a6cb1be3d83ee50  gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
->  sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> +sha256 3f4b80a3eec1c28f92b17417b123d7f24ec9ed6d82be4929fa6cd4a8c17a1e74  gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
->  sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
->  
->  # Synopsys DesignWare ARC toolchains
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index be9568e..d3a0e8a 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -315,6 +315,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02),y)
-> +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/15.02/components/toolchain/binaries/armeb-linux-gnueabihf
-> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
-> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> 
+  http://autobuild.buildroot.net/results/89d/89d22ba2d41e05b407cde04c7e57510b36973ce9/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/shairport-sync/shairport-sync.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index dc36c0e..36d5b82 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -10,6 +10,7 @@ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VE
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+ SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
+ SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
++SHAIRPORT_SYNC_PATCH = https://github.com/mikebrady/shairport-sync/commit/6ae067af1f695e615415cde69a506ad330dbc45b.patch
+ 
+ # Touching configure.ac with the patches
+ SHAIRPORT_SYNC_AUTORECONF = YES
+-- 
+1.7.1
