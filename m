@@ -1,59 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 21 Sep 2015 00:11:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 8361] New: Buildroot 2015.08.1 skeleton inittab
- overwritten by busybox's version
-Message-ID: <bug-8361-163@https.bugs.busybox.net/>
+From: =?utf-8?B?5bed5bO2IOa1qQ==?= <kei-k@ca2.so-net.ne.jp>
+Date: Mon, 21 Sep 2015 10:51:25 +0900
+Subject: [Buildroot] [PATCH v5 1/1] squeezelite: new package
+In-Reply-To: <38121FAB319C3344930C920E7B51831326015AD4@LEMAIL01.le.imgtec.org>
+References: <201509201015.t8KAFEK0027976@ms-omx02.plus.so-net.ne.jp>
+ <38121FAB319C3344930C920E7B51831326015AD4@LEMAIL01.le.imgtec.org>
+Message-ID: <66D29DF2-AD52-49E3-BBB4-6F7C88FE6B36@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8361
+Thank you for taking time to review.
+Ok, I will post sanity patch again.
 
-           Summary: Buildroot 2015.08.1 skeleton inittab overwritten by
-                    busybox's version
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: tommygunsster at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Kawashima
 
-
-When compiling, the rsync operation that copies the skeleton directory operates
-before all other packages that might alter some of the files in the skeleton
-directory.  This can cause problems if your build has custom skeleton files
-that get overwritten.
-
-In my example, I am using the default system/skeleton folder to contain any
-custom files I may need as appropriate.  Specifically, I have an inittab file
-that should be used over others.
-
-I did notice that system/skeleton/etc/inittab and init.d are not stored in wait
-which is to be expected, particularly for specific files.
-
-I realize this is likely because configuration of things may require
-alternative methods to startup, but in this particular case it is not an issue
-as the only file that I see being altered that's affecting the init's ability
-is that the tty0 parameter I need does not exist.
-
-I am also aware that I can script a custom package to correct this for me as
-well.
-
-The specific git revision that adds this issue from what I can tell is:
-http://git.buildroot.net/buildroot/commit/?id=89d39fc7a392530be043bac541ade0bef746edb6
-
-I imagine the intent of this addition is to ensure an inittab file exists.  I
-would imagine the overwriting of the skeleton files was unintentional?
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> 2015/09/20 20:00?Vincent Olivert Riera <Vincent.Riera@imgtec.com> ?????
+> 
+> Dear Hiroshi Kawashima,
+> 
+> thanks for taking my comments into account and fix all the issue we find during the review process.
+> 
+> This patch looks good to me, but it has a big issue. You have edited it manually and forgot to change one important thing. Please keep reading.
+> 
+> On 20/09/15 11:15, kei-k at ca2.so-net.ne.jp wrote:
+>> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+>> ---
+>>  package/Config.in                  |    5 +----
+>>  package/squeezelite/Config.in      |   33 +++++++++++++++++++++++++++++++++
+> 
+> Here you have changed a 32 by a 33, and added one more +. Please keep scrolling down.
+> 
+>>  package/squeezelite/squeezelite.mk |   30 ++++++++++++++++++++++++++++++
+>>  3 files changed, 63 insertions(+), 4 deletions(-)
+>>  create mode 100644 package/squeezelite/Config.in
+>>  create mode 100644 package/squeezelite/squeezelite.mk
+>> 
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 22aef52..57f4498 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -33,6 +33,7 @@ menu "Audio and video applications"
+>>  	source "package/opus-tools/Config.in"
+>>  	source "package/pulseaudio/Config.in"
+>>  	source "package/sox/Config.in"
+>> +	source "package/squeezelite/Config.in"
+>>  	source "package/tidsp-binaries/Config.in"
+>>  	source "package/tovid/Config.in"
+>>  	source "package/tstools/Config.in"
+>> diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
+>> new file mode 100644
+>> index 0000000..c27dac2
+>> --- /dev/null
+>> +++ b/package/squeezelite/Config.in
+>> @@ -0,0 +1,32 @@
+> 
+> But you forgot to change this 32 here and put 33, so when we apply your patch only 32 lines are written to package/squeezelite/Config.in.
+> 
+> Please, _NEVER_ edit patches manually. Always regenerate them using "git format-patch".
+> 
+> In fact, I don't know why are you generating the patch file (since you are not adding a changelog) and then sending it by email. You can just send by email your latest commit with "git send-email --to=buildroot at buildroot.org --subject-prefix="PATCHv6" -1".
+> 
+> When we find issues during the review, you have to fix the issues by editing the needed files. Then add those files again with "git add <the file>", and then amend your commit with "git commit --amend". That workflow is much easier and faster.
+> 
+> Regards,
+> 
+> Vincent.
+> 
+> [snip]
