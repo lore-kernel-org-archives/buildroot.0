@@ -1,86 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 22 Sep 2015 00:32:13 +0200
-Subject: [Buildroot] [PATCH 18/19] ccache: use mtime for external
- toolchain, CONF_OPTS for internal toolchain
-In-Reply-To: <CAHXCMMLkNi47MQg+KCMNjtG1s4byAOO=aJqOGYHYC6Af_6WwpQ@mail.gmail.com>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442777319-24164-1-git-send-email-arnout@mind.be>
- <1442777319-24164-5-git-send-email-arnout@mind.be>
- <CAHXCMMLkNi47MQg+KCMNjtG1s4byAOO=aJqOGYHYC6Af_6WwpQ@mail.gmail.com>
-Message-ID: <5600856D.8010702@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Sep 2015 00:34:26 +0200
+Subject: [Buildroot] [PATCHv2] valgrind: build for the right MIPS ISA
+	revision level
+In-Reply-To: <1442874710-11595-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1442874710-11595-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150921223426.GH3570@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Vicente, All,
 
-
-On 21-09-15 23:43, Samuel Martin wrote:
-> Hi Arnout,
+On 2015-09-21 23:31 +0100, Vicente Olivert Riera spake thusly:
+> When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+> -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture, it
+> forcibly adds -march=mips64. This causes Valgrind to be built always for
+> the first ISA revision level (R1), even when the user has configured
+> Buildroot for the second ISA revision level (R2).
 > 
-> Just some minor comments below.
+> Since R2 is backwards compatible with R1, you can run a Valgrind built
+> for R1 in an R2 core. This is why nobody noticed about this problem, or
+> at least nobody complained.
 > 
-> On Sun, Sep 20, 2015 at 9:28 PM, Arnout Vandecappelle (Essensium/Mind)
-> <arnout@mind.be> wrote:
-> [...]
->>
->> +ifeq ($(BR2_CCACHE),y)
->> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
->> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/*.patch
->> +ifeq ($(BR2_xtensa),y)
->> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
->> +endif
->> +ifeq ($(ARCH),powerpc)
->> +ifneq ($(BR2_SOFT_FLOAT),)
->> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
->> +endif
->> +endif
+> But, since (I hope) we will support R6 in Buildroot in the near future,
+> this problem will become very important because R6 is not backwards
+> compatible with R1 or R2, so building Valgrind for R1 when your target
+> is R6 will result in a non-working Valgrind.
 > 
-> Maybe it is a rare case, should not the gcc's patches from the
-> BR2_GLOBAL_PATCH_DIR location be added to the
-> HOST_GCC_COMMON_CCACHE_HASH_FILES list as well?
-
- True. Note that in the global patch dir, you'd have to create separate
-gcc-initial and gcc-final directories, which makes it less likely that someone
-would actually do this.
-
- I was also thinking about GCC_OVERRIDE_SRCDIR, which is not covered at the moment.
-
- However, these things make the already fairly complicated hash logic even more
-complex. Do we really need to support such exotic cases?
-
-
+> Override the CFLAGS variable (which Valgrind appends to its CFLAGS) and
+> pass the right -march option, so they take precedence over Valgrind's
+> wrongfully detected value.
 > 
->> +
->> +HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
->> +       printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
->> +               | sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
->> +               | cut -c -64 | tr -d '\n'`\"
-> 
-> Depending on the number of items in the
-> HOST_GCC_COMMON_CCACHE_HASH_FILES list, the BR_CCACHE_HASH definition
-> can be quite long...
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Is that a problem?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- Regards,
- Arnout
+Regards,
+Yann E. MORIN.
 
+> ---
+> Changes v1 -> v2:
+>   - Improved commit log. (Suggested by Yann E. Morin)
 > 
->> +endif # BR2_CCACHE
->> +
-> [...]
+>  package/valgrind/valgrind.mk | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> 
-> Regards,
-> 
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index f8f205e..9500264 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -13,6 +13,19 @@ VALGRIND_CONF_OPTS = --disable-tls
+>  VALGRIND_AUTORECONF = YES
+>  VALGRIND_INSTALL_STAGING = YES
+>  
+> +# When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+> +# -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
+> +# it forcibly adds -march=mips64. This causes Valgrind to be built
+> +# always for the first ISA revision level (R1), even when the user has
+> +# configured Buildroot for the second ISA revision level (R2).
+> +#
+> +# Override the CFLAGS variable (which Valgrind appends to its CFLAGS)
+> +# and pass the right -march option, so they take precedence over
+> +# Valgrind's wrongfully detected value.
+> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> +VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
+> +endif
+> +
+>  # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
+>  # host tuple to determine whether it's being built for ARMv7 or
+>  # not. Therefore, we adjust the host tuple to specify we're on
+> -- 
+> 2.4.9
 > 
 
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
