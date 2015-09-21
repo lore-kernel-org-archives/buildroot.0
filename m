@@ -1,40 +1,59 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 21 Sep 2015 12:03:02 +1200
-Subject: [Buildroot] [PATCH] micropython: Invert fallback detection logic
-Message-ID: <1442793782-6664-1-git-send-email-judge.packham@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 21 Sep 2015 00:11:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 8361] New: Buildroot 2015.08.1 skeleton inittab
+ overwritten by busybox's version
+Message-ID: <bug-8361-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rather than specifying architectures that do not have explicit support
-in micropython invert the logic and set MICROPY_GCREGS_SETJMP=1 if the
-architecture does not have explicit support. MIPS is listed as being
-supported but this support consists of automatically defining
-MICROPY_GCREGS_SETJMP 1 based on __mips__ being defined.
+https://bugs.busybox.net/show_bug.cgi?id=8361
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
-This should clean up most of the remaining build failures. Listing the
-architectures with explicit support makes more sense to me and is
-certainly a shorter list at the moment.
+           Summary: Buildroot 2015.08.1 skeleton inittab overwritten by
+                    busybox's version
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: tommygunsster at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- package/micropython/micropython.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index f2ad5bf..e351843 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -13,7 +13,7 @@ MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8b4fb4fe14
- 
- # Use fallback implementation for exception handling on architectures that don't
- # have explicit support.
--ifeq ($(BR2_powerpc)$(BR2_sh)$(BR2_xtensa),y)
-+ifneq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),y)
- MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
- endif
- 
+When compiling, the rsync operation that copies the skeleton directory operates
+before all other packages that might alter some of the files in the skeleton
+directory.  This can cause problems if your build has custom skeleton files
+that get overwritten.
+
+In my example, I am using the default system/skeleton folder to contain any
+custom files I may need as appropriate.  Specifically, I have an inittab file
+that should be used over others.
+
+I did notice that system/skeleton/etc/inittab and init.d are not stored in wait
+which is to be expected, particularly for specific files.
+
+I realize this is likely because configuration of things may require
+alternative methods to startup, but in this particular case it is not an issue
+as the only file that I see being altered that's affecting the init's ability
+is that the tty0 parameter I need does not exist.
+
+I am also aware that I can script a custom package to correct this for me as
+well.
+
+The specific git revision that adds this issue from what I can tell is:
+http://git.buildroot.net/buildroot/commit/?id=89d39fc7a392530be043bac541ade0bef746edb6
+
+I imagine the intent of this addition is to ensure an inittab file exists.  I
+would imagine the overwriting of the skeleton files was unintentional?
+
 -- 
-2.5.0
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
