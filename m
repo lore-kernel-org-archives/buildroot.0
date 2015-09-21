@@ -1,30 +1,43 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 21 Sep 2015 18:29:42 +0200
-Subject: [Buildroot] [PATCH 0/2] Early boot fixes
-Message-ID: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net>
+Date: Mon, 21 Sep 2015 18:29:44 +0200
+Subject: [Buildroot] [PATCH 2/2] skeleton: fix absence of /dev/shm on static,
+	read-only systems
+In-Reply-To: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net>
+References: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1442852984-28452-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+/dev/shm is needed for systems using shared memory. On init-based systems
+this directory is usually created in the inittab along with /dev/pts, by
+the lines:
 
-my mdev-without-devtmpfs highlighted a couple errors that are not strictly
-related to that work. And since that work might or not have a v2, and is
-not very likely to be merged at all, let's have the two small fixes rolling
-on their own.
+package/busybox/inittab:
+  ::sysinit:/bin/mkdir -p /dev/pts
+  ::sysinit:/bin/mkdir -p /dev/shm
 
-Enjoy!
+package/sysvinit/inittab:
+  si2::sysinit:/bin/mkdir -p /dev/pts
+  si3::sysinit:/bin/mkdir -p /dev/shm
 
-Luca Ceresoli (2):
-  busybox: inittab: don't redirect output to /dev/null
-  skeleton: fix absence of /dev/shm on static, read-only systems
+However this is broken when static /dev management is selected and the root
+filesystem is read-only, showing during boot the error:
 
- package/busybox/inittab        | 12 ++++++------
- system/skeleton/dev/shm/.empty |  0
- 2 files changed, 6 insertions(+), 6 deletions(-)
+  mkdir: can't create directory '/dev/shm': Read-only file system
+
+Fix by creating the empth /dev/shm directory, just like /dev/pts.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ system/skeleton/dev/shm/.empty | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
  create mode 100644 system/skeleton/dev/shm/.empty
 
+diff --git a/system/skeleton/dev/shm/.empty b/system/skeleton/dev/shm/.empty
+new file mode 100644
+index 0000000..e69de29
 -- 
 1.9.1
