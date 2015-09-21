@@ -1,9 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 21 Sep 2015 23:43:33 +0200
-Subject: [Buildroot] Internal toolchain wrapper & ccache fixes
-In-Reply-To: <1442774504-22799-1-git-send-email-arnout@mind.be>
+Date: Mon, 21 Sep 2015 23:43:43 +0200
+Subject: [Buildroot] [PATCH 18/19] ccache: use mtime for external
+ toolchain, CONF_OPTS for internal toolchain
+In-Reply-To: <1442777319-24164-5-git-send-email-arnout@mind.be>
 References: <1442774504-22799-1-git-send-email-arnout@mind.be>
-Message-ID: <CAHXCMMLGXDWrLeMh3d=iHLuA-Xhy5845+5bfJfouk_hoSB_KMg@mail.gmail.com>
+ <1442777319-24164-1-git-send-email-arnout@mind.be>
+ <1442777319-24164-5-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMMLkNi47MQg+KCMNjtG1s4byAOO=aJqOGYHYC6Af_6WwpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +15,42 @@ To: buildroot@busybox.net
 
 Hi Arnout,
 
-On Sun, Sep 20, 2015 at 8:41 PM, Arnout Vandecappelle (Essensium/Mind)
+Just some minor comments below.
+
+On Sun, Sep 20, 2015 at 9:28 PM, Arnout Vandecappelle (Essensium/Mind)
 <arnout@mind.be> wrote:
 [...]
-> It would be really nice if someone else could take over this series,
-> since it is rather 'deep' stuff and if someone else really gets their
-> hands dirty on this code, there's a better chance of catching some
-> issues that I overlooked.
+>
+> +ifeq ($(BR2_CCACHE),y)
+> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/*.patch
+> +ifeq ($(BR2_xtensa),y)
+> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
+> +endif
+> +ifeq ($(ARCH),powerpc)
+> +ifneq ($(BR2_SOFT_FLOAT),)
+> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
+> +endif
+> +endif
 
-There is quite some work in this series!
-I've just reviewed the whole series, nothing scary stands out, just a
-couple of comments in the patch re-enabling compiler check (I'll
-respond to this patch).
+Maybe it is a rare case, should not the gcc's patches from the
+BR2_GLOBAL_PATCH_DIR location be added to the
+HOST_GCC_COMMON_CCACHE_HASH_FILES list as well?
 
-Thanks,
+> +
+> +HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
+> +       printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
+> +               | sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
+> +               | cut -c -64 | tr -d '\n'`\"
+
+Depending on the number of items in the
+HOST_GCC_COMMON_CCACHE_HASH_FILES list, the BR_CCACHE_HASH definition
+can be quite long...
+
+> +endif # BR2_CCACHE
+> +
+[...]
+
 
 Regards,
 
