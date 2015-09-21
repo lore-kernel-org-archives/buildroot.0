@@ -1,74 +1,57 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 21 Sep 2015 09:44:18 +0100
-Subject: [Buildroot] [PATCH v7 1/1] squeezelite: new package
-In-Reply-To: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
-References: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <55FFC362.8050106@imgtec.com>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Mon, 21 Sep 2015 10:48:01 +0200
+Subject: [Buildroot] [PATCH 1/1] drbd-utils: bump version to 8.9.4
+Message-ID: <1442825281-16987-1-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi Kawashima,
+Version 8.9.4 of drbd-utils contains fixes for the musl C library.
 
-comments below.
+Fixes http://autobuild.buildroot.net/results/4e0/4e0ed65b2e06f4ccadcad5b4302e6334667ecbdb
 
-On 09/21/2015 04:47 AM, kei-k at ca2.so-net.ne.jp wrote:
-[snip]
-> diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
-> new file mode 100644
-> index 0000000..681bb46
-> --- /dev/null
-> +++ b/package/squeezelite/squeezelite.mk
-> @@ -0,0 +1,30 @@
-> +################################################################################
-> +#
-> +# squeezelite
-> +#
-> +################################################################################
-> +
-> +SQUEEZELITE_VERSION = v1.8
-> +SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
-> +SQUEEZELITE_SITE_METHOD = git
-> +SQUEEZELITE_LICENSE = GPLv3
-> +SQUEEZELITE_LICENSE_FILE = LICENSE.txt
-> +SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
-> +
-> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
-> +	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
-> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
-> +		SQUEEZELITE_MAKE_OPTS += -DRESAMPLE_MP
-> +	endif
-> +endif
+Moreover, this commit removes the hook used to disable the
+documentation which is no longer necessary.
 
-I think the Buildroot style is to not indent this code. Can other dev
-tell me if I'm wrong?
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+---
+ package/drbd-utils/drbd-utils.hash | 2 +-
+ package/drbd-utils/drbd-utils.mk   | 8 +-------
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-> +
-> +define SQUEEZELITE_BUILD_CMDS
-> +    $(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
-
-You should indent this command with one tab instead of four spaces.
-
-> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-
-And this line indented with two tabs as is the continuation of the above
-command.
-
-> +endef
-> +
-> +define SQUEEZELITE_INSTALL_TARGET_CMDS
-> +    $(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
-
-Same here. This command should be indented with one tab instead of four
-spaces.
-
-Regards,
-
-Vincent.
-
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index c9894cd..731526e 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	2c531655d0d198a6af055edbc90f232538c2a3d2ce3fe137d03d06de4c1166d7	drbd-utils-8.9.1.tar.gz
++sha256	01a8924f8bc1370fc91e0495989d69b65c3b08346006d614d4b1dbdcd1caade5	drbd-utils-8.9.4.tar.gz
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 5df5b81..627b9a4 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DRBD_UTILS_VERSION = 8.9.1
++DRBD_UTILS_VERSION = 8.9.4
+ DRBD_UTILS_SITE = http://oss.linbit.com/drbd/
+ DRBD_UTILS_LICENSE = GPLv2+
+ DRBD_UTILS_LICENSE_FILES = COPYING
+@@ -26,10 +26,4 @@ else
+ DRBD_UTILS_CONF_OPTS += --with-udev=no
+ endif
+ 
+-# Do not build the documentation because it requires docbook
+-define DRBD_UTILS_DISABLE_DOCS
+-	$(SED) 's/user scripts documentation/user scripts/' $(@D)/Makefile.in
+-endef
+-DRBD_UTILS_POST_PATCH_HOOKS += DRBD_UTILS_DISABLE_DOCS
+-
+ $(eval $(autotools-package))
+-- 
+2.5.1
