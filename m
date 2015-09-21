@@ -1,30 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 21 Sep 2015 09:30:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 4099] cut utility from GNU coreutils works
-	incorrect
-In-Reply-To: <bug-4099-163@https.bugs.busybox.net/>
-References: <bug-4099-163@https.bugs.busybox.net/>
-Message-ID: <20150921093055.BF4C781922@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Sep 2015 11:34:04 +0200
+Subject: [Buildroot] [PATCH v7 1/1] squeezelite: new package
+In-Reply-To: <55FFC362.8050106@imgtec.com>
+References: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
+ <55FFC362.8050106@imgtec.com>
+Message-ID: <20150921113404.5412db51@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4099
+Vicente,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Mon, 21 Sep 2015 09:44:18 +0100, Vicente Olivert Riera wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+> > +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
+> > +	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
+> > +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
+> > +		SQUEEZELITE_MAKE_OPTS += -DRESAMPLE_MP
+> > +	endif
+> > +endif
+> 
+> I think the Buildroot style is to not indent this code. Can other dev
+> tell me if I'm wrong?
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2015-09-21 09:30:55 UTC ---
-Fixed by commits 26ae113d1186951c4969000f5de2ec67e7f1ba3e and
-e07cc92491080289188b3618d687b06bb9aa6041. Thanks Waldemar!
+You're correct.
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
