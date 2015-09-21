@@ -1,67 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Sep 2015 11:36:29 +0200
-Subject: [Buildroot] [PATCH v7 1/1] squeezelite: new package
-In-Reply-To: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
-References: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <20150921113629.0fc4f356@free-electrons.com>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Mon, 21 Sep 2015 10:56:05 +0100
+Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: improve checking of stack
+ smashing support with uclibc
+In-Reply-To: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
+References: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <CA+BsyQ72v3_sc7Luec6n=Ap-WWxd6JNg+X_Aha3UL4OJqZvTcg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 19 September 2015 at 19:05, Brendan Heading <brendanheading@gmail.com> wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/123/123a5b3f72ba8c1a4aa1cea5b7b846a04fd4e923/
+> http://autobuild.buildroot.net/results/38c/38cfa4e7249a8770b06dbd392acba79303d3f9bc/
+>
+> .. and others.
+>
+> Improve GCC's checking of stack smashing support, adding a specific case
+> statement for uclibc, and removing the check done after checking the
+> glibc version.
+>
+> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+> ---
+> Patch V1 - this initial version only fixes 4.7.4 - wanted to check that
+> we are heading the right way before I fix all the other versions.
+>
+> Note that I manually modified configure, rather than regenerating it from
+> configure.ac.
+>
+> Original plan was to reverse the order of the existing __GLIBC_MINOR__ and
+> uclibc check. However, the uclibc check falls through if it does not
+> detect uclibc, so I figure it better to add the separate case statement.
 
-On Mon, 21 Sep 2015 12:47:38 +0900, kei-k at ca2.so-net.ne.jp wrote:
+Hi guys,
 
-> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
-> +	bool "Enable resampling function"
-> +	default y
-> +	depends on BR2_PACKAGE_SQUEEZELITE
-> +	help
-> +	  Enable resampling function
-> +
-> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
-> +	bool "Use OpenMP for resampling"
-> +	default y
-> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
-> +	help
-> +	  Enable OpenMP support for resampling
+Just a quick ping to draw your attention to the above patch. Before I
+add the fix to all the other supported versions of GCC I wanted to
+check that you are happy with the way I'm solving the problem in
+4.7.4.
 
-The naming of the options is a bit inconsistent: "ENABLE" in one case
-and "WITH" in the other case. I believe in fact you could simplify the
-option naming to just:
-
-BR2_PACKAGE_SQUEEZELITE_RESAMPLE
-BR2_PACKAGE_SQUEEZELITE_RESAMPLE_OPENMP
-
-However, I'm a bit worried about the OpenMP option. Does it require
-OpenMP support in the toolchain? If yes, then not all toolchains have
-OpenMP support, so we should handle that.
-
-> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
-> +	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
-> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
-
-Since BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP already depends on
-BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE, there's no real need to nest
-the two tests. They can be made two separate tests.
-
-> +		SQUEEZELITE_MAKE_OPTS += -DRESAMPLE_MP
-> +	endif
-> +endif
-> +
-> +define SQUEEZELITE_BUILD_CMDS
-> +    $(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
-> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-
-Have you tried using $(TARGET_CONFIGURE_OPTS) instead of manually
-passing CC and LD ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Brendan
