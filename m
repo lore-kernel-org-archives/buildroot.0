@@ -1,118 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Sep 2015 00:45:39 +0200
-Subject: [Buildroot] [PATCH 1/1] board/wandboard: fix linux compilation
- error due to deprecated perl statement
-In-Reply-To: <1442847794-6972-1-git-send-email-imrehg@gmail.com>
-References: <1442847794-6972-1-git-send-email-imrehg@gmail.com>
-Message-ID: <20150921224539.GI3570@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 22 Sep 2015 00:49:52 +0200
+Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
+ to resolve the VLAN trunk issue
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C34B3C@svr-wa-exch1.atg.lc>
+References: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
+ <5600612C.5060300@mind.be>
+ <944894A3EB1D044A9003B2F944389BB20474C34B3C@svr-wa-exch1.atg.lc>
+Message-ID: <56008990.3010706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gergely, All,
-
-On 2015-09-21 23:03 +0800, imrehg at gmail.com spake thusly:
-> From: Gergely Imreh <imrehg@gmail.com>
+On 22-09-15 00:28, Lee, Tommy wrote:
+[snip]
+> My Buildroot .config file has following six lines relevant to this subject:
 > 
-> The perl syntax has changed since linux 3.8 and it is causing a compile error
-> in wandboard's kernel. Add in a proposed simple patch (one of the many
-> identical versions found online).
-
-Or backport 70730bca1331fc50c3caacaea00439de1325bd6e which "fixes" this
-by removing the perl script in favour of a bc script:
-
-commit 70730bca1331fc50c3caacaea00439de1325bd6e
-Author: H. Peter Anvin <hpa@zytor.com>
-Date:   Thu Feb 14 15:13:55 2013 -0800
-
-    kernel: Replace timeconst.pl with a bc script
-
-    bc is the standard tool for multi-precision arithmetic.  We switched
-    to Perl because akpm reported a hard-to-reproduce build hang, which
-    was very odd because affected and unaffected machines were all running
-    the same version of GNU bc.
-
-    Unfortunately switching to Perl required a really ugly "canning"
-    mechanism to support Perl < 5.8 installations lacking the Math::BigInt
-    module.
-
-    It was recently pointed out to me that some very old versions of GNU
-    make had problems with pipes in subshells, which was indeed the
-    construct used in the Makefile rules in that version of the patch;
-    Perl didn't need it so switching to Perl fixed the problem for
-    unrelated reasons.  With the problem (hopefully) root-caused, we can
-    switch back to bc and do the arbitrary-precision arithmetic naturally.
-
-    Signed-off-by: H. Peter Anvin <hpa@zytor.com>
-    Cc: Andrew Morton <akpm@linux-foundation.org>
-    Acked-by: Sam Ravnborg <sam@ravnborg.org>
-    Signed-off-by: Michal Marek <mmarek@suse.cz>
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-> ---
->  .../patches/linux/perl-define-in-timeconst.patch   | 24 ++++++++++++++++++++++
->  configs/wandboard_defconfig                        |  1 +
->  2 files changed, 25 insertions(+)
->  create mode 100644 board/wandboard/patches/linux/perl-define-in-timeconst.patch
+>  
 > 
-> diff --git a/board/wandboard/patches/linux/perl-define-in-timeconst.patch b/board/wandboard/patches/linux/perl-define-in-timeconst.patch
-> new file mode 100644
-> index 0000000..811b0a4
-> --- /dev/null
-> +++ b/board/wandboard/patches/linux/perl-define-in-timeconst.patch
-> @@ -0,0 +1,24 @@
-> +The use of defined() on arrays and hashes has been deprecated since perl
-> +5.6, but until 5.17.6 it only warned on lexicals, not package globals.
-> +
-> +Signed-off-by: Dagfinn Ilmari Manns?ker <ilmari@ilmari.org>
-> +---
-> + kernel/timeconst.pl |    2 +-
-> + 1 files changed, 1 insertions(+), 1 deletions(-)
-> +
-> +diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
-> +index eb51d76..0461239 100644
-> +--- a/kernel/timeconst.pl
-> ++++ b/kernel/timeconst.pl
-> +@@ -370,7 +370,7 @@ if ($hz eq '--can') {
-> + 	}
-> + 
-> + 	@val = @{$canned_values{$hz}};
-> +-	if (!defined(@val)) {
-> ++	if (!@val) {
-> + 		@val = compute_values($hz);
-> + 	}
-> + 	output($hz, @val);
-> +-- 
-> +1.7.5.4
-> +
-> diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-> index 5d74fc3..5ce5fdf 100644
-> --- a/configs/wandboard_defconfig
-> +++ b/configs/wandboard_defconfig
-> @@ -1,5 +1,6 @@
->  BR2_arm=y
->  BR2_cortex_a9=y
-> +BR2_GLOBAL_PATCH_DIR="board/wandboard/patches"
->  BR2_KERNEL_HEADERS_VERSION=y
->  BR2_DEFAULT_KERNEL_VERSION="3.0.101"
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
-> -- 
-> 2.5.3
+> BR2_ENDIAN="LITTLE"
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> BR2_cortex_a9=y
+> 
+> BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+> 
+> BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
+> 
+> BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+> 
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-385-db-ap"
+> 
+>  
+> 
+> My built kernel zImage has a root file system integrated. My U-Boot ?bootz
+> 0x02000000 ? 0x01000000? command successfully booted my board. 
+
+ Your original mail sounded like you didn't even manage to boot the board.
+
+
+> However, to
+> enable VLAN for my work, the network interface connected to a local segment,
+> used as the VLAN trunk, cannot ping out to a peer system on the segment.     
+
+ So what does that mean? VLAN doesn't work? Or networking doesn't work at all?
+Does mvebu_v7 have VLAN enabled?
+
+
+> I booted up my board using Marvell?s kernel zImage and DTB. There exists no such
+> VLAN trunk reachability problem at all.
+> 
+> Marvells totally gave me three DTB files, I tried my zImage and all them, one at
+> time. Unfortunately the VLAN trunk problem still exists. 
+
+ If it's just VLAN and not networking in general, it sounds like a kernel config
+issue and not a dts issue.
+
+
+> With the belief that
+> the problem is in the configuration of my kernel,
+
+ Exactly :-)
+
+> Last week I used the ?make
+> linux-menuconfig? command and created my kernel .config file using the following
+> two lines replacing the above DECONFIG lines.
+> 
+>  
+> 
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> 
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/armada385/.config"
+> 
+>  
+> 
+> Because of the discovery I mentioned in my preceding email, I quit the ?make
+> linux-menuconfig? process and reported the issue this morning.  
+
+ What discovery?
+
+> 
+>  
+> 
+> Taking your suggestion, I will rebuild my kernel zImage and DTB with
+> ?BR2_LINUX_KERNEL_INTREE_DTS_NAME="armada-388-db-ap? setting, to see whether the
+> VLAN trunk reachability problem can be resolved.
+
+ Well, that's what you tried before, no?
+
+
+
+ Regards,
+ Arnout
+
+ PS We prefer non-HTML mails on this list, and also proper quoting in replies.
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
