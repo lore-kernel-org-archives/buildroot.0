@@ -1,96 +1,115 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 21 Sep 2015 11:40:18 +0100
-Subject: [Buildroot] [PATCH v3] libseccomp: Add new config option to
- build and install tests
-In-Reply-To: <1442827716-8802-1-git-send-email-markos.chandras@imgtec.com>
-References: <20150920144637.25230558@free-electrons.com>
- <1442827716-8802-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <55FFDE92.9010901@imgtec.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 21 Sep 2015 14:28:18 +0200
+Subject: [Buildroot] [PATCH 4/5] toolchain/external: bump Linaro to
+ 2015.12 for ARM (BE)
+In-Reply-To: <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
+References: <cover.1442785491.git.yann.morin.1998@free.fr>
+ <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
+Message-ID: <55FFF7E2.40607@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Hi Yann, All,
 
-could you please mark your previous patch as superseded?
-
-http://patchwork.ozlabs.org/patch/519170/
-
-On 09/21/2015 10:28 AM, Markos Chandras wrote:
-> Add new config option to allow building and installing the libseccomp
-> testsuite on the target. It's useful for testing the kernels'
-> seccomp behavior for the target architecture.
+Le 20/09/2015 23:45, Yann E. MORIN a ?crit :
+> That toolchain is only available for x86_64 hosts, so hide it when the
+> host is not an x86_64.
 > 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Build test for MIPS architecture. All fine. Binary files built for the
-right architecture and no more .py files installed on target. Checked
-that now the tests and tools are installed in /usr/share/libseccomp/.
-
-Regards,
-
-Vincent.
-
+> Re-use the comment previously added for the ARM toolchain.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
-> changes since v2:
-> - Move installation path for tests to /usr/share/libseccomp
-> - Do not install python files. We don't support python + libseccomp
-> at the moment so there is no point in installing these tests yet.
+>  toolchain/toolchain-external/Config.in             | 24 +++++++++++++++++++++-
+>  .../toolchain-external/toolchain-external.hash     |  1 +
+>  toolchain/toolchain-external/toolchain-external.mk |  4 ++++
+>  3 files changed, 28 insertions(+), 1 deletion(-)
 > 
-> changes since v1:
-> - Drop compile hook for tests and use MAKE_OPTS instead
-> ---
->  package/libseccomp/Config.in     |  9 +++++++++
->  package/libseccomp/libseccomp.mk | 16 ++++++++++++++++
->  2 files changed, 25 insertions(+)
-> 
-> diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
-> index 4c34c5466592..760a6f321142 100644
-> --- a/package/libseccomp/Config.in
-> +++ b/package/libseccomp/Config.in
-> @@ -15,6 +15,15 @@ config BR2_PACKAGE_LIBSECCOMP
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index ce3a5f1..3863c3d 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
+>  	depends on BR2_STATIC_LIBS
 >  
->  	  https://github.com/seccomp/libseccomp
+>  comment "Linaro 2015.02 toolchains need an x86_64 build machine"
+> -	depends on BR2_arm
+> +	depends on BR2_arm || BR2_armeb
+>  	depends on (!BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF) \
+>  		|| !BR2_HOSTARCH = "x86_64"
+>  	depends on !BR2_STATIC_LIBS
+> @@ -60,6 +60,28 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09
+>  	  with the hard floating point calling convention, and uses
+>  	  the VFPv3-D16 FPU instructions.
 >  
-> +config BR2_PACKAGE_LIBSECCOMP_TESTS
-> +	bool "Install libseccomp tests"
-> +	depends on BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
+> +config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
+> +	bool "Linaro armeb 2015.02"
+> +	depends on BR2_armeb
+> +	depends on BR2_ARM_CPU_ARMV7A
+> +	depends on BR2_HOSTARCH = "x86_64"
+> +	depends on BR2_ARM_EABIHF
+> +	depends on !BR2_STATIC_LIBS
+> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_INSTALL_LIBSTDCPP
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 > +	help
-> +	  Build and install the libseccomp testsuite.
+> +	  Linaro toolchain for the ARM big endian architecture. It
+> +	  uses Linaro GCC 2015.01 (based on gcc 4.9), Linaro GDB
+> +	  2015.02 (based on GDB 7.8), eglibc 2.19, Binutils 2014.11
+> +	  (based on 2.24) and kernel headers 3.17. It generates code
+> +	  that runs on all Cortex-A profile devices, but tuned for
+> +	  the Cortex-A9. The code generated is Thumb 2, with the hard
+> +	  floating point calling convention, and uses the VFPv3-D16
+> +	  FPU instructions.
 > +
-> +comment "libseccomp testsuite needs bash as running shell"
-> +	depends on !BR2_PACKAGE_BASH && BR2_PACKAGE_LIBSECCOMP
-> +
->  comment "libseccomp needs a toolchain w/ headers >= 3.12"
->  	depends on BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || \
->  		BR2_mips64el || BR2_i386 || BR2_x86_64
-> diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-> index a188298006b1..e6e578b85561 100644
-> --- a/package/libseccomp/libseccomp.mk
-> +++ b/package/libseccomp/libseccomp.mk
-> @@ -17,4 +17,20 @@ define LIBSECCOMP_FIXUP_M4_DIR
->  endef
->  LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
+>  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09
+>  	bool "Linaro armeb 2014.09"
+>  	depends on BR2_armeb
+
+Something is missing in this file ;-)
+
+You forgot to define default value for the toolchain prefix when this
+toolchain is used.
+
+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+[...]
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2015_02
++	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
+
+I haven't reviewed entirely your patch series yet, tests are underway.
+
+Best regards,
+Romain 
+
+> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+> index 7eafe82..8c9e153 100644
+> --- a/toolchain/toolchain-external/toolchain-external.hash
+> +++ b/toolchain/toolchain-external/toolchain-external.hash
+> @@ -52,6 +52,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
+>  sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+>  sha256 94fca98cb436228a40e8c9b77eec91beee87be170055aea99a6cb1be3d83ee50  gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
+>  sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+> +sha256 3f4b80a3eec1c28f92b17417b123d7f24ec9ed6d82be4929fa6cd4a8c17a1e74  gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
+>  sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
 >  
-> +ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
-> +
-> +LIBSECCOMP_MAKE_OPTS += check-build
-> +
-> +define LIBSECCOMP_TESTS_INSTALL
-> +	mkdir -p $(TARGET_DIR)/usr/share/libseccomp/{tests,tools} && \
-> +	for x in tests tools; do \
-> +		find $(@D)/$$x -maxdepth 1 \( -name "*.tests" -o -perm -a=x \) -a ! -name "*.py" \
-> +			-type f -exec cp {} $(TARGET_DIR)/usr/share/libseccomp/$$x/ \; ; \
-> +	done
-> +endef
-> +
-> +LIBSECCOMP_POST_INSTALL_TARGET_HOOKS += LIBSECCOMP_TESTS_INSTALL
-> +
-> +endif
-> +
->  $(eval $(autotools-package))
+>  # Synopsys DesignWare ARC toolchains
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index be9568e..d3a0e8a 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -315,6 +315,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02),y)
+> +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/15.02/components/toolchain/binaries/armeb-linux-gnueabihf
+> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
+> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
 > 
