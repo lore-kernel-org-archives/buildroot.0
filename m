@@ -1,138 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Sep 2015 19:29:13 +0200
-Subject: [Buildroot] [PATCH 4/5] toolchain/external: bump Linaro to
- 2015.12 for ARM (BE)
-In-Reply-To: <55FFF7E2.40607@openwide.fr>
-References: <cover.1442785491.git.yann.morin.1998@free.fr>
- <e1b88cef7705821748912646bc779cb0c5365006.1442785491.git.yann.morin.1998@free.fr>
- <55FFF7E2.40607@openwide.fr>
-Message-ID: <20150921172913.GB3570@free.fr>
+Date: Mon, 21 Sep 2015 19:41:44 +0200
+Subject: [Buildroot] [PATCH] valgrind: build for the right MIPS ISA
+	revision level
+In-Reply-To: <1442840551-13640-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1442840551-13640-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150921174144.GC3570@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Vicente, All,
 
-On 2015-09-21 14:28 +0200, Romain Naour spake thusly:
-> Le 20/09/2015 23:45, Yann E. MORIN a ?crit :
-> > That toolchain is only available for x86_64 hosts, so hide it when the
-> > host is not an x86_64.
-> > 
-> > Re-use the comment previously added for the ARM toolchain.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > ---
-> >  toolchain/toolchain-external/Config.in             | 24 +++++++++++++++++++++-
-> >  .../toolchain-external/toolchain-external.hash     |  1 +
-> >  toolchain/toolchain-external/toolchain-external.mk |  4 ++++
-> >  3 files changed, 28 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> > index ce3a5f1..3863c3d 100644
-> > --- a/toolchain/toolchain-external/Config.in
-> > +++ b/toolchain/toolchain-external/Config.in
-> > @@ -7,7 +7,7 @@ comment "(e)glibc toolchains only available with shared lib support"
-> >  	depends on BR2_STATIC_LIBS
-> >  
-> >  comment "Linaro 2015.02 toolchains need an x86_64 build machine"
-> > -	depends on BR2_arm
-> > +	depends on BR2_arm || BR2_armeb
-> >  	depends on (!BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF) \
-> >  		|| !BR2_HOSTARCH = "x86_64"
-> >  	depends on !BR2_STATIC_LIBS
-> > @@ -60,6 +60,28 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09
-> >  	  with the hard floating point calling convention, and uses
-> >  	  the VFPv3-D16 FPU instructions.
-> >  
-> > +config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
-> > +	bool "Linaro armeb 2015.02"
-> > +	depends on BR2_armeb
-> > +	depends on BR2_ARM_CPU_ARMV7A
-> > +	depends on BR2_HOSTARCH = "x86_64"
-> > +	depends on BR2_ARM_EABIHF
-> > +	depends on !BR2_STATIC_LIBS
-> > +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> > +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> > +	select BR2_INSTALL_LIBSTDCPP
-> > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-> > +	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> > +	help
-> > +	  Linaro toolchain for the ARM big endian architecture. It
-> > +	  uses Linaro GCC 2015.01 (based on gcc 4.9), Linaro GDB
-> > +	  2015.02 (based on GDB 7.8), eglibc 2.19, Binutils 2014.11
-> > +	  (based on 2.24) and kernel headers 3.17. It generates code
-> > +	  that runs on all Cortex-A profile devices, but tuned for
-> > +	  the Cortex-A9. The code generated is Thumb 2, with the hard
-> > +	  floating point calling convention, and uses the VFPv3-D16
-> > +	  FPU instructions.
-> > +
-> >  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09
-> >  	bool "Linaro armeb 2014.09"
-> >  	depends on BR2_armeb
+On 2015-09-21 14:02 +0100, Vicente Olivert Riera spake thusly:
+> When valgrind detects a 32-bit MIPS architecture adds -march=mips32 to
+> CFLAGS, and when it detects a 64-bit MIPS architecture adds
+> -march=mips64 instead.
+
+Hmm.. This looks like the sentence is missing some verbs. What about:
+
+
+    When valgrind detects a 32-bit MIPS architecture, it forcibly adds
+    -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
+    it forcibly adds -march=mips64. This causes valgrind to be built
+    always for the first ISA revision level (R1), even when the user has
+    configured Buildroot for the second ISA revision level (R2).
+
+    Since R2 is backwards compatible with R1, you can run a valgrind
+    built for R1 in an R2 core. This is why nobody noticed about this
+    problem, or at least nobody complained.
+
+    But, since (I hope) we will support R6 in Buildroot in the near
+    future, this problem will become very important because R6 is not
+    backwards compatible with R1 or R2, so building valgrind for R1 when
+    your target is R6 will result in a non-working valgrind.
+
+    Override the CFLAGS variable (which Valgrind appends to its CFLAGS)
+    and pass the right -march option, so they take precedence over
+    Valgrind's wrongfully detected value.
+ 
+
+(I find this new layout more meaningful: it explains the current status
+in Valgrind in ?1, explains why this is a problem in ?2-3, and explains
+how we fix it in ?4.)
+
+But that's mostly nit-picking. ;-)
+
+> This causes valgrind to be built always for the
+> first ISA revision level (R1) which is not correct because our target
+> architecture could have a different ISA revision level (i.e. R2). We
+> need to override the CFLAGS variable and pass the right -march option.
 > 
-> Something is missing in this file ;-)
+> Since R2 is backwards compatible with R1, you can run a valgrind built
+> for R1 in an R2 core. This is why nobody noticed about this problem, or
+> at least nobody complained. But, since (I hope) we will support R6 in
+> Buildroot in the near future, this problem will become very important
+> because R6 is not backwards compatible with R1 or R2, so building
+> valgrind for R1 when your target is R6 will result in a non-working
+> valgrind.
 > 
-> You forgot to define default value for the toolchain prefix when this
-> toolchain is used.
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/valgrind/valgrind.mk |   10 ++++++++++
+>  1 files changed, 10 insertions(+), 0 deletions(-)
 > 
-> config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-> [...]
-> +	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2015_02
-> +	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index f8f205e..944e721 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -13,6 +13,16 @@ VALGRIND_CONF_OPTS = --disable-tls
+>  VALGRIND_AUTORECONF = YES
+>  VALGRIND_INSTALL_STAGING = YES
+>  
+> +# When valgrind detects a 32-bit MIPS architecture adds -march=mips32 to
+> +# CFLAGS, and when it detects a 64-bit MIPS architecture adds
 
-Damned.
-
-I initially did a series that replaced the existing toolchains with the
-new ones. That one was working as expected.
-
-However, since the new toolchains are only available for x86_64 hosts, I
-did a new series that _added_ the new toolchains and kept the old ones.
-So, I just copy-pasted the new options from the old series, and forgot
-to add the new tuples in the list (even though I did update the entries
-when renaming the old options). Sigh...
-
-Good catch, I'll fix (but will wait for more reviews before I respin).
-
-Thanks! :-)
+Ditto, the sentence looks weird.
 
 Regards,
 Yann E. MORIN.
 
-> I haven't reviewed entirely your patch series yet, tests are underway.
-> 
-> Best regards,
-> Romain 
-> 
-> > diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-> > index 7eafe82..8c9e153 100644
-> > --- a/toolchain/toolchain-external/toolchain-external.hash
-> > +++ b/toolchain/toolchain-external/toolchain-external.hash
-> > @@ -52,6 +52,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
-> >  sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> >  sha256 94fca98cb436228a40e8c9b77eec91beee87be170055aea99a6cb1be3d83ee50  gcc-linaro-4.9-2015.02-3-x86_64_arm-linux-gnueabihf.tar.xz
-> >  sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> > +sha256 3f4b80a3eec1c28f92b17417b123d7f24ec9ed6d82be4929fa6cd4a8c17a1e74  gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
-> >  sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
-> >  
-> >  # Synopsys DesignWare ARC toolchains
-> > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> > index be9568e..d3a0e8a 100644
-> > --- a/toolchain/toolchain-external/toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/toolchain-external.mk
-> > @@ -315,6 +315,10 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM_2014_09),y)
-> >  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-> >  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> >  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-> > +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2015_02),y)
-> > +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/15.02/components/toolchain/binaries/armeb-linux-gnueabihf
-> > +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-4.9-2015.02-3-x86_64_armeb-linux-gnueabihf.tar.xz
-> > +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
-> >  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB_2014_09),y)
-> >  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-> >  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-> > 
+> +# -march=mips64 instead. This causes valgrind to be built always for the
+> +# first ISA revision level (R1) which is not correct because our target
+> +# architecture could have a different ISA revision level (i.e. R2). We
+> +# need to override the CFLAGS variable and pass the right -march option.
+> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> +VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
+> +endif
+> +
+>  # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
+>  # host tuple to determine whether it's being built for ARMv7 or
+>  # not. Therefore, we adjust the host tuple to specify we're on
+> -- 
+> 1.7.1
 > 
 
 -- 
