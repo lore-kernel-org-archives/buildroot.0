@@ -1,54 +1,42 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 21 Sep 2015 14:02:31 +0100
-Subject: [Buildroot] [PATCH] valgrind: build for the right MIPS ISA revision
-	level
-Message-ID: <1442840551-13640-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 21 Sep 2015 14:21:26 +0100
+Subject: [Buildroot] [PATCH] links: bump to version 2.12
+Message-ID: <1442841686-19355-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When valgrind detects a 32-bit MIPS architecture adds -march=mips32 to
-CFLAGS, and when it detects a 64-bit MIPS architecture adds
--march=mips64 instead. This causes valgrind to be built always for the
-first ISA revision level (R1) which is not correct because our target
-architecture could have a different ISA revision level (i.e. R2). We
-need to override the CFLAGS variable and pass the right -march option.
-
-Since R2 is backwards compatible with R1, you can run a valgrind built
-for R1 in an R2 core. This is why nobody noticed about this problem, or
-at least nobody complained. But, since (I hope) we will support R6 in
-Buildroot in the near future, this problem will become very important
-because R6 is not backwards compatible with R1 or R2, so building
-valgrind for R1 when your target is R6 will result in a non-working
-valgrind.
+And also use the .tar.bz2 tarball to save disk space and bandwidth.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/valgrind/valgrind.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ package/links/links.hash |    2 +-
+ package/links/links.mk   |    3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index f8f205e..944e721 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -13,6 +13,16 @@ VALGRIND_CONF_OPTS = --disable-tls
- VALGRIND_AUTORECONF = YES
- VALGRIND_INSTALL_STAGING = YES
+diff --git a/package/links/links.hash b/package/links/links.hash
+index 910bb69..2d9a7b3 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e2d4e193eb3147f0d745e28d37d510edb22697707e329cbe361bb79037bae332	links-2.9.tar.gz
++sha256 98411811ded1e8028f5aed708dd7d8ec0ae63ce24c2991a0241a989b7d09d84e  links-2.12.tar.bz2
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 3b9f011..ba55061 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
  
-+# When valgrind detects a 32-bit MIPS architecture adds -march=mips32 to
-+# CFLAGS, and when it detects a 64-bit MIPS architecture adds
-+# -march=mips64 instead. This causes valgrind to be built always for the
-+# first ISA revision level (R1) which is not correct because our target
-+# architecture could have a different ISA revision level (i.e. R2). We
-+# need to override the CFLAGS variable and pass the right -march option.
-+ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-+VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
-+endif
-+
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
- # not. Therefore, we adjust the host tuple to specify we're on
+-LINKS_VERSION = 2.9
++LINKS_VERSION = 2.12
++LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
+ LINKS_LICENSE = GPLv2+
 -- 
 1.7.1
