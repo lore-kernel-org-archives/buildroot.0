@@ -1,145 +1,76 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 21 Sep 2015 22:23:27 +0200
-Subject: [Buildroot] [PATCH v2] support/misc: Adding Vagrant file for
-	provisioning
-Message-ID: <1442867007-3715-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 21 Sep 2015 22:45:41 +0200
+Subject: [Buildroot] [PATCH 2/5] toolchain/external: rename Linaro arm
+ and AArch64 options
+In-Reply-To: <56003B9E.4050108@mind.be>
+References: <cover.1442785491.git.yann.morin.1998@free.fr>
+ <86fd4e995ad6ec4737cdd0b0c3a5c4c0f9a0123a.1442785491.git.yann.morin.1998@free.fr>
+ <56003B9E.4050108@mind.be>
+Message-ID: <20150921204541.GD3570@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a Vagrant file to buildroot. With this file
-you can provision a complete buildroot developing environment
-in minutes on all major platforms (Linux/Mac/Windows).
+Arnout, All,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changelog
+On 2015-09-21 19:17 +0200, Arnout Vandecappelle spake thusly:
+> On 20-09-15 23:45, Yann E. MORIN wrote:
+> > We're going to add a new Linaro version (2015.02) for those toolchains,
+> > so we want to differentiate them.
+> > 
+> > Even though we could simply keep the current options as-is and just
+> > introduce the new ones suffixed with the version, it is better to rename
+> > the existing options for consistency with the new ones and wiith other
+> > multi-versions toolchains (like the CS CodeBench).
+> 
+>  Sorry to revisit the discussion on IRC, but in be2abf23 Thomas Petazzoni wrote:
+> 
+>     Linaro toolchains are released so frequently (every month) that it
+>     doesn't make much sense to support 3 consecutive versions. So, like we
+>     do for ARM big-endian, let's support only one version at a time.
+> 
+>  Are we in agreement that this has changed because it seems they now have stable
+> releases? Or let me put this differently: are we sure now that the 2015.02
+> version is really considered more stable than 2015.08, or is it just that
+> they're too lazy to update their website?
 
-v1 -> v2:
+Well, I would not put the "stableness" as the main reason, but rather
+that the new toolchains are only for x86_64, hence people stuck with a
+32-bit host would be left out. So, we keep the 2014.09 for those in
+32-bit land, and add 2015.02 for those in 64-bit land.
 
-* Scraping latest version number from website (suggested by Arnout Vandecappelle)
-* Added libc i386 dependency for precompiled toolchains (suggested by Arnout Vandecappelle)
+Also, I had a look at the latest toolchain, and it seems they've
+switched it to a gcc-4.8.:
+    http://releases.linaro.org/15.06/components/toolchain/binaries/
+which gives:
+    $ ./gcc-linaro-4.8-2015.06-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc --version
+    arm-linux-gnueabihf-gcc (Linaro GCC 4.8-2015.06) 4.8.5
+    [...]
 
- docs/manual/getting.txt    | 14 ++++++++++++
- docs/website/download.html | 17 +++++++++++++++
- support/misc/Vagrantfile   | 54 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 85 insertions(+)
- create mode 100644 support/misc/Vagrantfile
+while the previous is still using a gcc-4.9:
+    http://releases.linaro.org/15.05/components/toolchain/binaries/
+which gives:
+    $ ./gcc-linaro-4.9-2015.05-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc --version
+    arm-linux-gnueabihf-gcc (Linaro GCC 4.9-2015.05) 4.9.3 20150413 (prerelease)
+    [...]
 
-diff --git a/docs/manual/getting.txt b/docs/manual/getting.txt
-index 3437f93..84e1f54 100644
---- a/docs/manual/getting.txt
-+++ b/docs/manual/getting.txt
-@@ -10,6 +10,20 @@ November. Release numbers are in the format YYYY.MM, so for example
- 
- Release tarballs are available at http://buildroot.org/downloads/[].
- 
-+An official https://www.vagrantup.com/[Vagrantfile] is distributed within buildroot for your needs.
-+If you want to setup an isolated buildroot environment on Linux or
-+Mac Os X, paste this line onto your terminal:
-+
-+--------------------
-+curl -O http://git.buildroot.net/buildroot/plain/support/misc/Vagrantfile; vagrant up
-+--------------------
-+
-+If you are on Windows, paste this into your powershell:
-+
-+--------------------
-+(new-object System.Net.WebClient).DownloadFile("http://git.buildroot.net/buildroot/plain/support/misc/Vagrantfile","Vagrantfile"); vagrant up
-+--------------------
-+
- If you want to follow development, you can use the daily snapshots or
- make a clone of the Git repository. Refer to the
- http://buildroot.org/download[Download page] of the Buildroot website
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 534fc7e..8075aca 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -32,6 +32,23 @@ This and earlier releases (and their PGP signatures) can always be downloaded fr
- 
- <p>
- 
-+<p>
-+An official <a href="https://www.vagrantup.com/">Vagrantfile</a>
-+is distributed within buildroot for your needs.
-+If you want to setup an isolated buildroot environment on Linux or
-+Mac Os X, paste this line onto your terminal:
-+
-+<pre>
-+curl -O http://git.buildroot.net/buildroot/plain/support/misc/Vagrantfile; vagrant up
-+</pre>
-+
-+If you are on Windows, paste this into your powershell:
-+
-+<pre>
-+(new-object System.Net.WebClient).DownloadFile("http://git.buildroot.net/buildroot/plain/support/misc/Vagrantfile","Vagrantfile"); vagrant up
-+</pre>
-+</p>
-+
- You can also obtain daily snapshots of the latest Buildroot source tree if you
- want to follow development, but cannot or do not wish to use Git.
- 
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-new file mode 100644
-index 0000000..36f9048
---- /dev/null
-+++ b/support/misc/Vagrantfile
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# Vagrantfile
-+#
-+################################################################################
-+
-+### Change here for more memory/cores ###
-+VM_MEMORY=1024
-+VM_CORES=1
-+
-+Vagrant.configure('2') do |config|
-+	config.vm.box = 'ubuntu/trusty64'
-+
-+	config.vm.provider :vmware_fusion do |v, override|
-+		v.vmx['memsize'] = VM_MEMORY
-+		v.vmx['numvcpus'] = VM_CORES
-+	end
-+
-+	config.vm.provider :virtualbox do |v, override|
-+		v.customize ['modifyvm', :id, '--memory', VM_MEMORY]
-+		v.customize ['modifyvm', :id, '--cpus', VM_CORES]
-+	end
-+
-+	config.vm.provision 'shell' do |s|
-+		s.inline = 'echo Setting up machine name'
-+
-+		require 'open-uri'
-+		open('http://buildroot.org/download.html') do |f|
-+			$buildroot_version = f.read.lines.grep(/The latest stable release/)[0]
-+				.split('<b>')[1].split('</b>')[0]
-+		end
-+
-+		config.vm.provider :vmware_fusion do |v, override|
-+			v.vmx['displayname'] = "Buildroot #{$buildroot_version}"
-+		end
-+
-+		config.vm.provider :virtualbox do |v, override|
-+			v.customize ['modifyvm', :id, '--name', "Buildroot #{$buildroot_version}"]
-+		end
-+	end
-+
-+	config.vm.provision 'shell', inline:
-+		"sudo dpkg --add-architecture i386
-+		sudo apt-get -q update
-+		sudo apt-get -q -y install build-essential libncurses5-dev \
-+			git bzr cvs mercurial subversion libc6:i386
-+		sudo apt-get -q -y autoremove
-+		sudo apt-get -q -y clean"
-+
-+	config.vm.provision 'shell', privileged: false, inline:
-+		"echo 'Downloading and extracting buildroot #{$buildroot_version}'
-+		wget -q -c http://buildroot.org/downloads/buildroot-#{$buildroot_version}.tar.gz
-+		tar axf buildroot-#{$buildroot_version}.tar.gz"
-+end
+So, it seems that they are not completely "stable" with their latest
+toolchain releases anyway... :-/
+
+However, I'm open to discussion. Hence adding the topic on the list for
+the DevDays. If we agree on keeping the old version, the series is
+ready. If not, it's easy to chop it down and just do the replacement
+with the new version.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
