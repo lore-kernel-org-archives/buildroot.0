@@ -1,51 +1,66 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 21 Sep 2015 18:29:43 +0200
-Subject: [Buildroot] [PATCH 1/2] busybox: inittab: don't redirect output to
-	/dev/null
-In-Reply-To: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net>
-References: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1442852984-28452-2-git-send-email-luca@lucaceresoli.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 21 Sep 2015 19:32:40 +0300
+Subject: [Buildroot] [PATCH] sysvinit: arm64 build fix
+In-Reply-To: <875368a848cb37f12c0c13638c987ce0f7783700.1442850883.git.jpinto@synopsys.com>
+References: <875368a848cb37f12c0c13638c987ce0f7783700.1442850883.git.jpinto@synopsys.com>
+Message-ID: <20150921163240.GB2242@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Several inittab steps are redirected to /dev/null. This means any error or
-warning printed by these crucial commands would be hidden from the user.
-There is no evident reason to hide this output, so stop doing that.
+Hi Joao,
 
-Suggested by Thomas Petazzoni:
-http://lists.busybox.net/pipermail/buildroot/2015-September/139146.html
+[Resend with the correct list address]
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/inittab | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On Mon, Sep 21, 2015 at 05:10:15PM +0100, Joao Pinto wrote:
+> sysvinit was not able to be built for arm64 architectures.
+> The package patch was changed according to the suggestion of 
+> Thomas Petazzoni.
+> 
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  package/sysvinit/0001-fix-libcrypt-test.patch | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/sysvinit/0001-fix-libcrypt-test.patch b/package/sysvinit/0001-fix-libcrypt-test.patch
+> index 207270d..3724110 100644
+> --- a/package/sysvinit/0001-fix-libcrypt-test.patch
+> +++ b/package/sysvinit/0001-fix-libcrypt-test.patch
+> @@ -1,17 +1,21 @@
+>  Make the libcrypt test somewhat cross-compilation compliant
+>  
+>  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> +Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+>  
+>  Index: b/src/Makefile
+>  ===================================================================
+>  --- a/src/Makefile
+>  +++ b/src/Makefile
+> -@@ -78,7 +78,7 @@
+> +@@ -78,8 +78,9 @@ else
+>   endif
+>   
+>   # Additional libs for GNU libc.
+>  -ifneq ($(wildcard /usr/lib*/libcrypt.a),)
+> -+ifneq ($(wildcard $(SYSROOT)/usr/lib*/libcrypt.a),)
+> -   SULOGINLIBS	+= -lcrypt
+> +-  SULOGINLIBS	+= -lcrypt
+> ++HAS_LIBCRYPT=$(shell f=`mktemp` && echo 'int main(void) {}' | $(CC) -o $$f -xc - -lcrypt >/dev/null 2>&1 && echo yes && rm -f $$f)
 
-diff --git a/package/busybox/inittab b/package/busybox/inittab
-index b1892c1..24d9199 100644
---- a/package/busybox/inittab
-+++ b/package/busybox/inittab
-@@ -14,12 +14,12 @@
- # process   == program to run
- 
- # Startup the system
--null::sysinit:/bin/mount -t proc proc /proc
--null::sysinit:/bin/mount -o remount,rw /
--null::sysinit:/bin/mkdir -p /dev/pts
--null::sysinit:/bin/mkdir -p /dev/shm
--null::sysinit:/bin/mount -a
--null::sysinit:/bin/hostname -F /etc/hostname
-+::sysinit:/bin/mount -t proc proc /proc
-+::sysinit:/bin/mount -o remount,rw /
-+::sysinit:/bin/mkdir -p /dev/pts
-+::sysinit:/bin/mkdir -p /dev/shm
-+::sysinit:/bin/mount -a
-+::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
- ::sysinit:/etc/init.d/rcS
- 
+The last '&&' causes the 'rm' command to delete the temporary file only when 
+the test succeeds. Should be ';' instead, I think.
+
+baruch
+
+> ++ifeq ($(HAS_LIBCRYPT),yes)
+> ++  SULOGINLIBS += -lcrypt
+>   endif
+>   
+> + all:		$(BIN) $(SBIN) $(USRBIN)
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
