@@ -1,44 +1,43 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Mon, 21 Sep 2015 10:56:05 +0100
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: improve checking of stack
- smashing support with uclibc
-In-Reply-To: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
-References: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <CA+BsyQ72v3_sc7Luec6n=Ap-WWxd6JNg+X_Aha3UL4OJqZvTcg@mail.gmail.com>
+From: =?UTF-8?Q?C=C3=A9dric_Marie?= <cedric.marie@openmailbox.org>
+Date: Mon, 21 Sep 2015 12:23:09 +0200
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH=5D_Makefile=3A_Remove_KBUILD=5FVER?=
+ =?utf-8?q?BOSE_and_quiet?=
+In-Reply-To: <55FF2498.3060105@mind.be>
+References: <1441658846-5786-1-git-send-email-cedric.marie@openmailbox.org>
+ <20150920151157.7dc9b021@free-electrons.com>
+ <55FF1A8A.5030507@openmailbox.org> <55FF2498.3060105@mind.be>
+Message-ID: <be665633918344391cf5a86576592c7c@openmailbox.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19 September 2015 at 19:05, Brendan Heading <brendanheading@gmail.com> wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/123/123a5b3f72ba8c1a4aa1cea5b7b846a04fd4e923/
-> http://autobuild.buildroot.net/results/38c/38cfa4e7249a8770b06dbd392acba79303d3f9bc/
->
-> .. and others.
->
-> Improve GCC's checking of stack smashing support, adding a specific case
-> statement for uclibc, and removing the check done after checking the
-> glibc version.
->
-> Signed-off-by: Brendan Heading <brendanheading@gmail.com>
-> ---
-> Patch V1 - this initial version only fixes 4.7.4 - wanted to check that
-> we are heading the right way before I fix all the other versions.
->
-> Note that I manually modified configure, rather than regenerating it from
-> configure.ac.
->
-> Original plan was to reverse the order of the existing __GLIBC_MINOR__ and
-> uclibc check. However, the uclibc check falls through if it does not
-> detect uclibc, so I figure it better to add the separate case statement.
+Le 2015-09-20 23:26, Arnout Vandecappelle a ?crit?:
+>> - modify qt.mk because it currently enables verbose mode if VERBOSE is 
+>> defined
+>> and not empty, but my modification implies that VERBOSE may be equal 
+>> to 0, and
+>> it should not enable verbose mode in that case!...
+> 
+>  Well, just unset VERBOSE when V=0. So VERBOSE is either empty or 1. 
+> Similar
+> with how Config.in works.
 
-Hi guys,
+Well, the idea was to set VERBOSE in Makefile and use its value in 
+infrastructures.
+In autotools I need to make the difference between VERBOSE=1 (force 
+verbose), VERBOSE=0 (force non-verbose), and VERBOSE not set (keep 
+package default verbose level).
 
-Just a quick ping to draw your attention to the above patch. Before I
-add the fix to all the other supported versions of GCC I wanted to
-check that you are happy with the way I'm solving the problem in
-4.7.4.
+Unless we decide that finally there is no real interest in forcing 
+non-verbose and adding a new possibility with 'make V=0'.
+I'm not so sure it can be very usefull, since it will only be taken into 
+account by a few autotools package.
+If you want a quiet output, you'd rather use 'make -s'
+NB: I found it in Makefile, but it doesn't seem to be documented...
 
-Brendan
+
+-- 
+C?dric
