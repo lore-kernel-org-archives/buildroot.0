@@ -1,54 +1,117 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 21 Sep 2015 06:31:50 +0300
-Subject: [Buildroot] [PATCH] micropython: Invert fallback detection logic
-In-Reply-To: <1442793782-6664-1-git-send-email-judge.packham@gmail.com>
-References: <1442793782-6664-1-git-send-email-judge.packham@gmail.com>
-Message-ID: <20150921033150.GJ2782@tarshish>
+From: =?utf-8?B?5bed5bO2IOa1qQ==?= <kei-k@ca2.so-net.ne.jp>
+Date: Mon, 21 Sep 2015 12:34:03 +0900
+Subject: [Buildroot] [PATCH v6 1/1] squeezelite: new package
+In-Reply-To: <201509210152.t8L1qsTW012583@ms-omx03.plus.so-net.ne.jp>
+References: <201509210152.t8L1qsTW012583@ms-omx03.plus.so-net.ne.jp>
+Message-ID: <99E64A30-E642-41D7-9115-0FE252CA47ED@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
+I?m very sorry, this patch was based on my old tree.
+Let me post right patch again.
 
-On Mon, Sep 21, 2015 at 12:03:02PM +1200, Chris Packham wrote:
-> Rather than specifying architectures that do not have explicit support
-> in micropython invert the logic and set MICROPY_GCREGS_SETJMP=1 if the
-> architecture does not have explicit support. MIPS is listed as being
-> supported but this support consists of automatically defining
-> MICROPY_GCREGS_SETJMP 1 based on __mips__ being defined.
+> 2015/09/21 10:52?kei-k at ca2.so-net.ne.jp ?????
 > 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
 > ---
-> This should clean up most of the remaining build failures. Listing the
-> architectures with explicit support makes more sense to me and is
-> certainly a shorter list at the moment.
+> package/Config.in                  |    1 +
+> package/squeezelite/Config.in      |   32 ++++++++++++++++++++++++++++++++
+> package/squeezelite/squeezelite.mk |   30 ++++++++++++++++++++++++++++++
+> 3 files changed, 63 insertions(+), 0 deletions(-)
+> create mode 100644 package/squeezelite/Config.in
+> create mode 100644 package/squeezelite/squeezelite.mk
 > 
->  package/micropython/micropython.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/package/Config.in b/package/Config.in
+> index 22aef52..03a7fbd 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -33,6 +33,7 @@ menu "Audio and video applications"
+> 	source "package/opus-tools/Config.in"
+> 	source "package/pulseaudio/Config.in"
+> 	source "package/sox/Config.in"
+> +	source "package/squeezelite/Config.in"
+> 	source "package/tidsp-binaries/Config.in"
+> 	source "package/tovid/Config.in"
+> 	source "package/tstools/Config.in"
+> diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
+> new file mode 100644
+> index 0000000..c27dac2
+> --- /dev/null
+> +++ b/package/squeezelite/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_PACKAGE_SQUEEZELITE
+> +	bool "squeezelite"
+> +	depends on BR2_USE_WCHAR # flac
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+> +	depends on BR2_USE_MMU # mpg123
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_FLAC
+> +	select BR2_PACKAGE_LIBMAD
+> +	select BR2_PACKAGE_LIBVORBIS
+> +	select BR2_PACKAGE_FAAD2
+> +	select BR2_PACKAGE_MPG123
+> +	select BR2_PACKAGE_LIBSOXR
+> +	help
+> +	  Logitech Media Server client
+> +	  https://code.google.com/p/squeezelite/
+> +
+> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+> +	bool "Enable resampling function"
+> +	default y
+> +	depends on BR2_PACKAGE_SQUEEZELITE
+> +	help
+> +	  Enable resampling function
+> +
+> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
+> +	bool "Use OpenMP for resampling"
+> +	default y
+> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+> +	help
+> +	  Enable OpenMP support for resampling
+> +
+> +comment "squeezelite needs a toolchain w/ wchar, threads, mmu
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_MMU
+> diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
+> new file mode 100644
+> index 0000000..681bb46
+> --- /dev/null
+> +++ b/package/squeezelite/squeezelite.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# squeezelite
+> +#
+> +################################################################################
+> +
+> +SQUEEZELITE_VERSION = v1.8
+> +SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
+> +SQUEEZELITE_SITE_METHOD = git
+> +SQUEEZELITE_LICENSE = GPLv3
+> +SQUEEZELITE_LICENSE_FILE = LICENSE.txt
+> +SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
+> +
+> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
+> +	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
+> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
+> +		SQUEEZELITE_MAKE_OPTS += -DRESAMPLE_MP
+> +	endif
+> +endif
+> +
+> +define SQUEEZELITE_BUILD_CMDS
+> +    $(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
+> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+> +endef
+> +
+> +define SQUEEZELITE_INSTALL_TARGET_CMDS
+> +    $(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 1.7.1
 > 
-> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-> index f2ad5bf..e351843 100644
-> --- a/package/micropython/micropython.mk
-> +++ b/package/micropython/micropython.mk
-> @@ -13,7 +13,7 @@ MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8b4fb4fe14
->  
->  # Use fallback implementation for exception handling on architectures that don't
->  # have explicit support.
-> -ifeq ($(BR2_powerpc)$(BR2_sh)$(BR2_xtensa),y)
-> +ifneq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),y)
-
-We prefer positive logic, like (untested):
-
-   ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
-
-baruch
-
->  MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
->  endif
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> ============================================================
+>    Hiroshi Kawashima
