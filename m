@@ -1,11 +1,12 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 21 Sep 2015 10:11:11 +0200
-Subject: [Buildroot] [PATCH 00/14] Update Freescale packages to
-	3.14.28-1.0.0_ga
-In-Reply-To: <20150919154221.11c7b2f7@free-electrons.com>
-References: <1441830063-8190-1-git-send-email-gary.bisson@boundarydevices.com>
- <20150919154221.11c7b2f7@free-electrons.com>
-Message-ID: <CAAMH-yuV1dc+h_dYzPBVfhAbdqY0g1AhZLoqkX9NV7nr9p5Tjg@mail.gmail.com>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Mon, 21 Sep 2015 09:39:20 +0100
+Subject: [Buildroot] [PATCH v2] libseccomp: Add new config option to
+ build and install tests
+In-Reply-To: <20150920144637.25230558@free-electrons.com>
+References: <55FAF226.9080800@imgtec.com>
+ <1442564371-10498-1-git-send-email-markos.chandras@imgtec.com>
+ <20150920144637.25230558@free-electrons.com>
+Message-ID: <55FFC238.2010202@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +15,36 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Sat, Sep 19, 2015 at 3:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Gary,
->
-> On Wed,  9 Sep 2015 22:20:49 +0200, Gary Bisson wrote:
->
->> Gary Bisson (14):
->>   freescale-imx: bump to 3.14.28-1.0.0_ga release
->
-> Applied.
->
->>   kobs-ng: remove obsolete package
->>   imx-kobs: add new package
->
-> Those two not applied. I'll reply on the imx-kobs package why.
+On 09/20/2015 01:46 PM, Thomas Petazzoni wrote:
+> Markos,
+> 
+> On Fri, 18 Sep 2015 09:19:31 +0100, Markos Chandras wrote:
+> 
+>> +ifeq ($(BR2_PACKAGE_LIBSECCOMP_TESTS),y)
+>> +
+>> +LIBSECCOMP_MAKE_OPTS += check-build
+>> +
+>> +define LIBSECCOMP_TESTS_INSTALL
+>> +	mkdir -p $(TARGET_DIR)/usr/libseccomp/{tests,tools} && \
+>> +	for x in tests tools; do \
+>> +		find $(@D)/$$x -maxdepth 1 \( -name "*.tests" -o -perm -a=x \) \
+>> +			-type f -exec cp {} $(TARGET_DIR)/usr/libseccomp/$$x/ \; ; \
+> 
+> This has the effect of installing one .py file for each test even if
+> Python is not installed on the target. They are pretty small, so maybe
+> we don't care, but it doesn't look really nice.
 
-I will take a look at it today.
+Hmm makes sense. I will rework it then.
 
->>   imx-gpu-viv: bump version to 5.0.11 p4.5
->>   xdriver_xf86-video-imx-viv: bump to version 5.0.11 p4.5
->>   libfslcodec: bump version to 4.0.3
->>   libfslparser: bump version to 4.0.3
->>   libfslvpuwrap: bump version to 1.0.58
->>   gst-fsl-plugins: bump version to 4.0.3
->>   gst1-imx: bump version to 0.11.1
->>   freescale_imx6*_defconfig: bump version to 3.14.28-1.0.0_ga
->>   qmx6_defconfig: bump version to 3.14.28_1.0.0
->>   nitrogen6x_defconfig: bump version to 3.14.28-1.0.0
->>   board/boundarydevices: update u-boot script for 3.14 kernels
->
-> All those patches applied.
+> 
+> Also, this whole thing seems pretty crappy in libseccomp. Why don't
+> they have simply a --enable-tests option, which will simply do the
+> right thing?
 
-Thank you! Could you also apply Baruch VPU changes since all my
-testing was done with his patches applied (plus they are harmless):
-http://patchwork.ozlabs.org/patch/513580/
-http://patchwork.ozlabs.org/patch/513579/
+It's probably because this is yet another testsuite and like any other
+package testsuite you don't really need it installed. it's supposed to
+run as part of package verification during build and installation. but
+for cross-builds, it's useful to have it on the target.
 
-Thanks,
-Gary
+-- 
+markos
