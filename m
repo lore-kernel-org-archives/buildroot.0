@@ -1,41 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Sep 2015 18:40:00 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.2.1
-In-Reply-To: <1442871600-9139-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1442871600-9139-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1442871600-9139-2-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 21 Sep 2015 23:43:33 +0200
+Subject: [Buildroot] Internal toolchain wrapper & ccache fixes
+In-Reply-To: <1442774504-22799-1-git-send-email-arnout@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMMLGXDWrLeMh3d=iHLuA-Xhy5845+5bfJfouk_hoSB_KMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Arnout,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f4fdbb2..9f39c4c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.2"
-+	bool "4.2.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.2.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On Sun, Sep 20, 2015 at 8:41 PM, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+[...]
+> It would be really nice if someone else could take over this series,
+> since it is rather 'deep' stuff and if someone else really gets their
+> hands dirty on this code, there's a better chance of catching some
+> issues that I overlooked.
+
+There is quite some work in this series!
+I've just reviewed the whole series, nothing scary stands out, just a
+couple of comments in the patch re-enabling compiler check (I'll
+respond to this patch).
+
+Thanks,
+
+Regards,
+
+
 -- 
-2.4.9
+Samuel
