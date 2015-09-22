@@ -1,79 +1,61 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 22 Sep 2015 10:54:16 +0200
-Subject: [Buildroot] [PATCH v9 1/1] squeezelite: new package
-In-Reply-To: <201509220826.t8M8QvuY012965@ms-omx01.plus.so-net.ne.jp>
-References: <201509220826.t8M8QvuY012965@ms-omx01.plus.so-net.ne.jp>
-Message-ID: <1442912056.5410.29.camel@embedded.rocks>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Tue, 22 Sep 2015 12:31:01 +0200
+Subject: [Buildroot] slang failing on my system | detects host
+	libraries/headers
+Message-ID: <56012DE5.4000909@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi Kawashima,
+Dear all,
 
-On Di, 2015-09-22 at 17:26 +0900, kei-k at ca2.so-net.ne.jp wrote:
-> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
 
-No revision changelog. Please have a look at the Buildroot manual:
-http://nightly.buildroot.org/#_providing_patches
+It looks to me as if slang is finding some host files on my system currently:
 
-> ---
->  package/Config.in                  |    1 +
->  package/squeezelite/Config.in      |   26 ++++++++++++++++++++++++++
->  package/squeezelite/squeezelite.mk |   27
-> +++++++++++++++++++++++++++
->  3 files changed, 54 insertions(+), 0 deletions(-)
->  create mode 100644 package/squeezelite/Config.in
->  create mode 100644 package/squeezelite/squeezelite.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 5158371..2a47420 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -33,6 +33,7 @@ menu "Audio and video applications"
->  	source "package/opus-tools/Config.in"
->  	source "package/pulseaudio/Config.in"
->  	source "package/sox/Config.in"
-> +	source "package/squeezelite/Config.in"
->  	source "package/tidsp-binaries/Config.in"
->  	source "package/tovid/Config.in"
->  	source "package/tstools/Config.in"
-> diff --git a/package/squeezelite/Config.in
-> b/package/squeezelite/Config.in
-> new file mode 100644
-> index 0000000..96efb7c
-> --- /dev/null
-> +++ b/package/squeezelite/Config.in
-> @@ -0,0 +1,26 @@
-> +config BR2_PACKAGE_SQUEEZELITE
-> +	bool "squeezelite"
-> +	depends on BR2_USE_WCHAR # flac
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-> +	depends on BR2_USE_MMU # mpg123
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_FLAC
-> +	select BR2_PACKAGE_LIBMAD
-> +	select BR2_PACKAGE_LIBVORBIS
-> +	select BR2_PACKAGE_FAAD2
-> +	select BR2_PACKAGE_MPG123
-> +	help
-> +	  Logitech Media Server client
-> +	  https://code.google.com/p/squeezelite/
 
-Buildroot uses a newline between the description and the URL.
+configure:7437: checking for the onig library and header files oniguruma.h
+configure:7513: result: yes: /usr/lib and /usr/include
 
-> +
-> +config BR2_PACKAGE_SQUEEZELITE_RESAMPLE
-> +	bool "Enable resampling function"
-> +	default n
 
-"default n" is set implicitly and not needed here.
+Which ultimately results in:
 
-[snip]
+/data/work/zupr/ZUPR-Embedded-Buildroot/output/host/usr/bin/ccache
+/data/work/zupr/ZUPR-Embedded-Buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc
+-I/data/work/zupr/ZUPR-Embedded-Buildroot/output/build/slang-2.3.0/src -shared -fPIC
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -Os
+-I/data/work/zupr/ZUPR-Embedded-Buildroot/output/build/slang-2.3.0/src
+-Wl,-R/usr/lib:/data/work/zupr/ZUPR-Embedded-Buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
+  -lm
+/data/work/zupr/ZUPR-Embedded-Buildroot/output/build/slang-2.3.0/modules/onig-module.c -o
+onig-module.so -lonig
+/data/work/zupr/ZUPR-Embedded-Buildroot/output/build/slang-2.3.0/modules/onig-module.c:27:23:
+fatal error: oniguruma.h: No such file or directory
+ #include <oniguruma.h>
+                       ^
+compilation terminated.
+Makefile:119: recipe for target 'onig-module.so' failed
 
-Did you see my comments to the squeezelite.mk file in the last patch
-(v8)?
 
-Best regards
-J?rg Krause
+Anybody care to fix that correctly? Here's my quick-and-dirty patch:
+
+[jaap at jaap /data/work/zupr/ZUPR-Embedded-Buildroot ]$ git diff
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 59ef993..f597017 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -54,4 +54,6 @@ SLANG_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
+ SLANG_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
+ endif
+
++SLANG_CONF_OPTS += --without-onig
++
+ $(eval $(autotools-package))
+[jaap at jaap /data/work/zupr/ZUPR-Embedded-Buildroot ]$
+
+
+Kind regards,
+
+
+Jaap Crezee
