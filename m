@@ -1,48 +1,77 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 22 Sep 2015 09:55:23 +0300
-Subject: [Buildroot] Default configuration for Ka-Ro TX25 module
-In-Reply-To: <6bee8e0798ac4666bc051d88f2064b30@IHM-PORT-E13M01.prdhosting.local>
-References: <6bee8e0798ac4666bc051d88f2064b30@IHM-PORT-E13M01.prdhosting.local>
-Message-ID: <20150922065523.GD2242@tarshish>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 22 Sep 2015 10:14:58 +0300
+Subject: [Buildroot] [PATCH] kompexsqlite: don't overwrite CFLAGS and
+	CXXFLAGS in makefiles
+Message-ID: <1442906098-30127-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Fixes:
+  http://autobuild.buildroot.net/results/68c1cd7ce7889cf8bad8354e8d7b04e912885cb7
 
-On Mon, Sep 21, 2015 at 11:08:22PM +0000, Matthew Kerr wrote:
-> 1)      Are you aware of a default configuration which has been created for 
-> the TX25 module? Or is there something similar that I should start with?
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ .../0002-append-to-cflags-and-cxxflags.patch       | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch
 
-Buildroot has no specific configuration for the TX25 module.
-
-> 2)      Is it possible to use the Ka-Ro supplied kernel source (and 
-> patches/upgrades)? Should I use it or should I just let Buildroot do its 
-> thing and see what happens?
-
-You can tell Buildroot to build a kernel from vendor supplied source tree. 
-Just select one of the "Custom" options, or "Local directory" in the "Kernel 
-version" configuration choice.
-
-Alternatively, you may build the kernel on your own as before, and use 
-Buildroot just for the rootfs.
-
-In any case Buildroot can't automatically build a kernel for you, since it 
-lacks the required information.
-
-> 3)      Can I do anything with the Ka-Ro supplied rootfs or should I just 
-> let Buildroot generate this for me?
-
-Buildroot supports helper mechanisms to ease local customization of generated 
-rootfs, like rootfs overlay, and post build script. See 
-http://nightly.buildroot.org/manual.html#customize for more details.
-
-Hope this helps,
-baruch
-
+diff --git a/package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch b/package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch
+new file mode 100644
+index 0000000..abd0dc0
+--- /dev/null
++++ b/package/kompexsqlite/0002-append-to-cflags-and-cxxflags.patch
+@@ -0,0 +1,49 @@
++From 3eb064ffa9b43fb5f245b8abda48a1c152a6f2d7 Mon Sep 17 00:00:00 2001
++From: me <noemail@nowhere.com>
++Date: Thu, 20 Nov 2014 14:37:34 -0700
++Subject: [PATCH] Append to CFLAGS and CXXFLAGS as setup by ./configure.  This
++ can allow users to Customize the SQLite build process with compile time
++ #defines rather than altering the sources.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 3eb064ffa9b43fb5f245b8abda48a1c152a6f2d7
++
++ Makefile-shared.mk | 4 ++--
++ Makefile-static.mk | 4 ++--
++ 2 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile-shared.mk b/Makefile-shared.mk
++index b2a4920..d15ce3c 100644
++--- a/Makefile-shared.mk
+++++ b/Makefile-shared.mk
++@@ -12,10 +12,10 @@ OBJS= \
++ 	${objsdir}/sqlite3.o
++ 
++ # C Compiler Flags
++-CFLAGS= -fPIC -MMD -MP
+++CFLAGS+= -fPIC -MMD -MP
++ 
++ # CC Compiler Flags
++-CPPFLAGS= -DKOMPEX_SQLITEWRAPPER_EXPORT -DKOMPEX_SQLITEWRAPPER_DYN -fPIC -MMD -MP -I${includedir}
+++CPPFLAGS+= -DKOMPEX_SQLITEWRAPPER_EXPORT -DKOMPEX_SQLITEWRAPPER_DYN -fPIC -MMD -MP -I${includedir}
++ 
++ # Link Libraries and Options
++ LDLIBSOPTIONS= -shared -fPIC
++diff --git a/Makefile-static.mk b/Makefile-static.mk
++index 429a4ff..0678681 100644
++--- a/Makefile-static.mk
+++++ b/Makefile-static.mk
++@@ -12,10 +12,10 @@ OBJS= \
++ 	${objsdir}/sqlite3.o
++ 
++ # C Compiler Flags
++-CFLAGS= -MMD -MP
+++CFLAGS+= -MMD -MP
++ 
++ # CC Compiler Flags
++-CPPFLAGS= -I${includedir} -MMD -MP
+++CPPFLAGS+= -I${includedir} -MMD -MP
++ 
++ # Link Libraries and Options
++ LDLIBSOPTIONS=
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.1.4
