@@ -1,129 +1,104 @@
-From: Gergely Imreh <imrehg@gmail.com>
-Date: Tue, 22 Sep 2015 10:46:42 +0800
-Subject: [Buildroot] [PATCH 1/1] board/wandboard: fix linux compilation
- error due to deprecated perl statement
-In-Reply-To: <20150921224539.GI3570@free.fr>
-References: <1442847794-6972-1-git-send-email-imrehg@gmail.com>
- <20150921224539.GI3570@free.fr>
-Message-ID: <CAJ3iQcqT75jbtYk9CCZFt90ip9kFRGjhB7p4eiLRTrkFE9XrCg@mail.gmail.com>
+From: =?utf-8?B?5bed5bO2IOa1qQ==?= <kei-k@ca2.so-net.ne.jp>
+Date: Tue, 22 Sep 2015 11:52:23 +0900
+Subject: [Buildroot] [PATCH v7 1/1] squeezelite: new package
+In-Reply-To: <8BBD1ACC-75AD-4C18-BD19-2F6022F4C448@ca2.so-net.ne.jp>
+References: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
+ <20150921113629.0fc4f356@free-electrons.com>
+ <8BBD1ACC-75AD-4C18-BD19-2F6022F4C448@ca2.so-net.ne.jp>
+Message-ID: <441B3232-0F61-429F-A548-21944673609B@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22 September 2015 at 06:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Gergely, All,
->
-> On 2015-09-21 23:03 +0800, imrehg at gmail.com spake thusly:
->> From: Gergely Imreh <imrehg@gmail.com>
->>
->> The perl syntax has changed since linux 3.8 and it is causing a compile error
->> in wandboard's kernel. Add in a proposed simple patch (one of the many
->> identical versions found online).
->
-> Or backport 70730bca1331fc50c3caacaea00439de1325bd6e which "fixes" this
-> by removing the perl script in favour of a bc script:
+Hello.
 
-It's a bigger change, but makes sense. Made a v2 of the patch and can
-choose which one is more suitable to use.
+And one more.
 
-Thanks a lot for the feedback!
+Actually, -DRESAMPLE and -DRESAMPLE_MP of squeezelite build, the essence of
+difference is here (squeezelite/resample.c):
+#if RESAMPLE_MP
+    r->resampler = SOXR(r, create, raw_sample_rate, outrate, 2, &error, &io_spec, &q_spec, &r_spec);
+#else
+    r->resampler = SOXR(r, create, raw_sample_rate, outrate, 2, &error, &io_spec, &q_spec, NULL);
+#endif
+Just difference is passing r_spec or NULL for last arg.
+So if I always define RESAMPLE and RESAMPLE_MP variables, it does not have side effect.
+I think it?s better for simplification.
 
-Cheers,
-    Gergely
+With these modification, I will send patch again.
 
->
-> commit 70730bca1331fc50c3caacaea00439de1325bd6e
-> Author: H. Peter Anvin <hpa@zytor.com>
-> Date:   Thu Feb 14 15:13:55 2013 -0800
->
->     kernel: Replace timeconst.pl with a bc script
->
->     bc is the standard tool for multi-precision arithmetic.  We switched
->     to Perl because akpm reported a hard-to-reproduce build hang, which
->     was very odd because affected and unaffected machines were all running
->     the same version of GNU bc.
->
->     Unfortunately switching to Perl required a really ugly "canning"
->     mechanism to support Perl < 5.8 installations lacking the Math::BigInt
->     module.
->
->     It was recently pointed out to me that some very old versions of GNU
->     make had problems with pipes in subshells, which was indeed the
->     construct used in the Makefile rules in that version of the patch;
->     Perl didn't need it so switching to Perl fixed the problem for
->     unrelated reasons.  With the problem (hopefully) root-caused, we can
->     switch back to bc and do the arbitrary-precision arithmetic naturally.
->
->     Signed-off-by: H. Peter Anvin <hpa@zytor.com>
->     Cc: Andrew Morton <akpm@linux-foundation.org>
->     Acked-by: Sam Ravnborg <sam@ravnborg.org>
->     Signed-off-by: Michal Marek <mmarek@suse.cz>
->
-> Regards,
-> Yann E. MORIN.
->
->> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
->> ---
->>  .../patches/linux/perl-define-in-timeconst.patch   | 24 ++++++++++++++++++++++
->>  configs/wandboard_defconfig                        |  1 +
->>  2 files changed, 25 insertions(+)
->>  create mode 100644 board/wandboard/patches/linux/perl-define-in-timeconst.patch
->>
->> diff --git a/board/wandboard/patches/linux/perl-define-in-timeconst.patch b/board/wandboard/patches/linux/perl-define-in-timeconst.patch
->> new file mode 100644
->> index 0000000..811b0a4
->> --- /dev/null
->> +++ b/board/wandboard/patches/linux/perl-define-in-timeconst.patch
->> @@ -0,0 +1,24 @@
->> +The use of defined() on arrays and hashes has been deprecated since perl
->> +5.6, but until 5.17.6 it only warned on lexicals, not package globals.
->> +
->> +Signed-off-by: Dagfinn Ilmari Manns?ker <ilmari@ilmari.org>
->> +---
->> + kernel/timeconst.pl |    2 +-
->> + 1 files changed, 1 insertions(+), 1 deletions(-)
->> +
->> +diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
->> +index eb51d76..0461239 100644
->> +--- a/kernel/timeconst.pl
->> ++++ b/kernel/timeconst.pl
->> +@@ -370,7 +370,7 @@ if ($hz eq '--can') {
->> +     }
->> +
->> +     @val = @{$canned_values{$hz}};
->> +-    if (!defined(@val)) {
->> ++    if (!@val) {
->> +             @val = compute_values($hz);
->> +     }
->> +     output($hz, @val);
->> +--
->> +1.7.5.4
->> +
->> diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
->> index 5d74fc3..5ce5fdf 100644
->> --- a/configs/wandboard_defconfig
->> +++ b/configs/wandboard_defconfig
->> @@ -1,5 +1,6 @@
->>  BR2_arm=y
->>  BR2_cortex_a9=y
->> +BR2_GLOBAL_PATCH_DIR="board/wandboard/patches"
->>  BR2_KERNEL_HEADERS_VERSION=y
->>  BR2_DEFAULT_KERNEL_VERSION="3.0.101"
->>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
->> --
->> 2.5.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Thank you,
+Kawashima 
+
+> 2015/09/22 10:11??? ? <kei-k@ca2.so-net.ne.jp> ?????
+> 
+> Hello.
+> 
+> Thank you for your comment.
+> 
+> About openmp issue, squeezelite is using openmp through libsoxr.
+> I have realized that libsoxr in buildroot is compiled with
+>    LIBSOXR_CONF_OPTS = -DWITH_OPENMP=OFF
+> So, processing of resampling will result to use ordinal multi-thread ?
+> 
+> 
+>> 2015/09/21 18:36?Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ?????
+>> 
+>> Hello,
+>> 
+>> On Mon, 21 Sep 2015 12:47:38 +0900, kei-k at ca2.so-net.ne.jp wrote:
+>> 
+>>> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+>>> +	bool "Enable resampling function"
+>>> +	default y
+>>> +	depends on BR2_PACKAGE_SQUEEZELITE
+>>> +	help
+>>> +	  Enable resampling function
+>>> +
+>>> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
+>>> +	bool "Use OpenMP for resampling"
+>>> +	default y
+>>> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
+>>> +	help
+>>> +	  Enable OpenMP support for resampling
+>> 
+>> The naming of the options is a bit inconsistent: "ENABLE" in one case
+>> and "WITH" in the other case. I believe in fact you could simplify the
+>> option naming to just:
+>> 
+>> BR2_PACKAGE_SQUEEZELITE_RESAMPLE
+>> BR2_PACKAGE_SQUEEZELITE_RESAMPLE_OPENMP
+>> 
+>> However, I'm a bit worried about the OpenMP option. Does it require
+>> OpenMP support in the toolchain? If yes, then not all toolchains have
+>> OpenMP support, so we should handle that.
+>> 
+>>> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
+>>> +	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
+>>> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
+>> 
+>> Since BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP already depends on
+>> BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE, there's no real need to nest
+>> the two tests. They can be made two separate tests.
+>> 
+>>> +		SQUEEZELITE_MAKE_OPTS += -DRESAMPLE_MP
+>>> +	endif
+>>> +endif
+>>> +
+>>> +define SQUEEZELITE_BUILD_CMDS
+>>> +    $(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
+>>> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+>> 
+>> Have you tried using $(TARGET_CONFIGURE_OPTS) instead of manually
+>> passing CC and LD ?
+>> 
+>> Thanks,
+>> 
+>> Thomas
+>> -- 
+>> Thomas Petazzoni, CTO, Free Electrons
+>> Embedded Linux, Kernel and Android engineering
+>> http://free-electrons.com
+> 
