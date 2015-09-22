@@ -1,603 +1,129 @@
-From: imrehg at gmail.com <imrehg@gmail.com>
-Date: Tue, 22 Sep 2015 10:45:21 +0800
-Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related linux
-	compilation error
-Message-ID: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+From: Gergely Imreh <imrehg@gmail.com>
+Date: Tue, 22 Sep 2015 10:46:42 +0800
+Subject: [Buildroot] [PATCH 1/1] board/wandboard: fix linux compilation
+ error due to deprecated perl statement
+In-Reply-To: <20150921224539.GI3570@free.fr>
+References: <1442847794-6972-1-git-send-email-imrehg@gmail.com>
+ <20150921224539.GI3570@free.fr>
+Message-ID: <CAJ3iQcqT75jbtYk9CCZFt90ip9kFRGjhB7p4eiLRTrkFE9XrCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gergely Imreh <imrehg@gmail.com>
+On 22 September 2015 at 06:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Gergely, All,
+>
+> On 2015-09-21 23:03 +0800, imrehg at gmail.com spake thusly:
+>> From: Gergely Imreh <imrehg@gmail.com>
+>>
+>> The perl syntax has changed since linux 3.8 and it is causing a compile error
+>> in wandboard's kernel. Add in a proposed simple patch (one of the many
+>> identical versions found online).
+>
+> Or backport 70730bca1331fc50c3caacaea00439de1325bd6e which "fixes" this
+> by removing the perl script in favour of a bc script:
 
-Replace the "timeconst" perl script with a bc script to fix an
-error due to syntax changes in perl which resulted in linux
-compilation error for the wandboard's 3.8 kernel. The patch is
-backported, kernels from 3.9 onward already have this change.
+It's a bigger change, but makes sense. Made a v2 of the patch and can
+choose which one is more suitable to use.
 
-Signed-off-by: Gergely Imreh <imrehg@gmail.com>
----
-Changes v1 -> v2:
+Thanks a lot for the feedback!
 
- - backport patch from kernel instead of mailing list (suggested by Yann E. MORIN)
+Cheers,
+    Gergely
 
----
- .../patches/linux/replace-timeconst-script.patch   | 554 +++++++++++++++++++++
- configs/wandboard_defconfig                        |   1 +
- 2 files changed, 555 insertions(+)
- create mode 100644 board/wandboard/patches/linux/replace-timeconst-script.patch
-
-diff --git a/board/wandboard/patches/linux/replace-timeconst-script.patch b/board/wandboard/patches/linux/replace-timeconst-script.patch
-new file mode 100644
-index 0000000..bbf3fe6
---- /dev/null
-+++ b/board/wandboard/patches/linux/replace-timeconst-script.patch
-@@ -0,0 +1,554 @@
-+Backported 70730bca1331fc50c3caacaea00439de1325bd6e from linux
-+to Wandboard's 3.8 kernel.
-+
-+Original commit message below.
-+
-+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
-+
-+---
-+
-+bc is the standard tool for multi-precision arithmetic.  We switched
-+to Perl because akpm reported a hard-to-reproduce build hang, which
-+was very odd because affected and unaffected machines were all running
-+the same version of GNU bc.
-+
-+Unfortunately switching to Perl required a really ugly "canning"
-+mechanism to support Perl < 5.8 installations lacking the Math::BigInt
-+module.
-+
-+It was recently pointed out to me that some very old versions of GNU
-+make had problems with pipes in subshells, which was indeed the
-+construct used in the Makefile rules in that version of the patch;
-+Perl didn't need it so switching to Perl fixed the problem for
-+unrelated reasons.  With the problem (hopefully) root-caused, we can
-+switch back to bc and do the arbitrary-precision arithmetic naturally.
-+
-+Signed-off-by: H. Peter Anvin <hpa@zytor.com>
-+Cc: Andrew Morton <akpm@linux-foundation.org>
-+Acked-by: Sam Ravnborg <sam@ravnborg.org>
-+Signed-off-by: Michal Marek <mmarek@suse.cz>
-+
-+--- a/kernel/Makefile
-++++ b/kernel/Makefile
-+@@ -133,8 +133,16 @@ $(obj)/config_data.h: $(obj)/config_data.gz FORCE
-+ 
-+ $(obj)/time.o: $(obj)/timeconst.h
-+ 
-+-quiet_cmd_timeconst  = TIMEC   $@
-+-      cmd_timeconst  = $(PERL) $< $(CONFIG_HZ) > $@
-++quiet_cmd_hzfile = HZFILE  $@
-++      cmd_hzfile = echo "hz=$(CONFIG_HZ)" > $@
-++
-++targets += hz.bc
-++$(obj)/hz.bc: $(objtree)/include/config/hz.h FORCE
-++	$(call if_changed,hzfile)
-++
-++quiet_cmd_bc  = BC      $@
-++      cmd_bc  = bc -q $(filter-out FORCE,$^) > $@
-++
-+ targets += timeconst.h
-+-$(obj)/timeconst.h: $(src)/timeconst.pl FORCE
-+-	$(call if_changed,timeconst)
-++$(obj)/timeconst.h: $(obj)/hz.bc $(src)/timeconst.bc FORCE
-++	$(call if_changed,bc)
-+diff --git a/kernel/timeconst.bc b/kernel/timeconst.bc
-+new file mode 100644
-+index 0000000..511bdf2
-+--- /dev/null
-++++ b/kernel/timeconst.bc
-+@@ -0,0 +1,108 @@
-++scale=0
-++
-++define gcd(a,b) {
-++	auto t;
-++	while (b) {
-++		t = b;
-++		b = a % b;
-++		a = t;
-++	}
-++	return a;
-++}
-++
-++/* Division by reciprocal multiplication. */
-++define fmul(b,n,d) {
-++       return (2^b*n+d-1)/d;
-++}
-++
-++/* Adjustment factor when a ceiling value is used.  Use as:
-++   (imul * n) + (fmulxx * n + fadjxx) >> xx) */
-++define fadj(b,n,d) {
-++	auto v;
-++	d = d/gcd(n,d);
-++	v = 2^b*(d-1)/d;
-++	return v;
-++}
-++
-++/* Compute the appropriate mul/adj values as well as a shift count,
-++   which brings the mul value into the range 2^b-1 <= x < 2^b.  Such
-++   a shift value will be correct in the signed integer range and off
-++   by@most one in the upper half of the unsigned range. */
-++define fmuls(b,n,d) {
-++	auto s, m;
-++	for (s = 0; 1; s++) {
-++		m = fmul(s,n,d);
-++		if (m >= 2^(b-1))
-++			return s;
-++	}
-++	return 0;
-++}
-++
-++define timeconst(hz) {
-++	print "/* Automatically generated by kernel/timeconst.bc */\n"
-++	print "/* Time conversion constants for HZ == ", hz, " */\n"
-++	print "\n"
-++
-++	print "#ifndef KERNEL_TIMECONST_H\n"
-++	print "#define KERNEL_TIMECONST_H\n\n"
-++
-++	print "#include <linux/param.h>\n"
-++	print "#include <linux/types.h>\n\n"
-++
-++	print "#if HZ != ", hz, "\n"
-++	print "#error \qkernel/timeconst.h has the wrong HZ value!\q\n"
-++	print "#endif\n\n"
-++
-++	if (hz < 2) {
-++		print "#error Totally bogus HZ value!\n"
-++	} else {
-++		s=fmuls(32,1000,hz)
-++		obase=16
-++		print "#define HZ_TO_MSEC_MUL32\tU64_C(0x", fmul(s,1000,hz), ")\n"
-++		print "#define HZ_TO_MSEC_ADJ32\tU64_C(0x", fadj(s,1000,hz), ")\n"
-++		obase=10
-++		print "#define HZ_TO_MSEC_SHR32\t", s, "\n"
-++
-++		s=fmuls(32,hz,1000)
-++		obase=16
-++		print "#define MSEC_TO_HZ_MUL32\tU64_C(0x", fmul(s,hz,1000), ")\n"
-++		print "#define MSEC_TO_HZ_ADJ32\tU64_C(0x", fadj(s,hz,1000), ")\n"
-++		obase=10
-++		print "#define MSEC_TO_HZ_SHR32\t", s, "\n"
-++
-++		obase=10
-++		cd=gcd(hz,1000)
-++		print "#define HZ_TO_MSEC_NUM\t\t", 1000/cd, "\n"
-++		print "#define HZ_TO_MSEC_DEN\t\t", hz/cd, "\n"
-++		print "#define MSEC_TO_HZ_NUM\t\t", hz/cd, "\n"
-++		print "#define MSEC_TO_HZ_DEN\t\t", 1000/cd, "\n"
-++		print "\n"
-++
-++		s=fmuls(32,1000000,hz)
-++		obase=16
-++		print "#define HZ_TO_USEC_MUL32\tU64_C(0x", fmul(s,1000000,hz), ")\n"
-++		print "#define HZ_TO_USEC_ADJ32\tU64_C(0x", fadj(s,1000000,hz), ")\n"
-++		obase=10
-++		print "#define HZ_TO_USEC_SHR32\t", s, "\n"
-++
-++		s=fmuls(32,hz,1000000)
-++		obase=16
-++		print "#define USEC_TO_HZ_MUL32\tU64_C(0x", fmul(s,hz,1000000), ")\n"
-++		print "#define USEC_TO_HZ_ADJ32\tU64_C(0x", fadj(s,hz,1000000), ")\n"
-++		obase=10
-++		print "#define USEC_TO_HZ_SHR32\t", s, "\n"
-++
-++		obase=10
-++		cd=gcd(hz,1000000)
-++		print "#define HZ_TO_USEC_NUM\t\t", 1000000/cd, "\n"
-++		print "#define HZ_TO_USEC_DEN\t\t", hz/cd, "\n"
-++		print "#define USEC_TO_HZ_NUM\t\t", hz/cd, "\n"
-++		print "#define USEC_TO_HZ_DEN\t\t", 1000000/cd, "\n"
-++		print "\n"
-++
-++		print "#endif /* KERNEL_TIMECONST_H */\n"
-++	}
-++	halt
-++}
-++
-++timeconst(hz)
-+diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
-+deleted file mode 100644
-+index eb51d76..0000000
-+--- a/kernel/timeconst.pl
-++++ /dev/null
-+@@ -1,378 +0,0 @@
-+-#!/usr/bin/perl
-+-# -----------------------------------------------------------------------
-+-#
-+-#   Copyright 2007-2008 rPath, Inc. - All Rights Reserved
-+-#
-+-#   This file is part of the Linux kernel, and is made available under
-+-#   the terms of the GNU General Public License version 2 or (at your
-+-#   option) any later version; incorporated herein by reference.
-+-#
-+-# -----------------------------------------------------------------------
-+-#
-+-
-+-#
-+-# Usage: timeconst.pl HZ > timeconst.h
-+-#
-+-
-+-# Precomputed values for systems without Math::BigInt
-+-# Generated by:
-+-# timeconst.pl --can 24 32 48 64 100 122 128 200 250 256 300 512 1000 1024 1200
-+-%canned_values = (
-+-	24 => [
-+-		'0xa6aaaaab','0x2aaaaaa',26,
-+-		125,3,
-+-		'0xc49ba5e4','0x1fbe76c8b4',37,
-+-		3,125,
-+-		'0xa2c2aaab','0xaaaa',16,
-+-		125000,3,
-+-		'0xc9539b89','0x7fffbce4217d',47,
-+-		3,125000,
-+-	], 32 => [
-+-		'0xfa000000','0x6000000',27,
-+-		125,4,
-+-		'0x83126e98','0xfdf3b645a',36,
-+-		4,125,
-+-		'0xf4240000','0x0',17,
-+-		31250,1,
-+-		'0x8637bd06','0x3fff79c842fa',46,
-+-		1,31250,
-+-	], 48 => [
-+-		'0xa6aaaaab','0x6aaaaaa',27,
-+-		125,6,
-+-		'0xc49ba5e4','0xfdf3b645a',36,
-+-		6,125,
-+-		'0xa2c2aaab','0x15555',17,
-+-		62500,3,
-+-		'0xc9539b89','0x3fffbce4217d',46,
-+-		3,62500,
-+-	], 64 => [
-+-		'0xfa000000','0xe000000',28,
-+-		125,8,
-+-		'0x83126e98','0x7ef9db22d',35,
-+-		8,125,
-+-		'0xf4240000','0x0',18,
-+-		15625,1,
-+-		'0x8637bd06','0x1fff79c842fa',45,
-+-		1,15625,
-+-	], 100 => [
-+-		'0xa0000000','0x0',28,
-+-		10,1,
-+-		'0xcccccccd','0x733333333',35,
-+-		1,10,
-+-		'0x9c400000','0x0',18,
-+-		10000,1,
-+-		'0xd1b71759','0x1fff2e48e8a7',45,
-+-		1,10000,
-+-	], 122 => [
-+-		'0x8325c53f','0xfbcda3a',28,
-+-		500,61,
-+-		'0xf9db22d1','0x7fbe76c8b',35,
-+-		61,500,
-+-		'0x8012e2a0','0x3ef36',18,
-+-		500000,61,
-+-		'0xffda4053','0x1ffffbce4217',45,
-+-		61,500000,
-+-	], 128 => [
-+-		'0xfa000000','0x1e000000',29,
-+-		125,16,
-+-		'0x83126e98','0x3f7ced916',34,
-+-		16,125,
-+-		'0xf4240000','0x40000',19,
-+-		15625,2,
-+-		'0x8637bd06','0xfffbce4217d',44,
-+-		2,15625,
-+-	], 200 => [
-+-		'0xa0000000','0x0',29,
-+-		5,1,
-+-		'0xcccccccd','0x333333333',34,
-+-		1,5,
-+-		'0x9c400000','0x0',19,
-+-		5000,1,
-+-		'0xd1b71759','0xfff2e48e8a7',44,
-+-		1,5000,
-+-	], 250 => [
-+-		'0x80000000','0x0',29,
-+-		4,1,
-+-		'0x80000000','0x180000000',33,
-+-		1,4,
-+-		'0xfa000000','0x0',20,
-+-		4000,1,
-+-		'0x83126e98','0x7ff7ced9168',43,
-+-		1,4000,
-+-	], 256 => [
-+-		'0xfa000000','0x3e000000',30,
-+-		125,32,
-+-		'0x83126e98','0x1fbe76c8b',33,
-+-		32,125,
-+-		'0xf4240000','0xc0000',20,
-+-		15625,4,
-+-		'0x8637bd06','0x7ffde7210be',43,
-+-		4,15625,
-+-	], 300 => [
-+-		'0xd5555556','0x2aaaaaaa',30,
-+-		10,3,
-+-		'0x9999999a','0x1cccccccc',33,
-+-		3,10,
-+-		'0xd0555556','0xaaaaa',20,
-+-		10000,3,
-+-		'0x9d495183','0x7ffcb923a29',43,
-+-		3,10000,
-+-	], 512 => [
-+-		'0xfa000000','0x7e000000',31,
-+-		125,64,
-+-		'0x83126e98','0xfdf3b645',32,
-+-		64,125,
-+-		'0xf4240000','0x1c0000',21,
-+-		15625,8,
-+-		'0x8637bd06','0x3ffef39085f',42,
-+-		8,15625,
-+-	], 1000 => [
-+-		'0x80000000','0x0',31,
-+-		1,1,
-+-		'0x80000000','0x0',31,
-+-		1,1,
-+-		'0xfa000000','0x0',22,
-+-		1000,1,
-+-		'0x83126e98','0x1ff7ced9168',41,
-+-		1,1000,
-+-	], 1024 => [
-+-		'0xfa000000','0xfe000000',32,
-+-		125,128,
-+-		'0x83126e98','0x7ef9db22',31,
-+-		128,125,
-+-		'0xf4240000','0x3c0000',22,
-+-		15625,16,
-+-		'0x8637bd06','0x1fff79c842f',41,
-+-		16,15625,
-+-	], 1200 => [
-+-		'0xd5555556','0xd5555555',32,
-+-		5,6,
-+-		'0x9999999a','0x66666666',31,
-+-		6,5,
-+-		'0xd0555556','0x2aaaaa',22,
-+-		2500,3,
-+-		'0x9d495183','0x1ffcb923a29',41,
-+-		3,2500,
-+-	]
-+-);
-+-
-+-$has_bigint = eval 'use Math::BigInt qw(bgcd); 1;';
-+-
-+-sub bint($)
-+-{
-+-	my($x) = @_;
-+-	return Math::BigInt->new($x);
-+-}
-+-
-+-#
-+-# Constants for division by reciprocal multiplication.
-+-# (bits, numerator, denominator)
-+-#
-+-sub fmul($$$)
-+-{
-+-	my ($b,$n,$d) = @_;
-+-
-+-	$n = bint($n);
-+-	$d = bint($d);
-+-
-+-	return scalar (($n << $b)+$d-bint(1))/$d;
-+-}
-+-
-+-sub fadj($$$)
-+-{
-+-	my($b,$n,$d) = @_;
-+-
-+-	$n = bint($n);
-+-	$d = bint($d);
-+-
-+-	$d = $d/bgcd($n, $d);
-+-	return scalar (($d-bint(1)) << $b)/$d;
-+-}
-+-
-+-sub fmuls($$$) {
-+-	my($b,$n,$d) = @_;
-+-	my($s,$m);
-+-	my($thres) = bint(1) << ($b-1);
-+-
-+-	$n = bint($n);
-+-	$d = bint($d);
-+-
-+-	for ($s = 0; 1; $s++) {
-+-		$m = fmul($s,$n,$d);
-+-		return $s if ($m >= $thres);
-+-	}
-+-	return 0;
-+-}
-+-
-+-# Generate a hex value if the result fits in 64 bits;
-+-# otherwise skip.
-+-sub bignum_hex($) {
-+-	my($x) = @_;
-+-	my $s = $x->as_hex();
-+-
-+-	return (length($s) > 18) ? undef : $s;
-+-}
-+-
-+-# Provides mul, adj, and shr factors for a specific
-+-# (bit, time, hz) combination
-+-sub muladj($$$) {
-+-	my($b, $t, $hz) = @_;
-+-	my $s = fmuls($b, $t, $hz);
-+-	my $m = fmul($s, $t, $hz);
-+-	my $a = fadj($s, $t, $hz);
-+-	return (bignum_hex($m), bignum_hex($a), $s);
-+-}
-+-
-+-# Provides numerator, denominator values
-+-sub numden($$) {
-+-	my($n, $d) = @_;
-+-	my $g = bgcd($n, $d);
-+-	return ($n/$g, $d/$g);
-+-}
-+-
-+-# All values for a specific (time, hz) combo
-+-sub conversions($$) {
-+-	my ($t, $hz) = @_;
-+-	my @val = ();
-+-
-+-	# HZ_TO_xx
-+-	push(@val, muladj(32, $t, $hz));
-+-	push(@val, numden($t, $hz));
-+-
-+-	# xx_TO_HZ
-+-	push(@val, muladj(32, $hz, $t));
-+-	push(@val, numden($hz, $t));
-+-
-+-	return @val;
-+-}
-+-
-+-sub compute_values($) {
-+-	my($hz) = @_;
-+-	my @val = ();
-+-	my $s, $m, $a, $g;
-+-
-+-	if (!$has_bigint) {
-+-		die "$0: HZ == $hz not canned and ".
-+-		    "Math::BigInt not available\n";
-+-	}
-+-
-+-	# MSEC conversions
-+-	push(@val, conversions(1000, $hz));
-+-
-+-	# USEC conversions
-+-	push(@val, conversions(1000000, $hz));
-+-
-+-	return @val;
-+-}
-+-
-+-sub outputval($$)
-+-{
-+-	my($name, $val) = @_;
-+-	my $csuf;
-+-
-+-	if (defined($val)) {
-+-	    if ($name !~ /SHR/) {
-+-		$val = "U64_C($val)";
-+-	    }
-+-	    printf "#define %-23s %s\n", $name.$csuf, $val.$csuf;
-+-	}
-+-}
-+-
-+-sub output($@)
-+-{
-+-	my($hz, @val) = @_;
-+-	my $pfx, $bit, $suf, $s, $m, $a;
-+-
-+-	print "/* Automatically generated by kernel/timeconst.pl */\n";
-+-	print "/* Conversion constants for HZ == $hz */\n";
-+-	print "\n";
-+-	print "#ifndef KERNEL_TIMECONST_H\n";
-+-	print "#define KERNEL_TIMECONST_H\n";
-+-	print "\n";
-+-
-+-	print "#include <linux/param.h>\n";
-+-	print "#include <linux/types.h>\n";
-+-
-+-	print "\n";
-+-	print "#if HZ != $hz\n";
-+-	print "#error \"kernel/timeconst.h has the wrong HZ value!\"\n";
-+-	print "#endif\n";
-+-	print "\n";
-+-
-+-	foreach $pfx ('HZ_TO_MSEC','MSEC_TO_HZ',
-+-		      'HZ_TO_USEC','USEC_TO_HZ') {
-+-		foreach $bit (32) {
-+-			foreach $suf ('MUL', 'ADJ', 'SHR') {
-+-				outputval("${pfx}_$suf$bit", shift(@val));
-+-			}
-+-		}
-+-		foreach $suf ('NUM', 'DEN') {
-+-			outputval("${pfx}_$suf", shift(@val));
-+-		}
-+-	}
-+-
-+-	print "\n";
-+-	print "#endif /* KERNEL_TIMECONST_H */\n";
-+-}
-+-
-+-# Pretty-print Perl values
-+-sub perlvals(@) {
-+-	my $v;
-+-	my @l = ();
-+-
-+-	foreach $v (@_) {
-+-		if (!defined($v)) {
-+-			push(@l, 'undef');
-+-		} elsif ($v =~ /^0x/) {
-+-			push(@l, "\'".$v."\'");
-+-		} else {
-+-			push(@l, $v.'');
-+-		}
-+-	}
-+-	return join(',', @l);
-+-}
-+-
-+-($hz) = @ARGV;
-+-
-+-# Use this to generate the %canned_values structure
-+-if ($hz eq '--can') {
-+-	shift(@ARGV);
-+-	@hzlist = sort {$a <=> $b} (@ARGV);
-+-
-+-	print "# Precomputed values for systems without Math::BigInt\n";
-+-	print "# Generated by:\n";
-+-	print "# timeconst.pl --can ", join(' ', @hzlist), "\n";
-+-	print "\%canned_values = (\n";
-+-	my $pf = "\t";
-+-	foreach $hz (@hzlist) {
-+-		my @values = compute_values($hz);
-+-		print "$pf$hz => [\n";
-+-		while (scalar(@values)) {
-+-			my $bit;
-+-			foreach $bit (32) {
-+-				my $m = shift(@values);
-+-				my $a = shift(@values);
-+-				my $s = shift(@values);
-+-				print "\t\t", perlvals($m,$a,$s), ",\n";
-+-			}
-+-			my $n = shift(@values);
-+-			my $d = shift(@values);
-+-			print "\t\t", perlvals($n,$d), ",\n";
-+-		}
-+-		print "\t]";
-+-		$pf = ', ';
-+-	}
-+-	print "\n);\n";
-+-} else {
-+-	$hz += 0;			# Force to number
-+-	if ($hz < 1) {
-+-		die "Usage: $0 HZ\n";
-+-	}
-+-
-+-	@val = @{$canned_values{$hz}};
-+-	if (!defined(@val)) {
-+-		@val = compute_values($hz);
-+-	}
-+-	output($hz, @val);
-+-}
-+-exit 0;
-+-- 
-+cgit v0.10.2
-+
-diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
-index 5d74fc3..5ce5fdf 100644
---- a/configs/wandboard_defconfig
-+++ b/configs/wandboard_defconfig
-@@ -1,5 +1,6 @@
- BR2_arm=y
- BR2_cortex_a9=y
-+BR2_GLOBAL_PATCH_DIR="board/wandboard/patches"
- BR2_KERNEL_HEADERS_VERSION=y
- BR2_DEFAULT_KERNEL_VERSION="3.0.101"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
--- 
-2.5.3
+>
+> commit 70730bca1331fc50c3caacaea00439de1325bd6e
+> Author: H. Peter Anvin <hpa@zytor.com>
+> Date:   Thu Feb 14 15:13:55 2013 -0800
+>
+>     kernel: Replace timeconst.pl with a bc script
+>
+>     bc is the standard tool for multi-precision arithmetic.  We switched
+>     to Perl because akpm reported a hard-to-reproduce build hang, which
+>     was very odd because affected and unaffected machines were all running
+>     the same version of GNU bc.
+>
+>     Unfortunately switching to Perl required a really ugly "canning"
+>     mechanism to support Perl < 5.8 installations lacking the Math::BigInt
+>     module.
+>
+>     It was recently pointed out to me that some very old versions of GNU
+>     make had problems with pipes in subshells, which was indeed the
+>     construct used in the Makefile rules in that version of the patch;
+>     Perl didn't need it so switching to Perl fixed the problem for
+>     unrelated reasons.  With the problem (hopefully) root-caused, we can
+>     switch back to bc and do the arbitrary-precision arithmetic naturally.
+>
+>     Signed-off-by: H. Peter Anvin <hpa@zytor.com>
+>     Cc: Andrew Morton <akpm@linux-foundation.org>
+>     Acked-by: Sam Ravnborg <sam@ravnborg.org>
+>     Signed-off-by: Michal Marek <mmarek@suse.cz>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+>> ---
+>>  .../patches/linux/perl-define-in-timeconst.patch   | 24 ++++++++++++++++++++++
+>>  configs/wandboard_defconfig                        |  1 +
+>>  2 files changed, 25 insertions(+)
+>>  create mode 100644 board/wandboard/patches/linux/perl-define-in-timeconst.patch
+>>
+>> diff --git a/board/wandboard/patches/linux/perl-define-in-timeconst.patch b/board/wandboard/patches/linux/perl-define-in-timeconst.patch
+>> new file mode 100644
+>> index 0000000..811b0a4
+>> --- /dev/null
+>> +++ b/board/wandboard/patches/linux/perl-define-in-timeconst.patch
+>> @@ -0,0 +1,24 @@
+>> +The use of defined() on arrays and hashes has been deprecated since perl
+>> +5.6, but until 5.17.6 it only warned on lexicals, not package globals.
+>> +
+>> +Signed-off-by: Dagfinn Ilmari Manns?ker <ilmari@ilmari.org>
+>> +---
+>> + kernel/timeconst.pl |    2 +-
+>> + 1 files changed, 1 insertions(+), 1 deletions(-)
+>> +
+>> +diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
+>> +index eb51d76..0461239 100644
+>> +--- a/kernel/timeconst.pl
+>> ++++ b/kernel/timeconst.pl
+>> +@@ -370,7 +370,7 @@ if ($hz eq '--can') {
+>> +     }
+>> +
+>> +     @val = @{$canned_values{$hz}};
+>> +-    if (!defined(@val)) {
+>> ++    if (!@val) {
+>> +             @val = compute_values($hz);
+>> +     }
+>> +     output($hz, @val);
+>> +--
+>> +1.7.5.4
+>> +
+>> diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+>> index 5d74fc3..5ce5fdf 100644
+>> --- a/configs/wandboard_defconfig
+>> +++ b/configs/wandboard_defconfig
+>> @@ -1,5 +1,6 @@
+>>  BR2_arm=y
+>>  BR2_cortex_a9=y
+>> +BR2_GLOBAL_PATCH_DIR="board/wandboard/patches"
+>>  BR2_KERNEL_HEADERS_VERSION=y
+>>  BR2_DEFAULT_KERNEL_VERSION="3.0.101"
+>>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0=y
+>> --
+>> 2.5.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
