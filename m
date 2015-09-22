@@ -1,59 +1,82 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 22 Sep 2015 17:03:33 +0200
-Subject: [Buildroot] [PATCH] python: rework *.pyc files generation
-Message-ID: <1442934213-26231-1-git-send-email-yegorslists@googlemail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 22 Sep 2015 19:02:14 +0200
+Subject: [Buildroot] [PATCH 1/2] imx-kobs: add new package
+In-Reply-To: <56003D03.1040500@mind.be>
+References: <1442839899-18044-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1442839899-18044-2-git-send-email-gary.bisson@boundarydevices.com>
+ <56003D03.1040500@mind.be>
+Message-ID: <CAAMH-ys5ORiRoMzzu_9ZxyHFq3w4mfmbqjjoicNnhUu-w=eiAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi Arnout,
 
-This patch generates all *.pyc files from *.py located in
-<target>/usr/python*/site-packages, before stripping the rootfs.
+On Mon, Sep 21, 2015 at 7:23 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 21-09-15 14:51, Gary Bisson wrote:
+>> Based on the Yocto 3.14.28-1.0.0_ga update:
+>> https://github.com/Freescale/meta-fsl-arm/commit/6c44744
+>>
+>> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+>> ---
+>>  package/freescale-imx/Config.in                    |  1 +
+>>  .../imx-kobs/0001-Fix-musl-build.patch             | 43 ++++++++++++++++++++++
+>>  package/freescale-imx/imx-kobs/Config.in           | 10 +++++
+>>  package/freescale-imx/imx-kobs/imx-kobs.hash       |  2 +
+>>  package/freescale-imx/imx-kobs/imx-kobs.mk         | 12 ++++++
+>>  5 files changed, 68 insertions(+)
+>>  create mode 100644 package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
+>>  create mode 100644 package/freescale-imx/imx-kobs/Config.in
+>>  create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.hash
+>>  create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.mk
+>>
+>> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+>> index dffe76f..a958dbd 100644
+>> --- a/package/freescale-imx/Config.in
+>> +++ b/package/freescale-imx/Config.in
+>> @@ -42,6 +42,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+>>       default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+>>       default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+>>
+>> +source "package/freescale-imx/imx-kobs/Config.in"
+>>  source "package/freescale-imx/imx-lib/Config.in"
+>>  source "package/freescale-imx/imx-vpu/Config.in"
+>>  source "package/freescale-imx/firmware-imx/Config.in"
+>> diff --git a/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
+>> new file mode 100644
+>> index 0000000..4e9c72b
+>> --- /dev/null
+>> +++ b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
+>> @@ -0,0 +1,43 @@
+>> +[PATCH] Fix musl build
+>> +
+>> +Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+>> +---
+>> + src/mtd.c | 5 +++++
+>> + src/mtd.h | 5 +++++
+>> + 2 files changed, 10 insertions(+)
+>> +
+>> +diff --git a/src/mtd.c b/src/mtd.c
+>> +index 1edc441..2d3824e 100644
+>> +--- a/src/mtd.c
+>> ++++ b/src/mtd.c
+>> +@@ -34,6 +34,11 @@
+>> + #include <sys/types.h>
+>> + #include <sys/ioctl.h>
+>> +
+>> ++// musl offsetof macro is located in stddef.h
+>> ++#if !defined(__GLIBC__) && !defined(__UCLIBC__)
+>
+>  Since C99 (and probably C90 as well) specifies that offsetof is in stddef.h, I
+> don't think it's necessary to do this conditionally.
 
-*.pyc generation on per package basis is disabled through
-"--no-compile" option.
+You're right. I just didn't think it through, when the build
+complained at offsetof I just looked at its location in the musl
+toolchain.
 
-This prevents modules from packages that do not compile the *.py
-files from disappearing.
+I'll submit a V2 soon. Thanks for the feedback.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
----
- Makefile              | 5 +++++
- package/pkg-python.mk | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index fdbca02..74164c3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -558,6 +558,11 @@ $(TARGETS_ROOTFS): target-finalize
- 
- target-finalize: $(PACKAGES)
- 	@$(call MESSAGE,"Finalizing target directory")
-+ifneq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON_PY_PYC)$(BR2_PACKAGE_PYTHON3_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PY_PYC),)
-+	PYTHONPATH="$(PYTHON_PATH)" \
-+		$(HOST_DIR)/usr/bin/python -c "import compileall; \
-+			compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages')"
-+endif
- 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index b7a702d..9725d24 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -253,7 +253,7 @@ ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	(cd $$($$(PKG)_BUILDDIR)/; \
- 		$$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
--		$$($(2)_PYTHON_INTERPRETER) setup.py install \
-+		$$($(2)_PYTHON_INTERPRETER) setup.py install --no-compile \
- 		$$($$(PKG)_BASE_INSTALL_TARGET_OPTS) \
- 		$$($$(PKG)_INSTALL_TARGET_OPTS))
- endef
--- 
-2.1.4
+Regards,
+Gary
