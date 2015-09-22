@@ -1,25 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Sep 2015 15:43:33 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 12,
- 14}.x and 4.{1, 2}.x series
-In-Reply-To: <1442871600-9139-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1442871600-9139-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20150922154333.2c2715d7@free-electrons.com>
+Date: Tue, 22 Sep 2015 15:47:16 +0200
+Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
+ linux compilation error
+In-Reply-To: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+Message-ID: <20150922154716.0c3fec44@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hello,
 
-On Mon, 21 Sep 2015 18:39:59 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+On Tue, 22 Sep 2015 10:45:21 +0800, imrehg at gmail.com wrote:
+> From: Gergely Imreh <imrehg@gmail.com>
+> 
+> Replace the "timeconst" perl script with a bc script to fix an
+> error due to syntax changes in perl which resulted in linux
+> compilation error for the wandboard's 3.8 kernel. The patch is
+> backported, kernels from 3.9 onward already have this change.
+> 
+> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 
-Both applied, thanks!
+The problem with this patch is that it fixes the problem specifically
+for the wandboard_defconfig. Any other person building another kernel
+version affected by the same problem will face the problem.
+
+If the problem is serious, I don't really see another option than
+having some logic in linux.mk to detect if the kernel is affected by
+the problem, and replacing the perl script by a bc script.
+
+Other ideas?
+
+Best regards,
 
 Thomas
 -- 
