@@ -1,54 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 22 Sep 2015 09:49:07 +0200
-Subject: [Buildroot] Default configuration for Ka-Ro TX25 module
-In-Reply-To: <20150922065523.GD2242@tarshish>
-References: <6bee8e0798ac4666bc051d88f2064b30@IHM-PORT-E13M01.prdhosting.local>
- <20150922065523.GD2242@tarshish>
-Message-ID: <560107F3.80500@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 22 Sep 2015 10:54:16 +0200
+Subject: [Buildroot] [PATCH v9 1/1] squeezelite: new package
+In-Reply-To: <201509220826.t8M8QvuY012965@ms-omx01.plus.so-net.ne.jp>
+References: <201509220826.t8M8QvuY012965@ms-omx01.plus.so-net.ne.jp>
+Message-ID: <1442912056.5410.29.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22-09-15 08:55, Baruch Siach wrote:
-> Hi Matthew,
+Dear Hiroshi Kawashima,
+
+On Di, 2015-09-22 at 17:26 +0900, kei-k at ca2.so-net.ne.jp wrote:
+> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+
+No revision changelog. Please have a look at the Buildroot manual:
+http://nightly.buildroot.org/#_providing_patches
+
+> ---
+>  package/Config.in                  |    1 +
+>  package/squeezelite/Config.in      |   26 ++++++++++++++++++++++++++
+>  package/squeezelite/squeezelite.mk |   27
+> +++++++++++++++++++++++++++
+>  3 files changed, 54 insertions(+), 0 deletions(-)
+>  create mode 100644 package/squeezelite/Config.in
+>  create mode 100644 package/squeezelite/squeezelite.mk
 > 
-> On Mon, Sep 21, 2015 at 11:08:22PM +0000, Matthew Kerr wrote:
+> diff --git a/package/Config.in b/package/Config.in
+> index 5158371..2a47420 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -33,6 +33,7 @@ menu "Audio and video applications"
+>  	source "package/opus-tools/Config.in"
+>  	source "package/pulseaudio/Config.in"
+>  	source "package/sox/Config.in"
+> +	source "package/squeezelite/Config.in"
+>  	source "package/tidsp-binaries/Config.in"
+>  	source "package/tovid/Config.in"
+>  	source "package/tstools/Config.in"
+> diff --git a/package/squeezelite/Config.in
+> b/package/squeezelite/Config.in
+> new file mode 100644
+> index 0000000..96efb7c
+> --- /dev/null
+> +++ b/package/squeezelite/Config.in
+> @@ -0,0 +1,26 @@
+> +config BR2_PACKAGE_SQUEEZELITE
+> +	bool "squeezelite"
+> +	depends on BR2_USE_WCHAR # flac
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+> +	depends on BR2_USE_MMU # mpg123
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_FLAC
+> +	select BR2_PACKAGE_LIBMAD
+> +	select BR2_PACKAGE_LIBVORBIS
+> +	select BR2_PACKAGE_FAAD2
+> +	select BR2_PACKAGE_MPG123
+> +	help
+> +	  Logitech Media Server client
+> +	  https://code.google.com/p/squeezelite/
+
+Buildroot uses a newline between the description and the URL.
+
+> +
+> +config BR2_PACKAGE_SQUEEZELITE_RESAMPLE
+> +	bool "Enable resampling function"
+> +	default n
+
+"default n" is set implicitly and not needed here.
+
 [snip]
->> 3)      Can I do anything with the Ka-Ro supplied rootfs or should I just 
->> let Buildroot generate this for me?
-> 
-> Buildroot supports helper mechanisms to ease local customization of generated 
-> rootfs, like rootfs overlay, and post build script. See 
-> http://nightly.buildroot.org/manual.html#customize for more details.
 
- Note that the binaries in the Ka-Ro supplied rootfs will most likely not work,
-unless you also reuse their toolchain.
+Did you see my comments to the squeezelite.mk file in the last patch
+(v8)?
 
- Reusing their toolchain is BTW pretty easy as well: copy the toolchain out of
-the VM and install it in the same location on your host, and in buildroot select
-'External toolchain', 'custom toolchain', 'pre-installed toolchain', and point
-'toolchain path' to where the toolchain resided (excluding the bin/ part). Then
-you'll have to specify the toolchain properties: which standard C library is
-used (most likely glibc), the gcc version, and the kernel headers version. If
-you make a mistake there, buildroot will tell you what is wrong.
-
- One possible issue you may run into is that they also have custom versions for
-some of the user-space programs, e.g. for bluetooth or wifi support. If that is
-the case, it is probably easiest (to start with) to use the vendor-supplied
-toolchain as I described above and just copy those binaries from the
-vendor-supplied rootfs.
-
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards
+J?rg Krause
