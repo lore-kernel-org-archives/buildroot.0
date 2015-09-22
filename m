@@ -1,104 +1,101 @@
-From: =?utf-8?B?5bed5bO2IOa1qQ==?= <kei-k@ca2.so-net.ne.jp>
-Date: Tue, 22 Sep 2015 11:52:23 +0900
-Subject: [Buildroot] [PATCH v7 1/1] squeezelite: new package
-In-Reply-To: <8BBD1ACC-75AD-4C18-BD19-2F6022F4C448@ca2.so-net.ne.jp>
-References: <201509210347.t8L3lcth017495@ms-omx02.plus.so-net.ne.jp>
- <20150921113629.0fc4f356@free-electrons.com>
- <8BBD1ACC-75AD-4C18-BD19-2F6022F4C448@ca2.so-net.ne.jp>
-Message-ID: <441B3232-0F61-429F-A548-21944673609B@ca2.so-net.ne.jp>
+From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+Date: Tue, 22 Sep 2015 12:02:27 +0900
+Subject: [Buildroot] [PATCH v8 1/1] squeezelite: new package
+Message-ID: <201509220302.t8M32RG6003915@ms-omx02.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+---
+ package/Config.in                  |    1 +
+ package/squeezelite/Config.in      |   26 ++++++++++++++++++++++++++
+ package/squeezelite/squeezelite.mk |   27 +++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+), 0 deletions(-)
+ create mode 100644 package/squeezelite/Config.in
+ create mode 100644 package/squeezelite/squeezelite.mk
 
-And one more.
+diff --git a/package/Config.in b/package/Config.in
+index 5158371..2a47420 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -33,6 +33,7 @@ menu "Audio and video applications"
+ 	source "package/opus-tools/Config.in"
+ 	source "package/pulseaudio/Config.in"
+ 	source "package/sox/Config.in"
++	source "package/squeezelite/Config.in"
+ 	source "package/tidsp-binaries/Config.in"
+ 	source "package/tovid/Config.in"
+ 	source "package/tstools/Config.in"
+diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
+new file mode 100644
+index 0000000..65dfff3
+--- /dev/null
++++ b/package/squeezelite/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_SQUEEZELITE
++	bool "squeezelite"
++	depends on BR2_USE_WCHAR # flac
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	depends on BR2_USE_MMU # mpg123
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_FLAC
++	select BR2_PACKAGE_LIBMAD
++	select BR2_PACKAGE_LIBVORBIS
++	select BR2_PACKAGE_FAAD2
++	select BR2_PACKAGE_MPG123
++	select BR2_PACKAGE_LIBSOXR
++	help
++	  Logitech Media Server client
++	  https://code.google.com/p/squeezelite/
++
++config BR2_PACKAGE_SQUEEZELITE_RESAMPLE
++	bool "Enable resampling function"
++	default y
++	depends on BR2_PACKAGE_SQUEEZELITE
++	help
++	  Enable resampling function
++
++comment "squeezelite needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
+new file mode 100644
+index 0000000..4ea2715
+--- /dev/null
++++ b/package/squeezelite/squeezelite.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# squeezelite
++#
++################################################################################
++
++SQUEEZELITE_VERSION = v1.8
++SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
++SQUEEZELITE_SITE_METHOD = git
++SQUEEZELITE_LICENSE = GPLv3
++SQUEEZELITE_LICENSE_FILE = LICENSE.txt
++SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123 libsoxr
++
++ifeq ($(BR2_PACKAGE_SQUEEZELITE_RESAMPLE),y)
++	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE -DRESAMPLE_MP
++endif
++
++define SQUEEZELITE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
++		CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++define SQUEEZELITE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.1
 
-Actually, -DRESAMPLE and -DRESAMPLE_MP of squeezelite build, the essence of
-difference is here (squeezelite/resample.c):
-#if RESAMPLE_MP
-    r->resampler = SOXR(r, create, raw_sample_rate, outrate, 2, &error, &io_spec, &q_spec, &r_spec);
-#else
-    r->resampler = SOXR(r, create, raw_sample_rate, outrate, 2, &error, &io_spec, &q_spec, NULL);
-#endif
-Just difference is passing r_spec or NULL for last arg.
-So if I always define RESAMPLE and RESAMPLE_MP variables, it does not have side effect.
-I think it?s better for simplification.
-
-With these modification, I will send patch again.
-
-Thank you,
-Kawashima 
-
-> 2015/09/22 10:11??? ? <kei-k@ca2.so-net.ne.jp> ?????
-> 
-> Hello.
-> 
-> Thank you for your comment.
-> 
-> About openmp issue, squeezelite is using openmp through libsoxr.
-> I have realized that libsoxr in buildroot is compiled with
->    LIBSOXR_CONF_OPTS = -DWITH_OPENMP=OFF
-> So, processing of resampling will result to use ordinal multi-thread ?
-> 
-> 
->> 2015/09/21 18:36?Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ?????
->> 
->> Hello,
->> 
->> On Mon, 21 Sep 2015 12:47:38 +0900, kei-k at ca2.so-net.ne.jp wrote:
->> 
->>> +config BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
->>> +	bool "Enable resampling function"
->>> +	default y
->>> +	depends on BR2_PACKAGE_SQUEEZELITE
->>> +	help
->>> +	  Enable resampling function
->>> +
->>> +config BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP
->>> +	bool "Use OpenMP for resampling"
->>> +	default y
->>> +	depends on BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE
->>> +	help
->>> +	  Enable OpenMP support for resampling
->> 
->> The naming of the options is a bit inconsistent: "ENABLE" in one case
->> and "WITH" in the other case. I believe in fact you could simplify the
->> option naming to just:
->> 
->> BR2_PACKAGE_SQUEEZELITE_RESAMPLE
->> BR2_PACKAGE_SQUEEZELITE_RESAMPLE_OPENMP
->> 
->> However, I'm a bit worried about the OpenMP option. Does it require
->> OpenMP support in the toolchain? If yes, then not all toolchains have
->> OpenMP support, so we should handle that.
->> 
->>> +ifeq ($(BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE),y)
->>> +	SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
->>> +	ifeq ($(BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP),y)
->> 
->> Since BR2_PACKAGE_SQUEEZELITE_WITH_RESAMPLE_MP already depends on
->> BR2_PACKAGE_SQUEEZELITE_ENABLE_RESAMPLE, there's no real need to nest
->> the two tests. They can be made two separate tests.
->> 
->>> +		SQUEEZELITE_MAKE_OPTS += -DRESAMPLE_MP
->>> +	endif
->>> +endif
->>> +
->>> +define SQUEEZELITE_BUILD_CMDS
->>> +    $(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
->>> +	CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
->> 
->> Have you tried using $(TARGET_CONFIGURE_OPTS) instead of manually
->> passing CC and LD ?
->> 
->> Thanks,
->> 
->> Thomas
->> -- 
->> Thomas Petazzoni, CTO, Free Electrons
->> Embedded Linux, Kernel and Android engineering
->> http://free-electrons.com
-> 
+============================================================
+    Hiroshi Kawashima
