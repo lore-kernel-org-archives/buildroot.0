@@ -1,35 +1,41 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 22 Sep 2015 15:19:55 +0200
-Subject: [Buildroot] [PATCH v10 1/1] squeezelite: new package
-In-Reply-To: <EED27595-D73F-4F34-8B0D-98472C72636C@ca2.so-net.ne.jp>
-References: <201509221038.t8MAc9DS019932@ms-omx03.plus.so-net.ne.jp>
- <1442923734.5410.39.camel@embedded.rocks>
- <2C237626-118B-4EF0-A53C-F33B3E4A8986@ca2.so-net.ne.jp>
- <EED27595-D73F-4F34-8B0D-98472C72636C@ca2.so-net.ne.jp>
-Message-ID: <1442927995.5410.43.camel@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Sep 2015 15:42:47 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.2.1
+Message-ID: <20150922134308.7E52381774@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi,
+commit: http://git.buildroot.net/buildroot/commit/?id=01d362d2e03c24f8b7d7d818243cdfcb0fcd2bca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Di, 2015-09-22 at 21:59 +0900, kei wrote:
-> On 2015/09/22, at 21:46, kei <kei-k@ca2.so-net.ne.jp> wrote:
-> 
-> > Dear Jorg.
-> > 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-[snip]
-
-> > OK
-> Ah, NO.
-> -DRESAMPLE_MP is ok here as I explained.
-> You can not agree ?
-> 
-
-Sorry, I did not receive an explanation.
-
-Best regards
-J?rg Krause
+diff --git a/linux/Config.in b/linux/Config.in
+index f4fdbb2..9f39c4c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.2"
++	bool "4.2.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.2.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
