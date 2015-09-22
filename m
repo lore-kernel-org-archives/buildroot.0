@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Sep 2015 15:47:16 +0200
-Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
- linux compilation error
-In-Reply-To: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
-References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
-Message-ID: <20150922154716.0c3fec44@free-electrons.com>
+From: imrehg at gmail.com <imrehg@gmail.com>
+Date: Tue, 22 Sep 2015 21:48:54 +0800
+Subject: [Buildroot] [PATCH 1/1] package/genimage: use git version,
+	bump to latest
+Message-ID: <1442929734-26752-1-git-send-email-imrehg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Gergely Imreh <imrehg@gmail.com>
 
-On Tue, 22 Sep 2015 10:45:21 +0800, imrehg at gmail.com wrote:
-> From: Gergely Imreh <imrehg@gmail.com>
-> 
-> Replace the "timeconst" perl script with a bc script to fix an
-> error due to syntax changes in perl which resulted in linux
-> compilation error for the wandboard's 3.8 kernel. The patch is
-> backported, kernels from 3.9 onward already have this change.
-> 
-> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+Using the latest release 7 of genimage on Arch Linux at the
+moment seems to result in segmentation fault, while it works on
+other distros. The latest git version on the other hand runs
+correctly on all platforms tested. Test was done by running:
+"make wandboard_defconfig && make" as Wandboard is using genimage
+in the post-image script.
 
-The problem with this patch is that it fixes the problem specifically
-for the wandboard_defconfig. Any other person building another kernel
-version affected by the same problem will face the problem.
+Signed-off-by: Gergely Imreh <imrehg@gmail.com>
+---
+ package/genimage/genimage.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-If the problem is serious, I don't really see another option than
-having some logic in linux.mk to detect if the kernel is affected by
-the problem, and replacing the perl script by a bc script.
-
-Other ideas?
-
-Best regards,
-
-Thomas
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 07d95a4..773d515 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 7
+-GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+-GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
++GENIMAGE_VERSION = f23b67b7e3c57712c22e226742566e206cfb43be
++GENIMAGE_SITE = git://git.pengutronix.de/git/genimage.git
+ GENIMAGE_DEPENDENCIES = host-pkgconf libconfuse
+ GENIMAGE_LICENSE = GPLv2
++GENIMAGE_AUTORECONF = YES
+ 
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.3
