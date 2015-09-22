@@ -1,77 +1,83 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 22 Sep 2015 20:56:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lua: do not install man files
-In-Reply-To: <20150922160121.2c878fa6@free-electrons.com>
-References: <1442876342-10841-1-git-send-email-joerg.krause@embedded.rocks>
- <20150922160121.2c878fa6@free-electrons.com>
-Message-ID: <1442948203.2525.1.camel@embedded.rocks>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 22 Sep 2015 21:25:03 +0200
+Subject: [Buildroot] [PATCH 18/19] ccache: use mtime for external
+ toolchain, CONF_OPTS for internal toolchain
+In-Reply-To: <5600856D.8010702@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442777319-24164-1-git-send-email-arnout@mind.be>
+ <1442777319-24164-5-git-send-email-arnout@mind.be>
+ <CAHXCMMLkNi47MQg+KCMNjtG1s4byAOO=aJqOGYHYC6Af_6WwpQ@mail.gmail.com>
+ <5600856D.8010702@mind.be>
+Message-ID: <CAHXCMMKk-qwuE5zNjr1gqK+eFBvC0gxatF3Qrnqg8dk9pESfNA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Di, 2015-09-22 at 16:01 +0200, Thomas Petazzoni wrote:
-> Hello J?rg,
-> 
-> On Tue, 22 Sep 2015 00:59:02 +0200, J?rg Krause wrote:
-> > As written in the holy manual:
-> > http://buildroot.org/downloads/manual/manual.html#faq-no-doc-on-tar
-> > get
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> >  package/lua/lua.mk | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-> > index 1279b76..af5cef3 100644
-> > --- a/package/lua/lua.mk
-> > +++ b/package/lua/lua.mk
-> > @@ -87,7 +87,7 @@ define HOST_LUA_BUILD_CMDS
-> >  endef
-> >  
-> >  define LUA_INSTALL_STAGING_CMDS
-> > -	$(MAKE) INSTALL_TOP="$(STAGING_DIR)/usr" -C $(@D) install
-> > +	$(MAKE) INSTALL_TOP="$(STAGING_DIR)/usr" INSTALL_MAN= -C
-> > $(@D) install
-> >  	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
-> >  		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
-> >  endef
-> > @@ -97,7 +97,7 @@ define LUA_INSTALL_TARGET_CMDS
-> >  endef
-> >  
-> >  define HOST_LUA_INSTALL_CMDS
-> > -	$(MAKE) INSTALL_TOP="$(HOST_DIR)/usr" -C $(@D) install
-> > +	$(MAKE) INSTALL_TOP="$(HOST_DIR)/usr" INSTALL_MAN= -C
-> > $(@D) install
-> >  	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
-> >  		$(HOST_DIR)/usr/lib/pkgconfig/lua.pc
-> >  endef
-> 
-> This is in fact not needed. Buildroot is already removing the man
-> pages
-> in the target-finalize step of the main Makefile. I have checked, the
-> Lua man pages are installed in standard locations, so they are
-> properly
-> removed by this generic removal step.
-> 
-> For this reason, I am not sure it is really worth to add more
-> complexity to a package to avoid doing something that is anyway
-> already
-> handled at some later point in a generic way. It would be worth if
-> that
-> thing was actually taking a significant amount of build time, or
-> required additional dependencies. But it's not the case here, so i
-> would be tempted to leave the Lua package as is, and not take this
-> patch.
-> 
-> Opinions?
-> 
+On Tue, Sep 22, 2015 at 12:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 21-09-15 23:43, Samuel Martin wrote:
+>> Hi Arnout,
+>>
+>> Just some minor comments below.
+>>
+>> On Sun, Sep 20, 2015 at 9:28 PM, Arnout Vandecappelle (Essensium/Mind)
+>> <arnout@mind.be> wrote:
+>> [...]
+>>>
+>>> +ifeq ($(BR2_CCACHE),y)
+>>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+>>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/*.patch
+>>> +ifeq ($(BR2_xtensa),y)
+>>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
+>>> +endif
+>>> +ifeq ($(ARCH),powerpc)
+>>> +ifneq ($(BR2_SOFT_FLOAT),)
+>>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
+>>> +endif
+>>> +endif
+>>
+>> Maybe it is a rare case, should not the gcc's patches from the
+>> BR2_GLOBAL_PATCH_DIR location be added to the
+>> HOST_GCC_COMMON_CCACHE_HASH_FILES list as well?
+>
+>  True. Note that in the global patch dir, you'd have to create separate
+> gcc-initial and gcc-final directories, which makes it less likely that someone
+> would actually do this.
+>
+>  I was also thinking about GCC_OVERRIDE_SRCDIR, which is not covered at the moment.
+>
+>  However, these things make the already fairly complicated hash logic even more
+> complex. Do we really need to support such exotic cases?
 
-I see! I didn't know about this. I just build the lua package (without
-make all) and saw the man files in my target tree.
+Maybe no. The cost of supporting these corner cases may be to high
+compared to the frequency it would be used/needed.
 
-Many thanks for clarification! I'll mark this patch as rejected...
+>
+>
+>>
+>>> +
+>>> +HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
+>>> +       printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
+>>> +               | sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
+>>> +               | cut -c -64 | tr -d '\n'`\"
+>>
+>> Depending on the number of items in the
+>> HOST_GCC_COMMON_CCACHE_HASH_FILES list, the BR_CCACHE_HASH definition
+>> can be quite long...
+>
+>  Is that a problem?
 
-J?rg
+It was just a comment ;-)
+
+It's not really a problem, it might only be a bit annoying when
+debugging the wrapper.
+This is not something people does every day, I hope so ;-).
+
+Regards,
+
+
+-- 
+Samuel
