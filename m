@@ -1,75 +1,129 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 23 Sep 2015 14:20:48 +0100
-Subject: [Buildroot] [PATCH] rtptools: needs RPC support
-In-Reply-To: <5602A624.7020709@imgtec.com>
-References: <1443009479-8481-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150923150354.70f6b27a@free-electrons.com> <5602A3F7.9000605@imgtec.com>
- <20150923151240.31f5d864@free-electrons.com> <5602A624.7020709@imgtec.com>
-Message-ID: <5602A730.6070801@imgtec.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 23 Sep 2015 15:39:26 +0200
+Subject: [Buildroot] [PATCH v2 1/2] imx-kobs: add new package
+In-Reply-To: <1443015567-4040-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1443015567-4040-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1443015567-4040-2-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again Thomas,
+Based on the Yocto 3.14.28-1.0.0_ga update:
+https://github.com/Freescale/meta-fsl-arm/commit/6c44744
 
-On 09/23/2015 02:16 PM, Vicente Olivert Riera wrote:
-> Hi Thomas,
-> 
-> On 09/23/2015 02:12 PM, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Wed, 23 Sep 2015 14:07:03 +0100, Vicente Olivert Riera wrote:
->>
->>>> I'm surprised we have not seen autobuilder failures. Or did you forget
->>>> to include a reference to an autobuilder error?
->>>
->>> No, I didn't forget that. I have catch this issue with one local
->>> autobuilder I have. If you wonder why I have a local autobuilder instead
->>> of submitting the results to the ML, it's because that autobuilder uses
->>> toolchains that are not yet included in our Buildroot tree.
->>
->> That's perfectly OK. However, I wonder why we haven't seen this problem
->> with toolchains already tested in the autobuilders. rtptools does not
->> have any other dependencies, and we have a "basic" toolchain with no
->> special options enabled.
->>
->> Also, I think your patch should instead be:
->>
->> 	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> 
-> I already tried that and it didn't fix the problem. Also added to the
-> .mk file the following:
-> 
-> ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/freescale-imx/Config.in                    |  1 +
+ .../imx-kobs/0001-Fix-musl-build.patch             | 39 ++++++++++++++++++++++
+ package/freescale-imx/imx-kobs/Config.in           | 10 ++++++
+ package/freescale-imx/imx-kobs/imx-kobs.hash       |  2 ++
+ package/freescale-imx/imx-kobs/imx-kobs.mk         | 12 +++++++
+ 5 files changed, 64 insertions(+)
+ create mode 100644 package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
+ create mode 100644 package/freescale-imx/imx-kobs/Config.in
+ create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.hash
+ create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.mk
 
-Sorry, I didn't put the "y" when I tried it. It was just a type while
-writing the email.
-
-Regards,
-
-Vincent.
-
-> RTPTOOLS_DEPENDENCIES += libtirpc
-> endif
-> 
-> After checking that libtirpc was installed, then I ran this command:
-> 
-> find output/staging/ -type f -name "ypclnt.h"
-> 
-> And that file doesn't exist either, so libtirpc can't fix the problem.
-> 
-> Regards,
-> 
-> Vincent.
-> 
->> and add libtirpc to the dependencies.
->>
->> Thomas
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index dffe76f..a958dbd 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -42,6 +42,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+ 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ 
++source "package/freescale-imx/imx-kobs/Config.in"
+ source "package/freescale-imx/imx-lib/Config.in"
+ source "package/freescale-imx/imx-vpu/Config.in"
+ source "package/freescale-imx/firmware-imx/Config.in"
+diff --git a/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
+new file mode 100644
+index 0000000..ce123de
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
+@@ -0,0 +1,39 @@
++[PATCH] Fix musl build
++
++Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
++---
++ src/mtd.c | 1 +
++ src/mtd.h | 5 +++++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/src/mtd.c b/src/mtd.c
++index 1edc441..6d2264c 100644
++--- a/src/mtd.c
+++++ b/src/mtd.c
++@@ -31,6 +31,7 @@
++ #include <fcntl.h>
++ #include <ctype.h>
++ #include <errno.h>
+++#include <stddef.h>
++ #include <sys/types.h>
++ #include <sys/ioctl.h>
++ 
++diff --git a/src/mtd.h b/src/mtd.h
++index bd21add..debfc84 100644
++--- a/src/mtd.h
+++++ b/src/mtd.h
++@@ -31,6 +31,11 @@
++ #include "BootControlBlocks.h"
++ #include "rom_nand_hamming_code_ecc.h"
++ 
+++// musl library doesn't define loff_t
+++#if !defined(__GLIBC__) && !defined(__UCLIBC__)
+++#define loff_t off_t
+++#endif
+++
++ //------------------------------------------------------------------------------
++ // Re-definitions of true and false, because the standard ones aren't good
++ // enough?
++-- 
++2.5.1
++
+diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
+new file mode 100644
+index 0000000..fc2344e
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_IMX_KOBS
++	bool "imx-kobs"
++	depends on BR2_arm # Only relevant for i.MX
++	help
++	  The imx-kobs tool is used for writing images to NAND on i.MX
++	  platforms.
++
++	  This library is provided by Freescale as-is and doesn't have
++	  an upstream.
++
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
+new file mode 100644
+index 0000000..13373ea
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256 cfac042f5c96731205c397a4a6b3ed966f804569ae4d0e2685d22fdf6bdc9eb7  imx-kobs-3.14.28-1.0.0.tar.gz
+diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
+new file mode 100644
+index 0000000..02c5cad
+--- /dev/null
++++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# imx-kobs
++#
++################################################################################
++
++IMX_KOBS_VERSION = $(FREESCALE_IMX_VERSION)
++IMX_KOBS_SITE = $(FREESCALE_IMX_SITE)
++IMX_KOBS_LICENSE = GPLv2+
++IMX_KOBS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+-- 
+2.5.1
