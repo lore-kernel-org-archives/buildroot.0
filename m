@@ -1,55 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Sep 2015 15:08:44 +0200
-Subject: [Buildroot] [git commit] shairport-sync: fix non-existent meta_dir
-	member of shairport_cfg struct
-Message-ID: <20150923130901.1BB6A819BB@busybox.osuosl.org>
+Date: Wed, 23 Sep 2015 15:09:16 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: fix non-existent meta_dir
+ member of shairport_cfg struct
+In-Reply-To: <1442838575-11855-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1442838575-11855-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150923150916.456c2296@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa3aa748d0b5f3e65f573edf075ba195772ffd19
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Vicente,
 
-shairport-sync tries to access to a non-existent member called
-"meta_dir" of a "shairport_cfg" struct:
+On Mon, 21 Sep 2015 13:29:35 +0100, Vicente Olivert Riera wrote:
+> shairport-sync tries to access to a non-existent member called
+> "meta_dir" of a "shairport_cfg" struct:
+> 
+> [snip]
+> if (config.meta_dir)
+> [snip]
+> 
+> That struct doesn't have that member so it causes a build failure like
+> this one:
+> 
+> mdns_tinysvcmdns.c: In function 'mdns_tinysvcmdns_register':
+> mdns_tinysvcmdns.c:121:13: error: 'shairport_cfg' has no member named
+> 'meta_dir'
+> if (config.meta_dir)
+> 
+> This issue has been reported and fixed upstream:
+> 
+>   https://github.com/mikebrady/shairport-sync/issues/128#issuecomment-141947175
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/89d/89d22ba2d41e05b407cde04c7e57510b36973ce9/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/shairport-sync/shairport-sync.mk |    1 +
+>  1 files changed, 1 insertions(+), 0 deletions(-)
 
-[snip]
-if (config.meta_dir)
-[snip]
+Applied, thanks.
 
-That struct doesn't have that member so it causes a build failure like
-this one:
-
-mdns_tinysvcmdns.c: In function 'mdns_tinysvcmdns_register':
-mdns_tinysvcmdns.c:121:13: error: 'shairport_cfg' has no member named
-'meta_dir'
-if (config.meta_dir)
-
-This issue has been reported and fixed upstream:
-
-  https://github.com/mikebrady/shairport-sync/issues/128#issuecomment-141947175
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/89d/89d22ba2d41e05b407cde04c7e57510b36973ce9/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/shairport-sync/shairport-sync.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index dc36c0e..36d5b82 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -10,6 +10,7 @@ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VE
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
- SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
- SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
-+SHAIRPORT_SYNC_PATCH = https://github.com/mikebrady/shairport-sync/commit/6ae067af1f695e615415cde69a506ad330dbc45b.patch
- 
- # Touching configure.ac with the patches
- SHAIRPORT_SYNC_AUTORECONF = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
