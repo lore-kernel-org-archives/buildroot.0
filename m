@@ -1,122 +1,60 @@
-From: Wetzel Andreas <Andreas.Wetzel@nanotronic.ch>
-Date: Wed, 23 Sep 2015 15:12:04 +0000
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: add option to
- enable/disable ipv6 support
-In-Reply-To: <5602BC5D.40101@imgtec.com>
-References: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>
- <5602B279.8020506@imgtec.com>
- <816992ffccd84eb3bdfaa89a699d1610@LysExc01.nanotronic.local>,
- <5602BC5D.40101@imgtec.com>
-Message-ID: <ba965d47aded4d318703f4ce3f75e4b5@LysExc01.nanotronic.local>
+From: Gergely Imreh <imrehg@gmail.com>
+Date: Wed, 23 Sep 2015 23:26:09 +0800
+Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
+ linux compilation error
+In-Reply-To: <20150922154716.0c3fec44@free-electrons.com>
+References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+ <20150922154716.0c3fec44@free-electrons.com>
+Message-ID: <CAJ3iQcrqXVz0Fu88pLdszq_WBxqa4eG1n0StGoFnMYmLYM0P2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincente,
-
-I thought about using git send-email again. But then favoured a reply to have the history included in the mail body. Sorry for that.
-
-Next time I will use git send-email again. I don't like our outlook webmail anyway :)
-
-Regards,
-Andi
-
-________________________________________
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Sent: Wednesday, September 23, 2015 16:51
-To: Wetzel Andreas
-Cc: buildroot
-Subject: Re: [Buildroot] [PATCH 1/1] libwebsockets: add option to enable/disable ipv6 support
-
-Dear Wetzel Andreas,
-
-thanks for fixing the issue.
-
-On 09/23/2015 03:43 PM, Wetzel Andreas wrote:
-> Hi Vincente,
+On 22 September 2015 at 21:47, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> Please find the corrected (with tabs) patch in the attachment.
-
-why don't you send the v2 of your patch using git send-email? The
-Buildroot project strongly prefers patches to be sent using git
-send-email. It easier for everyone to review them and also for the
-maintainer to apply them.
-
-Regards,
-
-Vincent.
-
->
-> Regards,
-> Andi
->
-> ________________________________________
-> From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Sent: Wednesday, September 23, 2015 16:08
-> To: Wetzel Andreas
-> Cc: buildroot
-> Subject: Re: [Buildroot] [PATCH 1/1] libwebsockets: add option to enable/disable ipv6 support
->
-> Dear Andreas Wetzel,
->
-> On 09/23/2015 02:16 PM, Andreas Wetzel wrote:
->> Added configuration option BR2_PACKAGE_LIBWEBSOCKETS_IPV6 that
->> adds -DLWS_IPV6=ON/OFF to LIBWEBSOCKETS_CONF_OPTS.
+> On Tue, 22 Sep 2015 10:45:21 +0800, imrehg at gmail.com wrote:
+>> From: Gergely Imreh <imrehg@gmail.com>
 >>
->> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
->> ---
->>  package/libwebsockets/Config.in        | 7 +++++++
->>  package/libwebsockets/libwebsockets.mk | 8 +++++++-
->>  2 files changed, 14 insertions(+), 1 deletion(-)
+>> Replace the "timeconst" perl script with a bc script to fix an
+>> error due to syntax changes in perl which resulted in linux
+>> compilation error for the wandboard's 3.8 kernel. The patch is
+>> backported, kernels from 3.9 onward already have this change.
 >>
->> diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
->> index 2b350bf..e3c7eea 100644
->> --- a/package/libwebsockets/Config.in
->> +++ b/package/libwebsockets/Config.in
->> @@ -8,3 +8,10 @@ config BR2_PACKAGE_LIBWEBSOCKETS
->>         in both directions.
->>
->>         http://libwebsockets.org/
->> +
->> +if BR2_PACKAGE_LIBWEBSOCKETS
->> +
->> +config BR2_PACKAGE_LIBWEBSOCKETS_IPV6
->> +    bool "Compile with support for ipv6"
+>> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 >
-> please use tabs for indentation, not spaces.
+> The problem with this patch is that it fixes the problem specifically
+> for the wandboard_defconfig. Any other person building another kernel
+> version affected by the same problem will face the problem.
 >
-> Regards,
+> If the problem is serious, I don't really see another option than
+> having some logic in linux.mk to detect if the kernel is affected by
+> the problem, and replacing the perl script by a bc script.
 >
-> Vincent.
+> Other ideas?
+
+At cursory glance, this should affect every kernel before 3.9 (when it
+was switched to bc script), please correct me if I'm wrong.
+
+On the other hand, looking at this patch, it appears to need more
+backporting than the original single line of perl fix, and likely not
+very portable (because of touching the Makefile). The other one one is
+simple and very well defined. I'd probably start from that patch if
+large variety of unknown kernel versions need to be potentially fixed.
+
+But this is just a thought.
+
+Cheers,
+  Gergely
+
 >
->> +
->> +endif
->> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
->> index 2f83748..f4a3db2 100644
->> --- a/package/libwebsockets/libwebsockets.mk
->> +++ b/package/libwebsockets/libwebsockets.mk
->> @@ -11,7 +11,7 @@ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
->>  LIBWEBSOCKETS_LICENSE_FILES = LICENSE
->>  LIBWEBSOCKETS_DEPENDENCIES = zlib
->>  LIBWEBSOCKETS_INSTALL_STAGING = YES
->> -LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
->> +LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON
->>
->>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->>  LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
->> @@ -20,4 +20,10 @@ else
->>  LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=OFF
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_IPV6),y)
->> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=ON
->> +else
->> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=OFF
->> +endif
->> +
->>  $(eval $(cmake-package))
->>
+> Best regards,
 >
->
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
