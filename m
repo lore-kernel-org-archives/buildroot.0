@@ -1,129 +1,59 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 23 Sep 2015 15:39:26 +0200
-Subject: [Buildroot] [PATCH v2 1/2] imx-kobs: add new package
-In-Reply-To: <1443015567-4040-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1443015567-4040-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1443015567-4040-2-git-send-email-gary.bisson@boundarydevices.com>
+Date: Wed, 23 Sep 2015 15:39:25 +0200
+Subject: [Buildroot] [PATCH v2 0/2] Add imx-kobs package
+Message-ID: <1443015567-4040-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Based on the Yocto 3.14.28-1.0.0_ga update:
-https://github.com/Freescale/meta-fsl-arm/commit/6c44744
+Hi all,
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
+This series adds the up to date imx-kobs package and deperecate the old
+kobs-ng.
+
+It also includes a patch to allow building this tool on musl as suggested
+by Thomas:
+http://lists.busybox.net/pipermail/buildroot/2015-September/139899.html
+
+This patch will be submitted to the yocto mailing list (soone) to hopefully
+get the attention of the actual imx-kobs package maintainer but I have little
+to no hope that they will merge it into their code base as most Freescale
+packages require glibc. I'll respond to this e-mail once the patch has been
+submitted.
+
+Changelog:
+v1->v2:
+- removed condition around the stddef.h inclusion as suggested by Arnout
+
+Regards,
+Gary
+
+Gary Bisson (2):
+  imx-kobs: add new package
+  kobs-ng: remove obsolete package
+
+ Config.in.legacy                                   |  8 +++
+ package/Config.in                                  |  1 -
  package/freescale-imx/Config.in                    |  1 +
- .../imx-kobs/0001-Fix-musl-build.patch             | 39 ++++++++++++++++++++++
- package/freescale-imx/imx-kobs/Config.in           | 10 ++++++
- package/freescale-imx/imx-kobs/imx-kobs.hash       |  2 ++
- package/freescale-imx/imx-kobs/imx-kobs.mk         | 12 +++++++
- 5 files changed, 64 insertions(+)
+ .../imx-kobs/0001-Fix-musl-build.patch             | 39 ++++++++++++
+ package/freescale-imx/imx-kobs/Config.in           | 10 +++
+ package/freescale-imx/imx-kobs/imx-kobs.hash       |  2 +
+ package/freescale-imx/imx-kobs/imx-kobs.mk         | 12 ++++
+ package/kobs-ng/0001-fix-mtd-defines.patch         | 73 ----------------------
+ package/kobs-ng/Config.in                          |  9 ---
+ package/kobs-ng/kobs-ng.hash                       |  2 -
+ package/kobs-ng/kobs-ng.mk                         | 13 ----
+ 11 files changed, 72 insertions(+), 98 deletions(-)
  create mode 100644 package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
  create mode 100644 package/freescale-imx/imx-kobs/Config.in
  create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.hash
  create mode 100644 package/freescale-imx/imx-kobs/imx-kobs.mk
+ delete mode 100644 package/kobs-ng/0001-fix-mtd-defines.patch
+ delete mode 100644 package/kobs-ng/Config.in
+ delete mode 100644 package/kobs-ng/kobs-ng.hash
+ delete mode 100644 package/kobs-ng/kobs-ng.mk
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index dffe76f..a958dbd 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
- 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 
-+source "package/freescale-imx/imx-kobs/Config.in"
- source "package/freescale-imx/imx-lib/Config.in"
- source "package/freescale-imx/imx-vpu/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
-diff --git a/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
-new file mode 100644
-index 0000000..ce123de
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
-@@ -0,0 +1,39 @@
-+[PATCH] Fix musl build
-+
-+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-+---
-+ src/mtd.c | 1 +
-+ src/mtd.h | 5 +++++
-+ 2 files changed, 6 insertions(+)
-+
-+diff --git a/src/mtd.c b/src/mtd.c
-+index 1edc441..6d2264c 100644
-+--- a/src/mtd.c
-++++ b/src/mtd.c
-+@@ -31,6 +31,7 @@
-+ #include <fcntl.h>
-+ #include <ctype.h>
-+ #include <errno.h>
-++#include <stddef.h>
-+ #include <sys/types.h>
-+ #include <sys/ioctl.h>
-+ 
-+diff --git a/src/mtd.h b/src/mtd.h
-+index bd21add..debfc84 100644
-+--- a/src/mtd.h
-++++ b/src/mtd.h
-+@@ -31,6 +31,11 @@
-+ #include "BootControlBlocks.h"
-+ #include "rom_nand_hamming_code_ecc.h"
-+ 
-++// musl library doesn't define loff_t
-++#if !defined(__GLIBC__) && !defined(__UCLIBC__)
-++#define loff_t off_t
-++#endif
-++
-+ //------------------------------------------------------------------------------
-+ // Re-definitions of true and false, because the standard ones aren't good
-+ // enough?
-+-- 
-+2.5.1
-+
-diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
-new file mode 100644
-index 0000000..fc2344e
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_IMX_KOBS
-+	bool "imx-kobs"
-+	depends on BR2_arm # Only relevant for i.MX
-+	help
-+	  The imx-kobs tool is used for writing images to NAND on i.MX
-+	  platforms.
-+
-+	  This library is provided by Freescale as-is and doesn't have
-+	  an upstream.
-+
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
-new file mode 100644
-index 0000000..13373ea
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256 cfac042f5c96731205c397a4a6b3ed966f804569ae4d0e2685d22fdf6bdc9eb7  imx-kobs-3.14.28-1.0.0.tar.gz
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
-new file mode 100644
-index 0000000..02c5cad
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# imx-kobs
-+#
-+################################################################################
-+
-+IMX_KOBS_VERSION = $(FREESCALE_IMX_VERSION)
-+IMX_KOBS_SITE = $(FREESCALE_IMX_SITE)
-+IMX_KOBS_LICENSE = GPLv2+
-+IMX_KOBS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
 -- 
 2.5.1
