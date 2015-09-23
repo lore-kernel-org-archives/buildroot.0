@@ -1,105 +1,55 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 23 Sep 2015 15:51:09 +0100
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: add option to
- enable/disable ipv6 support
-In-Reply-To: <816992ffccd84eb3bdfaa89a699d1610@LysExc01.nanotronic.local>
-References: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>
- <5602B279.8020506@imgtec.com>
- <816992ffccd84eb3bdfaa89a699d1610@LysExc01.nanotronic.local>
-Message-ID: <5602BC5D.40101@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Sep 2015 17:06:13 +0200
+Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
+ to resolve the VLAN trunk issue
+In-Reply-To: <5600612C.5060300@mind.be>
+References: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
+ <5600612C.5060300@mind.be>
+Message-ID: <20150923170613.75f5e7e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Wetzel Andreas,
+Hello,
 
-thanks for fixing the issue.
+On Mon, 21 Sep 2015 21:57:32 +0200, Arnout Vandecappelle wrote:
 
-On 09/23/2015 03:43 PM, Wetzel Andreas wrote:
-> Hi Vincente,
+>  So you'll have to configure buildroot yourself. Start with selecting
+> BR2_cortex_a9 for the architecture, configure the toolchain as you like. Then
+> for the kernel, select an in-tree defconfig and fill in "mvebu_v7" for the
+> defconfig name. Also select an in-tree device tree and fill in armada-388-gp.
 > 
-> Please find the corrected (with tabs) patch in the attachment.
+>  Thomas Petazzoni actually worked on this board I think. Thomas, why didn't you
+> submit a defconfig? :-P
 
-why don't you send the v2 of your patch using git send-email? The
-Buildroot project strongly prefers patches to be sent using git
-send-email. It easier for everyone to review them and also for the
-maintainer to apply them.
+I actually did a bit more than working on this board, since we (Free
+Electrons) did the support for the Armada 38x SoC in the mainline Linux
+kernel.
 
-Regards,
+The reason why I didn't submit a defconfig is because there is no
+full-featured publicly available bootloader for these platforms. The
+bootloader provided by Marvell is not publicly available (you have to
+be a customer, and use an account to access their Extranet and download
+the U-Boot sources). There is now some U-Boot support in the mainline
+U-Boot, but I haven't tried it yet.
 
-Vincent.
+So I could submit a huge bunch of defconfigs for all the Armada 370,
+XP, 375, 38x and 39x platforms that I have (it would probably be 15 to
+20 defconfigs), but they would only differ by the name of the Device
+Tree in the defconfig. All the rest would be exactly the same. So I
+wasn't sure it was really worth adding 15 to 20 more defconfigs for a
+configuration that doesn't include the bootloader and where all
+configurations would be almost identical.
 
-> 
-> Regards,
-> Andi
-> 
-> ________________________________________
-> From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Sent: Wednesday, September 23, 2015 16:08
-> To: Wetzel Andreas
-> Cc: buildroot
-> Subject: Re: [Buildroot] [PATCH 1/1] libwebsockets: add option to enable/disable ipv6 support
-> 
-> Dear Andreas Wetzel,
-> 
-> On 09/23/2015 02:16 PM, Andreas Wetzel wrote:
->> Added configuration option BR2_PACKAGE_LIBWEBSOCKETS_IPV6 that
->> adds -DLWS_IPV6=ON/OFF to LIBWEBSOCKETS_CONF_OPTS.
->>
->> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
->> ---
->>  package/libwebsockets/Config.in        | 7 +++++++
->>  package/libwebsockets/libwebsockets.mk | 8 +++++++-
->>  2 files changed, 14 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
->> index 2b350bf..e3c7eea 100644
->> --- a/package/libwebsockets/Config.in
->> +++ b/package/libwebsockets/Config.in
->> @@ -8,3 +8,10 @@ config BR2_PACKAGE_LIBWEBSOCKETS
->>         in both directions.
->>
->>         http://libwebsockets.org/
->> +
->> +if BR2_PACKAGE_LIBWEBSOCKETS
->> +
->> +config BR2_PACKAGE_LIBWEBSOCKETS_IPV6
->> +    bool "Compile with support for ipv6"
-> 
-> please use tabs for indentation, not spaces.
-> 
-> Regards,
-> 
-> Vincent.
-> 
->> +
->> +endif
->> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
->> index 2f83748..f4a3db2 100644
->> --- a/package/libwebsockets/libwebsockets.mk
->> +++ b/package/libwebsockets/libwebsockets.mk
->> @@ -11,7 +11,7 @@ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
->>  LIBWEBSOCKETS_LICENSE_FILES = LICENSE
->>  LIBWEBSOCKETS_DEPENDENCIES = zlib
->>  LIBWEBSOCKETS_INSTALL_STAGING = YES
->> -LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
->> +LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON
->>
->>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->>  LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
->> @@ -20,4 +20,10 @@ else
->>  LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=OFF
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_IPV6),y)
->> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=ON
->> +else
->> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=OFF
->> +endif
->> +
->>  $(eval $(cmake-package))
->>
-> 
-> 
+That being said, if there is some interest in this, I can definitely do
+it.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
