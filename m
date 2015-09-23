@@ -1,72 +1,83 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 23 Sep 2015 15:08:57 +0100
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: add option to
- enable/disable ipv6 support
-In-Reply-To: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>
-References: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>
-Message-ID: <5602B279.8020506@imgtec.com>
+Date: Wed, 23 Sep 2015 15:16:40 +0100
+Subject: [Buildroot] [PATCH] openssl: change sed expression delimiter
+In-Reply-To: <1442931820-20838-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1442931820-20838-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <5602B448.6010302@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Wetzel,
+Dear Gustavo Zacarias,
 
-On 09/23/2015 02:16 PM, Andreas Wetzel wrote:
-> Added configuration option BR2_PACKAGE_LIBWEBSOCKETS_IPV6 that
-> adds -DLWS_IPV6=ON/OFF to LIBWEBSOCKETS_CONF_OPTS.
+On 09/22/2015 03:23 PM, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
-> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
-> ---
->  package/libwebsockets/Config.in        | 7 +++++++
->  package/libwebsockets/libwebsockets.mk | 8 +++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+> Switch from : to # since CFLAGS can include :'s spilled in from
+> BR2_TARGET_OPTIMIZATION, for example:
 > 
-> diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-> index 2b350bf..e3c7eea 100644
-> --- a/package/libwebsockets/Config.in
-> +++ b/package/libwebsockets/Config.in
-> @@ -8,3 +8,10 @@ config BR2_PACKAGE_LIBWEBSOCKETS
->  	  in both directions.
->  
->  	  http://libwebsockets.org/
-> +
-> +if BR2_PACKAGE_LIBWEBSOCKETS
-> +
-> +config BR2_PACKAGE_LIBWEBSOCKETS_IPV6
-> +    bool "Compile with support for ipv6"
-
-please use tabs for indentation, not spaces.
+> BR2_TARGET_OPTIMIZATION="-Wl,-rpath,/lib:/usr/lib" would cause the sed
+> expression to fail thus breaking the build.
+> 
+> Changed all of the SEDs to # for consistency.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Regards,
 
 Vincent.
 
-> +
-> +endif
-> diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-> index 2f83748..f4a3db2 100644
-> --- a/package/libwebsockets/libwebsockets.mk
-> +++ b/package/libwebsockets/libwebsockets.mk
-> @@ -11,7 +11,7 @@ LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
->  LIBWEBSOCKETS_LICENSE_FILES = LICENSE
->  LIBWEBSOCKETS_DEPENDENCIES = zlib
->  LIBWEBSOCKETS_INSTALL_STAGING = YES
-> -LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
-> +LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON
+> ---
+>  package/openssl/openssl.mk | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+> index c1fc420..cad8d0c 100644
+> --- a/package/openssl/openssl.mk
+> +++ b/package/openssl/openssl.mk
+> @@ -65,7 +65,7 @@ define HOST_OPENSSL_CONFIGURE_CMDS
+>  		shared \
+>  		zlib-dynamic \
+>  	)
+> -	$(SED) "s:-O[0-9]:$(HOST_CFLAGS):" $(@D)/Makefile
+> +	$(SED) "s#-O[0-9]#$(HOST_CFLAGS)#" $(@D)/Makefile
+>  endef
 >  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
-> @@ -20,4 +20,10 @@ else
->  LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=OFF
+>  define OPENSSL_CONFIGURE_CMDS
+> @@ -87,15 +87,15 @@ define OPENSSL_CONFIGURE_CMDS
+>  			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
+>  			$(if $(BR2_STATIC_LIBS),no-dso) \
+>  	)
+> -	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(@D)/Makefile
+> -	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
+> -	$(SED) "s: build_tests::" $(@D)/Makefile
+> +	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
+> +	$(SED) "s#-O[0-9]#$(OPENSSL_CFLAGS)#" $(@D)/Makefile
+> +	$(SED) "s# build_tests##" $(@D)/Makefile
+>  endef
+>  
+>  # libdl is not available in a static build, and this is not implied by no-dso
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  define OPENSSL_FIXUP_STATIC_MAKEFILE
+> -	$(SED) 's/-ldl//g' $(@D)/Makefile
+> +	$(SED) 's#-ldl##g' $(@D)/Makefile
+>  endef
+>  OPENSSL_POST_CONFIGURE_HOOKS += OPENSSL_FIXUP_STATIC_MAKEFILE
 >  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS_IPV6),y)
-> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=ON
-> +else
-> +LIBWEBSOCKETS_CONF_OPTS += -DLWS_IPV6=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
+> @@ -125,9 +125,9 @@ endef
+>  # libdl has no business in a static build
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  define OPENSSL_FIXUP_STATIC_PKGCONFIG
+> -	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
+> -	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
+> -	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
+> +	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
+> +	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
+> +	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
+>  endef
+>  OPENSSL_POST_INSTALL_STAGING_HOOKS += OPENSSL_FIXUP_STATIC_PKGCONFIG
+>  endif
 > 
