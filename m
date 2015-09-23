@@ -1,36 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Sep 2015 23:25:17 +0200
-Subject: [Buildroot] [PATCH] rtptools: needs RPC support
-In-Reply-To: <1443009479-8481-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Wed, 23 Sep 2015 12:57:59 +0100")
-References: <1443009479-8481-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87pp18q14y.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Sep 2015 23:27:42 +0200
+Subject: [Buildroot] [git commit] openssl: change sed expression delimiter
+Message-ID: <20150923212758.B911C81739@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=35495daed39933db06dcc62a335fff89836d1853
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > rtptools needs a toolchain with RPC support, otherwise it will fail with
- > an error message like this one:
+Switch from : to # since CFLAGS can include :'s spilled in from
+BR2_TARGET_OPTIMIZATION, for example:
 
- > host2ip.c:13:38: fatal error: rpcsvc/ypclnt.h: No such file or directory
- >  #include <rpcsvc/ypclnt.h>   /* YP */
+BR2_TARGET_OPTIMIZATION="-Wl,-rpath,/lib:/usr/lib" would cause the sed
+expression to fail thus breaking the build.
 
-Hmm, are you sure?
+Changed all of the SEDs to # for consistency.
 
-I just did a test build here with a toolchain without RPC support:
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openssl/openssl.mk |   16 ++++++++--------
+ 1 files changed, 8 insertions(+), 8 deletions(-)
 
-find output/staging/usr -name ypclnt.h
-
-But it still built. I do see that rpctools itself contain that header
-file:
-
-find output/build/rtptools-1.20 -name ypclnt.h
-output/build/rtptools-1.20/nt/include/ypclnt.h
-output/build/rtptools-1.20/nt/include/rpcsvc/ypclnt.h
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index c1fc420..cad8d0c 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -65,7 +65,7 @@ define HOST_OPENSSL_CONFIGURE_CMDS
+ 		shared \
+ 		zlib-dynamic \
+ 	)
+-	$(SED) "s:-O[0-9]:$(HOST_CFLAGS):" $(@D)/Makefile
++	$(SED) "s#-O[0-9]#$(HOST_CFLAGS)#" $(@D)/Makefile
+ endef
+ 
+ define OPENSSL_CONFIGURE_CMDS
+@@ -87,15 +87,15 @@ define OPENSSL_CONFIGURE_CMDS
+ 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
+ 			$(if $(BR2_STATIC_LIBS),no-dso) \
+ 	)
+-	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(@D)/Makefile
+-	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
+-	$(SED) "s: build_tests::" $(@D)/Makefile
++	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
++	$(SED) "s#-O[0-9]#$(OPENSSL_CFLAGS)#" $(@D)/Makefile
++	$(SED) "s# build_tests##" $(@D)/Makefile
+ endef
+ 
+ # libdl is not available in a static build, and this is not implied by no-dso
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define OPENSSL_FIXUP_STATIC_MAKEFILE
+-	$(SED) 's/-ldl//g' $(@D)/Makefile
++	$(SED) 's#-ldl##g' $(@D)/Makefile
+ endef
+ OPENSSL_POST_CONFIGURE_HOOKS += OPENSSL_FIXUP_STATIC_MAKEFILE
+ endif
+@@ -125,9 +125,9 @@ endef
+ # libdl has no business in a static build
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define OPENSSL_FIXUP_STATIC_PKGCONFIG
+-	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
+-	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
+-	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libcrypto.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/libssl.pc
++	$(SED) 's#-ldl##' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
+ endef
+ OPENSSL_POST_INSTALL_STAGING_HOOKS += OPENSSL_FIXUP_STATIC_PKGCONFIG
+ endif
