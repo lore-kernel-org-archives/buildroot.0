@@ -1,30 +1,54 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed, 23 Sep 2015 09:34:53 -0400
-Subject: [Buildroot] [PATCH] genimage: bump to version 8
-Message-ID: <1443015293-16426-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 23 Sep 2015 14:44:21 +0100
+Subject: [Buildroot] [PATCH] dependencies.sh: improve the missing perl
+	modules detection
+Message-ID: <1443015861-11295-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/genimage/genimage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/dependencies/dependencies.sh |   26 +++++++++++++++++++++-----
+ 1 files changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 07d95a4..2dffbc5 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 01ad828..af9aefe 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -236,10 +236,26 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
+ 	fi
+ fi
  
--GENIMAGE_VERSION = 7
-+GENIMAGE_VERSION = 8
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
- GENIMAGE_DEPENDENCIES = host-pkgconf libconfuse
+-# Check that the Perl installation is complete enough to build
+-# host-autoconf.
+-if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
+-	echo "Your Perl installation is not complete enough, at least Data::Dumper is missing."
+-	echo "On Debian/Ubuntu distributions, install the 'perl' package."
++# Check that the Perl installation is complete enough for Buildroot.
++# Here is the space-separated list of the required modules:
++required_perl_modules="Data::Dumper Thread:Queue"
++
++# This variable will keep the modules that are missing in your system:
++missing_perl_modules=""
++
++for pm in $required_perl_modules ; do
++	if ! perl  -e "require $pm" > /dev/null 2>&1 ; then
++		missing_perl_modules="$missing_perl_modules $pm"
++	fi
++done
++
++if [ -n "$missing_perl_modules" ] ; then
++	echo "Your Perl installation is not complete enough; at least the following"
++	echo "modules are missing:"
++	echo ""
++	for pm in $missing_perl_modules ; do
++		echo -e "\t $pm"
++	done
++	echo ""
+ 	exit 1
+ fi
 -- 
-2.5.2
+1.7.1
