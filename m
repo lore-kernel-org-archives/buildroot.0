@@ -1,41 +1,36 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 23 Sep 2015 22:15:42 +0100
-Subject: [Buildroot] [PATCHv2] micropython: fix build for MIPS64 n32
-In-Reply-To: <20150923231159.16ff509d@free-electrons.com>
-References: <1442997860-1402-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150923231159.16ff509d@free-electrons.com>
-Message-ID: <5603167E.4050406@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Sep 2015 23:25:17 +0200
+Subject: [Buildroot] [PATCH] rtptools: needs RPC support
+In-Reply-To: <1443009479-8481-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 23 Sep 2015 12:57:59 +0100")
+References: <1443009479-8481-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87pp18q14y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On 23/09/15 22:11, Thomas Petazzoni wrote:
-> Vicente,
->
-> On Wed, 23 Sep 2015 09:44:20 +0100, Vicente Olivert Riera wrote:
->
->> diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
->> index f2ad5bf..7f401bf 100644
->> --- a/package/micropython/micropython.mk
->> +++ b/package/micropython/micropython.mk
->> @@ -10,6 +10,7 @@ MICROPYTHON_LICENSE = MIT
->>   MICROPYTHON_LICENSE_FILES = LICENSE
->>   MICROPYTHON_DEPENDENCIES = host-pkgconf libffi
->>   MICROPYTHON_PATCH = https://github.com/micropython/micropython/commit/8b4fb4fe140e9cf57fcfa258d0d2d6fe19090fc5.patch
->> +MICROPYTHON_PATCH += https://github.com/micropython/micropython/commit/587914169cc6ff7f0513bd14c42dcbb275bf77bd.patch
->
-> There's no need to use a += here, using a single assignment for both is
-> nicer. I've changed that and applied, thanks!
+ > rtptools needs a toolchain with RPC support, otherwise it will fail with
+ > an error message like this one:
 
-Noted. I will do it in that way from now on :-)
+ > host2ip.c:13:38: fatal error: rpcsvc/ypclnt.h: No such file or directory
+ >  #include <rpcsvc/ypclnt.h>   /* YP */
 
-Thanks!
+Hmm, are you sure?
 
-Vincent.
+I just did a test build here with a toolchain without RPC support:
 
-> Thomas
->
+find output/staging/usr -name ypclnt.h
+
+But it still built. I do see that rpctools itself contain that header
+file:
+
+find output/build/rtptools-1.20 -name ypclnt.h
+output/build/rtptools-1.20/nt/include/ypclnt.h
+output/build/rtptools-1.20/nt/include/rpcsvc/ypclnt.h
+
+-- 
+Bye, Peter Korsgaard
