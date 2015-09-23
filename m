@@ -1,49 +1,90 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 23 Sep 2015 22:30:19 +0100
-Subject: [Buildroot] [PATCH] rtptools: needs RPC support
-In-Reply-To: <87pp18q14y.fsf@dell.be.48ers.dk>
-References: <1443009479-8481-1-git-send-email-Vincent.Riera@imgtec.com>
- <87pp18q14y.fsf@dell.be.48ers.dk>
-Message-ID: <560319EB.8080003@imgtec.com>
+Date: Wed, 23 Sep 2015 23:28:37 +0100
+Subject: [Buildroot] [PATCH 1/1] openvpn: add option for
+ --enable-password-save
+In-Reply-To: <1443001188-8997-1-git-send-email-andreas.wetzel@nanotronic.ch>
+References: <1443001188-8997-1-git-send-email-andreas.wetzel@nanotronic.ch>
+Message-ID: <56032795.30601@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Andreas Wetzel,
 
-On 23/09/15 22:25, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
->
->   > rtptools needs a toolchain with RPC support, otherwise it will fail with
->   > an error message like this one:
->
->   > host2ip.c:13:38: fatal error: rpcsvc/ypclnt.h: No such file or directory
->   >  #include <rpcsvc/ypclnt.h>   /* YP */
->
-> Hmm, are you sure?
->
-> I just did a test build here with a toolchain without RPC support:
->
-> find output/staging/usr -name ypclnt.h
->
-> But it still built. I do see that rpctools itself contain that header
-> file:
->
-> find output/build/rtptools-1.20 -name ypclnt.h
-> output/build/rtptools-1.20/nt/include/ypclnt.h
-> output/build/rtptools-1.20/nt/include/rpcsvc/ypclnt.h
->
+just a minor problems that (I think) will not prevent your patch to be 
+applied by a maintaner:
 
-We were discussing about this in the IRC during this afternoon, and 
-checked that it actually builds with toolchains without RPC. I 
-highlighted the issue using a toolchain which is a bit special.
-I then marked my patch as deferred few hours ago, but now I'm going to 
-mark it as rejected. I will keep investigating about this because is 
-very weird that the rtptools itself has the headers but my toolchain is 
-not able to find them.
+The subject prefix of your patch should be "PATCH v2", as is the second 
+version of your patch. This is explained in the Buildroot manual:
+
+http://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+Subsection "21.5.2. Patch revision changelog".
+
+On 23/09/15 10:39, Andreas Wetzel wrote:
+> Added configuration option BR2_PACKAGE_OPENVPN_PWSAVE that
+> adds --enable-password-save to OPENVPN_CONF_OPTS if selected.
+>
+> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+> ---
+
+You should have added a changelog here explaining the changes between v1 
+and v2, as explained in the Buildroot manual, in the same subsection I 
+mentioned above.
+
+>   package/openvpn/Config.in  | 5 +++++
+>   package/openvpn/openvpn.mk | 6 ++++++
+>   2 files changed, 11 insertions(+)
+>
+> diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+> index 5edb479..ae29a1b 100644
+> --- a/package/openvpn/Config.in
+> +++ b/package/openvpn/Config.in
+> @@ -27,6 +27,11 @@ config BR2_PACKAGE_OPENVPN_SMALL
+>   	  You loose eurephia, debugging info, help messages and more.
+>   	  It saves around 100 KiB in binary file size.
+>
+> +config BR2_PACKAGE_OPENVPN_PWSAVE
+> +	bool "Allow passwords in files"
+> +	help
+> +	  Allow --askpass and --auth-user-pass passwords to be read from a file.
+
+As explained in the Buildroot manual, the help text should be wrapped at 
+72 characters, so the "file." should have been in the next line. I think 
+a maintainer will not mind to fix it for you.
+
+http://buildroot.org/downloads/manual/manual.html#writing-rules-config-in
+
+Despite of those comments, I think your patch looks OK to be applied, so 
+here you have my...
+
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Regards,
 
 Vincent.
+
+> +
+>   choice
+>   	prompt "Crypto backend"
+>   	default BR2_PACKAGE_OPENVPN_CRYPTO_OPENSSL
+> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+> index 1caa9a0..2973928 100644
+> --- a/package/openvpn/openvpn.mk
+> +++ b/package/openvpn/openvpn.mk
+> @@ -41,6 +41,12 @@ else
+>   OPENVPN_CONF_OPTS += --disable-lzo
+>   endif
+>
+> +ifeq ($(BR2_PACKAGE_OPENVPN_PWSAVE),y)
+> +OPENVPN_CONF_OPTS += --enable-password-save
+> +else
+> +OPENVPN_CONF_OPTS += --disable-password-save
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_OPENVPN_CRYPTO_OPENSSL),y)
+>   OPENVPN_CONF_OPTS += --with-crypto-library=openssl
+>   OPENVPN_DEPENDENCIES += openssl
+>
