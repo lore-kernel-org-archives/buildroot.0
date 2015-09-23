@@ -1,44 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Sep 2015 23:12:26 +0200
-Subject: [Buildroot] [git commit] lvm2: bump to version 2.02.132
-Message-ID: <20150923211231.3D4F881681@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Sep 2015 23:12:30 +0200
+Subject: [Buildroot] [PATCHv2] micropython: fix build for MIPS64 n32
+In-Reply-To: <1442997860-1402-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Wed, 23 Sep 2015 09:44:20 +0100")
+References: <1442997860-1402-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <8737y4rgap.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a8c03614f195f8acb2a73bca69ff89caec43c02
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lvm2/lvm2.hash |    4 ++--
- package/lvm2/lvm2.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > This patch applies an upstream patch to fix a compile error like this
+ > one:
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 6aae05a..49a1655 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,4 +1,4 @@
- # From ftp://sources.redhat.com/pub/lvm2/md5.sum
--md5 e7ae07e413120713549cc6dd2a558c75  LVM2.2.02.130.tgz
-+md5 80af5af726949bbbb2aceb15b24b7d20  LVM2.2.02.132.tgz
- # Locally calculated
--sha256 1d9af1ce498453639bb353d593980eca5c7ca9cc7734ace61454191f7c669d29  LVM2.2.02.130.tgz
-+sha256 413aa09cd5babb2e01b0209ed4be514645fa8b492664f57f384352a7f58f8829  LVM2.2.02.132.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 73a27ad..6df9b35 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.130
-+LVM2_VERSION = 2.02.132
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ > modffi.c: In function 'ffifunc_call':
+ > modffi.c:358:25: error: cast from pointer to integer of different size
+ > [-Werror=pointer-to-int-cast]
+ >              values[i] = (ffi_arg)a;
+
+ > This error can be highlighted when building micropython for MIPS64 n32
+ > because ffi_arg is 64-bit wide and the pointers on MIPS64 n32 are 32-bit
+ > wide, so it's trying to case an integer to a pointer (or vice versa) of
+ > a different size. We should cast first the pointer (or the integer) to a
+ > pointer sized integer (intptr_t) to fix that problem.
+
+ > This patch was merged upstream as a result of this pull request:
+
+ >   https://github.com/micropython/micropython/pull/1471
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/e22/e2253de3f96e9a53e75b4cecaf56c1df2950803f/
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Committed, thanks.
+
+If we need to apply any more patches then I think it makes more sense to
+get the sources from git (or convince upstream to make a new release).
+
+-- 
+Bye, Peter Korsgaard
