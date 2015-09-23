@@ -1,83 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 22 Sep 2015 21:25:03 +0200
-Subject: [Buildroot] [PATCH 18/19] ccache: use mtime for external
- toolchain, CONF_OPTS for internal toolchain
-In-Reply-To: <5600856D.8010702@mind.be>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442777319-24164-1-git-send-email-arnout@mind.be>
- <1442777319-24164-5-git-send-email-arnout@mind.be>
- <CAHXCMMLkNi47MQg+KCMNjtG1s4byAOO=aJqOGYHYC6Af_6WwpQ@mail.gmail.com>
- <5600856D.8010702@mind.be>
-Message-ID: <CAHXCMMKk-qwuE5zNjr1gqK+eFBvC0gxatF3Qrnqg8dk9pESfNA@mail.gmail.com>
+From: =?utf-8?B?5bed5bO2IOa1qQ==?= <kei-k@ca2.so-net.ne.jp>
+Date: Wed, 23 Sep 2015 10:50:33 +0900
+Subject: [Buildroot] [PATCH v10 1/1] squeezelite: new package
+In-Reply-To: <1442927995.5410.43.camel@embedded.rocks>
+References: <201509221038.t8MAc9DS019932@ms-omx03.plus.so-net.ne.jp>
+ <1442923734.5410.39.camel@embedded.rocks>
+ <2C237626-118B-4EF0-A53C-F33B3E4A8986@ca2.so-net.ne.jp>
+ <EED27595-D73F-4F34-8B0D-98472C72636C@ca2.so-net.ne.jp>
+ <1442927995.5410.43.camel@embedded.rocks>
+Message-ID: <E0CE107F-77B8-4EB0-BA9F-6549D1C10343@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 22, 2015 at 12:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 21-09-15 23:43, Samuel Martin wrote:
->> Hi Arnout,
->>
->> Just some minor comments below.
->>
->> On Sun, Sep 20, 2015 at 9:28 PM, Arnout Vandecappelle (Essensium/Mind)
->> <arnout@mind.be> wrote:
->> [...]
->>>
->>> +ifeq ($(BR2_CCACHE),y)
->>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
->>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/*.patch
->>> +ifeq ($(BR2_xtensa),y)
->>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
->>> +endif
->>> +ifeq ($(ARCH),powerpc)
->>> +ifneq ($(BR2_SOFT_FLOAT),)
->>> +HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
->>> +endif
->>> +endif
->>
->> Maybe it is a rare case, should not the gcc's patches from the
->> BR2_GLOBAL_PATCH_DIR location be added to the
->> HOST_GCC_COMMON_CCACHE_HASH_FILES list as well?
->
->  True. Note that in the global patch dir, you'd have to create separate
-> gcc-initial and gcc-final directories, which makes it less likely that someone
-> would actually do this.
->
->  I was also thinking about GCC_OVERRIDE_SRCDIR, which is not covered at the moment.
->
->  However, these things make the already fairly complicated hash logic even more
-> complex. Do we really need to support such exotic cases?
+Sometime your address results delivery error like this?
 
-Maybe no. The cost of supporting these corner cases may be to high
-compared to the frequency it would be used/needed.
+The original message was received at Tue, 22 Sep 2015 21:46:02 +0900
+from ms-omx12.plus.so-net.ne.jp [10.240.84.162]
 
->
->
->>
->>> +
->>> +HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
->>> +       printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
->>> +               | sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
->>> +               | cut -c -64 | tr -d '\n'`\"
->>
->> Depending on the number of items in the
->> HOST_GCC_COMMON_CCACHE_HASH_FILES list, the BR_CCACHE_HASH definition
->> can be quite long...
->
->  Is that a problem?
+  ----- The following addresses had permanent fatal errors -----
+<joerg.krause@embedded.rocks>
+   (reason: 550 5.7.1 Service unavailable; client [202.238.84.152] blocked using dnsbl.inps.de)
 
-It was just a comment ;-)
+  ----- Transcript of session follows -----
+... while talking to embedded.rocks.:
+>>> RCPT To:<joerg.krause@embedded.rocks>
+<<< 550 5.7.1 Service unavailable; client [202.238.84.152] blocked using dnsbl.inps.de
+550 5.1.1 <joerg.krause@embedded.rocks>... User unknown
+>>> DATA
+<<< 554 5.5.1 Error: no valid recipients
+Reporting-MTA: dns; ms-omx02.plus.so-net.ne.jp
+Received-From-MTA: DNS; ms-omx12.plus.so-net.ne.jp
+Arrival-Date: Tue, 22 Sep 2015 21:46:02 +0900
 
-It's not really a problem, it might only be a bit annoying when
-debugging the wrapper.
-This is not something people does every day, I hope so ;-).
-
-Regards,
-
-
--- 
-Samuel
+> 2015/09/22 22:19?J?rg Krause <joerg.krause@embedded.rocks> ?????
+> 
+> Dear Hiroshi,
+> 
+> On Di, 2015-09-22 at 21:59 +0900, kei wrote:
+>> On 2015/09/22, at 21:46, kei <kei-k@ca2.so-net.ne.jp> wrote:
+>> 
+>>> Dear Jorg.
+>>> 
+> 
+> [snip]
+> 
+>>> OK
+>> Ah, NO.
+>> -DRESAMPLE_MP is ok here as I explained.
+>> You can not agree ?
+>> 
+> 
+> Sorry, I did not receive an explanation.
+> 
+> Best regards
+> J?rg Krause
