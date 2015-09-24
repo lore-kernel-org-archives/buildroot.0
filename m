@@ -1,47 +1,35 @@
-From: =?UTF-8?Q?Beno=c3=aet_Th=c3=a9baudeau?= <benoit@wsystem.com>
-Date: Thu, 24 Sep 2015 11:25:35 +0200
-Subject: [Buildroot] [PATCH] package/genimage: bump version to 8
-In-Reply-To: <1443086443-107037-1-git-send-email-benoit@wsystem.com>
-References: <1443086443-107037-1-git-send-email-benoit@wsystem.com>
-Message-ID: <5603C18F.5040008@wsystem.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Sep 2015 11:58:17 +0200
+Subject: [Buildroot] [git commit] openssl: change sed expression
+ delimiter
+In-Reply-To: <20150923212758.B911C81739@busybox.osuosl.org>
+References: <20150923212758.B911C81739@busybox.osuosl.org>
+Message-ID: <20150924115817.51306b11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/09/2015 11:20, Beno?t Th?baudeau wrote:
-> This new version fixes segmentation faults on some platforms.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
-> ---
->  package/genimage/genimage.hash | 2 +-
->  package/genimage/genimage.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
-> index 71b7601..b01ea46 100644
-> --- a/package/genimage/genimage.hash
-> +++ b/package/genimage/genimage.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256	7366dcfe4c542298ffe8a6c8d3551b1c3a84e25bfbb76ca75b9692e974f4534a	genimage-7.tar.xz
-> +sha256	363b2222b8036eca927c464994e7a877539adc3ea9ba895c1e2186f0589fafbf	genimage-8.tar.xz
-> diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-> index 07d95a4..2dffbc5 100644
-> --- a/package/genimage/genimage.mk
-> +++ b/package/genimage/genimage.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GENIMAGE_VERSION = 7
-> +GENIMAGE_VERSION = 8
->  GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
->  GENIMAGE_SITE = http://www.pengutronix.de/software/genimage/download
->  GENIMAGE_DEPENDENCIES = host-pkgconf libconfuse
+Hello,
 
-I have successfully tested this with my RPi series using genimage.
+On Wed, 23 Sep 2015 23:27:42 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=35495daed39933db06dcc62a335fff89836d1853
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Switch from : to # since CFLAGS can include :'s spilled in from
+> BR2_TARGET_OPTIMIZATION, for example:
+> 
+> BR2_TARGET_OPTIMIZATION="-Wl,-rpath,/lib:/usr/lib" would cause the sed
+> expression to fail thus breaking the build.
 
-Best regards,
-Beno?t
+Actually, I am wondering of -Wl,-rpath,/lib:/usr/lib is the legal of
+doing things, and if it shouldn't be -Wl,-rpath,/lib
+-Wl,-rpath,/usr/lib. The first solution makes the assumption that ':'
+is the RPATH separator, while the latter does not make such assumption.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
