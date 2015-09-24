@@ -1,69 +1,52 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 24 Sep 2015 08:13:31 +0100
-Subject: [Buildroot] [PATCH v3] dependencies.sh: improve the missing perl
-	modules detection
-Message-ID: <1443078811-10087-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Sep 2015 09:14:21 +0200
+Subject: [Buildroot] [PATCHv2] dependencies.sh: improve the missing perl
+ modules detection
+In-Reply-To: <20150924040839.GB2229@tarshish>
+References: <1443042786-28226-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150924040839.GB2229@tarshish>
+Message-ID: <20150924091421.5b5956bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v2 -> v3:
-  - Add comments about why each module is needed. (Suggested by Baruch
-    Siach)
+Hello,
 
-Changes v1 -> v2:
-  - Check first for perl itself, and then the modules. Also keep the
-    comment which says that perl is needed to build host-autoconf.
-    (Suggested by Baruch Siach)
+On Thu, 24 Sep 2015 07:08:40 +0300, Baruch Siach wrote:
 
- support/dependencies/dependencies.sh |   32 +++++++++++++++++++++++++++-----
- 1 files changed, 27 insertions(+), 5 deletions(-)
+> > +# Check that the Perl installation is complete enough for Buildroot.
+> > +# Here is the space-separated list of the required modules:
+> 
+> The original comment implied that Data::Dumper is a dependency of 
+> host-autoconf. I guess the same is true for Thread:Queue. This is useful 
+> information that IMO should be preserved. Maybe some thing like the following:
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 01ad828..0d1e303 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -236,10 +236,32 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
- 	fi
- fi
- 
--# Check that the Perl installation is complete enough to build
--# host-autoconf.
--if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
--	echo "Your Perl installation is not complete enough, at least Data::Dumper is missing."
--	echo "On Debian/Ubuntu distributions, install the 'perl' package."
-+# Verify that Perl is installed. Is needed to buid host-autoconf among
-+# many other packages.
-+check_prog_host "perl"
-+
-+# Check that the Perl installation is complete enough for Buildroot.
-+# Here is the space-separated list of the required modules.
-+# Data::Dumper (needed to build host-autoconf)
-+# Thread::Queue (needed to autoreconf libevent)
-+required_perl_modules="Data::Dumper Thread:Queue"
-+
-+# This variable will keep the modules that are missing in your system.
-+missing_perl_modules=""
-+
-+for pm in $required_perl_modules ; do
-+	if ! perl  -e "require $pm" > /dev/null 2>&1 ; then
-+		missing_perl_modules="$missing_perl_modules $pm"
-+	fi
-+done
-+
-+if [ -n "$missing_perl_modules" ] ; then
-+	echo "Your Perl installation is not complete enough; at least the following"
-+	echo "modules are missing:"
-+	echo ""
-+	for pm in $missing_perl_modules ; do
-+		echo -e "\t $pm"
-+	done
-+	echo ""
- 	exit 1
- fi
+Actually, the Thread::Queue module seems to be used by automake, not
+autoconf. It's actually what I guessed from the bug report. And it
+seems to indeed be the case:
+
+thomas at skate:~/projets/buildroot (master)$ grep -r Queue output/build/host-autoconf-2.69/*
+output/build/host-autoconf-2.69/lib/Autom4te/Channels.pm:  # Redirect all channels to push messages on a Thread::Queue using
+output/build/host-autoconf-2.69/lib/Autom4te/Channels.pm:  # Output a message pending in a Thread::Queue.
+thomas at skate:~/projets/buildroot (master)$ grep -r Queue output/build/host-automake-1.15/* 
+output/build/host-automake-1.15/bin/automake.in:      require Thread::Queue;
+output/build/host-automake-1.15/bin/automake.in:      import Thread::Queue;
+output/build/host-automake-1.15/bin/automake.in:# Queue to push require_conf_file requirements to.
+output/build/host-automake-1.15/bin/automake.in:  my $file_queue = Thread::Queue->new;
+output/build/host-automake-1.15/bin/automake.in:      $msg_queues{$file} = Thread::Queue->new;
+output/build/host-automake-1.15/bin/automake.in:  # Queue all makefiles.
+output/build/host-automake-1.15/lib/Automake/Channels.pm:  # Redirect all channels to push messages on a Thread::Queue using
+output/build/host-automake-1.15/lib/Automake/Channels.pm:  # Output a message pending in a Thread::Queue.
+output/build/host-automake-1.15/old/ChangeLog.09:	Cope with absent Perl modules threads and Thread::Queue.
+output/build/host-automake-1.15/old/ChangeLog.09:	Thread::Queue.
+output/build/host-automake-1.15/old/ChangeLog.09:	Thread::Queue, and output messages from such a queue, suitably
+output/build/host-automake-1.15/old/ChangeLog.09:	to set a Thread::Queue for channels, and to flush a queue.
+output/build/host-automake-1.15/old/ChangeLog.09:	threading, then use `threads' and `Thread::Queue'.
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
