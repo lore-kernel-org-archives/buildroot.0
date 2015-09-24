@@ -1,73 +1,58 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 24 Sep 2015 08:21:56 +0100
-Subject: [Buildroot] [PATCH v4] dependencies.sh: improve the missing perl
-	modules detection
-Message-ID: <1443079316-10651-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Sep 2015 09:26:18 +0200
+Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
+ to resolve the VLAN trunk issue
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C34BEE@svr-wa-exch1.atg.lc>
+References: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
+ <5600612C.5060300@mind.be>
+ <20150923170613.75f5e7e4@free-electrons.com>
+ <944894A3EB1D044A9003B2F944389BB20474C34BEE@svr-wa-exch1.atg.lc>
+Message-ID: <20150924092618.2af71055@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v3 -> v4:
-  - Thread::Queue module is actually needed because host-automake uses
-    it. Comment modified accordingly. (Highlighted by Thomas Petazzoni)
+Hello,
 
-Changes v2 -> v3:
-  - Add comments about why each module is needed. (Suggested by Baruch
-    Siach)
+On Wed, 23 Sep 2015 10:58:15 -0700, Lee, Tommy wrote:
 
-Changes v1 -> v2:
-  - Check first for perl itself, and then the modules. Also keep the
-    comment which says that perl is needed to build host-autoconf.
-    (Suggested by Baruch Siach)
+> Please view my in-line replies.
 
- support/dependencies/dependencies.sh |   32 +++++++++++++++++++++++++++-----
- 1 files changed, 27 insertions(+), 5 deletions(-)
+It would be nicer if you actually used an e-mail client that was
+quoting properly the text you're replying to in the plain text version
+of the e-mail (and avoid sending an HTML version).
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 01ad828..c48322d 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -236,10 +236,32 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
- 	fi
- fi
- 
--# Check that the Perl installation is complete enough to build
--# host-autoconf.
--if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
--	echo "Your Perl installation is not complete enough, at least Data::Dumper is missing."
--	echo "On Debian/Ubuntu distributions, install the 'perl' package."
-+# Verify that Perl is installed. Is needed to buid host-autoconf among
-+# many other packages.
-+check_prog_host "perl"
-+
-+# Check that the Perl installation is complete enough for Buildroot.
-+# Here is the space-separated list of the required modules.
-+# Data::Dumper (needed to build host-autoconf)
-+# Thread::Queue (used by host-automake)
-+required_perl_modules="Data::Dumper Thread:Queue"
-+
-+# This variable will keep the modules that are missing in your system.
-+missing_perl_modules=""
-+
-+for pm in $required_perl_modules ; do
-+	if ! perl  -e "require $pm" > /dev/null 2>&1 ; then
-+		missing_perl_modules="$missing_perl_modules $pm"
-+	fi
-+done
-+
-+if [ -n "$missing_perl_modules" ] ; then
-+	echo "Your Perl installation is not complete enough; at least the following"
-+	echo "modules are missing:"
-+	echo ""
-+	for pm in $missing_perl_modules ; do
-+		echo -e "\t $pm"
-+	done
-+	echo ""
- 	exit 1
- fi
+> I received from my project management the Marvell's A385 package in
+> July. Then I started the work on the board in the package -
+> DB-88F6820-GP. What I have achieved is the success of building and
+> booting the Linux-4.0.4 system on the DB-88F6820-GP board. The system
+> is built with mvebu_v7_defconfig and armada-385-db-ap.dts.
+
+This is not the correct Device Tree file. Use armada-388-gp.dts for the
+DB-88F6820-GP. Using an incorrect Device Tree file might work
+partially, but some devices may not work (especially network
+interfaces, which are very often not configured in the same way between
+different boards).
+
+> My current problem, as I mentioned in my preceding email, is that the
+> eth0 and eth1 interfaces cannot be enabled, but eth2 at the boot time.
+
+Two things:
+
+ * Remember what I already told you: the network interfaces are
+   "inverted". eth0 is the second network interface, and eth1 is the
+   first network interface.
+
+ * Use "setenv fdt_skip_update yes" in U-Boot before booting, to tell
+   the Marvell U-Boot to not do any magic fixup in the Device Tree
+   before starting the kernel.
+
+Best regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
