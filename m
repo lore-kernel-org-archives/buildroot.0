@@ -1,153 +1,72 @@
-From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
-Date: Thu, 24 Sep 2015 22:32:57 +0900
-Subject: [Buildroot] [PATCH v12 1/1] squeezelite: new package
-Message-ID: <201509241332.t8ODWvNZ013481@ms-omx03.plus.so-net.ne.jp>
+From: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+Date: Thu, 24 Sep 2015 15:36:40 +0200
+Subject: [Buildroot] [PATCH v2] drbd-utils: bump version to 8.9.4
+Message-ID: <1443101800-12027-1-git-send-email-cvubrugier@fastmail.fm>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear, reviewers.
+Version 8.9.4 of drbd-utils contains fixes for the musl C library.
 
-Thank you for your many comment and suggestions.
+Fixes:
 
-I'm very sorry to post patches so many times.
-I think I reflected all feedbacks except TARGET_CONFIGURE_OPTS issue.
-I'm not sure the right way to fix this, so would anyone suggest me?
+  http://autobuild.buildroot.net/results/4e0/4e0ed65b2e06f4ccadcad5b4302e6334667ecbdb
 
-v11 -> v12
-- remove -DRESAMPLE_MP, because libsoxr is compiled without
-  openMP support in buildroot, so meaningless for now.
-- add -DLINKALL to resolve symbols in optional libraries (libsoxr, etc).
-- add more configuration options : ffmpeg, DSD, Visualizer.
-  lirc support is not included for now, because more work will be
-  necessary to use it (eg: modifying package/lirc-tools to add
-  LIRC_TOOLS_INSTALL_STAGING = YES).
+Moreover, this commit adds the --without-manual option to ./configure
+and drops the hook used to disable the documentation.
 
-Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+
 ---
- package/Config.in                  |    1 +
- package/squeezelite/Config.in      |   46 ++++++++++++++++++++++++++++++++++++
- package/squeezelite/squeezelite.mk |   42 ++++++++++++++++++++++++++++++++
- 3 files changed, 89 insertions(+), 0 deletions(-)
- create mode 100644 package/squeezelite/Config.in
- create mode 100644 package/squeezelite/squeezelite.mk
+Changes v1 -> v2:
+ * fix commit message for Autobuild (comment from Vicente)
+ * fix checksum (comment from Vicente)
+ * pass --without-manual to configure
+---
+ package/drbd-utils/drbd-utils.hash |  2 +-
+ package/drbd-utils/drbd-utils.mk   | 10 ++--------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5158371..2a47420 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -33,6 +33,7 @@ menu "Audio and video applications"
- 	source "package/opus-tools/Config.in"
- 	source "package/pulseaudio/Config.in"
- 	source "package/sox/Config.in"
-+	source "package/squeezelite/Config.in"
- 	source "package/tidsp-binaries/Config.in"
- 	source "package/tovid/Config.in"
- 	source "package/tstools/Config.in"
-diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
-new file mode 100644
-index 0000000..b4af3c8
---- /dev/null
-+++ b/package/squeezelite/Config.in
-@@ -0,0 +1,46 @@
-+config BR2_PACKAGE_SQUEEZELITE
-+	bool "squeezelite"
-+	depends on BR2_USE_WCHAR # flac
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	depends on BR2_USE_MMU # mpg123
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_LIBMAD
-+	select BR2_PACKAGE_LIBVORBIS
-+	select BR2_PACKAGE_FAAD2
-+	select BR2_PACKAGE_MPG123
-+	help
-+	  Logitech Media Server client
-+
-+	  https://code.google.com/p/squeezelite/
-+
-+if BR2_PACKAGE_SQUEEZELITE
-+
-+config BR2_PACKAGE_SQUEEZELITE_FF
-+	bool "Enable wma, alac decoding (by ffmpeg)"
-+	default y
-+	select BR2_PACKAGE_FFMPEG
-+	help
-+	  Enable wma, alac decoding
-+
-+config BR2_PACKAGE_SQUEEZELITE_DSD
-+	bool "Enable dsd decoding"
-+	help
-+	  Enable built-in DSD decoder
-+
-+config BR2_PACKAGE_SQUEEZELITE_RESAMPLE
-+	bool "Enable resampling function"
-+	select BR2_PACKAGE_LIBSOXR
-+	help
-+	  Enable resampling function
-+
-+config BR2_PACKAGE_SQUEEZELITE_VISEXPORT
-+	bool "Enable Visualiser support"
-+	help
-+	  Enable Visualiser support
-+
-+endif
-+
-+comment "squeezelite needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
-new file mode 100644
-index 0000000..9611b97
---- /dev/null
-+++ b/package/squeezelite/squeezelite.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# squeezelite
-+#
-+################################################################################
-+
-+SQUEEZELITE_VERSION = v1.8
-+SQUEEZELITE_SITE = https://code.google.com/p/squeezelite
-+SQUEEZELITE_SITE_METHOD = git
-+SQUEEZELITE_LICENSE = GPLv3
-+SQUEEZELITE_LICENSE_FILE = LICENSE.txt
-+SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123
-+SQUEEZELITE_MAKE_OPTS = -DLINKALL
-+
-+ifeq ($(BR2_PACKAGE_SQUEEZELITE_FF),y)
-+SQUEEZELITE_DEPENDENCIES += ffmpeg
-+SQUEEZELITE_MAKE_OPTS += -DFFMPEG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQUEEZELITE_DSD),y)
-+SQUEEZELITE_MAKE_OPTS += -DDSD
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQUEEZELITE_RESAMPLE),y)
-+SQUEEZELITE_DEPENDENCIES += libsoxr
-+SQUEEZELITE_MAKE_OPTS += -DRESAMPLE
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQUEEZELITE_VISEXPORT),y)
-+SQUEEZELITE_MAKE_OPTS += -DVISEXPORT
-+endif
-+
-+define SQUEEZELITE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
-+		CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-+endef
-+
-+define SQUEEZELITE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/drbd-utils/drbd-utils.hash b/package/drbd-utils/drbd-utils.hash
+index c9894cd..ebd13ef 100644
+--- a/package/drbd-utils/drbd-utils.hash
++++ b/package/drbd-utils/drbd-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	2c531655d0d198a6af055edbc90f232538c2a3d2ce3fe137d03d06de4c1166d7	drbd-utils-8.9.1.tar.gz
++sha256	38929279d1bf549fd1ade4ce6773a6fe209db51bbb0efe7bf6d2b7871ba0afbc	drbd-utils-8.9.4.tar.gz
+diff --git a/package/drbd-utils/drbd-utils.mk b/package/drbd-utils/drbd-utils.mk
+index 5df5b81..75bc854 100644
+--- a/package/drbd-utils/drbd-utils.mk
++++ b/package/drbd-utils/drbd-utils.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-DRBD_UTILS_VERSION = 8.9.1
++DRBD_UTILS_VERSION = 8.9.4
+ DRBD_UTILS_SITE = http://oss.linbit.com/drbd/
+ DRBD_UTILS_LICENSE = GPLv2+
+ DRBD_UTILS_LICENSE_FILES = COPYING
+ DRBD_UTILS_DEPENDENCIES = host-flex
+ 
+-DRBD_UTILS_CONF_OPTS = --with-distro=generic
++DRBD_UTILS_CONF_OPTS = --with-distro=generic --without-manual
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ DRBD_UTILS_CONF_OPTS += --with-initscripttype=systemd
+@@ -26,10 +26,4 @@ else
+ DRBD_UTILS_CONF_OPTS += --with-udev=no
+ endif
+ 
+-# Do not build the documentation because it requires docbook
+-define DRBD_UTILS_DISABLE_DOCS
+-	$(SED) 's/user scripts documentation/user scripts/' $(@D)/Makefile.in
+-endef
+-DRBD_UTILS_POST_PATCH_HOOKS += DRBD_UTILS_DISABLE_DOCS
+-
+ $(eval $(autotools-package))
 -- 
-1.7.1
-
-============================================================
-    Hiroshi Kawashima
+2.5.1
