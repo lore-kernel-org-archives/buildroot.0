@@ -1,32 +1,37 @@
-From: Stefan Peter <st3fanp3t3r@gmail.com>
-Date: Fri, 25 Sep 2015 09:39:35 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Sep 2015 09:41:50 +0200
 Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
- to resolve the VLAN trunk issue
-In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C34C8C@svr-wa-exch1.atg.lc>
+	to resolve the VLAN trunk issue
+In-Reply-To: <20150925093431.4a39623e@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 25 Sep 2015 09:34:31 +0200")
 References: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
- <5600612C.5060300@mind.be> <20150923170613.75f5e7e4@free-electrons.com>
+ <5600612C.5060300@mind.be>
+ <20150923170613.75f5e7e4@free-electrons.com>
  <871tdno5er.fsf@dell.be.48ers.dk>
- <944894A3EB1D044A9003B2F944389BB20474C34C8C@svr-wa-exch1.atg.lc>
-Message-ID: <5604FA37.7040205@gmail.com>
+ <20150925093431.4a39623e@free-electrons.com>
+Message-ID: <87oagrlzcx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tommy
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Am 25.09.2015 um 00:53 schrieb Lee, Tommy:
-> Hi,
-> Yesterday I used one of four Marvell's DTB files with my 4.0.4 system zImage built with mvebu_v7_defconfig. The boot process automatically enabled only eth0.
-> 
-> Unfortunately I do not have the DTS file for building that DTB file. I am reviewing the relevant DTS files, in the 2015.05 and Marvell's 2012.11 file systems, to try to resolve the eth1 enabling issue now.
+Hi,
 
-dtc, the device tree compiler, can decompile dtb to dts. If memory
-serves right, you can use something along
+>> Couldn't we just do a single defconfig that builds all the dtb files and
+ >> then add a README describing what dtb / how to boot on the various
+ >> boards?
 
-dtc -I DTB -O DTS yourfile.dtb
+ > Right, we could do that. But it's really as simple as taking some
+ > random mainline kernel version and build mvebu_v7_defconfig. It's not a
+ > defconfig that has a lot of added-value.
 
-With kind regards
+Ok, and the Marvell u-boot supports zImage / separate dtb or do you need
+to play tricks with appended dtb? Anything related to the bootloader
+that is worthwhile documenting?
 
-Stefan Peter
+-- 
+Venlig hilsen,
+Peter Korsgaard 
