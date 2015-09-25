@@ -1,41 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Sep 2015 09:34:31 +0200
+From: Stefan Peter <st3fanp3t3r@gmail.com>
+Date: Fri, 25 Sep 2015 09:39:35 +0200
 Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
  to resolve the VLAN trunk issue
-In-Reply-To: <871tdno5er.fsf@dell.be.48ers.dk>
+In-Reply-To: <944894A3EB1D044A9003B2F944389BB20474C34C8C@svr-wa-exch1.atg.lc>
 References: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
- <5600612C.5060300@mind.be>
- <20150923170613.75f5e7e4@free-electrons.com>
+ <5600612C.5060300@mind.be> <20150923170613.75f5e7e4@free-electrons.com>
  <871tdno5er.fsf@dell.be.48ers.dk>
-Message-ID: <20150925093431.4a39623e@free-electrons.com>
+ <944894A3EB1D044A9003B2F944389BB20474C34C8C@svr-wa-exch1.atg.lc>
+Message-ID: <5604FA37.7040205@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Tommy
 
-On Thu, 24 Sep 2015 23:48:12 +0200, Peter Korsgaard wrote:
-
->  > So I could submit a huge bunch of defconfigs for all the Armada 370,
->  > XP, 375, 38x and 39x platforms that I have (it would probably be 15 to
->  > 20 defconfigs), but they would only differ by the name of the Device
->  > Tree in the defconfig. All the rest would be exactly the same. So I
->  > wasn't sure it was really worth adding 15 to 20 more defconfigs for a
->  > configuration that doesn't include the bootloader and where all
->  > configurations would be almost identical.
+Am 25.09.2015 um 00:53 schrieb Lee, Tommy:
+> Hi,
+> Yesterday I used one of four Marvell's DTB files with my 4.0.4 system zImage built with mvebu_v7_defconfig. The boot process automatically enabled only eth0.
 > 
-> Couldn't we just do a single defconfig that builds all the dtb files and
-> then add a README describing what dtb / how to boot on the various
-> boards?
+> Unfortunately I do not have the DTS file for building that DTB file. I am reviewing the relevant DTS files, in the 2015.05 and Marvell's 2012.11 file systems, to try to resolve the eth1 enabling issue now.
 
-Right, we could do that. But it's really as simple as taking some
-random mainline kernel version and build mvebu_v7_defconfig. It's not a
-defconfig that has a lot of added-value.
+dtc, the device tree compiler, can decompile dtb to dts. If memory
+serves right, you can use something along
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+dtc -I DTB -O DTS yourfile.dtb
+
+With kind regards
+
+Stefan Peter
