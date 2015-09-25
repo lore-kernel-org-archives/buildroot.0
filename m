@@ -1,97 +1,86 @@
 From: kei <kei-k@ca2.so-net.ne.jp>
-Date: Sat, 26 Sep 2015 00:04:47 +0900
+Date: Sat, 26 Sep 2015 00:07:32 +0900
 Subject: [Buildroot] [PATCH v12 1/1] squeezelite: new package
-In-Reply-To: <560558BD.1030905@imgtec.com>
+In-Reply-To: <E0E50949-0251-4E06-9CAA-B48E7EC46B23@ca2.so-net.ne.jp>
 References: <201509250304.t8P343dO012199@ms-omx03.plus.so-net.ne.jp>
- <5605101A.3090102@imgtec.com> <20150925161420.05e33e90@free-electrons.com>
- <560557BB.6080800@imgtec.com> <560558BD.1030905@imgtec.com>
-Message-ID: <AF2714BD-425E-4CC0-899D-CCBD9C33448B@ca2.so-net.ne.jp>
+ <5605101A.3090102@imgtec.com>
+ <E0E50949-0251-4E06-9CAA-B48E7EC46B23@ca2.so-net.ne.jp>
+Message-ID: <6D94AAE5-54B4-437F-AB2F-24140A70E2D2@ca2.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear, Vincente.
+Dear, Thomas.
 
-Probably you are misunderstanding.
-Full git clone is working, but shallow clone (of buildroot/support/download/git script)
-does not work for this repo.
-That was pointed out by you, shallow clone does not work.
-Try again make squeeze-source.
+I deeply appreciate if you can technically suggest me about following.
+(from the view point of right root build way).
 
+Regards,
 Kawashima
 
-On 2015/09/25, at 23:22, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
 
-> Hi everyone,
-> 
-> On 09/25/2015 03:18 PM, Vicente Olivert Riera wrote:
->> Hi Thomas,
+>> Hiroshi, there is one more little comment below; keep scrolling down.
 >> 
->> On 09/25/2015 03:14 PM, Thomas Petazzoni wrote:
->>> Hello,
->>> 
->>> On Fri, 25 Sep 2015 10:12:58 +0100, Vicente Olivert Riera wrote:
->>> 
->>>>>>>>> squeezelite v1.8 Downloading
->>>>>> Doing shallow clone
->>>>>> Initialized empty Git repository in
->>>>>> /br/output/build/.squeezelite-v1.8.tar.gz.pb3XtQ/squeezelite-v1.8/
->>>>>> remote: Counting objects: 82, done.
->>>>>> Unpacking objects: 100% (82/82), done.
->>>>>> warning: Remote branch v1.8 not found in upstream origin, using HEAD instead
->>>>>> fatal: unable to read tree 668edec073bef579bedf43817f65aee3a592d0ef
->>>>> Hmm...
->>>>> I have been working on my cached source, so I did not realize it.
->>>>> Yes, I can reproduce your problem with real clean buildroot tree.
->>>>> Maybe something changed https://code.google.com/p/squeezelite repo
->>>>> since my last fetch.
->>>>> I'm considering to change SQUEEZELITE_SITE to github repo like:
->>>>> https://github.com/sixeyed/squeezelite
->>>>> Does this repo work for you too ?
+>>>>> I think I reflected all feedbacks except TARGET_CONFIGURE_OPTS issue.
+>>>>> I'm not sure the right way to fix this, so would anyone suggest me?
 >>>> 
->>>> the fact that it works or not is not the problem. The problem is that
->>>> right now there isn't any official repository for that project, so that
->>>> repository could disappear tomorrow. And I don't know if the owner of
->>>> that repository has made any change to the source code or not.
+>>>> TARGET_CONFIGURE_OPTS is a variable which defines PATH, CC, LD and more
+>>>> things. You can have a look at it in package/Makefile.in, line #247.
 >>>> 
->>>> Perhaps downloading the tarballs from Google Code and putting them in
->>>> mirror.buildroot.org would be the best option. I have added Peter and
->>>> Thomas on CC so they can tell their opinion about this issue.
+>>>> Instead of passing CC="$(TARGET_CC)" LD="$(TARGET_LD) to the make
+>>>> command, you could just pass $(TARGET_CONFIGURE_OPTS).
+>>>> 
+>>>> There is a comment at the end where I show you how to use it.
 >>> 
->>> What do you want to do this instead of just using the Google Code
->>> tarballs? Yes, I know Google Code will disappear in the future, but
->>> right now, it works, and by the time it will be shut down, hopefully
->>> this project will have found a new hosting.
->> 
->> Because I don't see any tarball in Google Code which contains the
->> sources. All I see are binary builds:
->> 
->> https://code.google.com/p/squeezelite/downloads/list?can=1&q=
-> 
-> anyway, I think the git repo on Google Code started working again:
-> 
-> $ git clone https://code.google.com/p/squeezelite/
-> Initialized empty Git repository in /git-clones/squeezelite/.git/
-> remote: Counting objects: 845, done.
-> Receiving objects: 100% (845/845), 286.68 KiB, done.
-> Resolving deltas: 100% (570/570), done.
-> $
-> 
-> Regards,
-> 
-> Vincent.
-> 
->> Regards,
->> 
->> Vincent.
->> 
+>>> [snip]
 >>> 
->>> Thomas
+>>>>> +define SQUEEZELITE_BUILD_CMDS
+>>>>> +	$(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
+>>>>> +		CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+>>>> 
+>>>> Here is where you could use the $(TARGET_CONFIGURE_OPTS) variable:
+>>>> 
+>>>> 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+>>>> 		OPTS="$(SQUEEZELITE_MAKE_OPTS)" -C $(@D) all
+>>>> 
+>>>> Perhaps using $(TARGET_CONFIGURE_OPTS) as environment variable would
+>>>> work as well, and since it also defines PATH, then $(TARGET_MAKE_ENV)
+>>>> wouldn't be needed:
+>>>> 
+>>>> 	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
+>>>> 		OPTS="$(SQUEEZELITE_MAKE_OPTS)" -C $(@D) all
+>>> Yes, I know basic usage of TARGET_CONFIGURE_OPTS as you explained,
+>>> thanks.
+>>> But just changing like this does not work with squeezelite's Makefile.
+>>> I included squeezelite's Makefile in last of this e-mail.
+>>> It determines optional libraries to be linked, I choose libsoxr as
+>>> example like this:
+>>> ...
+>>> CFLAGS  ?= -Wall -fPIC -O2 $(OPTS)
+>>> LDFLAGS ?= -lasound -lpthread -lm -lrt
+>>> ...
+>>> OPT_RESAMPLE= -DRESAMPLE
+>>> ...
+>>> LINKALL_RESAMPLE = -lsoxr
+>>> ...
+>>> ifneq (,$(findstring $(OPT_RESAMPLE), $(CFLAGS)))
+>>>       LDFLAGS += $(LINKALL_RESAMPLE)
+>>> endif
+>>> ...
+>>> $(EXECUTABLE): $(OBJECTS)
+>>> 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+>>> ...
+>>> .c.o:
+>>> 	$(CC) $(CFLAGS) $(CPPFLAGS) $< -c -o $@
+>>> ...
 >>> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>>> But TARGET_CONFIGURE_OPTS override CFLAGS, LDFLAGS, etc.
+>>> It results original Makefile logic does not work.
+>>> Can you suggest me right way (of buildroot) how to solve this ?
+>>> How should I control final CFLAGS, LDFLAGS, etc from squeezelite.mk
+>>> file ?
 >> 
+>> Well, if it doesn't work, then I guess is fine doing it by passing
+>> CC="$(TARGET_CC)" and LD="$(TARGET_LD)" as you already do.
