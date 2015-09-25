@@ -1,96 +1,79 @@
-From: kei <kei-k@ca2.so-net.ne.jp>
-Date: Sat, 26 Sep 2015 00:11:55 +0900
-Subject: [Buildroot] [PATCH v12 1/1] squeezelite: new package
-In-Reply-To: <6D94AAE5-54B4-437F-AB2F-24140A70E2D2@ca2.so-net.ne.jp>
-References: <201509250304.t8P343dO012199@ms-omx03.plus.so-net.ne.jp>
- <5605101A.3090102@imgtec.com>
- <E0E50949-0251-4E06-9CAA-B48E7EC46B23@ca2.so-net.ne.jp>
- <6D94AAE5-54B4-437F-AB2F-24140A70E2D2@ca2.so-net.ne.jp>
-Message-ID: <29D58222-45CC-4D6C-B6FF-7A9A54E5B935@ca2.so-net.ne.jp>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 25 Sep 2015 16:25:31 +0100
+Subject: [Buildroot] [PATCH] glmark2: depend on host-python
+Message-ID: <1443194731-52284-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, s/root build/buildroot/
+The waf build system of glmark2 needs Python 2 as stated on its README
+file:
 
-On 2015/09/26, at 0:07, kei <kei-k@ca2.so-net.ne.jp> wrote:
+python 2.x (>= 2.4) for the build system (waf)
 
-> Dear, Thomas.
-> 
-> I deeply appreciate if you can technically suggest me about following.
-> (from the view point of right root build way).
-> 
-> Regards,
-> Kawashima
-> 
-> 
->>> Hiroshi, there is one more little comment below; keep scrolling down.
->>> 
->>>>>> I think I reflected all feedbacks except TARGET_CONFIGURE_OPTS issue.
->>>>>> I'm not sure the right way to fix this, so would anyone suggest me?
->>>>> 
->>>>> TARGET_CONFIGURE_OPTS is a variable which defines PATH, CC, LD and more
->>>>> things. You can have a look at it in package/Makefile.in, line #247.
->>>>> 
->>>>> Instead of passing CC="$(TARGET_CC)" LD="$(TARGET_LD) to the make
->>>>> command, you could just pass $(TARGET_CONFIGURE_OPTS).
->>>>> 
->>>>> There is a comment at the end where I show you how to use it.
->>>> 
->>>> [snip]
->>>> 
->>>>>> +define SQUEEZELITE_BUILD_CMDS
->>>>>> +	$(TARGET_MAKE_ENV) $(MAKE) OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
->>>>>> +		CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
->>>>> 
->>>>> Here is where you could use the $(TARGET_CONFIGURE_OPTS) variable:
->>>>> 
->>>>> 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
->>>>> 		OPTS="$(SQUEEZELITE_MAKE_OPTS)" -C $(@D) all
->>>>> 
->>>>> Perhaps using $(TARGET_CONFIGURE_OPTS) as environment variable would
->>>>> work as well, and since it also defines PATH, then $(TARGET_MAKE_ENV)
->>>>> wouldn't be needed:
->>>>> 
->>>>> 	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
->>>>> 		OPTS="$(SQUEEZELITE_MAKE_OPTS)" -C $(@D) all
->>>> Yes, I know basic usage of TARGET_CONFIGURE_OPTS as you explained,
->>>> thanks.
->>>> But just changing like this does not work with squeezelite's Makefile.
->>>> I included squeezelite's Makefile in last of this e-mail.
->>>> It determines optional libraries to be linked, I choose libsoxr as
->>>> example like this:
->>>> ...
->>>> CFLAGS  ?= -Wall -fPIC -O2 $(OPTS)
->>>> LDFLAGS ?= -lasound -lpthread -lm -lrt
->>>> ...
->>>> OPT_RESAMPLE= -DRESAMPLE
->>>> ...
->>>> LINKALL_RESAMPLE = -lsoxr
->>>> ...
->>>> ifneq (,$(findstring $(OPT_RESAMPLE), $(CFLAGS)))
->>>>      LDFLAGS += $(LINKALL_RESAMPLE)
->>>> endif
->>>> ...
->>>> $(EXECUTABLE): $(OBJECTS)
->>>> 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
->>>> ...
->>>> .c.o:
->>>> 	$(CC) $(CFLAGS) $(CPPFLAGS) $< -c -o $@
->>>> ...
->>>> 
->>>> But TARGET_CONFIGURE_OPTS override CFLAGS, LDFLAGS, etc.
->>>> It results original Makefile logic does not work.
->>>> Can you suggest me right way (of buildroot) how to solve this ?
->>>> How should I control final CFLAGS, LDFLAGS, etc from squeezelite.mk
->>>> file ?
->>> 
->>> Well, if it doesn't work, then I guess is fine doing it by passing
->>> CC="$(TARGET_CC)" and LD="$(TARGET_LD)" as you already do.
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Building it with a system with Python 3 as the default Python version
+will result on a failure like this one:
+
+File "waflib/Utils.py", line 199
+    except OSError ,e:
+                   ^
+SyntaxError: invalid syntax
+
+So, in order to fix this, make this package depending on host-python and
+also run the waf script using $(HOST_DIR)/usr/bin/python2.
+
+At the same time fix a typo in the .mk file. The python-config script is
+localed at $(HOST_DIR)/usr/bin/ instead of $(STAGING_DIR)/usr/bin/.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/fc6/fc6cd2a90bbb0e6f80f6c4afaae1430f82e54046/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/glmark2/glmark2.mk |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index ffaea73..32112b4 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -8,7 +8,7 @@ GLMARK2_VERSION = 499aa81a68fb4c8aac1c80f0d6a4cce05941c4cc
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPLv3+ SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
+-GLMARK2_DEPENDENCIES = host-pkgconf jpeg libpng \
++GLMARK2_DEPENDENCIES = host-pkgconf host-python jpeg libpng \
+ 	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
+ 	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
+ 	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
+@@ -47,21 +47,21 @@ GLMARK2_CONF_OPTS += \
+ 
+ define GLMARK2_CONFIGURE_CMDS
+ 	(cd $(@D); \
+-		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
++		PYTHON_CONFIG="$(HOST_DIR)/usr/bin/python-config" \
+ 		python_LDFLAGS="" \
+ 		python_LIBDIR="" \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(GLMARK2_CONF_ENV) \
+-		./waf configure $(GLMARK2_CONF_OPTS) \
++		$(HOST_DIR)/usr/bin/python2 ./waf configure $(GLMARK2_CONF_OPTS) \
+ 	)
+ endef
+ 
+ define GLMARK2_BUILD_CMDS
+-	cd $(@D) && $(TARGET_MAKE_ENV) ./waf
++	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf
+ endef
+ 
+ define GLMARK2_INSTALL_TARGET_CMDS
+-	cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
++	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf install --destdir=$(TARGET_DIR)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+1.7.1
