@@ -1,78 +1,56 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 25 Sep 2015 11:06:25 +0100
-Subject: [Buildroot] [PATCH v6] dependencies.sh: improve the missing perl
-	modules detection
-Message-ID: <1443175585-27077-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Wetzel Andreas <Andreas.Wetzel@nanotronic.ch>
+Date: Fri, 25 Sep 2015 11:12:00 +0000
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: add option to
+ enable/disable ipv6 support
+In-Reply-To: <20150923230236.5b5c5302@free-electrons.com>
+References: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>,
+ <20150923230236.5b5c5302@free-electrons.com>
+Message-ID: <0dc07792d2e04be6b1628563695e9e28@LysExc01.nanotronic.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v5 -> v6:
-  - Remove the check for perl itself, as is already done at line #161.
+Hi Thomas,
 
-Changes v4 -> v5:
-  - Use the string concatenation operator (+=) to assing the values to
-    the required_perl_modules. That way the comments about why each
-    module is needed can be in the same line where the module is added
-    to the variable.
-    Use also += for the missing_perl_modules variable.
+Ok, I was not aware that you made IPv6 mandantory. Sorry for that.
 
-Changes v3 -> v4:
-  - Thread::Queue module is actually needed because host-automake uses
-    it. Comment modified accordingly. (Highlighted by Thomas Petazzoni)
+Currently, IPv6 is always enabled for libwebsockets.
+In a project we used a kernel without support for IPv6. libwebsockets (with ipv6 support) seem to cause problems if the kernel does not support IPv6 at all. That's why I thought such configuration option would make sense.
 
-Changes v2 -> v3:
-  - Add comments about why each module is needed. (Suggested by Baruch
-    Siach)
+Size is no reason. Including IPv6 support is a matter of a few kilobytes.
 
-Changes v1 -> v2:
-  - Check first for perl itself, and then the modules. Also keep the
-    comment which says that perl is needed to build host-autoconf.
-    (Suggested by Baruch Siach)
+So my resolution is to add IPv6 support to the linux kernel we use to.
 
- support/dependencies/dependencies.sh |   27 ++++++++++++++++++++++-----
- 1 files changed, 22 insertions(+), 5 deletions(-)
+Thank you,
+Andi
+________________________________________
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Sent: Wednesday, September 23, 2015 23:02
+To: Wetzel Andreas
+Cc: buildroot at busybox.net; Gustavo Zacarias
+Subject: Re: [Buildroot] [PATCH 1/1] libwebsockets: add option to enable/disable ipv6 support
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 01ad828..8ff667c 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -236,10 +236,27 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_COMPILER=y $BR2_CONFIG ; then
- 	fi
- fi
- 
--# Check that the Perl installation is complete enough to build
--# host-autoconf.
--if ! perl  -e "require Data::Dumper" > /dev/null 2>&1 ; then
--	echo "Your Perl installation is not complete enough, at least Data::Dumper is missing."
--	echo "On Debian/Ubuntu distributions, install the 'perl' package."
-+# Check that the Perl installation is complete enough for Buildroot.
-+# Here is the space-separated list of the required modules.
-+required_perl_modules="Data::Dumper" # Needed to build host-autoconf
-+required_perl_modules+=" Thread:Queue" # Used by host-automake
-+
-+# This variable will keep the modules that are missing in your system.
-+missing_perl_modules=""
-+
-+for pm in $required_perl_modules ; do
-+	if ! perl  -e "require $pm" > /dev/null 2>&1 ; then
-+		missing_perl_modules+=" $pm"
-+	fi
-+done
-+
-+if [ -n "$missing_perl_modules" ] ; then
-+	echo "Your Perl installation is not complete enough; at least the following"
-+	echo "modules are missing:"
-+	echo ""
-+	for pm in $missing_perl_modules ; do
-+		echo -e "\t $pm"
-+	done
-+	echo ""
- 	exit 1
- fi
--- 
-1.7.1
+Dear Andreas Wetzel,
+
+On Wed, 23 Sep 2015 15:16:34 +0200, Andreas Wetzel wrote:
+> Added configuration option BR2_PACKAGE_LIBWEBSOCKETS_IPV6 that
+> adds -DLWS_IPV6=ON/OFF to LIBWEBSOCKETS_CONF_OPTS.
+>
+> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
+
+We stopped supporting IPv6 as an optional feature in the toolchain, and
+made it mandatory. So, to go in the same direction, I would suggest to
+simply always enable IPv6 in libwebsockets.
+
+What is the size overhead of enabling IPv6 ? If it's reasonable, then
+we want IPv6 to be unconditionally enabled.
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
