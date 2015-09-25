@@ -1,107 +1,51 @@
-From: kei <kei-k@ca2.so-net.ne.jp>
-Date: Sat, 26 Sep 2015 00:34:39 +0900
-Subject: [Buildroot] [PATCH v12 1/1] squeezelite: new package
-In-Reply-To: <AF2714BD-425E-4CC0-899D-CCBD9C33448B@ca2.so-net.ne.jp>
-References: <201509250304.t8P343dO012199@ms-omx03.plus.so-net.ne.jp>
- <5605101A.3090102@imgtec.com> <20150925161420.05e33e90@free-electrons.com>
- <560557BB.6080800@imgtec.com> <560558BD.1030905@imgtec.com>
- <AF2714BD-425E-4CC0-899D-CCBD9C33448B@ca2.so-net.ne.jp>
-Message-ID: <8C444A3A-D9A3-4DAD-A7BF-E70FF76999A9@ca2.so-net.ne.jp>
+From: Lee, Tommy <Tommy_Lee@alliedtelesis.com>
+Date: Fri, 25 Sep 2015 09:07:51 -0700
+Subject: [Buildroot] Building system for the Marvell's ARMADA A385 borad
+ to resolve the VLAN trunk issue
+In-Reply-To: <5604FA37.7040205@gmail.com>
+References: <944894A3EB1D044A9003B2F944389BB20474C34B0F@svr-wa-exch1.atg.lc>
+ <5600612C.5060300@mind.be> <20150923170613.75f5e7e4@free-electrons.com>
+ <871tdno5er.fsf@dell.be.48ers.dk>
+ <944894A3EB1D044A9003B2F944389BB20474C34C8C@svr-wa-exch1.atg.lc>
+ <5604FA37.7040205@gmail.com>
+Message-ID: <944894A3EB1D044A9003B2F944389BB20474C34CAE@svr-wa-exch1.atg.lc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, s/squeeze-source/squeezelite-source/
+Stefan,
 
-On 2015/09/26, at 0:04, kei <kei-k@ca2.so-net.ne.jp> wrote:
+Thanks for sharing your experience. I will do it when I get back to this work.
 
-> Dear, Vincente.
-> 
-> Probably you are misunderstanding.
-> Full git clone is working, but shallow clone (of buildroot/support/download/git script)
-> does not work for this repo.
-> That was pointed out by you, shallow clone does not work.
-> Try again make squeeze-source.
-> 
-> Kawashima
-> 
-> On 2015/09/25, at 23:22, Vicente Olivert Riera <Vincent.Riera@imgtec.com> wrote:
-> 
->> Hi everyone,
->> 
->> On 09/25/2015 03:18 PM, Vicente Olivert Riera wrote:
->>> Hi Thomas,
->>> 
->>> On 09/25/2015 03:14 PM, Thomas Petazzoni wrote:
->>>> Hello,
->>>> 
->>>> On Fri, 25 Sep 2015 10:12:58 +0100, Vicente Olivert Riera wrote:
->>>> 
->>>>>>>>>> squeezelite v1.8 Downloading
->>>>>>> Doing shallow clone
->>>>>>> Initialized empty Git repository in
->>>>>>> /br/output/build/.squeezelite-v1.8.tar.gz.pb3XtQ/squeezelite-v1.8/
->>>>>>> remote: Counting objects: 82, done.
->>>>>>> Unpacking objects: 100% (82/82), done.
->>>>>>> warning: Remote branch v1.8 not found in upstream origin, using HEAD instead
->>>>>>> fatal: unable to read tree 668edec073bef579bedf43817f65aee3a592d0ef
->>>>>> Hmm...
->>>>>> I have been working on my cached source, so I did not realize it.
->>>>>> Yes, I can reproduce your problem with real clean buildroot tree.
->>>>>> Maybe something changed https://code.google.com/p/squeezelite repo
->>>>>> since my last fetch.
->>>>>> I'm considering to change SQUEEZELITE_SITE to github repo like:
->>>>>> https://github.com/sixeyed/squeezelite
->>>>>> Does this repo work for you too ?
->>>>> 
->>>>> the fact that it works or not is not the problem. The problem is that
->>>>> right now there isn't any official repository for that project, so that
->>>>> repository could disappear tomorrow. And I don't know if the owner of
->>>>> that repository has made any change to the source code or not.
->>>>> 
->>>>> Perhaps downloading the tarballs from Google Code and putting them in
->>>>> mirror.buildroot.org would be the best option. I have added Peter and
->>>>> Thomas on CC so they can tell their opinion about this issue.
->>>> 
->>>> What do you want to do this instead of just using the Google Code
->>>> tarballs? Yes, I know Google Code will disappear in the future, but
->>>> right now, it works, and by the time it will be shut down, hopefully
->>>> this project will have found a new hosting.
->>> 
->>> Because I don't see any tarball in Google Code which contains the
->>> sources. All I see are binary builds:
->>> 
->>> https://code.google.com/p/squeezelite/downloads/list?can=1&q=
->> 
->> anyway, I think the git repo on Google Code started working again:
->> 
->> $ git clone https://code.google.com/p/squeezelite/
->> Initialized empty Git repository in /git-clones/squeezelite/.git/
->> remote: Counting objects: 845, done.
->> Receiving objects: 100% (845/845), 286.68 KiB, done.
->> Resolving deltas: 100% (570/570), done.
->> $
->> 
->> Regards,
->> 
->> Vincent.
->> 
->>> Regards,
->>> 
->>> Vincent.
->>> 
->>>> 
->>>> Thomas
->>>> 
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Tommy
+
+-----Original Message-----
+From: buildroot [mailto:buildroot-bounces at busybox.net] On Behalf Of Stefan Peter
+Sent: Friday, September 25, 2015 12:40 AM
+To: buildroot at busybox.net
+Subject: Re: [Buildroot] Building system for the Marvell's ARMADA A385 borad to resolve the VLAN trunk issue
+
+Hi Tommy
+
+Am 25.09.2015 um 00:53 schrieb Lee, Tommy:
+> Hi,
+> Yesterday I used one of four Marvell's DTB files with my 4.0.4 system zImage built with mvebu_v7_defconfig. The boot process automatically enabled only eth0.
+>
+> Unfortunately I do not have the DTS file for building that DTB file. I am reviewing the relevant DTS files, in the 2015.05 and Marvell's 2012.11 file systems, to try to resolve the eth1 enabling issue now.
+
+dtc, the device tree compiler, can decompile dtb to dts. If memory serves right, you can use something along
+
+dtc -I DTB -O DTS yourfile.dtb
+
+With kind regards
+
+Stefan Peter
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+This e-mail message is for the sole use of the intended recipient(s) and may contain confidential and privileged information. Any unauthorized review, use, disclosure or distribution is prohibited. If you are not the intended recipient, please contact the sender by reply e-mail and destroy all copies of the original message. If you are the intended recipient, please be advised that the content of this message is subject to access, review and disclosure by the sender's e-mail System Administrator.
