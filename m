@@ -1,57 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Sep 2015 16:40:46 +0200
-Subject: [Buildroot] [PATCHv2] package/kodi: needs .py modules
-References: <1442178783-27567-1-git-send-email-yann.morin.1998@free.fr>
- <20150913232942.736dea75@free-electrons.com>
-Message-ID: <ecnidcxjj2.ln2@ID-313208.user.individual.net>
+From: Dinesh Guleria <din.gulu.er@gmail.com>
+Date: Sat, 26 Sep 2015 20:46:31 +0530
+Subject: [Buildroot] free electron training question --
+	embedded-linux-labs.pdf
+Message-ID: <CAKpDV8vowAb3vj0_jebPo3BmGxLFiV+FoKiEaipGOiy4o10Frw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 13 Sep 2015 23:29:42 +0200 schrieb Thomas Petazzoni:
+Hello Buildroot team,
 
-> Yann,
-> 
-> On Sun, 13 Sep 2015 23:13:03 +0200, Yann E. MORIN wrote:
->> Kodi segfaults as soon as it tries to load a python module:
->> 
->>     Could not find platform independent libraries <prefix> Consider
->>     setting $PYTHONHOME to <prefix>[:<exec_prefix>]
->>     ImportError: No module named site Segmentation fault
->> 
->> Turns out that keeping .py modules (with or without .pyc) fixes the
->> issue.
->> 
->> Currently, Kodi selects python, but since the format of modules is a
->> choice, we can not select it.
->> 
->> Fix that by inverting the dependency on python from Kodi:
->>   - turn it into a depends rather than a select,
->>   - add the dependency to ! pyc-only - update the comment accordingly.
->> 
->> Signed-off-by: "Yann E. MORIN"
->> <yann.morin.1998@free.fr>
-> 
-> Do we actually understand why it doesn't work? There is really no reason
-> for .py files to be necessary.
+I have question from page 27 of following doc embedded-linux-labs.pdf.
+Attached image.
 
-Hi Thomas, hi Yann,
+Here in figure UBI use to go in MDT partition.
 
-according to http://kodi.wiki/view/Add-on_rules Kodi apparently 
-expects .py files in add-ons:
+Does following also goes into individual MDT partition  :--
+AT91Bootstrap, U-Boot, U-Boot env & U-Boot env backup
 
-"All source files must be included. No pre-compiled files will be 
-allowed."
+Or these (AT91Bootstrap, U-Boot, U-Boot env & U-Boot env backup ) also goes
+into NAND Flash at predefined location which are not MDT partiton ?
 
-Some more information about this can be found here:
-http://forum.kodi.tv/showthread.php?tid=181065&pid=1580560#pid1580560
-https://github.com/OpenELEC/OpenELEC.tv/issues/3335#issuecomment-51490468
+Please suggest.
 
-I remember that several years ago I had problems after removing .py files 
-from my xbmc/kodi box so I kept them ever since ;)
-
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Regards, Bernd
+Regards,
+Dinesh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150926/68c95a08/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mtd_partition.png
+Type: image/png
+Size: 103414 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150926/68c95a08/attachment.png>
