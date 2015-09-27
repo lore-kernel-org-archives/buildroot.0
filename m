@@ -1,38 +1,27 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 27 Sep 2015 13:50:51 +0200
-Subject: [Buildroot] [PATCH v2 1/4] Remove trailing slash from all
- package site URLs
-In-Reply-To: <1443346764-7433-2-git-send-email-luca@lucaceresoli.net>
-References: <1443346764-7433-1-git-send-email-luca@lucaceresoli.net>
- <1443346764-7433-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <5607D81B.4000101@lucaceresoli.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Sep 2015 14:13:30 +0200
+Subject: [Buildroot] [PATCH v2 1/1]
+ package/x11r7/xdriver_xf86-video-ati: Fix DRI-related build
+References: <1443351264-9312-1-git-send-email-bernd.kuhls@t-online.de>
+ <5607D7A4.8020903@imgtec.com>
+Message-ID: <a43ldcxmbf.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am Sun, 27 Sep 2015 12:48:52 +0100 schrieb Vicente Olivert Riera:
+
+> And I managed to build xdriver_xf86-video-ati for MIPS architecture
+> successfully, after enabling BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON for
+> all architectures.
+
 Hi,
 
-Luca Ceresoli wrote:
- > The recommended form is without the trailing slash. Buildroot will 
-add a slash
- > between FOO_SITE and FOO_SOURCE as appropriate.
- >
- > This avoids the need for the $$($(2)_SITE:/=) magic in 
-package/pkg-generic.mk
- > to avoid double slashes in download URLs, like
- > https://mosh.mit.edu//mosh-1.2.5.tar.gz which works but is dirty.
- >
- > Note: this work has already been done in b0b9606530dfc6de4030 a few 
-months ago,
- > but no check has been added at that time to avoid new slashes to slip 
-in, and
- > so they did. This time a patch will follow immediately to catch future
- > mistakes to be unnoticed.
+it is possible to build the package for various archs, but does it make 
+sense? V2 of my patch picks up a comment by Peter:
+http://patchwork.ozlabs.org/patch/512209/
+"Is there any realistic use cases for anything besides x86 / x86-64?"
 
-And of course the last sentence should be written in English: "...to
-prevent future mistakes from being unnoticed".
-
--- 
-Luca
+Regards, Bernd
