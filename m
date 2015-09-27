@@ -1,43 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Sep 2015 21:22:05 +0200
-Subject: [Buildroot] [PATCH v2] drbd-utils: bump version to 8.9.4
-In-Reply-To: <1443101800-12027-1-git-send-email-cvubrugier@fastmail.fm>
-References: <1443101800-12027-1-git-send-email-cvubrugier@fastmail.fm>
-Message-ID: <20150927212205.6314710b@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Sep 2015 22:49:18 +0200
+Subject: [Buildroot] [PATCH] mosquitto: bump version
+Message-ID: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Christophe Vu-Brugier,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mosquitto/mosquitto.hash | 2 +-
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, 24 Sep 2015 15:36:40 +0200, Christophe Vu-Brugier wrote:
-> Version 8.9.4 of drbd-utils contains fixes for the musl C library.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/4e0/4e0ed65b2e06f4ccadcad5b4302e6334667ecbdb
-> 
-> Moreover, this commit adds the --without-manual option to ./configure
-> and drops the hook used to disable the documentation.
-> 
-> Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-> 
-> ---
-> Changes v1 -> v2:
->  * fix commit message for Autobuild (comment from Vicente)
->  * fix checksum (comment from Vicente)
->  * pass --without-manual to configure
-> ---
->  package/drbd-utils/drbd-utils.hash |  2 +-
->  package/drbd-utils/drbd-utils.mk   | 10 ++--------
->  2 files changed, 3 insertions(+), 9 deletions(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 2ca1d17..e2db213 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	773d7436f729b5a6088035708c9277a9c6ba5651e127b63c8f29fe39e152479c  mosquitto-1.4.3.tar.gz
++sha256  c643c7123708aadcd29287dda7b5ce7c910f75b02956a8fc4fe65ad2ea767a5f  mosquitto-1.4.4.tar.gz
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index d9703fb..73365f9 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.4.3
++MOSQUITTO_VERSION = 1.4.4
+ MOSQUITTO_SITE = http://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
