@@ -1,164 +1,111 @@
-From: vj <vicencb@gmail.com>
-Date: Sun, 27 Sep 2015 01:37:30 +0100
-Subject: [Buildroot] [RFC 00/37] efl bump to 1.14.2
-In-Reply-To: <55EB0258.5020904@openwide.fr>
-References: <CAAMcf8CO9XsiTBOJX3APO+ZXtyPLDZmHq2EU0LPT3UXKhTC-=g@mail.gmail.com>
- <55D6F4A8.3000104@openwide.fr>
- <CAAMcf8COScfy62sEC4uPKHw=LgyLWWtic9ypCF0DZMfu21hzdg@mail.gmail.com>
- <55DB8FAF.7060509@openwide.fr>
- <CAAMcf8Cp0+p4rG+SYc3EHyQaahBe5M9YrkMMF+Uq0RP+tPJFQQ@mail.gmail.com>
- <55EB0258.5020904@openwide.fr>
-Message-ID: <CAAMcf8DcwuJvASF1A12hLSTKsyK3553CL5hv9dnPT+vrMwo9sA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Sep 2015 08:30:15 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2015-09-26
+Message-ID: <20150927063015.F21321028C1@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
-this weekend I had some time to spend on this, sorry for the delay.
+Build statistics for 2015-09-26
+===============================
 
-I've posted the EFL issue:
-http://sourceforge.net/p/enlightenment/mailman/message/34493376
+        success : 226
+       failures : 47 
+       timeouts : 0  
+          TOTAL : 273
 
-And tested your efl-1.15.1-v1 branch from
-git://github.com/RomainNaour/buildroot.git
-Aside from the EFL workaround (-fvisibility=default) the only
-remaining issue is that when audio is disabled it fails to build
-because of bae9cf8354208bdad7780e0d11e5b4c8cf1b1f3e.
-I think it should be safe to just revert it because multisense is
-already enabled by default and (as an audio-related feature) it only
-makes sense when audio is also enabled.
+Classification of failures by reason
+====================================
 
-Regards,
-  Vicente.
+              drbd-utils-8.9.1 | 3 
+               util-linux-2.27 | 3 
+                 mesa3d-10.6.7 | 2 
+                flashrom-0.9.8 | 2 
+libbroadvoice-f65b0f50c8c76... | 2 
+                    ruby-2.2.3 | 2 
+         conntrack-tools-1.4.3 | 2 
+                  ltris-1.0.19 | 2 
+              libstrophe-0.8.8 | 2 
+            micropython-v1.4.6 | 2 
+                ipmiutil-2.9.5 | 1 
+                  mono-4.0.2.5 | 1 
+              gst1-libav-1.4.5 | 1 
+           qt5multimedia-5.5.0 | 1 
+             fxload-2008_10_13 | 1 
+                 dropwatch-1.4 | 1 
+                    neard-0.14 | 1 
+           libfreeimage-3.17.0 | 1 
+                minidlna-1.1.4 | 1 
+                openntpd-5.7p4 | 1 
+                directfb-1.7.7 | 1 
+               iptables-1.4.21 | 1 
+              strongswan-5.3.3 | 1 
+                     rpm-5.2.0 | 1 
+         qt5imageformats-5.5.0 | 1 
+             lttng-tools-2.6.0 | 1 
+                 iperf3-3.0.10 | 1 
+                  libsoc-0.6.4 | 1 
+       kompexsqlite-v1.10.12-1 | 1 
+                 sudo-1.8.14p3 | 1 
+                busybox-1.23.2 | 1 
+                   squid-3.5.9 | 1 
+            ibrdtn-tools-1.0.1 | 1 
+                dbus-cpp-0.9.0 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
 
-Tested-by: Vicente Bergas <vicencb@gmail.com>
+Detail of failures
+===================
 
-On Sat, Sep 5, 2015 at 3:55 PM, Romain Naour <romain.naour@openwide.fr> wrote:
-> Hello Vicente,
->
-> Sorry for the delay.
->
-> Le 25/08/2015 00:09, vj a ?crit :
->> Hello Romain,
->>
->> On Mon, Aug 24, 2015 at 10:42 PM, Romain Naour <romain.naour@openwide.fr> wrote:
->>> Hi Vicente
->>>
->>> Le 21/08/2015 19:56, vj a ?crit :
->>>> Hello Romain,
->>>>
->>>> On Fri, Aug 21, 2015 at 10:51 AM, Romain Naour <romain.naour@openwide.fr> wrote:
->>>>> Hi Vicente,
->>>>>
->>>>> Le 21/08/2015 02:30, vj a ?crit :
->>>>>> Hello Romain,
->>>>>> I've tested you efl update
->>>>>> https://github.com/RomainNaour/buildroot/tree/efl-1.15.0-v1
->>>>>> It did not work, :(
->>>>>> But applying the two patches below works again!
->>>>>> The first one was already commented in a previous e-mail.
->>>>>
->>>>> Yes, sorry I haven't looked at your issue yet.
->>>>>
->>>>> libmount seems to be optional and can be disabled with --disable-libmount:
->>>>> https://github.com/RomainNaour/buildroot/blob/efl-1.15.0-v1/package/efl/efl.mk#L35
->>>>
->>>> Without that dependency it failed with 1.14.2.
->>>> When I saw the dependency was not there in 1.15.0, I just added it
->>>> again without checking.
->>>> Just now I've tried it again without that patch and it's fine, so, you
->>>> can forget it.
->>>> Sorry for the hassle.
->>>
->>> It's ok ;-) I haven't heavily tested with a minimal config.
->>> Maybe next time can you post the last ~100 build log lines, it not always easy
->>> to reproduce a build issue...
->>>
->>>>
->>>>>
->>>>> But since it's not recommended to disable it, I'll apply your patch :)
->>>>>
->>>>>> The second is related to a regression in efl-1.15.0.
->>>>>
->>>>> Can you report your issue to the efl mailing list ?
->>>>
->>>> I know it would be better to have it fixed upstream, but have no time
->>>> for that now.
->>>> If you would like to, feel free to report it.
->>>> To debug it, it helps enabling the WRN and DGB macros in eina_module.c.
->>>
->>> Well, I can't really report an issue that I can't reproduce.
->>
->> Do you mean that the fb backend is working for you?
->
-> I mean I don't have this issue because I don't use the fb backend during my test.
->
->> Are you crosscompiling with upstream vanilla gcc>=4 for arm?
->
-> I'm using a toolchain for ARM build by buildroot with a uClibc-ng.
->
->> It might be a compiler bug too.
->> I'm using musl gcc 4.9.3 build with buildroot itself.
->> gcc 5 seems broken for arm crosscompilation.
->> Just for completeness, the compiler I'm using was build with:
->> buildroot.version=2ebbb7fe355c18a0be3d0fb8e50997142113c46b
->> BR2_arm=y
->> BR2_cortex_a8=y
->> BR2_ARM_EABIHF=y
->> BR2_ARM_FPU_NEON=y
->> BR2_HOST_DIR="/opt/arm-buildroot-linux-musleabihf"
->> BR2_OPTIMIZE_3=y
->> BR2_TOOLCHAIN_BUILDROOT_MUSL=y
->> BR2_BINUTILS_VERSION_2_25_X=y
->> BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> BR2_GCC_ENABLE_LTO=y
->> BR2_GCC_ENABLE_GRAPHITE=y
->> BR2_TARGET_OPTIMIZATION="-march=armv7-a -mtune=cortex-a8
->> -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard"
->
-> Theses flags are handled directly by your target configuration in "Target
-> options" menu. You don't need to define them in BR2_TARGET_OPTIMIZATION.
->
->>
->>> See, I reported the issue about SDL2 dependency and it's now fixed in the efl
->>> 1.15.1. So, I can drop the last patch and avoid to autoreconf the package.
->>>
->>> Also, I'm probably not the good person to report an efl issue.
->>> Honestly, I don't know what to do with -fvisibility=default.
->>> It would be better if you can send just an email to the enlightenment mailing
->>> list to report your issue.
->>
->> Is "enlightenment-devel at lists.sourceforge.net" the correct mailing
->> list for an efl bug?
->
-> Yes it is.
->
-> Best regards,
-> Romain
->
->>
->>>>
->>>>>
->>>>>> The testing I've done has been with the musl libc and with
->>>>>> BR2_PACKAGE_EFL_RECOMMENDED_CONFIG unset.
->>>>>> Basically the same config as in the previous e-mail.
->>>>>>
->>>>>> A minor issue: check the spelling of recommanded.
->>>>>
->>>>> Ha indeed recommanded is used in Config.in prompt
->>>>> (my French was turned on sorry ;-) )
->>>>>
->>>>> Thanks for testing!
->>>>
->>>> Thanks for adding musl and maintaining efl!
->>>
->>> You're welcome!
->>>
->>> Best regards,
->>> Romain
->>
->> Regards,
->>   Vicente.
->>
+       sparc |                 busybox-1.23.2 | NOK | http://autobuild.buildroot.net/results/44c61dfd3d3f6d6e5a43d014df468be3b2c73fcb/
+         arm |          conntrack-tools-1.4.3 | NOK | http://autobuild.buildroot.net/results/54e62f91358e12ee4aee015c98df30885d2cd621/
+         arm |          conntrack-tools-1.4.3 | NOK | http://autobuild.buildroot.net/results/d7bd0084fc57239415d3f95c14f72d2d61a08990/
+      x86_64 |                 dbus-cpp-0.9.0 | NOK | http://autobuild.buildroot.net/results/177b07699e92b8e3694837150889ce3472970e07/
+      x86_64 |                 directfb-1.7.7 | NOK | http://autobuild.buildroot.net/results/4978d8562d89a45ed18fa78dce47ad720ac54964/
+         arm |               drbd-utils-8.9.1 | NOK | http://autobuild.buildroot.net/results/3896a3ed880d2e07abb09bc5d8fc4360ed87f7b5/
+      x86_64 |               drbd-utils-8.9.1 | NOK | http://autobuild.buildroot.net/results/e906fde06cb3fe4bcd14b60758fbf0457e404dc7/
+         arm |               drbd-utils-8.9.1 | NOK | http://autobuild.buildroot.net/results/d05b13b297c07c3f8127a2d2b179a4396076fae3/
+         arm |                  dropwatch-1.4 | NOK | http://autobuild.buildroot.net/results/992f868545a6f8efe65afbe25f401465c160521b/
+        i686 |                 flashrom-0.9.8 | NOK | http://autobuild.buildroot.net/results/2a5da78dd5b2922796e3010e4a0477cb9f6355cb/
+      x86_64 |                 flashrom-0.9.8 | NOK | http://autobuild.buildroot.net/results/30c83f9c60ac5c7359ddabdc1f190ab12433ae92/
+microblazeel |              fxload-2008_10_13 | NOK | http://autobuild.buildroot.net/results/5051eb794facc7223117c2de21d6a8eabcd3f8c9/
+         sh4 |               gst1-libav-1.4.5 | NOK | http://autobuild.buildroot.net/results/0121d2d8301b4eab6df1d745a4014d13ed182d6f/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/24a5f843f5076f08b1b3bad2b595556332fdab93/
+         arm |             ibrdtn-tools-1.0.1 | NOK | http://autobuild.buildroot.net/results/75ce07c2d30eb2c35a36424161fdaa372ccd4d7d/
+      x86_64 |                  iperf3-3.0.10 | NOK | http://autobuild.buildroot.net/results/a169824e10e99123bb825899a7efd7cf6fa23b87/
+      x86_64 |                 ipmiutil-2.9.5 | NOK | http://autobuild.buildroot.net/results/e31d94847cad9216aad839c2fbb312e9ea0ae75e/
+      x86_64 |                iptables-1.4.21 | NOK | http://autobuild.buildroot.net/results/aeb5939284518816544d1d962f0688261b0eeabc/
+     powerpc |        kompexsqlite-v1.10.12-1 | NOK | http://autobuild.buildroot.net/results/c83b4002cc7ccb4e9e51364a3c3d48503fe05dbf/
+         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/cae09a54bc09ad05292ad147013bd1481bb43c51/
+         arc | libbroadvoice-f65b0f50c8c76... | NOK | http://autobuild.buildroot.net/results/f7f74bb3b9012db1a374f813f40a51827de844a2/
+         arm |            libfreeimage-3.17.0 | NOK | http://autobuild.buildroot.net/results/723d0adec6f108a904cca5ddeb0cf050b8103db4/
+      x86_64 |                   libsoc-0.6.4 | NOK | http://autobuild.buildroot.net/results/6f98e4ce49db963994f03ad3475dd1643384ac73/
+        bfin |               libstrophe-0.8.8 | NOK | http://autobuild.buildroot.net/results/9f0b20f1503f609c6af0019130127d884ee0a50b/
+      mipsel |               libstrophe-0.8.8 | NOK | http://autobuild.buildroot.net/results/047e319b9d7bf0cdaabc007326a6d67de2c1ee52/
+         arm |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/b965694d80247ac5b54114e8d27dd69a40ee948e/
+         arm |                   ltris-1.0.19 | NOK | http://autobuild.buildroot.net/results/00d7837df4eec30ff7f0dc3e9ca8f69633cfb31e/
+         arm |              lttng-tools-2.6.0 | NOK | http://autobuild.buildroot.net/results/50f142f0d5d531bd8d416dadb59eb54b24041158/
+    mips64el |                  mesa3d-10.6.7 | NOK | http://autobuild.buildroot.net/results/e2e2e2b96ece70710ab490e7bb7369af7d1b5a23/
+       sparc |                  mesa3d-10.6.7 | NOK | http://autobuild.buildroot.net/results/8c4b916762f6fe0cb070ad0f51643dcf071b736a/
+         arm |             micropython-v1.4.6 | NOK | http://autobuild.buildroot.net/results/ef7d47dde06e1c5997a200aa9277e919bc93e9bf/
+         arm |             micropython-v1.4.6 | NOK | http://autobuild.buildroot.net/results/d4cfb2842d3f1acad45684bdbb2b75e04b9b85e4/
+         arm |                 minidlna-1.1.4 | NOK | http://autobuild.buildroot.net/results/2906b2bfd46046192b0c18d04b1070af77397696/
+       sparc |                   mono-4.0.2.5 | NOK | http://autobuild.buildroot.net/results/b23cad402c3666fe5e3d1cd89a1b614a52bdb2bc/
+       sparc |                     neard-0.14 | NOK | http://autobuild.buildroot.net/results/659e17b43f3322aafdbf48dee185f5eae3605a10/
+     powerpc |                 openntpd-5.7p4 | NOK | http://autobuild.buildroot.net/results/f388d981b60a9cef2b409ab0e6ba239210c0cdc7/
+     aarch64 |          qt5imageformats-5.5.0 | NOK | http://autobuild.buildroot.net/results/19d1b183e336a19c74c73571585df4f81281d47c/
+     powerpc |            qt5multimedia-5.5.0 | NOK | http://autobuild.buildroot.net/results/3c92d3862a30d4577dc67b3e3bfda6186d78d6fa/
+         sh4 |                      rpm-5.2.0 | NOK | http://autobuild.buildroot.net/results/8c9f0c95d2c9f67dfca27ba940362f512b212294/
+     powerpc |                     ruby-2.2.3 | NOK | http://autobuild.buildroot.net/results/06ad3e8cc836fffcb7f8e8f8ce724547da19634e/
+         arm |                     ruby-2.2.3 | NOK | http://autobuild.buildroot.net/results/45241300f8bdbed8a6ba618b8c689f19de0561ba/
+         arm |                    squid-3.5.9 | NOK | http://autobuild.buildroot.net/results/fc2772181186833faa812399e47d8379f8c45086/
+     powerpc |               strongswan-5.3.3 | NOK | http://autobuild.buildroot.net/results/79ce14b7c0bd44f1b1d30d37ebb80aff713ab493/
+     powerpc |                  sudo-1.8.14p3 | NOK | http://autobuild.buildroot.net/results/56bb913e6819143de5cf4308aac439bf42b01758/
+         arc |                util-linux-2.27 | NOK | http://autobuild.buildroot.net/results/a7dc61846c586e819ffd5086a812b6de7de5bcb5/
+         arm |                util-linux-2.27 | NOK | http://autobuild.buildroot.net/results/b2c15bc6e0322d44f9892dcd06eb2cfcb855c36a/
+         arm |                util-linux-2.27 | NOK | http://autobuild.buildroot.net/results/ae5ef99371633214f8f37a51a2aba001433eba09/
+
+
+-- 
+http://autobuild.buildroot.net
