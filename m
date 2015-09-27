@@ -1,27 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Sep 2015 14:13:30 +0200
-Subject: [Buildroot] [PATCH v2 1/1]
- package/x11r7/xdriver_xf86-video-ati: Fix DRI-related build
-References: <1443351264-9312-1-git-send-email-bernd.kuhls@t-online.de>
- <5607D7A4.8020903@imgtec.com>
-Message-ID: <a43ldcxmbf.ln2@ID-313208.user.individual.net>
+From: Vicente Bergas <vicencb@gmail.com>
+Date: Sun, 27 Sep 2015 14:48:22 +0100
+Subject: [Buildroot] [PATCH] Fix musl-based builds on ARMhf platforms.
+Message-ID: <1443361702-27612-1-git-send-email-vicencb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 27 Sep 2015 12:48:52 +0100 schrieb Vicente Olivert Riera:
+When ARCH is arm and the hard-floating-point option is on executables
+expect to find the dynamic linker at /lib/ld-musl-armhf.so.1 and not
+/lib/ld-musl-arm.so.1
+There are two ways of fixing this:
+ 1) Changing the actual location of the dynamic linker.
+ 2) Changing the expected location of the dynamic linker.
+This patch uses option 1.
+I don't know how to do option 2 and also don't know which option is better.
 
-> And I managed to build xdriver_xf86-video-ati for MIPS architecture
-> successfully, after enabling BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON for
-> all architectures.
+Signed-off-by: Vicente Bergas <vicencb@gmail.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi,
-
-it is possible to build the package for various archs, but does it make 
-sense? V2 of my patch picks up a comment by Peter:
-http://patchwork.ozlabs.org/patch/512209/
-"Is there any realistic use cases for anything besides x86 / x86-64?"
-
-Regards, Bernd
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 61a5dba..79afdaa 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -524,6 +524,8 @@ endef
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+ ifeq ($(BR2_i386),y)
+ MUSL_ARCH = i386
++else ifeq ($(BR2_ARM_EABIHF),y)
++MUSL_ARCH = armhf
+ else
+ MUSL_ARCH = $(ARCH)
+ endif
+-- 
+2.5.3
