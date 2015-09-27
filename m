@@ -1,59 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Sep 2015 19:25:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: Fix musl build error due to
-	missing include of limits.h
-Message-ID: <1443374728-27323-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Sep 2015 19:35:13 +0200
+Subject: [Buildroot] [git commit] core/pkg-generic: use tabs, not spaces
+Message-ID: <20150927173518.8676880DF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/abb/abb935e7fe71369c593ae92b3acf4a2a674a0300/
+commit: http://git.buildroot.net/buildroot/commit/?id=9940a83d7de6f88aaf83f83a4f6edde78f6c8b21
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...nclude-limits.h-to-fix-build-error-on-Sol.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch
+ package/pkg-generic.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch b/package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch
-new file mode 100644
-index 0000000..03b4524
---- /dev/null
-+++ b/package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch
-@@ -0,0 +1,31 @@
-+From 3fed80daf1dcb0b5d20e623d27228726c735e138 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 27 Sep 2015 19:09:47 +0200
-+Subject: [PATCH 1/1] xf86drm.c: Include limits.h to fix build error on Solaris
-+ and with musl
-+
-+musl's strict implementation requires #include <limits.h> for PATH_MAX.
-+
-+Patch suggested by evgeny for Solaris:
-+https://bugs.freedesktop.org/show_bug.cgi?id=92082
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ xf86drm.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/xf86drm.c b/xf86drm.c
-+index a9f5c29..ec985eb 100644
-+--- a/xf86drm.c
-++++ b/xf86drm.c
-+@@ -53,6 +53,7 @@
-+ #include <sys/ioctl.h>
-+ #include <sys/time.h>
-+ #include <stdarg.h>
-++#include <limits.h>
-+ #ifdef HAVE_SYS_MKDEV_H
-+ # include <sys/mkdev.h> /* defines major(), minor(), and makedev() on Solaris */
-+ #endif
-+-- 
-+2.5.3
-+
--- 
-2.5.3
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6a7d97e..5201fca 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -661,11 +661,11 @@ $(1)-reconfigure:	$(1)-clean-for-reconfigure $(1)
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
+ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+-$$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
++$$($(2)_TARGET_INSTALL_HOST):		PKG=$(2)
+ $$($(2)_TARGET_BUILD):			PKG=$(2)
+ $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
+-$$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+-$$($(2)_TARGET_RSYNC):                  PKG=$(2)
++$$($(2)_TARGET_RSYNC):			SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
++$$($(2)_TARGET_RSYNC):			PKG=$(2)
+ $$($(2)_TARGET_PATCH):			PKG=$(2)
+ $$($(2)_TARGET_PATCH):			RAWNAME=$$(patsubst host-%,%,$(1))
+ $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
