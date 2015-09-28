@@ -1,89 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Sep 2015 21:27:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcrossguid: new package
-Message-ID: <1443468421-24604-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Sep 2015 21:27:48 +0200
+Subject: [Buildroot] [git commit] libstrophe: add a patch to fix static
+	builds
+Message-ID: <20150928192752.9F9C680E59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed by Kodi 16.x-Jarvis:
-https://github.com/xbmc/xbmc/commit/6f8171f53992fc2eaabf71f6fa47ebed1da0d43d
+commit: http://git.buildroot.net/buildroot/commit/?id=124b3f76dbcd3bde52d1c73514f89e47acbf23eb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+libstrophe.a and libcrypto.a have symbols with equal names, so
+executables can't be statically linked with libstrophe and openssl:
+
+sha1dgst.c:(.text+0x1b4c): multiple definition of `SHA1_Update'
+sha1dgst.c:(.text+0x1cc0): multiple definition of `SHA1_Final'
+sha1dgst.c:(.text+0x1e78): multiple definition of `SHA1_Init
+
+Renaming the internal SHA functions fixes the problem.
+
+Issue reported upstream:
+
+  https://github.com/strophe/libstrophe/issues/40
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/047/047e319b9d7bf0cdaabc007326a6d67de2c1ee52/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |  1 +
- package/libcrossguid/Config.in       | 13 +++++++++++++
- package/libcrossguid/libcrossguid.mk | 28 ++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
- create mode 100644 package/libcrossguid/Config.in
- create mode 100644 package/libcrossguid/libcrossguid.mk
+ package/libstrophe/libstrophe.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 72b55c9..42a25be 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1091,6 +1091,7 @@ menu "Other"
- 	source "package/libcap-ng/Config.in"
- 	source "package/libcgroup/Config.in"
- 	source "package/libcofi/Config.in"
-+	source "package/libcrossguid/Config.in"
- 	source "package/libdaemon/Config.in"
- 	source "package/libee/Config.in"
- 	source "package/libev/Config.in"
-diff --git a/package/libcrossguid/Config.in b/package/libcrossguid/Config.in
-new file mode 100644
-index 0000000..fb74c36
---- /dev/null
-+++ b/package/libcrossguid/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBCROSSGUID
-+	bool "libcrossguid"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Lightweight cross platform C++ GUID/UUID library
-+
-+	  https://github.com/graeme-hill/crossguid
-+
-+comment "libcrossguid needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/libcrossguid/libcrossguid.mk b/package/libcrossguid/libcrossguid.mk
-new file mode 100644
-index 0000000..e63ca40
---- /dev/null
-+++ b/package/libcrossguid/libcrossguid.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libcrossguid
-+#
-+################################################################################
-+
-+LIBCROSSGUID_VERSION = 8f399e8bd4252be9952f3dfa8199924cc8487ca4
-+LIBCROSSGUID_SITE = $(call github,graeme-hill,crossguid,$(LIBCROSSGUID_VERSION))
-+LIBCROSSGUID_LICENSE = MIT
-+LIBCROSSGUID_LICENSE_FILES = LICENSE
-+LIBCROSSGUID_INSTALL_STAGING = YES
-+LIBCROSSGUID_DEPENDENCIES = util-linux
-+
-+define LIBCROSSGUID_BUILD_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(TARGET_CXX) -c guid.cpp -o guid.o -Wall -std=c++11 -DGUID_LIBUUID)
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(TARGET_AR) rvs libcrossguid.a guid.o)
-+endef
-+
-+define LIBCROSSGUID_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a $(STAGING_DIR)/usr/lib/libcrossguid.a
-+	$(INSTALL) -D -m 644 $(@D)/guid.h $(STAGING_DIR)/usr/include/guid.h
-+endef
-+
-+define LIBCROSSGUID_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 644 $(@D)/libcrossguid.a $(TARGET_DIR)/usr/lib/libcrossguid.a
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.5.3
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index e6eb834..60e29d3 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -12,6 +12,7 @@ LIBSTROPHE_AUTORECONF = YES
+ LIBSTROPHE_LICENSE = MIT or GPLv3
+ LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
+ LIBSTROPHE_INSTALL_STAGING = YES
++LIBSTROPHE_PATCH = https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780.patch
+ 
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ # Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
