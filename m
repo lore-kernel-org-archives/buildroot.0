@@ -1,87 +1,65 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 28 Sep 2015 11:43:28 +0100
-Subject: [Buildroot] [RFC PATCH 1/2] eventlog: New package
-In-Reply-To: <1443266743-20775-2-git-send-email-judge.packham@gmail.com>
-References: <1443266743-20775-1-git-send-email-judge.packham@gmail.com>
- <1443266743-20775-2-git-send-email-judge.packham@gmail.com>
-Message-ID: <560919D0.6020001@imgtec.com>
+Date: Mon, 28 Sep 2015 11:56:09 +0100
+Subject: [Buildroot] [PATCH] mosquitto: bump version
+In-Reply-To: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
+References: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
+Message-ID: <56091CC9.9040408@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Packham,
+Dear Peter Korsgaard,
 
-On 09/26/2015 12:25 PM, Chris Packham wrote:
-> eventlog is a library for creating structured events from applications,
-> and is the workhorse behind syslog-ng's own messages.
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->  package/Config.in            |  1 +
->  package/eventlog/Config.in   |  5 +++++
->  package/eventlog/eventlog.mk | 14 ++++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/eventlog/Config.in
->  create mode 100644 package/eventlog/eventlog.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 9dff5e8..2c033ba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -943,6 +943,7 @@ endmenu
->  
->  menu "Logging"
->  	source "package/glog/Config.in"
-> +	source "package/eventlog/Config.in"
+I think is a good habit to write the version number in the subject, so
+someone using "git log --oneline" would be able to see to which version
+number are you bumping :P
 
-this should be alphabetically ordered.
+On 09/27/2015 09:49 PM, Peter Korsgaard wrote:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
->  	source "package/liblog4c-localtime/Config.in"
->  	source "package/liblogging/Config.in"
->  	source "package/log4cplus/Config.in"
-> diff --git a/package/eventlog/Config.in b/package/eventlog/Config.in
-> new file mode 100644
-> index 0000000..3ba909a
-> --- /dev/null
-> +++ b/package/eventlog/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_EVENTLOG
-> +	bool "eventlog"
-> +	help
-> +	  eventlog is a library for creating structured events from
-> +	  applications, and is the workhorse behind syslog-ng's own messages.
-> diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
-> new file mode 100644
-> index 0000000..14bbbfe
-> --- /dev/null
-> +++ b/package/eventlog/eventlog.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# eventlog
-> +#
-> +################################################################################
-> +
-> +EVENTLOG_VERSION = 0.2.12
-> +EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
-> +EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/0.2/
+Build test for MIPS architecture:
 
-The trailing slash is not needed.
+$ grep ^MOSQUITTO_VERSION package/mosquitto/mosquitto.mk
+MOSQUITTO_VERSION = 1.4.4
 
-> +EVENTLOG_LICENSE = BSD
-> +EVENTLOG_LICENSE_FILES = COPYING
-> +EVENTLOG_INSTALL_STAGING = YES
-> +
-> +$(eval $(autotools-package))
-> 
-
-And you are missing an eventlog.hash file like this one:
-
-# From https://my.balabit.com/downloads/eventlog/0.2/
-sha1 3e35a634e7de029ab9d36995a085bfcb00ed6a4d  eventlog_0.2.12.tar.gz
+$ file output/target/usr/bin/mosquitto_pub
+output/target/usr/bin/mosquitto_pub: ELF 32-bit MSB executable, MIPS,
+MIPS32 rel2 version 1 (SYSV), dynamically linked (uses shared libs), for
+GNU/Linux 2.6.32, with unknown capability 0x41000000 = 0xf676e75, with
+unknown capability 0x10000 = 0x70403, stripped
 
 Regards,
 
 Vincent.
+
+> ---
+>  package/mosquitto/mosquitto.hash | 2 +-
+>  package/mosquitto/mosquitto.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+> index 2ca1d17..e2db213 100644
+> --- a/package/mosquitto/mosquitto.hash
+> +++ b/package/mosquitto/mosquitto.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated after checking pgp signature
+> -sha256	773d7436f729b5a6088035708c9277a9c6ba5651e127b63c8f29fe39e152479c  mosquitto-1.4.3.tar.gz
+> +sha256  c643c7123708aadcd29287dda7b5ce7c910f75b02956a8fc4fe65ad2ea767a5f  mosquitto-1.4.4.tar.gz
+> diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+> index d9703fb..73365f9 100644
+> --- a/package/mosquitto/mosquitto.mk
+> +++ b/package/mosquitto/mosquitto.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MOSQUITTO_VERSION = 1.4.3
+> +MOSQUITTO_VERSION = 1.4.4
+>  MOSQUITTO_SITE = http://mosquitto.org/files/source
+>  MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
+>  MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
+> 
