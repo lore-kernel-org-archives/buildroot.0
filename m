@@ -1,41 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Sep 2015 22:50:44 +0200
-Subject: [Buildroot] [PATCH] Fix musl-based builds on ARMhf platforms.
-In-Reply-To: <1443361702-27612-1-git-send-email-vicencb@gmail.com>
-References: <1443361702-27612-1-git-send-email-vicencb@gmail.com>
-Message-ID: <20150928225044.19e13433@free-electrons.com>
+Date: Mon, 28 Sep 2015 22:52:14 +0200
+Subject: [Buildroot] [PATCH] glmark2: depend on host-python
+In-Reply-To: <5608FB43.9060408@imgtec.com>
+References: <1443194731-52284-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150927212127.2e70faeb@free-electrons.com>
+ <5608FB43.9060408@imgtec.com>
+Message-ID: <20150928225214.33f8785d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Bergas,
+Vicente,
 
-On Sun, 27 Sep 2015 14:48:22 +0100, Vicente Bergas wrote:
-> When ARCH is arm and the hard-floating-point option is on executables
-> expect to find the dynamic linker at /lib/ld-musl-armhf.so.1 and not
-> /lib/ld-musl-arm.so.1
-> There are two ways of fixing this:
->  1) Changing the actual location of the dynamic linker.
->  2) Changing the expected location of the dynamic linker.
-> This patch uses option 1.
-> I don't know how to do option 2 and also don't know which option is better.
+On Mon, 28 Sep 2015 09:33:07 +0100, Vicente Olivert Riera wrote:
+
+> > From a quick look, I don't see anything in the glmark2 source code that
+> > would need Python. It's really only waf itself that uses Python. So I
+> > don't quite see where PYTHON_CONFIG can actually be useful...
 > 
-> Signed-off-by: Vicente Bergas <vicencb@gmail.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 2 ++
->  1 file changed, 2 insertions(+)
+> Exactly. In fact, I managed to build the package when the value was
+> $(STAGING_DIR)/usr/bin/python-config which didn't exist.
+> 
+> Should we remove it?
 
-I've slightly tweaked the commit log and applied. In fact your
-explanation about "two ways of fixing this" is not completely correct:
-the dynamic linker in musl is part of the C library itself. So all what
-Buildroot is doing is create a symbolic link with the name of the
-dynamic linker encoded into the executables, which points to the musl C
-library. So all what your patch is doing is adjusting the logic that
-calculates the name of this symbolic link.
+I don't know. It is there since when the package was originally
+introduced by Spenser, so I have no idea why those three PYTHON_*
+variables were added.
 
-Thanks for this contribution!
+If the build works for you without those variables, then I would
+suggest to remove them, and see what the autobuilders say.
+
+What do you think?
 
 Thomas
 -- 
