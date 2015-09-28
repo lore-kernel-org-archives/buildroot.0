@@ -1,49 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Sep 2015 21:27:48 +0200
-Subject: [Buildroot] [git commit] libstrophe: add a patch to fix static
-	builds
-Message-ID: <20150928192752.9F9C680E59@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 28 Sep 2015 21:27:57 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libdcadec: bump version
+In-Reply-To: <1443468477-25001-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1443468477-25001-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1443468477-25001-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=124b3f76dbcd3bde52d1c73514f89e47acbf23eb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-libstrophe.a and libcrypto.a have symbols with equal names, so
-executables can't be statically linked with libstrophe and openssl:
-
-sha1dgst.c:(.text+0x1b4c): multiple definition of `SHA1_Update'
-sha1dgst.c:(.text+0x1cc0): multiple definition of `SHA1_Final'
-sha1dgst.c:(.text+0x1e78): multiple definition of `SHA1_Init
-
-Renaming the internal SHA functions fixes the problem.
-
-Issue reported upstream:
-
-  https://github.com/strophe/libstrophe/issues/40
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/047/047e319b9d7bf0cdaabc007326a6d67de2c1ee52/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libstrophe/libstrophe.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libdcadec/libdcadec.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index e6eb834..60e29d3 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
-@@ -12,6 +12,7 @@ LIBSTROPHE_AUTORECONF = YES
- LIBSTROPHE_LICENSE = MIT or GPLv3
- LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
- LIBSTROPHE_INSTALL_STAGING = YES
-+LIBSTROPHE_PATCH = https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780.patch
+diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
+index 1c423f0..76862a6 100644
+--- a/package/libdcadec/libdcadec.mk
++++ b/package/libdcadec/libdcadec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_EXPAT),y)
- # Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
+-LIBDCADEC_VERSION = 7b3b44cd180c9345c98be9062eac701eab5c7454
++LIBDCADEC_VERSION = 2a9186e34ce557d3af1a20f5b558d1e6687708b9
+ LIBDCADEC_SITE = $(call github,foo86,dcadec,$(LIBDCADEC_VERSION))
+ LIBDCADEC_LICENSE = LGPLv2.1+
+ LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
+-- 
+2.5.3
