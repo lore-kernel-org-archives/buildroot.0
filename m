@@ -1,33 +1,34 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 28 Sep 2015 21:00:06 +0200
-Subject: [Buildroot] [PATCH v3 2/4] pkg-generic: prevent _SITE URLs with
- a trailing slash
-In-Reply-To: <20150928172749.GA2309@tarshish>
-References: <1443456634-21484-1-git-send-email-luca@lucaceresoli.net>
- <1443456634-21484-3-git-send-email-luca@lucaceresoli.net>
- <20150928172749.GA2309@tarshish>
-Message-ID: <56098E36.4020302@lucaceresoli.net>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Mon, 28 Sep 2015 21:03:58 +0200
+Subject: [Buildroot] [PATCH] package/genimage: bump version to 8
+In-Reply-To: <20150927232017.60f4d844@free-electrons.com>
+References: <1443086443-107037-1-git-send-email-benoit@wsystem.com>
+ <20150927232017.60f4d844@free-electrons.com>
+Message-ID: <CA+sos7-cuqiR2ZY5DBbKrcKV=QOkLoJ0nr23DExUMch=1Sanzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch,
+Hi Thomas,
 
-Baruch Siach wrote:
-> Hi Luca,
+On Sun, Sep 27, 2015 at 11:20 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Beno?t Th?baudeau,
 >
-> On Mon, Sep 28, 2015 at 06:10:32PM +0200, Luca Ceresoli wrote:
->> A trailing slash in FOO_SITE is useless, since Buildroot automatically adds
->> a slash between FOO_SITE and the filename as appropriate.
+> On Thu, 24 Sep 2015 11:20:43 +0200, Beno?t Th?baudeau wrote:
+>> This new version fixes segmentation faults on some platforms.
 >>
->> Moreover they are potentially armful, which led to introducing a workaround
+>> Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+>> ---
+>>  package/genimage/genimage.hash | 2 +-
+>>  package/genimage/genimage.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> harmful?
+> Applied, thanks.
 
-Of course!
-Thanks for spotting it.
+It seems like you forgot to push this commit, or there is an issue somewhere.
 
--- 
-Luca
+Best regards,
+Beno?t
