@@ -1,31 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Sep 2015 21:27:32 +0200
-Subject: [Buildroot] [PATCH] mosquitto: bump version
-In-Reply-To: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
-References: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
-Message-ID: <20150928212732.7de6c185@free-electrons.com>
+Date: Mon, 28 Sep 2015 22:10:54 +0200
+Subject: [Buildroot] [git commit] package/libdrm: Fix musl build error due
+	to missing include of limits.h
+Message-ID: <20150928201323.2FA47819EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Buildroot maintainer,
+commit: http://git.buildroot.net/buildroot/commit/?id=9cea5997837097876fb390206680cd66feb6ef0a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 27 Sep 2015 22:49:18 +0200, Peter Korsgaard wrote:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/mosquitto/mosquitto.hash | 2 +-
->  package/mosquitto/mosquitto.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes
+http://autobuild.buildroot.net/results/abb/abb935e7fe71369c593ae92b3acf4a2a674a0300/
 
-After adjusting the commit title as suggested by Vicente, I've applied
-your patch :-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...nclude-limits.h-to-fix-build-error-on-Sol.patch |   31 ++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch b/package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch
+new file mode 100644
+index 0000000..03b4524
+--- /dev/null
++++ b/package/libdrm/0002-xf86drm.c-Include-limits.h-to-fix-build-error-on-Sol.patch
+@@ -0,0 +1,31 @@
++From 3fed80daf1dcb0b5d20e623d27228726c735e138 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 27 Sep 2015 19:09:47 +0200
++Subject: [PATCH 1/1] xf86drm.c: Include limits.h to fix build error on Solaris
++ and with musl
++
++musl's strict implementation requires #include <limits.h> for PATH_MAX.
++
++Patch suggested by evgeny for Solaris:
++https://bugs.freedesktop.org/show_bug.cgi?id=92082
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ xf86drm.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/xf86drm.c b/xf86drm.c
++index a9f5c29..ec985eb 100644
++--- a/xf86drm.c
+++++ b/xf86drm.c
++@@ -53,6 +53,7 @@
++ #include <sys/ioctl.h>
++ #include <sys/time.h>
++ #include <stdarg.h>
+++#include <limits.h>
++ #ifdef HAVE_SYS_MKDEV_H
++ # include <sys/mkdev.h> /* defines major(), minor(), and makedev() on Solaris */
++ #endif
++-- 
++2.5.3
++
