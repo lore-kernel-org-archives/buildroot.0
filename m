@@ -1,41 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Sep 2015 21:27:55 +0200
-Subject: [Buildroot] [PATCH] libstrophe: add a patch to fix static builds
-In-Reply-To: <1443431833-24753-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1443431833-24753-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150928212755.617bdb10@free-electrons.com>
+Date: Mon, 28 Sep 2015 21:27:32 +0200
+Subject: [Buildroot] [PATCH] mosquitto: bump version
+In-Reply-To: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
+References: <1443386958-24125-1-git-send-email-peter@korsgaard.com>
+Message-ID: <20150928212732.7de6c185@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Buildroot maintainer,
 
-On Mon, 28 Sep 2015 10:17:13 +0100, Vicente Olivert Riera wrote:
-> libstrophe.a and libcrypto.a have symbols with equal names, so
-> executables can't be statically linked with libstrophe and openssl:
-> 
-> sha1dgst.c:(.text+0x1b4c): multiple definition of `SHA1_Update'
-> sha1dgst.c:(.text+0x1cc0): multiple definition of `SHA1_Final'
-> sha1dgst.c:(.text+0x1e78): multiple definition of `SHA1_Init
-> 
-> Renaming the internal SHA functions fixes the problem.
-> 
-> Issue reported upstream:
-> 
->   https://github.com/strophe/libstrophe/issues/40
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/047/047e319b9d7bf0cdaabc007326a6d67de2c1ee52/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Sun, 27 Sep 2015 22:49:18 +0200, Peter Korsgaard wrote:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/libstrophe/libstrophe.mk |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
+>  package/mosquitto/mosquitto.hash | 2 +-
+>  package/mosquitto/mosquitto.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks.
+After adjusting the commit title as suggested by Vicente, I've applied
+your patch :-)
+
+Thanks,
 
 Thomas
 -- 
