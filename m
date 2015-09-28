@@ -1,9 +1,8 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Mon, 28 Sep 2015 23:27:24 +0200
-Subject: [Buildroot] [PATCH 4/4] libssh/Config.in:indentation cleanup
-In-Reply-To: <1443475644-5320-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1443475644-5320-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <1443475644-5320-4-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Mon, 28 Sep 2015 23:27:21 +0200
+Subject: [Buildroot] [PATCH 1/4] libssh/libssh.mk:normalize header separator
+	size to 80
+Message-ID: <1443475644-5320-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +11,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/libssh/Config.in | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ package/libssh/libssh.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 719ca8c..e8ef602 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_LIBSSH
--        bool "libssh"
--        depends on BR2_USE_MMU # fork()
--        # Either OpenSSL or libgcrypt are mandatory
--        select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
--        help
--          libssh is a multiplatform C library implementing the SSHv2
--          and SSHv1 protocol on client and server side. With libssh,
--          you can remotely execute programs, transfer files, use a
--          secure and transparent tunnel for your remote applications.
-+	bool "libssh"
-+	depends on BR2_USE_MMU # fork()
-+	# Either OpenSSL or libgcrypt are mandatory
-+	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
-+	help
-+	  libssh is a multiplatform C library implementing the SSHv2
-+	  and SSHv1 protocol on client and server side. With libssh,
-+	  you can remotely execute programs, transfer files, use a
-+	  secure and transparent tunnel for your remote applications.
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 39cff50..ded5e8c 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -2,7 +2,7 @@
+ #
+ ## libssh
+ #
+-#################################################################################
++################################################################################
  
--          http://www.libssh.org/
-+	  http://www.libssh.org/
+ LIBSSH_VERSION = 0.7.1
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
 -- 
 1.9.1
