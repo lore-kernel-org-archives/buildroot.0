@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Sep 2015 17:31:35 +0200
-Subject: [Buildroot] Disabling Automatic Source Fetching
-In-Reply-To: <36A43B0E1E88D84791516F9D44BC4833281C84FD@corpmail01.corp.sensis.com>
-References: <36A43B0E1E88D84791516F9D44BC4833281C84FD@corpmail01.corp.sensis.com>
-Message-ID: <20150929173135.7a1fe550@free-electrons.com>
+Date: Tue, 29 Sep 2015 17:32:06 +0200
+Subject: [Buildroot] [PATCH 1/2] Revert "setools: fix race condition"
+In-Reply-To: <1443539310-55883-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1443539310-55883-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20150929173206.11f589b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Vicente Olivert Riera,
 
-On Tue, 29 Sep 2015 14:40:37 +0000, Crast, Nicholas wrote:
+On Tue, 29 Sep 2015 16:08:29 +0100, Vicente Olivert Riera wrote:
+> This reverts commit 1ac68fe2c9b4cea91c7a30429ebf75279ede8e70.
+> 
+> Further investigations revealed that the problem wasn't a race condition
+> but the lack of flex package in the host machine:
+> 
+>   https://github.com/TresysTechnology/setools3/issues/5#issuecomment-144048612
 
-> I've been hunting for awhile, but I cannot find anything about this.
-> I want to disable Buildroot's automatic fetching of sources over the
-> network. We would like to go download any source packages ourselves
-> manually. Is there some sort of global configuration option to stop
-> Buildroot from accessing the network?
+Missing SoB line here :-)
 
-The best way is to enable BR2_PRIMARY_SITE_ONLY=y. If you set this
-option, Buildroot will only ever look for source code in two places:
-
- * In the local cache, indicated by BR2_DL_DIR, which defaults to the
-   dl/ folder.
-
- * In the HTTP/FTP server indicated by BR2_PRIMARY_SITE, which is empty
-   by default.
-
-So basically, if you set BR2_PRIMARY_SITE_ONLY=y, and leave
-BR2_PRIMARY_SITE empty, Buildroot will only look into the local cache
-and not download anything from the network.
-
-See also slide 99 and following in
-http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf.
-
-Best regards,
+> ---
+>  package/setools/setools.mk |    4 ----
+>  1 files changed, 0 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+> index 71301c7..a2bfd42 100644
+> --- a/package/setools/setools.mk
+> +++ b/package/setools/setools.mk
+> @@ -12,10 +12,6 @@ SETOOLS_INSTALL_STAGING = YES
+>  SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
+>  SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+>  
+> -# Race condition reported upstream:
+> -# https://github.com/TresysTechnology/setools3/issues/5
+> -SETOOLS_MAKE = $(MAKE1)
+> -
+>  # configure.ac is patched by the cross compile patch,
+>  # so autoreconf is necessary
+>  SETOOLS_AUTORECONF = YES
 
 Thomas
 -- 
