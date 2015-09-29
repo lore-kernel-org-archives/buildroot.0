@@ -1,35 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2015 13:51:25 +0200
-Subject: [Buildroot] [git commit] package/ltp-testsuite: enable realtime
-	tests
-Message-ID: <20150929120702.7F7E081D63@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 Sep 2015 15:58:22 +0300
+Subject: [Buildroot] [PATCH 1/2] libbluray: add optional fontconfig
+	dependency
+Message-ID: <c0676cbc3b883de88e98c9ba28d8023f17cb5e88.1443531503.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ac29e66148b64ff462e48ab85ffa5cebc7b732e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+http://autobuild.buildroot.net/results/dbf/dbfbf09f48e7ec09be34a3a40d3c859b74379eaf/
+http://autobuild.buildroot.net/results/3fb/3fb9c077d4fe772774f53c7611b4dcbaad361312/
+http://autobuild.buildroot.net/results/f9c/f9c1f3cf8bfa9eeacb7719459c22bdf7dea26ddb/
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+and more.
+
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/ltp-testsuite/ltp-testsuite.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libbluray/libbluray.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index acc1640..48733f2 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -9,6 +9,8 @@ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
- LTP_TESTSUITE_SITE = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
- LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
-+LTP_TESTSUITE_CONF_OPTS += \
-+			   --with-realtime-testsuite
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index e10f7dbc8c73..f6a501a1083f 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -24,6 +24,12 @@ else
+ LIBBLURAY_CONF_OPTS += --without-freetype
+ endif
  
- # Needs libcap with file attrs which needs attr, so both required
- ifeq ($(BR2_PACKAGE_LIBCAP)$(BR2_PACKAGE_ATTR),yy)
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++LIBBLURAY_DEPENDENCIES += fontconfig
++else
++LIBBLURAY_CONF_OPTS += --without-fontconfig
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ LIBBLURAY_DEPENDENCIES += libxml2
+ else
+-- 
+2.5.3
