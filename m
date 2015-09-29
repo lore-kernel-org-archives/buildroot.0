@@ -1,47 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Sep 2015 00:30:21 +0200
-Subject: [Buildroot] [git commit] ipmiutil: needs dynamic library support
-Message-ID: <20150929223556.C6F0981D69@busybox.osuosl.org>
+Date: Wed, 30 Sep 2015 00:33:02 +0200
+Subject: [Buildroot] [git commit] postgresql: fix ZIC configure variable
+	assignment
+Message-ID: <20150929223556.DE22D8078F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=670095b4739c898a8f270b003ee19294206d91f6
+commit: http://git.buildroot.net/buildroot/commit/?id=468233a9b776a55dfd8ced7d5d67189f6bb76855
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ipmiutil builds libipmiutil.so unconditionally.
+The 'ZIC=$$(ZIC)' assignment is seen as 'ZIC=$(ZIC)' by the shell, that
+interprets that as command substitution causing an error like:
 
-Fixes:
-http://autobuild.buildroot.net/results/e31/e31d94847cad9216aad839c2fbb312e9ea0ae75e/
-http://autobuild.buildroot.net/results/5f3/5f3f32473186e6fa3a165b263f682047af8e291e/
+/bin/sh: ZIC: command not found
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipmiutil/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/postgresql/postgresql.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
-index a2a898b..9eb5452 100644
---- a/package/ipmiutil/Config.in
-+++ b/package/ipmiutil/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_IPMIUTIL
- 	bool "ipmiutil"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_x86_64 || BR2_i386
- 	help
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_IPMIUTIL
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 2bad6b4..e710e92 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -50,7 +50,7 @@ POSTGRESQL_DEPENDENCIES += tzdata
+ POSTGRESQL_CONF_OPTS += --with-system-tzdata=/usr/share/zoneinfo
+ else
+ POSTGRESQL_DEPENDENCIES += host-zic
+-POSTGRESQL_CONF_ENV += ZIC=$$(ZIC)
++POSTGRESQL_CONF_ENV += ZIC="$(ZIC)"
+ endif
  
- 	  http://ipmiutil.sourceforge.net/
- 
--comment "ipmiutil needs a toolchain w/ threads"
-+comment "ipmiutil needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_x86_64 || BR2_i386
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
