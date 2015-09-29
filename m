@@ -1,32 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Sep 2015 00:24:43 +0200
-Subject: [Buildroot] [git commit] hostapd: bump to version 2.5
-Message-ID: <20150929223556.B7EF880168@busybox.osuosl.org>
+Date: Wed, 30 Sep 2015 00:28:52 +0200
+Subject: [Buildroot] [git commit] wpa_supplicant: bump to version 2.5
+Message-ID: <20150929223556.C050781D67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1639a7ebfa99f5b52dc7d2d8db94d826f4bac35f
+commit: http://git.buildroot.net/buildroot/commit/?id=bac20afec5d5e53fb359ff67187f62b2efbd5547
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstream patches.
+Remove upstream patches. Renumber the remaining patch.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ ...e-SSID-element-length-before-copying-it-C.patch |   45 ------
+ ...patch => 0001-fix-readline-libs-ordering.patch} |    0
  ...Fix-HTTP-chunked-transfer-encoding-parser.patch |   50 -------
  ...integer-underflow-in-WMM-Action-frame-par.patch |   42 ------
- package/hostapd/0003-EAP-pwd-fixes.patch           |  154 --------------------
- package/hostapd/hostapd.hash                       |    2 +-
- package/hostapd/hostapd.mk                         |    2 +-
- 5 files changed, 2 insertions(+), 248 deletions(-)
+ package/wpa_supplicant/0004-EAP-pwd-fixes.patch    |  154 --------------------
+ package/wpa_supplicant/wpa_supplicant.hash         |    2 +-
+ package/wpa_supplicant/wpa_supplicant.mk           |    2 +-
+ 7 files changed, 2 insertions(+), 293 deletions(-)
 
-diff --git a/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
+diff --git a/package/wpa_supplicant/0001-P2P-Validate-SSID-element-length-before-copying-it-C.patch b/package/wpa_supplicant/0001-P2P-Validate-SSID-element-length-before-copying-it-C.patch
+deleted file mode 100644
+index 989bc4f..0000000
+--- a/package/wpa_supplicant/0001-P2P-Validate-SSID-element-length-before-copying-it-C.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 9ed4eee345f85e3025c33c6e20aa25696e341ccd Mon Sep 17 00:00:00 2001
+-From: Jouni Malinen <jouni@qca.qualcomm.com>
+-Date: Tue, 7 Apr 2015 11:32:11 +0300
+-Subject: [PATCH] P2P: Validate SSID element length before copying it
+- (CVE-2015-1863)
+-
+-Upstream commit 9ed4eee345f85e3025c33c6e20aa25696e341ccd.
+-
+-This fixes a possible memcpy overflow for P2P dev->oper_ssid in
+-p2p_add_device(). The length provided by the peer device (0..255 bytes)
+-was used without proper bounds checking and that could have resulted in
+-arbitrary data of up to 223 bytes being written beyond the end of the
+-dev->oper_ssid[] array (of which about 150 bytes would be beyond the
+-heap allocation) when processing a corrupted management frame for P2P
+-peer discovery purposes.
+-
+-This could result in corrupted state in heap, unexpected program
+-behavior due to corrupted P2P peer device information, denial of service
+-due to process crash, exposure of memory contents during GO Negotiation,
+-and potentially arbitrary code execution.
+-
+-Thanks to Google security team for reporting this issue and smart
+-hardware research group of Alibaba security team for discovering it.
+-
+-Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- src/p2p/p2p.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/p2p/p2p.c b/src/p2p/p2p.c
+-index f584fae..a45fe73 100644
+---- a/src/p2p/p2p.c
+-+++ b/src/p2p/p2p.c
+-@@ -778,6 +778,7 @@ int p2p_add_device(struct p2p_data *p2p, const u8 *addr, int freq,
+- 	if (os_memcmp(addr, p2p_dev_addr, ETH_ALEN) != 0)
+- 		os_memcpy(dev->interface_addr, addr, ETH_ALEN);
+- 	if (msg.ssid &&
+-+	    msg.ssid[1] <= sizeof(dev->oper_ssid) &&
+- 	    (msg.ssid[1] != P2P_WILDCARD_SSID_LEN ||
+- 	     os_memcmp(msg.ssid + 2, P2P_WILDCARD_SSID, P2P_WILDCARD_SSID_LEN)
+- 	     != 0)) {
+--- 
+-1.9.1
+-
+diff --git a/package/wpa_supplicant/0005-fix-readline-libs-ordering.patch b/package/wpa_supplicant/0001-fix-readline-libs-ordering.patch
+similarity index 100%
+rename from package/wpa_supplicant/0005-fix-readline-libs-ordering.patch
+rename to package/wpa_supplicant/0001-fix-readline-libs-ordering.patch
+diff --git a/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch b/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
 deleted file mode 100644
 index d9dccf9..0000000
---- a/package/hostapd/0001-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
+--- a/package/wpa_supplicant/0002-WPS-Fix-HTTP-chunked-transfer-encoding-parser.patch
 +++ /dev/null
 @@ -1,50 +0,0 @@
 -From 5acd23f4581da58683f3cf5e36cb71bbe4070bd7 Mon Sep 17 00:00:00 2001
@@ -79,10 +136,10 @@ index d9dccf9..0000000
 --- 
 -2.1.4
 -
-diff --git a/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
+diff --git a/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch b/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
 deleted file mode 100644
 index 307297b..0000000
---- a/package/hostapd/0002-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
+--- a/package/wpa_supplicant/0003-AP-WMM-Fix-integer-underflow-in-WMM-Action-frame-par.patch
 +++ /dev/null
 @@ -1,42 +0,0 @@
 -From ef566a4d4f74022e1fdb0a2addfe81e6de9f4aae Mon Sep 17 00:00:00 2001
@@ -127,10 +184,10 @@ index 307297b..0000000
 --- 
 -2.1.4
 -
-diff --git a/package/hostapd/0003-EAP-pwd-fixes.patch b/package/hostapd/0003-EAP-pwd-fixes.patch
+diff --git a/package/wpa_supplicant/0004-EAP-pwd-fixes.patch b/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 deleted file mode 100644
 index 16a1f53..0000000
---- a/package/hostapd/0003-EAP-pwd-fixes.patch
+--- a/package/wpa_supplicant/0004-EAP-pwd-fixes.patch
 +++ /dev/null
 @@ -1,154 +0,0 @@
 -This patch combines the following upstream security fixes:
@@ -287,24 +344,24 @@ index 16a1f53..0000000
 - 		data->inbuf = wpabuf_alloc(tot_len);
 - 		if (data->inbuf == NULL) {
 - 			wpa_printf(MSG_INFO, "EAP-pwd: Out of memory to "
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index 3c7b63d..869849b 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index 1ec3367..19e4359 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256	6fe0eb6bd1c9cbd24952ece8586b6f7bd14ab358edfda99794e79b9b9dbd657f  hostapd-2.4.tar.gz
-+sha256	8e272d954dc0d7026c264b79b15389ec2b2c555b32970de39f506b9f463ec74a  hostapd-2.5.tar.gz
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 1ad32a2..e22e53f 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
+-sha256	058dc832c096139a059e6df814080f50251a8d313c21b13364c54a1e70109122  wpa_supplicant-2.4.tar.gz
++sha256	cce55bae483b364eae55c35ba567c279be442ed8bab5b80a3c7fb0d057b9b316  wpa_supplicant-2.5.tar.gz
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index eb4278a..1a3e0db 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HOSTAPD_VERSION = 2.4
-+HOSTAPD_VERSION = 2.5
- HOSTAPD_SITE = http://hostap.epitest.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+-WPA_SUPPLICANT_VERSION = 2.4
++WPA_SUPPLICANT_VERSION = 2.5
+ WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+ WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
+ WPA_SUPPLICANT_LICENSE_FILES = README
