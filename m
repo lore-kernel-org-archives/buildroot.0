@@ -1,53 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Sep 2015 19:13:59 +0100
-Subject: [Buildroot] [PATCH] glmark2: depend on host-python
-In-Reply-To: <20150928225214.33f8785d@free-electrons.com>
-References: <1443194731-52284-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150927212127.2e70faeb@free-electrons.com> <5608FB43.9060408@imgtec.com>
- <20150928225214.33f8785d@free-electrons.com>
-Message-ID: <560AD4E7.1090208@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 Sep 2015 21:48:47 +0300
+Subject: [Buildroot] [PATCH] libbluray: explicitly enable optional enabled
+	features
+Message-ID: <3801bfc7a86c5b3dd7adb6e4a3c1f33003989bb4.1443552527.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libbluray/libbluray.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 28/09/15 21:52, Thomas Petazzoni wrote:
-> Vicente,
->
-> On Mon, 28 Sep 2015 09:33:07 +0100, Vicente Olivert Riera wrote:
->
->>>  From a quick look, I don't see anything in the glmark2 source code that
->>> would need Python. It's really only waf itself that uses Python. So I
->>> don't quite see where PYTHON_CONFIG can actually be useful...
->>
->> Exactly. In fact, I managed to build the package when the value was
->> $(STAGING_DIR)/usr/bin/python-config which didn't exist.
->>
->> Should we remove it?
->
-> I don't know. It is there since when the package was originally
-> introduced by Spenser, so I have no idea why those three PYTHON_*
-> variables were added.
->
-> If the build works for you without those variables, then I would
-> suggest to remove them, and see what the autobuilders say.
-
-
-I remember that I already tried to remove them and it built fine, but 
-anyway I have double checked it just in case, and yes, I confirm that it 
-builds fine.
-
-> What do you think?
-
-Yeah, remove them and see if there is any autobuilder issue. I have sent 
-an v2.
-
-Regards,
-
-Vincent.
-
-> Thomas
->
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 2e9268ef29ac..e62ad4844c44 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -20,18 +20,21 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ LIBBLURAY_DEPENDENCIES += freetype
++LIBBLURAY_CONF_OPTS += --with-freetype
+ else
+ LIBBLURAY_CONF_OPTS += --without-freetype
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ LIBBLURAY_DEPENDENCIES += fontconfig
++LIBBLURAY_CONF_OPTS += --with-fontconfig
+ else
+ LIBBLURAY_CONF_OPTS += --without-fontconfig
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ LIBBLURAY_DEPENDENCIES += libxml2
++LIBBLURAY_CONF_OPTS += --with-libxml2
+ else
+ LIBBLURAY_CONF_OPTS += --without-libxml2
+ endif
+-- 
+2.5.3
