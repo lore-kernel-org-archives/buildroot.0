@@ -1,39 +1,49 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Sep 2015 16:56:39 +0100
-Subject: [Buildroot] [PATCH] xz: bump to version 5.2.2
-Message-ID: <1443542199-29611-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 29 Sep 2015 17:49:33 +0100
+Subject: [Buildroot] [PATCH] glmark2: add missing dependencies
+Message-ID: <1443545373-9115-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There are some missing dependencies which are in fact stated in the
+comment, and due to that you can select the package despite of not
+satisfying them.
+Also propagate the !STATIC dependency from mesa3d and add some comments.
+
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/xz/xz.hash |    2 +-
- package/xz/xz.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glmark2/Config.in |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index da523d9..f723f7e 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  679148f497e0bff2c1adce42dee5a23f746e71321c33ebb0f641a302e30c2a80  xz-5.2.1.tar.bz2
-+sha256 6ff5f57a4b9167155e35e6da8b529de69270efb2b4cf3fbabf41a4ee793840b5  xz-5.2.2.tar.bz2
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 503275c..ac6f809 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+index 052e820..6ab4f5b 100644
+--- a/package/glmark2/Config.in
++++ b/package/glmark2/Config.in
+@@ -15,6 +15,12 @@ comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mes
+ config BR2_PACKAGE_GLMARK2
+ 	bool "glmark2"
+ 	depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
++	# glmark2-gl and glmark2-egl-gles depend on mesa3d, which intruduces
++	# dependencies on NPTL, STDCPP and !STATIC.
++	depends on BR2_INSTALL_LIBSTDCPP # mesa3d
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
++	depends on !BR2_STATIC_LIBS # mesa3d
++	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBPNG
+ 	help
+@@ -22,6 +28,6 @@ config BR2_PACKAGE_GLMARK2
  
--XZ_VERSION = 5.2.1
-+XZ_VERSION = 5.2.2
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = http://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
+ 	  https://github.com/glmark2/glmark2
+ 
+-comment "glmark2 needs udev /dev management and a toolchain w/ C++, NPTL"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
++comment "glmark2 needs udev and a toolchain w/ C++, NPTL, shared library"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
 -- 
 1.7.1
