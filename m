@@ -1,36 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 Sep 2015 23:01:31 +0300
-Subject: [Buildroot] [PATCH 1/2] postgresql: disable rpath
-Message-ID: <b782d1949e86cb4f2479ffac8fc47dffda0d1b9f.1443556892.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Sep 2015 00:24:22 +0200
+Subject: [Buildroot] [PATCH] dos2unix: needs host-gettext
+In-Reply-To: <7d8f19570aef65d2409bb7025251f73e6844a889.1443509748.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 29 Sep 2015 09:55:48 +0300")
+References: <7d8f19570aef65d2409bb7025251f73e6844a889.1443509748.git.baruch@tkos.co.il>
+Message-ID: <87a8s4zwx5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The linker -rpath option causes the linker to search for libraries in host
-directories.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Should fix:
-http://autobuild.buildroot.net/results/2cc/2cca5f8d8a8cd1bf9bbbc8c955aec477839e059f/
-http://autobuild.buildroot.net/results/da6/da61d30791f216033971d679c84704d0fc0c3de0/
+ > dos2unix uses xgettext to generate its .pot file.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/eda/eda7eeb2fdf7a22c299858ac99d1b1953b15575e/
+ > http://autobuild.buildroot.net/results/aaf/aaf2b77f964eb6259e2e4b1d5a13838c3a1eef21/
+ > http://autobuild.buildroot.net/results/922/92289b63ebdf133ab910f058ffca8ba34e574208/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/postgresql/postgresql.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 382f3209ee22..2bad6b4d0547 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -15,6 +15,7 @@ POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
- 		      pgac_cv_snprintf_long_long_int_format="%lld" \
- 		      pgac_cv_snprintf_size_t_support=yes
- POSTGRESQL_AUTORECONF = YES
-+POSTGRESQL_CONF_OPTS = --disable-rpath
- 
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- # PostgreSQL does not build against uClibc with locales
+Committed, thanks.
+
 -- 
-2.5.3
+Bye, Peter Korsgaard
