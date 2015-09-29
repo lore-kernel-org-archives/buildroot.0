@@ -1,28 +1,37 @@
-From: Crast, Nicholas <Nicholas.Crast@saabsensis.com>
-Date: Tue, 29 Sep 2015 14:40:37 +0000
-Subject: [Buildroot] Disabling Automatic Source Fetching
-Message-ID: <36A43B0E1E88D84791516F9D44BC4833281C84FD@corpmail01.corp.sensis.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 29 Sep 2015 16:08:29 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "setools: fix race condition"
+Message-ID: <1443539310-55883-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This reverts commit 1ac68fe2c9b4cea91c7a30429ebf75279ede8e70.
 
-I've been hunting for awhile, but I cannot find anything about this. I want to disable Buildroot's automatic fetching of sources over the network. We would like to go download any source packages ourselves manually. Is there some sort of global configuration option to stop Buildroot from accessing the network?
+Further investigations revealed that the problem wasn't a race condition
+but the lack of flex package in the host machine:
 
-Thanks,
-Nick
+  https://github.com/TresysTechnology/setools3/issues/5#issuecomment-144048612
+---
+ package/setools/setools.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-
-----------------------------------------
-Nick Crast
-Software Engineer
-Saab Sensis Corporation
-Phone: 315-445-5703
-Email: Nicholas.Crast at saabsensis.com<mailto:Nicholas.Crast@saabsensis.com>
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150929/22c413b7/attachment.html>
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index 71301c7..a2bfd42 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -12,10 +12,6 @@ SETOOLS_INSTALL_STAGING = YES
+ SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
+ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
+ 
+-# Race condition reported upstream:
+-# https://github.com/TresysTechnology/setools3/issues/5
+-SETOOLS_MAKE = $(MAKE1)
+-
+ # configure.ac is patched by the cross compile patch,
+ # so autoreconf is necessary
+ SETOOLS_AUTORECONF = YES
+-- 
+1.7.1
