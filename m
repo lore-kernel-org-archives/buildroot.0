@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Sep 2015 19:36:26 +0200
-Subject: [Buildroot] [git commit] xz: bump to version 5.2.2
-Message-ID: <20150929173630.615FE81D5B@busybox.osuosl.org>
+Date: Tue, 29 Sep 2015 19:39:45 +0200
+Subject: [Buildroot] [git commit] libbluray: disable BD-Java
+Message-ID: <20150929173951.C99F07F9FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f355849c9ec11bee978f712328f33f97342c2ebb
+commit: http://git.buildroot.net/buildroot/commit/?id=7cc5e6daed2858bbfe020309e3834ee8db64e22b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+BD-Java requires host-ant which is not currently available in Buildroot.
+
+Fixes:
+http://autobuild.buildroot.net/results/e87/e8790359cc12d73a22a168a61f59215e50a58f0f/
+http://autobuild.buildroot.net/results/bb3/bb33effb844fd6c06efa033cc3e3cb4b4495d1d5/
+http://autobuild.buildroot.net/results/623/623de2013eba2bff2d0863968e76f299488f9f35/
+
+and more.
+
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xz/xz.hash |    2 +-
- package/xz/xz.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libbluray/libbluray.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/xz/xz.hash b/package/xz/xz.hash
-index da523d9..f723f7e 100644
---- a/package/xz/xz.hash
-+++ b/package/xz/xz.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  679148f497e0bff2c1adce42dee5a23f746e71321c33ebb0f641a302e30c2a80  xz-5.2.1.tar.bz2
-+sha256 6ff5f57a4b9167155e35e6da8b529de69270efb2b4cf3fbabf41a4ee793840b5  xz-5.2.2.tar.bz2
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index 503275c..ac6f809 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index f6a501a..2e9268e 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -12,7 +12,7 @@ LIBBLURAY_LICENSE = LGPLv2.1+
+ LIBBLURAY_LICENSE_FILES = COPYING
+ LIBBLURAY_DEPENDENCIES = host-pkgconf
  
--XZ_VERSION = 5.2.1
-+XZ_VERSION = 5.2.2
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = http://tukaani.org/xz
- XZ_INSTALL_STAGING = YES
+-LIBBLURAY_CONF_OPTS = --enable-udf
++LIBBLURAY_CONF_OPTS = --enable-udf --disable-bdjava
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ LIBBLURAY_DEPENDENCIES += libiconv
