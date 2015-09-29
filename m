@@ -1,38 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Sep 2015 00:32:04 +0200
-Subject: [Buildroot] [git commit] postgresql: disable rpath
-Message-ID: <20150929223556.D5ED981D65@busybox.osuosl.org>
+Date: Wed, 30 Sep 2015 00:30:21 +0200
+Subject: [Buildroot] [git commit] ipmiutil: needs dynamic library support
+Message-ID: <20150929223556.C6F0981D69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b70f2f96d3c32c19761be6df57e16e9d5b6bdfef
+commit: http://git.buildroot.net/buildroot/commit/?id=670095b4739c898a8f270b003ee19294206d91f6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The linker -rpath option causes the linker to search for libraries in host
-directories.
+ipmiutil builds libipmiutil.so unconditionally.
 
-Should fix:
-http://autobuild.buildroot.net/results/2cc/2cca5f8d8a8cd1bf9bbbc8c955aec477839e059f/
-http://autobuild.buildroot.net/results/da6/da61d30791f216033971d679c84704d0fc0c3de0/
+Fixes:
+http://autobuild.buildroot.net/results/e31/e31d94847cad9216aad839c2fbb312e9ea0ae75e/
+http://autobuild.buildroot.net/results/5f3/5f3f32473186e6fa3a165b263f682047af8e291e/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/ipmiutil/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 382f320..2bad6b4 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -15,6 +15,7 @@ POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
- 		      pgac_cv_snprintf_long_long_int_format="%lld" \
- 		      pgac_cv_snprintf_size_t_support=yes
- POSTGRESQL_AUTORECONF = YES
-+POSTGRESQL_CONF_OPTS = --disable-rpath
+diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
+index a2a898b..9eb5452 100644
+--- a/package/ipmiutil/Config.in
++++ b/package/ipmiutil/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_IPMIUTIL
+ 	bool "ipmiutil"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_x86_64 || BR2_i386
+ 	help
+@@ -11,7 +12,7 @@ config BR2_PACKAGE_IPMIUTIL
  
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
- # PostgreSQL does not build against uClibc with locales
+ 	  http://ipmiutil.sourceforge.net/
+ 
+-comment "ipmiutil needs a toolchain w/ threads"
++comment "ipmiutil needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_x86_64 || BR2_i386
