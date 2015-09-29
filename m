@@ -1,84 +1,53 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Sep 2015 19:10:51 +0100
-Subject: [Buildroot] [PATCH v2] glmark2: depend on host-python
-Message-ID: <1443550251-30965-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 29 Sep 2015 19:13:59 +0100
+Subject: [Buildroot] [PATCH] glmark2: depend on host-python
+In-Reply-To: <20150928225214.33f8785d@free-electrons.com>
+References: <1443194731-52284-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20150927212127.2e70faeb@free-electrons.com> <5608FB43.9060408@imgtec.com>
+ <20150928225214.33f8785d@free-electrons.com>
+Message-ID: <560AD4E7.1090208@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The waf build system of glmark2 needs Python 2 as stated on its README
-file:
+Hello Thomas,
 
-python 2.x (>= 2.4) for the build system (waf)
+On 28/09/15 21:52, Thomas Petazzoni wrote:
+> Vicente,
+>
+> On Mon, 28 Sep 2015 09:33:07 +0100, Vicente Olivert Riera wrote:
+>
+>>>  From a quick look, I don't see anything in the glmark2 source code that
+>>> would need Python. It's really only waf itself that uses Python. So I
+>>> don't quite see where PYTHON_CONFIG can actually be useful...
+>>
+>> Exactly. In fact, I managed to build the package when the value was
+>> $(STAGING_DIR)/usr/bin/python-config which didn't exist.
+>>
+>> Should we remove it?
+>
+> I don't know. It is there since when the package was originally
+> introduced by Spenser, so I have no idea why those three PYTHON_*
+> variables were added.
+>
+> If the build works for you without those variables, then I would
+> suggest to remove them, and see what the autobuilders say.
 
-Building it with a system with Python 3 as the default Python version
-will result on a failure like this one:
 
-File "waflib/Utils.py", line 199
-    except OSError ,e:
-                   ^
-SyntaxError: invalid syntax
+I remember that I already tried to remove them and it built fine, but 
+anyway I have double checked it just in case, and yes, I confirm that it 
+builds fine.
 
-So, in order to fix this, make this package depending on host-python and
-also run the waf script using $(HOST_DIR)/usr/bin/python2.
+> What do you think?
 
-At the same time delete 3 Python environment variables passed to the waf
-script during the configure phase which it seems there aren't needed for
-anything.
+Yeah, remove them and see if there is any autobuilder issue. I have sent 
+an v2.
 
-Fixes:
+Regards,
 
-  http://autobuild.buildroot.net/results/fc6/fc6cd2a90bbb0e6f80f6c4afaae1430f82e54046/
+Vincent.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v1 -> v2:
-  - Delete the 3 Python environment variables that are passed to the waf
-    script during the configure phase, as it seems they aren't needed
-    for anything. (Suggested by Thomas Petazzoni)
-
- package/glmark2/glmark2.mk |   11 ++++-------
- 1 files changed, 4 insertions(+), 7 deletions(-)
-
-diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
-index ffaea73..a2e8852 100644
---- a/package/glmark2/glmark2.mk
-+++ b/package/glmark2/glmark2.mk
-@@ -8,7 +8,7 @@ GLMARK2_VERSION = 499aa81a68fb4c8aac1c80f0d6a4cce05941c4cc
- GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
- GLMARK2_LICENSE = GPLv3+ SGIv1
- GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
--GLMARK2_DEPENDENCIES = host-pkgconf jpeg libpng \
-+GLMARK2_DEPENDENCIES = host-pkgconf host-python jpeg libpng \
- 	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
- 	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
- 	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
-@@ -47,21 +47,18 @@ GLMARK2_CONF_OPTS += \
- 
- define GLMARK2_CONFIGURE_CMDS
- 	(cd $(@D); \
--		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
--		python_LDFLAGS="" \
--		python_LIBDIR="" \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(GLMARK2_CONF_ENV) \
--		./waf configure $(GLMARK2_CONF_OPTS) \
-+		$(HOST_DIR)/usr/bin/python2 ./waf configure $(GLMARK2_CONF_OPTS) \
- 	)
- endef
- 
- define GLMARK2_BUILD_CMDS
--	cd $(@D) && $(TARGET_MAKE_ENV) ./waf
-+	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf
- endef
- 
- define GLMARK2_INSTALL_TARGET_CMDS
--	cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
-+	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf install --destdir=$(TARGET_DIR)
- endef
- 
- $(eval $(generic-package))
--- 
-1.7.1
+> Thomas
+>
