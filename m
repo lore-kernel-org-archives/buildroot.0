@@ -1,45 +1,105 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 Sep 2015 13:41:21 +0300
-Subject: [Buildroot] [PATCH] ipmiutil: needs dynamic library support
-Message-ID: <83a0afc5c996ee536aaae2e182eeae4393fd83e2.1443523281.git.baruch@tkos.co.il>
+From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+Date: Tue, 29 Sep 2015 20:05:34 +0900
+Subject: [Buildroot] [PATCH v13 1/1] squeezelite: new package
+In-Reply-To: Your message of Mon, 28 Sep 2015 23:03:37 +0200.
+ <20150928230337.105c6648@free-electrons.com>
+Message-ID: <201509291105.t8TB5Yv6028815@ms-omx03.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ipmiutil builds libipmiutil.so unconditionally.
+Dear Thomas.
 
-Fixes:
-http://autobuild.buildroot.net/results/e31/e31d94847cad9216aad839c2fbb312e9ea0ae75e/
-http://autobuild.buildroot.net/results/5f3/5f3f32473186e6fa3a165b263f682047af8e291e/
+Thank you for your comment.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/ipmiutil/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I will send v14 patch with reflecting following your comment
+in next e-mail.
 
-diff --git a/package/ipmiutil/Config.in b/package/ipmiutil/Config.in
-index a2a898b5c5eb..9eb5452b6ce3 100644
---- a/package/ipmiutil/Config.in
-+++ b/package/ipmiutil/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_IPMIUTIL
- 	bool "ipmiutil"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_x86_64 || BR2_i386
- 	help
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_IPMIUTIL
- 
- 	  http://ipmiutil.sourceforge.net/
- 
--comment "ipmiutil needs a toolchain w/ threads"
-+comment "ipmiutil needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_x86_64 || BR2_i386
--- 
-2.5.3
+> > I've fixed SQUEEZELITE_BUILD_CMDS issue.
+> > I hope this will be the final version, and be pulled up.
+> 
+> Unfortunately you are still not following the good comments from
+> Vicente. Your commit log should *not* contain any "personal" messages.
+> All "personal" messages should go below the "---" sign.
+OK.
+
+> > +config BR2_PACKAGE_SQUEEZELITE_FF
+> Option should be suffixed _FFMPEG
+OK.
+
+> > 	bool "Enable wma, alac decoding (by ffmpeg)"
+> "(by ffmpeg)" part not needed.
+> Also, please use:
+> 	Enable WMA and ALAC decoding
+OK.
+
+> > +	help
+> > +	  Enable wma, alac decoding
+> The help is useless here, so get rid of it.
+OK. I remove it.
+
+> > +	bool "Enable dsd decoding"
+> Please use:
+> 	"Enable Direct Speech Decoding"
+> or at least put DSD in capital letters.
+OK.
+DSD is not 'Direct Speech Decoding', but 'Direct Stream Digital'.
+Anyway I will use DSD here.
+
+> > +	help
+> > +	  Enable built-in DSD decoder
+> > +config BR2_PACKAGE_SQUEEZELITE_RESAMPLE
+> > +	bool "Enable resampling function"
+> Rather than "function" use "support"
+OK.
+
+> > +	select BR2_PACKAGE_LIBSOXR
+> > +	help
+> > +	  Enable resampling function
+> Again help text useless if it's just copy/pasting the prompt of the
+> option.
+OK. removed.
+
+> > +config BR2_PACKAGE_SQUEEZELITE_VISEXPORT
+> > +	bool "Enable Visualiser support"
+> 	"Enable visualiser support"
+> (no need for a capital V)
+OK.
+
+> > +	help
+> > +	  Enable Visualiser support
+> Useless help, should be removed.
+OK, removed.
+
+> > +define SQUEEZELITE_CONFIGURE_CMDS
+> > +	sed -e '1aoverride CFLAGS += $$(OPTS)' \
+> > +		-e 's/LDFLAGS +=/override LDFLAGS +=/' \
+> > +		-e 's/LDFLAGS ?=/override LDFLAGS +=/' \
+> > +		$(@D)/Makefile >$(@D)/$(SQUEEZELITE_MAKEFILE)
+> > +endef
+> Don't do this. Create a patch for the Makefile that does the necessary
+> changes.
+OK, I will make patch file.
+
+> > +define SQUEEZELITE_BUILD_CMDS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> > +		OPTS="$(SQUEEZELITE_MAKE_OPTS)" \
+> > +		-f $(SQUEEZELITE_MAKEFILE) -C $(@D) all
+> > +endef
+> > +define SQUEEZELITE_INSTALL_TARGET_CMDS
+> > +	$(INSTALL) -D -m 0755 $(@D)/squeezelite $(TARGET_DIR)/usr/bin
+> You must use a full path as the destination, i.e:
+OK.
+
+> Can you fix the above issues and send an updated version? Please be
+> careful to take into account all the comments. If you have some doubts
+> about certain comments, simply ask questions as a reply to this e-mail
+> rather than sending many iterations of the patch.
+> 
+> Thanks a lot!
+> 
+> Thomas
+============================================================
+    Hiroshi Kawashima
