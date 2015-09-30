@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2015 10:15:52 +0200
-Subject: [Buildroot] [PATCH v2] Revert "setools: fix race condition"
-In-Reply-To: <1443599196-1073-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1443599196-1073-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150930101552.3fe53a41@free-electrons.com>
+Date: Wed, 30 Sep 2015 10:16:40 +0200
+Subject: [Buildroot] [git commit] apitrace: needs gcc 4.6 or later
+Message-ID: <20150930081643.BE87A81D5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=c258be93b60b26282cee65c9f6c3960ae1fa71df
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Sep 2015 08:46:35 +0100, Vicente Olivert Riera wrote:
-> This reverts commit 1ac68fe2c9b4cea91c7a30429ebf75279ede8e70.
-> 
-> Further investigations revealed that the problem wasn't a race condition
-> but the lack of flex package in the host machine:
-> 
->   https://github.com/TresysTechnology/setools3/issues/5#issuecomment-144048612
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->   - Added missing SoB. (Highlighted by Thomas Petazzoni)
+Fixes:
+http://autobuild.buildroot.net/results/4a1/4a183b05b44833ee2f253749c39257b31db963ac/
+http://autobuild.buildroot.net/results/a9c/a9c4ed838fae31cb680ff5e19bf03dd7e2f85094/
+http://autobuild.buildroot.net/results/026/026eecffd262b0be6675001ee2f5a635207e55c7/
 
-Both patches applied, thanks.
+and more.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/apitrace/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/apitrace/Config.in b/package/apitrace/Config.in
+index 6491463..4fe82aa 100644
+--- a/package/apitrace/Config.in
++++ b/package/apitrace/Config.in
+@@ -1,11 +1,13 @@
+-comment "apitrace needs a (e)glibc toolchain w/ C++"
++comment "apitrace needs a (e)glibc toolchain w/ C++, gcc >= 4.6"
+ 	depends on BR2_PACKAGE_XORG7
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 
+ config BR2_PACKAGE_APITRACE
+ 	bool "apitrace"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # uses glibc specific __libc_dlsym
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	help
