@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Sep 2015 22:56:10 +0200
-Subject: [Buildroot] [git commit] iostat: fix build with musl
-Message-ID: <20150930205738.65FB481D8B@busybox.osuosl.org>
+Date: Wed, 30 Sep 2015 22:56:41 +0200
+Subject: [Buildroot] [git commit] flashrom: fix static build
+Message-ID: <20150930205738.6C5E77FA5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bbb793624e264b3f97661cdf15893127aed77653
+commit: http://git.buildroot.net/buildroot/commit/?id=803ed997fb2eca841ffafa047b194cf322f766df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-musl does not provide access to the kernel defined HZ macro. Under Linux HZ is
-always 100, so use that value.
+Use $(TARGET_MAKE_ENV) to set $PATH so as to make sure Buildroot pkg-config is
+used. This corrects pkg-config output, and fixes static build.
 
 Fixes:
-http://autobuild.buildroot.net/results/dc9/dc98a572c7055cb66cf14648af750b7e0c8e136e/
-http://autobuild.buildroot.net/results/fe3/fe3907858f90f766f1949be631427dbb079e08ed/
-http://autobuild.buildroot.net/results/59e/59e7c8a3d94d06ba52ea5034fcabd9737a5314db/
+http://autobuild.buildroot.net/results/b6e/b6e9f3cb7fa8019e631c14d9c832174125ec64ba/
+http://autobuild.buildroot.net/results/30c/30c83f9c60ac5c7359ddabdc1f190ab12433ae92/
+http://autobuild.buildroot.net/results/2a5/2a5da78dd5b2922796e3010e4a0477cb9f6355cb/
 
 and more.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iostat/iostat.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/flashrom/flashrom.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
-index d28dc1b..d591c67 100644
---- a/package/iostat/iostat.mk
-+++ b/package/iostat/iostat.mk
-@@ -10,7 +10,8 @@ IOSTAT_LICENSE = GPL
- IOSTAT_LICENSE_FILES = LICENSE
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 525470a..7e0fcf2 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -7,12 +7,12 @@
+ FLASHROM_VERSION = 0.9.8
+ FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
+ FLASHROM_SITE = http://download.flashrom.org/releases
+-FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi
++FLASHROM_DEPENDENCIES = pciutils libusb libusb-compat libftdi host-pkgconf
+ FLASHROM_LICENSE = GPLv2+
+ FLASHROM_LICENSE_FILES = COPYING
  
- define IOSTAT_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(TARGET_CFLAGS) -DHZ=100"
+ define FLASHROM_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
  endef
  
- define IOSTAT_INSTALL_TARGET_CMDS
+ define FLASHROM_INSTALL_TARGET_CMDS
