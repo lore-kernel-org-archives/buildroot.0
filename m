@@ -1,47 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2015 23:54:46 +0200
-Subject: [Buildroot] [PATCH 3/9] linux: meddle not in the affairs of
-	filesystems, for you are tasty with bacon
+Date: Wed, 30 Sep 2015 23:54:44 +0200
+Subject: [Buildroot] [PATCH 1/9] core: sort packages and eliminate
+	duplicates before building
 In-Reply-To: <cover.1443650034.git.yann.morin.1998@free.fr>
 References: <cover.1443650034.git.yann.morin.1998@free.fr>
-Message-ID: <4efd4ca99366d56f8ae7796f9ae8958f1749b862.1443650034.git.yann.morin.1998@free.fr>
+Message-ID: <ef61b62e70416103f69b2e8c214b7f6bedd99b5e.1443650034.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the rule to rebuild the Linux kernel with an initramfs
-directly depends on the filesystem image filename.
+Currently, enabling more than one filesystem image will make
+'show-targets' list a few host packages more than once.
 
-This is inherently "bad" from a purity point of view. linux.mk should
-not have to delve into the fs internals.
+This is because all filesystem images add the same set of
+host-packages to their dependencies, which are then added as-is
+to the package list.
 
-Rather, make it directly depend on the "frontal" rule that generates the
-cpio image.
+Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
+appear as many times as there are filesystem images enabled.
+
+Fix that by sorting the package list, thus eliminating duplicates from
+that list.
+
+Furthermore, and even though we're already sorting packages by scanning
+the .mk file in alphabetical order (because we $(sort) them), sorting
+the list itself will further guarantee the build order, thus enhancing
+reproducibility (and $(sort ...) is not dependent on the locale, it
+always sorts with the C locale).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
-This, too, will be useful for the initramfs patch coming next.
----
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 316f973..864ccbf 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -392,7 +392,7 @@ $(eval $(kconfig-package))
- # been generated in $(BINARIES_DIR)/rootfs.cpio.
- $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
- $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
--$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
-+$(LINUX_DIR)/.stamp_initramfs_rebuilt: rootfs-cpio
- $(LINUX_DIR)/.stamp_initramfs_rebuilt:
- 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
- 	# Build the kernel.
+diff --git a/Makefile b/Makefile
+index fdbca02..b3f519e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -556,6 +556,12 @@ endif
+ 
+ $(TARGETS_ROOTFS): target-finalize
+ 
++# Filesystems may add the same pacakges more than once from their
++# dependency lists. For example, all filesystems include host-fakeroot,
++# host-makedevs and, if required, host-mkpasswd. They would appear
++# multiple times in the list returned by show-target.
++PACKAGES := $(sort $(PACKAGES))
++
+ target-finalize: $(PACKAGES)
+ 	@$(call MESSAGE,"Finalizing target directory")
+ 	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
 -- 
 1.9.1
