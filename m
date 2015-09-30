@@ -1,50 +1,41 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 30 Sep 2015 13:45:55 -0300
-Subject: [Buildroot] Wandboard Solo/Dual/Quad support
-Message-ID: <CANu7NGtUCHKhNDZwA7im_nCgB82NXYdwzr6gjGnq0b+yGOmVBw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 30 Sep 2015 20:13:23 +0300
+Subject: [Buildroot] [PATCH] iostat: fix build with musl
+Message-ID: <0adb275dfb0b27263aa2a671be7505ca55eb5db8.1443633203.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+musl does not provide access to the kernel defined HZ macro. Under Linux HZ is
+always 100, so use that value.
 
-I'm working on the config files for the wandboard solo, dual and quad, and
-I have a few questions:
+Fixes:
+http://autobuild.buildroot.net/results/dc9/dc98a572c7055cb66cf14648af750b7e0c8e136e/
+http://autobuild.buildroot.net/results/fe3/fe3907858f90f766f1949be631427dbb079e08ed/
+http://autobuild.buildroot.net/results/59e/59e7c8a3d94d06ba52ea5034fcabd9737a5314db/
 
-1. Are you guys OK with this organization?
+and more.
 
-$ ls configs/wandboard*
-configs/wandboard_solo_defconfig
-configs/wandboard_dual_defconfig
-configs/wandboard_quad_defconfig
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/iostat/iostat.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-$ tree board/wandboard/
-board/wandboard/
-??? dual
-?   ??? readme.txt
-?   ??? uboot-env.txt
-??? genimage.cfg
-??? post-image.sh
-??? quad
-?   ??? readme.txt
-?   ??? uboot-env.txt
-??? solo
-    ??? readme.txt
-    ??? uboot-env.txt
-
-2. After renaming wandboard_defconfig to wandboard_solo_defconfig, I will
-bump its u-boot and kernel version. Should I send you two separate patches
-(renaming and then bumping versions) or just one patch including both
-changes?
-
-Best regards,
-
-Sergio Prado
-Embedded Labworks
-Office: +55 11 2628-3461
-Mobile: +55 11 97123-3420
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150930/9b66a6ac/attachment.html>
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index d28dc1b76e55..d591c67dcb36 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -10,7 +10,8 @@ IOSTAT_LICENSE = GPL
+ IOSTAT_LICENSE_FILES = LICENSE
+ 
+ define IOSTAT_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -DHZ=100"
+ endef
+ 
+ define IOSTAT_INSTALL_TARGET_CMDS
+-- 
+2.5.3
