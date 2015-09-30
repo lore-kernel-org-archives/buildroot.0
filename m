@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 30 Sep 2015 13:52:44 +0200
-Subject: [Buildroot] [git commit] ltp-testsuite: don't include host headers
-Message-ID: <20150930115301.70352818EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] git: bump to version 2.6.0
+Message-ID: <20150930115301.66879818EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51093254eb13fd10430eb9491a1356ddfc12ffb4
+commit: http://git.buildroot.net/buildroot/commit/?id=3cda54971e98c89bed246510969c8c5324ac1e50
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-$SYSROOT defaults to empty, so we must set it to our sysroot.
-
-Fixes:
-http://autobuild.buildroot.net/results/812/812986b00786972d4e7fbb0362460a0de8a70472/
-http://autobuild.buildroot.net/results/4a3/4a3c7ea4eb08248f2aec45d8efc111087bc1327f/
-http://autobuild.buildroot.net/results/8b6/8b6f7adb5546387c25f3a4c9d8e6f72f4b62b9a4/
-
-and more.
-
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ltp-testsuite/ltp-testsuite.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 32038a0..b23cc05 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -35,6 +35,7 @@ endif
- LTP_TESTSUITE_CONF_ENV += \
- 	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
- 	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
--	LIBS="$(LTP_TESTSUITE_LIBS)"
-+	LIBS="$(LTP_TESTSUITE_LIBS)" \
-+	SYSROOT="$(STAGING_DIR)"
+diff --git a/package/git/git.hash b/package/git/git.hash
+index c669d53..5abf518 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 124d29d857a1282fd2111cf4a021f156e8bae917f455b4551b2aea87f0453a1a  git-2.5.3.tar.xz
++sha256 211beb96ff41a83727e39704431ac388ecb1cebb5219cda067999bce4e1e15a6  git-2.6.0.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 720528e..43a4397 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-GIT_VERSION = 2.5.3
++GIT_VERSION = 2.6.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
