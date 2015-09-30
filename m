@@ -1,80 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2015 12:34:26 +0200
-Subject: [Buildroot] board: add support for Synopsys VDK Software
- Development Platform
-In-Reply-To: <3d88a36124c3fa652b6a54e3a2d0ac1e2c165375.1443605861.git.jpinto@synopsys.com>
-References: <3d88a36124c3fa652b6a54e3a2d0ac1e2c165375.1443605861.git.jpinto@synopsys.com>
-Message-ID: <20150930123426.5eb66486@free-electrons.com>
+Date: Wed, 30 Sep 2015 12:35:00 +0200
+Subject: [Buildroot] [git commit] glmark2: depend on host-python
+Message-ID: <20150930103504.60B6081D5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joao Pinto,
+commit: http://git.buildroot.net/buildroot/commit/?id=97acef48bbe101901a7ae21af575f90c9a4b8b14
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Sep 2015 10:44:29 +0100, Joao Pinto wrote:
-> The Virtualizer Development Kit (VDK) Family for ARM Cortex Products consists of a set of virtual
-> prototypes that provide a virtualizer for the ARM core variants. The VDK is a standalone package that runs
-> on an host computer.
+The waf build system of glmark2 needs Python 2 as stated on its README
+file:
 
-You already sent the same patch yesterday. What are the changes in this
-new version? New versions of patches should have a different version
-number, and carry a changelog (see the Buildroot manual for details).
+python 2.x (>= 2.4) for the build system (waf)
 
-Also, your commit log message should be wrapped to ~72 characters.
+Building it with a system with Python 3 as the default Python version
+will result on a failure like this one:
 
->  board/synopsys/vdk/fs-overlay/etc/inittab |   28 +
+File "waflib/Utils.py", line 199
+    except OSError ,e:
+                   ^
+SyntaxError: invalid syntax
 
-You could add a paragraph in your commit log that explains why a custom
-inittab is used.
+So, in order to fix this, make this package depending on host-python and
+also run the waf script using $(HOST_DIR)/usr/bin/python2.
 
->  board/synopsys/vdk/linux-vdk-defconfig    | 2914 +++++++++++++++++++++++++++++
+At the same time delete 3 Python environment variables passed to the waf
+script during the configure phase which it seems there aren't needed for
+anything.
 
-Please use a defconfig, which you can generate with "make
-linux-update-defconfig". It will make the file much much smaller.
+Fixes:
 
+  http://autobuild.buildroot.net/results/fc6/fc6cd2a90bbb0e6f80f6c4afaae1430f82e54046/
 
-> diff --git a/configs/snps_vdk_defconfig b/configs/snps_vdk_defconfig
-> new file mode 100644
-> index 0000000..c1b1b8a
-> --- /dev/null
-> +++ b/configs/snps_vdk_defconfig
-> @@ -0,0 +1,17 @@
-> +BR2_aarch64=y
-> +BR2_KERNEL_HEADERS_3_18=y
-> +BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
-> +BR2_INIT_SYSV=y
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/glmark2/glmark2.mk |   11 ++++-------
+ 1 files changed, 4 insertions(+), 7 deletions(-)
 
-No, please use the default init system (i.e Busybox).
-
-> +BR2_SYSTEM_BIN_SH_BASH=y
-
-Ditto, use the default value.
-
-> +BR2_ROOTFS_OVERLAY="board/synopsys/vdk/fs-overlay"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-defconfig"
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-> +BR2_PACKAGE_PCIUTILS=y
-
-No special packages in defconfigs.
-
-> +BR2_TARGET_ROOTFS_EXT2=y
-
-Any reason to generate an ext2 filesystem here? Is it used for the
-emulator/simulator?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index ffaea73..a2e8852 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -8,7 +8,7 @@ GLMARK2_VERSION = 499aa81a68fb4c8aac1c80f0d6a4cce05941c4cc
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPLv3+ SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
+-GLMARK2_DEPENDENCIES = host-pkgconf jpeg libpng \
++GLMARK2_DEPENDENCIES = host-pkgconf host-python jpeg libpng \
+ 	$(if $(BR2_PACKAGE_HAS_LIBEGL),libegl) \
+ 	$(if $(BR2_PACKAGE_HAS_LIBGLES),libgles) \
+ 	$(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
+@@ -47,21 +47,18 @@ GLMARK2_CONF_OPTS += \
+ 
+ define GLMARK2_CONFIGURE_CMDS
+ 	(cd $(@D); \
+-		PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python-config" \
+-		python_LDFLAGS="" \
+-		python_LIBDIR="" \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		$(GLMARK2_CONF_ENV) \
+-		./waf configure $(GLMARK2_CONF_OPTS) \
++		$(HOST_DIR)/usr/bin/python2 ./waf configure $(GLMARK2_CONF_OPTS) \
+ 	)
+ endef
+ 
+ define GLMARK2_BUILD_CMDS
+-	cd $(@D) && $(TARGET_MAKE_ENV) ./waf
++	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf
+ endef
+ 
+ define GLMARK2_INSTALL_TARGET_CMDS
+-	cd $(@D) && $(TARGET_MAKE_ENV) ./waf install --destdir=$(TARGET_DIR)
++	cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf install --destdir=$(TARGET_DIR)
+ endef
+ 
+ $(eval $(generic-package))
