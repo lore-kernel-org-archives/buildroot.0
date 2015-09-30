@@ -1,30 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Sep 2015 13:49:36 +0200
-Subject: [Buildroot] [PATCH 2/2] ltp-testsuite: don't link with libtirpc
-In-Reply-To: <4f342418e3b1c4cb115e13709fe7366ce8ba0db7.1443613129.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 30 Sep 2015 14:38:49 +0300")
-References: <5e7ab0a7bf987fa76a167569b823df89144af045.1443613129.git.baruch@tkos.co.il>
- <4f342418e3b1c4cb115e13709fe7366ce8ba0db7.1443613129.git.baruch@tkos.co.il>
-Message-ID: <871tdgxh2n.fsf@dell.be.48ers.dk>
+Date: Wed, 30 Sep 2015 13:52:44 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: don't include host headers
+Message-ID: <20150930115301.70352818EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=51093254eb13fd10430eb9491a1356ddfc12ffb4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Buildroot patches libtirpc to remove auth_des support. This breaks tirpc test
- > build. Remove support for libtirpc for now.
+$SYSROOT defaults to empty, so we must set it to our sysroot.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/301/3015eee7b1b6b240e7948b08954d273d28f44c32/
+Fixes:
+http://autobuild.buildroot.net/results/812/812986b00786972d4e7fbb0362460a0de8a70472/
+http://autobuild.buildroot.net/results/4a3/4a3c7ea4eb08248f2aec45d8efc111087bc1327f/
+http://autobuild.buildroot.net/results/8b6/8b6f7adb5546387c25f3a4c9d8e6f72f4b62b9a4/
 
- > Cc: Anders Roxell <anders.roxell@linaro.org>
- > Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+and more.
 
-Committed, thanks.
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 32038a0..b23cc05 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -35,6 +35,7 @@ endif
+ LTP_TESTSUITE_CONF_ENV += \
+ 	CFLAGS="$(LTP_TESTSUITE_CFLAGS)" \
+ 	CPPFLAGS="$(LTP_TESTSUITE_CPPFLAGS)" \
+-	LIBS="$(LTP_TESTSUITE_LIBS)"
++	LIBS="$(LTP_TESTSUITE_LIBS)" \
++	SYSROOT="$(STAGING_DIR)"
+ 
+ $(eval $(autotools-package))
