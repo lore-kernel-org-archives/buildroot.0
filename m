@@ -1,43 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2015 12:47:07 +0200
-Subject: [Buildroot] [PATCH v3 1/4] Remove trailing slash from all
- package site URLs
-In-Reply-To: <1443456634-21484-2-git-send-email-luca@lucaceresoli.net>
-References: <1443456634-21484-1-git-send-email-luca@lucaceresoli.net>
- <1443456634-21484-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20150930124707.3520a87e@free-electrons.com>
+Date: Wed, 30 Sep 2015 12:52:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libsoil: new package
+In-Reply-To: <1443468339-24028-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1443468339-24028-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20150930125219.767840c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Bernd,
 
-On Mon, 28 Sep 2015 18:10:31 +0200, Luca Ceresoli wrote:
-> The recommended form is without the trailing slash, and will become
-> mandatory in a coming commit.
+On Mon, 28 Sep 2015 21:25:39 +0200, Bernd Kuhls wrote:
+> Needed for these new Kodi addons, to be included in upcoming 16.x-Jarvis
+> version bump:
 > 
-> This avoids the need for the $$($(2)_SITE:/=) magic in package/pkg-generic.mk
-> to avoid double slashes in download URLs, like
-> "https://mosh.mit.edu//mosh-1.2.5.tar.gz".
->                      ^^
-> 
-> Note: this work has already been done in b0b9606530dfc6de4030 a few
-> months ago and earlier in c7f4b964718bc5a3329b and 4a9eb20de817fa64,
-> but no check has been added at that time to avoid new slashes to slip
-> in, and so they did. This time a patch will follow immediately to
-> prevent future mistakes from being unnoticed.
-> 
-> Mass-replaced with the following command:
-> 
->   git grep -l '_SITE.*/$' | xargs sed -i '/_SITE.*=/s|/$||'
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> ---
+> kodi-screensaver-asterwave
+> kodi-screensaver-cpblobs
+> kodi-screensaver-matrixtrails
+> kodi-screensaver-planestate
+> kodi-visualisation-fountain
 
-Applied, thanks.
+So they start using a library that has seen its last release in 2008?
+Interesting choice :)
+
+
+> +-	gcc -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES)
+> ++	$(CC) -shared -Wl,-soname,$(LIBNAME).so.$(MAJOR) -o $(LIBNAME).so.$(VERSION) $(OFILES) -lGL -lm
+
+Looking at this line, I believe this package should "depends
+on !BR2_STATIC_LIBS".
+
+> diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
+> new file mode 100644
+> index 0000000..664f4e6
+> --- /dev/null
+> +++ b/package/libsoil/libsoil.mk
+> @@ -0,0 +1,38 @@
+> +################################################################################
+> +#
+> +# libsoil
+> +#
+> +################################################################################
+> +
+> +LIBSOIL_VERSION = 1.07~20080707
+> +LIBSOIL_SOURCE = libsoil_$(LIBSOIL_VERSION).dfsg.orig.tar.gz
+> +LIBSOIL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/libs/libsoil
+
+Any reason to not use the upstream site,
+http://www.lonesock.net/files/soil.zip ?
+
+> +LIBSOIL_INSTALL_STAGING = YES
+> +LIBSOIL_DEPENDENCIES = libgl
+> +LIBSOIL_LICENSE = Public Domain, MIT
+> +LIBSOIL_LICENSE_FILES = src/stb_image_aug.c src/image_helper.c
+> +
+> +define LIBSOIL_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
+> +		CC=$(TARGET_CC) \
+
+Why do you pass CC=$(TARGET_CC) if you already pass
+$(TARGET_CONFIGURE_OPTS) in the environment?
+
+Also, please use $(TARGET_MAKE_ENV) in the environment.
+
+> +		-f ../projects/makefile/alternate\ Makefile.txt \
+
+Wow, they used a space in the name of the Makefile. Very interesting :)
+
+Thanks,
 
 Thomas
 -- 
