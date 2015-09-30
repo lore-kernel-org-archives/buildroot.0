@@ -1,35 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2015 13:58:26 +0200
-Subject: [Buildroot] [PATCH 1/1] openvpn: add option for
- --enable-password-save
-In-Reply-To: <1443001188-8997-1-git-send-email-andreas.wetzel@nanotronic.ch>
-References: <1443001188-8997-1-git-send-email-andreas.wetzel@nanotronic.ch>
-Message-ID: <20150930135826.2f61326e@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Sep 2015 12:55:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 8066] nodejs crashes when built with gcc 4.9
+In-Reply-To: <bug-8066-163@https.bugs.busybox.net/>
+References: <bug-8066-163@https.bugs.busybox.net/>
+Message-ID: <20150930125504.4DDED81DA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andreas Wetzel,
+https://bugs.busybox.net/show_bug.cgi?id=8066
 
-On Wed, 23 Sep 2015 11:39:48 +0200, Andreas Wetzel wrote:
-> Added configuration option BR2_PACKAGE_OPENVPN_PWSAVE that
-> adds --enable-password-save to OPENVPN_CONF_OPTS if selected.
-> 
-> Signed-off-by: Andreas Wetzel <andreas.wetzel@nanotronic.ch>
-> ---
->  package/openvpn/Config.in  | 5 +++++
->  package/openvpn/openvpn.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
+Jeroen Roovers <jer@xs4all.nl> changed:
 
-Applied, thanks. I've just rewrapped the Config.in help text as
-suggested by Vicente.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jer at xs4all.nl
 
-Best regards,
+--- Comment #6 from Jeroen Roovers <jer@xs4all.nl> 2015-09-30 12:55:04 UTC ---
+On an ARM system (cortex-a7) I am seeing a similar problem when I build
+everything with gcc-4.9.*. It doesn't crash, though, it merely exits certain
+functions early, causing it to output invalid HTTP headers. I have seen some
+references on the wider Internet pointing to similar problems, but those were
+not connected to a specific GCC version or even the same OS. The only thing I
+am certain of is that GCC 4.9 miscompiles nodejs, including version 4.1.1. I
+haven't tried with libuv and libhttpparser properly in place, though.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
