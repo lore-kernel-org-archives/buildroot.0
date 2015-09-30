@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2015 10:16:45 +0200
-Subject: [Buildroot] [PATCH] apitrace: needs gcc 4.6 or later
-In-Reply-To: <084ad68ad5b3f1b650d49638adffc0cb441986f4.1443591219.git.baruch@tkos.co.il>
-References: <084ad68ad5b3f1b650d49638adffc0cb441986f4.1443591219.git.baruch@tkos.co.il>
-Message-ID: <20150930101645.41382d6f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Sep 2015 08:31:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 8381] New: make manuconfig problem in opensuse 13.2
+Message-ID: <bug-8381-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+https://bugs.busybox.net/show_bug.cgi?id=8381
 
-On Wed, 30 Sep 2015 08:33:39 +0300, Baruch Siach wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/4a1/4a183b05b44833ee2f253749c39257b31db963ac/
-> http://autobuild.buildroot.net/results/a9c/a9c4ed838fae31cb680ff5e19bf03dd7e2f85094/
-> http://autobuild.buildroot.net/results/026/026eecffd262b0be6675001ee2f5a635207e55c7/
-> 
-> and more.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/apitrace/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+           Summary: make manuconfig problem in opensuse 13.2
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: ztutberidze at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Applied, thanks.
 
-Thomas
+when I type make menuconfig I am getting error
+ *** Unable to find the ncurses libraries or the
+ *** required header files.
+ *** 'make menuconfig' requires the ncurses libraries.
+ *** 
+ *** Install ncurses (ncurses-devel) and try again.
+ *** 
+
+even when ncurses with development packages are installed.
+
+The solution is adding -ldl in file /usr/lib64/pkgconfig/ncursesw.pc section
+Libs.
+
+after that make menuconfig is working.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
