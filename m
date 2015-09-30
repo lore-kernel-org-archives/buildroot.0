@@ -1,85 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2015 23:54:48 +0200
-Subject: [Buildroot] [PATCH 0/9] fs: cleanups and enhancements (branch
-	yem/fs)
-Message-ID: <cover.1443650034.git.yann.morin.1998@free.fr>
+Date: Wed, 30 Sep 2015 23:54:45 +0200
+Subject: [Buildroot] [PATCH 2/9] linux: split overly-long dependency line
+	for readability
+In-Reply-To: <cover.1443650034.git.yann.morin.1998@free.fr>
+References: <cover.1443650034.git.yann.morin.1998@free.fr>
+Message-ID: <47ba1d9a2c6849fedcdffda03d3313288180ac5f.1443650034.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-This series introduces some cleaups and enhancements to the filesystem
-infrastructure.
+---
+This is going to be useful to better understand the initramfs patch
+coming next.
+---
+ linux/linux.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Most notably, it gets rid of the post-target rules, i.e. rules defined
-by filesystems that were to be executed after the image was generated,
-in favour of post-gen hooks.
-
-The reason for getting rid of post-target rules is that they were not
-really needed, and the way they were used was dubious when dealing with
-top-level parallel builds. Also, the sole user for which those rules
-were documented to be useful was not even using the filesystem infra.
-
-The series also introduces the concept of a "landing" area for the
-target directory.
-
-This landing area is a copy of the currently-known target/ directory,
-copy in which all the target-finalize step and hooks are run, leaving
-the original target/ directory to contain only what packages have
-installed.
-
-Please read the commit log for the final patch for more on that landing
-area.
-
-To be noted: patch 8/9 was the beginning of a bigger plan to rework how
-images are generated. However, and quite sadly, that bigger plan is now
-evading my recollection. It's sad to get old... ;-] Nevertheless, the
-patch by itself still makes sense, so I kept it.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 803ed997fb2eca841ffafa047b194cf322f766df:
-
-  flashrom: fix static build (2015-09-30 22:56:41 +0200)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/fs
-
-for you to fetch changes up to a594ac3858ea713de72610ad49566be4e20c176f:
-
-  core: finalise target in its own location (2015-09-30 23:53:09 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (9):
-      core: sort packages and eliminate duplicates before building
-      linux: split overly-long dependency line for readability
-      linux: meddle not in the affairs of filesystems, for you are tasty with bacon
-      fs/initramfs: cleanup and enhance comments
-      fs/ext2: use a post-gen hook rather than a post-target rule
-      fs/cpio: use a post-gen hook rather than a post-target rule
-      fs/common: get rid of post-target rules
-      fs/common: move actions common to all filesystems to their own rule
-      core: finalise target in its own location
-
- Makefile                  | 34 +++++++++++++++++++++++-
- fs/common.mk              | 67 +++++++++++++++++++++++++----------------------
- fs/cpio/cpio.mk           | 11 ++++----
- fs/ext2/ext2.mk           | 10 +++----
- fs/initramfs/initramfs.mk | 22 +++++++++++-----
- linux/linux.mk            |  5 +++-
- 6 files changed, 97 insertions(+), 52 deletions(-)
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index bbcc54b..316f973 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -390,7 +390,10 @@ $(eval $(kconfig-package))
+ 
+ # Support for rebuilding the kernel after the cpio archive has
+ # been generated in $(BINARIES_DIR)/rootfs.cpio.
+-$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
++$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
++$(LINUX_DIR)/.stamp_initramfs_rebuilt:
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
