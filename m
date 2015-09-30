@@ -1,125 +1,178 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 30 Sep 2015 22:06:47 +0200
-Subject: [Buildroot] [git commit] imx-kobs: add new package
-Message-ID: <20150930200653.A3D2B80425@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kobs-ng: remove obsolete package
+Message-ID: <20150930200653.A958F7FB37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff3e2d69a94392a444eeaf988f8a054d43b354cc
+commit: http://git.buildroot.net/buildroot/commit/?id=2b78fb21473223d50aac8e2f8b574eba89721a81
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Based on the Yocto 3.14.28-1.0.0_ga update:
-https://github.com/Freescale/meta-fsl-arm/commit/6c44744
+In favor of imx-kobs maintained by Freescale.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freescale-imx/Config.in                    |    1 +
- .../imx-kobs/0001-Fix-musl-build.patch             |   39 ++++++++++++++++++++
- package/freescale-imx/imx-kobs/Config.in           |   10 +++++
- package/freescale-imx/imx-kobs/imx-kobs.hash       |    2 +
- package/freescale-imx/imx-kobs/imx-kobs.mk         |   12 ++++++
- 5 files changed, 64 insertions(+), 0 deletions(-)
+ Config.in.legacy                           |    8 +++
+ package/Config.in                          |    1 -
+ package/kobs-ng/0001-fix-mtd-defines.patch |   73 ----------------------------
+ package/kobs-ng/Config.in                  |    9 ----
+ package/kobs-ng/kobs-ng.hash               |    2 -
+ package/kobs-ng/kobs-ng.mk                 |   13 -----
+ 6 files changed, 8 insertions(+), 98 deletions(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index dffe76f..a958dbd 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
- 	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
- 	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 18231fd..5305538 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -363,6 +363,14 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW
+ 	  BR2_PACKAGE_DIRECTFB_EXAMPLES option now installs all
+ 	  examples.
  
-+source "package/freescale-imx/imx-kobs/Config.in"
- source "package/freescale-imx/imx-lib/Config.in"
- source "package/freescale-imx/imx-vpu/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
-diff --git a/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
-new file mode 100644
-index 0000000..ce123de
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/0001-Fix-musl-build.patch
-@@ -0,0 +1,39 @@
-+[PATCH] Fix musl build
-+
-+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-+---
-+ src/mtd.c | 1 +
-+ src/mtd.h | 5 +++++
-+ 2 files changed, 6 insertions(+)
-+
-+diff --git a/src/mtd.c b/src/mtd.c
-+index 1edc441..6d2264c 100644
-+--- a/src/mtd.c
-++++ b/src/mtd.c
-+@@ -31,6 +31,7 @@
-+ #include <fcntl.h>
-+ #include <ctype.h>
-+ #include <errno.h>
-++#include <stddef.h>
-+ #include <sys/types.h>
-+ #include <sys/ioctl.h>
-+ 
-+diff --git a/src/mtd.h b/src/mtd.h
-+index bd21add..debfc84 100644
-+--- a/src/mtd.h
-++++ b/src/mtd.h
-+@@ -31,6 +31,11 @@
-+ #include "BootControlBlocks.h"
-+ #include "rom_nand_hamming_code_ecc.h"
-+ 
-++// musl library doesn't define loff_t
-++#if !defined(__GLIBC__) && !defined(__UCLIBC__)
-++#define loff_t off_t
-++#endif
-++
-+ //------------------------------------------------------------------------------
-+ // Re-definitions of true and false, because the standard ones aren't good
-+ // enough?
-+-- 
-+2.5.1
-+
-diff --git a/package/freescale-imx/imx-kobs/Config.in b/package/freescale-imx/imx-kobs/Config.in
-new file mode 100644
-index 0000000..fc2344e
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_IMX_KOBS
-+	bool "imx-kobs"
-+	depends on BR2_arm # Only relevant for i.MX
++config BR2_PACKAGE_KOBS_NG
++	bool "kobs-ng was replaced by imx-kobs"
++	select BR2_LEGACY
++	select BR2_PACKAGE_IMX_KOBS
 +	help
-+	  The imx-kobs tool is used for writing images to NAND on i.MX
-+	  platforms.
++	  The outdated kobs-ng has been replaced by the Freescale-
++	  maintained imx-kobs package.
 +
-+	  This library is provided by Freescale as-is and doesn't have
-+	  an upstream.
-+
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.hash b/package/freescale-imx/imx-kobs/imx-kobs.hash
-new file mode 100644
-index 0000000..13373ea
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256 cfac042f5c96731205c397a4a6b3ed966f804569ae4d0e2685d22fdf6bdc9eb7  imx-kobs-3.14.28-1.0.0.tar.gz
-diff --git a/package/freescale-imx/imx-kobs/imx-kobs.mk b/package/freescale-imx/imx-kobs/imx-kobs.mk
-new file mode 100644
-index 0000000..02c5cad
---- /dev/null
-+++ b/package/freescale-imx/imx-kobs/imx-kobs.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# imx-kobs
-+#
-+################################################################################
-+
-+IMX_KOBS_VERSION = $(FREESCALE_IMX_VERSION)
-+IMX_KOBS_SITE = $(FREESCALE_IMX_SITE)
-+IMX_KOBS_LICENSE = GPLv2+
-+IMX_KOBS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ config BR2_PACKAGE_SAWMAN
+ 	bool "sawman package removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 0e0c5cd..79cbbe6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -164,7 +164,6 @@ menu "Filesystem and flash utilities"
+ 	source "package/genext2fs/Config.in"
+ 	source "package/genpart/Config.in"
+ 	source "package/genromfs/Config.in"
+-	source "package/kobs-ng/Config.in"
+ 	source "package/makedevs/Config.in"
+ 	source "package/mmc-utils/Config.in"
+ 	source "package/mtd/Config.in"
+diff --git a/package/kobs-ng/0001-fix-mtd-defines.patch b/package/kobs-ng/0001-fix-mtd-defines.patch
+deleted file mode 100644
+index 3ffba71..0000000
+--- a/package/kobs-ng/0001-fix-mtd-defines.patch
++++ /dev/null
+@@ -1,73 +0,0 @@
+-Newer kernel headers renamed mtd mode defines and no longer support
+-MEMSETOOBSEL. Allow code to work with both older and newer kernel
+-versions.
+-
+-Signed-off-by: Paul B. Henson <henson@acm.org>
+-Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
+-
+-diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.c kobs-ng-3.0.35-4.0.0/src/mtd.c
+---- kobs-ng-3.0.35-4.0.0-orig/src/mtd.c	2012-12-17 22:37:40.000000000 -0800
+-+++ kobs-ng-3.0.35-4.0.0/src/mtd.c	2013-07-28 19:39:59.000000000 -0700
+-@@ -852,8 +852,11 @@
+- 		mp = &md->part[i];
+- 
+- 		if (mp->fd != -1) {
+-+/* Newer kernels dropped MEMSETOOBSEL */
+-+#ifdef MEMSETOOBSEL
+- 			(void)ioctl(mp->fd, MEMSETOOBSEL,
+- 					&mp->old_oobinfo);
+-+#endif
+- 			close(mp->fd);
+- 		}
+- 
+-@@ -896,6 +899,8 @@
+- 				continue;
+- 			}
+- 
+-+/* Newer kernels dropped MEMSETOOBSEL */
+-+#ifdef MEMSETOOBSEL
+- 			if (r == -ENOTTY) {
+- 				r = ioctl(mp->fd, MEMSETOOBSEL, &mp->old_oobinfo);
+- 				if (r != 0) {
+-@@ -904,6 +909,7 @@
+- 				}
+- 				mp->oobinfochanged = 0;
+- 			}
+-+#endif
+- 		} else {
+- 			r = ioctl(mp->fd, MTDFILEMODE, (void *)MTD_MODE_RAW);
+- 			if (r != 0 && r != -ENOTTY) {
+-@@ -911,6 +917,8 @@
+- 				continue;
+- 			}
+- 
+-+/* Newer kernels dropped MEMSETOOBSEL */
+-+#ifdef MEMSETOOBSEL
+- 			if (r == -ENOTTY) {
+- 				r = ioctl(mp->fd, MEMSETOOBSEL, &none_oobinfo);
+- 				if (r != 0) {
+-@@ -920,6 +928,7 @@
+- 				mp->oobinfochanged = 1;
+- 			} else
+- 				mp->oobinfochanged = 2;
+-+#endif
+- 		}
+- 
+- 		mp->ecc = ecc;
+-diff -u -r kobs-ng-3.0.35-4.0.0-orig/src/mtd.h kobs-ng-3.0.35-4.0.0/src/mtd.h
+---- kobs-ng-3.0.35-4.0.0-orig/src/mtd.h	2012-12-17 22:37:40.000000000 -0800
+-+++ kobs-ng-3.0.35-4.0.0/src/mtd.h	2013-07-28 19:33:57.000000000 -0700
+-@@ -31,6 +31,13 @@
+- #include "BootControlBlocks.h"
+- #include "rom_nand_hamming_code_ecc.h"
+- 
+-+// Newer kernel headers renamed define
+-+#include <linux/version.h>
+-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 2, 0)
+-+# define MTD_MODE_NORMAL MTD_FILE_MODE_NORMAL
+-+# define MTD_MODE_RAW MTD_FILE_MODE_RAW
+-+#endif
+-+
+- //------------------------------------------------------------------------------
+- // Re-definitions of true and false, because the standard ones aren't good
+- // enough?
+diff --git a/package/kobs-ng/Config.in b/package/kobs-ng/Config.in
+deleted file mode 100644
+index 1f6b2d1..0000000
+--- a/package/kobs-ng/Config.in
++++ /dev/null
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_KOBS_NG
+-	bool "kobs-ng"
+-	depends on BR2_arm
+-	help
+-	  The kobs-ng tool is used for writing images to NAND on i.MX
+-	  platforms.
+-
+-	  This utility is provided by Freescale as-is and doesn't have an
+-	  upstream.
+diff --git a/package/kobs-ng/kobs-ng.hash b/package/kobs-ng/kobs-ng.hash
+deleted file mode 100644
+index 3e527da..0000000
+--- a/package/kobs-ng/kobs-ng.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# From http://repository.timesys.com/buildsources/k/kobs-ng/kobs-ng-3.0.35-4.0.0/kobs-ng-3.0.35-4.0.0.tar.gz.md5sum
+-md5	26104c577f59a6b81782a5bd16aadd82	kobs-ng-3.0.35-4.0.0.tar.gz
+diff --git a/package/kobs-ng/kobs-ng.mk b/package/kobs-ng/kobs-ng.mk
+deleted file mode 100644
+index 13d1faf..0000000
+--- a/package/kobs-ng/kobs-ng.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# kobs-ng
+-#
+-################################################################################
+-
+-# kobs-ng versions have never made much sense :(
+-KOBS_NG_VERSION = 3.0.35-4.0.0
+-KOBS_NG_SITE = http://repository.timesys.com/buildsources/k/kobs-ng/kobs-ng-$(KOBS_NG_VERSION)
+-KOBS_NG_LICENSE = GPLv2+
+-KOBS_NG_LICENSE_FILES = COPYING
+-
+-$(eval $(autotools-package))
