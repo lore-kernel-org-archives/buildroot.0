@@ -1,59 +1,46 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 30 Sep 2015 08:52:14 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "setools: fix race condition"
-In-Reply-To: <20150929173206.11f589b7@free-electrons.com>
-References: <1443539310-55883-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150929173206.11f589b7@free-electrons.com>
-Message-ID: <560B94AE.3020009@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Sep 2015 10:15:40 +0200
+Subject: [Buildroot] [git commit] setools: depends on host-flex
+Message-ID: <20150930081546.8323B80E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=fa9d0818f41dbf6d7ff485a25a370cd4f5ab47b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 29/09/15 16:32, Thomas Petazzoni wrote:
-> Dear Vicente Olivert Riera,
->
-> On Tue, 29 Sep 2015 16:08:29 +0100, Vicente Olivert Riera wrote:
->> This reverts commit 1ac68fe2c9b4cea91c7a30429ebf75279ede8e70.
->>
->> Further investigations revealed that the problem wasn't a race condition
->> but the lack of flex package in the host machine:
->>
->>    https://github.com/TresysTechnology/setools3/issues/5#issuecomment-144048612
->
-> Missing SoB line here :-)
+setools needs host-flex in order to generate some source files during
+build time, otherwise it will fail with an error like this one:
 
-Shame on me :-( I should have passed the '-s' option to 'git revert'.
+error: policy_scan.c: No such file or directory
 
-I have sent a v2.
+Issue reported here as a race condition problem, but it turned out that
+it the actual problem was the lack of host-flex:
 
-Thanks,
+  https://github.com/TresysTechnology/setools3/issues/5#issuecomment-144048612
 
-Vincent.
+Fixes:
 
->
->> ---
->>   package/setools/setools.mk |    4 ----
->>   1 files changed, 0 insertions(+), 4 deletions(-)
->>
->> diff --git a/package/setools/setools.mk b/package/setools/setools.mk
->> index 71301c7..a2bfd42 100644
->> --- a/package/setools/setools.mk
->> +++ b/package/setools/setools.mk
->> @@ -12,10 +12,6 @@ SETOOLS_INSTALL_STAGING = YES
->>   SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
->>   SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
->>
->> -# Race condition reported upstream:
->> -# https://github.com/TresysTechnology/setools3/issues/5
->> -SETOOLS_MAKE = $(MAKE1)
->> -
->>   # configure.ac is patched by the cross compile patch,
->>   # so autoreconf is necessary
->>   SETOOLS_AUTORECONF = YES
->
-> Thomas
->
+  http://autobuild.buildroot.net/results/dad/dad9d79c10722b203536540141a6defc79937e4e/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/setools/setools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/setools/setools.mk b/package/setools/setools.mk
+index a2bfd42..612ab89 100644
+--- a/package/setools/setools.mk
++++ b/package/setools/setools.mk
+@@ -7,7 +7,7 @@
+ SETOOLS_VERSION = 3.3.8
+ SETOOLS_SOURCE = setools-$(SETOOLS_VERSION).tar.bz2
+ SETOOLS_SITE = https://raw.githubusercontent.com/wiki/TresysTechnology/setools3/files/dists/setools-$(SETOOLS_VERSION)/
+-SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2 host-bison
++SETOOLS_DEPENDENCIES = libselinux libsepol sqlite libxml2 bzip2 host-bison host-flex
+ SETOOLS_INSTALL_STAGING = YES
+ SETOOLS_LICENSE = GPLv2+ LGPLv2.1+
+ SETOOLS_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
