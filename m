@@ -1,52 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 30 Sep 2015 16:18:12 +0100
-Subject: [Buildroot] [PATCH v14 1/1] squeezelite: new package
-In-Reply-To: <201509301434.t8UEYCh2003625@ms-omx01.plus.so-net.ne.jp>
-References: <201509301434.t8UEYCh2003625@ms-omx01.plus.so-net.ne.jp>
-Message-ID: <560BFD34.3020409@imgtec.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 30 Sep 2015 13:45:55 -0300
+Subject: [Buildroot] Wandboard Solo/Dual/Quad support
+Message-ID: <CANu7NGtUCHKhNDZwA7im_nCgB82NXYdwzr6gjGnq0b+yGOmVBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hiroshi Kawashima,
+Hello all,
 
-On 09/30/2015 03:34 PM, kei-k at ca2.so-net.ne.jp wrote:
-> Dear all.
-> 
-> I will appreciate if you point out anything I should improve for
-> following patch.
-> 
-> Thanks,
-> Kawashima
-> 
->> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
->> ---
->> Changelog
->> v13 -> v14
->> - change to use patch file insted of using sed to generate Makefile.
+I'm working on the config files for the wandboard solo, dual and quad, and
+I have a few questions:
 
-[snip]
+1. Are you guys OK with this organization?
 
->> v12 -> v13
->> - change SQUEEZELITE_SITE to github (mine), cloned from original
->>   google code site (original site is unstable to fetch).
+$ ls configs/wandboard*
+configs/wandboard_solo_defconfig
+configs/wandboard_dual_defconfig
+configs/wandboard_quad_defconfig
 
-So you own a clone of that project on github, and the package you want
-to add in Buildroot clones from it. Great! Then, why not...
+$ tree board/wandboard/
+board/wandboard/
+??? dual
+?   ??? readme.txt
+?   ??? uboot-env.txt
+??? genimage.cfg
+??? post-image.sh
+??? quad
+?   ??? readme.txt
+?   ??? uboot-env.txt
+??? solo
+    ??? readme.txt
+    ??? uboot-env.txt
 
-[snip]
+2. After renaming wandboard_defconfig to wandboard_solo_defconfig, I will
+bump its u-boot and kernel version. Should I send you two separate patches
+(renaming and then bumping versions) or just one patch including both
+changes?
 
->> - to accomplish above, change to generate buildroot suitable Makefile from
->>   original squeezelite's Makefile (using 'override' directive for CFLAGS,
->>   LDFLAGS).
+Best regards,
 
-...fix the Makefile upstream (your github repo) instead of adding a
-patch in Buildroot?
-
-Regards,
-
-Vincent.
-
-[snip]
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150930/9b66a6ac/attachment.html>
