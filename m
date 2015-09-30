@@ -1,125 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2015 00:15:17 +0200
-Subject: [Buildroot] [RFC 1/2] non-versioned packages
-In-Reply-To: <39cc9541d430e29d38dc07ef2c1d975687cf2af3.1443645945.git.alex.suykov@gmail.com>
-References: <39cc9541d430e29d38dc07ef2c1d975687cf2af3.1443645945.git.alex.suykov@gmail.com>
-Message-ID: <20150930221517.GA3702@free.fr>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Thu, 1 Oct 2015 00:16:36 +0200
+Subject: [Buildroot] [PATCH] libosmesa: New package
+In-Reply-To: <20150930233743.6835979e@free-electrons.com>
+References: <560C50B6.3050409@dawncrow.de>
+ <20150930233743.6835979e@free-electrons.com>
+Message-ID: <560C5F44.8070101@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex, All,
-
-On 2015-10-01 00:12 +0300, Alex Suykov spake thusly:
-> In case (PKG)_VERSION is empty, do not attempt to download sources
-> for the package. Attempts to download (package)-undefined.tar.gz
-> are pointless, the file is not likely to exist.
+Am 30.09.2015 um 23:37 schrieb Thomas Petazzoni:
+> Dear Andr? Hentschel,
 > 
-> Also, output/build/(package) looks better and makes more sense than
-> output/build/(package)-undefined for such packages.
+> On Wed, 30 Sep 2015 23:14:30 +0200, Andr? Hentschel wrote:
 > 
-> Non-versioned packages within buildroot: skeleton and mke2img.
-
-Wrong. We also have:
-    googlefontdirectory
-    gadgetfs-test
-  * initscripts
- r+ * mcookie
-    cache-calibrator
-
-[*] like skeleton and mke2img, those are internal packages. so it's
-normal they have no version.
-[+] mcookie is now provided by util-linux, so we should probably get rid
-of our internal copy.
-
-Also, there has been a new package discussed on the list today that had
-no version either (libsoil):
-    http://lists.busybox.net/pipermail/buildroot/2015-September/140370.html
-    http://lists.busybox.net/pipermail/buildroot/2015-September/140480.html
-    http://lists.busybox.net/pipermail/buildroot/2015-September/140508.html
-
-And yes, I would like to keep being able to have packages without a
-version.Even if  upstream are not playing by the rules, it is perfectly
-legit that we have support for that.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> ---
->  package/pkg-generic.mk | 6 ++----
->  package/pkg-utils.mk   | 2 +-
->  2 files changed, 3 insertions(+), 5 deletions(-)
+>> diff --git a/package/libosmesa/libosmesa.hash b/package/libosmesa/libosmesa.hash
+>> new file mode 100644
+>> index 0000000..0501314
+>> --- /dev/null
+>> +++ b/package/libosmesa/libosmesa.hash
+>> @@ -0,0 +1,2 @@
+>> +# From http://lists.freedesktop.org/archives/mesa-announce/2015-September/000175.html
+>> +sha256	e36ee5ceeadb3966fb5ce5b4cf18322dbb76a4f075558ae49c3bba94f57d58fd	mesa-10.6.8.tar.xz
+>> diff --git a/package/libosmesa/libosmesa.mk b/package/libosmesa/libosmesa.mk
+>> new file mode 100644
+>> index 0000000..f70fd2a
+>> --- /dev/null
+>> +++ b/package/libosmesa/libosmesa.mk
+>> @@ -0,0 +1,30 @@
+>> +################################################################################
+>> +#
+>> +# libosmesa
+>> +#
+>> +################################################################################
+>> +
+>> +# When updating the version, please also update mesa3d
+>> +LIBOSMESA_VERSION = 10.6.8
+>> +LIBOSMESA_SOURCE = mesa-$(LIBOSMESA_VERSION).tar.xz
+>> +LIBOSMESA_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(LIBOSMESA_VERSION)
 > 
-> The actual case the prompted me to do the change: I'm using buildroot
-> as a test rig for building and running HEAD shapshots of a local git repo.
-> "HEAD" is not a proper version, but without these changes I could only
-> get "package-unknown" or "package-HEAD", and it took some effort to prevent
-> download attempts.
+> Why are you creating a new package, instead of simply adding a new
+> option to the existing mesa3d package?
 > 
-> I'm not sure how common this is, but it's possible. And since no proper
-> downloadable package should ever come without a version, changing the way
-> empty VERSION is handled should affect them.
-> 
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5201fca..cb5545b 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -332,8 +332,6 @@ ifndef $(2)_VERSION
->    $(2)_DL_VERSION := $$($(3)_DL_VERSION)
->   else ifdef $(3)_VERSION
->    $(2)_DL_VERSION := $$($(3)_VERSION)
-> - else
-> -  $(2)_DL_VERSION = undefined
->   endif
->  else
->   $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-> @@ -344,7 +342,7 @@ ifdef $(3)_OVERRIDE_SRCDIR
->    $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
->  endif
->  
-> -$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-> +$(2)_BASE_NAME	=  $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
->  
-> @@ -374,7 +372,7 @@ endif
->  ifndef $(2)_SOURCE
->   ifdef $(3)_SOURCE
->    $(2)_SOURCE = $$($(3)_SOURCE)
-> - else
-> + else ifdef $(2)_VERSION
->    $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
->   endif
->  endif
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 44bd2c9..c098b55 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -83,7 +83,7 @@ INFLATE.tar  = cat
->  suitable-extractor = $(INFLATE$(suffix $(1)))
->  
->  # MESSAGE Macro -- display a message in bold type
-> -MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
-> +MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_BASE_NAME) $(call qstrip,$(1))$(TERM_RESET)"
->  TERM_BOLD := $(shell tput smso)
->  TERM_RESET := $(shell tput rmso)
->  
-> -- 
-> 2.0.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Hi,
+
+I thought I keep it seperate as osmesa is totally standalone,
+but looking closer at the mesa3d.mk it seems this is still possible if the comment about libgl is correct.
+(We don't need a libgl for osmesa, but if libgl is only build when a DRI driver is selected it is fine)
