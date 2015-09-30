@@ -1,33 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 30 Sep 2015 11:46:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 8381] make manuconfig problem in opensuse 13.2
-In-Reply-To: <bug-8381-163@https.bugs.busybox.net/>
-References: <bug-8381-163@https.bugs.busybox.net/>
-Message-ID: <20150930114620.5BCD9817E5@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Sep 2015 13:49:30 +0200
+Subject: [Buildroot] [PATCH 1/2] ltp-testsuite: don't include host
+	headers
+In-Reply-To: <5e7ab0a7bf987fa76a167569b823df89144af045.1443613129.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 30 Sep 2015 14:38:48 +0300")
+References: <5e7ab0a7bf987fa76a167569b823df89144af045.1443613129.git.baruch@tkos.co.il>
+Message-ID: <87612sxh2t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8381
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2015-09-30 11:46:20 UTC ---
-(In reply to comment #2)
-> > That sounds like a bug in the ncursesw.pc file your distribution in using. 
-> > Does menuconfig work for other packages (Linux kernel, busybox, barebox, ..)?
-> 
-> I think you are right.
-> 
-> Sorry for my mistake.
-> 
-> But I think this information will helpful for others who will use buildroot on
-> same system
+ > $SYSROOT defaults to empty, so we must set it to our sysroot.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/812/812986b00786972d4e7fbb0362460a0de8a70472/
+ > http://autobuild.buildroot.net/results/4a3/4a3c7ea4eb08248f2aec45d8efc111087bc1327f/
+ > http://autobuild.buildroot.net/results/8b6/8b6f7adb5546387c25f3a4c9d8e6f72f4b62b9a4/
 
-I agree. What distribution are you using? Do you have similar problems with
-menuconfig in the Linux kernel or busybox?
+ > and more.
+
+ > Cc: Anders Roxell <anders.roxell@linaro.org>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
