@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Sep 2015 12:35:19 +0200
-Subject: [Buildroot] [PATCH v2] glmark2: depend on host-python
-In-Reply-To: <1443550251-30965-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1443550251-30965-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20150930123519.7c64e19c@free-electrons.com>
+Date: Wed, 30 Sep 2015 12:36:23 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.2.2
+Message-ID: <20150930103628.EADDA805FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=5f6cb63454a98bfc7e686469b3cf32fa2d40fd70
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Sep 2015 19:10:51 +0100, Vicente Olivert Riera wrote:
-> The waf build system of glmark2 needs Python 2 as stated on its README
-> file:
-> 
-> python 2.x (>= 2.4) for the build system (waf)
-> 
-> Building it with a system with Python 3 as the default Python version
-> will result on a failure like this one:
-> 
-> File "waflib/Utils.py", line 199
->     except OSError ,e:
->                    ^
-> SyntaxError: invalid syntax
-> 
-> So, in order to fix this, make this package depending on host-python and
-> also run the waf script using $(HOST_DIR)/usr/bin/python2.
-> 
-> At the same time delete 3 Python environment variables passed to the waf
-> script during the configure phase which it seems there aren't needed for
-> anything.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/fc6/fc6cd2a90bbb0e6f80f6c4afaae1430f82e54046/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->   - Delete the 3 Python environment variables that are passed to the waf
->     script during the configure phase, as it seems they aren't needed
->     for anything. (Suggested by Thomas Petazzoni)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks. Let's see what happens in the autobuilders :-)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 9f39c4c..2be91bb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.2.1"
++	bool "4.2.2"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -109,7 +109,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.2.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.2.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
