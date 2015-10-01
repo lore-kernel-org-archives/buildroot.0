@@ -1,71 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  1 Oct 2015 21:30:48 +0300
-Subject: [Buildroot] [PATCH] libssh: bump to version 0.7.2
-Message-ID: <2490c4cadb0735ae8a6a4cd26accc6071540d9bf.1443724248.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  1 Oct 2015 21:18:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-stalker: Needs jsoncpp
+Message-ID: <1443727112-15603-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, require threads support. cmake detects threads support correctly, but
-libssh build system uses this information incorrectly.
+Fixes
+http://autobuild.buildroot.net/results/56f/56fb98da27495f6a461bfdc7aa8c2de4d86dfdb8/
+http://autobuild.buildroot.net/results/f98/f982b437935cf1f921559f5388fd4146eb9241bd/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libssh/Config.in   | 5 +++--
- package/libssh/libssh.hash | 6 +++---
- package/libssh/libssh.mk   | 4 ++--
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/kodi-pvr-stalker/Config.in           | 1 +
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 30aabd621fb6..3357fb9e9252 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSSH
- 	bool "libssh"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# Either OpenSSL or libgcrypt are mandatory
- 	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
+index b327fd8..3ec530c 100644
+--- a/package/kodi-pvr-stalker/Config.in
++++ b/package/kodi-pvr-stalker/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_STALKER
+ 	bool "kodi-pvr-stalker"
++	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
  	help
-@@ -12,6 +13,6 @@ config BR2_PACKAGE_LIBSSH
+ 	  A PVR Client that connects Kodi to Stalker Middleware
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index 589cf7d..c1baa8d 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -8,6 +8,6 @@ KODI_PVR_STALKER_VERSION = 5f6eb1992ffd45a075ebb7bc4253c4a88bf65c80
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPLv2+
+ KODI_PVR_STALKER_LICENSE_FILES = src/client.h
+-KODI_PVR_STALKER_DEPENDENCIES = kodi-platform
++KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform
  
- 	  http://www.libssh.org/
- 
--comment "libssh needs a toolchain w/ dynamic library"
-+comment "libssh needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 473ced36c73b..49bf6c959fe2 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,4 +1,4 @@
- # from https://red.libssh.org/projects/libssh/files/
--md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
--# Locally calculated
--sha256	2fc7ccf96d3263cbd8ab520118cb94d9a2e11714c61e22b3f761fc5352fd046d  libssh-0.7.1.tar.xz
-+md5	5d7d468937649a6dfc6186edfff083db	libssh-0.7.2.tar.xz
-+# Locally calculated after checking signature on uncompressed libssh-0.7.2.tar
-+sha256	a32c45b9674141cab4bde84ded7d53e931076c6b0f10b8fd627f3584faebae62  libssh-0.7.2.tar.xz
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index cd537b04fc99..d425ff0b74bc 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBSSH_VERSION = 0.7.1
-+LIBSSH_VERSION = 0.7.2
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
--LIBSSH_SITE = https://red.libssh.org/attachments/download/154
-+LIBSSH_SITE = https://red.libssh.org/attachments/download/177
- LIBSSH_LICENSE = LGPLv2.1
- LIBSSH_LICENSE_FILES = COPYING
- LIBSSH_INSTALL_STAGING = YES
+ $(eval $(cmake-package))
 -- 
 2.5.3
