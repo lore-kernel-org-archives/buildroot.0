@@ -1,48 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2015 18:32:00 +0200
-Subject: [Buildroot] [PATCH 1/9] core: sort packages and eliminate
- duplicates before building
-In-Reply-To: <20151001081917.7957b83b@free-electrons.com>
-References: <cover.1443650034.git.yann.morin.1998@free.fr>
- <ef61b62e70416103f69b2e8c214b7f6bedd99b5e.1443650034.git.yann.morin.1998@free.fr>
- <20151001081917.7957b83b@free-electrons.com>
-Message-ID: <20151001163200.GA3686@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  1 Oct 2015 16:32:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 8381] make manuconfig problem in opensuse 13.2
+In-Reply-To: <bug-8381-163@https.bugs.busybox.net/>
+References: <bug-8381-163@https.bugs.busybox.net/>
+Message-ID: <20151001163250.AF06581DDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=8381
 
-On 2015-10-01 08:19 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 30 Sep 2015 23:54:44 +0200, Yann E. MORIN wrote:
-> > Currently, enabling more than one filesystem image will make
-> > 'show-targets' list a few host packages more than once.
-> > 
-> > This is because all filesystem images add the same set of
-> > host-packages to their dependencies, which are then added as-is
-> > to the package list.
-> > 
-> > Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
-> > appear as many times as there are filesystem images enabled.
-> 
-> Is this a problem? I don't think "show-targets" aims at guaranteeing
-> that each target will only be listed once.
+--- Comment #5 from Vicente Olivert Riera <vincent.riera@imgtec.com> 2015-10-01 16:32:50 UTC ---
+Hello Zurab,
 
-Well, it's not a real, hard problem. It's just not clean.
+I just installed OpenSUSE 13.2 on a virtualbox and I ran Buildroot's menuconfig
+successfully:
 
-However, the part I'm most interested in is to sort the packages list,
-so we have ven more reproducible builds. Maybe I should have articulated
-the commit log to stress more on that reason rather than on show-targets.
+---------------------------------------------
+Last login: Thu Oct  1 12:17:26 2015
+Have a lot of fun...
+vriera at linux-oy96:~> cat /etc/SuSE-release 
+openSUSE 13.2 (x86_64)
+VERSION = 13.2
+CODENAME = Harlequin
+# /etc/SuSE-release is deprecated and will be removed in the future, use
+/etc/os-release instead
+vriera at linux-oy96:~> cd buildroot/
+vriera at linux-oy96:~/buildroot> make menuconfig
+configuration written to /home/vriera/buildroot/.config
+
+*** End of the configuration.
+*** Execute 'make' to start the build or try 'make help'.
+
+vriera at linux-oy96:~/buildroot> grep Libs /usr/lib64/pkgconfig/ncursesw.pc 
+Libs:  -lncursesw -ltinfo
+Libs.private: 
+vriera at linux-oy96:~/buildroot>
+---------------------------------------------
+
+These are the ncurses packages I have installed:
+
+vriera at linux-oy96:~> rpm -qa | grep ncurses
+ncurses-utils-5.9-52.2.3.x86_64
+ncurses-devel-5.9-52.2.3.x86_64
+libyui-ncurses-pkg6-2.46.1-2.1.9.x86_64
+libncurses6-5.9-52.2.3.x86_64
+libyui-ncurses6-2.46.6-2.1.9.x86_64
+libncurses5-5.9-52.2.3.x86_64
 
 Regards,
-Yann E. MORIN.
+
+Vincent.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
