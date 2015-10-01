@@ -1,33 +1,96 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  1 Oct 2015 07:20:27 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10, 14}.x series
-Message-ID: <1443694827-32540-1-git-send-email-gustavo@zacarias.com.ar>
+From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+Date: Thu, 01 Oct 2015 20:39:13 +0900
+Subject: [Buildroot] [PATCH v14 1/1] squeezelite: new package
+In-Reply-To: Your message of Thu, 01 Oct 2015 08:04:09 +0900.
+ <201509302304.t8UN4AZT025099@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <201510011139.t91BdD7E003057@ms-omx01.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear, Vincent, all.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3559167..101f30d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -193,9 +193,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.71"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.109"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.89"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.90"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.48"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.53"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.54"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.21"	if BR2_KERNEL_HEADERS_3_18
--- 
-2.4.9
+I deeply appreciate if you suggest me which is preferred (or policy ?)
+of buildroot community.
+
+Regards,
+Kawashima
+
+kei-k at ca2.so-net.ne.jp writes:
+> Dear, Vincent.
+> 
+> Thank you for your comment.
+> 
+> > ...fix the Makefile upstream (your github repo) instead of adding a
+> > patch in Buildroot?
+> 
+> Since this modification is buildroot specific, modification should be
+> embeded in buildroot environment (as patch file), I should untouch
+> original source trees as possible as I can, that is my understanding.
+> 
+> But anyway, I will obey your (buildroot community) preference.
+> 
+> I will have 2 choice.
+> 1) Use current method (patching to original Makefile).
+> 2) Prepare modified Makefile.buildroot and add to my github repo.
+> 
+> Which is preferred ?
+> Please advise me.
+> 
+> Regards,
+> Kawashima
+> 
+> Vicente Olivert Riera writes:
+> > Dear Hiroshi Kawashima,
+> > 
+> > On 09/30/2015 03:34 PM, kei-k at ca2.so-net.ne.jp wrote:
+> > > Dear all.
+> > > 
+> > > I will appreciate if you point out anything I should improve for
+> > > following patch.
+> > > 
+> > > Thanks,
+> > > Kawashima
+> > > 
+> > >> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> > >> ---
+> > >> Changelog
+> > >> v13 -> v14
+> > >> - change to use patch file insted of using sed to generate Makefile.
+> > 
+> > [snip]
+> > 
+> > >> v12 -> v13
+> > >> - change SQUEEZELITE_SITE to github (mine), cloned from original
+> > >>   google code site (original site is unstable to fetch).
+> > 
+> > So you own a clone of that project on github, and the package you want
+> > to add in Buildroot clones from it. Great! Then, why not...
+> > 
+> > [snip]
+> > 
+> > >> - to accomplish above, change to generate buildroot suitable Makefile fr
+> om
+> > >>   original squeezelite's Makefile (using 'override' directive for CFLAGS
+> ,
+> > >>   LDFLAGS).
+> > 
+> > ...fix the Makefile upstream (your github repo) instead of adding a
+> > patch in Buildroot?
+> > 
+> > Regards,
+> > 
+> > Vincent.
+> > 
+> > [snip]
+> ============================================================
+>     Hiroshi Kawashima
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+============================================================
+    Hiroshi Kawashima
