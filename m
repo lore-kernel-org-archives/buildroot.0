@@ -1,45 +1,67 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  1 Oct 2015 21:18:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-stalker: Needs jsoncpp
-Message-ID: <1443727112-15603-1-git-send-email-bernd.kuhls@t-online.de>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 1 Oct 2015 14:29:44 -0500
+Subject: [Buildroot] [PATCH] libssh: bump to version 0.7.2
+In-Reply-To: <2490c4cadb0735ae8a6a4cd26accc6071540d9bf.1443724248.git.baruch@tkos.co.il>
+References: <2490c4cadb0735ae8a6a4cd26accc6071540d9bf.1443724248.git.baruch@tkos.co.il>
+Message-ID: <CAMQcK5LhGU92=TX+JK_uBVBFYNK9fJf5ZNFQRgQ3LV8vquqYOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/56f/56fb98da27495f6a461bfdc7aa8c2de4d86dfdb8/
-http://autobuild.buildroot.net/results/f98/f982b437935cf1f921559f5388fd4146eb9241bd/
+HI Baruch,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-stalker/Config.in           | 1 +
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+On Thu, Oct 1, 2015 at 1:30 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Also, require threads support. cmake detects threads support correctly, but
+> libssh build system uses this information incorrectly.
+>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/libssh/Config.in   | 5 +++--
+>  package/libssh/libssh.hash | 6 +++---
+>  package/libssh/libssh.mk   | 4 ++--
+>  3 files changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+> index 30aabd621fb6..3357fb9e9252 100644
+> --- a/package/libssh/Config.in
+> +++ b/package/libssh/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSSH
+>         bool "libssh"
+>         depends on BR2_USE_MMU # fork()
+>         depends on !BR2_STATIC_LIBS
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>         # Either OpenSSL or libgcrypt are mandatory
+>         select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+>         help
+> @@ -12,6 +13,6 @@ config BR2_PACKAGE_LIBSSH
+>
+>           http://www.libssh.org/
+>
+> -comment "libssh needs a toolchain w/ dynamic library"
+> +comment "libssh needs a toolchain w/ dynamic library, threads"
+>         depends on BR2_USE_MMU
+> -       depends on BR2_STATIC_LIBS
+> +       depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-index b327fd8..3ec530c 100644
---- a/package/kodi-pvr-stalker/Config.in
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_STALKER
- 	bool "kodi-pvr-stalker"
-+	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  A PVR Client that connects Kodi to Stalker Middleware
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index 589cf7d..c1baa8d 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -8,6 +8,6 @@ KODI_PVR_STALKER_VERSION = 5f6eb1992ffd45a075ebb7bc4253c4a88bf65c80
- KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
- KODI_PVR_STALKER_LICENSE = GPLv2+
- KODI_PVR_STALKER_LICENSE_FILES = src/client.h
--KODI_PVR_STALKER_DEPENDENCIES = kodi-platform
-+KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform
- 
- $(eval $(cmake-package))
+It appears that this patch an your previous patch should be a series.
+Was this your intention?
+
+This patch assume that your previous patch has been applied in order
+to bump the version. Your previous patch being "libssh: needs shared
+library support" [1].
+
+Thanks,
+-Ryan
+
+[1] - http://lists.busybox.net/pipermail/buildroot/2015-October/140551.html
+
+[...]
+
 -- 
-2.5.3
+Ryan Barnett / Sr Software Engineer
+Airborne Information Systems / Security Systems and Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+ryan.barnett at rockwellcollins.com
+www.rockwellcollins.com
