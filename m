@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  1 Oct 2015 22:12:22 +0200
-Subject: [Buildroot] [PATCH 3/3] package/kodi-pvr-pctv: add jsoncpp reverse
-	dependency
-In-Reply-To: <1443730342-12383-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1443730342-12383-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1443730342-12383-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu,  1 Oct 2015 22:12:20 +0200
+Subject: [Buildroot] [PATCH 1/3] package/kodi-pvr-argustv: add jsoncpp
+	reverse dependency
+Message-ID: <1443730342-12383-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +11,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-pctv/Config.in | 4 ++++
+ package/kodi-pvr-argustv/Config.in | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 255cd4a..a6210f6 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
+diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
+index 698ff46..ad27c38 100644
+--- a/package/kodi-pvr-argustv/Config.in
++++ b/package/kodi-pvr-argustv/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_KODI_PVR_ARGUSTV
+ 	bool "kodi-pvr-argustv"
 +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
  	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  PCTV PVR client addon for Kodi
+ 	  Kodi's ARGUS TV client addon
  
- 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
+ 	  https://github.com/kodi-pvr/pvr.argustv
 +
-+comment "kodi-pvr-pctv needs a toolchain w/ C++, gcc >= 4.7"
++comment "kodi-pvr-argustv needs a toolchain w/ C++, gcc >= 4.7"
 +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 -- 
 2.5.3
