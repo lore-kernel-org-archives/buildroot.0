@@ -1,50 +1,66 @@
-From: James Knight <james.d.knight@live.com>
-Date: Sun, 30 Aug 2015 08:20:42 -0400
-Subject: [Buildroot] [PATCH 1/1] package/bash: indicate getcwd is
-	malloc-supported
-Message-ID: <BLU436-SMTP2066E5D6D70E93216F0327EA0680@phx.gbl>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Wed, 30 Sep 2015 23:05:16 -0300
+Subject: [Buildroot] Wandboard Solo/Dual/Quad support
+In-Reply-To: <20150930220150.2cfc3ae5@free-electrons.com>
+References: <CANu7NGtUCHKhNDZwA7im_nCgB82NXYdwzr6gjGnq0b+yGOmVBw@mail.gmail.com>
+ <20150930220150.2cfc3ae5@free-electrons.com>
+Message-ID: <CANu7NGs-cPWXP73hUD+BV_O-kU1ygFD-eAh42WVCcRGbJWJxVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When Bash attempts to find the current working directory, it uses a C
-library call `getcwd` to resolve it. When cross-compiling, the
-configuration process cannot determine if the target system's C library
-can support an "unfixed" path length. Therefore, Bash will fallback to a
-size of `PATH_MAX` for determining the current working directory. When
-using OverlayFS (and possible other file systems), this becomes an issue
-since file paths can commonly exceed standard `PATH_MAX` length. This
-typically results in the following error appearing:
+Dear Thomas,
 
-   error retrieving current directory: [...]
+Yes, you are right.
 
-Common C library `getcwd` calls can default to a higher limit (usually
-the system's page size). The current configurable C libraries (as of at
-least 2015.08) support a zero (0) size buffer length. Most use the
-system's page size; musl, being an exception, which defaults to
-`PATH_MAX` (as Bash was doing). Since these C libraries support
-allocating buffer space with a zero (0) provided size, the following
-configuration change allows Bash to support getting a larger-length'ed
-working directory on target's that support it.
+I was bumping to the 2015.04 version of U-Boot from the official Freescale
+repository (git://github.com/Freescale/u-boot-fslc.git) that has 3 separate
+defconfigs.
 
-Signed-off-by: James Knight <james.d.knight@live.com>
----
- package/bash/bash.mk | 1 +
- 1 file changed, 1 insertion(+)
+But I can see that since U-Boot mainline version 2015.07, SPL is used and
+we have only one defconfig. So I will bump to this version.
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 9865e19..97d7182 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -16,6 +16,7 @@ BASH_LICENSE_FILES = COPYING
- BASH_CONF_ENV += \
- 	ac_cv_rl_prefix="$(STAGING_DIR)" \
- 	ac_cv_rl_version="$(READLINE_VERSION)" \
-+	bash_cv_getcwd_malloc=yes \
- 	bash_cv_job_control_missing=present \
- 	bash_cv_sys_named_pipes=present \
- 	bash_cv_func_sigsetjmp=present \
--- 
-2.4.3
+Thanks!
+
+Sergio Prado
+Embedded Labworks
+Office: +55 11 2628-3461
+Mobile: +55 11 97123-3420
+
+2015-09-30 17:01 GMT-03:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Dear Sergio Prado,
+>
+> On Wed, 30 Sep 2015 13:45:55 -0300, Sergio Prado wrote:
+>
+> > I'm working on the config files for the wandboard solo, dual and quad,
+> and
+> > I have a few questions:
+> >
+> > 1. Are you guys OK with this organization?
+> >
+> > $ ls configs/wandboard*
+> > configs/wandboard_solo_defconfig
+> > configs/wandboard_dual_defconfig
+> > configs/wandboard_quad_defconfig
+>
+> Is there a reason to have 3 separate defconfigs? In the Linux kernel, a
+> single configuration can support all three variants, and it seems to be
+> the case in U-Boot as well:
+>
+>   ./configs/wandboard_defconfig
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20150930/a0608b56/attachment.html>
