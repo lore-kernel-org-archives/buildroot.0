@@ -1,44 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 1 Oct 2015 10:16:46 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-09-30
-In-Reply-To: <20151001063016.DF1C9101E4A@stock.ovh.net>
-References: <20151001063016.DF1C9101E4A@stock.ovh.net>
-Message-ID: <20151001071646.GA3337@tarshish>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 1 Oct 2015 09:41:52 +0100
+Subject: [Buildroot] [PATCHv4] gdb: prevent building the documentation
+In-Reply-To: <20151001091137.4bc06d8a@free-electrons.com>
+References: <1441875400-16473-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151001091137.4bc06d8a@free-electrons.com>
+Message-ID: <560CF1D0.3090608@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Hello Thomas, Romain,
 
-On Thu, Oct 01, 2015 at 08:30:16AM +0200, Thomas Petazzoni wrote:
-> Build statistics for 2015-09-30
-> ===============================
->       xtensa |              e2fsprogs-1.42.13 | NOK | http://autobuild.buildroot.net/results/2a20e454a597f1e18beb2feb9242a84d3303e735/
+On 10/01/2015 08:11 AM, Thomas Petazzoni wrote:
+> Vicente, Romain,
+> 
+> On Thu, 10 Sep 2015 09:56:40 +0100, Vicente Olivert Riera wrote:
+>> Force gdb to not build the documentation. This way we avoid depending on
+>> host-texinfo. This is a temporary fix until upstream accepts a proposed
+>> --disable-docs configure option.
+>>
+>> Since the documentation will not be build at all, we can remove the
+>> parts related to host-texinfo and MAKEINFO in the gdb.mk file.
+>>
+>> Fixes:
+>>
+>>   http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
+>>
+>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>> Tested-by: Brendan Heading <brendanheading@gmail.com>
+> 
+> Seems like this is not yet working completely for all situations:
+> 
+>    http://autobuild.buildroot.org/results/244/2442e697d8a300496434fd42fcb1ee3941d13e06/build-end.log
 
-pass5.c: In function 'check_inode_bitmaps':
-pass5.c:614:10: warning: comparison between pointer and integer
-       (i == fs->super=>s_inodes_count)) {
-          ^
-pass5.c:614:23: error: expected expression before '>' token
-       (i == fs->super=>s_inodes_count)) {
-                       ^
+I will have a look.
 
-The original code line[1] is:
+Romain, how is going the upstream request about the --disable-docs option?
 
-       (i == fs->super->s_inodes_count)) {
+Regards,
 
-Looks like a bitflip on the build machine, as ASCII '=' (0b0111101) is just 
-one bitflip away from '-' (0b0101101).
+Vincent.
 
-[1] 
-https://git.kernel.org/cgit/fs/ext2/e2fsprogs.git/tree/e2fsck/pass5.c?id=v1.42.13#n614
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> Best regards,
+> 
+> Thomas
+> 
