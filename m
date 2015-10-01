@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Oct 2015 08:19:17 +0200
-Subject: [Buildroot] [PATCH 1/9] core: sort packages and eliminate
- duplicates before building
-In-Reply-To: <ef61b62e70416103f69b2e8c214b7f6bedd99b5e.1443650034.git.yann.morin.1998@free.fr>
+Date: Thu, 1 Oct 2015 08:20:25 +0200
+Subject: [Buildroot] [PATCH 3/9] linux: meddle not in the affairs of
+ filesystems, for you are tasty with bacon
+In-Reply-To: <4efd4ca99366d56f8ae7796f9ae8958f1749b862.1443650034.git.yann.morin.1998@free.fr>
 References: <cover.1443650034.git.yann.morin.1998@free.fr>
- <ef61b62e70416103f69b2e8c214b7f6bedd99b5e.1443650034.git.yann.morin.1998@free.fr>
-Message-ID: <20151001081917.7957b83b@free-electrons.com>
+ <4efd4ca99366d56f8ae7796f9ae8958f1749b862.1443650034.git.yann.morin.1998@free.fr>
+Message-ID: <20151001082025.30cdb5ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,40 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Wed, 30 Sep 2015 23:54:44 +0200, Yann E. MORIN wrote:
-> Currently, enabling more than one filesystem image will make
-> 'show-targets' list a few host packages more than once.
+On Wed, 30 Sep 2015 23:54:46 +0200, Yann E. MORIN wrote:
+> Currently, the rule to rebuild the Linux kernel with an initramfs
+> directly depends on the filesystem image filename.
 > 
-> This is because all filesystem images add the same set of
-> host-packages to their dependencies, which are then added as-is
-> to the package list.
+> This is inherently "bad" from a purity point of view. linux.mk should
+> not have to delve into the fs internals.
 > 
-> Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
-> appear as many times as there are filesystem images enabled.
+> Rather, make it directly depend on the "frontal" rule that generates the
+> cpio image.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> ---
+> This, too, will be useful for the initramfs patch coming next.
+> ---
+>  linux/linux.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 316f973..864ccbf 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -392,7 +392,7 @@ $(eval $(kconfig-package))
+>  # been generated in $(BINARIES_DIR)/rootfs.cpio.
+>  $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
+>  $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
+> -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
+> +$(LINUX_DIR)/.stamp_initramfs_rebuilt: rootfs-cpio
 
-Is this a problem? I don't think "show-targets" aims at guaranteeing
-that each target will only be listed once.
+Are you sure this is OK ? It creates a dependency of a "real target" on
+a "phony target", which means that the "real target" will *always* be
+rebuilt, at every invocation of "make". Is this what we want?
 
 Thomas
 -- 
