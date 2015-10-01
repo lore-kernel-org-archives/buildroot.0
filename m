@@ -1,87 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Oct 2015 23:44:00 +0200
-Subject: [Buildroot] [PATCH 9/9] core: finalise target in its own
- location
-In-Reply-To: <a594ac3858ea713de72610ad49566be4e20c176f.1443650034.git.yann.morin.1998@free.fr>
-References: <cover.1443650034.git.yann.morin.1998@free.fr>
- <a594ac3858ea713de72610ad49566be4e20c176f.1443650034.git.yann.morin.1998@free.fr>
-Message-ID: <20151001234400.0d18c041@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  2 Oct 2015 01:06:31 +0300
+Subject: [Buildroot] [PATCH] vtun: fix gcc5 build
+Message-ID: <e7f752b1db41fb8e094a79efd6210501de26a7b0.1443737191.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add -std=gnu89 to CFLAGS to keep pre gcc5 inline function symbols visibility
+rules.
 
-On Wed, 30 Sep 2015 23:54:52 +0200, Yann E. MORIN wrote:
-> Currently, after all packages have been installed into target/ , we run
-> a sanitising pass called 'target-finalize' on that directory, to:
->   - apply overlays
->   - remove unnecessary files (man, .h, .a ...)
->   - strip files
-> as well as a few other miscellanous cleanups.
-> 
-> This means that target/ no longer contains only package-installed files,
-> and that target-finalize might not be idempotent (i.e. sucessive runs of
-> target-finalize may yield different results in target/ ). We're trying
-> pretty hard that all the internal target-finalize hooks are idempotent,
-> whether they are from the core (e.g. installing glibc locales) or
-> provided by packages (e.g. cleaning up perl files).
-> 
-> However, that might not be the case for packages from br2-external for
-> example, or under complex situations where a combination of packages
-> does not yield an idempotent sequence (quoting Wikipedia: "a combination
-> of idempotent methods or subroutines is not necessrily idempotent"; see:
-> https://en.wikipedia.org/wiki/Idempotence#Examples ).
-> 
-> Address this issue by copying target/ to a "landing" area where the
-> finalising takes place.
-> 
-> This keeps the user-visible target/ directory to contain only what
-> packages have installed, helps keeping target-finalize be idempotent by
-> allowing packages to provide simpler target-finalize hooks.
-> 
-> For simplicity for packages, we have to allow them to use $(TARGET_DIR)
-> everywhere, be it in target install commands or target finalize
-> commands, without requiring them to know whether to use $(TARGET_DIR)
-> or $(FINAL_TARGET_DIR). $(TARGET_DIR) always points to the directory in
-> which to act.
-> 
-> So, for target-finalize, we override TARGET_DIR to point to the landing
-> area. But since packages are dependencies of target-finalize, they
-> would also inherit from this override. So, we over-override TARGET_DIR
-> for packages, to point to the usual and currently used $(O)/target/
-> directory.
-> 
-> Finally, filesystem images are generated from that landing area, of
-> course. Similarly, we need to override TARGET_DIR for them.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
+http://autobuild.buildroot.net/results/a7e/a7e684174b90a852318a7a8bf41c4f477d159d56/
+http://autobuild.buildroot.net/results/ab0/ab01f8e0467e85322c63b81bb7e84fd251e5d556/
+http://autobuild.buildroot.net/results/117/117a68bf648b050dabed8088d1165c1d7d9301f0/
 
-To be honest, my initial reaction is: why? What is the benefit? It's
-additional complexity (not so much in the code), but in the user
-visible output directories.
+and more.
 
-Having idem-potent post-build scripts seems like a good goal to
-achieve. Your only arguments are:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/vtun/vtun.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- - "this might not be the case for br2-external", but it doesn't
-   explain why
-
- - "under complex situations where a combination of packages does not
-   yield an idempotent sequence", which doesn't come with a real-life
-   example of such a situation.
-
-So with the current explanation/motivation, I'm inclined to say no to
-this change. I'd be happy to revise my opinion if there are some clearer
-benefits to balance the drawbacks of the additional complexity.
-
-Thanks!
-
-Thomas
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 2b64ab9efc69..884ebc666431 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -14,4 +14,6 @@ VTUN_CONF_OPTS = \
+ 	--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
+ 	--with-lzo-lib=$(STAGING_DIR)/usr/lib
+ 
++VTUN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.3
