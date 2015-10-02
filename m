@@ -1,21 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2015 15:51:10 +0200
-Subject: [Buildroot] [PATCH] libmicrohttpd: bump to version 0.9.44
-In-Reply-To: <1443791637-31068-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 2 Oct 2015 10:13:57 -0300")
-References: <1443791637-31068-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877fn5js4x.fsf@dell.be.48ers.dk>
+From: Brian Foster <brian.foster@maximintegrated.com>
+Date: Fri, 2 Oct 2015 15:39:40 +0200
+Subject: [Buildroot] [Buildroot website] Missing image(s?) files
+Message-ID: <40125828.rcXOoJhnam@laclwks004>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+  Apologies if this is not the correct or best place to report
+  problems with the website's contents...
 
-Committed, thanks.
+  In the current Buildroot User's Manual (for 2015.08) at the website,
+
+    http://buildroot.uclibc.org/downloads/manual/manual.html
+
+  in ?17.19.2, "How to add a package from GitHub", at least,
+  there is an obviously missing image `github_hash_mongrel2.png'
+  (see just about the second (last) ?-list).
+
+cheers!
+	-blf-
 
 -- 
-Bye, Peter Korsgaard
+Brian Foster
+Principal MTS, Software        |  La Ciotat, France
+Maxim Integrated               |  http://www.maximintegrated.com/
