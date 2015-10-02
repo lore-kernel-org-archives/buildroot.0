@@ -1,28 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 2 Oct 2015 14:23:25 -0300
-Subject: [Buildroot] [PATCH] mutt: bump to version 1.5.24
-In-Reply-To: <38121FAB319C3344930C920E7B5183136A3DBDD1@LEMAIL01.le.imgtec.org>
-References: <1443805873-24176-1-git-send-email-gustavo@zacarias.com.ar>
- <38121FAB319C3344930C920E7B5183136A3DBDD1@LEMAIL01.le.imgtec.org>
-Message-ID: <560EBD8D.3090205@zacarias.com.ar>
+From: glscantlen <glscantlen@gmail.com>
+Date: Fri, 2 Oct 2015 10:14:31 -0700 (PDT)
+Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
+In-Reply-To: <55A13972.2060908@mind.be>
+References: <bug-8206-163@https.bugs.busybox.net/>
+ <20150707210059.917A78015E@busybox.osuosl.org>
+ <1436622071664-105281.post@n4.nabble.com> <55A12A5E.4010900@mind.be>
+ <1436625379066-105305.post@n4.nabble.com> <55A1359C.5020109@mind.be>
+ <20150711173913.32fbc8a7@free-electrons.com> <55A13972.2060908@mind.be>
+Message-ID: <1443806071553-113718.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/10/15 14:21, Vincent Olivert Riera wrote:
+I realize this is an old thread, but it appears the issue was not resolved
+and I have a solution that works for my defconfig on both 2015.05 & .08.
 
-> Dear Gustavo Zacarias,
->
-> Is there a problem with downloading from an ftp? I think is better to download the sources from the official site.
->
-> Regards,
->
-> Vincent.
+The most recent version I have tested is snapshot 2015.08 from
+git.buildroot.net
+on Sept.30. That version has exhibited the same issue as previous versions
+noted in this thread "mplayer uses host xorg development files"
 
-Hi.
-Corporate firewalls tend to block ftp more than https.
-Bitbucket is listed in the mutt homepage, ftp is listed as primary, but 
-it's just as official (yeah, bad wording).
-Regards.
+The solution I am using is described here:
+    - Fix a bug in the mplayer's .mk file. Add Buildroot's path
+      for staging to mplayer's configuration, ~ line 259
+       $ nano -w package/mplayer/mplayer.mk
+          --extra-cflags="$(MPLAYER_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+          --extra-ldflags="$(MPLAYER_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Bug-8206-New-mplayer-uses-host-xorg-development-files-tp104861p113718.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
