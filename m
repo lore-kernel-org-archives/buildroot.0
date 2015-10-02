@@ -1,41 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 21:46:03 +0200
-Subject: [Buildroot] [git commit] redis: bump to version 3.0.4
-Message-ID: <20151002194622.C047081D43@busybox.osuosl.org>
+Date: Fri, 02 Oct 2015 21:49:01 +0200
+Subject: [Buildroot] [PATCH] pciutils: bump to version 3.4.0
+In-Reply-To: <1443804738-13762-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 2 Oct 2015 13:52:18 -0300")
+References: <1443804738-13762-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878u7lgifm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6782aaa582997147f1eb2c6e890a39d885d3b34e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash |    2 +-
- package/redis/redis.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 9afa94f..47964e9 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,2 +1,2 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1	0e2d7707327986ae652df717059354b358b83358 	redis-3.0.3.tar.gz
-+sha1	cccc58b2b8643930840870f17280fcae57ed7675 	redis-3.0.4.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index ef51972..ea20b77 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 3.0.3
-+REDIS_VERSION = 3.0.4
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
