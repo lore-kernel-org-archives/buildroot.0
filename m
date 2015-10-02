@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Oct 2015 23:07:07 +0100
-Subject: [Buildroot] [PATCH v3 3/4] package/kodi-pvr-filmon: add jsoncpp
+Date: Fri, 2 Oct 2015 23:08:09 +0100
+Subject: [Buildroot] [PATCH v3 4/4] package/kodi-pvr-pctv: add jsoncpp
  reverse dependency
-In-Reply-To: <1443803497-9936-3-git-send-email-bernd.kuhls@t-online.de>
+In-Reply-To: <1443803497-9936-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1443803497-9936-1-git-send-email-bernd.kuhls@t-online.de>
- <1443803497-9936-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151002220707.GD4284@free.fr>
+ <1443803497-9936-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151002220809.GE4284@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -26,25 +26,25 @@ Yann E. MORIN.
 > v3: removed reference to c++ from comment (Baruch)
 > v2: skipped
 > 
->  package/kodi-pvr-filmon/Config.in | 4 ++++
+>  package/kodi-pvr-pctv/Config.in | 4 ++++
 >  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
-> index 0b662df..3d87ec8 100644
-> --- a/package/kodi-pvr-filmon/Config.in
-> +++ b/package/kodi-pvr-filmon/Config.in
+> diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
+> index 255cd4a..1bef551 100644
+> --- a/package/kodi-pvr-pctv/Config.in
+> +++ b/package/kodi-pvr-pctv/Config.in
 > @@ -1,8 +1,12 @@
->  config BR2_PACKAGE_KODI_PVR_FILMON
->  	bool "kodi-pvr-filmon"
+>  config BR2_PACKAGE_KODI_PVR_PCTV
+>  	bool "kodi-pvr-pctv"
 > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
 >  	select BR2_PACKAGE_JSONCPP
 >  	select BR2_PACKAGE_KODI_PLATFORM
 >  	help
->  	  Filmon PVR client addon for Kodi
+>  	  PCTV PVR client addon for Kodi
 >  
->  	  https://github.com/kodi-pvr/pvr.filmon
+>  	  https://github.com/kodi-pvr/pvr.vdr.vnsi
 > +
-> +comment "kodi-pvr-filmon needs a toolchain w/ gcc >= 4.7"
+> +comment "kodi-pvr-pctv needs a toolchain w/ gcc >= 4.7"
 > +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 > -- 
 > 2.5.3
