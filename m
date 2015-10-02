@@ -1,35 +1,67 @@
 From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Date: Fri,  2 Oct 2015 11:37:19 -0300
-Subject: [Buildroot] [PATCH 0/2] Add support for AXFS filesystem type
-Message-ID: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
+Date: Fri,  2 Oct 2015 11:37:21 -0300
+Subject: [Buildroot] [PATCH 2/2] axfs: add new filesystem type
+In-Reply-To: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
+References: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
+Message-ID: <1443796641-16056-3-git-send-email-ariel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-This patch series adds support for using the AXFS filesystem type.
 The Advanced XIP File System is a Linux kernel filesystem driver that enables
 files to be executed directly from flash or ROM memory rather than being copied
 into RAM.
 
-Thanks!
-Ariel
-
-Ariel D'Alessandro (2):
-  axfsutils: add new package
-  axfs: add new filesystem type
-
- fs/Config.in                   |  1 +
- fs/axfs/Config.in              |  4 ++++
- fs/axfs/axfs.mk                | 13 +++++++++++++
- package/axfsutils/axfsutils.mk | 21 +++++++++++++++++++++
- 4 files changed, 39 insertions(+)
+Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+---
+ fs/Config.in      |  1 +
+ fs/axfs/Config.in |  4 ++++
+ fs/axfs/axfs.mk   | 13 +++++++++++++
+ 3 files changed, 18 insertions(+)
  create mode 100644 fs/axfs/Config.in
  create mode 100644 fs/axfs/axfs.mk
- create mode 100644 package/axfsutils/axfsutils.mk
 
+diff --git a/fs/Config.in b/fs/Config.in
+index 5853113..51ccf28 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -1,5 +1,6 @@
+ menu "Filesystem images"
+ 
++source "fs/axfs/Config.in"
+ source "fs/cloop/Config.in"
+ source "fs/cpio/Config.in"
+ source "fs/cramfs/Config.in"
+diff --git a/fs/axfs/Config.in b/fs/axfs/Config.in
+new file mode 100644
+index 0000000..7e25fe7
+--- /dev/null
++++ b/fs/axfs/Config.in
+@@ -0,0 +1,4 @@
++config BR2_TARGET_ROOTFS_AXFS
++	bool "axfs root filesystem"
++	help
++	  Build an axfs root filesystem
+diff --git a/fs/axfs/axfs.mk b/fs/axfs/axfs.mk
+new file mode 100644
+index 0000000..05d6e5d
+--- /dev/null
++++ b/fs/axfs/axfs.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# Build the axfs root filesystem image
++#
++################################################################################
++
++ROOTFS_AXFS_DEPENDENCIES = host-axfsutils
++
++define ROOTFS_AXFS_CMD
++	$(HOST_DIR)/usr/bin/mkfs.axfs -s -a $(TARGET_DIR) $@
++endef
++
++$(eval $(call ROOTFS_TARGET,axfs))
 -- 
 1.9.1
