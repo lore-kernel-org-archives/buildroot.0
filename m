@@ -1,105 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Oct 2015 21:50:25 +0200
-Subject: [Buildroot] [PATCH] glmark2: add missing dependencies
-In-Reply-To: <560B944F.1090907@imgtec.com>
-References: <1443545373-9115-1-git-send-email-Vincent.Riera@imgtec.com>
- <20150929170140.GB2309@tarshish> <560B944F.1090907@imgtec.com>
-Message-ID: <560EE001.8060108@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 00:18:24 +0200
+Subject: [Buildroot] [PATCHv4] gdb: prevent building the documentation
+In-Reply-To: <560CF1D0.3090608@imgtec.com>
+References: <1441875400-16473-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151001091137.4bc06d8a@free-electrons.com> <560CF1D0.3090608@imgtec.com>
+Message-ID: <560F02B0.9080107@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-09-15 09:50, Vicente Olivert Riera wrote:
-> Hello Baruch,
+Hi Vicente,
+
+Le 01/10/2015 10:41, Vicente Olivert Riera a ?crit :
+> Hello Thomas, Romain,
 > 
-> On 29/09/15 18:01, Baruch Siach wrote:
->> Hi Vincent,
+> On 10/01/2015 08:11 AM, Thomas Petazzoni wrote:
+>> Vicente, Romain,
 >>
->> On Tue, Sep 29, 2015 at 05:49:33PM +0100, Vicente Olivert Riera wrote:
->>> There are some missing dependencies which are in fact stated in the
->>> comment, and due to that you can select the package despite of not
->>> satisfying them.
->>> Also propagate the !STATIC dependency from mesa3d and add some comments.
+>> On Thu, 10 Sep 2015 09:56:40 +0100, Vicente Olivert Riera wrote:
+>>> Force gdb to not build the documentation. This way we avoid depending on
+>>> host-texinfo. This is a temporary fix until upstream accepts a proposed
+>>> --disable-docs configure option.
+>>>
+>>> Since the documentation will not be build at all, we can remove the
+>>> parts related to host-texinfo and MAKEINFO in the gdb.mk file.
+>>>
+>>> Fixes:
+>>>
+>>>   http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
 >>>
 >>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>> ---
->>>   package/glmark2/Config.in |   12 +++++++++---
->>>   1 files changed, 9 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
->>> index 052e820..6ab4f5b 100644
->>> --- a/package/glmark2/Config.in
->>> +++ b/package/glmark2/Config.in
->>> @@ -15,6 +15,12 @@ comment "glmark2 needs an OpenGL or an openGL ES and EGL
->>> backend provided by mes
->>>   config BR2_PACKAGE_GLMARK2
->>>       bool "glmark2"
->>>       depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
->>> +    # glmark2-gl and glmark2-egl-gles depend on mesa3d, which intruduces
->>> +    # dependencies on NPTL, STDCPP and !STATIC.
->>> +    depends on BR2_INSTALL_LIBSTDCPP # mesa3d
->>> +    depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
->>> +    depends on !BR2_STATIC_LIBS # mesa3d
->>> +    depends on BR2_PACKAGE_HAS_UDEV
+>>> Tested-by: Brendan Heading <brendanheading@gmail.com>
 >>
->> Why would that be needed? Kconfig 'depends' is transitive. That is, since
->> glmark2 depends on glmark2-gl/glmark2-egl-gles, that in turn depend on mesa3d,
->> glmark2 automatically also depends on mesa3d dependencies. It is only for
->> 'select' that we need to manually propagate dependencies.
+>> Seems like this is not yet working completely for all situations:
 >>
->> Did you hit any specific problem?
+>>    http://autobuild.buildroot.org/results/244/2442e697d8a300496434fd42fcb1ee3941d13e06/build-end.log
 > 
-> Yes, you can satisfy this dependency...
+> I will have a look.
 > 
-> depends on BR2_PACKAGE_GLMARK2_GL || BR2_PACKAGE_GLMARK2_EGL_GLES
-> 
-> ...and be able to select the glmark2 package from the menu despite of not
-> satisfying the BR2_PACKAGE_HAS_UDEV dependency. In fact, you will still see the
-> comment on the menu, but the comment about the opengl stuff will be replaced by
-> the package so you can select it.
+> Romain, how is going the upstream request about the --disable-docs option?
 
- The UDEV part of the comment is in fact wrong. UDEV dependency was removed from
-mesa3d in f5fbb12da0f0f1dbf23cdd603f41103da41e4f68, but glmark2 was not updated.
+The patch I submitted upstream is not complete since we need to disable the
+documentation for bfd and gprof.
 
+https://sourceware.org/ml/gdb-patches/2015-09/msg00073.html
 
- Regards,
- Arnout
+Maybe the easiest solution is to make sure that the missing script return 0
+instead of the error code... thoughts ?
+
+Best regards,
+Romain
 
 > 
 > Regards,
 > 
 > Vincent.
 > 
+>> Best regards,
 >>
->> baruch
+>> Thomas
 >>
->>>       select BR2_PACKAGE_JPEG
->>>       select BR2_PACKAGE_LIBPNG
->>>       help
->>> @@ -22,6 +28,6 @@ config BR2_PACKAGE_GLMARK2
->>>
->>>         https://github.com/glmark2/glmark2
->>>
->>> -comment "glmark2 needs udev /dev management and a toolchain w/ C++, NPTL"
->>> -    depends on !BR2_INSTALL_LIBSTDCPP || \
->>> -        !BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
->>> +comment "glmark2 needs udev and a toolchain w/ C++, NPTL, shared library"
->>> +    depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
->>> +        !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
