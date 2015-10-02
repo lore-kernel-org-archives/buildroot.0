@@ -1,39 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Oct 2015 13:53:00 -0300
-Subject: [Buildroot] [PATCH] redis: bump to version 3.0.4
-Message-ID: <1443804780-13854-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  2 Oct 2015 14:11:13 -0300
+Subject: [Buildroot] [PATCH] mutt: bump to version 1.5.24
+Message-ID: <1443805873-24176-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switch to bitbucket since it's not hosted at sourceforge any more (and
+the official mutt source is ftp).
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mutt/mutt.hash | 4 ++--
+ package/mutt/mutt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 9afa94f..47964e9 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 397f3da..befed13 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
 @@ -1,2 +1,2 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha1	0e2d7707327986ae652df717059354b358b83358 	redis-3.0.3.tar.gz
-+sha1	cccc58b2b8643930840870f17280fcae57ed7675 	redis-3.0.4.tar.gz
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index ef51972..ea20b77 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
+-# Locally computed:
+-sha256  3af0701e57b9e1880ed3a0dee34498a228939e854a16cdccd24e5e502626fd37  mutt-1.5.23.tar.gz
++# Locally calculated
++sha256  a292ca765ed7b19db4ac495938a3ef808a16193b7d623d65562bb8feb2b42200  mutt-1.5.24.tar.gz
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 92457a1..b07f9b2 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--REDIS_VERSION = 3.0.3
-+REDIS_VERSION = 3.0.4
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-MUTT_VERSION = 1.5.23
+-MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt
++MUTT_VERSION = 1.5.24
++MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPLv2+
+ MUTT_LICENSE_FILES = GPL
+ MUTT_DEPENDENCIES = ncurses
 -- 
 2.4.9
