@@ -1,39 +1,79 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  2 Oct 2015 10:14:29 +0200
-Subject: [Buildroot] [PATCH] lpeg: bump to version 1.0.0
-Message-ID: <1443773669-15351-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Oct 2015 10:21:49 +0200
+Subject: [Buildroot] [PATCH 9/9] core: finalise target in its own
+ location
+In-Reply-To: <20151002074632.GA3908@free.fr>
+References: <cover.1443650034.git.yann.morin.1998@free.fr>
+ <a594ac3858ea713de72610ad49566be4e20c176f.1443650034.git.yann.morin.1998@free.fr>
+ <20151001234400.0d18c041@free-electrons.com>
+ <20151002074632.GA3908@free.fr>
+Message-ID: <20151002102149.418fb8e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lpeg/lpeg.hash | 2 +-
- package/lpeg/lpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/lpeg/lpeg.hash b/package/lpeg/lpeg.hash
-index 1d4e3f4..50e66d1 100644
---- a/package/lpeg/lpeg.hash
-+++ b/package/lpeg/lpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	5df2f09d0cbb67e46176c925e434c0f299ec89060ee97beccfa90375a6f8d3a7  lpeg-0.12.2-1.src.rock
-+sha256	e70c7cf8d7b8feddd8a41235d0ebb27bb60fbe7f31c8364ad23ee30a7f0cc26e  lpeg-1.0.0-1.src.rock
-diff --git a/package/lpeg/lpeg.mk b/package/lpeg/lpeg.mk
-index 76e75f7..0754f00 100644
---- a/package/lpeg/lpeg.mk
-+++ b/package/lpeg/lpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LPEG_VERSION = 0.12.2-1
-+LPEG_VERSION = 1.0.0-1
- LPEG_LICENSE = MIT
- 
- $(eval $(luarocks-package))
+On Fri, 2 Oct 2015 09:46:33 +0200, Yann E. MORIN wrote:
+
+> > To be honest, my initial reaction is: why? What is the benefit? It's
+> > additional complexity (not so much in the code), but in the user
+> > visible output directories.
+> 
+> Well, I would say that the user-visible target/ directory, the one we
+> are currently exposing, is still user-visible, and the only one we want
+> to expose to users. The new build/target-finalise/ directory introduced
+> here is not meant to be user-visible. If having that directory in build/
+> is considered to be user-visible, then I agree this is not that good; we
+> should really have this directory hidden to the user. It is an internal
+> step which the user should not meddle with.
+
+Well I personally dislike precisely the fact that what the user sees in
+output/target/ is not really what goes into the root filesystem image.
+It will remain cluttered with header files, static libraries, locales
+and zillions of other crappy things. Users will wonder what's going on,
+etc. If there's one thing that users should not see, it is precisely
+that.
+
+> A trivial example of a non-idempotent target-finalise hook could be:
+> 
+>     define FOO_CREATE_MY_USER
+>         echo "user:x:1234:5678::/home/user:/bin/sh" >>$(TARGET_DIR)/etc/passwd
+>     endef
+>     TARGET_FINALIZE_HOOKS += FOO_CREATE_MY_USER
+
+This is trivially fixed with:
+
+ 1/ Using the proper mechanism for that: the users table.
+
+ 2/ If it's not about creating a user but something else, then a simple
+    grep addition will make it work.
+
+> Yes, this is badly written, but we can't expect this kind of situation
+> won't happen in real life, especially with br2-external stuff which we
+> by design can not review. It has hapenned; it will happen again.
+
+Right, but such mistakes are seen quite quickly I believe. The user
+will soon enough realize that his post-build script or
+TARGET_FINALIZE_HOOKS is executed each time "make" is called, and that
+they have to be idempotent.
+
+> >  - "under complex situations where a combination of packages does not
+> >    yield an idempotent sequence", which doesn't come with a real-life
+> >    example of such a situation.
+> 
+> Indeed, I have no first-hand example. However, I really said "under
+> complex situations" just because if such a situation exists, it is
+> complex by nature and will be difficult to debug.
+
+Sorry for turning down the patch, but I am not a big fan of taking new
+features just because an unknown, supposedly complex situation by
+nature, may hypothetically exists.
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
