@@ -1,114 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 16:34:25 +0200
-Subject: [Buildroot] [git commit] tcpdump: drop unneeded security patches
-Message-ID: <20151002143558.8850F81DC3@busybox.osuosl.org>
+Date: Fri, 2 Oct 2015 16:02:39 +0200
+Subject: [Buildroot] [git commit] libpng: bump to version 1.6.18
+Message-ID: <20151002143558.5114A7FA23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fc962e3ea364a15071e887859cc9fdd21a62c46
+commit: http://git.buildroot.net/buildroot/commit/?id=effd4f1ae72c82ee3af856d667b98bc0865ea48f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 4.7.4 of tcpdump is not vulnerable to these issues according to:
-
-   https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-8767
-   https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-8768
-   https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-8769
-
-The tcpdump commit log seems to indicate that these issues were fixes in a
-different way in the following commits:
-
-CVE-2014-8767: 4038f83ebf654804829b258dde5e0a508c1c2003
-CVE-2014-8768: 9255c9b05b0a04b8d89739b3efcb9f393a617fe9
-CVE-2014-8769: 9ed7ddb48fd557dc993e73f22a50dda6cedf4df7
-
-Just drop these patches.
-
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpdump/0002-fix-CVE-2014-8767.patch |   20 --------------------
- package/tcpdump/0003-fix-CVE-2014-8768.patch |   19 -------------------
- package/tcpdump/0004-fix-CVE-2014-8769.patch |   19 -------------------
- 3 files changed, 0 insertions(+), 58 deletions(-)
+ package/libpng/libpng.hash |    6 +++---
+ package/libpng/libpng.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tcpdump/0002-fix-CVE-2014-8767.patch b/package/tcpdump/0002-fix-CVE-2014-8767.patch
-deleted file mode 100644
-index a88efdf..0000000
---- a/package/tcpdump/0002-fix-CVE-2014-8767.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--From https://bugzilla.redhat.com/show_bug.cgi?id=1165160
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- tcpdump-tcpdump-4.6/print-olsr.c	2014-10-23 14:07:12.000000000 +0700
--+++ tcpdump-4.6.2/print-olsr.c	2014-11-21 14:56:18.205542679 +0700
--@@ -234,6 +234,13 @@
--     ND_PRINT((ndo, "\n\t      neighbor\n\t\t"));
--     neighbor = 1;
-- 
--+    u_int caplength;
--+
--+    /* Checking length of available data before print */
--+    caplength = (ndo->ndo_snapend >= msg_data) ? ndo->ndo_snapend - msg_data : 0;
--+    if (hello_len > caplength)
--+        hello_len = caplength;
--+
--     while (hello_len >= sizeof(struct in_addr)) {
-- 
--         /* print 4 neighbors per line */
-diff --git a/package/tcpdump/0003-fix-CVE-2014-8768.patch b/package/tcpdump/0003-fix-CVE-2014-8768.patch
-deleted file mode 100644
-index a8b82cf..0000000
---- a/package/tcpdump/0003-fix-CVE-2014-8768.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--From https://bugzilla.redhat.com/show_bug.cgi?id=1165161
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- tcpdump-tcpdump_4.5/print-geonet.c	2014-02-17 05:58:41.000000000 +0700
--+++ print-geonet.c	2014-11-21 10:06:58.590217933 +0700
--@@ -237,6 +237,12 @@
-- 		printf("Malformed (small) ");
-- 	}
-- 
--+	/* Checking length before print */
--+	u_int caplength;
--+	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
--+	if (length > caplength)
--+		length = caplength;
--+
-- 	/* Print user data part */
-- 	if (ndo->ndo_vflag)
-- 		default_print(bp, length);
-diff --git a/package/tcpdump/0004-fix-CVE-2014-8769.patch b/package/tcpdump/0004-fix-CVE-2014-8769.patch
-deleted file mode 100644
-index 38eaf12..0000000
---- a/package/tcpdump/0004-fix-CVE-2014-8769.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--From https://bugzilla.redhat.com/show_bug.cgi?id=1165162
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- tcpdump-tcpdump-4.6/print-udp.c	2014-11-21 13:53:05.757690197 +0700
--+++ tcpdump-4.6.2/print-udp.c	2014-11-21 13:50:58.077695164 +0700
--@@ -357,6 +357,12 @@
-- #ifdef INET6
-- 	register const struct ip6_hdr *ip6;
-- #endif
--+	u_int caplength;
--+
--+	/* Checking length of available data before print */
--+	caplength = (ndo->ndo_snapend >= bp) ? ndo->ndo_snapend - bp : 0;
--+	if (length > caplength)
--+		length = caplength;
-- 
-- 	if (ep > ndo->ndo_snapend)
-- 		ep = ndo->ndo_snapend;
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index dd4af06..92ac24f 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.17/
+-md5	430a9b76b78533235cd4b9b26ce75c7e	libpng-1.6.17.tar.xz
+-sha1	6394f3c0847c3b9ea69f4f972dddae3786592050	libpng-1.6.17.tar.xz
++# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.18/
++md5	6a57c8e0f5469b9c9949a4b43d57b3a1	libpng-1.6.18.tar.xz
++sha1	c6e06510d30beba08c96c468ab269fafb2bb256f	libpng-1.6.18.tar.xz
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 08d8196..5500a61 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPNG_VERSION = 1.6.17
++LIBPNG_VERSION = 1.6.18
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
