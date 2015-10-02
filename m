@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2015 21:51:30 +0200
-Subject: [Buildroot] [PATCH] mpg123: bump to version 1.22.4
-In-Reply-To: <1443806632-23547-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 2 Oct 2015 14:23:52 -0300")
-References: <1443806632-23547-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87vbapf3r1.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Oct 2015 21:52:05 +0200
+Subject: [Buildroot] [PATCH] minidlna: bump to version 1.1.5
+In-Reply-To: <1443806654-23945-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 2 Oct 2015 14:24:14 -0300")
+References: <1443806654-23945-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r3ldf3q2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
