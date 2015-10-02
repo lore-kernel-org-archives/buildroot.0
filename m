@@ -1,44 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2015 15:51:45 +0200
-Subject: [Buildroot] [PATCH] vtun: fix gcc5 build
-In-Reply-To: <e7f752b1db41fb8e094a79efd6210501de26a7b0.1443737191.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 2 Oct 2015 01:06:31 +0300")
-References: <e7f752b1db41fb8e094a79efd6210501de26a7b0.1443737191.git.baruch@tkos.co.il>
-Message-ID: <8737xtjs3y.fsf@dell.be.48ers.dk>
+Date: Fri, 2 Oct 2015 15:50:12 +0200
+Subject: [Buildroot] [git commit] vtun: add license info
+Message-ID: <20151002135307.922A181E05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7dbf2d6ea1afeb16ee822fdd10b417d620450092
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add -std=gnu89 to CFLAGS to keep pre gcc5 inline function symbols visibility
- > rules.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vtun/vtun.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/a7e/a7e684174b90a852318a7a8bf41c4f477d159d56/
- > http://autobuild.buildroot.net/results/ab0/ab01f8e0467e85322c63b81bb7e84fd251e5d556/
- > http://autobuild.buildroot.net/results/117/117a68bf648b050dabed8088d1165c1d7d9301f0/
-
- > and more.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- >  package/vtun/vtun.mk | 2 ++
- >  1 file changed, 2 insertions(+)
-
- > diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
- > index 2b64ab9efc69..884ebc666431 100644
- > --- a/package/vtun/vtun.mk
- > +++ b/package/vtun/vtun.mk
- > @@ -14,4 +14,6 @@ VTUN_CONF_OPTS = \
- >  	--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
- >  	--with-lzo-lib=$(STAGING_DIR)/usr/lib
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 2a3f548..5e0e266 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -6,6 +6,8 @@
  
- > +VTUN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
-
-Committed after adding a comment explaining why this is needed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ VTUN_VERSION = 3.0.3
+ VTUN_SITE = http://downloads.sourceforge.net/project/vtun/vtun/$(VTUN_VERSION)
++VTUN_LICENSE = GPLv2+ with OpenSSL exception
++VTUN_LICENSE_FILES = README.OpenSSL
+ VTUN_DEPENDENCIES = host-bison host-flex zlib lzo openssl
+ VTUN_AUTORECONF = YES
+ 
