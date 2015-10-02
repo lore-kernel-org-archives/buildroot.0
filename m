@@ -1,73 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 16:41:02 +0200
-Subject: [Buildroot] [git commit] libssh: bump to version 0.7.2
-Message-ID: <20151002144250.C169981DF3@busybox.osuosl.org>
+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Date: Fri,  2 Oct 2015 11:37:20 -0300
+Subject: [Buildroot] [PATCH 1/2] axfsutils: add new package
+In-Reply-To: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
+References: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
+Message-ID: <1443796641-16056-2-git-send-email-ariel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c30b838bc8eb2072eac2aa940e85e458d3b0cb7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Tools for building AXFS Filesystem.
 
-Also, require threads support. cmake detects threads support correctly, but
-libssh build system uses this information incorrectly.
+The Advanced XIP File System is a Linux kernel filesystem driver that enables
+files to be executed directly from flash or ROM memory rather than being copied
+into RAM.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Source:
+	https://github.com/jaredeh/axfs
+
+Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 ---
- package/libssh/Config.in   |    5 +++--
- package/libssh/libssh.hash |    6 +++---
- package/libssh/libssh.mk   |    4 ++--
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/axfsutils/axfsutils.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/axfsutils/axfsutils.mk
 
-diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index 30aabd6..3357fb9 100644
---- a/package/libssh/Config.in
-+++ b/package/libssh/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSSH
- 	bool "libssh"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# Either OpenSSL or libgcrypt are mandatory
- 	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
- 	help
-@@ -12,6 +13,6 @@ config BR2_PACKAGE_LIBSSH
- 
- 	  http://www.libssh.org/
- 
--comment "libssh needs a toolchain w/ dynamic library"
-+comment "libssh needs a toolchain w/ dynamic library, threads"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 473ced3..49bf6c9 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,4 +1,4 @@
- # from https://red.libssh.org/projects/libssh/files/
--md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
--# Locally calculated
--sha256	2fc7ccf96d3263cbd8ab520118cb94d9a2e11714c61e22b3f761fc5352fd046d  libssh-0.7.1.tar.xz
-+md5	5d7d468937649a6dfc6186edfff083db	libssh-0.7.2.tar.xz
-+# Locally calculated after checking signature on uncompressed libssh-0.7.2.tar
-+sha256	a32c45b9674141cab4bde84ded7d53e931076c6b0f10b8fd627f3584faebae62  libssh-0.7.2.tar.xz
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index cd537b0..d425ff0 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LIBSSH_VERSION = 0.7.1
-+LIBSSH_VERSION = 0.7.2
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
--LIBSSH_SITE = https://red.libssh.org/attachments/download/154
-+LIBSSH_SITE = https://red.libssh.org/attachments/download/177
- LIBSSH_LICENSE = LGPLv2.1
- LIBSSH_LICENSE_FILES = COPYING
- LIBSSH_INSTALL_STAGING = YES
+diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
+new file mode 100644
+index 0000000..ef8d471
+--- /dev/null
++++ b/package/axfsutils/axfsutils.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# axfsutils
++#
++################################################################################
++
++AXFSUTILS_VERSION = f26ae785e33df76f658b71ef2cfbc7f511ff875d
++AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
++AXFSUTILS_LICENSE = GPLv2
++AXFSUTILS_LICENSE_FILES = COPYING
++
++define HOST_AXFSUTILS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
++endef
++
++define HOST_AXFSUTILS_INSTALL_CMDS
++	cp $(@D)/mkfs.axfs-legacy/mkfs.axfs $(HOST_DIR)/usr/bin/
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+1.9.1
