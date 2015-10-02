@@ -1,56 +1,41 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 2 Oct 2015 17:34:28 +0000
-Subject: [Buildroot] [PATCH] mutt: bump to version 1.5.24
-In-Reply-To: <560EBD8D.3090205@zacarias.com.ar>
-References: <1443805873-24176-1-git-send-email-gustavo@zacarias.com.ar>
- <38121FAB319C3344930C920E7B5183136A3DBDD1@LEMAIL01.le.imgtec.org>,
- <560EBD8D.3090205@zacarias.com.ar>
-Message-ID: <38121FAB319C3344930C920E7B5183136A3DBE8E@LEMAIL01.le.imgtec.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 2 Oct 2015 20:44:46 +0200
+Subject: [Buildroot] [git commit] tiff: bump to version 4.0.6
+Message-ID: <20151002184453.3934F81D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=7319bba9ee2ef7f15b248a03e3513e11ffbb6f4d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ok, understood.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tiff/tiff.hash |    2 +-
+ package/tiff/tiff.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Build test for MIPS architecture:
-
-$ file output/target/usr/bin/mutt
-output/target/usr/bin/mutt: ELF 32-bit MSB executable, MIPS, MIPS32 rel2 version 1 (SYSV), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 2.6.32, stripped
-
-$ grep ^MUTT_VERSION package/mutt/mutt.mk 
-MUTT_VERSION = 1.5.24
-
-Regards,
-
-Vincent.
-
-
-________________________________________
-From: Gustavo Zacarias [gustavo at zacarias.com.ar]
-Sent: 02 October 2015 18:23
-To: Vincent Olivert Riera
-Cc: buildroot at buildroot.org
-Subject: Re: [Buildroot] [PATCH] mutt: bump to version 1.5.24
-
-On 02/10/15 14:21, Vincent Olivert Riera wrote:
-
-> Dear Gustavo Zacarias,
->
-> Is there a problem with downloading from an ftp? I think is better to download the sources from the official site.
->
-> Regards,
->
-> Vincent.
-
-Hi.
-Corporate firewalls tend to block ftp more than https.
-Bitbucket is listed in the mutt homepage, ftp is listed as primary, but
-it's just as official (yeah, bad wording).
-Regards.
+diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
+index 9cb31dc..7ff746f 100644
+--- a/package/tiff/tiff.hash
++++ b/package/tiff/tiff.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	e25eaa83ed7fab43ddd278b9b14d91a406a4b674cedc776adb95535f897f309c	tiff-4.0.5.tar.gz
++sha256	4d57a50907b510e3049a4bba0d7888930fdfc16ce49f1bf693e5b6247370d68c	tiff-4.0.6.tar.gz
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 9a2bf70..c2e713c 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIFF_VERSION = 4.0.5
++TIFF_VERSION = 4.0.6
+ TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_LICENSE = tiff license
+ TIFF_LICENSE_FILES = COPYRIGHT
