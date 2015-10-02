@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Oct 2015 23:06:23 +0100
-Subject: [Buildroot] [PATCH v3 2/4] package/kodi-pvr-argustv: add
- jsoncpp reverse dependency
-In-Reply-To: <1443803497-9936-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 2 Oct 2015 23:07:07 +0100
+Subject: [Buildroot] [PATCH v3 3/4] package/kodi-pvr-filmon: add jsoncpp
+ reverse dependency
+In-Reply-To: <1443803497-9936-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1443803497-9936-1-git-send-email-bernd.kuhls@t-online.de>
- <1443803497-9936-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151002220623.GC4284@free.fr>
+ <1443803497-9936-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151002220707.GD4284@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,27 +24,27 @@ Yann E. MORIN.
 
 > ---
 > v3: removed reference to c++ from comment (Baruch)
-> v2: added missing "select BR2_PACKAGE_JSONCPP" (Baruch)
+> v2: skipped
 > 
->  package/kodi-pvr-argustv/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+>  package/kodi-pvr-filmon/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
-> index 698ff46..247d83c 100644
-> --- a/package/kodi-pvr-argustv/Config.in
-> +++ b/package/kodi-pvr-argustv/Config.in
-> @@ -1,7 +1,12 @@
->  config BR2_PACKAGE_KODI_PVR_ARGUSTV
->  	bool "kodi-pvr-argustv"
+> diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
+> index 0b662df..3d87ec8 100644
+> --- a/package/kodi-pvr-filmon/Config.in
+> +++ b/package/kodi-pvr-filmon/Config.in
+> @@ -1,8 +1,12 @@
+>  config BR2_PACKAGE_KODI_PVR_FILMON
+>  	bool "kodi-pvr-filmon"
 > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
-> +	select BR2_PACKAGE_JSONCPP
+>  	select BR2_PACKAGE_JSONCPP
 >  	select BR2_PACKAGE_KODI_PLATFORM
 >  	help
->  	  Kodi's ARGUS TV client addon
+>  	  Filmon PVR client addon for Kodi
 >  
->  	  https://github.com/kodi-pvr/pvr.argustv
+>  	  https://github.com/kodi-pvr/pvr.filmon
 > +
-> +comment "kodi-pvr-argustv needs a toolchain w/ gcc >= 4.7"
+> +comment "kodi-pvr-filmon needs a toolchain w/ gcc >= 4.7"
 > +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
 > -- 
 > 2.5.3
