@@ -1,28 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Oct 2015 20:07:36 +0100
-Subject: [Buildroot] [PATCH] zsh: bump to version 5.1.1
-In-Reply-To: <1443804447-17983-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1443804447-17983-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151002200736.63b0cb93@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Oct 2015 21:08:02 +0200
+Subject: [Buildroot] [PATCH] redis: bump to version 3.0.4
+In-Reply-To: <1443804780-13854-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 2 Oct 2015 13:53:00 -0300")
+References: <1443804780-13854-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d1wxgkbx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Fri,  2 Oct 2015 13:47:27 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/zsh/zsh.hash | 4 +++-
->  package/zsh/zsh.mk   | 3 ++-
->  2 files changed, 5 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Applied, thanks.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
