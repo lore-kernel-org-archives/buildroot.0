@@ -1,24 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2015 16:42:31 +0200
-Subject: [Buildroot] [PATCH] libssh: bump to version 0.7.2
-In-Reply-To: <2490c4cadb0735ae8a6a4cd26accc6071540d9bf.1443724248.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 1 Oct 2015 21:30:48 +0300")
-References: <2490c4cadb0735ae8a6a4cd26accc6071540d9bf.1443724248.git.baruch@tkos.co.il>
-Message-ID: <87y4flgwmg.fsf@dell.be.48ers.dk>
+Date: Fri, 2 Oct 2015 16:39:08 +0200
+Subject: [Buildroot] [git commit] libssh: needs shared library support
+Message-ID: <20151002144250.B944C81DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2b44749e9625d17eed450841c9c0cc85ac646129
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Also, require threads support. cmake detects threads support correctly, but
- > libssh build system uses this information incorrectly.
+libssh builds libssh.so unconditionally.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes:
+http://autobuild.buildroot.net/results/7c7/7c7da08c71b5378b68631e3844088307080f6f9e/
+http://autobuild.buildroot.net/results/a19/a19c619f4561f5426236b958f09cab4c095a63cc/
+http://autobuild.buildroot.net/results/d6d/d6dd4a9b787d654b4173c03174a2fd72bdc017b3/
 
-Committed, thanks.
+and more.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libssh/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+index e8ef602..30aabd6 100644
+--- a/package/libssh/Config.in
++++ b/package/libssh/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBSSH
+ 	bool "libssh"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	# Either OpenSSL or libgcrypt are mandatory
+ 	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
+ 	help
+@@ -10,3 +11,7 @@ config BR2_PACKAGE_LIBSSH
+ 	  secure and transparent tunnel for your remote applications.
+ 
+ 	  http://www.libssh.org/
++
++comment "libssh needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
