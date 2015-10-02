@@ -1,29 +1,44 @@
-From: Brian Foster <brian.foster@maximintegrated.com>
-Date: Fri, 2 Oct 2015 15:39:40 +0200
-Subject: [Buildroot] [Buildroot website] Missing image(s?) files
-Message-ID: <40125828.rcXOoJhnam@laclwks004>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Oct 2015 15:51:45 +0200
+Subject: [Buildroot] [PATCH] vtun: fix gcc5 build
+In-Reply-To: <e7f752b1db41fb8e094a79efd6210501de26a7b0.1443737191.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 2 Oct 2015 01:06:31 +0300")
+References: <e7f752b1db41fb8e094a79efd6210501de26a7b0.1443737191.git.baruch@tkos.co.il>
+Message-ID: <8737xtjs3y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-  Apologies if this is not the correct or best place to report
-  problems with the website's contents...
+ > Add -std=gnu89 to CFLAGS to keep pre gcc5 inline function symbols visibility
+ > rules.
 
-  In the current Buildroot User's Manual (for 2015.08) at the website,
+ > Fixes:
+ > http://autobuild.buildroot.net/results/a7e/a7e684174b90a852318a7a8bf41c4f477d159d56/
+ > http://autobuild.buildroot.net/results/ab0/ab01f8e0467e85322c63b81bb7e84fd251e5d556/
+ > http://autobuild.buildroot.net/results/117/117a68bf648b050dabed8088d1165c1d7d9301f0/
 
-    http://buildroot.uclibc.org/downloads/manual/manual.html
+ > and more.
 
-  in ?17.19.2, "How to add a package from GitHub", at least,
-  there is an obviously missing image `github_hash_mongrel2.png'
-  (see just about the second (last) ?-list).
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  package/vtun/vtun.mk | 2 ++
+ >  1 file changed, 2 insertions(+)
 
-cheers!
-	-blf-
+ > diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+ > index 2b64ab9efc69..884ebc666431 100644
+ > --- a/package/vtun/vtun.mk
+ > +++ b/package/vtun/vtun.mk
+ > @@ -14,4 +14,6 @@ VTUN_CONF_OPTS = \
+ >  	--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
+ >  	--with-lzo-lib=$(STAGING_DIR)/usr/lib
+ 
+ > +VTUN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
+
+Committed after adding a comment explaining why this is needed, thanks.
 
 -- 
-Brian Foster
-Principal MTS, Software        |  La Ciotat, France
-Maxim Integrated               |  http://www.maximintegrated.com/
+Bye, Peter Korsgaard
