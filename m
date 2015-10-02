@@ -1,84 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Oct 2015 22:57:37 +0100
-Subject: [Buildroot] [PATCH 1/2] axfsutils: add new package
-In-Reply-To: <1443796641-16056-2-git-send-email-ariel@vanguardiasur.com.ar>
-References: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1443796641-16056-2-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <20151002215737.GA4284@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat,  3 Oct 2015 00:01:02 +0200
+Subject: [Buildroot] [PATCH v3] systemd: Bump version and change hosting
+Message-ID: <1443823262-27013-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ariel, All,
+systemd seems to do its release using their github repository up from
+the 221 version.
 
-On 2015-10-02 11:37 -0300, Ariel D'Alessandro spake thusly:
-> Tools for building AXFS Filesystem.
-> 
-> The Advanced XIP File System is a Linux kernel filesystem driver that enables
-> files to be executed directly from flash or ROM memory rather than being copied
-> into RAM.
-> 
-> Source:
-> 	https://github.com/jaredeh/axfs
-> 
-> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-> ---
->  package/axfsutils/axfsutils.mk | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->  create mode 100644 package/axfsutils/axfsutils.mk
-> 
-> diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
-> new file mode 100644
-> index 0000000..ef8d471
-> --- /dev/null
-> +++ b/package/axfsutils/axfsutils.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# axfsutils
-> +#
-> +################################################################################
-> +
-> +AXFSUTILS_VERSION = f26ae785e33df76f658b71ef2cfbc7f511ff875d
-> +AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
-> +AXFSUTILS_LICENSE = GPLv2
-> +AXFSUTILS_LICENSE_FILES = COPYING
-> +
-> +define HOST_AXFSUTILS_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
-> +endef
-> +
-> +define HOST_AXFSUTILS_INSTALL_CMDS
-> +	cp $(@D)/mkfs.axfs-legacy/mkfs.axfs $(HOST_DIR)/usr/bin/
-> +endef
-> +
-> +$(eval $(generic-package))
+Since they use the auto generated release, we can't have a hash file.
 
-Since you do not add a Config.in that provides the corresponding option
-BR2_PACKAGE_AXFSUTILS for this package, it will never be buildable for
-the target.
+We need to use the autogen.sh scripts from systemd, since they don't
+provide the Makefile.in file in the 'po' directory, intltoolize which is
+called in the autogen.sh scripts will create it for us.
+Therefore, it's no longer needed to do AUTORECONF.
 
-So, either you provide a Config.in that adds BR2_PACKAGE_AXFSUTILS (like
-is done for e2fsprogs, for example), or you do not add a call to $(generic-package)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/systemd/systemd.hash |  2 --
+ package/systemd/systemd.mk   | 14 ++++++++++----
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+ delete mode 100644 package/systemd/systemd.hash
 
-Regards,
-Yann E. MORIN.
-
-> +$(eval $(host-generic-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+deleted file mode 100644
+index f746051..0000000
+--- a/package/systemd/systemd.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally calculated
+-sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f  systemd-221.tar.xz
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b62fc08..886c26d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,13 +4,15 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 221
+-SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+-SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
++SYSTEMD_VERSION = 226
++SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+ SYSTEMD_INSTALL_STAGING = YES
+ SYSTEMD_DEPENDENCIES = \
++	host-automake \
++	host-autoconf \
++	host-libtool \
+ 	host-intltool \
+ 	libcap \
+ 	util-linux \
+@@ -18,7 +20,6 @@ SYSTEMD_DEPENDENCIES = \
+ 	host-gperf
+ 
+ SYSTEMD_PROVIDES = udev
+-SYSTEMD_AUTORECONF = YES
+ 
+ # Make sure that systemd will always be built after busybox so that we have
+ # a consistent init setup between two builds
+@@ -51,6 +52,11 @@ SYSTEMD_CONF_ENV = \
+ 	CFLAGS="$(SYSTEMD_CFLAGS)" \
+ 	ac_cv_path_KMOD=/usr/bin/kmod
+ 
++define SYSTEMD_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_AUTOGEN
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+ SYSTEMD_CONF_OPTS += --enable-compat-libs
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.3
