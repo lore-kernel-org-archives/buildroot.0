@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 16:32:35 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.9.2-3
-Message-ID: <20151002143558.6C1B681DC3@busybox.osuosl.org>
+Date: Fri, 2 Oct 2015 16:02:07 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.5.10
+Message-ID: <20151002143558.41FB581DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2871e7ea78b466d71456cc33c6bef255bcfbb6f3
+commit: http://git.buildroot.net/buildroot/commit/?id=7e4b26fbc8219d3f0fe799e5f0c97b2f70eeed8f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash |    2 +-
- package/imagemagick/imagemagick.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.hash |    6 +++---
+ package/squid/squid.mk   |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index e57a994..8b1cd75 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,2 +1,2 @@
- # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
--sha256 987b353058482b5ba15d42746eebc51c15eb05241ce94f22381b8aae0b841617 ImageMagick-6.9.1-8.tar.xz
-+sha256	e251574136e4a82128b3860b97c72b289df0a2030ce72900c91b67685a3298e4	ImageMagick-6.9.2-3.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index d4829a3..0e14c7d 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a67af98..2a7b5f3 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.9.tar.xz.asc
+-md5 fe7306a90a0ba2fc906e9a8c741cc8ea  squid-3.5.9.tar.xz
+-sha1 4856ca628cafbd1cbfa0ddcbadec440e6f4c2da7  squid-3.5.9.tar.xz
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.10.tar.xz.asc
++md5	5ddc53bd6ff78234691a7ebbcbc6aa38	squid-3.5.10.tar.xz
++sha1	804bbf5ef6ccdc277dacde83e086fad30d02da60	squid-3.5.10.tar.xz
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 641720a..8a05814 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.9.1-8
-+IMAGEMAGICK_VERSION = 6.9.2-3
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).9
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).10
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
