@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2015 16:32:22 +0200
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.0.4
-In-Reply-To: <1443793352-3016-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 2 Oct 2015 10:42:32 -0300")
-References: <1443793352-3016-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pp0xibnt.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Oct 2015 16:32:46 +0200
+Subject: [Buildroot] [PATCH] imagemagick: bump to version 6.9.2-3
+In-Reply-To: <1443793372-3061-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 2 Oct 2015 10:42:52 -0300")
+References: <1443793372-3061-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lhblibn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
