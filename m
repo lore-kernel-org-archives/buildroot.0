@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Oct 2015 13:52:18 -0300
-Subject: [Buildroot] [PATCH] pciutils: bump to version 3.4.0
-Message-ID: <1443804738-13762-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  2 Oct 2015 13:52:37 -0300
+Subject: [Buildroot] [PATCH] cryptsetup: bump to version 1.6.8
+Message-ID: <1443804757-13808-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pciutils/pciutils.hash | 2 +-
- package/pciutils/pciutils.mk   | 2 +-
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pciutils/pciutils.hash b/package/pciutils/pciutils.hash
-index cc901d1..cda0ac2 100644
---- a/package/pciutils/pciutils.hash
-+++ b/package/pciutils/pciutils.hash
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index a418081..a0b975d 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/utils/pciutils/sha256sums.asc
--sha256	514a3bdb77e4cdbe9e970e1885af46e0ba2011bf97364368c455ade0edd4e3a9	pciutils-3.3.1.tar.xz
-+sha256	f8898ff6d58f52e9e17e2763bff479bb9511bcf0d8711084fa77f1b6b1739196	pciutils-3.4.0.tar.xz
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 12c13b2..6c0e660 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -4,7 +4,7 @@
- #
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.6/sha256sums.asc
+-sha256	c23c24c8d662032da8650c1c84985221be8bbedf4737c1540bba7e4517dfe820	cryptsetup-1.6.7.tar.xz
++sha256	45a6ccd3c65b7d904e58e1cb3656a7e997190b6a05b5ff7c6887e4a41c5f19bc	cryptsetup-1.6.8.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 3655d5d..78cbe8f 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PCIUTILS_VERSION = 3.3.1
-+PCIUTILS_VERSION = 3.4.0
- PCIUTILS_SITE = $(BR2_KERNEL_MIRROR)/software/utils/pciutils
- PCIUTILS_SOURCE = pciutils-$(PCIUTILS_VERSION).tar.xz
- PCIUTILS_INSTALL_STAGING = YES
+ CRYPTSETUP_VERSION_MAJOR = 1.6
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).7
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).8
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
 -- 
 2.4.9
