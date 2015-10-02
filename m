@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 Oct 2015 10:42:12 -0300
-Subject: [Buildroot] [PATCH] libpng: bump to version 1.6.18
-Message-ID: <1443793332-2962-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  2 Oct 2015 10:42:32 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.0.4
+Message-ID: <1443793352-3016-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libpng/libpng.hash | 6 +++---
- package/libpng/libpng.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index dd4af06..92ac24f 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.17/
--md5	430a9b76b78533235cd4b9b26ce75c7e	libpng-1.6.17.tar.xz
--sha1	6394f3c0847c3b9ea69f4f972dddae3786592050	libpng-1.6.17.tar.xz
-+# From http://sourceforge.net/projects/libpng/files/libpng16/1.6.18/
-+md5	6a57c8e0f5469b9c9949a4b43d57b3a1	libpng-1.6.18.tar.xz
-+sha1	c6e06510d30beba08c96c468ab269fafb2bb256f	libpng-1.6.18.tar.xz
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 08d8196..5500a61 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 2d80b60..a1302fe 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.3.tar.bz2.sha256
+-sha256	ebdc875ea06d010722dec13d92bc40002ab6a77071d62e71aad564ff76a63df7	harfbuzz-1.0.3.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.4.tar.bz2.sha256
++sha256	b030373457e7c00d3a7920f15e6fcd35defac3c4e44cd14ed85869030df74381	harfbuzz-1.0.4.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 60dcd94..b4116c6 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPNG_VERSION = 1.6.17
-+LIBPNG_VERSION = 1.6.18
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
+-HARFBUZZ_VERSION = 1.0.3
++HARFBUZZ_VERSION = 1.0.4
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
 2.4.9
