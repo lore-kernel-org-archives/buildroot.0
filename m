@@ -1,42 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 16:32:12 +0200
-Subject: [Buildroot] [git commit] harfbuzz: bump to version 1.0.4
-Message-ID: <20151002143558.5FE5B81E16@busybox.osuosl.org>
+Date: Fri, 2 Oct 2015 16:33:07 +0200
+Subject: [Buildroot] [git commit] cpio: install to /bin and after busybox
+Message-ID: <20151002143558.7F6A281DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f1f0d6da1950a0a7b2f2777fd1932bc43f935ed
+commit: http://git.buildroot.net/buildroot/commit/?id=63eaed6498d2ee668c24c220d602c9188ed05a9d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+As the usual rule consider full-blown packages superior to busybox,
+hence build after it.
+Also install cpio to /bin to override the busybox-provided one.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/harfbuzz/harfbuzz.hash |    4 ++--
- package/harfbuzz/harfbuzz.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cpio/cpio.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 2d80b60..a1302fe 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.3.tar.bz2.sha256
--sha256	ebdc875ea06d010722dec13d92bc40002ab6a77071d62e71aad564ff76a63df7	harfbuzz-1.0.3.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.0.4.tar.bz2.sha256
-+sha256	b030373457e7c00d3a7920f15e6fcd35defac3c4e44cd14ed85869030df74381	harfbuzz-1.0.4.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 60dcd94..b4116c6 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index ca8463e..1576127 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -6,6 +6,8 @@
  
--HARFBUZZ_VERSION = 1.0.3
-+HARFBUZZ_VERSION = 1.0.4
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ CPIO_VERSION = 2.12
+ CPIO_SITE = http://ftp.gnu.org/gnu/cpio
++CPIO_CONF_OPTS = --bindir=/bin
++CPIO_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ CPIO_LICENSE = GPLv3+
+ CPIO_LICENSE_FILES = COPYING
+ 
