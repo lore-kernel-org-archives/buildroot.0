@@ -1,64 +1,104 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 00:18:24 +0200
-Subject: [Buildroot] [PATCHv4] gdb: prevent building the documentation
-In-Reply-To: <560CF1D0.3090608@imgtec.com>
-References: <1441875400-16473-1-git-send-email-Vincent.Riera@imgtec.com>
- <20151001091137.4bc06d8a@free-electrons.com> <560CF1D0.3090608@imgtec.com>
-Message-ID: <560F02B0.9080107@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Oct 2015 23:21:53 +0100
+Subject: [Buildroot] [PATCH v3] systemd: Bump version and change hosting
+In-Reply-To: <1443823262-27013-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443823262-27013-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20151002222153.GF4284@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+Maxime, All,
 
-Le 01/10/2015 10:41, Vicente Olivert Riera a ?crit :
-> Hello Thomas, Romain,
+On 2015-10-03 00:01 +0200, Maxime Hadjinlian spake thusly:
+> systemd seems to do its release using their github repository up from
+> the 221 version.
 > 
-> On 10/01/2015 08:11 AM, Thomas Petazzoni wrote:
->> Vicente, Romain,
->>
->> On Thu, 10 Sep 2015 09:56:40 +0100, Vicente Olivert Riera wrote:
->>> Force gdb to not build the documentation. This way we avoid depending on
->>> host-texinfo. This is a temporary fix until upstream accepts a proposed
->>> --disable-docs configure option.
->>>
->>> Since the documentation will not be build at all, we can remove the
->>> parts related to host-texinfo and MAKEINFO in the gdb.mk file.
->>>
->>> Fixes:
->>>
->>>   http://autobuild.buildroot.net/results/dd5/dd50ed99abb2c8495def826866b184030953f90e/
->>>
->>> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->>> Tested-by: Brendan Heading <brendanheading@gmail.com>
->>
->> Seems like this is not yet working completely for all situations:
->>
->>    http://autobuild.buildroot.org/results/244/2442e697d8a300496434fd42fcb1ee3941d13e06/build-end.log
+> Since they use the auto generated release, we can't have a hash file.
 > 
-> I will have a look.
-> 
-> Romain, how is going the upstream request about the --disable-docs option?
+> We need to use the autogen.sh scripts from systemd, since they don't
+> provide the Makefile.in file in the 'po' directory, intltoolize which is
+> called in the autogen.sh scripts will create it for us.
+> Therefore, it's no longer needed to do AUTORECONF.
 
-The patch I submitted upstream is not complete since we need to disable the
-documentation for bfd and gprof.
+As discussed in real-life, I think it would be better to manually call
+intltoolize as a post-patch hook, and keep AUTORECONF.
 
-https://sourceware.org/ml/gdb-patches/2015-09/msg00073.html
+Regards,
+Yann E. MORIN.
 
-Maybe the easiest solution is to make sure that the missing script return 0
-instead of the error code... thoughts ?
-
-Best regards,
-Romain
-
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/systemd/systemd.hash |  2 --
+>  package/systemd/systemd.mk   | 14 ++++++++++----
+>  2 files changed, 10 insertions(+), 6 deletions(-)
+>  delete mode 100644 package/systemd/systemd.hash
 > 
-> Regards,
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> deleted file mode 100644
+> index f746051..0000000
+> --- a/package/systemd/systemd.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally calculated
+> -sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f  systemd-221.tar.xz
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index b62fc08..886c26d 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -4,13 +4,15 @@
+>  #
+>  ################################################################################
+>  
+> -SYSTEMD_VERSION = 221
+> -SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+> -SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+> +SYSTEMD_VERSION = 226
+> +SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
+>  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+>  SYSTEMD_INSTALL_STAGING = YES
+>  SYSTEMD_DEPENDENCIES = \
+> +	host-automake \
+> +	host-autoconf \
+> +	host-libtool \
+>  	host-intltool \
+>  	libcap \
+>  	util-linux \
+> @@ -18,7 +20,6 @@ SYSTEMD_DEPENDENCIES = \
+>  	host-gperf
+>  
+>  SYSTEMD_PROVIDES = udev
+> -SYSTEMD_AUTORECONF = YES
+>  
+>  # Make sure that systemd will always be built after busybox so that we have
+>  # a consistent init setup between two builds
+> @@ -51,6 +52,11 @@ SYSTEMD_CONF_ENV = \
+>  	CFLAGS="$(SYSTEMD_CFLAGS)" \
+>  	ac_cv_path_KMOD=/usr/bin/kmod
+>  
+> +define SYSTEMD_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_AUTOGEN
+> +
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+>  SYSTEMD_CONF_OPTS += --enable-compat-libs
+>  else
+> -- 
+> 2.5.3
 > 
-> Vincent.
-> 
->> Best regards,
->>
->> Thomas
->>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
