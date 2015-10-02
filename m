@@ -1,37 +1,42 @@
-From: glscantlen <glscantlen@gmail.com>
-Date: Fri, 2 Oct 2015 10:14:31 -0700 (PDT)
-Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
-In-Reply-To: <55A13972.2060908@mind.be>
-References: <bug-8206-163@https.bugs.busybox.net/>
- <20150707210059.917A78015E@busybox.osuosl.org>
- <1436622071664-105281.post@n4.nabble.com> <55A12A5E.4010900@mind.be>
- <1436625379066-105305.post@n4.nabble.com> <55A1359C.5020109@mind.be>
- <20150711173913.32fbc8a7@free-electrons.com> <55A13972.2060908@mind.be>
-Message-ID: <1443806071553-113718.post@n4.nabble.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  2 Oct 2015 14:23:52 -0300
+Subject: [Buildroot] [PATCH] mpg123: bump to version 1.22.4
+Message-ID: <1443806632-23547-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I realize this is an old thread, but it appears the issue was not resolved
-and I have a solution that works for my defconfig on both 2015.05 & .08.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpg123/mpg123.hash | 6 +++---
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-The most recent version I have tested is snapshot 2015.08 from
-git.buildroot.net
-on Sept.30. That version has exhibited the same issue as previous versions
-noted in this thread "mplayer uses host xorg development files"
-
-The solution I am using is described here:
-    - Fix a bug in the mplayer's .mk file. Add Buildroot's path
-      for staging to mplayer's configuration, ~ line 259
-       $ nano -w package/mplayer/mplayer.mk
-          --extra-cflags="$(MPLAYER_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-          --extra-ldflags="$(MPLAYER_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Bug-8206-New-mplayer-uses-host-xorg-development-files-tp104861p113718.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index bf81f2a..ae261d0 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.2/
+-md5	6f6d2178c354f39207bf97e062936110	mpg123-1.22.2.tar.bz2
+-sha1	9125b4eabf6327c71a439e07e16eb39b712085e2	mpg123-1.22.2.tar.bz2
++# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.4/
++md5	2dfafae3bbc532b4c8b04a77c6a6de89	mpg123-1.22.4.tar.bz2
++sha1	6ca59baceeebe361cc508214ba725a56d4fea743	mpg123-1.22.4.tar.bz2
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 171cbde..efd510d 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MPG123_VERSION = 1.22.2
++MPG123_VERSION = 1.22.4
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
+-- 
+2.4.9
