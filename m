@@ -1,28 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2015 22:29:59 +0200
-Subject: [Buildroot] [PATCH 2/5] package/weston: restore the freerdp
-	backend
-In-Reply-To: <34e2e215f8ea40ab0d223fc555bde8289937b878.1441569038.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 6 Sep 2015 21:54:19 +0200")
-References: <cover.1441569038.git.yann.morin.1998@free.fr>
- <34e2e215f8ea40ab0d223fc555bde8289937b878.1441569038.git.yann.morin.1998@free.fr>
-Message-ID: <874mi9f1yw.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Oct 2015 22:57:37 +0100
+Subject: [Buildroot] [PATCH 1/2] axfsutils: add new package
+In-Reply-To: <1443796641-16056-2-git-send-email-ariel@vanguardiasur.com.ar>
+References: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
+ <1443796641-16056-2-git-send-email-ariel@vanguardiasur.com.ar>
+Message-ID: <20151002215737.GA4284@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Ariel, All,
 
- > Now that we've switched to using FreeRDP from master, we can build the
- > weston's FreeRDP backend again.
+On 2015-10-02 11:37 -0300, Ariel D'Alessandro spake thusly:
+> Tools for building AXFS Filesystem.
+> 
+> The Advanced XIP File System is a Linux kernel filesystem driver that enables
+> files to be executed directly from flash or ROM memory rather than being copied
+> into RAM.
+> 
+> Source:
+> 	https://github.com/jaredeh/axfs
+> 
+> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+> ---
+>  package/axfsutils/axfsutils.mk | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>  create mode 100644 package/axfsutils/axfsutils.mk
+> 
+> diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
+> new file mode 100644
+> index 0000000..ef8d471
+> --- /dev/null
+> +++ b/package/axfsutils/axfsutils.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# axfsutils
+> +#
+> +################################################################################
+> +
+> +AXFSUTILS_VERSION = f26ae785e33df76f658b71ef2cfbc7f511ff875d
+> +AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
+> +AXFSUTILS_LICENSE = GPLv2
+> +AXFSUTILS_LICENSE_FILES = COPYING
+> +
+> +define HOST_AXFSUTILS_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
+> +endef
+> +
+> +define HOST_AXFSUTILS_INSTALL_CMDS
+> +	cp $(@D)/mkfs.axfs-legacy/mkfs.axfs $(HOST_DIR)/usr/bin/
+> +endef
+> +
+> +$(eval $(generic-package))
 
- > Propagate the new dependencies of FreeRDP.
+Since you do not add a Config.in that provides the corresponding option
+BR2_PACKAGE_AXFSUTILS for this package, it will never be buildable for
+the target.
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+So, either you provide a Config.in that adds BR2_PACKAGE_AXFSUTILS (like
+is done for e2fsprogs, for example), or you do not add a call to $(generic-package)
 
-Committed, thanks.
+Regards,
+Yann E. MORIN.
+
+> +$(eval $(host-generic-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
