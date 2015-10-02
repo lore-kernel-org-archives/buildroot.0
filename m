@@ -1,48 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 16:39:08 +0200
-Subject: [Buildroot] [git commit] libssh: needs shared library support
-Message-ID: <20151002144250.B944C81DF3@busybox.osuosl.org>
+Date: Fri, 2 Oct 2015 16:41:02 +0200
+Subject: [Buildroot] [git commit] libssh: bump to version 0.7.2
+Message-ID: <20151002144250.C169981DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b44749e9625d17eed450841c9c0cc85ac646129
+commit: http://git.buildroot.net/buildroot/commit/?id=0c30b838bc8eb2072eac2aa940e85e458d3b0cb7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libssh builds libssh.so unconditionally.
-
-Fixes:
-http://autobuild.buildroot.net/results/7c7/7c7da08c71b5378b68631e3844088307080f6f9e/
-http://autobuild.buildroot.net/results/a19/a19c619f4561f5426236b958f09cab4c095a63cc/
-http://autobuild.buildroot.net/results/d6d/d6dd4a9b787d654b4173c03174a2fd72bdc017b3/
-
-and more.
+Also, require threads support. cmake detects threads support correctly, but
+libssh build system uses this information incorrectly.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libssh/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/libssh/Config.in   |    5 +++--
+ package/libssh/libssh.hash |    6 +++---
+ package/libssh/libssh.mk   |    4 ++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/package/libssh/Config.in b/package/libssh/Config.in
-index e8ef602..30aabd6 100644
+index 30aabd6..3357fb9 100644
 --- a/package/libssh/Config.in
 +++ b/package/libssh/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBSSH
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSSH
  	bool "libssh"
  	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	# Either OpenSSL or libgcrypt are mandatory
  	select BR2_PACKAGE_LIBGCRYPT if !BR2_PACKAGE_OPENSSL
  	help
-@@ -10,3 +11,7 @@ config BR2_PACKAGE_LIBSSH
- 	  secure and transparent tunnel for your remote applications.
+@@ -12,6 +13,6 @@ config BR2_PACKAGE_LIBSSH
  
  	  http://www.libssh.org/
-+
-+comment "libssh needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
+ 
+-comment "libssh needs a toolchain w/ dynamic library"
++comment "libssh needs a toolchain w/ dynamic library, threads"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 473ced3..49bf6c9 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,4 +1,4 @@
+ # from https://red.libssh.org/projects/libssh/files/
+-md5	bffc9dc548c3bae3a3afc5ac1654b272	libssh-0.7.1.tar.xz
+-# Locally calculated
+-sha256	2fc7ccf96d3263cbd8ab520118cb94d9a2e11714c61e22b3f761fc5352fd046d  libssh-0.7.1.tar.xz
++md5	5d7d468937649a6dfc6186edfff083db	libssh-0.7.2.tar.xz
++# Locally calculated after checking signature on uncompressed libssh-0.7.2.tar
++sha256	a32c45b9674141cab4bde84ded7d53e931076c6b0f10b8fd627f3584faebae62  libssh-0.7.2.tar.xz
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index cd537b0..d425ff0 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBSSH_VERSION = 0.7.1
++LIBSSH_VERSION = 0.7.2
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+-LIBSSH_SITE = https://red.libssh.org/attachments/download/154
++LIBSSH_SITE = https://red.libssh.org/attachments/download/177
+ LIBSSH_LICENSE = LGPLv2.1
+ LIBSSH_LICENSE_FILES = COPYING
+ LIBSSH_INSTALL_STAGING = YES
