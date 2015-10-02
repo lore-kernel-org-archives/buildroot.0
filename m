@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 15:35:41 +0200
-Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.44
-Message-ID: <20151002135307.853A981E16@busybox.osuosl.org>
+Date: Fri, 2 Oct 2015 15:46:52 +0200
+Subject: [Buildroot] [git commit] vtun: fix gcc5 build
+Message-ID: <20151002135307.8DA54819D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4640f87f2f6ab9ad2156e06e2b62f4534e983473
+commit: http://git.buildroot.net/buildroot/commit/?id=ea3485d085200b82da6e6cc79ea75c01128a1df9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Add -std=gnu89 to CFLAGS to keep pre gcc5 inline function symbols visibility
+rules.
+
+Fixes:
+http://autobuild.buildroot.net/results/a7e/a7e684174b90a852318a7a8bf41c4f477d159d56/
+http://autobuild.buildroot.net/results/ab0/ab01f8e0467e85322c63b81bb7e84fd251e5d556/
+http://autobuild.buildroot.net/results/117/117a68bf648b050dabed8088d1165c1d7d9301f0/
+
+and more.
+
+[Peter: add a comment explaining why]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmicrohttpd/libmicrohttpd.hash |    4 ++--
- package/libmicrohttpd/libmicrohttpd.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vtun/vtun.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index 7abec2f..0b3b795 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	414bb37471fd91646a7a41c6877a5be2d03871e8d9f845fd3ee55d0970d9069f	libmicrohttpd-0.9.43.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256	f2739cc05112dc00a5ebe1a470174970ca3a3fd71dcd67fb7539af9d83b8411e	libmicrohttpd-0.9.44.tar.gz
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 4fa27d8..f649da2 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 2b64ab9..2a3f548 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -14,4 +14,7 @@ VTUN_CONF_OPTS = \
+ 	--with-lzo-headers=$(STAGING_DIR)/usr/include/lzo \
+ 	--with-lzo-lib=$(STAGING_DIR)/usr/lib
  
--LIBMICROHTTPD_VERSION = 0.9.43
-+LIBMICROHTTPD_VERSION = 0.9.44
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
++# Assumes old-style gcc inline symbol visibility rules
++VTUN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -std=gnu89"
++
+ $(eval $(autotools-package))
