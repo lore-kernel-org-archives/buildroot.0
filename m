@@ -1,56 +1,43 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  3 Oct 2015 21:50:27 +0200
-Subject: [Buildroot] [PATCH v2 3/4] libnfs: Without native RPC use libtirpc
+Date: Sat,  3 Oct 2015 21:50:28 +0200
+Subject: [Buildroot] [PATCH v2 4/4] kodi: Without native RPC use libtirpc
 In-Reply-To: <1443901828-11390-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1443901828-11390-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1443901828-11390-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1443901828-11390-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-v1 -> v2:
-	- Don't depends on blackfin toolchain (is removed by previous
-	  patch)
----
- package/libnfs/Config.in | 7 ++++---
- package/libnfs/libnfs.mk | 4 ++++
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/kodi/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnfs/Config.in b/package/libnfs/Config.in
-index 6642fe4..2a1ef03 100644
---- a/package/libnfs/Config.in
-+++ b/package/libnfs/Config.in
-@@ -1,10 +1,11 @@
- config BR2_PACKAGE_LIBNFS
- 	bool "libnfs"
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 797f59d..7d60faf 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -181,13 +181,15 @@ config BR2_PACKAGE_KODI_LIBMICROHTTPD
+ 
+ config BR2_PACKAGE_KODI_LIBNFS
+ 	bool "nfs"
 -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
++	# libnfs -> libtirpc
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS
 +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_LIBNFS
  	help
- 	  nfs userspace implementation.
+ 	  Enable NFS server support.
  
- 	  http://github.com/sahlberg/libnfs
- 
--comment "libnfs needs a toolchain w/ RPC"
+-comment "nfs support needs a toolchain w/ RPC support"
 -	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+comment "libnfs needs a toolchain w/ threads"
++comment "nfs support needs a toolchain w/ threads support"
 +	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
-diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-index 0c8c4f5..fb95e21 100644
---- a/package/libnfs/libnfs.mk
-+++ b/package/libnfs/libnfs.mk
-@@ -13,4 +13,8 @@ LIBNFS_LICENSE = LGPLv2.1+
- LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
- LIBNFS_DEPENDENCIES = host-pkgconf
  
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+LIBNFS_DEPENDENCIES += libtirpc
-+endif
-+
- $(eval $(autotools-package))
+ config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "rtmp"
 -- 
 2.5.3
