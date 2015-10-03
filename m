@@ -1,96 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  3 Oct 2015 14:31:45 +0100
-Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to wait
-	for slow network interfaces
-Message-ID: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 15:31:49 +0200
+Subject: [Buildroot] [PATCH 0/6 RFC] toolchain/external: use generic
+ extract commands (branch yem/extract-cmds)
+In-Reply-To: <cover.1441233378.git.yann.morin.1998@free.fr>
+References: <cover.1441233378.git.yann.morin.1998@free.fr>
+Message-ID: <560FD8C5.1060803@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some machines, the network interface is slow to appear. For example,
-on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
-and our standard boot process is too fast, so our network startup script
-is called before the USB bus is compeltely enumerated, thus it can't
-configure eth0.
+Hi Yann,
 
-If Buildroot is configured to do a DHCP on an interface, install a
-startup script, just before S40network, that waits for that interface.
+Le 03/09/2015 00:51, Yann E. MORIN a ?crit :
+> Hello All!
+> 
+> This series is an attempt at simplifying the way external toolchains are
+> extracted.
+> 
+> Currently, external toolchains use custom extract commands, because they
+> want to exclude a bumch of files during extraction, so as to save a bit
+> of space (locales in some toolchains can account for up to 80% of the
+> size of the toolchain as a whole).
+> 
+> And it turns out, gcc also wants to exclude a bunch of files (java and
+> go, testsuites).
+> 
+> Using custom extract commands means that those packages (and critical
+> ones, at that) can not benefit from the enhancements and fixes made to
+> the generic commands, like the automatic triiping of components.
+> 
+> In this series:
+> 
+>   - we first introduce the support for the exclusion list
+>   - we always break/dereference hardlinks
+>   - we make gcc use the exclusion list
+>   - we then make the external toolchains use it (in two passes: one for
+>     the non-Blackfin case, one for it, as it is 'seecial')
+>   - finaly, we introduce the Codescape MTI toolchain from Vincent
+> 
+> Thomas, there is a question for you in the second commit: would you
+> care to explain what your goal was when you added --hard-dereference
+> when extracting the Blackfin toolchains?
+> 
 
-Since Buildroot can only be configured to run DHCP on a single interface,
-we do not need a script that waits for more than one interface.
+What do you think about a new Kconfig option that allow users to define a list
+of excluded files or directories.
+Some toolchains (ie SourceryCodeBench standard) can bundle eclipse or other
+stuff that are not used in the build process.
 
-Closes #8116.
+Something like:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/skeleton/S39wait-for-network-if | 43 +++++++++++++++++++++++++++++++++
- package/skeleton/skeleton.mk            |  2 ++
- 2 files changed, 45 insertions(+)
- create mode 100644 package/skeleton/S39wait-for-network-if
+config BR2_TOOLCHAIN_EXTERNAL_EXCLUDES
+	string "Exclude unwanted directories from the toolchain archive"
+	default ""
+	help
+	  If some directories in the toolchain archive are not intended
+	  to be used in the build process, this option define a
+	  space-separated list of patterns to exclude when extracting
+	  the archive.
 
-diff --git a/package/skeleton/S39wait-for-network-if b/package/skeleton/S39wait-for-network-if
-new file mode 100644
-index 0000000..010026e
---- /dev/null
-+++ b/package/skeleton/S39wait-for-network-if
-@@ -0,0 +1,43 @@
-+#!/bin/sh
-+
-+# In case we have a slow-to-appear interface (e.g. eth-over-USB),
-+# and we need to configure it, wait until it appears. But not too
-+# long either. WAIT_DELAY is in seconds.
-+WAIT_DELAY=15
-+
-+wait_for_IF() {
-+    IF="$(sed -r -e '/^auto lo/d;' \
-+                 -e '/^auto (.+)$/!d;' \
-+                 -e 's//\1/;' \
-+                 /etc/network/interfaces
-+         )"
-+    if [ -z "${IF}" -o -e "/sys/class/net/${IF}" ]; then
-+        return 0
-+    fi
-+    printf "Waiting for interface %s to appear" "${IF}"
-+    wait=${WAIT_DELAY}
-+    while [ ${wait} -gt 0 ]; do
-+        if [ -e "/sys/class/net/${IF}" ]; then
-+            printf " yes\n"
-+            return 0
-+        fi
-+        sleep 1
-+        printf "."
-+        : $((wait--))
-+    done
-+    printf " no.\n"
-+    return 1
-+}
-+
-+case "$1" in
-+  start)
-+	wait_for_IF
-+	;;
-+  stop)
-+	;;
-+  restart)
-+	"$0" start
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+esac
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 48e7085..733b86f 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -76,6 +76,8 @@ define SET_NETWORK_DHCP
- 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
- 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
- 	) >> $(TARGET_DIR)/etc/network/interfaces
-+	$(INSTALL) -D -m 0755 package/skeleton/S39wait-for-network-if \
-+		$(TARGET_DIR)/etc/init.d/S39wait-for-network-if
- endef
- endif
- 
--- 
-1.9.1
+ifneq ($(BR2_TOOLCHAIN_EXTERNAL_EXCLUDES),)
+TOOLCHAIN_EXTERNAL_EXCLUDES = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_EXCLUDES))
+endif
+
+Thoughts ?
+
+Best regards,
+Romain
+
+> Regards,
+> Yann E. MORIN.
