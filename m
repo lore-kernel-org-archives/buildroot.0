@@ -1,97 +1,165 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  3 Oct 2015 21:29:09 +0200
-Subject: [Buildroot] [PATCH 2/2] nfs-utils: systemd support
-In-Reply-To: <1443900549-9696-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443900549-9696-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1443900549-9696-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 21:42:33 +0200
+Subject: [Buildroot] [PATCH 02/18] gcc: use toolchain wrapper
+In-Reply-To: <1442774504-22799-3-git-send-email-arnout@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442774504-22799-3-git-send-email-arnout@mind.be>
+Message-ID: <56102FA9.3030109@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Aur?lien Chabot <aurelien@chabot.fr>
+Hi Arnout,
 
-nfs-utils has been patched to install only the needed systemd unit files
-supported.
-Also tmpfiles was needed because the folder /run/nfs is a tmpfs
-and nfs-utils need some files to be there to work correctly.
+Le 20/09/2015 20:41, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> We have a toolchain wrapper for external toolchain, but it is also
+> beneficial for internal toolchains, for the following reasons:
+> 
+> 1. It can make sure that BR2_TARGET_OPTIMIZATION is passed to the
+>    compiler even if a package's build system doesn't honor CFLAGS.
+> 2. It allows us to do the unsafe path check (i.e. -I/usr/include)
+>    without patching gcc.
+> 3. It makes it simpler to implement building each package with a
+>    separate staging directory (per-package staging).
+> 4. It makes it simpler to implement a compiler hash check for ccache.
+> 
+> The wrapper is reused from the external toolchain. A third CROSS_PATH_
+> option is added to the wrapper: in this case, the real executable is in
+> the same directory, with the extension .real.
+> 
+> The creation of the simple symlinks is merged with the creation of the
+> wrapper symlinks, otherwise part of the -gcc-ar handling logic would
+> have to be repeated.
+> 
+> The complex case-condition could be refactored with the one for the
+> external toolchain, but then it becomes even more complex because
+> they each have special corner cases. For example, the internal
+> toolchain has to handle *.real to avoid creating an extra indirection
+> after host-gcc-{final,initial}-rebuild.
+> 
+> Instead of creating the .real files, it would also have been possible
+> to install the internal toolchain in $(HOST_DIR)/opt, similar to what
+> we do for the external toolchain. However, then we would also have to
+> copy things to the sysroot and do more of the magic that the external
+> toolchain is doing. So keeping it in $(HOST_DIR)/usr/bin is much
+> simpler.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
+> ---
+>  package/gcc/gcc-final/gcc-final.mk     | 13 +++++--------
+>  package/gcc/gcc-initial/gcc-initial.mk |  4 ++++
+>  package/gcc/gcc.mk                     | 35 ++++++++++++++++++++++++++++++++++
+>  toolchain/toolchain-wrapper.c          |  4 +++-
+>  4 files changed, 47 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 3426ba4..2c16fdf 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -96,14 +96,11 @@ endef
+>  
+>  HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
+>  
+> -# Create <arch>-linux-<tool> symlinks
+> -define HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
+> -	(cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
+> -		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+> -	done)
+> -endef
+> -
+> -HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
+> +HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
+> +HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
+> +# Note: this must be done after CREATE_CC_SYMLINKS, otherwise the
+> +# -cc symlink to the wrapper is not created.
+> +HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+>  
+>  # In gcc 4.7.x, the ARM EABIhf library loader path for (e)glibc was not
+>  # correct, so we create a symbolic link to make things work
+> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+> index 6bb7997..4b03e47 100644
+> --- a/package/gcc/gcc-initial/gcc-initial.mk
+> +++ b/package/gcc/gcc-initial/gcc-initial.mk
+> @@ -62,4 +62,8 @@ HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
+>  HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
+>  endif
+>  
+> +HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
+> +HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
+> +HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+> +
 
-Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
-[Maxime: Remove patches included originally in the patch as they have
-have been merged upstream in v1.3.3]
-Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-v1 -> v2:
-    - Remove the added patch since the previous patch bump nfs_utils
-      which have them already in the tree.
----
- package/nfs-utils/nfs-utils.mk            | 27 +++++++++++++++++++++++++++
- package/nfs-utils/nfs-utils_env.sh        |  1 +
- package/nfs-utils/nfs-utils_tmpfiles.conf |  4 ++++
- 3 files changed, 32 insertions(+)
- create mode 100755 package/nfs-utils/nfs-utils_env.sh
- create mode 100644 package/nfs-utils/nfs-utils_tmpfiles.conf
+I was wondering why we had to use the wrapper for the gcc-initial until I figure
+out that it's used when the libc is build.
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 8c06d8e..ccc73c5 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -41,11 +41,38 @@ define NFS_UTILS_INSTALL_FIXUP
- endef
- NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
- 
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+	NFS_UTILS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system
-+	NFS_UTILS_DEPENDENCIES += systemd
-+else
-+	NFS_UTILS_CONF_OPTS += --without-systemd
-+endif
-+
- define NFS_UTILS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
- 		$(TARGET_DIR)/etc/init.d/S60nfs
- endef
- 
-+define NFS_UTILS_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -fs ../../../../usr/lib/systemd/system/nfs-server.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-server.service
-+	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-client.target
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants
-+
-+	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
-+		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
-+
-+	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
-+		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
-+
-+	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
-+endef
-+
- define NFS_UTILS_REMOVE_NFSIOSTAT
- 	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
- endef
-diff --git a/package/nfs-utils/nfs-utils_env.sh b/package/nfs-utils/nfs-utils_env.sh
-new file mode 100755
-index 0000000..1a24852
---- /dev/null
-+++ b/package/nfs-utils/nfs-utils_env.sh
-@@ -0,0 +1 @@
-+#!/bin/sh
-diff --git a/package/nfs-utils/nfs-utils_tmpfiles.conf b/package/nfs-utils/nfs-utils_tmpfiles.conf
-new file mode 100644
-index 0000000..f87939f
---- /dev/null
-+++ b/package/nfs-utils/nfs-utils_tmpfiles.conf
-@@ -0,0 +1,4 @@
-+d /run/nfs/sm 0700 root root -
-+d /run/nfs/sm.bak 0700 root root -
-+f /run/nfs/rmtab 0644 root root -
-+f /run/nfs/etab 0644 root root -
--- 
-2.5.3
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+
+Best regards,
+Romain
+
+>  $(eval $(host-autotools-package))
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 501fcea..9044040 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -235,4 +235,39 @@ HOST_GCC_COMMON_CONF_OPTS += \
+>  	--with-long-double-128
+>  endif
+>  
+> +HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
+> +
+> +# The LTO support in gcc creates wrappers for ar, ranlib and nm which load
+> +# the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
+> +# *-gcc-nm and should be used instead of the real programs when -flto is
+> +# used. However, we should not add the toolchain wrapper for them, and they
+> +# match the *cc-* pattern. Therefore, an additional case is added for *-ar,
+> +# *-ranlib and *-nm.
+> +# Avoid that a .real is symlinked a second time.
+> +# Also create <arch>-linux-<tool> symlinks.
+> +define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+> +	$(Q)cd $(HOST_DIR)/usr/bin; \
+> +	for i in $(GNU_TARGET_NAME)-*; do \
+> +		case "$$i" in \
+> +		*.real) \
+> +			;; \
+> +		*-ar|*-ranlib|*-nm) \
+> +			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+> +			;; \
+> +		*cc|*cc-*|*++|*++-*|*cpp) \
+> +			rm -f $$i.real; \
+> +			mv $$i $$i.real; \
+> +			ln -sf toolchain-wrapper $$i; \
+> +			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+> +			ln -snf $$i.real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.real; \
+> +			;; \
+> +		*) \
+> +			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
+> +			;; \
+> +		esac; \
+> +	done
+> +
+> +endef
+> +
+> +
+>  include $(sort $(wildcard package/gcc/*/*.mk))
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index b3b02d8..f3ff04f 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -138,8 +138,10 @@ int main(int argc, char **argv)
+>  	/* Fill in the relative paths */
+>  #ifdef BR_CROSS_PATH_REL
+>  	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s", absbasedir, basename);
+> -#else /* BR_CROSS_PATH_ABS */
+> +#elif BR_CROSS_PATH_ABS
+>  	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s", basename);
+> +#else /* BR_CROSS_PATH_SUFFIX */
+> +	ret = snprintf(path, sizeof(path), "%s/usr/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
+>  #endif
+>  	if (ret >= sizeof(path)) {
+>  		perror(__FILE__ ": overflow");
+> 
