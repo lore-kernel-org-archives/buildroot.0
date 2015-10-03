@@ -1,105 +1,24 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 3 Oct 2015 20:46:42 +0200
-Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to
- wait for slow network interfaces
-In-Reply-To: <561021EF.7020105@mind.be>
-References: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
- <20151003164732.28d042e6@free-electrons.com>
- <CAGduivwa-qfDjTNoryRgCV=ZCmDVUa5A8TXTYLbzZ7mcJOY-fA@mail.gmail.com>
- <561021EF.7020105@mind.be>
-Message-ID: <CAGduivwsJABPgb6zDOqrndTBFH-VjFjhLzVbvMwu6HCxHRpfJQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Oct 2015 20:57:31 +0200
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: add option to
+	enable/disable ipv6 support
+In-Reply-To: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>
+ (Andreas Wetzel's message of "Wed, 23 Sep 2015 15:16:34 +0200")
+References: <1443014194-24211-1-git-send-email-andreas.wetzel@nanotronic.ch>
+Message-ID: <87y4fj231g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 3, 2015 at 8:43 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>> "Andreas" == Andreas Wetzel <andreas.wetzel@nanotronic.ch> writes:
 
-> On 03-10-15 19:29, Maxime Hadjinlian wrote:
-> >
-> >
-> > On Sat, Oct 3, 2015 at 5:47 PM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com
-> > <mailto:thomas.petazzoni@free-electrons.com>> wrote:
-> >
-> >     Hello,
-> >
-> >     On Sat,  3 Oct 2015 14:31:45 +0100, Yann E. MORIN wrote:
-> >
-> >     > +    printf "Waiting for interface %s to appear" "${IF}"
-> >     > +    wait=${WAIT_DELAY}
-> >     > +    while [ ${wait} -gt 0 ]; do
-> >     > +        if [ -e "/sys/class/net/${IF}" ]; then
-> >     > +            printf " yes\n"
-> >     > +            return 0
-> >     > +        fi
-> >     > +        sleep 1
-> >     > +        printf "."
-> >     > +        : $((wait--))
-> >     > +    done
-> >
-> >     One thing that I really like in Buildroot is that by default, it
-> >     generates you a system that boots really fast. People often don't
-> have
-> >     to do anything special with Buildroot to make it boot fast. So
-> having a
-> >     shell script that is installed by default and does a "sleep 1" in a
-> >     loop is not very nice :-/
-> >
-> >     Though I agree that it will only slow the boot on systems where the
-> >     network interfaces are not available immediately at boot time.
-> >
-> > I have that trouble too but instead of doing a sleep 1, I "hammer" the
-> system
-> > with sleep 0.1 or usleep 25 if it's available (even usleep 1 can work,
-> since
-> > it's not RT, it takes around 10ms).
->
->  Since sysv init is not parallel, you're not even hammering the system
-> since
-> nothing else is going on except perhaps some hotplug callbacks.
->
-sysv is not, but the shell is. The scripts are started in background and
-then I simply use wait
+ > Added configuration option BR2_PACKAGE_LIBWEBSOCKETS_IPV6 that
+ > adds -DLWS_IPV6=ON/OFF to LIBWEBSOCKETS_CONF_OPTS.
 
->
->  Regards,
->  Arnout
->
-> > This way it's almost transparent and add the necessary requirements
-> before going
-> > on with the boot.
-> >
-> >
-> >     Thomas
-> >     --
-> >     Thomas Petazzoni, CTO, Free Electrons
-> >     Embedded Linux, Kernel and Android engineering
-> >     http://free-electrons.com
-> >     _______________________________________________
-> >     buildroot mailing list
-> >     buildroot at busybox.net <mailto:buildroot@busybox.net>
-> >     http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151003/993b270d/attachment.html>
+So apparently this is a bug in libwebsockets? Have you brought up the
+issue with the libwebsockets developers?
+
+-- 
+Bye, Peter Korsgaard
