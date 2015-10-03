@@ -1,74 +1,31 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 15:31:49 +0200
-Subject: [Buildroot] [PATCH 0/6 RFC] toolchain/external: use generic
- extract commands (branch yem/extract-cmds)
-In-Reply-To: <cover.1441233378.git.yann.morin.1998@free.fr>
-References: <cover.1441233378.git.yann.morin.1998@free.fr>
-Message-ID: <560FD8C5.1060803@openwide.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Oct 2015 15:35:27 +0200
+Subject: [Buildroot] [PATCH 0/2] Early boot fixes
+In-Reply-To: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Mon, 21 Sep 2015 18:29:42 +0200")
+References: <1442852984-28452-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <878u7k6pnk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-Le 03/09/2015 00:51, Yann E. MORIN a ?crit :
-> Hello All!
-> 
-> This series is an attempt at simplifying the way external toolchains are
-> extracted.
-> 
-> Currently, external toolchains use custom extract commands, because they
-> want to exclude a bumch of files during extraction, so as to save a bit
-> of space (locales in some toolchains can account for up to 80% of the
-> size of the toolchain as a whole).
-> 
-> And it turns out, gcc also wants to exclude a bunch of files (java and
-> go, testsuites).
-> 
-> Using custom extract commands means that those packages (and critical
-> ones, at that) can not benefit from the enhancements and fixes made to
-> the generic commands, like the automatic triiping of components.
-> 
-> In this series:
-> 
->   - we first introduce the support for the exclusion list
->   - we always break/dereference hardlinks
->   - we make gcc use the exclusion list
->   - we then make the external toolchains use it (in two passes: one for
->     the non-Blackfin case, one for it, as it is 'seecial')
->   - finaly, we introduce the Codescape MTI toolchain from Vincent
-> 
-> Thomas, there is a question for you in the second commit: would you
-> care to explain what your goal was when you added --hard-dereference
-> when extracting the Blackfin toolchains?
-> 
+ > Hi,
+ > my mdev-without-devtmpfs highlighted a couple errors that are not strictly
+ > related to that work. And since that work might or not have a v2, and is
+ > not very likely to be merged at all, let's have the two small fixes rolling
+ > on their own.
 
-What do you think about a new Kconfig option that allow users to define a list
-of excluded files or directories.
-Some toolchains (ie SourceryCodeBench standard) can bundle eclipse or other
-stuff that are not used in the build process.
+ > Enjoy!
 
-Something like:
+ > Luca Ceresoli (2):
+ >   busybox: inittab: don't redirect output to /dev/null
+ >   skeleton: fix absence of /dev/shm on static, read-only systems
 
-config BR2_TOOLCHAIN_EXTERNAL_EXCLUDES
-	string "Exclude unwanted directories from the toolchain archive"
-	default ""
-	help
-	  If some directories in the toolchain archive are not intended
-	  to be used in the build process, this option define a
-	  space-separated list of patterns to exclude when extracting
-	  the archive.
+Committed both, thanks.
 
-ifneq ($(BR2_TOOLCHAIN_EXTERNAL_EXCLUDES),)
-TOOLCHAIN_EXTERNAL_EXCLUDES = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_EXCLUDES))
-endif
-
-Thoughts ?
-
-Best regards,
-Romain
-
-> Regards,
-> Yann E. MORIN.
+-- 
+Bye, Peter Korsgaard
