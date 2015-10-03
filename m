@@ -1,31 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Oct 2015 23:16:50 +0200
-Subject: [Buildroot] [PATCH] gdb: do not build documentation for bfd and
-	gprof
-In-Reply-To: <1443705837-23322-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 1 Oct 2015 14:23:57 +0100")
-References: <1443705837-23322-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <8737xr1wl9.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 23:16:53 +0200
+Subject: [Buildroot] [PATCH 06/18] imx-lib: remove now-redundant ccache
+ handling
+In-Reply-To: <56104491.5090406@openwide.fr>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442774504-22799-7-git-send-email-arnout@mind.be>
+ <56104491.5090406@openwide.fr>
+Message-ID: <561045C5.8040905@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Arnout,
 
- > Our previous patch to disable the documentation in gdb wasn't complete.
- > There are cases where the documentation under bfd and gprof directories
- > is being built, causing the subsequent failure due to missing makeinfo.
- > This patch fixes that problem.
+Le 03/10/2015 23:11, Romain Naour a ?crit :
+> Hi Arnout,
+> 
+> Le 20/09/2015 20:41, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> You also need to remove now-redundant ccache handling in freescale-imx/imx-vpu
+> package.
 
- > Fixes:
+Sorry, I'm missing [7/18] patch in my local branch.
 
- >   http://autobuild.buildroot.org/results/244/2442e697d8a300496434fd42fcb1ee3941d13e06/
+Best regards,
+Romain
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+> 
+> Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+> 
+> Best regards,
+> Romain
+> 
+>> ---
+>>  package/freescale-imx/imx-lib/imx-lib.mk | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+>> index 92739a8..7046580 100644
+>> --- a/package/freescale-imx/imx-lib/imx-lib.mk
+>> +++ b/package/freescale-imx/imx-lib/imx-lib.mk
+>> @@ -21,7 +21,7 @@ IMX_LIB_INCLUDE = \
+>>  IMX_LIB_MAKE_ENV = \
+>>  	$(TARGET_MAKE_ENV) \
+>>  	$(TARGET_CONFIGURE_OPTS) \
+>> -	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+>> +	CROSS_COMPILE="$(TARGET_CROSS)" \
+>>  	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
+>>  	INCLUDE="$(IMX_LIB_INCLUDE)"
+>>  
+>>
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
