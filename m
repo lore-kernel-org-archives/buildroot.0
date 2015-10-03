@@ -1,41 +1,165 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sat, 3 Oct 2015 21:20:39 +0100
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: improve checking of stack
- smashing support with uclibc
-In-Reply-To: <56100FFC.6020805@mind.be>
-References: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
- <56007E78.1090001@mind.be>
- <CA+BsyQ5a01JK7Cb7GoZK9jkhsPDHTx0NE0j3YHCde=HMPdXoJQ@mail.gmail.com>
- <56100FFC.6020805@mind.be>
-Message-ID: <CA+BsyQ5oKZe_xJWXaT+bUx5-Q=s7Tuz_37O7OX4+v1eJOOS5qw@mail.gmail.com>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Sat, 3 Oct 2015 22:41:09 +0200
+Subject: [Buildroot] [PATCH 7/7] configs: remove old/broken Atmel
+	configurations
+In-Reply-To: <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20151003204109.GH2694@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> So my approach has been to aim at building a set of patches knowing
->> that they are not likely to be integrated, meaning we can focus on
->> keeping the maintenance as simple as possible on the buildroot side.
->
->  Well, no, diverging from upstream makes maintenance harder, not simpler.
+Hi,
 
-I don't see how we have a choice when it comes to older GCC releases.
-Making a relatively big change to trunk and backporting it is going to
-be a more invasive change in this case. But it's academic, as I think
-we agree in any case that the more comprehensive approach (ie doing
-the detection of symbols only and getting rid of all the other checks)
-might be best in the long run.
+On 03/10/2015 at 20:44:17 +0100, Thomas Petazzoni wrote :
+> The at91rm9200df_defconfig configuration is really old: it builds a
+> 2.6.38 kernel with the old days kernel patches and a 2010.06
+> U-Boot. It hasn't been updated since a long time, so let's get rid of
+> it.
+> 
+> The at91sam9260dfc_defconfig, at91sam9261ek_defconfig and
+> at91sam9263ek_defconfig refer to kernel defconfigs that no longer
+> exists, so they fail to build.
+> 
 
->> What do you think of the idea of doing a wholesale change that gets
->> rid of the entire check and simply uses the check for the helper
->> functions ?
->
->  As mentioned above, I think that that is the better approach, but it's really
-> worthwhile to discuss this upstream as well.
+I don't actually see any reason why they couldn't be updated. I'm
+actually using buildroot to build for my at91rm9200ek.
 
-Okay. I will do that next before submitting any further patches here.
+I'll try to update them. However, if you prefer deleting them in the
+meantime, that is fine.
 
-regards
+> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  configs/at91rm9200df_defconfig   | 30 ------------------------------
+>  configs/at91sam9260dfc_defconfig | 19 -------------------
+>  configs/at91sam9261ek_defconfig  | 19 -------------------
+>  configs/at91sam9263ek_defconfig  | 19 -------------------
+>  4 files changed, 87 deletions(-)
+>  delete mode 100644 configs/at91rm9200df_defconfig
+>  delete mode 100644 configs/at91sam9260dfc_defconfig
+>  delete mode 100644 configs/at91sam9261ek_defconfig
+>  delete mode 100644 configs/at91sam9263ek_defconfig
+> 
+> diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+> deleted file mode 100644
+> index 5994f43..0000000
+> --- a/configs/at91rm9200df_defconfig
+> +++ /dev/null
+> @@ -1,30 +0,0 @@
+> -# Architecture
+> -BR2_arm=y
+> -BR2_arm920t=y
+> -
+> -# Filesystem
+> -BR2_TARGET_ROOTFS_JFFS2=y
+> -BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
+> -BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x420
+> -BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x2100
+> -BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+> -BR2_TARGET_ROOTFS_JFFS2_LE=y
+> -
+> -# Lock down headers to avoid breaking with new defaults
+> -BR2_KERNEL_HEADERS_VERSION=y
+> -BR2_DEFAULT_KERNEL_VERSION="2.6.38.8"
+> -BR2_DEFAULT_KERNEL_HEADERS="2.6.38.8"
+> -
+> -# Bootloader
+> -BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="at91rm9200ek"
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.06"
+> -
+> -# Kernel
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
+> -BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
+> -BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+> -BR2_LINUX_KERNEL_DEFCONFIG="at91rm9200ek"
+> diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+> deleted file mode 100644
+> index 20389f3..0000000
+> --- a/configs/at91sam9260dfc_defconfig
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -# Architecture
+> -BR2_arm=y
+> -BR2_arm926t=y
+> -
+> -# Host utilities
+> -#
+> -BR2_PACKAGE_HOST_SAM_BA=y
+> -
+> -# First stage bootloader
+> -BR2_TARGET_AT91BOOTSTRAP=y
+> -BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
+> -
+> -# Second stage bootloader
+> -BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="at91sam9260ek_dataflash_cs0"
+> -
+> -# Kernel
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260_9g20"
+> diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+> deleted file mode 100644
+> index 0824a00..0000000
+> --- a/configs/at91sam9261ek_defconfig
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -# Architecture
+> -BR2_arm=y
+> -BR2_arm926t=y
+> -
+> -# Host utilities
+> -#
+> -BR2_PACKAGE_HOST_SAM_BA=y
+> -
+> -# First stage bootloader
+> -BR2_TARGET_AT91BOOTSTRAP=y
+> -BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9261ek"
+> -
+> -# Second stage bootloader
+> -BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="at91sam9261ek_dataflash_cs0"
+> -
+> -# Kernel
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_DEFCONFIG="at91sam9261_9g10"
+> diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+> deleted file mode 100644
+> index 208e057..0000000
+> --- a/configs/at91sam9263ek_defconfig
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> -# Architecture
+> -BR2_arm=y
+> -BR2_arm926t=y
+> -
+> -# Host utilities
+> -#
+> -BR2_PACKAGE_HOST_SAM_BA=y
+> -
+> -# First stage bootloader
+> -BR2_TARGET_AT91BOOTSTRAP=y
+> -BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9263ek"
+> -
+> -# Second stage bootloader
+> -BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="at91sam9263ek_dataflash_cs0"
+> -
+> -# Kernel
+> -BR2_LINUX_KERNEL=y
+> -BR2_LINUX_KERNEL_DEFCONFIG="at91sam9263"
+> -- 
+> 2.6.0
+> 
 
-Brendan
+-- 
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
