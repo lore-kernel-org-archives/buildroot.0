@@ -1,44 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2015 22:24:36 +0200
-Subject: [Buildroot] [git commit] package/weston: restore the freerdp backend
-Message-ID: <20151003071223.03305818F6@busybox.osuosl.org>
+Date: Sat, 3 Oct 2015 09:09:28 +0200
+Subject: [Buildroot] [git commit] package/freerdp: re-add support for
+	gstreamer
+Message-ID: <20151003071222.F214080585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e58885258e7fb499bbdd7a66ea62cb5016e35ac6
+commit: http://git.buildroot.net/buildroot/commit/?id=6c7f3b28e694da032a80cc5f55ef124f2c6e81ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we've switched to using FreeRDP from master, we can build weston's
-FreeRDP backend again.
+Previously, we expected the user to select gstreamer-0.x on his own,
+to enable gstreamer support in FreeRDP. This could have been a bit
+confusing to the user, as he may have enabled gst-1.x but FreeRDP did
+only support gst-0.x.
 
-Propagate the new dependencies of FreeRDP.
+Also, gstreamer support needs xlib-libxrandr, which was missing in
+FreeRDP's dependencies, so it was never enabled (AFAICS).
 
+(Re-)introduce support for gstreamer-0.x and gstreamer-1.x, since both
+are supported.
+
+We're doing it in a choice, and select whichever version the user chooses,
+rather than automatically detect it as previosuly done.  We can select the
+gstreamer packages, as their dependencies are anyway already covered by the
+ones of FreeRDP.
+
+This also now requires xlib-libxrandr, so hide the choice if X.org is
+not enabled, still offer the option of not using gstreamer if it is.
+
+[Peter: Hide option if gstreamer{,1} aren't enabled,
+	Default to gstreamer{,1} support enabled
+	GStreamer 0.10 support needs host-pkgconf and libxml2]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/Config.in |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ package/freerdp/Config.in  |   31 +++++++++++++++++++++++++++++++
+ package/freerdp/freerdp.mk |   14 +++++++++++++-
+ 2 files changed, 44 insertions(+), 1 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index f530e22..3fd7981 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -41,13 +41,11 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index ab8c3f5..12619a5 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -23,6 +23,37 @@ config BR2_PACKAGE_FREERDP
  
--# RDP backend needs FreeRDP master, while we only have stable-1.1
--comment "RDP backend is broken"
--
-+# FreeRDP needs threads and !static, already the case for weston
- config BR2_PACKAGE_WESTON_RDP
- 	bool "RDP compositor"
--	depends on BROKEN # needs FreeRDP master
- 	depends on BR2_USE_WCHAR # freerdp
-+	depends on BR2_USE_MMU # freerdp, libglib2
- 	select BR2_PACKAGE_FREERDP
- 	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	help
+ if BR2_PACKAGE_FREERDP
+ 
++choice
++	bool "gstreamer support"
++	depends on BR2_PACKAGE_XORG7 # xlib-libxrandr
++	depends on BR2_PACKAGE_GSTREAMER || BR2_PACKAGE_GSTREAMER1
++
++config BR2_PACKAGE_FREERDP_GSTREAMER1
++	bool "gstreamer-1.x"
++	depends on BR2_PACKAGE_GSTREAMER1
++	# gstreamer-1.x dependencies already dependencies of FreeRDP
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++
++config BR2_PACKAGE_FREERDP_GSTREAMER
++	bool "gstreamer-0.x"
++	depends on BR2_PACKAGE_GSTREAMER
++	# gstreamer-0.x dependencies already dependencies of FreeRDP
++	select BR2_PACKAGE_GST_PLUGINS_BASE
++	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_LIBXML2
++
++config BR2_PACKAGE_FREERDP_GSTREAMER_NO
++	bool "none"
++
++endchoice
++
++comment "gstreamer support needs X.Org"
++	depends on !BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_GSTREAMER || BR2_PACKAGE_GSTREAMER1
++
+ config BR2_PACKAGE_FREERDP_SERVER
+ 	bool "server"
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 9205169..30108b6 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -15,7 +15,19 @@ FREERDP_INSTALL_STAGING = YES
+ 
+ FREERDP_CONF_OPTS = -DWITH_MANPAGES=OFF -Wno-dev
+ 
+-FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF -DWITH_GSTREAMER_1_0=OFF
++ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER),y)
++FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=ON
++FREERDP_DEPENDENCIES += gstreamer gst-plugins-base libxml2 host-pkgconf
++else
++FREERDP_CONF_OPTS += -DWITH_GSTREAMER_0_10=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_FREERDP_GSTREAMER1),y)
++FREERDP_CONF_OPTS += -DWITH_GSTREAMER_1_0=ON
++FREERDP_DEPENDENCIES += gstreamer1 gst1-plugins-base
++else
++FREERDP_CONF_OPTS += -DWITH_GSTREAMER_1_0=OFF
++endif
+ 
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ FREERDP_CONF_OPTS += -DWITH_CUPS=ON
