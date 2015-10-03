@@ -1,7 +1,7 @@
 From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sat, 3 Oct 2015 19:21:53 +0200
-Subject: [Buildroot] [PATCH] openal: New package
-Message-ID: <56100EB1.4010100@dawncrow.de>
+Date: Sat, 3 Oct 2015 19:21:55 +0200
+Subject: [Buildroot] [PATCH] package/mesa3d: Add option to build OSMesa
+Message-ID: <56100EB3.2000300@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,88 +10,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 ---
- package/Config.in          |  1 +
- package/openal/Config.in   | 16 ++++++++++++++++
- package/openal/openal.hash |  2 ++
- package/openal/openal.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 45 insertions(+)
- create mode 100644 package/openal/Config.in
- create mode 100644 package/openal/openal.hash
- create mode 100644 package/openal/openal.mk
+ package/mesa3d/Config.in | 7 +++++++
+ package/mesa3d/mesa3d.mk | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 79cbbe6..6d15dd1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -722,6 +722,7 @@ menu "Audio/Sound"
- 	source "package/opencore-amr/Config.in"
- 	source "package/opus/Config.in"
- 	source "package/opusfile/Config.in"
-+	source "package/openal/Config.in"
- 	source "package/portaudio/Config.in"
- 	source "package/speex/Config.in"
- 	source "package/taglib/Config.in"
-diff --git a/package/openal/Config.in b/package/openal/Config.in
-new file mode 100644
-index 0000000..8eb177b
---- /dev/null
-+++ b/package/openal/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_OPENAL
-+	bool "openal"
-+	# OpenAL needs a backend
-+	depends on BR2_PACKAGE_ALSA_LIB || \
-+	           BR2_PACKAGE_PORTAUDIO || \
-+	           BR2_PACKAGE_PULSEAUDIO
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a658986..fdeb599 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -117,6 +117,13 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 
+ endif # BR2_PACKAGE_XORG7
+ 
++comment "Off-screen Rendering"
++
++config BR2_PACKAGE_MESA3D_OSMESA
++	bool "OSMesa library"
 +	help
-+	  OpenAL provides capabilities for playing audio in a virtual
-+	  3D environment. Distance attenuation, doppler shift, and
-+	  directional sound emitters are among the features handled by
-+	  the API.
++	  The OSMesa API provides functions for making off-screen renderings.
 +
-+comment "openal needs a backend"
-+	depends on !BR2_PACKAGE_ALSA_LIB && \
-+	           !BR2_PACKAGE_PORTAUDIO && \
-+	           !BR2_PACKAGE_PULSEAUDIO
-diff --git a/package/openal/openal.hash b/package/openal/openal.hash
-new file mode 100644
-index 0000000..b28b2e2
---- /dev/null
-+++ b/package/openal/openal.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	2f3dcd313fe26391284fbf8596863723f99c65d6c6846dccb48e79cadaf40d5f  openal-soft-1.16.0.tar.bz2
-diff --git a/package/openal/openal.mk b/package/openal/openal.mk
-new file mode 100644
-index 0000000..a67d675
---- /dev/null
-+++ b/package/openal/openal.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# openal
-+#
-+################################################################################
-+
-+OPENAL_VERSION = 1.16.0
-+OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
-+OPENAL_SITE = http://kcat.strangesoft.net/openal-releases/
-+OPENAL_LICENSE = LGPL
-+OPENAL_LICENSE_FILES = COPYING
-+OPENAL_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+OPENAL_DEPENDENCIES += alsa-lib
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+ comment "Additional API Support"
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f7feb0f..70ec2ec 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -110,6 +110,12 @@ endif
+ 
+ # APIs
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++MESA3D_CONF_OPTS += --enable-osmesa
++else
++MESA3D_CONF_OPTS += --disable-osmesa
 +endif
 +
-+ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+OPENAL_DEPENDENCIES += portaudio
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+OPENAL_DEPENDENCIES += pulseaudio
-+endif
-+
-+$(eval $(cmake-package))
+ # Always enable OpenGL:
+ #   - it is needed for GLES (mesa3d's ./configure is a bit weird)
+ #   - but if no DRI driver is enabled, then libgl is not built,
 -- 
 1.9.1
