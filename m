@@ -1,33 +1,62 @@
-From: Herman Theron <herman.theron@gmail.com>
-Date: Sat, 3 Oct 2015 20:28:54 +0200
-Subject: [Buildroot] Help needed in compiling python cryptography module
-Message-ID: <CABC2aiqvRmmTsfJ4aoA9zbScrM-nRrquLG-WYSQFGTaiYN1ZUg@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 3 Oct 2015 20:29:08 +0200
+Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to
+ wait for slow network interfaces
+In-Reply-To: <20151003164732.28d042e6@free-electrons.com>
+References: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
+ <20151003164732.28d042e6@free-electrons.com>
+Message-ID: <CAGduivwa-qfDjTNoryRgCV=ZCmDVUa5A8TXTYLbzZ7mcJOY-fA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Buildroot list,
+On Sat, Oct 3, 2015 at 5:47 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-I'm trying to create a  Buildroot package for the Crossbar.io python
-software. This package has a lot of dependencies, and I'm slowly working
-through them.
+> Hello,
+>
+> On Sat,  3 Oct 2015 14:31:45 +0100, Yann E. MORIN wrote:
+>
+> > +    printf "Waiting for interface %s to appear" "${IF}"
+> > +    wait=${WAIT_DELAY}
+> > +    while [ ${wait} -gt 0 ]; do
+> > +        if [ -e "/sys/class/net/${IF}" ]; then
+> > +            printf " yes\n"
+> > +            return 0
+> > +        fi
+> > +        sleep 1
+> > +        printf "."
+> > +        : $((wait--))
+> > +    done
+>
+> One thing that I really like in Buildroot is that by default, it
+> generates you a system that boots really fast. People often don't have
+> to do anything special with Buildroot to make it boot fast. So having a
+> shell script that is installed by default and does a "sleep 1" in a
+> loop is not very nice :-/
+>
+> Though I agree that it will only slow the boot on systems where the
+> network interfaces are not available immediately at boot time.
+>
+I have that trouble too but instead of doing a sleep 1, I "hammer" the
+system with sleep 0.1 or usleep 25 if it's available (even usleep 1 can
+work, since it's not RT, it takes around 10ms).
+This way it's almost transparent and add the necessary requirements before
+going on with the boot.
 
-I'm picking up a similar issue as
-http://lists.busybox.net/pipermail/buildroot/2015-March/121816.html
-<https://her-webmail.sansa.org.za/owa/redir.aspx?C=ef424837439d4f8283da45e6a6a2085f&URL=http%3a%2f%2flists.busybox.net%2fpipermail%2fbuildroot%2f2015-March%2f121816.html>
- in compiling python-cryptography (development platform is 64bit Ubuntu,
-cross compiling for 32-bit) - the wrong cffi backend is chosen: "wrong ELF
-class: ELFCLASS32" (cffi compiled fine for the correct architecture,
-cryptography is using the host info.)
-
-Can anybody in assisting to get a python-cryptogarphy module to correctly
-crosscompile?
-
-Regards
-
-Herman
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151003/88cd0adb/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151003/e4cf1363/attachment.html>
