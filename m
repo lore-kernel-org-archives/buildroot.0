@@ -1,86 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Oct 2015 20:44:10 +0100
-Subject: [Buildroot] [PATCH 0/7] configs: fix build of many defconfigs
-Message-ID: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat,  3 Oct 2015 20:44:11 +0100
+Subject: [Buildroot] [PATCH 1/7] configs: remove gnublin_defconfig
+In-Reply-To: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1443901457-7914-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This defconfig tries to fetch its kernel source code and U-Boot source
+code from gitorious.org, which is not longer available. Therefore,
+this defconfig has been failing to build since quite some time. Since
+there's no obvious other place to grab the kernel and u-boot source
+code, and the defconfig was not updated since a long time, let's
+simply get rid of it.
 
-This set of patches fix the build of many defconfigs that currently do
-not build properly:
-
- * gnublin_defconfig: does not build because needs gitorious.org
-   sources, so this defconfig is removed.
-
- * zedboard_defconfig, olimex_a20_olinuxino_lime_defconfig: don't
-   build because a host DTC compiler is needed by U-Boot. So a patch
-   is added to allow to build DTC for the host, and then a patch for
-   U-Boot to make it optionally depend on host-dtc.
-
- * calao_usb_a9g20_lpw_defconfig and calao_qil_a9260_defconfig: don't
-   build due to a change in the logic of how patches are applied. To
-   fix this, patches are moved around and BR2_GLOBAL_PATCH_DIR is
-   used.
-
- * at91rm9200df_defconfig: refers to a 2.6.38 kernel with a huge
-   non-mainline patch, while I know the board is much better supported
-   in mainline now. Defconfig removed.
-
- * at91sam9260dfc_defconfig, at91sam9261ek_defconfig,
-   at91sam9263ek_defconfig: refer to non-existing kernel defconfigs,
-   so they don't build. Defconfigs removed.
-
-Best regards,
-
-Thomas
-
-Peter Seiderer (1):
-  dtc: add host build
-
-Thomas Petazzoni (6):
-  configs: remove gnublin_defconfig
-  u-boot: add an option to indicate that DTC is needed
-  configs: fix configurations that need host-dtc
-  configs: fix build of calao_usb_a9g20_lpw_defconfig
-  configs: fix build of calao_qil_a9260_defconfig
-  configs: remove old/broken Atmel configurations
-
- .../at91bootstrap/0001-qil-a9260.patch}            |  0
- .../barebox/0001-qil-a9260.patch}                  |  0
- .../linux/0001-qil-a9260.patch}                    |  0
- .../at91bootstrap/0001-usb-a9g20-lpw.patch}        |  0
- .../barebox/0001-usb-a9g20-lpw.patch}              |  0
- boot/uboot/Config.in                               |  7 +++++
- boot/uboot/uboot.mk                                |  4 +++
- configs/at91rm9200df_defconfig                     | 30 ----------------------
- configs/at91sam9260dfc_defconfig                   | 19 --------------
- configs/at91sam9261ek_defconfig                    | 19 --------------
- configs/at91sam9263ek_defconfig                    | 19 --------------
- configs/calao_qil_a9260_defconfig                  |  6 ++---
- configs/calao_usb_a9g20_lpw_defconfig              |  3 +--
- configs/gnublin_defconfig                          | 28 --------------------
- configs/olimex_a20_olinuxino_lime_defconfig        |  1 +
- configs/zedboard_defconfig                         |  1 +
- linux/linux.mk                                     | 10 --------
- package/Config.in.host                             |  1 +
- package/dtc/Config.in.host                         |  9 +++++++
- package/dtc/dtc.mk                                 | 10 ++++++++
- 20 files changed, 37 insertions(+), 130 deletions(-)
- rename board/calao/qil-a9260/{at91bootstrap-1.16-qil-a9260.patch => patches/at91bootstrap/0001-qil-a9260.patch} (100%)
- rename board/calao/qil-a9260/{barebox-2012.07.0-qil-a9260.patch => patches/barebox/0001-qil-a9260.patch} (100%)
- rename board/calao/qil-a9260/{linux-3.4.7.patch => patches/linux/0001-qil-a9260.patch} (100%)
- rename board/calao/usb-a9g20-lpw/{at91bootstrap-1.16-usb-a9g20-lpw.patch => patches/at91bootstrap/0001-usb-a9g20-lpw.patch} (100%)
- rename board/calao/usb-a9g20-lpw/{barebox-2012.07.0-usb-a9g20-lpw.patch => patches/barebox/0001-usb-a9g20-lpw.patch} (100%)
- delete mode 100644 configs/at91rm9200df_defconfig
- delete mode 100644 configs/at91sam9260dfc_defconfig
- delete mode 100644 configs/at91sam9261ek_defconfig
- delete mode 100644 configs/at91sam9263ek_defconfig
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/gnublin_defconfig | 28 ----------------------------
+ 1 file changed, 28 deletions(-)
  delete mode 100644 configs/gnublin_defconfig
- create mode 100644 package/dtc/Config.in.host
 
+diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
+deleted file mode 100644
+index 369c9da..0000000
+--- a/configs/gnublin_defconfig
++++ /dev/null
+@@ -1,28 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# System
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.7"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_7=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Gnublin"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=475000
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2009.11_gnublin_support_v2"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v3.7-gnublin-2"
+-BR2_LINUX_KERNEL_DEFCONFIG="gnublin"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 2.6.0
