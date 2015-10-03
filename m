@@ -1,65 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2015 15:26:21 +0200
-Subject: [Buildroot] [git commit] valgrind: build for the right MIPS ISA
-	revision level
-Message-ID: <20151003132847.EBA0E818A0@busybox.osuosl.org>
+Date: Sat, 3 Oct 2015 15:28:04 +0200
+Subject: [Buildroot] [git commit] links: bump to version 2.12
+Message-ID: <20151003132848.0D0DF7FD52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4fc3a6fd7472089ebf4b725ed11abf1f18258cb5
+commit: http://git.buildroot.net/buildroot/commit/?id=aba0f80d899b99627795d555ae821c50a45c545f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
--march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture, it
-forcibly adds -march=mips64. This causes Valgrind to be built always for
-the first ISA revision level (R1), even when the user has configured
-Buildroot for the second ISA revision level (R2).
-
-Since R2 is backwards compatible with R1, you can run a Valgrind built
-for R1 in an R2 core. This is why nobody noticed about this problem, or
-at least nobody complained.
-
-But, since (I hope) we will support R6 in Buildroot in the near future,
-this problem will become very important because R6 is not backwards
-compatible with R1 or R2, so building Valgrind for R1 when your target
-is R6 will result in a non-working Valgrind.
-
-Override the CFLAGS variable (which Valgrind appends to its CFLAGS) and
-pass the right -march option, so they take precedence over Valgrind's
-wrongfully detected value.
+And also use the .tar.bz2 tarball to save disk space and bandwidth.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/valgrind/valgrind.mk |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
+ package/links/links.hash |    2 +-
+ package/links/links.mk   |    3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index f8f205e..9500264 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -13,6 +13,19 @@ VALGRIND_CONF_OPTS = --disable-tls
- VALGRIND_AUTORECONF = YES
- VALGRIND_INSTALL_STAGING = YES
+diff --git a/package/links/links.hash b/package/links/links.hash
+index 910bb69..2d9a7b3 100644
+--- a/package/links/links.hash
++++ b/package/links/links.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e2d4e193eb3147f0d745e28d37d510edb22697707e329cbe361bb79037bae332	links-2.9.tar.gz
++sha256 98411811ded1e8028f5aed708dd7d8ec0ae63ce24c2991a0241a989b7d09d84e  links-2.12.tar.bz2
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 3b9f011..ba55061 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
  
-+# When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
-+# -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture,
-+# it forcibly adds -march=mips64. This causes Valgrind to be built
-+# always for the first ISA revision level (R1), even when the user has
-+# configured Buildroot for the second ISA revision level (R2).
-+#
-+# Override the CFLAGS variable (which Valgrind appends to its CFLAGS)
-+# and pass the right -march option, so they take precedence over
-+# Valgrind's wrongfully detected value.
-+ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-+VALGRIND_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -march=$(BR2_GCC_TARGET_ARCH)"
-+endif
-+
- # On ARM, Valgrind only supports ARMv7, and uses the arch part of the
- # host tuple to determine whether it's being built for ARMv7 or
- # not. Therefore, we adjust the host tuple to specify we're on
+-LINKS_VERSION = 2.9
++LINKS_VERSION = 2.12
++LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
+ LINKS_SITE = http://links.twibright.com/download
+ LINKS_DEPENDENCIES = host-pkgconf
+ LINKS_LICENSE = GPLv2+
