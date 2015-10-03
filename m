@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2015 23:39:54 +0200
-Subject: [Buildroot] [git commit] package/pixman: bump version to 0.32.8
-Message-ID: <20151003214139.613F281926@busybox.osuosl.org>
+Date: Sat, 3 Oct 2015 23:40:13 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: bump
+	to version 0.10.8
+Message-ID: <20151003214139.7634F81926@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3db431619072b95fada2edd1ae5a30e901a3a647
+commit: http://git.buildroot.net/buildroot/commit/?id=60be80914fa263ecc06e907bc6d1249dbc80018a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix .hash comment as pointed out by Vincent]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pixman/pixman.hash |    4 ++--
- package/pixman/pixman.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-sis.hash                    |    2 ++
+ .../xdriver_xf86-video-sis.mk                      |    5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
-index c6ec14e..04e2620 100644
---- a/package/pixman/pixman.hash
-+++ b/package/pixman/pixman.hash
-@@ -1,2 +1,2 @@
--# From http://cairographics.org/releases/pixman-0.32.6.tar.gz.sha1
--sha1	8791343cbf6d99451f4d08e8209d6ac11bf96df2	pixman-0.32.6.tar.gz
-+# From http://cairographics.org/releases/pixman-0.32.8.tar.gz.sha1
-+sha1	c1119bbdb587c56009b653e6f81c083f98a20135	pixman-0.32.8.tar.gz
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index a244ea8..0e4b0b9 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+new file mode 100644
+index 0000000..dfc7814
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
+@@ -0,0 +1,2 @@
++# From http://lists.x.org/archives/xorg-announce/2015-August/002628.html
++sha256	c8f3f2577f69334dfcc4bf96477dce45161170555f3abdfa105599e61bc7d3fe	xf86-video-sis-0.10.8.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+index ee93526..b1fce83 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PIXMAN_VERSION = 0.32.6
-+PIXMAN_VERSION = 0.32.8
- PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_LICENSE = MIT
- PIXMAN_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_SIS_VERSION = 0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
+-XDRIVER_XF86_VIDEO_SIS_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-sis
++XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.8
++XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
++XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
