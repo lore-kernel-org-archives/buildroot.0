@@ -1,214 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2015 17:11:01 +0200
-Subject: [Buildroot] [git commit] gmock: new package
-Message-ID: <20151003151432.515DC817E5@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Oct 2015 16:14:40 +0100
+Subject: [Buildroot] [PATCH v3 2/4] pkg-generic: prevent _SITE URLs with
+ a trailing slash
+In-Reply-To: <560FEF35.5060508@lucaceresoli.net>
+References: <1443456634-21484-1-git-send-email-luca@lucaceresoli.net>
+ <1443456634-21484-3-git-send-email-luca@lucaceresoli.net>
+ <20150930124554.4a7abec2@free-electrons.com> <560FC397.2050404@mind.be>
+ <560FEF35.5060508@lucaceresoli.net>
+Message-ID: <560FF0E0.6010703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63086aa42f28c806663ab9df15c94083f2a8bb1f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
-specifics in mind, Google C++ Mocking Framework (or Google Mock for
-short) is a library for writing and using C++ mock classes.
 
-Google Mock:
+On 03-10-15 16:07, Luca Ceresoli wrote:
+> Hi Arnout, Thomas,
+> 
+> Arnout Vandecappelle wrote:
+> [...]
+>>
+>>>
+>>> I am wondering if there are indeed no places left where a final / could
+>>> sneak in. For example, when you specify a custom tarball location for
+>>> packages like U-Boot, the Linux kernel and so on.
+>>>
+>>> For Linux and U-Boot, it is taken care of:
+>>>
+>>> UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
+>>>
+>>> LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
+>>>
+>>> But for example, for the external toolchain site:
+>>>
+>>> TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+>>>
+>>> I believe this means that the TOOLCHAIN_EXTERNAL_SITE variable will
+>>> contain a final /. But that's indeed the only case I could find from a
+>>> quick inspection.
+>>
+>>   Well, to be consistent, the removal should not be done for U-Boot or Linux
+>> either, and instead the user should get this error message when he builds.
+> 
+> But FOO_SITE is generated internally when the user chooses to fetch from
+> a custom URL. The user has no access to FOO_SITE in these cases, so
+> Buildroot should strip them.
 
-  * lets you create mock classes trivially using simple macros,
-  * supports a rich set of matchers and actions,
-  * handles unordered, partially ordered, or completely ordered
-    expectations,
-  * is extensible by users, and
-  * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
-    Symbian.
+ You're completely right, sorry!
 
-  http://code.google.com/p/googlemock/
 
-There are both host and target packages. The target one has include
-files required to compile the tests and the static libraries required
-to link/run them. The host package installs gmock_gen, a Python script
-used to generate code mocks.
+> So I guess I'll add a patsubst to toolchain-external too, and hunt for
+> other places where it might be needed.
 
-Notice that GMock 1.7.0 requires the Python 2 host package even if
-Python 3 is selected as a target package.
+ I can't think of an easy grep for that :-(
 
-Signed-off-by: Marcelo Barbosa <marcelo.barbosa@datacom.ind.br>
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                          |    1 +
- package/gmock/0001-force-use-python2.patch |   20 +++++++++
- package/gmock/Config.in                    |   32 ++++++++++++++
- package/gmock/gmock.hash                   |    2 +
- package/gmock/gmock.mk                     |   62 ++++++++++++++++++++++++++++
- package/gtest/gtest.mk                     |    1 +
- 6 files changed, 118 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 870da79..2091d4e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1079,6 +1079,7 @@ menu "Other"
- 	source "package/gflags/Config.in"
- 	source "package/glibmm/Config.in"
- 	source "package/glm/Config.in"
-+	source "package/gmock/Config.in"
- 	source "package/gmp/Config.in"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
-diff --git a/package/gmock/0001-force-use-python2.patch b/package/gmock/0001-force-use-python2.patch
-new file mode 100644
-index 0000000..5dcb231
---- /dev/null
-+++ b/package/gmock/0001-force-use-python2.patch
-@@ -0,0 +1,20 @@
-+Force use of Python 2 even when Python 3 is the default Python interpreter.
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-+
-+--- ./gtest/scripts/fuse_gtest_files.py.orig	2013-09-18 14:48:30.000000000 -0300
-++++ ./gtest/scripts/fuse_gtest_files.py	2015-07-22 15:42:53.291591205 -0300
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env python
-++#!/usr/bin/env python2
-+ #
-+ # Copyright 2009, Google Inc.
-+ # All rights reserved.
-+--- ./scripts/generator/gmock_gen.py.orig	2013-09-18 14:50:15.000000000 -0300
-++++ ./scripts/generator/gmock_gen.py	2015-07-22 17:06:51.071815634 -0300
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env python
-++#!/usr/bin/env python2
-+ #
-+ # Copyright 2008 Google Inc. All Rights Reserved.
-+ #
-diff --git a/package/gmock/Config.in b/package/gmock/Config.in
-new file mode 100644
-index 0000000..ec3eb92
---- /dev/null
-+++ b/package/gmock/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_GMOCK
-+	bool "gmock"
-+	select BR2_PACKAGE_GTEST
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Inspired by jMock, EasyMock, and Hamcrest, and designed with C++'s
-+	  specifics in mind, Google C++ Mocking Framework (or Google Mock for
-+	  short) is a library for writing and using C++ mock classes.
-+
-+	  Google Mock:
-+
-+	    * lets you create mock classes trivially using simple macros,
-+	    * supports a rich set of matchers and actions,
-+	    * handles unordered, partially ordered, or completely ordered
-+	      expectations,
-+	    * is extensible by users, and
-+	    * works on Linux, Mac OS X, Windows, Windows Mobile, minGW, and
-+	      Symbian.
-+
-+	    http://code.google.com/p/googlemock/
-+
-+	  There are both host and target packages. The target one has include
-+	  files required to compile the tests and the static libraries required
-+	  to link/run them. The host package installs gmock_gen, a Python script
-+	  used to generate code mocks.
-+
-+comment "gmock needs a toolchain w/ C++, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gmock/gmock.hash b/package/gmock/gmock.hash
-new file mode 100644
-index 0000000..2b71739
---- /dev/null
-+++ b/package/gmock/gmock.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 26fcbb5925b74ad5fc8c26b0495dfc96353f4d553492eb97e85a8a6d2f43095b  gmock-1.7.0.zip
-diff --git a/package/gmock/gmock.mk b/package/gmock/gmock.mk
-new file mode 100644
-index 0000000..a0351d0
---- /dev/null
-+++ b/package/gmock/gmock.mk
-@@ -0,0 +1,62 @@
-+################################################################################
-+#
-+# gmock
-+#
-+################################################################################
-+
-+# Make sure this remains the same version as the gtest one
-+GMOCK_VERSION = 1.7.0
-+GMOCK_SOURCE = gmock-$(GMOCK_VERSION).zip
-+GMOCK_SITE = http://googlemock.googlecode.com/files
-+GMOCK_INSTALL_STAGING = YES
-+GMOCK_INSTALL_TARGET = NO
-+GMOCK_LICENSE = BSD-3c
-+GMOCK_LICENSE_FILES = LICENSE
-+GMOCK_DEPENDENCIES = gtest host-gmock
-+
-+# GMock 1.7.0 relies on Python 2.7 syntax which is NOT compatible with Python3.
-+HOST_GMOCK_DEPENDENCIES = host-python
-+HOST_GMOCK_PYTHONPATH=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+# Static linking is required in order to keep the GMock package completely
-+# separated from GTest. According to GMock's README file:
-+#
-+#   "Google Mock can be used as a DLL, but the same DLL must contain Google
-+#    Test as well.  See Google Test's README file for instructions on how to
-+#    set up necessary compiler settings".
-+GMOCK_CONF_OPTS = --enable-static --disable-shared
-+
-+define GMOCK_EXTRACT_CMDS
-+	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(BUILD_DIR)
-+endef
-+
-+# We can't use the default rule for autotools-package staging because it fails
-+# because it tries to rebuild/install gtest stuff and fails after this error:
-+#    "'make install' is dangerous and not supported. Instead, see README for
-+#      how to integrate Google Test into your build system."
-+define GMOCK_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock.a $(STAGING_DIR)/usr/lib/libgmock.a
-+	$(INSTALL) -D -m 0755 $(@D)/lib/.libs/libgmock_main.a $(STAGING_DIR)/usr/lib/libgmock_main.a
-+	$(INSTALL) -d -m 0755 $(STAGING_DIR)/usr/include/gmock/
-+	cp -rp $(@D)/include/gmock/* $(STAGING_DIR)/usr/include/gmock/
-+endef
-+
-+# Unzipping inside $(@D) and moving everything from the created subdirectory is
-+# required because unzipping directly in $(BUILD_DIR) would cause host-gmock to
-+# overwrite the gmock subdir instead of unzipping in a host-gmock subdir.
-+define HOST_GMOCK_EXTRACT_CMDS
-+	$(UNZIP) $(DL_DIR)/$(GMOCK_SOURCE) -d $(@D)
-+	mv $(@D)/gmock-$(GMOCK_VERSION)/* $(@D)
-+	rmdir $(@D)/gmock-$(GMOCK_VERSION)
-+endef
-+
-+define HOST_GMOCK_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/scripts/generator/gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen.py
-+	ln -sf gmock_gen.py $(HOST_DIR)/usr/bin/gmock_gen
-+	cp -rp $(@D)/scripts/generator/cpp $(HOST_GMOCK_PYTHONPATH)
-+endef
-+
-+$(eval $(autotools-package))
-+# The host package does not build anything, just installs gmock_gen stuff, so
-+# it does not need to be a host-autotools-package.
-+$(eval $(host-generic-package))
-diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
-index 562acf0..da08621 100644
---- a/package/gtest/gtest.mk
-+++ b/package/gtest/gtest.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# Make sure this remains the same version as the gmock one
- GTEST_VERSION = 1.7.0
- GTEST_SOURCE = gtest-$(GTEST_VERSION).zip
- GTEST_SITE = http://googletest.googlecode.com/files
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
