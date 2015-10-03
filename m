@@ -1,61 +1,80 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 3 Oct 2015 13:33:07 +0100
-Subject: [Buildroot] [PATCH 2/2] dhcpcd: move libexecdir
-In-Reply-To: <1443868098-15805-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1443868098-15805-1-git-send-email-gustavo@zacarias.com.ar>
- <1443868098-15805-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <560FCB03.9030306@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Oct 2015 14:34:20 +0200
+Subject: [Buildroot] [PATCH] squashfs: Add lz4 hc compression
+In-Reply-To: <1439279901-4337-1-git-send-email-m.weisser.m@gmail.com>
+ (Matthias Weisser's message of "Tue, 11 Aug 2015 09:58:21 +0200")
+References: <1439279901-4337-1-git-send-email-m.weisser.m@gmail.com>
+Message-ID: <87lhbk871v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Matthias" == Matthias Weisser <m.weisser.m@gmail.com> writes:
 
-On 03/10/15 11:28, Gustavo Zacarias wrote:
-> The default is $PREFIX/libexec which ends up in an ugly and non-standard
-> /libexec dir in the target.
-> Move it to $PREFIX/lib/dhcpcd which is far more nicer and suitable.
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Hi,
 
-It does install the libexec files into that directory:
+Sorry for the slow response.
 
-$ find output/target/lib/dhcpcd/
-output/target/lib/dhcpcd/
-output/target/lib/dhcpcd/dhcpcd-run-hooks
-output/target/lib/dhcpcd/dhcpcd-hooks
-output/target/lib/dhcpcd/dhcpcd-hooks/50-yp.conf
-output/target/lib/dhcpcd/dhcpcd-hooks/10-wpa_supplicant
-output/target/lib/dhcpcd/dhcpcd-hooks/02-dump
-output/target/lib/dhcpcd/dhcpcd-hooks/15-timezone
-output/target/lib/dhcpcd/dhcpcd-hooks/01-test
-output/target/lib/dhcpcd/dhcpcd-hooks/20-resolv.conf
-output/target/lib/dhcpcd/dhcpcd-hooks/50-ntp.conf
-output/target/lib/dhcpcd/dhcpcd-hooks/29-lookup-hostname
-output/target/lib/dhcpcd/dhcpcd-hooks/30-hostname
+ > lz4 offers a high compression mode. A minimalistic file system shrinks by about 15%.
+ > Signed-off-by: Matthias Weisser <m.weisser.m@gmail.com>
+ > ---
+ >  fs/squashfs/Config.in   | 3 +++
+ >  fs/squashfs/squashfs.mk | 4 ++++
+ >  2 files changed, 7 insertions(+)
 
-Regards,
+ > diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
+ > index ca9ddb2..94e126e 100644
+ > --- a/fs/squashfs/Config.in
+ > +++ b/fs/squashfs/Config.in
+ > @@ -18,6 +18,9 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
+ >  config BR2_TARGET_ROOTFS_SQUASHFS4_LZ4
+ >  	bool "lz4"
+ 
+ > +config BR2_TARGET_ROOTFS_SQUASHFS4_LZ4_HC
+ > +	bool "lz4hc"
 
-Vincent.
+Is there ever any use case for enabling lz4 WITHOUT the high compression
+option? The only drawback is somewhat slower filesystem creation, right?
+Perhaps we can just adjust the existing lz4 option to use -Xhc?
 
-> ---
->   package/dhcpcd/dhcpcd.mk | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-> index de169b5..66928e2 100644
-> --- a/package/dhcpcd/dhcpcd.mk
-> +++ b/package/dhcpcd/dhcpcd.mk
-> @@ -23,6 +23,7 @@ define DHCPCD_CONFIGURE_CMDS
->   	(cd $(@D); \
->   	$(TARGET_CONFIGURE_OPTS) ./configure \
->   		--os=linux \
-> +		--libexecdir=/lib/dhcpcd \
->   		$(DHCPCD_CONFIG_OPTS) )
->   endef
->
->
+
+
+> +
+ >  config BR2_TARGET_ROOTFS_SQUASHFS4_LZMA
+ >  	bool "lzma"
+ 
+ > diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
+ > index 446906f..528e0f7 100644
+ > --- a/fs/squashfs/squashfs.mk
+ > +++ b/fs/squashfs/squashfs.mk
+ > @@ -9,6 +9,9 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
+ >  ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
+ >  ROOTFS_SQUASHFS_ARGS += -comp lz4
+ >  else
+ > +ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4_HC),y)
+ > +ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
+ > +else
+ >  ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
+ >  ROOTFS_SQUASHFS_ARGS += -comp lzo
+ >  else
+ > @@ -23,6 +26,7 @@ endif
+ >  endif
+ >  endif
+ >  endif
+ > +endif
+ 
+ >  define ROOTFS_SQUASHFS_CMD
+ >  	$(HOST_DIR)/usr/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
+ > -- 
+ > 2.1.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+Bye, Peter Korsgaard
