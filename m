@@ -1,44 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2015 15:28:04 +0200
-Subject: [Buildroot] [git commit] links: bump to version 2.12
-Message-ID: <20151003132848.0D0DF7FD52@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  3 Oct 2015 14:31:45 +0100
+Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to wait
+	for slow network interfaces
+Message-ID: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aba0f80d899b99627795d555ae821c50a45c545f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On some machines, the network interface is slow to appear. For example,
+on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
+and our standard boot process is too fast, so our network startup script
+is called before the USB bus is compeltely enumerated, thus it can't
+configure eth0.
 
-And also use the .tar.bz2 tarball to save disk space and bandwidth.
+If Buildroot is configured to do a DHCP on an interface, install a
+startup script, just before S40network, that waits for that interface.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Since Buildroot can only be configured to run DHCP on a single interface,
+we do not need a script that waits for more than one interface.
+
+Closes #8116.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/links/links.hash |    2 +-
- package/links/links.mk   |    3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/skeleton/S39wait-for-network-if | 43 +++++++++++++++++++++++++++++++++
+ package/skeleton/skeleton.mk            |  2 ++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 package/skeleton/S39wait-for-network-if
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index 910bb69..2d9a7b3 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	e2d4e193eb3147f0d745e28d37d510edb22697707e329cbe361bb79037bae332	links-2.9.tar.gz
-+sha256 98411811ded1e8028f5aed708dd7d8ec0ae63ce24c2991a0241a989b7d09d84e  links-2.12.tar.bz2
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 3b9f011..ba55061 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+diff --git a/package/skeleton/S39wait-for-network-if b/package/skeleton/S39wait-for-network-if
+new file mode 100644
+index 0000000..010026e
+--- /dev/null
++++ b/package/skeleton/S39wait-for-network-if
+@@ -0,0 +1,43 @@
++#!/bin/sh
++
++# In case we have a slow-to-appear interface (e.g. eth-over-USB),
++# and we need to configure it, wait until it appears. But not too
++# long either. WAIT_DELAY is in seconds.
++WAIT_DELAY=15
++
++wait_for_IF() {
++    IF="$(sed -r -e '/^auto lo/d;' \
++                 -e '/^auto (.+)$/!d;' \
++                 -e 's//\1/;' \
++                 /etc/network/interfaces
++         )"
++    if [ -z "${IF}" -o -e "/sys/class/net/${IF}" ]; then
++        return 0
++    fi
++    printf "Waiting for interface %s to appear" "${IF}"
++    wait=${WAIT_DELAY}
++    while [ ${wait} -gt 0 ]; do
++        if [ -e "/sys/class/net/${IF}" ]; then
++            printf " yes\n"
++            return 0
++        fi
++        sleep 1
++        printf "."
++        : $((wait--))
++    done
++    printf " no.\n"
++    return 1
++}
++
++case "$1" in
++  start)
++	wait_for_IF
++	;;
++  stop)
++	;;
++  restart)
++	"$0" start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++esac
+diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
+index 48e7085..733b86f 100644
+--- a/package/skeleton/skeleton.mk
++++ b/package/skeleton/skeleton.mk
+@@ -76,6 +76,8 @@ define SET_NETWORK_DHCP
+ 		echo "auto $(NETWORK_DHCP_IFACE)";                   \
+ 		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
+ 	) >> $(TARGET_DIR)/etc/network/interfaces
++	$(INSTALL) -D -m 0755 package/skeleton/S39wait-for-network-if \
++		$(TARGET_DIR)/etc/init.d/S39wait-for-network-if
+ endef
+ endif
  
--LINKS_VERSION = 2.9
-+LINKS_VERSION = 2.12
-+LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
- LINKS_LICENSE = GPLv2+
+-- 
+1.9.1
