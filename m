@@ -1,53 +1,55 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  3 Oct 2015 16:14:23 +0200
-Subject: [Buildroot] [PATCH v3 2/3] skeleton: Remove bash specific files
+Date: Sat,  3 Oct 2015 16:14:24 +0200
+Subject: [Buildroot] [PATCH v3 3/3] skeleton: Pretty fixes for /etc/profile
 In-Reply-To: <1443881664-9100-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1443881664-9100-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1443881664-9100-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1443881664-9100-3-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- system/skeleton/root/.bash_history | 0
- system/skeleton/root/.bash_logout  | 7 -------
- system/skeleton/root/.bash_profile | 7 -------
- 3 files changed, 14 deletions(-)
- delete mode 100644 system/skeleton/root/.bash_history
- delete mode 100644 system/skeleton/root/.bash_logout
- delete mode 100644 system/skeleton/root/.bash_profile
+Fix indent and put PATH on a single line.
 
-diff --git a/system/skeleton/root/.bash_history b/system/skeleton/root/.bash_history
-deleted file mode 100644
-index e69de29..0000000
-diff --git a/system/skeleton/root/.bash_logout b/system/skeleton/root/.bash_logout
-deleted file mode 100644
-index 77ef1f9..0000000
---- a/system/skeleton/root/.bash_logout
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# ~/.bash_logout: executed by bash(1) when login shell exits.
--
--# when leaving the console clear the screen to increase privacy
--
--case "`tty`" in
--    /dev/tty[0-9]*) clear
--esac
-diff --git a/system/skeleton/root/.bash_profile b/system/skeleton/root/.bash_profile
-deleted file mode 100644
-index 0ee04a3..0000000
---- a/system/skeleton/root/.bash_profile
-+++ /dev/null
-@@ -1,7 +0,0 @@
--# .bash_profile
--
--umask 022
--
--if [ -f ~/.bashrc ]; then
--    source ~/.bashrc
--fi
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ system/skeleton/etc/profile | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index c40a311..df0be7f 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -1,13 +1,9 @@
+-export PATH=\
+-/bin:\
+-/sbin:\
+-/usr/bin:\
+-/usr/sbin
++export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+ 
+ if [ "`id -u`" -eq 0 ]; then
+-    export PS1='# '
++	export PS1='# '
+ else
+-    export PS1='$ '
++	export PS1='$ '
+ fi
+ 
+ export PAGER='/bin/more '
+@@ -15,8 +11,8 @@ export EDITOR='/bin/vi'
+ 
+ # Source configuration files from /etc/profile.d
+ for i in /etc/profile.d/*.sh ; do
+-    if [ -r "$i" ]; then
+-        . $i
+-    fi
+-    unset i
++	if [ -r "$i" ]; then
++		. $i
++	fi
++	unset i
+ done
 -- 
 2.5.3
