@@ -1,57 +1,50 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 23:34:13 +0200
-Subject: [Buildroot] [PATCH 11/18] cryptodev-linux: remove now-redundant
- fix-ccache-compile patch
-In-Reply-To: <1442777030-24036-3-git-send-email-arnout@mind.be>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442777030-24036-1-git-send-email-arnout@mind.be>
- <1442777030-24036-3-git-send-email-arnout@mind.be>
-Message-ID: <561049D5.8060504@openwide.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 3 Oct 2015 23:34:09 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix umask settings for non-bash shells
+ for root user
+In-Reply-To: <87bndquxne.fsf@dell.be.48ers.dk>
+References: <1434378026-15007-1-git-send-email-vorel@jablocom.com>
+ <20150829105707.3d5e0fec@free-electrons.com> <20150829092037.GA4857@free.fr>
+ <55E18457.3080302@mind.be> <87bndquxne.fsf@dell.be.48ers.dk>
+Message-ID: <CAGduivxRtnN7QLt6gubAP8NT6yyfjdHRprGgfBQHT8ZMZGcamw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi Petr, all
 
-Le 20/09/2015 21:23, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The idea behind that patch has be respinned and reworked into a series to
+cleanup /etc/profile a little bit.
+You can find it there:
+http://lists.busybox.net/pipermail/buildroot/2015-October/140786.html
 
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+Thank you very much.
 
-Best regards,
-Romain
+On Sat, Aug 29, 2015 at 1:44 PM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
 
-> ---
->  .../cryptodev-linux/0002-fix-ccache-compile.patch    | 20 --------------------
->  1 file changed, 20 deletions(-)
->  delete mode 100644 package/cryptodev-linux/0002-fix-ccache-compile.patch
-> 
-> diff --git a/package/cryptodev-linux/0002-fix-ccache-compile.patch b/package/cryptodev-linux/0002-fix-ccache-compile.patch
-> deleted file mode 100644
-> index 058fb43..0000000
-> --- a/package/cryptodev-linux/0002-fix-ccache-compile.patch
-> +++ /dev/null
-> @@ -1,20 +0,0 @@
-> -Fix compilation with ccache enabled
-> -
-> -When ccache is enabled the CROSS_COMPILE variable contains a space, so
-> -it must be properly quoted.
-> -
-> -Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> -
-> -Index: cryptodev-linux-1.7/Makefile
-> -===================================================================
-> ---- cryptodev-linux-1.7.orig/Makefile
-> -+++ cryptodev-linux-1.7/Makefile
-> -@@ -18,7 +18,7 @@ ifneq (${ARCH},)
-> - KERNEL_MAKE_OPTS += ARCH=${ARCH}
-> - endif
-> - ifneq (${CROSS_COMPILE},)
-> --KERNEL_MAKE_OPTS += CROSS_COMPILE=${CROSS_COMPILE}
-> -+KERNEL_MAKE_OPTS += CROSS_COMPILE="${CROSS_COMPILE}"
-> - endif
-> - 
-> - build: version.h
-> 
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+>  >> My opinion? Here's what I'd do ;-)
+>  >>
+>  >> git rm system/skeleton/root/.bash_*
+>
+>  >  +1
+>
+>  >  Even when bash is the default shell, none of these are needed IMHO.
+>
+> +1 from here as well (for 2015.11).
+>
+> --
+> Venlig hilsen,
+> Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151003/e4c74e65/attachment.html>
