@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 16:46:09 +0200
-Subject: [Buildroot] [PATCH 1/6 RFC] core/pkg-generic: allow packages to
- exclude files when extracting
-In-Reply-To: <419c992b5ee60036fd6e601f421e92f0ebadffe1.1441233378.git.yann.morin.1998@free.fr>
+Date: Sat, 3 Oct 2015 16:49:02 +0200
+Subject: [Buildroot] [PATCH 3/6 RFC] package/gcc: use generic extract
+ commands
+In-Reply-To: <c6065405bb95d2c5bb88672a4329168b6a44c695.1441233378.git.yann.morin.1998@free.fr>
 References: <cover.1441233378.git.yann.morin.1998@free.fr>
- <419c992b5ee60036fd6e601f421e92f0ebadffe1.1441233378.git.yann.morin.1998@free.fr>
-Message-ID: <560FEA31.2080404@openwide.fr>
+ <c6065405bb95d2c5bb88672a4329168b6a44c695.1441233378.git.yann.morin.1998@free.fr>
+Message-ID: <560FEADE.1010700@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +15,6 @@ To: buildroot@busybox.net
 Hi Yann,
 
 Le 03/09/2015 00:51, Yann E. MORIN a ?crit :
-> Currently, packages that need to exclude parts of the archives when
-> extracting (e.g. to gain space), like gcc or toolchain-external, have to
-> provide custom extract commands, just for the sake of adding a bunch of
-> --exclude directives when calling tar.
-> 
-> Add a new variable that packages may set, to provide a space-separated
-> list of patterns to exclude.
-> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
@@ -33,39 +25,64 @@ Best regards,
 Romain
 
 > ---
->  docs/manual/adding-packages-generic.txt | 4 ++++
->  package/pkg-generic.mk                  | 5 ++++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
+>  package/gcc/gcc-final/gcc-final.mk     |  3 ++-
+>  package/gcc/gcc-initial/gcc-initial.mk |  3 ++-
+>  package/gcc/gcc.mk                     | 15 ++++-----------
+>  3 files changed, 8 insertions(+), 13 deletions(-)
 > 
-> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index 4c12b42..e7a473c 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -312,6 +312,10 @@ information is (assuming the package name is +libfoo+) :
->    that have more than one leading component to strip, set this
->    variable with the value to be passed to tar. Default: 1.
+> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+> index 86b3c78..1d06d7e 100644
+> --- a/package/gcc/gcc-final/gcc-final.mk
+> +++ b/package/gcc/gcc-final/gcc-final.mk
+> @@ -12,7 +12,8 @@ HOST_GCC_FINAL_DEPENDENCIES = \
+>  	$(HOST_GCC_COMMON_DEPENDENCIES) \
+>  	$(BR_LIBC)
 >  
-> +* +LIBFOO_EXCLUDES+ is a space-separated list of patterns to exclude
-> +  when extracting the archive. Each item from that list is passed as
-> +  a tar's +--exclude+ option. By default, empty.
-> +
->  * +LIBFOO_DEPENDENCIES+ lists the dependencies (in terms of package
->    name) that are required for the current target package to
->    compile. These dependencies are guaranteed to be compiled and
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 6a7d97e..d1877a7 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -476,7 +476,10 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
->  # default extract command
->  $(2)_EXTRACT_CMDS ?= \
->  	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
-> -	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) -C $$($(2)_DIR) $$(TAR_OPTIONS) -)
-> +	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
-> +		-C $$($(2)_DIR) \
-> +		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
-> +		$$(TAR_OPTIONS) -)
+> -HOST_GCC_FINAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+> +HOST_GCC_FINAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
+> +HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
 >  
->  # pre/post-steps hooks
->  $(2)_PRE_DOWNLOAD_HOOKS         ?=
+>  ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+>  HOST_GCC_FINAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+> index 6bb7997..a86b25a 100644
+> --- a/package/gcc/gcc-initial/gcc-initial.mk
+> +++ b/package/gcc/gcc-initial/gcc-initial.mk
+> @@ -10,7 +10,8 @@ GCC_INITIAL_SOURCE = $(GCC_SOURCE)
+>  
+>  HOST_GCC_INITIAL_DEPENDENCIES = $(HOST_GCC_COMMON_DEPENDENCIES)
+>  
+> -HOST_GCC_INITIAL_EXTRACT_CMDS = $(HOST_GCC_EXTRACT_CMDS)
+> +HOST_GCC_INITIAL_TAR_EXCLUDES = $(HOST_GCC_TAR_EXCLUDES)
+> +HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_FAKE_TESTSUITE
+>  
+>  ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+>  HOST_GCC_INITIAL_POST_EXTRACT_HOOKS += HOST_GCC_XTENSA_OVERLAY_EXTRACT
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 501fcea..b9e9323 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -47,18 +47,11 @@ define HOST_GCC_APPLY_PATCHES
+>  	$(HOST_GCC_APPLY_POWERPC_PATCH)
+>  endef
+>  
+> -#
+> -# Custom extract command to save disk space
+> -#
+> +HOST_GCC_TAR_EXCLUDES = \
+> +	libjava/* libgo/* \
+> +	gcc/testsuite/* libstdc++-v3/testsuite/*
+>  
+> -define HOST_GCC_EXTRACT_CMDS
+> -	$(call suitable-extractor,$(GCC_SOURCE)) $(DL_DIR)/$(GCC_SOURCE) | \
+> -		$(TAR) --strip-components=1 -C $(@D) \
+> -		--exclude='libjava/*' \
+> -		--exclude='libgo/*' \
+> -		--exclude='gcc/testsuite/*' \
+> -		--exclude='libstdc++-v3/testsuite/*' \
+> -		$(TAR_OPTIONS) -
+> +define HOST_GCC_FAKE_TESTSUITE
+>  	mkdir -p $(@D)/libstdc++-v3/testsuite/
+>  	echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
+>  	echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
 > 
