@@ -1,68 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 21:50:40 +0100
-Subject: [Buildroot] [PATCH v2 3/4] libnfs: Without native RPC use
- libtirpc
-In-Reply-To: <1443901828-11390-3-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443901828-11390-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1443901828-11390-3-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <56103FA0.7050409@mind.be>
+Date: Sat, 3 Oct 2015 21:54:26 +0100
+Subject: [Buildroot] [PATCH 7/7] configs: remove old/broken Atmel
+ configurations
+In-Reply-To: <20151003204109.GH2694@piout.net>
+References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20151003204109.GH2694@piout.net>
+Message-ID: <56104082.6060805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03-10-15 20:50, Maxime Hadjinlian wrote:
-> Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+On 03-10-15 21:41, Alexandre Belloni wrote:
+> Hi,
+> 
+> On 03/10/2015 at 20:44:17 +0100, Thomas Petazzoni wrote :
+>> > The at91rm9200df_defconfig configuration is really old: it builds a
+>> > 2.6.38 kernel with the old days kernel patches and a 2010.06
+>> > U-Boot. It hasn't been updated since a long time, so let's get rid of
+>> > it.
+>> > 
+>> > The at91sam9260dfc_defconfig, at91sam9261ek_defconfig and
+>> > at91sam9263ek_defconfig refer to kernel defconfigs that no longer
+>> > exists, so they fail to build.
+>> > 
+> I don't actually see any reason why they couldn't be updated. I'm
+> actually using buildroot to build for my at91rm9200ek.
+> 
+> I'll try to update them. However, if you prefer deleting them in the
+> meantime, that is fine.
+> 
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ There's no hurry to remove them.
+
+ BTW, when updating these defconfigs, please make sure that the kernel headers
+version and the kernel version are fixated.
 
  Regards,
  Arnout
-
-> ---
-> v1 -> v2:
-> 	- Don't depends on blackfin toolchain (is removed by previous
-> 	  patch)
-> ---
->  package/libnfs/Config.in | 7 ++++---
->  package/libnfs/libnfs.mk | 4 ++++
->  2 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libnfs/Config.in b/package/libnfs/Config.in
-> index 6642fe4..2a1ef03 100644
-> --- a/package/libnfs/Config.in
-> +++ b/package/libnfs/Config.in
-> @@ -1,10 +1,11 @@
->  config BR2_PACKAGE_LIBNFS
->  	bool "libnfs"
-> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS # libtirpc
-> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	help
->  	  nfs userspace implementation.
->  
->  	  http://github.com/sahlberg/libnfs
->  
-> -comment "libnfs needs a toolchain w/ RPC"
-> -	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +comment "libnfs needs a toolchain w/ threads"
-> +	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
-> diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-> index 0c8c4f5..fb95e21 100644
-> --- a/package/libnfs/libnfs.mk
-> +++ b/package/libnfs/libnfs.mk
-> @@ -13,4 +13,8 @@ LIBNFS_LICENSE = LGPLv2.1+
->  LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
->  LIBNFS_DEPENDENCIES = host-pkgconf
->  
-> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> +LIBNFS_DEPENDENCIES += libtirpc
-> +endif
-> +
->  $(eval $(autotools-package))
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
