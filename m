@@ -1,93 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Oct 2015 20:44:16 +0100
-Subject: [Buildroot] [PATCH 6/7] configs: fix build of
-	calao_qil_a9260_defconfig
+Date: Sat,  3 Oct 2015 20:44:17 +0100
+Subject: [Buildroot] [PATCH 7/7] configs: remove old/broken Atmel
+	configurations
 In-Reply-To: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1443901457-7914-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Barebox, AT91Bootstrap and Linux patches for the Calao QIL A9260
-board are all located in the same directory, board/calao/qil-a9260/,
-with only a prefix to indicate to which component they apply.
+The at91rm9200df_defconfig configuration is really old: it builds a
+2.6.38 kernel with the old days kernel patches and a 2010.06
+U-Boot. It hasn't been updated since a long time, so let's get rid of
+it.
 
-Unfortunately, since commit 0eba4759fab9d093afacac77a0ac31f1f0b3cceb
-("packages: apply custom patches using *.patch instead of
-<pkg>-*.patch"), the logic to apply custom patches in Barebox and
-AT91Bootstrap has been changed from applying <package>-*.patch to
-applying *.patch (in order to be consistent with what we do for all
-packages in Buildroot).
+The at91sam9260dfc_defconfig, at91sam9261ek_defconfig and
+at91sam9263ek_defconfig refer to kernel defconfigs that no longer
+exists, so they fail to build.
 
-However, this had the effect of trying to apply both the AT91Bootstrap
-and Barebox patches on both packages, which obviously cannot work.
-
-This commit fixes that by moving patches around, and switching to use
-BR2_GLOBAL_PATCH_DIR for all of Barebox, AT91Bootstrap and Linux
-patches.
-
-In addition, the defconfig was not specifying explicitly which Barebox
-version to use, so right now it's trying to use Barebox 2015.09, on
-which the board-specific patch does not apply. So we've forced to use
-Barebox 2012.08, which was the lastest release available at the time
-the defconfig was initially contributed.
-
-Cc: Gregory Hermant <gregory.hermant@calao-systems.com>
+Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../at91bootstrap/0001-qil-a9260.patch}                             | 0
- .../barebox/0001-qil-a9260.patch}                                   | 0
- .../{linux-3.4.7.patch => patches/linux/0001-qil-a9260.patch}       | 0
- configs/calao_qil_a9260_defconfig                                   | 6 +++---
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename board/calao/qil-a9260/{at91bootstrap-1.16-qil-a9260.patch => patches/at91bootstrap/0001-qil-a9260.patch} (100%)
- rename board/calao/qil-a9260/{barebox-2012.07.0-qil-a9260.patch => patches/barebox/0001-qil-a9260.patch} (100%)
- rename board/calao/qil-a9260/{linux-3.4.7.patch => patches/linux/0001-qil-a9260.patch} (100%)
+ configs/at91rm9200df_defconfig   | 30 ------------------------------
+ configs/at91sam9260dfc_defconfig | 19 -------------------
+ configs/at91sam9261ek_defconfig  | 19 -------------------
+ configs/at91sam9263ek_defconfig  | 19 -------------------
+ 4 files changed, 87 deletions(-)
+ delete mode 100644 configs/at91rm9200df_defconfig
+ delete mode 100644 configs/at91sam9260dfc_defconfig
+ delete mode 100644 configs/at91sam9261ek_defconfig
+ delete mode 100644 configs/at91sam9263ek_defconfig
 
-diff --git a/board/calao/qil-a9260/at91bootstrap-1.16-qil-a9260.patch b/board/calao/qil-a9260/patches/at91bootstrap/0001-qil-a9260.patch
-similarity index 100%
-rename from board/calao/qil-a9260/at91bootstrap-1.16-qil-a9260.patch
-rename to board/calao/qil-a9260/patches/at91bootstrap/0001-qil-a9260.patch
-diff --git a/board/calao/qil-a9260/barebox-2012.07.0-qil-a9260.patch b/board/calao/qil-a9260/patches/barebox/0001-qil-a9260.patch
-similarity index 100%
-rename from board/calao/qil-a9260/barebox-2012.07.0-qil-a9260.patch
-rename to board/calao/qil-a9260/patches/barebox/0001-qil-a9260.patch
-diff --git a/board/calao/qil-a9260/linux-3.4.7.patch b/board/calao/qil-a9260/patches/linux/0001-qil-a9260.patch
-similarity index 100%
-rename from board/calao/qil-a9260/linux-3.4.7.patch
-rename to board/calao/qil-a9260/patches/linux/0001-qil-a9260.patch
-diff --git a/configs/calao_qil_a9260_defconfig b/configs/calao_qil_a9260_defconfig
-index 05af114..f18337f 100644
---- a/configs/calao_qil_a9260_defconfig
-+++ b/configs/calao_qil_a9260_defconfig
-@@ -1,5 +1,6 @@
- BR2_arm=y
- BR2_arm926t=y
-+BR2_GLOBAL_PATCH_DIR="board/calao/qil-a9260/patches/"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
- BR2_KERNEL_HEADERS_VERSION=y
- BR2_DEFAULT_KERNEL_VERSION="3.4"
-@@ -7,16 +8,15 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4=y
- BR2_PACKAGE_HOST_SAM_BA=y
- BR2_TARGET_ROOTFS_UBIFS=y
- BR2_TARGET_AT91BOOTSTRAP=y
--BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/qil-a9260/"
- BR2_TARGET_AT91BOOTSTRAP_BOARD="qil_a9260"
- BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
- BR2_TARGET_BAREBOX=y
--BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR="board/calao/qil-a9260/"
-+BR2_TARGET_BAREBOX_CUSTOM_VERSION=y
-+BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE="2012.08.0"
- BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="qil_a9260"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
--BR2_LINUX_KERNEL_PATCH="board/calao/qil-a9260/linux-3.4.7.patch"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/qil-a9260/linux-3.4.7.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+deleted file mode 100644
+index 5994f43..0000000
+--- a/configs/at91rm9200df_defconfig
++++ /dev/null
+@@ -1,30 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm920t=y
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_JFFS2=y
+-BR2_TARGET_ROOTFS_JFFS2_DATAFLASH_1056=y
+-BR2_TARGET_ROOTFS_JFFS2_PAGESIZE=0x420
+-BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x2100
+-BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+-BR2_TARGET_ROOTFS_JFFS2_LE=y
+-
+-# Lock down headers to avoid breaking with new defaults
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="2.6.38.8"
+-BR2_DEFAULT_KERNEL_HEADERS="2.6.38.8"
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="at91rm9200ek"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2010.06"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
+-BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91rm9200ek"
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+deleted file mode 100644
+index 20389f3..0000000
+--- a/configs/at91sam9260dfc_defconfig
++++ /dev/null
+@@ -1,19 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# Host utilities
+-#
+-BR2_PACKAGE_HOST_SAM_BA=y
+-
+-# First stage bootloader
+-BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
+-
+-# Second stage bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="at91sam9260ek_dataflash_cs0"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260_9g20"
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+deleted file mode 100644
+index 0824a00..0000000
+--- a/configs/at91sam9261ek_defconfig
++++ /dev/null
+@@ -1,19 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# Host utilities
+-#
+-BR2_PACKAGE_HOST_SAM_BA=y
+-
+-# First stage bootloader
+-BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9261ek"
+-
+-# Second stage bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="at91sam9261ek_dataflash_cs0"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91sam9261_9g10"
+diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+deleted file mode 100644
+index 208e057..0000000
+--- a/configs/at91sam9263ek_defconfig
++++ /dev/null
+@@ -1,19 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# Host utilities
+-#
+-BR2_PACKAGE_HOST_SAM_BA=y
+-
+-# First stage bootloader
+-BR2_TARGET_AT91BOOTSTRAP=y
+-BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9263ek"
+-
+-# Second stage bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="at91sam9263ek_dataflash_cs0"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91sam9263"
 -- 
 2.6.0
