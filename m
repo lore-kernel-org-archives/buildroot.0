@@ -1,80 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Oct 2015 14:34:20 +0200
-Subject: [Buildroot] [PATCH] squashfs: Add lz4 hc compression
-In-Reply-To: <1439279901-4337-1-git-send-email-m.weisser.m@gmail.com>
- (Matthias Weisser's message of "Tue, 11 Aug 2015 09:58:21 +0200")
-References: <1439279901-4337-1-git-send-email-m.weisser.m@gmail.com>
-Message-ID: <87lhbk871v.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Oct 2015 14:25:52 +0200
+Subject: [Buildroot] [git commit] system: use a menuconfig for the getty
+	options
+Message-ID: <20151003123722.83EDA7FFDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthias" == Matthias Weisser <m.weisser.m@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6fc79762529b51bda082495f2d173c50f548d028
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Making the getty option a menuconfig instead of a simple config
+automatically moves its dependees into a menu without the need to
+manually declare such a menu.
 
-Sorry for the slow response.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ system/Config.in |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
- > lz4 offers a high compression mode. A minimalistic file system shrinks by about 15%.
- > Signed-off-by: Matthias Weisser <m.weisser.m@gmail.com>
- > ---
- >  fs/squashfs/Config.in   | 3 +++
- >  fs/squashfs/squashfs.mk | 4 ++++
- >  2 files changed, 7 insertions(+)
-
- > diff --git a/fs/squashfs/Config.in b/fs/squashfs/Config.in
- > index ca9ddb2..94e126e 100644
- > --- a/fs/squashfs/Config.in
- > +++ b/fs/squashfs/Config.in
- > @@ -18,6 +18,9 @@ config BR2_TARGET_ROOTFS_SQUASHFS4_GZIP
- >  config BR2_TARGET_ROOTFS_SQUASHFS4_LZ4
- >  	bool "lz4"
+diff --git a/system/Config.in b/system/Config.in
+index 03521fd..45170d8 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -260,12 +260,11 @@ config BR2_SYSTEM_BIN_SH
+ 	default "dash"    if BR2_SYSTEM_BIN_SH_DASH
+ 	default "zsh"     if BR2_SYSTEM_BIN_SH_ZSH
  
- > +config BR2_TARGET_ROOTFS_SQUASHFS4_LZ4_HC
- > +	bool "lz4hc"
-
-Is there ever any use case for enabling lz4 WITHOUT the high compression
-option? The only drawback is somewhat slower filesystem creation, right?
-Perhaps we can just adjust the existing lz4 option to use -Xhc?
-
-
-
-> +
- >  config BR2_TARGET_ROOTFS_SQUASHFS4_LZMA
- >  	bool "lzma"
+-config BR2_TARGET_GENERIC_GETTY
++menuconfig BR2_TARGET_GENERIC_GETTY
+ 	bool "Run a getty (login prompt) after boot"
+ 	default y
  
- > diff --git a/fs/squashfs/squashfs.mk b/fs/squashfs/squashfs.mk
- > index 446906f..528e0f7 100644
- > --- a/fs/squashfs/squashfs.mk
- > +++ b/fs/squashfs/squashfs.mk
- > @@ -9,6 +9,9 @@ ROOTFS_SQUASHFS_DEPENDENCIES = host-squashfs
- >  ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4),y)
- >  ROOTFS_SQUASHFS_ARGS += -comp lz4
- >  else
- > +ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZ4_HC),y)
- > +ROOTFS_SQUASHFS_ARGS += -comp lz4 -Xhc
- > +else
- >  ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS4_LZO),y)
- >  ROOTFS_SQUASHFS_ARGS += -comp lzo
- >  else
- > @@ -23,6 +26,7 @@ endif
- >  endif
- >  endif
- >  endif
- > +endif
+ if BR2_TARGET_GENERIC_GETTY
+-menu "getty options"
+ config BR2_TARGET_GENERIC_GETTY_PORT
+ 	string "TTY port"
+ 	default "console"
+@@ -313,7 +312,6 @@ config BR2_TARGET_GENERIC_GETTY_OPTIONS
+ 	help
+ 	  Any other flags you want to pass to getty,
+ 	  Refer to getty --help for details.
+-endmenu
+ endif
  
- >  define ROOTFS_SQUASHFS_CMD
- >  	$(HOST_DIR)/usr/bin/mksquashfs $(TARGET_DIR) $@ -noappend \
- > -- 
- > 2.1.4
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
