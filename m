@@ -1,87 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 22:19:33 +0100
-Subject: [Buildroot] [PATCH 3/7] u-boot: add an option to indicate that
- DTC is needed
-In-Reply-To: <1443901457-7914-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1443901457-7914-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56104665.6020309@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Oct 2015 23:19:50 +0200
+Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
+	linux compilation error
+In-Reply-To: <5610435E.9030303@mind.be> (Arnout Vandecappelle's message of
+ "Sat, 3 Oct 2015 22:06:38 +0100")
+References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+ <20150922154716.0c3fec44@free-electrons.com>
+ <87r3lb22jp.fsf@dell.be.48ers.dk> <87fv1r1xwh.fsf@dell.be.48ers.dk>
+ <5610435E.9030303@mind.be>
+Message-ID: <87y4fjzm2x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03-10-15 20:44, Thomas Petazzoni wrote:
-> Some U-Boot configurations require the Device Tree compiler to be
-> available, so we need to depend on host-dtc (example configuration:
-> zynq_zed).
-> 
-> However, we don't want to build it unconditionally, since the vast
-> majority of U-Boot configurations don't need it (and host-dtc itself
-> has a bunch of dependencies).
-> 
-> So, we simply add a Config.in option that allows users to indicate
-> whether their U-Boot needs DTC or not, and depend on host-dtc if this
-> option is enabled.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- I don't really like that the option has to be user-configurable, but I see no
-other way. So:
+Hi,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ >  It's with perl 5.22. Should at least be mentioned in the commit log.
 
-with one small nit.
+ >  This also means that whenever host-perl is built before the kernel, you'll bump
+ > into this issue (because host-perl is in the PATH passed to the kernel build).
 
-> ---
->  boot/uboot/Config.in | 7 +++++++
->  boot/uboot/uboot.mk  | 4 ++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index be51642..8643dab 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -139,6 +139,13 @@ config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
->  	  Path to the U-Boot configuration file.
->  endif
->  
-> +config BR2_TARGET_UBOOT_NEEDS_DTC
-> +	bool "U-Boot needs dtc"
-> +	select BR2_PACKAGE_HOST_DTC
-> +	help
-> +	  Select this option if your U-Boot board configuration
-> +	  requires the Device Tree compiler to be available.
+ >  But so indeed, this is going to be an issue for all kernels, so I'm with Imreh
+ > that the solution is to have a simple sed-patch that can be applied to all kernels.
 
- Device Tree Compiler.
+Agreed. From the 5.22 changelog:
 
-> +
->  choice
->  	prompt "U-Boot binary format"
->  	default BR2_TARGET_UBOOT_FORMAT_BIN
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 8f321ac..af583d1 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -77,6 +77,10 @@ UBOOT_MAKE_OPTS += \
->  	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
->  	ARCH=$(UBOOT_ARCH)
->  
-> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
-> +UBOOT_DEPENDENCIES += host-dtc
-> +endif
-> +
->  # Helper function to fill the U-Boot config.h file.
->  # Argument 1: option name
->  # Argument 2: option value
-> 
+defined(@array) and defined(%hash) are now fatal errors
 
+These have been deprecated since v5.6.1 and have raised deprecation
+warnings since v5.16.
+
+https://metacpan.org/pod/distribution/perl/pod/perldelta.pod#defined-array-and-defined-hash-are-now-fatal-errors
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
