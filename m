@@ -1,11 +1,12 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 23:24:05 +0200
-Subject: [Buildroot] [PATCH 09/18] uboot: remove now-redundant ccache
+Date: Sat, 3 Oct 2015 23:25:06 +0200
+Subject: [Buildroot] [PATCH 10/18] barebox: remove now-redundant ccache
  handling
-In-Reply-To: <1442777030-24036-1-git-send-email-arnout@mind.be>
+In-Reply-To: <1442777030-24036-2-git-send-email-arnout@mind.be>
 References: <1442774504-22799-1-git-send-email-arnout@mind.be>
  <1442777030-24036-1-git-send-email-arnout@mind.be>
-Message-ID: <56104775.2040106@openwide.fr>
+ <1442777030-24036-2-git-send-email-arnout@mind.be>
+Message-ID: <561047B2.4010301@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,20 +24,21 @@ Best regards,
 Romain
 
 > ---
->  boot/uboot/uboot.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  boot/barebox/barebox.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 8f321ac..7494078 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -74,7 +74,7 @@ endif
->  UBOOT_ARCH = $(KERNEL_ARCH)
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index e45976d..00e1537 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -52,8 +52,7 @@ else
+>  BAREBOX_ARCH = $(KERNEL_ARCH)
+>  endif
 >  
->  UBOOT_MAKE_OPTS += \
-> -	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-> +	CROSS_COMPILE="$(TARGET_CROSS)" \
->  	ARCH=$(UBOOT_ARCH)
+> -BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) \
+> -	$(TARGET_CROSS)"
+> +BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(TARGET_CROSS)"
+>  BAREBOX_MAKE_ENV = $(TARGET_MAKE_ENV)
 >  
->  # Helper function to fill the U-Boot config.h file.
+>  ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
 > 
