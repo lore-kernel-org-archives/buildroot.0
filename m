@@ -1,125 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 14:51:03 +0100
-Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to
- wait for slow network interfaces
-In-Reply-To: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
-References: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <560FDD47.6090707@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 3 Oct 2015 14:50:47 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime2: new board
+Message-ID: <20151003135240.DA27280794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03-10-15 14:31, Yann E. MORIN wrote:
-> On some machines, the network interface is slow to appear. For example,
-> on the Raspberry Pi, the network interface eth0 is an ethernet-over-USB,
-> and our standard boot process is too fast, so our network startup script
-> is called before the USB bus is compeltely enumerated, thus it can't
-> configure eth0.
-> 
-> If Buildroot is configured to do a DHCP on an interface, install a
-> startup script, just before S40network, that waits for that interface.
-> 
-> Since Buildroot can only be configured to run DHCP on a single interface,
-> we do not need a script that waits for more than one interface.
-> 
-> Closes #8116.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/skeleton/S39wait-for-network-if | 43 +++++++++++++++++++++++++++++++++
+commit: http://git.buildroot.net/buildroot/commit/?id=aa8c11105dde6c34f4b52ea9146521af6fea8901
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Argh, you're adding an init script to skeleton! That's evil(TM)! :-)
+It is based on olimex_a20_olinuxino_lime configuration. Tested on the mainline
+kernel 4.1.4. It boots and the Ethernet is working at speed 1 Gbps.
 
- Seriously, this should be part of package/initscripts/init.d/S40network instead.
+[Thomas: remove ccache and optimize 2 options.]
 
->  package/skeleton/skeleton.mk            |  2 ++
->  2 files changed, 45 insertions(+)
->  create mode 100644 package/skeleton/S39wait-for-network-if
-> 
-> diff --git a/package/skeleton/S39wait-for-network-if b/package/skeleton/S39wait-for-network-if
-> new file mode 100644
-> index 0000000..010026e
-> --- /dev/null
-> +++ b/package/skeleton/S39wait-for-network-if
-> @@ -0,0 +1,43 @@
-> +#!/bin/sh
-> +
-> +# In case we have a slow-to-appear interface (e.g. eth-over-USB),
-> +# and we need to configure it, wait until it appears. But not too
-> +# long either. WAIT_DELAY is in seconds.
-> +WAIT_DELAY=15
-> +
-> +wait_for_IF() {
-> +    IF="$(sed -r -e '/^auto lo/d;' \
+Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/olimex/a20_olinuxino/readme.txt        |    3 ++
+ configs/olimex_a20_olinuxino_lime2_defconfig |   29 ++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+), 0 deletions(-)
 
- I believe the ; are redundant when you use -e (at least that's what we do in
-other cases).
-
-> +                 -e '/^auto (.+)$/!d;' \
-> +                 -e 's//\1/;' \
-
- This one got me looking at the sed man page and I'm still surprised that it
-works. Basically, this s command is reusing the same address as given on the
-previous line, but without the ! modifier, right?
-
-
- Regards,
- Arnout
-
-> +                 /etc/network/interfaces
-> +         )"
-> +    if [ -z "${IF}" -o -e "/sys/class/net/${IF}" ]; then
-> +        return 0
-> +    fi
-> +    printf "Waiting for interface %s to appear" "${IF}"
-> +    wait=${WAIT_DELAY}
-> +    while [ ${wait} -gt 0 ]; do
-> +        if [ -e "/sys/class/net/${IF}" ]; then
-> +            printf " yes\n"
-> +            return 0
-> +        fi
-> +        sleep 1
-> +        printf "."
-> +        : $((wait--))
-> +    done
-> +    printf " no.\n"
-> +    return 1
-> +}
-> +
-> +case "$1" in
-> +  start)
-> +	wait_for_IF
-> +	;;
-> +  stop)
-> +	;;
-> +  restart)
-> +	"$0" start
-> +	;;
-> +  *)
-> +	echo "Usage: $0 {start|stop|restart}"
-> +esac
-> diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-> index 48e7085..733b86f 100644
-> --- a/package/skeleton/skeleton.mk
-> +++ b/package/skeleton/skeleton.mk
-> @@ -76,6 +76,8 @@ define SET_NETWORK_DHCP
->  		echo "auto $(NETWORK_DHCP_IFACE)";                   \
->  		echo "iface $(NETWORK_DHCP_IFACE) inet dhcp";        \
->  	) >> $(TARGET_DIR)/etc/network/interfaces
-> +	$(INSTALL) -D -m 0755 package/skeleton/S39wait-for-network-if \
-> +		$(TARGET_DIR)/etc/init.d/S39wait-for-network-if
->  endef
->  endif
->  
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 7e9af84..7998aa1 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -17,6 +17,8 @@ The following defconfigs are available:
+    for the A20-OLinuXino-LIME board using mainline kernel
+  - olimex_a20_olinuxino_lime_mali_defconfig
+    for the A20-OLinuXino-LIME board using legacy linux-sunxi kernel
++ - olimex_a20_olinuxino_lime2_defconfig
++   for the A20-OLinuXino-LIME2 board using mainline kernel
+ 
+ The legacy linux-sunxi kernels are based on the vendor code drops.
+ They are only useful when accelerated 3D graphics and multimedia support
+@@ -50,6 +52,7 @@ After building, you should get a tree like this:
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- script.bin (lime_mali)
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
++    +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+     +-- u-boot.bin
+     +-- u-boot-sunxi-with-spl.bin
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+new file mode 100644
+index 0000000..7580ce0
+--- /dev/null
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -0,0 +1,29 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_EABIHF=y
++BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.4"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-lime2"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_PACKAGE_SUNXI_TOOLS=y
++BR2_PACKAGE_SUNXI_BOARDS=y
++BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino-Lime2"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
