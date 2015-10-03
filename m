@@ -1,101 +1,39 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 23:02:29 +0200
-Subject: [Buildroot] [PATCH 04/18] infra: move ccache handling to the
- toolchain wrapper
-In-Reply-To: <1442774504-22799-5-git-send-email-arnout@mind.be>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442774504-22799-5-git-send-email-arnout@mind.be>
-Message-ID: <56104265.9070506@openwide.fr>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sat, 3 Oct 2015 22:03:14 +0100
+Subject: [Buildroot] [PATCH] dovecot: bump to version 2.2.19
+Message-ID: <1443906194-10728-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/dovecot/dovecot.hash |    2 +-
+ package/dovecot/dovecot.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le 20/09/2015 20:41, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> Since we always have a toolchain wrapper now, we can move the ccache
-> call to the toolchain wrapper.
-> 
-> The hostcc ccache handling obviously stays.
-> 
-> The global addition of ccache to TARGET_CC/CXX is removed, but many
-> individual packages and infras still add it. This means we have a
-> chain like this: ccache -> toolchain-wrapper -> ccache -> gcc
-> However, this is fairly harmless: for cache misses, the inner ccache
-> just adds overhead and for cache hits, the inner ccache is never
-> called. Later patches will remove these redundant ccache calls.
-> 
-> As a side effect, perl now supports ccache as well.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Danomi Manchego <danomimanchego123@gmail.com>
-> Cc: K?roly Kasza <kaszak@gmail.com>
-
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
-Romain
-
-> ---
->  package/Makefile.in            | 5 -----
->  toolchain/toolchain-wrapper.c  | 5 ++++-
->  toolchain/toolchain-wrapper.mk | 4 ++++
->  3 files changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 545694f..4b1ce7f 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -189,11 +189,6 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
->  TARGET_CC_NOCCACHE  := $(TARGET_CC)
->  TARGET_CXX_NOCCACHE := $(TARGET_CXX)
->  
-> -ifeq ($(BR2_CCACHE),y)
-> -TARGET_CC  := $(CCACHE) $(TARGET_CC)
-> -TARGET_CXX := $(CCACHE) $(TARGET_CXX)
-> -endif
-> -
->  ifeq ($(BR2_STRIP_strip),y)
->  STRIP_STRIP_DEBUG := --strip-debug
->  STRIP_STRIP_UNNEEDED := --strip-unneeded
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index f3ff04f..4774692 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -40,6 +40,9 @@ static char sysroot[PATH_MAX];
->  #define EXCLUSIVE_ARGS	3
->  
->  static char *predef_args[] = {
-> +#ifdef BR_CCACHE
-> +	BR_CCACHE,
-> +#endif
->  	path,
->  	"--sysroot", sysroot,
->  #ifdef BR_ABI
-> @@ -251,7 +254,7 @@ int main(int argc, char **argv)
->  		}
->  	}
->  
-> -	if (execv(path, args))
-> +	if (execv(args[0], args))
->  		perror(path);
->  
->  	free(args);
-> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-> index 8e8a445..ab8215d 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -17,6 +17,10 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
->  # toolchain wrapper.
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
->  
-> +ifeq ($(BR2_CCACHE),y)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE='"$(CCACHE)"'
-> +endif
-> +
->  # For simplicity, build directly into the install location
->  define TOOLCHAIN_BUILD_WRAPPER
->  	$(Q)mkdir -p $(HOST_DIR)/usr/bin
-> 
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 8b6e8f5..9386df0 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	b6d8468cea47f1227f47b80618f7fb872e2b2e9d3302adc107a005dd083865bb	dovecot-2.2.18.tar.gz
++sha256 759e1e3f9d907cdaabad1f5fbacc793ca191d234c084bec3bba42966952a4e9f  dovecot-2.2.19.tar.gz
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 58666d0..69f722f 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).18
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).19
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
+-- 
+1.7.1
