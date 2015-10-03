@@ -1,38 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Oct 2015 16:15:35 +0200
-Subject: [Buildroot] [PATCH v3 1/4] package/rpm: bump to version 4.12.0.1
-In-Reply-To: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
- (James Knight's message of "Thu, 3 Sep 2015 11:23:48 -0400")
-References: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <87h9m85988.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Oct 2015 15:19:04 +0100
+Subject: [Buildroot] [Buildroot website] Missing image(s?) files
+In-Reply-To: <40125828.rcXOoJhnam@laclwks004>
+References: <40125828.rcXOoJhnam@laclwks004>
+Message-ID: <560FE3D8.7090703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Knight <james.knight@rockwellcollins.com> writes:
+On 02-10-15 14:39, Brian Foster wrote:
+> 
+>   Apologies if this is not the correct or best place to report
+>   problems with the website's contents...
+> 
+>   In the current Buildroot User's Manual (for 2015.08) at the website,
+> 
+>     http://buildroot.uclibc.org/downloads/manual/manual.html
+> 
+>   in ?17.19.2, "How to add a package from GitHub", at least,
+>   there is an obviously missing image `github_hash_mongrel2.png'
+>   (see just about the second (last) ?-list).
 
- > The provided "bump" (suggested by Baruch Siach) switches from the rpm5
- > implementation to rpm.org's more active stream.
+ I can confirm that this is the case on the website, but my local build is fine.
+So I guess the images are not copied correctly to the website. Peter?
 
- > Signed-off-by: James Knight <james.knight@rockwellcollins.com>
- > ---
- > Changes v2 -> v3:
- >   - Cleanup configuration dependency to beecrypt/libnss; following
- >      convention (suggested by Baruch Siach).
+ Regards,
+ Arnout
 
- > Changes v1 -> v2:
- >   - Package change introduced in change set 2.
- > ---
- > +#ifeq ($(BR2_PACKAGE_LIBCAP),y)
- > +RPM_DEPENDENCIES += libcap
- > +RPM_CONF_OPTS += --with-cap
- > +#else
- > +RPM_CONF_OPTS += --without-cap
- > +#endif
+> 
+> cheers!
+> 	-blf-
+> 
 
-Why is this commented out? You don't select libcap in Config.in.
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
