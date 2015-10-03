@@ -1,165 +1,231 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 3 Oct 2015 21:42:33 +0200
-Subject: [Buildroot] [PATCH 02/18] gcc: use toolchain wrapper
-In-Reply-To: <1442774504-22799-3-git-send-email-arnout@mind.be>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442774504-22799-3-git-send-email-arnout@mind.be>
-Message-ID: <56102FA9.3030109@openwide.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 3 Oct 2015 21:44:06 +0200
+Subject: [Buildroot] [PATCH v2] nfs-utils: systemd support
+In-Reply-To: <1438813249-8789-1-git-send-email-aurelien@chabot.fr>
+References: <1437344153-11424-1-git-send-email-aurelien@chabot.fr>
+ <1438813249-8789-1-git-send-email-aurelien@chabot.fr>
+Message-ID: <CAGduivwJT85KyAn9KdzhaQZfaU9_TxQZtPWx53RrqbSFACccqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Aur?lien, all
 
-Le 20/09/2015 20:41, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> We have a toolchain wrapper for external toolchain, but it is also
-> beneficial for internal toolchains, for the following reasons:
-> 
-> 1. It can make sure that BR2_TARGET_OPTIMIZATION is passed to the
->    compiler even if a package's build system doesn't honor CFLAGS.
-> 2. It allows us to do the unsafe path check (i.e. -I/usr/include)
->    without patching gcc.
-> 3. It makes it simpler to implement building each package with a
->    separate staging directory (per-package staging).
-> 4. It makes it simpler to implement a compiler hash check for ccache.
-> 
-> The wrapper is reused from the external toolchain. A third CROSS_PATH_
-> option is added to the wrapper: in this case, the real executable is in
-> the same directory, with the extension .real.
-> 
-> The creation of the simple symlinks is merged with the creation of the
-> wrapper symlinks, otherwise part of the -gcc-ar handling logic would
-> have to be repeated.
-> 
-> The complex case-condition could be refactored with the one for the
-> external toolchain, but then it becomes even more complex because
-> they each have special corner cases. For example, the internal
-> toolchain has to handle *.real to avoid creating an extra indirection
-> after host-gcc-{final,initial}-rebuild.
-> 
-> Instead of creating the .real files, it would also have been possible
-> to install the internal toolchain in $(HOST_DIR)/opt, similar to what
-> we do for the external toolchain. However, then we would also have to
-> copy things to the sysroot and do more of the magic that the external
-> toolchain is doing. So keeping it in $(HOST_DIR)/usr/bin is much
-> simpler.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
+Since your patch was sent, a new version of nfs-utils was released, so I
+bumped it and removed the patch that have been merged from your patch and
+sent it as a part of the same series.
+You can find it there:
+http://lists.busybox.net/pipermail/buildroot/2015-October/140835.html
+
+Thanks
+
+On Thu, Aug 6, 2015 at 12:20 AM, Aur?lien Chabot <aurelien@chabot.fr> wrote:
+
+> nfs-utils has been patched to install only the needed systemd unit files
+> supported.
+> Also tmpfiles was needed because the folder /run/nfs is a tmpfs
+> and nfs-utils need some files to be there to work correctly.
+>
+> Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
 > ---
->  package/gcc/gcc-final/gcc-final.mk     | 13 +++++--------
->  package/gcc/gcc-initial/gcc-initial.mk |  4 ++++
->  package/gcc/gcc.mk                     | 35 ++++++++++++++++++++++++++++++++++
->  toolchain/toolchain-wrapper.c          |  4 +++-
->  4 files changed, 47 insertions(+), 9 deletions(-)
-> 
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 3426ba4..2c16fdf 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -96,14 +96,11 @@ endef
->  
->  HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
->  
-> -# Create <arch>-linux-<tool> symlinks
-> -define HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
-> -	(cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
-> -		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-> -	done)
-> -endef
-> -
-> -HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
-> +HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-> +HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-> +# Note: this must be done after CREATE_CC_SYMLINKS, otherwise the
-> +# -cc symlink to the wrapper is not created.
-> +HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
->  
->  # In gcc 4.7.x, the ARM EABIhf library loader path for (e)glibc was not
->  # correct, so we create a symbolic link to make things work
-> diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-> index 6bb7997..4b03e47 100644
-> --- a/package/gcc/gcc-initial/gcc-initial.mk
-> +++ b/package/gcc/gcc-initial/gcc-initial.mk
-> @@ -62,4 +62,8 @@ HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
->  HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
->  endif
->  
-> +HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-> +HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-> +HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
+>  ...c-Fix-systemd-autotools-activation-option.patch | 31 ++++++++++++
+>  ...006-Install-only-needed-systemd-unit-file.patch | 58
+> ++++++++++++++++++++++
+>  package/nfs-utils/nfs-utils.mk                     | 27 ++++++++++
+>  package/nfs-utils/nfs-utils_env.sh                 |  1 +
+>  package/nfs-utils/nfs-utils_tmpfiles.conf          |  4 ++
+>  5 files changed, 121 insertions(+)
+>  create mode 100644
+> package/nfs-utils/0005-configure.ac-Fix-systemd-autotools-activation-option.patch
+>  create mode 100644
+> package/nfs-utils/0006-Install-only-needed-systemd-unit-file.patch
+>  create mode 100755 package/nfs-utils/nfs-utils_env.sh
+>  create mode 100644 package/nfs-utils/nfs-utils_tmpfiles.conf
+>
+> diff --git
+> a/package/nfs-utils/0005-configure.ac-Fix-systemd-autotools-activation-option.patch
+> b/package/nfs-utils/0005-configure.ac-Fix-systemd-autotools-activation-option.patch
+> new file mode 100644
+> index 0000000..4aa8b3e
+> --- /dev/null
+> +++
+> b/package/nfs-utils/0005-configure.ac-Fix-systemd-autotools-activation-option.patch
+> @@ -0,0 +1,31 @@
+> +From 29b07cc61d8796765ccadfd940a5ce382304d4e7 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+> +Date: Thu, 26 Feb 2015 14:30:50 -0500
+> +Subject: [PATCH] configure.ac: Fix systemd autotools activation option
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
 > +
-
-I was wondering why we had to use the wrapper for the gcc-initial until I figure
-out that it's used when the libc is build.
-
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
-Romain
-
->  $(eval $(host-autotools-package))
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 501fcea..9044040 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -235,4 +235,39 @@ HOST_GCC_COMMON_CONF_OPTS += \
->  	--with-long-double-128
->  endif
->  
-> +HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
+> +The option to activate the install of systemd service files
+> +was never taken into account.
 > +
-> +# The LTO support in gcc creates wrappers for ar, ranlib and nm which load
-> +# the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
-> +# *-gcc-nm and should be used instead of the real programs when -flto is
-> +# used. However, we should not add the toolchain wrapper for them, and they
-> +# match the *cc-* pattern. Therefore, an additional case is added for *-ar,
-> +# *-ranlib and *-nm.
-> +# Avoid that a .real is symlinked a second time.
-> +# Also create <arch>-linux-<tool> symlinks.
-> +define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
-> +	$(Q)cd $(HOST_DIR)/usr/bin; \
-> +	for i in $(GNU_TARGET_NAME)-*; do \
-> +		case "$$i" in \
-> +		*.real) \
-> +			;; \
-> +		*-ar|*-ranlib|*-nm) \
-> +			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-> +			;; \
-> +		*cc|*cc-*|*++|*++-*|*cpp) \
-> +			rm -f $$i.real; \
-> +			mv $$i $$i.real; \
-> +			ln -sf toolchain-wrapper $$i; \
-> +			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-> +			ln -snf $$i.real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.real; \
-> +			;; \
-> +		*) \
-> +			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-> +			;; \
-> +		esac; \
-> +	done
+> +Signed-off-by: Steve Dickson <steved@redhat.com>
+> +Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
+> +---
+> + configure.ac | 1 -
+> + 1 file changed, 1 deletion(-)
 > +
+> +diff --git a/configure.ac b/configure.ac
+> +index 8e427e3..e61430f 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -60,7 +60,6 @@ AC_ARG_WITH(systemd,
+> +       [AC_HELP_STRING([--with-systemd@<:@=unit-dir-path@:>@],
+> +                       [install systemd unit files @<:@Default: no, and
+> path defaults to /usr/lib/systemd/system if not given@:>@])],
+> +       test "$withval" = "no" && use_systemd=0 || unitdir=$withval
+> use_systemd=1
+> +-      use_systemd=0
+> +       )
+> +       AM_CONDITIONAL(INSTALL_SYSTEMD, [test "$use_systemd" = 1])
+> +       AC_SUBST(unitdir)
+> +--
+> +2.5.0
+> diff --git
+> a/package/nfs-utils/0006-Install-only-needed-systemd-unit-file.patch
+> b/package/nfs-utils/0006-Install-only-needed-systemd-unit-file.patch
+> new file mode 100644
+> index 0000000..472fb07
+> --- /dev/null
+> +++ b/package/nfs-utils/0006-Install-only-needed-systemd-unit-file.patch
+> @@ -0,0 +1,58 @@
+> +From be1e41aa35ec246acdf62b868c16a600df9638e5 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Aur=C3=A9lien=20Chabot?= <aurelien@chabot.fr>
+> +Date: Mon, 20 Jul 2015 21:08:58 +0200
+> +Subject: [PATCH] Install only needed systemd unit file
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
+> +---
+> + systemd/Makefile.am | 22 +++++++++++++++++-----
+> + 1 file changed, 17 insertions(+), 5 deletions(-)
+> +
+> +diff --git a/systemd/Makefile.am b/systemd/Makefile.am
+> +index 16cf5e6..ef32494 100644
+> +--- a/systemd/Makefile.am
+> ++++ b/systemd/Makefile.am
+> +@@ -6,21 +6,33 @@ unit_files =  \
+> +     nfs-blkmap.target \
+> +     nfs-client.target \
+> +     \
+> +-    auth-rpcgss-module.service \
+> +-    nfs-blkmap.service \
+> +     nfs-config.service \
+> +-    nfs-idmapd.service \
+> +     nfs-mountd.service \
+> +     nfs-server.service \
+> +     nfs-utils.service \
+> +-    rpc-gssd.service \
+> +     rpc-statd-notify.service \
+> +     rpc-statd.service \
+> +-    rpc-svcgssd.service \
+> +     \
+> +     proc-fs-nfsd.mount \
+> +     var-lib-nfs-rpc_pipefs.mount
+> +
+> ++if CONFIG_NFSV4
+> ++unit_files += \
+> ++    nfs-idmapd.service
+> ++endif
+> ++
+> ++if CONFIG_NFSV41
+> ++unit_files += \
+> ++    nfs-blkmap.service
+> ++endif
+> ++
+> ++if CONFIG_GSS
+> ++unit_files += \
+> ++    auth-rpcgss-module.service \
+> ++    rpc-gssd.service \
+> ++    rpc-svcgssd.service
+> ++endif
+> ++
+> + EXTRA_DIST = $(unit_files)
+> +
+> + unit_dir = /usr/lib/systemd/system
+> +--
+> +2.5.0
+> diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/
+> nfs-utils.mk
+> index 095d095..e729786 100644
+> --- a/package/nfs-utils/nfs-utils.mk
+> +++ b/package/nfs-utils/nfs-utils.mk
+> @@ -41,11 +41,38 @@ define NFS_UTILS_INSTALL_FIXUP
+>  endef
+>  NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
+>
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +       NFS_UTILS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system
+> +       NFS_UTILS_DEPENDENCIES += systemd
+> +else
+> +       NFS_UTILS_CONF_OPTS += --without-systemd
+> +endif
+> +
+>  define NFS_UTILS_INSTALL_INIT_SYSV
+>         $(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
+>                 $(TARGET_DIR)/etc/init.d/S60nfs
+>  endef
+>
+> +define NFS_UTILS_INSTALL_INIT_SYSTEMD
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +
+> +       ln -fs ../../../../usr/lib/systemd/system/nfs-server.service \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-server.service
+> +       ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-client.target
+> +
+> +       mkdir -p $(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants
+> +
+> +       ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
+> +
+>  $(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
+> +
+> +       $(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
+> +               $(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
+> +
+> +       $(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
+> +               $(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
 > +endef
 > +
-> +
->  include $(sort $(wildcard package/gcc/*/*.mk))
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index b3b02d8..f3ff04f 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -138,8 +138,10 @@ int main(int argc, char **argv)
->  	/* Fill in the relative paths */
->  #ifdef BR_CROSS_PATH_REL
->  	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s", absbasedir, basename);
-> -#else /* BR_CROSS_PATH_ABS */
-> +#elif BR_CROSS_PATH_ABS
->  	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s", basename);
-> +#else /* BR_CROSS_PATH_SUFFIX */
-> +	ret = snprintf(path, sizeof(path), "%s/usr/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
->  #endif
->  	if (ret >= sizeof(path)) {
->  		perror(__FILE__ ": overflow");
-> 
+>  define NFS_UTILS_REMOVE_NFSIOSTAT
+>         rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
+>  endef
+> diff --git a/package/nfs-utils/nfs-utils_env.sh
+> b/package/nfs-utils/nfs-utils_env.sh
+> new file mode 100755
+> index 0000000..1a24852
+> --- /dev/null
+> +++ b/package/nfs-utils/nfs-utils_env.sh
+> @@ -0,0 +1 @@
+> +#!/bin/sh
+> diff --git a/package/nfs-utils/nfs-utils_tmpfiles.conf
+> b/package/nfs-utils/nfs-utils_tmpfiles.conf
+> new file mode 100644
+> index 0000000..f87939f
+> --- /dev/null
+> +++ b/package/nfs-utils/nfs-utils_tmpfiles.conf
+> @@ -0,0 +1,4 @@
+> +d /run/nfs/sm 0700 root root -
+> +d /run/nfs/sm.bak 0700 root root -
+> +f /run/nfs/rmtab 0644 root root -
+> +f /run/nfs/etab 0644 root root -
+> --
+> 2.5.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151003/6e078729/attachment.html>
