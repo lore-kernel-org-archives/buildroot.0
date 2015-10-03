@@ -1,41 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Oct 2015 23:19:50 +0200
-Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
-	linux compilation error
-In-Reply-To: <5610435E.9030303@mind.be> (Arnout Vandecappelle's message of
- "Sat, 3 Oct 2015 22:06:38 +0100")
-References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
- <20150922154716.0c3fec44@free-electrons.com>
- <87r3lb22jp.fsf@dell.be.48ers.dk> <87fv1r1xwh.fsf@dell.be.48ers.dk>
- <5610435E.9030303@mind.be>
-Message-ID: <87y4fjzm2x.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Oct 2015 23:14:27 +0200
+Subject: [Buildroot] [git commit] gdb: do not build documentation for bfd
+	and gprof
+Message-ID: <20151003212011.BFDE4818EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1180bafd8e1de2b12db3c7c235b128c9e48d4abb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Our previous patch to disable the documentation in gdb wasn't complete.
+There are cases where the documentation under bfd and gprof directories
+is being built, causing the subsequent failure due to missing makeinfo.
+This patch fixes that problem.
 
- >  It's with perl 5.22. Should at least be mentioned in the commit log.
+Fixes:
 
- >  This also means that whenever host-perl is built before the kernel, you'll bump
- > into this issue (because host-perl is in the PATH passed to the kernel build).
+  http://autobuild.buildroot.org/results/244/2442e697d8a300496434fd42fcb1ee3941d13e06/
 
- >  But so indeed, this is going to be an issue for all kernels, so I'm with Imreh
- > that the solution is to have a simple sed-patch that can be applied to all kernels.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdb/gdb.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Agreed. From the 5.22 changelog:
-
-defined(@array) and defined(%hash) are now fatal errors
-
-These have been deprecated since v5.6.1 and have raised deprecation
-warnings since v5.16.
-
-https://metacpan.org/pod/distribution/perl/pod/perldelta.pod#defined-array-and-defined-hash-are-now-fatal-errors
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 58a1232..15f394c 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -54,6 +54,12 @@ endif
+ # Prevent gdb to build the documentation
+ define GDB_DISABLE_DOC
+ 	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
++	if test -e $(@D)/bfd/doc/Makefile.in ; then \
++		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/bfd/doc/Makefile.in ; \
++	fi
++	if test -e $(@D)/gprof/Makefile.in ; then \
++		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/gprof/Makefile.in ; \
++	fi
+ endef
+ GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
+ HOST_GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
