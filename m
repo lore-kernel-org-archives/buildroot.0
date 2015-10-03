@@ -1,64 +1,69 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sat, 3 Oct 2015 13:02:03 +0100
-Subject: [Buildroot] [PATCH 2/2] libnss: bump to version 3.20
-In-Reply-To: <1443872329-31417-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1443872329-31417-1-git-send-email-gustavo@zacarias.com.ar>
- <1443872329-31417-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <560FC3BB.4@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Oct 2015 14:04:55 +0200
+Subject: [Buildroot] [PATCH 4/5] package/freerdp: prepare for adding
+	another client
+In-Reply-To: <b26d6437e140b49c39a7a4887b9bbf4ec6f2754d.1441569038.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 6 Sep 2015 21:54:21 +0200")
+References: <cover.1441569038.git.yann.morin.1998@free.fr>
+ <b26d6437e140b49c39a7a4887b9bbf4ec6f2754d.1441569038.git.yann.morin.1998@free.fr>
+Message-ID: <87zj009mzc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 03/10/15 12:38, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Currently, the only client we can build is the X11 client.
+ > FreeRDP now has support for building a wayland client.
 
-Build test for MIPS architecture:
+ > However, that means we need to rethink the way we build FreeRDP, because
+ > of some "inconsistencies" in its build system. This is because FreeRDP's
+ > buildsystem does not have orthogonal options; some of the options can be
+ > used for different components.
 
-$ file output/target/usr/lib/libnss3.so
-output/target/usr/lib/libnss3.so: ELF 32-bit MSB shared object, MIPS, 
-MIPS32 rel2 version 1 (SYSV), dynamically linked, with unknown 
-capability 0x41000000 = 0xf676e75, with unknown capability 0x10000 = 
-0x70401, stripped
+ > For example, the set of X11 libraries needed to build the server is a
+ > superset of the X11 libraries needed to build the X11 client. So,
+ > whenever the server is enabled, it means the X11 libraries required to
+ > build the X11 client are available.
 
-$ grep ^LIBNSS_VERSION package/libnss/libnss.mk
-LIBNSS_VERSION = 3.20
+ > Now, if the user also wants to build the waland client (but not the X11
+ > client), there is no way to tell FreeRDP not to build the X11 client,
+ > because there is a single option, WITH_CLIENT, to drive whether any of
+ > the clients is built. The decision is made on the availability of the
+ > required libraries. And since the server is enabled, the X11 libs
+ > required to build the X11 client are available. So, we end up with the
+ > X11 client, even though it is not wanted.
 
-Regards,
+ > And conversely with wayland...
 
-Vincent.
+ > So, we redesign the way we build FreeRDP. WE do not care what is
+ > actually built; we just build whatever is buildable with the current
+ > set of enabled libraries. But at install time (both in staging/ and
+ > target/) we remove whatever the user does not want.
 
+ > We also take the opportunity to rename the X11 client option, so it is
+ > coherent with the soon-to-be-introduced wayland client.
 
-> ---
->   package/libnss/libnss.hash | 4 ++--
->   package/libnss/libnss.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-> index 2336590..9e24786 100644
-> --- a/package/libnss/libnss.hash
-> +++ b/package/libnss/libnss.hash
-> @@ -1,2 +1,2 @@
-> -# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_19_2_RTM/src/SHA256SUMS
-> -sha256	1306663e8f61d8449ad8cbcffab743a604dcd9f6f34232c210847c51dce2c9ae	nss-3.19.2.tar.gz
-> +# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_20_RTM/src/SHA256SUMS
-> +sha256	5e38d4b9837ca338af966b97fc91c07f67ad647fb38dc4af3cfd0d84e477d15c	nss-3.20.tar.gz
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index 0821804..f283bb3 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->
-> -LIBNSS_VERSION = 3.19.2
-> +LIBNSS_VERSION = 3.20
->   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
->   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
->   LIBNSS_DISTDIR = dist
->
+ > Note: since FreeRDP has gained new dependencies, we can not just
+ > introduce the legacy option as-is, otherwise we run the risk that it
+ > selects the new option even though the new FreeRDP dependencies are not
+ > enabled, spitting out the infamous 'unmet direct dependencies" kconfig
+ > error.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ > +# Remove static libraries in unusual dir
+ > +define FREERDP_CLEANUP
+ > +	rm -rf $(TARGET_DIR)/usr/lib/freerdp
+ > +endef
+ > +FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_CLEANUP
+ > +
+
+This part doesn't really seem directly related to the rest, but OK.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
