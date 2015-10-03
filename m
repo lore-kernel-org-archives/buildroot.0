@@ -1,93 +1,120 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 3 Oct 2015 16:25:30 +0200
-Subject: [Buildroot] [PATCH] libnfs: Without native RPC use libtirpc
-In-Reply-To: <1443882268-9737-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443882268-9737-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <CAGduivwirG_RD1LfYfgekqfEphCquOr5AG9H2WKB=4Vjv7OFnQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Oct 2015 15:27:35 +0100
+Subject: [Buildroot] [PATCH v3 1/3] skeleton: Clean up profile file
+In-Reply-To: <1443881664-9100-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443881664-9100-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <560FE5D7.5070002@mind.be>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's a crappy file. Don't do git add with glob at home...
-
-On Sat, Oct 3, 2015 at 4:24 PM, Maxime Hadjinlian <
-maxime.hadjinlian@gmail.com> wrote:
-
+On 03-10-15 15:14, Maxime Hadjinlian wrote:
+> There's a lot of code in /etc/profile, which doesn't really belong in a
+> minimal default skeleton.
+> 
+> If the user has a specific needs, it needs to be added in
+> /etc/profile.d/ by a post-build script.
+> 
 > Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
-> RFC: A few packages uses libtirpc if there's no native RPC support *BUT*
-> they don't propagate the BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2.
->
-> It was probably added later on in libtirpc, so the questions here, is
-> what do we do with that ? Should we add the dependencies to the other
-> packages ?
-> Do we need some kind of mechanisms to handle that ?
+> v1 -> v2:
+>     - Don't change indent and don't fix 'pretty' stuff
+>     - Keep PS1 , PAGER and EDITOR setted.
+>     - At the end of the for loop, add unset i
 > ---
->  package/libnfs/.Config.in.swp | Bin 0 -> 12288 bytes
->  package/libnfs/Config.in      |   8 +++++---
->  package/libnfs/libnfs.mk      |   4 ++++
->  3 files changed, 9 insertions(+), 3 deletions(-)
->  create mode 100644 package/libnfs/.Config.in.swp
->
-> diff --git a/package/libnfs/.Config.in.swp b/package/libnfs/.Config.in.swp
+>  system/skeleton/etc/profile         | 60 +++++--------------------------------
+>  system/skeleton/etc/profile.d/umask |  1 +
+>  2 files changed, 9 insertions(+), 52 deletions(-)
+>  create mode 100644 system/skeleton/etc/profile.d/umask
+> 
+> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+> index c7438fe..c40a311 100644
+> --- a/system/skeleton/etc/profile
+> +++ b/system/skeleton/etc/profile
+> @@ -1,66 +1,22 @@
+> -# ~/.bashrc: executed by bash(1) for non-login interactive shells.
+> -
+>  export PATH=\
+>  /bin:\
+>  /sbin:\
+>  /usr/bin:\
+> -/usr/sbin:\
+> -/usr/local/bin
+> -
+> -# If running interactively, then:
+> -if [ "$PS1" ]; then
+> -
+> -    if [ "$BASH" ]; then
+> -	export PS1="[\u@\h \W]\\$ "
+> -	alias ll='/bin/ls --color=tty -laFh'
+> -	alias ls='/bin/ls --color=tty -F'
+> -	export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:';
+> -    else
+> -      if [ "`id -u`" -eq 0 ]; then 
+> -	export PS1='# '
+> -      else
+> -	export PS1='$ '
+> -      fi
+> -    fi
+[snip]
+> +if [ "`id -u`" -eq 0 ]; then
+> +    export PS1='# '
+> +else
+> +    export PS1='$ '
+
+ Previously, this was inside an if [ "$PS1" ]; i.e. only set for interactive
+shells. Perhaps that should be kept. Not really essential, though.
+
+>  fi
+>  
+> -LANG=${LANG:-C}
+> -export LANG
+> -[ -n "$LC_CTYPE" ]          && export LC_CTYPE
+> -[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
+> -[ -n "$LC_TIME" ]           && export LC_TIME
+> -[ -n "$LC_COLLATE" ]        && export LC_COLLATE
+> -[ -n "$LC_MONETARY" ]       && export LC_MONETARY
+> -[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
+> -[ -n "$LC_PAPER" ]          && export LC_PAPER
+> -[ -n "$LC_NAME" ]           && export LC_NAME
+> -[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
+> -[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
+> -[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
+> -[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
+> +export PAGER='/bin/more '
+> +export EDITOR='/bin/vi'
+>  
+>  # Source configuration files from /etc/profile.d
+>  for i in /etc/profile.d/*.sh ; do
+>      if [ -r "$i" ]; then
+>          . $i
+>      fi
+> +    unset i
+
+ You forgot to mention this in the commit message :-P
+
+
+ Regards,
+ Arnout
+
+
+>  done
+> diff --git a/system/skeleton/etc/profile.d/umask b/system/skeleton/etc/profile.d/umask
 > new file mode 100644
-> index
-> 0000000000000000000000000000000000000000..c737cd335751e1a7082f17205d29e1b6f8eb3318
-> GIT binary patch
-> literal 12288
-> zcmeI&y>8P`6bJBAHX}-_GP2yHQbm!7(|`o(f}AuZR)bsROC69b+qsFa at R#fx!BD|V
-> z at DjWO6O23n6DxwJfa4~WAke at F=zpcZY|F>?xxX#S@#`b|vAAEmN4z$P>K`{oed7(i
-> zzfBZ-&s8kT8>?3!b5;C7-HZ7P&4V<U#WK-_naR9J&Cm;;n*K~h<2+5ZnenAJm1d;;
-> zWKx)|G?}PrO(m<Fz+DJH;BtYPp4@q`PInu7^|ENYS`jz4hL_jl4g??o0SG_<0uX=z
-> z1R(I=3FvH%Uh=N4EOvHnaa>zEE-rC^00bZa0SG_<0uX=z1Rwwb2teQ;6!6AGU)PC_
-> zu5<JJ|Nq7B|4$o4A2_c$4rh~dmGgz`K6Bo2-f~`X%4Z*PZgRFbSP*~!1Rwwb2tWV=
-> z5P$##An;cUi1{K~oEXMfW-=KUB27f)R<qY|2gk?VR>!g(w`29)LFb2(-<S8=)<IvK
-> zor#~{<yZrI)OLF(tz8PzxEv1`)%gUtNTlQ@JfYJx3PMjM;+ZLQm`iV5REZ2BLanoX
-> z)0`?D&ioobZx&t{`7)m_rpV8$c$!?y3LZJ<33Dk_oJF$yj;B?c)W`^Bl#x-$NCx`6
-> z!xO7 at WIbxTUAsB3xig_AqOz)WGK^m`&G)^tv;1`XbkOcOR at ZHI`BR6?I&5`qXL#y1
-> p>U)h|V|QCHfmV4I(D%BldMJ6Hkm0k{1z?p$%NhFRO*w~s`UVbg$W#CT
->
-> literal 0
-> HcmV?d00001
->
-> diff --git a/package/libnfs/Config.in b/package/libnfs/Config.in
-> index 6642fe4..0081548 100644
-> --- a/package/libnfs/Config.in
-> +++ b/package/libnfs/Config.in
-> @@ -1,10 +1,12 @@
->  config BR2_PACKAGE_LIBNFS
->         bool "libnfs"
-> -       depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +       depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || \
-> +               (BR2_TOOLCHAIN_HAS_THREADS &&
-> !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)# libtirpc
-> +       select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
->         help
->           nfs userspace implementation.
->
->           http://github.com/sahlberg/libnfs
->
-> -comment "libnfs needs a toolchain w/ RPC"
-> -       depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +comment "libnfs needs a toolchain w/ threads"
-> +       depends on !(BR2_TOOLCHAIN_HAS_THREADS ||
-> BR2_TOOLCHAIN_HAS_NATIVE_RPC)
-> diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
-> index 0c8c4f5..fb95e21 100644
-> --- a/package/libnfs/libnfs.mk
-> +++ b/package/libnfs/libnfs.mk
-> @@ -13,4 +13,8 @@ LIBNFS_LICENSE = LGPLv2.1+
->  LIBNFS_LICENSE_FILES = LICENCE-LGPL-2.1.txt
->  LIBNFS_DEPENDENCIES = host-pkgconf
->
-> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> +LIBNFS_DEPENDENCIES += libtirpc
-> +endif
-> +
->  $(eval $(autotools-package))
-> --
-> 2.5.3
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151003/3a5dcb3c/attachment.html>
+> index 0000000..8e71ad5
+> --- /dev/null
+> +++ b/system/skeleton/etc/profile.d/umask
+> @@ -0,0 +1 @@
+> +umask 022
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
