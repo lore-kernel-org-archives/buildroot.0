@@ -1,50 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 21:54:26 +0100
-Subject: [Buildroot] [PATCH 7/7] configs: remove old/broken Atmel
- configurations
-In-Reply-To: <20151003204109.GH2694@piout.net>
-References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
- <20151003204109.GH2694@piout.net>
-Message-ID: <56104082.6060805@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 23:02:29 +0200
+Subject: [Buildroot] [PATCH 04/18] infra: move ccache handling to the
+ toolchain wrapper
+In-Reply-To: <1442774504-22799-5-git-send-email-arnout@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442774504-22799-5-git-send-email-arnout@mind.be>
+Message-ID: <56104265.9070506@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03-10-15 21:41, Alexandre Belloni wrote:
-> Hi,
+Hi Arnout,
+
+Le 20/09/2015 20:41, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> Since we always have a toolchain wrapper now, we can move the ccache
+> call to the toolchain wrapper.
 > 
-> On 03/10/2015 at 20:44:17 +0100, Thomas Petazzoni wrote :
->> > The at91rm9200df_defconfig configuration is really old: it builds a
->> > 2.6.38 kernel with the old days kernel patches and a 2010.06
->> > U-Boot. It hasn't been updated since a long time, so let's get rid of
->> > it.
->> > 
->> > The at91sam9260dfc_defconfig, at91sam9261ek_defconfig and
->> > at91sam9263ek_defconfig refer to kernel defconfigs that no longer
->> > exists, so they fail to build.
->> > 
-> I don't actually see any reason why they couldn't be updated. I'm
-> actually using buildroot to build for my at91rm9200ek.
+> The hostcc ccache handling obviously stays.
 > 
-> I'll try to update them. However, if you prefer deleting them in the
-> meantime, that is fine.
+> The global addition of ccache to TARGET_CC/CXX is removed, but many
+> individual packages and infras still add it. This means we have a
+> chain like this: ccache -> toolchain-wrapper -> ccache -> gcc
+> However, this is fairly harmless: for cache misses, the inner ccache
+> just adds overhead and for cache hits, the inner ccache is never
+> called. Later patches will remove these redundant ccache calls.
 > 
+> As a side effect, perl now supports ccache as well.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Danomi Manchego <danomimanchego123@gmail.com>
+> Cc: K?roly Kasza <kaszak@gmail.com>
 
- There's no hurry to remove them.
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
- BTW, when updating these defconfigs, please make sure that the kernel headers
-version and the kernel version are fixated.
+Best regards,
+Romain
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> ---
+>  package/Makefile.in            | 5 -----
+>  toolchain/toolchain-wrapper.c  | 5 ++++-
+>  toolchain/toolchain-wrapper.mk | 4 ++++
+>  3 files changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 545694f..4b1ce7f 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -189,11 +189,6 @@ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+>  TARGET_CC_NOCCACHE  := $(TARGET_CC)
+>  TARGET_CXX_NOCCACHE := $(TARGET_CXX)
+>  
+> -ifeq ($(BR2_CCACHE),y)
+> -TARGET_CC  := $(CCACHE) $(TARGET_CC)
+> -TARGET_CXX := $(CCACHE) $(TARGET_CXX)
+> -endif
+> -
+>  ifeq ($(BR2_STRIP_strip),y)
+>  STRIP_STRIP_DEBUG := --strip-debug
+>  STRIP_STRIP_UNNEEDED := --strip-unneeded
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index f3ff04f..4774692 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -40,6 +40,9 @@ static char sysroot[PATH_MAX];
+>  #define EXCLUSIVE_ARGS	3
+>  
+>  static char *predef_args[] = {
+> +#ifdef BR_CCACHE
+> +	BR_CCACHE,
+> +#endif
+>  	path,
+>  	"--sysroot", sysroot,
+>  #ifdef BR_ABI
+> @@ -251,7 +254,7 @@ int main(int argc, char **argv)
+>  		}
+>  	}
+>  
+> -	if (execv(path, args))
+> +	if (execv(args[0], args))
+>  		perror(path);
+>  
+>  	free(args);
+> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+> index 8e8a445..ab8215d 100644
+> --- a/toolchain/toolchain-wrapper.mk
+> +++ b/toolchain/toolchain-wrapper.mk
+> @@ -17,6 +17,10 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+>  # toolchain wrapper.
+>  TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
+>  
+> +ifeq ($(BR2_CCACHE),y)
+> +TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE='"$(CCACHE)"'
+> +endif
+> +
+>  # For simplicity, build directly into the install location
+>  define TOOLCHAIN_BUILD_WRAPPER
+>  	$(Q)mkdir -p $(HOST_DIR)/usr/bin
+> 
