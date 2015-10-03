@@ -1,54 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 22:06:38 +0100
-Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
- linux compilation error
-In-Reply-To: <87fv1r1xwh.fsf@dell.be.48ers.dk>
-References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
- <20150922154716.0c3fec44@free-electrons.com>
- <87r3lb22jp.fsf@dell.be.48ers.dk> <87fv1r1xwh.fsf@dell.be.48ers.dk>
-Message-ID: <5610435E.9030303@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 23:07:41 +0200
+Subject: [Buildroot] [PATCH 05/18] perl: Remove ccache handling
+In-Reply-To: <1442774504-22799-6-git-send-email-arnout@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442774504-22799-6-git-send-email-arnout@mind.be>
+Message-ID: <5610439D.7040806@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03-10-15 21:48, Peter Korsgaard wrote:
->>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
-> 
-> Hi,
-> 
->  >> If the problem is serious, I don't really see another option than
->  >> having some logic in linux.mk to detect if the kernel is affected by
->  >> the problem, and replacing the perl script by a bc script.
-> 
->  > Step 1 must be to understand what the issue is exactly and what version
->  > of perl/make triggers it.
-> 
->  > Imreh, can you clarify?
-> 
-> Could it be that your system perl enables strict mode by default? What
-> distribution and perl version are you using?
-> 
-> I just built wandboard_defconfig without any problems here (perl 5.20.2
-> / Debian).
-> 
+Hi Arnout,
 
- It's with perl 5.22. Should at least be mentioned in the commit log.
+Le 20/09/2015 20:41, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> Now the ccache handling has moved to the toolchain wrapper, it is no
+> longer necessary to pass TARGET_CC_NOCCACHE.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- This also means that whenever host-perl is built before the kernel, you'll bump
-into this issue (because host-perl is in the PATH passed to the kernel build).
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
- But so indeed, this is going to be an issue for all kernels, so I'm with Imreh
-that the solution is to have a simple sed-patch that can be applied to all kernels.
+Best regards,
+Romain
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> ---
+>  package/perl/perl.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index b9f90e4..7192700 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -45,13 +45,12 @@ PERL_DEPENDENCIES += gdbm
+>  endif
+>  
+>  # We have to override LD, because an external multilib toolchain ld is not
+> -# wrapped to provide the required sysroot options.  We also can't use ccache
+> -# because the configure script doesn't support it.
+> +# wrapped to provide the required sysroot options.
+>  PERL_CONF_OPTS = \
+>  	--target=$(GNU_TARGET_NAME) \
+>  	--target-tools-prefix=$(TARGET_CROSS) \
+>  	--prefix=/usr \
+> -	-Dld="$(TARGET_CC_NOCCACHE)" \
+> +	-Dld="$(TARGET_CC)" \
+>  	-Dccflags="$(TARGET_CFLAGS)" \
+>  	-Dldflags="$(TARGET_LDFLAGS) -lm" \
+>  	-Dmydomain="" \
+> 
