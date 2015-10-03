@@ -1,45 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 3 Oct 2015 23:40:13 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: bump
-	to version 0.10.8
-Message-ID: <20151003214139.7634F81926@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXi: bump version to
+	1.7.5
+Message-ID: <20151003214139.68C4B7FEC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=60be80914fa263ecc06e907bc6d1249dbc80018a
+commit: http://git.buildroot.net/buildroot/commit/?id=9326e8ada9be34424118245209482335f1345ecf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xdriver_xf86-video-sis.hash                    |    2 ++
- .../xdriver_xf86-video-sis.mk                      |    5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/x11r7/xlib_libXi/xlib_libXi.hash |    4 ++--
+ package/x11r7/xlib_libXi/xlib_libXi.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-new file mode 100644
-index 0000000..dfc7814
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.hash
-@@ -0,0 +1,2 @@
-+# From http://lists.x.org/archives/xorg-announce/2015-August/002628.html
-+sha256	c8f3f2577f69334dfcc4bf96477dce45161170555f3abdfa105599e61bc7d3fe	xf86-video-sis-0.10.8.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index ee93526..b1fce83 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
+index 75497f7..67b7b33 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.hash
++++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/pipermail/xorg/2014-July/056751.html
+-sha256	2cffc2686618dc1803725636cd92b36342c512dc60a7a35cba34bf7192a42244	libXi-1.7.4.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2015-September/002634.html
++sha256	d964d7deb5d8f7d6b9c358969c625073d7ab273dbda94693130b3540bc0ca229	libXi-1.7.5.tar.bz2
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
+index faa791b..391247f 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.mk
++++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SIS_VERSION = 0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
--XDRIVER_XF86_VIDEO_SIS_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-sis
-+XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.8
-+XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
+-XLIB_LIBXI_VERSION = 1.7.4
++XLIB_LIBXI_VERSION = 1.7.5
+ XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
+ XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXI_LICENSE = MIT
