@@ -1,74 +1,117 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 07:56:43 +0100
-Subject: [Buildroot] [Bug 8206] mplayer uses host xorg development files
-In-Reply-To: <1443806071553-113718.post@n4.nabble.com>
-References: <bug-8206-163@https.bugs.busybox.net/>
- <20150707210059.917A78015E@busybox.osuosl.org>
- <1436622071664-105281.post@n4.nabble.com> <55A12A5E.4010900@mind.be>
- <1436625379066-105305.post@n4.nabble.com> <55A1359C.5020109@mind.be>
- <20150711173913.32fbc8a7@free-electrons.com> <55A13972.2060908@mind.be>
- <1443806071553-113718.post@n4.nabble.com>
-Message-ID: <560F7C2B.5070608@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Oct 2015 09:08:57 +0200
+Subject: [Buildroot] [PATCH 3/5] package/freerdp: re-add support for
+	gstreamer
+In-Reply-To: <6bfca930d5e10ea07fffaf7680067658bc68b797.1441569038.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 6 Sep 2015 21:54:20 +0200")
+References: <cover.1441569038.git.yann.morin.1998@free.fr>
+ <6bfca930d5e10ea07fffaf7680067658bc68b797.1441569038.git.yann.morin.1998@free.fr>
+Message-ID: <871tdce8dy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-10-15 18:14, glscantlen wrote:
-> I realize this is an old thread, but it appears the issue was not resolved
-> and I have a solution that works for my defconfig on both 2015.05 & .08.
-> 
-> The most recent version I have tested is snapshot 2015.08 from
-> git.buildroot.net
-> on Sept.30. That version has exhibited the same issue as previous versions
-> noted in this thread "mplayer uses host xorg development files"
-> 
-> The solution I am using is described here:
->     - Fix a bug in the mplayer's .mk file. Add Buildroot's path
->       for staging to mplayer's configuration, ~ line 259
->        $ nano -w package/mplayer/mplayer.mk
->           --extra-cflags="$(MPLAYER_CFLAGS) -I$(STAGING_DIR)/usr/include" \
->           --extra-ldflags="$(MPLAYER_LDFLAGS) -L$(STAGING_DIR)/usr/lib" \
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- I've done a few tests with the PARANOID handling to detect a problem here, but
-couldn't find any. However, I do notice in the configure script that it will
-happily search for headers in /usr/include, but AFAICS without actually adding
-/usr/include to the search path. Explicitly adding $(STAGING_DIR)/usr/include
-will work because then configure will look for the header file in that place.
-The ldflags addition shouldn't be needed however.
+ > Previously, we expected the user to select gstreamer-0.x on his own,
+ > to enable gstreamer support in FreeRDP. This could have been a bit
+ > confusing to the user, as he may have enabled gst-1.x but FreeRDP did
+ > only support gst-0.x.
 
- Now, the problem in your case seems to be that you don't have
-BR2_PACKAGE_XLIB_LIBXV selected, which means that there will be no useful X11
-support included. And indeed, the logs you posted earlier show that mplayer is
-using the framebuffer instead of X11.
+ > Also, gstreamer support needs xlib-libxrandr, which was missing in
+ > FreeRDP's dependencies, so it was never enabled (AFAICS).
+
+ > (Re-)introduce support for gstreamer-0.x and gstreamer-1.x, since both
+ > are supported.
+
+ > We're doing it in a choice, and forcibly select whichever version the
+ > user chooses, rather than automatically detect it as previosuly done.
+ > We can select gstreamer, as their dependencies are anyway already
+ > covered by the ones of FreeRDP.
+
+Is there an advantage to doing so? Now people will not get gstreamer
+support by default even though they have gstreamer packages enabled.
 
 
- That said, I guess the mplayer package could really use some love to properly
-deal with all the silliness in its configure script.
+ > This also now requires xlib-libxrandr, so hide the choice if X.org is
+ > not enabled, still offer the option of not using gstreamer if it is.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ---
+ >  package/freerdp/Config.in  | 28 ++++++++++++++++++++++++++++
+ >  package/freerdp/freerdp.mk | 14 +++++++++++++-
+ >  2 files changed, 41 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+ > index ab8c3f5..ca57cef 100644
+ > --- a/package/freerdp/Config.in
+ > +++ b/package/freerdp/Config.in
+ > @@ -23,6 +23,34 @@ config BR2_PACKAGE_FREERDP
+ 
+ >  if BR2_PACKAGE_FREERDP
+ 
+ > +choice
+ > +	bool "gstreamer support"
+ > +	depends on BR2_PACKAGE_XORG7 # xlib-libxrandr
+
+Would people ever want to configure this without explicitly having
+enabled gstreamer{,1}?
+
+I think it makes more sense to let this depend on
+BR2_PACKAGE_GSTREAMER || BR2_PACKAGE_GSTREAMER1 as well.
+
+> +
+ > +config BR2_PACKAGE_FREERDP_GSTREAMER_NO
+ > +	bool "none"
+ > +
+
+And then move this to the bottom so gstreamer support is enabled by
+default.
+
+> +config BR2_PACKAGE_FREERDP_GSTREAMER1
+ > +	bool "gstreamer-1.x"
+ > +	# gstreamer-1.x dependencies already dependencies of FreeRDP
+ > +	select BR2_PACKAGE_GSTREAMER1
+
+This should then be a 'depends on'.
+
+> +	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ > +	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP
+ > +	select BR2_PACKAGE_XLIB_LIBXRANDR
+ > +
+ > +config BR2_PACKAGE_FREERDP_GSTREAMER
+ > +	bool "gstreamer-0.x"
+ > +	# gstreamer-0.x dependencies already dependencies of FreeRDP
+ > +	select BR2_PACKAGE_GSTREAMER
+
+And here as well.
+
+> +	select BR2_PACKAGE_GST_PLUGINS_BASE
+ > +	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
+ > +	select BR2_PACKAGE_XLIB_LIBXRANDR
+
+Looking at FindGStreamer_0_10.cmake I see it needs libxml2 and uses
+pkg-config as well.
 
 
- Regards,
- Arnout
+> +
+ > +endchoice
+ > +
+ > +comment "gstreamer support needs X.Org"
+ > +	depends on !BR2_PACKAGE_XORG7
 
-> 
-> 
-> 
-> 
-> --
-> View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Bug-8206-New-mplayer-uses-host-xorg-development-files-tp104861p113718.html
-> Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+And then this should also depend on gstreamer|gstreamer1
 
+With that said, I'm not sure we really need such detailed user
+configuration. Would there ever be any good reason to NOT enable
+gstreamer{,1} support if it is available? And with gstreamer 0.10 being
+so old I don't think it is an issue to go for gstreamer1 support if both
+are enabled.
+
+But that is something we can improve later. Committed with the above
+fixes, thanks!
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
