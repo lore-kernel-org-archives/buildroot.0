@@ -1,102 +1,131 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  3 Oct 2015 13:14:38 +0200
-Subject: [Buildroot] [PATCH 2/2] skeleton: Clean up profile file
-In-Reply-To: <1443870878-2569-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443870878-2569-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1443870878-2569-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  3 Oct 2015 08:38:48 -0300
+Subject: [Buildroot] [PATCH 1/2] libnspr: bump to version 4.10.9
+Message-ID: <1443872329-31417-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's a lot of code in /etc/profile, which doesn't really belong in a
-minimal default skeleton.
-
-If the user has a specific needs, it needs to be added in
-/etc/profile.d/ by a post-build script.
-
-Signed-off-by Maxime Hadjinlian <maxime.hadjinlia@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- system/skeleton/etc/profile         | 60 +------------------------------------
- system/skeleton/etc/profile.d/umask |  1 +
- 2 files changed, 2 insertions(+), 59 deletions(-)
- create mode 100644 system/skeleton/etc/profile.d/umask
+ package/libnspr/0001-nios2.patch      | 22 +++++++++++-----------
+ package/libnspr/0002-microblaze.patch | 25 ++++++++++++++-----------
+ package/libnspr/libnspr.hash          |  4 ++--
+ package/libnspr/libnspr.mk            |  2 +-
+ 4 files changed, 28 insertions(+), 25 deletions(-)
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index c7438fe..7ef2eca 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -1,62 +1,4 @@
--# ~/.bashrc: executed by bash(1) for non-login interactive shells.
--
--export PATH=\
--/bin:\
--/sbin:\
--/usr/bin:\
--/usr/sbin:\
--/usr/local/bin
--
--# If running interactively, then:
--if [ "$PS1" ]; then
--
--    if [ "$BASH" ]; then
--	export PS1="[\u@\h \W]\\$ "
--	alias ll='/bin/ls --color=tty -laFh'
--	alias ls='/bin/ls --color=tty -F'
--	export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:';
--    else
--      if [ "`id -u`" -eq 0 ]; then 
--	export PS1='# '
--      else
--	export PS1='$ '
--      fi
--    fi
--
--    export USER=`id -un`
--    export LOGNAME=$USER
--    export HOSTNAME=`/bin/hostname`
--    export HISTSIZE=1000
--    export HISTFILESIZE=1000
--    export PAGER='/bin/more '
--    export EDITOR='/bin/vi'
--    export INPUTRC=/etc/inputrc
--    export DMALLOC_OPTIONS=debug=0x34f47d83,inter=100,log=logfile
--
--fi;
--
--if [ -z "$LANG" ]; then
--  if [ -n $HOME ] && [ -r $HOME/.config/locale.conf ]; then
--    . "$HOME/.config/locale.conf"
--  elif [ -r /etc/locale.conf ]; then
--    . /etc/locale.conf
--  fi
--fi
--
--LANG=${LANG:-C}
--export LANG
--[ -n "$LC_CTYPE" ]          && export LC_CTYPE
--[ -n "$LC_NUMERIC" ]        && export LC_NUMERIC
--[ -n "$LC_TIME" ]           && export LC_TIME
--[ -n "$LC_COLLATE" ]        && export LC_COLLATE
--[ -n "$LC_MONETARY" ]       && export LC_MONETARY
--[ -n "$LC_MESSAGES" ]       && export LC_MESSAGES
--[ -n "$LC_PAPER" ]          && export LC_PAPER
--[ -n "$LC_NAME" ]           && export LC_NAME
--[ -n "$LC_ADDRESS" ]        && export LC_ADDRESS
--[ -n "$LC_TELEPHONE" ]      && export LC_TELEPHONE
--[ -n "$LC_MEASUREMENT" ]    && export LC_MEASUREMENT
--[ -n "$LC_IDENTIFICATION" ] && export LC_IDENTIFICATION
-+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+diff --git a/package/libnspr/0001-nios2.patch b/package/libnspr/0001-nios2.patch
+index 4fc6551..22cacd7 100644
+--- a/package/libnspr/0001-nios2.patch
++++ b/package/libnspr/0001-nios2.patch
+@@ -1,12 +1,12 @@
+ Add Nios-II support
  
- # Source configuration files from /etc/profile.d
- for i in /etc/profile.d/*.sh ; do
-diff --git a/system/skeleton/etc/profile.d/umask b/system/skeleton/etc/profile.d/umask
-new file mode 100644
-index 0000000..8e71ad5
---- /dev/null
-+++ b/system/skeleton/etc/profile.d/umask
-@@ -0,0 +1 @@
-+umask 022
+-[Gustavo: update for nspr 4.10.6]
++[Gustavo: update for nspr 4.10.9]
+ Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ 
+-diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/include/md/_linux.cfg
+---- nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:22.447502521 -0300
+-+++ nspr-4.10.6/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:32.746850581 -0300
+-@@ -924,6 +924,51 @@
++diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/include/md/_linux.cfg
++--- nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg	2015-10-03 08:11:43.229387215 -0300
+++++ nspr-4.10.9/nspr/pr/include/md/_linux.cfg	2015-10-03 08:11:55.277798841 -0300
++@@ -1017,6 +1017,51 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+@@ -58,13 +58,13 @@ diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/in
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.h nspr-4.10.6/nspr/pr/include/md/_linux.h
+---- nspr-4.10.6.orig/nspr/pr/include/md/_linux.h	2014-06-18 10:26:22.446502487 -0300
+-+++ nspr-4.10.6/nspr/pr/include/md/_linux.h	2014-06-18 10:26:32.747850615 -0300
+-@@ -55,6 +55,8 @@
+- #define _PR_SI_ARCHITECTURE "avr32"
+- #elif defined(__m32r__)
++diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.h nspr-4.10.9/nspr/pr/include/md/_linux.h
++--- nspr-4.10.9.orig/nspr/pr/include/md/_linux.h	2015-10-03 08:11:43.229387215 -0300
+++++ nspr-4.10.9/nspr/pr/include/md/_linux.h	2015-10-03 08:12:22.474728003 -0300
++@@ -57,6 +57,8 @@
+  #define _PR_SI_ARCHITECTURE "m32r"
++ #elif defined(__or1k__)
++ #define _PR_SI_ARCHITECTURE "or1k"
+ +#elif defined(nios2)
+ +#define _PR_SI_ARCHITECTURE "nios2"
+  #else
+diff --git a/package/libnspr/0002-microblaze.patch b/package/libnspr/0002-microblaze.patch
+index 30b17f3..f1416e7 100644
+--- a/package/libnspr/0002-microblaze.patch
++++ b/package/libnspr/0002-microblaze.patch
+@@ -1,12 +1,12 @@
+ Add Microblaze support
+ 
+-[Gustavo: update for nspr 4.10.6]
++[Gustavo: update for nspr 4.10.9]
+ Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ 
+-diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/include/md/_linux.cfg
+---- nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg	2014-06-18 10:29:15.816361425 -0300
+-+++ nspr-4.10.6/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:59.908768508 -0300
+-@@ -969,6 +969,56 @@
++diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.9/nspr/pr/include/md/_linux.cfg
++--- nspr-4.10.9.orig/nspr/pr/include/md/_linux.cfg	2015-10-03 08:13:11.845414714 -0300
+++++ nspr-4.10.9/nspr/pr/include/md/_linux.cfg	2015-10-03 08:13:20.435708195 -0300
++@@ -1062,6 +1062,56 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+@@ -63,15 +63,18 @@ diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/i
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.h nspr-4.10.6/nspr/pr/include/md/_linux.h
+---- nspr-4.10.6.nios2/nspr/pr/include/md/_linux.h	2014-06-18 10:29:15.817361459 -0300
+-+++ nspr-4.10.6/nspr/pr/include/md/_linux.h	2014-06-18 10:26:59.909768537 -0300
+-@@ -55,6 +55,8 @@
+- #define _PR_SI_ARCHITECTURE "avr32"
+- #elif defined(__m32r__)
++diff -Nura nspr-4.10.9.orig/nspr/pr/include/md/_linux.h nspr-4.10.9/nspr/pr/include/md/_linux.h
++--- nspr-4.10.9.orig/nspr/pr/include/md/_linux.h	2015-10-03 08:13:11.845414714 -0300
+++++ nspr-4.10.9/nspr/pr/include/md/_linux.h	2015-10-03 08:14:53.351882603 -0300
++@@ -57,8 +57,11 @@
+  #define _PR_SI_ARCHITECTURE "m32r"
++ #elif defined(__or1k__)
++ #define _PR_SI_ARCHITECTURE "or1k"
+ +#elif defined(__microblaze__)
+ +#define _PR_SI_ARCHITECTURE "microblaze"
+  #elif defined(nios2)
+  #define _PR_SI_ARCHITECTURE "nios2"
+++#elif defined(nios2)
+  #else
++ #error "Unknown CPU architecture"
++ #endif
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index 632422f..36d17ae 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.10.8/src/SHA256SUMS
+-sha256	507ea57c525c0c524dae4857a642b4ef5c9d795518754c7f83422d22fe544a15	nspr-4.10.8.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.10.9/src/SHA256SUMS
++sha256	4112ff6ad91d32696ca0c6c3d4abef6367b5dc0127fa172fcb3c3ab81bb2d881	nspr-4.10.9.tar.gz
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 752af87..bf65f0a 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.10.8
++LIBNSPR_VERSION = 4.10.9
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
 -- 
-2.5.3
+2.4.9
