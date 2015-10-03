@@ -1,28 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Oct 2015 14:24:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez_utils: fix musl
-	compilation issue
-In-Reply-To: <1441203317-10180-1-git-send-email-brendanheading@gmail.com>
- (Brendan Heading's message of "Wed, 2 Sep 2015 15:15:17 +0100")
-References: <1441203317-10180-1-git-send-email-brendanheading@gmail.com>
-Message-ID: <871tdc9m3b.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Oct 2015 14:23:56 +0200
+Subject: [Buildroot] [git commit] package/bluez_utils: fix musl compilation
+	issue
+Message-ID: <20151003122423.DA5F1818C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=adf622d88e6c60ed9141f6fc085cd0d56171185c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > http://autobuild.buildroot.net/results/4e4/4e4cea0234e6abf5882296abd5ceeda6ccab89b0/
- > Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+http://autobuild.buildroot.net/results/4e4/4e4cea0234e6abf5882296abd5ceeda6ccab89b0/
 
- > ---
- > Note, this is a small patch against a three year old version of the
- > upstream package - the upstream is being actively maintained but it looks
- > like a bit of effort to move to the latest version at this stage.
+Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0003-fix-compilation-issues-with-musl.patch    |   61 ++++++++++++++++++++
+ 1 files changed, 61 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bluez_utils/0003-fix-compilation-issues-with-musl.patch b/package/bluez_utils/0003-fix-compilation-issues-with-musl.patch
+new file mode 100644
+index 0000000..d8b48ea
+--- /dev/null
++++ b/package/bluez_utils/0003-fix-compilation-issues-with-musl.patch
+@@ -0,0 +1,61 @@
++From 8aa6aa4ba2d9d00c91e36e146895af20cbc00d17 Mon Sep 17 00:00:00 2001
++From: Brendan Heading <brendanheading@gmail.com>
++Date: Wed, 2 Sep 2015 12:10:58 +0100
++Subject: [PATCH 1/1] fix compilation issues with musl.
++
++- sys/time.h needed for struct timeval
++- unistd.h should not be included due to clash with encrypt(3)
++- sys/types.h needed for mode_t
++
++Note that this version of bluez is 3 years old. Recent fixes have gone
++into the upstream to address musl compatibility issues, but the upstream
++has changed so much that it makes little sense to try to backport these.
++This patch is really a stopgap until we move to the latest upstream.
++
++Upstream-Status: not needed
++Signed-off-by: Brendan Heading <brendanheading@gmail.com>
++---
++ compat/bnep.c  | 1 +
++ compat/dund.c  | 1 -
++ src/textfile.h | 1 +
++ 3 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/compat/bnep.c b/compat/bnep.c
++index 281350b..49226c1 100644
++--- a/compat/bnep.c
+++++ b/compat/bnep.c
++@@ -32,6 +32,7 @@
++ #include <stdlib.h>
++ #include <sys/socket.h>
++ #include <sys/ioctl.h>
+++#include <sys/time.h>
++ 
++ #include <bluetooth/bluetooth.h>
++ #include <bluetooth/bnep.h>
++diff --git a/compat/dund.c b/compat/dund.c
++index af1b536..c2f085f 100644
++--- a/compat/dund.c
+++++ b/compat/dund.c
++@@ -29,7 +29,6 @@
++ #include <stdio.h>
++ #include <errno.h>
++ #include <fcntl.h>
++-#include <unistd.h>
++ #include <stdlib.h>
++ #include <string.h>
++ #include <syslog.h>
++diff --git a/src/textfile.h b/src/textfile.h
++index dc5fc2b..0148b30 100644
++--- a/src/textfile.h
+++++ b/src/textfile.h
++@@ -24,6 +24,7 @@
++ #ifndef __TEXTFILE_H
++ #define __TEXTFILE_H
++ 
+++#include <sys/types.h>
++ int create_dirs(const char *filename, const mode_t mode);
++ int create_file(const char *filename, const mode_t mode);
++ int create_name(char *buf, size_t size, const char *path,
++-- 
++2.4.3
++
