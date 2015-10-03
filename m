@@ -1,63 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2015 14:21:07 +0200
-Subject: [Buildroot] [git commit] targetcli-fb: systemd support
-Message-ID: <20151003122242.30ED98192C@busybox.osuosl.org>
+Date: Sat, 03 Oct 2015 14:24:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez_utils: fix musl
+	compilation issue
+In-Reply-To: <1441203317-10180-1-git-send-email-brendanheading@gmail.com>
+ (Brendan Heading's message of "Wed, 2 Sep 2015 15:15:17 +0100")
+References: <1441203317-10180-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <871tdc9m3b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6ff869eee978eb82ae740c60a7282860a300d9d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Brendan" == Brendan Heading <brendanheading@gmail.com> writes:
 
-The systemd service file is taken from Fedora.
+ > http://autobuild.buildroot.net/results/4e4/4e4cea0234e6abf5882296abd5ceeda6ccab89b0/
+ > Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 
-Signed-off-by: Christophe Vu-Brugier <cvubrugier@fastmail.fm>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/targetcli-fb/target.service  |   14 ++++++++++++++
- package/targetcli-fb/targetcli-fb.mk |    8 +++++++-
- 2 files changed, 21 insertions(+), 1 deletions(-)
+ > ---
+ > Note, this is a small patch against a three year old version of the
+ > upstream package - the upstream is being actively maintained but it looks
+ > like a bit of effort to move to the latest version at this stage.
 
-diff --git a/package/targetcli-fb/target.service b/package/targetcli-fb/target.service
-new file mode 100644
-index 0000000..400284e
---- /dev/null
-+++ b/package/targetcli-fb/target.service
-@@ -0,0 +1,14 @@
-+[Unit]
-+Description=Restore LIO kernel target configuration
-+Requires=sys-kernel-config.mount
-+After=sys-kernel-config.mount network.target local-fs.target
-+
-+[Service]
-+Type=oneshot
-+RemainAfterExit=yes
-+ExecStart=/usr/bin/targetctl restore
-+ExecStop=/usr/bin/targetctl clear
-+SyslogIdentifier=target
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/targetcli-fb/targetcli-fb.mk b/package/targetcli-fb/targetcli-fb.mk
-index 0a64c46..cf7f29f 100644
---- a/package/targetcli-fb/targetcli-fb.mk
-+++ b/package/targetcli-fb/targetcli-fb.mk
-@@ -12,7 +12,13 @@ TARGETCLI_FB_SETUP_TYPE = setuptools
- TARGETCLI_FB_DEPENDENCIES = python-configshell-fb python-rtslib-fb python-six
- 
- define TARGETCLI_FB_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target $(TARGET_DIR)/etc/init.d/S50target
-+	$(INSTALL) -m 0755 -D package/targetcli-fb/S50target \
-+		$(TARGET_DIR)/etc/init.d/S50target
-+endef
-+
-+define TARGETCLI_FB_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0644 -D package/targetcli-fb/target.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/target.service
- endef
- 
- # Targetcli stores its configuration in /etc/target/saveconfig.json
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
