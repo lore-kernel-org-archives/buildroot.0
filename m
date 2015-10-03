@@ -1,38 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2015 15:20:02 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-pctv: add jsoncpp reverse
-	dependency
-Message-ID: <20151003132414.8FF727FAF9@busybox.osuosl.org>
+Date: Sat, 03 Oct 2015 15:27:45 +0200
+Subject: [Buildroot] [PATCHv2] valgrind: build for the right MIPS ISA
+	revision level
+In-Reply-To: <1442874710-11595-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Mon, 21 Sep 2015 23:31:50 +0100")
+References: <1442874710-11595-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87oagg6q0e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3046c80e792216c592fc63b77f31f3d23c9be49
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-pvr-pctv/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ > When Valgrind detects a 32-bit MIPS architecture, it forcibly adds
+ > -march=mips32 to CFLAGS; when it detects a 64-bit MIPS architecture, it
+ > forcibly adds -march=mips64. This causes Valgrind to be built always for
+ > the first ISA revision level (R1), even when the user has configured
+ > Buildroot for the second ISA revision level (R2).
 
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 255cd4a..1bef551 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  PCTV PVR client addon for Kodi
- 
- 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
-+
-+comment "kodi-pvr-pctv needs a toolchain w/ gcc >= 4.7"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ > Since R2 is backwards compatible with R1, you can run a Valgrind built
+ > for R1 in an R2 core. This is why nobody noticed about this problem, or
+ > at least nobody complained.
+
+ > But, since (I hope) we will support R6 in Buildroot in the near future,
+ > this problem will become very important because R6 is not backwards
+ > compatible with R1 or R2, so building Valgrind for R1 when your target
+ > is R6 will result in a non-working Valgrind.
+
+ > Override the CFLAGS variable (which Valgrind appends to its CFLAGS) and
+ > pass the right -march option, so they take precedence over Valgrind's
+ > wrongfully detected value.
+
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > Changes v1 -> v2:
+ >   - Improved commit log. (Suggested by Yann E. Morin)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
