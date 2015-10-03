@@ -1,70 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Oct 2015 16:14:40 +0100
-Subject: [Buildroot] [PATCH v3 2/4] pkg-generic: prevent _SITE URLs with
- a trailing slash
-In-Reply-To: <560FEF35.5060508@lucaceresoli.net>
-References: <1443456634-21484-1-git-send-email-luca@lucaceresoli.net>
- <1443456634-21484-3-git-send-email-luca@lucaceresoli.net>
- <20150930124554.4a7abec2@free-electrons.com> <560FC397.2050404@mind.be>
- <560FEF35.5060508@lucaceresoli.net>
-Message-ID: <560FF0E0.6010703@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 3 Oct 2015 17:39:23 +0200
+Subject: [Buildroot] [PATCH 1/1] host-localdef fails under gcc5
+In-Reply-To: <1441057847-18193-1-git-send-email-stephen.agate@talktalk.net>
+References: <1441057847-18193-1-git-send-email-stephen.agate@talktalk.net>
+Message-ID: <560FF6AB.2050306@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Stephen,
 
-
-On 03-10-15 16:07, Luca Ceresoli wrote:
-> Hi Arnout, Thomas,
+Le 31/08/2015 23:50, Stephen Agate a ?crit :
+> Building host-localdef fails under gcc5.1 reporting multiple definitions and undefined references:
 > 
-> Arnout Vandecappelle wrote:
-> [...]
->>
->>>
->>> I am wondering if there are indeed no places left where a final / could
->>> sneak in. For example, when you specify a custom tarball location for
->>> packages like U-Boot, the Linux kernel and so on.
->>>
->>> For Linux and U-Boot, it is taken care of:
->>>
->>> UBOOT_SITE = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
->>>
->>> LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
->>>
->>> But for example, for the external toolchain site:
->>>
->>> TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
->>>
->>> I believe this means that the TOOLCHAIN_EXTERNAL_SITE variable will
->>> contain a final /. But that's indeed the only case I could find from a
->>> quick inspection.
->>
->>   Well, to be consistent, the removal should not be done for U-Boot or Linux
->> either, and instead the user should get this error message when he builds.
+> argp-help.o: In function `argp_fmtstream_write':
+> argp-help.c:(.text+0x1dc0): multiple definition of `argp_fmtstream_write'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x750): first defined here
+> argp-help.o: In function `argp_fmtstream_puts':
+> argp-help.c:(.text+0x1e10): multiple definition of `argp_fmtstream_puts'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x810): first defined here
+> argp-help.o: In function `argp_fmtstream_putc':
+> argp-help.c:(.text+0x1e80): multiple definition of `argp_fmtstream_putc'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x7b0): first defined here
+> argp-help.o: In function `argp_fmtstream_set_lmargin':
+> argp-help.c:(.text+0x1ed0): multiple definition of `argp_fmtstream_set_lmargin'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x590): first defined here
+> argp-help.o: In function `argp_fmtstream_set_rmargin':
+> argp-help.c:(.text+0x1f00): multiple definition of `argp_fmtstream_set_rmargin'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x5c0): first defined here
+> argp-help.o: In function `argp_fmtstream_set_wmargin':
+> argp-help.c:(.text+0x1f30): multiple definition of `argp_fmtstream_set_wmargin'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x5f0): first defined here
+> argp-help.o: In function `argp_fmtstream_point':
+> argp-help.c:(.text+0x1f60): multiple definition of `argp_fmtstream_point'
+> argp-fmtstream.o:argp-fmtstream.c:(.text+0x620): first defined here
+> charmap.o: In function `cmlr_open.constprop.2':
+> charmap.c:(.text+0x230a): undefined reference to `charmap_hash'
+> charmap.o: In function `charmap_read':
+> charmap.c:(.text+0x2397): undefined reference to `charmap_hash'
+> locfile.o: In function `locfile_read':
+> locfile.c:(.text+0x2e4): undefined reference to `locfile_hash'
+> locfile.c:(.text+0x8f4): undefined reference to `locfile_hash'
+> locfile.c:(.text+0x9b3): undefined reference to `locfile_hash'
+> locfile.c:(.text+0xa36): undefined reference to `locfile_hash'
+> collect2: error: ld returned 1 exit status
+> Makefile:58: recipe for target 'localedef' failed
 > 
-> But FOO_SITE is generated internally when the user chooses to fetch from
-> a custom URL. The user has no access to FOO_SITE in these cases, so
-> Buildroot should strip them.
+> Ref: http://permalink.gmane.org/gmane.comp.embedded.ptxdist.devel/12950
+> 
+> Signed-off-by: Stephen Agate <stephen.agate@talktalk.net>
 
- You're completely right, sorry!
+I reproduced this build issue locally.
 
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+[Build tested only]
+Tested-by: Romain Naour <romain.naour@openwide.fr>
 
-> So I guess I'll add a patsubst to toolchain-external too, and hunt for
-> other places where it might be needed.
+Best regards,
+Romain
 
- I can't think of an easy grep for that :-(
-
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> ---
+>  package/localedef/localedef.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+> index 4762e64..1fe431a 100644
+> --- a/package/localedef/localedef.mk
+> +++ b/package/localedef/localedef.mk
+> @@ -12,6 +12,8 @@ HOST_LOCALEDEF_CONF_OPTS += \
+>  	--prefix=/usr \
+>  	--with-glibc=./eglibc
+> 
+> +HOST_LOCALEDEF_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -fgnu89-inline"
+> +
+>  # The makefile does not implement an install target
+>  define HOST_LOCALEDEF_INSTALL_CMDS
+>  	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/usr/bin/localedef
+> --
+> 2.5.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
