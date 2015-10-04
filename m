@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 18:34:15 +0100
-Subject: [Buildroot] [PATCH 1/5] toolchain/external: commonalise
- comments about Linaro toolchains
-In-Reply-To: <376787b59e2113f2b072918ed14fae488f144bd2.1442785491.git.yann.morin.1998@free.fr>
-References: <cover.1442785491.git.yann.morin.1998@free.fr>
- <376787b59e2113f2b072918ed14fae488f144bd2.1442785491.git.yann.morin.1998@free.fr>
-Message-ID: <20151004183415.027b56ce@free-electrons.com>
+Date: Sun, 4 Oct 2015 18:35:28 +0100
+Subject: [Buildroot] [PATCH] audit: Bump version
+In-Reply-To: <1443978074-1455-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443978074-1455-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20151004183528.26a2ef94@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Clayton,
 
-On Sun, 20 Sep 2015 23:45:49 +0200, Yann E. MORIN wrote:
-> Those two comments:
->   - are exactly the same
->   - have the same dependencies (except for arm/armeb)
+Can you test/ack this patch? Thanks!
+
+On Sun,  4 Oct 2015 19:01:14 +0200, Maxime Hadjinlian wrote:
+> Remove patch as it was merged in this release:
+> https://fedorahosted.org/audit/changeset/1117
 > 
-> So, make it a common comment. It will be useful to have that comment
-> when we introduce new Linaro toolchain versions.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  toolchain/toolchain-external/Config.in | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-
-Applied, thanks.
+>  .../audit/0001-Missed-cross-compile-fixes.patch    | 694 ---------------------
+>  package/audit/audit.hash                           |   2 +-
+>  package/audit/audit.mk                             |   2 +-
+>  3 files changed, 2 insertions(+), 696 deletions(-)
+>  delete mode 100644 package/audit/0001-Missed-cross-compile-fixes.patch
 
 Thomas
 -- 
