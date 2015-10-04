@@ -1,33 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 18:35:28 +0100
-Subject: [Buildroot] [PATCH] audit: Bump version
-In-Reply-To: <1443978074-1455-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443978074-1455-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20151004183528.26a2ef94@free-electrons.com>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Sun, 4 Oct 2015 19:51:02 +0200
+Subject: [Buildroot] [RFC v4 00/16] Add per-package staging feature
+In-Reply-To: <56116029.7000204@mind.be>
+References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
+ <56116029.7000204@mind.be>
+Message-ID: <CAEYzJUFkZqkD+HQ+bxLaLnATjUw8tdQyWTZzsN=ms5xZ+Y2iGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clayton,
+On 4 October 2015 at 19:21, Arnout Vandecappelle <arnout@mind.be> wrote:
+> [...] We anyway don't
+> have complete reproducibility at the moment, since the build of host packages
+> depends on what is installed on the system.
 
-Can you test/ack this patch? Thanks!
+To get a known set of host packages, Buildroot could run in an
+environment setup by Nix[1].
 
-On Sun,  4 Oct 2015 19:01:14 +0200, Maxime Hadjinlian wrote:
-> Remove patch as it was merged in this release:
-> https://fedorahosted.org/audit/changeset/1117
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  .../audit/0001-Missed-cross-compile-fixes.patch    | 694 ---------------------
->  package/audit/audit.hash                           |   2 +-
->  package/audit/audit.mk                             |   2 +-
->  3 files changed, 2 insertions(+), 696 deletions(-)
->  delete mode 100644 package/audit/0001-Missed-cross-compile-fixes.patch
+With some extra tricks, you can get _very_ reproducible environments:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  https://garbas.si/2015/reproducible-development-environments.html
+
+I think that's close to as reproducible as it gets, if not emulating
+CPU/RAM/filesystem the build runs in :-)
+
+[1] http://nixos.org/nix/
+
+Disclaimer: I'm a Nix(OS) user/contributor.
+
+- Bj?rn
