@@ -1,61 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 04 Oct 2015 10:12:40 +0200
-Subject: [Buildroot] [PATCH] openal: New package
-References: <56100EB1.4010100@dawncrow.de>
-Message-ID: <ok37ecxrt1.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 09:15:57 +0100
+Subject: [Buildroot] [PATCH 1/7] configs: remove gnublin_defconfig
+In-Reply-To: <20151003230604.069b6d2a@gmx.net>
+References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1443901457-7914-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20151003230604.069b6d2a@gmx.net>
+Message-ID: <20151004091557.30158dd4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andr?,
+Hello,
 
-several months ago I started hacking an openal package myself but
-never finished it. Here I will compare my package to your version.
+On Sat, 3 Oct 2015 23:06:04 +0200, Peter Seiderer wrote:
+> Hello Thomas,
+> 
+> On Sat,  3 Oct 2015 20:44:11 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> 
+> > This defconfig tries to fetch its kernel source code and U-Boot source
+> > code from gitorious.org, which is not longer available. Therefore,
+> > this defconfig has been failing to build since quite some time. Since
+> > there's no obvious other place to grab the kernel and u-boot source
+> > code, and the defconfig was not updated since a long time, let's
+> > simply get rid of it.
+> 
+> Just for the record, there are still (old?) sources for kernel/u-boot:
+> 
+> https://github.com/embeddedprojects/gnublin-lpc3131-2.6.33
+> https://github.com/embeddedprojects/gnublin-lpc3131-3.3.0
+> https://github.com/embeddedprojects/gnublin-distribution/tree/master/lpc3131/bootloader/u-boot
+> 
+> but nothing with a 3.7 or newer version...
 
-Am Sat, 03 Oct 2015 19:21:53 +0200 schrieb Andr? Hentschel:
+Yes, I also saw those sources, but since they were older than the 3.7
+kernel used in the defconfig and couldn't find any other recent
+version, I decided to drop the defconfig entirely.
 
-> diff --git a/package/openal/Config.in b/package/openal/Config.in
-> new file mode 100644
-> index 0000000..8eb177b
-> --- /dev/null
-> +++ b/package/openal/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_OPENAL
-> +	bool "openal"
-> +	# OpenAL needs a backend
-> +	depends on BR2_PACKAGE_ALSA_LIB || \
-> +	           BR2_PACKAGE_PORTAUDIO || \
-> +	           BR2_PACKAGE_PULSEAUDIO
-> +	help
-> +	  OpenAL provides capabilities for playing audio in a virtual
-> +	  3D environment. Distance attenuation, doppler shift, and
-> +	  directional sound emitters are among the features handled by
-> +	  the API.
-> +
-> +comment "openal needs a backend"
-> +	depends on !BR2_PACKAGE_ALSA_LIB && \
-> +	           !BR2_PACKAGE_PORTAUDIO && \
-> +	           !BR2_PACKAGE_PULSEAUDIO
-
-What about having a choice option defaulting to, for example, alsa?
-
-Please add
-
-	http://kcat.strangesoft.net/openal.html
-
-to Config.in. Openal also needs this
-
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-	comment "openal needs a toolchain w/ threads"
-		depends on !BR2_TOOLCHAIN_HAS_THREADS
-
-Did you test a static build? I have this in openal.mk:
-
-ifeq ($(BR2_STATIC_LIBS),y)
-OPENAL_CONF_OPTS += -DLIBTYPE=STATIC
-endif
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
