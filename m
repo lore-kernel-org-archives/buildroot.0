@@ -1,160 +1,255 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 13:28:42 +0100
-Subject: [Buildroot] [PATCH v2 02/18] gcc: use toolchain wrapper
-In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be>
-References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <1443961738-12149-3-git-send-email-arnout@mind.be>
+Date: Sun, 4 Oct 2015 13:28:40 +0100
+Subject: [Buildroot] [PATCH v2 00/18] Internal toolchain wrapper & ccache
+	support
+Message-ID: <1443961738-12149-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have a toolchain wrapper for external toolchain, but it is also
-beneficial for internal toolchains, for the following reasons:
+This series introduces two features that were discussed on the list and
+in the Buildroot Summer Camp: a wrapper for the internal toolchain, and
+fixing ccache. See below why the two are combined in one series.
 
-1. It can make sure that BR2_TARGET_OPTIMIZATION is passed to the
-   compiler even if a package's build system doesn't honor CFLAGS.
-2. It allows us to do the unsafe path check (i.e. -I/usr/include)
-   without patching gcc.
-3. It makes it simpler to implement building each package with a
-   separate staging directory (per-package staging).
-4. It makes it simpler to implement a compiler hash check for ccache.
+[Note: to make review easier, all the potentially contentious stuff
+from the individual patches is repeated here. So for the first few
+iterations, it's probably enough to reply to just this e-mail.]
 
-The wrapper is reused from the external toolchain. A third CROSS_PATH_
-option is added to the wrapper: in this case, the real executable is in
-the same directory, with the extension .real.
+The idea of a wrapper for the internal toolchain has been floating
+around for a while now. It allows us to make sure that
+BR2_TARGET_OPTIMIZATION and BR2_TARGET_LDFLAGS are passed down to the
+compiler and linker even if the package build system doesn't use CFLAGS
+and LDFLAGS. This is something which is not tested in the autobuilders
+(they never set these options) so probably there are packages out there
+that are not built with these flags.
 
-The creation of the simple symlinks is merged with the creation of the
-wrapper symlinks, otherwise part of the -gcc-ar handling logic would
-have to be repeated.
+A second reason for the wrapper is to be able to use the unsafe path
+check also for internal toolchains without patching gcc.
 
-The complex case-condition could be refactored with the one for the
-external toolchain, but then it becomes even more complex because
-they each have special corner cases. For example, the internal
-toolchain has to handle *.real to avoid creating an extra indirection
-after host-gcc-{final,initial}-rebuild.
+More recently, and additional motivation for an internal toolchain
+wrapper was discovered: it makes the support for a per-package staging
+directory significantly simpler. See the discussion in [1][2].
 
-Instead of creating the .real files, it would also have been possible
-to install the internal toolchain in $(HOST_DIR)/opt, similar to what
-we do for the external toolchain. However, then we would also have to
-copy things to the sysroot and do more of the magic that the external
-toolchain is doing. So keeping it in $(HOST_DIR)/usr/bin is much
-simpler.
+And finally, the wrapper makes the ccache handling simpler, as
+explained below.
 
-Note that gcc-initial has to be wrapped as well, because it is used for
-building libc and we want to apply the same magic when building libc.
+To create the wrapper for the internal toolchain, this series refactors
+as much as possible with the external toolchain. Therefore, the first
+few patch moves things around a bit as an enabler of the internal
+toolchain wrapper. The same patch also does some related cleanups.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The second patch adds the toolchain wrapper for the internal toolchain.
+It uses the same toolchain-wrapper.c as the external toolchain. The
+wrapper is created both for gcc-initial and gcc-final. It is rebuilt
+for gcc-final, which is not exactly
+
+The real gcc, g++, etc. executables are moved to gcc.real etc. and a
+symlink is created to toolchain-wrapper. This requires the wrapper code
+to be extended with an additional BR_CROSS_PATH_SUFFIX to find the real
+executable. I could have reused the same approach of the external
+toolchain, installing in /opt, but that would require copying a bunch
+files around as well and overall would be much more invasive, so I
+opted for this simpler change.
+
+The creation of the wrapper symlinks is covered by a fairly complex
+case-condition which is similar to the external toolchain wrapper. I
+didn't refactor these two commands, because there are suble differences
+that would make the refactored code very complicated.
+
+The third patch implements the second use case: it removes the 
+now-redundant gcc patches that add the unsafe path check. This check is
+now handled by the toolchain wrapper. Note that the patches for 
+binutils are still needed, since ld isn't wrapped. We actually should 
+also wrap cpp and ld to cover the first use case.
+
+The first use case (passing TARGET_CFLAGS through the wrapper) isn't
+implemented yet because it is a bit complicated, because some packages
+do _not_ want TARGET_CFLAGS, e.g. gcc and linux. So some infrastructure
+needs to be added that allows overriding TARGET_CFLAGS.
+
+The third use case should be handled by Fabio in his per-package
+staging series.
+
+The fourth use case brings us to the ccache problem.
+
+The problem with our current ccache is that we disable hashing of the
+compiler executable itself. If we don't do that, using ccache is
+pointless since we always rebuild the compiler (for the external
+toolchain we rebuild the wrapper) so the cache would always miss.
+But in the current situation, if a user changes the compiler
+configuration (which would result in the compiler generating different
+object files than before) and does 'make clean all', ccache may in fact
+reuse object files from the previous run. This rarely gives problems,
+because
+(1) the cache expires quite quickly (it's only 1GB by default),
+(2) radically changing compiler options will cause cache misses because
+    different header files are used,
+(3) many compiler changes (e.g. changing -mtune) have little practical
+    effect because the resulting code is usually still compatible,
+(4) we currently don't use CCACHE_BASEDIR, and almost all object files
+    will contain an absolute path (e.g. in debug info), so when
+    building in a different directory, most of it will miss,
+(5) we do mostly build test, and many of the potential problems only
+    appear at runtime.
+Still, when ccache _does_ use the wrong cached object files, the
+effects are really weird and hard to debug. Also, we want reproducible
+builds and obviously the above makes builds non-reproducible. So we
+have a FAQ entry that warns against using ccache and tells the user to
+clear the cache in case of problems.
+
+To fix the situation, this series sets the CCACHE_COMPILERCHECK
+environment variable to a hash of the compiler options. I already
+analyzed the options that should be checked a while ago in [3].
+
+Unfortunately, it's not so simple, since for the host compiler we
+should not use the same hash: on the one hand, it's possible that the
+host compiler has changed while the target compiler options are still
+the same, and on the other hand when we change the target compiler
+options, the cached host object files are still valid.
+
+My first attempt was to create a ccache wrapper that sets the
+CCACHE_COMPILERCHECK environment variable, and compiles it differently
+for host and target (i.e. use ccache-host for host compilation, and
+ccache-target for target compilation). However, it was very difficult
+to insert the calculation of the target compiler hash correctly in the
+dependency chain. The calculation of the hash really belongs to the
+toolchain build, but ccache is already built before everything else.
+It's much simpler, instead, to use the toolchain wrapper and insert
+ccache in there. That's why these two features (internal toolchain
+wrapper and ccache fix) are combined in a single series.
+
+The ccache part of the series starts with moving the ccache handling
+into the toolchain wrapper. This allows a lot of follow-up patches to
+remove ccache handling in individual packages, including some patches
+to handle the fact that CC has multiple words. These patches were
+tested by doing a ccache-enabled build of the affected packages, then
+cleaning them, then rebuilding, and checking the evolution of the
+ccache stats while building. If the number of cache hits is increasing
+significantly faster than the number of cache misses, all is well.
+
+Moving the ccache handling into the toolchain wrapper has one nasty
+side effect: when you change the value of BR2_CCACHE, this will have no
+effect unless host-gcc-final is rebuilt. Of course, we don't really
+support the incremental build scenario so it's not such a big deal.
+Still, I've added a patch (marked RFC) to support this scenario, by
+exporting a BR_NO_CCACHE that tells the wrapper to skip ccache. Note
+that this works only to turn ccache off, but I think that's the most
+important use case.
+
+Once ccache moves to the wrapper, we can fix the compilercheck. All of
+that is done in a single commit - I didn't think splitting it up was
+really worthwhile. It reverts the default compilercheck to 'mtime' like
+it is in upstream, and it adds an option to the toolchain wrapper to
+set the CCACHE_COMPILERCHECK environment variable. The hash is
+calculated based on the config options passed to gcc and on the sources
+and patches.
+
+A final cleanup step, also marked RFC, is to support changing the
+output directory. Many of the build commands have a -I argument
+pointing somewhere in the staging directory, so when you rebuild in
+a different directory, this will mot match and the cache isn't used.
+ccache has the CCACHE_BASEDIR potion to deal with that, but it's not
+bullet-proof so I added a Kconfig option for it.
+
+It would be really nice if someone else could take over this series,
+since it is rather 'deep' stuff and if someone else really gets their
+hands dirty on this code, there's a better chance of catching some
+issues that I overlooked.
+
+Changelog:
+
+v2: - Rebased on master.
+    - Updated comments to remove the 'external' from the wrapper.
+    - Include BR2_GLOBAL_PATCH_DIR in the wrapper hash; also use
+      $(wildcard ...) for all patches.
+    - Remove --enable-poison-system-directories from gcc-final
+      configure.
+    - Explain in commit message why gcc-initial also needs the wrapper.
+
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-March/121005.html
+[2] http://lists.busybox.net/pipermail/buildroot/2015-June/131051.html
+[3] http://lists.busybox.net/pipermail/buildroot/2015-April/127341.html
+
 Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
 Cc: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
----
-v2: - Update commit message to explain why gcc-initial has to be wrapped
-      [Romain]
-    - Remove redundant newline [Romain]
----
- package/gcc/gcc-final/gcc-final.mk     | 13 +++++--------
- package/gcc/gcc-initial/gcc-initial.mk |  4 ++++
- package/gcc/gcc.mk                     | 34 ++++++++++++++++++++++++++++++++++
- toolchain/toolchain-wrapper.c          |  4 +++-
- 4 files changed, 46 insertions(+), 9 deletions(-)
+Cc: Danomi Manchego <danomimanchego123@gmail.com>
+Cc: K?roly Kasza <kaszak@gmail.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 3426ba4..2c16fdf 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -96,14 +96,11 @@ endef
- 
- HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_CC_SYMLINKS
- 
--# Create <arch>-linux-<tool> symlinks
--define HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
--	(cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
--		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
--	done)
--endef
--
--HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_CREATE_SIMPLE_SYMLINKS
-+HOST_GCC_FINAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-+HOST_GCC_FINAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-+# Note: this must be done after CREATE_CC_SYMLINKS, otherwise the
-+# -cc symlink to the wrapper is not created.
-+HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
- 
- # In gcc 4.7.x, the ARM EABIhf library loader path for (e)glibc was not
- # correct, so we create a symbolic link to make things work
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 6bb7997..4b03e47 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -62,4 +62,8 @@ HOST_GCC_INITIAL_MAKE_OPTS += all-target-libgcc
- HOST_GCC_INITIAL_INSTALL_OPTS += install-target-libgcc
- endif
- 
-+HOST_GCC_INITIAL_TOOLCHAIN_WRAPPER_ARGS += $(HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS)
-+HOST_GCC_INITIAL_POST_BUILD_HOOKS += TOOLCHAIN_BUILD_WRAPPER
-+HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
-+
- $(eval $(host-autotools-package))
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 501fcea..b9da398 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -235,4 +235,38 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
-+
-+# The LTO support in gcc creates wrappers for ar, ranlib and nm which load
-+# the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
-+# *-gcc-nm and should be used instead of the real programs when -flto is
-+# used. However, we should not add the toolchain wrapper for them, and they
-+# match the *cc-* pattern. Therefore, an additional case is added for *-ar,
-+# *-ranlib and *-nm.
-+# Avoid that a .real is symlinked a second time.
-+# Also create <arch>-linux-<tool> symlinks.
-+define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
-+	$(Q)cd $(HOST_DIR)/usr/bin; \
-+	for i in $(GNU_TARGET_NAME)-*; do \
-+		case "$$i" in \
-+		*.real) \
-+			;; \
-+		*-ar|*-ranlib|*-nm) \
-+			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			;; \
-+		*cc|*cc-*|*++|*++-*|*cpp) \
-+			rm -f $$i.real; \
-+			mv $$i $$i.real; \
-+			ln -sf toolchain-wrapper $$i; \
-+			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			ln -snf $$i.real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.real; \
-+			;; \
-+		*) \
-+			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			;; \
-+		esac; \
-+	done
-+
-+endef
-+
- include $(sort $(wildcard package/gcc/*/*.mk))
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index ac40dec..d4d25c7 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -138,8 +138,10 @@ int main(int argc, char **argv)
- 	/* Fill in the relative paths */
- #ifdef BR_CROSS_PATH_REL
- 	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s", absbasedir, basename);
--#else /* BR_CROSS_PATH_ABS */
-+#elif BR_CROSS_PATH_ABS
- 	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s", basename);
-+#else /* BR_CROSS_PATH_SUFFIX */
-+	ret = snprintf(path, sizeof(path), "%s/usr/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
- #endif
- 	if (ret >= sizeof(path)) {
- 		perror(__FILE__ ": overflow");
--- 
-2.5.3
+
+The following changes since commit 0611258aeae3b2e311b1c8fbebd337c9567830fb:
+
+  package/freerdp: needs C++ (2015-10-04 14:16:27 +0200)
+
+are available in the git repository at:
+
+  https://github.com/arnout/buildroot.git toolchain-wrapper-2
+
+for you to fetch changes up to 11995e8efc5b34d78a45a1ea44bcb9cbdc4e53d3:
+
+  [RFC] ccache: support changing the output directory (2015-10-04 13:23:38 +0100)
+
+----------------------------------------------------------------
+Arnout Vandecappelle (Essensium/Mind) (18):
+      toolchain-external: move wrapper to toolchain directory
+      gcc: use toolchain wrapper
+      gcc: remove unsafe patch check (poison system dirs) patch
+      infra: move ccache handling to the toolchain wrapper
+      perl: Remove ccache handling
+      imx-lib: remove now-redundant ccache handling
+      imx-vpu: remove now-redundant ccache handling
+      linux: remove now-redundant ccache handling
+      uboot: remove now-redundant ccache handling
+      barebox: remove now-redundant ccache handling
+      cryptodev-linux: remove now-redundant fix-ccache-compile patch
+      qt5base: remove now-redundant ccache handling
+      package-cmake: remove now-redundant target ccache support
+      qpid-proton: remove now-redundant ccache handling patch
+      Makefile.in: remove now-unused TARGET_CC/CXX_NOCCACHE
+      toolchain-wrapper: support change of BR2_CCACHE
+      ccache: use mtime for external toolchain, CONF_OPTS for internal toolchain
+      [RFC] ccache: support changing the output directory
+
+ Config.in                                          |  27 +++
+ Makefile                                           |   2 +
+ boot/barebox/barebox.mk                            |   3 +-
+ boot/uboot/uboot.mk                                |   2 +-
+ docs/manual/ccache-support.txt                     |  20 ++
+ linux/linux.mk                                     |   2 +-
+ package/Makefile.in                                |   8 -
+ package/ccache/ccache.mk                           |   5 -
+ .../cryptodev-linux/0002-fix-ccache-compile.patch  |  20 --
+ package/freescale-imx/imx-lib/imx-lib.mk           |   2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.mk           |   2 +-
+ .../4.7.4/910-gcc-poison-system-directories.patch  | 207 -------------------
+ .../4.8.5/910-gcc-poison-system-directories.patch  | 207 -------------------
+ .../4.9.3/910-gcc-poison-system-directories.patch  | 207 -------------------
+ .../5.2.0/200-gcc-poison-system-directories.patch  | 207 -------------------
+ .../910-gcc-poison-system-directories.patch        | 221 ---------------------
+ package/gcc/gcc-final/gcc-final.mk                 |  14 +-
+ package/gcc/gcc-initial/gcc-initial.mk             |   4 +
+ package/gcc/gcc.mk                                 |  65 +++++-
+ package/perl/perl.mk                               |   5 +-
+ package/pkg-cmake.mk                               |   5 +-
+ ...fix-C-compiler-detection-with-_ARG1-_ARG2.patch |  52 -----
+ package/qt5/qt5base/0002-mkspecs-files.patch       |   6 +-
+ .../qt5/qt5base/0009-fix-build-with-ccache.patch   |  49 -----
+ package/qt5/qt5base/qt5base.mk                     |   1 -
+ support/misc/toolchainfile.cmake.in                |  32 +--
+ toolchain/toolchain-external/toolchain-external.mk |  55 ++---
+ ...ext-toolchain-wrapper.c => toolchain-wrapper.c} |  51 ++++-
+ toolchain/toolchain-wrapper.mk                     |  34 ++++
+ 29 files changed, 231 insertions(+), 1284 deletions(-)
+ delete mode 100644 package/cryptodev-linux/0002-fix-ccache-compile.patch
+ delete mode 100644 package/gcc/4.7.4/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/4.8.5/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/4.9.3/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/5.2.0/200-gcc-poison-system-directories.patch
+ delete mode 100644 package/gcc/arc-2015.06/910-gcc-poison-system-directories.patch
+ delete mode 100644 package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
+ delete mode 100644 package/qt5/qt5base/0009-fix-build-with-ccache.patch
+ rename toolchain/{toolchain-external/ext-toolchain-wrapper.c => toolchain-wrapper.c} (81%)
+ create mode 100644 toolchain/toolchain-wrapper.mk
