@@ -1,85 +1,247 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 18:22:20 +0200
-Subject: [Buildroot] [git commit] qpid-proton: remove now-redundant ccache
-	handling patch
-Message-ID: <20151004162325.338C681DA9@busybox.osuosl.org>
+Date: Sun, 4 Oct 2015 18:22:19 +0200
+Subject: [Buildroot] [git commit] toolchain-external: move wrapper to
+	toolchain directory
+Message-ID: <20151004162324.BF99981D77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca0d298f43966e92a20be13292336ab1cc9f8f9f
+commit: http://git.buildroot.net/buildroot/commit/?id=f6ae24379b551cbfc6447b25a241ffa76d366ddc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Although this patch is still relevant for upstream, we don't need it
-anymore in buildoort because we no longer have _ARG1.
+The toolchain wrapper will be reused for the internal toolchain, so it
+belongs in the toolchain directory. Also, the ext- prefix is removed
+from it. The build commands are moved to a new toolchain-wrapper.mk.
 
-Note that it would be relevant again if we would add host-qpid-proton.
-However, the 0.10 release already has the fix.
+The wrapper arguments that are also relevant for the internal toolchain
+wrapper are moved to toolchain-wrapper.mk, the rest stays in
+toolchain-external.mk.
+
+While we're at it, move the building of the toolchain wrapper to the
+build step of toolchain-external. There is no specific reason to do
+this, other than that it fits better semantically. Also remove the
+MESSAGE call, otherwise we'd see:
+>>> toolchain-external undefined Building
+>>> toolchain-external undefined Building toolchain wrapper
+/usr/bin/gcc ...
+Having an extra "Building toolchain wrapper' message is pointless.
+
+The useless condition on $(BR2_TARGET_OPTIMIZATION) is removed. It was
+always true because it wasn't qstrip'ped first, so clearly it works
+without that condition as well.
+
+Also rewrapped some comments and removed the 'external' reference.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: J??r??me Oufella <jerome.oufella@savoirfairelinux.com>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fix-C-compiler-detection-with-_ARG1-_ARG2.patch |   52 --------------------
- 1 files changed, 0 insertions(+), 52 deletions(-)
+ toolchain/toolchain-external/toolchain-external.mk |   55 ++++++-------------
+ ...ext-toolchain-wrapper.c => toolchain-wrapper.c} |    6 +-
+ toolchain/toolchain-wrapper.mk                     |   26 +++++++++
+ 3 files changed, 47 insertions(+), 40 deletions(-)
 
-diff --git a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch b/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
-deleted file mode 100644
-index 16f4aba..0000000
---- a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From f24be9ae9ab01c7507a366e9d5529c444f0b7edd Mon Sep 17 00:00:00 2001
--From: Luca Ceresoli <luca@lucaceresoli.net>
--Date: Fri, 10 Jul 2015 10:13:47 +0200
--Subject: [PATCH] proton-c: fix C compiler detection with _ARG1/_ARG2
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index ad4084e..3fb165c 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -153,15 +153,14 @@ TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX
+ TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc
+ TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++
+ TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+ 
+ ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
+ # TOOLCHAIN_EXTERNAL_BIN points outside HOST_DIR => absolute path
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_ABS='"$(TOOLCHAIN_EXTERNAL_BIN)"'
+ else
+ # TOOLCHAIN_EXTERNAL_BIN points inside HOST_DIR => relative path
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
+ 	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
+ endif
+ 
+@@ -180,59 +179,54 @@ CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
+ # to select the right multilib variant
+ ifeq ($(BR2_x86_64),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m64
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
+ endif
+ ifneq ($(CC_TARGET_ARCH_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
+ endif
+ ifneq ($(CC_TARGET_CPU_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
+ endif
+ ifneq ($(CC_TARGET_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+ endif
+ ifneq ($(CC_TARGET_FPU_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=$(CC_TARGET_FPU_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FPU='"$(CC_TARGET_FPU_)"'
+ endif
+ ifneq ($(CC_TARGET_FLOAT_ABI_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mfloat-abi=$(CC_TARGET_FLOAT_ABI_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_FLOAT_ABI='"$(CC_TARGET_FLOAT_ABI_)"'
+ endif
+ ifneq ($(CC_TARGET_MODE_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MODE='"$(CC_TARGET_MODE_)"'
+ endif
+ ifeq ($(BR2_BINFMT_FLAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_BINFMT_FLAT
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_BINFMT_FLAT
+ endif
+ ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MIPS_TARGET_LITTLE_ENDIAN
+ TOOLCHAIN_EXTERNAL_CFLAGS += -EL
+ endif
+ ifeq ($(BR2_mips)$(BR2_mips64),y)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_MIPS_TARGET_BIG_ENDIAN
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_MIPS_TARGET_BIG_ENDIAN
+ TOOLCHAIN_EXTERNAL_CFLAGS += -EB
+ endif
+ ifeq ($(BR2_arceb),y)
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARC_TARGET_BIG_ENDIAN
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARC_TARGET_BIG_ENDIAN
+ TOOLCHAIN_EXTERNAL_CFLAGS += -EB
+ endif
+-ifneq ($(BR2_TARGET_OPTIMIZATION),)
++
+ TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+-# We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each
+-# flag is a separate argument when used in execv() by the external
+-# toolchain wrapper.
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
+-endif
+ 
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
++TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+ endif
+ 
+ # The Linaro ARMhf toolchain expects the libraries in
+@@ -696,15 +690,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT
+ endef
+ endif
+ 
+-# We use --hash-style=both to increase the compatibility of
+-# the generated binary with older platforms, except for MIPS,
+-# where the only acceptable hash style is 'sysv'
+-ifeq ($(findstring mips,$(HOSTARCH)),mips)
+-TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = sysv
+-else
+-TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE = both
+-endif
 -
--The C compiler commandline in CMake is composed by the concatenation of
--CMAKE_C_COMPILER + CMAKE_C_COMPILER_ARG1 + CMAKE_C_COMPILER_ARG2.
--
--In most use cases the two additional argument variables are empty, thus
--CMAKE_C_COMPILER can be used without any noticeable difference.
--
--The Buildroot embedded Linux build system [0], however, optionally exploits the
--CMAKE_C_COMPILER_ARG1 variable to speed up the cross-compilation of CMake-based
--packages using ccache. It does so by setting [1]:
--
--  CMAKE_C_COMPILER      = /path/to/ccache
--  CMAKE_C_COMPILER_ARG1 = /path/to/cross-gcc
--
--This works fine with other CMake-based packages, but proton-c's CMakeLists.txt
--calls gcc to extract the compiler version. It does so by calling
--"${CMAKE_C_COMPILER} -dumpversion", without honoring the two extra arguments.
--Within Buildroot with ccache enabled, this means calling
--"/path/to/ccache -dumpversion", which fails with the error:
--
--  ccache: invalid option -- 'd'
--
--Fix the compiler check by adding the two arguments.
--
--[0] http://buildroot.net/
--[1] http://git.buildroot.net/buildroot/tree/support/misc/toolchainfile.cmake.in?id=2015.05
--
--Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-----
-- proton-c/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/proton-c/CMakeLists.txt b/proton-c/CMakeLists.txt
--index 93449a9..8c31a89 100644
----- a/proton-c/CMakeLists.txt
--+++ b/proton-c/CMakeLists.txt
--@@ -218,7 +218,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
--     set (COMPILE_LANGUAGE_FLAGS "-std=c99")
--     set (COMPILE_PLATFORM_FLAGS "-std=gnu99")
-- 
---    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION
--+    execute_process(COMMAND ${CMAKE_C_COMPILER} ${CMAKE_C_COMPILER_ARG1} ${CMAKE_C_COMPILER_ARG2} -dumpversion OUTPUT_VARIABLE GCC_VERSION
--       OUTPUT_STRIP_TRAILING_WHITESPACE)
--     if (${GCC_VERSION} VERSION_LESS "4.3.0")
--       # Only a concern if contibuting code back.
---- 
--1.9.1
--
+ # Build toolchain wrapper for preprocessor, C and C++ compiler and setup
+ # symlinks for everything else. Skip gdb symlink when we are building our
+ # own gdb to prevent two gdb's in output/host/usr/bin.
+@@ -715,8 +700,6 @@ endif
+ # match the *cc-* pattern. Therefore, an additional case is added for *-ar,
+ # *-ranlib and *-nm.
+ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+-	$(Q)$(call MESSAGE,"Building ext-toolchain wrapper")
+-	$(Q)mkdir -p $(HOST_DIR)/usr/bin
+ 	$(Q)cd $(HOST_DIR)/usr/bin; \
+ 	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
+ 		base=$${i##*/}; \
+@@ -725,7 +708,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
+ 			;; \
+ 		*cc|*cc-*|*++|*++-*|*cpp) \
+-			ln -sf ext-toolchain-wrapper $$base; \
++			ln -sf toolchain-wrapper $$base; \
+ 			;; \
+ 		*gdb|*gdbtui) \
+ 			if test "$(BR2_PACKAGE_HOST_GDB)" != "y"; then \
+@@ -737,10 +720,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+ 			;; \
+ 		esac; \
+ 	done
+-	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_EXTERNAL_WRAPPER_ARGS) \
+-		-s -Wl,--hash-style=$(TOOLCHAIN_EXTERNAL_WRAPPER_HASH_STYLE) \
+-		toolchain/toolchain-external/ext-toolchain-wrapper.c \
+-		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
+ endef
+ 
+ # This sed magic is taken from Linux headers_install.sh script.
+@@ -779,6 +758,8 @@ define TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO
+ 	fi
+ endef
+ 
++TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
++
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+similarity index 96%
+rename from toolchain/toolchain-external/ext-toolchain-wrapper.c
+rename to toolchain/toolchain-wrapper.c
+index b3b02d8..ac40dec 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -1,7 +1,7 @@
+ /**
+- * Buildroot wrapper for external toolchains. This simply executes the real
+- * toolchain with a number of arguments (sysroot/arch/..) hardcoded,
+- * to ensure the external toolchain uses the correct configuration.
++ * Buildroot wrapper for toolchains. This simply executes the real toolchain
++ * with a number of arguments (sysroot/arch/..) hardcoded, to ensure the
++ * toolchain uses the correct configuration.
+  * The hardcoded path arguments are defined relative to the actual location
+  * of the binary.
+  *
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+new file mode 100644
+index 0000000..899947d
+--- /dev/null
++++ b/toolchain/toolchain-wrapper.mk
+@@ -0,0 +1,26 @@
++# This file contains the definition of the toolchain wrapper build commands
++
++# We use --hash-style=both to increase the compatibility of the generated
++# binary with older platforms, except for MIPS, where the only acceptable
++# hash style is 'sysv'
++ifeq ($(findstring mips,$(HOSTARCH)),mips)
++TOOLCHAIN_WRAPPER_HASH_STYLE = sysv
++else
++TOOLCHAIN_WRAPPER_HASH_STYLE = both
++endif
++
++TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
++
++# We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
++# separate argument when used in execv() by the toolchain wrapper.
++TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
++
++# For simplicity, build directly into the install location
++define TOOLCHAIN_BUILD_WRAPPER
++	$(Q)mkdir -p $(HOST_DIR)/usr/bin
++	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
++		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
++		toolchain/toolchain-wrapper.c \
++		-o $(HOST_DIR)/usr/bin/toolchain-wrapper
++endef
