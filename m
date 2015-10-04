@@ -1,136 +1,147 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 16:10:42 +0100
-Subject: [Buildroot] [PATCH v2] board: add support for Synopsys VDK
- Software Development Platform
-In-Reply-To: <33ba74fe14a0cf32e5dbddac4c135529e124cf10.1443620378.git.jpinto@synopsys.com>
-References: <33ba74fe14a0cf32e5dbddac4c135529e124cf10.1443620378.git.jpinto@synopsys.com>
-Message-ID: <20151004161042.2e8e6782@free-electrons.com>
+Date: Sun, 4 Oct 2015 16:11:32 +0100
+Subject: [Buildroot] [git commit] blackfin: 2012R2 toolchain is gone,
+	remove kludges
+Message-ID: <20151004151805.E4B3881D6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joao,
+commit: http://git.buildroot.net/buildroot/commit/?id=231fdc7c5448d1b79752bbaa849a2532b678f209
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Sep 2015 14:45:48 +0100, Joao Pinto wrote:
-> The Virtualizer Development Kit (VDK) Family for ARM Cortex Products 
-> consists of a set of virtual prototypes that provide a virtualizer 
-> for the ARM core variants. The VDK is a standalone package that runs
-> on an host computer.
-> 
-> Remark: The ext2 generator is essential since it is the expected 
-> filesystem format expected by the VDK platform.
-> 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dhcpcd/Config.in   |    2 --
+ package/glog/Config.in     |    2 --
+ package/libtirpc/Config.in |    7 -------
+ package/openpgm/Config.in  |    1 -
+ package/rpcbind/Config.in  |    4 ----
+ package/zeromq/Config.in   |    1 -
+ package/zyre/Config.in     |    4 ----
+ 7 files changed, 0 insertions(+), 21 deletions(-)
 
-This looks good, but there are still a few issues.
-
-> diff --git a/board/synopsys/vdk/fs-overlay/etc/inittab b/board/synopsys/vdk/fs-overlay/etc/inittab
-> new file mode 100644
-> index 0000000..9cd272f
-> --- /dev/null
-> +++ b/board/synopsys/vdk/fs-overlay/etc/inittab
-> @@ -0,0 +1,36 @@
-> +# /etc/inittab
-> +#
-> +# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
-> +#
-> +# Note: BusyBox init doesn't support runlevels.  The runlevels field is
-> +# completely ignored by BusyBox init. If you want runlevels, use
-> +# sysvinit.
-> +#
-> +# Format for each entry: <id>:<runlevels>:<action>:<process>
-> +#
-> +# id        == tty to run on, or empty for /dev/console
-> +# runlevels == ignored
-> +# action    == one of sysinit, respawn, askfirst, wait, and once
-> +# process   == program to run
-> +
-> +# Startup the system
-> +null::sysinit:/bin/mount -t proc proc /proc
-> +null::sysinit:/bin/mount -o remount,rw /
-> +null::sysinit:/bin/mkdir -p /dev/pts
-> +null::sysinit:/bin/mkdir -p /dev/shm
-> +null::sysinit:/bin/mount -a
-> +null::sysinit:/bin/hostname -F /etc/hostname
-> +# now run any rc scripts
-> +::sysinit:/etc/init.d/rcS
-> +
-> +# Put a getty on the serial port
-> +console::respawn:/sbin/getty -L  console 0 vt100 # GENERIC_SERIAL
-> +tty1::respawn:/sbin/getty 0 tty1
-
-Like Arnout said, do we really need to have two gettys?
-
-> diff --git a/board/synopsys/vdk/linux-vdk-defconfig b/board/synopsys/vdk/linux-vdk-defconfig
-> new file mode 100644
-> index 0000000..e3eb277
-> --- /dev/null
-> +++ b/board/synopsys/vdk/linux-vdk-defconfig
-> @@ -0,0 +1,817 @@
-> +CONFIG_ARM64=y
-> +CONFIG_64BIT=y
-> +CONFIG_ARCH_PHYS_ADDR_T_64BIT=y
-
-[... snip ...]
-
-This is clearly not a kernel defconfig. It looks like you have just
-removed the commented lines, which is not correct. Can you please
-generate it with "make linux-update-defconfig" ?
-
-See
-http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf,
-slide 78 for details on how to do that.
-
-
-> diff --git a/configs/snps_vdk_defconfig b/configs/snps_vdk_defconfig
-> new file mode 100644
-> index 0000000..39eb86f
-> --- /dev/null
-> +++ b/configs/snps_vdk_defconfig
-
-This file should be named snps_aarch64_vdk_defconfig
-
-The VDK exists for other architectures than AArch64: we also have
-defconfigs for the VDK emulated the ARC HS38 CPU, so we need a way to
-distinguish that.
-
-> @@ -0,0 +1,16 @@
-> +BR2_aarch64=y
-> +BR2_KERNEL_HEADERS_3_18=y
-> +BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
-> +BR2_ROOTFS_OVERLAY="board/synopsys/vdk/fs-overlay"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-defconfig"
-
-Same here, vdk-aarch64 or something like that.
-
-
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-> +BR2_PACKAGE_BASH=y
-
-No bash please.
-
-> +BR2_TARGET_ROOTFS_EXT2=y
-
-If you need ext2, then please disable the tarball.
-
-I'll mark your patch as Changes Requested in our patch tracking system,
-so please resubmit a new version that fixes the above comments,
-otherwise we'll forget about your contribution.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index 88f2e48..ece08d2 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -3,8 +3,6 @@ comment "dhcpcd needs a toolchain w/ headers >= 3.1"
+ 
+ config BR2_PACKAGE_DHCPCD
+ 	bool "dhcpcd"
+-	# No support for AI_ADDRCONFIG
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1 # sa_family_t in linux/socket.h
+ 	help
+ 	  An RFC2131 compliant DHCP client
+diff --git a/package/glog/Config.in b/package/glog/Config.in
+index 3f54020..1c48ed9 100644
+--- a/package/glog/Config.in
++++ b/package/glog/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_GLOG
+ 	# build issues with these external toolchains
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	help
+ 	  C++ implementation of the Google logging module
+ 
+@@ -15,6 +14,5 @@ config BR2_PACKAGE_GLOG
+ comment "glog needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		BR2_STATIC_LIBS
+diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+index a8e6dd3..2e9c939 100644
+--- a/package/libtirpc/Config.in
++++ b/package/libtirpc/Config.in
+@@ -1,11 +1,5 @@
+ config BR2_PACKAGE_LIBTIRPC
+ 	bool "libtirpc"
+-	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
+-	# support. Note that since they provide native RPC support, we
+-	# don't need to propagate this dependency to reverse
+-	# dependencies of libtirpc for which native RPC support can be
+-	# used instead of libtirpc.
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Libtirpc is a port of Sun's Transport-Independent RPC
+@@ -14,5 +8,4 @@ config BR2_PACKAGE_LIBTIRPC
+ 	  http://sourceforge.net/projects/libtirpc/
+ 
+ comment "libtirpc needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
+index cef5ed4..3e90422 100644
+--- a/package/openpgm/Config.in
++++ b/package/openpgm/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_OPENPGM
+ 	# The following toolchains lack required compiler intrinsics
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
+index 2a79bdc..9ff64a5 100644
+--- a/package/rpcbind/Config.in
++++ b/package/rpcbind/Config.in
+@@ -4,9 +4,6 @@ config BR2_PACKAGE_RPCBIND
+ 	# implementation of toolchains.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc
+ 	select BR2_PACKAGE_LIBTIRPC
+-	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
+-	# support, needed for libtirpc
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	# fork()
+ 	depends on BR2_USE_MMU
+ 	help
+@@ -14,6 +11,5 @@ config BR2_PACKAGE_RPCBIND
+ 	  into universal addresses.
+ 
+ comment "rpcbind needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index 9277653..aa5c1a8 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -31,7 +31,6 @@ config BR2_PACKAGE_ZEROMQ_PGM
+ 	bool "PGM/EPGM support"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1 # openpgm
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # openpgm
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # openpgm
+ 	select BR2_PACKAGE_OPENPGM
+ 	help
+ 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
+diff --git a/package/zyre/Config.in b/package/zyre/Config.in
+index 95cbf95..a6aef60 100644
+--- a/package/zyre/Config.in
++++ b/package/zyre/Config.in
+@@ -4,9 +4,6 @@ config BR2_PACKAGE_ZYRE
+ 	depends on BR2_USE_WCHAR # zeromq
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+ 	depends on BR2_USE_MMU # czmq
+-	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
+-	# support, needed by czmq
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	select BR2_PACKAGE_CZMQ
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+@@ -17,6 +14,5 @@ config BR2_PACKAGE_ZYRE
+ 
+ comment "zyre needs a toolchain w/ C++, wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
+ 		BR2_TOOLCHAIN_HAS_THREADS)
