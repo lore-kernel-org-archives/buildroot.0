@@ -1,29 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 11:25:59 +0100
-Subject: [Buildroot] [PATCH] vim: bump to version 7.4.889
-In-Reply-To: <1443954187-20282-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1443954187-20282-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151004112559.4b24aa0b@free-electrons.com>
+From: gwenhael.goavec <gwenj@trabucayre.com>
+Date: Sun, 4 Oct 2015 12:42:55 +0200
+Subject: [Buildroot] [PATCH v2 1/2] python-numpy: introduce
+ ARCH_SUPPORTS hidden variable
+In-Reply-To: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+References: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20151004124255.1eec99de@x230.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Up?
+Gwen
 
-On Sun, 4 Oct 2015 11:23:07 +0100, Vicente Olivert Riera wrote:
-> And also move to GitHub since Google Code is going to die soon.
+On Thu,  3 Sep 2015 15:13:15 +0200
+Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/vim/vim.mk |    7 +++----
->  1 files changed, 3 insertions(+), 4 deletions(-)
-
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Python-numpy has specific constraints about uClibc and arch. This
+> patch add an BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS hidden variable
+> to avoid duplicate dependencies test for others packages which uses
+> numpy.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou
+> <gwenhael.goavec-merou@trabucayre.com> ---
+>  package/python-numpy/Config.in | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/python-numpy/Config.in
+> b/package/python-numpy/Config.in index 1f9938a..4c02ea6 100644
+> --- a/package/python-numpy/Config.in
+> +++ b/package/python-numpy/Config.in
+> @@ -1,12 +1,16 @@
+> +config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+> +	bool
+> +	# numpy needs fenv.h. Available for all architectures in
+> +	# glibc, but only for x86 and x86-64 in uClibc.
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 ||
+> BR2_x86_64 +
+>  config BR2_PACKAGE_PYTHON_NUMPY
+>  	bool "python-numpy"
+>  	# Numpy has some CPU specific code
+>  	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+>  		|| BR2_mips || BR2_mipsel || BR2_powerpc ||
+> BR2_powerpc64 \ || BR2_sh || BR2_x86_64
+> -	# numpy needs fenv.h. Available for all architectures in
+> -	# glibc, but only for x86 and x86-64 in uClibc.
+> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 ||
+> BR2_x86_64
+> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	help
+>  	  NumPy is the fundamental package for scientific computing
+>  	  with Python.
+> -- 
+> 2.4.6
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
