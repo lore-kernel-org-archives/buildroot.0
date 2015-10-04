@@ -1,34 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 16:19:05 +0100
-Subject: [Buildroot] [PATCH v2 1/4] toolchain-external: Remove
- BLACKFIN_UCLINUX_2012R2
-In-Reply-To: <1443901828-11390-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443901828-11390-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20151004161905.60263d38@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun,  4 Oct 2015 17:19:43 +0200
+Subject: [Buildroot] [PATCH v3] kodi: Without native RPC use libtirpc
+Message-ID: <1443971983-17800-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+v2 -> v3:
+   - Remove the select (not needed, we only have to propagate the
+     depends on)
+---
+ package/kodi/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-On Sat,  3 Oct 2015 21:50:25 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  toolchain/toolchain-external/Config.in             | 19 -------------------
->  toolchain/toolchain-external/toolchain-external.mk |  8 ++------
->  2 files changed, 2 insertions(+), 25 deletions(-)
-
-Patches 1 to 3 applied. However patch 4 not applied since the "select
-BR2_PACKAGE_LIBTIRPC" is not needed and the same change should be done
-in mpd (and possibly other reverse dependencies of libnfs, if any other
-than kodi and mpd).
-
-Thanks!
-
-Thomas
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 797f59d..eede243 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -181,13 +181,14 @@ config BR2_PACKAGE_KODI_LIBMICROHTTPD
+ 
+ config BR2_PACKAGE_KODI_LIBNFS
+ 	bool "nfs"
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	# libnfs -> libtirpc
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBNFS
+ 	help
+ 	  Enable NFS server support.
+ 
+-comment "nfs support needs a toolchain w/ RPC support"
+-	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++comment "nfs support needs a toolchain w/ threads support"
++	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
+ 
+ config BR2_PACKAGE_KODI_RTMPDUMP
+ 	bool "rtmp"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.3
