@@ -1,70 +1,42 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Sun, 4 Oct 2015 19:04:43 +0200
-Subject: [Buildroot] [PATCH] openal: New package
-In-Reply-To: <ok37ecxrt1.ln2@ID-313208.user.individual.net>
-References: <56100EB1.4010100@dawncrow.de>
- <ok37ecxrt1.ln2@ID-313208.user.individual.net>
-Message-ID: <56115C2B.1080705@dawncrow.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Oct 2015 19:06:12 +0200
+Subject: [Buildroot] [PATCH 5/7] configs: fix build of
+	calao_usb_a9g20_lpw_defconfig
+In-Reply-To: <1443901457-7914-6-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Oct 2015 20:44:15 +0100")
+References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1443901457-7914-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87twq6k1h7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 04.10.2015 um 10:12 schrieb Bernd Kuhls:
-> Hi Andr?,
-> 
-> several months ago I started hacking an openal package myself but
-> never finished it. Here I will compare my package to your version.
-> 
-> Am Sat, 03 Oct 2015 19:21:53 +0200 schrieb Andr? Hentschel:
-> 
->> diff --git a/package/openal/Config.in b/package/openal/Config.in
->> new file mode 100644
->> index 0000000..8eb177b
->> --- /dev/null
->> +++ b/package/openal/Config.in
->> @@ -0,0 +1,16 @@
->> +config BR2_PACKAGE_OPENAL
->> +	bool "openal"
->> +	# OpenAL needs a backend
->> +	depends on BR2_PACKAGE_ALSA_LIB || \
->> +	           BR2_PACKAGE_PORTAUDIO || \
->> +	           BR2_PACKAGE_PULSEAUDIO
->> +	help
->> +	  OpenAL provides capabilities for playing audio in a virtual
->> +	  3D environment. Distance attenuation, doppler shift, and
->> +	  directional sound emitters are among the features handled by
->> +	  the API.
->> +
->> +comment "openal needs a backend"
->> +	depends on !BR2_PACKAGE_ALSA_LIB && \
->> +	           !BR2_PACKAGE_PORTAUDIO && \
->> +	           !BR2_PACKAGE_PULSEAUDIO
-> 
-> What about having a choice option defaulting to, for example, alsa?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I'll think about it
+ > Both the Barebox and AT91Bootstrap patches for the Calao USB A9G20
+ > board are located in the same directory, board/calao/usb-a9g20-lpw/,
+ > with only a prefix making a difference between whether they apply to
+ > Barebox or AT91Bootstrap.
 
-> Please add
-> 
-> 	http://kcat.strangesoft.net/openal.html
+ > Unfortunately, since commit 0eba4759fab9d093afacac77a0ac31f1f0b3cceb
+ > ("packages: apply custom patches using *.patch instead of
+ > <pkg>-*.patch"), the logic to apply custom patches in Barebox and
+ > AT91Bootstrap has been changed from applying <package>-*.patch to
+ > applying *.patch (in order to be consistent with what we do for all
+ > packages in Buildroot).
 
-Done locally
+ > However, this had the effect of trying to apply both the AT91Bootstrap
+ > and Barebox patches on both packages, which obviously cannot work.
 
-> to Config.in. Openal also needs this
-> 
-> 	depends on BR2_TOOLCHAIN_HAS_THREADS
-> 
-> 	comment "openal needs a toolchain w/ threads"
-> 		depends on !BR2_TOOLCHAIN_HAS_THREADS
-> 
-> Did you test a static build? I have this in openal.mk:
-> 
-> ifeq ($(BR2_STATIC_LIBS),y)
-> OPENAL_CONF_OPTS += -DLIBTYPE=STATIC
-> endif
+ > This commit fixes that by moving patches around, and switching to use
+ > BR2_GLOBAL_PATCH_DIR.
 
-Done that locally, thanks.
-I'll reiterate in a week hopefully.
-Thank you very much for the comments!
+ > Cc: Gregory Hermant <gregory.hermant@calao-systems.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
