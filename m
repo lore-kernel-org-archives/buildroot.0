@@ -1,192 +1,176 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 13:28:57 +0100
-Subject: [Buildroot] [PATCH v2 17/18] ccache: use mtime for external
-	toolchain, CONF_OPTS for internal toolchain
+Date: Sun, 4 Oct 2015 13:28:58 +0100
+Subject: [Buildroot] [PATCH v2 18/18] [RFC] ccache: support changing the
+	output directory
 In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be>
 References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <1443961738-12149-18-git-send-email-arnout@mind.be>
+Message-ID: <1443961738-12149-19-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Our current ccache disables hashing of the compiler executable itself,
-because using the default 'mtime' doesn't work in buildroot: we always
-rebuild the compiler, so the mtime is always different, so the cache
-always misses.
+When building in a different output directory than the original build,
+there will currently be a lot of ccache misses because in many cases
+there is some -I/... absolute path in the compilation. ccache has an
+option CCACHE_BASEDIR to substitute absolute paths with relative paths,
+so they wil be the same in the hash (and in the output).
 
-However, in the current situation, if a user changes the compiler
-configuration (which would result in the compiler generating different
-object files than before) and does 'make clean all', ccache may in fact
-reuse object files from the previous run. This rarely gives problems,
-because
-(1) the cache expires quite quickly (it's only 1GB by default),
-(2) radically changing compiler options will cause cache misses because
-    different header files are used,
-(3) many compiler changes (e.g. changing -mtune) have little practical
-    effect because the resulting code is usually still compatible,
-(4) we currently don't use CCACHE_BASEDIR, and almost all object files
-    will contain an absolute path (e.g. in debug info), so when
-    building in a different directory, most of it will miss,
-(5) we do mostly build test, and many of the potential problems only
-    appear at runtime.
-Still, when ccache _does_ use the wrong cached object files, the
-effects are really weird and hard to debug. Also, we want reproducible
-builds and obviously the above makes builds non-reproducible. So we
-have a FAQ entry that warns against using ccache and tells the user to
-clear the cache in case of problems.
+Since there are some disadvantages to this path rewriting, it is made
+optional as BR2_CCACHE_USE_BASEDIR. It defaults to y because the
+usefulness of ccache is severely reduced without this option.
 
-Now that ccache is called from the toolchain wrapper, it is in fact
-possible to at least use the 'mtime' compiler hash for the external
-toolchain and for the host-gcc. Indeed, in this case, the compiler
-executable comes from a tarball so the mtime will be a good reference
-for it state. Therefore, the patch (sed script) that changes the
-default from 'mtime' to 'none' is removed.
-
-For the internal toolchain, we can do better by providing a hash of
-the relevant toolchain options. We are only interested in things that
-affect the compiler itself, because ccache also processes the header
-files and it doesn't look at libraries because it doesn't cache the
-link step, just compilation. Everything that affects the compiler
-itself can nicely be summarised in $(HOST_GCC_FINAL_CONF_OPTS). Of
-course, also the compiler source itself is relevant, so the source
-tarball and all the patches are included in the hash. For this purpose,
-a new HOST_GCC_XTENSA_OVERLAY_TAR is introduced.
-
-The following procedure tests the ccache behaviour:
-
- Use this defconfig:
-BR2_arm=y
-BR2_CCACHE=y
-
- make
- readelf -A output/build/uclibc-1.0.6/libc/signal/signal.os
--> Tag_CPU_name: "ARM926EJ-S"
-
- Now make menuconfig, change variant into BR2_cortex_a9
-
- make clean; make
- readelf -A output/build/uclibc-1.0.6/libc/signal/signal.os
--> Tag_CPU_name: "ARM926EJ-S"
- should be "Cortex-A9"
-
-After this commit, it is "Cortex-A9".
+In addition to CCACHE_BASEDIR, we also substitute away the occurences
+of $(HOST_DIR) in the calculation of the compiler hash. This is done
+regardless of the setting of BR2_CCACHE_USE_BASEDIR because it's
+quite harmless.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Danomi Manchego <danomimanchego123@gmail.com>
-Cc: K?roly Kasza <kaszak@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: - Add BR2_GLOBAL_PATCH_DIR to the patches used to generate the hash.
-      [Samuel]
-    - Use $(wildcard ...) for the patches, so missing patch dir (e.g. for
-      OVERRIDE_SRCDIR) doesn't lead to an error. [Arnout]
-    - Remove redundant newline [Romain]
----
- package/ccache/ccache.mk      |  5 -----
- package/gcc/gcc.mk            | 29 +++++++++++++++++++++++++++--
- toolchain/toolchain-wrapper.c | 12 ++++++++++++
- 3 files changed, 39 insertions(+), 7 deletions(-)
+Perhaps we should use $(HOST_DIR) instead of $(BASE_DIR) as
+CCACHE_BASEDIR, because most of the time an absolute path will point
+into the host dir. Not always, though (e.g. references to LINUX_DIR).
+And most people will have $(HOST_DIR) inside $(BASE_DIR) so the latter
+works well for them.
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 3bd2803..52cf309 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -26,15 +26,10 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
- #    is already used by autotargets for the ccache package.
- #    BR_CACHE_DIR is exported by Makefile based on config option
- #    BR2_CCACHE_DIR.
--#  - ccache shouldn't use the compiler binary mtime to detect a change in
--#    the compiler, because in the context of Buildroot, that completely
--#    defeats the purpose of ccache. Of course, that leaves the user
--#    responsible for purging its cache when the compiler changes.
- #  - Change hard-coded last-ditch default to match path in .config, to avoid
- #    the need to specify BR_CACHE_DIR when invoking ccache directly.
- define HOST_CCACHE_PATCH_CONFIGURATION
- 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
--	sed -i 's,conf->compiler_check = x_strdup("mtime"),conf->compiler_check = x_strdup("none"),' $(@D)/conf.c
- 	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
- endef
+It's hard to be sure with ccache, but in my tests I still had the
+impression that there were less cache hits when rebuilding in a
+different output directory than when rebuilding in the same directory.
+Oh well...
+---
+ Config.in                      | 27 +++++++++++++++++++++++++++
+ docs/manual/ccache-support.txt | 20 ++++++++++++++++++++
+ package/gcc/gcc.mk             |  4 +++-
+ toolchain/toolchain-wrapper.c  | 11 +++++++++++
+ toolchain/toolchain-wrapper.mk |  4 ++++
+ 5 files changed, 65 insertions(+), 1 deletion(-)
+
+diff --git a/Config.in b/Config.in
+index 74aeb46..d795361 100644
+--- a/Config.in
++++ b/Config.in
+@@ -286,6 +286,33 @@ config BR2_CCACHE_INITIAL_SETUP
  
+ 	  These initial settings are applied after ccache has been compiled.
+ 
++config BR2_CCACHE_USE_BASEDIR
++	bool "Use relative paths"
++	default y
++	help
++	  Allow ccache to convert absolute paths within the output
++	  directory into relative paths.
++
++	  During the build, many -I include directives are given with
++	  an absolute path. These absolute paths end up in the hashes
++	  that are computed by ccache. Therefore, when you build from a
++	  different directory, the hash will be different and the
++	  cached object will not be used.
++
++	  To improve cache performance, set this option to y. This
++	  allows ccache to rewrite absolute paths within the output
++	  directory into relative paths. Note that only paths within
++	  the output directory will be rewritten; therefore, if you
++	  change BR2_HOST_DIR to point outside the output directory and
++	  subsequently move it to a different location, this will lead
++	  to cache misses.
++
++	  This option has as a result that the debug information in the
++	  object files also has only relative paths. Therefore, make
++	  sure you cd to the build directory before starting gdb. See
++	  the section "COMPILING IN DIFFERENT DIRECTORIES" in the
++	  ccache manual for more information.
++
+ endif
+ 
+ config BR2_DEPRECATED
+diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
+index 992471d..f6746ad 100644
+--- a/docs/manual/ccache-support.txt
++++ b/docs/manual/ccache-support.txt
+@@ -33,3 +33,23 @@ make CCACHE_OPTIONS="--max-size=5G" ccache-options
+ # zero statistics counters
+ make CCACHE_OPTIONS="--zero-stats" ccache-options
+ -----------------
++
+++ccache+ makes a hash of the source files and of the compiler options.
++If a compiler option is different, the cached object file will not be
++used. Many compiler options, however, contain an absolute path to the
++staging directory. Because of this, building in a different output
++directory would lead to many cache misses.
++
++To avoid this issue, buildroot has the +Use relative paths+ option
++(+BR2_CCACHE_USE_BASEDIR+). This will rewrite all absolute paths that
++point inside the output directory into relative paths. Thus, changing
++the output directory no longer leads to cache misses.
++
++A disadvantage of the relative paths is that they also end up to be
++relative paths in the object file. Therefore, for example, the debugger
++will no longer find the file, unless you cd to the output directory
++first.
++
++See https://ccache.samba.org/manual.html#_compiling_in_different_directories[the
++ccache manual's section on "Compiling in different directories"] for
++more details about this rewriting of absolute paths.
 diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b9da398..103cbe1 100644
+index 103cbe1..420c4e9 100644
 --- a/package/gcc/gcc.mk
 +++ b/package/gcc/gcc.mk
-@@ -23,9 +23,10 @@ GCC_SOURCE ?= gcc-$(GCC_VERSION).tar.bz2
- # Xtensa special hook
- #
+@@ -256,8 +256,10 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-lin
+ endif
+ endif
  
-+HOST_GCC_XTENSA_OVERLAY_TAR = $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,$(BR2_XTENSA_CORE_NAME)).tar
-+
- define HOST_GCC_XTENSA_OVERLAY_EXTRACT
--	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
--		$(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
-+	tar xf $(HOST_GCC_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
- endef
- 
- #
-@@ -237,6 +238,30 @@ endif
- 
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
- 
-+ifeq ($(BR2_CCACHE),y)
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
-+# Cfr. PATCH_BASE_DIRS in .stamp_patched, but we catch both versioned and
-+# unversioned patches unconditionally
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += \
-+	$(wildcard \
-+		package/gcc/$(GCC_VERSION)/*.patch \
-+		$(addsuffix $((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
-+		$(addsuffix $((PKG)_RAWNAME)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
-+ifeq ($(BR2_xtensa),y)
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
-+endif
-+ifeq ($(ARCH),powerpc)
-+ifneq ($(BR2_SOFT_FLOAT),)
-+HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
-+endif
-+endif
-+
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
-+	printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
-+		| sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
-+		| cut -c -64 | tr -d '\n'`\"
-+endif # BR2_CCACHE
-+
- # The LTO support in gcc creates wrappers for ar, ranlib and nm which load
- # the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
- # *-gcc-nm and should be used instead of the real programs when -flto is
++# _CONF_OPTS contains some references to the absolute path of $(HOST_DIR),
++# so substitute those away.
+ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
+-	printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
++	printf '%s' $(subst $(HOST_DIR), at HOST_DIR@,$($(PKG)_CONF_OPTS)) \
+ 		| sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
+ 		| cut -c -64 | tr -d '\n'`\"
+ endif # BR2_CCACHE
 diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index cf66fac..7ee3028 100644
+index 7ee3028..af5768b 100644
 --- a/toolchain/toolchain-wrapper.c
 +++ b/toolchain/toolchain-wrapper.c
-@@ -254,6 +254,10 @@ int main(int argc, char **argv)
- 		debug = atoi(env_debug);
- 		if (debug > 0) {
- 			fprintf(stderr, "Toolchain wrapper executing:");
-+#ifdef BR_CCACHE_HASH
-+			fprintf(stderr, "CCACHE_COMPILERCHECK=string:" BR_CCACHE_HASH "%s",
+@@ -258,6 +258,10 @@ int main(int argc, char **argv)
+ 			fprintf(stderr, "CCACHE_COMPILERCHECK=string:" BR_CCACHE_HASH "%s",
+ 				(debug == 2) ? "\n    " : " ");
+ #endif
++#ifdef BR_CCACHE_BASEDIR
++			fprintf(stderr, "CCACHE_BASEDIR=" BR_CCACHE_BASEDIR "%s",
 +				(debug == 2) ? "\n    " : " ");
 +#endif
  			for (i = 0; exec_args[i]; i++)
  				fprintf(stderr, "%s'%s'",
  					(debug == 2) ? "\n    " : " ", exec_args[i]);
-@@ -261,6 +265,14 @@ int main(int argc, char **argv)
- 		}
+@@ -272,6 +276,13 @@ int main(int argc, char **argv)
+ 		return 3;
  	}
- 
-+#ifdef BR_CCACHE_HASH
+ #endif
++#ifdef BR_CCACHE_BASEDIR
 +	/* Allow compilercheck to be overridden through the environment */
-+	if (setenv("CCACHE_COMPILERCHECK", "string:" BR_CCACHE_HASH, 0)) {
-+		perror(__FILE__ ": Failed to set CCACHE_COMPILERCHECK");
++	if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
++		perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
 +		return 3;
 +	}
 +#endif
-+
+ 
  	if (execv(exec_args[0], exec_args))
  		perror(path);
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 0fd2b86..40d29a2 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -20,6 +20,10 @@ ifeq ($(BR2_CCACHE),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE='"$(CCACHE)"'
+ endif
  
++ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
++endif
++
+ # For simplicity, build directly into the install location
+ define TOOLCHAIN_BUILD_WRAPPER
+ 	$(Q)mkdir -p $(HOST_DIR)/usr/bin
 -- 
 2.5.3
