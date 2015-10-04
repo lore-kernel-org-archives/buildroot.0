@@ -1,95 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 4 Oct 2015 17:49:00 +0100
-Subject: [Buildroot] [git commit] nfs-utils: systemd support
-Message-ID: <20151004164905.D56528082B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] nfs-utils: Bump version
+Message-ID: <20151004164905.CB27681D4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b19438c2c0a89fe4da757571604a7ca2fe0663b
+commit: http://git.buildroot.net/buildroot/commit/?id=9bd4ee8e66dbc644b580f06ccc9ce339a98a73a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-nfs-utils has been patched to install only the needed systemd unit files
-supported.
-Also tmpfiles was needed because the folder /run/nfs is a tmpfs
-and nfs-utils need some files to be there to work correctly.
+Remove patch as it was backported from upstream:
+http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=17a3e5bffb7110d46de1bf42b64b90713ff5ea50
 
-Signed-off-by: Aur??lien Chabot <aurelien@chabot.fr>
-[Maxime: Remove patches included originally in the patch as they have
-have been merged upstream in v1.3.3]
 Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-[Thomas:
-  - add comment in nfs-utils_env.sh to explain why an empty script is
-    needed.
-  - remove incorrect indentation.]
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfs-utils/nfs-utils.mk            |   27 +++++++++++++++++++++++++++
- package/nfs-utils/nfs-utils_env.sh        |    3 +++
- package/nfs-utils/nfs-utils_tmpfiles.conf |    4 ++++
- 3 files changed, 34 insertions(+), 0 deletions(-)
+ .../0004-statd-Fix-test-for-foreground-mode.patch  |   30 --------------------
+ package/nfs-utils/nfs-utils.hash                   |    4 +-
+ package/nfs-utils/nfs-utils.mk                     |    2 +-
+ 3 files changed, 3 insertions(+), 33 deletions(-)
 
+diff --git a/package/nfs-utils/0004-statd-Fix-test-for-foreground-mode.patch b/package/nfs-utils/0004-statd-Fix-test-for-foreground-mode.patch
+deleted file mode 100644
+index a6138a3..0000000
+--- a/package/nfs-utils/0004-statd-Fix-test-for-foreground-mode.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From ca1fd7153937e147f66d1ca3edbe9c2615f33880 Mon Sep 17 00:00:00 2001
+-From: Chris Mayo <aklhfex@gmail.com>
+-Date: Sun, 1 Feb 2015 12:03:46 -0500
+-Subject: [PATCH] statd: Fix test for foreground mode
+-
+-daemon_init parameter has the opposite sense
+-to code removed in commit 7addf9d
+-
+-Signed-off-by: Chris Mayo <aklhfex@gmail.com>
+-Signed-off-by: Steve Dickson <steved@redhat.com>
+----
+- utils/statd/statd.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/utils/statd/statd.c b/utils/statd/statd.c
+-index 60ce6d1..2b7a167 100644
+---- a/utils/statd/statd.c
+-+++ b/utils/statd/statd.c
+-@@ -393,7 +393,7 @@ int main (int argc, char **argv)
+- 		simulator (--argc, ++argv);	/* simulator() does exit() */
+- #endif
+- 
+--	daemon_init(!(run_mode & MODE_NODAEMON));
+-+	daemon_init((run_mode & MODE_NODAEMON));
+- 
+- 	if (run_mode & MODE_LOG_STDERR) {
+- 		xlog_syslog(0);
+--- 
+-2.4.5
+-
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index a4959ee..2bd5121 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.2/sha256sums.asc
+-sha256 2966bb431c06e9ba35a54f48f89db03a5132bc2d8ed8084ac8ccb34e25a9b739  nfs-utils-1.3.2.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/1.3.3/sha256sums.asc
++sha256 700d689c5622c87953c34102e5befafc4d3c811e676852238f0dd79c9c0c084d  nfs-utils-1.3.3.tar.xz
 diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 8c06d8e..30f12fd 100644
+index 095d095..8c06d8e 100644
 --- a/package/nfs-utils/nfs-utils.mk
 +++ b/package/nfs-utils/nfs-utils.mk
-@@ -41,11 +41,38 @@ define NFS_UTILS_INSTALL_FIXUP
- endef
- NFS_UTILS_POST_INSTALL_TARGET_HOOKS += NFS_UTILS_INSTALL_FIXUP
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+NFS_UTILS_CONF_OPTS += --with-systemd=/usr/lib/systemd/system
-+NFS_UTILS_DEPENDENCIES += systemd
-+else
-+NFS_UTILS_CONF_OPTS += --without-systemd
-+endif
-+
- define NFS_UTILS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
- 		$(TARGET_DIR)/etc/init.d/S60nfs
- endef
- 
-+define NFS_UTILS_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -fs ../../../../usr/lib/systemd/system/nfs-server.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-server.service
-+	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-client.target
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants
-+
-+	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
-+		$(TARGET_DIR)/etc/systemd/system/remote-fs.target.wants/nfs-client.target
-+
-+	$(INSTALL) -D -m 0755 package/nfs-utils/nfs-utils_env.sh \
-+		$(TARGET_DIR)/usr/lib/systemd/scripts/nfs-utils_env.sh
-+
-+	$(INSTALL) -D -m 0644 package/nfs-utils/nfs-utils_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/nfs-utils.conf
-+endef
-+
- define NFS_UTILS_REMOVE_NFSIOSTAT
- 	rm -f $(TARGET_DIR)/usr/sbin/nfsiostat
- endef
-diff --git a/package/nfs-utils/nfs-utils_env.sh b/package/nfs-utils/nfs-utils_env.sh
-new file mode 100755
-index 0000000..82284ce
---- /dev/null
-+++ b/package/nfs-utils/nfs-utils_env.sh
-@@ -0,0 +1,3 @@
-+#!/bin/sh
-+# This script is empty, it simply needs to exist to make the
-+# nfs-config.service happy.
-diff --git a/package/nfs-utils/nfs-utils_tmpfiles.conf b/package/nfs-utils/nfs-utils_tmpfiles.conf
-new file mode 100644
-index 0000000..f87939f
---- /dev/null
-+++ b/package/nfs-utils/nfs-utils_tmpfiles.conf
-@@ -0,0 +1,4 @@
-+d /run/nfs/sm 0700 root root -
-+d /run/nfs/sm.bak 0700 root root -
-+f /run/nfs/rmtab 0644 root root -
-+f /run/nfs/etab 0644 root root -
+-NFS_UTILS_VERSION = 1.3.2
++NFS_UTILS_VERSION = 1.3.3
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPLv2+
