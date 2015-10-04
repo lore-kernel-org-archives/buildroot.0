@@ -1,88 +1,61 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  4 Oct 2015 15:39:08 +0200
-Subject: [Buildroot] [PATCH v2] skeleton: Have a portable remount RW/RO
-Message-ID: <1443965948-13945-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun, 4 Oct 2015 15:42:19 +0200
+Subject: [Buildroot] [PATCH] libnfs: Without native RPC use libtirpc
+In-Reply-To: <20151004113505.GB2633@tarshish>
+References: <1443882268-9737-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <CAGduivwirG_RD1LfYfgekqfEphCquOr5AG9H2WKB=4Vjv7OFnQ@mail.gmail.com>
+ <20151004113505.GB2633@tarshish>
+Message-ID: <CAGduivzptU6E4UPtpasJhX8QbY1Sw1ys2dy-_pD7vf2DpEg9sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With systemd, inittab is useless, but it's also where we stored a 'mount
--o remount ...' to toggle the rootfs ro/rw at the demand of the user.
+On Sun, Oct 4, 2015 at 1:35 PM, Baruch Siach <baruch@tkos.co.il> wrote:
 
-Instead, doing a simple 'mount -a -o remount' should change the flag of
-every mountpoint by reading /etc/fstab.
+> Hi Maxime,
+>
+> On Sat, Oct 03, 2015 at 04:25:30PM +0200, Maxime Hadjinlian wrote:
+> > There's a crappy file. Don't do git add with glob at home...
+>
+> Or just do
+>
+>    echo '*.swp' >> .git/info/exclude
+>
+Good point Baruch.
+I'll even add it to my global gitconfig, no real reason I would ever need
+to commit a swp file.
 
-Therefore, we now modify /etc/fstab, which happens to be read by systemd
-also and so, everyone benefits.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
-v1 -> v2:
-    - Rebase on current master ('null' was removed from inittab)
-    - 'Rework' sed expression (add quote, remove curly braces, remove
-      useless escape of comma)
----
- package/busybox/inittab      | 3 +--
- package/skeleton/skeleton.mk | 8 ++++----
- package/sysvinit/inittab     | 3 +--
- 3 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/package/busybox/inittab b/package/busybox/inittab
-index 24d9199..7202474 100644
---- a/package/busybox/inittab
-+++ b/package/busybox/inittab
-@@ -15,10 +15,9 @@
- 
- # Startup the system
- ::sysinit:/bin/mount -t proc proc /proc
--::sysinit:/bin/mount -o remount,rw /
- ::sysinit:/bin/mkdir -p /dev/pts
- ::sysinit:/bin/mkdir -p /dev/shm
--::sysinit:/bin/mount -a
-+::sysinit:/bin/mount -a -o remount
- ::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
- ::sysinit:/etc/init.d/rcS
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index 48e7085..ae8f429 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -142,14 +142,14 @@ endif
- 
- ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
--# Find commented line, if any, and remove leading '#'s
-+# Find 'ro,' (avoid 'root') in the first line and change it to 'rw,'
- define SKELETON_SYSTEM_REMOUNT_RW
--	$(SED) '/^#.*-o remount,rw \/$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
-+	$(SED) '0,/ro,/s/ro,/rw,/' $(TARGET_DIR)/etc/fstab
- endef
- else
--# Find uncommented line, if any, and add a leading '#'
-+# Find rw on the first line and change it to ro
- define SKELETON_SYSTEM_REMOUNT_RW
--	$(SED) '/^[^#].*-o remount,rw \/$$/s~^~#~' $(TARGET_DIR)/etc/inittab
-+	$(SED) '0,/rw/s/rw/ro/' $(TARGET_DIR)/etc/fstab
- endef
- endif
- TARGET_FINALIZE_HOOKS += SKELETON_SYSTEM_REMOUNT_RW
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index fc0c9b5..4b8cfd7 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -5,10 +5,9 @@
- id:3:initdefault:
- 
- si0::sysinit:/bin/mount -t proc proc /proc
--si1::sysinit:/bin/mount -o remount,rw /
- si2::sysinit:/bin/mkdir -p /dev/pts
- si3::sysinit:/bin/mkdir -p /dev/shm
--si4::sysinit:/bin/mount -a
-+si4::sysinit:/bin/mount -a -o remount
- si5::sysinit:/bin/hostname -F /etc/hostname
- si6::sysinit:/etc/init.d/rcS
- 
--- 
-2.5.3
+>
+> baruch
+>
+> > On Sat, Oct 3, 2015 at 4:24 PM, Maxime Hadjinlian <
+> > maxime.hadjinlian at gmail.com> wrote:
+> > > Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> > > ---
+> > > RFC: A few packages uses libtirpc if there's no native RPC support
+> *BUT*
+> > > they don't propagate the
+> BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2.
+> > >
+> > > It was probably added later on in libtirpc, so the questions here, is
+> > > what do we do with that ? Should we add the dependencies to the other
+> > > packages ?
+> > > Do we need some kind of mechanisms to handle that ?
+> > > ---
+> > >  package/libnfs/.Config.in.swp | Bin 0 -> 12288 bytes
+> > >  package/libnfs/Config.in      |   8 +++++---
+> > >  package/libnfs/libnfs.mk      |   4 ++++
+> > >  3 files changed, 9 insertions(+), 3 deletions(-)
+> > >  create mode 100644 package/libnfs/.Config.in.swp
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151004/2fe38b0e/attachment.html>
