@@ -1,48 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  4 Oct 2015 15:36:25 +0100
-Subject: [Buildroot] [PATCH 1/2] mpdecimal: use official upstream site
-Message-ID: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  4 Oct 2015 15:36:26 +0100
+Subject: [Buildroot] [PATCH 2/2] mpdecimal: fix comment about fenv.h
+In-Reply-To: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1443969386-22868-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The official upstream site is available again, so let's switch to
-using it.
+We're disabling fenv.h usage on i386 because it is not available in
+musl/uclibc (and not musl/glibc as was written).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mpdecimal/mpdecimal.hash | 4 ++--
- package/mpdecimal/mpdecimal.mk   | 6 +-----
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/mpdecimal/mpdecimal.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
-index 249d56c..bc443d1 100644
---- a/package/mpdecimal/mpdecimal.hash
-+++ b/package/mpdecimal/mpdecimal.hash
-@@ -1,2 +1,2 @@
--# From http://code.activestate.com/lists/python-dev/132315/
--sha256 da74d3cfab559971a4fbd4fb506e1b4498636eb77d0fd09e44f8e546d18ac068 mpdecimal_2.4.1.orig.tar.gz
-+# From http://www.bytereef.org/mpdecimal/download.html
-+sha256 da74d3cfab559971a4fbd4fb506e1b4498636eb77d0fd09e44f8e546d18ac068 mpdecimal-2.4.1.tar.gz
 diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index 07a7564..2c8cc3c 100644
+index 2c8cc3c..9b13def 100644
 --- a/package/mpdecimal/mpdecimal.mk
 +++ b/package/mpdecimal/mpdecimal.mk
-@@ -4,12 +4,8 @@
- #
- ################################################################################
+@@ -13,7 +13,7 @@ MPDECIMAL_CONF_OPTS = LD="$(TARGET_CC)"
+ MPDECIMAL_AUTORECONF = YES
  
--# Official site currently down
--# MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
--
--MPDECIMAL_SITE = https://launchpad.net/ubuntu/+archive/primary/+files
-+MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
- MPDECIMAL_VERSION = 2.4.1
--MPDECIMAL_SOURCE = mpdecimal_$(MPDECIMAL_VERSION).orig.tar.gz
- MPDECIMAL_INSTALL_STAGING = YES
- MPDECIMAL_LICENSE = BSD-2c
- MPDECIMAL_LICENSE_FILES = LICENSE.txt
+ # On i386, by default, mpdecimal tries to uses <fenv.h> which is not
+-# available in musl/glibc. So in this case, we tell mpdecimal to use
++# available in musl/uclibc. So in this case, we tell mpdecimal to use
+ # the generic 32 bits code, which is anyway the one used on ARM,
+ # PowerPC, etc.
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
 -- 
 2.6.0
