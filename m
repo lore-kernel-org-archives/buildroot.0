@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2015 20:15:58 +0200
-Subject: [Buildroot] [PATCH 3/7] u-boot: add an option to indicate that
-	DTC is needed
-In-Reply-To: <1443901457-7914-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Oct 2015 20:44:13 +0100")
+Date: Sun, 04 Oct 2015 20:16:56 +0200
+Subject: [Buildroot] [PATCH 4/7] configs: fix configurations that need
+	host-dtc
+In-Reply-To: <1443901457-7914-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Oct 2015 20:44:14 +0100")
 References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1443901457-7914-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87612mjy8x.fsf@dell.be.48ers.dk>
+ <1443901457-7914-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871tdajy7b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Some U-Boot configurations require the Device Tree compiler to be
- > available, so we need to depend on host-dtc (example configuration:
- > zynq_zed).
-
- > However, we don't want to build it unconditionally, since the vast
- > majority of U-Boot configurations don't need it (and host-dtc itself
- > has a bunch of dependencies).
-
- > So, we simply add a Config.in option that allows users to indicate
- > whether their U-Boot needs DTC or not, and depend on host-dtc if this
- > option is enabled.
+ > olimex_a20_olinuxino_lime_defconfig and zedboard_defconfig use U-Boot
+ > 2015.07, and they need host-dtc to build properly.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
