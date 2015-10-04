@@ -1,178 +1,56 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 16:25:32 +0100
-Subject: [Buildroot] [PATCH v3] [RFC] ccache: support changing the output
-	directory
-In-Reply-To: <1443961738-12149-19-git-send-email-arnout@mind.be>
-References: <1443961738-12149-19-git-send-email-arnout@mind.be>
-Message-ID: <1443972332-18709-1-git-send-email-arnout@mind.be>
+Date: Sun, 4 Oct 2015 16:34:41 +0100
+Subject: [Buildroot] [PATCH] python-numpy: re-enable for uClibc
+Message-ID: <1443972881-24357-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building in a different output directory than the original build,
-there will currently be a lot of ccache misses because in many cases
-there is some -I/... absolute path in the compilation. ccache has an
-option CCACHE_BASEDIR to substitute absolute paths with relative paths,
-so they wil be the same in the hash (and in the output).
+In commit b0f025386f6861fdc21e38e3a33b65669276f2c2 a patch was added
+to make sure that python-numpy does work in uClibc. This patch was
+needed for the x86 architecture, because uClibc in fact does support
+fenv for x86. However, we don't turn on this support in our uClibc
+config. Because the Config.in depends still allowed uClibc for x86,
+this lead to a built failure, which lead to the fix in commit b0f02538.
+But since this fix also fixes it for all other (supported)
+architectures, we can just remove the !uClibc dependency completely.
 
-Since there are some disadvantages to this path rewriting, it is made
-optional as BR2_CCACHE_USE_BASEDIR. It defaults to y because the
-usefulness of ccache is severely reduced without this option.
-
-In addition to CCACHE_BASEDIR, we also substitute away the occurences
-of $(HOST_DIR) in the calculation of the compiler hash. This is done
-regardless of the setting of BR2_CCACHE_USE_BASEDIR because it's
-quite harmless.
+This is also propagated to the reverse dependency in opencv3.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
-Perhaps we should use $(HOST_DIR) instead of $(BASE_DIR) as
-CCACHE_BASEDIR, because most of the time an absolute path will point
-into the host dir. Not always, though (e.g. references to LINUX_DIR).
-And most people will have $(HOST_DIR) inside $(BASE_DIR) so the latter
-works well for them.
+ package/opencv3/Config.in      | 1 -
+ package/python-numpy/Config.in | 3 ---
+ 2 files changed, 4 deletions(-)
 
-It's hard to be sure with ccache, but in my tests I still had the
-impression that there were less cache hits when rebuilding in a
-different output directory than when rebuilding in the same directory.
-Oh well...
-
-v3: - Fix format string of BR2_DEBUG_WRAPPER. [Romain]
----
- Config.in                      | 27 +++++++++++++++++++++++++++
- docs/manual/ccache-support.txt | 20 ++++++++++++++++++++
- package/gcc/gcc.mk             |  4 +++-
- toolchain/toolchain-wrapper.c  | 11 +++++++++++
- toolchain/toolchain-wrapper.mk |  4 ++++
- 5 files changed, 65 insertions(+), 1 deletion(-)
-
-diff --git a/Config.in b/Config.in
-index 74aeb46..d795361 100644
---- a/Config.in
-+++ b/Config.in
-@@ -286,6 +286,33 @@ config BR2_CCACHE_INITIAL_SETUP
- 
- 	  These initial settings are applied after ccache has been compiled.
- 
-+config BR2_CCACHE_USE_BASEDIR
-+	bool "Use relative paths"
-+	default y
-+	help
-+	  Allow ccache to convert absolute paths within the output
-+	  directory into relative paths.
-+
-+	  During the build, many -I include directives are given with
-+	  an absolute path. These absolute paths end up in the hashes
-+	  that are computed by ccache. Therefore, when you build from a
-+	  different directory, the hash will be different and the
-+	  cached object will not be used.
-+
-+	  To improve cache performance, set this option to y. This
-+	  allows ccache to rewrite absolute paths within the output
-+	  directory into relative paths. Note that only paths within
-+	  the output directory will be rewritten; therefore, if you
-+	  change BR2_HOST_DIR to point outside the output directory and
-+	  subsequently move it to a different location, this will lead
-+	  to cache misses.
-+
-+	  This option has as a result that the debug information in the
-+	  object files also has only relative paths. Therefore, make
-+	  sure you cd to the build directory before starting gdb. See
-+	  the section "COMPILING IN DIFFERENT DIRECTORIES" in the
-+	  ccache manual for more information.
-+
- endif
- 
- config BR2_DEPRECATED
-diff --git a/docs/manual/ccache-support.txt b/docs/manual/ccache-support.txt
-index 992471d..f6746ad 100644
---- a/docs/manual/ccache-support.txt
-+++ b/docs/manual/ccache-support.txt
-@@ -33,3 +33,23 @@ make CCACHE_OPTIONS="--max-size=5G" ccache-options
- # zero statistics counters
- make CCACHE_OPTIONS="--zero-stats" ccache-options
- -----------------
-+
-++ccache+ makes a hash of the source files and of the compiler options.
-+If a compiler option is different, the cached object file will not be
-+used. Many compiler options, however, contain an absolute path to the
-+staging directory. Because of this, building in a different output
-+directory would lead to many cache misses.
-+
-+To avoid this issue, buildroot has the +Use relative paths+ option
-+(+BR2_CCACHE_USE_BASEDIR+). This will rewrite all absolute paths that
-+point inside the output directory into relative paths. Thus, changing
-+the output directory no longer leads to cache misses.
-+
-+A disadvantage of the relative paths is that they also end up to be
-+relative paths in the object file. Therefore, for example, the debugger
-+will no longer find the file, unless you cd to the output directory
-+first.
-+
-+See https://ccache.samba.org/manual.html#_compiling_in_different_directories[the
-+ccache manual's section on "Compiling in different directories"] for
-+more details about this rewriting of absolute paths.
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 103cbe1..420c4e9 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -256,8 +256,10 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-lin
- endif
- endif
- 
-+# _CONF_OPTS contains some references to the absolute path of $(HOST_DIR),
-+# so substitute those away.
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
--	printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
-+	printf '%s' $(subst $(HOST_DIR), at HOST_DIR@,$($(PKG)_CONF_OPTS)) \
- 		| sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
- 		| cut -c -64 | tr -d '\n'`\"
- endif # BR2_CCACHE
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index d52115f..11f93f0 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -268,6 +268,10 @@ int main(int argc, char **argv)
- 			fprintf(stderr, "%sCCACHE_COMPILERCHECK='string:" BR_CCACHE_HASH "'",
- 				(debug == 2) ? "\n    " : " ");
- #endif
-+#ifdef BR_CCACHE_BASEDIR
-+			fprintf(stderr, "%sCCACHE_BASEDIR='" BR_CCACHE_BASEDIR "'",
-+				(debug == 2) ? "\n    " : " ");
-+#endif
- 			for (i = 0; exec_args[i]; i++)
- 				fprintf(stderr, "%s'%s'",
- 					(debug == 2) ? "\n    " : " ", exec_args[i]);
-@@ -282,6 +286,13 @@ int main(int argc, char **argv)
- 		return 3;
- 	}
- #endif
-+#ifdef BR_CCACHE_BASEDIR
-+	/* Allow compilercheck to be overridden through the environment */
-+	if (setenv("CCACHE_BASEDIR", BR_CCACHE_BASEDIR, 0)) {
-+		perror(__FILE__ ": Failed to set CCACHE_BASEDIR");
-+		return 3;
-+	}
-+#endif
- 
- 	if (execv(exec_args[0], exec_args))
- 		perror(path);
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 749afd7..c78363a 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -20,6 +20,10 @@ ifeq ($(BR2_CCACHE),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
- endif
- 
-+ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
-+endif
-+
- # For simplicity, build directly into the install location
- define TOOLCHAIN_BUILD_WRAPPER
- 	$(Q)mkdir -p $(HOST_DIR)/usr/bin
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 137a351..4977925 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -170,7 +170,6 @@ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
+ 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+ 		|| BR2_sh || BR2_x86_64 # python-numpy
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
+ 	select BR2_PACKAGE_PYTHON_NUMPY
+ 	help
+ 	  Include opencv_python module into the OpenCV build.
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 1f9938a..f8170f8 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -4,9 +4,6 @@ config BR2_PACKAGE_PYTHON_NUMPY
+ 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+ 		|| BR2_sh || BR2_x86_64
+-	# numpy needs fenv.h. Available for all architectures in
+-	# glibc, but only for x86 and x86-64 in uClibc.
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
+ 	help
+ 	  NumPy is the fundamental package for scientific computing
+ 	  with Python.
 -- 
 2.5.3
