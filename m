@@ -1,120 +1,88 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 13:28:52 +0100
-Subject: [Buildroot] [PATCH v2 12/18] qt5base: remove now-redundant ccache
-	handling
+Date: Sun, 4 Oct 2015 13:28:54 +0100
+Subject: [Buildroot] [PATCH v2 14/18] qpid-proton: remove now-redundant
+	ccache handling patch
 In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be>
 References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <1443961738-12149-13-git-send-email-arnout@mind.be>
+Message-ID: <1443961738-12149-15-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Although this patch is still relevant for upstream, we don't need it
+anymore in buildoort because we no longer have _ARG1.
+
+Note that it would be relevant again if we would add host-qpid-proton.
+However, the 0.10 release already has the fix.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 ---
-Note that ccache was not and still is not used for the host tools (e.g.
-qmake). This commit only affects the target builds.
-
 v2: No change
 ---
- package/qt5/qt5base/0002-mkspecs-files.patch       |  6 ++-
- .../qt5/qt5base/0009-fix-build-with-ccache.patch   | 49 ----------------------
- package/qt5/qt5base/qt5base.mk                     |  1 -
- 3 files changed, 4 insertions(+), 52 deletions(-)
- delete mode 100644 package/qt5/qt5base/0009-fix-build-with-ccache.patch
+ ...fix-C-compiler-detection-with-_ARG1-_ARG2.patch | 52 ----------------------
+ 1 file changed, 52 deletions(-)
+ delete mode 100644 package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
 
-diff --git a/package/qt5/qt5base/0002-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
-index 09c1b67..adeabdf 100644
---- a/package/qt5/qt5base/0002-mkspecs-files.patch
-+++ b/package/qt5/qt5base/0002-mkspecs-files.patch
-@@ -9,6 +9,8 @@ allows us to easily pass the cross-compiler paths and flags from our
- qt5.mk.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Arnout: remove ccache support]
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- 
- Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- ===================================================================
-@@ -18,8 +20,8 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
- +include(../common/linux_device_pre.conf)
- +
- +# modifications to g++-unix.conf
--+QMAKE_CC                = $${BR_CCACHE} $${CROSS_COMPILE}gcc
--+QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
-++QMAKE_CC                = $${CROSS_COMPILE}gcc
-++QMAKE_CXX               = $${CROSS_COMPILE}g++
- +
- +#modifications to gcc-base.conf
- +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
-diff --git a/package/qt5/qt5base/0009-fix-build-with-ccache.patch b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+diff --git a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch b/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
 deleted file mode 100644
-index 896c0ef..0000000
---- a/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+index 16f4aba..0000000
+--- a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
 +++ /dev/null
-@@ -1,49 +0,0 @@
--Fix QMAKE_CXX/CROSS_COMPILE verification with ccache
+@@ -1,52 +0,0 @@
+-From f24be9ae9ab01c7507a366e9d5529c444f0b7edd Mon Sep 17 00:00:00 2001
+-From: Luca Ceresoli <luca@lucaceresoli.net>
+-Date: Fri, 10 Jul 2015 10:13:47 +0200
+-Subject: [PATCH] proton-c: fix C compiler detection with _ARG1/_ARG2
 -
--The use of ccache leads to QMAKE_CXX definitions of the form:
+-The C compiler commandline in CMake is composed by the concatenation of
+-CMAKE_C_COMPILER + CMAKE_C_COMPILER_ARG1 + CMAKE_C_COMPILER_ARG2.
 -
--    QMAKE_CXX = $${CCACHE} $${CROSS_COMPILE}g++
+-In most use cases the two additional argument variables are empty, thus
+-CMAKE_C_COMPILER can be used without any noticeable difference.
 -
--The previous test required QMAKE_CXX to be a single valid (absolute or
--QMAKE_PATH_ENV-relative) path to an existing file, which was not
--compatible with definitions of QMAKE_CXX like the one above.
+-The Buildroot embedded Linux build system [0], however, optionally exploits the
+-CMAKE_C_COMPILER_ARG1 variable to speed up the cross-compilation of CMake-based
+-packages using ccache. It does so by setting [1]:
 -
--Fix this by using only the first value in QMAKE_CXX, which usually
--points to the compiler executable, or to the ccache executable in the
--above case.
+-  CMAKE_C_COMPILER      = /path/to/ccache
+-  CMAKE_C_COMPILER_ARG1 = /path/to/cross-gcc
 -
--Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+-This works fine with other CMake-based packages, but proton-c's CMakeLists.txt
+-calls gcc to extract the compiler version. It does so by calling
+-"${CMAKE_C_COMPILER} -dumpversion", without honoring the two extra arguments.
+-Within Buildroot with ccache enabled, this means calling
+-"/path/to/ccache -dumpversion", which fails with the error:
+-
+-  ccache: invalid option -- 'd'
+-
+-Fix the compiler check by adding the two arguments.
+-
+-[0] http://buildroot.net/
+-[1] http://git.buildroot.net/buildroot/tree/support/misc/toolchainfile.cmake.in?id=2015.05
+-
+-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ----
-- mkspecs/features/device_config.prf | 9 +++++++--
-- 1 file changed, 7 insertions(+), 2 deletions(-)
+- proton-c/CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
--index cd3a0cf..eee4ac6 100644
----- a/mkspecs/features/device_config.prf
--+++ b/mkspecs/features/device_config.prf
--@@ -19,10 +19,15 @@ defineTest(deviceSanityCheckCompiler) {
--     else: \
--         sfx =
+-diff --git a/proton-c/CMakeLists.txt b/proton-c/CMakeLists.txt
+-index 93449a9..8c31a89 100644
+---- a/proton-c/CMakeLists.txt
+-+++ b/proton-c/CMakeLists.txt
+-@@ -218,7 +218,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
+-     set (COMPILE_LANGUAGE_FLAGS "-std=c99")
+-     set (COMPILE_PLATFORM_FLAGS "-std=gnu99")
 - 
--+    # Build the compiler filename using the first value in QMAKE_CXX in order to
--+    # support tools like ccache, which give QMAKE_CXX values of the form:
--+    #     ccache <path_to_compiler>
--+    compiler = $$first(QMAKE_CXX)$$sfx
--+
--     # Check if the binary exists with an absolute path. Do this check
--     # before the CROSS_COMPILE empty check below to allow the mkspec
--     # to derive the compiler path from other device options.
---    exists($$QMAKE_CXX$$sfx):return()
--+    exists($$compiler):return()
-- 
--     # Check for possible reasons of failure
--     # check if CROSS_COMPILE device-option is set
--@@ -31,7 +36,7 @@ defineTest(deviceSanityCheckCompiler) {
--     # Check if QMAKE_CXX points to an executable.
--     ensurePathEnv()
--     for (dir, QMAKE_PATH_ENV) {
---        exists($$dir/$${QMAKE_CXX}$$sfx): \
--+        exists($$dir/$${compiler}): \
--             return()
--     }
-- 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e783b4d..570cd35 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -189,7 +189,6 @@ define QT5BASE_CONFIGURE_CMDS
- 		-nomake tests \
- 		-device buildroot \
- 		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
--		-device-option BR_CCACHE="$(CCACHE)" \
- 		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS) $(QT5BASE_EXTRA_CFLAGS)" \
- 		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS) $(QT5BASE_EXTRA_CFLAGS)" \
- 		$(QT5BASE_CONFIGURE_OPTS) \
+--    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION
+-+    execute_process(COMMAND ${CMAKE_C_COMPILER} ${CMAKE_C_COMPILER_ARG1} ${CMAKE_C_COMPILER_ARG2} -dumpversion OUTPUT_VARIABLE GCC_VERSION
+-       OUTPUT_STRIP_TRAILING_WHITESPACE)
+-     if (${GCC_VERSION} VERSION_LESS "4.3.0")
+-       # Only a concern if contibuting code back.
+--- 
+-1.9.1
+-
 -- 
 2.5.3
