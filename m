@@ -1,73 +1,80 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 4 Oct 2015 20:14:31 +0200
-Subject: [Buildroot] [PATCH 2/3] vsftpd: Add ftp user creation
-In-Reply-To: <20151004150816.GC7334@free.fr>
-References: <1443965495-12774-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1443965495-12774-2-git-send-email-maxime.hadjinlian@gmail.com>
- <20151004154452.16eee409@free-electrons.com> <20151004150816.GC7334@free.fr>
-Message-ID: <CAGduivzjbp3rDRFdT_K143PtjExZb=4iZmkMchH=+w41Mc_k0A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 4 Oct 2015 19:15:10 +0100
+Subject: [Buildroot] [PATCH v5 2/2] Patch to assembler to strip LOCK
+ prefix.
+In-Reply-To: <1443786554.3328.21.camel@intel.com>
+References: <1443786554.3328.21.camel@intel.com>
+Message-ID: <56116CAE.3070100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
+ Hi Ray,
 
-On Sun, Oct 4, 2015 at 5:08 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+On 02-10-15 12:49, Kinsella, Ray wrote:
+> The lock prefix is usually stripped by passing to the compiler
+> -Wa,momit-lock-prefix=yes via EXTRA_CFLAGS. However I couldn't find
+> a way to get buildroot to pass CFLAGS/EXTRA_CFLAGS around.
+> 
+> I tried using BR2_TARGET_OPTIMIZATION, and creating a new processor type
+> but the flag kept stripping it out. I found the most reliable way to 
+> achieve the behavior was to make stripping the LOCK prefix the assembler's 
+> default behavior, hence the patch
 
-> Maxime, All,
->
-> On 2015-10-04 15:44 +0100, Thomas Petazzoni spake thusly:
-> > On Sun,  4 Oct 2015 15:31:34 +0200, Maxime Hadjinlian wrote:
-> > > +#
-> > > +# VSFTPD won't work if the jail directory is writable, it has to be
-> readable
-> > > +# only
-> > > +# Otherwise you get the following error:
-> > > +# 500 OOPS: vsftpd: refusing to run with writable root inside chroot()
-> > > +# That's why we have to chmod /home/ftp
-> > > +define VSFTPD_FIX_HOME_PERMISSIONS
-> > > +   $(INSTALL) -d -m 555 $(TARGET_DIR)/home/ftp
-> > > +endef
-> >
-> > Can we use VSFTPD_PERMISSIONS instead ? The only drawback is that you
-> > will have to set a fixed UID/GID for ftp:ftp in VSFTPD_USERS.
->
-> Canyoucheck if it is possible to:
->   - check if it is possible to create a premission table with no UID or
->     GID, only a mode,
->   - if so:
->     - move the mkuser script call before th makedev call in fs/common.mk
->     - use a permission table as suggested by Thomas.
->
-> If it's not possible to not specify UID/GID in a permission table, then
-> we'll have to do with your solution.
->
-> Unfortunately, it doesn't seem to work, I get the following error:
-makedevs: unknown group name: -
+ We now have a toolchain wrapper both for internal and external toolchains. This
+will allow you to reliably pass options to the compiler. So we'd preferably use
+that approach.
+
+ Also, we think it's worthwhile to add a new subarchitecture for the Quark in
+arch/Config.in.x86. This should set the arch and tune options to i586, but the
+toolchain wrapper can then carry an option that adds -Wa,-momit-lock-prefix=yes.
+This also fixes the problem for external toolchains.
+
+ So the proposal is that you create a first patch that adds BR2_x86_quark and
+adds -Wa,-momit-lock-prefix=yes, and then a second patch that adds the Galileo2
+defconfig.
+
+ I have now marked both patches as Changes Requested in out patch tracking
+system, so please resubmit a new version that fixes the above comments,
+otherwise we'll forget about your contribution.
 
 
-> Thanks.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151004/2e7a1def/attachment.html>
+ Regards,
+ Arnout
+
+
+> Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> ---
+>  .../galileo/patches/binutils/2.25/default-lock-prefix.patch   | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>  create mode 100644 board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch
+> 
+> diff --git a/board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch b/board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch
+> new file mode 100644
+> index 0000000..7814ae4
+> --- /dev/null
+> +++ b/board/intel/galileo/patches/binutils/2.25/default-lock-prefix.patch
+> @@ -0,0 +1,11 @@
+> +--- a/gas/config/tc-i386.orig	2015-07-24 15:54:51.359080778 +0100
+> ++++ b/gas/config/tc-i386.c	2015-07-24 15:54:59.692192247 +0100
+> +@@ -545,7 +545,7 @@ static int allow_index_reg = 0;
+> + 
+> + /* 1 if the assembler should ignore LOCK prefix, even if it was
+> +    specified explicitly.  */
+> +-static int omit_lock_prefix = 0;
+> ++static int omit_lock_prefix = 1;
+> + 
+> + static enum check_kind
+> +   {
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
