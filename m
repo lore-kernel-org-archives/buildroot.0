@@ -1,61 +1,73 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 4 Oct 2015 15:42:19 +0200
-Subject: [Buildroot] [PATCH] libnfs: Without native RPC use libtirpc
-In-Reply-To: <20151004113505.GB2633@tarshish>
-References: <1443882268-9737-1-git-send-email-maxime.hadjinlian@gmail.com>
- <CAGduivwirG_RD1LfYfgekqfEphCquOr5AG9H2WKB=4Vjv7OFnQ@mail.gmail.com>
- <20151004113505.GB2633@tarshish>
-Message-ID: <CAGduivzptU6E4UPtpasJhX8QbY1Sw1ys2dy-_pD7vf2DpEg9sw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 4 Oct 2015 14:42:42 +0100
+Subject: [Buildroot] [PATCH v2 1/2] python-numpy: introduce
+ ARCH_SUPPORTS hidden variable
+In-Reply-To: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+References: <1441285996-29463-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <56112CD2.9050602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 4, 2015 at 1:35 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+On 03-09-15 14:13, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> 
+> Python-numpy has specific constraints about uClibc and arch. This patch add an
+> BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS hidden variable to avoid duplicate
+> dependencies test for others packages which uses numpy.
+> 
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+> ---
+>  package/python-numpy/Config.in | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+> index 1f9938a..4c02ea6 100644
+> --- a/package/python-numpy/Config.in
+> +++ b/package/python-numpy/Config.in
+> @@ -1,12 +1,16 @@
+> +config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+> +	bool
+> +	# numpy needs fenv.h. Available for all architectures in
+> +	# glibc, but only for x86 and x86-64 in uClibc.
+> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
+> +
+>  config BR2_PACKAGE_PYTHON_NUMPY
+>  	bool "python-numpy"
+>  	# Numpy has some CPU specific code
+>  	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+>  		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+>  		|| BR2_sh || BR2_x86_64
 
-> Hi Maxime,
->
-> On Sat, Oct 03, 2015 at 04:25:30PM +0200, Maxime Hadjinlian wrote:
-> > There's a crappy file. Don't do git add with glob at home...
->
-> Or just do
->
->    echo '*.swp' >> .git/info/exclude
->
-Good point Baruch.
-I'll even add it to my global gitconfig, no real reason I would ever need
-to commit a swp file.
+ You should also move this dependency to NUMPY_ARCH_SUPPORTS.
 
->
-> baruch
->
-> > On Sat, Oct 3, 2015 at 4:24 PM, Maxime Hadjinlian <
-> > maxime.hadjinlian at gmail.com> wrote:
-> > > Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> > > ---
-> > > RFC: A few packages uses libtirpc if there's no native RPC support
-> *BUT*
-> > > they don't propagate the
-> BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2.
-> > >
-> > > It was probably added later on in libtirpc, so the questions here, is
-> > > what do we do with that ? Should we add the dependencies to the other
-> > > packages ?
-> > > Do we need some kind of mechanisms to handle that ?
-> > > ---
-> > >  package/libnfs/.Config.in.swp | Bin 0 -> 12288 bytes
-> > >  package/libnfs/Config.in      |   8 +++++---
-> > >  package/libnfs/libnfs.mk      |   4 ++++
-> > >  3 files changed, 9 insertions(+), 3 deletions(-)
-> > >  create mode 100644 package/libnfs/.Config.in.swp
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151004/2fe38b0e/attachment.html>
+> -	# numpy needs fenv.h. Available for all architectures in
+> -	# glibc, but only for x86 and x86-64 in uClibc.
+> -	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
+
+ Turns out that this is actually not needed - patch will follow. So wait a bit
+before respinning and respin it based on my patch.
+
+> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	help
+>  	  NumPy is the fundamental package for scientific computing
+>  	  with Python.
+> 
+
+
+ You should also update the reverse dependencies of python-numpy (opencv3) with
+this new symbol.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
