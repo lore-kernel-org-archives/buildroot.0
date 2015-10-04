@@ -1,49 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 15:51:27 +0100
-Subject: [Buildroot] [PATCH] binutils: improve poison system directory
- support
-In-Reply-To: <1432544520-665-1-git-send-email-vapier@gentoo.org>
-References: <1432544520-665-1-git-send-email-vapier@gentoo.org>
-Message-ID: <20151004155127.4f116556@free-electrons.com>
+Date: Sun, 4 Oct 2015 15:53:07 +0100
+Subject: [Buildroot] [git commit] skeleton: Pretty fixes for /etc/profile
+Message-ID: <20151004145339.38A637FDAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike,
+commit: http://git.buildroot.net/buildroot/commit/?id=a92b886a034ef49945c5ae2858becb35b590d99e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 25 May 2015 05:02:00 -0400, Mike Frysinger wrote:
-> From: Mike Frysinger <vapier@chromium.org>
-> 
-> I've added support for the gold linker and reworked a bit the system:
-> * The command line flags are always available.
-> * The flag names are tweaked slightly to match existing flag standards.
-> * We can turn on & off the warning via the command line.
-> * The configure option controls the default warning behavior.
-> 
-> This makes it easier for distros to take the patch and drop it into their
-> setups.  If they don't pass the configure flag, then it isn't enabled by
-> default, and they get the same behavior w/out the patch.  The difference
-> is that people can still opt in to the warnings/errors via LDFLAGS.
-> 
-> Signed-off-by: Mike Frysinger <vapier@chromium.org>
-> ---
->  .../2.25/600-poison-system-directories.patch       | 254 +++++++++++++--------
->  1 file changed, 154 insertions(+), 100 deletions(-)
+Fix indent and put PATH on a single line.
 
-We are in fact going to drop our binutils/gcc poison detection patches,
-since we are moving to generalizing the toolchain wrapper to be also
-used in the internal toolchain case. Since the wrapper already does the
-poisoning detection, there will no longer be a point to have such
-gcc/binutils patches in Buildroot.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/skeleton/etc/profile |   24 ++++++++++--------------
+ 1 files changed, 10 insertions(+), 14 deletions(-)
 
-Consequently, I've marked your patch as Rejected in patchwork.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index e44e568..3a97427 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -1,15 +1,11 @@
+-export PATH=\
+-/bin:\
+-/sbin:\
+-/usr/bin:\
+-/usr/sbin
++export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+ 
+ if [ "$PS1" ]; then
+-    if [ "`id -u`" -eq 0 ]; then
+-        export PS1='# '
+-    else
+-        export PS1='$ '
+-    fi
++	if [ "`id -u`" -eq 0 ]; then
++		export PS1='# '
++	else
++		export PS1='$ '
++	fi
+ fi
+ 
+ export PAGER='/bin/more '
+@@ -17,8 +13,8 @@ export EDITOR='/bin/vi'
+ 
+ # Source configuration files from /etc/profile.d
+ for i in /etc/profile.d/*.sh ; do
+-    if [ -r "$i" ]; then
+-        . $i
+-    fi
+-    unset i
++	if [ -r "$i" ]; then
++		. $i
++	fi
++	unset i
+ done
