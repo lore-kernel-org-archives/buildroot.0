@@ -1,39 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2015 11:30:57 +0200
-Subject: [Buildroot] musl/gettext issue
-In-Reply-To: <55FB3E49.5050606@mind.be> (Arnout Vandecappelle's message of
- "Fri, 18 Sep 2015 00:27:21 +0200")
-References: <20150916221636.039df52b@free-electrons.com>
- <55FB3E49.5050606@mind.be>
-Message-ID: <87oagfvv3i.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 4 Oct 2015 11:32:55 +0200
+Subject: [Buildroot] [PATCH 13/18] package-cmake: remove now-redundant
+ target ccache support
+In-Reply-To: <1442777030-24036-5-git-send-email-arnout@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442777030-24036-1-git-send-email-arnout@mind.be>
+ <1442777030-24036-5-git-send-email-arnout@mind.be>
+Message-ID: <5610F247.6020604@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Arnout,
 
-Hi,
+Resending the reviewed tag for this patch since patch 14/18 is no longer in the
+patchwork.
+http://lists.busybox.net/pipermail/buildroot/2015-October/140909.html
 
- >  Another option is that we add a different flag to indicate the dependency on
- > libintl:
+Le 20/09/2015 21:23, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> All the complexity with the different ways that CMAKE_C_COMPILER and
+> CMAKE_C_COMPILER_ARG1 can be set are no longer needed, it's all handled
+> by the toolchain wrapper now.
+> 
+> Note that it is still necessary to handle this for the host build.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > config BR2_PACKAGE_GETTEXT_WITH_LIBINTL
- > 	bool
- > 	default y
- > 	depends on BR2_PACKAGE_GETTEXT
- > 	depends on BR2_STATIC_LIBS
- > 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+This patch doesn't apply since sed expression delimiter has been changed by
+d90b1d74cb78f5668d49fe8262290eaff1d61a1d (s/:/#/)
 
+Otherwise:
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
- >  HTTPING_LDFLAGS = $(TARGET_LDFLAGS) \
- >         $(if $(BR2_PACKAGE_GETTEXT_WITH_LIBINTL),-lintl) \
+Best regards,
+Romain
 
-
- >  There's just about 30 packages that ned to be adapted.
-
-Yes, I guess that's the best solution.
-
--- 
-Bye, Peter Korsgaard
+> ---
+>  package/pkg-cmake.mk                |  5 ++---
+>  support/misc/toolchainfile.cmake.in | 32 ++------------------------------
+>  2 files changed, 4 insertions(+), 33 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 574eccc..d85ff11 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -98,7 +98,6 @@ define $(2)_CONFIGURE_CMDS
+>  		-DBUILD_TESTS=OFF \
+>  		-DBUILD_TESTING=OFF \
+>  		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
+> -		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
+>  		$$(CMAKE_QUIET) \
+>  		$$($$(PKG)_CONF_OPTS) \
+>  	)
+> @@ -245,8 +244,8 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
+>  		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
+>  		-e 's:@@TARGET_LDFLAGS@@:$(call qstrip,$(TARGET_LDFLAGS)):' \
+> -		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
+> -		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
+> +		-e 's:@@TARGET_CC@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC))):' \
+> +		-e 's:@@TARGET_CXX@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX))):' \
+>  		-e 's:@@CMAKE_SYSTEM_PROCESSOR@@:$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR)):' \
+>  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+>  		> $@
+> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+> index cd41254..5cf381e 100644
+> --- a/support/misc/toolchainfile.cmake.in
+> +++ b/support/misc/toolchainfile.cmake.in
+> @@ -27,33 +27,5 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+>  set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+>  
+>  # This toolchain file can be used both inside and outside Buildroot.
+> -# * When used inside Buildroot, ccache support is explicitly driven using the
+> -#   USE_CCACHE variable.
+> -# * When used outside Buildroot (i.e. when USE_CCACHE is not defined), ccache
+> -#   support is automatically enabled if the ccache program is available.
+> -if(DEFINED USE_CCACHE)
+> -	if(USE_CCACHE)
+> -		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+> -		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+> -		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> -	else()
+> -		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> -	endif()
+> -else()
+> -	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
+> -	if(CCACHE)
+> -		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_C_COMPILER "${CCACHE}")
+> -		set(CMAKE_CXX_COMPILER "${CCACHE}")
+> -		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> -		message(STATUS "ccache program has been found and will be used for the build.")
+> -		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
+> -	else()
+> -		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+> -		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+> -	endif()
+> -endif()
+> +set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
+> +set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
+> 
