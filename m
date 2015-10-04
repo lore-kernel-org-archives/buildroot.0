@@ -1,109 +1,65 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 4 Oct 2015 12:13:34 +0200
-Subject: [Buildroot] [PATCH 17/19] [RFC] toolchain-wrapper: support
- change of BR2_CCACHE
-In-Reply-To: <1442777319-24164-4-git-send-email-arnout@mind.be>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442777319-24164-1-git-send-email-arnout@mind.be>
- <1442777319-24164-4-git-send-email-arnout@mind.be>
-Message-ID: <5610FBCE.7050309@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 Oct 2015 11:17:55 +0100
+Subject: [Buildroot] [PATCH] package/freerdp: fix missing define
+Message-ID: <1443953875-30450-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+FreeRDP uses CMSPAR, which is defined by glibc in bits/termios.h .
 
-Le 20/09/2015 21:28, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> By moving the ccache call to the toolchain wrapper, the following
-> scenario no longer works:
-> 
-> make foo-dirclean all BR2_CCACHE=
-> 
-> That's a sometimes useful call to check if some failure is perhaps
-> caused by ccache.
-> 
-> We can enable this scenario again by exporting BR_NO_CCACHE when
-> BR2_CCACHE is not set, and by handling this in the toolchain wrapper.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> This one is marked as RFC because it is a little bit invasive, and it
-> is only needed for a use-case that we don't officially support: doing
-> non-clean rebuilds. Also, the usefulness of the scenario mentioned in
-> the commit message is pretty limited, especially considering that
-> ccache should be fixed by the upcoming toolchain configuration hash.
+glibc has two flavours of bits/termios.h: a genmeric one and an
+architecture-specific one. When installing, glibc will install the
+architecture-specific file if it exists, otherwise it installs the
+generic file. Only Alpha, MIPS, PPC and Sparc have their own
+bits/termios.h.
 
-Actually, I don't use ccache while using Buildroot, so I haven't strong opinion
-about this patch.
+The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
+do define CMSPAR. However, the MIPS flavour does not define it.
 
-Anyway, lets see what other think about it.
+We add a patch to FreeRDP that defines CMSPAR to the value from the
+generic value, which is also the value known to the Linux kernel for
+MIPS.
 
-Best regards,
-Romain
+Fixes:
+    http://autobuild.buildroot.org/results/0b4/0b4793f0bf9f4c57933897f3480054a4e06528ad/
+    http://autobuild.buildroot.org/results/7a2/7a2284d0a2987158fa2e78f789b07c8c6fcdb974/
+    http://autobuild.buildroot.org/results/387/3874088c3ccd4bbf76ea0c911ca1ef64c7dc9d1c/
+    ...
 
-> ---
->  Makefile                      |  2 ++
->  toolchain/toolchain-wrapper.c | 15 +++++++++++----
->  2 files changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index fdbca02..e8e2f02 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -375,6 +375,8 @@ BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
->  export BR_CACHE_DIR
->  HOSTCC := $(CCACHE) $(HOSTCC)
->  HOSTCXX := $(CCACHE) $(HOSTCXX)
-> +else
-> +export BR_NO_CCACHE
->  endif
->  
->  # Scripts in support/ or post-build scripts may need to reference
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 4774692..89c8598 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -95,7 +95,7 @@ static void check_unsafe_path(const char *path, int paranoid)
->  
->  int main(int argc, char **argv)
->  {
-> -	char **args, **cur;
-> +	char **args, **cur, **exec_args;
->  	char *relbasedir, *absbasedir;
->  	char *progpath = argv[0];
->  	char *basename;
-> @@ -237,6 +237,13 @@ int main(int argc, char **argv)
->  	/* finish with NULL termination */
->  	*cur = NULL;
->  
-> +	exec_args = args;
-> +#ifdef BR_CCACHE
-> +	if (getenv("BR_NO_CCACHE"))
-> +		/* Skip the ccache call */
-> +		exec_args++;
-> +#endif
-> +
->  	/* Debug the wrapper to see actual arguments passed to
->  	 * the compiler:
->  	 * unset, empty, or 0: do not trace
-> @@ -247,14 +254,14 @@ int main(int argc, char **argv)
->  		debug = atoi(env_debug);
->  		if (debug > 0) {
->  			fprintf(stderr, "Toolchain wrapper executing:");
-> -			for (i = 0; args[i]; i++)
-> +			for (i = 0; exec_args[i]; i++)
->  				fprintf(stderr, "%s'%s'",
-> -					(debug == 2) ? "\n    " : " ", args[i]);
-> +					(debug == 2) ? "\n    " : " ", exec_args[i]);
->  			fprintf(stderr, "\n");
->  		}
->  	}
->  
-> -	if (execv(args[0], args))
-> +	if (execv(exec_args[0], exec_args))
->  		perror(path);
->  
->  	free(args);
-> 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freerdp/0003-add-missing-define.patch | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/freerdp/0003-add-missing-define.patch
+
+diff --git a/package/freerdp/0003-add-missing-define.patch b/package/freerdp/0003-add-missing-define.patch
+new file mode 100644
+index 0000000..74ef084
+--- /dev/null
++++ b/package/freerdp/0003-add-missing-define.patch
+@@ -0,0 +1,18 @@
++diff -durN freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.orig/winpr/libwinpr/comm/comm_serial_sys.c freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16/winpr/libwinpr/comm/comm_serial_sys.c
++--- freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.orig/winpr/libwinpr/comm/comm_serial_sys.c	2015-09-04 16:20:17.000000000 +0100
+++++ freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16/winpr/libwinpr/comm/comm_serial_sys.c	2015-10-04 11:07:41.868513726 +0100
++@@ -27,6 +27,14 @@
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
++ #include <termios.h>
+++
+++/* glibc for MIPS has its own bits/termios.h which does not define
+++ * CMSPAR, so we vampirise the value from the generic bits/termios.h
+++ */
+++#ifndef CMSPAR
+++#define CMSPAR 010000000000
+++#endif
+++
++ #include <unistd.h>
++ 
++ #include "comm_serial_sys.h"
+-- 
+1.9.1
