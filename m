@@ -1,51 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2015 17:07:44 +0200
-Subject: [Buildroot] [PATCH v2 04/18] infra: move ccache handling to the
-	toolchain wrapper
-In-Reply-To: <1443961738-12149-5-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 4 Oct 2015 13:28:44 +0100")
-References: <1443961738-12149-1-git-send-email-arnout@mind.be>
- <1443961738-12149-5-git-send-email-arnout@mind.be>
-Message-ID: <87mvvyoenz.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Oct 2015 16:08:16 +0100
+Subject: [Buildroot] [PATCH 2/3] vsftpd: Add ftp user creation
+In-Reply-To: <20151004154452.16eee409@free-electrons.com>
+References: <1443965495-12774-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1443965495-12774-2-git-send-email-maxime.hadjinlian@gmail.com>
+ <20151004154452.16eee409@free-electrons.com>
+Message-ID: <20151004150816.GC7334@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Maxime, All,
 
- > Since we always have a toolchain wrapper now, we can move the ccache
- > call to the toolchain wrapper.
+On 2015-10-04 15:44 +0100, Thomas Petazzoni spake thusly:
+> On Sun,  4 Oct 2015 15:31:34 +0200, Maxime Hadjinlian wrote:
+> > +#
+> > +# VSFTPD won't work if the jail directory is writable, it has to be readable
+> > +# only
+> > +# Otherwise you get the following error:
+> > +# 500 OOPS: vsftpd: refusing to run with writable root inside chroot()
+> > +# That's why we have to chmod /home/ftp
+> > +define VSFTPD_FIX_HOME_PERMISSIONS
+> > +	$(INSTALL) -d -m 555 $(TARGET_DIR)/home/ftp
+> > +endef
+> 
+> Can we use VSFTPD_PERMISSIONS instead ? The only drawback is that you
+> will have to set a fixed UID/GID for ftp:ftp in VSFTPD_USERS.
 
- > The hostcc ccache handling obviously stays.
+Canyoucheck if it is possible to:
+  - check if it is possible to create a premission table with no UID or
+    GID, only a mode,
+  - if so:
+    - move the mkuser script call before th makedev call in fs/common.mk
+    - use a permission table as suggested by Thomas.
 
- > The global addition of ccache to TARGET_CC/CXX is removed, but many
- > individual packages and infras still add it. This means we have a
- > chain like this: ccache -> toolchain-wrapper -> ccache -> gcc
- > However, this is fairly harmless: for cache misses, the inner ccache
- > just adds overhead and for cache hits, the inner ccache is never
- > called. Later patches will remove these redundant ccache calls.
+If it's not possible to not specify UID/GID in a permission table, then
+we'll have to do with your solution.
 
- > As a side effect, perl now supports ccache as well.
+Thanks.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Danomi Manchego <danomimanchego123@gmail.com>
- > Cc: K?roly Kasza <kaszak@gmail.com>
- > Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-> +++ b/toolchain/toolchain-wrapper.mk
- > @@ -16,6 +16,10 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- >  # separate argument when used in execv() by the toolchain wrapper.
- >  TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
- 
- > +ifeq ($(BR2_CCACHE),y)
- > +TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE='"$(CCACHE)"'
- > +endif
-
-As I just mentioned IRL, CCACHE is $(HOST_DIR)/usr/bin/ccache, E.G the
-absolute path to ccache - So hardcoding this in the wrapper isn't really
-nice for relocatable SDK.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
