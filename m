@@ -1,33 +1,74 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun,  4 Oct 2015 19:55:17 +0200
-Subject: [Buildroot] [PATCH] portaudio: fix dependency on alsa-lib
-Message-ID: <1443981317-26663-1-git-send-email-luca@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 18:57:45 +0100
+Subject: [Buildroot] [git commit] webkitgtk24: fix compilation failure due
+	to unicode quotes
+Message-ID: <20151004175801.03B5C81826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_PORTAUDIO_ALSA is misspelled in one place, resulting in
-alsa-lib not being listed in the dependencies.
+commit: http://git.buildroot.net/buildroot/commit/?id=7fe695c0656dae2a2b9f973c2aede7058a723049
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+As reported in this upstream bug...
+
+https://bugs.webkit.org/show_bug.cgi?id=128971
+
+...the pretty unicode double quotes break Python stdin. Backporting the
+patch that was attached to that bug report and tweak it minimally to
+make it apply on Buildroot.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/c8e/c8ea1cab0a1ee081f9bca994ff5309ea0117d692/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/portaudio/portaudio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...etty-quotes-in-licence-break-Python-stdin.patch |   36 ++++++++++++++++++++
+ 1 files changed, 36 insertions(+), 0 deletions(-)
 
-diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
-index 0cccd20..0353d65 100644
---- a/package/portaudio/portaudio.mk
-+++ b/package/portaudio/portaudio.mk
-@@ -13,7 +13,7 @@ PORTAUDIO_LICENSE = portaudio license (MIT-like plus special clause)
- PORTAUDIO_LICENSE_FILES = LICENSE.txt
- 
- PORTAUDIO_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
-+	$(if $(BR2_PACKAGE_PORTAUDIO_ALSA),alsa-lib)
- 
- PORTAUDIO_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
--- 
-1.9.1
+diff --git a/package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch b/package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch
+new file mode 100644
+index 0000000..df51078
+--- /dev/null
++++ b/package/webkitgtk24/0003-Pretty-quotes-in-licence-break-Python-stdin.patch
+@@ -0,0 +1,36 @@
++Pretty quotes in licence break Python stdin.
++
++This patch was submitted upstream in this bug report:
++
++https://bugs.webkit.org/show_bug.cgi?id=128971
++
++[Vincent: tweak the patch to make it apply on Buildroot]
++
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++Pretty quotes in licence break Python stdin.
++
++https://bugs.webkit.org/show_bug.cgi?id=128971
++
++--- a/Source/WebCore/xml/XMLViewer.css	2014-01-23 16:49:58.000000000 +0000
+++++ b/Source/WebCore/xml/XMLViewer.css
++@@ -14,7 +14,7 @@
++  * distribution.
++  *
++  * THIS SOFTWARE IS PROVIDED BY GOOGLE INC. AND ITS CONTRIBUTORS
++- * ???AS IS??? AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GOOGLE INC.
++  * OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++--- a/Source/WebCore/xml/XMLViewer.js	2014-01-23 16:49:58.000000000 +0000
+++++ b/Source/WebCore/xml/XMLViewer.js
++@@ -15,7 +15,7 @@
++  * distribution.
++  *
++  * THIS SOFTWARE IS PROVIDED BY GOOGLE INC. AND ITS CONTRIBUTORS
++- * ???AS IS??? AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GOOGLE INC.
++  * OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
