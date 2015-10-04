@@ -1,59 +1,46 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  4 Oct 2015 19:29:34 +0200
-Subject: [Buildroot] [PATCH] audit: Add systemd support
-Message-ID: <1443979774-13743-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 18:29:35 +0100
+Subject: [Buildroot] [git commit] parted: add patch to fix musl build
+Message-ID: <20151004172943.3CAE180818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The main .service file is installed by audit.
-We are using tmpfiles mechanisms to create the log directory, which
-would not exists otherwise since /var/log points to /tmp
+commit: http://git.buildroot.net/buildroot/commit/?id=198f64f4671c80b012fedc8a4d7af6470fc190ea
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Fixes:
+
+  http://autobuild.buildroot.org/results/e1b/e1b6de7b234f2ec154d772ee93e33275dff38f3e/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/audit/audit.mk            | 14 ++++++++++++++
- package/audit/audit_tmpfiles.conf |  1 +
- 2 files changed, 15 insertions(+)
- create mode 100644 package/audit/audit_tmpfiles.conf
+ package/parted/0004-fix-includes-for-musl.patch |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index d736070..2f601c2 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -34,10 +34,24 @@ ifeq ($(BR2_aarch64),y)
- AUDIT_CONF_OPTS += --with-aarch64
- endif
- 
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+AUDIT_CONF_OPTS += --enable-systemd
-+endif
-+
- define AUDIT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/audit/S01auditd $(TARGET_DIR)/etc/init.d/S01auditd
- endef
- 
-+define AUDIT_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/auditd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/auditd.service
-+
-+	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
-+	$(INSTALL) -D -m 644 package/audit/audit_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/audit.conf
-+endef
-+
- define AUDIT_INSTALL_CLEANUP
- 	$(RM) -rf $(TARGET_DIR)/etc/rc.d
- 	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
-diff --git a/package/audit/audit_tmpfiles.conf b/package/audit/audit_tmpfiles.conf
+diff --git a/package/parted/0004-fix-includes-for-musl.patch b/package/parted/0004-fix-includes-for-musl.patch
 new file mode 100644
-index 0000000..6b8325b
+index 0000000..28c94ac
 --- /dev/null
-+++ b/package/audit/audit_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /var/log/audit 0755 - -
--- 
-2.5.3
++++ b/package/parted/0004-fix-includes-for-musl.patch
+@@ -0,0 +1,18 @@
++Include <fcntl.h> to get loff_t definition
++
++Patch borrowed from Alpine Linux at
++http://git.alpinelinux.org/cgit/aports/plain/main/parted/fix-includes.patch. Solves
++build with musl.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++--- parted-3.1.orig/libparted/fs/xfs/platform_defs.h
+++++ parted-3.1/libparted/fs/xfs/platform_defs.h
++@@ -35,6 +35,7 @@
++ #define __XFS_PLATFORM_DEFS_H__
++ 
++ #include <stdio.h>
+++#include <fcntl.h>
++ #include <stdarg.h>
++ #include <assert.h>
++ #include <endian.h>
