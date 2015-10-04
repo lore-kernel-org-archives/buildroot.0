@@ -1,34 +1,29 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 4 Oct 2015 15:46:06 +0000
-Subject: [Buildroot] [PATCH 1/2] mpdecimal: use official upstream site
-In-Reply-To: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <38121FAB319C3344930C920E7B5183136A3DE22A@LEMAIL01.le.imgtec.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Oct 2015 18:01:59 +0200
+Subject: [Buildroot] [PATCH v2 00/18] Internal toolchain wrapper &
+	ccache support
+In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 4 Oct 2015 13:28:40 +0100")
+References: <1443961738-12149-1-git-send-email-arnout@mind.be>
+Message-ID: <871tdaoc5k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Deat Thomas Petazzoni,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > This series introduces two features that were discussed on the list and
+ > in the Buildroot Summer Camp: a wrapper for the internal toolchain, and
+ > fixing ccache. See below why the two are combined in one series.
 
->>> mpdecimal 2.4.1 Downloading
---2015-10-04 16:43:02--  http://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.4.1.tar.gz
-Resolving www.bytereef.org... 23.235.43.133
-Connecting to www.bytereef.org|23.235.43.133|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 2254789 (2.1M) [application/octet-stream]
-Saving to: `/br/output/build/.mpdecimal-2.4.1.tar.gz.tAa8M5/output'
+ > [Note: to make review easier, all the potentially contentious stuff
+ > from the individual patches is repeated here. So for the first few
+ > iterations, it's probably enough to reply to just this e-mail.]
 
-100%[=======================================================================================================================>] 2,254,789    777K/s   in 2.8s    
+Committed entire series, including the v3 versions of the 3 patches,
+thanks!
 
-2015-10-04 16:43:06 (777 KB/s) - `/br/output/build/.mpdecimal-2.4.1.tar.gz.tAa8M5/output' saved [2254789/2254789]
-
-mpdecimal-2.4.1.tar.gz: OK (sha256: da74d3cfab559971a4fbd4fb506e1b4498636eb77d0fd09e44f8e546d18ac068)
-
-Regards,
-
-Vincent.
+-- 
+Bye, Peter Korsgaard
