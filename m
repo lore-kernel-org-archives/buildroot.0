@@ -1,29 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2015 18:01:59 +0200
-Subject: [Buildroot] [PATCH v2 00/18] Internal toolchain wrapper &
-	ccache support
-In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 4 Oct 2015 13:28:40 +0100")
-References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <871tdaoc5k.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 16:59:05 +0100
+Subject: [Buildroot] [git commit] legal-info: allow to declare the actual
+	sources for binary packages
+Message-ID: <20151004160501.8EA53807E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b9f4727ff4d512868352494f5209fff4da147473
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This series introduces two features that were discussed on the list and
- > in the Buildroot Summer Camp: a wrapper for the internal toolchain, and
- > fixing ccache. See below why the two are combined in one series.
+The FOO_SITE/FOO_SOURCE variables usually point to a tarball containing
+source code.
 
- > [Note: to make review easier, all the potentially contentious stuff
- > from the individual patches is repeated here. So for the first few
- > iterations, it's probably enough to reply to just this e-mail.]
+For the downloaded external toolchains this is not true, the "source"
+tarball actually contains binaries. This is fine for making Buildroot
+work, but for legal-info we really want to ship real source code, not
+binaries.
 
-Committed entire series, including the v3 versions of the 3 patches,
-thanks!
+Luckily, some (hopefully all) toolchain vendors publish a downloadable
+tarball containing the source code counterpart for their binary
+packages.
 
--- 
-Bye, Peter Korsgaard
+Here we allow the user to declare the URL of this other tarball in the
+pair of variables FOO_ACTUAL_SOURCE_TARBALL (by default equal to
+FOO_SOURCE) and FOO_ACTUAL_SOURCE_SITE (by default equal to FOO_SITE).
+If the "actual source" package can be downloaded from the same
+directory as the binary package, then only FOO_ACTUAL_SOURCE_TARBALL
+needs to be set.
+
+Note this change is not strictly toolchain-specific: it might be useful
+for other packages that happen to ship binaries in the same way.
+
+[Thomas:
+  - remove "the source code has not been saved" warning that could
+    never be triggered due to how the conditions were
+    organized. Discussed with Luca live during the meeting.]
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile               |    1 -
+ package/pkg-generic.mk |   19 ++++++++++++++-----
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index fdbca02..304789f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -647,7 +647,6 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+ 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,not saved,HOST)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+-	@$(call legal-warning,the toolchain has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p)-all-legal-info) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3942a89..76ec295 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -708,12 +708,18 @@ ifneq ($$($(2)_SITE_METHOD),local)
+ ifneq ($$($(2)_SITE_METHOD),override)
+ # Packages that have a tarball need it downloaded beforehand
+ $(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+-$(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
+-$(2)_MANIFEST_SITE = $$(call qstrip,$$($(2)_SITE))
+ endif
+ endif
+ endif
+ 
++# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
++# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
++# point to the actual sources tarball. Use the actual sources for legal-info.
++# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
++# so these are the defaults for FOO_ACTUAL_*.
++$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
++$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
++
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
+ # Packages without a source are assumed to be part of Buildroot, skip them.
+@@ -744,13 +750,16 @@ else
+ # Other packages
+ 
+ ifeq ($$($(2)_REDISTRIBUTE),YES)
++ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
++	$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
++endif
+ # Copy the source tarball (just hardlink if possible)
+-	@cp -l $$(DL_DIR)/$$($(2)_SOURCE) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
+-	   cp $$(DL_DIR)/$$($(2)_SOURCE) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
++	@cp -l $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4))) 2>/dev/null || \
++	    cp $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL) $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+ endif # redistribute
+ 
+ endif # other packages
+-	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$$($(2)_MANIFEST_SITE),$$(call UPPERCASE,$(4)))
++	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call UPPERCASE,$(4)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
