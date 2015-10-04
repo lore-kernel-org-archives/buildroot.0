@@ -1,30 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 12:05:45 +0200
-Subject: [Buildroot] [git commit] lz4: adjust homepage URL
-Message-ID: <20151004100731.43E8181D65@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 4 Oct 2015 12:12:01 +0200
+Subject: [Buildroot] [PATCH v4 1/3] skeleton: Clean up profile file
+In-Reply-To: <1443884002-13585-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443884002-13585-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <5610FB71.8040708@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcf696802b495e95d6db4e0b06396c2546f878f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime,
 
-Lz4 is no longer developed on google code.
+Maxime Hadjinlian wrote:
+> There's a lot of code in /etc/profile, which doesn't really belong in a
+> minimal default skeleton.
+>
+> Also, add an 'unset i' to avoid clutter.
+>
+> If the user has a specific needs, it needs to be added in
+> /etc/profile.d/ by a post-build script.
+>
+> Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lz4/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+[Build- and runtime-tested with qemu_arm_versatile_defconfig]
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/package/lz4/Config.in b/package/lz4/Config.in
-index 677658c..4a00a70 100644
---- a/package/lz4/Config.in
-+++ b/package/lz4/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_LZ4
- 	  in multiple GB/s per core, typically reaching RAM speed limits
- 	  on multi-core systems.
- 
--	  https://code.google.com/p/lz4/
-+	  http://www.lz4.org/
+-- 
+Luca
