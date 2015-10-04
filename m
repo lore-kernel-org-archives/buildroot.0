@@ -1,46 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Oct 2015 23:47:08 +0100
-Subject: [Buildroot] Buildroot developer meeting report
-Message-ID: <5611AC6C.3060007@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  4 Oct 2015 20:12:42 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x series
+Message-ID: <1444000362-31447-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- As you will have noticed from the mailing list traffic, it's been a very busy
-two days at the Buildroot developer meeting in Dublin. You can find the full
-report at [1]. Here are the highlights:
-
-- We have decided to proceed with starting a not-for-profit organisation. It
-will be based in France. Maxime H. volunteered to get the ball rolling. The plan
-is to prepare the statutes in the coming months and sign them at FOSDEM.
-
-- 110 patches were committed, the patchwork queue has been reduced from 331 to
-236 patches. We also discussed a few of the difficult patches and series that
-are pending, though in fact there are still many more that warrant discussion.
-
-- We decided how to proceed with the runtime testing. Nothing has been committed
-yet, the a Jenkins instance is already running at [2].
-
-- When discussing the idea of making .hash files mandatory for all packages, we
-discovered that it looks like the tarballs generated automatically by github are
-nowadays stable. We'll verify this by adding a couple of hashes for github
-packages and check if the autobuilders survive.
-
-
- Regards,
- Arnout
-
-
-[1] http://elinux.org/Buildroot:DeveloperDaysELCE2015#Report
-[2] http://jenkins.free-electrons.com/job/buildroot-runtime-tests/
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2e28f78..8a9682a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -198,7 +198,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.14.54"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.21"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.22"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.10"	if BR2_KERNEL_HEADERS_4_1
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.9
