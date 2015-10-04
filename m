@@ -1,71 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 4 Oct 2015 17:27:27 +0100
-Subject: [Buildroot] [git commit] xtensa: switch from text-section-literals
-	to auto-litpools
-Message-ID: <20151004162733.3E4A181D79@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "opencv: mark as not available on
+	Xtensa"
+Message-ID: <20151004162733.4750181D79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3570732c6494ab16d844b83922511af96cab489c
+commit: http://git.buildroot.net/buildroot/commit/?id=ac43503bf7a6c9866eb0bde361cf7a2ff0ce4bdd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that both binutils and gcc support auto-litpools use that option
-instead of text-section-literals to be able to compile huge functions.
+Now that xtensa toolchain is able to compile huge functions this
+workaround is no longer needed.
 
-Fixes:
-  http://autobuild.buildroot.net/results/dd384fe0ef02a4205bea66a4a16ca2062afe53b4/
-  http://autobuild.buildroot.net/results/87dd357a4b883ea3cd75546b3d63c4c28245beee/
-  http://autobuild.buildroot.net/results/b5bca00dec1ecb118c7fb9c10dee74c94809c831/
-and many others.
+This reverts commit d21932508e69d4ab849cba9958f953ae9342cb8c.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    4 ++--
- package/gcc/gcc.mk  |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/opencv3/Config.in |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 7dc0eac..8a592d4 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -91,7 +91,7 @@ endif
- # code size and performance, the linker can usually optimize away the
- # overhead when a call ends up within a certain range.
- #
--# Use text-section-literals for Xtensa globally.
-+# Use auto-litpools for Xtensa globally.
- # Collecting literals into separate section can be advantageous if that
- # section is placed into DTCM at link time. This is applicable for code
- # running on bare metal, but makes no sense under linux, where userspace
-@@ -100,7 +100,7 @@ endif
- # instruction can only access literals in 256 KBytes range.
- #
- ifeq ($(BR2_xtensa),y)
--TARGET_ABI += -mlongcalls -mtext-section-literals
-+TARGET_ABI += -mlongcalls -mauto-litpools
- endif
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 137a351..934d546 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -5,8 +5,6 @@ menuconfig BR2_PACKAGE_OPENCV3
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS # include dlfcn.h
+-	# Causes some toolchain failures on Xtensa
+-	depends on !BR2_xtensa
+ 	depends on !BR2_PACKAGE_OPENCV
+ 	help
+ 	  OpenCV (Open Source Computer Vision) is a library of programming
+@@ -337,7 +335,6 @@ config BR2_PACKAGE_OPENCV3_INSTALL_DATA
+ endif # BR2_PACKAGE_OPENCV3
  
- ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index ead3e15..9025cdf 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -113,11 +113,11 @@ GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
- endif
- endif
- 
--# Xtensa libgcc can't be built with -mtext-section-literals
-+# Xtensa libgcc can't be built with -mauto-litpools
- # because of the trick used to generate .init/.fini sections.
- ifeq ($(BR2_xtensa),y)
--GCC_COMMON_TARGET_CFLAGS = $(filter-out -mtext-section-literals,$(TARGET_CFLAGS))
--GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mtext-section-literals,$(TARGET_CXXFLAGS))
-+GCC_COMMON_TARGET_CFLAGS = $(filter-out -mauto-litpools,$(TARGET_CFLAGS))
-+GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mauto-litpools,$(TARGET_CXXFLAGS))
- endif
- 
- # Propagate options used for target software building to GCC target libs
+ comment "opencv3 needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+-	depends on !BR2_xtensa
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
