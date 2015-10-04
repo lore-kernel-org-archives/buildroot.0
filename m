@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 15:40:46 +0100
-Subject: [Buildroot] [PATCH] arc: add HS38 VDK virtual boards
-In-Reply-To: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
-References: <1441724062-27521-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20151004154046.5dd0315a@free-electrons.com>
+Date: Sun, 4 Oct 2015 15:44:52 +0100
+Subject: [Buildroot] [PATCH 2/3] vsftpd: Add ftp user creation
+In-Reply-To: <1443965495-12774-2-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443965495-12774-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1443965495-12774-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20151004154452.16eee409@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Maxime,
 
-On Tue,  8 Sep 2015 17:54:22 +0300, Alexey Brodkin wrote:
-> Virtualizer Development Kits (VDKs) are software development kits
-> containing design-specific virtual prototypes as well as debug and
-> analysis tools and sample software.
-> 
-> With this change we add support for VDK based on ARC HS38 core.
-> 
-> Note that FS-overlay is required to allow instantiation of console on
-> both serial port and LCD screen simultaneously.
-> 
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  configs/snps_hs38_smp_vdk_defconfig | 21 +++++++++++++++++++++
->  configs/snps_hs38_vdk_defconfig     | 21 +++++++++++++++++++++
->  2 files changed, 42 insertions(+)
->  create mode 100644 configs/snps_hs38_smp_vdk_defconfig
->  create mode 100644 configs/snps_hs38_vdk_defconfig
+On Sun,  4 Oct 2015 15:31:34 +0200, Maxime Hadjinlian wrote:
 
-Applied, thanks.
+> +#
+> +# VSFTPD won't work if the jail directory is writable, it has to be readable
+> +# only
+> +# Otherwise you get the following error:
+> +# 500 OOPS: vsftpd: refusing to run with writable root inside chroot()
+> +# That's why we have to chmod /home/ftp
+> +define VSFTPD_FIX_HOME_PERMISSIONS
+> +	$(INSTALL) -d -m 555 $(TARGET_DIR)/home/ftp
+> +endef
+
+Can we use VSFTPD_PERMISSIONS instead ? The only drawback is that you
+will have to set a fixed UID/GID for ftp:ftp in VSFTPD_USERS.
 
 Thomas
 -- 
