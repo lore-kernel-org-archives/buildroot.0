@@ -1,41 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 10:49:50 +0100
-Subject: [Buildroot] [PATCH buildroot-test 1/2] autobuild-run: do not
- build strongswan using an incompatible toolchain
-In-Reply-To: <1441965048-30856-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1441965048-30856-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151004104950.4f9b0f42@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 4 Oct 2015 12:05:45 +0200
+Subject: [Buildroot] [git commit] lz4: adjust homepage URL
+Message-ID: <20151004100731.43E8181D65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=bcf696802b495e95d6db4e0b06396c2546f878f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Sep 2015 10:50:47 +0100, Vicente Olivert Riera wrote:
-> This external MIPS toolchain uses eglibc-2.18 which lacks the definition
-> of the SYS_getdents64 macro for MIPS64 n64. Because of that, strongswan
-> package fails to build and shows this error message:
-> 
-> utils/utils.c: In function 'closefrom':
-> utils/utils.c:151:25: error: 'SYS_getdents64' undeclared (first use in
-> this function)
->    while ((len = syscall(SYS_getdents64, dir_fd, buffer,
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/ea2/ea2be188b88ceb1cad4314bdaf00184cb74b9e26/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  scripts/autobuild-run |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
+Lz4 is no longer developed on google code.
 
-Both patches applied to buildroot-test, thanks!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lz4/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lz4/Config.in b/package/lz4/Config.in
+index 677658c..4a00a70 100644
+--- a/package/lz4/Config.in
++++ b/package/lz4/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_LZ4
+ 	  in multiple GB/s per core, typically reaching RAM speed limits
+ 	  on multi-core systems.
+ 
+-	  https://code.google.com/p/lz4/
++	  http://www.lz4.org/
