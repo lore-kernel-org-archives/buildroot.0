@@ -1,71 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 12:16:11 +0200
-Subject: [Buildroot] [git commit] host-localdef fails under gcc5
-Message-ID: <20151004102213.9AC8A80741@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 Oct 2015 11:22:35 +0100
+Subject: [Buildroot] [PATCHv2] package/freerdp: fix missing define
+Message-ID: <1443954155-4505-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=844f240185fc12c41a2f028d8ded43df98c83f88
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+FreeRDP uses CMSPAR, which is defined by glibc in bits/termios.h .
 
-Building host-localdef fails under gcc5.1 reporting multiple definitions and undefined references:
+glibc has two flavours of bits/termios.h: a genmeric one and an
+architecture-specific one. When installing, glibc will install the
+architecture-specific file if it exists, otherwise it installs the
+generic file. Only Alpha, MIPS, PPC and Sparc have their own
+bits/termios.h.
 
-argp-help.o: In function `argp_fmtstream_write':
-argp-help.c:(.text+0x1dc0): multiple definition of `argp_fmtstream_write'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x750): first defined here
-argp-help.o: In function `argp_fmtstream_puts':
-argp-help.c:(.text+0x1e10): multiple definition of `argp_fmtstream_puts'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x810): first defined here
-argp-help.o: In function `argp_fmtstream_putc':
-argp-help.c:(.text+0x1e80): multiple definition of `argp_fmtstream_putc'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x7b0): first defined here
-argp-help.o: In function `argp_fmtstream_set_lmargin':
-argp-help.c:(.text+0x1ed0): multiple definition of `argp_fmtstream_set_lmargin'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x590): first defined here
-argp-help.o: In function `argp_fmtstream_set_rmargin':
-argp-help.c:(.text+0x1f00): multiple definition of `argp_fmtstream_set_rmargin'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x5c0): first defined here
-argp-help.o: In function `argp_fmtstream_set_wmargin':
-argp-help.c:(.text+0x1f30): multiple definition of `argp_fmtstream_set_wmargin'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x5f0): first defined here
-argp-help.o: In function `argp_fmtstream_point':
-argp-help.c:(.text+0x1f60): multiple definition of `argp_fmtstream_point'
-argp-fmtstream.o:argp-fmtstream.c:(.text+0x620): first defined here
-charmap.o: In function `cmlr_open.constprop.2':
-charmap.c:(.text+0x230a): undefined reference to `charmap_hash'
-charmap.o: In function `charmap_read':
-charmap.c:(.text+0x2397): undefined reference to `charmap_hash'
-locfile.o: In function `locfile_read':
-locfile.c:(.text+0x2e4): undefined reference to `locfile_hash'
-locfile.c:(.text+0x8f4): undefined reference to `locfile_hash'
-locfile.c:(.text+0x9b3): undefined reference to `locfile_hash'
-locfile.c:(.text+0xa36): undefined reference to `locfile_hash'
-collect2: error: ld returned 1 exit status
-Makefile:58: recipe for target 'localedef' failed
+The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
+do define CMSPAR. However, the MIPS flavour does not define it.
 
-Ref: http://permalink.gmane.org/gmane.comp.embedded.ptxdist.devel/12950
+We add a patch to FreeRDP that defines CMSPAR to the value from the
+generic value, which is also the value known to the Linux kernel for
+MIPS.
 
-Signed-off-by: Stephen Agate <stephen.agate@talktalk.net>
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-Tested-by: Romain Naour <romain.naour@openwide.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+    http://autobuild.buildroot.org/results/0b4/0b4793f0bf9f4c57933897f3480054a4e06528ad/
+    http://autobuild.buildroot.org/results/7a2/7a2284d0a2987158fa2e78f789b07c8c6fcdb974/
+    http://autobuild.buildroot.org/results/387/3874088c3ccd4bbf76ea0c911ca1ef64c7dc9d1c/
+    ...
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
 ---
- package/localedef/localedef.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Changes v1 -> v2:
+  - add commit log and sob to the patch
+---
+ package/freerdp/0003-add-missing-define.patch | 44 +++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/freerdp/0003-add-missing-define.patch
 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 4762e64..1fe431a 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -12,6 +12,8 @@ HOST_LOCALEDEF_CONF_OPTS += \
- 	--prefix=/usr \
- 	--with-glibc=./eglibc
- 
-+HOST_LOCALEDEF_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -fgnu89-inline"
+diff --git a/package/freerdp/0003-add-missing-define.patch b/package/freerdp/0003-add-missing-define.patch
+new file mode 100644
+index 0000000..a8f669e
+--- /dev/null
++++ b/package/freerdp/0003-add-missing-define.patch
+@@ -0,0 +1,44 @@
++libwinpr/comm_seria: fix missing define
 +
- # The makefile does not implement an install target
- define HOST_LOCALEDEF_INSTALL_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/usr/bin/localedef
++FreeRDP uses CMSPAR, which is defined by glibc in bits/termios.h .
++
++glibc has two flavours of bits/termios.h: a genmeric one and an
++architecture-specific one. When installing, glibc will install the
++architecture-specific file if it exists, otherwise it installs the
++generic file. Only Alpha, MIPS, PPC and Sparc have their own
++bits/termios.h.
++
++The generic bits/termios.h, as well as the Alpha, PPC and Sparc flavours
++do define CMSPAR. However, the MIPS flavour does not define it.
++
++Define CMSPAR to the value from the generic value, which is also the
++value known to the Linux kernel for MIPS.
++
++Fixes:
++    http://autobuild.buildroot.org/results/0b4/0b4793f0bf9f4c57933897f3480054a4e06528ad/
++    http://autobuild.buildroot.org/results/7a2/7a2284d0a2987158fa2e78f789b07c8c6fcdb974/
++    http://autobuild.buildroot.org/results/387/3874088c3ccd4bbf76ea0c911ca1ef64c7dc9d1c/
++    ...
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Peter Korsgaard <jacmet@uclibc.org>
++Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++diff -durN freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.orig/winpr/libwinpr/comm/comm_serial_sys.c freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16/winpr/libwinpr/comm/comm_serial_sys.c
++--- freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16.orig/winpr/libwinpr/comm/comm_serial_sys.c	2015-09-04 16:20:17.000000000 +0100
+++++ freerdp-17834af7bb378f85a3b3cc4dcadaa5125a337e16/winpr/libwinpr/comm/comm_serial_sys.c	2015-10-04 11:07:41.868513726 +0100
++@@ -27,6 +27,14 @@
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
++ #include <termios.h>
+++
+++/* glibc for MIPS has its own bits/termios.h which does not define
+++ * CMSPAR, so we vampirise the value from the generic bits/termios.h
+++ */
+++#ifndef CMSPAR
+++#define CMSPAR 010000000000
+++#endif
+++
++ #include <unistd.h>
++ 
++ #include "comm_serial_sys.h"
+-- 
+1.9.1
