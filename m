@@ -1,48 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 17:50:32 +0100
-Subject: [Buildroot] [PATCH 2/2] nfs-utils: systemd support
-In-Reply-To: <1443900549-9696-2-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443900549-9696-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1443900549-9696-2-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20151004175032.69e0523c@free-electrons.com>
+Date: Sun, 4 Oct 2015 17:51:15 +0100
+Subject: [Buildroot] [PATCH] python-numpy: re-enable for uClibc
+In-Reply-To: <1443972881-24357-1-git-send-email-arnout@mind.be>
+References: <1443972881-24357-1-git-send-email-arnout@mind.be>
+Message-ID: <20151004175115.7be4e036@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Sat,  3 Oct 2015 21:29:09 +0200, Maxime Hadjinlian wrote:
-> From: Aur?lien Chabot <aurelien@chabot.fr>
+On Sun, 4 Oct 2015 16:34:41 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> In commit b0f025386f6861fdc21e38e3a33b65669276f2c2 a patch was added
+> to make sure that python-numpy does work in uClibc. This patch was
+> needed for the x86 architecture, because uClibc in fact does support
+> fenv for x86. However, we don't turn on this support in our uClibc
+> config. Because the Config.in depends still allowed uClibc for x86,
+> this lead to a built failure, which lead to the fix in commit b0f02538.
+> But since this fix also fixes it for all other (supported)
+> architectures, we can just remove the !uClibc dependency completely.
 > 
-> nfs-utils has been patched to install only the needed systemd unit files
-> supported.
-> Also tmpfiles was needed because the folder /run/nfs is a tmpfs
-> and nfs-utils need some files to be there to work correctly.
+> This is also propagated to the reverse dependency in opencv3.
 > 
-> Signed-off-by: Aur?lien Chabot <aurelien@chabot.fr>
-> [Maxime: Remove patches included originally in the patch as they have
-> have been merged upstream in v1.3.3]
-> Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > ---
-> v1 -> v2:
->     - Remove the added patch since the previous patch bump nfs_utils
->       which have them already in the tree.
-> ---
->  package/nfs-utils/nfs-utils.mk            | 27 +++++++++++++++++++++++++++
->  package/nfs-utils/nfs-utils_env.sh        |  1 +
->  package/nfs-utils/nfs-utils_tmpfiles.conf |  4 ++++
->  3 files changed, 32 insertions(+)
->  create mode 100755 package/nfs-utils/nfs-utils_env.sh
->  create mode 100644 package/nfs-utils/nfs-utils_tmpfiles.conf
+>  package/opencv3/Config.in      | 1 -
+>  package/python-numpy/Config.in | 3 ---
+>  2 files changed, 4 deletions(-)
 
-Applied with some changes:
-
-    [Thomas:
-      - add comment in nfs-utils_env.sh to explain why an empty script is
-        needed.
-      - remove incorrect indentation.]
+Applied, thanks.
 
 Thomas
 -- 
