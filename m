@@ -1,89 +1,46 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 4 Oct 2015 13:29:53 +0200
-Subject: [Buildroot] [PATCH] toolchain: Remove useless printf
-In-Reply-To: <20151004112707.GA7334@free.fr>
-References: <1443957460-26432-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20151004112707.GA7334@free.fr>
-Message-ID: <CAGduivyAtCU=1k215HaB8LW_tPOON8Gib3MHeeibGNBqjcnEmg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 4 Oct 2015 14:35:05 +0300
+Subject: [Buildroot] [PATCH] libnfs: Without native RPC use libtirpc
+In-Reply-To: <CAGduivwirG_RD1LfYfgekqfEphCquOr5AG9H2WKB=4Vjv7OFnQ@mail.gmail.com>
+References: <1443882268-9737-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <CAGduivwirG_RD1LfYfgekqfEphCquOr5AG9H2WKB=4Vjv7OFnQ@mail.gmail.com>
+Message-ID: <20151004113505.GB2633@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 4, 2015 at 1:27 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+Hi Maxime,
 
-> Maxime, All,
->
-> On 2015-10-04 13:17 +0200, Maxime Hadjinlian spake thusly:
-> > Introduced by previous patch 0f75b2635ee564fbbdb9ea631cf39fa8731d6d6c,
-> > this printf doesn't serve any purposes.
->
-> This is even worth than that. It actually breaks the build because there
-> is not format to printf:
->     printf: usage: printf [-v var] format [arguments]
->
-> So the glibc build fails.
->
-> With that fixed in the commit log;
->
->     Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
->
+On Sat, Oct 03, 2015 at 04:25:30PM +0200, Maxime Hadjinlian wrote:
+> There's a crappy file. Don't do git add with glob at home...
+
+Or just do
+
+   echo '*.swp' >> .git/info/exclude
+
+baruch
+
+> On Sat, Oct 3, 2015 at 4:24 PM, Maxime Hadjinlian <
+> maxime.hadjinlian at gmail.com> wrote:
 > > Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->
-> And I think this would also be valid;
->
-> Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-Yes, I noticed I forgot that when I hit 'y' on git send-email, sorry :/.
-Should I send a v2 with a better commit log or should it be done when the
-commit is done ?
-
->
-> ;-)
->
-> Regards,
-> Yann E. MORIN.
->
 > > ---
-> >  toolchain/helpers.mk | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > RFC: A few packages uses libtirpc if there's no native RPC support *BUT*
+> > they don't propagate the BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2.
 > >
-> > diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> > index a4fa815..1452ec6 100644
-> > --- a/toolchain/helpers.mk
-> > +++ b/toolchain/helpers.mk
-> > @@ -79,9 +79,7 @@ copy_toolchain_lib_root = \
-> >                       fi ; \
-> >                       LIBPATH="`readlink -f $${LIBPATH}`"; \
-> >               done; \
-> > -     done; \
-> > -\
-> > -     printf
-> > +     done
-> >
-> >  #
-> >  # Copy the full external toolchain sysroot directory to the staging
-> > --
-> > 2.5.3
-> >
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151004/3ece82e3/attachment.html>
+> > It was probably added later on in libtirpc, so the questions here, is
+> > what do we do with that ? Should we add the dependencies to the other
+> > packages ?
+> > Do we need some kind of mechanisms to handle that ?
+> > ---
+> >  package/libnfs/.Config.in.swp | Bin 0 -> 12288 bytes
+> >  package/libnfs/Config.in      |   8 +++++---
+> >  package/libnfs/libnfs.mk      |   4 ++++
+> >  3 files changed, 9 insertions(+), 3 deletions(-)
+> >  create mode 100644 package/libnfs/.Config.in.swp
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
