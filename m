@@ -1,92 +1,192 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 13:28:56 +0100
-Subject: [Buildroot] [PATCH v2 16/18] toolchain-wrapper: support change of
-	BR2_CCACHE
+Date: Sun, 4 Oct 2015 13:28:57 +0100
+Subject: [Buildroot] [PATCH v2 17/18] ccache: use mtime for external
+	toolchain, CONF_OPTS for internal toolchain
 In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be>
 References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <1443961738-12149-17-git-send-email-arnout@mind.be>
+Message-ID: <1443961738-12149-18-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By moving the ccache call to the toolchain wrapper, the following
-scenario no longer works:
+Our current ccache disables hashing of the compiler executable itself,
+because using the default 'mtime' doesn't work in buildroot: we always
+rebuild the compiler, so the mtime is always different, so the cache
+always misses.
 
-make foo-dirclean all BR2_CCACHE=
+However, in the current situation, if a user changes the compiler
+configuration (which would result in the compiler generating different
+object files than before) and does 'make clean all', ccache may in fact
+reuse object files from the previous run. This rarely gives problems,
+because
+(1) the cache expires quite quickly (it's only 1GB by default),
+(2) radically changing compiler options will cause cache misses because
+    different header files are used,
+(3) many compiler changes (e.g. changing -mtune) have little practical
+    effect because the resulting code is usually still compatible,
+(4) we currently don't use CCACHE_BASEDIR, and almost all object files
+    will contain an absolute path (e.g. in debug info), so when
+    building in a different directory, most of it will miss,
+(5) we do mostly build test, and many of the potential problems only
+    appear at runtime.
+Still, when ccache _does_ use the wrong cached object files, the
+effects are really weird and hard to debug. Also, we want reproducible
+builds and obviously the above makes builds non-reproducible. So we
+have a FAQ entry that warns against using ccache and tells the user to
+clear the cache in case of problems.
 
-That's a sometimes useful call to check if some failure is perhaps
-caused by ccache.
+Now that ccache is called from the toolchain wrapper, it is in fact
+possible to at least use the 'mtime' compiler hash for the external
+toolchain and for the host-gcc. Indeed, in this case, the compiler
+executable comes from a tarball so the mtime will be a good reference
+for it state. Therefore, the patch (sed script) that changes the
+default from 'mtime' to 'none' is removed.
 
-We can enable this scenario again by exporting BR_NO_CCACHE when
-BR2_CCACHE is not set, and by handling this in the toolchain wrapper.
+For the internal toolchain, we can do better by providing a hash of
+the relevant toolchain options. We are only interested in things that
+affect the compiler itself, because ccache also processes the header
+files and it doesn't look at libraries because it doesn't cache the
+link step, just compilation. Everything that affects the compiler
+itself can nicely be summarised in $(HOST_GCC_FINAL_CONF_OPTS). Of
+course, also the compiler source itself is relevant, so the source
+tarball and all the patches are included in the hash. For this purpose,
+a new HOST_GCC_XTENSA_OVERLAY_TAR is introduced.
+
+The following procedure tests the ccache behaviour:
+
+ Use this defconfig:
+BR2_arm=y
+BR2_CCACHE=y
+
+ make
+ readelf -A output/build/uclibc-1.0.6/libc/signal/signal.os
+-> Tag_CPU_name: "ARM926EJ-S"
+
+ Now make menuconfig, change variant into BR2_cortex_a9
+
+ make clean; make
+ readelf -A output/build/uclibc-1.0.6/libc/signal/signal.os
+-> Tag_CPU_name: "ARM926EJ-S"
+ should be "Cortex-A9"
+
+After this commit, it is "Cortex-A9".
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Danomi Manchego <danomimanchego123@gmail.com>
+Cc: K?roly Kasza <kaszak@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: No change, but no longer RFC.
+v2: - Add BR2_GLOBAL_PATCH_DIR to the patches used to generate the hash.
+      [Samuel]
+    - Use $(wildcard ...) for the patches, so missing patch dir (e.g. for
+      OVERRIDE_SRCDIR) doesn't lead to an error. [Arnout]
+    - Remove redundant newline [Romain]
 ---
- Makefile                      |  2 ++
- toolchain/toolchain-wrapper.c | 15 +++++++++++----
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ package/ccache/ccache.mk      |  5 -----
+ package/gcc/gcc.mk            | 29 +++++++++++++++++++++++++++--
+ toolchain/toolchain-wrapper.c | 12 ++++++++++++
+ 3 files changed, 39 insertions(+), 7 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index fdbca02..e8e2f02 100644
---- a/Makefile
-+++ b/Makefile
-@@ -375,6 +375,8 @@ BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
- export BR_CACHE_DIR
- HOSTCC := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
-+else
-+export BR_NO_CCACHE
- endif
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 3bd2803..52cf309 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -26,15 +26,10 @@ HOST_CCACHE_CONF_OPTS += --with-bundled-zlib
+ #    is already used by autotargets for the ccache package.
+ #    BR_CACHE_DIR is exported by Makefile based on config option
+ #    BR2_CCACHE_DIR.
+-#  - ccache shouldn't use the compiler binary mtime to detect a change in
+-#    the compiler, because in the context of Buildroot, that completely
+-#    defeats the purpose of ccache. Of course, that leaves the user
+-#    responsible for purging its cache when the compiler changes.
+ #  - Change hard-coded last-ditch default to match path in .config, to avoid
+ #    the need to specify BR_CACHE_DIR when invoking ccache directly.
+ define HOST_CCACHE_PATCH_CONFIGURATION
+ 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+-	sed -i 's,conf->compiler_check = x_strdup("mtime"),conf->compiler_check = x_strdup("none"),' $(@D)/conf.c
+ 	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/conf.c
+ endef
  
- # Scripts in support/ or post-build scripts may need to reference
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b9da398..103cbe1 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -23,9 +23,10 @@ GCC_SOURCE ?= gcc-$(GCC_VERSION).tar.bz2
+ # Xtensa special hook
+ #
+ 
++HOST_GCC_XTENSA_OVERLAY_TAR = $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,$(BR2_XTENSA_CORE_NAME)).tar
++
+ define HOST_GCC_XTENSA_OVERLAY_EXTRACT
+-	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
+-		$(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
++	tar xf $(HOST_GCC_XTENSA_OVERLAY_TAR) -C $(@D) --strip-components=1 gcc
+ endef
+ 
+ #
+@@ -237,6 +238,30 @@ endif
+ 
+ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".real"'
+ 
++ifeq ($(BR2_CCACHE),y)
++HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
++# Cfr. PATCH_BASE_DIRS in .stamp_patched, but we catch both versioned and
++# unversioned patches unconditionally
++HOST_GCC_COMMON_CCACHE_HASH_FILES += \
++	$(wildcard \
++		package/gcc/$(GCC_VERSION)/*.patch \
++		$(addsuffix $((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
++		$(addsuffix $((PKG)_RAWNAME)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
++ifeq ($(BR2_xtensa),y)
++HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
++endif
++ifeq ($(ARCH),powerpc)
++ifneq ($(BR2_SOFT_FLOAT),)
++HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
++endif
++endif
++
++HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
++	printf '%s' $($(PKG)_CONF_OPTS) $(GCC_VERSION) \
++		| sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
++		| cut -c -64 | tr -d '\n'`\"
++endif # BR2_CCACHE
++
+ # The LTO support in gcc creates wrappers for ar, ranlib and nm which load
+ # the lto plugin. These wrappers are called *-gcc-ar, *-gcc-ranlib, and
+ # *-gcc-nm and should be used instead of the real programs when -flto is
 diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index b5fe1d3..cf66fac 100644
+index cf66fac..7ee3028 100644
 --- a/toolchain/toolchain-wrapper.c
 +++ b/toolchain/toolchain-wrapper.c
-@@ -95,7 +95,7 @@ static void check_unsafe_path(const char *path, int paranoid)
- 
- int main(int argc, char **argv)
- {
--	char **args, **cur;
-+	char **args, **cur, **exec_args;
- 	char *relbasedir, *absbasedir;
- 	char *progpath = argv[0];
- 	char *basename;
-@@ -237,6 +237,13 @@ int main(int argc, char **argv)
- 	/* finish with NULL termination */
- 	*cur = NULL;
- 
-+	exec_args = args;
-+#ifdef BR_CCACHE
-+	if (getenv("BR_NO_CCACHE"))
-+		/* Skip the ccache call */
-+		exec_args++;
-+#endif
-+
- 	/* Debug the wrapper to see actual arguments passed to
- 	 * the compiler:
- 	 * unset, empty, or 0: do not trace
-@@ -247,14 +254,14 @@ int main(int argc, char **argv)
+@@ -254,6 +254,10 @@ int main(int argc, char **argv)
  		debug = atoi(env_debug);
  		if (debug > 0) {
  			fprintf(stderr, "Toolchain wrapper executing:");
--			for (i = 0; args[i]; i++)
-+			for (i = 0; exec_args[i]; i++)
++#ifdef BR_CCACHE_HASH
++			fprintf(stderr, "CCACHE_COMPILERCHECK=string:" BR_CCACHE_HASH "%s",
++				(debug == 2) ? "\n    " : " ");
++#endif
+ 			for (i = 0; exec_args[i]; i++)
  				fprintf(stderr, "%s'%s'",
--					(debug == 2) ? "\n    " : " ", args[i]);
-+					(debug == 2) ? "\n    " : " ", exec_args[i]);
- 			fprintf(stderr, "\n");
+ 					(debug == 2) ? "\n    " : " ", exec_args[i]);
+@@ -261,6 +265,14 @@ int main(int argc, char **argv)
  		}
  	}
  
--	if (execv(args[0], args))
-+	if (execv(exec_args[0], exec_args))
++#ifdef BR_CCACHE_HASH
++	/* Allow compilercheck to be overridden through the environment */
++	if (setenv("CCACHE_COMPILERCHECK", "string:" BR_CCACHE_HASH, 0)) {
++		perror(__FILE__ ": Failed to set CCACHE_COMPILERCHECK");
++		return 3;
++	}
++#endif
++
+ 	if (execv(exec_args[0], exec_args))
  		perror(path);
  
- 	free(args);
 -- 
 2.5.3
