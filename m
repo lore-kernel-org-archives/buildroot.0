@@ -1,26 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2015 20:16:56 +0200
-Subject: [Buildroot] [PATCH 4/7] configs: fix configurations that need
-	host-dtc
-In-Reply-To: <1443901457-7914-5-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Oct 2015 20:44:14 +0100")
-References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1443901457-7914-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871tdajy7b.fsf@dell.be.48ers.dk>
+Date: Sun, 4 Oct 2015 20:17:35 +0200
+Subject: [Buildroot] [git commit] linux: install dtc binary as linux-dtc
+Message-ID: <20151004181804.72802807E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ab74e09eb4e28dab8bed8d783c5f0464d39a32e7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > olimex_a20_olinuxino_lime_defconfig and zedboard_defconfig use U-Boot
- > 2015.07, and they need host-dtc to build properly.
+So it doesn't conflict with host-dtc. The Linux kernel version may be a
+patched version supporting E.G. overlays.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 2319576..c98459f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -294,7 +294,7 @@ endif
+ define LINUX_INSTALL_HOST_TOOLS
+ 	# Installing dtc (device tree compiler) as host tool, if selected
+ 	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
+-		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ;	\
++		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/linux-dtc ;	\
+ 	fi
+ endef
+ 
