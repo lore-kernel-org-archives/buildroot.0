@@ -1,93 +1,120 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 13:28:53 +0100
-Subject: [Buildroot] [PATCH v2 13/18] package-cmake: remove now-redundant
-	target ccache support
+Date: Sun, 4 Oct 2015 13:28:52 +0100
+Subject: [Buildroot] [PATCH v2 12/18] qt5base: remove now-redundant ccache
+	handling
 In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be>
 References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <1443961738-12149-14-git-send-email-arnout@mind.be>
+Message-ID: <1443961738-12149-13-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All the complexity with the different ways that CMAKE_C_COMPILER and
-CMAKE_C_COMPILER_ARG1 can be set are no longer needed, it's all handled
-by the toolchain wrapper now.
-
-Note that it is still necessary to handle this for the host build.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v2: Rebased on master
----
- package/pkg-cmake.mk                |  5 ++---
- support/misc/toolchainfile.cmake.in | 32 ++------------------------------
- 2 files changed, 4 insertions(+), 33 deletions(-)
+Note that ccache was not and still is not used for the host tools (e.g.
+qmake). This commit only affects the target builds.
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6bc13d4..81dcfcc 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -98,7 +98,6 @@ define $(2)_CONFIGURE_CMDS
- 		-DBUILD_TESTS=OFF \
- 		-DBUILD_TESTING=OFF \
- 		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
--		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
- 		$$(CMAKE_QUIET) \
- 		$$($$(PKG)_CONF_OPTS) \
- 	)
-@@ -245,8 +244,8 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
- 		-e 's#@@TARGET_CXXFLAGS@@#$(call qstrip,$(TARGET_CXXFLAGS))#' \
- 		-e 's#@@TARGET_LDFLAGS@@#$(call qstrip,$(TARGET_LDFLAGS))#' \
--		-e 's#@@TARGET_CC_NOCCACHE@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE)))#' \
--		-e 's#@@TARGET_CXX_NOCCACHE@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE)))#' \
-+		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
-+		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index cd41254..5cf381e 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -27,33 +27,5 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
- set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+v2: No change
+---
+ package/qt5/qt5base/0002-mkspecs-files.patch       |  6 ++-
+ .../qt5/qt5base/0009-fix-build-with-ccache.patch   | 49 ----------------------
+ package/qt5/qt5base/qt5base.mk                     |  1 -
+ 3 files changed, 4 insertions(+), 52 deletions(-)
+ delete mode 100644 package/qt5/qt5base/0009-fix-build-with-ccache.patch
+
+diff --git a/package/qt5/qt5base/0002-mkspecs-files.patch b/package/qt5/qt5base/0002-mkspecs-files.patch
+index 09c1b67..adeabdf 100644
+--- a/package/qt5/qt5base/0002-mkspecs-files.patch
++++ b/package/qt5/qt5base/0002-mkspecs-files.patch
+@@ -9,6 +9,8 @@ allows us to easily pass the cross-compiler paths and flags from our
+ qt5.mk.
  
- # This toolchain file can be used both inside and outside Buildroot.
--# * When used inside Buildroot, ccache support is explicitly driven using the
--#   USE_CCACHE variable.
--# * When used outside Buildroot (i.e. when USE_CCACHE is not defined), ccache
--#   support is automatically enabled if the ccache program is available.
--if(DEFINED USE_CCACHE)
--	if(USE_CCACHE)
--		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
--		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
--		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
--	else()
--		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
--	endif()
--else()
--	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
--	if(CCACHE)
--		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--		set(CMAKE_C_COMPILER "${CCACHE}")
--		set(CMAKE_CXX_COMPILER "${CCACHE}")
--		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
--		message(STATUS "ccache program has been found and will be used for the build.")
--		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
--	else()
--		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
--	endif()
--endif()
-+set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
-+set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Arnout: remove ccache support]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ 
+ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ ===================================================================
+@@ -18,8 +20,8 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ +include(../common/linux_device_pre.conf)
+ +
+ +# modifications to g++-unix.conf
+-+QMAKE_CC                = $${BR_CCACHE} $${CROSS_COMPILE}gcc
+-+QMAKE_CXX               = $${BR_CCACHE} $${CROSS_COMPILE}g++
+++QMAKE_CC                = $${CROSS_COMPILE}gcc
+++QMAKE_CXX               = $${CROSS_COMPILE}g++
+ +
+ +#modifications to gcc-base.conf
+ +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+diff --git a/package/qt5/qt5base/0009-fix-build-with-ccache.patch b/package/qt5/qt5base/0009-fix-build-with-ccache.patch
+deleted file mode 100644
+index 896c0ef..0000000
+--- a/package/qt5/qt5base/0009-fix-build-with-ccache.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-Fix QMAKE_CXX/CROSS_COMPILE verification with ccache
+-
+-The use of ccache leads to QMAKE_CXX definitions of the form:
+-
+-    QMAKE_CXX = $${CCACHE} $${CROSS_COMPILE}g++
+-
+-The previous test required QMAKE_CXX to be a single valid (absolute or
+-QMAKE_PATH_ENV-relative) path to an existing file, which was not
+-compatible with definitions of QMAKE_CXX like the one above.
+-
+-Fix this by using only the first value in QMAKE_CXX, which usually
+-points to the compiler executable, or to the ccache executable in the
+-above case.
+-
+-Signed-off-by: Beno?t Th?baudeau <benoit@wsystem.com>
+----
+- mkspecs/features/device_config.prf | 9 +++++++--
+- 1 file changed, 7 insertions(+), 2 deletions(-)
+-
+-diff --git a/mkspecs/features/device_config.prf b/mkspecs/features/device_config.prf
+-index cd3a0cf..eee4ac6 100644
+---- a/mkspecs/features/device_config.prf
+-+++ b/mkspecs/features/device_config.prf
+-@@ -19,10 +19,15 @@ defineTest(deviceSanityCheckCompiler) {
+-     else: \
+-         sfx =
+- 
+-+    # Build the compiler filename using the first value in QMAKE_CXX in order to
+-+    # support tools like ccache, which give QMAKE_CXX values of the form:
+-+    #     ccache <path_to_compiler>
+-+    compiler = $$first(QMAKE_CXX)$$sfx
+-+
+-     # Check if the binary exists with an absolute path. Do this check
+-     # before the CROSS_COMPILE empty check below to allow the mkspec
+-     # to derive the compiler path from other device options.
+--    exists($$QMAKE_CXX$$sfx):return()
+-+    exists($$compiler):return()
+- 
+-     # Check for possible reasons of failure
+-     # check if CROSS_COMPILE device-option is set
+-@@ -31,7 +36,7 @@ defineTest(deviceSanityCheckCompiler) {
+-     # Check if QMAKE_CXX points to an executable.
+-     ensurePathEnv()
+-     for (dir, QMAKE_PATH_ENV) {
+--        exists($$dir/$${QMAKE_CXX}$$sfx): \
+-+        exists($$dir/$${compiler}): \
+-             return()
+-     }
+- 
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e783b4d..570cd35 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -189,7 +189,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-nomake tests \
+ 		-device buildroot \
+ 		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
+-		-device-option BR_CCACHE="$(CCACHE)" \
+ 		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS) $(QT5BASE_EXTRA_CFLAGS)" \
+ 		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS) $(QT5BASE_EXTRA_CFLAGS)" \
+ 		$(QT5BASE_CONFIGURE_OPTS) \
 -- 
 2.5.3
