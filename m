@@ -1,45 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 09:15:57 +0100
-Subject: [Buildroot] [PATCH 1/7] configs: remove gnublin_defconfig
-In-Reply-To: <20151003230604.069b6d2a@gmx.net>
-References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1443901457-7914-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20151003230604.069b6d2a@gmx.net>
-Message-ID: <20151004091557.30158dd4@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Oct 2015 10:23:34 +0200
+Subject: [Buildroot] [PATCH] package/skeleton: add a startup script to
+	wait for slow network interfaces
+In-Reply-To: <20151003164732.28d042e6@free-electrons.com> (Thomas Petazzoni's
+ message of "Sat, 3 Oct 2015 16:47:32 +0100")
+References: <1443879105-3036-1-git-send-email-yann.morin.1998@free.fr>
+ <20151003164732.28d042e6@free-electrons.com>
+Message-ID: <87612nxcs9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sat, 3 Oct 2015 23:06:04 +0200, Peter Seiderer wrote:
-> Hello Thomas,
-> 
-> On Sat,  3 Oct 2015 20:44:11 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> > This defconfig tries to fetch its kernel source code and U-Boot source
-> > code from gitorious.org, which is not longer available. Therefore,
-> > this defconfig has been failing to build since quite some time. Since
-> > there's no obvious other place to grab the kernel and u-boot source
-> > code, and the defconfig was not updated since a long time, let's
-> > simply get rid of it.
-> 
-> Just for the record, there are still (old?) sources for kernel/u-boot:
-> 
-> https://github.com/embeddedprojects/gnublin-lpc3131-2.6.33
-> https://github.com/embeddedprojects/gnublin-lpc3131-3.3.0
-> https://github.com/embeddedprojects/gnublin-distribution/tree/master/lpc3131/bootloader/u-boot
-> 
-> but nothing with a 3.7 or newer version...
+ > Hello,
+ > On Sat,  3 Oct 2015 14:31:45 +0100, Yann E. MORIN wrote:
 
-Yes, I also saw those sources, but since they were older than the 3.7
-kernel used in the defconfig and couldn't find any other recent
-version, I decided to drop the defconfig entirely.
+ >> +    printf "Waiting for interface %s to appear" "${IF}"
+ >> +    wait=${WAIT_DELAY}
+ >> +    while [ ${wait} -gt 0 ]; do
+ >> +        if [ -e "/sys/class/net/${IF}" ]; then
+ >> +            printf " yes\n"
+ >> +            return 0
+ >> +        fi
+ >> +        sleep 1
+ >> +        printf "."
+ >> +        : $((wait--))
+ >> +    done
 
-Thomas
+ > One thing that I really like in Buildroot is that by default, it
+ > generates you a system that boots really fast. People often don't have
+ > to do anything special with Buildroot to make it boot fast. So having a
+ > shell script that is installed by default and does a "sleep 1" in a
+ > loop is not very nice :-/
+
+ > Though I agree that it will only slow the boot on systems where the
+ > network interfaces are not available immediately at boot time.
+
+Or where you misconfigured /etc/network/interfaces or forgot to enable
+the needed drivers in the kernel, but yeah.
+
+But yes, using something like ifplugd to handle the interface when it
+shows up (or link state changes) is certainly nicer than just waiting.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
