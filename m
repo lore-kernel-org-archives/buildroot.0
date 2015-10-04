@@ -1,85 +1,134 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 15:19:34 +0100
-Subject: [Buildroot] [git commit] zxing: bump upstream version,
-	drop useless patch
-Message-ID: <20151004142056.7655281D5D@busybox.osuosl.org>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 4 Oct 2015 16:24:56 +0200
+Subject: [Buildroot] [PATCH v2 16/18] toolchain-wrapper: support change
+ of BR2_CCACHE
+In-Reply-To: <1443961738-12149-17-git-send-email-arnout@mind.be>
+References: <1443961738-12149-1-git-send-email-arnout@mind.be>
+ <1443961738-12149-17-git-send-email-arnout@mind.be>
+Message-ID: <561136B8.8010200@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c8aceb2d5db8901df9d4b57cc2a79dc2e7e49f9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout,
 
-The 0001-CMakeLists-add-rules-for-installation.patch patch has been
-merged upstream 7 minutes after it was submitted. So let's bump to the
-latest upstream version and drop the no longer needed patch.
+Le 04/10/2015 14:28, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> By moving the ccache call to the toolchain wrapper, the following
+> scenario no longer works:
+> 
+> make foo-dirclean all BR2_CCACHE=
+> 
+> That's a sometimes useful call to check if some failure is perhaps
+> caused by ccache.
+> 
+> We can enable this scenario again by exporting BR_NO_CCACHE when
+> BR2_CCACHE is not set, and by handling this in the toolchain wrapper.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...001-CMakeLists-add-rules-for-installation.patch |   33 --------------------
- package/zxing-cpp/zxing-cpp.hash                   |    2 +-
- package/zxing-cpp/zxing-cpp.mk                     |    2 +-
- 3 files changed, 2 insertions(+), 35 deletions(-)
+I tried this patch with the whole series applied (I removed the hash to ease the
+reading)
 
-diff --git a/package/zxing-cpp/0001-CMakeLists-add-rules-for-installation.patch b/package/zxing-cpp/0001-CMakeLists-add-rules-for-installation.patch
-deleted file mode 100644
-index 034f200..0000000
---- a/package/zxing-cpp/0001-CMakeLists-add-rules-for-installation.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 2bc58a87dd629cef4cd2c62c5132c319bede61fa Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 4 Oct 2015 11:49:52 +0100
--Subject: [PATCH] CMakeLists: add rules for installation
--
--This commit adds some CMake rules that allow to do a "make install" to
--install the zxing binary, its library and corresponding header files.
--
--Submitted upstream: https://github.com/glassechidna/zxing-cpp/pull/31
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- CMakeLists.txt | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f49b28d..7151d90 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -68,6 +68,10 @@ file(GLOB_RECURSE ZXING_FILES
-- )
-- add_executable(zxing ${ZXING_FILES})
-- target_link_libraries(zxing libzxing)
--+install(TARGETS zxing libzxing
--+	LIBRARY DESTINATION lib
--+	RUNTIME DESTINATION bin)
--+install(DIRECTORY core/src/zxing/ DESTINATION include/zxing FILES_MATCHING PATTERN "*.h")
-- 
-- # Add testrunner executable.
-- find_package(CPPUNIT)
---- 
--2.6.0
--
-diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
-index bc3b11d..e38a612 100644
---- a/package/zxing-cpp/zxing-cpp.hash
-+++ b/package/zxing-cpp/zxing-cpp.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 c3934e9e59b7496c9a4db7ad4d8eb43668da4b321ec705feebaf085b185b2d08 zxing-cpp-4abdbb62c9939014eca3e43ac7dfa30daa344536.tar.gz
-+sha256 164c0bc9f1ce2ff5659fddce6da71f8cdda091751f3b71140c090b58451a2b04 zxing-cpp-fa34227d26e0b388e65b81936a2681952928f5be.tar.gz
-diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-index 64c20f3..7344dc1 100644
---- a/package/zxing-cpp/zxing-cpp.mk
-+++ b/package/zxing-cpp/zxing-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZXING_CPP_VERSION = 4abdbb62c9939014eca3e43ac7dfa30daa344536
-+ZXING_CPP_VERSION = fa34227d26e0b388e65b81936a2681952928f5be
- ZXING_CPP_SITE = $(call github,glassechidna,zxing-cpp,$(ZXING_CPP_VERSION))
- ZXING_CPP_LICENSE = Apache-2.0
- ZXING_CPP_LICENSE_FILES = COPYING
+$ make O=test/ccache/ busybox BR2_DEBUG_WRAPPER=2
+
+Toolchain wrapper executing:CCACHE_COMPILERCHECK=string:[hash]
+    CCACHE_BASEDIR=/home/naourr/git/buildroot/test/ccache
+
+    '/home/naourr/git/buildroot/test/ccache/host/usr/bin/ccache'
+
+'/home/naourr/git/buildroot/test/ccache/host/usr/bin/i686-buildroot-linux-uclibc-gcc.real'
+    '--sysroot'
+
+'/home/naourr/git/buildroot/test/ccache/host/usr/i686-buildroot-linux-uclibc/sysroot'
+    '-E'
+    '-xc'
+    '-'
+
+$ make O=test/ccache/ busybox BR2_DEBUG_WRAPPER=2 BR2_CCACHE=
+
+Toolchain wrapper executing:CCACHE_COMPILERCHECK=string:[hash]
+    CCACHE_BASEDIR=/home/naourr/git/buildroot/test/ccache
+
+
+'/home/naourr/git/buildroot/test/ccache/host/usr/bin/i686-buildroot-linux-uclibc-gcc.real'
+    '--sysroot'
+
+'/home/naourr/git/buildroot/test/ccache/host/usr/i686-buildroot-linux-uclibc/sysroot'
+    '-E'
+    '-xc'
+    '-'
+
+Tested-by: Romain Naour <romain.naour@openwide.fr>
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
+
+Best regards,
+Romain
+
+> ---
+> v2: No change, but no longer RFC.
+> ---
+>  Makefile                      |  2 ++
+>  toolchain/toolchain-wrapper.c | 15 +++++++++++----
+>  2 files changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index fdbca02..e8e2f02 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -375,6 +375,8 @@ BR_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
+>  export BR_CACHE_DIR
+>  HOSTCC := $(CCACHE) $(HOSTCC)
+>  HOSTCXX := $(CCACHE) $(HOSTCXX)
+> +else
+> +export BR_NO_CCACHE
+>  endif
+>  
+>  # Scripts in support/ or post-build scripts may need to reference
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index b5fe1d3..cf66fac 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -95,7 +95,7 @@ static void check_unsafe_path(const char *path, int paranoid)
+>  
+>  int main(int argc, char **argv)
+>  {
+> -	char **args, **cur;
+> +	char **args, **cur, **exec_args;
+>  	char *relbasedir, *absbasedir;
+>  	char *progpath = argv[0];
+>  	char *basename;
+> @@ -237,6 +237,13 @@ int main(int argc, char **argv)
+>  	/* finish with NULL termination */
+>  	*cur = NULL;
+>  
+> +	exec_args = args;
+> +#ifdef BR_CCACHE
+> +	if (getenv("BR_NO_CCACHE"))
+> +		/* Skip the ccache call */
+> +		exec_args++;
+> +#endif
+> +
+>  	/* Debug the wrapper to see actual arguments passed to
+>  	 * the compiler:
+>  	 * unset, empty, or 0: do not trace
+> @@ -247,14 +254,14 @@ int main(int argc, char **argv)
+>  		debug = atoi(env_debug);
+>  		if (debug > 0) {
+>  			fprintf(stderr, "Toolchain wrapper executing:");
+> -			for (i = 0; args[i]; i++)
+> +			for (i = 0; exec_args[i]; i++)
+>  				fprintf(stderr, "%s'%s'",
+> -					(debug == 2) ? "\n    " : " ", args[i]);
+> +					(debug == 2) ? "\n    " : " ", exec_args[i]);
+>  			fprintf(stderr, "\n");
+>  		}
+>  	}
+>  
+> -	if (execv(args[0], args))
+> +	if (execv(exec_args[0], exec_args))
+>  		perror(path);
+>  
+>  	free(args);
+> 
