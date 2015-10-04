@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 16:25:18 +0100
-Subject: [Buildroot] [git commit] kodi: Without native RPC use libtirpc
-Message-ID: <20151004152539.13161818B3@busybox.osuosl.org>
+Date: Sun, 4 Oct 2015 16:25:31 +0100
+Subject: [Buildroot] [git commit] mpd: Without native RPC use libtirpc
+Message-ID: <20151004152539.2036B803F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a74623d5600cf582468125dfa9b9a78d20323d0f
+commit: http://git.buildroot.net/buildroot/commit/?id=8b69e6c54233036dd12c6e76b98798200553290a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-----
-v2 -> v3:
-   - Remove the select (not needed, we only have to propagate the
-     depends on)
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in |    7 ++++---
+ package/mpd/Config.in |    7 ++++---
  1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 797f59d..eede243 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -181,13 +181,14 @@ config BR2_PACKAGE_KODI_LIBMICROHTTPD
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 28962f7..3bfeb3e 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -179,13 +179,14 @@ config BR2_PACKAGE_MPD_CURL
  
- config BR2_PACKAGE_KODI_LIBNFS
+ config BR2_PACKAGE_MPD_LIBNFS
  	bool "nfs"
 -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
 +	# libnfs -> libtirpc
 +	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_TOOLCHAIN_HAS_THREADS
  	select BR2_PACKAGE_LIBNFS
  	help
- 	  Enable NFS server support.
+ 	  Enable Network File System (NFS) support.
  
--comment "nfs support needs a toolchain w/ RPC support"
+-comment "nfs support needs a toolchain w/ RPC"
 -	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
 +comment "nfs support needs a toolchain w/ threads support"
 +	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
  
- config BR2_PACKAGE_KODI_RTMPDUMP
- 	bool "rtmp"
+ comment "samba support needs an (e)glibc toolchain"
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC
