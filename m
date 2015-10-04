@@ -1,90 +1,116 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 19:05:47 +0200
-Subject: [Buildroot] [git commit] configs: fix build of
-	calao_qil_a9260_defconfig
-Message-ID: <20151004171022.56841807AE@busybox.osuosl.org>
+Date: Sun, 4 Oct 2015 19:01:59 +0200
+Subject: [Buildroot] [git commit] configs: remove gnublin_defconfig
+Message-ID: <20151004171022.3E60E807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=357cf46f9ac5b49897641c9f884cd96ccb8e6d51
+commit: http://git.buildroot.net/buildroot/commit/?id=d755067b7c497cc76cac57f88e79e34be592009e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Barebox, AT91Bootstrap and Linux patches for the Calao QIL A9260
-board are all located in the same directory, board/calao/qil-a9260/,
-with only a prefix to indicate to which component they apply.
+This defconfig tries to fetch its kernel source code and U-Boot source
+code from gitorious.org, which is not longer available. Therefore,
+this defconfig has been failing to build since quite some time. Since
+there's no obvious other place to grab the kernel and u-boot source
+code, and the defconfig was not updated since a long time, let's
+simply get rid of it.
 
-Unfortunately, since commit 0eba4759fab9d093afacac77a0ac31f1f0b3cceb
-("packages: apply custom patches using *.patch instead of
-<pkg>-*.patch"), the logic to apply custom patches in Barebox and
-AT91Bootstrap has been changed from applying <package>-*.patch to
-applying *.patch (in order to be consistent with what we do for all
-packages in Buildroot).
-
-However, this had the effect of trying to apply both the AT91Bootstrap
-and Barebox patches on both packages, which obviously cannot work.
-
-This commit fixes that by moving patches around, and switching to use
-BR2_GLOBAL_PATCH_DIR for all of Barebox, AT91Bootstrap and Linux
-patches.
-
-In addition, the defconfig was not specifying explicitly which Barebox
-version to use, so right now it's trying to use Barebox 2015.09, on
-which the board-specific patch does not apply. So we've forced to use
-Barebox 2012.08, which was the lastest release available at the time
-the defconfig was initially contributed.
-
-Cc: Gregory Hermant <gregory.hermant@calao-systems.com>
+[Peter: also drop README]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../at91bootstrap/0001-qil-a9260.patch}            |    0
- .../barebox/0001-qil-a9260.patch}                  |    0
- .../linux/0001-qil-a9260.patch}                    |    0
- configs/calao_qil_a9260_defconfig                  |    6 +++---
- 4 files changed, 3 insertions(+), 3 deletions(-)
+ board/gnublin/README      |   48 ---------------------------------------------
+ configs/gnublin_defconfig |   28 --------------------------
+ 2 files changed, 0 insertions(+), 76 deletions(-)
 
-diff --git a/board/calao/qil-a9260/at91bootstrap-1.16-qil-a9260.patch b/board/calao/qil-a9260/patches/at91bootstrap/0001-qil-a9260.patch
-similarity index 100%
-rename from board/calao/qil-a9260/at91bootstrap-1.16-qil-a9260.patch
-rename to board/calao/qil-a9260/patches/at91bootstrap/0001-qil-a9260.patch
-diff --git a/board/calao/qil-a9260/barebox-2012.07.0-qil-a9260.patch b/board/calao/qil-a9260/patches/barebox/0001-qil-a9260.patch
-similarity index 100%
-rename from board/calao/qil-a9260/barebox-2012.07.0-qil-a9260.patch
-rename to board/calao/qil-a9260/patches/barebox/0001-qil-a9260.patch
-diff --git a/board/calao/qil-a9260/linux-3.4.7.patch b/board/calao/qil-a9260/patches/linux/0001-qil-a9260.patch
-similarity index 100%
-rename from board/calao/qil-a9260/linux-3.4.7.patch
-rename to board/calao/qil-a9260/patches/linux/0001-qil-a9260.patch
-diff --git a/configs/calao_qil_a9260_defconfig b/configs/calao_qil_a9260_defconfig
-index 05af114..f18337f 100644
---- a/configs/calao_qil_a9260_defconfig
-+++ b/configs/calao_qil_a9260_defconfig
-@@ -1,5 +1,6 @@
- BR2_arm=y
- BR2_arm926t=y
-+BR2_GLOBAL_PATCH_DIR="board/calao/qil-a9260/patches/"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
- BR2_KERNEL_HEADERS_VERSION=y
- BR2_DEFAULT_KERNEL_VERSION="3.4"
-@@ -7,16 +8,15 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4=y
- BR2_PACKAGE_HOST_SAM_BA=y
- BR2_TARGET_ROOTFS_UBIFS=y
- BR2_TARGET_AT91BOOTSTRAP=y
--BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/qil-a9260/"
- BR2_TARGET_AT91BOOTSTRAP_BOARD="qil_a9260"
- BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
- BR2_TARGET_BAREBOX=y
--BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR="board/calao/qil-a9260/"
-+BR2_TARGET_BAREBOX_CUSTOM_VERSION=y
-+BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE="2012.08.0"
- BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="qil_a9260"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
--BR2_LINUX_KERNEL_PATCH="board/calao/qil-a9260/linux-3.4.7.patch"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/qil-a9260/linux-3.4.7.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/board/gnublin/README b/board/gnublin/README
+deleted file mode 100644
+index 8f6a9f0..0000000
+--- a/board/gnublin/README
++++ /dev/null
+@@ -1,48 +0,0 @@
+-This the Buildroot support for the LPC3131 based Gnublin board (see here:
+-http://en.gnublin.org/) and to the Elektor Linux board
+-(http://www.elektor.com/news/elektor-presents-embedded-linux-made-easy.2147294.
+-lynkx)
+-
+-Unfortunately currently the AD and the pwm modules are not supported, i'm about
+-to add also those drivers as well to the current kernel later.
+-
+-Base kernel version: 3.7 (available here:
+-https://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin/commits/gnublin-
+-support)
+-
+-U-boot version: 2009.11 (available here:
+-https://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support)
+-
+-
+-Steps to create a bootable SD card (with the given config you need an at least
+-500 MB SD card):
+-
+-1.Config buildroot with the gnublin_defconfig:
+-
+-$ make gnublin_defconfig
+-
+-2.Tweak the config for your needs:
+-
+-$ make menuconfig
+-
+-3.Build:
+-
+-$ make
+-
+-4.Create two partitions on your SD card, one with type of BootIt (fdisk ID: df),
+-the size should be around 1M, and another partition with all of the left space
+-on the card, and with the type of normal DOS partition.
+-
+-5.From the output/images directory dump the u-boot image to the BootIt partition
+-(probably you have to modify the output /dev files according to your system):
+-
+-$ dd if=output/images/u-boot.bin of=/dev/sdc1
+-
+-6.Dump the root fs image as well:
+-
+-$ dd if=output/images/rootfs.ext2 of=/dev/sdc2
+-
+-7.Insert the SD card into the board's slot, and your board should boot up with
+-your newly created system.
+-
+-Any feedback/report is welcome on the mr.zoltan.gyarmati[at]gmail.com
+diff --git a/configs/gnublin_defconfig b/configs/gnublin_defconfig
+deleted file mode 100644
+index 369c9da..0000000
+--- a/configs/gnublin_defconfig
++++ /dev/null
+@@ -1,28 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# System
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.7"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_7=y
+-BR2_TARGET_GENERIC_ISSUE="Welcome to Gnublin"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_BLOCKS=475000
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="GNUBLIN"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://gitorious.org/u-boot-gnublin-support/u-boot-gnublin-support.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2009.11_gnublin_support_v2"
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://gitorious.org/linux-3-7-gnublin/linux-3-7-gnublin.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v3.7-gnublin-2"
+-BR2_LINUX_KERNEL_DEFCONFIG="gnublin"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
