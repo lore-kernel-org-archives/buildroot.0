@@ -1,43 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Oct 2015 17:52:11 +0100
-Subject: [Buildroot] [git commit] micropython: needs dynamic library
-Message-ID: <20151004165241.4A33280DAE@busybox.osuosl.org>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Sun, 4 Oct 2015 12:48:30 -0400
+Subject: [Buildroot] [PATCH 1/1] wandboard_defconfig: bump u-boot to
+ 2015.07 and kernel to 3.14.28_1.0.0
+In-Reply-To: <20151004173634.7fb531ce@free-electrons.com>
+References: <1443886802-23226-1-git-send-email-sergio.prado@e-labworks.com>
+ <20151004173634.7fb531ce@free-electrons.com>
+Message-ID: <20151004164829.GA32651@ketchup.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd4c691bd91ad05e6af5a79cb732e62bba342b2f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Fixes:
+On Oct. Sunday 04 (40) 05:36 PM, Thomas Petazzoni wrote:
+> Vivien,
+> 
+> Since you submitted the genimage configuration for the Wandboard not
+> too long ago, can you give a test to the following patch and reported
+> your Tested-by if it works fine for you?
 
-   http://autobuild.buildroot.org/results/06f/06fc79dad3d4c0c5f997f4c2e4b52014727764ac/
+Yes, I'll give it a try on monday and get back to you.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/micropython/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/micropython/Config.in b/package/micropython/Config.in
-index dae41b7..ed65d6a 100644
---- a/package/micropython/Config.in
-+++ b/package/micropython/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MICROPYTHON
- 	bool "micropython"
- 	select BR2_PACKAGE_LIBFFI
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	# libffi doesn't provide the closure implementation on Blackfin
- 	depends on !BR2_bfin
- 	help
-@@ -10,6 +11,6 @@ config BR2_PACKAGE_MICROPYTHON
- 
- 	  http://micropython.org
- 
--comment "micropython needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "micropython needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on !BR2_bfin
+Thanks,
+-v
