@@ -1,35 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 4 Oct 2015 18:22:20 +0200
-Subject: [Buildroot] [git commit] Makefile.in: remove now-unused
-	TARGET_CC/CXX_NOCCACHE
-Message-ID: <20151004162325.3DBC281DA9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package-cmake: remove now-redundant target
+	ccache support
+Message-ID: <20151004162325.2C37D81D77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b356105f0b44bc8d7af0987d572afde539efd35
+commit: http://git.buildroot.net/buildroot/commit/?id=e31ad0e809ca2cc75d16ac8f6c4ae3c850e828a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+All the complexity with the different ways that CMAKE_C_COMPILER and
+CMAKE_C_COMPILER_ARG1 can be set are no longer needed, it's all handled
+by the toolchain wrapper now.
+
+Note that it is still necessary to handle this for the host build.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+ package/pkg-cmake.mk                |    5 ++---
+ support/misc/toolchainfile.cmake.in |   32 ++------------------------------
+ 2 files changed, 4 insertions(+), 33 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4b1ce7f..7dc0eac 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -186,9 +186,6 @@ TARGET_READELF  = $(TARGET_CROSS)readelf
- TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
- TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 6bc13d4..81dcfcc 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -98,7 +98,6 @@ define $(2)_CONFIGURE_CMDS
+ 		-DBUILD_TESTS=OFF \
+ 		-DBUILD_TESTING=OFF \
+ 		-DBUILD_SHARED_LIBS=$$(if $$(BR2_STATIC_LIBS),OFF,ON) \
+-		-DUSE_CCACHE=$$(if $$(BR2_CCACHE),ON,OFF) \
+ 		$$(CMAKE_QUIET) \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 	)
+@@ -245,8 +244,8 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
+ 		-e 's#@@TARGET_CXXFLAGS@@#$(call qstrip,$(TARGET_CXXFLAGS))#' \
+ 		-e 's#@@TARGET_LDFLAGS@@#$(call qstrip,$(TARGET_LDFLAGS))#' \
+-		-e 's#@@TARGET_CC_NOCCACHE@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE)))#' \
+-		-e 's#@@TARGET_CXX_NOCCACHE@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE)))#' \
++		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
++		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index cd41254..5cf381e 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -27,33 +27,5 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
  
--TARGET_CC_NOCCACHE  := $(TARGET_CC)
--TARGET_CXX_NOCCACHE := $(TARGET_CXX)
--
- ifeq ($(BR2_STRIP_strip),y)
- STRIP_STRIP_DEBUG := --strip-debug
- STRIP_STRIP_UNNEEDED := --strip-unneeded
+ # This toolchain file can be used both inside and outside Buildroot.
+-# * When used inside Buildroot, ccache support is explicitly driven using the
+-#   USE_CCACHE variable.
+-# * When used outside Buildroot (i.e. when USE_CCACHE is not defined), ccache
+-#   support is automatically enabled if the ccache program is available.
+-if(DEFINED USE_CCACHE)
+-	if(USE_CCACHE)
+-		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+-		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
+-		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+-	else()
+-		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+-	endif()
+-else()
+-	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
+-	if(CCACHE)
+-		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-		set(CMAKE_C_COMPILER "${CCACHE}")
+-		set(CMAKE_CXX_COMPILER "${CCACHE}")
+-		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+-		message(STATUS "ccache program has been found and will be used for the build.")
+-		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
+-	else()
+-		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
+-	endif()
+-endif()
++set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
++set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
