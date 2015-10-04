@@ -1,35 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 18:27:42 +0200
-Subject: [Buildroot] [git commit] mpdecimal: fix comment about fenv.h
-Message-ID: <20151004162750.B28B281D5E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 17:28:25 +0100
+Subject: [Buildroot] [PATCH 0/4] xtensa: toolchain fix for compiling
+ huge functions
+In-Reply-To: <1439418003-23805-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1439418003-23805-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20151004172825.562eb8a6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc66e204ed63adf5055fe434643e18fc06a11d80
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Max,
 
-We're disabling fenv.h usage on i386 because it is not available in
-musl/uclibc (and not musl/glibc as was written).
+On Thu, 13 Aug 2015 01:19:59 +0300, Max Filippov wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpdecimal/mpdecimal.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Max Filippov (4):
+>   binutils: backport auto-litpools xtensa gas option
+>   gcc: backport mauto-litpools xtensa option
+>   xtensa: switch from text-section-literals to auto-litpools
+>   Revert "opencv: mark as not available on Xtensa"
 
-diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index 2c8cc3c..9b13def 100644
---- a/package/mpdecimal/mpdecimal.mk
-+++ b/package/mpdecimal/mpdecimal.mk
-@@ -13,7 +13,7 @@ MPDECIMAL_CONF_OPTS = LD="$(TARGET_CC)"
- MPDECIMAL_AUTORECONF = YES
- 
- # On i386, by default, mpdecimal tries to uses <fenv.h> which is not
--# available in musl/glibc. So in this case, we tell mpdecimal to use
-+# available in musl/uclibc. So in this case, we tell mpdecimal to use
- # the generic 32 bits code, which is anyway the one used on ARM,
- # PowerPC, etc.
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+In the end, I decided to apply these patches. They will break the
+current pre-built Xtensa external toolchain we use (which was built
+with Buildroot), but I will rebuild it soon to cope with that.
+
+It's not nice to have such large patches in binutils/gcc, but I guess
+it's necessary for architectures that are a bit specific, and for which
+the compiler support is not yet perfect. I hope you are pushing these
+changes to upstream gcc and binutils, so that we can drop the patches
+in future versions.
+
+BTW, can you have a look at gcc 5.x for Xtensa? We currently allow
+using gcc 5.2.x on Xtensa, but we don't have any patches for it. It
+would be great if you could have a look at which gcc 4.9.x patches are
+still needed for gcc 5.x.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
