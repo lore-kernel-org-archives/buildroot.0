@@ -1,44 +1,41 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 4 Oct 2015 11:48:06 +0200
-Subject: [Buildroot] [PATCH 16/19] Makefile.in: remove now-unused
- TARGET_CC/CXX_NOCCACHE
-In-Reply-To: <1442777319-24164-3-git-send-email-arnout@mind.be>
-References: <1442774504-22799-1-git-send-email-arnout@mind.be>
- <1442777319-24164-1-git-send-email-arnout@mind.be>
- <1442777319-24164-3-git-send-email-arnout@mind.be>
-Message-ID: <5610F5D6.7030800@openwide.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 10:49:50 +0100
+Subject: [Buildroot] [PATCH buildroot-test 1/2] autobuild-run: do not
+ build strongswan using an incompatible toolchain
+In-Reply-To: <1441965048-30856-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1441965048-30856-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20151004104950.4f9b0f42@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Dear Vicente Olivert Riera,
 
-Le 20/09/2015 21:28, Arnout Vandecappelle (Essensium/Mind) a ?crit :
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Reviewed-by: Romain Naour <romain.naour@openwide.fr>
-
-Best regards,
-Romain
-
+On Fri, 11 Sep 2015 10:50:47 +0100, Vicente Olivert Riera wrote:
+> This external MIPS toolchain uses eglibc-2.18 which lacks the definition
+> of the SYS_getdents64 macro for MIPS64 n64. Because of that, strongswan
+> package fails to build and shows this error message:
+> 
+> utils/utils.c: In function 'closefrom':
+> utils/utils.c:151:25: error: 'SYS_getdents64' undeclared (first use in
+> this function)
+>    while ((len = syscall(SYS_getdents64, dir_fd, buffer,
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/ea2/ea2be188b88ceb1cad4314bdaf00184cb74b9e26/
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/Makefile.in | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 4b1ce7f..7dc0eac 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -186,9 +186,6 @@ TARGET_READELF  = $(TARGET_CROSS)readelf
->  TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
->  TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
->  
-> -TARGET_CC_NOCCACHE  := $(TARGET_CC)
-> -TARGET_CXX_NOCCACHE := $(TARGET_CXX)
-> -
->  ifeq ($(BR2_STRIP_strip),y)
->  STRIP_STRIP_DEBUG := --strip-debug
->  STRIP_STRIP_UNNEEDED := --strip-unneeded
-> 
+>  scripts/autobuild-run |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
+
+Both patches applied to buildroot-test, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
