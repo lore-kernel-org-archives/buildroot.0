@@ -1,37 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Sun, 4 Oct 2015 11:23:07 +0100
-Subject: [Buildroot] [PATCH] vim: bump to version 7.4.889
-Message-ID: <1443954187-20282-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 11:23:51 +0100
+Subject: [Buildroot] [PATCH] system: clarify /dev management using
+ devtmpfs + {mdev, eudev}
+In-Reply-To: <1443951815-7669-1-git-send-email-luca@lucaceresoli.net>
+References: <1443951815-7669-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20151004112351.5daaa67b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And also move to GitHub since Google Code is going to die soon.
+Dear Luca Ceresoli,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/vim/vim.mk |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+On Sun,  4 Oct 2015 11:43:35 +0200, Luca Ceresoli wrote:
+> The "Dynamic using mdev" and "Dynamic using eudev" /dev management
+> methods are using devtmpfs, just like "Dynamic using devtmpfs only",
+> on top of which they add either mdev or eudev. But their names might
+> suggest they use mdev only or eudev only.
+> 
+> Clarify their descriptions by adding "devtmpfs +" to make it
+> unambiguous.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  docs/manual/configure.txt | 7 ++++---
+>  system/Config.in          | 4 ++--
+>  2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 518afaf..a6b75d0 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
- 
--VIM_SITE = https://vim.googlecode.com/hg
--VIM_SITE_METHOD = hg
--# 7.4 release patchlevel 333
--VIM_VERSION = 8ae50e3ef8bf
-+# 7.4 release patchlevel 889
-+VIM_VERSION = 74b738d414b2895b3365e26ae3b7792eb82ccf47
-+VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
- # Win over busybox vi since vim is more feature-rich
- VIM_DEPENDENCIES = \
- 	ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
+Applied after rewrapping the manual text (even if it indeed makes the
+diff a lot less readable), thanks!
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
