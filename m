@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 13:28:48 +0100
-Subject: [Buildroot] [PATCH v2 08/18] linux: remove now-redundant ccache
+Date: Sun, 4 Oct 2015 13:28:49 +0100
+Subject: [Buildroot] [PATCH v2 09/18] uboot: remove now-redundant ccache
 	handling
 In-Reply-To: <1443961738-12149-1-git-send-email-arnout@mind.be>
 References: <1443961738-12149-1-git-send-email-arnout@mind.be>
-Message-ID: <1443961738-12149-9-git-send-email-arnout@mind.be>
+Message-ID: <1443961738-12149-10-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,21 @@ Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 ---
 v2: No change
 ---
- linux/linux.mk | 2 +-
+ boot/uboot/uboot.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index bbcc54b..2319576 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -67,7 +67,7 @@ LINUX_MAKE_FLAGS = \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 8f321ac..7494078 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -74,7 +74,7 @@ endif
+ UBOOT_ARCH = $(KERNEL_ARCH)
+ 
+ UBOOT_MAKE_OPTS += \
 -	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
 +	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
+ 	ARCH=$(UBOOT_ARCH)
  
- LINUX_MAKE_ENV = \
+ # Helper function to fill the U-Boot config.h file.
 -- 
 2.5.3
