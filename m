@@ -1,34 +1,95 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2015 11:44:35 +0200
-Subject: [Buildroot] [PATCH] ibrdtn-tools: fix linking problem when
-	building statically
-In-Reply-To: <1441879380-51566-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Thu, 10 Sep 2015 11:03:00 +0100")
-References: <1441879380-51566-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87bncfvugs.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 4 Oct 2015 11:44:47 +0200
+Subject: [Buildroot] [PATCH 15/19] qpid-proton: remove now-redundant
+ ccache handling patch
+In-Reply-To: <1442777319-24164-2-git-send-email-arnout@mind.be>
+References: <1442774504-22799-1-git-send-email-arnout@mind.be>
+ <1442777319-24164-1-git-send-email-arnout@mind.be>
+ <1442777319-24164-2-git-send-email-arnout@mind.be>
+Message-ID: <5610F50F.2060806@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Arnout,
 
- > The problem looks like this:
- > /br/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr//lib/librt.a(timer_routines.os):
- > In function `__start_helper_thread':
- > timer_routines.c:(.text+0x2f4): undefined reference to `pthread_atfork'
- > collect2: error: ld returned 1 exit status
+Le 20/09/2015 21:28, Arnout Vandecappelle (Essensium/Mind) a ?crit :
+> Although this patch is still relevant for upstream, we don't need it
+> anymore in buildoort because we no longer have _ARG1.
+> 
+> Note that it would be relevant again if we would add host-qpid-proton.
+> However, the 0.10 release already has the fix.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > Adding -pthread to LDFLAGS fixes the problem.
+Reviewed-by: Romain Naour <romain.naour@openwide.fr>
 
- > Fixes:
+Best regards,
+Romain
 
- >   http://autobuild.buildroot.net/results/a87/a87a764d3a28f835ed8645923594f7023a662ae8/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+> ---
+>  ...fix-C-compiler-detection-with-_ARG1-_ARG2.patch | 52 ----------------------
+>  1 file changed, 52 deletions(-)
+>  delete mode 100644 package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
+> 
+> diff --git a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch b/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
+> deleted file mode 100644
+> index 16f4aba..0000000
+> --- a/package/qpid-proton/0001-proton-c-fix-C-compiler-detection-with-_ARG1-_ARG2.patch
+> +++ /dev/null
+> @@ -1,52 +0,0 @@
+> -From f24be9ae9ab01c7507a366e9d5529c444f0b7edd Mon Sep 17 00:00:00 2001
+> -From: Luca Ceresoli <luca@lucaceresoli.net>
+> -Date: Fri, 10 Jul 2015 10:13:47 +0200
+> -Subject: [PATCH] proton-c: fix C compiler detection with _ARG1/_ARG2
+> -
+> -The C compiler commandline in CMake is composed by the concatenation of
+> -CMAKE_C_COMPILER + CMAKE_C_COMPILER_ARG1 + CMAKE_C_COMPILER_ARG2.
+> -
+> -In most use cases the two additional argument variables are empty, thus
+> -CMAKE_C_COMPILER can be used without any noticeable difference.
+> -
+> -The Buildroot embedded Linux build system [0], however, optionally exploits the
+> -CMAKE_C_COMPILER_ARG1 variable to speed up the cross-compilation of CMake-based
+> -packages using ccache. It does so by setting [1]:
+> -
+> -  CMAKE_C_COMPILER      = /path/to/ccache
+> -  CMAKE_C_COMPILER_ARG1 = /path/to/cross-gcc
+> -
+> -This works fine with other CMake-based packages, but proton-c's CMakeLists.txt
+> -calls gcc to extract the compiler version. It does so by calling
+> -"${CMAKE_C_COMPILER} -dumpversion", without honoring the two extra arguments.
+> -Within Buildroot with ccache enabled, this means calling
+> -"/path/to/ccache -dumpversion", which fails with the error:
+> -
+> -  ccache: invalid option -- 'd'
+> -
+> -Fix the compiler check by adding the two arguments.
+> -
+> -[0] http://buildroot.net/
+> -[1] http://git.buildroot.net/buildroot/tree/support/misc/toolchainfile.cmake.in?id=2015.05
+> -
+> -Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ----
+> - proton-c/CMakeLists.txt | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/proton-c/CMakeLists.txt b/proton-c/CMakeLists.txt
+> -index 93449a9..8c31a89 100644
+> ---- a/proton-c/CMakeLists.txt
+> -+++ b/proton-c/CMakeLists.txt
+> -@@ -218,7 +218,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
+> -     set (COMPILE_LANGUAGE_FLAGS "-std=c99")
+> -     set (COMPILE_PLATFORM_FLAGS "-std=gnu99")
+> - 
+> --    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION
+> -+    execute_process(COMMAND ${CMAKE_C_COMPILER} ${CMAKE_C_COMPILER_ARG1} ${CMAKE_C_COMPILER_ARG2} -dumpversion OUTPUT_VARIABLE GCC_VERSION
+> -       OUTPUT_STRIP_TRAILING_WHITESPACE)
+> -     if (${GCC_VERSION} VERSION_LESS "4.3.0")
+> -       # Only a concern if contibuting code back.
+> --- 
+> -1.9.1
+> -
+> 
