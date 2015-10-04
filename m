@@ -1,39 +1,47 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 17:06:01 +0100
-Subject: [Buildroot] [PATCH] gcc: remove the --with-pkgversion option from
-	the ccache hash
-Message-ID: <1443974761-2081-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Oct 2015 17:07:58 +0100
+Subject: [Buildroot] [PATCH v2 0/4] legal-info: save the
+ external-toolchain source archive
+In-Reply-To: <1443907101-5290-1-git-send-email-luca@lucaceresoli.net>
+References: <1443907101-5290-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20151004170758.41802f96@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-One of the gcc configure options that we hash for ccache is
---with-pkgversion which is set to something like Buildroot
-2015.11-git-00426-ge7e7e4f - i.e., it will change with every buildroot
-commit. That's obviously not wanted, so substitute this away.
+Dear Luca Ceresoli,
 
-Also add a \n to the printf so the output is a bit more readable.
+On Sat,  3 Oct 2015 23:18:17 +0200, Luca Ceresoli wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gcc/gcc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Luca Ceresoli (4):
+>   legal-info: allow to declare the actual sources for binary packages
+>   toolchain-external: mass-define actual source tarball for known
+>     patterns
+>   toolchain-external: define actual sources for arago toolchains
+>   docs/manual: document new actual source package variables
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 420c4e9..e1d4bcf 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -259,7 +259,8 @@ endif
- # _CONF_OPTS contains some references to the absolute path of $(HOST_DIR),
- # so substitute those away.
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_HASH=\"`\
--	printf '%s' $(subst $(HOST_DIR), at HOST_DIR@,$($(PKG)_CONF_OPTS)) \
-+	printf '%s\n' $(subst $(HOST_DIR), at HOST_DIR@,\
-+		$(subst --with-pkgversion="Buildroot $(BR2_VERSION_FULL)",,$($(PKG)_CONF_OPTS))) \
- 		| sha256sum - $(HOST_GCC_COMMON_CCACHE_HASH_FILES) \
- 		| cut -c -64 | tr -d '\n'`\"
- endif # BR2_CCACHE
+All four patches applied, with only the removal of unneeded warning in
+the first patch.
+
+We noted several things during the review:
+
+ * The ifneq ($$($(2)_SITE_METHOD),override) test will always be false
+   because SITE_METHOD is never set to "override". This part of the
+   code should be reworked to simply test $(2)_OVERRIDE_SRCDIR instead:
+   when empty, it indicates that the packages is neither a "local"
+   site-method package nor a package that has its source directory
+   overridden.
+
+ * Maybe the fetching of the "actual source" could be deferred to a
+   separate $(1)-legal-info-source target, to refactor with the
+   existing dependency of $(1)-legal-info on $(1)-source.
+
+Thanks!
+
+Thomas
 -- 
-2.5.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
