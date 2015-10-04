@@ -1,56 +1,34 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 4 Oct 2015 16:34:41 +0100
-Subject: [Buildroot] [PATCH] python-numpy: re-enable for uClibc
-Message-ID: <1443972881-24357-1-git-send-email-arnout@mind.be>
+From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Sun, 4 Oct 2015 15:46:06 +0000
+Subject: [Buildroot] [PATCH 1/2] mpdecimal: use official upstream site
+In-Reply-To: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1443969386-22868-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <38121FAB319C3344930C920E7B5183136A3DE22A@LEMAIL01.le.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit b0f025386f6861fdc21e38e3a33b65669276f2c2 a patch was added
-to make sure that python-numpy does work in uClibc. This patch was
-needed for the x86 architecture, because uClibc in fact does support
-fenv for x86. However, we don't turn on this support in our uClibc
-config. Because the Config.in depends still allowed uClibc for x86,
-this lead to a built failure, which lead to the fix in commit b0f02538.
-But since this fix also fixes it for all other (supported)
-architectures, we can just remove the !uClibc dependency completely.
+Deat Thomas Petazzoni,
 
-This is also propagated to the reverse dependency in opencv3.
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/opencv3/Config.in      | 1 -
- package/python-numpy/Config.in | 3 ---
- 2 files changed, 4 deletions(-)
+>>> mpdecimal 2.4.1 Downloading
+--2015-10-04 16:43:02--  http://www.bytereef.org/software/mpdecimal/releases/mpdecimal-2.4.1.tar.gz
+Resolving www.bytereef.org... 23.235.43.133
+Connecting to www.bytereef.org|23.235.43.133|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2254789 (2.1M) [application/octet-stream]
+Saving to: `/br/output/build/.mpdecimal-2.4.1.tar.gz.tAa8M5/output'
 
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 137a351..4977925 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -170,7 +170,6 @@ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
- 		|| BR2_sh || BR2_x86_64 # python-numpy
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64 # python-numpy
- 	select BR2_PACKAGE_PYTHON_NUMPY
- 	help
- 	  Include opencv_python module into the OpenCV build.
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index 1f9938a..f8170f8 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -4,9 +4,6 @@ config BR2_PACKAGE_PYTHON_NUMPY
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
- 		|| BR2_sh || BR2_x86_64
--	# numpy needs fenv.h. Available for all architectures in
--	# glibc, but only for x86 and x86-64 in uClibc.
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
- 	help
- 	  NumPy is the fundamental package for scientific computing
- 	  with Python.
--- 
-2.5.3
+100%[=======================================================================================================================>] 2,254,789    777K/s   in 2.8s    
+
+2015-10-04 16:43:06 (777 KB/s) - `/br/output/build/.mpdecimal-2.4.1.tar.gz.tAa8M5/output' saved [2254789/2254789]
+
+mpdecimal-2.4.1.tar.gz: OK (sha256: da74d3cfab559971a4fbd4fb506e1b4498636eb77d0fd09e44f8e546d18ac068)
+
+Regards,
+
+Vincent.
