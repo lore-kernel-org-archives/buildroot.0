@@ -1,27 +1,47 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Sun, 4 Oct 2015 12:48:30 -0400
-Subject: [Buildroot] [PATCH 1/1] wandboard_defconfig: bump u-boot to
- 2015.07 and kernel to 3.14.28_1.0.0
-In-Reply-To: <20151004173634.7fb531ce@free-electrons.com>
-References: <1443886802-23226-1-git-send-email-sergio.prado@e-labworks.com>
- <20151004173634.7fb531ce@free-electrons.com>
-Message-ID: <20151004164829.GA32651@ketchup.lan>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 4 Oct 2015 17:56:08 +0100
+Subject: [Buildroot] [PATCH v3 1/1] Makefile: add target to clean
+	targetfs
+In-Reply-To: <1430095555-8484-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+References: <1425947100-9031-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+ <1430095555-8484-1-git-send-email-emeric.vigier@savoirfairelinux.com>
+Message-ID: <56115A28.9020001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Oct. Sunday 04 (40) 05:36 PM, Thomas Petazzoni wrote:
-> Vivien,
+On 27-04-15 01:45, Emeric Vigier wrote:
+> If you had some files added to the targetfs (fs-overlay, new packages,
+> ...) and you no longer need them, buildroot does not offer a simple way
+> to remove these items from the output/target directory. The rule added
+> by this commit allows you to clean the targetfs. Issuing 'make'
+> afterward will generate a new and clean targetfs.
 > 
-> Since you submitted the genimage configuration for the Wandboard not
-> too long ago, can you give a test to the following patch and reported
-> your Tested-by if it works fine for you?
+> A section in the documentation is also added. It describes few examples
+> when developers could need it. 'make help' is also updated accordingly.
+> And full-rebuild section of the documentation is updated with content
+> and links.
+> 
+> Change-Id: I42b640e845bb4195fb7b160281b16ee40883f01f
+> Signed-off-by: Emeric Vigier <emeric.vigier@savoirfairelinux.com>
 
-Yes, I'll give it a try on monday and get back to you.
+ Hi Emeric,
 
-Thanks,
--v
+ Since there were some comments on this patch and there also seem to be cases
+where it doesn't really work well, I've marked it as Changes Requested in our
+patch tracking system. So unless you resubmit a new version that fixes the
+comments, we will forget about your contribution.
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
