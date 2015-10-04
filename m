@@ -1,27 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 18:36:28 +0200
-Subject: [Buildroot] [git commit] devmem2: add a hash file
-Message-ID: <20151004163656.738017FD40@busybox.osuosl.org>
+Date: Sun, 04 Oct 2015 18:39:37 +0200
+Subject: [Buildroot] [PATCH] package/schifra: remove package
+In-Reply-To: <1443890105-2962-1-git-send-email-romain.naour@openwide.fr>
+ (Romain Naour's message of "Sat, 3 Oct 2015 18:35:05 +0200")
+References: <1443890105-2962-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <87bncelh9y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5bc76921fa99c0c87486de53c617587508fe01a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Romain" == Romain Naour <romain.naour@openwide.fr> writes:
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/devmem2/devmem2.hash |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ > Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+ > Cc: Arnaud R?billout <rebillout@syscom.ch>
+ > Cc: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/devmem2/devmem2.hash b/package/devmem2/devmem2.hash
-new file mode 100644
-index 0000000..fff5306
---- /dev/null
-+++ b/package/devmem2/devmem2.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 3b15515693bae1ebd14d914e46d388edfec2175829ea1576a7a0c8606ebbe639  devmem2.c
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
