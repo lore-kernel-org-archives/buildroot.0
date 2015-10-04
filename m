@@ -1,145 +1,152 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2015 18:40:48 +0200
-Subject: [Buildroot] [git commit] package/schifra: remove package
-Message-ID: <20151004164116.678F681D3A@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun,  4 Oct 2015 18:45:43 +0200
+Subject: [Buildroot] [PATCH] vsftpd: Add systemd services
+Message-ID: <1443977143-21369-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f8031339bfbb76159a74060ddd1687e1ae23a4f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The systemd services were taken from Arch Linux's repository:
+https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/vsftpd
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-Cc: Arnaud R??billout <rebillout@syscom.ch>
-Cc: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- Config.in.legacy             |    6 +++++
- package/Config.in            |    1 -
- package/schifra/Config.in    |   26 ------------------------
- package/schifra/schifra.hash |    3 --
- package/schifra/schifra.mk   |   44 ------------------------------------------
- 5 files changed, 6 insertions(+), 74 deletions(-)
+ package/vsftpd/vsftpd-ssl.service  | 10 ++++++++++
+ package/vsftpd/vsftpd-ssl.socket   |  9 +++++++++
+ package/vsftpd/vsftpd-ssl at .service |  9 +++++++++
+ package/vsftpd/vsftpd.mk           | 17 +++++++++++++++++
+ package/vsftpd/vsftpd.service      | 11 +++++++++++
+ package/vsftpd/vsftpd.socket       |  9 +++++++++
+ package/vsftpd/vsftpd at .service     |  8 ++++++++
+ 7 files changed, 73 insertions(+)
+ create mode 100644 package/vsftpd/vsftpd-ssl.service
+ create mode 100644 package/vsftpd/vsftpd-ssl.socket
+ create mode 100644 package/vsftpd/vsftpd-ssl at .service
+ create mode 100644 package/vsftpd/vsftpd.service
+ create mode 100644 package/vsftpd/vsftpd.socket
+ create mode 100644 package/vsftpd/vsftpd at .service
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9a59e73..e031bed 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -107,6 +107,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2015.11"
- 
-+config BR2_PACKAGE_SCHIFRA
-+	bool "schifra package has been removed"
-+	help
-+	  Schifra package has been maked broken since 2014.11 release and
-+	  haven't been fixed since then.
+diff --git a/package/vsftpd/vsftpd-ssl.service b/package/vsftpd/vsftpd-ssl.service
+new file mode 100644
+index 0000000..3343bc9
+--- /dev/null
++++ b/package/vsftpd/vsftpd-ssl.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=vsftpd daemon (legacy implicit SSL)
 +
- config BR2_PACKAGE_ZXING
- 	bool "zxing option has been renamed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 4c8bb21..3794f44 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1136,7 +1136,6 @@ endif
- 	source "package/protobuf-c/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
--	source "package/schifra/Config.in"
- 	source "package/startup-notification/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-diff --git a/package/schifra/Config.in b/package/schifra/Config.in
-deleted file mode 100644
-index a3f699a..0000000
---- a/package/schifra/Config.in
-+++ /dev/null
-@@ -1,26 +0,0 @@
--config BR2_PACKAGE_SCHIFRA
--	bool "schifra"
--	depends on BR2_INSTALL_LIBSTDCPP
--	# Upstream keep changing the tarball without doing new
--	# releases. This is not acceptable for Buildroot, as
--	# reproducible builds are very important.
--	depends on BR2_BROKEN
--	help
--	  Schifra is a very robust, highly optimized and extremely configurable
--	  Reed-Solomon error correcting code library for both software and IP
--	  core based applications with implementations in C++ and VHDL.
--
--	  http://www.schifra.com/
--
--if BR2_PACKAGE_SCHIFRA
--
--config BR2_PACKAGE_SCHIFRA_EXAMPLES
--	bool "schifra examples"
--	help
--	  Build and install the schifra example applications.
--
--endif
--
--comment "schifra needs a toolchain w/ C++"
--	depends on BR2_BROKEN
--	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/schifra/schifra.hash b/package/schifra/schifra.hash
-deleted file mode 100644
-index 7f8e6c0..0000000
---- a/package/schifra/schifra.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Calculated locally after download
--# Upstream doesn't store a version and tarball may change unexpectedly!
--sha256	3e60478cf024d87735d1cc1460aa2176c449e6c7f76914eefda25d3b20d22522	schifra.tgz
-diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
-deleted file mode 100644
-index 661ef04..0000000
---- a/package/schifra/schifra.mk
-+++ /dev/null
-@@ -1,44 +0,0 @@
--################################################################################
--#
--# schifra
--#
--################################################################################
--
--SCHIFRA_VERSION = 0.0.1
--SCHIFRA_SITE = http://www.schifra.com/downloads
--SCHIFRA_SOURCE = schifra.tgz
--SCHIFRA_INSTALL_STAGING = YES
--SCHIFRA_LICENSE = schifra license
--SCHIFRA_LICENSE_FILES = schifra_license.txt
--
--SCHIFRA_MAKE_OPTS = \
--	COMPILER="$(TARGET_CXX)" \
--	OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
--
--# The examples are the only buildable artefacts.
--ifeq ($(BR2_PACKAGE_SCHIFRA_EXAMPLES),y)
--define SCHIFRA_BUILD_CMDS
--	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPTS) all
--endef
--
--define SCHIFRA_INSTALL_EXAMPLES
--	cd $(@D) && for i in `find -type f -name 'schifra_*' -executable` ; \
--	do \
--		$(INSTALL) -m 0755 -D $$i $(TARGET_DIR)/usr/bin/$$i; \
--	done
--endef
--
--SCHIFRA_POST_INSTALL_TARGET_HOOKS += SCHIFRA_INSTALL_EXAMPLES
--endif
--
--define SCHIFRA_INSTALL_TARGET_CMDS
--	cd $(@D) && for i in schifra_*.hpp; do \
--		$(INSTALL) -m 0644 -D $$i $(TARGET_DIR)/usr/include/$$i; done
--endef
--
--define SCHIFRA_INSTALL_STAGING_CMDS
--	cd $(@D) && for i in schifra_*.hpp; do \
--		$(INSTALL) -m 0644 -D $$i $(STAGING_DIR)/usr/include/$$i; done
--endef
--
--$(eval $(generic-package))
++[Service]
++ExecStart=/usr/bin/vsftpd -oimplicit_ssl=yes
++ExecReload=/bin/kill -HUP $MAINPID
++KillMode=process
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/package/vsftpd/vsftpd-ssl.socket b/package/vsftpd/vsftpd-ssl.socket
+new file mode 100644
+index 0000000..b18b639
+--- /dev/null
++++ b/package/vsftpd/vsftpd-ssl.socket
+@@ -0,0 +1,9 @@
++[Unit]
++Conflicts=vsftpd.service
++
++[Socket]
++ListenStream=990
++Accept=yes
++
++[Install]
++WantedBy=sockets.target
+diff --git a/package/vsftpd/vsftpd-ssl at .service b/package/vsftpd/vsftpd-ssl at .service
+new file mode 100644
+index 0000000..8bcf78e
+--- /dev/null
++++ b/package/vsftpd/vsftpd-ssl at .service
+@@ -0,0 +1,9 @@
++[Unit]
++Description=vsftpd per-connection server (legacy implicit SSL)
++
++[Service]
++ExecStart=-/usr/bin/vsftpd -oimplicit_ssl=yes
++ExecReload=/bin/kill -HUP $MAINPID
++StandardInput=socket
++StandardOutput=socket
++StandardError=syslog
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 1e48264..823ad66 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -47,6 +47,23 @@ define VSFTPD_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/vsftpd/S70vsftpd $(TARGET_DIR)/etc/init.d/S70vsftpd
+ endef
+ 
++define VSFTPD_INSTALL_INIT_SYSTEMD
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
++
++	for f in vsftpd.service vsftpd.socket vsftpd at .service \
++		vsftpd-ssl.service vsftpd-ssl.socket vsftpd-ssl at .service; do \
++		$(INSTALL) -D -m 644 package/vsftpd/$$f \
++			$(TARGET_DIR)/usr/lib/systemd/system/$$f; \
++		wanted_by="multi-user.target.wants"; \
++		if [ $${f##*.} = "socket" ]; then \
++			wanted_by="sockets.target.wants"; \
++		fi; \
++		ln -sf ../../../../usr/lib/systemd/system/$$f \
++			$(TARGET_DIR)/etc/systemd/system/$$wanted_by/$$f; \
++	done
++endef
++
+ define VSFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/vsftpd $(TARGET_DIR)/usr/sbin/vsftpd
+ 	test -f $(TARGET_DIR)/etc/vsftpd.conf || \
+diff --git a/package/vsftpd/vsftpd.service b/package/vsftpd/vsftpd.service
+new file mode 100644
+index 0000000..cc7645f
+--- /dev/null
++++ b/package/vsftpd/vsftpd.service
+@@ -0,0 +1,11 @@
++[Unit]
++Description=vsftpd daemon
++After=network.target
++
++[Service]
++ExecStart=/usr/bin/vsftpd
++ExecReload=/bin/kill -HUP $MAINPID
++KillMode=process
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/package/vsftpd/vsftpd.socket b/package/vsftpd/vsftpd.socket
+new file mode 100644
+index 0000000..cdc0d33
+--- /dev/null
++++ b/package/vsftpd/vsftpd.socket
+@@ -0,0 +1,9 @@
++[Unit]
++Conflicts=vsftpd.service
++
++[Socket]
++ListenStream=21
++Accept=yes
++
++[Install]
++WantedBy=sockets.target
+diff --git a/package/vsftpd/vsftpd at .service b/package/vsftpd/vsftpd at .service
+new file mode 100644
+index 0000000..81e1429
+--- /dev/null
++++ b/package/vsftpd/vsftpd at .service
+@@ -0,0 +1,8 @@
++[Unit]
++Description=vsftpd per-connection server
++
++[Service]
++ExecStart=-/usr/bin/vsftpd
++ExecReload=/bin/kill -HUP $MAINPID
++StandardInput=socket
++StandardError=syslog
+-- 
+2.5.3
