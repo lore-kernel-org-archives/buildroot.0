@@ -1,39 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Oct 2015 11:26:49 -0300
-Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.09.25
-Message-ID: <1444055209-5846-1-git-send-email-gustavo@zacarias.com.ar>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Mon, 5 Oct 2015 10:31:00 -0400
+Subject: [Buildroot] [PATCH v3 1/4] package/rpm: bump to version 4.12.0.1
+In-Reply-To: <87h9m85988.fsf@dell.be.48ers.dk>
+References: <1441293831-3524-1-git-send-email-james.knight@rockwellcollins.com>
+ <87h9m85988.fsf@dell.be.48ers.dk>
+Message-ID: <CALe+oY_HWF33rePJzZgH5QJw0A5en1KnNaGAFM34FHCdMXxTow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Peter,
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index f02c1c3..2b46b45 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	edac88b58f23f0a7d73aa2b21520d04019f30e3e604b0a60ca0a6af16044bdf2	wireless-regdb-2015.07.20.tar.xz
-+sha256	06dbcfcd4c0835440b0787084e726b7ea1a707acfb53e17a3be08efbbbbf4ee2	wireless-regdb-2015.09.25.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index fe76882..7ce580c 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRELESS_REGDB_VERSION = 2015.07.20
-+WIRELESS_REGDB_VERSION = 2015.09.25
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
--- 
-2.4.9
+On Sat, Oct 3, 2015 at 10:15 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>  > +#ifeq ($(BR2_PACKAGE_LIBCAP),y)
+>  > +RPM_DEPENDENCIES += libcap
+>  > +RPM_CONF_OPTS += --with-cap
+>  > +#else
+>  > +RPM_CONF_OPTS += --without-cap
+>  > +#endif
+>
+> Why is this commented out? You don't select libcap in Config.in.
+
+It is definitely a mistake; sorry. I'll clean that up with the other
+patchset changes to be made.
