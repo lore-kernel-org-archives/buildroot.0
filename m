@@ -1,45 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2015 02:10:51 +0200
-Subject: [Buildroot] [git commit] rtorrent: bump to version 0.9.6
-Message-ID: <20151005001135.4828881D5F@busybox.osuosl.org>
+Date: Mon, 5 Oct 2015 02:09:43 +0200
+Subject: [Buildroot] [git commit] libtorrent: bump to version 0.13.6
+Message-ID: <20151005001135.4770B8082E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0162131675e22512edbb8a2030de9f1f30165579
+commit: http://git.buildroot.net/buildroot/commit/?id=137620371928a819cf752622b6201c5cbc5352ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump to version 0.9.6
+- Bump to version 0.13.6.
 
 - Add a hash file.
 
 - Change the website URL to the new official one.
 
-- Tweak the 0001-cross_compile.patch for the new version.
+- Help the build system to find the zlib headers, otherwise the
+  configure script will fail like this:
+
+    checking if zlib is wanted... yes
+    checking for inflateEnd in -lz... no
+    checking zlib.h usability... no
+    checking zlib.h presence... no
+    checking for zlib.h... no
+    configure: error: either specify a valid zlib installation with
+    --with-zlib=DIR or disable zlib usage with --without-zlib
+
+- Disable instrumentation support by default since it avoids runtime
+  failures on rtorrent for some architectures like MIPS, PowerPC or ARM:
+
+    https://github.com/rakshasa/rtorrent/issues/156
+
+- Tweak the 0001-cross_compile.patch for this new version.
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rtorrent/0001-cross_compile.patch |   58 ++++++++++++++++++++++++-----
- package/rtorrent/Config.in                |    2 +-
- package/rtorrent/rtorrent.hash            |    2 +
- package/rtorrent/rtorrent.mk              |    4 +-
- 4 files changed, 53 insertions(+), 13 deletions(-)
+ package/libtorrent/0001-cross_compile.patch |   54 ++++++++++++++++++++-------
+ package/libtorrent/Config.in                |    2 +-
+ package/libtorrent/libtorrent.hash          |    2 +
+ package/libtorrent/libtorrent.mk            |   11 +++--
+ 4 files changed, 50 insertions(+), 19 deletions(-)
 
-diff --git a/package/rtorrent/0001-cross_compile.patch b/package/rtorrent/0001-cross_compile.patch
-index 2be8d06..a8ad696 100644
---- a/package/rtorrent/0001-cross_compile.patch
-+++ b/package/rtorrent/0001-cross_compile.patch
-@@ -1,22 +1,48 @@
+diff --git a/package/libtorrent/0001-cross_compile.patch b/package/libtorrent/0001-cross_compile.patch
+index f86f289..abb2438 100644
+--- a/package/libtorrent/0001-cross_compile.patch
++++ b/package/libtorrent/0001-cross_compile.patch
+@@ -1,22 +1,35 @@
 -Fix cross compilation, based on OpenWRT patch.
-+From d62f7474289970d5be3fd658dd6ace4489408bdf Mon Sep 17 00:00:00 2001
++From c4cc0ba76c81e1967c648be423f5f0312ac9d87f Mon Sep 17 00:00:00 2001
 +From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Mon, 5 Oct 2015 00:52:26 +0100
++Date: Mon, 5 Oct 2015 00:40:25 +0100
 +Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
 +
-+[Vincent: tweak the patch for version 0.9.6]
++[Vincent: tweak the patch for version 0.13.6]
  
  Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
@@ -49,15 +65,15 @@ index 2be8d06..a8ad696 100644
 + scripts/common.m4 |    4 ++--
 + 3 files changed, 3 insertions(+), 4 deletions(-)
  
--diff -Nura rtorrent-0.9.2/configure.ac rtorrent-0.9.2-cross/configure.ac
----- rtorrent-0.9.2/configure.ac	2012-04-20 03:55:30.000000000 -0300
--+++ rtorrent-0.9.2-cross/configure.ac	2012-05-09 11:06:49.436474039 -0300
--@@ -4,7 +4,6 @@
+-diff -Nura libtorrent-0.13.3.orig/configure.ac libtorrent-0.13.3/configure.ac
+---- libtorrent-0.13.3.orig/configure.ac	2012-10-31 07:38:59.345752076 -0300
+-+++ libtorrent-0.13.3/configure.ac	2012-10-31 07:39:06.454799361 -0300
+-@@ -19,7 +19,6 @@
 +diff --git a/configure.ac b/configure.ac
-+index ba5bbf2..0821d4e 100644
++index ba994ee..7696466 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -4,7 +4,6 @@ AC_DEFINE(API_VERSION, 9, api version)
++@@ -19,7 +19,6 @@ AC_SUBST(LIBTORRENT_INTERFACE_VERSION_NO)
   
   AM_INIT_AUTOMAKE
 - AM_CONFIG_HEADER(config.h)
@@ -65,24 +81,27 @@ index 2be8d06..a8ad696 100644
  -AM_PATH_CPPUNIT(1.9.6)
   
   AC_PROG_CXX
-  AC_PROG_LIBTOOL
--diff -Nura rtorrent-0.9.2/scripts/common.m4 rtorrent-0.9.2-cross/scripts/common.m4
----- rtorrent-0.9.2/scripts/common.m4	2012-03-13 09:10:49.000000000 -0300
--+++ rtorrent-0.9.2-cross/scripts/common.m4	2012-05-09 11:05:56.620102678 -0300
--@@ -223,7 +223,7 @@
+  
+-diff -Nura libtorrent-0.13.3.orig/scripts/checks.m4 libtorrent-0.13.3/scripts/checks.m4
+---- libtorrent-0.13.3.orig/scripts/checks.m4	2012-10-31 07:38:59.342752057 -0300
+-+++ libtorrent-0.13.3/scripts/checks.m4	2012-10-31 07:39:06.454799361 -0300
+-@@ -96,7 +96,7 @@
 +diff --git a/scripts/checks.m4 b/scripts/checks.m4
 +index 598f39b..0e5abe0 100644
 +--- a/scripts/checks.m4
 ++++ b/scripts/checks.m4
 +@@ -96,7 +96,7 @@ AC_DEFUN([TORRENT_CHECK_KQUEUE], [
-+ AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
-+   AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
-+ 
-+-  AC_RUN_IFELSE([AC_LANG_SOURCE([
-++  AC_LINK_IFELSE([AC_LANG_SOURCE([
-+       #include <fcntl.h>
-+       #include <stdlib.h>
-+       #include <unistd.h>
+  AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
+    AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
+  
+@@ -25,10 +38,11 @@ diff -Nura libtorrent-0.13.3.orig/scripts/checks.m4 libtorrent-0.13.3/scripts/ch
+        #include <fcntl.h>
+        #include <stdlib.h>
+        #include <unistd.h>
+-diff -Nura libtorrent-0.13.3.orig/scripts/common.m4 libtorrent-0.13.3/scripts/common.m4
+---- libtorrent-0.13.3.orig/scripts/common.m4	2012-10-31 07:38:59.342752057 -0300
+-+++ libtorrent-0.13.3/scripts/common.m4	2012-10-31 07:39:32.550972826 -0300
+-@@ -223,7 +223,7 @@
 +diff --git a/scripts/common.m4 b/scripts/common.m4
 +index 5127624..cc68269 100644
 +--- a/scripts/common.m4
@@ -91,7 +110,7 @@ index 2be8d06..a8ad696 100644
   AC_DEFUN([TORRENT_CHECK_EXECINFO], [
     AC_MSG_CHECKING(for execinfo.h)
   
-@@ -25,3 +51,15 @@ diff -Nura rtorrent-0.9.2/scripts/common.m4 rtorrent-0.9.2-cross/scripts/common.
+@@ -37,3 +51,15 @@ diff -Nura libtorrent-0.13.3.orig/scripts/common.m4 libtorrent-0.13.3/scripts/co
         #include <execinfo.h>
         int main() { backtrace((void**)0, 0); backtrace_symbols((char**)0, 0); return 0;}
         ])],
@@ -107,39 +126,48 @@ index 2be8d06..a8ad696 100644
 +-- 
 +1.7.1
 +
-diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
-index 1798331..77ab595 100644
---- a/package/rtorrent/Config.in
-+++ b/package/rtorrent/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_RTORRENT
+diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+index aac71fa..02ed73a 100644
+--- a/package/libtorrent/Config.in
++++ b/package/libtorrent/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBTORRENT
  	help
- 	  BitTorrent Client using libtorrent
+ 	  BitTorrent library written in C++ for *nix
  
 -	  http://libtorrent.rakshasa.no/
 +	  http://rtorrent.net/downloads/
  
- comment "rtorrent needs a toolchain w/ C++, threads, wchar"
- 	depends on BR2_USE_MMU
-diff --git a/package/rtorrent/rtorrent.hash b/package/rtorrent/rtorrent.hash
+ comment "libtorrent needs a toolchain w/ C++, threads"
+ 	depends on BR2_ARCH_HAS_ATOMICS
+diff --git a/package/libtorrent/libtorrent.hash b/package/libtorrent/libtorrent.hash
 new file mode 100644
-index 0000000..15257ac
+index 0000000..73753e9
 --- /dev/null
-+++ b/package/rtorrent/rtorrent.hash
++++ b/package/libtorrent/libtorrent.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 1e69c24f1f26f8f07d58d673480dc392bfc4317818c1115265b08a7813ff5b0e  rtorrent-0.9.6.tar.gz
-diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
-index 77f0e85..bedf404 100644
---- a/package/rtorrent/rtorrent.mk
-+++ b/package/rtorrent/rtorrent.mk
-@@ -4,8 +4,8 @@
++sha256 2838a08c96edfd936aff8fbf99ecbb930c2bfca3337dd1482eb5fccdb80d5a04  libtorrent-0.13.6.tar.gz
+diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
+index 5f3920d..9690acb 100644
+--- a/package/libtorrent/libtorrent.mk
++++ b/package/libtorrent/libtorrent.mk
+@@ -4,12 +4,15 @@
  #
  ################################################################################
  
--RTORRENT_VERSION = 0.9.3
--RTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
-+RTORRENT_VERSION = 0.9.6
-+RTORRENT_SITE = http://rtorrent.net/downloads
- RTORRENT_DEPENDENCIES = host-pkgconf libcurl libsigc libtorrent ncurses
- RTORRENT_AUTORECONF = YES
- RTORRENT_LICENSE = GPLv2
+-LIBTORRENT_VERSION = 0.13.3
+-LIBTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
++LIBTORRENT_VERSION = 0.13.6
++LIBTORRENT_SITE = http://rtorrent.net/downloads
+ LIBTORRENT_DEPENDENCIES = host-pkgconf libsigc \
+-	$(if $(BR2_PACKAGE_OPENSSL),openssl)
++	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
++	$(if $(BR2_PACKAGE_ZLIB),zlib)
+ LIBTORRENT_CONF_OPTS = --enable-aligned \
+-	$(if $(BR2_PACKAGE_OPENSSL),--enable-openssl,--disable-openssl)
++	--disable-instrumentation \
++	$(if $(BR2_PACKAGE_OPENSSL),--enable-openssl,--disable-openssl) \
++	$(if $(BR2_PACKAGE_ZLIB),--with-zlib=$(STAGING_DIR)/usr,--without-zlib)
+ LIBTORRENT_INSTALL_STAGING = YES
+ LIBTORRENT_AUTORECONF = YES
+ LIBTORRENT_LICENSE = GPLv2
