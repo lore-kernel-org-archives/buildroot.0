@@ -1,119 +1,102 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon,  5 Oct 2015 16:26:59 -0400
-Subject: [Buildroot] [PATCH v4 4/4] package/rpm: add host variant
-In-Reply-To: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
-References: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <1444076819-10228-4-git-send-email-james.knight@rockwellcollins.com>
+Date: Mon,  5 Oct 2015 16:28:41 -0400
+Subject: [Buildroot] [PATCH v3 1/1] yad: new package
+Message-ID: <1444076921-6004-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following adds support for a host variant of the rpm package. This
-support will allow a host system to setup/manipulate a target system's
-initial RPM database during the post-build phase.
-
-A target's default RPM database (/var/lib/rpm) is initially empty. If a
-developer wishes to create this database during the build phase, they
-will have to do so using the same database format between their host
-system and target system. By provided an rpm host variant, a developer
-can ensure an rpm database build, for example, during the post-build
-phase will be compatible with the rpm system installed on the target.
-
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
-Changes v3 -> v4:
-  - Removed invalid host symbols provided in Config.in.host (pointed out
-     by Yann E. MORIN).
-  - Altered name of common configuration variable from RPM_CONF_OPTS to
-     RPM_COMMON_CONF_OPTS for clarity (suggested by Yann E. MORIN).
-
 Changes v2 -> v3:
-  - None.
+  - Increment to version 0.31.1 (removed need for HTML patch introduced
+     in v2 change; suggested by Vicente Olivert Riera).
 
 Changes v1 -> v2:
-  - A series of changes (different configuration options) based off of a
-     switch from rpm 4.12.0.1 (from rpm5).
-  - Cleaned up configuration options to ensure host variant is not
-     configured based off of target variant configuration (from comments
-     provided by from Thomas Petazzoni).
-  - Original patch set referenced a host variant neon package. This is
-     no longer required in rpm 4.12.0.1 version.
+  - Increment to version 0.29.0 (with updated hash and patch fix).
+  - Removed complex gtk library selection. Defaults to libgtk3, if
+     available; elsewise, uses libgtk2 (suggested from comments by
+     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
 ---
- package/Config.in.host     |  1 +
- package/rpm/Config.in.host |  6 ++++++
- package/rpm/rpm.mk         | 17 ++++++++++++++++-
- 3 files changed, 23 insertions(+), 1 deletion(-)
- create mode 100644 package/rpm/Config.in.host
+ package/Config.in     |  1 +
+ package/yad/Config.in | 13 +++++++++++++
+ package/yad/yad.hash  |  2 ++
+ package/yad/yad.mk    | 24 ++++++++++++++++++++++++
+ 4 files changed, 40 insertions(+)
+ create mode 100644 package/yad/Config.in
+ create mode 100644 package/yad/yad.hash
+ create mode 100644 package/yad/yad.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1f69687..14766f8 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -23,6 +23,7 @@ menu "Host utilities"
- 	source "package/patchelf/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/qemu/Config.in.host"
-+	source "package/rpm/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-diff --git a/package/rpm/Config.in.host b/package/rpm/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 3794f44..5d4eb7d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -290,6 +290,7 @@ comment "X applications"
+ 	source "package/xscreensaver/Config.in"
+ 	source "package/xterm/Config.in"
+ 	source "package/xvkbd/Config.in"
++	source "package/yad/Config.in"
+ 
+ comment "X libraries and helper libraries"
+ 	source "package/libsexy/Config.in"
+diff --git a/package/yad/Config.in b/package/yad/Config.in
 new file mode 100644
-index 0000000..c3d188a
+index 0000000..1e6776b
 --- /dev/null
-+++ b/package/rpm/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_RPM
-+	bool "host rpm"
++++ b/package/yad/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_YAD
++	bool "yad"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
++	select BR2_PACKAGE_LIBGLIB2
 +	help
-+	  The RPM Package Manager (RPM).
++	  YAD (yet another dialog) is a tool for create graphical dialogs
++	  from shell scripts.
 +
-+	  http://www.rpm.org/
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 4b015cd..7a3d93a 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -9,10 +9,11 @@ RPM_VERSION = $(RPM_VERSION_MAJOR).0.1
- RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
- RPM_SITE = http://rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
- RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
-+HOST_RPM_DEPENDENCIES = host-pkgconf host-beecrypt host-berkeleydb host-popt
- RPM_LICENSE = GPLv2
- RPM_LICENSE_FILES = COPYING
- 
--RPM_CONF_OPTS += \
-+RPM_COMMON_CONF_OPTS = \
- 	--disable-largefile \
- 	--disable-rpath \
- 	--enable-python=no \
-@@ -21,6 +22,17 @@ RPM_CONF_OPTS += \
- 	--without-cap \
- 	--without-hackingdocs
- 
-+RPM_CONF_OPTS = \
-+	$(RPM_COMMON_CONF_OPTS)
++	  http://sourceforge.net/projects/yad-dialog/
 +
-+HOST_RPM_CONF_OPTS = \
-+	$(RPM_COMMON_CONF_OPTS) \
-+	--with-beecrypt \
-+	--without-archive \
-+	--without-libintl-prefix \
-+	--without-lua \
-+	--without-selinux
++comment "yad needs libgtk2 or libgtk3"
++	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
+diff --git a/package/yad/yad.hash b/package/yad/yad.hash
+new file mode 100644
+index 0000000..fdde908
+--- /dev/null
++++ b/package/yad/yad.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 3716d71861009add49e0a8a2269b181feffd0449e4cdf4f317f873dfb8c94b82 yad-0.31.1.tar.xz
+diff --git a/package/yad/yad.mk b/package/yad/yad.mk
+new file mode 100644
+index 0000000..7615cf6
+--- /dev/null
++++ b/package/yad/yad.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# yad
++#
++################################################################################
 +
- ifeq ($(BR2_PACKAGE_ACL),y)
- RPM_DEPENDENCIES += acl
- RPM_CONF_OPTS += --with-acl
-@@ -69,5 +81,8 @@ endif
- 
- RPM_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(RPM_CONFIGURATION)"
-+HOST_RPM_CONF_ENV += \
-+	CFLAGS="$(HOST_CFLAGS) -I$(HOST_DIR)/usr/include/beecrypt"
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++YAD_VERSION = 0.31.1
++YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
++YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
++YAD_LICENSE = GPLv3
++YAD_LICENSE_FILES = COPYING
++YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
++
++YAD_CONF_OPTS = --enable-html=no
++
++ifeq ($(BR2_PACKAGE_LIBGTK3),y)
++YAD_DEPENDENCIES += libgtk3
++YAD_CONF_OPTS += --with-gtk=gtk3
++else
++YAD_DEPENDENCIES += libgtk2
++YAD_CONF_OPTS += --with-gtk=gtk2
++endif
++
++$(eval $(autotools-package))
 -- 
 1.9.5.msysgit.1
