@@ -1,77 +1,35 @@
-From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Date: Mon, 5 Oct 2015 08:03:51 -0300
-Subject: [Buildroot] [PATCH 1/2] axfsutils: add new package
-In-Reply-To: <20151002215737.GA4284@free.fr>
-References: <1443796641-16056-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1443796641-16056-2-git-send-email-ariel@vanguardiasur.com.ar>
- <20151002215737.GA4284@free.fr>
-Message-ID: <56125917.7070308@vanguardiasur.com.ar>
+From: Brian Foster <brian.foster@maximintegrated.com>
+Date: Mon, 5 Oct 2015 14:05:27 +0200
+Subject: [Buildroot] [Buildroot website] Missing image(s?) files
+In-Reply-To: <87io6n3i3l.fsf@dell.be.48ers.dk>
+References: <40125828.rcXOoJhnam@laclwks004> <560FE3D8.7090703@mind.be>
+ <87io6n3i3l.fsf@dell.be.48ers.dk>
+Message-ID: <1704416.LO4ZoCOqbj@laclwks004>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
-
-El 02/10/15 a las 18:57, Yann E. MORIN escribi?:
-> Ariel, All,
+On Saturday 03-October-2015 11:46:54 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>  >[,,,]
+>  >> in ?17.19.2, "How to add a package from GitHub", at least,
+>  >> there is an obviously missing image `github_hash_mongrel2.png'
+>  >> (see just [above] the second (last) ?-list).
+>  >[...]
+>  > So I guess the images are not copied correctly to the website. Peter?
 > 
-> On 2015-10-02 11:37 -0300, Ariel D'Alessandro spake thusly:
->> Tools for building AXFS Filesystem.
->>
->> The Advanced XIP File System is a Linux kernel filesystem driver that enables
->> files to be executed directly from flash or ROM memory rather than being copied
->> into RAM.
->>
->> Source:
->> 	https://github.com/jaredeh/axfs
->>
->> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
->> ---
->>  package/axfsutils/axfsutils.mk | 21 +++++++++++++++++++++
->>  1 file changed, 21 insertions(+)
->>  create mode 100644 package/axfsutils/axfsutils.mk
->>
->> diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
->> new file mode 100644
->> index 0000000..ef8d471
->> --- /dev/null
->> +++ b/package/axfsutils/axfsutils.mk
->> @@ -0,0 +1,21 @@
->> +################################################################################
->> +#
->> +# axfsutils
->> +#
->> +################################################################################
->> +
->> +AXFSUTILS_VERSION = f26ae785e33df76f658b71ef2cfbc7f511ff875d
->> +AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
->> +AXFSUTILS_LICENSE = GPLv2
->> +AXFSUTILS_LICENSE_FILES = COPYING
->> +
->> +define HOST_AXFSUTILS_BUILD_CMDS
->> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
->> +endef
->> +
->> +define HOST_AXFSUTILS_INSTALL_CMDS
->> +	cp $(@D)/mkfs.axfs-legacy/mkfs.axfs $(HOST_DIR)/usr/bin/
->> +endef
->> +
->> +$(eval $(generic-package))
-> 
-> Since you do not add a Config.in that provides the corresponding option
-> BR2_PACKAGE_AXFSUTILS for this package, it will never be buildable for
-> the target.
-> 
-> So, either you provide a Config.in that adds BR2_PACKAGE_AXFSUTILS (like
-> is done for e2fsprogs, for example), or you do not add a call to $(generic-package)
+> Indeed, my release script was only copying manual.{html,text}. I've
+> fixed that manually and updated the script.
 
-You're right. Wrong call to $(generic-package). I'll remove it and
-submit patchset v2.
+ I confirm the reported missing image is indeed now visible
+ on the website.
 
-Thanks!
+cheers,
+	-blf-
 
 -- 
-Ariel D'Alessandro, VanguardiaSur
-www.vanguardiasur.com.ar
+Brian Foster
+Principal MTS, Software        |  La Ciotat, France
+Maxim Integrated               |  http://www.maximintegrated.com/
