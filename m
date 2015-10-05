@@ -1,137 +1,151 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Oct 2015 10:49:29 -0300
-Subject: [Buildroot] [PATCH 1/2] pkgconf: bump to version 0.9.12
-Message-ID: <1444052970-26682-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  5 Oct 2015 10:49:30 -0300
+Subject: [Buildroot] [PATCH 2/2] nettle: bump to version 3.1.1
+In-Reply-To: <1444052970-26682-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444052970-26682-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1444052970-26682-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patches, they aren't required any more.
-It fixes a bug where inline comments cause issues, like:
-
-Libs: -lblah # -lbleh
-
-...it would make pkgconf search for the '#' package
-
-This is required for the nettle 3.1.1 upgrade since howgeed.pc adjusts
-Libs according to static/dynamic builds using the comment feature.
+API is now compatible with nettle 2.7.x
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pkgconf/0001-fix-variable.patch       | 29 -------------------
- package/pkgconf/0002-fix-double-sysroot.patch | 40 ---------------------------
- package/pkgconf/pkgconf.hash                  |  4 +--
- package/pkgconf/pkgconf.mk                    |  4 +--
- 4 files changed, 4 insertions(+), 73 deletions(-)
- delete mode 100644 package/pkgconf/0001-fix-variable.patch
- delete mode 100644 package/pkgconf/0002-fix-double-sysroot.patch
+ ...patch => 0001-disable-testsuite-examples.patch} |  0
+ package/nettle/0001-fix-shared-only-build.patch    | 75 ----------------------
+ package/nettle/nettle.hash                         |  2 +-
+ package/nettle/nettle.mk                           | 11 +---
+ 4 files changed, 3 insertions(+), 85 deletions(-)
+ rename package/nettle/{0002-disable-testsuite-examples.patch => 0001-disable-testsuite-examples.patch} (100%)
+ delete mode 100644 package/nettle/0001-fix-shared-only-build.patch
 
-diff --git a/package/pkgconf/0001-fix-variable.patch b/package/pkgconf/0001-fix-variable.patch
+diff --git a/package/nettle/0002-disable-testsuite-examples.patch b/package/nettle/0001-disable-testsuite-examples.patch
+similarity index 100%
+rename from package/nettle/0002-disable-testsuite-examples.patch
+rename to package/nettle/0001-disable-testsuite-examples.patch
+diff --git a/package/nettle/0001-fix-shared-only-build.patch b/package/nettle/0001-fix-shared-only-build.patch
 deleted file mode 100644
-index 4c213d6..0000000
---- a/package/pkgconf/0001-fix-variable.patch
+index 3c9b186..0000000
+--- a/package/nettle/0001-fix-shared-only-build.patch
 +++ /dev/null
-@@ -1,29 +0,0 @@
--[PATCH] prefix sysroot to include/libdir path variables
+@@ -1,75 +0,0 @@
+-static/shared: use available libraries when linking our tools/examples/testsuite
 -
--Prefix includedir / libdir variable values with sysroot if a variable is
--requested (--variable=<name>), similar to how it's done for -I / -L flags.
+-For a shared-only build, static libraries do not exist, so the build fails as
+-soon as we try to link either of our tools, examples or testsuite utils.
 -
--This is sometimes used to find header files (E.G. in gst-plugins configure),
--so ensure the sysroot'ed files are used.
+-Use whatever libraries are available, with a preference toward using shared
+-libraries.
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 -
--diff -Nura pkgconf-0.8.9.orig/main.c pkgconf-0.8.9/main.c
----- pkgconf-0.8.9.orig/main.c	2012-10-24 14:32:08.236508699 -0300
--+++ pkgconf-0.8.9/main.c	2012-10-24 14:54:36.771070217 -0300
--@@ -298,7 +298,13 @@
-- 	if (eflag != PKG_ERRF_OK)
-- 		return false;
+-diff -durN nettle-2.7.1.orig/config.make.in nettle-2.7.1/config.make.in
+---- nettle-2.7.1.orig/config.make.in	2013-05-28 16:21:53.000000000 +0200
+-+++ nettle-2.7.1/config.make.in	2014-12-12 19:56:07.031292752 +0100
+-@@ -30,6 +30,8 @@
+- PACKAGE_VERSION = @PACKAGE_VERSION@
 - 
---	printf("%s\n", req.buf);
--+	if ( !strcmp(req.variable, "includedir") ||
--+	  !strcmp(req.variable, "mapdir") ||
--+	  !strcmp(req.variable, "sdkdir") ||
--+	  !strcmp(req.variable, "libdir"))
--+		printf("%s%s\n", sysroot_dir, req.buf);
--+	else
--+		printf("%s\n", req.buf);
-- 	return true;
-- }
+- SHLIBCFLAGS = @SHLIBCFLAGS@
+-+ at IF_STATIC@LIBS_EXT = .a
+-+ at IF_SHARED@LIBS_EXT = .so
 - 
-diff --git a/package/pkgconf/0002-fix-double-sysroot.patch b/package/pkgconf/0002-fix-double-sysroot.patch
-deleted file mode 100644
-index 14bc34a..0000000
---- a/package/pkgconf/0002-fix-double-sysroot.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--pkgconf: don't double prefix lib/include paths with sysroot
--
--A .pc file could contain statements of the form:
--    -L/usr/lib
--but also:
--    -L/path/to/sysroot/usr/lib
--
--The latter form typically occurs when the dependency was configured with a
--statement like --with-xxx=$(STAGING_DIR)/usr.
--
--pkgconf only expects the first form, and prefixes it with the specified
--sysroot. However, this strategy would result in a double sysroot in the
--second case:
--    -L/path/to/sysroot/path/to/sysroot/usr/lib
--
--This patch checks for the presence of the sysroot in the specified -L or -I
--directives, and only adds the sysroot when not already present.
--
--Upstream-status: will be submitted
--
--Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
--
-----
-- main.c |  3 ++-
-- 1 files changed, 2 insertions(+), 1 deletions(-)
--
--
--diff -r 16865d81819f -r 9d8e1737687f main.c
----- a/main.c	Mon Jun 16 19:47:52 2014 +0200
--+++ b/main.c	Mon Jun 16 19:48:15 2014 +0200
--@@ -82,7 +82,8 @@
-- 	{
-- 	case 'L':
-- 	case 'I':
---		return sysroot_dir;
--+		if (strncmp(sysroot_dir, frag->data, strlen(sysroot_dir)) != 0)
--+			return sysroot_dir;
-- 	default:
-- 		break;
-- 	}
-diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
-index 97060bd..79191bc 100644
---- a/package/pkgconf/pkgconf.hash
-+++ b/package/pkgconf/pkgconf.hash
+- LIBNETTLE_MAJOR = @LIBNETTLE_MAJOR@
+- LIBNETTLE_MINOR = @LIBNETTLE_MINOR@
+-diff -durN nettle-2.7.1.orig/tools/Makefile.in nettle-2.7.1/tools/Makefile.in
+---- nettle-2.7.1.orig/tools/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+-+++ nettle-2.7.1/tools/Makefile.in	2014-12-12 19:57:12.499805574 +0100
+-@@ -34,19 +34,19 @@
+- DISTFILES = $(SOURCES) Makefile.in input.h misc.h output.h parse.h
+- 
+- sexp_conv_OBJS = $(sexp_conv_SOURCES:.c=.$(OBJEXT)) $(getopt_OBJS)
+--sexp-conv$(EXEEXT): $(sexp_conv_OBJS) ../libnettle.a
+-+sexp-conv$(EXEEXT): $(sexp_conv_OBJS) ../libnettle$(LIBS_EXT)
+- 	$(LINK) $(sexp_conv_OBJS) -lnettle $(LIBS) -o $@
+- 
+--nettle-lfib-stream$(EXEEXT): nettle-lfib-stream.$(OBJEXT) ../libnettle.a
+-+nettle-lfib-stream$(EXEEXT): nettle-lfib-stream.$(OBJEXT) ../libnettle$(LIBS_EXT)
+- 	$(LINK) nettle-lfib-stream.$(OBJEXT) -lnettle $(LIBS) -o $@
+- 
+- pkcs1_conv_OBJS = $(pkcs1_conv_SOURCES:.c=.$(OBJEXT)) $(getopt_OBJS)
+--pkcs1-conv$(EXEEXT): $(pkcs1_conv_OBJS) ../libnettle.a ../libhogweed.a
+-+pkcs1-conv$(EXEEXT): $(pkcs1_conv_OBJS) ../libnettle$(LIBS_EXT) ../libhogweed$(LIBS_EXT)
+- 	$(LINK) $(pkcs1_conv_OBJS) -lhogweed -lnettle $(LIBS) -o $@
+- 
+- # FIXME: Avoid linking with gmp
+- nettle_hash_OBJS = $(nettle_hash_SOURCES:.c=.$(OBJEXT)) $(getopt_OBJS)
+--nettle-hash$(EXEEXT): $(nettle_hash_OBJS) ../libnettle.a
+-+nettle-hash$(EXEEXT): $(nettle_hash_OBJS) ../libnettle$(LIBS_EXT)
+- 	$(LINK) $(nettle_hash_OBJS) -lnettle $(LIBS) -o $@
+- 
+- 
+-diff -durN nettle-2.7.1.orig/examples/Makefile.in nettle-2.7.1/examples/Makefile.in
+---- nettle-2.7.1.orig/examples/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+-+++ nettle-2.7.1/examples/Makefile.in	2014-12-12 21:54:48.286251022 +0100
+-@@ -117,8 +117,8 @@
+- 	-lhogweed -lnettle $(BENCH_LIBS) $(LIBS) $(OPENSSL_LIBFLAGS) \
+- 	-o hogweed-benchmark$(EXEEXT)
+- 
+--$(TARGETS) : io.$(OBJEXT) ../libnettle.a
+--$(HOGWEED_TARGETS): ../libhogweed.a
+-+$(TARGETS) : io.$(OBJEXT) ../libnettle$(LIBS_EXT)
+-+$(HOGWEED_TARGETS): ../libhogweed$(LIBS_EXT)
+- 
+- check: $(TS_ALL)
+- 	LD_LIBRARY_PATH=../.lib PATH="../.lib:$$PATH" srcdir="$(srcdir)" \
+-diff -durN nettle-2.7.1.orig/testsuite/Makefile.in nettle-2.7.1/testsuite/Makefile.in
+---- nettle-2.7.1.orig/testsuite/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+-+++ nettle-2.7.1/testsuite/Makefile.in	2014-12-12 21:55:30.414814549 +0100
+-@@ -96,7 +96,7 @@
+- include $(srcdir)/.test-rules.make
+- 
+- $(TARGETS) $(EXTRA_TARGETS): testutils.$(OBJEXT) ../nettle-internal.$(OBJEXT) \
+--	../libnettle.a @IF_HOGWEED@ ../libhogweed.a
+-+	../libnettle$(LIBS_EXT) @IF_HOGWEED@ ../libhogweed$(LIBS_EXT)
+- 
+- # For use as, e.g.,
+- #
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 34c3862..f506992 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
 @@ -1,2 +1,2 @@
--# Locally computed:
--sha256 3bbb1c40832b522de0bf0e5bdeba62160ac499a541facedac5755929a9e87027 pkgconf-0.8.9.tar.bz2
-+# Locally calculated
-+sha256	7ec8b516e655e247f4ba976837cee808134785819ab8f538f652fe919cc6c09f	pkgconf-0.9.12.tar.bz2
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index 3c93fd5..c8b0cba 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	bc71ebd43435537d767799e414fce88e521b7278d48c860651216e1fc6555b40	nettle-2.7.1.tar.gz
++sha256	5fd4d25d64d8ddcb85d0d897572af73b05b4d163c6cc49438a5bfbb8ff293d4c	nettle-3.1.1.tar.gz
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index a25bb24..97b7625 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PKGCONF_VERSION = 0.8.9
--PKGCONF_SITE = http://rabbit.dereferenced.org/~nenolod/distfiles
-+PKGCONF_VERSION = 0.9.12
-+PKGCONF_SITE = https://github.com/pkgconf/pkgconf/releases/download/pkgconf-$(PKGCONF_VERSION)
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
- PKGCONF_LICENSE = pkgconf license
- PKGCONF_LICENSE_FILES = COPYING
+-NETTLE_VERSION = 2.7.1
++NETTLE_VERSION = 3.1.1
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
+@@ -19,17 +19,10 @@ ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5),y)
+ NETTLE_CONF_OPTS += --disable-assembler
+ endif
+ 
+-# ARM NEON, requires binutils 2.21+
+-ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_TOOLCHAIN_BUILDROOT)$(BR2_BINUTILS_VERSION_2_20_1),yy)
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ NETTLE_CONF_OPTS += --enable-arm-neon
+ else
+ NETTLE_CONF_OPTS += --disable-arm-neon
+ endif
+ 
+-define NETTLE_DITCH_DEBUGGING_CFLAGS
+-	$(SED) '/CFLAGS/ s/ -ggdb3//' $(@D)/configure
+-endef
+-
+-NETTLE_POST_EXTRACT_HOOKS += NETTLE_DITCH_DEBUGGING_CFLAGS
+-
+ $(eval $(autotools-package))
 -- 
 2.4.9
