@@ -1,102 +1,49 @@
 From: James Knight <james.knight@rockwellcollins.com>
-Date: Mon,  5 Oct 2015 16:28:41 -0400
-Subject: [Buildroot] [PATCH v3 1/1] yad: new package
-Message-ID: <1444076921-6004-1-git-send-email-james.knight@rockwellcollins.com>
+Date: Mon,  5 Oct 2015 16:29:26 -0400
+Subject: [Buildroot] [PATCH 1/1] ntp: add ntptime option
+Message-ID: <1444076966-9308-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Allow the `ntptime` utility to be included on a target.
+
 Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
-Changes v2 -> v3:
-  - Increment to version 0.31.1 (removed need for HTML patch introduced
-     in v2 change; suggested by Vicente Olivert Riera).
+ package/ntp/Config.in | 6 ++++++
+ package/ntp/ntp.mk    | 1 +
+ 2 files changed, 7 insertions(+)
 
-Changes v1 -> v2:
-  - Increment to version 0.29.0 (with updated hash and patch fix).
-  - Removed complex gtk library selection. Defaults to libgtk3, if
-     available; elsewise, uses libgtk2 (suggested from comments by
-     Baruch Siach, Thomas Petazzoni and Peter Korsgaard).
----
- package/Config.in     |  1 +
- package/yad/Config.in | 13 +++++++++++++
- package/yad/yad.hash  |  2 ++
- package/yad/yad.mk    | 24 ++++++++++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/yad/Config.in
- create mode 100644 package/yad/yad.hash
- create mode 100644 package/yad/yad.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 3794f44..5d4eb7d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -290,6 +290,7 @@ comment "X applications"
- 	source "package/xscreensaver/Config.in"
- 	source "package/xterm/Config.in"
- 	source "package/xvkbd/Config.in"
-+	source "package/yad/Config.in"
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index d4caddf..1763225 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -67,6 +67,12 @@ config BR2_PACKAGE_NTP_NTPSNMPD
+ 	help
+ 	  Install ntpsnmpd NTP SNMP MIB agent.
  
- comment "X libraries and helper libraries"
- 	source "package/libsexy/Config.in"
-diff --git a/package/yad/Config.in b/package/yad/Config.in
-new file mode 100644
-index 0000000..1e6776b
---- /dev/null
-+++ b/package/yad/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_YAD
-+	bool "yad"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
-+	select BR2_PACKAGE_LIBGLIB2
++config BR2_PACKAGE_NTP_NTPTIME
++	bool "ntptime"
 +	help
-+	  YAD (yet another dialog) is a tool for create graphical dialogs
-+	  from shell scripts.
++	  The ntptime utility program is used to read and set kernel time
++	  variables.
 +
-+	  http://sourceforge.net/projects/yad-dialog/
-+
-+comment "yad needs libgtk2 or libgtk3"
-+	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
-diff --git a/package/yad/yad.hash b/package/yad/yad.hash
-new file mode 100644
-index 0000000..fdde908
---- /dev/null
-+++ b/package/yad/yad.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 3716d71861009add49e0a8a2269b181feffd0449e4cdf4f317f873dfb8c94b82 yad-0.31.1.tar.xz
-diff --git a/package/yad/yad.mk b/package/yad/yad.mk
-new file mode 100644
-index 0000000..7615cf6
---- /dev/null
-+++ b/package/yad/yad.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# yad
-+#
-+################################################################################
-+
-+YAD_VERSION = 0.31.1
-+YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
-+YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
-+YAD_LICENSE = GPLv3
-+YAD_LICENSE_FILES = COPYING
-+YAD_DEPENDENCIES = host-intltool host-pkgconf libglib2
-+
-+YAD_CONF_OPTS = --enable-html=no
-+
-+ifeq ($(BR2_PACKAGE_LIBGTK3),y)
-+YAD_DEPENDENCIES += libgtk3
-+YAD_CONF_OPTS += --with-gtk=gtk3
-+else
-+YAD_DEPENDENCIES += libgtk2
-+YAD_CONF_OPTS += --with-gtk=gtk2
-+endif
-+
-+$(eval $(autotools-package))
+ config BR2_PACKAGE_NTP_NTPTRACE
+ 	bool "ntptrace"
+ 	depends on BR2_PACKAGE_PERL
+diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+index 5997247..a3818ea 100644
+--- a/package/ntp/ntp.mk
++++ b/package/ntp/ntp.mk
+@@ -46,6 +46,7 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDC) += ntpdc/ntpdc
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPQ) += ntpq/ntpq
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPSNMPD) += ntpsnmpd/ntpsnmpd
++NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTIME) += util/ntptime
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTRACE) += scripts/ntptrace/ntptrace
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_SNTP) += sntp/sntp
+ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
 -- 
 1.9.5.msysgit.1
