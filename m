@@ -1,34 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 05 Oct 2015 06:25:17 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libpjsip: new package
-References: <1430078330-14821-1-git-send-email-bernd.kuhls@t-online.de>
- <5611737F.3050109@lucaceresoli.net>
-Message-ID: <dma9ecxik1.ln2@ID-313208.user.individual.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  5 Oct 2015 06:28:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 8386] build failed with external toolchain
+In-Reply-To: <bug-8386-163@https.bugs.busybox.net/>
+References: <bug-8386-163@https.bugs.busybox.net/>
+Message-ID: <20151005062809.370C17FAA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca,
+https://bugs.busybox.net/show_bug.cgi?id=8386
 
-Am Sun, 04 Oct 2015 20:44:15 +0200 schrieb Luca Ceresoli:
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-> Dear Bernd,
-> 
-> are you still interested in this work?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-no, I explained my reasons here (in short: I switched to Freeswitch):
-http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/124777/focus=125692
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2015-10-05 06:28:08 UTC ---
+indeed, it is broken since yesterday. Fixed by:
 
-> Incidentally, since you sent this patch alone and I didn't see v1, I
-> applied this one only, and of course it didn't build because libgsm is
-> not in Buildroot.
+commit ccdb179d24a2d99ce4f3078bfcd2ffee5af60701
+Author: Peter Korsgaard <peter@korsgaard.com>
+Date:   Mon Oct 5 08:25:17 2015 +0200
 
-This patch is part of a series to implement an Asterisk package:
+    toolchain-wrapper.c: unbreak BR_CROSS_PATH_ABS handling
 
-libgsm: http://patchwork.ozlabs.org/patch/464719/
-libspandsp: http://patchwork.ozlabs.org/patch/464716/
-Asterisk (RFC version): http://patchwork.ozlabs.org/patch/464714/
+    Fixes #8386
 
-Regards, Bernd
+    We should check if BR_CROSS_PATH_ABS is defined, not if it evalutates to
+    true for the pre processor.
+
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Thanks!
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
