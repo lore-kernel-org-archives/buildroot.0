@@ -1,19 +1,21 @@
-From: Vincent Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 5 Oct 2015 00:07:39 +0000
-Subject: [Buildroot] [PATCH 1/2] libtorrent: bump to version 0.13.6
-In-Reply-To: <1444002976-63670-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1444002976-63670-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <38121FAB319C3344930C920E7B5183136A3DE59E@LEMAIL01.le.imgtec.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Oct 2015 02:09:24 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x series
+In-Reply-To: <1444000362-31447-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 4 Oct 2015 20:12:42 -0300")
+References: <1444000362-31447-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zizyp45n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[snip]
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> - Disable instrumentation support by default since it avoids runtime
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-s/runtime/buildtime/
+Committed, thanks.
 
-[snip]
+-- 
+Bye, Peter Korsgaard
