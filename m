@@ -1,44 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Oct 2015 16:54:30 -0300
-Subject: [Buildroot] [PATCH] glib-networking: specify GIO_MODULE_DIR for
-	target
-Message-ID: <1444074870-31815-1-git-send-email-gustavo@zacarias.com.ar>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Mon,  5 Oct 2015 16:26:57 -0400
+Subject: [Buildroot] [PATCH v4 2/4] package/berkeleydb: add host variant
+In-Reply-To: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <1444076819-10228-2-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the upgrade to pkgconf 0.9.12 all directories and variables with
-directories are sysroot-prefixed, whereas with the old patch only some
-variables were (includedir, mapdir, sdkdir, libdir).
+Required by an upcoming host variant of the `rpm` package.
 
-libglib2 uses a giomoduledir=${libdir}/gio/modules variable in
-gio-2.0.pc, which when expanded via sysroot by pkgconf at configure time
-points to the staging directory (via libdir expansion).
-When target install gets called the gio module gets installed to staging
-rather than target, with the obvious consequences this has.
-
-Work-around this pkgconfig abuse by overriding GIO_MODULE_DIR at target
-install time.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
 ---
- package/glib-networking/glib-networking.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Changes v3 -> v4:
+  - Correcting a series of host configuration options which were
+     incorrectly set (pointed out by Yann E. MORIN).
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index deb138a..67a9203 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -16,6 +16,8 @@ GLIB_NETWORKING_DEPENDENCIES = \
- 	libglib2
- GLIB_NETWORKING_LICENSE = LGPLv2+
- GLIB_NETWORKING_LICENSE_FILES = COPYING
-+GLIB_NETWORKING_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) \
-+	GIO_MODULE_DIR=/usr/lib/gio/modules install
+Changes v2 -> v3:
+  - None.
+
+Changes v1 -> v2:
+  - Package change introduced in change set 2.
+---
+ package/berkeleydb/berkeleydb.mk | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index e5c11bd..24f2bdf 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -44,6 +44,23 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 	)
+ endef
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- GLIB_NETWORKING_DEPENDENCIES += gnutls
++define HOST_BERKELEYDB_CONFIGURE_CMDS
++	(cd $(@D)/build_unix; rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		$(HOST_CONFIGURE_ARGS) \
++		../dist/configure $(QUIET) \
++		--prefix=$(HOST_DIR)/usr \
++		--sysconfdir=$(HOST_DIR)/etc \
++		--with-gnu-ld \
++		--disable-java \
++		--disable-tcl \
++		--enable-compat185 \
++		--enable-cxx \
++		--enable-o_direct \
++		--with-pic \
++	)
++endef
++
+ ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
+ 
+ define BERKELEYDB_REMOVE_TOOLS
+@@ -61,3 +78,4 @@ endef
+ BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.4.9
+1.9.5.msysgit.1
