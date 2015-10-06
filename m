@@ -1,39 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Oct 2015 09:57:56 +0100
-Subject: [Buildroot] [PATCH 1/1] wandboard_defconfig: bump u-boot to
- 2015.07 and kernel to 3.14.28_1.0.0
-In-Reply-To: <1443886802-23226-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1443886802-23226-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20151006095756.29e0d0ef@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 Oct 2015 11:03:39 +0200
+Subject: [Buildroot] [git commit] dbus-cpp: not available on musl
+Message-ID: <20151006090350.A58587FC37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+commit: http://git.buildroot.net/buildroot/commit/?id=169cbc0c5615beac135e08a3263feb407edb169c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Oct 2015 12:40:02 -0300, Sergio Prado wrote:
-> Bump U-boot version to 2015.07 from the mainline repository. Since there
-> is SPL support for the wandboard in the U-boot 2015.07, it is now
-> possible to boot the same U-boot image for all wandboard variants
-> (solo/dual/quad).
-> 
-> Bump kernel version to 3.14.28_1.0.0 from the wandboard git repository.
-> 
-> Tested on Wandboard Solo, Wandboard Dual and Wandboard Quad.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  board/wandboard/genimage.cfg  | 10 ++++++++--
->  board/wandboard/uboot-env.txt | 22 +++++++++++++++-------
->  configs/wandboard_defconfig   | 24 +++++++++++++++---------
->  3 files changed, 38 insertions(+), 18 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/9b2/9b29ff3aac5cd543dbe2a1a632b61e27ca25085e/
+http://autobuild.buildroot.net/results/304/3041ed6d7ff648f805cf2e29762e2b57cd0540e4/
 
-Applied, thanks!
+musl doesn't provide the initializer for recursive pthread mutexes.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dbus-cpp/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/dbus-cpp/Config.in b/package/dbus-cpp/Config.in
+index f631ece..8e9ed66 100644
+--- a/package/dbus-cpp/Config.in
++++ b/package/dbus-cpp/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_DBUS_CPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_USES_MUSL # no PTHREAD_RECURSIVE_MUTEX_*
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  dbus-c++ attempts to provide a C++ API for D-BUS.
+@@ -12,7 +13,8 @@ config BR2_PACKAGE_DBUS_CPP
+ 
+ 	  http://sourceforge.net/projects/dbus-cplusplus/
+ 
+-comment "dbus-c++ needs a toolchain w/ C++, threads"
++comment "dbus-c++ needs a uClibc or (e)glibc toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_DBUS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_TOOLCHAIN_USES_MUSL
