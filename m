@@ -1,40 +1,98 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 Oct 2015 13:38:03 -0300
-Subject: [Buildroot] [PATCH] ccache: bump to version 3.2.3
-Message-ID: <1444149483-12534-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 6 Oct 2015 17:53:52 +0100
+Subject: [Buildroot] [PATCH] sane-backends: add systemd support
+Message-ID: <1444150432-23644-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ccache/ccache.hash | 4 ++--
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The content and the location of the saned.socket and saned at .service
+files is based on the instructions of the sane-backends manual.
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 56bf0d0..d4e33d5 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,2 +1,2 @@
--# Verified key https://samba.org/ftp/ccache/ccache-3.2.2.tar.xz.asc - sha256 computed locally
--sha256	4f0d99699f24d198494addca0f41a93b0150cdfd01491f15a5d7eb02c7c2a0ca	ccache-3.2.2.tar.xz
-+# Verified key https://samba.org/ftp/ccache/ccache-3.2.3.tar.xz.asc - sha256 computed locally
-+sha256	ec0414fc435982ece8b8fca062f5836ff32c5d5148abd7f80768614ed776600e	ccache-3.2.3.tar.xz
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 52cf309..167711d 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Notes to the maintainer:
+  - This patch is meant to be applied after:
+    http://patchwork.ozlabs.org/patch/526815/
+
+ package/sane-backends/sane-backends.mk |   14 ++++++++++++++
+ package/sane-backends/saned.socket     |   10 ++++++++++
+ package/sane-backends/saned at .service   |   18 ++++++++++++++++++
+ 3 files changed, 42 insertions(+), 0 deletions(-)
+ create mode 100644 package/sane-backends/saned.socket
+ create mode 100644 package/sane-backends/saned at .service
+
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index 0c0b5a9..82b5052 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -14,6 +14,13 @@ SANE_BACKENDS_INSTALL_STAGING = YES
+ SANE_BACKENDS_CONF_OPTS = \
+ 	$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthread,--disable-pthread)
  
--CCACHE_VERSION = 3.2.2
-+CCACHE_VERSION = 3.2.3
- CCACHE_SITE = https://samba.org/ftp/ccache
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPLv3+, others
++ifeq ($(BR2_INIT_SYSTEMD),y)
++SANE_BACKENDS_CONF_OPTS += --with-systemd
++SANE_BACKENDS_DEPENDENCIES += systemd
++else
++SANE_BACKENDS_CONF_OPTS += --without-systemd
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ SANE_BACKENDS_DEPENDENCIES += libusb
+ SANE_BACKENDS_CONF_OPTS += --enable-libusb_1_0
+@@ -50,4 +57,11 @@ endef
+ 
+ SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
+ 
++define SANE_BACKENDS_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -m 0644 -D package/sane-backends/saned.socket \
++		$(TARGET_DIR)/etc/systemd/system/saned.socket
++	$(INSTALL) -m 0644 -D package/sane-backends/saned at .service \
++		$(TARGET_DIR)/etc/systemd/system/saned at .service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/sane-backends/saned.socket b/package/sane-backends/saned.socket
+new file mode 100644
+index 0000000..1aa19e7
+--- /dev/null
++++ b/package/sane-backends/saned.socket
+@@ -0,0 +1,10 @@
++[Unit]
++Description=saned incoming socket
++
++[Socket]
++ListenStream=6566
++Accept=yes
++MaxConnections=1
++
++[Install]
++WantedBy=sockets.target
+diff --git a/package/sane-backends/saned at .service b/package/sane-backends/saned at .service
+new file mode 100644
+index 0000000..1905dbf
+--- /dev/null
++++ b/package/sane-backends/saned at .service
+@@ -0,0 +1,18 @@
++[Unit]
++Description=Scanner Service
++Requires=saned.socket
++
++[Service]
++ExecStart=/usr/sbin/saned
++User=saned
++Group=saned
++StandardInput=null
++StandardOutput=syslog
++StandardError=syslog
++Environment=SANE_CONFIG_DIR=/etc/sane.d
++# If you need to debug your configuration uncomment the next line and
++# change it as appropriate to set the desired debug options
++# Environment=SANE_DEBUG_DLL=255 SANE_DEBUG_BJNP=5
++
++[Install]
++Also=saned.socket
 -- 
-2.4.9
+1.7.1
