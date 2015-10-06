@@ -1,42 +1,149 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 Oct 2015 08:31:24 -0300
-Subject: [Buildroot] [PATCH 2/2] glib-networking: bump to version 2.46.0
-In-Reply-To: <1444131084-20328-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444131084-20328-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1444131084-20328-2-git-send-email-gustavo@zacarias.com.ar>
+From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
+Date: Tue, 06 Oct 2015 20:58:35 +0900
+Subject: [Buildroot] [PATCH v14 1/1] squeezelite: new package
+In-Reply-To: Your message of Thu, 01 Oct 2015 22:45:52 +0900.
+ <201510011345.t91DjqM6012898@ms-omx02.plus.so-net.ne.jp>
+Message-ID: <201510061158.t96BwZLb015387@ms-omx02.plus.so-net.ne.jp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/glib-networking/glib-networking.hash | 4 ++--
- package/glib-networking/glib-networking.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Dear maintainer.
 
-diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
-index 03ed3ae..6ebe625 100644
---- a/package/glib-networking/glib-networking.hash
-+++ b/package/glib-networking/glib-networking.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.44/glib-networking-2.44.0.sha256sum
--sha256	8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346	glib-networking-2.44.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.46/glib-networking-2.46.0.sha256sum
-+sha256	3655526d6dbfc697c22cd9b279e14599f8449f5802b12d84485bdc52d96482f0	glib-networking-2.46.0.tar.xz
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index b12c978..67a9203 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLIB_NETWORKING_VERSION_MAJOR = 2.44
-+GLIB_NETWORKING_VERSION_MAJOR = 2.46
- GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
--- 
-2.4.9
+Sorry bothering you, but if no further objection, should I just wait
+your commit ?
+Or anything I should do ?
+
+Please advise me.
+
+Kawashima
+
+kei-k at ca2.so-net.ne.jp writes:
+> Dear maintainer, Thomas, Peter.
+> (Thank you Vincent, for your suggestion.)
+> 
+> I deeply appreciate if you suggest me which method is preferred.
+> > >> I will have 2 choice.
+> > >> 1) Use current method (patching to original Makefile).
+> > >> 2) Prepare modified Makefile.buildroot and add to my github repo.
+> 
+> Regards,
+> Kawashima
+> 
+> Vicente Olivert Riera writes:
+> > Dear Hiroshi Kawashima,
+> > 
+> > On 10/01/2015 12:39 PM, kei-k at ca2.so-net.ne.jp wrote:
+> > > Dear, Vincent, all.
+> > > 
+> > > I deeply appreciate if you suggest me which is preferred (or policy ?)
+> > > of buildroot community.
+> > 
+> > I don't know the policy in this case, and I don't even know if we have
+> > one. What I was suggesting is my personal opinion. I really think is
+> > better to have a flexible and cross-compile friendly Makefile upstream
+> > (since you are in control of the upstream repository) rather than fixing
+> > it only in Buildroot. If you fix it upstream, other projects could
+> > benefit from that, not only Buildroot. But, again, this is only my
+> > personal opinion. Better to listen the opinion of other developers as
+> > well, specially the maintainers Thomas and Peter.
+> > 
+> > Regards,
+> > 
+> > Vincent.
+> > 
+> > > Regards,
+> > > Kawashima
+> > > 
+> > > kei-k at ca2.so-net.ne.jp writes:
+> > >> Dear, Vincent.
+> > >>
+> > >> Thank you for your comment.
+> > >>
+> > >>> ...fix the Makefile upstream (your github repo) instead of adding a
+> > >>> patch in Buildroot?
+> > >>
+> > >> Since this modification is buildroot specific, modification should be
+> > >> embeded in buildroot environment (as patch file), I should untouch
+> > >> original source trees as possible as I can, that is my understanding.
+> > >>
+> > >> But anyway, I will obey your (buildroot community) preference.
+> > >>
+> > >> I will have 2 choice.
+> > >> 1) Use current method (patching to original Makefile).
+> > >> 2) Prepare modified Makefile.buildroot and add to my github repo.
+> > >>
+> > >> Which is preferred ?
+> > >> Please advise me.
+> > >>
+> > >> Regards,
+> > >> Kawashima
+> > >>
+> > >> Vicente Olivert Riera writes:
+> > >>> Dear Hiroshi Kawashima,
+> > >>>
+> > >>> On 09/30/2015 03:34 PM, kei-k at ca2.so-net.ne.jp wrote:
+> > >>>> Dear all.
+> > >>>>
+> > >>>> I will appreciate if you point out anything I should improve for
+> > >>>> following patch.
+> > >>>>
+> > >>>> Thanks,
+> > >>>> Kawashima
+> > >>>>
+> > >>>>> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+> > >>>>> ---
+> > >>>>> Changelog
+> > >>>>> v13 -> v14
+> > >>>>> - change to use patch file insted of using sed to generate Makefile.
+> > >>>
+> > >>> [snip]
+> > >>>
+> > >>>>> v12 -> v13
+> > >>>>> - change SQUEEZELITE_SITE to github (mine), cloned from original
+> > >>>>>   google code site (original site is unstable to fetch).
+> > >>>
+> > >>> So you own a clone of that project on github, and the package you want
+> > >>> to add in Buildroot clones from it. Great! Then, why not...
+> > >>>
+> > >>> [snip]
+> > >>>
+> > >>>>> - to accomplish above, change to generate buildroot suitable Makefile
+>  f
+> > r
+> > >> om
+> > >>>>>   original squeezelite's Makefile (using 'override' directive for CFL
+> AG
+> > S
+> > >> ,
+> > >>>>>   LDFLAGS).
+> > >>>
+> > >>> ...fix the Makefile upstream (your github repo) instead of adding a
+> > >>> patch in Buildroot?
+> > >>>
+> > >>> Regards,
+> > >>>
+> > >>> Vincent.
+> > >>>
+> > >>> [snip]
+> > >> ============================================================
+> > >>     Hiroshi Kawashima
+> > >> _______________________________________________
+> > >> buildroot mailing list
+> > >> buildroot at busybox.net
+> > >> http://lists.busybox.net/mailman/listinfo/buildroot
+> > >>
+> > > ============================================================
+> > >     Hiroshi Kawashima
+> > > 
+> > 
+> ============================================================
+>     Hiroshi Kawashima
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+============================================================
+    Hiroshi Kawashima
