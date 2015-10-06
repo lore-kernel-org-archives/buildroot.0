@@ -1,98 +1,125 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 6 Oct 2015 17:53:52 +0100
-Subject: [Buildroot] [PATCH] sane-backends: add systemd support
-Message-ID: <1444150432-23644-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  6 Oct 2015 21:35:30 +0200
+Subject: [Buildroot] [PATCH v1] libdrm: update driver options
+Message-ID: <1444160130-10549-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The content and the location of the saned.socket and saned at .service
-files is based on the instructions of the sane-backends manual.
+- add AMD GPU driver (available since 2.4.63)
+- freedreno is no longer experimental (since 2.4.59)
+- add NVIDIA Tegra driver (available since 2.4.59)
+- update help texts (install vs. installs, change to complete
+  sentences)
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Notes to the maintainer:
-  - This patch is meant to be applied after:
-    http://patchwork.ozlabs.org/patch/526815/
+ package/libdrm/Config.in | 27 +++++++++++++++++++--------
+ package/libdrm/libdrm.mk | 16 ++++++++++++++--
+ 2 files changed, 33 insertions(+), 10 deletions(-)
 
- package/sane-backends/sane-backends.mk |   14 ++++++++++++++
- package/sane-backends/saned.socket     |   10 ++++++++++
- package/sane-backends/saned at .service   |   18 ++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
- create mode 100644 package/sane-backends/saned.socket
- create mode 100644 package/sane-backends/saned at .service
-
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index 0c0b5a9..82b5052 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -14,6 +14,13 @@ SANE_BACKENDS_INSTALL_STAGING = YES
- SANE_BACKENDS_CONF_OPTS = \
- 	$(if $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthread,--disable-pthread)
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index dda3aee..cf1c13b 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -22,42 +22,53 @@ config BR2_PACKAGE_LIBDRM_INTEL
+ 	select BR2_PACKAGE_LIBPCIACCESS
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+-	  installs intel graphics driver
++	  Install intel graphics driver.
  
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+SANE_BACKENDS_CONF_OPTS += --with-systemd
-+SANE_BACKENDS_DEPENDENCIES += systemd
+ config BR2_PACKAGE_LIBDRM_RADEON
+ 	bool "radeon"
+ 	help
+-	  install AMD/ATI graphics driver
++	  Install AMD/ATI graphics driver.
++
++config BR2_PACKAGE_LIBDRM_AMDGPU
++	bool "amdgpu"
++	help
++	  Install AMD GPU driver.
+ 
+ config BR2_PACKAGE_LIBDRM_NOUVEAU
+ 	bool "nouveau"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+-	  install Nvidia graphics driver
++	  Install NVIDIA graphics driver.
+ 
+ config BR2_PACKAGE_LIBDRM_VMWGFX
+ 	bool "vmwgfx"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	help
+-	  installs Vmware graphics driver
++	  Installs Vmware graphics driver.
+ 
+ config BR2_PACKAGE_LIBDRM_OMAP
+ 	bool "omap (experimental)"
+ 	depends on BR2_arm
+ 	help
+-	  install the TI OMAP driver using an experimental API.
++	  Install the TI OMAP driver using an experimental API.
+ 
+ config BR2_PACKAGE_LIBDRM_EXYNOS
+ 	bool "exynos (experimental)"
+ 	depends on BR2_arm
+ 	help
+-	  installs Samsung Exynos driver using an experimental API.
++	  Install Samsung Exynos driver using an experimental API.
+ 
+ config BR2_PACKAGE_LIBDRM_FREEDRENO
+-	bool "freedreno (experimental)"
++	bool "freedreno"
++	depends on BR2_arm || BR2_aarch64 || BR2_aarch64_be
++	help
++	  Install Qualcomm Snapdragon driver.
++
++config BR2_PACKAGE_LIBDRM_TEGRA
++	bool "tegra (experimental)"
+ 	depends on BR2_arm
+ 	help
+-	  install Qualcomm Snapdragon driver using an experimental API.
++	  Install NVIDIA Tegra driver using an experimental API.
+ 
+ endmenu
+ 
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 01fa8d5..8db2236 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -34,6 +34,12 @@ else
+ LIBDRM_CONF_OPTS += --disable-radeon
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM_AMDGPU),y)
++LIBDRM_CONF_OPTS += --enable-amdgpu
 +else
-+SANE_BACKENDS_CONF_OPTS += --without-systemd
++LIBDRM_CONF_OPTS += --disable-amdgpu
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- SANE_BACKENDS_DEPENDENCIES += libusb
- SANE_BACKENDS_CONF_OPTS += --enable-libusb_1_0
-@@ -50,4 +57,11 @@ endef
+ ifeq ($(BR2_PACKAGE_LIBDRM_NOUVEAU),y)
+ LIBDRM_CONF_OPTS += --enable-nouveau
+ else
+@@ -59,9 +65,15 @@ LIBDRM_CONF_OPTS += --disable-exynos-experimental-api
+ endif
  
- SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
+ ifeq ($(BR2_PACKAGE_LIBDRM_FREEDRENO),y)
+-LIBDRM_CONF_OPTS += --enable-freedreno-experimental-api
++LIBDRM_CONF_OPTS += --enable-freedreno
++else
++LIBDRM_CONF_OPTS += --disable-freedreno
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_TEGRA),y)
++LIBDRM_CONF_OPTS += --enable-tegra-experimental-api
+ else
+-LIBDRM_CONF_OPTS += --disable-freedreno-experimental-api
++LIBDRM_CONF_OPTS += --disable-tegra-experimental-api
+ endif
  
-+define SANE_BACKENDS_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -m 0644 -D package/sane-backends/saned.socket \
-+		$(TARGET_DIR)/etc/systemd/system/saned.socket
-+	$(INSTALL) -m 0644 -D package/sane-backends/saned at .service \
-+		$(TARGET_DIR)/etc/systemd/system/saned at .service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/sane-backends/saned.socket b/package/sane-backends/saned.socket
-new file mode 100644
-index 0000000..1aa19e7
---- /dev/null
-+++ b/package/sane-backends/saned.socket
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=saned incoming socket
-+
-+[Socket]
-+ListenStream=6566
-+Accept=yes
-+MaxConnections=1
-+
-+[Install]
-+WantedBy=sockets.target
-diff --git a/package/sane-backends/saned at .service b/package/sane-backends/saned at .service
-new file mode 100644
-index 0000000..1905dbf
---- /dev/null
-+++ b/package/sane-backends/saned at .service
-@@ -0,0 +1,18 @@
-+[Unit]
-+Description=Scanner Service
-+Requires=saned.socket
-+
-+[Service]
-+ExecStart=/usr/sbin/saned
-+User=saned
-+Group=saned
-+StandardInput=null
-+StandardOutput=syslog
-+StandardError=syslog
-+Environment=SANE_CONFIG_DIR=/etc/sane.d
-+# If you need to debug your configuration uncomment the next line and
-+# change it as appropriate to set the desired debug options
-+# Environment=SANE_DEBUG_DLL=255 SANE_DEBUG_BJNP=5
-+
-+[Install]
-+Also=saned.socket
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
 -- 
-1.7.1
+2.1.4
