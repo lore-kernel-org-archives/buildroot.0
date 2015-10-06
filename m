@@ -1,47 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Oct 2015 11:03:39 +0200
-Subject: [Buildroot] [git commit] dbus-cpp: not available on musl
-Message-ID: <20151006090350.A58587FC37@busybox.osuosl.org>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Tue,  6 Oct 2015 12:06:54 +0200
+Subject: [Buildroot] [PATCH v5 1/3] python-numpy: introduce ARCH_SUPPORTS
+	hidden variable
+Message-ID: <1444126016-8815-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=169cbc0c5615beac135e08a3263feb407edb169c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/9b2/9b29ff3aac5cd543dbe2a1a632b61e27ca25085e/
-http://autobuild.buildroot.net/results/304/3041ed6d7ff648f805cf2e29762e2b57cd0540e4/
+Some packages selects python-numpy. This package has a some CPU specific
+code. To simplify and avoid duplicate dependencies this patch introduce an
+hidden ARCH_SUPPORTS variable.
 
-musl doesn't provide the initializer for recursive pthread mutexes.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/dbus-cpp/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Changes v4 -> v5:
+ * Re-add hidden variable.
+---
+ package/python-numpy/Config.in | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus-cpp/Config.in b/package/dbus-cpp/Config.in
-index f631ece..8e9ed66 100644
---- a/package/dbus-cpp/Config.in
-+++ b/package/dbus-cpp/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_DBUS_CPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_TOOLCHAIN_USES_MUSL # no PTHREAD_RECURSIVE_MUTEX_*
- 	select BR2_PACKAGE_EXPAT
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index f8170f8..f25102a 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,9 +1,13 @@
+-config BR2_PACKAGE_PYTHON_NUMPY
+-	bool "python-numpy"
++config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	bool
+ 	# Numpy has some CPU specific code
+ 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+ 		|| BR2_sh || BR2_x86_64
++
++config BR2_PACKAGE_PYTHON_NUMPY
++	bool "python-numpy"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
  	help
- 	  dbus-c++ attempts to provide a C++ API for D-BUS.
-@@ -12,7 +13,8 @@ config BR2_PACKAGE_DBUS_CPP
- 
- 	  http://sourceforge.net/projects/dbus-cplusplus/
- 
--comment "dbus-c++ needs a toolchain w/ C++, threads"
-+comment "dbus-c++ needs a uClibc or (e)glibc toolchain w/ C++, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_DBUS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_TOOLCHAIN_USES_MUSL
+ 	  NumPy is the fundamental package for scientific computing
+ 	  with Python.
+-- 
+2.4.9
