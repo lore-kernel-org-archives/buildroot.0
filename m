@@ -1,149 +1,39 @@
-From: kei-k at ca2.so-net.ne.jp <kei-k@ca2.so-net.ne.jp>
-Date: Tue, 06 Oct 2015 20:58:35 +0900
-Subject: [Buildroot] [PATCH v14 1/1] squeezelite: new package
-In-Reply-To: Your message of Thu, 01 Oct 2015 22:45:52 +0900.
- <201510011345.t91DjqM6012898@ms-omx02.plus.so-net.ne.jp>
-Message-ID: <201510061158.t96BwZLb015387@ms-omx02.plus.so-net.ne.jp>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 6 Oct 2015 13:24:37 +0100
+Subject: [Buildroot] [PATCH] git: bump to version 2.6.1
+Message-ID: <1444134277-63524-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear maintainer.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/git/git.hash |    2 +-
+ package/git/git.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry bothering you, but if no further objection, should I just wait
-your commit ?
-Or anything I should do ?
-
-Please advise me.
-
-Kawashima
-
-kei-k at ca2.so-net.ne.jp writes:
-> Dear maintainer, Thomas, Peter.
-> (Thank you Vincent, for your suggestion.)
-> 
-> I deeply appreciate if you suggest me which method is preferred.
-> > >> I will have 2 choice.
-> > >> 1) Use current method (patching to original Makefile).
-> > >> 2) Prepare modified Makefile.buildroot and add to my github repo.
-> 
-> Regards,
-> Kawashima
-> 
-> Vicente Olivert Riera writes:
-> > Dear Hiroshi Kawashima,
-> > 
-> > On 10/01/2015 12:39 PM, kei-k at ca2.so-net.ne.jp wrote:
-> > > Dear, Vincent, all.
-> > > 
-> > > I deeply appreciate if you suggest me which is preferred (or policy ?)
-> > > of buildroot community.
-> > 
-> > I don't know the policy in this case, and I don't even know if we have
-> > one. What I was suggesting is my personal opinion. I really think is
-> > better to have a flexible and cross-compile friendly Makefile upstream
-> > (since you are in control of the upstream repository) rather than fixing
-> > it only in Buildroot. If you fix it upstream, other projects could
-> > benefit from that, not only Buildroot. But, again, this is only my
-> > personal opinion. Better to listen the opinion of other developers as
-> > well, specially the maintainers Thomas and Peter.
-> > 
-> > Regards,
-> > 
-> > Vincent.
-> > 
-> > > Regards,
-> > > Kawashima
-> > > 
-> > > kei-k at ca2.so-net.ne.jp writes:
-> > >> Dear, Vincent.
-> > >>
-> > >> Thank you for your comment.
-> > >>
-> > >>> ...fix the Makefile upstream (your github repo) instead of adding a
-> > >>> patch in Buildroot?
-> > >>
-> > >> Since this modification is buildroot specific, modification should be
-> > >> embeded in buildroot environment (as patch file), I should untouch
-> > >> original source trees as possible as I can, that is my understanding.
-> > >>
-> > >> But anyway, I will obey your (buildroot community) preference.
-> > >>
-> > >> I will have 2 choice.
-> > >> 1) Use current method (patching to original Makefile).
-> > >> 2) Prepare modified Makefile.buildroot and add to my github repo.
-> > >>
-> > >> Which is preferred ?
-> > >> Please advise me.
-> > >>
-> > >> Regards,
-> > >> Kawashima
-> > >>
-> > >> Vicente Olivert Riera writes:
-> > >>> Dear Hiroshi Kawashima,
-> > >>>
-> > >>> On 09/30/2015 03:34 PM, kei-k at ca2.so-net.ne.jp wrote:
-> > >>>> Dear all.
-> > >>>>
-> > >>>> I will appreciate if you point out anything I should improve for
-> > >>>> following patch.
-> > >>>>
-> > >>>> Thanks,
-> > >>>> Kawashima
-> > >>>>
-> > >>>>> Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
-> > >>>>> ---
-> > >>>>> Changelog
-> > >>>>> v13 -> v14
-> > >>>>> - change to use patch file insted of using sed to generate Makefile.
-> > >>>
-> > >>> [snip]
-> > >>>
-> > >>>>> v12 -> v13
-> > >>>>> - change SQUEEZELITE_SITE to github (mine), cloned from original
-> > >>>>>   google code site (original site is unstable to fetch).
-> > >>>
-> > >>> So you own a clone of that project on github, and the package you want
-> > >>> to add in Buildroot clones from it. Great! Then, why not...
-> > >>>
-> > >>> [snip]
-> > >>>
-> > >>>>> - to accomplish above, change to generate buildroot suitable Makefile
->  f
-> > r
-> > >> om
-> > >>>>>   original squeezelite's Makefile (using 'override' directive for CFL
-> AG
-> > S
-> > >> ,
-> > >>>>>   LDFLAGS).
-> > >>>
-> > >>> ...fix the Makefile upstream (your github repo) instead of adding a
-> > >>> patch in Buildroot?
-> > >>>
-> > >>> Regards,
-> > >>>
-> > >>> Vincent.
-> > >>>
-> > >>> [snip]
-> > >> ============================================================
-> > >>     Hiroshi Kawashima
-> > >> _______________________________________________
-> > >> buildroot mailing list
-> > >> buildroot at busybox.net
-> > >> http://lists.busybox.net/mailman/listinfo/buildroot
-> > >>
-> > > ============================================================
-> > >     Hiroshi Kawashima
-> > > 
-> > 
-> ============================================================
->     Hiroshi Kawashima
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-============================================================
-    Hiroshi Kawashima
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 5abf518..6b663b5 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,2 +1,2 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 211beb96ff41a83727e39704431ac388ecb1cebb5219cda067999bce4e1e15a6  git-2.6.0.tar.xz
++sha256 fc7c727745d5eb0d796a16dc7c4b999c184830110e0aeb592c788597cc8e9ccd  git-2.6.1.tar.xz
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 43a4397..2bd6a01 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.6.0
++GIT_VERSION = 2.6.1
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = https://www.kernel.org/pub/software/scm/git
+ GIT_LICENSE = GPLv2 LGPLv2.1+
+-- 
+1.7.1
