@@ -1,79 +1,75 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 5 Oct 2015 23:13:30 +0200
-Subject: [Buildroot] [RFC v4 00/16] Add per-package staging feature
-In-Reply-To: <56116029.7000204@mind.be>
-References: <1435520570-20332-1-git-send-email-fabio.porcedda@gmail.com>
- <56116029.7000204@mind.be>
-Message-ID: <CAHkwnC_AZORjwySNrhuxsaN0+_9ZzTTpMDuEZbe6SVpJM-z-0A@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 6 Oct 2015 01:30:18 +0100
+Subject: [Buildroot] [PATCH] python-numpy: uClibc patch to avoid ldexpl and
+	frexpl
+Message-ID: <1444091418-31656-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 4, 2015 at 7:21 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+It turns out that uClibc only enables the long double math functions
+for some architectures (god know why, so what if long double is the
+same as double, these functions should still be defined). Since
+python-numpy links with those functions, the module will fail to load
+on ARM, MIPS and SH.
 
-> On 28-06-15 20:42, Fabio Porcedda wrote:
-> > Hi all,
-> > this patch set aims to improve build reproducibility by using a
-> > per-package staging directory.
-> > Also this feature aims to enable the top-level parallel make.
-> >
-> > This patch set is available at:
-> > https://github.com/fabio-porcedda/buildroot/tree/pps-v4
-> >
-> >
-> > Every package instead of installing the files in the shared staging
-> > directory (STAGING_DIR) install all files in a subdirectory of the
-> > STAGINGPKG_DIR.
->
-> [snip]
->
-> > TODO:
-> >  - use the toolchaing wrapper even for the internal toolchain
-> >  - rebase over master (this patch set is based on 2015.05-161-gca5f11e).
-> >  - more testing (tested only for arm target).
->
-> [snip]
->
->  Hi Fabio,
->
->  Now that we have a toolchain wrapper for the internal toolchain, would
-> you care
-> to rebase this series and use the toolchain wrapper for pps support?
->
->
-Thanks for the toolchain wrapper for the internal toolchain.
+However, python-numpy actually checks for each function if it is really
+available. Only, it overrides that check for ldexpl and frexpl when
+long double is the same as double (i.e. in exactly the case the uClibc
+doesn't have these functions).
 
-I will rebase this patch for sure and send an updated version.
+So add another exception for this.
 
+Upstream-status: not applicable (code has changed too much)
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+I've only build-tested, I haven't tested if the import now works on ARM.
+---
+ ...indly-enable-frexpl-and-ldexpl-for-uClibc.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/python-numpy/0002-Don-t-blindly-enable-frexpl-and-ldexpl-for-uClibc.patch
 
->  Thomas commented that there should also be a per-package host directory,
-> but
-> after some discussion here at the BR developer meeting we decided that we
-> could
-> start with just a per-package staging and see how far we get. We anyway
-> don't
-> have complete reproducibility at the moment, since the build of host
-> packages
-> depends on what is installed on the system.
->
->  Note that we are really excited about the possibilities of per-package
-> staging
-> and top-level parallel build, so we hope you'll continue working on it.
->
-
-Great, it's nice to hear it!
-
-
->  I've marked this series as Changes Requested in patchwork.
->
-Ok
-
-BR
+diff --git a/package/python-numpy/0002-Don-t-blindly-enable-frexpl-and-ldexpl-for-uClibc.patch b/package/python-numpy/0002-Don-t-blindly-enable-frexpl-and-ldexpl-for-uClibc.patch
+new file mode 100644
+index 0000000..42d1941
+--- /dev/null
++++ b/package/python-numpy/0002-Don-t-blindly-enable-frexpl-and-ldexpl-for-uClibc.patch
+@@ -0,0 +1,33 @@
++From b0a1b9628d17251bb417a063ec6c6e09f32393c2 Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Tue, 6 Oct 2015 01:20:48 +0100
++Subject: [PATCH] Don't blindly enable frexpl and ldexpl for uClibc
++
++When the size of double and long double are equal, numpy blindly
++assumes that frexpl and ldexpl will be available as well. But for
++uClibc, that's not true: it only defines the long double functions
++when long double "exists" on the architecture.
++
++So make an exception for uClibc.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ numpy/core/src/private/npy_config.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/numpy/core/src/private/npy_config.h b/numpy/core/src/private/npy_config.h
++index 453dbd0..7ecf72c 100644
++--- a/numpy/core/src/private/npy_config.h
+++++ b/numpy/core/src/private/npy_config.h
++@@ -11,7 +11,7 @@
++ #endif
++ 
++ /* Safe to use ldexp and frexp for long double for MSVC builds */
++-#if (NPY_SIZEOF_LONGDOUBLE == NPY_SIZEOF_DOUBLE) || defined(_MSC_VER)
+++#if ((NPY_SIZEOF_LONGDOUBLE == NPY_SIZEOF_DOUBLE) && !defined(__UCLIBC__)) || defined(_MSC_VER)
++     #ifdef HAVE_LDEXP
++         #define HAVE_LDEXPL 1
++     #endif
++-- 
++2.5.3
++
 -- 
-Fabio Porcedda
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151005/83693684/attachment-0001.html>
+2.5.3
