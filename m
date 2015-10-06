@@ -1,44 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Oct 2015 18:33:43 +0200
-Subject: [Buildroot] [git commit] libglib2: bump to version 2.46.0
-Message-ID: <20151006163601.E4FD181EA1@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  6 Oct 2015 13:37:43 -0300
+Subject: [Buildroot] [PATCH] xterm: bump to version 320
+Message-ID: <1444149463-1269-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45a8af919048c4953f16afc4faf4ac0512512201
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also switch to http site.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libglib2/libglib2.hash |    4 ++--
- package/libglib2/libglib2.mk   |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xterm/xterm.hash | 2 +-
+ package/xterm/xterm.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index f3c4a66..9a54c3f 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
+diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
+index d36d1c4..a6e2c69 100644
+--- a/package/xterm/xterm.hash
++++ b/package/xterm/xterm.hash
 @@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.44/glib-2.44.1.sha256sum
--sha256  8811deacaf8a503d0a9b701777ea079ca6a4277be10e3d730d2112735d5eca07  glib-2.44.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.46/glib-2.46.0.sha256sum
-+sha256  b1cee83469ae7d80f17c267c37f090414e93960bd62d2b254a5a96fbc5baacb4  glib-2.46.0.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 516f5fa..b62e8b0 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	1dbf1e93796c1b71b22b84e82eb58bcf20a14a7f365158819f3b4dbb29fe93f0	xterm-314.tgz
++sha256	a60dbb574334c081425fa30f011cd9f571e3be7a91e2a84e252461798bce24a7	xterm-320.tgz
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index e7afff2..7cad0cb 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBGLIB2_VERSION_MAJOR = 2.44
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION_MAJOR = 2.46
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
+-XTERM_VERSION = 314
++XTERM_VERSION = 320
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+-XTERM_SITE = ftp://invisible-island.net/xterm
++XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+ XTERM_LICENSE = MIT
+ XTERM_LICENSE_FILES = version.c
+-- 
+2.4.9
