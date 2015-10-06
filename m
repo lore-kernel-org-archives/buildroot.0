@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Oct 2015 22:42:09 +0100
-Subject: [Buildroot] [PATCH v5 1/3] python-numpy: introduce
- ARCH_SUPPORTS hidden variable
-In-Reply-To: <1444126016-8815-1-git-send-email-gwenj@trabucayre.com>
+Date: Tue, 6 Oct 2015 22:42:22 +0100
+Subject: [Buildroot] [PATCH v5 2/3] opencv3: use
+ BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS instead of replicate python-numpy
+ depends
+In-Reply-To: <1444126016-8815-2-git-send-email-gwenj@trabucayre.com>
 References: <1444126016-8815-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <56144031.3030304@mind.be>
+ <1444126016-8815-2-git-send-email-gwenj@trabucayre.com>
+Message-ID: <5614403E.8040905@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +16,9 @@ To: buildroot@busybox.net
 On 06-10-15 11:06, Gwenhael Goavec-Merou wrote:
 > From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> Some packages selects python-numpy. This package has a some CPU specific
-> code. To simplify and avoid duplicate dependencies this patch introduce an
-> hidden ARCH_SUPPORTS variable.
+> Opencv3 select python-numpy. To reduce CPU arch dependencies, an hidden 
+> variable has been added to python-numpy package. This patch propagate this
+> modification.
 > 
 > Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
@@ -26,32 +28,24 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
-> Changes v4 -> v5:
->  * Re-add hidden variable.
-> ---
->  package/python-numpy/Config.in | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  package/opencv3/Config.in | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-> index f8170f8..f25102a 100644
-> --- a/package/python-numpy/Config.in
-> +++ b/package/python-numpy/Config.in
-> @@ -1,9 +1,13 @@
-> -config BR2_PACKAGE_PYTHON_NUMPY
-> -	bool "python-numpy"
-> +config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-> +	bool
->  	# Numpy has some CPU specific code
->  	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
->  		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
->  		|| BR2_sh || BR2_x86_64
-> +
-> +config BR2_PACKAGE_PYTHON_NUMPY
-> +	bool "python-numpy"
+> diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+> index 9492603..2f51580 100644
+> --- a/package/opencv3/Config.in
+> +++ b/package/opencv3/Config.in
+> @@ -165,9 +165,7 @@ config BR2_PACKAGE_OPENCV3_LIB_PHOTO
+>  config BR2_PACKAGE_OPENCV3_LIB_PYTHON
+>  	bool "python"
+>  	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+> -	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+> -		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+> -		|| BR2_sh || BR2_x86_64 # python-numpy
 > +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_PYTHON_NUMPY
 >  	help
->  	  NumPy is the fundamental package for scientific computing
->  	  with Python.
+>  	  Include opencv_python module into the OpenCV build.
 > 
 
 
