@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 Oct 2015 08:31:23 -0300
-Subject: [Buildroot] [PATCH 1/2] libglib2: bump to version 2.46.0
-Message-ID: <1444131084-20328-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  6 Oct 2015 08:31:24 -0300
+Subject: [Buildroot] [PATCH 2/2] glib-networking: bump to version 2.46.0
+In-Reply-To: <1444131084-20328-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444131084-20328-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1444131084-20328-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/glib-networking/glib-networking.hash | 4 ++--
+ package/glib-networking/glib-networking.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index f3c4a66..9a54c3f 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 03ed3ae..6ebe625 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
 @@ -1,2 +1,2 @@
--# https://download.gnome.org/sources/glib/2.44/glib-2.44.1.sha256sum
--sha256  8811deacaf8a503d0a9b701777ea079ca6a4277be10e3d730d2112735d5eca07  glib-2.44.1.tar.xz
-+# https://download.gnome.org/sources/glib/2.46/glib-2.46.0.sha256sum
-+sha256  b1cee83469ae7d80f17c267c37f090414e93960bd62d2b254a5a96fbc5baacb4  glib-2.46.0.tar.xz
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 516f5fa..b62e8b0 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.44/glib-networking-2.44.0.sha256sum
+-sha256	8f8a340d3ba99bfdef38b653da929652ea6640e27969d29f7ac51fbbe11a4346	glib-networking-2.44.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.46/glib-networking-2.46.0.sha256sum
++sha256	3655526d6dbfc697c22cd9b279e14599f8449f5802b12d84485bdc52d96482f0	glib-networking-2.46.0.tar.xz
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index b12c978..67a9203 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGLIB2_VERSION_MAJOR = 2.44
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).1
-+LIBGLIB2_VERSION_MAJOR = 2.46
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPLv2+
+-GLIB_NETWORKING_VERSION_MAJOR = 2.44
++GLIB_NETWORKING_VERSION_MAJOR = 2.46
+ GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
 -- 
 2.4.9
