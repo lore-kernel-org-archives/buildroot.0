@@ -1,75 +1,93 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 7 Oct 2015 18:01:56 +0100
-Subject: [Buildroot] [PATCH] picocom: bump to version 2.0
-Message-ID: <1444237316-52377-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Wed, 7 Oct 2015 18:16:40 +0100
+Subject: [Buildroot] [PATCH v3 1/1] yad: new package
+In-Reply-To: <CALe+oY-pnZuJBugebSt6+PXsLJNwCw=Y06xCQgMK9MGyTFCnpA@mail.gmail.com>
+References: <1444076921-6004-1-git-send-email-james.knight@rockwellcollins.com>
+ <5614EF2A.9090809@imgtec.com>
+ <CALe+oY-pnZuJBugebSt6+PXsLJNwCw=Y06xCQgMK9MGyTFCnpA@mail.gmail.com>
+Message-ID: <56155378.1000709@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump to version 2.0
-- Switch the download site to GitHub
-- Apply a patch to fix a missing define. Pull request sent upstream:
-  https://github.com/npat-efault/picocom/pull/31
-- Add a hash file
-- Rewrap the help text to 72 characters length
-- Change the official website
+Dear James Knight,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/picocom/Config.in    |    7 +++----
- package/picocom/picocom.hash |    3 +++
- package/picocom/picocom.mk   |    7 ++++---
- 3 files changed, 10 insertions(+), 7 deletions(-)
- create mode 100644 package/picocom/picocom.hash
+On 10/07/2015 04:46 PM, James Knight wrote:
+> Vincent,
+> 
+> On Wed, Oct 7, 2015 at 6:08 AM, Vicente Olivert Riera
+> <Vincent.Riera@imgtec.com> wrote:
+>> In the next line you are going to select BR2_PACKAGE_LIBGLIB2, so you
+>> need to propagate its dependencies to this package as well. That means
+>> you need to add right here the following lines:
+>>
+>> depends on BR2_USE_WCHAR # libglib2
+>> depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+>> depends on BR2_USE_MMU # libglib2
+> 
+> Gotcha. I'll get that fixed.
+> 
+> On this point, is the common practice to copy the `depends` of
+> packages you `select` on (ex. for this yad package, if I select on
+> `BR2_PACKAGE_LIBGLIB2`, I then check the libglib2 package and copy the
+> `depends` references it has and add the command "libglib2" to each
+> line)?
 
-diff --git a/package/picocom/Config.in b/package/picocom/Config.in
-index 5a7d583..671d01f 100644
---- a/package/picocom/Config.in
-+++ b/package/picocom/Config.in
-@@ -2,8 +2,7 @@ config BR2_PACKAGE_PICOCOM
- 	bool "picocom"
- 	depends on BR2_USE_MMU # fork()
- 	help
--	  picocom is a minimal dumb-terminal emulation program. It
--	  is, in principle, very much like minicom, only it's pico
--	  instead of mini!
-+	  picocom is a minimal dumb-terminal emulation program. It is, in
-+	  principle, very much like minicom, only it's pico instead of mini!
- 
--	  http://code.google.com/p/picocom/
-+	  https://github.com/npat-efault/picocom/
-diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
-new file mode 100644
-index 0000000..7eada03
---- /dev/null
-+++ b/package/picocom/picocom.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 e0f7095c118f43c1c09787a16ef5c7d4c4ad4457dd3b1281efcc4cdb8906af9a  picocom-2.0.tar.gz
-+sha256 37746613c05ecf4058c989ef7042b85ef0308886f3731a9dfffdadd19cc9ecfb  2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
-diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
-index 7858d2b..1751f0a 100644
---- a/package/picocom/picocom.mk
-+++ b/package/picocom/picocom.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--PICOCOM_VERSION = 1.7
--PICOCOM_SITE = http://picocom.googlecode.com/files
-+PICOCOM_VERSION = 2.0
-+PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
- PICOCOM_LICENSE = GPLv2+
- PICOCOM_LICENSE_FILES = LICENSE.txt
-+PICOCOM_PATCH = https://github.com/vriera/picocom/commit/2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
- 
- define PICOCOM_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define PICOCOM_INSTALL_TARGET_CMDS
--- 
-1.7.1
+yes, that's mandatory. When you select a package, you have to propagate
+its dependencies to the package which is selecting it. Otherwise, that
+package could select the other one despite of not satisfying the
+dependencies. For instance, in your case, if you select the "yad"
+package, it will automatically select the "libglib2" package. And that
+could be done even if your toolchain doesn't have threads support. Then,
+buildroot will try to build "libglib2" and it will fail.
+
+A package shouldn't be able to select another one if the dependencies of
+the other package are not satisfied.
+
+>> The word "from" still fits in the first line as it will not exceed the
+>> 72 characters limit.
+> 
+> Does it? For myself I have three (3) characters left after "dialogs"
+> (4+2+69+3). Is a four (4) character tab not the expected length or is
+> it something else? Curious if I've been messing up all my Config.in
+> files. :o
+
+Note that the tab counts as only one character, despite of the
+configuration of your text editor which displays the tabs as 4 spaces.
+If you use vim, is worth to have these options in the ~/.vimrc file when
+you write commit logs:
+
+set textwidth=72
+set wrap
+
+This will wrap lines automatically when you reach the 72 characters limit.
+
+>>> +
+>>> +       http://sourceforge.net/projects/yad-dialog/
+>>> +
+>>> +comment "yad needs libgtk2 or libgtk3"
+>>> +     depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
+>>
+>> And you also need to update this comment since now you have the libglib2
+>> dependencies as well. Something like this would be ok:
+>>
+>> comment "yad needs libgtk2 or libgtk3 and a toolchain w/ wchar, threads"
+>>   depends on BR2_USE_MMU
+>>   depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>>     (!BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3)
+> 
+> Will do. Thanks.
+> 
+>> Be careful if you copy-paste the above text. You have to use tabs for
+>> indentation instead of spaces :-)
+> 
+> Always paranoid about this; unfortunately my paranoia doesn't catch it
+> all the time. :(
+
+hehe, hopefully we will catch it during the review process :P
+
+Regards,
+
+Vincent.
