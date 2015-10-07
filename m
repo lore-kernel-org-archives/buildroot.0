@@ -1,44 +1,23 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 7 Oct 2015 20:41:23 +0300
-Subject: [Buildroot] [PATCH] picocom: bump to version 2.0
-In-Reply-To: <20151007172457.GJ2375@tarshish>
-References: <1444237316-52377-1-git-send-email-Vincent.Riera@imgtec.com>
- <20151007172457.GJ2375@tarshish>
-Message-ID: <20151007174123.GK2375@tarshish>
+From: Guillaume William Bres <guillaume.bressaix@gmail.com>
+Date: Wed, 7 Oct 2015 11:52:57 -0600
+Subject: [Buildroot] add a new package: PyQtGraph
+Message-ID: <1444240379-22896-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+Hi guys,
 
-On Wed, Oct 07, 2015 at 08:24:57PM +0300, Baruch Siach wrote:
-> On Wed, Oct 07, 2015 at 06:01:56PM +0100, Vicente Olivert Riera wrote:
-> > - Bump to version 2.0
-> > - Switch the download site to GitHub
-> > - Apply a patch to fix a missing define. Pull request sent upstream:
-> >   https://github.com/npat-efault/picocom/pull/31
-> 
-> Where is that patch?
+PyQtGraph is based on the PyQt framework, it is an easy to use 
+library to build advanced, science related, plots/user interfaces.
 
-Missed the PICOCOM_PATCH variable. Sorry for the noise.
+It is easy to build since it is only made of Python scripts.
 
-baruch
+It depends on Python-Numpy which required a GLIBC toolchain
+by the time I created a patch (10/05/2015) but that might
+have changed in the mean-time.
 
-> > - Add a hash file
-> > - Rewrap the help text to 72 characters length
-> > - Change the official website
-> > 
-> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > ---
-> >  package/picocom/Config.in    |    7 +++----
-> >  package/picocom/picocom.hash |    3 +++
-> >  package/picocom/picocom.mk   |    7 ++++---
-> >  3 files changed, 10 insertions(+), 7 deletions(-)
-> >  create mode 100644 package/picocom/picocom.hash
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+I guess i met your requirements for 'selects/depends on',
+check this out and enjoy it.
