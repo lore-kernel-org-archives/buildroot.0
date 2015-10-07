@@ -1,59 +1,51 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 8 Oct 2015 00:03:42 +0200
-Subject: [Buildroot] [PATCH v2] skeleton: Have a portable remount RW/RO
-In-Reply-To: <1443965948-13945-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1443965948-13945-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <561596BE.9020107@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Oct 2015 23:03:58 +0100
+Subject: [Buildroot] [PATCH] system: add options for /bin /sbin and /lib
+ to be symlinks into /usr
+In-Reply-To: <CANPyyuP3SBaEfR68jL=OqQqfkLov=1GLjW-r05CsOQgEOHY=Fg@mail.gmail.com>
+References: <1441324062-31743-1-git-send-email-yann.morin.1998@free.fr>
+ <20150904101128.4206779d@free-electrons.com> <55E9540C.9060000@mind.be>
+ <20150904163121.GD4540@free.fr> <8737yg3dt0.fsf@dell.be.48ers.dk>
+ <55F73B74.1020708@mind.be> <87vbbcznmq.fsf@dell.be.48ers.dk>
+ <CANPyyuP3SBaEfR68jL=OqQqfkLov=1GLjW-r05CsOQgEOHY=Fg@mail.gmail.com>
+Message-ID: <561596CE.9080502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime,
+On 07-10-15 17:19, Mike Williams wrote:
+> All,
+> 
+>       >  However, I'm not really in favour of it. I don't see that it brings
+>      > a lot of benefit, other than reducing the number of symlinks from 3
+>      > to 1. But it does create /share and /local which looks weird could
+>      > potentially conflict with existing user directories (e.g. a
+>      > mountpoint for windows shares...). Also it makes it more complicated
+>      > for the user to implement a fedora-like mounted /usr.
+> 
+>     Ok - fine, having 1 or 3 symlinks isn't really a big deal. Just symlinking /usr
+>     seemed the simplest possible solution.
+> 
+> 
+> Any reason this wasn't committed? Just reviewing my list of out-of-tree patches...
 
-sorry for having kind of endorsed this patch in its v1, but now I
-tested it and it seems flawed in its very core (unless I'm still drunk).
+ Because it is a non-trivial change, and we don't have runtime testing to give
+Peter sufficient trust to just commit it, so he will want to look at the patch
+in detail before committing. And by now it got snowed under by other patches...
 
-Maxime Hadjinlian wrote:
-> With systemd, inittab is useless, but it's also where we stored a 'mount
-> -o remount ...' to toggle the rootfs ro/rw at the demand of the user.
->
-> Instead, doing a simple 'mount -a -o remount' should change the flag of
-> every mountpoint by reading /etc/fstab.
+ So it's good that you push for it ;-).
 
-Maybe it should, but it doesn't:
 
-# cat /etc/fstab
-# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
-/dev/root	/		ext2	rw,noauto	0	1
-proc		/proc		proc	defaults	0	0
-devpts		/dev/pts	devpts	defaults,gid=5,mode=620	0	0
-tmpfs		/dev/shm	tmpfs	mode=0777	0	0
-tmpfs		/tmp		tmpfs	mode=1777	0	0
-tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
-sysfs		/sys		sysfs	defaults	0	0
-# mount
-/dev/root on / type ext2 (ro,relatime,errors=remount-ro)
-devtmpfs on /dev type devtmpfs 
-(rw,relatime,size=62812k,nr_inodes=15703,mode=755)
-proc on /proc type proc (rw,relatime)
-# /bin/mount -a -o remount
-# mount
-/dev/root on / type ext2 (ro,relatime,errors=remount-ro)
-devtmpfs on /dev type devtmpfs 
-(rw,relatime,size=62812k,nr_inodes=15703,mode=755)
-proc on /proc type proc (rw,relatime)
-#
-
-It's still mounted ro. Removing the noauto for /dev/root/ does not
-change the result.
-
-This is using the default mount from busybox on
-qemu_arm_versatile_defconfig with an external toolchain. Wild guess: are
-you using the full-featured mount command from util-linux? Or maybe
-systemd ships it own mount command with this feature?
+ Regards,
+ Arnout
 
 
 -- 
-Luca
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
