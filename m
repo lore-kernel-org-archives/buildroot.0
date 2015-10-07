@@ -1,66 +1,75 @@
-From: David Van Arnem <dvanarnem@cmlab.biz>
-Date: Wed, 7 Oct 2015 10:56:41 -0600
-Subject: [Buildroot] Add [user@host dir] back to skeleton /etc/profile
-In-Reply-To: <5614D653.7030005@lucaceresoli.net>
-References: <5614523A.2090204@cmlab.biz> <5614D653.7030005@lucaceresoli.net>
-Message-ID: <56154EC9.4090107@cmlab.biz>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 7 Oct 2015 18:01:56 +0100
+Subject: [Buildroot] [PATCH] picocom: bump to version 2.0
+Message-ID: <1444237316-52377-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/07/2015 02:22 AM, Luca Ceresoli wrote:
-> Dear David,
->
-> thanks for your report.
->
-> [Cc-ing the author and the other reviewer of the mentioned commit]
->
-> David Van Arnem wrote:
->> Hi all,
->>
->> I noticed there was a commit pushed Saturday (f93c692c) which removed
->> some bash-specific stuff from the skeleton shell profile in
->> /etc/profile.  The default behavior for the shell prompt now is to only
->> display "$" or "#", without the [user at host dir] prefix.  I just
->> subscribed to the list today so I missed out on any discussion on this;
->> was there a reason the [user at host dir] prefix was not left in the
->> changes ("export PS1="[\u@\h \W]\\$ "")?  I have not encountered a Linux
->> distribution that does not display this or a similar prompt, and I think
->> it would be beneficial to add it back in.  I agree that the aliases,
->> colors, etc should stay removed.
->
-> This is because bash is rather unusual on embedded Linux systems. At
-> least on small devices, bash has a farily targe foot print, so in most
-> cases a simpler shell is used. For example, the default in Buildroot is
-> to use the 'ash' shell implemented by Busybox.
->
-> Comparing with a desktop distribution, if that's what you did, is
-> misleading. Desktops distributions run on machines with large of disks
-> and RAMs, and
->
-> However it is perfectly fine if you want to use bash on your embedded
-> system, and that's why Buildroot has a 'bash' package.
->
-> Mmh, I realize now it's probably wise if we add back the bash-specific
-> lines, but in package/bash/bash_profile, and of course install that
-> file. This would give back bash features to bash users, out of the box,
-> and without cluttering the rootfs for other users.
->
-> Why don't you try to do it yourself, and make your first code
-> contribution to Buildroot?
->
-> Regards,
+- Bump to version 2.0
+- Switch the download site to GitHub
+- Apply a patch to fix a missing define. Pull request sent upstream:
+  https://github.com/npat-efault/picocom/pull/31
+- Add a hash file
+- Rewrap the help text to 72 characters length
+- Change the official website
 
-Hi Luca, all,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/picocom/Config.in    |    7 +++----
+ package/picocom/picocom.hash |    3 +++
+ package/picocom/picocom.mk   |    7 ++++---
+ 3 files changed, 10 insertions(+), 7 deletions(-)
+ create mode 100644 package/picocom/picocom.hash
 
-I'd be happy to work on putting the changes back in 
-package/bash/bash_profile.  I've only used default 
-packages/configurations in Buildroot so I'm not very familiar with 
-modifying them, and I could use some guidance.  Should I place 
-bash_profile in package/bash and then have the bash package Makefile 
-copy it to system/skeleton/etc/profile?  Or is there another way I 
-should install it?
-
-David
+diff --git a/package/picocom/Config.in b/package/picocom/Config.in
+index 5a7d583..671d01f 100644
+--- a/package/picocom/Config.in
++++ b/package/picocom/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_PICOCOM
+ 	bool "picocom"
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  picocom is a minimal dumb-terminal emulation program. It
+-	  is, in principle, very much like minicom, only it's pico
+-	  instead of mini!
++	  picocom is a minimal dumb-terminal emulation program. It is, in
++	  principle, very much like minicom, only it's pico instead of mini!
+ 
+-	  http://code.google.com/p/picocom/
++	  https://github.com/npat-efault/picocom/
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+new file mode 100644
+index 0000000..7eada03
+--- /dev/null
++++ b/package/picocom/picocom.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 e0f7095c118f43c1c09787a16ef5c7d4c4ad4457dd3b1281efcc4cdb8906af9a  picocom-2.0.tar.gz
++sha256 37746613c05ecf4058c989ef7042b85ef0308886f3731a9dfffdadd19cc9ecfb  2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 7858d2b..1751f0a 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 1.7
+-PICOCOM_SITE = http://picocom.googlecode.com/files
++PICOCOM_VERSION = 2.0
++PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPLv2+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
++PICOCOM_PATCH = https://github.com/vriera/picocom/commit/2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
+ 
+ define PICOCOM_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define PICOCOM_INSTALL_TARGET_CMDS
+-- 
+1.7.1
