@@ -1,75 +1,89 @@
-From: Guillaume William Bres <guillaume.bressaix@gmail.com>
-Date: Wed, 7 Oct 2015 11:52:59 -0600
-Subject: [Buildroot] [PATCH 2/2] Add new package PyQtGraph
-In-Reply-To: <1444240379-22896-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <1444240379-22896-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <1444240379-22896-3-git-send-email-guillaume.bressaix@gmail.com>
+From: David Van Arnem <dvanarnem@cmlab.biz>
+Date: Wed, 7 Oct 2015 12:13:20 -0600
+Subject: [Buildroot] Add [user@host dir] back to skeleton /etc/profile
+In-Reply-To: <56154EC9.4090107@cmlab.biz>
+References: <5614523A.2090204@cmlab.biz> <5614D653.7030005@lucaceresoli.net>
+ <56154EC9.4090107@cmlab.biz>
+Message-ID: <561560C0.4030509@cmlab.biz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/python-pyqtgraph/Config.in             |   14 ++++++++++++++
- package/python-pyqtgraph/python-pyqtgraph.hash |    5 +++++
- package/python-pyqtgraph/python-pyqtgraph.mk   |   15 +++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/python-pyqtgraph/Config.in
- create mode 100644 package/python-pyqtgraph/python-pyqtgraph.hash
- create mode 100644 package/python-pyqtgraph/python-pyqtgraph.mk
+On 10/07/2015 10:56 AM, David Van Arnem wrote:
+> On 10/07/2015 02:22 AM, Luca Ceresoli wrote:
+>> Dear David,
+>>
+>> thanks for your report.
+>>
+>> [Cc-ing the author and the other reviewer of the mentioned commit]
+>>
+>> David Van Arnem wrote:
+>>> Hi all,
+>>>
+>>> I noticed there was a commit pushed Saturday (f93c692c) which removed
+>>> some bash-specific stuff from the skeleton shell profile in
+>>> /etc/profile.  The default behavior for the shell prompt now is to only
+>>> display "$" or "#", without the [user at host dir] prefix.  I just
+>>> subscribed to the list today so I missed out on any discussion on this;
+>>> was there a reason the [user at host dir] prefix was not left in the
+>>> changes ("export PS1="[\u@\h \W]\\$ "")?  I have not encountered a Linux
+>>> distribution that does not display this or a similar prompt, and I think
+>>> it would be beneficial to add it back in.  I agree that the aliases,
+>>> colors, etc should stay removed.
+>>
+>> This is because bash is rather unusual on embedded Linux systems. At
+>> least on small devices, bash has a farily targe foot print, so in most
+>> cases a simpler shell is used. For example, the default in Buildroot is
+>> to use the 'ash' shell implemented by Busybox.
+>>
+>> Comparing with a desktop distribution, if that's what you did, is
+>> misleading. Desktops distributions run on machines with large of disks
+>> and RAMs, and
+>>
+>> However it is perfectly fine if you want to use bash on your embedded
+>> system, and that's why Buildroot has a 'bash' package.
+>>
+>> Mmh, I realize now it's probably wise if we add back the bash-specific
+>> lines, but in package/bash/bash_profile, and of course install that
+>> file. This would give back bash features to bash users, out of the box,
+>> and without cluttering the rootfs for other users.
+>>
+>> Why don't you try to do it yourself, and make your first code
+>> contribution to Buildroot?
+>>
+>> Regards,
+>
+> Hi Luca, all,
+>
+> I'd be happy to work on putting the changes back in
+> package/bash/bash_profile.  I've only used default
+> packages/configurations in Buildroot so I'm not very familiar with
+> modifying them, and I could use some guidance.  Should I place
+> bash_profile in package/bash and then have the bash package Makefile
+> copy it to system/skeleton/etc/profile?  Or is there another way I
+> should install it?
+>
+> David
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
-new file mode 100644
-index 0000000..14619e3
---- /dev/null
-+++ b/package/python-pyqtgraph/Config.in
-@@ -0,0 +1,14 @@
-+comment "PyQtGraph requires a GLibc Toolchain w/ WCHAR and C++."
-+	depends on BR2_PACKAGE_PYTHON_PYQT
-+
-+config BR2_PACKAGE_PYTHON_PYQTGRAPH
-+	bool "python-pyqtgraph"
-+	depends on BR2_PACKAGE_PYTHON_PYQT
-+	select BR2_PACKAGE_PYTHON_PYEXPAT
-+	select BR2_PACKAGE_QT_SVG
-+	select BR2_PACKAGE_PYTHON_NUMPY
-+	help
-+	  PyQtGraph is a pure Python graphics and GUI library built on PyQt4, PySide and Numpy. 
-+	  Official website:
-+
-+	  http://www.pyqtgraph.org/
-diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
-new file mode 100644
-index 0000000..0a43fbc
---- /dev/null
-+++ b/package/python-pyqtgraph/python-pyqtgraph.hash
-@@ -0,0 +1,5 @@
-+# From http://www.pyqtgraph.org/downloads/pyqtgraph-0.9.10.tar.gz 
-+md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
-+
-+# Locally calculated:
-+sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
-diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
-new file mode 100644
-index 0000000..dbc3598
---- /dev/null
-+++ b/package/python-pyqtgraph/python-pyqtgraph.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pyqtgraph
-+#
-+################################################################################
-+
-+PYTHON_PYQTGRAPH_VERSION = 0.9.10
-+PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
-+PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
-+PYTHON_PYQTGRAPH_LICENSE = MIT
-+PYTHON_PYQTGRAPH_LICENSE_FILES = COPYING
-+PYTHON_PYQTGRAPH_SETUP_TYPE = distutils
-+PYTHON_PYQTGRAPH_DEPENDENCIES = python-pyqt
-+
-+$(eval $(python-package))
+Upon more investigation, I have a (hopefully) better idea for how to 
+accomplish this. Sticking with the suggestion in the commit message ("If 
+the user has a specific needs, it needs to be added in /etc/profile.d/ 
+by a post-build script."), I'm thinking I should create 
+package/bash/bash_profile.sh, and in bash.mk set up a section to use 
+$(INSTALL) to install it to $(TARGET_DIR)/etc/profile.d/bash_profile.sh. 
+The skeleton /etc/profile sources any *.sh files in /etc/profile.d, so 
+it should hopefully pick it up. Does this sound like a viable (and 
+correct wrt best buildroot practices) approach?
+
+Or, I'll just try it and see if it works :)
 -- 
-1.7.10.4
+Thanks,
+David
