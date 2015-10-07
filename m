@@ -1,34 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Oct 2015 15:59:10 +0100
-Subject: [Buildroot] [PATCH v2] nettle: bump to version 3.1.1
-In-Reply-To: <1444055141-23068-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444055141-23068-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151005155910.10560ccd@free-electrons.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed,  7 Oct 2015 09:43:18 +0200
+Subject: [Buildroot] [PATCH v6 2/3] opencv3: use
+	BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS instead of replicate
+	python-numpy depends
+In-Reply-To: <1444203799-16230-1-git-send-email-gwenj@trabucayre.com>
+References: <1444203799-16230-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1444203799-16230-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On Mon,  5 Oct 2015 11:25:41 -0300, Gustavo Zacarias wrote:
-> API is now compatible with nettle 2.7.x
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...patch => 0001-disable-testsuite-examples.patch} |  0
->  package/nettle/0001-fix-shared-only-build.patch    | 75 ----------------------
->  package/nettle/nettle.hash                         |  2 +-
->  package/nettle/nettle.mk                           | 15 ++---
->  4 files changed, 5 insertions(+), 87 deletions(-)
->  rename package/nettle/{0002-disable-testsuite-examples.patch => 0001-disable-testsuite-examples.patch} (100%)
->  delete mode 100644 package/nettle/0001-fix-shared-only-build.patch
+Opencv3 select python-numpy. To reduce CPU arch dependencies, an hidden 
+variable has been added to python-numpy package. This patch propagate this
+modification.
 
-Applied, thanks.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/opencv3/Config.in | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Thomas
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 9492603..2f51580 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -165,9 +165,7 @@ config BR2_PACKAGE_OPENCV3_LIB_PHOTO
+ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
+ 	bool "python"
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+-	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+-		|| BR2_sh || BR2_x86_64 # python-numpy
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_PYTHON_NUMPY
+ 	help
+ 	  Include opencv_python module into the OpenCV build.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.9
