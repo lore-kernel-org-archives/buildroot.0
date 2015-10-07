@@ -1,345 +1,157 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  7 Oct 2015 23:56:49 +0200
-Subject: [Buildroot] [PATCH v2 3/4] Config.in.legacy: add missing select
-	BR2_LEGACY
-In-Reply-To: <1444255010-6341-1-git-send-email-ps.report@gmx.net>
-References: <1444255010-6341-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1444255010-6341-3-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Oct 2015 23:00:56 +0100
+Subject: [Buildroot] [PATCH 2/2] Add new package PyQtGraph
+In-Reply-To: <1444240379-22896-3-git-send-email-guillaume.bressaix@gmail.com>
+References: <1444240379-22896-1-git-send-email-guillaume.bressaix@gmail.com>
+ <1444240379-22896-3-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <56159618.9040107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - new patch to fix missing select BR2_LEGACY (suggested by Arnout Vandecappelle)
----
- Config.in.legacy | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ Hi Guillaume,
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index af92b72..007e598 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -119,6 +119,7 @@ config BR2_PACKAGE_MEDIA_CTL
- 
- config BR2_PACKAGE_SCHIFRA
- 	bool "schifra package has been removed"
-+	select BR2_LEGACY
- 	help
- 	  Schifra package has been maked broken since 2014.11 release and
- 	  haven't been fixed since then.
-@@ -136,6 +137,7 @@ config BR2_PACKAGE_ZXING
- config BR2_PACKAGE_FREERDP_CLIENT
- 	bool "freerdp client option renamed"
- 	depends on BR2_PACKAGE_FREERDP
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_FREERDP_CLIENT_X11
- 
- config BR2_PACKAGE_BLACKBOX
-@@ -187,6 +189,7 @@ config BR2_KERNEL_HEADERS_3_15
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
- 	bool "DirectFB example df_andi has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -195,6 +198,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD
- 	bool "DirectFB example df_bltload has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -203,6 +207,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_BLTLOAD
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD
- 	bool "DirectFB example df_cpuload has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -211,6 +216,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_CPULOAD
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER
- 	bool "DirectFB example df_databuffer has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -219,6 +225,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_DATABUFFER
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD
- 	bool "DirectFB example df_dioload has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -227,6 +234,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_DIOLOAD
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK
- 	bool "DirectFB example df_dok has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -235,6 +243,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_DOK
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST
- 	bool "DirectFB example df_drivertest has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -244,6 +253,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_DRIVERTEST
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE
- 	bool "DirectFB example df_fire has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -252,6 +262,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_FIRE
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP
- 	bool "DirectFB example df_flip has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -260,6 +271,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_FLIP
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS
- 	bool "DirectFB example df_fonts has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -268,6 +280,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_FONTS
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT
- 	bool "DirectFB example df_input has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -276,6 +289,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_INPUT
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK
- 	bool "DirectFB example df_joystick has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -284,6 +298,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_JOYSTICK
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES
- 	bool "DirectFB example df_knuckles has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -292,6 +307,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_KNUCKLES
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER
- 	bool "DirectFB example df_layer has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -300,6 +316,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_LAYER
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX
- 	bool "DirectFB example df_matrix has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -308,6 +325,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX_WATER
- 	bool "DirectFB example df_matrix_water has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -316,6 +334,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_MATRIX_WATER
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO
- 	bool "DirectFB example df_neo has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -324,6 +343,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_NEO
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_NETLOAD
- 	bool "DirectFB example df_netload has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -340,6 +360,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_PALETTE
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE
- 	bool "DirectFB example df_particle has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -348,6 +369,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_PARTICLE
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_PORTER
- 	bool "DirectFB example df_porter has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -364,6 +386,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_STRESS
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE
- 	bool "DirectFB example df_texture has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -372,6 +395,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_TEXTURE
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO
- 	bool "DirectFB example df_video has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -380,6 +404,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE
- 	bool "DirectFB example df_video_particle has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -388,6 +413,7 @@ config BR2_PACKAGE_DIRECTFB_EXAMPLES_VIDEO_PARTICLE
- 
- config BR2_PACKAGE_DIRECTFB_EXAMPLES_WINDOW
- 	bool "DirectFB example df_window has been removed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_DIRECTFB_EXAMPLES
- 	help
- 	  The per-DirectFB example options have been removed. The
-@@ -502,6 +528,7 @@ config BR2_PACKAGE_GPU_VIV_BIN_MX6Q
- config BR2_PACKAGE_LIBSEMANAGE_PYTHON_BINDINGS
- 	depends on BR2_PACKAGE_PYTHON
- 	bool "libsemanage python bindings removed"
-+	select BR2_LEGACY
- 	help
- 	  This option has been removed, since the libsemanage Python
- 	  bindings on the target were not useful.
-@@ -579,6 +606,7 @@ config BR2_PACKAGE_TIFF_TIFFCP
- 
- config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
- 	bool "RTAI patch file path has been removed"
-+	select BR2_LEGACY
- 	help
- 	  This option has never worked, so it has been removed.
- 
-@@ -913,6 +941,7 @@ config BR2_PACKAGE_XLIB_LIBPCIACCESS
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_XC5000
- 	bool "Xceive xc5000 option has been renamed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_LINUX_FIRMWARE_XCx000
- 	help
- 	  The Xceive xc5000 option now also handles older firmwares from
-@@ -921,6 +950,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_XC5000
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
- 	bool "Chelsio T4 option has been renamed"
-+	select BR2_LEGACY
- 	select BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T4
- 	help
- 	  The Chelsio T4 option BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
-@@ -929,6 +959,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7
- 	bool "BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7 has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7 was
- 	  renamed to BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_7. You must
-@@ -939,6 +970,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_7
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8
- 	bool "BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8 has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160_7260_8 was
- 	  renamed to BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV_8. You must
-@@ -1150,6 +1182,7 @@ config BR2_TARGET_TZ_ZONELIST
- 
- config BR2_PACKAGE_TZDATA_ZONELIST
- 	string "tzdata: the timezone list option has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_PACKAGE_TZDATA_ZONELIST has been renamed to
- 	  BR2_TARGET_TZ_ZONELIST, and moved to the "System configuration"
-@@ -1276,18 +1309,21 @@ comment "Legacy options removed in 2014.02"
- 
- config BR2_sh2
- 	bool "sh2 support removed"
-+	select BR2_LEGACY
- 	help
- 	  Due to an inexistent user base and generally poor Linux
- 	  support, the support for the SH2 architecture was removed.
- 
- config BR2_sh3
- 	bool "sh3 support removed"
-+	select BR2_LEGACY
- 	help
- 	  Due to an inexistent user base and generally poor Linux
- 	  support, the support for the SH3 architecture was removed.
- 
- config BR2_sh3eb
- 	bool "sh3eb support removed"
-+	select BR2_LEGACY
- 	help
- 	  Due to an inexistent user base and generally poor Linux
- 	  support, the support for the SH3eb architecture was removed.
-@@ -1501,6 +1537,7 @@ config BR2_PACKAGE_MODULE_INIT_TOOLS
- 
- config BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL
- 	string "u-boot: the git repository URL option has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL has
- 	  been renamed to BR2_TARGET_UBOOT_CUSTOM_REPO_URL.
-@@ -1515,6 +1552,7 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL_WRAP
- 
- config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
- 	string "u-boot: the git repository version option has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION has
- 	  been renamed to BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION.
-@@ -1529,6 +1567,7 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION_WRAP
- 
- config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
- 	string "linux: the git repository URL option has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL has
- 	  been renamed to
-@@ -1544,6 +1583,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL_WRAP
- 
- config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 	string "linux: the git repository version option has been renamed"
-+	select BR2_LEGACY
- 	help
- 	  The option BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION has
- 	  been renamed to
+ Thank you for your contribution. I have some comments below, could you adapt
+your patch accordingly and resubmit?
+
+ First of all, we require all commits to carry a Signed-off-by tag by which you
+certify that you have the right to contribute this commit under the Buildroot
+license (GPLv2). See [1].
+
+ Second, the addition in the package/Config.in menu should be done in the same
+commit, otherwise the commit is not stand-alone.
+
+ Third, we typically use the following commit summary for new packages:
+
+pyqtgraph: new package
+
+
+ When you resubmit, please provide a patch changelog that indicates what you
+have changed compared to this version.
+
+
+On 07-10-15 18:52, Guillaume William Bres wrote:
+> ---
+>  package/python-pyqtgraph/Config.in             |   14 ++++++++++++++
+>  package/python-pyqtgraph/python-pyqtgraph.hash |    5 +++++
+>  package/python-pyqtgraph/python-pyqtgraph.mk   |   15 +++++++++++++++
+>  3 files changed, 34 insertions(+)
+>  create mode 100644 package/python-pyqtgraph/Config.in
+>  create mode 100644 package/python-pyqtgraph/python-pyqtgraph.hash
+>  create mode 100644 package/python-pyqtgraph/python-pyqtgraph.mk
+> 
+> diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
+> new file mode 100644
+> index 0000000..14619e3
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/Config.in
+> @@ -0,0 +1,14 @@
+> +comment "PyQtGraph requires a GLibc Toolchain w/ WCHAR and C++."
+
+ No need for all the capitalisation or punctuation, also we have a standard
+formulation:
+
+comment "python-pyqtgraph nees a (e)glibc toolchain w/ wchar and C++"
+
+ But actually, you don't have this dependency below, so I'm not sure where you
+get it from?
+
+ That said, I think you should not depend on python-pyqt, but select it. And
+then you have to propagate the pyqt dependencies. In addition, you have to
+propagate the numpy dependencies. Gwenhael has just posted a patch to make that
+easier, so it would become:
+
+comment "python-pyqtgraph needs a toolchain w/ C++, threads"
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
+	depends on BR2_USE_MMU
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+
+config BR2_PACKAGE_PYTHON_PYQTGRAPH
+	bool "python-pyqtgraph"
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
+	depends on BR2_USE_MMU # pyqt -> qt
+	depends on BR2_INSTALL_LIBSTDCPP # pyqt -> qt
+	depends on BR2_TOOLCHAIN_HAS_THREADS # pyqt -> qt
+
+(if you cut & paste this, take care that it starts with tab, not spaces).
+
+> +	depends on BR2_PACKAGE_PYTHON_PYQT
+> +
+> +config BR2_PACKAGE_PYTHON_PYQTGRAPH
+> +	bool "python-pyqtgraph"
+> +	depends on BR2_PACKAGE_PYTHON_PYQT
+> +	select BR2_PACKAGE_PYTHON_PYEXPAT
+> +	select BR2_PACKAGE_QT_SVG
+
+ That depends on BR2_PACKAGE_QT_GUI_MODULE, so you have to select that as well.
+
+> +	select BR2_PACKAGE_PYTHON_NUMPY
+> +	help
+> +	  PyQtGraph is a pure Python graphics and GUI library built on PyQt4, PySide and Numpy. 
+
+ You should wrap lines at 72 columns (where tab counts as 8 spaces, so 62 real
+characters).
+
+> +	  Official website:
+> +
+> +	  http://www.pyqtgraph.org/
+> diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
+> new file mode 100644
+> index 0000000..0a43fbc
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/python-pyqtgraph.hash
+> @@ -0,0 +1,5 @@
+> +# From http://www.pyqtgraph.org/downloads/pyqtgraph-0.9.10.tar.gz 
+
+ This should specify the place where you can find the MD5, not where you
+downloaded it.
+
+> +md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
+> +
+> +# Locally calculated:
+> +sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
+> diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
+> new file mode 100644
+> index 0000000..dbc3598
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/python-pyqtgraph.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pyqtgraph
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYQTGRAPH_VERSION = 0.9.10
+> +PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
+> +PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
+> +PYTHON_PYQTGRAPH_LICENSE = MIT
+> +PYTHON_PYQTGRAPH_LICENSE_FILES = COPYING
+> +PYTHON_PYQTGRAPH_SETUP_TYPE = distutils
+> +PYTHON_PYQTGRAPH_DEPENDENCIES = python-pyqt
+
+ Are numpy and pyexpat runtime dependencies only? If so, you should add comments
+to that effect in Config.in.
+
+
+ I have marked your patches as Changes Requested in our patch tracking system
+[2], so we will forget about your patches unless you send a new version.
+
+ Thanks!
+
+ Regards,
+ Arnout
+
+
+[1] http://buildroot.org/manual.html#submitting-patches
+[2] http://patchwork.ozlabs.org/project/buildroot/list/
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
