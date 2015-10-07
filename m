@@ -1,75 +1,62 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 7 Oct 2015 17:44:00 +0200
-Subject: [Buildroot] [PATCH v1 2/3] media-ctl: remove package
-In-Reply-To: <5615088C.60004@mind.be>
-References: <1444165338-19896-1-git-send-email-ps.report@gmx.net>
- <1444165338-19896-2-git-send-email-ps.report@gmx.net>
- <5615088C.60004@mind.be>
-Message-ID: <20151007174400.7b52ae72@gmx.net>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Wed, 7 Oct 2015 11:46:45 -0400
+Subject: [Buildroot] [PATCH v3 1/1] yad: new package
+In-Reply-To: <5614EF2A.9090809@imgtec.com>
+References: <1444076921-6004-1-git-send-email-james.knight@rockwellcollins.com>
+ <5614EF2A.9090809@imgtec.com>
+Message-ID: <CALe+oY-pnZuJBugebSt6+PXsLJNwCw=Y06xCQgMK9MGyTFCnpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Vincent,
 
-On Wed, 7 Oct 2015 12:57:00 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> On 06-10-15 22:02, Peter Seiderer wrote:
-> > Package media-ctl is out-dated, source (and developement) have been moved
-> > to v4l-utils since June 2014. Up-to-date version is available in
-> > the libv4l package (BR2_PACKAGE_LIBV4L/BR2_PACKAGE_LIBV4L_UTILS).
-> > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  Config.in.legacy                                   |   7 +
-> >  package/Config.in                                  |   1 -
-> >  ...ers-for-compatibility-with-old-toolchains.patch | 303 ---------------------
-> >  package/media-ctl/Config.in                        |   9 -
-> >  package/media-ctl/media-ctl.mk                     |  17 --
-> >  5 files changed, 7 insertions(+), 330 deletions(-)
-> >  delete mode 100644 package/media-ctl/0001-add-kernel-headers-for-compatibility-with-old-toolchains.patch
-> >  delete mode 100644 package/media-ctl/Config.in
-> >  delete mode 100644 package/media-ctl/media-ctl.mk
-> > 
-> > diff --git a/Config.in.legacy b/Config.in.legacy
-> > index 3c7fe36..4b7e201 100644
-> > --- a/Config.in.legacy
-> > +++ b/Config.in.legacy
-> > @@ -107,6 +107,13 @@ endif
-> >  ###############################################################################
-> >  comment "Legacy options removed in 2015.11"
-> >  
-> > +config BR2_PACKAGE_MEDIA_CTL
-> > +	bool "media-ctl package has been removed"
-> > +	help
-> > +	  media-ctl source and developement have been moved to
-> > +	  v4l-utils since June 2014. For an up-to-date media-ctl
-> > +	  version select BR2_PACKAGE_LIBV4L and BR2_PACKAGE_LIBV4L_UTILS.
-> 
->  These two options should be selected automatically. See e.g.
-> BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
-> 
->  You should also select BR2_LEGACY.
+On Wed, Oct 7, 2015 at 6:08 AM, Vicente Olivert Riera
+<Vincent.Riera@imgtec.com> wrote:
+> In the next line you are going to select BR2_PACKAGE_LIBGLIB2, so you
+> need to propagate its dependencies to this package as well. That means
+> you need to add right here the following lines:
 >
+> depends on BR2_USE_WCHAR # libglib2
+> depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> depends on BR2_USE_MMU # libglib2
 
-O.k., will fix it...
- 
-> > +
-> >  config BR2_PACKAGE_SCHIFRA
-> >  	bool "schifra package has been removed"
-> 
->  Oops, here BR2_LEGACY is not selected... And in a couple of other places as well...
+Gotcha. I'll get that fixed.
 
-O.k., will take a look at it too...
+On this point, is the common practice to copy the `depends` of
+packages you `select` on (ex. for this yad package, if I select on
+`BR2_PACKAGE_LIBGLIB2`, I then check the libglib2 package and copy the
+`depends` references it has and add the command "libglib2" to each
+line)?
 
-Regards,
-Peter
+> The word "from" still fits in the first line as it will not exceed the
+> 72 characters limit.
 
-> 
->  Regards,
->  Arnout
-> 
-> >  	help
-> 
+Does it? For myself I have three (3) characters left after "dialogs"
+(4+2+69+3). Is a four (4) character tab not the expected length or is
+it something else? Curious if I've been messing up all my Config.in
+files. :o
+
+>> +
+>> +       http://sourceforge.net/projects/yad-dialog/
+>> +
+>> +comment "yad needs libgtk2 or libgtk3"
+>> +     depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
+>
+> And you also need to update this comment since now you have the libglib2
+> dependencies as well. Something like this would be ok:
+>
+> comment "yad needs libgtk2 or libgtk3 and a toolchain w/ wchar, threads"
+>   depends on BR2_USE_MMU
+>   depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+>     (!BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3)
+
+Will do. Thanks.
+
+> Be careful if you copy-paste the above text. You have to use tabs for
+> indentation instead of spaces :-)
+
+Always paranoid about this; unfortunately my paranoia doesn't catch it
+all the time. :(
