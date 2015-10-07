@@ -1,69 +1,148 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Oct 2015 23:09:55 +0100
-Subject: [Buildroot] [PATCH v5 2/2] Patch to assembler to strip LOCK
- prefix.
-In-Reply-To: <1444211584.2759.10.camel@intel.com>
-References: <1443786554.3328.21.camel@intel.com> <56116CAE.3070100@mind.be>
- <1444211584.2759.10.camel@intel.com>
-Message-ID: <56159833.6080005@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 08 Oct 2015 00:44:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: Add node.js v4.1.2
+In-Reply-To: <1444136239-22044-1-git-send-email-jaap@jcz.nl>
+References: <1444136239-22044-1-git-send-email-jaap@jcz.nl>
+Message-ID: <1444257869.12599.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-10-15 10:53, Kinsella, Ray wrote:
-> Hi Arnout,
-> 
-> On Sun, 2015-10-04 at 19:15 +0100, Arnout Vandecappelle wrote:
->>  We now have a toolchain wrapper both for internal and external toolchains. This
->> will allow you to reliably pass options to the compiler. So we'd preferably use
->> that approach.
-> 
-> Ok - I will investigate - any examples I can look at?
-> 
->>  Also, we think it's worthwhile to add a new subarchitecture for the Quark in
->> arch/Config.in.x86. This should set the arch and tune options to i586, but the
->> toolchain wrapper can then carry an option that adds -Wa,-momit-lock-prefix=yes.
->> This also fixes the problem for external toolchains.
-> 
-> Ok - I actually proto-typed this and I couldn't get it to work reliably,
-> hence the nasty patch.
+Dear Jaap Crezee,
 
- Should be fairly simple with the toolchain wrapper. I think it it best to
-refactor toolchain/toolchain-wrapper.mk a little to create a new variable to
-contain the BR_ADDITIONAL_CFLAGS, and then conditionally add the -Wa,-momit-...
-option to it.
-
-> I should have it on a branch (I hope), I can dust it off. 
+On Di, 2015-10-06 at 14:57 +0200, Jaap Crezee wrote:
+> Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+> ---
+>  ...01-Remove-dependency-on-Python-bz2-module.patch | 31
+> ++++++++++++++++++++++
+>  package/nodejs/Config.in                           |  5 ++++
+>  package/nodejs/nodejs.hash                         |  3 +++
+>  3 files changed, 39 insertions(+)
+>  create mode 100644 package/nodejs/4.1.2/0001-Remove-dependency-on
+> -Python-bz2-module.patch
 > 
->>  So the proposal is that you create a first patch that adds BR2_x86_quark and
->> adds -Wa,-momit-lock-prefix=yes, and then a second patch that adds the Galileo2
->> defconfig.
-> 
-> ok 
-> 
->>  I have now marked both patches as Changes Requested in out patch tracking
->> system, so please resubmit a new version that fixes the above comments,
->> otherwise we'll forget about your contribution.
-> 
-> ok - will followup.
-> (is the patch tracking system public?)
+> diff --git a/package/nodejs/4.1.2/0001-Remove-dependency-on-Python
+> -bz2-module.patch b/package/nodejs/4.1.2/0001-Remove-dependency-on
+> -Python-bz2-module.patch
+> new file mode 100644
+> index 0000000..de83d44
+> --- /dev/null
+> +++ b/package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2
+> -module.patch
+> @@ -0,0 +1,31 @@
+> +From 3d4817c152d6f3afddcc699949c4d1664da91e2b Mon Sep 17 00:00:00
+> 2001
+> +From: Martin Bark <martin@barkynet.com>
+> +Date: Tue, 30 Jun 2015 09:43:11 +0100
+> +Subject: [PATCH 1/4] Remove dependency on Python bz2 module
+> +
+> +The Python bz2 module is only needed in certain cases, so only
+> import
+> +it when needed. In the normal nodejs build, this allows to remove
+> the
+> +dependency on this module.
+> +
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com
+> >
+> +[Martin: adapt to 0.12.5]
+> +Signed-off-by: Martin Bark <martin@barkynet.com>
+> +---
+> + deps/v8/tools/js2c.py | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/deps/v8/tools/js2c.py b/deps/v8/tools/js2c.py
+> +index 77485f6..371caf5 100755
+> +--- a/deps/v8/tools/js2c.py
+> ++++ b/deps/v8/tools/js2c.py
+> +@@ -34,7 +34,6 @@
+> + import os, re, sys, string
+> + import optparse
+> + import jsmin
+> +-import bz2
+> + import textwrap
+> + 
+> + 
+> +-- 
+> +2.1.4
+> +
+> diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+> index 329d270..b25375b 100644
+> --- a/package/nodejs/Config.in
+> +++ b/package/nodejs/Config.in
+> @@ -40,12 +40,17 @@ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+>  	bool "v0.12.7"
+>  	depends on !BR2_ARM_CPU_ARMV5
+>  
+> +config BR2_BR2_PACKAGE_NODEJS_4_1_X
+> +	bool "v4.1.2"
+> +	depends on !BR2_ARM_CPU_ARMV5
+> +
+>  endchoice
+>  
+>  config BR2_PACKAGE_NODEJS_VERSION_STRING
+>  	string
+>  	default "0.10.40"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
+>  	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
+> +	default "4.1.2"     if BR2_BR2_PACKAGE_NODEJS_4_1_X
+>  
+>  menu "Module Selection"
+>  
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index 9be2806..9f75471 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -3,3 +3,6 @@ sha256	bae79c2fd959aebe1629af36077bebbb760128d
+> b753da226d2344cd91499149f  node-v0
+>  
+>  # From upstream URL: http://nodejs.org/dist/v0.12.7/SHASUMS256.txt
+>  sha256	b23d64df051c9c969b0c583f802d5d71de342e53067127a5061415
+> be7e12f39d  node-v0.12.7.tar.gz
+> +
+> +# From upstream URL: http://nodejs.org/dist/v4.1.2/SHASUMS256.txt
+> +sha256	febec3703a3fea9b64c46100a7b6a4408250027aa8259a2a815fd2
+> 275d502c49  node-v4.1.2.tar.gz
 
-http://patchwork.ozlabs.org/project/buildroot/list/
+No need for patch #2 and #3 from 0.12.x?
 
- If you create a login with the same email address as the one you send patches
-from, then you can update the state of your own patches (e.g. mark them as
-Superseded when you send a new version).
+Additionally, this package does not compile with the Sourcery CodeBench
+x86/x86_64 2012.09 toolchain:
 
- Regards,
- Arnout
+    In file included from ../src/js_stream.h:6:0,
+                     from ../src/js_stream.cc:1:
+    ../src/stream_base.h:218:11: error: looser throw specifier for
+    'virtual node::StreamBase::~StreamBase()'
+    ../src/stream_base.h:134:11: error:   overriding 'virtual
+    node::StreamResource::~StreamResource() noexcept (true)'
+    In file included from ../src/js_stream.cc:1:0:
+    ../src/js_stream.h:17:3: error: looser throw specifier for 'virtual
+    node::JSStream::~JSStream()'
+    In file included from ../src/js_stream.h:6:0,
+                     from ../src/js_stream.cc:1:
+    ../src/stream_base.h:218:11: error:   overriding 'virtual
+    node::StreamBase::~StreamBase() noexcept (true)'
+    node.target.mk:146: recipe for target
+    '/home/joerg/Development/git/buildroot/output/build/nodejs
+    -4.1.2/out/Release/obj.target/node/src/js_stream.o' failed
+    make[2]: ***
+    [/home/joerg/Development/git/buildroot/output/build/nodejs
+    -4.1.2/out/Release/obj.target/node/src/js_stream.o] Error 1
+    make[2]: *** Waiting for unfinished jobs....
+    make[2]: Leaving directory
+    '/home/joerg/Development/git/buildroot/output/build/nodejs
+    -4.1.2/out'
+    Makefile:45: recipe for target 'node' failed
+    make[1]: *** [node] Error 2
+    make[1]: Leaving directory
+    '/home/joerg/Development/git/buildroot/output/build/nodejs-4.1.2'
+    package/pkg-generic.mk:156: recipe for target
+    '/home/joerg/Development/git/buildroot/output/build/nodejs
+    -4.1.2/.stamp_built' failed
+    make: *** [/home/joerg/Development/git/buildroot/output/build/nodejs
+    -4.1.2/.stamp_built] Error 2
 
+Maybe gcc > 4.7 required?
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards
+J?rg Krause
