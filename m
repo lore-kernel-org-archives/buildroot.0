@@ -1,48 +1,46 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed,  7 Oct 2015 09:43:17 +0200
-Subject: [Buildroot] [PATCH v6 1/3] python-numpy: introduce ARCH_SUPPORTS
-	hidden variable
-Message-ID: <1444203799-16230-1-git-send-email-gwenj@trabucayre.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Oct 2015 10:20:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: Add node.js v4.1.2
+In-Reply-To: <1444136239-22044-1-git-send-email-jaap@jcz.nl> (Jaap Crezee's
+ message of "Tue, 6 Oct 2015 14:57:19 +0200")
+References: <1444136239-22044-1-git-send-email-jaap@jcz.nl>
+Message-ID: <87612jnl7c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>>>>> "Jaap" == Jaap Crezee <jaap@jcz.nl> writes:
 
-Some packages selects python-numpy. This package has a some CPU specific
-code. To simplify and avoid duplicate dependencies this patch introduce an
-hidden ARCH_SUPPORTS variable.
+ > Signed-off-by: Jaap Crezee <jaap@jcz.nl>
+ > ---
+ >  ...01-Remove-dependency-on-Python-bz2-module.patch | 31 ++++++++++++++++++++++
+ >  package/nodejs/Config.in                           |  5 ++++
+ >  package/nodejs/nodejs.hash                         |  3 +++
+ >  3 files changed, 39 insertions(+)
+ >  create mode 100644 package/nodejs/4.1.2/0001-Remove-dependency-on-Python-bz2-module.patch
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Changes v4 -> v5:
- * Re-add hidden variable.
----
- package/python-numpy/Config.in | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ > +++ b/package/nodejs/Config.in
+ > @@ -40,12 +40,17 @@ config BR2_BR2_PACKAGE_NODEJS_0_12_X
+ >  	bool "v0.12.7"
+ >  	depends on !BR2_ARM_CPU_ARMV5
+ 
+ > +config BR2_BR2_PACKAGE_NODEJS_4_1_X
+ > +	bool "v4.1.2"
+ > +	depends on !BR2_ARM_CPU_ARMV5
+ > +
+ >  endchoice
+ 
+ >  config BR2_PACKAGE_NODEJS_VERSION_STRING
+ >  	string
+ >  	default "0.10.40"	if BR2_BR2_PACKAGE_NODEJS_0_10_X
+ >  	default "0.12.7"	if BR2_BR2_PACKAGE_NODEJS_0_12_X
+ > +	default "4.1.2"     if BR2_BR2_PACKAGE_NODEJS_4_1_X
 
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-index f8170f8..f25102a 100644
---- a/package/python-numpy/Config.in
-+++ b/package/python-numpy/Config.in
-@@ -1,9 +1,13 @@
--config BR2_PACKAGE_PYTHON_NUMPY
--	bool "python-numpy"
-+config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	bool
- 	# Numpy has some CPU specific code
- 	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
- 		|| BR2_sh || BR2_x86_64
-+
-+config BR2_PACKAGE_PYTHON_NUMPY
-+	bool "python-numpy"
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	help
- 	  NumPy is the fundamental package for scientific computing
- 	  with Python.
+Is there a need to keep both 0.12.x and 4.1.x? The only reason we have a
+version selection is afaik that <ARMv7 is only supported in the old
+0.10.x version.
+
 -- 
-2.4.9
+Bye, Peter Korsgaard
