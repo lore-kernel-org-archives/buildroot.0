@@ -1,62 +1,60 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Wed, 7 Oct 2015 11:46:45 -0400
-Subject: [Buildroot] [PATCH v3 1/1] yad: new package
-In-Reply-To: <5614EF2A.9090809@imgtec.com>
-References: <1444076921-6004-1-git-send-email-james.knight@rockwellcollins.com>
- <5614EF2A.9090809@imgtec.com>
-Message-ID: <CALe+oY-pnZuJBugebSt6+PXsLJNwCw=Y06xCQgMK9MGyTFCnpA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 7 Oct 2015 17:50:07 +0200
+Subject: [Buildroot] [PATCH v1 1/3] libv4l: update v4l-utils help text
+ (add more listed tools)
+In-Reply-To: <20151007083512.0460326f@free-electrons.com>
+References: <1444165338-19896-1-git-send-email-ps.report@gmx.net>
+ <20151007083512.0460326f@free-electrons.com>
+Message-ID: <20151007175007.7c464961@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vincent,
+Hello Thomas,
 
-On Wed, Oct 7, 2015 at 6:08 AM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> In the next line you are going to select BR2_PACKAGE_LIBGLIB2, so you
-> need to propagate its dependencies to this package as well. That means
-> you need to add right here the following lines:
->
-> depends on BR2_USE_WCHAR # libglib2
-> depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-> depends on BR2_USE_MMU # libglib2
+On Wed, 7 Oct 2015 08:35:12 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Gotcha. I'll get that fixed.
+> Dear Peter Seiderer,
+> 
+> On Tue,  6 Oct 2015 23:02:16 +0200, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/libv4l/Config.in | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+> > index d137613..5a55b2b 100644
+> > --- a/package/libv4l/Config.in
+> > +++ b/package/libv4l/Config.in
+> > @@ -26,8 +26,16 @@ config BR2_PACKAGE_LIBV4L_UTILS
+> >  	help
+> >  	  v4l-utils is a collection of various video4linux and DVB utilities.
+> >  	  Enable this if you want to build the following tools:
+> > -	  cx18-ctl, ir-keytable, ivtv-ctl, v4l2-ctl, v4l2-sysfs-path and
+> > -	  others.
+> > +	  - cx18-ctl
+> > +	  - dvb-fe-tool, dvbv5-zap, dvbv5-scan, dvb-format-convert
+> > +	  - decode_tm6000
+> > +	  - ir-keytable
+> > +	  - media-ctl
+> > +	  - v4l2-compliance
+> > +	  - v4l2-ctl, cx18-ctl, ivtv-ctl
+> > +	  - v4l2-sysfs-path
+> > +	  - rds-ctl
+> > +	  - qv4l2 (if Qt is enabled)
+> 
+> To make the things more future-proof, shouldn't we remove the list of
+> tools, and just say "Enable this option to enable various tools to
+> control Video4Linux devices" (or some other better wording) ?
 
-On this point, is the common practice to copy the `depends` of
-packages you `select` on (ex. for this yad package, if I select on
-`BR2_PACKAGE_LIBGLIB2`, I then check the libglib2 package and copy the
-`depends` references it has and add the command "libglib2" to each
-line)?
+This has pro and cons, my reasoning was to mention media-ctl somewhere before
+removing the superfluously extra media-ctl package (as hint for people who are
+not that familiar with the v4l-utils package)...
 
-> The word "from" still fits in the first line as it will not exceed the
-> 72 characters limit.
+Regards,
+Peter
 
-Does it? For myself I have three (3) characters left after "dialogs"
-(4+2+69+3). Is a four (4) character tab not the expected length or is
-it something else? Curious if I've been messing up all my Config.in
-files. :o
-
->> +
->> +       http://sourceforge.net/projects/yad-dialog/
->> +
->> +comment "yad needs libgtk2 or libgtk3"
->> +     depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
->
-> And you also need to update this comment since now you have the libglib2
-> dependencies as well. Something like this would be ok:
->
-> comment "yad needs libgtk2 or libgtk3 and a toolchain w/ wchar, threads"
->   depends on BR2_USE_MMU
->   depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
->     (!BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3)
-
-Will do. Thanks.
-
-> Be careful if you copy-paste the above text. You have to use tabs for
-> indentation instead of spaces :-)
-
-Always paranoid about this; unfortunately my paranoia doesn't catch it
-all the time. :(
+> 
+> Thomas
