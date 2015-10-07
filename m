@@ -1,52 +1,51 @@
-From: Alexander Lukichev <alexander.lukichev@gmail.com>
-Date: Wed,  7 Oct 2015 10:02:46 +0300
-Subject: [Buildroot] [PATCH v2] qt: fix build for arm with BR2_STATIC_LIBS
-In-Reply-To: <1444128975-17943-1-git-send-email-alexander.lukichev@gmail.com>
-References: <1444128975-17943-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <1444201366-354-1-git-send-email-alexander.lukichev@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 7 Oct 2015 08:35:12 +0100
+Subject: [Buildroot] [PATCH v1 1/3] libv4l: update v4l-utils help text
+ (add more listed tools)
+In-Reply-To: <1444165338-19896-1-git-send-email-ps.report@gmx.net>
+References: <1444165338-19896-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151007083512.0460326f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some Buildroot-generated static toolchains for ARM do not have
-dlfcn.h header, which breaks builds of qt-4.8.7 because its
-QtCore's plugin loader expects this header to be present (and
-dynamic libraries to be supported). For certain platforms without
-dynamic libraries, there is a QT_NO_DYNAMIC_LIBRARY constant
-defined in plugin loader's source. This patch puts that constant
-into Qt's build environment if Buildroot is configured without
-shared library support.
+Dear Peter Seiderer,
 
-Fixes:
-- http://autobuild.buildroot.net/results/11a4c19638ca211bd2a424fd92602166235c9433
-- http://autobuild.buildroot.net/results/c056e8781558267f6971a5f017f47e90dcf24e07
-- http://autobuild.buildroot.net/results/b8f34afa8686e890a1a3882a52081bb6a3b9c13b
-and several others.
+On Tue,  6 Oct 2015 23:02:16 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/libv4l/Config.in | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+> index d137613..5a55b2b 100644
+> --- a/package/libv4l/Config.in
+> +++ b/package/libv4l/Config.in
+> @@ -26,8 +26,16 @@ config BR2_PACKAGE_LIBV4L_UTILS
+>  	help
+>  	  v4l-utils is a collection of various video4linux and DVB utilities.
+>  	  Enable this if you want to build the following tools:
+> -	  cx18-ctl, ir-keytable, ivtv-ctl, v4l2-ctl, v4l2-sysfs-path and
+> -	  others.
+> +	  - cx18-ctl
+> +	  - dvb-fe-tool, dvbv5-zap, dvbv5-scan, dvb-format-convert
+> +	  - decode_tm6000
+> +	  - ir-keytable
+> +	  - media-ctl
+> +	  - v4l2-compliance
+> +	  - v4l2-ctl, cx18-ctl, ivtv-ctl
+> +	  - v4l2-sysfs-path
+> +	  - rds-ctl
+> +	  - qv4l2 (if Qt is enabled)
 
-Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
----
-Changes
-v2: unnecessary Qt patch removed (Arnout).
----
- package/qt/qt.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+To make the things more future-proof, shouldn't we remove the list of
+tools, and just say "Enable this option to enable various tools to
+control Video4Linux devices" (or some other better wording) ?
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index e0e5d22..a64d32f 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -203,6 +203,10 @@ else
- QT_CONFIGURE_OPTS += -static
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+QT_CONFIGURE_OPTS += -D QT_NO_DYNAMIC_LIBRARY
-+endif
-+
- ifeq ($(BR2_ENDIAN),"LITTLE")
- QT_CONFIGURE_OPTS += -little-endian
- else
+Thomas
 -- 
-2.6.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
