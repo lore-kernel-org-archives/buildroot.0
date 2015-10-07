@@ -1,70 +1,107 @@
-From: David Van Arnem <dvanarnem@cmlab.biz>
-Date: Wed,  7 Oct 2015 17:17:04 -0600
-Subject: [Buildroot] [PATCH 1/1] bash: add default bash settings
-Message-ID: <1444259824-6246-1-git-send-email-dvanarnem@cmlab.biz>
+From: Guillaume William Bres <guillaume.bressaix@gmail.com>
+Date: Wed, 7 Oct 2015 17:23:08 -0600
+Subject: [Buildroot] [PATCH v2] pyqtgraph: new package
+In-Reply-To: <Re: [Buildroot] [PATCH 2/2] Add new package PyQtGraph>
+References: <Re: [Buildroot] [PATCH 2/2] Add new package PyQtGraph>
+Message-ID: <1444260188-9571-1-git-send-email-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Settings that were bash-specific were previously removed from
-system/skeleton/etc/profile.  This measn that users using bash no longer
-get the "normal" bash prompt with [user at host dir]#/$, and only get #/$.
-This commit adds back the bash-specific settings, but adds them to the
-bash package so they are only used when bash is installed on the target
-system.
-
-bash_profile.sh contains the variables, aliases, and color profile that
-were previously in system/skeleton/etc/profile.  The changes to bash.mk
-use a post-install hook to install bash_profile.sh to the target
-filesystem, where it will later be sourced by /etc/profile when a bash
-shell is started.
-
-Signed-off-by: David Van Arnem <dvanarnem@cmlab.biz>
+Signed-off-by: Guillaume William Bres <guillaume.bressaix@gmail.com>
 ---
- package/bash/bash.mk         |  7 +++++++
- package/bash/bash_profile.sh | 16 ++++++++++++++++
- 2 files changed, 23 insertions(+)
- create mode 100644 package/bash/bash_profile.sh
-
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 97d7182..dae3bf2 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -49,4 +49,11 @@ define BASH_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/bin/bashbug
- endef
+Applied modifications suggested by Arnout:
  
-+# install default bash settings
-+define BASH_INSTALL_DEFAULT_PROFILE
-+	$(INSTALL) -D -m 644 package/bash/bash_profile.sh \
-+		$(TARGET_DIR)/etc/profile.d/bash_profile.sh
-+endef
-+
-+BASH_POST_INSTALL_TARGET_HOOKS += BASH_INSTALL_DEFAULT_PROFILE
- $(eval $(autotools-package))
-diff --git a/package/bash/bash_profile.sh b/package/bash/bash_profile.sh
+ package/python-pyqtgraph/Config.in now depends on the new variable:
+ BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS.
+ 
+ package/python-pyqtgraph/Config.in selects Qt/PyQt.
+ 
+ comment all dependencies.
+
+---
+ package/Config.in                              |    1 +
+ package/python-pyqtgraph/Config.in             |   22 ++++++++++++++++++++++
+ package/python-pyqtgraph/python-pyqtgraph.hash |    5 +++++
+ package/python-pyqtgraph/python-pyqtgraph.mk   |   15 +++++++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/python-pyqtgraph/Config.in
+ create mode 100644 package/python-pyqtgraph/python-pyqtgraph.hash
+ create mode 100644 package/python-pyqtgraph/python-pyqtgraph.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 3794f44..c8812a6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -645,6 +645,7 @@ menu "external python modules"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pypcap/Config.in"
+ 	source "package/python-pyqt/Config.in"
++	source "package/python-pyqtgraph/Config.in"
+ 	source "package/python-pyratemp/Config.in"
+ 	source "package/python-pyro/Config.in"
+ 	source "package/python-pyroute2/Config.in"
+diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
 new file mode 100644
-index 0000000..b41c240
+index 0000000..f1c3a42
 --- /dev/null
-+++ b/package/bash/bash_profile.sh
-@@ -0,0 +1,16 @@
-+# default bash script, should be sourced by /etc/profile
++++ b/package/python-pyqtgraph/Config.in
+@@ -0,0 +1,22 @@
++comment "python-pyqtgraph requires a (e)glibc toolchain w/ wchar and C++"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 +
-+if [ "$PS1" ]; then
-+    export PS1="[\u@\h \W]$PS1"
-+    alias ll='/bin/ls --color=tty -laFh'
-+    alias ls='/bin/ls --color=tty -F'
-+   	export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:';
++config BR2_PACKAGE_PYTHON_PYQTGRAPH
++	bool "python-pyqtgraph"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
++	depends on BR2_USE_MMU # pyqt -> qt
++	depends on BR2_INSTALL_LIBSTDCPP # pyqt -> qt
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pyqt -> qt
++	select BR2_PACKAGE_PYTHON_PYQT
++	select BR2_PACKAGE_PYTHON_NUMPY # runtime dependency
++	select BR2_PACKAGE_PYTHON_PYEXPAT # runtime dependency
++	select BR2_PACKAGE_QT_SVG # runtime dependency
++	select BR2_PACKAGE_QT_GUI_MODULE
++	help
++	  Pyqtgraph is a pure Python graphics and GUI library built on PyQt4, 
++	  PySide and Numpy. 
++	  
++	  Official website:
++	  http://www.pyqtgraph.org/
+diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
+new file mode 100644
+index 0000000..c20eea2
+--- /dev/null
++++ b/package/python-pyqtgraph/python-pyqtgraph.hash
+@@ -0,0 +1,5 @@
++# From http://www.pyqtgraph.org/downloads
++md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
 +
-+    export USER=`id -un`
-+    export LOGNAME=$USER
-+    export HOSTNAME=`/bin/hostname`
-+    export HISTSIZE=1000
-+    export HISTFILESIZE=1000
-+    export INPUTRC=/etc/inputrc
-+    export DMALLOC_OPTIONS=debug=0x34f47d83,inter=100,log=logfile
-+fi;
++# Locally calculated:
++sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
+diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
+new file mode 100644
+index 0000000..dbc3598
+--- /dev/null
++++ b/package/python-pyqtgraph/python-pyqtgraph.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pyqtgraph
++#
++################################################################################
++
++PYTHON_PYQTGRAPH_VERSION = 0.9.10
++PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
++PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
++PYTHON_PYQTGRAPH_LICENSE = MIT
++PYTHON_PYQTGRAPH_LICENSE_FILES = COPYING
++PYTHON_PYQTGRAPH_SETUP_TYPE = distutils
++PYTHON_PYQTGRAPH_DEPENDENCIES = python-pyqt
++
++$(eval $(python-package))
 -- 
-2.4.3
+1.7.10.4
