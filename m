@@ -1,9 +1,8 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  7 Oct 2015 23:30:04 +0200
-Subject: [Buildroot] [PATCH v1 6/7] gst1-libav: bump version to 1.6.0
-In-Reply-To: <1444253405-3994-1-git-send-email-ps.report@gmx.net>
-References: <1444253405-3994-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1444253405-3994-6-git-send-email-ps.report@gmx.net>
+Date: Wed,  7 Oct 2015 23:56:47 +0200
+Subject: [Buildroot] [PATCH v2 1/4] libv4l: update v4l-utils help text (add
+	more listed tools)
+Message-ID: <1444255010-6341-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +11,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - no changes
+---
+ package/libv4l/Config.in | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index c1a757b..9f6473b 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050904.html
--sha256	605c62624604f3bb5c870844cc1f2711779cc533b004c2aa1d8c0d58557afbbc  gst-libav-1.4.5.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.6.0.tar.xz.sha256sum
-+sha256	6cca6cf73182a882768ef0c860af88c2fd2c77e2c81ce464a998ab4e6baa604c  gst-libav-1.6.0.tar.xz
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 8d71677..ffd13b5 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index d137613..5a55b2b 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -26,8 +26,16 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 	help
+ 	  v4l-utils is a collection of various video4linux and DVB utilities.
+ 	  Enable this if you want to build the following tools:
+-	  cx18-ctl, ir-keytable, ivtv-ctl, v4l2-ctl, v4l2-sysfs-path and
+-	  others.
++	  - cx18-ctl
++	  - dvb-fe-tool, dvbv5-zap, dvbv5-scan, dvb-format-convert
++	  - decode_tm6000
++	  - ir-keytable
++	  - media-ctl
++	  - v4l2-compliance
++	  - v4l2-ctl, cx18-ctl, ivtv-ctl
++	  - v4l2-sysfs-path
++	  - rds-ctl
++	  - qv4l2 (if Qt is enabled)
  
--GST1_LIBAV_VERSION = 1.4.5
-+GST1_LIBAV_VERSION = 1.6.0
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
+ endif
  
 -- 
 2.1.4
