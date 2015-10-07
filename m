@@ -1,33 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 7 Oct 2015 13:09:18 +0300
-Subject: [Buildroot] [PATCH v5 2/2] Patch to assembler to strip LOCK
- prefix.
-In-Reply-To: <1444211584.2759.10.camel@intel.com>
-References: <1443786554.3328.21.camel@intel.com> <56116CAE.3070100@mind.be>
- <1444211584.2759.10.camel@intel.com>
-Message-ID: <20151007100918.GG2375@tarshish>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 7 Oct 2015 11:19:18 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-10-06
+In-Reply-To: <20151007063018.D494C102352@stock.ovh.net>
+References: <20151007063018.D494C102352@stock.ovh.net>
+Message-ID: <5614F1A6.2030403@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ray,
+Dear Thomas Petazzoni,
 
-On Wed, Oct 07, 2015 at 09:53:05AM +0000, Kinsella, Ray wrote:
-> On Sun, 2015-10-04 at 19:15 +0100, Arnout Vandecappelle wrote:
-> >  I have now marked both patches as Changes Requested in out patch tracking
-> > system, so please resubmit a new version that fixes the above comments,
-> > otherwise we'll forget about your contribution.
-> 
-> ok - will followup.
-> (is the patch tracking system public?)
+On 10/07/2015 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2015-10-06
+> ===============================
 
-See http://patchwork.ozlabs.org/project/buildroot/list/.
+>     mips64el |                      pcre-8.37 | NOK | http://autobuild.buildroot.net/results/77f1c33d4315cce3f2d2387aa1368a63caac7468/
 
-baruch
+I'm unable to reproduce this failure even using the same .config file.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+The failure looks like this:
+
+configure: error: You need a C++ compiler for C++ support.
+
+But the toolchain used in that config file does have a C++ compiler:
+
+$ file output/host/opt/ext-toolchain/bin/mips64el-ctng_n64-linux-gnu-g++
+output/host/opt/ext-toolchain/bin/mips64el-ctng_n64-linux-gnu-g++: ELF
+32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked
+(uses shared libs), for GNU/Linux 2.6.18, stripped
+
+This was reported by your gcc75 autobuilder. Could you please have a look?
+
+Regards,
+
+Vincent.
