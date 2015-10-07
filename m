@@ -1,39 +1,23 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 7 Oct 2015 11:19:18 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-10-06
-In-Reply-To: <20151007063018.D494C102352@stock.ovh.net>
-References: <20151007063018.D494C102352@stock.ovh.net>
-Message-ID: <5614F1A6.2030403@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Oct 2015 12:28:57 +0200
+Subject: [Buildroot] [PATCH] xterm: bump to version 320
+In-Reply-To: <1444149463-1269-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 6 Oct 2015 13:37:43 -0300")
+References: <1444149463-1269-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87si5nm0pi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 10/07/2015 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2015-10-06
-> ===============================
+ > Also switch to http site.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
->     mips64el |                      pcre-8.37 | NOK | http://autobuild.buildroot.net/results/77f1c33d4315cce3f2d2387aa1368a63caac7468/
 
-I'm unable to reproduce this failure even using the same .config file.
+Committed, thanks.
 
-The failure looks like this:
-
-configure: error: You need a C++ compiler for C++ support.
-
-But the toolchain used in that config file does have a C++ compiler:
-
-$ file output/host/opt/ext-toolchain/bin/mips64el-ctng_n64-linux-gnu-g++
-output/host/opt/ext-toolchain/bin/mips64el-ctng_n64-linux-gnu-g++: ELF
-32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked
-(uses shared libs), for GNU/Linux 2.6.18, stripped
-
-This was reported by your gcc75 autobuilder. Could you please have a look?
-
-Regards,
-
-Vincent.
+-- 
+Bye, Peter Korsgaard
