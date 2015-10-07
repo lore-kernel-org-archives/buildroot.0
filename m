@@ -1,91 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Oct 2015 16:40:44 +0100
-Subject: [Buildroot] Buildroot developer meeting report
-In-Reply-To: <5611AC6C.3060007@mind.be>
-References: <5611AC6C.3060007@mind.be>
-Message-ID: <20151007154044.GA4030@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 7 Oct 2015 17:44:00 +0200
+Subject: [Buildroot] [PATCH v1 2/3] media-ctl: remove package
+In-Reply-To: <5615088C.60004@mind.be>
+References: <1444165338-19896-1-git-send-email-ps.report@gmx.net>
+ <1444165338-19896-2-git-send-email-ps.report@gmx.net>
+ <5615088C.60004@mind.be>
+Message-ID: <20151007174400.7b52ae72@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Hello Arnout,
 
-On 2015-10-04 23:47 +0100, Arnout Vandecappelle spake thusly:
->  As you will have noticed from the mailing list traffic, it's been a very busy
-> two days at the Buildroot developer meeting in Dublin. You can find the full
-> report at [1].
-[--SNIP--]
+On Wed, 7 Oct 2015 12:57:00 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-As part of the discussions came the subject of supporting multiple
-br2-external trees at once.
+> On 06-10-15 22:02, Peter Seiderer wrote:
+> > Package media-ctl is out-dated, source (and developement) have been moved
+> > to v4l-utils since June 2014. Up-to-date version is available in
+> > the libv4l package (BR2_PACKAGE_LIBV4L/BR2_PACKAGE_LIBV4L_UTILS).
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  Config.in.legacy                                   |   7 +
+> >  package/Config.in                                  |   1 -
+> >  ...ers-for-compatibility-with-old-toolchains.patch | 303 ---------------------
+> >  package/media-ctl/Config.in                        |   9 -
+> >  package/media-ctl/media-ctl.mk                     |  17 --
+> >  5 files changed, 7 insertions(+), 330 deletions(-)
+> >  delete mode 100644 package/media-ctl/0001-add-kernel-headers-for-compatibility-with-old-toolchains.patch
+> >  delete mode 100644 package/media-ctl/Config.in
+> >  delete mode 100644 package/media-ctl/media-ctl.mk
+> > 
+> > diff --git a/Config.in.legacy b/Config.in.legacy
+> > index 3c7fe36..4b7e201 100644
+> > --- a/Config.in.legacy
+> > +++ b/Config.in.legacy
+> > @@ -107,6 +107,13 @@ endif
+> >  ###############################################################################
+> >  comment "Legacy options removed in 2015.11"
+> >  
+> > +config BR2_PACKAGE_MEDIA_CTL
+> > +	bool "media-ctl package has been removed"
+> > +	help
+> > +	  media-ctl source and developement have been moved to
+> > +	  v4l-utils since June 2014. For an up-to-date media-ctl
+> > +	  version select BR2_PACKAGE_LIBV4L and BR2_PACKAGE_LIBV4L_UTILS.
+> 
+>  These two options should be selected automatically. See e.g.
+> BR2_PACKAGE_DIRECTFB_EXAMPLES_ANDI
+> 
+>  You should also select BR2_LEGACY.
+>
 
-The proposal I sent earlier was deemed to introduce too much complexity,
-and Peter suggested we do it with "a script that will generate a bunch
-of symlinks into a single directory, and use that directory as the
-traditional br2-external."
+O.k., will fix it...
+ 
+> > +
+> >  config BR2_PACKAGE_SCHIFRA
+> >  	bool "schifra package has been removed"
+> 
+>  Oops, here BR2_LEGACY is not selected... And in a couple of other places as well...
 
-So, I've spent most of my spare time since then to try to implement that
-proposal, and made quite some progress, up to the point that I believe
-this is not a doable solution. Although it seems nice on paper, it is
-broken by design.
-
-For example, take those two br2-external trees as a simple example (only
-interesting files are listed):
-
-    br2-ext-1/
-        external.mk
-            include $(BR2_EXTERNAL)/foo/foo.mk
-        foo/
-            foo.mk
-                blabla package stuff in here
-            
-
-    br2-ext-2/
-        external.mk
-            include $(BR2_EXTERNAL)/*/*.mk
-
-
-Now, when we create the "shadow copy" full of symlinks, we inevitably
-have to include those two external.mk files, because they may contain
-more than include statements (like custom local rules, or custom macros,
-or whatever; we always said that users were free to provide "even custom
-configuration options and make logic" in there).
-
-
-Now, since we're using a shadow copy, BR2_EXTERNAL at runtime will be
-pointing to that shadow copy, so what happens in that case is that the
-second external.mk will re-include foo/foo.mk
-
-So far, this is not really a problem. Except we now want to ensure that
-a package is not defined multiple times, to avoid a br2-external tree
-redefining a package in Buildroot or in another br2-external tree.
-
-But since foo/foo.mk is included twice, the second time will trigger the
-re-definition check and we would abort.
-
-
-There are not many solutions to this, but the more we try to fix this,
-the more complex and fragile the code is getting. And worse, it would
-inevitably break existing br2-external trees, which we are trying hard
-to keep working without modification to those.
-
-
-So, I'm calling the symlink (or "shadow copy") solution a dead-end out of
-which I can't see an easy path.
-
-
-Input most welcome.
+O.k., will take a look at it too...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
+>  Regards,
+>  Arnout
+> 
+> >  	help
+> 
