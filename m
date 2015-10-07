@@ -1,39 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Oct 2015 10:22:15 +0200
-Subject: [Buildroot] [PATCH] mplayer: bump to version 1.2
-In-Reply-To: <1444138974-30218-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 6 Oct 2015 14:42:54 +0100")
-References: <1444138974-30218-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <871td7nl54.fsf@dell.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 7 Oct 2015 10:22:43 +0200
+Subject: [Buildroot] Add [user@host dir] back to skeleton /etc/profile
+In-Reply-To: <5614523A.2090204@cmlab.biz>
+References: <5614523A.2090204@cmlab.biz>
+Message-ID: <5614D653.7030005@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Dear David,
 
- > - Bump to version 1.2
- > - Update hash file.
- > - Remove no longer existent configure options:
- >   --disable-dvdread-internal, --disable-tremor-internal.
- > - Tweak 0001-disable-install-strip.patch.
- > - Remove 0002-fix-cc-parsing.patch. Upstreamed:
- >   https://github.com/pigoz/mplayer-svn/commit/0f3ddfe146b8b2c6fe9302017375ef6b30ffbe71
- > - Remove 0004-add-arc-support.patch. Upstreamed:
- >   https://github.com/pigoz/mplayer-svn/commit/3b8c5f22313a416b24dcc4e7facde0a886352a75
- > - Remove 0005-Support-newer-GIFLIB-versions.patch. Upstreamed:
- >   https://github.com/pigoz/mplayer-svn/commit/a0ddaef5457e222dade386901bf448c5e3ac7b89
- > - Remove 0006-Support-newer-GIFLIB-versions-part2.patch. Upstreamed:
- >   https://github.com/pigoz/mplayer-svn/commit/a43d259602723d92db1463b166739fb8d22c2d51
- > - Remove 0007-mplayer-enable-aarch64.patch. Upstreamed:
- >   https://github.com/pigoz/mplayer-svn/commit/1cceebf1fa0cc1b27429e937f1cfa61c406f9159
- > - Rename 0003-mpdemux-live555-async-interface.patch to
- >   0002-mpdemux-live555-async-interface.patch.
+thanks for your report.
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Cc-ing the author and the other reviewer of the mentioned commit]
 
-Committed, thanks.
+David Van Arnem wrote:
+> Hi all,
+>
+> I noticed there was a commit pushed Saturday (f93c692c) which removed
+> some bash-specific stuff from the skeleton shell profile in
+> /etc/profile.  The default behavior for the shell prompt now is to only
+> display "$" or "#", without the [user at host dir] prefix.  I just
+> subscribed to the list today so I missed out on any discussion on this;
+> was there a reason the [user at host dir] prefix was not left in the
+> changes ("export PS1="[\u@\h \W]\\$ "")?  I have not encountered a Linux
+> distribution that does not display this or a similar prompt, and I think
+> it would be beneficial to add it back in.  I agree that the aliases,
+> colors, etc should stay removed.
 
+This is because bash is rather unusual on embedded Linux systems. At
+least on small devices, bash has a farily targe foot print, so in most
+cases a simpler shell is used. For example, the default in Buildroot is
+to use the 'ash' shell implemented by Busybox.
+
+Comparing with a desktop distribution, if that's what you did, is
+misleading. Desktops distributions run on machines with large of disks
+and RAMs, and
+
+However it is perfectly fine if you want to use bash on your embedded
+system, and that's why Buildroot has a 'bash' package.
+
+Mmh, I realize now it's probably wise if we add back the bash-specific
+lines, but in package/bash/bash_profile, and of course install that
+file. This would give back bash features to bash users, out of the box,
+and without cluttering the rootfs for other users.
+
+Why don't you try to do it yourself, and make your first code
+contribution to Buildroot?
+
+Regards,
 -- 
-Bye, Peter Korsgaard
+Luca
