@@ -1,57 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Oct 2015 21:58:02 +0100
-Subject: [Buildroot] Add [user@host dir] back to skeleton /etc/profile
-In-Reply-To: <561560C0.4030509@cmlab.biz>
-References: <5614523A.2090204@cmlab.biz> <5614D653.7030005@lucaceresoli.net>
- <56154EC9.4090107@cmlab.biz> <561560C0.4030509@cmlab.biz>
-Message-ID: <5615875A.2010409@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed,  7 Oct 2015 23:30:01 +0200
+Subject: [Buildroot] [PATCH v1 3/7] gst1-plugins-good: bump version to 1.6.0
+In-Reply-To: <1444253405-3994-1-git-send-email-ps.report@gmx.net>
+References: <1444253405-3994-1-git-send-email-ps.report@gmx.net>
+Message-ID: <1444253405-3994-3-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07-10-15 19:13, David Van Arnem wrote:
-> On 10/07/2015 10:56 AM, David Van Arnem wrote:
-[snip]
->> I'd be happy to work on putting the changes back in
->> package/bash/bash_profile.  I've only used default
->> packages/configurations in Buildroot so I'm not very familiar with
->> modifying them, and I could use some guidance.  Should I place
->> bash_profile in package/bash and then have the bash package Makefile
->> copy it to system/skeleton/etc/profile?  Or is there another way I
->> should install it?
->>
->> David
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> Upon more investigation, I have a (hopefully) better idea for how to accomplish
-> this. Sticking with the suggestion in the commit message ("If the user has a
-> specific needs, it needs to be added in /etc/profile.d/ by a post-build
-> script."), I'm thinking I should create package/bash/bash_profile.sh, and in
-> bash.mk set up a section to use $(INSTALL) to install it to
-> $(TARGET_DIR)/etc/profile.d/bash_profile.sh. The skeleton /etc/profile sources
-> any *.sh files in /etc/profile.d, so it should hopefully pick it up. Does this
-> sound like a viable (and correct wrt best buildroot practices) approach?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- Sounds like a good idea to me!
-
- Regards,
- Arnout
-
-> 
-> Or, I'll just try it and see if it works :)
-
-
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index be4c801..bcc321a 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050904.html
+-sha256	79b1b5f3f7bcaa8a615202eb5e176121eeb8336960f70687e536ad78dbc7e641  gst-plugins-good-1.4.5.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.6.0.tar.xz.sha256sum
++sha256	a0915639595305e48884656e22b16fda7c6892aa02cdb3eb43e23dab6e6b81fa  gst-plugins-good-1.6.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index d9b4438..dd19594 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_GOOD_VERSION = 1.4.5
++GST1_PLUGINS_GOOD_VERSION = 1.6.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
