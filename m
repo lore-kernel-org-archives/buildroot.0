@@ -1,51 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 7 Oct 2015 09:07:49 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-10-06
-In-Reply-To: <561509B4.9000408@mind.be>
-References: <20151007063018.D494C102352@stock.ovh.net>
- <5614F1A6.2030403@imgtec.com> <561509B4.9000408@mind.be>
-Message-ID: <56150B15.20402@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 7 Oct 2015 13:19:37 +0100
+Subject: [Buildroot] [PATCH 1/1] ntp: add ntptime option
+In-Reply-To: <1444076966-9308-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1444076966-9308-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <56150DD9.3030600@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/10/15 09:01, Arnout Vandecappelle wrote:
+Dear James Knight,
 
-> On 07-10-15 11:19, Vicente Olivert Riera wrote:
->> Dear Thomas Petazzoni,
->>
->> On 10/07/2015 07:30 AM, Thomas Petazzoni wrote:
->>> Build statistics for 2015-10-06
->>> ===============================
->>
->>>      mips64el |                      pcre-8.37 | NOK | http://autobuild.buildroot.net/results/77f1c33d4315cce3f2d2387aa1368a63caac7468/
->>
->> I'm unable to reproduce this failure even using the same .config file.
->>
->> The failure looks like this:
->>
->> configure: error: You need a C++ compiler for C++ support.
->>
->> But the toolchain used in that config file does have a C++ compiler:
->>
->> $ file output/host/opt/ext-toolchain/bin/mips64el-ctng_n64-linux-gnu-g++
->> output/host/opt/ext-toolchain/bin/mips64el-ctng_n64-linux-gnu-g++: ELF
->> 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked
->> (uses shared libs), for GNU/Linux 2.6.18, stripped
->>
->> This was reported by your gcc75 autobuilder. Could you please have a look?
->
->   gcc75 => probably a bitflip?
->
->   Regards,
->   Arnout
+On 10/05/2015 09:29 PM, James Knight wrote:
+> Allow the `ntptime` utility to be included on a target.
+> 
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Hi Arnout.
-We already had one of those in gcc75:
+Build test for MIPS architecture:
 
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-1-2-cmake-bump-to-version-3-3-2-td112954.html
+$ file output/target/usr/bin/ntptime
+output/target/usr/bin/ntptime: ELF 32-bit MSB executable, MIPS, MIPS32
+rel2 version 1, dynamically linked (uses shared libs), for GNU/Linux
+2.6.32, with unknown capability 0x41000000 = 0xf676e75, with unknown
+capability 0x10000 = 0x70403, not stripped
 
-Regards.
+Regards,
+
+Vincent.
+
+> ---
+>  package/ntp/Config.in | 6 ++++++
+>  package/ntp/ntp.mk    | 1 +
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+> index d4caddf..1763225 100644
+> --- a/package/ntp/Config.in
+> +++ b/package/ntp/Config.in
+> @@ -67,6 +67,12 @@ config BR2_PACKAGE_NTP_NTPSNMPD
+>  	help
+>  	  Install ntpsnmpd NTP SNMP MIB agent.
+>  
+> +config BR2_PACKAGE_NTP_NTPTIME
+> +	bool "ntptime"
+> +	help
+> +	  The ntptime utility program is used to read and set kernel time
+> +	  variables.
+> +
+>  config BR2_PACKAGE_NTP_NTPTRACE
+>  	bool "ntptrace"
+>  	depends on BR2_PACKAGE_PERL
+> diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
+> index 5997247..a3818ea 100644
+> --- a/package/ntp/ntp.mk
+> +++ b/package/ntp/ntp.mk
+> @@ -46,6 +46,7 @@ NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDATE) += ntpdate/ntpdate
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPDC) += ntpdc/ntpdc
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPQ) += ntpq/ntpq
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPSNMPD) += ntpsnmpd/ntpsnmpd
+> +NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTIME) += util/ntptime
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_NTPTRACE) += scripts/ntptrace/ntptrace
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_SNTP) += sntp/sntp
+>  NTP_INSTALL_FILES_$(BR2_PACKAGE_NTP_TICKADJ) += util/tickadj
+> 
