@@ -1,195 +1,90 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  8 Oct 2015 16:01:00 -0300
-Subject: [Buildroot] [PATCH 2/2] rrdtool: bump to version 1.5.4
-In-Reply-To: <1444330860-31735-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444330860-31735-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1444330860-31735-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 8 Oct 2015 21:10:34 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: Fix dri checks
+In-Reply-To: <1443263563-13588-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1443263563-13588-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151008211034.2d690f16@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patches, they're no longer relevant.
+Hello Bernd,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/rrdtool/0001-automake-compat.patch         | 18 -----------
- ...0002-configure-dont-hardcode-include-dirs.patch | 26 ----------------
- package/rrdtool/Config.in                          | 36 +++++++++++++++++-----
- package/rrdtool/rrdtool.hash                       |  2 +-
- package/rrdtool/rrdtool.mk                         | 36 ++++++++++++----------
- 5 files changed, 49 insertions(+), 69 deletions(-)
- delete mode 100644 package/rrdtool/0001-automake-compat.patch
- delete mode 100644 package/rrdtool/0002-configure-dont-hardcode-include-dirs.patch
+On Sat, 26 Sep 2015 12:32:43 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-diff --git a/package/rrdtool/0001-automake-compat.patch b/package/rrdtool/0001-automake-compat.patch
-deleted file mode 100644
-index 92b753d..0000000
---- a/package/rrdtool/0001-automake-compat.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--Make it compatible with newer autoconf/automake.
--Patch from OpenWRT.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- a/bindings/tcl/Makefile.am
--+++ b/bindings/tcl/Makefile.am
--@@ -26,8 +26,8 @@ tclpkgdir = @TCL_PACKAGE_DIR@
-- tclpkg_DATA = pkgIndex.tcl
-- tclpkg_SCRIPTS = ifOctets.tcl
-- else
---pkglib_DATA = pkgIndex.tcl
---pkglib_SCRIPTS = ifOctets.tcl
--+pkgdata_DATA = pkgIndex.tcl
--+pkgdata_SCRIPTS = ifOctets.tcl
-- endif
-- 
-- # Automake doen't like `tclrrd$(VERSION)$(TCL_SHLIB_SUFFIX)' as
-diff --git a/package/rrdtool/0002-configure-dont-hardcode-include-dirs.patch b/package/rrdtool/0002-configure-dont-hardcode-include-dirs.patch
-deleted file mode 100644
-index 43b57a1..0000000
---- a/package/rrdtool/0002-configure-dont-hardcode-include-dirs.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--[PATCH] configure.ac: don't hardcode include files search paths
--
--Breaks cross compilation if host has libart/freetype.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- configure.ac |    4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--Index: rrdtool-1.2.30/configure.ac
--===================================================================
----- rrdtool-1.2.30.orig/configure.ac
--+++ rrdtool-1.2.30/configure.ac
--@@ -524,10 +524,10 @@
-- 
-- CORE_LIBS="$LIBS"
-- 
---EX_CHECK_ALL(art_lgpl_2, art_vpath_add_point,       libart_lgpl/libart.h,   libart-2.0,  2.3.17, ftp://ftp.gnome.org/pub/GNOME/sources/libart_lgpl/2.3/, /usr/include/libart-2.0)
--+EX_CHECK_ALL(art_lgpl_2, art_vpath_add_point,       libart_lgpl/libart.h,   libart-2.0,  2.3.17, ftp://ftp.gnome.org/pub/GNOME/sources/libart_lgpl/2.3/, "")
-- EX_CHECK_ALL(z,          zlibVersion,               zlib.h,                 zlib,        1.2.3,  http://www.gzip.org/zlib/, "")
-- EX_CHECK_ALL(png,        png_access_version_number, png.h,                  libpng,      1.2.10,  http://prdownloads.sourceforge.net/libpng/, "")
---EX_CHECK_ALL(freetype,   FT_Init_FreeType,          ft2build.h,		    freetype2,   2.1.10,  http://prdownloads.sourceforge.net/freetype/, /usr/include/freetype2)
--+EX_CHECK_ALL(freetype,   FT_Init_FreeType,          ft2build.h,		    freetype2,   2.1.10,  http://prdownloads.sourceforge.net/freetype/, "")
-- 
-- if test "$EX_CHECK_ALL_ERR" = "YES"; then
--   AC_MSG_ERROR([Please fix the library issues listed above and try again.])
-diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
-index 33fa677..b07c446 100644
---- a/package/rrdtool/Config.in
-+++ b/package/rrdtool/Config.in
-@@ -1,15 +1,37 @@
- config BR2_PACKAGE_RRDTOOL
- 	bool "rrdtool"
--	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_FREETYPE
--	select BR2_PACKAGE_LIBART
--	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_ZLIB
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  RRDtool is the OpenSource industry standard, high performance
- 	  data logging and graphing system for time series data.
- 
- 	  http://oss.oetiker.ch/rrdtool/
- 
--comment "rrdtool needs a toolchain w/ wchar"
--	depends on !BR2_USE_WCHAR
-+if BR2_PACKAGE_RRDTOOL
-+
-+config BR2_PACKAGE_RRDTOOL_RRDGRAPH
-+	bool "rrd_graph"
-+	default y
-+	depends on BR2_ARCH_HAS_ATOMICS # cairo
-+	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PDF
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_CAIRO_PS
-+	select BR2_PACKAGE_CAIRO_SVG
-+	select BR2_PACKAGE_PANGO
-+	help
-+	  This enables the graphing capabilities ('rrdgraph').
-+	  Without this it will only act as a database backend.
-+
-+comment "rrd_graph support needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+endif
-+
-+comment "rrdtool needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
-index 20af75a..55a7f5b 100644
---- a/package/rrdtool/rrdtool.hash
-+++ b/package/rrdtool/rrdtool.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	3190efea410a6dd035799717948b2df09910f608d72d23ee81adad4cd0184ae9	rrdtool-1.2.30.tar.gz
-+sha256	3feea3da87c02128a27083f1c7b2cb797ef673e946564c0ce008c1c25a5c3f99	rrdtool-1.5.4.tar.gz
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index e422694..f90b137 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -4,31 +4,33 @@
- #
- ################################################################################
- 
--RRDTOOL_VERSION = 1.2.30
-+RRDTOOL_VERSION = 1.5.4
- RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
- RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in COPYRIGHT
--RRDTOOL_LICENSE_FILES = COPYING COPYRIGHT
--
--RRDTOOL_DEPENDENCIES = host-pkgconf freetype libart libpng zlib
--RRDTOOL_AUTORECONF = YES
-+RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
-+RRDTOOL_DEPENDENCIES = host-pkgconf libglib2
- RRDTOOL_INSTALL_STAGING = YES
--RRDTOOL_CONF_ENV = \
--	rd_cv_ieee_works=yes \
--	rd_cv_null_realloc=nope \
--	ac_cv_func_mmap_fixed_mapped=yes
- RRDTOOL_CONF_OPTS = \
-+	--disable-examples \
-+	--disable-libdbi \
-+	--disable-librados \
-+	--disable-libwrap \
-+	--disable-lua \
- 	--disable-perl \
- 	--disable-python \
- 	--disable-ruby \
--	--disable-tcl \
--	--program-transform-name='' \
--	$(if $(BR2_TOOLCHAIN_HAS_THREADS),,--disable-pthread)
--RRDTOOL_MAKE = $(MAKE1)
-+	--disable-tcl
- 
--define RRDTOOL_REMOVE_EXAMPLES
--	rm -rf $(TARGET_DIR)/usr/share/rrdtool/examples
--endef
-+ifeq ($(BR2_PACKAGE_RRDTOOL_RRDGRAPH),y)
-+RRDTOOL_DEPENDENCIES += cairo pango
-+else
-+RRDTOOL_CONF_OPTS += --disable-rrd_graph
-+endif
- 
--RRDTOOL_POST_INSTALL_TARGET_HOOKS += RRDTOOL_REMOVE_EXAMPLES
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+RRDTOOL_DEPENDENCIES += libxml2
-+else
-+RRDTOOL_CONF_OPTS += --disable-rrd_restore
-+endif
- 
- $(eval $(autotools-package))
--- 
-2.4.9
+> "MESA3D_EGL_PLATFORMS = drm" is only needed when dri drivers are
+> enabled:
+> http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n1653
+> 
+> Unconditionally enable dri support, also for gallium drivers, quoting
+> http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n1382
+> 
+>  # Strictly speaking libgbm does not require --enable-dri, although
+>  # both of its backends do. Thus one can build libgbm without any
+>  # backends if --disable-dri is set.
+>  # To avoid unnecessary complexity of checking if at least one backend
+>  # is available when building, just mandate --enable-dri.
+>    AC_MSG_ERROR([gbm requires --enable-dri])
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/799/799f505594f668154af38cb2c2a1ed8a90337e9f/
+> http://autobuild.buildroot.net/results/d00/d00fe349e8710a1ad557507cf04b006216806868/
+> http://autobuild.buildroot.net/results/c7b/c7ba08c8cf54b2e7cf28c5e3454e92a408e724db/
+> http://autobuild.buildroot.net/results/cd7/cd717c9a3a1b0080192e7e765d990cce55513005/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Shortened too long lines in commit message (Vicente)
+> 
+>  package/mesa3d/mesa3d.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 0244523..c5f4c82 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -88,7 +88,7 @@ endef
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+>  MESA3D_CONF_OPTS += \
+> -	--without-dri-drivers --disable-dri --disable-dri3
+> +	--without-dri-drivers --disable-dri3
+>  MESA3D_POST_INSTALL_STAGING_HOOKS += MESA3D_REMOVE_OPENGL_PC
+>  else
+>  ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
+> @@ -102,7 +102,6 @@ MESA3D_DEPENDENCIES += xlib_libXxf86vm
+>  endif
+>  MESA3D_PROVIDES += libgl
+>  MESA3D_CONF_OPTS += \
+> -	--enable-dri \
+>  	--enable-shared-glapi \
+>  	--enable-driglx-direct \
+>  	--with-dri-drivers=$(subst $(space),$(comma),$(MESA3D_DRI_DRIVERS-y))
+> @@ -114,7 +113,7 @@ endif
+>  #   - it is needed for GLES (mesa3d's ./configure is a bit weird)
+>  #   - but if no DRI driver is enabled, then libgl is not built,
+>  #     remove dri.pc and gl.pc in this case (MESA3D_REMOVE_OPENGL_PC)
+> -MESA3D_CONF_OPTS += --enable-opengl
+> +MESA3D_CONF_OPTS += --enable-opengl --enable-dri
+>  
+>  # libva and mesa3d have a circular dependency
+>  # we do not need libva support in mesa3d, therefore disable this option
+> @@ -122,7 +121,9 @@ MESA3D_CONF_OPTS += --disable-va
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+>  MESA3D_PROVIDES += libegl
+> +ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+>  MESA3D_EGL_PLATFORMS = drm
+> +endif
+>  ifeq ($(BR2_PACKAGE_WAYLAND),y)
+>  MESA3D_DEPENDENCIES += wayland
+>  MESA3D_EGL_PLATFORMS += wayland
+
+Fixes compile failure from http://autobuild.buildroot.net/results/f06/f068a90d89a3ef820c9e43cc30dee2b9d6476d8e/
+
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
