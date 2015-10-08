@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Oct 2015 17:07:40 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.12.x series
-Message-ID: <20151008151450.E97A17FA69@busybox.osuosl.org>
+Date: Thu, 8 Oct 2015 17:08:45 +0200
+Subject: [Buildroot] [git commit] mplayer: add license info
+Message-ID: <20151008151451.0132E7FB5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b47d9d4ff056f589fbf6011c181d831a1c3a681
+commit: http://git.buildroot.net/buildroot/commit/?id=ee3e913f1befeb3cb174e2ee2498d1d1a4b8716e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Most code is GPLv2+ or compatible except for one file that is
+GPLv2-only, hence as a whole is GPLv2 (see Copyright).
+Also kill some whitespace and make the only hard dependency
+(host-pkgconf) a hard dependency, not an addition, since it's not
+conditional.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mplayer/mplayer.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8a9682a..adcf616 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -194,7 +194,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.71"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.109"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.90"	if BR2_KERNEL_HEADERS_3_10
--	default "3.12.48"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.49"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.54"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.16.7"	if BR2_KERNEL_HEADERS_3_16
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index bab7ed7..d896b35 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -7,12 +7,12 @@
+ MPLAYER_VERSION = 1.2
+ MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
+ MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+-
++MPLAYER_DEPENDENCIES = host-pkgconf
++MPLAYER_LICENSE = GPLv2
++MPLAYER_LICENSE_FILES = LICENSE Copyright
+ MPLAYER_CFLAGS = $(TARGET_CFLAGS)
+ MPLAYER_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+-MPLAYER_DEPENDENCIES += host-pkgconf
+-
+ # mplayer needs pcm+mixer support, but configure fails to check for it
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
+ MPLAYER_DEPENDENCIES += alsa-lib
