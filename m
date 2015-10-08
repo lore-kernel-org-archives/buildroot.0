@@ -1,78 +1,19 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 8 Oct 2015 10:47:20 +0100
-Subject: [Buildroot] [PATCH v2] picocom: bump to version 2.0
-Message-ID: <1444297640-3094-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Thu, 8 Oct 2015 14:49:27 +0200
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.10.0
+In-Reply-To: <1444259326-28656-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444259326-28656-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <56166657.5000107@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump to version 2.0
-- Switch the download site to GitHub
-- Apply an upstream patch to fix a missing define
-- Add a hash file
-- Rewrap the help text to 72 characters length
-- Change the official website
+On 08/10/2015 01:08, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-Changes v1 -> v2:
-  - Grab the patch from upstream since the pull request has been already
-    merged. Modify the commit log accordingly.
+Tested-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
- package/picocom/Config.in    |    7 +++----
- package/picocom/picocom.hash |    3 +++
- package/picocom/picocom.mk   |    7 ++++---
- 3 files changed, 10 insertions(+), 7 deletions(-)
- create mode 100644 package/picocom/picocom.hash
-
-diff --git a/package/picocom/Config.in b/package/picocom/Config.in
-index 5a7d583..671d01f 100644
---- a/package/picocom/Config.in
-+++ b/package/picocom/Config.in
-@@ -2,8 +2,7 @@ config BR2_PACKAGE_PICOCOM
- 	bool "picocom"
- 	depends on BR2_USE_MMU # fork()
- 	help
--	  picocom is a minimal dumb-terminal emulation program. It
--	  is, in principle, very much like minicom, only it's pico
--	  instead of mini!
-+	  picocom is a minimal dumb-terminal emulation program. It is, in
-+	  principle, very much like minicom, only it's pico instead of mini!
- 
--	  http://code.google.com/p/picocom/
-+	  https://github.com/npat-efault/picocom/
-diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
-new file mode 100644
-index 0000000..7eada03
---- /dev/null
-+++ b/package/picocom/picocom.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 e0f7095c118f43c1c09787a16ef5c7d4c4ad4457dd3b1281efcc4cdb8906af9a  picocom-2.0.tar.gz
-+sha256 37746613c05ecf4058c989ef7042b85ef0308886f3731a9dfffdadd19cc9ecfb  2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
-diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
-index 7858d2b..ade4029 100644
---- a/package/picocom/picocom.mk
-+++ b/package/picocom/picocom.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--PICOCOM_VERSION = 1.7
--PICOCOM_SITE = http://picocom.googlecode.com/files
-+PICOCOM_VERSION = 2.0
-+PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
- PICOCOM_LICENSE = GPLv2+
- PICOCOM_LICENSE_FILES = LICENSE.txt
-+PICOCOM_PATCH = https://github.com/npat-efault/picocom/commit/2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
- 
- define PICOCOM_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define PICOCOM_INSTALL_TARGET_CMDS
--- 
-1.7.1
+(i was testing a patch 100% identical to yours).
