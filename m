@@ -1,98 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  8 Oct 2015 15:59:12 -0300
-Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.4.5
-Message-ID: <1444330752-31507-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  8 Oct 2015 16:00:26 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.24
+Message-ID: <1444330826-31555-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-
-CVE-2015-5289: json or jsonb input values constructed from arbitrary
-user input can crash the PostgreSQL server and cause a denial of
-service.
-
-CVE-2015-5288: The crypt() function included with the optional pgCrypto
-extension could be exploited to read a few additional bytes of memory.
-No working exploit for this issue has been developed.
-
-sparc build fix patch upstream so drop it.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/postgresql/0002-fix-sparc-compile.patch | 38 -------------------------
- package/postgresql/postgresql.hash              |  4 +--
- package/postgresql/postgresql.mk                |  2 +-
- 3 files changed, 3 insertions(+), 41 deletions(-)
- delete mode 100644 package/postgresql/0002-fix-sparc-compile.patch
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/0002-fix-sparc-compile.patch b/package/postgresql/0002-fix-sparc-compile.patch
-deleted file mode 100644
-index 9eec23a..0000000
---- a/package/postgresql/0002-fix-sparc-compile.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--The gcc predefines for Linux are __sparc_v8__/__sparc_v7__
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--
--diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
----- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
--+++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 19:57:06.000000000 +0200
--@@ -420,12 +420,12 @@
-- :		"=r"(_res), "+m"(*lock)
-- :		"r"(lock)
-- :		"memory");
---#if defined(__sparcv7)
--+#if defined(__sparcv7) || defined(__sparc_v7__)
-- 	/*
-- 	 * No stbar or membar available, luckily no actually produced hardware
-- 	 * requires a barrier.
-- 	 */
---#elif defined(__sparcv8)
--+#elif defined(__sparcv8) || defined(__sparc_v8__)
-- 	/* stbar is available (and required for both PSO, RMO), membar isn't */
-- 	__asm__ __volatile__ ("stbar	 \n":::"memory");
-- #else
--@@ -438,13 +438,13 @@
-- 	return (int) _res;
-- }
-- 
---#if defined(__sparcv7)
--+#if defined(__sparcv7) || defined(__sparc_v7__)
-- /*
--  * No stbar or membar available, luckily no actually produced hardware
--  * requires a barrier.
--  */
-- #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
---#elif defined(__sparcv8)
--+#elif defined(__sparcv8) || defined(__sparc_v8__)
-- /* stbar is available (and required for both PSO, RMO), membar isn't */
-- #define S_UNLOCK(lock)	\
-- do \
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 5f415af..97bb56d 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 1ac8350..7edf51a 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
 @@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.4/postgresql-9.4.4.tar.bz2.sha256
--sha256	538ed99688d6fdbec6fd166d1779cf4588bf2f16c52304e5ef29f904c43b0013  postgresql-9.4.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.bz2.sha256
-+sha256	b87c50c66b6ea42a9712b5f6284794fabad0616e6ae420cf0f10523be6d94a39  postgresql-9.4.5.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index e710e92..a42fe73 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://www.stunnel.org/pipermail/stunnel-announce/2015-September/000108.html
+-sha256	0fc4a702afd2e857bae8ad1f39c51546eb282c3d0ff4f4d55d62aece7328ddea	stunnel-5.23.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-users/2015-October/005238.html
++sha256	ab2e5a1034d422951ddad21b572eb7fa8efb4c4ce04bc86536c6845f3d02b07e	stunnel-5.24.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index c44518f..32ed0db 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--POSTGRESQL_VERSION = 9.4.4
-+POSTGRESQL_VERSION = 9.4.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).23
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).24
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
 2.4.9
