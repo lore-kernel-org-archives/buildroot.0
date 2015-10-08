@@ -1,64 +1,98 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Thu, 8 Oct 2015 19:50:11 +0100
-Subject: [Buildroot] [PATCH RFC v1 1/1] gcc: improve checking of stack
- smashing support with uclibc
-In-Reply-To: <20151008181353.GF12078@waldemar-brodkorb.de>
-References: <1442685931-20556-1-git-send-email-brendanheading@gmail.com>
- <CA+BsyQ72v3_sc7Luec6n=Ap-WWxd6JNg+X_Aha3UL4OJqZvTcg@mail.gmail.com>
- <20151008181353.GF12078@waldemar-brodkorb.de>
-Message-ID: <CA+BsyQ7XDnn9KWVssW0_WKnFUxGaGZdJ-Gs2tHky_Hgo+n7bnw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  8 Oct 2015 15:59:12 -0300
+Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.4.5
+Message-ID: <1444330752-31507-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Fixes:
 
-Not yet Waldemar .. I started a new job recently and I need to have a
-word with them before I submit any more patches. Hope to have updates
-soon ..
+CVE-2015-5289: json or jsonb input values constructed from arbitrary
+user input can crash the PostgreSQL server and cause a denial of
+service.
 
-regards
+CVE-2015-5288: The crypt() function included with the optional pgCrypto
+extension could be exploited to read a few additional bytes of memory.
+No working exploit for this issue has been developed.
 
-Brendan
+sparc build fix patch upstream so drop it.
 
-On 8 October 2015 at 19:13, Waldemar Brodkorb <mail@waldemar-brodkorb.de> wrote:
-> Hi Brendan,
->
-> any news about this?
->
-> Brendan Heading wrote,
->
->> On 19 September 2015 at 19:05, Brendan Heading <brendanheading@gmail.com> wrote:
->> > Fixes:
->> > http://autobuild.buildroot.net/results/123/123a5b3f72ba8c1a4aa1cea5b7b846a04fd4e923/
->> > http://autobuild.buildroot.net/results/38c/38cfa4e7249a8770b06dbd392acba79303d3f9bc/
->> >
->> > .. and others.
->> >
->> > Improve GCC's checking of stack smashing support, adding a specific case
->> > statement for uclibc, and removing the check done after checking the
->> > glibc version.
->> >
->> > Signed-off-by: Brendan Heading <brendanheading@gmail.com>
->> > ---
->> > Patch V1 - this initial version only fixes 4.7.4 - wanted to check that
->> > we are heading the right way before I fix all the other versions.
->> >
->> > Note that I manually modified configure, rather than regenerating it from
->> > configure.ac.
->> >
->> > Original plan was to reverse the order of the existing __GLIBC_MINOR__ and
->> > uclibc check. However, the uclibc check falls through if it does not
->> > detect uclibc, so I figure it better to add the separate case statement.
->>
->> Hi guys,
->>
->> Just a quick ping to draw your attention to the above patch. Before I
->> add the fix to all the other supported versions of GCC I wanted to
->> check that you are happy with the way I'm solving the problem in
->> 4.7.4.
->>
->> Brendan
->>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/postgresql/0002-fix-sparc-compile.patch | 38 -------------------------
+ package/postgresql/postgresql.hash              |  4 +--
+ package/postgresql/postgresql.mk                |  2 +-
+ 3 files changed, 3 insertions(+), 41 deletions(-)
+ delete mode 100644 package/postgresql/0002-fix-sparc-compile.patch
+
+diff --git a/package/postgresql/0002-fix-sparc-compile.patch b/package/postgresql/0002-fix-sparc-compile.patch
+deleted file mode 100644
+index 9eec23a..0000000
+--- a/package/postgresql/0002-fix-sparc-compile.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-The gcc predefines for Linux are __sparc_v8__/__sparc_v7__
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
+---- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
+-+++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 19:57:06.000000000 +0200
+-@@ -420,12 +420,12 @@
+- :		"=r"(_res), "+m"(*lock)
+- :		"r"(lock)
+- :		"memory");
+--#if defined(__sparcv7)
+-+#if defined(__sparcv7) || defined(__sparc_v7__)
+- 	/*
+- 	 * No stbar or membar available, luckily no actually produced hardware
+- 	 * requires a barrier.
+- 	 */
+--#elif defined(__sparcv8)
+-+#elif defined(__sparcv8) || defined(__sparc_v8__)
+- 	/* stbar is available (and required for both PSO, RMO), membar isn't */
+- 	__asm__ __volatile__ ("stbar	 \n":::"memory");
+- #else
+-@@ -438,13 +438,13 @@
+- 	return (int) _res;
+- }
+- 
+--#if defined(__sparcv7)
+-+#if defined(__sparcv7) || defined(__sparc_v7__)
+- /*
+-  * No stbar or membar available, luckily no actually produced hardware
+-  * requires a barrier.
+-  */
+- #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
+--#elif defined(__sparcv8)
+-+#elif defined(__sparcv8) || defined(__sparc_v8__)
+- /* stbar is available (and required for both PSO, RMO), membar isn't */
+- #define S_UNLOCK(lock)	\
+- do \
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 5f415af..97bb56d 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.postgresql.org/pub/source/v9.4.4/postgresql-9.4.4.tar.bz2.sha256
+-sha256	538ed99688d6fdbec6fd166d1779cf4588bf2f16c52304e5ef29f904c43b0013  postgresql-9.4.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.bz2.sha256
++sha256	b87c50c66b6ea42a9712b5f6284794fabad0616e6ae420cf0f10523be6d94a39  postgresql-9.4.5.tar.bz2
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e710e92..a42fe73 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 9.4.4
++POSTGRESQL_VERSION = 9.4.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.4.9
