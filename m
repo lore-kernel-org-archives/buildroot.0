@@ -1,70 +1,78 @@
-From: Jaap Crezee <jaap@jcz.nl>
-Date: Thu, 8 Oct 2015 11:26:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: Add node.js v4.1.2
-In-Reply-To: <1444257869.12599.3.camel@embedded.rocks>
-References: <1444136239-22044-1-git-send-email-jaap@jcz.nl>
- <1444257869.12599.3.camel@embedded.rocks>
-Message-ID: <561636D7.9080709@jcz.nl>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 8 Oct 2015 10:47:20 +0100
+Subject: [Buildroot] [PATCH v2] picocom: bump to version 2.0
+Message-ID: <1444297640-3094-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi J?rg,
+- Bump to version 2.0
+- Switch the download site to GitHub
+- Apply an upstream patch to fix a missing define
+- Add a hash file
+- Rewrap the help text to 72 characters length
+- Change the official website
 
-On 10/08/15 00:44, J?rg Krause wrote:
-> No need for patch #2 and #3 from 0.12.x?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+  - Grab the patch from upstream since the pull request has been already
+    merged. Modify the commit log accordingly.
 
-Not when using our cross environment...
-Running on an up-to-date Archlinux system.
-The (unmodified) patches don't apply cleanly as well.
+ package/picocom/Config.in    |    7 +++----
+ package/picocom/picocom.hash |    3 +++
+ package/picocom/picocom.mk   |    7 ++++---
+ 3 files changed, 10 insertions(+), 7 deletions(-)
+ create mode 100644 package/picocom/picocom.hash
 
-> Additionally, this package does not compile with the Sourcery CodeBench
-> x86/x86_64 2012.09 toolchain:
-> 
->     In file included from ../src/js_stream.h:6:0,
->                      from ../src/js_stream.cc:1:
->     ../src/stream_base.h:218:11: error: looser throw specifier for
->     'virtual node::StreamBase::~StreamBase()'
->     ../src/stream_base.h:134:11: error:   overriding 'virtual
->     node::StreamResource::~StreamResource() noexcept (true)'
->     In file included from ../src/js_stream.cc:1:0:
->     ../src/js_stream.h:17:3: error: looser throw specifier for 'virtual
->     node::JSStream::~JSStream()'
->     In file included from ../src/js_stream.h:6:0,
->                      from ../src/js_stream.cc:1:
->     ../src/stream_base.h:218:11: error:   overriding 'virtual
->     node::StreamBase::~StreamBase() noexcept (true)'
->     node.target.mk:146: recipe for target
->     '/home/joerg/Development/git/buildroot/output/build/nodejs
->     -4.1.2/out/Release/obj.target/node/src/js_stream.o' failed
->     make[2]: ***
->     [/home/joerg/Development/git/buildroot/output/build/nodejs
->     -4.1.2/out/Release/obj.target/node/src/js_stream.o] Error 1
->     make[2]: *** Waiting for unfinished jobs....
->     make[2]: Leaving directory
->     '/home/joerg/Development/git/buildroot/output/build/nodejs
->     -4.1.2/out'
->     Makefile:45: recipe for target 'node' failed
->     make[1]: *** [node] Error 2
->     make[1]: Leaving directory
->     '/home/joerg/Development/git/buildroot/output/build/nodejs-4.1.2'
->     package/pkg-generic.mk:156: recipe for target
->     '/home/joerg/Development/git/buildroot/output/build/nodejs
->     -4.1.2/.stamp_built' failed
->     make: *** [/home/joerg/Development/git/buildroot/output/build/nodejs
->     -4.1.2/.stamp_built] Error 2
-> 
-> Maybe gcc > 4.7 required?
-
-I think so, I am using:
-
-gcc version 4.9.3 20141031 (prerelease) (Linaro GCC 2014.11)
-from
-gcc-linaro-arm-linux-gnueabihf-4.9-2014.07_linux
-
-
-regards,
-
-Jaap Crezee
+diff --git a/package/picocom/Config.in b/package/picocom/Config.in
+index 5a7d583..671d01f 100644
+--- a/package/picocom/Config.in
++++ b/package/picocom/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_PICOCOM
+ 	bool "picocom"
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  picocom is a minimal dumb-terminal emulation program. It
+-	  is, in principle, very much like minicom, only it's pico
+-	  instead of mini!
++	  picocom is a minimal dumb-terminal emulation program. It is, in
++	  principle, very much like minicom, only it's pico instead of mini!
+ 
+-	  http://code.google.com/p/picocom/
++	  https://github.com/npat-efault/picocom/
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+new file mode 100644
+index 0000000..7eada03
+--- /dev/null
++++ b/package/picocom/picocom.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 e0f7095c118f43c1c09787a16ef5c7d4c4ad4457dd3b1281efcc4cdb8906af9a  picocom-2.0.tar.gz
++sha256 37746613c05ecf4058c989ef7042b85ef0308886f3731a9dfffdadd19cc9ecfb  2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index 7858d2b..ade4029 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-PICOCOM_VERSION = 1.7
+-PICOCOM_SITE = http://picocom.googlecode.com/files
++PICOCOM_VERSION = 2.0
++PICOCOM_SITE = $(call github,npat-efault,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPLv2+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
++PICOCOM_PATCH = https://github.com/npat-efault/picocom/commit/2c4c2317592daac97aac6669fd7b68e07a3dbec6.patch
+ 
+ define PICOCOM_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define PICOCOM_INSTALL_TARGET_CMDS
+-- 
+1.7.1
