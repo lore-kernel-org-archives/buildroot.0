@@ -1,109 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Oct 2015 17:13:49 +0200
-Subject: [Buildroot] [git commit] dos2unix: bump to version 7.3.1
-Message-ID: <20151008151451.0CC537FA59@busybox.osuosl.org>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Thu, 8 Oct 2015 17:15:17 +0200
+Subject: [Buildroot] [PATCH 7/7 v2] mysql: add mariadb galera cluster
+ variant
+In-Reply-To: <CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+References: <1436458921-4199-1-git-send-email-sylvain.raybaud@green-communications.fr>
+ <1436458921-4199-8-git-send-email-sylvain.raybaud@green-communications.fr>
+ <CAHXCMMKV79jKA9YcA_f6KxWuivKMjP8_zZKjHjAHDU6hgiiXCg@mail.gmail.com>
+Message-ID: <56168885.3090309@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=912538634a778452196c49726bb0770885280adc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Drop upstream patch.
+Hi Samuel
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../dos2unix/0001-fix-build-without-wchar.patch    |   59 --------------------
- package/dos2unix/dos2unix.hash                     |    2 +-
- package/dos2unix/dos2unix.mk                       |    2 +-
- 3 files changed, 2 insertions(+), 61 deletions(-)
+On 09/07/2015 23:56, Samuel Martin wrote:
+>>> +--- a/storage/xtradb/CMakeLists.txt    2014-10-30
+>>> 16:24:33.160188627 +0100 ++++ b/storage/xtradb/CMakeLists.txt
+>>> 2014-10-30 16:25:09.060188829 +0100 +@@ -470,12 +470,13 @@ +
+>>> SET(WITH_INNOBASE_STORAGE_ENGINE TRUE) + ENDIF() + 
+>>> +-IF(XTRADB_OK) +-  MYSQL_ADD_PLUGIN(xtradb ${INNOBASE_SOURCES}
+>>> STORAGE_ENGINE +-    DEFAULT +-    RECOMPILE_FOR_EMBEDDED +-
+>>> LINK_LIBRARIES ${ZLIB_LIBRARY} ${LINKER_SCRIPT}) +-ELSE() +-
+>>> MESSAGE(FATAL_ERROR "Percona XtraDB is not supported on this
+>>> platform") ++IF(NOT WITHOUT_XTRADB)
+> Does this boolean come from an option? it could.
 
-diff --git a/package/dos2unix/0001-fix-build-without-wchar.patch b/package/dos2unix/0001-fix-build-without-wchar.patch
-deleted file mode 100644
-index c318836..0000000
---- a/package/dos2unix/0001-fix-build-without-wchar.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--Don't reference wchar_t when D2U_UNICODE is not defined.
--
--Patch status: upstream (http://sourceforge.net/p/dos2unix/code/736)
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
--diff -Nuar dos2unix-7.3.orig/common.c dos2unix-7.3/common.c
----- dos2unix-7.3.orig/common.c	2015-08-21 02:02:31.000000000 +0300
--+++ dos2unix-7.3/common.c	2015-09-02 22:13:33.648486366 +0300
--@@ -1615,9 +1615,11 @@
--     } else if (pFlag->status & WRONG_CODEPAGE) {
--       d2u_fprintf(stderr,"%s: ",progname);
--       d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
--+#ifdef D2U_UNICODE
--     } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
--       d2u_fprintf(stderr,"%s: ",progname);
--       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), "stdin", (int)sizeof(wchar_t));
--+#endif
--     } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
--       d2u_fprintf(stderr,"%s: ",progname);
--       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), "stdin", pFlag->line_nr);
--@@ -1701,9 +1703,11 @@
--   } else if (pFlag->status & WRONG_CODEPAGE) {
--     d2u_fprintf(stderr,"%s: ",progname);
--     d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
--+#ifdef D2U_UNICODE
--   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
--     d2u_fprintf(stderr,"%s: ",progname);
--     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
--+#endif
--   } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
--     d2u_fprintf(stderr,"%s: ",progname);
--     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), infile, pFlag->line_nr);
--@@ -1781,9 +1785,11 @@
--   } else if (pFlag->status & WRONG_CODEPAGE) {
--     d2u_fprintf(stderr,"%s: ",progname);
--     d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
--+#ifdef D2U_UNICODE
--   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
--     d2u_fprintf(stderr,"%s: ",progname);
--     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
--+#endif
--   } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
--     d2u_fprintf(stderr,"%s: ",progname);
--     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), infile, pFlag->line_nr);
--@@ -1834,11 +1840,13 @@
--       d2u_fprintf(stderr,"%s: ",progname);
--       d2u_fprintf(stderr, _("Skipping symbolic link %s, target is not a regular file.\n"), infile);
--     }
--+#ifdef D2U_UNICODE
--   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
--     if (pFlag->verbose) {
--       d2u_fprintf(stderr,"%s: ",progname);
--       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
--     }
--+#endif
--   }
-- }
-- 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index b22b6fc..7e1a120 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	8175f7552a72edaaa8918fdee68ce2cbc982dc25452f33d4dc611d769f4944d1	dos2unix-7.3.tar.gz
-+sha256	f4d5df24d181c2efecf7631aab6e894489012396092cf206829f1f9a98556b94	dos2unix-7.3.1.tar.gz
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index f448e14..21e03ae 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOS2UNIX_VERSION = 7.3
-+DOS2UNIX_VERSION = 7.3.1
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2c
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+It does. I've sent this patch upstream. MariaDB people acknowledged
+the bug. I think they'll fix it but I don't know when.
+
+> 
+>>> ++  IF(XTRADB_OK) ++    MYSQL_ADD_PLUGIN(xtradb
+>>> ${INNOBASE_SOURCES} STORAGE_ENGINE ++      DEFAULT ++
+>>> RECOMPILE_FOR_EMBEDDED ++      LINK_LIBRARIES ${ZLIB_LIBRARY}
+>>> ${LINKER_SCRIPT}) ++  ELSE() ++    MESSAGE(FATAL_ERROR "Percona
+>>> XtraDB is not supported on this platform") ++  ENDIF() +
+>>> ENDIF() +- diff --git
+>>> a/package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
+>>> b/package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
+>>
+>>> 
+> new file mode 100644
+>>> index 0000000..1ddec5d --- /dev/null +++
+>>> b/package/mysql/10.0.17/mariadb-galera-02-fix_innodb_cmakelist.patch
+>>
+>>> 
+> @@ -0,0 +1,251 @@
+>>> +Use CHECK_C_SOURCE_COMPILES instead of CHECK_C_SOURCE_RUNS in
+>>> order to be +cross-compile friendly. +In buildroot another
+>>> solution (maybe better, maybe not) could be to use 
+>>> +BR2_ARCH_HAS_ATOMICS in order to determine the value of
+>>> HAVE_IB_GCC_ATOMIC_BUILTINS_BYTE +and likes. +
+> Missing SoB line [2].
+> 
+> It makes sense to submit this patch upstream as well.
+> 
+
+I've sent this upstream. I've been told that CHECK_C_SOURCE_COMPILES
+was used before but was not enough in some corner cases. They propose
+to use it when cross-compiling and stick with SOURCE_RUN otherwise. It
+means that "corner cases" won't be covered in cross-compilation but
+this solution is no worse than my patch. However, this script checks
+the availability and usability of:
+__sync_bool_compare_and_swap
+__sync_add_and_fetch
+__sync_lock_test_and_set
+__sync_sub_and_fetch
+__sync_add_and_fetch
+__atomic_thread_fence
+__sync_bool_compare_and_swap
+__sync_synchronize
+maybe I could use BR2_ARCH_HAS_ATOMICS and/or other buildroot
+variables to determine the value of HAVE_IB_GCC_ATOMIC_BUILTINS_BYTE,
+HAVE_IB_ATOMIC_PTHREAD_T_GCC and HAVE_IB_ATOMIC_PTHREAD_T_GCC?
+
+Cheers,
+
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.22 (GNU/Linux)
+
+iQIcBAEBAgAGBQJWFoiFAAoJEEkkwl4JtJ9ys6oQAKqi6EMMLc7THs6WotDuNF72
+Lcg+2ZHlaWdICu58ELSEJD8eqPQeHpKV+UFV+Zm02PT1UZ/nqnSCM59lTjsmzHOo
+D+XJz9w/otGTYjYhKRYuz4f8CyX7VAd6snNxw2TeesRQgShsU8h/A2LE74BPN3nn
+k5f6DZhmDd0ZDBxHFYhOVxQXLK7i8u0zSDemwrLQbdj4ngh7d9P+5LbXNYVKNZiU
+6lNJwNR7xwvEB2ZFtpRkqC2gTjIxD2n71ultwbRoFybnG/drt8dfLWoAg3ZoxrAQ
+sGcbHY0gqhch7ioF/nwdtPqO648jQwY5WGbpLv5FP8GA2XxyWz7JYhyxwIZtyroO
+6dDUJEvpYbVGHYGeR0B/sFJYNtW4gaM4zsoi7NVA740hvX56vhIOQflF+DxxU6ae
+Ma0y1If14U/d5KG8cb4RkC6BSBNRLZAuRAibUIvlQ4pHj6Zw2O3nLJ8o+/hzDEDi
+y2HlCtq1OS2kxsRj81DgmCQMHswO2lLITYmrH3W25dh8guF1cfE9t+a79ZmjeaQA
+im7m6tAhokkTN4m8XcPyaHfBuWBVViZrPmGJLFlLeqGTjJB3+Xm5/48lvhg96L/3
+54dZ9kNJeyIcmXgkJv1tEKtfHyy33NZPYnyRbMBzP+Jk+n/S288WSfkxpBn9j9ur
+YmoAYbVCYiQlaJWydCQp
+=CJ/5
+-----END PGP SIGNATURE-----
