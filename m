@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  8 Oct 2015 02:40:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lzlib: bump to version 0.4.3
-Message-ID: <1444264832-25371-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Thu,  8 Oct 2015 04:12:54 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/lzlib: bump to version 0.4.3
+Message-ID: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,13 @@ Switch to more recent github repository.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
+Changes v1 -> v2:
+  - fix install paths for lib and lua files
+---
  package/lzlib/Config.in  | 2 +-
  package/lzlib/lzlib.hash | 2 --
- package/lzlib/lzlib.mk   | 6 +++---
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ package/lzlib/lzlib.mk   | 8 +++++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
  delete mode 100644 package/lzlib/lzlib.hash
 
 diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
@@ -37,10 +40,10 @@ index d823e8b..0000000
 -# Locally calculated
 -sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
 diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-index ec37842..242b2a7 100644
+index ec37842..91f380a 100644
 --- a/package/lzlib/lzlib.mk
 +++ b/package/lzlib/lzlib.mk
-@@ -4,9 +4,9 @@
+@@ -4,9 +4,11 @@
  #
  ################################################################################
  
@@ -50,6 +53,8 @@ index ec37842..242b2a7 100644
 +LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
  LZLIB_DEPENDENCIES = zlib
  LZLIB_LICENSE = MIT
++LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
++	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
  
 -$(eval $(luarocks-package))
 +$(eval $(cmake-package))
