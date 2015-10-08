@@ -1,41 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Oct 2015 17:06:51 +0200
-Subject: [Buildroot] [git commit] libcurl: bump to version 7.45.0
-Message-ID: <20151008151450.E682B81EE7@busybox.osuosl.org>
+Date: Thu, 8 Oct 2015 17:13:49 +0200
+Subject: [Buildroot] [git commit] dos2unix: bump to version 7.3.1
+Message-ID: <20151008151451.0CC537FA59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f4b13cc526f4004452ed9eac66a27f78da5080f
+commit: http://git.buildroot.net/buildroot/commit/?id=912538634a778452196c49726bb0770885280adc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Drop upstream patch.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash |    2 +-
- package/libcurl/libcurl.mk   |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../dos2unix/0001-fix-build-without-wchar.patch    |   59 --------------------
+ package/dos2unix/dos2unix.hash                     |    2 +-
+ package/dos2unix/dos2unix.mk                       |    2 +-
+ 3 files changed, 2 insertions(+), 61 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index db012a4..d8c6ea1 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/dos2unix/0001-fix-build-without-wchar.patch b/package/dos2unix/0001-fix-build-without-wchar.patch
+deleted file mode 100644
+index c318836..0000000
+--- a/package/dos2unix/0001-fix-build-without-wchar.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-Don't reference wchar_t when D2U_UNICODE is not defined.
+-
+-Patch status: upstream (http://sourceforge.net/p/dos2unix/code/736)
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+-diff -Nuar dos2unix-7.3.orig/common.c dos2unix-7.3/common.c
+---- dos2unix-7.3.orig/common.c	2015-08-21 02:02:31.000000000 +0300
+-+++ dos2unix-7.3/common.c	2015-09-02 22:13:33.648486366 +0300
+-@@ -1615,9 +1615,11 @@
+-     } else if (pFlag->status & WRONG_CODEPAGE) {
+-       d2u_fprintf(stderr,"%s: ",progname);
+-       d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
+-+#ifdef D2U_UNICODE
+-     } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
+-       d2u_fprintf(stderr,"%s: ",progname);
+-       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), "stdin", (int)sizeof(wchar_t));
+-+#endif
+-     } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
+-       d2u_fprintf(stderr,"%s: ",progname);
+-       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), "stdin", pFlag->line_nr);
+-@@ -1701,9 +1703,11 @@
+-   } else if (pFlag->status & WRONG_CODEPAGE) {
+-     d2u_fprintf(stderr,"%s: ",progname);
+-     d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
+-+#ifdef D2U_UNICODE
+-   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
+-     d2u_fprintf(stderr,"%s: ",progname);
+-     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
+-+#endif
+-   } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
+-     d2u_fprintf(stderr,"%s: ",progname);
+-     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), infile, pFlag->line_nr);
+-@@ -1781,9 +1785,11 @@
+-   } else if (pFlag->status & WRONG_CODEPAGE) {
+-     d2u_fprintf(stderr,"%s: ",progname);
+-     d2u_fprintf(stderr, _("code page %d is not supported.\n"), pFlag->ConvMode);
+-+#ifdef D2U_UNICODE
+-   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
+-     d2u_fprintf(stderr,"%s: ",progname);
+-     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
+-+#endif
+-   } else if (pFlag->status & UNICODE_CONVERSION_ERROR) {
+-     d2u_fprintf(stderr,"%s: ",progname);
+-     d2u_fprintf(stderr, _("Skipping UTF-16 file %s, an UTF-16 conversion error occurred on line %u.\n"), infile, pFlag->line_nr);
+-@@ -1834,11 +1840,13 @@
+-       d2u_fprintf(stderr,"%s: ",progname);
+-       d2u_fprintf(stderr, _("Skipping symbolic link %s, target is not a regular file.\n"), infile);
+-     }
+-+#ifdef D2U_UNICODE
+-   } else if (pFlag->status & WCHAR_T_TOO_SMALL) {
+-     if (pFlag->verbose) {
+-       d2u_fprintf(stderr,"%s: ",progname);
+-       d2u_fprintf(stderr, _("Skipping UTF-16 file %s, the size of wchar_t is %d bytes.\n"), infile, (int)sizeof(wchar_t));
+-     }
+-+#endif
+-   }
+- }
+- 
+diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
+index b22b6fc..7e1a120 100644
+--- a/package/dos2unix/dos2unix.hash
++++ b/package/dos2unix/dos2unix.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256  1e2541bae6582bb697c0fbae49e1d3e6fad5d05d5aa80dbd6f072e0a44341814  curl-7.44.0.tar.bz2
-+sha256 65154e66b9f8a442b57c436904639507b4ac37ec13d6f8a48248f1b4012b98ea  curl-7.45.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 6a5348b..ab007d6 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+-sha256	8175f7552a72edaaa8918fdee68ce2cbc982dc25452f33d4dc611d769f4944d1	dos2unix-7.3.tar.gz
++sha256	f4d5df24d181c2efecf7631aab6e894489012396092cf206829f1f9a98556b94	dos2unix-7.3.1.tar.gz
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index f448e14..21e03ae 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.44.0
-+LIBCURL_VERSION = 7.45.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-DOS2UNIX_VERSION = 7.3
++DOS2UNIX_VERSION = 7.3.1
+ DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
+ DOS2UNIX_LICENSE = BSD-2c
+ DOS2UNIX_LICENSE_FILES = COPYING.txt
