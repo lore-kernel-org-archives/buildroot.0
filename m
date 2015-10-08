@@ -1,40 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  8 Oct 2015 16:00:26 -0300
-Subject: [Buildroot] [PATCH] stunnel: bump to version 5.24
-Message-ID: <1444330826-31555-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  8 Oct 2015 16:00:59 -0300
+Subject: [Buildroot] [PATCH 1/2] collectd: drop rrdtool selects
+Message-ID: <1444330860-31735-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop indirect rrdtool selects, they're already selected by rrdtool
+itself so there's no need.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/collectd/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 1ac8350..7edf51a 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From https://www.stunnel.org/pipermail/stunnel-announce/2015-September/000108.html
--sha256	0fc4a702afd2e857bae8ad1f39c51546eb282c3d0ff4f4d55d62aece7328ddea	stunnel-5.23.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-October/005238.html
-+sha256	ab2e5a1034d422951ddad21b572eb7fa8efb4c4ce04bc86536c6845f3d02b07e	stunnel-5.24.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index c44518f..32ed0db 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 2054978..5cdb24e 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -504,11 +504,7 @@ config BR2_PACKAGE_COLLECTD_NETWORK
+ config BR2_PACKAGE_COLLECTD_RRDTOOL
+ 	bool "rrdtool"
+ 	depends on BR2_USE_WCHAR # rrdtool
+-	select BR2_PACKAGE_FREETYPE
+-	select BR2_PACKAGE_LIBART
+-	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_RRDTOOL
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Writes values to RRD-files.
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).23
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).24
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
 2.4.9
