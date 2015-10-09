@@ -1,74 +1,45 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 9 Oct 2015 23:04:30 +0200
-Subject: [Buildroot] efl: fix framebuffer support
-In-Reply-To: <1444074105-2110-1-git-send-email-vicencb@gmail.com>
-References: <5609AA80.6040106@openwide.fr>
- <1444074105-2110-1-git-send-email-vicencb@gmail.com>
-Message-ID: <56182BDE.1000806@openwide.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 9 Oct 2015 23:06:40 +0200
+Subject: [Buildroot] [PATCH v2 3/4] Config.in.legacy: add missing select
+ BR2_LEGACY
+In-Reply-To: <20151009153212.36448f22@free-electrons.com>
+References: <1444255010-6341-1-git-send-email-ps.report@gmx.net>
+ <1444255010-6341-3-git-send-email-ps.report@gmx.net>
+ <20151009153212.36448f22@free-electrons.com>
+Message-ID: <20151009230640.3401fe4c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+Hello Thomas,
 
-Le 05/10/2015 21:41, Vicente Bergas a ?crit :
-> Hello Romain,
+On Fri, 9 Oct 2015 15:32:12 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Peter Seiderer,
 > 
->> Hi Vicente,
->>
->> Le 27/09/2015 02:37, vj a =C3=A9crit :
->>> Hello Romain,
->>> this weekend I had some time to spend on this, sorry for the delay.
->>
->> That's ok, I guess you're working on your free time :)
->>
->>> =20
->>> I've posted the EFL issue:
->>> http://sourceforge.net/p/enlightenment/mailman/message/34493376
->>
->> Glad to see you had some help on your error on framebuffer support.
->> If you send me a git formated patch that fixes your issue, be sure it'll =
->> be part
->> of the next efl series. (I hope, in the meantime, a patch will be applied
->> upstream and backported to 1.15 stable branch before the 1.15.2 release).
+> On Wed,  7 Oct 2015 23:56:49 +0200, Peter Seiderer wrote:
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > 
-> It seems that the issue was not posted soon enough to make it for 1.15.2,
-> so, here is the patch required for it to work.
-
-Ok no problem, I'll add you patch in the next series.
-
+> This patch was actually wrong: doing a "select BR2_LEGACY" on string
+> options is not correct. This was causing a number of warnings when
+> running menuconfig:
 > 
->>
->>> =20
->>> And tested your efl-1.15.1-v1 branch from
->>> git://github.com/RomainNaour/buildroot.git
->>> Aside from the EFL workaround (-fvisibility=3Ddefault) the only
->>> remaining issue is that when audio is disabled it fails to build
->>> because of bae9cf8354208bdad7780e0d11e5b4c8cf1b1f3e.
->>> I think it should be safe to just revert it because multisense is
->>> already enabled by default and (as an audio-related feature) it only
->>> makes sense when audio is also enabled.
->>
->> Thanks for the testing and the feedback!
->> The last patches from efl-1.15.1-v1 branch are WIP and won't be included =
->> yet in
->> the next Buildroot series. I'll take a closer look to multisense stuff.
+> Config.in.legacy:1175:warning: config symbol 'BR2_PACKAGE_TZDATA_ZONELIST' uses select, but is not boolean or tristate
+> Config.in.legacy:1530:warning: config symbol 'BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL' uses select, but is not boolean or tristate
+> Config.in.legacy:1545:warning: config symbol 'BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION' uses select, but is not boolean or tristate
+> Config.in.legacy:1560:warning: config symbol 'BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL' uses select, but is not boolean or tristate
+> Config.in.legacy:1576:warning: config symbol 'BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION' uses select, but is not boolean or tristate
 > 
-> I've spotted something extra:
-> package/efl/efl.mk:312: *** EFL_SITE (http://download.enlightenment.org/rel/libs/efl/) cannot have a trailing slash.  Stop.
-> Affected packages are:
-> econnman efl elemines empc enlightenment libcanberra libelementary libemotion-generic-players libetrophy libevas-generic-loaders python-efl rage terminology x11r7
-> This fixes it:
-> sed -i 's@\(_SITE = .*\)/$@\1@' $(grep -rl '_SITE = .*/$')
+> I've fixed that up in commit http://git.buildroot.net/buildroot/commit/?id=37ad0f8d7000c0be5ea47c4b968241311cc27560.
+> 
+> Please at least test such patches by doing a "make menuconfig" :-)
 
-Thanks for noticing it. Will fix.
+Sorry for this one, will do better next time...
 
-Best regards,
-Romain
+Regards,
+Peter
 
 > 
-> Regards,
->   Vicente.
-> 
+> Thomas
