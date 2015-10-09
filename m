@@ -1,68 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2015 22:54:01 +0200
-Subject: [Buildroot] [PATCH v3] board: add support for ARM Juno r1
- Development Board
-In-Reply-To: <e5d96cb71e852bcd3b4f0ac9a445a11d82ae7a7a.1444410355.git.jpinto@synopsys.com>
-References: <e5d96cb71e852bcd3b4f0ac9a445a11d82ae7a7a.1444410355.git.jpinto@synopsys.com>
-Message-ID: <20151009225401.5d109dd3@free-electrons.com>
+Date: Fri, 9 Oct 2015 15:34:02 +0200
+Subject: [Buildroot] [git commit] python-numpy: introduce ARCH_SUPPORTS
+	hidden variable
+Message-ID: <20151009205547.30A7D81EF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Joao Pinto,
+commit: http://git.buildroot.net/buildroot/commit/?id=bb9014b329175b02d49db91105ba58a17b757c50
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new version!
+Some packages selects python-numpy. This package has a some CPU specific
+code. To simplify and avoid duplicate dependencies this patch introduce an
+hidden ARCH_SUPPORTS variable.
 
-On Fri,  9 Oct 2015 18:08:24 +0100, Joao Pinto wrote:
-> The Juno r1 ARM Development Platform (ADP) is a software development
-> platform for ARMv8-A, it includes the Juno r1 Versatile Express board 
-> and an ARMv8-A reference software port available through Linaro.
-> 
-> Remark: The kernel' arm64 defconfig lacks a considerable amount of 
-> configuration items regarding the Juno r1 board, and that is the reason
-> of this custom kernel configuration file.
-> 
-> 
+[Thomas: fix the definition of the new option to make sure its value
+is actually 'y' when a supported architecture is used.]
 
-Only one empty line is needed here.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-numpy/Config.in |   10 +++++++---
+ 1 files changed, 7 insertions(+), 3 deletions(-)
 
-
-> diff --git a/board/arm/junor1/readme.txt b/board/arm/junor1/readme.txt
-> new file mode 100644
-> index 0000000..224078e
-> --- /dev/null
-> +++ b/board/arm/junor1/readme.txt
-> @@ -0,0 +1,15 @@
-> +This is the support for the ARM Juno r1 development board.
-> +
-> +Please follow the following steps to achieve the desired result:
-> +
-> +1. Install the root filesystem 
-> +1.1 The user should format a pen-drive (ext3 is the suggested 
-> +filesystem type).
-> +1.2 The user should untar the resulting root filesystem (deployed in 
-> +output/images/rootfs.tar) targetting the previously prepared pen-drive.
-> +
-> +2. Install the kernel image and Device Tree Blob
-> +2.1 The user should copy the Image file (output/Images/Image) and Device
-> +Tree Blob (output/build/<linux_folder>/arch/arm64/boot/dts/arm/juno-r1.dtb)
-> +to the Juno r1 Board
-
-This is wrong: you shouldn't tell users to look into output/build/. All
-useful output should be in output/images/.
-
-Also, these instructions are not very interesting: you should explain
-how to actually "install" the kernel image and Device Tree blob.
-
-Please look at other readme.txt in Buildroot to see good examples. I
-think board/raspberrypi2/readme.txt is a good example.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index f8170f8..f7822ef 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,9 +1,13 @@
+-config BR2_PACKAGE_PYTHON_NUMPY
+-	bool "python-numpy"
++config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	bool
+ 	# Numpy has some CPU specific code
+-	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
++	default y if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+ 		|| BR2_sh || BR2_x86_64
++
++config BR2_PACKAGE_PYTHON_NUMPY
++	bool "python-numpy"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	help
+ 	  NumPy is the fundamental package for scientific computing
+ 	  with Python.
