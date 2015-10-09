@@ -1,45 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 9 Oct 2015 23:06:40 +0200
-Subject: [Buildroot] [PATCH v2 3/4] Config.in.legacy: add missing select
- BR2_LEGACY
-In-Reply-To: <20151009153212.36448f22@free-electrons.com>
-References: <1444255010-6341-1-git-send-email-ps.report@gmx.net>
- <1444255010-6341-3-git-send-email-ps.report@gmx.net>
- <20151009153212.36448f22@free-electrons.com>
-Message-ID: <20151009230640.3401fe4c@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Oct 2015 23:15:49 +0200
+Subject: [Buildroot] [git commit] arch/mips: remove some remaining
+	mips1/2/3/4 bits
+Message-ID: <20151009211557.0CE0E81EF2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=25677a717ccaaaf3d9acf32a3d968eaff8f09151
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 9 Oct 2015 15:32:12 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.mips |    8 ++------
+ 1 files changed, 2 insertions(+), 6 deletions(-)
 
-> Dear Peter Seiderer,
-> 
-> On Wed,  7 Oct 2015 23:56:49 +0200, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> This patch was actually wrong: doing a "select BR2_LEGACY" on string
-> options is not correct. This was causing a number of warnings when
-> running menuconfig:
-> 
-> Config.in.legacy:1175:warning: config symbol 'BR2_PACKAGE_TZDATA_ZONELIST' uses select, but is not boolean or tristate
-> Config.in.legacy:1530:warning: config symbol 'BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL' uses select, but is not boolean or tristate
-> Config.in.legacy:1545:warning: config symbol 'BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION' uses select, but is not boolean or tristate
-> Config.in.legacy:1560:warning: config symbol 'BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL' uses select, but is not boolean or tristate
-> Config.in.legacy:1576:warning: config symbol 'BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION' uses select, but is not boolean or tristate
-> 
-> I've fixed that up in commit http://git.buildroot.net/buildroot/commit/?id=37ad0f8d7000c0be5ea47c4b968241311cc27560.
-> 
-> Please at least test such patches by doing a "make menuconfig" :-)
-
-Sorry for this one, will do better next time...
-
-Regards,
-Peter
-
-> 
-> Thomas
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 7630503..297977a 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -6,8 +6,8 @@ choice
+ 	help
+ 	  Specific CPU variant to use
+ 
+-	  64bit cabable: 3, 4, 64, 64r2
+-	  non-64bit capable: 1, 2, 32, 32r2
++	  64bit cabable: 64, 64r2
++	  non-64bit capable: 32, 32r2
+ 
+ config BR2_mips_32
+ 	bool "mips 32"
+@@ -65,10 +65,6 @@ config BR2_ARCH_HAS_ATOMICS
+ 	default y
+ 
+ config BR2_GCC_TARGET_ARCH
+-	default "mips1"		if BR2_mips_1
+-	default "mips2"		if BR2_mips_2
+-	default "mips3"		if BR2_mips_3
+-	default "mips4"		if BR2_mips_4
+ 	default "mips32"	if BR2_mips_32
+ 	default "mips32r2"	if BR2_mips_32r2
+ 	default "mips64"	if BR2_mips_64
