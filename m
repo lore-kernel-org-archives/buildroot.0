@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2015 22:55:34 +0200
-Subject: [Buildroot] [PATCH v6 1/3] python-numpy: introduce
- ARCH_SUPPORTS hidden variable
-In-Reply-To: <1444203799-16230-1-git-send-email-gwenj@trabucayre.com>
-References: <1444203799-16230-1-git-send-email-gwenj@trabucayre.com>
-Message-ID: <20151009225534.5a507232@free-electrons.com>
+Date: Fri, 9 Oct 2015 22:56:31 +0200
+Subject: [Buildroot] [git commit] opencv3: use
+	BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+Message-ID: <20151009205932.D71D081EC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael,
+commit: http://git.buildroot.net/buildroot/commit/?id=6187c82a1494f586f9f15c01f191c714cbd0454a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  7 Oct 2015 09:43:17 +0200, Gwenhael Goavec-Merou wrote:
+Opencv3 select python-numpy. To avoid duplicating architecture
+dependencies, an hidden variable has been added to python-numpy
+package. This patch propagate this modification to the opencv3
+package.
 
-> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-> index f8170f8..f25102a 100644
-> --- a/package/python-numpy/Config.in
-> +++ b/package/python-numpy/Config.in
-> @@ -1,9 +1,13 @@
-> -config BR2_PACKAGE_PYTHON_NUMPY
-> -	bool "python-numpy"
-> +config BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-> +	bool
->  	# Numpy has some CPU specific code
->  	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
->  		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
->  		|| BR2_sh || BR2_x86_64
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opencv3/Config.in |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-With this code, the BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS option is
-always false: there is nothing that makes it equal to 'y', so I don't
-see how you could test these patches.
-
-So I've fixed that by replacing:
-
-	depends on BR2_aarch64 ...
-
-by:
-
-	default y if BR2_aarch64 ...
-
-And applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 9492603..2f51580 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -165,9 +165,7 @@ config BR2_PACKAGE_OPENCV3_LIB_PHOTO
+ config BR2_PACKAGE_OPENCV3_LIB_PYTHON
+ 	bool "python"
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+-	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+-		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+-		|| BR2_sh || BR2_x86_64 # python-numpy
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_PYTHON_NUMPY
+ 	help
+ 	  Include opencv_python module into the OpenCV build.
