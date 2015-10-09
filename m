@@ -1,38 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 9 Oct 2015 07:33:01 -0300
-Subject: [Buildroot] [PATCH] webkitgtk24: use the correct Config.in
-	option for NEON
-In-Reply-To: <1444382406-16293-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1444382406-16293-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <561797DD.3010009@zacarias.com.ar>
+Date: Fri,  9 Oct 2015 07:52:33 -0300
+Subject: [Buildroot] [PATCH] ethtool: bump to version 4.2
+Message-ID: <1444387953-12850-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/10/15 06:20, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> In order to enable JIT support on ARM, webkitgtk24 currently looks at
-> BR2_ARM_ENABLE_NEON, which is not correct: BR2_ARM_CPU_HAS_NEON should
-> be used instead.
->
-> The BR2_ARM_ENABLE_NEON is only visible for cores that select
-> BR2_ARM_CPU_MAYBE_HAS_NEON, in order to allow to specify if his
-> particular SoC has chosen to integrate NEON or not. And if so,
-> BR2_ARM_CPU_HAS_NEON gets selected.
->
-> BR2_ARM_CPU_HAS_NEON is in fact selected in two different ways:
->
->   - Either directly by the CPU core selection, if NEON is mandatory in
->     this CPU core.
->
->   - Or by BR2_ARM_ENABLE_NEON, for CPU cores where NEON support is
->     optional.
->
-> So really, BR2_ARM_CPU_HAS_NEON is what should be used by packages.
->
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 5fde687..53f31d0 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	904887acc7d2f9c35dec04eb0e8a727a3205f346af4f4c95560ea3798de5ecff	ethtool-4.0.tar.xz
++sha256	8cb854bcf71ef8b484b5d2a0e6bf056ae1fbf12cfb19e4907b74b7b21da91e87	ethtool-4.2.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c358c62..c56eeb9 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 4.0
++ETHTOOL_VERSION = 4.2
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
+-- 
+2.4.9
