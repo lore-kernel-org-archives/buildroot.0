@@ -1,39 +1,37 @@
-From: Nikolay Dimitrov <picmaster@mail.bg>
-Date: Sat, 10 Oct 2015 00:49:05 +0300
-Subject: [Buildroot] [PATCH 1/1] configs/riotboard: bump kernel to version
-	4.2.3
-Message-ID: <1444427345-6645-1-git-send-email-picmaster@mail.bg>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 10 Oct 2015 00:02:12 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2015-10-08
+In-Reply-To: <20151009063017.B1789101629@stock.ovh.net>
+References: <20151009063017.B1789101629@stock.ovh.net>
+Message-ID: <20151010000212.22f6b063@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nikolay Dimitrov <picmaster@mail.bg>
----
- configs/riotboard_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-index 79e092e..708a860 100644
---- a/configs/riotboard_defconfig
-+++ b/configs/riotboard_defconfig
-@@ -20,13 +20,13 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # kernel headers
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.1.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_DEFAULT_KERNEL_VERSION="4.2.3"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
- 
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.2.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--- 
-2.1.4
+On Fri,  9 Oct 2015 08:30:17 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+>       x86_64 |                   libv4l-1.6.3 | NOK | http://autobuild.buildroot.net/results/ba2f067734ce5da4f9198ceeb8647af4312e17fc/
+
+Could not reproduce this one, but the failing build-end.log states:
+
+  GEN      moc_qv4l2.cpp
+/bin/bash: /ssd1/thomas/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/ssd1/thomas/autobuild/instance-3/output/host/usr/bin/moc: No such file or directory
+
+
+Would have expected something like
+
+	/ssd1/thomas/autobuild/instance-3/output/host/usr/bin/moc
+
+as moc path, MOC is calculated as (see configure.ac)
+
+	MOC=`$PKG_CONFIG --variable=moc_location QtCore`
+
+Any hints?
+
+Regards,
+Peter
