@@ -1,44 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2015 15:23:59 +0200
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.24
-Message-ID: <20151009132403.C9C558081B@busybox.osuosl.org>
+Date: Fri, 9 Oct 2015 15:23:32 +0200
+Subject: [Buildroot] [PATCH] webkitgtk24: use the correct Config.in
+ option for NEON
+In-Reply-To: <1444382406-16293-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1444382406-16293-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20151009152332.1f3f6763@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=633f2f570a342cbb68a1b9147c7d5d68d429c2fb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/stunnel/stunnel.hash |    4 ++--
- package/stunnel/stunnel.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri,  9 Oct 2015 11:20:06 +0200, Thomas Petazzoni wrote:
+> In order to enable JIT support on ARM, webkitgtk24 currently looks at
+> BR2_ARM_ENABLE_NEON, which is not correct: BR2_ARM_CPU_HAS_NEON should
+> be used instead.
+> 
+> The BR2_ARM_ENABLE_NEON is only visible for cores that select
+> BR2_ARM_CPU_MAYBE_HAS_NEON, in order to allow to specify if his
+> particular SoC has chosen to integrate NEON or not. And if so,
+> BR2_ARM_CPU_HAS_NEON gets selected.
+> 
+> BR2_ARM_CPU_HAS_NEON is in fact selected in two different ways:
+> 
+>  - Either directly by the CPU core selection, if NEON is mandatory in
+>    this CPU core.
+> 
+>  - Or by BR2_ARM_ENABLE_NEON, for CPU cores where NEON support is
+>    optional.
+> 
+> So really, BR2_ARM_CPU_HAS_NEON is what should be used by packages.
+> 
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/webkitgtk24/webkitgtk24.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 1ac8350..7edf51a 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From https://www.stunnel.org/pipermail/stunnel-announce/2015-September/000108.html
--sha256	0fc4a702afd2e857bae8ad1f39c51546eb282c3d0ff4f4d55d62aece7328ddea	stunnel-5.23.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-users/2015-October/005238.html
-+sha256	ab2e5a1034d422951ddad21b572eb7fa8efb4c4ce04bc86536c6845f3d02b07e	stunnel-5.24.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index c44518f..32ed0db 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).23
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).24
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
