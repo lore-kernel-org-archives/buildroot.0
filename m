@@ -1,82 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Oct 2015 11:15:05 +0200
-Subject: [Buildroot] [PATCHv5 1/2] pkg-generic: detect incorrectly used
-	package
+Date: Fri,  9 Oct 2015 11:15:06 +0200
+Subject: [Buildroot] [PATCHv5 2/2] pkg-generic: improve incorrectly used
+	package detection
 In-Reply-To: <1444382106-16019-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1444382106-16019-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1444382106-16019-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1444382106-16019-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In Buildroot, the selection of a package from a Config.in level and
-from a Makefile level are completely disconnected. This can lead to
-issues where the build of a package is triggered at the Makefile level
-due to the package being listed in another package <pkg>_DEPENDENCIES
-variable, even if that package is not enabled in the configuration.
+The package infrastructure now detects when a target package is being
+built even if its corresponding Config.in option is not enabled, and
+aborts with an error. However, it does not indicate *which* package is
+improperly depending on the current package without selecting it at
+the kconfig level.
 
-This has for example been the case recently with python-can having
-'python' in its <pkg>_DEPENDENCIES, while python-can could be enabled
-when Python 3.x is used, in which case the 'python' package should not
-be built.
-
-To detect such issues more easily, this patch adds a check in the
-package infrastructure. When the build process of a package is being
-triggered, we verify that the package is enabled in the
-configuration. We do this check in the "configure" step, since this
-step is the first common step between the normal download case and the
-"local site method" / "package override" case.
+So, in this commit, in addition to displaying an error, we try to help
+the user by saying which packages could be the culprit. To achieve
+this, we register the reverse dependencies of each package in a
+variable called <pkg>_DEPENDENT_OF, and display this variable for the
+problematic package when the error is detected. Many thanks to Yann
+E. Morin for the idea and implementation!
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes since v4:
- - Use $($(PKG)_KCONFIG_VAR) and $($(PKG)_TYPE) as suggested by Arnout.
- - Split the "potential culprit" mechanism into a separate commit, as
-   suggested by Yann.
-
-Changes since v3:
- - Add the DEPENDENT_OF mechanism to display which packages are
-   mistakenly depending on a package without selecting it. Suggested
-   and implement by Yann E. Morin.
-
-Changes since v2:
- - Only do the check if MAKECMDGOALS is empty, i.e if a "default"
-   build is being done. This allows advanced users to continue doing
-   "make <pkg>" to forcefully build a package even if not enabled in
-   the configuration. Suggested by Peter Korsgaard.
- - Add @ in front of the test command so that it doesn't get
-   displayed. Suggested by Peter Korsgaard.
- - Improve error message, as suggested by Peter Korsgaard.
-
-Changes since v1:
- - Use KCONFIG_VAR in order to make the thing work for toolchain
-   packages, bootloaders and Linux. Issue reported by Vicente.
----
- package/pkg-generic.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/pkg-generic.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 76ec295..a831199 100644
+index a831199..1266a47 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -143,6 +143,16 @@ $(foreach dir,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)),\
+@@ -150,6 +150,8 @@ ifeq ($(MAKECMDGOALS),)
+ 	@if test "$($(PKG)_TYPE)" = "target" -a -z "$($($(PKG)_KCONFIG_VAR))" ; then \
+ 		echo "ERROR: A package must have added $($(PKG)_NAME) to its _DEPENDENCIES line but" ; \
+ 		echo "forgot to add the corresponding select / depends on $($(PKG)_KCONFIG_VAR)." ; \
++		echo "Potential culprits:" ; \
++		for p in $($(PKG)_DEPENDENT_OF) ; do echo " - $$p" ; done ; \
+ 		exit 1 ; \
+ 	fi
+ endif
+@@ -777,6 +779,12 @@ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ # configuration
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
  
- # Configure
- $(BUILD_DIR)/%/.stamp_configured:
-+# Only trigger the check for default builds. If the user forces
-+# building a package, even if not enabled in the configuration, we
-+# want to accept it.
-+ifeq ($(MAKECMDGOALS),)
-+	@if test "$($(PKG)_TYPE)" = "target" -a -z "$($($(PKG)_KCONFIG_VAR))" ; then \
-+		echo "ERROR: A package must have added $($(PKG)_NAME) to its _DEPENDENCIES line but" ; \
-+		echo "forgot to add the corresponding select / depends on $($(PKG)_KCONFIG_VAR)." ; \
-+		exit 1 ; \
-+	fi
-+endif
- 	@$(call step_start,configure)
- 	@$(call MESSAGE,"Configuring")
- 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
++# Store reverse build-dependency information: we add the name of the
++# current package to the <pkg>_DEPENDENT_OF variable of all packages
++# the current package depends on.
++$$(eval $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),\
++	$$(call UPPERCASE,$$(d))_DEPENDENT_OF += $(1)$$(sep)))
++
+ # Ensure the calling package is the declared provider for all the virtual
+ # packages it claims to be an implementation of.
+ ifneq ($$($(2)_PROVIDES),)
 -- 
 2.6.1
