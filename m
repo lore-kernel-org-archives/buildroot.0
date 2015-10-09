@@ -1,101 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2015 15:24:34 +0200
-Subject: [Buildroot] [git commit] postgresql: security bump to version 9.4.5
-Message-ID: <20151009132438.EF8877FCF9@busybox.osuosl.org>
+Date: Fri, 9 Oct 2015 15:25:06 +0200
+Subject: [Buildroot] [git commit] collectd: drop rrdtool selects
+Message-ID: <20151009132509.C5DE3817F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4cab124a0b1b7504e50fd02357022cdad1a61865
+commit: http://git.buildroot.net/buildroot/commit/?id=3c1a1c15ad17a6345d2e7df722b40179c552d2ee
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-CVE-2015-5289: json or jsonb input values constructed from arbitrary
-user input can crash the PostgreSQL server and cause a denial of
-service.
-
-CVE-2015-5288: The crypt() function included with the optional pgCrypto
-extension could be exploited to read a few additional bytes of memory.
-No working exploit for this issue has been developed.
-
-sparc build fix patch upstream so drop it.
+Drop indirect rrdtool selects, they're already selected by rrdtool
+itself so there's no need.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/0002-fix-sparc-compile.patch |   38 -----------------------
- package/postgresql/postgresql.hash              |    4 +-
- package/postgresql/postgresql.mk                |    2 +-
- 3 files changed, 3 insertions(+), 41 deletions(-)
+ package/collectd/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/postgresql/0002-fix-sparc-compile.patch b/package/postgresql/0002-fix-sparc-compile.patch
-deleted file mode 100644
-index 9eec23a..0000000
---- a/package/postgresql/0002-fix-sparc-compile.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--The gcc predefines for Linux are __sparc_v8__/__sparc_v7__
--
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--
--diff -Nur postgresql-9.4.4.orig/src/include/storage/s_lock.h postgresql-9.4.4/src/include/storage/s_lock.h
----- postgresql-9.4.4.orig/src/include/storage/s_lock.h	2015-06-09 21:29:38.000000000 +0200
--+++ postgresql-9.4.4/src/include/storage/s_lock.h	2015-08-09 19:57:06.000000000 +0200
--@@ -420,12 +420,12 @@
-- :		"=r"(_res), "+m"(*lock)
-- :		"r"(lock)
-- :		"memory");
---#if defined(__sparcv7)
--+#if defined(__sparcv7) || defined(__sparc_v7__)
-- 	/*
-- 	 * No stbar or membar available, luckily no actually produced hardware
-- 	 * requires a barrier.
-- 	 */
---#elif defined(__sparcv8)
--+#elif defined(__sparcv8) || defined(__sparc_v8__)
-- 	/* stbar is available (and required for both PSO, RMO), membar isn't */
-- 	__asm__ __volatile__ ("stbar	 \n":::"memory");
-- #else
--@@ -438,13 +438,13 @@
-- 	return (int) _res;
-- }
-- 
---#if defined(__sparcv7)
--+#if defined(__sparcv7) || defined(__sparc_v7__)
-- /*
--  * No stbar or membar available, luckily no actually produced hardware
--  * requires a barrier.
--  */
-- #define S_UNLOCK(lock)		(*((volatile slock_t *) (lock)) = 0)
---#elif defined(__sparcv8)
--+#elif defined(__sparcv8) || defined(__sparc_v8__)
-- /* stbar is available (and required for both PSO, RMO), membar isn't */
-- #define S_UNLOCK(lock)	\
-- do \
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 5f415af..97bb56d 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.4/postgresql-9.4.4.tar.bz2.sha256
--sha256	538ed99688d6fdbec6fd166d1779cf4588bf2f16c52304e5ef29f904c43b0013  postgresql-9.4.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.bz2.sha256
-+sha256	b87c50c66b6ea42a9712b5f6284794fabad0616e6ae420cf0f10523be6d94a39  postgresql-9.4.5.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index e710e92..a42fe73 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 2054978..5cdb24e 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -504,11 +504,7 @@ config BR2_PACKAGE_COLLECTD_NETWORK
+ config BR2_PACKAGE_COLLECTD_RRDTOOL
+ 	bool "rrdtool"
+ 	depends on BR2_USE_WCHAR # rrdtool
+-	select BR2_PACKAGE_FREETYPE
+-	select BR2_PACKAGE_LIBART
+-	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_RRDTOOL
+-	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Writes values to RRD-files.
  
--POSTGRESQL_VERSION = 9.4.4
-+POSTGRESQL_VERSION = 9.4.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
