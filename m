@@ -1,59 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  9 Oct 2015 11:15:06 +0200
-Subject: [Buildroot] [PATCHv5 2/2] pkg-generic: improve incorrectly used
-	package detection
-In-Reply-To: <1444382106-16019-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1444382106-16019-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1444382106-16019-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri,  9 Oct 2015 11:20:06 +0200
+Subject: [Buildroot] [PATCH] webkitgtk24: use the correct Config.in option
+	for NEON
+Message-ID: <1444382406-16293-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package infrastructure now detects when a target package is being
-built even if its corresponding Config.in option is not enabled, and
-aborts with an error. However, it does not indicate *which* package is
-improperly depending on the current package without selecting it at
-the kconfig level.
+In order to enable JIT support on ARM, webkitgtk24 currently looks at
+BR2_ARM_ENABLE_NEON, which is not correct: BR2_ARM_CPU_HAS_NEON should
+be used instead.
 
-So, in this commit, in addition to displaying an error, we try to help
-the user by saying which packages could be the culprit. To achieve
-this, we register the reverse dependencies of each package in a
-variable called <pkg>_DEPENDENT_OF, and display this variable for the
-problematic package when the error is detected. Many thanks to Yann
-E. Morin for the idea and implementation!
+The BR2_ARM_ENABLE_NEON is only visible for cores that select
+BR2_ARM_CPU_MAYBE_HAS_NEON, in order to allow to specify if his
+particular SoC has chosen to integrate NEON or not. And if so,
+BR2_ARM_CPU_HAS_NEON gets selected.
 
+BR2_ARM_CPU_HAS_NEON is in fact selected in two different ways:
+
+ - Either directly by the CPU core selection, if NEON is mandatory in
+   this CPU core.
+
+ - Or by BR2_ARM_ENABLE_NEON, for CPU cores where NEON support is
+   optional.
+
+So really, BR2_ARM_CPU_HAS_NEON is what should be used by packages.
+
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/webkitgtk24/webkitgtk24.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a831199..1266a47 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -150,6 +150,8 @@ ifeq ($(MAKECMDGOALS),)
- 	@if test "$($(PKG)_TYPE)" = "target" -a -z "$($($(PKG)_KCONFIG_VAR))" ; then \
- 		echo "ERROR: A package must have added $($(PKG)_NAME) to its _DEPENDENCIES line but" ; \
- 		echo "forgot to add the corresponding select / depends on $($(PKG)_KCONFIG_VAR)." ; \
-+		echo "Potential culprits:" ; \
-+		for p in $($(PKG)_DEPENDENT_OF) ; do echo " - $$p" ; done ; \
- 		exit 1 ; \
- 	fi
- endif
-@@ -777,6 +779,12 @@ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- # configuration
- ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
+index a58fed3..3be1cc7 100644
+--- a/package/webkitgtk24/webkitgtk24.mk
++++ b/package/webkitgtk24/webkitgtk24.mk
+@@ -88,7 +88,7 @@ endif
  
-+# Store reverse build-dependency information: we add the name of the
-+# current package to the <pkg>_DEPENDENT_OF variable of all packages
-+# the current package depends on.
-+$$(eval $$(foreach d,$$($(2)_FINAL_ALL_DEPENDENCIES),\
-+	$$(call UPPERCASE,$$(d))_DEPENDENT_OF += $(1)$$(sep)))
-+
- # Ensure the calling package is the declared provider for all the virtual
- # packages it claims to be an implementation of.
- ifneq ($$($(2)_PROVIDES),)
+ # ARM needs NEON for JIT
+ # i386 & x86_64 don't seem to have any special requirements
+-ifeq ($(BR2_ARM_ENABLE_NEON)$(BR2_i386)$(BR2_x86_64),y)
++ifeq ($(BR2_ARM_CPU_HAS_NEON)$(BR2_i386)$(BR2_x86_64),y)
+ WEBKITGTK24_CONF_OPTS += --enable-jit
+ else
+ WEBKITGTK24_CONF_OPTS += --disable-jit
 -- 
 2.6.1
