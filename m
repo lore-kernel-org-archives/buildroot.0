@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2015 15:23:46 +0200
-Subject: [Buildroot] [git commit] bind: bump to version 9.9.8
-Message-ID: <20151009132403.BCB6C81F4D@busybox.osuosl.org>
+Date: Fri, 9 Oct 2015 15:23:59 +0200
+Subject: [Buildroot] [git commit] stunnel: bump to version 5.24
+Message-ID: <20151009132403.C9C558081B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5fa81e745b2bc6f9beb6656b973ebb5a9dc5585
+commit: http://git.buildroot.net/buildroot/commit/?id=633f2f570a342cbb68a1b9147c7d5d68d429c2fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -16,29 +16,29 @@ Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bind/bind.hash |    4 ++--
- package/bind/bind.mk   |    2 +-
+ package/stunnel/stunnel.hash |    4 ++--
+ package/stunnel/stunnel.mk   |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 4c9fc40..7f52c55 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 1ac8350..7edf51a 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
 @@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.9.7-P3/bind-9.9.7-P3.tar.gz.sha256.asc
--sha256	cb737dce18350890f350dd7d3bc836c62ea440103dfde184c09bc18cfad8a844	bind-9.9.7-P3.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.9.8/bind-9.9.8.tar.gz.sha256.asc
-+sha256	643997cdb0dd232a4c9f7c0f1436841fbf325c6b7269e6490bf5f380eda344e3	bind-9.9.8.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 95051d1..e93b356 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
+-# From https://www.stunnel.org/pipermail/stunnel-announce/2015-September/000108.html
+-sha256	0fc4a702afd2e857bae8ad1f39c51546eb282c3d0ff4f4d55d62aece7328ddea	stunnel-5.23.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-users/2015-October/005238.html
++sha256	ab2e5a1034d422951ddad21b572eb7fa8efb4c4ce04bc86536c6845f3d02b07e	stunnel-5.24.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index c44518f..32ed0db 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BIND_VERSION = 9.9.7-P3
-+BIND_VERSION = 9.9.8
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).23
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).24
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
