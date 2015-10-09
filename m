@@ -1,37 +1,54 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 10 Oct 2015 00:02:12 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-10-08
-In-Reply-To: <20151009063017.B1789101629@stock.ovh.net>
-References: <20151009063017.B1789101629@stock.ovh.net>
-Message-ID: <20151010000212.22f6b063@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  9 Oct 2015 22:17:42 +0000 (UTC)
+Subject: [Buildroot] [Bug 8391] New: Node.js 0.12.7 fails to build on
+ raspberry_pi defconfig
+Message-ID: <bug-8391-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8391
 
-On Fri,  9 Oct 2015 08:30:17 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+           Summary: Node.js 0.12.7 fails to build on raspberry_pi
+                    defconfig
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: tomaspollak at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
->       x86_64 |                   libv4l-1.6.3 | NOK | http://autobuild.buildroot.net/results/ba2f067734ce5da4f9198ceeb8647af4312e17fc/
 
-Could not reproduce this one, but the failing build-end.log states:
+Hi,
 
-  GEN      moc_qv4l2.cpp
-/bin/bash: /ssd1/thomas/autobuild/instance-3/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/ssd1/thomas/autobuild/instance-3/output/host/usr/bin/moc: No such file or directory
+I'm currently building a buildroot image (from git HEAD) for a raspberry_pi
+board, but when trying to build the nodejs package (ver 0.12.7) the compiler
+fails at some point on deps/v8/source with the following error:
 
+    "Your CPU's ARM architecture is not supported yet"
 
-Would have expected something like
+This seems to be caused by the compiler not being able to determine the right
+ARM version when compiling. If I cd to output/build/nodejs-0.12.7 dir and run:
 
-	/ssd1/thomas/autobuild/instance-3/output/host/usr/bin/moc
+    CXXFLAGS="-march=armv6" make
 
-as moc path, MOC is calculated as (see configure.ac)
+It builds correctly. 
 
-	MOC=`$PKG_CONFIG --variable=moc_location QtCore`
+I've been looking at the package/nodejs/nodejs.mk file but haven't been able to
+figure where to put this to get the package to build. Any pointers?
 
-Any hints?
+Thanks and congrats for your work!
+Tom
 
-Regards,
-Peter
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
