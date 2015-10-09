@@ -1,39 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Oct 2015 15:25:06 +0200
-Subject: [Buildroot] [git commit] collectd: drop rrdtool selects
-Message-ID: <20151009132509.C5DE3817F1@busybox.osuosl.org>
+Date: Fri, 9 Oct 2015 15:24:07 +0200
+Subject: [Buildroot] [PATCH] bind: bump to version 9.9.8
+In-Reply-To: <1444335393-6199-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444335393-6199-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151009152407.5bc33214@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c1a1c15ad17a6345d2e7df722b40179c552d2ee
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Drop indirect rrdtool selects, they're already selected by rrdtool
-itself so there's no need.
+On Thu,  8 Oct 2015 17:16:33 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/bind/bind.hash | 4 ++--
+>  package/bind/bind.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/collectd/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+Applied, thanks.
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 2054978..5cdb24e 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -504,11 +504,7 @@ config BR2_PACKAGE_COLLECTD_NETWORK
- config BR2_PACKAGE_COLLECTD_RRDTOOL
- 	bool "rrdtool"
- 	depends on BR2_USE_WCHAR # rrdtool
--	select BR2_PACKAGE_FREETYPE
--	select BR2_PACKAGE_LIBART
--	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_RRDTOOL
--	select BR2_PACKAGE_ZLIB
- 	help
- 	  Writes values to RRD-files.
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
