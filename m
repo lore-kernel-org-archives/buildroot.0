@@ -1,125 +1,141 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Oct 2015 17:04:57 +0200
-Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
-In-Reply-To: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
-References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151010150457.GD3640@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 10 Oct 2015 17:17:20 +0200
+Subject: [Buildroot] [PATCH] sane-backends: add systemd support
+In-Reply-To: <20151010120507.0b393f2a@free-electrons.com>
+References: <1444150432-23644-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151010120507.0b393f2a@free-electrons.com>
+Message-ID: <CAGduivxMHZQRnx46WYi9A8Hjeni5vDLZwadEHfVP0sVWHNstFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Hi Vicente, all
 
-On 2015-10-09 15:26 +0200, Romain Naour spake thusly:
-> The PCI support needs to be checked since this driver is based
-> on it. Otherwise the build fail with:
->  #error "This driver requires PCI support to be available"
-> 
-> But this message is concealed by several occurrence of this
-> one:
->  error: implicit declaration of function 'pci_find_bus' [-Werror=implicit-function-declaration]
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-[--SNIP--]
-> diff --git a/package/iqvlinux/Config.in b/package/iqvlinux/Config.in
-> new file mode 100644
-> index 0000000..275c67e
-> --- /dev/null
-> +++ b/package/iqvlinux/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_IQVLINUX
-> +	bool "iqvlinux"
-> +	depends on BR2_LINUX_KERNEL
-> +	help
-> +	  Intel Ethernet Adapter Debug Driver for Linux (iqvlinux),
-> +	  which supports kernel versions 2.6.x up through 4.0.x.
+On Sat, Oct 10, 2015 at 12:05 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-What about 4.1+ ?
+> Maxime,
+>
+> Can you review/ack the below patch?
+>
+> Thanks,
+>
+> Thomas
+>
+> On Tue, 6 Oct 2015 17:53:52 +0100, Vicente Olivert Riera wrote:
+> > The content and the location of the saned.socket and saned at .service
+> > files is based on the instructions of the sane-backends manual.
+> >
+> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > ---
+> > Notes to the maintainer:
+> >   - This patch is meant to be applied after:
+> >     http://patchwork.ozlabs.org/patch/526815/
+> >
+> >  package/sane-backends/sane-backends.mk |   14 ++++++++++++++
+> >  package/sane-backends/saned.socket     |   10 ++++++++++
+> >  package/sane-backends/saned at .service   |   18 ++++++++++++++++++
+> >  3 files changed, 42 insertions(+), 0 deletions(-)
+> >  create mode 100644 package/sane-backends/saned.socket
+> >  create mode 100644 package/sane-backends/saned at .service
+> >
+> > diff --git a/package/sane-backends/sane-backends.mk
+> b/package/sane-backends/sane-backends.mk
+> > index 0c0b5a9..82b5052 100644
+> > --- a/package/sane-backends/sane-backends.mk
+> > +++ b/package/sane-backends/sane-backends.mk
+> > @@ -14,6 +14,13 @@ SANE_BACKENDS_INSTALL_STAGING = YES
+> >  SANE_BACKENDS_CONF_OPTS = \
+> >       $(if
+> $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthread,--disable-pthread)
+> >
+> > +ifeq ($(BR2_INIT_SYSTEMD),y)
+> > +SANE_BACKENDS_CONF_OPTS += --with-systemd
+> > +SANE_BACKENDS_DEPENDENCIES += systemd
+> > +else
+> > +SANE_BACKENDS_CONF_OPTS += --without-systemd
+> > +endif
+> > +
+> >  ifeq ($(BR2_PACKAGE_LIBUSB),y)
+> >  SANE_BACKENDS_DEPENDENCIES += libusb
+> >  SANE_BACKENDS_CONF_OPTS += --enable-libusb_1_0
+> > @@ -50,4 +57,11 @@ endef
+> >
+> >  SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
+> >
+> > +define SANE_BACKENDS_INSTALL_INIT_SYSTEMD
+> > +     $(INSTALL) -m 0644 -D package/sane-backends/saned.socket \
+> > +             $(TARGET_DIR)/etc/systemd/system/saned.socket
+> > +     $(INSTALL) -m 0644 -D package/sane-backends/saned at .service \
+> > +             $(TARGET_DIR)/etc/systemd/system/saned at .service
+> > +endef
+>
+Regarding the installation of the services, I would prefer them to be
+installed in /usr/lib/systemd/system like the rest of our scripts, and
+create the link in /etc/systemd/system/, this way, if you want to
+enable/disable the target on the device, it'll only create/delete a
+symbolic link.
+I'll try to create a helper for that, we have this kind of code copy/pasted
+way too many times.
 
-Should we do a version-check at configure time, or is there such a check
-already done by the package itself?
+> > +
+> >  $(eval $(autotools-package))
+> > diff --git a/package/sane-backends/saned.socket
+> b/package/sane-backends/saned.socket
+> > new file mode 100644
+> > index 0000000..1aa19e7
+> > --- /dev/null
+> > +++ b/package/sane-backends/saned.socket
+> > @@ -0,0 +1,10 @@
+> > +[Unit]
+> > +Description=saned incoming socket
+> > +
+> > +[Socket]
+> > +ListenStream=6566
+> > +Accept=yes
+> > +MaxConnections=1
+> > +
+> > +[Install]
+> > +WantedBy=sockets.target
+> > diff --git a/package/sane-backends/saned at .service
+> b/package/sane-backends/saned at .service
+> > new file mode 100644
+> > index 0000000..1905dbf
+> > --- /dev/null
+> > +++ b/package/sane-backends/saned at .service
+> > @@ -0,0 +1,18 @@
+> > +[Unit]
+> > +Description=Scanner Service
+> > +Requires=saned.socket
+> > +
+> > +[Service]
+> > +ExecStart=/usr/sbin/saned
+> > +User=saned
+> > +Group=saned
+>
+You are using a user and a group, but I don't see it created anywhere in
+the mk file, is it missing or am I missing something ?
 
-[--SNIP--]
-> diff --git a/package/iqvlinux/iqvlinux.mk b/package/iqvlinux/iqvlinux.mk
-> new file mode 100644
-> index 0000000..ed98f1f
-> --- /dev/null
-> +++ b/package/iqvlinux/iqvlinux.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# iqvlinux
-> +#
-> +################################################################################
-> +
-> +IQVLINUX_VERSION = 1.1.5.3
-> +
-> +IQVLINUX_SITE = \
-> +	http://sourceforge.net/projects/e1000/files/iqvlinux/$(IQVLINUX_VERSION)
-> +IQVLINUX_SOURCE = iqvlinux.tar.gz
-> +
-> +IQVLINUX_LICENSE = GPLv2 or BSD-3c
-> +IQVLINUX_LICENSE_FILES = COPYING src/linux/driver/files.txt \
-> +	inc/linux/files.txt inc/files.txt
-> +
-> +IQVLINUX_MODULE_MAKE_OPTS = NALDIR=$(@D) KSRC=$(LINUX_DIR) CC=$(TARGET_CC)
-
-Are you sure CC is needed? The kernel buildsystem should already set it, no?
-
-> +IQVLINUX_MODULE_SUBDIRS = src/linux/driver
-> +
-> +ifeq ($(BR2_PACKAGE_IQVLINUX),y)
-> +define IQVLINUX_PCI_CHECK
-> +	@if ! grep -Fqx 'CONFIG_PCI=y' $(LINUX_DIR)/.config; then \
-> +		echo "ERROR: Enable CONFIG_PCI in the linux kernel config." 1>&2 ; \
-> +		exit 1; \
-> +	fi
-> +endef
-> +
-> +# Check if PCI is enabled in the Linux kernel build by Buildroot.
-> +LINUX_POST_CONFIGURE_HOOKS += IQVLINUX_PCI_CHECK
-> +endif
-
-I really do not like that a package meddles in the affairs of another
-package, like setting hooks for it.
-
-I'd rather we add a variable that packages could set to require specific
-kernel config options, something like:
-
-    IQVLINUX_LINUX_NEEDS_CONFIG_OPTS = CONFIG_PCI
-
-Then in package/pkg-generic, in the inner-generic-package macro:
-
-    LINUX_NEEDS_CONFIG_OPTS += $$($(2)_NEEDS_LINUX_CONFIG)
-
-And finally in linux/linux.mk:
-
-    define LINUX_CHECK_CONFIG_OPTS
-        $(foreach cfg,$(strip $(LINUX_NEEDS_CONFIG_OPTS)),\
-            if ! grep -E '^$(cfg)=y$$' $(@D)/.config >/dev/null; then \
-                printf "ERROR: Enable %s in your linux kernel config." "$(cfg)"; \
-                exit 1; \
-            fi;)
-    endef
-    LINUX_POST_CONFIGURE_HOOKS += LINUX_CHECK_CONFIG_OPTS
-
-Regards,
-Yann E. MORIN.
-
-> +$(eval $(kernel-module))
-> +$(eval $(generic-package))
-> -- 
-> 2.4.3
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> > +StandardInput=null
+> > +StandardOutput=syslog
+> > +StandardError=syslog
+> > +Environment=SANE_CONFIG_DIR=/etc/sane.d
+> > +# If you need to debug your configuration uncomment the next line and
+> > +# change it as appropriate to set the desired debug options
+> > +# Environment=SANE_DEBUG_DLL=255 SANE_DEBUG_BJNP=5
+> > +
+> > +[Install]
+> > +Also=saned.socket
+>
+>
+>
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151010/bb97869d/attachment.html>
