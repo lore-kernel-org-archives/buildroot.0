@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Oct 2015 12:54:28 +0200
-Subject: [Buildroot] [PATCH v3 02/37] package/expedite: move to package
- directory
-In-Reply-To: <1444471422-15118-3-git-send-email-romain.naour@openwide.fr>
-References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
- <1444471422-15118-3-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20151010125428.002de0af@free-electrons.com>
+Date: Sat, 10 Oct 2015 12:54:54 +0200
+Subject: [Buildroot] [PATCHv2 1/2] toolchain: add sparc64 architecture
+ support
+In-Reply-To: <20150829075733.GA19454@waldemar-brodkorb.de>
+References: <20150829075733.GA19454@waldemar-brodkorb.de>
+Message-ID: <20151010125454.3a1820a4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Waldemar Brodkorb,
 
-On Sat, 10 Oct 2015 12:03:07 +0200, Romain Naour wrote:
-> Add efl reverse dependencies.
+On Sat, 29 Aug 2015 09:57:33 +0200, Waldemar Brodkorb wrote:
+> Introduce sparc64 architecture to buildroot.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  - Changes v1 -> v2:
+>    only allow useful architecture variants suggested by Thomas Petazzoni 
+> ---
+>  arch/Config.in                          |   12 +++++++++++-
+>  arch/Config.in.sparc                    |   12 ++++++++++--
+>  toolchain/toolchain-buildroot/Config.in |    3 ++-
+>  3 files changed, 23 insertions(+), 4 deletions(-)
 
-This is a bit of a poor commit log. Why do you move expedite to the
-package/ directory? And what does it mean to "add reverse
-dependencies" ?
-
-Also, it seems like you don't have rename detection enabled in Git.
-
-Thanks,
+Both patches applied, thanks.
 
 Thomas
 -- 
