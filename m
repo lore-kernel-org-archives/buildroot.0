@@ -1,53 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Oct 2015 19:35:09 +0200
-Subject: [Buildroot] [PATCHv2 1/2] toolchain: add sparc64 architecture
- support
-In-Reply-To: <20150829075733.GA19454@waldemar-brodkorb.de>
-References: <20150829075733.GA19454@waldemar-brodkorb.de>
-Message-ID: <20151010193509.058edf01@free-electrons.com>
+Date: Sat, 10 Oct 2015 19:32:14 +0200
+Subject: [Buildroot] [git commit] skeleton: Remove ftp user and /home/ftp
+Message-ID: <20151010173637.E1A7C81DC6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar,
+commit: http://git.buildroot.net/buildroot/commit/?id=3dde19e5f32c58ffbf7e190257b073e91e0a7e8d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 29 Aug 2015 09:57:33 +0200, Waldemar Brodkorb wrote:
-> Introduce sparc64 architecture to buildroot.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  - Changes v1 -> v2:
->    only allow useful architecture variants suggested by Thomas Petazzoni 
-> ---
->  arch/Config.in                          |   12 +++++++++++-
->  arch/Config.in.sparc                    |   12 ++++++++++--
->  toolchain/toolchain-buildroot/Config.in |    3 ++-
->  3 files changed, 23 insertions(+), 4 deletions(-)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/skeleton/etc/group       |    1 -
+ system/skeleton/etc/passwd      |    1 -
+ 2 files changed, 0 insertions(+), 2 deletions(-)
 
-I tried to build a toolchain with this, and it fails for me, during the
-host-gcc-final build step, with the following error message:
-
-In file included from ../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:17:0:
-../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:257:72: error: size of array 'assertion_failed__869' is negative
-     typedef char IMPL_PASTE(assertion_failed_##_, line)[2*(int)(pred)-1]
-
-I have built the following configuration:
-
-BR2_sparc64=y
-BR2_KERNEL_HEADERS_4_1=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Could you have a look?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index c1dc11f..ba20e90 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -21,6 +21,5 @@ plugdev:x:46:
+ staff:x:50:
+ lock:x:54:
+ netdev:x:82:
+-ftp:x:83:
+ nogroup:x:99:
+ users:x:100:
+diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
+index 3a80341..883265a 100644
+--- a/system/skeleton/etc/passwd
++++ b/system/skeleton/etc/passwd
+@@ -6,5 +6,4 @@ sync:x:4:100:sync:/bin:/bin/sync
+ mail:x:8:8:mail:/var/spool/mail:/bin/false
+ www-data:x:33:33:www-data:/var/www:/bin/false
+ operator:x:37:37:Operator:/var:/bin/false
+-ftp:x:83:83:ftp:/home/ftp:/bin/false
+ nobody:x:99:99:nobody:/home:/bin/false
+diff --git a/system/skeleton/home/ftp/.empty b/system/skeleton/home/ftp/.empty
+deleted file mode 100644
+index e69de29..0000000
