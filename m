@@ -1,9 +1,10 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:19 +0200
-Subject: [Buildroot] [PATCH v3 14/37] package/efl: add webp dependency
+Date: Sat, 10 Oct 2015 12:03:20 +0200
+Subject: [Buildroot] [PATCH v3 15/37] package/efl: add frame buffer config
+	option
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-15-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-16-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +14,41 @@ To: buildroot@busybox.net
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
  package/efl/Config.in | 5 +++++
- package/efl/efl.mk    | 7 +++++++
- 2 files changed, 12 insertions(+)
+ package/efl/efl.mk    | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index aec02d0..6815189 100644
+index 6815189..00b14ca 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -64,6 +64,11 @@ config BR2_PACKAGE_EFL_TIFF
- 	help
- 	  This enables the loader code that loads tiff files.
+@@ -36,6 +36,11 @@ config BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
+ 	  otherwise we need to add a very long and obscure option
+ 	  to start the build.
  
-+config BR2_PACKAGE_EFL_WEBP
-+	bool "libevas webp image loader"
-+	help
-+	  This enables the loader code that loads images using WebP.
++comment "libecore video support"
 +
- endif # BR2_PACKAGE_EFL
++config BR2_PACKAGE_EFL_FB
++	bool "libecore framebuffer support"
++
+ comment "libevas loaders"
  
- comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
+ config BR2_PACKAGE_EFL_PNG
 diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index c30ce5d..4441d91 100644
+index 4441d91..35ee466 100644
 --- a/package/efl/efl.mk
 +++ b/package/efl/efl.mk
-@@ -194,6 +194,13 @@ else
- EFL_CONF_OPTS += --enable-image-loader-tiff=no
+@@ -165,6 +165,12 @@ else
+ EFL_CONF_OPTS += --enable-wayland=no
  endif
  
-+ifeq ($(BR2_PACKAGE_EFL_WEBP),y)
-+EFL_CONF_OPTS += --enable-image-loader-webp=yes
-+EFL_DEPENDENCIES += webp
++ifeq ($(BR2_PACKAGE_EFL_FB),y)
++EFL_CONF_OPTS += --enable-fb=yes
 +else
-+EFL_CONF_OPTS += --enable-image-loader-webp=no
++EFL_CONF_OPTS += --enable-fb=no
 +endif
 +
- $(eval $(autotools-package))
- 
- ################################################################################
+ # image loader: handle only loaders that requires dependencies.
+ # All other loaders are builded by default statically.
+ ifeq ($(BR2_PACKAGE_EFL_PNG),y)
 -- 
 2.4.3
