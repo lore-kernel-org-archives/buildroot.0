@@ -1,71 +1,149 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 15:31:31 +0200
-Subject: [Buildroot] [PATCH v3 02/37] package/expedite: move to package
- directory
-In-Reply-To: <20151010145556.59b3543c@free-electrons.com>
-References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
- <1444471422-15118-3-git-send-email-romain.naour@openwide.fr>
- <20151010125428.002de0af@free-electrons.com> <561907F7.5070308@openwide.fr>
- <20151010145556.59b3543c@free-electrons.com>
-Message-ID: <56191333.6030607@openwide.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 10 Oct 2015 16:50:55 +0200
+Subject: [Buildroot] [PATCH 1/1 v3] package/unscd: new package
+In-Reply-To: <1444399839-10680-1-git-send-email-rdkehn@yahoo.com>
+References: <1444399839-10680-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <20151010145055.GC3640@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Doug, All,
 
-Le 10/10/2015 14:55, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
+[CCing Maxime, as he knows systemd better than I do]
+
+On 2015-10-09 09:10 -0500, Doug Kehn spake thusly:
+> A daemon which handles passwd, group and host lookups for running programs and
+> caches the results for the next query. You only need this package if you are
+> using slow Name Services like LDAP, NIS or NIS+.
 > 
-> On Sat, 10 Oct 2015 14:43:35 +0200, Romain Naour wrote:
+> This particular NSCD is a complete rewrite of the GNU glibc nscd which is a
+> single threaded server process which offloads all NSS lookups to worker
+> children; cache hits are handled by the parent, and only cache misses start
+> worker children, making the parent immune to resource leaks, hangs, and crashes
+> in NSS libraries.
 > 
->> "We usually do not have a sub-directory for a family of related packages, so
->> move expedite to package directory.
+> It should mostly be a drop-in replacement for existing installs using nscd.
 > 
-> This is not exactly true. When they need to share the same version
-> number (example: qt5), then we do have a sub-directory for a family of
-> related packages. So I think this should be reworded a bit.
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+[--SNIP--]
+> diff --git a/package/unscd/S46unscd b/package/unscd/S46unscd
+> new file mode 100644
+> index 0000000..387ab32
+> --- /dev/null
+> +++ b/package/unscd/S46unscd
+> @@ -0,0 +1,24 @@
+> +#!/bin/sh
+> +
+> +NAME="nscd"
+> +DAEMON="/usr/sbin/${NAME}"
+> +
+> +case "$1" in
+> +start)
+> +        echo -n "Starting ${NAME}: "
 
-IIRC the sentence has been borrowed from a commit log from matchbox series
-http://git.buildroot.net/buildroot/commit/?id=3b468acbb4ec2aca748fc022ff0d53a530b3264b
+We have recently readicated use of 'echo -n' and all other non-POSIX use
+of echo. Please, use printf instead.
 
-Yann, no offense :)
+[--SNIP--]
+> diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
+> new file mode 100644
+> index 0000000..e8cccd3
+> --- /dev/null
+> +++ b/package/unscd/unscd.mk
+> @@ -0,0 +1,55 @@
+> +################################################################################
+> +#
+> +# unscd
+> +#
+> +################################################################################
+> +
+> +UNSCD_VERSION = 0.51
+> +UNSCD_SOURCE = unscd_$(UNSCD_VERSION).orig.tar.gz
+> +UNSCD_SITE = http://snapshot.debian.org/archive/debian/20150519T094547Z/pool/main/u/unscd
+> +UNSCD_EXTRA_DOWNLOADS = unscd_$(UNSCD_VERSION)-1.debian.tar.gz
+> +UNSCD_LICENSE = GPLv2
+> +UNSCD_LICENSE_FILES = debian/copyright
+> +
+> +define UNSCD_EXTRACT_DEBIAN
+> +	gzip -d -c $(BR2_DL_DIR)/$(UNSCD_EXTRA_DOWNLOADS) | tar -C $(@D) -xf -
 
-I think there is no advantage for efl related packages to share the same version
-number anymore, Except maybe for efl and libelementary...
+Please use suitable-extractor, like so:
 
-See: https://www.enlightenment.org/download
+    $(call suitable-extractor,$(UNSCD_EXTRA_DOWNLOADS)) $(DL_DIR)/$(UNSCD_EXTRA_DOWNLOADS) \
+    |$(TAR) xf -C $(@D) -
 
-EFL			1.15.2
-Elementary		1.15.2
-Emotion Generic Players	1.15.0
-Evas Generic Loaders	1.15.0
-Python-EFL		1.15.0
+> +endef
+> +
+> +UNSCD_POST_EXTRACT_HOOKS += UNSCD_EXTRACT_DEBIAN
+> +
+> +define UNSCD_APPLY_DEBIAN_PATCHES
+> +	for f in `grep -Ev "^#" $(@D)/debian/patches/series 2> /dev/null`; do \
+> +		cat "$(@D)/debian/patches/$${f}" | patch -g0 -p1 -E -d "$(@D)" -t -N; \
 
-expedite is downloaded from the 1.15 branch in the git repository
+Please use apply-patches, like so:
 
-> 
->>> Also, it seems like you don't have rename detection enabled in Git.
->>
->> Indeed, sorry for that... The patch generated with git format-patch didn't look
->> like the one viewed through gitk.
->> I fixed that using:
->> git config --global diff.renames copies
->>
->> Also the following patches moving efl packages to package directory have the
->> same issue...
-> 
-> Perfect. It will indeed make the review easier.
+    $(APPLY_PATCHES) $(@D) $(@D)/debian
 
-Thanks for noticing it.
+> +	done
+> +endef
+> +
+> +UNSCD_POST_PATCH_HOOKS += UNSCD_APPLY_DEBIAN_PATCHES
+> +
+> +define UNSCD_BUILD_CMDS
+> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+> +		$(@D)/nscd.c -o $(@D)/nscd
+> +endef
+> +
+> +define UNSCD_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 755 -D $(@D)/nscd $(TARGET_DIR)/usr/sbin/nscd
+> +	$(INSTALL) -m 600 -D $(@D)/debian/nscd.conf $(TARGET_DIR)/etc/nscd.conf
+> +endef
+> +
+> +define UNSCD_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -m 755 -D package/unscd/unscd.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/unscd.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
 
-Best regards,
-Romain
+Not that it matters a lot, but I think using $(INSTALL) to create
+directories should be favoured, like so:
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
+    $(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+
+> +	ln -fs ../../../../usr/lib/systemd/system/unscd.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/unscd.service
+> +endef
+[--SNIP--]
+> diff --git a/package/unscd/unscd.service b/package/unscd/unscd.service
+> new file mode 100644
+> index 0000000..58dd7eb
+> --- /dev/null
+> +++ b/package/unscd/unscd.service
+> @@ -0,0 +1,11 @@
+> +[Unit]
+> +Description=Micro Name Service Caching Daemon.
+> +After=syslog.target network.target
+> +
+> +[Service]
+> +Type=forking
+> +PIDFile=/var/run/nscd/nscd.pid
+> +ExecStart=/usr/sbin/nscd
+> +
+> +[Install]
+> +WantedBy=multi-user.target
+
+Maxime, what's your opinion on this systemd unit?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
