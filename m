@@ -1,45 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Oct 2015 11:38:15 +0200
-Subject: [Buildroot] [PATCH v1] fbterm: fix musl compile
-In-Reply-To: <1444329302-13716-1-git-send-email-ps.report@gmx.net>
-References: <1444329302-13716-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151010113815.2ee9d030@free-electrons.com>
+Date: Sat, 10 Oct 2015 11:40:09 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/lzlib: bump to version 0.4.3
+In-Reply-To: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151010114009.3ad10ecb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Fran?ois,
 
-On Thu,  8 Oct 2015 20:35:02 +0200, Peter Seiderer wrote:
-> - add missing include, fixes:
-> 
->   fbio.cpp:33:8: error: ?fd_set? does not name a type
->    static fd_set fds;
-> 
->   improxy.cpp:439:3: error: ?fd_set? was not declared in this scope
-> 
-> - add missing WAIT_ANY define, fixes:
-> 
->   fbterm.cpp: In member function ?void FbTerm::processSignal(u32)?:
->   fbterm.cpp:212:22: error: ?WAIT_ANY? was not declared in this scope
->       s32 pid = waitpid(WAIT_ANY, 0, WNOHANG);
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ab2/ab2334700b44bac233994b76f2acf1795f0
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...p-improxy.cpp-fbterm.cpp-fix-musl-compile.patch | 70 ++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 package/fbterm/0001-fbio.cpp-improxy.cpp-fbterm.cpp-fix-musl-compile.patch
+The patch below is touching a Lua package, can you review/test/ack ?
 
-Applied, thanks. However, this project is still hosted on Google Code,
-and has not seen any release since 2010. Not nice since it means we
-cannot upstream the patch :-/
+Thanks a lot!
 
 Thomas
+
+On Thu,  8 Oct 2015 04:12:54 +0200, J?rg Krause wrote:
+> Switch to more recent github repository.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+> Changes v1 -> v2:
+>   - fix install paths for lib and lua files
+> ---
+>  package/lzlib/Config.in  | 2 +-
+>  package/lzlib/lzlib.hash | 2 --
+>  package/lzlib/lzlib.mk   | 8 +++++---
+>  3 files changed, 6 insertions(+), 6 deletions(-)
+>  delete mode 100644 package/lzlib/lzlib.hash
+> 
+> diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+> index c123019..f7fae15 100644
+> --- a/package/lzlib/Config.in
+> +++ b/package/lzlib/Config.in
+> @@ -7,4 +7,4 @@ config BR2_PACKAGE_LZLIB
+>  	  functions and also to read/write gzip files using an
+>  	  interface similar to the base io package.
+>  
+> -	  http://luaforge.net/projects/lzlib/
+> +	  https://github.com/LuaDist/lzlib
+> diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+> deleted file mode 100644
+> index d823e8b..0000000
+> --- a/package/lzlib/lzlib.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally calculated
+> -sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
+> diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+> index ec37842..91f380a 100644
+> --- a/package/lzlib/lzlib.mk
+> +++ b/package/lzlib/lzlib.mk
+> @@ -4,9 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -LZLIB_VERSION = 0.4.work3-1
+> -LZLIB_SUBDIR = lzlib-0.4-work3
+> +LZLIB_VERSION = 0.4.3
+> +LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+>  LZLIB_DEPENDENCIES = zlib
+>  LZLIB_LICENSE = MIT
+> +LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+> +	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+>  
+> -$(eval $(luarocks-package))
+> +$(eval $(cmake-package))
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
