@@ -1,110 +1,151 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:35 +0200
-Subject: [Buildroot] [PATCH v3 30/37] package/libeio: remove package
+Date: Sat, 10 Oct 2015 12:03:37 +0200
+Subject: [Buildroot] [PATCH v3 32/37] package/libedbus: remove package
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-31-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-33-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libeio is now available in efl package.
+Libedbus is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
 v3: update legacy option for 2015.11
     update help text
 ---
- Config.in.legacy         |  7 +++++++
- package/Config.in        |  1 -
- package/libeio/Config.in | 24 ------------------------
- package/libeio/libeio.mk | 16 ----------------
- 4 files changed, 7 insertions(+), 41 deletions(-)
- delete mode 100644 package/libeio/Config.in
- delete mode 100644 package/libeio/libeio.mk
+ Config.in.legacy             |  7 +++++++
+ package/Config.in            |  1 -
+ package/libedbus/Config.in   | 44 --------------------------------------------
+ package/libedbus/libedbus.mk | 37 -------------------------------------
+ 4 files changed, 7 insertions(+), 82 deletions(-)
+ delete mode 100644 package/libedbus/Config.in
+ delete mode 100644 package/libedbus/libedbus.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 188f9b3..f52c7c0 100644
+index 3fee760..5759c26 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2015.11"
  
-+config BR2_PACKAGE_LIBEIO
-+	bool "libeio package has been removed"
++config BR2_PACKAGE_LIBEDBUS
++	bool "libedbus package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  The libeio package has been removed with the efl bump to 1.15.
++	  The libedbus package has been removed with the efl bump to 1.15.
 +
- config BR2_PACKAGE_LIBEMBRYO
- 	bool "libembryo package has been removed"
+ config BR2_PACKAGE_LIBEFREET
+ 	bool "libefreet package has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 3ab2c3a..7bd9d0a 100644
+index 934cd40..c8139d0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -245,7 +245,6 @@ endif
+@@ -244,7 +244,6 @@ endif
+ 	source "package/libecore/Config.in"
  	source "package/libeet/Config.in"
- 	source "package/libefreet/Config.in"
  	source "package/libeina/Config.in"
--	source "package/libeio/Config.in"
- 	source "package/libedbus/Config.in"
+-	source "package/libedbus/Config.in"
  	source "package/libelementary/Config.in"
  	source "package/libevas/Config.in"
-diff --git a/package/libeio/Config.in b/package/libeio/Config.in
+ 	source "package/libevas-generic-loaders/Config.in"
+diff --git a/package/libedbus/Config.in b/package/libedbus/Config.in
 deleted file mode 100644
-index e2e19a7..0000000
---- a/package/libeio/Config.in
+index d3752ee..0000000
+--- a/package/libedbus/Config.in
 +++ /dev/null
-@@ -1,24 +0,0 @@
--config BR2_PACKAGE_LIBEIO
--	bool "libeio"
--	select BR2_PACKAGE_LIBEET
+@@ -1,44 +0,0 @@
+-config BR2_PACKAGE_LIBEDBUS
+-	bool "libedbus"
 -	select BR2_PACKAGE_LIBEINA
 -	select BR2_PACKAGE_LIBECORE
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU # efl
+-	select BR2_PACKAGE_DBUS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+-	depends on BR2_USE_MMU # dbus, efl
 -	depends on BR2_USE_WCHAR # efl
 -	help
--	  Eio integrates with EFL (Ecore, Eina) to provide efficient
--	  filesystem Input/Output (I/O). It use the best techniques to
--	  achieve such purpose, like using at-variants, splice,
--	  properly handling errors and doing it in an asynchronous
--	  fashion by means of worker threads. It is also ported to
--	  Windows, so multi-platform.
+-	  E_Dbus is a set of wrappers around D-Bus APIs so they can be
+-	  easily used by EFL applications, automatically providing
+-	  Ecore/main loop integration, as well as Eina data types.
 -
--	  Whenever you need to list a directory, copy, move or delete
--	  files, Eio will do that task better than you'd achieve with
--	  naive implementations, and it is easy to use.
+-	  http://trac.enlightenment.org/e/wiki/E_Dbus
 -
--	  http://trac.enlightenment.org/e/wiki/Eio
+-if BR2_PACKAGE_LIBEDBUS
 -
--comment "libeio needs a toolchain w/ threads, wchar"
+-config BR2_PACKAGE_LIBEDBUS_BLUEZ
+-	bool "bluez support"
+-	depends on !BR2_STATIC_LIBS # bluez_utils
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils -> glib2
+-	select BR2_PACKAGE_BLUEZ_UTILS
+-	help
+-	  Bluetooth support.
+-
+-comment "bluez support needs a toolchain w/ threads, dynamic library"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-
+-config BR2_PACKAGE_LIBEDBUS_CONNMAN
+-	bool "connman support"
+-	depends on BR2_PACKAGE_CONNMAN
+-	help
+-	  Connection manager support.
+-
+-config BR2_PACKAGE_LIBEDBUS_NOTIFY
+-	bool "notify support"
+-	help
+-	  Notify support.
+-
+-endif
+-
+-comment "libedbus needs a toolchain w/ threads, wchar"
+-	depends on BR2_USE_MMU
 -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/libeio/libeio.mk b/package/libeio/libeio.mk
+diff --git a/package/libedbus/libedbus.mk b/package/libedbus/libedbus.mk
 deleted file mode 100644
-index e687c32..0000000
---- a/package/libeio/libeio.mk
+index 634ceaf..0000000
+--- a/package/libedbus/libedbus.mk
 +++ /dev/null
-@@ -1,16 +0,0 @@
+@@ -1,37 +0,0 @@
 -################################################################################
 -#
--# libeio
+-# libedbus
 -#
 -################################################################################
 -
--LIBEIO_VERSION = 1.7.10
--LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
--LIBEIO_SITE = http://download.enlightenment.org/releases
--LIBEIO_LICENSE = LGPLv2.1
--LIBEIO_LICENSE_FILES = COPYING
+-LIBEDBUS_VERSION = 1.7.10
+-LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
+-LIBEDBUS_SITE = http://download.enlightenment.org/releases
+-LIBEDBUS_LICENSE = BSD-2c
+-LIBEDBUS_LICENSE_FILES = COPYING
 -
--LIBEIO_INSTALL_STAGING = YES
--LIBEIO_DEPENDENCIES = libeina libeet libecore
+-LIBEDBUS_INSTALL_STAGING = YES
+-
+-LIBEDBUS_DEPENDENCIES = host-pkgconf dbus libeina libecore
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_BLUEZ),y)
+-LIBEDBUS_CONF_OPTS += --enable-ebluez
+-LIBEDBUS_DEPENDENCIES += bluez_utils
+-else
+-LIBEDBUS_CONF_OPTS += --disable-ebluez
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_CONNMAN),y)
+-LIBEDBUS_CONF_OPTS += --enable-econnman0_7x
+-LIBEDBUS_DEPENDENCIES += connman
+-else
+-LIBEDBUS_CONF_OPTS += --disable-econnman0_7x
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBEDBUS_NOTIFY),y)
+-LIBEDBUS_CONF_OPTS += --enable-enotify --disable-edbus-notify-test
+-else
+-LIBEDBUS_CONF_OPTS += --disable-enotify
+-endif
 -
 -$(eval $(autotools-package))
 -- 
