@@ -1,92 +1,40 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:23 +0200
-Subject: [Buildroot] [PATCH v3 18/37] package/efl: add OpenGL/OpenGLES
-	support
+Date: Sat, 10 Oct 2015 12:03:24 +0200
+Subject: [Buildroot] [PATCH v3 19/37] package/efl: enable xinput2.2
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-19-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-20-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://git.enlightenment.org/core/efl.git/tree/README?h=efl-1.15#n490
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/efl/Config.in | 26 ++++++++++++++++++++++++++
- package/efl/efl.mk    | 17 +++++++++++++++--
- 2 files changed, 41 insertions(+), 2 deletions(-)
+v3: new patch
+---
+ package/efl/efl.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 711d227..454f317 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -80,6 +80,32 @@ comment "for libecore XCB support disable recommended configurations"
- 
- endchoice
- 
-+if BR2_PACKAGE_EFL_X_XLIB
-+
-+choice
-+	prompt "select libevas OpenGL support"
-+
-+config BR2_PACKAGE_EFL_X_XLIB_GLX_FULL
-+	bool "libevas OpenGL full support"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+
-+comment "libevas OpenGLES support needs libgl"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-+
-+config BR2_PACKAGE_EFL_X_XLIB_GLX_ES
-+	bool "libevas OpenGLES support"
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "libevas OpenGLES support needs libgles"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+config BR2_PACKAGE_EFL_X_XLIB_GLX_NONE
-+	bool "libevas disable OpenGL support"
-+
-+endchoice
-+
-+endif # BR2_PACKAGE_EFL_X_XLIB
-+
- endif # BR2_PACKAGE_EFL_X
- 
- comment "libevas loaders"
 diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 06b2892..d720d7b 100644
+index d720d7b..5073c48 100644
 --- a/package/efl/efl.mk
 +++ b/package/efl/efl.mk
-@@ -174,8 +174,7 @@ endif
+@@ -171,10 +171,12 @@ else
+ EFL_CONF_OPTS += --enable-fb=no
+ endif
+ 
++# --enable-xinput22 is recommended
  ifeq ($(BR2_PACKAGE_EFL_X),y)
  EFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
  	--x-includes=$(STAGING_DIR)/usr/include \
--	--x-libraries=$(STAGING_DIR)/usr/lib \
--	--with-opengl=none
-+	--x-libraries=$(STAGING_DIR)/usr/lib
+-	--x-libraries=$(STAGING_DIR)/usr/lib
++	--x-libraries=$(STAGING_DIR)/usr/lib \
++	--enable-xinput22
  
- EFL_DEPENDENCIES += \
- 	xlib_libX11 \
-@@ -185,6 +184,20 @@ EFL_CONF_OPTS += --with-x=no \
- 	--with-x11=none
- endif
- 
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_FULL),y)
-+EFL_CONF_OPTS += --with-opengl=full
-+EFL_DEPENDENCIES += libgl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_ES),y)
-+EFL_CONF_OPTS += --with-opengl=es
-+EFL_DEPENDENCIES += libgles
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB_GLX_NONE),y)
-+EFL_CONF_OPTS += --with-opengl=none
-+endif
-+
- ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
  EFL_DEPENDENCIES += \
  	xlib_libX11 \
 -- 
