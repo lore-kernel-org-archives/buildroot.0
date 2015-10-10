@@ -1,141 +1,129 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:30 +0200
-Subject: [Buildroot] [PATCH v3 25/37] package/enlightenment: bump to version
-	0.19.12
+Date: Sat, 10 Oct 2015 12:03:33 +0200
+Subject: [Buildroot] [PATCH v3 28/37] package/libedje: remove package
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-26-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-29-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update url, add hash file, use xz archive and switch
-select to efl-core.
-Add efl reverse dependencies.
-
-Select png and jpeg image loader since enlightenment_start
-fail if png and jpeg image loader is not available in elf
-libraries.
-
-Also select libelementary
+Libedje is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v3: bymp to 0.19.12
-    remove trailing slash (Vicente Bergas)
-v2: bump to 0.19.9
-    remove glibc only dependency
+v3: update legacy option for 2015.11
+    update help text
 ---
- package/enlightenment/Config.in          | 37 +++++++++++---------------------
- package/enlightenment/enlightenment.hash |  2 ++
- package/enlightenment/enlightenment.mk   | 22 +++++++------------
- 3 files changed, 23 insertions(+), 38 deletions(-)
- create mode 100644 package/enlightenment/enlightenment.hash
+ Config.in.legacy           |  7 +++++++
+ package/Config.in          |  1 -
+ package/libedje/Config.in  | 30 ------------------------------
+ package/libedje/libedje.mk | 28 ----------------------------
+ 4 files changed, 7 insertions(+), 59 deletions(-)
+ delete mode 100644 package/libedje/Config.in
+ delete mode 100644 package/libedje/libedje.mk
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index 1af42c7..ce53511 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -1,32 +1,21 @@
- config BR2_PACKAGE_ENLIGHTENMENT
- 	bool "enlightenment"
--	select BR2_PACKAGE_LIBECORE
--	select BR2_PACKAGE_LIBECORE_X
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 940b6ab..ff388e2 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -107,6 +107,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2015.11"
+ 
++config BR2_PACKAGE_LIBEDJE
++	bool "libedje package has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EFL
++	help
++	  The libedje package has been removed with the efl bump to 1.15.
++
+ config BR2_PACKAGE_LIBETHUMB
+ 	bool "libethumb package has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 0b24e57..f8e5a05 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -243,7 +243,6 @@ endif
+ 	source "package/imagemagick/Config.in"
+ 	source "package/libecore/Config.in"
+ 	source "package/libeet/Config.in"
+-	source "package/libedje/Config.in"
+ 	source "package/libefreet/Config.in"
+ 	source "package/libeina/Config.in"
+ 	source "package/libeio/Config.in"
+diff --git a/package/libedje/Config.in b/package/libedje/Config.in
+deleted file mode 100644
+index 299e86b..0000000
+--- a/package/libedje/Config.in
++++ /dev/null
+@@ -1,30 +0,0 @@
+-comment "libedje needs a toolchain w/ threads, wchar"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_LIBEDJE
+-	bool "libedje"
 -	select BR2_PACKAGE_LIBEINA
 -	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBEVAS
--	select BR2_PACKAGE_LIBEVAS_JPEG
--	select BR2_PACKAGE_LIBEVAS_PNG
--	select BR2_PACKAGE_LIBEVAS_EET
+-	select BR2_PACKAGE_LIBECORE
 -	select BR2_PACKAGE_LIBECORE_EVAS
--	select BR2_PACKAGE_LIBEDJE
--	select BR2_PACKAGE_LIBEFREET
--	select BR2_PACKAGE_LIBEDBUS
--	select BR2_PACKAGE_LIBEIO
-+	select BR2_PACKAGE_EFL
-+	select BR2_PACKAGE_EFL_X
-+	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
-+	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
- 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_LIBELEMENTARY
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
- 	select BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
--	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
--	depends on BR2_USE_WCHAR
--	depends on BR2_INSTALL_LIBSTDCPP
--	# libedbus -> dbus
--	# libedbus -> glib2, libevas
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# libedbus -> dbus, efl libraries
--	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_XORG7
- 	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
- 	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU # efl
-+	depends on !BR2_STATIC_LIBS # efl
-+	depends on BR2_USE_WCHAR # efl
- 	help
- 	  Enlightenment, also known simply as E, is a stacking window
- 	  manager for the X Window System which can be used alone or
-@@ -36,7 +25,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 
- 	  http://www.enlightenment.org/
- 
--comment "enlightenment needs a toolchain w/ wchar, C++, threads"
-+comment "enlightenment needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
- 	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 	depends on BR2_ARCH_HAS_ATOMICS
-diff --git a/package/enlightenment/enlightenment.hash b/package/enlightenment/enlightenment.hash
-new file mode 100644
-index 0000000..c9b1284
---- /dev/null
-+++ b/package/enlightenment/enlightenment.hash
-@@ -0,0 +1,2 @@
-+# From https://phab.enlightenment.org/phame/live/3/post/e19_12_release/
-+sha256	55f23c337e3092e735ae37ada8f6701adab5ddd13f37ef38c63eec8a536f0b25	enlightenment-0.19.12.tar.xz
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index ddebe06..7595d72 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -4,24 +4,18 @@
- #
- ################################################################################
- 
--ENLIGHTENMENT_VERSION = 0.17.6
--ENLIGHTENMENT_SITE = http://download.enlightenment.org/releases
-+ENLIGHTENMENT_VERSION = 0.19.12
-+ENLIGHTENMENT_SOURCE = enlightenment-$(ENLIGHTENMENT_VERSION).tar.xz
-+ENLIGHTENMENT_SITE = http://download.enlightenment.org/rel/apps/enlightenment
- ENLIGHTENMENT_LICENSE = BSD-2c
- ENLIGHTENMENT_LICENSE_FILES = COPYING
- 
--ENLIGHTENMENT_DEPENDENCIES = 	\
--	host-pkgconf 		\
--	libecore 		\
--	libeet 			\
--	libeina 		\
--	libevas 		\
-+ENLIGHTENMENT_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-efl \
-+	efl \
-+	libelementary \
- 	libevas-generic-loaders \
--	libedje 		\
--	libefreet 		\
--	libedbus 		\
--	libeio 			\
--	host-libedje 		\
--	host-libeet		\
- 	xcb-util-keysyms
- 
- ENLIGHTENMENT_CONF_OPTS = \
+-	select BR2_PACKAGE_LIBEMBRYO
+-	select BR2_PACKAGE_LIBEVAS
+-	select BR2_PACKAGE_LUA
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libevas
+-	depends on BR2_USE_MMU # efl
+-	depends on BR2_USE_WCHAR # efl
+-	help
+-	  A graphical layout and animation library for animated
+-	  resizable, compressed and scalable themes.
+-
+-	  http://trac.enlightenment.org/e/wiki/Edje
+-
+-if BR2_PACKAGE_LIBEDJE
+-
+-config BR2_PACKAGE_LIBEDJE_CC
+-	bool "build edje_cc"
+-	help
+-	  Build and install the Edje compiler for the target. Normally this
+-	  is not required.
+-
+-endif
+diff --git a/package/libedje/libedje.mk b/package/libedje/libedje.mk
+deleted file mode 100644
+index 59189e4..0000000
+--- a/package/libedje/libedje.mk
++++ /dev/null
+@@ -1,28 +0,0 @@
+-################################################################################
+-#
+-# libedje
+-#
+-################################################################################
+-
+-LIBEDJE_VERSION = 1.7.10
+-LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
+-LIBEDJE_SITE = http://download.enlightenment.org/releases
+-LIBEDJE_LICENSE = GPLv2+ (epp binary), BSD-2c (everything else)
+-LIBEDJE_LICENSE_FILES = COPYING
+-
+-LIBEDJE_INSTALL_STAGING = YES
+-
+-LIBEDJE_DEPENDENCIES = \
+-	host-pkgconf lua libeina libeet libecore libevas \
+-	libembryo
+-
+-ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
+-LIBEDJE_CONF_OPTS += --enable-edje-cc
+-else
+-LIBEDJE_CONF_OPTS += --disable-edje-cc
+-endif
+-
+-HOST_LIBEDJE_CONF_OPTS = --enable-edje-cc
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
