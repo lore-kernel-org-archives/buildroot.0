@@ -1,59 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Oct 2015 19:31:25 +0200
-Subject: [Buildroot] [git commit] vsftpd: Add ftp user creation
-Message-ID: <20151010173637.D291E7F9BC@busybox.osuosl.org>
+Date: Sat, 10 Oct 2015 19:36:57 +0200
+Subject: [Buildroot] [PATCH 1/3] proftpd: Add ftp user creation
+In-Reply-To: <1443965495-12774-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443965495-12774-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20151010193657.444136f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e175f75e53d7b2a1df63a731eaf6617b54082d2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Maxime Hadjinlian,
 
-In order to remove '/home/ftp' and the ftp user from the 'skeleton'
-package, we need to add the creation of the ftp users to the package so
-it still work out of the box (with an anonymous user).
+On Sun,  4 Oct 2015 15:31:33 +0200, Maxime Hadjinlian wrote:
+> In order to remove '/home/ftp' and the ftp user from the 'skeleton'
+> package, we need to add the creation of the ftp users to the package so
+> it still work out of the box (with an anonymous user).
+> 
+> Signed-off-by Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/proftpd/proftpd.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-[Thomas:
- - remove the VSFTPD_FIX_HOME_PERMISSIONS variable, and simply put the
-   additional command in VSFTPD_INSTALL_TARGET_CMDS.
- - slightly tweak the comment.]
+Applied, thanks.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vsftpd/vsftpd.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
-
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index 1e48264..db969f4 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -43,16 +43,25 @@ define VSFTPD_BUILD_CMDS
- 		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(@D)
- endef
- 
-+define VSFTPD_USERS
-+	ftp -1 ftp -1 * /home/ftp - - Anonymous FTP User
-+endef
-+
- define VSFTPD_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/vsftpd/S70vsftpd $(TARGET_DIR)/etc/init.d/S70vsftpd
- endef
- 
-+# vsftpd won't work if the jail directory is writable, it has to be
-+# readable only otherwise you get the following error:
-+# 500 OOPS: vsftpd: refusing to run with writable root inside chroot()
-+# That's why we have to adjust the permissions of /home/ftp
- define VSFTPD_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/vsftpd $(TARGET_DIR)/usr/sbin/vsftpd
- 	test -f $(TARGET_DIR)/etc/vsftpd.conf || \
- 		$(INSTALL) -D -m 644 $(@D)/vsftpd.conf \
- 			$(TARGET_DIR)/etc/vsftpd.conf
- 	$(INSTALL) -d -m 700 $(TARGET_DIR)/usr/share/empty
-+	$(INSTALL) -d -m 555 $(TARGET_DIR)/home/ftp
- endef
- 
- $(eval $(generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
