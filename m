@@ -1,144 +1,120 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Oct 2015 16:50:55 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] package/unscd: new package
-In-Reply-To: <1444399839-10680-1-git-send-email-rdkehn@yahoo.com>
-References: <1444399839-10680-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <20151010145055.GC3640@free.fr>
+Date: Sat, 10 Oct 2015 17:04:57 +0200
+Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
+In-Reply-To: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
+References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20151010150457.GD3640@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doug, All,
+Romain, All,
 
-[CCing Maxime, as he knows systemd better than I do]
-
-On 2015-10-09 09:10 -0500, Doug Kehn spake thusly:
-> A daemon which handles passwd, group and host lookups for running programs and
-> caches the results for the next query. You only need this package if you are
-> using slow Name Services like LDAP, NIS or NIS+.
+On 2015-10-09 15:26 +0200, Romain Naour spake thusly:
+> The PCI support needs to be checked since this driver is based
+> on it. Otherwise the build fail with:
+>  #error "This driver requires PCI support to be available"
 > 
-> This particular NSCD is a complete rewrite of the GNU glibc nscd which is a
-> single threaded server process which offloads all NSS lookups to worker
-> children; cache hits are handled by the parent, and only cache misses start
-> worker children, making the parent immune to resource leaks, hangs, and crashes
-> in NSS libraries.
+> But this message is concealed by several occurrence of this
+> one:
+>  error: implicit declaration of function 'pci_find_bus' [-Werror=implicit-function-declaration]
 > 
-> It should mostly be a drop-in replacement for existing installs using nscd.
-> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 [--SNIP--]
-> diff --git a/package/unscd/S46unscd b/package/unscd/S46unscd
+> diff --git a/package/iqvlinux/Config.in b/package/iqvlinux/Config.in
 > new file mode 100644
-> index 0000000..387ab32
+> index 0000000..275c67e
 > --- /dev/null
-> +++ b/package/unscd/S46unscd
-> @@ -0,0 +1,24 @@
-> +#!/bin/sh
-> +
-> +NAME="nscd"
-> +DAEMON="/usr/sbin/${NAME}"
-> +
-> +case "$1" in
-> +start)
-> +        echo -n "Starting ${NAME}: "
+> +++ b/package/iqvlinux/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_IQVLINUX
+> +	bool "iqvlinux"
+> +	depends on BR2_LINUX_KERNEL
+> +	help
+> +	  Intel Ethernet Adapter Debug Driver for Linux (iqvlinux),
+> +	  which supports kernel versions 2.6.x up through 4.0.x.
 
-We have recently readicated use of 'echo -n' and all other non-POSIX use
-of echo. Please, use printf instead.
+What about 4.1+ ?
+
+Should we do a version-check at configure time, or is there such a check
+already done by the package itself?
 
 [--SNIP--]
-> diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
+> diff --git a/package/iqvlinux/iqvlinux.mk b/package/iqvlinux/iqvlinux.mk
 > new file mode 100644
-> index 0000000..e8cccd3
+> index 0000000..ed98f1f
 > --- /dev/null
-> +++ b/package/unscd/unscd.mk
-> @@ -0,0 +1,55 @@
+> +++ b/package/iqvlinux/iqvlinux.mk
+> @@ -0,0 +1,34 @@
 > +################################################################################
 > +#
-> +# unscd
+> +# iqvlinux
 > +#
 > +################################################################################
 > +
-> +UNSCD_VERSION = 0.51
-> +UNSCD_SOURCE = unscd_$(UNSCD_VERSION).orig.tar.gz
-> +UNSCD_SITE = http://snapshot.debian.org/archive/debian/20150519T094547Z/pool/main/u/unscd
-> +UNSCD_EXTRA_DOWNLOADS = unscd_$(UNSCD_VERSION)-1.debian.tar.gz
-> +UNSCD_LICENSE = GPLv2
-> +UNSCD_LICENSE_FILES = debian/copyright
+> +IQVLINUX_VERSION = 1.1.5.3
 > +
-> +define UNSCD_EXTRACT_DEBIAN
-> +	gzip -d -c $(BR2_DL_DIR)/$(UNSCD_EXTRA_DOWNLOADS) | tar -C $(@D) -xf -
+> +IQVLINUX_SITE = \
+> +	http://sourceforge.net/projects/e1000/files/iqvlinux/$(IQVLINUX_VERSION)
+> +IQVLINUX_SOURCE = iqvlinux.tar.gz
+> +
+> +IQVLINUX_LICENSE = GPLv2 or BSD-3c
+> +IQVLINUX_LICENSE_FILES = COPYING src/linux/driver/files.txt \
+> +	inc/linux/files.txt inc/files.txt
+> +
+> +IQVLINUX_MODULE_MAKE_OPTS = NALDIR=$(@D) KSRC=$(LINUX_DIR) CC=$(TARGET_CC)
 
-Please use suitable-extractor, like so:
+Are you sure CC is needed? The kernel buildsystem should already set it, no?
 
-    $(call suitable-extractor,$(UNSCD_EXTRA_DOWNLOADS)) $(DL_DIR)/$(UNSCD_EXTRA_DOWNLOADS) \
-    |$(TAR) xf -C $(@D) -
-
+> +IQVLINUX_MODULE_SUBDIRS = src/linux/driver
+> +
+> +ifeq ($(BR2_PACKAGE_IQVLINUX),y)
+> +define IQVLINUX_PCI_CHECK
+> +	@if ! grep -Fqx 'CONFIG_PCI=y' $(LINUX_DIR)/.config; then \
+> +		echo "ERROR: Enable CONFIG_PCI in the linux kernel config." 1>&2 ; \
+> +		exit 1; \
+> +	fi
 > +endef
 > +
-> +UNSCD_POST_EXTRACT_HOOKS += UNSCD_EXTRACT_DEBIAN
-> +
-> +define UNSCD_APPLY_DEBIAN_PATCHES
-> +	for f in `grep -Ev "^#" $(@D)/debian/patches/series 2> /dev/null`; do \
-> +		cat "$(@D)/debian/patches/$${f}" | patch -g0 -p1 -E -d "$(@D)" -t -N; \
+> +# Check if PCI is enabled in the Linux kernel build by Buildroot.
+> +LINUX_POST_CONFIGURE_HOOKS += IQVLINUX_PCI_CHECK
+> +endif
 
-Please use apply-patches, like so:
+I really do not like that a package meddles in the affairs of another
+package, like setting hooks for it.
 
-    $(APPLY_PATCHES) $(@D) $(@D)/debian
+I'd rather we add a variable that packages could set to require specific
+kernel config options, something like:
 
-> +	done
-> +endef
-> +
-> +UNSCD_POST_PATCH_HOOKS += UNSCD_APPLY_DEBIAN_PATCHES
-> +
-> +define UNSCD_BUILD_CMDS
-> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-> +		$(@D)/nscd.c -o $(@D)/nscd
-> +endef
-> +
-> +define UNSCD_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 755 -D $(@D)/nscd $(TARGET_DIR)/usr/sbin/nscd
-> +	$(INSTALL) -m 600 -D $(@D)/debian/nscd.conf $(TARGET_DIR)/etc/nscd.conf
-> +endef
-> +
-> +define UNSCD_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -m 755 -D package/unscd/unscd.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/unscd.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+    IQVLINUX_LINUX_NEEDS_CONFIG_OPTS = CONFIG_PCI
 
-Not that it matters a lot, but I think using $(INSTALL) to create
-directories should be favoured, like so:
+Then in package/pkg-generic, in the inner-generic-package macro:
 
-    $(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+    LINUX_NEEDS_CONFIG_OPTS += $$($(2)_NEEDS_LINUX_CONFIG)
 
-> +	ln -fs ../../../../usr/lib/systemd/system/unscd.service \
-> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/unscd.service
-> +endef
-[--SNIP--]
-> diff --git a/package/unscd/unscd.service b/package/unscd/unscd.service
-> new file mode 100644
-> index 0000000..58dd7eb
-> --- /dev/null
-> +++ b/package/unscd/unscd.service
-> @@ -0,0 +1,11 @@
-> +[Unit]
-> +Description=Micro Name Service Caching Daemon.
-> +After=syslog.target network.target
-> +
-> +[Service]
-> +Type=forking
-> +PIDFile=/var/run/nscd/nscd.pid
-> +ExecStart=/usr/sbin/nscd
-> +
-> +[Install]
-> +WantedBy=multi-user.target
+And finally in linux/linux.mk:
 
-Maxime, what's your opinion on this systemd unit?
+    define LINUX_CHECK_CONFIG_OPTS
+        $(foreach cfg,$(strip $(LINUX_NEEDS_CONFIG_OPTS)),\
+            if ! grep -E '^$(cfg)=y$$' $(@D)/.config >/dev/null; then \
+                printf "ERROR: Enable %s in your linux kernel config." "$(cfg)"; \
+                exit 1; \
+            fi;)
+    endef
+    LINUX_POST_CONFIGURE_HOOKS += LINUX_CHECK_CONFIG_OPTS
 
 Regards,
 Yann E. MORIN.
+
+> +$(eval $(kernel-module))
+> +$(eval $(generic-package))
+> -- 
+> 2.4.3
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
