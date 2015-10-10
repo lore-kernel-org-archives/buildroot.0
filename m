@@ -1,103 +1,114 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:36 +0200
-Subject: [Buildroot] [PATCH v3 31/37] package/libefreet: remove package
+Date: Sat, 10 Oct 2015 12:03:40 +0200
+Subject: [Buildroot] [PATCH v3 35/37] package/libeet: remove package
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-32-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-36-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Libefreet is now available in efl package.
+Libeet is now available in efl package.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
 v3: update legacy option for 2015.11
     update help text
 ---
- Config.in.legacy               |  7 +++++++
- package/Config.in              |  1 -
- package/libefreet/Config.in    | 15 ---------------
- package/libefreet/libefreet.mk | 17 -----------------
- 4 files changed, 7 insertions(+), 33 deletions(-)
- delete mode 100644 package/libefreet/Config.in
- delete mode 100644 package/libefreet/libefreet.mk
+ Config.in.legacy         |  7 +++++++
+ package/Config.in        |  1 -
+ package/libeet/Config.in | 16 ----------------
+ package/libeet/libeet.mk | 27 ---------------------------
+ 4 files changed, 7 insertions(+), 44 deletions(-)
+ delete mode 100644 package/libeet/Config.in
+ delete mode 100644 package/libeet/libeet.mk
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index f52c7c0..3fee760 100644
+index d707ee4..3c757dd 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -107,6 +107,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2015.11"
  
-+config BR2_PACKAGE_LIBEFREET
-+	bool "libefreet package has been removed"
++config BR2_PACKAGE_LIBEET
++	bool "libeet package has been removed"
 +	select BR2_LEGACY
 +	select BR2_PACKAGE_EFL
 +	help
-+	  The libefreet package has been removed with the efl bump to 1.15.
++	  The libeet package has been removed with the efl bump to 1.15.
 +
- config BR2_PACKAGE_LIBEIO
- 	bool "libeio package has been removed"
+ config BR2_PACKAGE_LIBEVAS
+ 	bool "libevas package has been removed"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 7bd9d0a..934cd40 100644
+index fe42c3e..a92bb01 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -243,7 +243,6 @@ endif
+@@ -241,7 +241,6 @@ endif
+ 	source "package/fbv/Config.in"
+ 	source "package/freerdp/Config.in"
  	source "package/imagemagick/Config.in"
- 	source "package/libecore/Config.in"
- 	source "package/libeet/Config.in"
--	source "package/libefreet/Config.in"
+-	source "package/libeet/Config.in"
  	source "package/libeina/Config.in"
- 	source "package/libedbus/Config.in"
  	source "package/libelementary/Config.in"
-diff --git a/package/libefreet/Config.in b/package/libefreet/Config.in
+ 	source "package/libevas-generic-loaders/Config.in"
+diff --git a/package/libeet/Config.in b/package/libeet/Config.in
 deleted file mode 100644
-index 75e5955..0000000
---- a/package/libefreet/Config.in
+index 3f36295..0000000
+--- a/package/libeet/Config.in
 +++ /dev/null
-@@ -1,15 +0,0 @@
--config BR2_PACKAGE_LIBEFREET
--	bool "libefreet"
+@@ -1,16 +0,0 @@
+-config BR2_PACKAGE_LIBEET
+-	bool "libeet"
+-	select BR2_PACKAGE_ZLIB
+-	select BR2_PACKAGE_JPEG
 -	select BR2_PACKAGE_LIBEINA
--	select BR2_PACKAGE_LIBEET
--	select BR2_PACKAGE_LIBECORE
--	depends on BR2_USE_MMU # efl
+-	depends on BR2_USE_MMU
 -	depends on BR2_USE_WCHAR # efl
 -	help
--	  Efreet is a library designed to help apps work with several of the
--	  Freedesktop.org standards regarding Icons, Desktop files and Menus.
+-	  Eet is a tiny library designed to write an arbitary set of
+-	  chunks of data to a file and optionally compress each chunk
+-	  (very much like a zip file).
 -
--	  http://trac.enlightenment.org/e/wiki/Efreet
+-	  http://trac.enlightenment.org/e/wiki/Eet
 -
--comment "libefreet needs a toolchain w/ wchar"
+-comment "libeet needs a toolchain w/ wchar"
 -	depends on !BR2_USE_WCHAR
-diff --git a/package/libefreet/libefreet.mk b/package/libefreet/libefreet.mk
+diff --git a/package/libeet/libeet.mk b/package/libeet/libeet.mk
 deleted file mode 100644
-index 65dbd12..0000000
---- a/package/libefreet/libefreet.mk
+index fc3d7f9..0000000
+--- a/package/libeet/libeet.mk
 +++ /dev/null
-@@ -1,17 +0,0 @@
+@@ -1,27 +0,0 @@
 -################################################################################
 -#
--# libefreet
+-# libeet
 -#
 -################################################################################
 -
--LIBEFREET_VERSION = 1.7.10
--LIBEFREET_SOURCE = efreet-$(LIBEFREET_VERSION).tar.bz2
--LIBEFREET_SITE = http://download.enlightenment.org/releases
--LIBEFREET_LICENSE = BSD-2c
--LIBEFREET_LICENSE_FILES = COPYING
+-LIBEET_VERSION = 1.7.10
+-LIBEET_SOURCE = eet-$(LIBEET_VERSION).tar.bz2
+-LIBEET_SITE = http://download.enlightenment.org/releases
+-LIBEET_LICENSE = BSD-2c
+-LIBEET_LICENSE_FILES = COPYING
 -
--LIBEFREET_INSTALL_STAGING = YES
+-LIBEET_INSTALL_STAGING = YES
 -
--LIBEFREET_DEPENDENCIES = libeina libeet libecore
+-LIBEET_DEPENDENCIES = host-pkgconf zlib jpeg libeina
+-HOST_LIBEET_DEPENDENCIES = host-pkgconf host-zlib host-libjpeg host-libeina
+-
+-ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
+-LIBEET_DEPENDENCIES += gnutls libgcrypt
+-LIBEET_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+-LIBEET_CONF_OPTS += --enable-gnutls
+-else
+-LIBEET_CONF_OPTS += --disable-gnutls
+-endif
 -
 -$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 2.4.3
