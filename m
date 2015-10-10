@@ -1,63 +1,54 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:27 +0200
-Subject: [Buildroot] [PATCH v3 22/37] package/libevas-generic-loaders: add
-	libraw dependency
+Date: Sat, 10 Oct 2015 12:03:29 +0200
+Subject: [Buildroot] [PATCH v3 24/37] package/libelementary: add host package
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-23-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-25-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+libelementary for the target needs elm_prefs_cc in order to
+cross-compile correctly.
+
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/libevas-generic-loaders/Config.in                  | 5 +++++
- package/libevas-generic-loaders/libevas-generic-loaders.mk | 9 +++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/libelementary/libelementary.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
-index 78247e2..779faae 100644
---- a/package/libevas-generic-loaders/Config.in
-+++ b/package/libevas-generic-loaders/Config.in
-@@ -16,6 +16,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+diff --git a/package/libelementary/libelementary.mk b/package/libelementary/libelementary.mk
+index f494fbe..08faaf4 100644
+--- a/package/libelementary/libelementary.mk
++++ b/package/libelementary/libelementary.mk
+@@ -12,14 +12,26 @@ LIBELEMENTARY_LICENSE_FILES = COPYING
  
- if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ LIBELEMENTARY_INSTALL_STAGING = YES
  
-+config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW
-+	bool "Libraw loader"
-+	help
-+	  This option enables the Evas generic Libraw loader
+-LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl
++LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl efl host-libelementary
+ 
+ LIBELEMENTARY_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--with-eldbus_codegen=$(HOST_DIR)/usr/bin/eldbus-codegen \
++	--with-elm-prefs-cc=$(HOST_DIR)/usr/bin/elm_prefs_cc \
+ 	--with-doxygen=no \
+ 	--disable-elementary-test
+ 
++# We need a host package in order to provide elm_prefs_cc and
++# elementary_codegen.
++HOST_LIBELEMENTARY_DEPENDENCIES = host-pkgconf host-efl
++HOST_LIBELEMENTARY_CONF_OPTS = \
++	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-eet-eet=$(HOST_DIR)/usr/bin/eet \
++	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
++ 	--with-doxygen=no \
++ 	--disable-elementary-test
 +
- config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	bool "SVG loader"
- 	select BR2_PACKAGE_LIBRSVG
-diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-index 467e728..886dca8 100644
---- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
-+++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
-@@ -14,14 +14,19 @@ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
- 
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = efl zlib
- 
--# For now, we only support the SVG loader
- # poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
- 	--disable-poppler \
- 	--disable-spectre \
--	--disable-libraw \
- 	--disable-gstreamer
- 
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_LIBRAW),y)
-+LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += libraw
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-libraw
-+else
-+LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --disable-libraw
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
- LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
- LIBEVAS_GENERIC_LOADERS_CONF_OPTS += --enable-svg
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.4.3
