@@ -1,9 +1,9 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:18 +0200
-Subject: [Buildroot] [PATCH v3 13/37] package/efl: add libblkid dependency
+Date: Sat, 10 Oct 2015 12:03:15 +0200
+Subject: [Buildroot] [PATCH v3 10/37] package/efl: add harfbuzz dependency
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-14-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-11-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/efl/Config.in | 1 +
- package/efl/efl.mk    | 5 +++++
- 2 files changed, 6 insertions(+)
+ package/efl/efl.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 1e5485f..aec02d0 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	default y
- 	help
 diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 32a684f..c30ce5d 100644
+index ffe3f06..2637bbb 100644
 --- a/package/efl/efl.mk
 +++ b/package/efl/efl.mk
-@@ -45,6 +45,11 @@ else
- EFL_CONF_OPTS += --disable-libmount
- endif
+@@ -116,6 +116,13 @@ endif
+ # There is no alsa support yet in Ecore_Audio.
+ # configure will disable alsa support even if alsa-lib is selected.
  
-+# libblkid is part of required tools, see EFL's README.
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
-+EFL_DEPENDENCIES += util-linux
++ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
++EFL_DEPENDENCIES += harfbuzz
++EFL_CONF_OPTS += --enable-harfbuzz=yes
++else
++EFL_CONF_OPTS += --enable-harfbuzz=no
 +endif
 +
- # If fontconfig is disabled, this is going to make general font
- # searching not work, and only some very direct 'load /path/file.ttf'
- # will work alongside some old-school ttf file path searching. This
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ EFL_DEPENDENCIES += tslib
+ EFL_CONF_OPTS += --enable-tslib
 -- 
 2.4.3
