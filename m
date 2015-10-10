@@ -1,34 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Oct 2015 12:57:12 +0200
-Subject: [Buildroot] [PATCH v1] libdrm: update driver options
-In-Reply-To: <1444160130-10549-1-git-send-email-ps.report@gmx.net>
-References: <1444160130-10549-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151010125712.2455f2f7@free-electrons.com>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sat, 10 Oct 2015 14:43:35 +0200
+Subject: [Buildroot] [PATCH v3 02/37] package/expedite: move to package
+ directory
+In-Reply-To: <20151010125428.002de0af@free-electrons.com>
+References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
+ <1444471422-15118-3-git-send-email-romain.naour@openwide.fr>
+ <20151010125428.002de0af@free-electrons.com>
+Message-ID: <561907F7.5070308@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Hi Thomas,
 
-On Tue,  6 Oct 2015 21:35:30 +0200, Peter Seiderer wrote:
-> - add AMD GPU driver (available since 2.4.63)
-> - freedreno is no longer experimental (since 2.4.59)
-> - add NVIDIA Tegra driver (available since 2.4.59)
-> - update help texts (install vs. installs, change to complete
->   sentences)
+Le 10/10/2015 12:54, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/libdrm/Config.in | 27 +++++++++++++++++++--------
->  package/libdrm/libdrm.mk | 16 ++++++++++++++--
->  2 files changed, 33 insertions(+), 10 deletions(-)
+> On Sat, 10 Oct 2015 12:03:07 +0200, Romain Naour wrote:
+>> Add efl reverse dependencies.
+> 
+> This is a bit of a poor commit log. Why do you move expedite to the
+> package/ directory? And what does it mean to "add reverse
+> dependencies" ?
 
-Applied, thanks.
+Ok, I'll complete the commit log with this:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+"We usually do not have a sub-directory for a family of related packages, so
+move expedite to package directory.
+Since expedite now select the efl package, propagate the reverse dependencies on
+mmu and wchar."
+
+I'll fixes that also in the following patches.
+
+> 
+> Also, it seems like you don't have rename detection enabled in Git.
+
+Indeed, sorry for that... The patch generated with git format-patch didn't look
+like the one viewed through gitk.
+I fixed that using:
+git config --global diff.renames copies
+
+Also the following patches moving efl packages to package directory have the
+same issue...
+
+Best regards,
+Romain
+
+> 
+> Thanks,
+> 
+> Thomas
+> 
