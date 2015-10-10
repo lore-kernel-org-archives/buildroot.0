@@ -1,78 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Oct 2015 11:40:09 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/lzlib: bump to version 0.4.3
-In-Reply-To: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151010114009.3ad10ecb@free-electrons.com>
+Date: Sat, 10 Oct 2015 11:40:31 +0200
+Subject: [Buildroot] [git commit] libv4l: update v4l-utils help text (add
+	more listed tools)
+Message-ID: <20151010094614.99513818CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+commit: http://git.buildroot.net/buildroot/commit/?id=9efc0817f1445aceb837863dc251f7600b033275
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch below is touching a Lua package, can you review/test/ack ?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libv4l/Config.in |   12 ++++++++++--
+ 1 files changed, 10 insertions(+), 2 deletions(-)
 
-Thanks a lot!
-
-Thomas
-
-On Thu,  8 Oct 2015 04:12:54 +0200, J?rg Krause wrote:
-> Switch to more recent github repository.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> Changes v1 -> v2:
->   - fix install paths for lib and lua files
-> ---
->  package/lzlib/Config.in  | 2 +-
->  package/lzlib/lzlib.hash | 2 --
->  package/lzlib/lzlib.mk   | 8 +++++---
->  3 files changed, 6 insertions(+), 6 deletions(-)
->  delete mode 100644 package/lzlib/lzlib.hash
-> 
-> diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
-> index c123019..f7fae15 100644
-> --- a/package/lzlib/Config.in
-> +++ b/package/lzlib/Config.in
-> @@ -7,4 +7,4 @@ config BR2_PACKAGE_LZLIB
->  	  functions and also to read/write gzip files using an
->  	  interface similar to the base io package.
->  
-> -	  http://luaforge.net/projects/lzlib/
-> +	  https://github.com/LuaDist/lzlib
-> diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
-> deleted file mode 100644
-> index d823e8b..0000000
-> --- a/package/lzlib/lzlib.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally calculated
-> -sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
-> diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-> index ec37842..91f380a 100644
-> --- a/package/lzlib/lzlib.mk
-> +++ b/package/lzlib/lzlib.mk
-> @@ -4,9 +4,11 @@
->  #
->  ################################################################################
->  
-> -LZLIB_VERSION = 0.4.work3-1
-> -LZLIB_SUBDIR = lzlib-0.4-work3
-> +LZLIB_VERSION = 0.4.3
-> +LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
->  LZLIB_DEPENDENCIES = zlib
->  LZLIB_LICENSE = MIT
-> +LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
-> +	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
->  
-> -$(eval $(luarocks-package))
-> +$(eval $(cmake-package))
-
-
-
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index d137613..5a55b2b 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -26,8 +26,16 @@ config BR2_PACKAGE_LIBV4L_UTILS
+ 	help
+ 	  v4l-utils is a collection of various video4linux and DVB utilities.
+ 	  Enable this if you want to build the following tools:
+-	  cx18-ctl, ir-keytable, ivtv-ctl, v4l2-ctl, v4l2-sysfs-path and
+-	  others.
++	  - cx18-ctl
++	  - dvb-fe-tool, dvbv5-zap, dvbv5-scan, dvb-format-convert
++	  - decode_tm6000
++	  - ir-keytable
++	  - media-ctl
++	  - v4l2-compliance
++	  - v4l2-ctl, cx18-ctl, ivtv-ctl
++	  - v4l2-sysfs-path
++	  - rds-ctl
++	  - qv4l2 (if Qt is enabled)
+ 
+ endif
+ 
