@@ -1,333 +1,113 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 10 Oct 2015 12:03:22 +0200
-Subject: [Buildroot] [PATCH v3 17/37] package/efl: add X11 support
+Date: Sat, 10 Oct 2015 12:03:26 +0200
+Subject: [Buildroot] [PATCH v3 21/37] package/libevas-generic-loaders: bump
+	to version 1.15.0
 In-Reply-To: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
 References: <1444471422-15118-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1444471422-15118-18-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1444471422-15118-22-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, set x-includes and x-libraries configure option for cross-compiling.
+Update url and add a hash file.
 
-Previous efl versions had cross-compilation issue (poisoned paths)
-if these options are not passed to configure script.
-
-Backport an upstream patch to remove xprint usage.
-https://git.enlightenment.org/core/efl.git/commit/?h=efl-1.15&id=434572355c7e929b84210b2f795634d38f13c913
+Also add efl reverse dependencies.
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
-v3: fix typo
-    remove xlib_libXp dependency (xprint), since libXp package has been
-    removed from this series.
+v3: remove trailing slash (Vicente Bergas)
+v2: bump to 1.15
+    remove glibc only dependency
 ---
- package/efl/0002-ecore_x-Remove-XPrint-usage.patch | 153 +++++++++++++++++++++
- package/efl/Config.in                              |  41 ++++++
- package/efl/efl.mk                                 |  63 ++++++++-
- 3 files changed, 255 insertions(+), 2 deletions(-)
- create mode 100644 package/efl/0002-ecore_x-Remove-XPrint-usage.patch
+ package/libevas-generic-loaders/Config.in            | 20 +++++++++-----------
+ .../libevas-generic-loaders.hash                     |  2 ++
+ .../libevas-generic-loaders.mk                       |  9 +++++----
+ 3 files changed, 16 insertions(+), 15 deletions(-)
+ create mode 100644 package/libevas-generic-loaders/libevas-generic-loaders.hash
 
-diff --git a/package/efl/0002-ecore_x-Remove-XPrint-usage.patch b/package/efl/0002-ecore_x-Remove-XPrint-usage.patch
-new file mode 100644
-index 0000000..4687e4c
---- /dev/null
-+++ b/package/efl/0002-ecore_x-Remove-XPrint-usage.patch
-@@ -0,0 +1,153 @@
-+From 434572355c7e929b84210b2f795634d38f13c913 Mon Sep 17 00:00:00 2001
-+From: Derek Foreman <derekf@osg.samsung.com>
-+Date: Tue, 6 Oct 2015 13:13:01 -0400
-+Subject: [PATCH] ecore_x: Remove XPrint usage
-+
-+Summary:
-+Xprint has been deprecated since 2008.
-+
-+It's recently (August 2015) been removed from debian.
-+
-+Reviewers: zmike, devilhorns
-+
-+Subscribers: cedric
-+
-+Differential Revision: https://phab.enlightenment.org/D3150
-+---
-+ configure.ac                           |  1 -
-+ src/lib/ecore_x/xlib/ecore_x.c         | 78 ----------------------------------
-+ src/lib/ecore_x/xlib/ecore_x_private.h |  3 --
-+ 3 files changed, 82 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9c17946..c34191c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3624,7 +3624,6 @@ if test "x${want_x11_xlib}" = "xyes" ; then
-+    ECORE_CHECK_X_EXTENSION([Xdpms], [dpms.h], [Xext], [DPMSQueryExtension])
-+    ECORE_CHECK_X_EXTENSION([Xfixes], [Xfixes.h], [Xfixes], [XFixesExpandRegion])
-+    ECORE_CHECK_X_EXTENSION([Xinerama], [Xinerama.h], [Xinerama], [XineramaQueryScreens])
-+-   ECORE_CHECK_X_EXTENSION([Xprint], [Print.h], [Xp], [XpQueryScreens])
-+    ECORE_CHECK_X_EXTENSION([Xrandr], [Xrandr.h], [Xrandr], [XRRGetScreenResourcesCurrent])
-+    ECORE_CHECK_X_EXTENSION([Xrender], [Xrender.h], [Xrender], [XRenderFindVisualFormat])
-+    ECORE_CHECK_X_EXTENSION([Xtest], [XTest.h], [Xtst], [XTestFakeKeyEvent])
-+diff --git a/src/lib/ecore_x/xlib/ecore_x.c b/src/lib/ecore_x/xlib/ecore_x.c
-+index 096f64d..8e2057e 100644
-+--- a/src/lib/ecore_x/xlib/ecore_x.c
-++++ b/src/lib/ecore_x/xlib/ecore_x.c
-+@@ -1219,9 +1219,6 @@ ecore_x_window_root_list(int *num_ret)
-+ {
-+    int num, i;
-+    Ecore_X_Window *roots;
-+-#ifdef ECORE_XPRINT
-+-   int xp_base, xp_err_base;
-+-#endif /* ifdef ECORE_XPRINT */
-+ 
-+    if (!num_ret)
-+      return NULL;
-+@@ -1229,80 +1226,6 @@ ecore_x_window_root_list(int *num_ret)
-+    *num_ret = 0;
-+ 
-+    LOGFN(__FILE__, __LINE__, __FUNCTION__);
-+-#ifdef ECORE_XPRINT
-+-   num = ScreenCount(_ecore_x_disp);
-+-   if (XpQueryExtension(_ecore_x_disp, &xp_base, &xp_err_base))
-+-     {
-+-        Screen **ps = NULL;
-+-        int psnum = 0;
-+-
-+-        ps = XpQueryScreens(_ecore_x_disp, &psnum);
-+-        if (ps)
-+-          {
-+-             int overlap, j;
-+-
-+-             overlap = 0;
-+-             for (i = 0; i < num; i++)
-+-               {
-+-                  for (j = 0; j < psnum; j++)
-+-                    {
-+-                       if (ScreenOfDisplay(_ecore_x_disp, i) == ps[j])
-+-                         overlap++;
-+-                    }
-+-               }
-+-             roots = malloc(MAX((num - overlap) * sizeof(Ecore_X_Window), 1));
-+-             if (roots)
-+-               {
-+-                  int k;
-+-
-+-                  k = 0;
-+-                  for (i = 0; i < num; i++)
-+-                    {
-+-                       int is_print;
-+-
-+-                       is_print = 0;
-+-                       for (j = 0; j < psnum; j++)
-+-                         {
-+-                            if (ScreenOfDisplay(_ecore_x_disp, i) == ps[j])
-+-                              {
-+-                                 is_print = 1;
-+-                                 break;
-+-                              }
-+-                         }
-+-                       if (!is_print)
-+-                         {
-+-                            roots[k] = RootWindow(_ecore_x_disp, i);
-+-                            k++;
-+-                         }
-+-                    }
-+-                  *num_ret = k;
-+-               }
-+-
-+-             XFree(ps);
-+-          }
-+-        else
-+-          {
-+-             roots = malloc(num * sizeof(Ecore_X_Window));
-+-             if (!roots)
-+-               return NULL;
-+-
-+-             *num_ret = num;
-+-             for (i = 0; i < num; i++)
-+-               roots[i] = RootWindow(_ecore_x_disp, i);
-+-          }
-+-     }
-+-   else
-+-     {
-+-        roots = malloc(num * sizeof(Ecore_X_Window));
-+-        if (!roots)
-+-          return NULL;
-+-
-+-        *num_ret = num;
-+-        for (i = 0; i < num; i++)
-+-          roots[i] = RootWindow(_ecore_x_disp, i);
-+-     }
-+-
-+-#else /* ifdef ECORE_XPRINT */
-+    num = ScreenCount(_ecore_x_disp);
-+    roots = malloc(num * sizeof(Ecore_X_Window));
-+    if (!roots)
-+@@ -1311,7 +1234,6 @@ ecore_x_window_root_list(int *num_ret)
-+    *num_ret = num;
-+    for (i = 0; i < num; i++)
-+      roots[i] = RootWindow(_ecore_x_disp, i);
-+-#endif /* ifdef ECORE_XPRINT */
-+    return roots;
-+ }
-+ 
-+diff --git a/src/lib/ecore_x/xlib/ecore_x_private.h b/src/lib/ecore_x/xlib/ecore_x_private.h
-+index 97b3858..07c09fb 100644
-+--- a/src/lib/ecore_x/xlib/ecore_x_private.h
-++++ b/src/lib/ecore_x/xlib/ecore_x_private.h
-+@@ -19,9 +19,6 @@
-+ #ifdef ECORE_XCURSOR
-+ #include <X11/Xcursor/Xcursor.h>
-+ #endif /* ifdef ECORE_XCURSOR */
-+-#ifdef ECORE_XPRINT
-+-#include <X11/extensions/Print.h>
-+-#endif /* ifdef ECORE_XPRINT */
-+ #ifdef ECORE_XINERAMA
-+ #include <X11/extensions/Xinerama.h>
-+ #endif /* ifdef ECORE_XINERAMA */
-+-- 
-+2.4.3
-+
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 75369b7..711d227 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -41,6 +41,47 @@ comment "libecore video support"
- config BR2_PACKAGE_EFL_FB
- 	bool "libecore framebuffer support"
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 47e5aa2..78247e2 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -1,15 +1,18 @@
+ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
+ 	bool "libevas generic loaders"
+-	select BR2_PACKAGE_LIBEINA
++	select BR2_PACKAGE_EFL
+ 	select BR2_PACKAGE_ZLIB
+-	depends on BR2_USE_WCHAR # efl
++	depends on BR2_INSTALL_LIBSTDCPP # efl
++	depends on BR2_PACKAGE_HAS_UDEV # efl -> libudev
+ 	depends on BR2_USE_MMU # efl
++	depends on !BR2_STATIC_LIBS # efl
++	depends on BR2_USE_WCHAR # efl
+ 	help
+ 	  These are additional "generic" loaders for Evas that are
+ 	  stand-alone executables that evas may run from its generic
+ 	  loader module.
  
-+config BR2_PACKAGE_EFL_X
-+	bool "libecore X support"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+
-+if BR2_PACKAGE_EFL_X
-+
-+choice
-+	prompt "select libecore XLIB/XCB support"
-+
-+config BR2_PACKAGE_EFL_X_XLIB
-+	bool "libecore XLIB support"
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXCURSOR
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA
-+	select BR2_PACKAGE_XLIB_LIBXP
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+
-+config BR2_PACKAGE_EFL_X_XCB
-+	bool "libecore XCB support"
-+	depends on !BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL_IMAGE # xcb-image.pc
-+	select BR2_PACKAGE_XCB_UTIL_KEYSYMS # xcb-keysyms.pc
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL # xcb-renderutil.pc
-+	select BR2_PACKAGE_XCB_UTIL_WM # xcb-icccm.pc
-+	select BR2_PACKAGE_XLIB_LIBX11
-+
-+comment "for libecore XCB support disable recommended configurations"
-+	depends on BR2_PACKAGE_EFL_RECOMMENDED_CONFIG
-+
-+endchoice
-+
-+endif # BR2_PACKAGE_EFL_X
-+
- comment "libevas loaders"
+-	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
++	  https://www.enlightenment.org/
  
- config BR2_PACKAGE_EFL_PNG
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
-index 9938b6f..06b2892 100644
---- a/package/efl/efl.mk
-+++ b/package/efl/efl.mk
-@@ -17,6 +17,7 @@ EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg libcurl lua udev \
+ if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
  
- # regenerate the configure script:
- # https://phab.enlightenment.org/T2718
-+# configure.ac patched by 0002-ecore_x-Remove-XPrint-usage.patch
- EFL_AUTORECONF = YES
- EFL_GETTEXTIZE = YES
+@@ -17,17 +20,12 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	bool "SVG loader"
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+-	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	help
+ 	  This option enables the Evas generic SVG loader
  
-@@ -28,8 +29,7 @@ EFL_CONF_OPTS = \
- 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
- 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
- 	--disable-cxx-bindings \
--	--enable-lua-old \
--	--with-x11=none
-+	--enable-lua-old
- 
- # Disable untested configuration warning.
- ifeq ($(BR2_PACKAGE_EFL_RECOMMENDED_CONFIG),)
-@@ -171,6 +171,65 @@ else
- EFL_CONF_OPTS += --enable-fb=no
+-comment "SVG loader needs a toolchain w/ threads, C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-
  endif
  
-+ifeq ($(BR2_PACKAGE_EFL_X),y)
-+EFL_CONF_OPTS += --with-x=$(STAGING_DIR) \
-+	--x-includes=$(STAGING_DIR)/usr/include \
-+	--x-libraries=$(STAGING_DIR)/usr/lib \
-+	--with-opengl=none
-+
-+EFL_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXext
-+else
-+EFL_CONF_OPTS += --with-x=no \
-+	--with-x11=none
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EFL_X_XLIB),y)
-+EFL_DEPENDENCIES += \
-+	xlib_libX11 \
-+	xlib_libXcomposite \
-+	xlib_libXcursor \
-+	xlib_libXdamage \
-+	xlib_libXext \
-+	xlib_libXinerama \
-+	xlib_libXrandr \
-+	xlib_libXrender \
-+	xlib_libXScrnSaver \
-+	xlib_libXtst
-+EFL_CONF_OPTS += --with-x11=xlib
-+endif
-+
-+# xcb-util-image to provide xcb-image.pc
-+# xcb-util-renderutil to provide xcb-renderutil.pc
-+# xcb-util-wm to provide xcb-icccm.pc
-+# xcb-util-keysyms to provide xcb-keysyms.pc
-+ifeq ($(BR2_PACKAGE_EFL_X_XCB),y)
-+EFL_DEPENDENCIES += libxcb \
-+	xcb-util-image \
-+	xcb-util-keysyms \
-+	xcb-util-renderutil \
-+	xcb-util-wm
-+# You have chosen to use XCB instead of Xlib. It is a myth that XCB
-+# is amazingly faster than Xlib (when used sensibly). It can be
-+# faster in a few corner cases on startup of an app, but it comes
-+# with many downsides. One of those is more complex code inside
-+# ecore_x, which is far less tested in XCB mode than Xlib. Also
-+# the big catch is that OpenGL support basically requires Xlib anyway
-+# so if you want OpenGL in X11, you need Xlib regardless and so you
-+# gain nothing really in terms of speed and no savings in memory
-+# because Xlib is still linked, loaded and used, BUT instead you
-+# have OpenGL drivers working with an hybrid XCB/Xlib (mostly XCB)
-+# toolkit and this is basically never tested by anyone working on
-+# the OpenGL drivers, so you will have bugs. Do not enable XCB
-+# and use OpenGL. XCB is only useful if you wish to shave a few Kb
-+# off the memory footprint of a whole system and live with less
-+# tested code, and possibly unimplemented features in ecore_x. To
-+# remove the XCB setup, remove the --with-x11=xcb option to
-+# configure.
-+EFL_CONF_OPTS += --with-x11=xcb
-+endif
-+
- # image loader: handle only loaders that requires dependencies.
- # All other loaders are builded by default statically.
- ifeq ($(BR2_PACKAGE_EFL_PNG),y)
+-comment "libevas generic loaders needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
++comment "libevas generic loaders needs udev /dev management and a toolchain w/ C++, dynamic library, wchar"
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.hash b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+new file mode 100644
+index 0000000..32723ba
+--- /dev/null
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.hash
+@@ -0,0 +1,2 @@
++# From https://download.enlightenment.org/rel/libs/evas_generic_loaders/evas_generic_loaders-1.15.0.tar.xz.sha256
++sha256	1e539e4d4d4e1590345caeb7fdd84f47ec7cd63bb76b6b7107a87420a401fd7f	evas_generic_loaders-1.15.0.tar.xz
+diff --git a/package/libevas-generic-loaders/libevas-generic-loaders.mk b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+index ac6b1cc..467e728 100644
+--- a/package/libevas-generic-loaders/libevas-generic-loaders.mk
++++ b/package/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -4,17 +4,18 @@
+ #
+ ################################################################################
+ 
+-LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.10
+-LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
+-LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.15.0
++LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.xz
++LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/rel/libs/evas_generic_loaders
+ LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
+ LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
+ 
+ LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
+ 
+-LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina zlib
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = efl zlib
+ 
+ # For now, we only support the SVG loader
++# poppler >= 0.32 is not supported with libevas-generic-loaders 1.14.0
+ LIBEVAS_GENERIC_LOADERS_CONF_OPTS += \
+ 	--disable-poppler \
+ 	--disable-spectre \
 -- 
 2.4.3
