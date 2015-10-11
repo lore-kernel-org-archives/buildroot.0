@@ -1,52 +1,44 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 11 Oct 2015 23:24:42 +0200
-Subject: [Buildroot] [PATCH v1 1/2] libevdev: bump version to 1.4.4
-Message-ID: <1444598683-12269-1-git-send-email-ps.report@gmx.net>
+Date: Sun, 11 Oct 2015 23:28:22 +0200
+Subject: [Buildroot] [PATCH v1] nodejs: fix typo for arm predefined
+ macro used for atomicops
+In-Reply-To: <20151011150501.0fee9223@free-electrons.com>
+References: <1444548587-30217-1-git-send-email-ps.report@gmx.net>
+ <20151011150501.0fee9223@free-electrons.com>
+Message-ID: <20151011232822.5f2acc4b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]:
+Hello Thomas,
 
-A couple of cleanups, one notable fix: we now transparently fix invalid
-ABS_MT_TRACKING_ID ranges to something sensible.
+On Sun, 11 Oct 2015 15:05:01 +0200, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-The touchpad-edge-detector tool prints out suggested hwdb rules for
-resolution overrides. And since the resolution is the main thing to fix on a
-device, the libevdev-tweak-device now has a --resolution argument to quickly
-set the resolution on the x/y axes.
+> Dear Peter Seiderer,
+> 
+> On Sun, 11 Oct 2015 09:29:47 +0200, Peter Seiderer wrote:
+> 
+> > diff --git a/package/nodejs/0.12.7/0005-Fix-typo-for-arm-predefined-macrco-in-atomicops_inte.patch b/package/nodejs/0.12.7/0005-Fix-typo-for-arm-predefined-macrco-in-atomicops_inte.patch
+> 
+> Typo in the file name macrco -> macro.
+> 
 
-[1] http://lists.freedesktop.org/archives/input-tools/2015-August/001210.html
+Many thanks for fixing my silly typo...
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libevdev/libevdev.hash | 4 ++--
- package/libevdev/libevdev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> > +Subject: [PATCH] Fix typo for arm predefined macrco in
+> 
+> And here as well.
+> 
+> Committed with these typos fixed. Please submit the patch upstream.
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 1b7897d..1e44bf8 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,2 +1,2 @@
--# Hash from http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
--sha256 1c418b26fd78b0e9900872be2f77fb5311c877b34ec5c75efd1b670ed627969b libevdev-1.4.3.tar.xz
-+# Hash from http://lists.freedesktop.org/archives/input-tools/2015-August/001210.html
-+sha256 ed9979369b6a6e28f5897d099538549ecffb2b7c00c1b717eb77c31d85bc45a9 libevdev-1.4.4.tar.xz
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 082a7cc..d9a2be6 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEVDEV_VERSION = 1.4.3
-+LIBEVDEV_VERSION = 1.4.4
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
--- 
-2.1.4
+O.k. will try to do...
+
+Regards,
+Peter
+
+> 
+> Thanks a lot!
+> 
+> Thomas
