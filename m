@@ -1,27 +1,89 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Sun, 11 Oct 2015 10:01:17 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2015-10-10
-In-Reply-To: <20151011063018.DD233101FF1@stock.ovh.net>
-References: <20151011063018.DD233101FF1@stock.ovh.net>
-Message-ID: <20151011100117.4e8c1b4c@x230.trabucayre.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 11 Oct 2015 10:12:08 +0200
+Subject: [Buildroot] [PATCH 2/2] Add package hackrf-tools
+In-Reply-To: <1444546853-1505-2-git-send-email-jrspruitt@gmail.com>
+References: <1444546853-1505-1-git-send-email-jrspruitt@gmail.com>
+ <1444546853-1505-2-git-send-email-jrspruitt@gmail.com>
+Message-ID: <CAHXCMMKYBCRdM1Xn+YTLwuQ2FoZ1Z1TsAX5fyO18uNY-5uT3eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Jason,
 
-On Sun, 11 Oct 2015 08:30:18 +0200 (CEST)
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+On Sun, Oct 11, 2015 at 9:00 AM, Jason Pruitt <jrspruitt@gmail.com> wrote:
+> Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
+> ---
+>  package/Config.in                    |  1 +
+>  package/hackrf-tools/Config.in       |  8 ++++++++
+>  package/hackrf-tools/hackrf-tools.mk | 14 ++++++++++++++
+>  3 files changed, 23 insertions(+)
+>  create mode 100644 package/hackrf-tools/Config.in
+>  create mode 100644 package/hackrf-tools/hackrf-tools.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 0184e46..fe3f057 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -352,6 +352,7 @@ endif
+>         source "package/gpsd/Config.in"
+>         source "package/gptfdisk/Config.in"
+>         source "package/gvfs/Config.in"
+> +       source "package/hackrf-tools/Config.in
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>         source "package/hdparm/Config.in"
+>  endif
+> diff --git a/package/hackrf-tools/Config.in b/package/hackrf-tools/Config.in
+> new file mode 100644
+> index 0000000..71fced6
+> --- /dev/null
+> +++ b/package/hackrf-tools/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HACKRF_TOOLS
+> +       bool "hackrf-tools"
+> +    depends on BR2_PACKAGE_LIBHACKRF && (BR2_SHARED_STATIC_LIBS || BR2_SHARED_LIBS)
+> +       help
+> +         Tools for interacting with and updating HackRF boards.
+> +
+> +         https://github.com/mossmann/hackrf/host/hackrf-tools
 
-> x86_64 |                   libftdi-0.20 | NOK |
-> http://autobuild.buildroot.net/results/e6360386a0a99900b83494924494ec40552d8dbe/
-Fixed by
-https://github.com/libusb/libusb-compat-0.1/commit/2e9b6bbebb7cf1ef0095516ec6d5203deb3822e8
+The right url seems to be:
+https://github.com/mossmann/hackrf/tree/master/host/hackrf-tools
 
-but only available on v0.1.6-rc1 ...
+> +
+> diff --git a/package/hackrf-tools/hackrf-tools.mk b/package/hackrf-tools/hackrf-tools.mk
+> new file mode 100644
+> index 0000000..40bccae
+> --- /dev/null
+> +++ b/package/hackrf-tools/hackrf-tools.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# hackrf-tools
+> +#
+> +################################################################################
+> +
+> +HACKRF_TOOLS_VERSION = v2015.07.2
+> +HACKRF_TOOLS_SITE = $(call github,mossmann,hackrf,$(HACKRF_TOOLS_VERSION))
+> +HACKRF_TOOLS_LICENSE = GPLv2+
+> +HACKRF_TOOLS_LICENSE_FILES = COPYING
+> +HACKRF_TOOLS_DEPENDENCIES = libhackrf
+> +HACKRF_TOOLS_SUBDIR = host/hackrf-tools
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Otherwise, it looks pretty good :)
 
 Regards,
-Gwen
+
+-- 
+Samuel
