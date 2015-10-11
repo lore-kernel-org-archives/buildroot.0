@@ -1,67 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Oct 2015 11:18:20 +0200
-Subject: [Buildroot] [PATCH 2/2] Add package hackrf-tools
-In-Reply-To: <1444546853-1505-2-git-send-email-jrspruitt@gmail.com>
-References: <1444546853-1505-1-git-send-email-jrspruitt@gmail.com>
- <1444546853-1505-2-git-send-email-jrspruitt@gmail.com>
-Message-ID: <20151011111820.21f6a115@free-electrons.com>
+Date: Sun, 11 Oct 2015 12:08:59 +0200
+Subject: [Buildroot] Issues with the toolchain wrapper applied to the
+	internal toolchain
+Message-ID: <20151011120859.7e786a73@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jason Pruitt,
+Hello,
 
-On Sun, 11 Oct 2015 00:00:53 -0700, Jason Pruitt wrote:
+Since the toolchain wrapper support for the internal toolchain has been
+merged, using pre-built Buildroot toolchains as external toolchains no
+longer work since the path logic in the wrapper doesn't cope with a
+toolchain installed in host/opt/ext-toolchain/. When executing the
+cross-compiler:
 
-> diff --git a/package/hackrf-tools/Config.in b/package/hackrf-tools/Config.in
-> new file mode 100644
-> index 0000000..71fced6
-> --- /dev/null
-> +++ b/package/hackrf-tools/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_HACKRF_TOOLS
-> +	bool "hackrf-tools"
-> +    depends on BR2_PACKAGE_LIBHACKRF && (BR2_SHARED_STATIC_LIBS || BR2_SHARED_LIBS)
+thomas at skate:~/projets/buildroot3 (master)$ ./output/host/opt/ext-toolchain/bin/arm-linux-gcc 
+/home/thomas/projets/buildroot3/output/host/opt/usr/bin/arm-linux-gcc.real: No such file or directory
 
-Improper indentation. Besides that, if something doesn't build with
-pure static libraries, we normally do:
+As you can see, it looks for the "real" compiler in the wrong location.
+I believe it should instead re-use some of the logic of
+BR_CROSS_PATH_REL.
 
-	depends on !BR2_STATIC_LIBS
+You can reproduce this issue by using the following defconfig:
 
-and add a comment:
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.08-532-ga237b40.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
 
-comment "hackrf-tools needs a toolchain w/ dynamic library"
-	depends on BR2_STATIC_LIBS
+Also, another concern I have is what going to happen with the double
+wrapper? A Buildroot toolchain has a wrapper, and then when it's
+re-used as an external toolchain, another wrapper is created. Will this
+work OK, especially in terms of ccache behavior?
 
-Regarding the "depends on BR2_PACKAGE_LIBHACKRF", it should be a
-"select" instead:
-
-	select BR2_PACKAGE_LIBHACKRF
-
-and then you need to propagate the reverse dependencies of libhackrf:
-
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-
-and of course keep a comment about this thread dependency. So the
-comment above should in fact be:
-
-comment "hackrf-tools needs a toolchain w/ threads, dynamic library"
-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-
-However, this is all moot if you merge both packages into one, as
-suggested in my review of the libhackrf package.
-
-> +	help
-> +	  Tools for interacting with and updating HackRF boards.
-> +
-> +	  https://github.com/mossmann/hackrf/host/hackrf-tools
-> +
-
-Unneeded empty new line.
-
-Thanks!
+Thanks, 
 
 Thomas
 -- 
