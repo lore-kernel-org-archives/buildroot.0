@@ -1,42 +1,117 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 11 Oct 2015 12:21:10 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
-	0.4.9
-In-Reply-To: <1444558870-29918-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1444558870-29918-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1444558870-29918-2-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Oct 2015 14:34:14 +0200
+Subject: [Buildroot] [PATCH v4 1/4] package/rpm: bump to version 4.12.0.1
+In-Reply-To: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1444076819-10228-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20151011143414.4bf27c78@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+James,
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index ac94e41..1371492 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	d73c1c5a11cdfdcb58304a1c1272cce6c8e1868e3f61d393b3b8a725f3bf665b	dovecot-2.2-pigeonhole-0.4.8.tar.gz
-+sha256	82892f876d26008a076973dfddf1cffaf5a0451825fd44e06287e94b89078649	dovecot-2.2-pigeonhole-0.4.9.tar.gz
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 5e6504e..06ff2f1 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOVECOT_PIGEONHOLE_VERSION = 0.4.8
-+DOVECOT_PIGEONHOLE_VERSION = 0.4.9
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
- DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
+On Mon,  5 Oct 2015 16:26:56 -0400, James Knight wrote:
+> The provided "bump" (suggested by Baruch Siach) switches from the rpm5
+> implementation to rpm.org's more active stream.
+> 
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+
+> -RPM_VERSION_MAJOR = 5.2
+> -RPM_VERSION = $(RPM_VERSION_MAJOR).0
+> -RPM_SITE = http://rpm5.org/files/rpm/rpm-$(RPM_VERSION_MAJOR)
+> -RPM_DEPENDENCIES = host-pkgconf zlib beecrypt neon popt openssl
+> -RPM_LICENSE = LGPLv2.1
+> -RPM_LICENSE_FILES = COPYING.LIB
+> +RPM_VERSION_MAJOR = 4.12
+> +RPM_VERSION = $(RPM_VERSION_MAJOR).0.1
+> +RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
+> +RPM_SITE = http://rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
+> +RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib
+> +RPM_LICENSE = GPLv2
+> +RPM_LICENSE_FILES = COPYING
+>  
+> -RPM_CONF_ENV = \
+> -	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/beecrypt -I$(STAGING_DIR)/usr/include/neon -DHAVE_MUTEX_THREAD_ONLY" \
+> -	ac_cv_va_copy=yes
+> -
+> -RPM_CONF_OPTS = \
+> -	--disable-build-versionscript \
+> +RPM_CONF_OPTS += \
+> +	--disable-largefile \
+>  	--disable-rpath \
+> -	--without-selinux \
+> -	--without-python \
+> -	--without-perl \
+> -	--with-openssl=external \
+> -	--with-zlib=external \
+> -	--with-libbeecrypt=$(STAGING_DIR) \
+> -	--with-popt=external
+> +	--enable-python=no \
+> +	--with-external-db \
+> +	--with-gnu-ld \
+> +	--without-cap \
+> +	--without-hackingdocs
+>  
+> -ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+> -RPM_DEPENDENCIES += gettext
+> +ifeq ($(BR2_PACKAGE_ACL),y)
+> +RPM_DEPENDENCIES += acl
+> +RPM_CONF_OPTS += --with-acl
+> +else
+> +RPM_CONF_OPTS += --without-acl
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_PCRE),y)
+> -RPM_DEPENDENCIES += pcre
+> -RPM_CONF_OPTS += --with-pcre=external
+> +ifeq ($(BR2_PACKAGE_BEECRYPT),y)
+> +RPM_DEPENDENCIES += beecrypt
+> +RPM_CONF_OPTS += --with-beecrypt
+> +RPM_CONFIGURATION += -I$(STAGING_DIR)/usr/include/beecrypt
+
+This should be named RPM_CFLAGS instead, it's more logical and
+consistent with what we do in other packages.
+
+Also, I had some issues building your package with uClibc and musl:
+
+ - the check for -fstack-protector doesn't work properly. I've written
+   a patch to fix this (attached). You need to set RPM_AUTORECONF = YES
+   to use this patch.
+
+ - uclibc and musl don't provide __fxstat64(). I've written a fix that
+   works for uclibc (attached). But it doesn't work as is for musl
+   since musl doesn't provide a __MUSL__ symbol, so you need to do a
+   proper configure.ac check.
+
+ - when building with musl, _D_EXACT_NAMELEN is missing.
+
+So could you rework this package to make it work with musl/uclibc or
+alternatively mark it as not available for these C libraries if you are
+not interested in supporting this use case.
+
+In the mean time, I'll mark your patches as "Changes Requested" in
+patchwork.
+
+Thanks!
+
+Thomas
 -- 
-2.6.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-configure.ac-use-link-instead-of-compile-for-gcc-fla.patch
+Type: text/x-patch
+Size: 1251 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151011/a1e09a21/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-fts-add-quirk-for-__fxstat64-on-uclibc.patch
+Type: text/x-patch
+Size: 840 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151011/a1e09a21/attachment-0001.bin>
