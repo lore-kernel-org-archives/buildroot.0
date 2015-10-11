@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Oct 2015 14:47:01 +0200
-Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: Add an explicit option
- to enable nl80211.
-In-Reply-To: <1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>
-References: <20150713112947.7e14fd64@free-electrons.com>
- <1437051754-24060-1-git-send-email-nicolas.cavallari@green-communications.fr>
-Message-ID: <20151011144701.66672b8e@free-electrons.com>
+Date: Sun, 11 Oct 2015 14:47:40 +0200
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+	to 0.4.9
+Message-ID: <20151011124757.C19B97FB6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Nicolas Cavallari,
+commit: http://git.buildroot.net/buildroot/commit/?id=dccf4f92089b54b3e9fd94778cd7bb24c19e35f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 16 Jul 2015 15:02:33 +0200, Nicolas Cavallari wrote:
-> Currently, nl80211 support is conditional with libnl being enabled,
-> using implicit dependencies.  This causes problems since it is not
-> obvious and wpa_supplicant without nl80211 isn't what most user expects.
-> 
-> If nl80211 isn't enabled, then buildroot only enables the wext driver,
-> which will only work if some deprecated kernel feature isn't left
-> disabled, or if using a outdated out-of-tree linux driver which doesn't
-> use the cfg80211 infrastructure.
-> 
-> This makes nl80211 support an explicit option, which
-> "select BR2_PACKAGE_LIBNL" accordingly.  To handle upgrades nicely, it
-> would have been nice to have "default y if BR2_PACKAGE_LIBNL", but
-> Kconfig treats this as a circular dependency.  So instead, this enables
-> the option by default, which is less worse than not enabling nl80211
-> when it was previously implicitly enabled.
-> 
-> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
->  package/wpa_supplicant/Config.in         | 16 ++++++++++++++++
->  package/wpa_supplicant/wpa_supplicant.mk |  2 +-
->  2 files changed, 17 insertions(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash |    2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've applied after doing some minor fixes:
-
-    [Thomas:
-     - rewrap Config.in help text
-     - add comment about thread dependency.]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index ac94e41..1371492 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	d73c1c5a11cdfdcb58304a1c1272cce6c8e1868e3f61d393b3b8a725f3bf665b	dovecot-2.2-pigeonhole-0.4.8.tar.gz
++sha256	82892f876d26008a076973dfddf1cffaf5a0451825fd44e06287e94b89078649	dovecot-2.2-pigeonhole-0.4.9.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 5e6504e..06ff2f1 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.8
++DOVECOT_PIGEONHOLE_VERSION = 0.4.9
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
