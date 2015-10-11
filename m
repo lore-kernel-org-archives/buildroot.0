@@ -1,162 +1,261 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Oct 2015 10:17:04 +0200
-Subject: [Buildroot] [PATCH 1/2] Add package libhackrf
-In-Reply-To: <1444546853-1505-1-git-send-email-jrspruitt@gmail.com>
-References: <1444546853-1505-1-git-send-email-jrspruitt@gmail.com>
-Message-ID: <CAHXCMMLw6W2gQ=u-mw07tOL=E-GNCLtn7wEHRk=CXvcM-8x6Kg@mail.gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Sun, 11 Oct 2015 10:48:30 +0200
+Subject: [Buildroot] [PATCH 1/1] libusb-compat: backport C99 std use patch
+Message-ID: <1444553310-26549-1-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jason,
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On Sun, Oct 11, 2015 at 9:00 AM, Jason Pruitt <jrspruitt@gmail.com> wrote:
-> Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
-> ---
->  package/Config.in                                  |  1 +
->  .../0001-disabled_shared_library_in_build.patch    | 54 ++++++++++++++++++++++
->  package/libhackrf/Config.in                        |  9 ++++
->  package/libhackrf/libhackrf.mk                     | 21 +++++++++
->  4 files changed, 85 insertions(+)
->  create mode 100644 package/libhackrf/0001-disabled_shared_library_in_build.patch
->  create mode 100644 package/libhackrf/Config.in
->  create mode 100644 package/libhackrf/libhackrf.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 1ceb7d6..0184e46 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -866,6 +866,7 @@ menu "Hardware handling"
->         source "package/libftdi/Config.in"
->         source "package/libftdi1/Config.in"
->         source "package/libgudev/Config.in"
-> +       source "package/libhackrf/Config.in"
->         source "package/libhid/Config.in"
->         source "package/libiio/Config.in"
->         source "package/libinput/Config.in"
-> diff --git a/package/libhackrf/0001-disabled_shared_library_in_build.patch b/package/libhackrf/0001-disabled_shared_library_in_build.patch
-> new file mode 100644
-> index 0000000..98a2af8
-> --- /dev/null
-> +++ b/package/libhackrf/0001-disabled_shared_library_in_build.patch
-> @@ -0,0 +1,54 @@
-> +diff -rupN hackrf/host/libhackrf/src/CMakeLists.txt libhackrf-v2015.07.2/host/libhackrf/src/CMakeLists.txt
-> +--- hackrf/host/libhackrf/src/CMakeLists.txt   2015-10-10 13:31:57.754026872 -0700
-> ++++ libhackrf-v2015.07.2/host/libhackrf/src/CMakeLists.txt     2015-10-10 13:30:52.162026628 -0700
-> +@@ -27,8 +27,10 @@ set(c_sources ${CMAKE_CURRENT_SOURCE_DIR
-> + set(c_headers ${CMAKE_CURRENT_SOURCE_DIR}/hackrf.h CACHE INTERNAL "List of C headers")
-> +
-> + # Dynamic library
-> +-add_library(hackrf SHARED ${c_sources})
-> +-set_target_properties(hackrf PROPERTIES VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.0 SOVERSION 0)
-> ++if(BUILD_SHARED_LIBS)
-> ++        add_library(hackrf SHARED ${c_sources})
-> ++        set_target_properties(hackrf PROPERTIES VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.0 SOVERSION 0)
-> ++endif()
-> +
-> + # Static library
-> + add_library(hackrf-static STATIC ${c_sources})
-> +@@ -38,12 +40,17 @@ else()
-> +       set_target_properties(hackrf-static PROPERTIES OUTPUT_NAME "hackrf")
-> + endif()
-> +
-> +-set_target_properties(hackrf PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-> ++if(BUILD_SHARED_LIBS)
-> ++        set_target_properties(hackrf PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-> ++endif()
-> + set_target_properties(hackrf-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-> +
-> ++
-> + # Dependencies
-> +-target_link_libraries(hackrf ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-> +-
-> ++if(BUILD_SHARED_LIBS)
-> ++        target_link_libraries(hackrf ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-> ++endif()
-> ++
-> + # For cygwin just force UNIX OFF and WIN32 ON
-> + if( ${CYGWIN} )
-> +   SET(UNIX OFF)
-> +@@ -51,10 +58,12 @@ if( ${CYGWIN} )
-> + endif( ${CYGWIN} )
-> +
-> + if( ${UNIX} )
-> +-   install(TARGETS hackrf
-> +-           LIBRARY DESTINATION lib${LIB_SUFFIX}
-> +-           COMPONENT sharedlibs
-> +-           )
-> ++   if(BUILD_SHARED_LIBS)
-> ++           install(TARGETS hackrf
-> ++                   LIBRARY DESTINATION lib${LIB_SUFFIX}
-> ++                   COMPONENT sharedlibs
-> ++                   )
-> ++   endif()
-> +    install(TARGETS hackrf-static
-> +            ARCHIVE DESTINATION lib${LIB_SUFFIX}
-> +            COMPONENT staticlibs
+fix : http://autobuild.buildroot.net/results/e63/e6360386a0a99900b83494924494ec40552d8dbe/
 
-So, static libs are always built... Don't know if this is an issue
-(some other packages may do the same).
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ ...andard-fixed-width-integer-types-in-usb.h.patch | 233 +++++++++++++++++++++
+ 1 file changed, 233 insertions(+)
+ create mode 100644 package/libusb-compat/0001-Use-C99-standard-fixed-width-integer-types-in-usb.h.patch
 
-> diff --git a/package/libhackrf/Config.in b/package/libhackrf/Config.in
-> new file mode 100644
-> index 0000000..2666a46
-> --- /dev/null
-> +++ b/package/libhackrf/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBHACKRF
-> +       bool "libhackrf"
-> +       select BR2_PACKAGE_LIBUSB
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       help
-> +         Library for accessing HackRF SDR boards.
-> +
-> +         https://github.com/mossmann/hackrf/host/libhackrf
-
-The right url seems to be:
-https://github.com/mossmann/hackrf/tree/master/host/libhackrf
-
-> +
-> diff --git a/package/libhackrf/libhackrf.mk b/package/libhackrf/libhackrf.mk
-> new file mode 100644
-> index 0000000..d7ed919
-> --- /dev/null
-> +++ b/package/libhackrf/libhackrf.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# libhackrf
-> +#
-> +################################################################################
-> +
-> +LIBHACKRF_VERSION = v2015.07.2
-> +LIBHACKRF_SITE = $(call github,mossmann,hackrf,$(LIBHACKRF_VERSION))
-> +LIBHACKRF_LICENSE = GPLv2+
-> +LIBHACKRF_LICENSE_FILES = COPYING
-> +LIBHACKRF_DEPENDENCIES = libusb
-> +LIBHACKRF_SUBDIR = host/libhackrf
-> +LIBHACKRF_INSTALL_STAGING = YES
-> +
-> +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> +LIBHACKRF_CONF_OPTS += -DINSTALL_UDEV_RULES=ON
-> +else
-> +LIBHACKRF_CONF_OPTS += -DINSTALL_UDEV_RULES=OFF
-> +endif
-> +
-> +$(eval $(cmake-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Otherwise it looks pretty good :)
-
-Regards,
-
+diff --git a/package/libusb-compat/0001-Use-C99-standard-fixed-width-integer-types-in-usb.h.patch b/package/libusb-compat/0001-Use-C99-standard-fixed-width-integer-types-in-usb.h.patch
+new file mode 100644
+index 0000000..7da8595
+--- /dev/null
++++ b/package/libusb-compat/0001-Use-C99-standard-fixed-width-integer-types-in-usb.h.patch
+@@ -0,0 +1,233 @@
++From 2e9b6bbebb7cf1ef0095516ec6d5203deb3822e8 Mon Sep 17 00:00:00 2001
++From: Nathan Hjelm <hjelmn@me.com>
++Date: Fri, 9 Oct 2015 15:03:10 -0600
++Subject: [PATCH 1/1] Use C99 standard fixed width integer types in usb.h
++
++This patch modifies the integer types in usb.h of the form u_int* to the
++C99 standard uint* types.
++
++Based on patch from Gwenhael Goavec-Merou.
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Signed-off-by: Nathan Hjelm <hjelmn@me.com>
++---
++ libusb/usb.h | 130 ++++++++++++++++++++++++++++++++---------------------------
++ 1 file changed, 70 insertions(+), 60 deletions(-)
++
++diff --git a/libusb/usb.h b/libusb/usb.h
++index 84e730f..d2c30aa 100644
++--- a/libusb/usb.h
+++++ b/libusb/usb.h
++@@ -2,6 +2,7 @@
++  * Prototypes, structure definitions and macros.
++  *
++  * Copyright (c) 2000-2003 Johannes Erdfelt <johannes@erdfelt.com>
+++ * Copyright (c) 2015      Nathan Hjelm <hjelmn@cs.unm.edu>
++  *
++  * This library is free software; you can redistribute it and/or
++  * modify it under the terms of the GNU Lesser General Public
++@@ -22,8 +23,8 @@
++  * distribution for details.
++  */
++ 
++-#ifndef __USB_H__
++-#define __USB_H__
+++#ifndef USB_H
+++#define USB_H
++ 
++ #include <unistd.h>
++ #include <stdlib.h>
++@@ -31,6 +32,15 @@
++ 
++ #include <dirent.h>
++ 
+++/* stdint.h is not available on older MSVC */
+++#if defined(_MSC_VER) && (_MSC_VER < 1600) && (!defined(_STDINT)) && (!defined(_STDINT_H))
+++typedef unsigned __int8   uint8_t;
+++typedef unsigned __int16  uint16_t;
+++typedef unsigned __int32  uint32_t;
+++#else
+++#include <stdint.h>
+++#endif
+++
++ /*
++  * USB spec information
++  *
++@@ -78,40 +88,40 @@
++ 
++ /* All standard descriptors have these 2 fields in common */
++ struct usb_descriptor_header {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
++ };
++ 
++ /* String descriptor */
++ struct usb_string_descriptor {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
++-	u_int16_t wData[1];
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
+++	uint16_t wData[1];
++ };
++ 
++ /* HID descriptor */
++ struct usb_hid_descriptor {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
++-	u_int16_t bcdHID;
++-	u_int8_t  bCountryCode;
++-	u_int8_t  bNumDescriptors;
++-	/* u_int8_t  bReportDescriptorType; */
++-	/* u_int16_t wDescriptorLength; */
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
+++	uint16_t bcdHID;
+++	uint8_t  bCountryCode;
+++	uint8_t  bNumDescriptors;
+++	/* uint8_t  bReportDescriptorType; */
+++	/* uint16_t wDescriptorLength; */
++ 	/* ... */
++ };
++ 
++ /* Endpoint descriptor */
++ #define USB_MAXENDPOINTS	32
++ struct usb_endpoint_descriptor {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
++-	u_int8_t  bEndpointAddress;
++-	u_int8_t  bmAttributes;
++-	u_int16_t wMaxPacketSize;
++-	u_int8_t  bInterval;
++-	u_int8_t  bRefresh;
++-	u_int8_t  bSynchAddress;
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
+++	uint8_t  bEndpointAddress;
+++	uint8_t  bmAttributes;
+++	uint16_t wMaxPacketSize;
+++	uint8_t  bInterval;
+++	uint8_t  bRefresh;
+++	uint8_t  bSynchAddress;
++ 
++ 	unsigned char *extra;	/* Extra descriptors */
++ 	int extralen;
++@@ -129,15 +139,15 @@ struct usb_endpoint_descriptor {
++ /* Interface descriptor */
++ #define USB_MAXINTERFACES	32
++ struct usb_interface_descriptor {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
++-	u_int8_t  bInterfaceNumber;
++-	u_int8_t  bAlternateSetting;
++-	u_int8_t  bNumEndpoints;
++-	u_int8_t  bInterfaceClass;
++-	u_int8_t  bInterfaceSubClass;
++-	u_int8_t  bInterfaceProtocol;
++-	u_int8_t  iInterface;
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
+++	uint8_t  bInterfaceNumber;
+++	uint8_t  bAlternateSetting;
+++	uint8_t  bNumEndpoints;
+++	uint8_t  bInterfaceClass;
+++	uint8_t  bInterfaceSubClass;
+++	uint8_t  bInterfaceProtocol;
+++	uint8_t  iInterface;
++ 
++ 	struct usb_endpoint_descriptor *endpoint;
++ 
++@@ -155,14 +165,14 @@ struct usb_interface {
++ /* Configuration descriptor information.. */
++ #define USB_MAXCONFIG		8
++ struct usb_config_descriptor {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
++-	u_int16_t wTotalLength;
++-	u_int8_t  bNumInterfaces;
++-	u_int8_t  bConfigurationValue;
++-	u_int8_t  iConfiguration;
++-	u_int8_t  bmAttributes;
++-	u_int8_t  MaxPower;
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
+++	uint16_t wTotalLength;
+++	uint8_t  bNumInterfaces;
+++	uint8_t  bConfigurationValue;
+++	uint8_t  iConfiguration;
+++	uint8_t  bmAttributes;
+++	uint8_t  MaxPower;
++ 
++ 	struct usb_interface *interface;
++ 
++@@ -172,28 +182,28 @@ struct usb_config_descriptor {
++ 
++ /* Device descriptor */
++ struct usb_device_descriptor {
++-	u_int8_t  bLength;
++-	u_int8_t  bDescriptorType;
++-	u_int16_t bcdUSB;
++-	u_int8_t  bDeviceClass;
++-	u_int8_t  bDeviceSubClass;
++-	u_int8_t  bDeviceProtocol;
++-	u_int8_t  bMaxPacketSize0;
++-	u_int16_t idVendor;
++-	u_int16_t idProduct;
++-	u_int16_t bcdDevice;
++-	u_int8_t  iManufacturer;
++-	u_int8_t  iProduct;
++-	u_int8_t  iSerialNumber;
++-	u_int8_t  bNumConfigurations;
+++	uint8_t  bLength;
+++	uint8_t  bDescriptorType;
+++	uint16_t bcdUSB;
+++	uint8_t  bDeviceClass;
+++	uint8_t  bDeviceSubClass;
+++	uint8_t  bDeviceProtocol;
+++	uint8_t  bMaxPacketSize0;
+++	uint16_t idVendor;
+++	uint16_t idProduct;
+++	uint16_t bcdDevice;
+++	uint8_t  iManufacturer;
+++	uint8_t  iProduct;
+++	uint8_t  iSerialNumber;
+++	uint8_t  bNumConfigurations;
++ };
++ 
++ struct usb_ctrl_setup {
++-	u_int8_t  bRequestType;
++-	u_int8_t  bRequest;
++-	u_int16_t wValue;
++-	u_int16_t wIndex;
++-	u_int16_t wLength;
+++	uint8_t  bRequestType;
+++	uint8_t  bRequest;
+++	uint16_t wValue;
+++	uint16_t wIndex;
+++	uint16_t wLength;
++ };
++ 
++ /*
++@@ -254,7 +264,7 @@ struct usb_device {
++ 
++   void *dev;		/* Darwin support */
++ 
++-  u_int8_t devnum;
+++  uint8_t devnum;
++ 
++   unsigned char num_children;
++   struct usb_device **children;
++@@ -266,7 +276,7 @@ struct usb_bus {
++   char dirname[PATH_MAX + 1];
++ 
++   struct usb_device *devices;
++-  u_int32_t location;
+++  uint32_t location;
++ 
++   struct usb_device *root_dev;
++ };
++-- 
++2.4.9
++
 -- 
-Samuel
+2.4.9
