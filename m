@@ -1,64 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Oct 2015 16:06:44 +0200
-Subject: [Buildroot] [git commit] audit: Add systemd support
-Message-ID: <20151011140707.3DDA881D64@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 11 Oct 2015 17:43:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: bump version to 6.9.2-4
+Message-ID: <1444578207-4705-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2bdd9724ee66eb1dad514afad1f0e1cefbfdb8d0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The main .service file is installed by audit.
-We are using tmpfiles mechanisms to create the log directory, which
-would not exists otherwise since /var/log points to /tmp
-
-[Thomas: add explicit --disable-systemd when systemd is not used.]
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/audit/audit.mk            |   16 ++++++++++++++++
- package/audit/audit_tmpfiles.conf |    1 +
- 2 files changed, 17 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index 7548135..329f8c5 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -31,10 +31,26 @@ ifeq ($(BR2_aarch64),y)
- AUDIT_CONF_OPTS += --with-aarch64
- endif
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 8b1cd75..716eaa7 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,2 +1,2 @@
+ # From ftp://ftp.nluug.nl/pub/ImageMagick/digest.rdf
+-sha256	e251574136e4a82128b3860b97c72b289df0a2030ce72900c91b67685a3298e4	ImageMagick-6.9.2-3.tar.xz
++sha256	05b1c499415048099a1464ebd03f0cfaae8d0994c681bcf7e0319b26e5e8d848	ImageMagick-6.9.2-4.tar.xz
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 0e14c7d..3b96126 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+AUDIT_CONF_OPTS += --enable-systemd
-+else
-+AUDIT_CONF_OPTS += --disable-systemd
-+endif
-+
- define AUDIT_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/audit/S01auditd $(TARGET_DIR)/etc/init.d/S01auditd
- endef
- 
-+define AUDIT_INSTALL_INIT_SYSTEMD
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/auditd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/auditd.service
-+
-+	mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
-+	$(INSTALL) -D -m 644 package/audit/audit_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/audit.conf
-+endef
-+
- define AUDIT_INSTALL_CLEANUP
- 	$(RM) -rf $(TARGET_DIR)/etc/rc.d
- 	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
-diff --git a/package/audit/audit_tmpfiles.conf b/package/audit/audit_tmpfiles.conf
-new file mode 100644
-index 0000000..6b8325b
---- /dev/null
-+++ b/package/audit/audit_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /var/log/audit 0755 - -
+-IMAGEMAGICK_VERSION = 6.9.2-3
++IMAGEMAGICK_VERSION = 6.9.2-4
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+ IMAGEMAGICK_LICENSE = Apache-2.0
+-- 
+2.6.1
