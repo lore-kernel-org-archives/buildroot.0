@@ -1,35 +1,31 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 11 Oct 2015 19:17:27 +0200
-Subject: [Buildroot] [PATCH] sparc64: fix toolchain building when C++ is
-	enabled
-Message-ID: <20151011171727.GA14946@waldemar-brodkorb.de>
+From: Carlos Soto <csotoalonso@gmail.com>
+Date: Sun, 11 Oct 2015 20:08:27 +0200
+Subject: [Buildroot] Change build directory por a package
+Message-ID: <CAD7j7Q9cSriOdjNQXxamwCh8W_TCJsQ0iuYDmsEr+FJ_Az_nkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable libsanitizer for sparc64, too. Same problem as for
-sparc, see https://bugs.busybox.net/show_bug.cgi?id=7951
+Hi,
+I'm working on a SDL2 package for buildroot, and I'm having some problems.
+Apparently, libtool has trouble finding some object files while linking. It
+looks for object files inside the sdl2-2.0.3/build/ dir, but they are
+located in sdl2-2.0.3/build/.libs/
+As soon as I manually move all object files to sdl2-2.0.3/build/ everything
+goes well, but it is something in the middle of the process so I don't
+think I can put a hook to make the mv.
 
-Reported-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/gcc/gcc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've tried this guide[1] and it works fine, and the only difference seems
+to be that the build directory is outside of the src directory, so my
+question is: how can I change the build directory in the mk file for a
+given package (in this case, SDL2)?
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 4def65c..1b30e6d 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -142,7 +142,7 @@ endif
- 
- # libsanitizer is broken for SPARC
- # https://bugs.busybox.net/show_bug.cgi?id=7951
--ifeq ($(BR2_sparc),y)
-+ifeq ($(BR2_sparc)$(BR2_sparc64),y)
- HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
- endif
- 
--- 
-1.7.10.4
+Thanks,
+Carlos
+
+[1]https://how-to-build-for-arm.wikispaces.com/sdl2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151011/193afc8e/attachment.html>
