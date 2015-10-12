@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 17:57:11 +0200
-Subject: [Buildroot] [git commit] package/libuv: bump to version 1.7.5
-Message-ID: <20151012155907.CECF181E3B@busybox.osuosl.org>
+Date: Mon, 12 Oct 2015 17:59:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.7.5
+In-Reply-To: <1444588847-4224-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1444588847-4224-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20151012175958.5f09256d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=935430b167a27b9c76a1d4e764943bb1aaa90e4f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear J?rg Krause,
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libuv/libuv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sun, 11 Oct 2015 20:40:47 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/libuv/libuv.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 7709ad1..da47b62 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.7.4
-+LIBUV_VERSION = v1.7.5
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+Applied, thanks.
+
+Note that we can now add hash files to packages sourced from github. We
+discussed it as the latest Buildroot Developers Meeting, and we believe
+that github is now producing reproducible tarballs. So we want to add
+hashes, and see if we discover problems or not.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
