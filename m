@@ -1,9 +1,7 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Mon, 12 Oct 2015 11:56:31 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2015g
-In-Reply-To: <1444647391-22164-1-git-send-email-martin@barkynet.com>
-References: <1444647391-22164-1-git-send-email-martin@barkynet.com>
-Message-ID: <1444647391-22164-2-git-send-email-martin@barkynet.com>
+Date: Mon, 12 Oct 2015 11:56:30 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2015g
+Message-ID: <1444647391-22164-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index cf89dc2..c2228e6 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 67a6c6d..3014d02 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
 @@ -1,2 +1,2 @@
 -# From 2015f release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-August/000033.html
--sha512  d86e6c9e4c6d9cd5de30762723d7a90ac697feeb6dd1f04649f6a35e4e1dc638261c32066db4aeafa767ac339ccd100c38dde044ceadd61e95cb3d39c27f977e  tzdata2015f.tar.gz
+-sha512  5cfbebde8a0be57e8388a7b6d35aeba99130a72c1a41f9bbd5d5864511a473aa5e9320ab21055b4383e64b3b9d7682c0d30377ce8407619987be672436014710  tzcode2015f.tar.gz
 +# From 2015g release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html
-+sha512  ad7de0e3e8753861d260f0fcbcbca327516a4dc826f7659370a7fb979e6154f1a26b23d2609acf6e1790c8c59da0b76c42f4a94bf361409c1460f6a8ffa6f879  tzdata2015g.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 336d145..48a0196 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
++sha512  44da833da3afdb82636a953785372bb4c765e61e40d700da40b46ab70007ebdbde4d480e10b87cbb36c45eaaffcaa6b9894375e2f553b7d16655dc167cd4a11f  tzcode2015g.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index e4cc1d3..0bcb800 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2015f
-+TZDATA_VERSION = 2015g
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
- TZDATA_STRIP_COMPONENTS = 0
+-ZIC_VERSION = 2015f
++ZIC_VERSION = 2015g
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = ftp://ftp.iana.org/tz/releases
+ ZIC_STRIP_COMPONENTS = 0
 -- 
 2.1.4
