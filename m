@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 23:44:40 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add dbus as
- optional dependency
-In-Reply-To: <1444682370-15070-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1444682370-15070-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151012234440.47dac32f@free-electrons.com>
+Date: Mon, 12 Oct 2015 23:45:19 +0200
+Subject: [Buildroot] [PATCH] sparc64: fix toolchain building when C++ is
+ enabled
+In-Reply-To: <20151011171727.GA14946@waldemar-brodkorb.de>
+References: <20151011171727.GA14946@waldemar-brodkorb.de>
+Message-ID: <20151012234519.681f68b4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Waldemar Brodkorb,
 
-On Mon, 12 Oct 2015 22:39:30 +0200, Bernd Kuhls wrote:
-> Dbus is an optional dependency for tvheadend:
-> https://github.com/tvheadend/tvheadend/commit/9c7b6047d2e3040e14cdba89f46d8acb2a36a115
+On Sun, 11 Oct 2015 19:17:27 +0200, Waldemar Brodkorb wrote:
+> Disable libsanitizer for sparc64, too. Same problem as for
+> sparc, see https://bugs.busybox.net/show_bug.cgi?id=7951
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Reported-By: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> v2: Added _CONF_OPTS (Thomas)
+>  package/gcc/gcc.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks.
 
