@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 22:37:09 +0200
-Subject: [Buildroot] [git commit] gst1-validate: bump version to 1.6.0
-Message-ID: <20151012203844.B1EB681DA9@busybox.osuosl.org>
+Date: Mon, 12 Oct 2015 22:36:56 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-good: bump version to 1.6.0
+Message-ID: <20151012203844.8C28981DA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29d8481bd66a2e9a121c85212e31336c2907d873
+commit: http://git.buildroot.net/buildroot/commit/?id=f91f5025b5bb192dce35f47de1e10cf24474946e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../gstreamer1/gst1-validate/gst1-validate.hash    |    4 ++--
- package/gstreamer1/gst1-validate/gst1-validate.mk  |    2 +-
+ .../gst1-plugins-good/gst1-plugins-good.hash       |    4 ++--
+ .../gst1-plugins-good/gst1-plugins-good.mk         |    2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index e2eb3ae..c50475c 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index be4c801..bcc321a 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
 @@ -1,2 +1,2 @@
--# Hash from http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.4.0.tar.xz.sha256sum
--sha256 ac30d1041a8cfe5d268439f5cedee7e9753ba49080fc67bff1266581198438d0 gst-validate-1.4.0.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.6.0.tar.xz.sha256sum
-+sha256 3baef8c7b5363293c20314a30afd54629849fc597669991fdcf92303602dafee  gst-validate-1.6.0.tar.xz
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index 9a9e796..b8b09da 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
+-# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050904.html
+-sha256	79b1b5f3f7bcaa8a615202eb5e176121eeb8336960f70687e536ad78dbc7e641  gst-plugins-good-1.4.5.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.6.0.tar.xz.sha256sum
++sha256	a0915639595305e48884656e22b16fda7c6892aa02cdb3eb43e23dab6e6b81fa  gst-plugins-good-1.6.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index d9b4438..dd19594 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VALIDATE_VERSION = 1.4.0
-+GST1_VALIDATE_VERSION = 1.6.0
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = http://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPLv2.1+
+-GST1_PLUGINS_GOOD_VERSION = 1.4.5
++GST1_PLUGINS_GOOD_VERSION = 1.6.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
