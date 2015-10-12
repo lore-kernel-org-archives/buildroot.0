@@ -1,9 +1,10 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Mon, 12 Oct 2015 12:38:08 +0100
-Subject: [Buildroot] [v2 2/4] package/tzdata: bump version to 2015g
+Date: Mon, 12 Oct 2015 12:38:10 +0100
+Subject: [Buildroot] [v2 4/4] package/tzdata: Updated TZDATA_SITE to use
+	http url
 In-Reply-To: <1444649890-28763-1-git-send-email-martin@barkynet.com>
 References: <1444649890-28763-1-git-send-email-martin@barkynet.com>
-Message-ID: <1444649890-28763-2-git-send-email-martin@barkynet.com>
+Message-ID: <1444649890-28763-4-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +14,23 @@ To: buildroot@busybox.net
 Signed-off-by: Martin Bark <martin@barkynet.com>
 
 ---
-v1 -> v2
- - Improved zic.hash comment (Suggested by Vicente Olivert Riera)
+Change suggested by Vicente Olivert Riera
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tzdata/tzdata.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index cf89dc2..1ab8334 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# From 2015f release anouncement.  See http://mm.icann.org/pipermail/tz-announce/2015-August/000033.html
--sha512  d86e6c9e4c6d9cd5de30762723d7a90ac697feeb6dd1f04649f6a35e4e1dc638261c32066db4aeafa767ac339ccd100c38dde044ceadd61e95cb3d39c27f977e  tzdata2015f.tar.gz
-+# From: http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html
-+sha512  ad7de0e3e8753861d260f0fcbcbca327516a4dc826f7659370a7fb979e6154f1a26b23d2609acf6e1790c8c59da0b76c42f4a94bf361409c1460f6a8ffa6f879  tzdata2015g.tar.gz
 diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 336d145..48a0196 100644
+index 48a0196..39fc262 100644
 --- a/package/tzdata/tzdata.mk
 +++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -6,7 +6,7 @@
  
--TZDATA_VERSION = 2015f
-+TZDATA_VERSION = 2015g
+ TZDATA_VERSION = 2015g
  TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+-TZDATA_SITE = ftp://ftp.iana.org/tz/releases
++TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
  TZDATA_STRIP_COMPONENTS = 0
+ TZDATA_DEPENDENCIES = host-tzdata
+ HOST_TZDATA_DEPENDENCIES = host-zic
 -- 
 2.1.4
