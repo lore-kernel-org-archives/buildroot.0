@@ -1,280 +1,236 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Mon, 12 Oct 2015 10:34:52 +0100
-Subject: [Buildroot] [PATCH v4] board: add support for Synopsys VDK Software
-	Development Platform
-Message-ID: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 12 Oct 2015 11:08:06 +0100
+Subject: [Buildroot] [PATCH v2] Add support for mips32r6 and mips64r6 target
+	architecture variants
+Message-ID: <1444644486-11117-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Virtualizer Development Kit (VDK) Family for ARM Cortex Products
-consists of a set of virtual prototypes that provide a virtualizer for 
-the ARM core variants. The VDK is a standalone package that runs on an 
-host computer.
+- Add support for mips32r6 and mips64r6 target architecture variants
+- Disable unsupported gcc versions
+- Disable unsupported binutils versions
+- Disable unsupported external toolchains
+- Disable unsuported C libraries
+- Add a hook in order to make glibc compile for MIPS R6.
 
-Remark: 'Image' boot argument was removed.
-
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- board/synopsys/vdk/linux-vdk-aarch64-defconfig | 226 +++++++++++++++++++++++++
- configs/snps_aarch64_vdk_defconfig             |  15 ++
- 2 files changed, 241 insertions(+)
- create mode 100644 board/synopsys/vdk/linux-vdk-aarch64-defconfig
- create mode 100644 configs/snps_aarch64_vdk_defconfig
+Changes v1 -> v2:
+  - Rebase on top of master
+  - Change the "Broken" comments to "Unsupported" (Suggested by Thomas)
+  - Specify why we choose the 4.0.0 version for the glibc hook
+  - Add 32r6 and 64r6 in the help message of arch/Config.in.mips
 
-diff --git a/board/synopsys/vdk/linux-vdk-aarch64-defconfig b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
-new file mode 100644
-index 0000000..f90f2ca
---- /dev/null
-+++ b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
-@@ -0,0 +1,226 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BSD_PROCESS_ACCT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=16
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_EMBEDDED=y
-+CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_CC_STACKPROTECTOR_REGULAR=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_SMP=y
-+CONFIG_SCHED_MC=y
-+CONFIG_SCHED_SMT=y
-+CONFIG_NR_CPUS=8
-+CONFIG_PREEMPT=y
-+CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
-+CONFIG_CMDLINE="console=ttyAMA0 earlyprintk=pl011,0x1c090000 debug user_debug=31 loglevel=9 root=/dev/vda"
-+CONFIG_CMDLINE_FORCE=y
-+CONFIG_BINFMT_MISC=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-+CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
-+CONFIG_ARM_DT_BL_CPUFREQ=y
-+CONFIG_ARM_SPCI_CPUFREQ=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_XFRM_USER=y
-+CONFIG_NET_KEY=y
-+CONFIG_NET_KEY_MIGRATE=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_SYN_COOKIES=y
-+CONFIG_NETWORK_PHY_TIMESTAMPING=y
-+CONFIG_NETFILTER=y
-+CONFIG_NETFILTER_NETLINK_LOG=m
-+CONFIG_NF_CONNTRACK=m
-+CONFIG_NF_CT_NETLINK=m
-+CONFIG_NETFILTER_XT_MARK=m
-+CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
-+CONFIG_NETFILTER_XT_TARGET_LOG=m
-+CONFIG_NETFILTER_XT_TARGET_REDIRECT=m
-+CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
-+CONFIG_NETFILTER_XT_MATCH_LIMIT=m
-+CONFIG_NETFILTER_XT_MATCH_MAC=m
-+CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
-+CONFIG_NETFILTER_XT_MATCH_STATE=m
-+CONFIG_NF_CONNTRACK_IPV4=m
-+CONFIG_NF_NAT_IPV4=m
-+CONFIG_IP_NF_IPTABLES=m
-+CONFIG_IP_NF_FILTER=m
-+CONFIG_IP_NF_TARGET_REJECT=m
-+CONFIG_IP_NF_MANGLE=m
-+CONFIG_NF_CONNTRACK_IPV6=m
-+CONFIG_NF_NAT_IPV6=m
-+CONFIG_IP6_NF_IPTABLES=m
-+CONFIG_IP6_NF_FILTER=m
-+CONFIG_IP6_NF_TARGET_REJECT=m
-+CONFIG_IP6_NF_MANGLE=m
-+CONFIG_BRIDGE_NF_EBTABLES=m
-+CONFIG_BRIDGE_EBT_T_FILTER=m
-+CONFIG_BRIDGE_EBT_T_NAT=m
-+CONFIG_BRIDGE_EBT_MARK_T=m
-+CONFIG_BRIDGE=m
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_VEXPRESS_CONFIG=y
-+CONFIG_CONNECTOR=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_OOPS=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_CFI_INTELEXT=y
-+CONFIG_MTD_SLRAM=y
-+CONFIG_MTD_NAND=y
-+CONFIG_OF_SELFTEST=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_NBD=m
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_DM=y
-+CONFIG_NETDEVICES=y
-+CONFIG_TUN=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_SMC91X=y
-+CONFIG_SMSC911X=y
-+CONFIG_STMMAC_ETH=m
-+CONFIG_STMMAC_DEBUG_FS=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_UINPUT=y
-+CONFIG_SERIO_AMBAKMI=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_AMBA_PL011=y
-+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_I2C=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_DESIGNWARE_PLATFORM=y
-+CONFIG_GPIOLIB=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_POWER_RESET_VEXPRESS=y
-+CONFIG_SENSORS_JC42=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_FB=y
-+CONFIG_FB_ARMCLCD=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_LOGO=y
-+CONFIG_USB_HIDDEV=y
-+CONFIG_USB=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_HCD_SYNOPSYS=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_DWC3=m
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_ULPI=y
-+CONFIG_USB_GADGET=m
-+CONFIG_USB_DUMMY_HCD=m
-+CONFIG_USB_MASS_STORAGE=m
-+CONFIG_USB_G_SERIAL=m
-+CONFIG_MMC=y
-+CONFIG_MMC_ARMMMCI=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_ONESHOT=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-+CONFIG_LEDS_TRIGGER_CPU=y
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_SWITCH=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_PL031=y
-+CONFIG_VIRTIO_BALLOON=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
-+CONFIG_COMMON_CLK_VERSATILE=y
-+CONFIG_CLK_SP810=y
-+CONFIG_CLK_VEXPRESS_OSC=y
-+CONFIG_COMMON_CLK_SCPI=y
-+CONFIG_MAILBOX=y
-+CONFIG_ARM_SCPI_PROTOCOL=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT3_FS=y
-+CONFIG_EXT3_FS_SECURITY=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_BTRFS_FS=y
-+CONFIG_QUOTA=y
-+CONFIG_QFMT_V2=y
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_HUGETLBFS=y
-+CONFIG_ECRYPT_FS=y
-+CONFIG_JFFS2_FS=y
-+CONFIG_JFFS2_SUMMARY=y
-+CONFIG_JFFS2_FS_XATTR=y
-+CONFIG_JFFS2_COMPRESSION_OPTIONS=y
-+CONFIG_JFFS2_LZO=y
-+CONFIG_JFFS2_RUBIN=y
-+CONFIG_CRAMFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V3_ACL=y
-+CONFIG_NFS_V4=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_NFSD=m
-+CONFIG_9P_FS=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_VIRTUALIZATION=y
-+CONFIG_KVM=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_DEBUG_INFO=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_SCHEDSTATS=y
-+CONFIG_TIMER_STATS=y
-+CONFIG_FUNCTION_TRACER=y
-+CONFIG_STRICT_DEVMEM=y
-+CONFIG_SECURITY=y
-+CONFIG_SECURITY_NETWORK_XFRM=y
-+CONFIG_LSM_MMAP_MIN_ADDR=0
-+CONFIG_SECURITY_SELINUX=y
-+CONFIG_SECURITY_SELINUX_BOOTPARAM=y
-+CONFIG_SECURITY_SELINUX_DISABLE=y
-+CONFIG_SECURITY_SMACK=y
-+CONFIG_SECURITY_APPARMOR=y
-+CONFIG_DEFAULT_SECURITY_APPARMOR=y
-+CONFIG_CRYPTO_MICHAEL_MIC=y
-+CONFIG_CRC_CCITT=y
-+CONFIG_CRC_T10DIF=y
-+CONFIG_CRC_ITU_T=y
-+CONFIG_CRC7=y
-diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
-new file mode 100644
-index 0000000..a79b1d2
---- /dev/null
-+++ b/configs/snps_aarch64_vdk_defconfig
-@@ -0,0 +1,14 @@
-+BR2_aarch64=y
-+BR2_KERNEL_HEADERS_3_18=y
-+BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
+ arch/Config.in.mips                     |   12 ++++++++++--
+ package/binutils/Config.in.host         |    4 ++++
+ package/gcc/Config.in.host              |    8 ++++++++
+ package/glibc/glibc.mk                  |   24 ++++++++++++++++++++++++
+ toolchain/toolchain-buildroot/Config.in |    4 ++++
+ toolchain/toolchain-external/Config.in  |    8 ++++++++
+ 6 files changed, 58 insertions(+), 2 deletions(-)
+
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 297977a..1e5d24d 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -6,8 +6,8 @@ choice
+ 	help
+ 	  Specific CPU variant to use
+ 
+-	  64bit cabable: 64, 64r2
+-	  non-64bit capable: 32, 32r2
++	  64bit cabable: 64, 64r2, 64r6
++	  non-64bit capable: 32, 32r2, 32r6
+ 
+ config BR2_mips_32
+ 	bool "mips 32"
+@@ -15,12 +15,18 @@ config BR2_mips_32
+ config BR2_mips_32r2
+ 	bool "mips 32r2"
+ 	depends on !BR2_ARCH_IS_64
++config BR2_mips_32r6
++	bool "mips 32r6"
++	depends on !BR2_ARCH_IS_64
+ config BR2_mips_64
+ 	bool "mips 64"
+ 	depends on BR2_ARCH_IS_64
+ config BR2_mips_64r2
+ 	bool "mips 64r2"
+ 	depends on BR2_ARCH_IS_64
++config BR2_mips_64r6
++	bool "mips 64r6"
++	depends on BR2_ARCH_IS_64
+ endchoice
+ 
+ 
+@@ -67,8 +73,10 @@ config BR2_ARCH_HAS_ATOMICS
+ config BR2_GCC_TARGET_ARCH
+ 	default "mips32"	if BR2_mips_32
+ 	default "mips32r2"	if BR2_mips_32r2
++	default "mips32r6"	if BR2_mips_32r6
+ 	default "mips64"	if BR2_mips_64
+ 	default "mips64r2"	if BR2_mips_64r2
++	default "mips64r6"	if BR2_mips_64r6
+ 
+ config BR2_MIPS_OABI32
+ 	bool
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 40619ab..f6aac5c 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -10,11 +10,15 @@ choice
+ 	config BR2_BINUTILS_VERSION_2_23_X
+ 		depends on !BR2_aarch64 && !BR2_microblaze && \
+ 			   !BR2_powerpc64le && !BR2_nios2
++		# Unsupported for MIPS R6
++		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24_X
+ 		# supported, but broken on Nios-II and powerpc64le
+ 		depends on !BR2_nios2 && !BR2_powerpc64le
++		# Unsupported for MIPS R6
++		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		bool "binutils 2.24"
+ 
+ 	config BR2_BINUTILS_VERSION_2_25_X
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index baa7956..78eb50b 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -31,6 +31,8 @@ choice
+ 		depends on !BR2_x86_corei7 && !BR2_x86_jaguar && !BR2_x86_steamroller
+ 		# ARM EABIhf support appeared in gcc 4.6
+ 		depends on !BR2_ARM_EABIHF
++		# Unsupported for MIPS R6
++		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 		select BR2_GCC_NEEDS_MPC
+@@ -50,6 +52,8 @@ choice
+ 		depends on !BR2_sparc_leon3
+ 		# Broken or unsupported x86 cores
+ 		depends on !BR2_x86_jaguar && !BR2_x86_steamroller
++		# Unsupported for MIPS R6
++		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+@@ -64,6 +68,8 @@ choice
+ 		depends on !BR2_powerpc_power8
+ 		# gcc-4.8.x + binutils-2.25 is broken for MIPS
+ 		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
++		# Unsupported for MIPS R6
++		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -80,6 +86,8 @@ choice
+ 		bool "gcc 4.9.x"
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_arc
++		# Unsupported for MIPS R6
++		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index cbfbf32..86f025e 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -121,4 +121,28 @@ define GLIBC_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
++# MIPS R6 requires to have NaN2008 support which is currently
++# unavailable in the Linux kernel, so in order to not allow the
++# compilation glibc checks for a version 10.0.0 of the Linux headers.
++# In general the compatibility issues introduced by mis-matched NaN
++# encodings will not cause a problem as signalling NaNs are rarely used
++# in average code. For MIPS R6 there isn't actually any compatibility
++# issue as the hardware is always NaN2008 and software is always
++# NaN2008. The problem only comes from when older MIPS code is linked in
++# via a DSO and multiple NaN encodings are introduced. Since Buildroot
++# is intended to have all code built from source then this scenario is
++# highly unlikely. The failure mode, if it ever occurs, would be either
++# that a signalling NaN fails to raise an invalid operation exception or
++# (more likely) an ordinary NaN raises an invalid operation exception.
++# In order to be able to compile glibc for MIPS R6 we change the Linux
++# kernel headers check from 10.0.0 to 4.0.0, because the MIPS R6 ISA
++# support has been part of mainline since v4.0.
++ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
++define GLIBC_FIX_MIPS_R6
++	$(SED) 's#10.0.0#4.0.0#' $(@D)/sysdeps/unix/sysv/linux/mips/configure
++	$(SED) 's#10.0.0#4.0.0#' $(@D)/sysdeps/unix/sysv/linux/mips/configure.ac
++endef
++GLIBC_POST_EXTRACT_HOOKS += GLIBC_FIX_MIPS_R6
++endif
++
+ $(eval $(autotools-package))
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 56c01c8..d3f685f 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -34,6 +34,8 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_powerpc || BR2_sh2a   || BR2_sh4	   || BR2_sh4eb    || \
+ 		   BR2_sparc   || BR2_xtensa || BR2_x86_64
++	# Unsupported for MIPS R6
++	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 	help
+ 	  This option selects uClibc as the C library for the
+ 	  cross-compilation toolchain.
+@@ -90,6 +92,8 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || \
+ 		BR2_sh || BR2_x86_64
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
++	# Unsupported for MIPS R6
++	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  This option selects musl as the C library for the
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 1bf97b8..18eb784 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -196,6 +196,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201505
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+ 	depends on !BR2_STATIC_LIBS
++	# Unsupported for MIPS R6
++	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -282,6 +284,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201411
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+ 	depends on !BR2_STATIC_LIBS
++	# Unsupported for MIPS R6
++	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -368,6 +372,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+ 	depends on !BR2_STATIC_LIBS
++	# Unsupported for MIPS R6
++	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+@@ -824,6 +830,8 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 		(BR2_i386 && !BR2_x86_i386) || BR2_microblazebe || BR2_mips || \
+ 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || BR2_x86_64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	# Unsupported for MIPS R6
++	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
 -- 
-1.8.1.5
+1.7.1
