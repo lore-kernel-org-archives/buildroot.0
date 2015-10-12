@@ -1,82 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Oct 2015 18:51:51 +0200
-Subject: [Buildroot] [v4 1/4] package/nodejs: Add node.js v0.12.5 and
- set as the default version
-In-Reply-To: <CAFGQKxd9DJUmqHrCUHRD+VMvYfG5fC-87xJZhb3PG-1HFpOHeQ@mail.gmail.com>
-References: <1435830207-16664-1-git-send-email-martin@barkynet.com>
- <20151011192546.GA24916@free.fr>
- <CAFGQKxd9DJUmqHrCUHRD+VMvYfG5fC-87xJZhb3PG-1HFpOHeQ@mail.gmail.com>
-Message-ID: <20151012165150.GD3735@free.fr>
+From: David Van Arnem <dvanarnem@cmlab.biz>
+Date: Mon, 12 Oct 2015 10:55:12 -0600
+Subject: [Buildroot] [PATCH 1/1] bash: add default bash settings
+In-Reply-To: <20151010115403.7cf295f0@free-electrons.com>
+References: <1444259824-6246-1-git-send-email-dvanarnem@cmlab.biz>
+ <20151010115403.7cf295f0@free-electrons.com>
+Message-ID: <561BE5F0.1020001@cmlab.biz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MArtin, All,
+On 10/10/2015 03:54 AM, Thomas Petazzoni wrote:
+> Dear David Van Arnem,
+>
+> On Wed,  7 Oct 2015 17:17:04 -0600, David Van Arnem wrote:
+>> Settings that were bash-specific were previously removed from
+>> system/skeleton/etc/profile.  This measn that users using bash no longer
+>> get the "normal" bash prompt with [user at host dir]#/$, and only get #/$.
+>> This commit adds back the bash-specific settings, but adds them to the
+>> bash package so they are only used when bash is installed on the target
+>> system.
+>>
+>> bash_profile.sh contains the variables, aliases, and color profile that
+>> were previously in system/skeleton/etc/profile.  The changes to bash.mk
+>> use a post-install hook to install bash_profile.sh to the target
+>> filesystem, where it will later be sourced by /etc/profile when a bash
+>> shell is started.
+>>
+>> Signed-off-by: David Van Arnem <dvanarnem@cmlab.biz>
+>
+> Thanks for your patch. Following the comments from Maxime Hadjinlian on
+> your patch, I've marked it as "Changes Requested" in our patch tracking
+> system. Please resubmit a new version of your patch that takes into
+> account the comments made by Maxime. Thanks a lot!
+>
+> Thomas
+>
+Hi Thomas,
 
-On 2015-10-12 09:48 +0100, Martin Bark spake thusly:
-> On 11 October 2015 at 20:25, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Martin, All,
-> >
-> > On 2015-07-02 10:43 +0100, Martin Bark spake thusly:
-> >> The version of the V8 JavaScript engine used by node.js v0.12.5 requires
-> >> at least an ARMv6 architecture with VFPv2.
-> >
-> > I'm trying to bump to node.js 4.1.2 and was wondering if that limitation
-> > still exists in that version.
-> 
-> Yes I've been thinking about this too.  As far as i can tell v0.10.x
-> was the last release to support ARMv5 due to changes in the V8
-> JavaScript engine.  One thing i have been wondering is if we need to
-> support multiple versions of node.js or just 4.1.x?  The node.js LTS
-> working group here https://github.com/nodejs/LTS/ seems to say that
-> 0.10.x and 0.12.x are still being maintained but supporting only the
-> latest version would be simpler.  What do you think?
-
-We currently have kept nodejs 0.10.x for backward compatibility with
-armv5 or non-VFP CPUs, in parallel with 0.12.x for armv6+ with VFP CPUs.
-
-> > I was able to sucessfully build for an arm926t (armv5) with a VFPv2 FPU.
-> >
-> > So:
-> >   - is the failure a runtime failure or a build time one?
-> 
-> From memory it only show up at runtime as an illegal instruction.  I
-> think i tested using qemu_arm_versatile_defconfig and a simple test
-> like
-> 
->     node -e 'console.log("hello world");'
-> 
-> >   - is armv6 really required, or can we just require VFPv2?
-> 
-> I went off this announcement for V8
-> https://groups.google.com/forum/#!topic/v8-users/aSOFbaAQvMk where it
-> states the minimum is now ARMv6 with VFPv2.  It was the no-VFPv2 port
-> that was removed but i don't know if it also requires any ARMv6 or
-> higher instructions.  The node.js configure script only seems to check
-> form ARMv6 or ARMv7, see
-> https://github.com/nodejs/node/blob/master/configure#L616.  So i
-> assume node.js and V8 need a minimum ARMv6 instruction set.
-
-OK, so let's do as upstream wants it:
-
-  - armv6 or above ir required
-  - VFPv2 or above is required
-
-Thanks! :-)
-
-BTW, you can see my WIP patch there (moving target, the branch may get
-rebased from time to time; handle with care! ;-) ):
-    http://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/node
-
-Regards,
-Yann E. MORIN.
+Can you instruct me on how to get Maxime's comments?  I do not see them 
+in my emails from this list.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+David
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 2416 bytes
+Desc: S/MIME Cryptographic Signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151012/215feaf3/attachment.p7s>
