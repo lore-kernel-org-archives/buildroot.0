@@ -1,46 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 00:06:32 +0200
-Subject: [Buildroot] [PATCH v2] pyqtgraph: new package
-In-Reply-To: <561C2B07.9070801@gmail.com>
-References: <Re: [Buildroot] [PATCH 2/2] Add new package PyQtGraph>
- <1444260188-9571-1-git-send-email-guillaume.bressaix@gmail.com>
- <20151012225452.007b3f11@free-electrons.com>
- <561C2B07.9070801@gmail.com>
-Message-ID: <20151013000632.436cb09b@free-electrons.com>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Tue, 13 Oct 2015 01:17:37 +0200
+Subject: [Buildroot] [PATCH 1/4] configs/raspberrypi: use EABIhf
+In-Reply-To: <20151012235935.6a195741@free-electrons.com>
+References: <20150820143005.GA6441@ketchup.mtl.sfl>
+ <1440273688-92868-1-git-send-email-benoit@wsystem.com>
+ <20151012235935.6a195741@free-electrons.com>
+Message-ID: <CA+sos78PFnHQLQknch1N22C=q_Qv=NaE1qvmUHi7ffnf6t=UeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume William Bres,
+Dear Thomas Petazzoni,
 
-Why did you reply to buildroot-request at busybox.net and not to the
-normal mailing list address buildroot at busybox.net ?
+On Mon, Oct 12, 2015 at 11:59 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Applied, thanks. I actually believe we should be doing the same for all
+> ARMv6/ARMv7 platforms, except if there is a specific issue with using
+> EABIhf (such as existing pre-built binaries that are EABI only).
 
-On Mon, 12 Oct 2015 15:49:59 -0600, Guillaume William Bres wrote:
+Yes, there is such an issue because some hardware vendors provide
+closed libraries that use soft-FP. It was the case e.g. for i.MX6
+(audio/video CODEC and GPU libraries), but they now provide hard-float
+binaries IIRC. So such a change should be checked on a per-platform
+basis.
 
-> __On 10/12/2015 02:54 PM, Thomas Petazzoni :_
-> 
->      So the comment says that you need eglibc with wchar and C++.
->      But the dependencies have absolutely nothing to do with the 
-> comment. Can you explain?
-> 
-> These were Arnout's corrections for Patch v1/.//
+> Maybe we should even use EABIhf by default on ARMv6+.
 
-Hum, I'm not sure why, but at least the comment should be consistent
-with the dependencies.
+Yes, I think that it would be a sane default, and it would still be
+possible to set EABI for a specific platform for which EABIhf would
+not apply.
 
-> I thought COPYING was a Buildroot command (I copied that line from other 
-> packages), now I know it's the name of the license file.
-
-For all details about the Buildroot variables, look at the manual. All
-of them are documented.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+Beno?t
