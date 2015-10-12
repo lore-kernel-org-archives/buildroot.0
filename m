@@ -1,34 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 23:44:03 +0200
-Subject: [Buildroot] [PATCH] imx-gpu-viv: install g2d library and header
-In-Reply-To: <1444662194-17583-1-git-send-email-vincent.stehle@freescale.com>
-References: <1444662194-17583-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <20151012234403.0cecfa89@free-electrons.com>
+Date: Mon, 12 Oct 2015 23:44:40 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add dbus as
+ optional dependency
+In-Reply-To: <1444682370-15070-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1444682370-15070-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151012234440.47dac32f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent Stehl?,
+Dear Bernd Kuhls,
 
-On Mon, 12 Oct 2015 17:03:14 +0200, Vincent Stehl? wrote:
-> Freescale gpu-viv binaries archive supplies the libraries and headers
-> for accelerated OpenGL ES, OpenCL and OpenVG on i.MX6 platforms.
+On Mon, 12 Oct 2015 22:39:30 +0200, Bernd Kuhls wrote:
+> Dbus is an optional dependency for tvheadend:
+> https://github.com/tvheadend/tvheadend/commit/9c7b6047d2e3040e14cdba89f46d8acb2a36a115
 > 
-> This binaries archive also supplies a g2d library and its header, which
-> allow to perform accelerated 2D operations on i.MX6 platforms in a
-> simpler manner. Install those as well, as it is useful for some
-> packages, such as e.g. kodi.
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Added _CONF_OPTS (Thomas)
 
-I've applied Gary's patch instead:
-
-   http://git.buildroot.net/buildroot/commit/?id=f640a6659f6c5f9c99684a98de006bbccfded128
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
