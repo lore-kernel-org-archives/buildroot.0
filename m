@@ -1,133 +1,112 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Oct 2015 23:01:54 +0200
-Subject: [Buildroot] [PATCH v4] board: add support for Synopsys VDK
- Software Development Platform
-In-Reply-To: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
-References: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
-Message-ID: <20151012210154.GF3735@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Oct 2015 23:15:13 +0200
+Subject: [Buildroot] [git commit] package/iqvlinux: new package
+Message-ID: <20151012211527.6C07F81D58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joao, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=330f961ad3404708ed9a35b9b1fdc429ad65ccfe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-10-12 10:34 +0100, Joao Pinto spake thusly:
-> The Virtualizer Development Kit (VDK) Family for ARM Cortex Products
-> consists of a set of virtual prototypes that provide a virtualizer for 
-> the ARM core variants. The VDK is a standalone package that runs on an 
-> host computer.
-> 
-> Remark: 'Image' boot argument was removed.
+The PCI support needs to be checked since this driver is based
+on it. Otherwise the build fail with:
+ #error "This driver requires PCI support to be available"
 
-That last line does not belong to the commit log. I nstead, it should be
-part of the 'changelog' of the patch.
+But this message is concealed by several occurrence of this
+one:
+ error: implicit declaration of function 'pci_find_bus' [-Werror=implicit-function-declaration]
 
-Such a changelog is written after a three-dash line, like so:
+[Thomas:
+ - fix minor typo in Config.in: s/Enthernet/Ethernet/
+ - license is "GPLv2, BSD-3c", not "GPLv2 or BSD-3c"
+ - remove IQVLINUX_PCI_CHECK, until a proper generic solution is
+   implemented.]
 
-    title: brief explanation of the patch
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in              |    1 +
+ package/iqvlinux/Config.in     |   18 ++++++++++++++++++
+ package/iqvlinux/iqvlinux.hash |    5 +++++
+ package/iqvlinux/iqvlinux.mk   |   21 +++++++++++++++++++++
+ 4 files changed, 45 insertions(+), 0 deletions(-)
 
-    Body of the commitlog, with more
-    in-depth explanations of what it
-    is doing.
-
-    Signed-off-by: Your Real Name <your-emain@address>
-
-    ---
-    Changes v3 -> v4:
-      - drop 'Image' boot option (Thomas)
-
-    Changes v2 -> v3:
-      - "some thing changed" (Someone)
-
-    and so on...
-
-This way, when a maintainer applies your patch, only what is above the
-three-dash line is kept in the git tree. Whatever is after the
-three-dash line gets removed.
-
-The changlog (after the ---) is there to help reviewers see how the
-patch has evolved, and adapt their reviews accordingly, with the first
-name of the reviewer between ().
-
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> ---
->  board/synopsys/vdk/linux-vdk-aarch64-defconfig | 226 +++++++++++++++++++++++++
->  configs/snps_aarch64_vdk_defconfig             |  15 ++
->  2 files changed, 241 insertions(+)
->  create mode 100644 board/synopsys/vdk/linux-vdk-aarch64-defconfig
->  create mode 100644 configs/snps_aarch64_vdk_defconfig
-> 
-> diff --git a/board/synopsys/vdk/linux-vdk-aarch64-defconfig b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
-> new file mode 100644
-> index 0000000..f90f2ca
-> --- /dev/null
-> +++ b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
-> @@ -0,0 +1,226 @@
-> +CONFIG_SYSVIPC=y
-> +CONFIG_POSIX_MQUEUE=y
-> +CONFIG_NO_HZ=y
-> +CONFIG_HIGH_RES_TIMERS=y
-> +CONFIG_BSD_PROCESS_ACCT=y
-
-This is not a minimal defconfig. I doubt BSD process acounting is
-required to have Linux run successfully on the VDK,  is it?
-
-Similarly, options that are not strictly required should not be enabled.
-For example, having netfilter enabled is probably not needed either.
-Same goes for a lot of the other options.
-
-We are trying to get the minimalist kernel option that just makes the
-board boot, with the meaningfull driver to suport the hardware
-(ethernet, WiFi, MMC, whatever HW is present...) but not much more.
-
-Having IPv4 (maybe v6) is meaningfull, but having bridge, netfilter or
-ebtables, TUN, SCSI, MD and so on is probably not. Also, if you're using
-virtio-net to do networking, then an ethernet driver is probably not
-required...
-
-Similarly, if the rootfs is ext2, then you don;t need the other
-filesystems. Maybe you can disable ext2 and ext3 support, enable ext4
-and use it for ext2/3 (CONFIG_EXT4_USE_FOR_EXT2).
-
-9p and 9p-virtio are probably not required either, but having them for
-virtio-mounting from the host kinda makes sense...
-
-I know you've already done a few rounds on that patch, but could you
-'cleanup' that defconfig as I explained above?
-
-[--SNIP--]
-> diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
-> new file mode 100644
-> index 0000000..a79b1d2
-> --- /dev/null
-> +++ b/configs/snps_aarch64_vdk_defconfig
-> @@ -0,0 +1,14 @@
-> +BR2_aarch64=y
-> +BR2_KERNEL_HEADERS_3_18=y
-> +BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
-> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-
-Otherwise, this defconfig looks OK! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index 37d9cd0..f686f13 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -365,6 +365,7 @@ endif
+ 	source "package/iostat/Config.in"
+ 	source "package/ipmitool/Config.in"
+ 	source "package/ipmiutil/Config.in"
++	source "package/iqvlinux/Config.in"
+ 	source "package/irda-utils/Config.in"
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+diff --git a/package/iqvlinux/Config.in b/package/iqvlinux/Config.in
+new file mode 100644
+index 0000000..8959955
+--- /dev/null
++++ b/package/iqvlinux/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_IQVLINUX
++	bool "iqvlinux"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Intel Ethernet Adapter Debug Driver for Linux (iqvlinux),
++	  which supports kernel versions 2.6.x up through 4.0.x.
++
++	  This debug driver supports all Intel's networking Tools based
++	  on the SDK version 2.19.36.0 or higher which support Intel
++	  Ethernet chip including e1000, e1000e, i210...
++
++	  Note: This driver requires PCI support to be enabled
++	  (i.e. CONFIG_PCI).
++
++	  http://sourceforge.net/projects/e1000/files/iqvlinux/
++
++comment "iqvlinux needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/iqvlinux/iqvlinux.hash b/package/iqvlinux/iqvlinux.hash
+new file mode 100644
+index 0000000..ddf57b7
+--- /dev/null
++++ b/package/iqvlinux/iqvlinux.hash
+@@ -0,0 +1,5 @@
++# From http://sourceforge.net/projects/e1000/files/iqvlinux/1.1.5.3/
++sha1	bd94416e4364015dbbd78a22e51080bf7ea81fac	iqvlinux.tar.gz
++md5	fb6a2a4dc122d39070fcb06985c97a05	iqvlinux.tar.gz
++# locally computed
++sha256	8cb19f3bfe040100a13bb2d05cb2b54f2b259e55cef23f8cc5aa6f2f31e98bec	iqvlinux.tar.gz
+diff --git a/package/iqvlinux/iqvlinux.mk b/package/iqvlinux/iqvlinux.mk
+new file mode 100644
+index 0000000..b3981fa
+--- /dev/null
++++ b/package/iqvlinux/iqvlinux.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# iqvlinux
++#
++################################################################################
++
++IQVLINUX_VERSION = 1.1.5.3
++IQVLINUX_SITE = http://sourceforge.net/projects/e1000/files/iqvlinux/$(IQVLINUX_VERSION)
++IQVLINUX_SOURCE = iqvlinux.tar.gz
++
++IQVLINUX_LICENSE = GPLv2, BSD-3c
++IQVLINUX_LICENSE_FILES = \
++	COPYING src/linux/driver/files.txt \
++	inc/linux/files.txt inc/files.txt
++
++IQVLINUX_MODULE_MAKE_OPTS = NALDIR=$(@D) KSRC=$(LINUX_DIR) CC=$(TARGET_CC)
++
++IQVLINUX_MODULE_SUBDIRS = src/linux/driver
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
