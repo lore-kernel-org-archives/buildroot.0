@@ -1,40 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Oct 2015 23:24:37 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Oct 2015 23:24:41 +0200
 Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
-In-Reply-To: <20151012231616.3fd41b57@free-electrons.com>
+In-Reply-To: <20151012211618.GG3735@free.fr>
 References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
  <20151010150457.GD3640@free.fr>
- <20151012231616.3fd41b57@free-electrons.com>
-Message-ID: <20151012212436.GH3735@free.fr>
+ <20151012224411.472a9d10@free-electrons.com>
+ <20151012211618.GG3735@free.fr>
+Message-ID: <20151012232441.3322b2fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Romain, All,
+Dear Yann E. MORIN,
 
-On 2015-10-12 23:16 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 10 Oct 2015 17:04:57 +0200, Yann E. MORIN wrote:
-> > > +IQVLINUX_MODULE_MAKE_OPTS = NALDIR=$(@D) KSRC=$(LINUX_DIR) CC=$(TARGET_CC)
-> > 
-> > Are you sure CC is needed? The kernel buildsystem should already set it, no?
+On Mon, 12 Oct 2015 23:16:18 +0200, Yann E. MORIN wrote:
+
+> > I agree on the principle, but I think we should rather handle that like
+> > we do for other options: enable automatically the needed option.
 > 
-> Yes, it is really needed. The kernel buildsystem indeed defines CC, but
-> it gets re-defined by the iqvlinux Makefile, which gets included by the
-> kernel buildsystem since we do M=/path/to/iqvlinux to build the
-> iqvlinux module.
+> Except for PCI it does not really makes sense, see Arnout's explanations:
+>     http://lists.busybox.net/pipermail/buildroot/2015-October/141178.html
 
-OK, maybe that could have been explained either as a comment in the .mk
-or in the commit log. ;-)
+Except that I disagree with Arnout :)
 
-Regards,
-Yann E. MORIN.
+Arnout is not making the difference between being able to *build* and
+being able to *run*.
 
+CONFIG_PCI is needed for the build to proceed, so it is normal that we
+enable it automatically. The PCI root complex drivers are only needed
+for the PCI support to actually work on the target, not for iqvlinux to
+build.
+
+And the story is the same for xtable-addons: the additions in linux.mk
+were made because those kernel options were needed for xtable-addons to
+simply *build*.
+
+> > Remember how someone proposed to check for CONFIG_MODULES=y and error
+> > out if not available? Instead, you implemented
+> > b7c32c98bc810b88e0391117f225658f82b44995.
+> 
+> Meh... ;-)
+
+No, your commit is good I believe.
+
+> I'm not totally oposed to this idea.
+> 
+> However, there are cases, like PCI, for which it does not make sense to
+> just enable it (as Arnout explained).
+
+See above :)
+
+> Unless we don't care about runtime consistency, and just care about the
+> buildability of the configuration...
+> 
+> However, I like doing such little tiny bit of infra, so I can append that
+> to my todo-list. What do you prefer: setting the option (like for
+> modules), or checking the option?
+
+Setting the option, when it is needed to build the external modules.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
