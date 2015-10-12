@@ -1,71 +1,49 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 12 Oct 2015 13:51:50 -0500
-Subject: [Buildroot] [PATCH 1/1] [arm64 uboot] Resolved compilation
- issue for arm64 uboot
-In-Reply-To: <20151012193942.75ee6483@free-electrons.com>
-References: <1444664954-64180-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20151012193942.75ee6483@free-electrons.com>
-Message-ID: <CANQCQpbWt9-24pXF20WUpoim-PYdbqYW0imaLMQ4uK5nEv2FDA@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 12 Oct 2015 13:53:16 -0500
+Subject: [Buildroot] [PATCH v2] uboot: arm64 arch build support
+Message-ID: <1444675996-17536-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+From: Ronak Desai <ronak.desai@rockwellcollins.com>
 
-On Mon, Oct 12, 2015 at 12:39 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Matt Weber,
->
-> On Mon, 12 Oct 2015 10:49:14 -0500, Matt Weber wrote:
->
->> This patch has been added to resolve the compilation issue
->> of arm64 uboot.
->>
->> For aarch64 architecture, kernel uses arm64 terminology and thus from
->> top-level Makefile KERNEL_ARCH is modified to arm64 for aarch64 which
->> then passed to uboot compilation. But, it causes compilation issue
->> while including architecture specific Makefile under
->> arch/$(ARCH)/Makefile as uboot uses top-level system architecture as
->> arm only.
->
-> I'm not a native english speaker, but the wording of this sentence
-> doesn't seem quite right.
->
-> The title of the commit should be:
->
->         uboot: <something>
->
->> +# For aarch64 architecture, kernel uses arm64 terminology and thus from
->> +# # top-level Makefile KERNEL_ARCH is modified to arm64 for aarch64 which
->> +# # then passed to uboot compilation. But, it causes compilation issue
->> +# # while including architecture specific Makefile under arch/$(ARCH)/Makefile
->> +# # as uboot uses top-level system architecture as arm only.
->
-> Double hashes a the beginning of each line -> not good.
->
-> Care to fix that up (especially rewording the commit log and comment) ?
->
+For a 64bit arm architecture, Buildroot uses arm64 terminology
+and from the top-level Makefile KERNEL_ARCH is set to
+arm64 which is then passed to the uboot build.
+This causes a compilation issue as uboot uses the top-level
+system architecture as it's $(ARCH).  So arch/$(ARCH)/Makefile
+doesn't work with arm64 unless we adjust the arch.
 
-Yeah, not a problem.  I should have a new revision out soon.
+Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ boot/uboot/uboot.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index eee0dba..d5cfd60 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -71,7 +71,17 @@ UBOOT_BIN = u-boot.bin
+ UBOOT_BIN_IFT = $(UBOOT_BIN).ift
+ endif
+ 
++# For a 64bit arm architecture, Buildroot uses arm64 terminology
++# and from the top-level Makefile KERNEL_ARCH is set to
++# arm64 which is then passed to the uboot build.
++# This causes a compilation issue as uboot uses the top-level
++# system architecture as it's $(ARCH).  So arch/$(ARCH)/Makefile
++# doesn't work with arm64 unless we adjust the arch.
++ifeq ($(KERNEL_ARCH),arm64)
++UBOOT_ARCH = arm
++else
+ UBOOT_ARCH = $(KERNEL_ARCH)
++endif
+ 
+ UBOOT_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / Security Systems and Software / Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.9.1
