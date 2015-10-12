@@ -1,36 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 21:34:40 +0200
-Subject: [Buildroot] [PATCH v2] Add support for mips32r6 and mips64r6
- target architecture variants
-In-Reply-To: <1444644486-11117-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1444644486-11117-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151012213440.1528b198@free-electrons.com>
+Date: Mon, 12 Oct 2015 21:39:55 +0200
+Subject: [Buildroot] [PATCH v3] libv4l: bump version to 1.8.0
+In-Reply-To: <1444678106-24045-1-git-send-email-ps.report@gmx.net>
+References: <1444678106-24045-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151012213955.6bca036c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Peter Seiderer,
 
-On Mon, 12 Oct 2015 11:08:06 +0100, Vicente Olivert Riera wrote:
-> - Add support for mips32r6 and mips64r6 target architecture variants
-> - Disable unsupported gcc versions
-> - Disable unsupported binutils versions
-> - Disable unsupported external toolchains
-> - Disable unsuported C libraries
-> - Add a hook in order to make glibc compile for MIPS R6.
+On Mon, 12 Oct 2015 21:28:26 +0200, Peter Seiderer wrote:
+> - add qt, qt5base/qt5gui/qt5widgets dependency for qv4l2
+>   (qt dependency was missing, qt5 support was added since 1.8.0)
 > 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
-> Changes v1 -> v2:
->   - Rebase on top of master
->   - Change the "Broken" comments to "Unsupported" (Suggested by Thomas)
->   - Specify why we choose the 4.0.0 version for the glibc hook
->   - Add 32r6 and 64r6 in the help message of arch/Config.in.mips
+> - fix fix moc/rcc/uic detection in case host versions
+>   of moc-qt5, rcc-qt5 or uic-qt5 are present
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Applied after slightly tweaking the glibc hack explanation, as
-discussed on IRC.
+Thanks, this is better, but it could still be improved. See below.
+
+>  LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+>  LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
+>  LIBV4L_INSTALL_STAGING = YES
+> @@ -43,6 +43,25 @@ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
+>  LIBV4L_CONF_OPTS += --enable-v4l-utils
+>  # clock_gettime is used, which is provided by librt for glibc < 2.17
+>  LIBV4L_LIBS += -lrt
+> +ifeq ($(BR2_PACKAGE_QT5),y)
+> +ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+
+The two conditions are not needed, just do:
+
+ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+
+> +LIBV4L_CONF_OPTS += --enable-qv4l2
+> +LIBV4L_DEPENDENCIES += qt5base
+> +# protect against host version detection of moc-qt5/rcc-qt5/uic-qt5
+> +LIBV4L_CONF_ENV += ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc
+> +LIBV4L_CONF_ENV += ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc
+> +LIBV4L_CONF_ENV += ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
+
+Only one assignment needed:
+
+LIBV4L_CONF_ENV += \
+	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
+	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
+	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
+
+> +else
+> +LIBV4L_CONF_OPTS += --disable-qv4l2
+
+This is not needed here (see below).
+
+> +endif
+> +else ifeq ($(BR2_PACKAGE_QT),y)
+> +ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+
+You could combine this into one condition.
+
+> +LIBV4L_CONF_OPTS += --enable-qv4l2
+> +LIBV4L_DEPENDENCIES += qt
+> +else
+> +LIBV4L_CONF_OPTS += --disable-qv4l2
+> +endif
+> +endif
+
+Here is what I'd like to see:
+
+ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+LIBV4L_CONF_OPTS += --enable-qv4l2
+... stuff for qt5 support ..
+else ifeq ($(BR2_PACKAGE_QT)$(BR2_PACKAGE_QT_GUI_MODULE),yy)
+LIBV4L_CONF_OPTS += --enable-qv4l2
+... stuff for qt4 support ..
+else
+LIBV4L_CONF_OPTS += --disable-qv4l2
+endif
+
+I believe this is simpler and clearer.
 
 Thanks!
 
