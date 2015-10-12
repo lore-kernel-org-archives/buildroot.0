@@ -1,35 +1,71 @@
-From: Carlos Soto <csotoalonso@gmail.com>
-Date: Mon, 12 Oct 2015 20:37:55 +0200
-Subject: [Buildroot] Change build directory por a package
-In-Reply-To: <CAD7j7Q9eO6nEgW=FwdXjc2MtMZ-bJyYZc+ZmPpTkM1XwnzgFTQ@mail.gmail.com>
-References: <CAD7j7Q9cSriOdjNQXxamwCh8W_TCJsQ0iuYDmsEr+FJ_Az_nkQ@mail.gmail.com>
- <20151012110903.7dd3ab79@free-electrons.com>
- <CAD7j7Q9eO6nEgW=FwdXjc2MtMZ-bJyYZc+ZmPpTkM1XwnzgFTQ@mail.gmail.com>
-Message-ID: <CAD7j7Q8VbbHZmO6RP9bsRaX1DfuEitGKeERoadtfC-Hm7R4GJQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 12 Oct 2015 13:51:50 -0500
+Subject: [Buildroot] [PATCH 1/1] [arm64 uboot] Resolved compilation
+ issue for arm64 uboot
+In-Reply-To: <20151012193942.75ee6483@free-electrons.com>
+References: <1444664954-64180-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20151012193942.75ee6483@free-electrons.com>
+Message-ID: <CANQCQpbWt9-24pXF20WUpoim-PYdbqYW0imaLMQ4uK5nEv2FDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
+Thomas,
 
-Anyway, it sure compiles, but it is only because it is configured for
-> static linking. As soon as I remove this config option from sdl2.mk
+On Mon, Oct 12, 2015 at 12:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Matt Weber,
 >
-> # We must enable static build to get compilation successful.SDL2_CONF_OPTS += --enable-static
+> On Mon, 12 Oct 2015 10:49:14 -0500, Matt Weber wrote:
 >
-> the problem I reported appears again and the compilation ends with an error.
+>> This patch has been added to resolve the compilation issue
+>> of arm64 uboot.
+>>
+>> For aarch64 architecture, kernel uses arm64 terminology and thus from
+>> top-level Makefile KERNEL_ARCH is modified to arm64 for aarch64 which
+>> then passed to uboot compilation. But, it causes compilation issue
+>> while including architecture specific Makefile under
+>> arch/$(ARCH)/Makefile as uboot uses top-level system architecture as
+>> arm only.
 >
-> I was a bit confused about the meaning of this configuration flag. I
-thought it meant to compile the .so library static, but instead it means
-building the static libSDL.a library. So no harm in letting it live ;-)
+> I'm not a native english speaker, but the wording of this sentence
+> doesn't seem quite right.
+>
+> The title of the commit should be:
+>
+>         uboot: <something>
+>
+>> +# For aarch64 architecture, kernel uses arm64 terminology and thus from
+>> +# # top-level Makefile KERNEL_ARCH is modified to arm64 for aarch64 which
+>> +# # then passed to uboot compilation. But, it causes compilation issue
+>> +# # while including architecture specific Makefile under arch/$(ARCH)/Makefile
+>> +# # as uboot uses top-level system architecture as arm only.
+>
+> Double hashes a the beginning of each line -> not good.
+>
+> Care to fix that up (especially rewording the commit log and comment) ?
+>
 
-There are some other issues with the SDL2 patch, but I'm not sure if this
-is the right place to discuss them or maybe I should look in the mailing
-list for the right thread?
+Yeah, not a problem.  I should have a new revision out soon.
 
-Thanks
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151012/996a999d/attachment.html>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
+-- 
+Matthew L Weber / Pr Software Engineer
+Airborne Information Systems / Security Systems and Software / Secure Platforms
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
