@@ -1,70 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 23:24:41 +0200
-Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
-In-Reply-To: <20151012211618.GG3735@free.fr>
-References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
- <20151010150457.GD3640@free.fr>
- <20151012224411.472a9d10@free-electrons.com>
- <20151012211618.GG3735@free.fr>
-Message-ID: <20151012232441.3322b2fa@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 12 Oct 2015 23:30:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: Add optional dependency to
+ libtaglib
+In-Reply-To: <1444669674-23736-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1444669674-23736-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151012213019.GI3735@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Bernd, All,
 
-On Mon, 12 Oct 2015 23:16:18 +0200, Yann E. MORIN wrote:
-
-> > I agree on the principle, but I think we should rather handle that like
-> > we do for other options: enable automatically the needed option.
+On 2015-10-12 19:07 +0200, Bernd Kuhls spake thusly:
+> taglib is an optional dependency to vlc:
+> http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=configure.ac;h=b9bd76a829da8ee8b8ea69a141827abd87c47cb2;hb=HEAD#l4020
 > 
-> Except for PCI it does not really makes sense, see Arnout's explanations:
->     http://lists.busybox.net/pipermail/buildroot/2015-October/141178.html
-
-Except that I disagree with Arnout :)
-
-Arnout is not making the difference between being able to *build* and
-being able to *run*.
-
-CONFIG_PCI is needed for the build to proceed, so it is normal that we
-enable it automatically. The PCI root complex drivers are only needed
-for the PCI support to actually work on the target, not for iqvlinux to
-build.
-
-And the story is the same for xtable-addons: the additions in linux.mk
-were made because those kernel options were needed for xtable-addons to
-simply *build*.
-
-> > Remember how someone proposed to check for CONFIG_MODULES=y and error
-> > out if not available? Instead, you implemented
-> > b7c32c98bc810b88e0391117f225658f82b44995.
+> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
+>   output/target/usr/lib/vlc/plugins/meta_engine/libtaglib_plugin.so
+>   | grep NEEDED
+>  0x00000001 (NEEDED)                     Shared library: [libvlccore.so.8]
+>  0x00000001 (NEEDED)                     Shared library: [librt.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libpthread.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libtag.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libstdc++.so.6]
+>  0x00000001 (NEEDED)                     Shared library: [libm.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
 > 
-> Meh... ;-)
-
-No, your commit is good I believe.
-
-> I'm not totally oposed to this idea.
+> Add it to vlc.mk to get reproducable builds.
 > 
-> However, there are cases, like PCI, for which it does not make sense to
-> just enable it (as Arnout explained).
-
-See above :)
-
-> Unless we don't care about runtime consistency, and just care about the
-> buildability of the configuration...
+> For taglib itself zlib is only an optional dependency
+> http://git.buildroot.net/buildroot/tree/package/taglib/taglib.mk#n13
 > 
-> However, I like doing such little tiny bit of infra, so I can append that
-> to my todo-list. What do you prefer: setting the option (like for
-> modules), or checking the option?
+> But taglib support in vlc depends on zlib:
+> http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=modules/meta_engine/Makefile.am;h=003d292cdc9a80762a6515e0ced77552f13b5120;hb=HEAD#l10
+> so we select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB is selected.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/vlc/Config.in | 1 +
+>  package/vlc/vlc.mk    | 7 +++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+> index 71e4f34..e2b8da9 100644
+> --- a/package/vlc/Config.in
+> +++ b/package/vlc/Config.in
+> @@ -13,6 +13,7 @@ config BR2_PACKAGE_VLC
+>  	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+>  	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
+>  	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
+> +	select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB
+>  	help
+>  	  VLC is a free and open source cross-platform multimedia player
+>  	  and framework that plays most multimedia files as well as DVD,
+> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+> index 4e84b12..ca1f09c 100644
+> --- a/package/vlc/vlc.mk
+> +++ b/package/vlc/vlc.mk
+> @@ -326,6 +326,13 @@ else
+>  VLC_CONF_OPTS += --disable-speex
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_TAGLIB),y)
+> +VLC_CONF_OPTS += --enable-taglib
+> +VLC_DEPENDENCIES += taglib
 
-Setting the option, when it is needed to build the external modules.
+Did you forget to add zlib as a dependency here as well?
 
-Thanks!
+Form vlc's configure.ac:
 
-Thomas
+    dnl
+    dnl Check for zlib.h and -lz along with system -lminizip if available
+    dnl
+    AC_CHECK_HEADERS(zlib.h, [ have_zlib=yes ], [ have_zlib=no ])
+    AM_CONDITIONAL(HAVE_ZLIB, [ test "${have_zlib}" = "yes" ])
+
+So, we should add an optional dependency to zlib (in its own ifeq-endif
+block, not inside the taglib block).
+
+Regards,
+Yann E. MORIN.
+
+> +else
+> +VLC_CONF_OPTS += --disable-taglib
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_TREMOR),y)
+>  VLC_CONF_OPTS += --enable-tremor
+>  VLC_DEPENDENCIES += tremor
+> -- 
+> 2.6.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
