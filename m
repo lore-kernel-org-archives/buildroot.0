@@ -1,36 +1,52 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 12 Oct 2015 17:09:27 +0200
-Subject: [Buildroot] [PATCH] imx-gpu-viv: install g2d library and header
-In-Reply-To: <1444662194-17583-1-git-send-email-vincent.stehle@freescale.com>
-References: <1444662194-17583-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <CAAMH-ytcNvB-9vWq2kSuYgzMa8eS6gXQJ7sNXWoLobhtTaLT1w@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 12 Oct 2015 10:49:14 -0500
+Subject: [Buildroot] [PATCH 1/1] [arm64 uboot] Resolved compilation issue
+	for arm64 uboot
+Message-ID: <1444664954-64180-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+From: Ronak Desai <ronak.desai@rockwellcollins.com>
 
-On Mon, Oct 12, 2015 at 5:03 PM, Vincent Stehl?
-<vincent.stehle@freescale.com> wrote:
-> Freescale gpu-viv binaries archive supplies the libraries and headers
-> for accelerated OpenGL ES, OpenCL and OpenVG on i.MX6 platforms.
->
-> This binaries archive also supplies a g2d library and its header, which
-> allow to perform accelerated 2D operations on i.MX6 platforms in a
-> simpler manner. Install those as well, as it is useful for some
-> packages, such as e.g. kodi.
+This patch has been added to resolve the compilation issue
+of arm64 uboot.
 
-I CC'd you to my patch adding the same libraries back in September:
-http://patchwork.ozlabs.org/patch/520309/
+For aarch64 architecture, kernel uses arm64 terminology and thus from
+top-level Makefile KERNEL_ARCH is modified to arm64 for aarch64 which
+then passed to uboot compilation. But, it causes compilation issue
+while including architecture specific Makefile under
+arch/$(ARCH)/Makefile as uboot uses top-level system architecture as
+arm only.
 
-The difference between yours and mine is that I added an option to
-select the G2D libs, not sure if people wants to control it or not but
-it didn't cost much.
+Signed-off-by: Ronak Desai <ronak.desai@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ boot/uboot/uboot.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Also I added the gputools as they can be useful when debugging the
-GPU. Please let me know why you offered another patch.
-
-Thanks,
-Gary
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index fd29cea..21314c1 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -71,7 +71,16 @@ UBOOT_BIN = u-boot.bin
+ UBOOT_BIN_IFT = $(UBOOT_BIN).ift
+ endif
+ 
++# For aarch64 architecture, kernel uses arm64 terminology and thus from
++# # top-level Makefile KERNEL_ARCH is modified to arm64 for aarch64 which
++# # then passed to uboot compilation. But, it causes compilation issue
++# # while including architecture specific Makefile under arch/$(ARCH)/Makefile
++# # as uboot uses top-level system architecture as arm only.
++ifeq ($(KERNEL_ARCH),arm64)
++UBOOT_ARCH = arm
++else
+ UBOOT_ARCH = $(KERNEL_ARCH)
++endif
+ 
+ UBOOT_MAKE_OPTS += \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+-- 
+1.9.1
