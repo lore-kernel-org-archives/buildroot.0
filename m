@@ -1,110 +1,148 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Oct 2015 23:30:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Add optional dependency to
- libtaglib
-In-Reply-To: <1444669674-23736-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1444669674-23736-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151012213019.GI3735@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Oct 2015 23:40:18 +0200
+Subject: [Buildroot] [git commit] imx-gpu-viv: add G2D libs and GPU tools
+	selection
+Message-ID: <20151012214026.C558980412@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=f640a6659f6c5f9c99684a98de006bbccfded128
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-10-12 19:07 +0200, Bernd Kuhls spake thusly:
-> taglib is an optional dependency to vlc:
-> http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=configure.ac;h=b9bd76a829da8ee8b8ea69a141827abd87c47cb2;hb=HEAD#l4020
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
->   output/target/usr/lib/vlc/plugins/meta_engine/libtaglib_plugin.so
->   | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libvlccore.so.8]
->  0x00000001 (NEEDED)                     Shared library: [librt.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libpthread.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libtag.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libstdc++.so.6]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
-> 
-> Add it to vlc.mk to get reproducable builds.
-> 
-> For taglib itself zlib is only an optional dependency
-> http://git.buildroot.net/buildroot/tree/package/taglib/taglib.mk#n13
-> 
-> But taglib support in vlc depends on zlib:
-> http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=modules/meta_engine/Makefile.am;h=003d292cdc9a80762a6515e0ced77552f13b5120;hb=HEAD#l10
-> so we select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB is selected.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/vlc/Config.in | 1 +
->  package/vlc/vlc.mk    | 7 +++++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-> index 71e4f34..e2b8da9 100644
-> --- a/package/vlc/Config.in
-> +++ b/package/vlc/Config.in
-> @@ -13,6 +13,7 @@ config BR2_PACKAGE_VLC
->  	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
->  	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
->  	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
-> +	select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB
->  	help
->  	  VLC is a free and open source cross-platform multimedia player
->  	  and framework that plays most multimedia files as well as DVD,
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index 4e84b12..ca1f09c 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -326,6 +326,13 @@ else
->  VLC_CONF_OPTS += --disable-speex
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_TAGLIB),y)
-> +VLC_CONF_OPTS += --enable-taglib
-> +VLC_DEPENDENCIES += taglib
+GPU package now includes libraries for GPU2D as well as several tools to
+monitor and debug the GPUs.
 
-Did you forget to add zlib as a dependency here as well?
+GPU2D libraries have been tested with the example provided in the
+package:
+ # /usr/share/examples/fsl-samples/g2d/overlay_test/g2d_overlay_test
+ Overlay rendering time 53861us .
 
-Form vlc's configure.ac:
+The tools have been tested with the following commands:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # apitrace trace --api egl ./tutorial7 &
+ # gmem_info
+ ... display memory use per PID ...
+ # killall tutorial7
+ #??apitrace replay tutorial7.trace
+ #??eglretrace tutorial7.trace
 
-    dnl
-    dnl Check for zlib.h and -lz along with system -lminizip if available
-    dnl
-    AC_CHECK_HEADERS(zlib.h, [ have_zlib=yes ], [ have_zlib=no ])
-    AM_CONDITIONAL(HAVE_ZLIB, [ test "${have_zlib}" = "yes" ])
+[Thomas: tweak the installation logic to be more explicit about paths
+being copied, and to use cp -dpfr consistently.]
 
-So, we should add an optional dependency to zlib (in its own ifeq-endif
-block, not inside the taglib block).
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freescale-imx/imx-gpu-viv/Config.in      |   21 ++++++++++++
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk |   37 ++++++++++++++++++++++
+ 2 files changed, 58 insertions(+), 0 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> +else
-> +VLC_CONF_OPTS += --disable-taglib
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_TREMOR),y)
->  VLC_CONF_OPTS += --enable-tremor
->  VLC_DEPENDENCIES += tremor
-> -- 
-> 2.6.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 2a0cf84..1c00eaa 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -58,6 +58,16 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+ 	default "imx-gpu-viv"
+ 
++config BR2_PACKAGE_IMX_GPU_VIV_APITRACE
++	bool "install apitrace tools"
++	select BR2_PACKAGE_IMX_GPU_VIV_G2D
++	help
++	  Copy the apitrace tool to the target. Apitrace consists
++	  of a set of tools to trace, replay and/or inspect OpenGL,
++	  OpenGL ES APIs calls
++
++	  http://apitrace.github.io/
++
+ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+ 	bool "install examples"
+ 	help
+@@ -65,4 +75,15 @@ config BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES
+ 
+ 	  Warning: examples take approximately 150 MB of disk space.
+ 
++config BR2_PACKAGE_IMX_GPU_VIV_G2D
++	bool "install G2D libraries"
++	help
++	  Copy the GPU2D libraries to the target.
++
++config BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO
++	bool "install gmem_info tool"
++	help
++	  Copy the gmem_info tool to the target which provides
++	  information about GPU memory consumption.
++
+ endif
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index aa1e3b6..a66c82e 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -62,9 +62,17 @@ define IMX_GPU_VIV_FIXUP_FB_HEADERS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_G2D),y)
++define IMX_GPU_VIV_INSTALL_G2D_STAGING
++	cp -dpfr $(@D)/g2d/usr/include/* $(STAGING_DIR)/usr/include/
++	cp -dpfr $(@D)/g2d/usr/lib/* $(STAGING_DIR)/usr/lib/
++endef
++endif
++
+ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
+ 	$(IMX_GPU_VIV_FIXUP_FB_HEADERS)
++	$(IMX_GPU_VIV_INSTALL_G2D_STAGING)
+ 	for lib in egl glesv2 vg; do \
+ 		$(INSTALL) -m 0644 -D \
+ 			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
+@@ -72,6 +80,20 @@ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ 	done
+ endef
+ 
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_APITRACE),y)
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
++define IMX_GPU_VIV_INSTALL_APITRACE
++	cp -dpfr $(@D)/apitrace/x11/usr/bin/* $(TARGET_DIR)/usr/bin/
++	cp -dpfr $(@D)/apitrace/x11/usr/lib/* $(TARGET_DIR)/usr/lib/
++endef
++else
++define IMX_GPU_VIV_INSTALL_APITRACE
++	cp -dpfr $(@D)/apitrace/non-x11/usr/bin/* $(TARGET_DIR)/usr/bin/
++	cp -dpfr $(@D)/apitrace/non-x11/usr/lib/* $(TARGET_DIR)/usr/lib/
++endef
++endif
++endif
++
+ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_EXAMPLES),y)
+ define IMX_GPU_VIV_INSTALL_EXAMPLES
+ 	mkdir -p $(TARGET_DIR)/usr/share/examples/
+@@ -79,11 +101,26 @@ define IMX_GPU_VIV_INSTALL_EXAMPLES
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_G2D),y)
++define IMX_GPU_VIV_INSTALL_G2D
++	cp -dpfr $(@D)/g2d/usr/lib/* $(TARGET_DIR)/usr/lib/
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_GMEM_INFO),y)
++define IMX_GPU_VIV_INSTALL_GMEM_INFO
++	cp -dpfr $(@D)/gpu-tools/gmem-info/usr/bin/* $(TARGET_DIR)/usr/bin/
++endef
++endif
++
+ # On the target, remove the unused libraries.
+ # Note that this is _required_, else ldconfig may create symlinks
+ # to the wrong library
+ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
++	$(IMX_GPU_VIV_INSTALL_APITRACE)
+ 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
++	$(IMX_GPU_VIV_INSTALL_G2D)
++	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
+ 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
+ 	for lib in EGL GAL VIVANTE GLESv2; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
