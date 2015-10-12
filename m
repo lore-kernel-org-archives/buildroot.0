@@ -1,75 +1,132 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 12 Oct 2015 19:07:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Add optional dependency to
-	libtaglib
-Message-ID: <1444669674-23736-1-git-send-email-bernd.kuhls@t-online.de>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon, 12 Oct 2015 19:39:37 +0200
+Subject: [Buildroot] [PATCH v2] sane-backends: add systemd support
+In-Reply-To: <1444646258-29287-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1444646258-29287-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <CAGduivx4AsdgbJGg4khHFJ2UC3XkAySDBvXjMR=dzC-+P-pb2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-taglib is an optional dependency to vlc:
-http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=configure.ac;h=b9bd76a829da8ee8b8ea69a141827abd87c47cb2;hb=HEAD#l4020
+Hello Vicente, all
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
-  output/target/usr/lib/vlc/plugins/meta_engine/libtaglib_plugin.so
-  | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libvlccore.so.8]
- 0x00000001 (NEEDED)                     Shared library: [librt.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libtag.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libstdc++.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libm.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
+On Mon, Oct 12, 2015 at 12:37 PM, Vicente Olivert Riera <
+Vincent.Riera@imgtec.com> wrote:
 
-Add it to vlc.mk to get reproducable builds.
+> The content of the saned.socket and saned at .service files is based on the
+> instructions of the sane-backends manual.
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v1 -> v2:
+>   - Install the systemd files in /usr/lib/systemd/system (Suggested by
+>     Maxime Hadjinlian)
+>   - Create saned user and group (Highlighted by Maxime Hadjinlian)
+>   - Amend the commit log since we are not using the location for the
+>     systemd files specified in the manual.
+>
+>  package/sane-backends/sane-backends.mk |   18 ++++++++++++++++++
+>  package/sane-backends/saned.socket     |   10 ++++++++++
+>  package/sane-backends/saned at .service   |   18 ++++++++++++++++++
+>  3 files changed, 46 insertions(+), 0 deletions(-)
+>  create mode 100644 package/sane-backends/saned.socket
+>  create mode 100644 package/sane-backends/saned at .service
+>
+> diff --git a/package/sane-backends/sane-backends.mk
+> b/package/sane-backends/sane-backends.mk
+> index 0c0b5a9..39c4bb1 100644
+> --- a/package/sane-backends/sane-backends.mk
+> +++ b/package/sane-backends/sane-backends.mk
+> @@ -14,6 +14,13 @@ SANE_BACKENDS_INSTALL_STAGING = YES
+>  SANE_BACKENDS_CONF_OPTS = \
+>         $(if
+> $(BR2_TOOLCHAIN_HAS_THREADS),--enable-pthread,--disable-pthread)
+>
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +SANE_BACKENDS_CONF_OPTS += --with-systemd
+> +SANE_BACKENDS_DEPENDENCIES += systemd
+> +else
+> +SANE_BACKENDS_CONF_OPTS += --without-systemd
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBUSB),y)
+>  SANE_BACKENDS_DEPENDENCIES += libusb
+>  SANE_BACKENDS_CONF_OPTS += --enable-libusb_1_0
+> @@ -50,4 +57,15 @@ endef
+>
+>  SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
+>
+> +define SANE_BACKENDS_USERS
+> +       saned -1 saned -1 * /etc/sane.d - - Saned User
+> +endef
+> +
+> +define SANE_BACKENDS_INSTALL_INIT_SYSTEMD
+> +       $(INSTALL) -m 0644 -D package/sane-backends/saned.socket \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/saned.socket
+> +       $(INSTALL) -m 0644 -D package/sane-backends/saned at .service \
+> +               $(TARGET_DIR)/usr/lib/systemd/system/saned at .service
+> +endef
+>
+You still need to create the target 'socket.target.wants' and put a symlink
+from saned.socket into this new folder.
 
-For taglib itself zlib is only an optional dependency
-http://git.buildroot.net/buildroot/tree/package/taglib/taglib.mk#n13
+You also need to symlink the service into it's target (since it's not
+defined in the .service, I would assume multi-user.target).
 
-But taglib support in vlc depends on zlib:
-http://git.videolan.org/gitweb.cgi?p=vlc.git;a=blob;f=modules/meta_engine/Makefile.am;h=003d292cdc9a80762a6515e0ced77552f13b5120;hb=HEAD#l10
-so we select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB is selected.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/vlc/Config.in | 1 +
- package/vlc/vlc.mk    | 7 +++++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 71e4f34..e2b8da9 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_VLC
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
- 	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
-+	select BR2_PACKAGE_ZLIB if BR2_PACKAGE_TAGLIB
- 	help
- 	  VLC is a free and open source cross-platform multimedia player
- 	  and framework that plays most multimedia files as well as DVD,
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4e84b12..ca1f09c 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -326,6 +326,13 @@ else
- VLC_CONF_OPTS += --disable-speex
- endif
- 
-+ifeq ($(BR2_PACKAGE_TAGLIB),y)
-+VLC_CONF_OPTS += --enable-taglib
-+VLC_DEPENDENCIES += taglib
-+else
-+VLC_CONF_OPTS += --disable-taglib
-+endif
-+
- ifeq ($(BR2_PACKAGE_TREMOR),y)
- VLC_CONF_OPTS += --enable-tremor
- VLC_DEPENDENCIES += tremor
--- 
-2.6.1
+> +
+>  $(eval $(autotools-package))
+> diff --git a/package/sane-backends/saned.socket
+> b/package/sane-backends/saned.socket
+> new file mode 100644
+> index 0000000..1aa19e7
+> --- /dev/null
+> +++ b/package/sane-backends/saned.socket
+> @@ -0,0 +1,10 @@
+> +[Unit]
+> +Description=saned incoming socket
+> +
+> +[Socket]
+> +ListenStream=6566
+> +Accept=yes
+> +MaxConnections=1
+> +
+> +[Install]
+> +WantedBy=sockets.target
+> diff --git a/package/sane-backends/saned at .service
+> b/package/sane-backends/saned at .service
+> new file mode 100644
+> index 0000000..1905dbf
+> --- /dev/null
+> +++ b/package/sane-backends/saned at .service
+> @@ -0,0 +1,18 @@
+> +[Unit]
+> +Description=Scanner Service
+> +Requires=saned.socket
+> +
+> +[Service]
+> +ExecStart=/usr/sbin/saned
+> +User=saned
+> +Group=saned
+> +StandardInput=null
+> +StandardOutput=syslog
+> +StandardError=syslog
+> +Environment=SANE_CONFIG_DIR=/etc/sane.d
+> +# If you need to debug your configuration uncomment the next line and
+> +# change it as appropriate to set the desired debug options
+> +# Environment=SANE_DEBUG_DLL=255 SANE_DEBUG_BJNP=5
+> +
+> +[Install]
+> +Also=saned.socket
+> --
+> 1.7.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151012/16e60722/attachment.html>
