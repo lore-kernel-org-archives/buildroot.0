@@ -1,94 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 12 Oct 2015 23:16:18 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Oct 2015 23:17:19 +0200
 Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
-In-Reply-To: <20151012224411.472a9d10@free-electrons.com>
+In-Reply-To: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
 References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
- <20151010150457.GD3640@free.fr>
- <20151012224411.472a9d10@free-electrons.com>
-Message-ID: <20151012211618.GG3735@free.fr>
+Message-ID: <20151012231719.7ecbe700@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Romain Naour,
 
-On 2015-10-12 22:44 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 10 Oct 2015 17:04:57 +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> > > +ifeq ($(BR2_PACKAGE_IQVLINUX),y)
-> > > +define IQVLINUX_PCI_CHECK
-> > > +	@if ! grep -Fqx 'CONFIG_PCI=y' $(LINUX_DIR)/.config; then \
-> > > +		echo "ERROR: Enable CONFIG_PCI in the linux kernel config." 1>&2 ; \
-> > > +		exit 1; \
-> > > +	fi
-> > > +endef
-> > > +
-> > > +# Check if PCI is enabled in the Linux kernel build by Buildroot.
-> > > +LINUX_POST_CONFIGURE_HOOKS += IQVLINUX_PCI_CHECK
-> > > +endif
-> > 
-> > I really do not like that a package meddles in the affairs of another
-> > package, like setting hooks for it.
-> > 
-> > I'd rather we add a variable that packages could set to require specific
-> > kernel config options, something like:
-> > 
-> >     IQVLINUX_LINUX_NEEDS_CONFIG_OPTS = CONFIG_PCI
-> > 
-> > Then in package/pkg-generic, in the inner-generic-package macro:
-> > 
-> >     LINUX_NEEDS_CONFIG_OPTS += $$($(2)_NEEDS_LINUX_CONFIG)
-> > 
-> > And finally in linux/linux.mk:
-> > 
-> >     define LINUX_CHECK_CONFIG_OPTS
-> >         $(foreach cfg,$(strip $(LINUX_NEEDS_CONFIG_OPTS)),\
-> >             if ! grep -E '^$(cfg)=y$$' $(@D)/.config >/dev/null; then \
-> >                 printf "ERROR: Enable %s in your linux kernel config." "$(cfg)"; \
-> >                 exit 1; \
-> >             fi;)
-> >     endef
-> >     LINUX_POST_CONFIGURE_HOOKS += LINUX_CHECK_CONFIG_OPTS
+On Fri,  9 Oct 2015 15:26:02 +0200, Romain Naour wrote:
+> The PCI support needs to be checked since this driver is based
+> on it. Otherwise the build fail with:
+>  #error "This driver requires PCI support to be available"
 > 
-> I agree on the principle, but I think we should rather handle that like
-> we do for other options: enable automatically the needed option.
+> But this message is concealed by several occurrence of this
+> one:
+>  error: implicit declaration of function 'pci_find_bus' [-Werror=implicit-function-declaration]
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+> v3: changes suggested by Arnout
+>     - remove the patch and use CC=$(TARGET_CC) instead.
+>     - Add a 'or' between GPLv2 and BSD-3c for license information
+>     - Add some more license files (files.txt)
+>     - Fixes typos and indentation.
+>     - move the check for PCI option to LINUX_POST_CONFIGURE_HOOKS
+>     - redirect echo to stderr.
+> v2: - rename the package simply to iqvlinux (ThomasP)
+>     - move it to "Hardware Handling" menu (ThomasP)
+>     - Cc Yann for the kernel-module infra
+>     - Add a check for CONFIG_PCI even if it's redundant with
+>       the message from the Makefile.
+>       (Do we really need this check ?)
+> ---
+>  package/Config.in              |  1 +
+>  package/iqvlinux/Config.in     | 18 ++++++++++++++++++
+>  package/iqvlinux/iqvlinux.hash |  5 +++++
+>  package/iqvlinux/iqvlinux.mk   | 34 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 58 insertions(+)
+>  create mode 100644 package/iqvlinux/Config.in
+>  create mode 100644 package/iqvlinux/iqvlinux.hash
+>  create mode 100644 package/iqvlinux/iqvlinux.mk
 
-Except for PCI it does not really makes sense, see Arnout's explanations:
-    http://lists.busybox.net/pipermail/buildroot/2015-October/141178.html
+Applied after doing the following changes:
 
-> Remember how someone proposed to check for CONFIG_MODULES=y and error
-> out if not available? Instead, you implemented
-> b7c32c98bc810b88e0391117f225658f82b44995.
+    [Thomas:
+     - fix minor typo in Config.in: s/Enthernet/Ethernet/
+     - license is "GPLv2, BSD-3c", not "GPLv2 or BSD-3c"
+     - remove IQVLINUX_PCI_CHECK, until a proper generic solution is
+       implemented.]
 
-Meh... ;-)
+As you can see, I've removed the IQVLINUX_PCI_CHECK so that a nicer
+solution can be discussed/implemented with Yann. However, since this
+check was not really mandatory, I decided to add the package
+nonetheless (albeit without the check).
 
-> So a little bit in the direction of what you proposed, what about
-> refactoring the LINUX_NEEDS_MODULES mechanism into a more generic
-> mechanism that allows package to express which kernel option(s) they
-> need, and automatically enable such options in linux/linux.mk when
-> configuring the kernel.
+Thanks!
 
-I'm not totally oposed to this idea.
-
-However, there are cases, like PCI, for which it does not make sense to
-just enable it (as Arnout explained).
-
-Unless we don't care about runtime consistency, and just care about the
-buildability of the configuration...
-
-However, I like doing such little tiny bit of infra, so I can append that
-to my todo-list. What do you prefer: setting the option (like for
-modules), or checking the option?
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
