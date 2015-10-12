@@ -1,46 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 22:35:19 +0200
-Subject: [Buildroot] [PATCH 1/2] package/tvheadend: add dbus as optional
- dependency
-In-Reply-To: <1444680585-31135-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1444680585-31135-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151012223519.3b352aed@free-electrons.com>
+Date: Mon, 12 Oct 2015 22:36:00 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20151012203606.5CCC481D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=7c5c3340deff49c5c8a51f546f4728305b0684c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Oct 2015 22:09:44 +0200, Bernd Kuhls wrote:
-> Dbus is an optional dependency for tvheadend:
-> https://github.com/tvheadend/tvheadend/commit/9c7b6047d2e3040e14cdba89f46d8acb2a36a115
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/tvheadend/tvheadend.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index db4ee3a..b901c4e 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -18,6 +18,10 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
->  TVHEADEND_DEPENDENCIES += avahi
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_DBUS),y)
-> +TVHEADEND_DEPENDENCIES += dbus
-> +endif
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/tvheadend.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Can you use --enable-dbus-1 / --disable-dbus-1 ? This way, if the
-BR2_PACKAGE_DBUS=y but the detection fails, the build will error out.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index db4ee3a..3059805 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 7b327910eefa3b89901e86aaec7acc3cd8d15b90
++TVHEADEND_VERSION = 1b682a46a11ea821c4ed183a274bc78993ef40a0
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
