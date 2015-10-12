@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 17:53:52 +0200
-Subject: [Buildroot] [git commit] package/tzdata: Updated TZDATA_SITE to use
-	http url
-Message-ID: <20151012155506.E654D81E8C@busybox.osuosl.org>
+Date: Mon, 12 Oct 2015 17:55:18 +0200
+Subject: [Buildroot] [v2 1/4] package/zic: bump version to 2015g
+In-Reply-To: <1444649890-28763-1-git-send-email-martin@barkynet.com>
+References: <1444649890-28763-1-git-send-email-martin@barkynet.com>
+Message-ID: <20151012175518.37eabbcd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=082de88b5fb8fddcea714d3a162a84215cddd672
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Martin Bark,
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tzdata/tzdata.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon, 12 Oct 2015 12:38:07 +0100, Martin Bark wrote:
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> 
+> ---
+> v1 -> v2
+>  - Improved zic.hash comment (Suggested by Vicente Olivert Riera)
+> ---
+>  package/zic/zic.hash | 4 ++--
+>  package/zic/zic.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 48a0196..39fc262 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -6,7 +6,7 @@
- 
- TZDATA_VERSION = 2015g
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
--TZDATA_SITE = ftp://ftp.iana.org/tz/releases
-+TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
- TZDATA_DEPENDENCIES = host-tzdata
- HOST_TZDATA_DEPENDENCIES = host-zic
+All four patches applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
