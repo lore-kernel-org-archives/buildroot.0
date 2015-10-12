@@ -1,55 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2015 22:38:16 +0200
-Subject: [Buildroot] [PATCH v2] qt: fix build for arm with
-	BR2_STATIC_LIBS
-In-Reply-To: <1444201366-354-1-git-send-email-alexander.lukichev@gmail.com>
- (Alexander Lukichev's message of "Wed, 7 Oct 2015 10:02:46 +0300")
-References: <1444128975-17943-1-git-send-email-alexander.lukichev@gmail.com>
- <1444201366-354-1-git-send-email-alexander.lukichev@gmail.com>
-Message-ID: <87io6baklj.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Oct 2015 22:37:05 +0200
+Subject: [Buildroot] [git commit] gst1-libav: bump version to 1.6.0
+Message-ID: <20151012203844.AA29E81DA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1c39b3c8b7b09ee321af327153d97645516c85ce
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Some Buildroot-generated static toolchains for ARM do not have
- > dlfcn.h header, which breaks builds of qt-4.8.7 because its
- > QtCore's plugin loader expects this header to be present (and
- > dynamic libraries to be supported). For certain platforms without
- > dynamic libraries, there is a QT_NO_DYNAMIC_LIBRARY constant
- > defined in plugin loader's source. This patch puts that constant
- > into Qt's build environment if Buildroot is configured without
- > shared library support.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-libav/gst1-libav.hash |    4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Fixes:
- > - http://autobuild.buildroot.net/results/11a4c19638ca211bd2a424fd92602166235c9433
- > - http://autobuild.buildroot.net/results/c056e8781558267f6971a5f017f47e90dcf24e07
- > - http://autobuild.buildroot.net/results/b8f34afa8686e890a1a3882a52081bb6a3b9c13b
- > and several others.
-
- > Signed-off-by: Alexander Lukichev <alexander.lukichev@gmail.com>
- > ---
- > Changes
- > v2: unnecessary Qt patch removed (Arnout).
- > ---
- >  package/qt/qt.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/qt/qt.mk b/package/qt/qt.mk
- > index e0e5d22..a64d32f 100644
- > --- a/package/qt/qt.mk
- > +++ b/package/qt/qt.mk
- > @@ -203,6 +203,10 @@ else
- >  QT_CONFIGURE_OPTS += -static
- >  endif
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index c1a757b..9f6473b 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050904.html
+-sha256	605c62624604f3bb5c870844cc1f2711779cc533b004c2aa1d8c0d58557afbbc  gst-libav-1.4.5.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.6.0.tar.xz.sha256sum
++sha256	6cca6cf73182a882768ef0c860af88c2fd2c77e2c81ce464a998ab4e6baa604c  gst-libav-1.6.0.tar.xz
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 8d71677..ffd13b5 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- > +ifeq ($(BR2_STATIC_LIBS),y)
- > +QT_CONFIGURE_OPTS += -D QT_NO_DYNAMIC_LIBRARY
-
-Hmm, shouldn't this be checking BR2_PACKAGE_QT_STATIC instead?
-
--- 
-Bye, Peter Korsgaard
+-GST1_LIBAV_VERSION = 1.4.5
++GST1_LIBAV_VERSION = 1.6.0
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
+ 
