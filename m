@@ -1,87 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 21:39:55 +0200
-Subject: [Buildroot] [PATCH v3] libv4l: bump version to 1.8.0
-In-Reply-To: <1444678106-24045-1-git-send-email-ps.report@gmx.net>
-References: <1444678106-24045-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20151012213955.6bca036c@free-electrons.com>
+Date: Mon, 12 Oct 2015 21:47:47 +0200
+Subject: [Buildroot] [PATCH] openal: New package
+In-Reply-To: <561C0AD0.6050909@dawncrow.de>
+References: <561C0AD0.6050909@dawncrow.de>
+Message-ID: <20151012214747.4c0d3cba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Andr? Hentschel,
 
-On Mon, 12 Oct 2015 21:28:26 +0200, Peter Seiderer wrote:
-> - add qt, qt5base/qt5gui/qt5widgets dependency for qv4l2
->   (qt dependency was missing, qt5 support was added since 1.8.0)
-> 
-> - fix fix moc/rcc/uic detection in case host versions
->   of moc-qt5, rcc-qt5 or uic-qt5 are present
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Thanks for this patch! It looks pretty good, but I have some comments
+(see below).
 
-Thanks, this is better, but it could still be improved. See below.
+On Mon, 12 Oct 2015 21:32:32 +0200, Andr? Hentschel wrote:
+> Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 
->  LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
->  LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
->  LIBV4L_INSTALL_STAGING = YES
-> @@ -43,6 +43,25 @@ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
->  LIBV4L_CONF_OPTS += --enable-v4l-utils
->  # clock_gettime is used, which is provided by librt for glibc < 2.17
->  LIBV4L_LIBS += -lrt
-> +ifeq ($(BR2_PACKAGE_QT5),y)
-> +ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+It seems like you have an UTF-8 configuration issue somewhere, since
+this ? got messed up into ??.
 
-The two conditions are not needed, just do:
+> diff --git a/package/openal/Config.in b/package/openal/Config.in
+> new file mode 100644
+> index 0000000..0bbbb37
+> --- /dev/null
+> +++ b/package/openal/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_OPENAL
+> +	bool "openal"
+> +	# OpenAL needs a backend
+> +	depends on BR2_PACKAGE_ALSA_LIB || \
+> +	           BR2_PACKAGE_PORTAUDIO || \
+> +	           BR2_PACKAGE_PULSEAUDIO
 
-ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+I think in this case, we like when at least one backend is
+automatically selected. alsa-lib seems to be the simplest one, so:
 
-> +LIBV4L_CONF_OPTS += --enable-qv4l2
-> +LIBV4L_DEPENDENCIES += qt5base
-> +# protect against host version detection of moc-qt5/rcc-qt5/uic-qt5
-> +LIBV4L_CONF_ENV += ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc
-> +LIBV4L_CONF_ENV += ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc
-> +LIBV4L_CONF_ENV += ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
+	select BR2_PACKAGE_ALSA_LIB if !BR2_PACKAGE_PORTAUDIO && !BR2_PACKAGE_PULSEAUDIO
+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
 
-Only one assignment needed:
+> +	help
+> +	  OpenAL provides capabilities for playing audio in a virtual
+> +	  3D environment. Distance attenuation, doppler shift, and
+> +	  directional sound emitters are among the features handled by
+> +	  the API.
+> +
+> +	  http://kcat.strangesoft.net/openal.html
+> +
+> +comment "openal needs a backend"
+> +	depends on !BR2_PACKAGE_ALSA_LIB && \
+> +	           !BR2_PACKAGE_PORTAUDIO && \
+> +	           !BR2_PACKAGE_PULSEAUDIO
 
-LIBV4L_CONF_ENV += \
-	ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc \
-	ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc \
-	ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
+Replace this with:
 
-> +else
-> +LIBV4L_CONF_OPTS += --disable-qv4l2
+comment "openal needs a toolchain w/ threads"
+	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-This is not needed here (see below).
+> diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+> new file mode 100644
+> index 0000000..b28b2e2
+> --- /dev/null
+> +++ b/package/openal/openal.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256	2f3dcd313fe26391284fbf8596863723f99c65d6c6846dccb48e79cadaf40d5f  openal-soft-1.16.0.tar.bz2
+> diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+> new file mode 100644
+> index 0000000..0c6a7cb
+> --- /dev/null
+> +++ b/package/openal/openal.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# openal
+> +#
+> +################################################################################
+> +
+> +OPENAL_VERSION = 1.16.0
+> +OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+> +OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+> +OPENAL_LICENSE = LGPL
 
-> +endif
-> +else ifeq ($(BR2_PACKAGE_QT),y)
-> +ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+This should be LGPLv2+.
 
-You could combine this into one condition.
+> +OPENAL_LICENSE_FILES = COPYING
+> +OPENAL_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+> +OPENAL_DEPENDENCIES += alsa-lib
 
-> +LIBV4L_CONF_OPTS += --enable-qv4l2
-> +LIBV4L_DEPENDENCIES += qt
-> +else
-> +LIBV4L_CONF_OPTS += --disable-qv4l2
-> +endif
-> +endif
+Maybe:
 
-Here is what I'd like to see:
-
-ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
-LIBV4L_CONF_OPTS += --enable-qv4l2
-... stuff for qt5 support ..
-else ifeq ($(BR2_PACKAGE_QT)$(BR2_PACKAGE_QT_GUI_MODULE),yy)
-LIBV4L_CONF_OPTS += --enable-qv4l2
-... stuff for qt4 support ..
+OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_ALSA=ON
 else
-LIBV4L_CONF_OPTS += --disable-qv4l2
-endif
+OPENAL_CONF_OPTS += -DALSOFT_REQUIRE_ALSA=OFF
 
-I believe this is simpler and clearer.
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
+> +OPENAL_DEPENDENCIES += portaudio
+
+ditto.
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
+> +OPENAL_DEPENDENCIES += pulseaudio
+
+ditto.
+
+This way, if it can't find Alsa even if we enabled it, we'll get an
+error.
+
+Could you fix those minor issues and send an updated version of your
+patch?
 
 Thanks!
 
