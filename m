@@ -1,93 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 22:44:11 +0200
-Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
-In-Reply-To: <20151010150457.GD3640@free.fr>
-References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
- <20151010150457.GD3640@free.fr>
-Message-ID: <20151012224411.472a9d10@free-electrons.com>
+Date: Mon, 12 Oct 2015 22:54:52 +0200
+Subject: [Buildroot] [PATCH v2] pyqtgraph: new package
+In-Reply-To: <1444260188-9571-1-git-send-email-guillaume.bressaix@gmail.com>
+References: <Re: [Buildroot] [PATCH 2/2] Add new package PyQtGraph>
+ <1444260188-9571-1-git-send-email-guillaume.bressaix@gmail.com>
+Message-ID: <20151012225452.007b3f11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Guillaume William Bres,
 
-On Sat, 10 Oct 2015 17:04:57 +0200, Yann E. MORIN wrote:
+Thanks for this new version. Though I believe it still has some issues
+(see below).
 
-> > diff --git a/package/iqvlinux/Config.in b/package/iqvlinux/Config.in
-> > new file mode 100644
-> > index 0000000..275c67e
-> > --- /dev/null
-> > +++ b/package/iqvlinux/Config.in
-> > @@ -0,0 +1,18 @@
-> > +config BR2_PACKAGE_IQVLINUX
-> > +	bool "iqvlinux"
-> > +	depends on BR2_LINUX_KERNEL
-> > +	help
-> > +	  Intel Ethernet Adapter Debug Driver for Linux (iqvlinux),
-> > +	  which supports kernel versions 2.6.x up through 4.0.x.
-> 
-> What about 4.1+ ?
-> 
-> Should we do a version-check at configure time, or is there such a check
-> already done by the package itself?
+On Wed, 7 Oct 2015 17:23:08 -0600, Guillaume William Bres wrote:
 
-I think we don't really care. There are lots of other kernel modules
-or Linux kernel extensions (Xenomai, RTAI) for which we don't do such
-version checks.
+> diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
+> new file mode 100644
+> index 0000000..f1c3a42
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/Config.in
+> @@ -0,0 +1,22 @@
+> +comment "python-pyqtgraph requires a (e)glibc toolchain w/ wchar and C++"
 
-> > +IQVLINUX_MODULE_SUBDIRS = src/linux/driver
-> > +
-> > +ifeq ($(BR2_PACKAGE_IQVLINUX),y)
-> > +define IQVLINUX_PCI_CHECK
-> > +	@if ! grep -Fqx 'CONFIG_PCI=y' $(LINUX_DIR)/.config; then \
-> > +		echo "ERROR: Enable CONFIG_PCI in the linux kernel config." 1>&2 ; \
-> > +		exit 1; \
-> > +	fi
-> > +endef
-> > +
-> > +# Check if PCI is enabled in the Linux kernel build by Buildroot.
-> > +LINUX_POST_CONFIGURE_HOOKS += IQVLINUX_PCI_CHECK
-> > +endif
-> 
-> I really do not like that a package meddles in the affairs of another
-> package, like setting hooks for it.
-> 
-> I'd rather we add a variable that packages could set to require specific
-> kernel config options, something like:
-> 
->     IQVLINUX_LINUX_NEEDS_CONFIG_OPTS = CONFIG_PCI
-> 
-> Then in package/pkg-generic, in the inner-generic-package macro:
-> 
->     LINUX_NEEDS_CONFIG_OPTS += $$($(2)_NEEDS_LINUX_CONFIG)
-> 
-> And finally in linux/linux.mk:
-> 
->     define LINUX_CHECK_CONFIG_OPTS
->         $(foreach cfg,$(strip $(LINUX_NEEDS_CONFIG_OPTS)),\
->             if ! grep -E '^$(cfg)=y$$' $(@D)/.config >/dev/null; then \
->                 printf "ERROR: Enable %s in your linux kernel config." "$(cfg)"; \
->                 exit 1; \
->             fi;)
->     endef
->     LINUX_POST_CONFIGURE_HOOKS += LINUX_CHECK_CONFIG_OPTS
+So the comment says that you need eglibc with wchar and C++.
 
-I agree on the principle, but I think we should rather handle that like
-we do for other options: enable automatically the needed option.
+> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 
-Remember how someone proposed to check for CONFIG_MODULES=y and error
-out if not available? Instead, you implemented
-b7c32c98bc810b88e0391117f225658f82b44995.
+But the dependencies have absolutely nothing to do with the comment.
+Can you explain?
 
-So a little bit in the direction of what you proposed, what about
-refactoring the LINUX_NEEDS_MODULES mechanism into a more generic
-mechanism that allows package to express which kernel option(s) they
-need, and automatically enable such options in linux/linux.mk when
-configuring the kernel.
+What you need is:
 
-Best regards,
+comment "python-pyqtgraph requires a toolchain w/ C++, threads"
+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
+	depends on BR2_USE_MMU
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+
+> +
+> +config BR2_PACKAGE_PYTHON_PYQTGRAPH
+> +	bool "python-pyqtgraph"
+> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
+> +	depends on BR2_USE_MMU # pyqt -> qt
+> +	depends on BR2_INSTALL_LIBSTDCPP # pyqt -> qt
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pyqt -> qt
+> +	select BR2_PACKAGE_PYTHON_PYQT
+> +	select BR2_PACKAGE_PYTHON_NUMPY # runtime dependency
+> +	select BR2_PACKAGE_PYTHON_PYEXPAT # runtime dependency
+
+python-pyqt supports both Python 2 and Python 3. By doing this select
+here, you break things if Python 3 is used. So you have two options:
+
+ * If python-pyqtgraph only works with Python 2, add a "depends on
+   BR2_PACKAGE_PYTHON"
+
+ * If python-pyqtgraph works with both Python 2 and Python 3, you
+   should:
+
+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
+
+(and of course do a build + run test with Python 3)
+
+> +	select BR2_PACKAGE_QT_SVG # runtime dependency
+> +	select BR2_PACKAGE_QT_GUI_MODULE
+> +	help
+> +	  Pyqtgraph is a pure Python graphics and GUI library built on PyQt4, 
+> +	  PySide and Numpy. 
+> +	  
+> +	  Official website:
+> +	  http://www.pyqtgraph.org/
+> diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
+> new file mode 100644
+> index 0000000..c20eea2
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/python-pyqtgraph.hash
+> @@ -0,0 +1,5 @@
+> +# From http://www.pyqtgraph.org/downloads
+> +md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
+> +
+> +# Locally calculated:
+> +sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
+> diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
+> new file mode 100644
+> index 0000000..dbc3598
+> --- /dev/null
+> +++ b/package/python-pyqtgraph/python-pyqtgraph.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pyqtgraph
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYQTGRAPH_VERSION = 0.9.10
+> +PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
+> +PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
+> +PYTHON_PYQTGRAPH_LICENSE = MIT
+> +PYTHON_PYQTGRAPH_LICENSE_FILES = COPYING
+
+There is no file named COPYING in the source. It's named LICENSE.txt.
+
+Could you fix those issues and post an updated version?
+
+Thanks!
 
 Thomas
 -- 
