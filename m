@@ -1,60 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 21:15:47 +0200
-Subject: [Buildroot] [git commit] mrouted: DVMRP missing subnet
-Message-ID: <20151012191905.9427581E96@busybox.osuosl.org>
+Date: Mon, 12 Oct 2015 21:16:59 +0200
+Subject: [Buildroot] [git commit] libevdev: bump version to 1.4.4
+Message-ID: <20151012191905.9C27681E91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0f3531812c50a9440f44b4775456db5c997f9422
+commit: http://git.buildroot.net/buildroot/commit/?id=e2c9de809627bc20599c7b26b450ba8a61352463
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+From [1]:
+
+A couple of cleanups, one notable fix: we now transparently fix invalid
+ABS_MT_TRACKING_ID ranges to something sensible.
+
+The touchpad-edge-detector tool prints out suggested hwdb rules for
+resolution overrides. And since the resolution is the main thing to fix on a
+device, the libevdev-tweak-device now has a --resolution argument to quickly
+set the resolution on the x/y axes.
+
+[1] http://lists.freedesktop.org/archives/input-tools/2015-August/001210.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../mrouted/0001-DVMRP-report-missing-subnet.patch |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
+ package/libevdev/libevdev.hash |    4 ++--
+ package/libevdev/libevdev.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mrouted/0001-DVMRP-report-missing-subnet.patch b/package/mrouted/0001-DVMRP-report-missing-subnet.patch
-new file mode 100644
-index 0000000..023c8cf
---- /dev/null
-+++ b/package/mrouted/0001-DVMRP-report-missing-subnet.patch
-@@ -0,0 +1,35 @@
-+From 687f41680d51585e9a5a135e39efee330588bea7 Mon Sep 17 00:00:00 2001
-+From: Matt Weber <matthew.weber@rockwellcollins.com>
-+Date: Fri, 11 Sep 2015 12:49:30 -0500
-+Subject: [PATCH 1/1] DVMRP report missing subnet
-+
-+Accepted upstream and will be included in 3.9.8.
-+https://github.com/troglobit/mrouted/commit/512af5ffe0f48ffa2ba3b45898c66c2a561a5c2d
-+
-+A subnet is missing in the DVMRP report sent to it's neighbor after
-+the initial probe occurs.  The issue was with the traversal of a double
-+linked list from end to start. Once the traversing pointer reaches
-+the start of routing table for loop (condition) it would break and
-+always drop the first subnet.
-+
-+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-+---
-+ route.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/route.c b/route.c
-+index f74e601..9fe779d 100644
-+--- a/route.c
-++++ b/route.c
-+@@ -1193,7 +1193,7 @@ static int report_chunk(int which_routes, struct rtentry *start_rt, vifi_t vifi,
-+ 
-+     p = send_buf + MIN_IP_HEADER_LEN + IGMP_MINLEN;
-+ 
-+-    for (r = start_rt; r != routing_table; r = r->rt_prev) {
-++    for (r = start_rt; r != NULL; r = r->rt_prev) {
-+ 	if (which_routes == CHANGED_ROUTES && !(r->rt_flags & RTF_CHANGED)) {
-+ 	    nrt++;
-+ 	    continue;
-+-- 
-+1.9.1
-+
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 1b7897d..1e44bf8 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-June/001171.html
+-sha256 1c418b26fd78b0e9900872be2f77fb5311c877b34ec5c75efd1b670ed627969b libevdev-1.4.3.tar.xz
++# Hash from http://lists.freedesktop.org/archives/input-tools/2015-August/001210.html
++sha256 ed9979369b6a6e28f5897d099538549ecffb2b7c00c1b717eb77c31d85bc45a9 libevdev-1.4.4.tar.xz
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 082a7cc..d9a2be6 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.4.3
++LIBEVDEV_VERSION = 1.4.4
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
