@@ -1,104 +1,280 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 12 Oct 2015 11:28:52 +0200
-Subject: [Buildroot] [PATCH] vsftpd: Add systemd services
-In-Reply-To: <20151010224648.4a36a327@free-electrons.com>
-References: <1443977143-21369-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20151010224648.4a36a327@free-electrons.com>
-Message-ID: <CAGduivySqOenaHf77MpwHXhqZTLUS-PjavA8gMK2YFuUQXR5Tw@mail.gmail.com>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Mon, 12 Oct 2015 10:34:52 +0100
+Subject: [Buildroot] [PATCH v4] board: add support for Synopsys VDK Software
+	Development Platform
+Message-ID: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, all
+The Virtualizer Development Kit (VDK) Family for ARM Cortex Products
+consists of a set of virtual prototypes that provide a virtualizer for 
+the ARM core variants. The VDK is a standalone package that runs on an 
+host computer.
 
-On Sat, Oct 10, 2015 at 10:46 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Remark: 'Image' boot argument was removed.
 
-> Dear Maxime Hadjinlian,
->
-> On Sun,  4 Oct 2015 18:45:43 +0200, Maxime Hadjinlian wrote:
-> > The systemd services were taken from Arch Linux's repository:
-> >
-> https://projects.archlinux.org/svntogit/community.git/tree/trunk?h=packages/vsftpd
->
-> Can this support be submitted upstream?
->
-I will try, I've asked how to do it on the IRC channel.
+Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+---
+ board/synopsys/vdk/linux-vdk-aarch64-defconfig | 226 +++++++++++++++++++++++++
+ configs/snps_aarch64_vdk_defconfig             |  15 ++
+ 2 files changed, 241 insertions(+)
+ create mode 100644 board/synopsys/vdk/linux-vdk-aarch64-defconfig
+ create mode 100644 configs/snps_aarch64_vdk_defconfig
 
->
-> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->
-> I've tested this, and it doesn't seem to work here:
->
->
->          Starting Serial Getty on ttyAMA0...
->          Starting Login Service...
-> systemd[1]: vsftpd at multi-user.service: Failed to run 'start' task:
-> Invalid argument
-> [FAILED] Failed to start vsftpd per-connection server.
-> See 'systemctl status vsftpd at multi-user.service' for details.
-> systemd[1]: vsftpd at multi-user.service: Unit entered failed state.
-> systemd[1]: vsftpd at multi-user.service: Failed with result 'resources'.
->          Starting vsftpd per-connection server...
-> [  OK  ] Started D-Bus System Message Bus.
->          Starting D-Bus System Message Bus...
-> [  OK  ] Started vsftpd daemon (legacy implicit SSL).
->          Starting vsftpd daemon (legacy implicit SSL)...
-> [FAILED] Failed to start vsftpd per-connection server (legacy implicit
-> SSL).
-> See 'systemctl status vsftpd-ssl at multi-user.service' for details.
->          Starting vsftpd per-connection server (legacy implicit SSL)...
->
-> I'll take a look at that.
-
->
-> > +define VSFTPD_INSTALL_INIT_SYSTEMD
-> > +     mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > +     mkdir -p $(TARGET_DIR)/etc/systemd/system/sockets.target.wants
-> > +
-> > +     for f in vsftpd.service vsftpd.socket vsftpd at .service \
-> > +             vsftpd-ssl.service vsftpd-ssl.socket vsftpd-ssl at .service;
-> do \
-> > +             $(INSTALL) -D -m 644 package/vsftpd/$$f \
-> > +                     $(TARGET_DIR)/usr/lib/systemd/system/$$f; \
-> > +             wanted_by="multi-user.target.wants"; \
-> > +             if [ $${f##*.} = "socket" ]; then \
-> > +                     wanted_by="sockets.target.wants"; \
-> > +             fi; \
-> > +             ln -sf ../../../../usr/lib/systemd/system/$$f \
-> > +                     $(TARGET_DIR)/etc/systemd/system/$$wanted_by/$$f; \
-> > +     done
->
-> You could also write this in pure make, though I don't know if it's
-> really more readable:
->
->         $(foreach f,$(wildcard package/vsftpd/*.service),\
->                 $(INSTALL) -D -m 644 $(f)
-> $(TARGET_DIR)/usr/lib/systemd/system/$(notdir $(f)) && \
->                 ln -sf ../../../../usr/lib/systemd/system/$(notdir $(f)) \
->
-> $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(notdir
-> $(f))$(sep))
->         $(foreach f,$(wildcard package/vsftpd/*.socket),\
->                 $(INSTALL) -D -m 644 $(f)
-> $(TARGET_DIR)/usr/lib/systemd/system/$(notdir $(f)) && \
->                 ln -sf ../../../../usr/lib/systemd/system/$(notdir $(f)) \
->
-> $(TARGET_DIR)/etc/systemd/system/sockets.target.wants/$(notdir $(f))$(sep))
->
-> I am cleary more of a shel script guy, so I prefer the shell script way,
-but if the make way is preferred, I'll adapt :).
-
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151012/533c1256/attachment.html>
+diff --git a/board/synopsys/vdk/linux-vdk-aarch64-defconfig b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
+new file mode 100644
+index 0000000..f90f2ca
+--- /dev/null
++++ b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
+@@ -0,0 +1,226 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=16
++CONFIG_CGROUPS=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_EMBEDDED=y
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_CC_STACKPROTECTOR_REGULAR=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_SMP=y
++CONFIG_SCHED_MC=y
++CONFIG_SCHED_SMT=y
++CONFIG_NR_CPUS=8
++CONFIG_PREEMPT=y
++CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
++CONFIG_CMDLINE="console=ttyAMA0 earlyprintk=pl011,0x1c090000 debug user_debug=31 loglevel=9 root=/dev/vda"
++CONFIG_CMDLINE_FORCE=y
++CONFIG_BINFMT_MISC=y
++CONFIG_CPU_IDLE=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
++CONFIG_ARM_DT_BL_CPUFREQ=y
++CONFIG_ARM_SPCI_CPUFREQ=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_NET_KEY_MIGRATE=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++CONFIG_SYN_COOKIES=y
++CONFIG_NETWORK_PHY_TIMESTAMPING=y
++CONFIG_NETFILTER=y
++CONFIG_NETFILTER_NETLINK_LOG=m
++CONFIG_NF_CONNTRACK=m
++CONFIG_NF_CT_NETLINK=m
++CONFIG_NETFILTER_XT_MARK=m
++CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
++CONFIG_NETFILTER_XT_TARGET_LOG=m
++CONFIG_NETFILTER_XT_TARGET_REDIRECT=m
++CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
++CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
++CONFIG_NETFILTER_XT_MATCH_LIMIT=m
++CONFIG_NETFILTER_XT_MATCH_MAC=m
++CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
++CONFIG_NETFILTER_XT_MATCH_STATE=m
++CONFIG_NF_CONNTRACK_IPV4=m
++CONFIG_NF_NAT_IPV4=m
++CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_TARGET_REJECT=m
++CONFIG_IP_NF_MANGLE=m
++CONFIG_NF_CONNTRACK_IPV6=m
++CONFIG_NF_NAT_IPV6=m
++CONFIG_IP6_NF_IPTABLES=m
++CONFIG_IP6_NF_FILTER=m
++CONFIG_IP6_NF_TARGET_REJECT=m
++CONFIG_IP6_NF_MANGLE=m
++CONFIG_BRIDGE_NF_EBTABLES=m
++CONFIG_BRIDGE_EBT_T_FILTER=m
++CONFIG_BRIDGE_EBT_T_NAT=m
++CONFIG_BRIDGE_EBT_MARK_T=m
++CONFIG_BRIDGE=m
++CONFIG_NET_9P=y
++CONFIG_NET_9P_VIRTIO=y
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_VEXPRESS_CONFIG=y
++CONFIG_CONNECTOR=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_OOPS=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_SLRAM=y
++CONFIG_MTD_NAND=y
++CONFIG_OF_SELFTEST=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_NBD=m
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_VIRTIO_BLK=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_MD=y
++CONFIG_BLK_DEV_DM=y
++CONFIG_NETDEVICES=y
++CONFIG_TUN=y
++CONFIG_VIRTIO_NET=y
++CONFIG_SMC91X=y
++CONFIG_SMSC911X=y
++CONFIG_STMMAC_ETH=m
++CONFIG_STMMAC_DEBUG_FS=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_UINPUT=y
++CONFIG_SERIO_AMBAKMI=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_I2C=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_DESIGNWARE_PLATFORM=y
++CONFIG_GPIOLIB=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_POWER_RESET_VEXPRESS=y
++CONFIG_SENSORS_JC42=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_FB=y
++CONFIG_FB_ARMCLCD=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_LOGO=y
++CONFIG_USB_HIDDEV=y
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_SYNOPSYS=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_DWC3=m
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_USB_ULPI=y
++CONFIG_USB_GADGET=m
++CONFIG_USB_DUMMY_HCD=m
++CONFIG_USB_MASS_STORAGE=m
++CONFIG_USB_G_SERIAL=m
++CONFIG_MMC=y
++CONFIG_MMC_ARMMMCI=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_SWITCH=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_PL031=y
++CONFIG_VIRTIO_BALLOON=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_COMMON_CLK_VERSATILE=y
++CONFIG_CLK_SP810=y
++CONFIG_CLK_VEXPRESS_OSC=y
++CONFIG_COMMON_CLK_SCPI=y
++CONFIG_MAILBOX=y
++CONFIG_ARM_SCPI_PROTOCOL=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_BTRFS_FS=y
++CONFIG_QUOTA=y
++CONFIG_QFMT_V2=y
++CONFIG_AUTOFS4_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_HUGETLBFS=y
++CONFIG_ECRYPT_FS=y
++CONFIG_JFFS2_FS=y
++CONFIG_JFFS2_SUMMARY=y
++CONFIG_JFFS2_FS_XATTR=y
++CONFIG_JFFS2_COMPRESSION_OPTIONS=y
++CONFIG_JFFS2_LZO=y
++CONFIG_JFFS2_RUBIN=y
++CONFIG_CRAMFS=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NFSD=m
++CONFIG_9P_FS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_VIRTUALIZATION=y
++CONFIG_KVM=y
++CONFIG_PRINTK_TIME=y
++CONFIG_DYNAMIC_DEBUG=y
++CONFIG_DEBUG_INFO=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_SCHEDSTATS=y
++CONFIG_TIMER_STATS=y
++CONFIG_FUNCTION_TRACER=y
++CONFIG_STRICT_DEVMEM=y
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK_XFRM=y
++CONFIG_LSM_MMAP_MIN_ADDR=0
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SECURITY_SELINUX_BOOTPARAM=y
++CONFIG_SECURITY_SELINUX_DISABLE=y
++CONFIG_SECURITY_SMACK=y
++CONFIG_SECURITY_APPARMOR=y
++CONFIG_DEFAULT_SECURITY_APPARMOR=y
++CONFIG_CRYPTO_MICHAEL_MIC=y
++CONFIG_CRC_CCITT=y
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC_ITU_T=y
++CONFIG_CRC7=y
+diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
+new file mode 100644
+index 0000000..a79b1d2
+--- /dev/null
++++ b/configs/snps_aarch64_vdk_defconfig
+@@ -0,0 +1,14 @@
++BR2_aarch64=y
++BR2_KERNEL_HEADERS_3_18=y
++BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
++BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
+-- 
+1.8.1.5
