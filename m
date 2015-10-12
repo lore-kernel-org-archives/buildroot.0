@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 17:56:58 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/shairport-sync: bump to
- version 2.4.1
-In-Reply-To: <1444597369-27828-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1444597369-27828-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20151012175658.4d377b37@free-electrons.com>
+Date: Mon, 12 Oct 2015 17:57:11 +0200
+Subject: [Buildroot] [git commit] package/libuv: bump to version 1.7.5
+Message-ID: <20151012155907.CECF181E3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: http://git.buildroot.net/buildroot/commit/?id=935430b167a27b9c76a1d4e764943bb1aaa90e4f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 11 Oct 2015 23:02:49 +0200, J?rg Krause wrote:
-> Remove backported from upstream patch.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
-> Changes v1 -> v2:
->   - Fix autoreconf comment (Baruch Siach)
-> ---
->  package/shairport-sync/shairport-sync.mk | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libuv/libuv.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied after tweaking the commit log as suggested by Yann, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 7709ad1..da47b62 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.7.4
++LIBUV_VERSION = v1.7.5
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
