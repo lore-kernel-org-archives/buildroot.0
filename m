@@ -1,78 +1,106 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Oct 2015 21:28:26 +0200
-Subject: [Buildroot] [PATCH v3] libv4l: bump version to 1.8.0
-Message-ID: <1444678106-24045-1-git-send-email-ps.report@gmx.net>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Mon, 12 Oct 2015 21:32:32 +0200
+Subject: [Buildroot] [PATCH] openal: New package
+Message-ID: <561C0AD0.6050909@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add qt, qt5base/qt5gui/qt5widgets dependency for qv4l2
-  (qt dependency was missing, qt5 support was added since 1.8.0)
-
-- fix fix moc/rcc/uic detection in case host versions
-  of moc-qt5, rcc-qt5 or uic-qt5 are present
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 ---
-Changes v2 -> v3:
-  - fix qt/qt5 enable/disable/dependency logic (suggested by Thomas Petazzoni)
-  - fix moc/rcc/uic detection (protect against host version selection)
 
-Changes v1 -> v2:
-  - fix typo in commit comment (depndency vs. dependency)
----
- package/libv4l/libv4l.hash |  2 +-
- package/libv4l/libv4l.mk   | 21 ++++++++++++++++++++-
- 2 files changed, 21 insertions(+), 2 deletions(-)
+Tested on various archs and toolchains (uclibc, glibc, musl, extern, intern)
 
-diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
-index 3371d34..1395eda 100644
---- a/package/libv4l/libv4l.hash
-+++ b/package/libv4l/libv4l.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 164abf5c1befcd27e8e6ef824a82d4015bdfb5d99ae82daa00e77d895ff9864c  v4l-utils-1.6.3.tar.bz2
-+sha256 50c7be033636d878e902dad0a207fc9f6d831bec27f1b410f1102acddaa5565e  v4l-utils-1.8.0.tar.bz2
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index edb2a36..66902c6 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBV4L_VERSION = 1.6.3
-+LIBV4L_VERSION = 1.8.0
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils
- LIBV4L_INSTALL_STAGING = YES
-@@ -43,6 +43,25 @@ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
- LIBV4L_CONF_OPTS += --enable-v4l-utils
- # clock_gettime is used, which is provided by librt for glibc < 2.17
- LIBV4L_LIBS += -lrt
-+ifeq ($(BR2_PACKAGE_QT5),y)
-+ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
-+LIBV4L_CONF_OPTS += --enable-qv4l2
-+LIBV4L_DEPENDENCIES += qt5base
-+# protect against host version detection of moc-qt5/rcc-qt5/uic-qt5
-+LIBV4L_CONF_ENV += ac_cv_prog_MOC=$(HOST_DIR)/usr/bin/moc
-+LIBV4L_CONF_ENV += ac_cv_prog_RCC=$(HOST_DIR)/usr/bin/rcc
-+LIBV4L_CONF_ENV += ac_cv_prog_UIC=$(HOST_DIR)/usr/bin/uic
-+else
-+LIBV4L_CONF_OPTS += --disable-qv4l2
+ package/Config.in          |  1 +
+ package/openal/Config.in   | 18 ++++++++++++++++++
+ package/openal/openal.hash |  2 ++
+ package/openal/openal.mk   | 30 ++++++++++++++++++++++++++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 package/openal/Config.in
+ create mode 100644 package/openal/openal.hash
+ create mode 100644 package/openal/openal.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 37d9cd0..767cb29 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -722,6 +722,7 @@ menu "Audio/Sound"
+ 	source "package/opencore-amr/Config.in"
+ 	source "package/opus/Config.in"
+ 	source "package/opusfile/Config.in"
++	source "package/openal/Config.in"
+ 	source "package/portaudio/Config.in"
+ 	source "package/speex/Config.in"
+ 	source "package/taglib/Config.in"
+diff --git a/package/openal/Config.in b/package/openal/Config.in
+new file mode 100644
+index 0000000..0bbbb37
+--- /dev/null
++++ b/package/openal/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_OPENAL
++	bool "openal"
++	# OpenAL needs a backend
++	depends on BR2_PACKAGE_ALSA_LIB || \
++	           BR2_PACKAGE_PORTAUDIO || \
++	           BR2_PACKAGE_PULSEAUDIO
++	help
++	  OpenAL provides capabilities for playing audio in a virtual
++	  3D environment. Distance attenuation, doppler shift, and
++	  directional sound emitters are among the features handled by
++	  the API.
++
++	  http://kcat.strangesoft.net/openal.html
++
++comment "openal needs a backend"
++	depends on !BR2_PACKAGE_ALSA_LIB && \
++	           !BR2_PACKAGE_PORTAUDIO && \
++	           !BR2_PACKAGE_PULSEAUDIO
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+new file mode 100644
+index 0000000..b28b2e2
+--- /dev/null
++++ b/package/openal/openal.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	2f3dcd313fe26391284fbf8596863723f99c65d6c6846dccb48e79cadaf40d5f  openal-soft-1.16.0.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+new file mode 100644
+index 0000000..0c6a7cb
+--- /dev/null
++++ b/package/openal/openal.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# openal
++#
++################################################################################
++
++OPENAL_VERSION = 1.16.0
++OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
++OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
++OPENAL_LICENSE = LGPL
++OPENAL_LICENSE_FILES = COPYING
++OPENAL_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++OPENAL_DEPENDENCIES += alsa-lib
 +endif
-+else ifeq ($(BR2_PACKAGE_QT),y)
-+ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
-+LIBV4L_CONF_OPTS += --enable-qv4l2
-+LIBV4L_DEPENDENCIES += qt
-+else
-+LIBV4L_CONF_OPTS += --disable-qv4l2
++
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++OPENAL_DEPENDENCIES += portaudio
 +endif
++
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++OPENAL_DEPENDENCIES += pulseaudio
 +endif
- else
- LIBV4L_CONF_OPTS += --disable-v4l-utils
- endif
++
++ifeq ($(BR2_STATIC_LIBS),y)
++OPENAL_CONF_OPTS += -DLIBTYPE=STATIC
++endif
++
++$(eval $(cmake-package))
 -- 
-2.1.4
+1.9.1
