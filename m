@@ -1,60 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 21:55:30 +0200
-Subject: [Buildroot] [git commit] package/dbus: Add optional dependency to
-	xlib_libSM
-Message-ID: <20151012195536.B95907FD39@busybox.osuosl.org>
+Date: Mon, 12 Oct 2015 21:55:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dbus: remove empty line from
+ dbus.mk
+In-Reply-To: <1444677663-28725-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1444677663-28725-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20151012215550.0eddaf67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50963b165d574cf8b7aedf677c60ddb9fe851489
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-To detect X11 support dbus uses the autoconf macro AC_PATH_XTRA
-http://cgit.freedesktop.org/dbus/dbus/tree/configure.ac#n1264
+On Mon, 12 Oct 2015 21:21:02 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/dbus/dbus.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-This macro checks for the optional presence of libICE:
-http://git.savannah.gnu.org/gitweb/?p=autoconf.git;a=blob;f=lib/autoconf/libs.m4;h=d2040d731f81fc1693e01d118c45d51ad169d56a;hb=HEAD#l472
+Both applied, thanks.
 
-quoting dbus configure with libICE not present:
-checking for IceConnectionNumber in -lICE... no
-
-quoting dbus configure with libICE being present:
-checking for IceConnectionNumber in -lICE... yes
-
-The binary usr/bin/dbus-launch is being linked to libICE and libSM if
-the packages are available:
-
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a
-  output/target/usr/bin/dbus-launch | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libdbus-1.so.3]
- 0x00000001 (NEEDED)                     Shared library: [libSM.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libICE.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libX11.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-
-To get a reproducable build add libSM as optional dependency to dbus,
-libSM pulls in the dependency to libICE.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dbus/dbus.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 84fbdfa..139a5d7 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -60,6 +60,9 @@ endif
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- DBUS_CONF_OPTS += --with-x
- DBUS_DEPENDENCIES += xlib_libX11
-+ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
-+DBUS_DEPENDENCIES += xlib_libSM
-+endif
- else
- DBUS_CONF_OPTS += --without-x
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
