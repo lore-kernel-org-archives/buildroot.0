@@ -1,42 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 22:36:56 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-good: bump version to 1.6.0
-Message-ID: <20151012203844.8C28981DA9@busybox.osuosl.org>
+Date: Mon, 12 Oct 2015 22:39:11 +0200
+Subject: [Buildroot] [PATCH v1 1/7] gstreamer1: bump version to 1.6.0
+In-Reply-To: <1444253405-3994-1-git-send-email-ps.report@gmx.net>
+References: <1444253405-3994-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151012223911.68a3470e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f91f5025b5bb192dce35f47de1e10cf24474946e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../gst1-plugins-good/gst1-plugins-good.hash       |    4 ++--
- .../gst1-plugins-good/gst1-plugins-good.mk         |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed,  7 Oct 2015 23:29:59 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+>  package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index be4c801..bcc321a 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/gstreamer-devel/2014-December/050904.html
--sha256	79b1b5f3f7bcaa8a615202eb5e176121eeb8336960f70687e536ad78dbc7e641  gst-plugins-good-1.4.5.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.6.0.tar.xz.sha256sum
-+sha256	a0915639595305e48884656e22b16fda7c6892aa02cdb3eb43e23dab6e6b81fa  gst-plugins-good-1.6.0.tar.xz
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index d9b4438..dd19594 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_GOOD_VERSION = 1.4.5
-+GST1_PLUGINS_GOOD_VERSION = 1.6.0
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+Entire series applied, thanks. Please send the followup patches adding
+support for the newly added functionalities/plugins. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
