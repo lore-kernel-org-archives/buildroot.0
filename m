@@ -1,34 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 17:55:46 +0200
-Subject: [Buildroot] [PATCH] package/liquid-dsp: fix legal-info
-In-Reply-To: <1444601192-29389-1-git-send-email-yann.morin.1998@free.fr>
-References: <1444601192-29389-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20151012175546.3b21bbb9@free-electrons.com>
+Date: Mon, 12 Oct 2015 17:56:22 +0200
+Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
+	2.4.1
+Message-ID: <20151012155642.8425D817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=d6ed9adc18b9e2cdd2dfda6cadcbab3f9ad1f7f8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 12 Oct 2015 00:06:32 +0200, Yann E. MORIN wrote:
-> The license file is named LICENSE, not COPYING.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/c82/c82baa5549bdca405e0f077c7ab8c77dcec9a582/
->     http://autobuild.buildroot.org/results/9c7/9c76ce4f9d69db1aa67cc9c07e4c5c2e5e8d93e0/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: guillaume william brs <guillaume.bressaix@gmail.com>
-> ---
->  package/liquid-dsp/liquid-dsp.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+- Remove backported from upstream patch.
+- Fix autoreconf comment that was wrong.
 
-Applied, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/shairport-sync.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 36d5b82..fa7100a 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,15 +4,14 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.4
++SHAIRPORT_SYNC_VERSION = 2.4.1
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+ SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
+ SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
+-SHAIRPORT_SYNC_PATCH = https://github.com/mikebrady/shairport-sync/commit/6ae067af1f695e615415cde69a506ad330dbc45b.patch
+ 
+-# Touching configure.ac with the patches
++# git clone, no configure
+ SHAIRPORT_SYNC_AUTORECONF = YES
+ 
+ SHAIRPORT_SYNC_CONF_OPTS = --with-alsa \
