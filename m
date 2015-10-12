@@ -1,117 +1,133 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Oct 2015 22:54:52 +0200
-Subject: [Buildroot] [PATCH v2] pyqtgraph: new package
-In-Reply-To: <1444260188-9571-1-git-send-email-guillaume.bressaix@gmail.com>
-References: <Re: [Buildroot] [PATCH 2/2] Add new package PyQtGraph>
- <1444260188-9571-1-git-send-email-guillaume.bressaix@gmail.com>
-Message-ID: <20151012225452.007b3f11@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 12 Oct 2015 23:01:54 +0200
+Subject: [Buildroot] [PATCH v4] board: add support for Synopsys VDK
+ Software Development Platform
+In-Reply-To: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
+References: <7cfe6681e738e9696eba42b8128eea1da7d3eb30.1444642014.git.jpinto@synopsys.com>
+Message-ID: <20151012210154.GF3735@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Guillaume William Bres,
+Joao, All,
 
-Thanks for this new version. Though I believe it still has some issues
-(see below).
+On 2015-10-12 10:34 +0100, Joao Pinto spake thusly:
+> The Virtualizer Development Kit (VDK) Family for ARM Cortex Products
+> consists of a set of virtual prototypes that provide a virtualizer for 
+> the ARM core variants. The VDK is a standalone package that runs on an 
+> host computer.
+> 
+> Remark: 'Image' boot argument was removed.
 
-On Wed, 7 Oct 2015 17:23:08 -0600, Guillaume William Bres wrote:
+That last line does not belong to the commit log. I nstead, it should be
+part of the 'changelog' of the patch.
 
-> diff --git a/package/python-pyqtgraph/Config.in b/package/python-pyqtgraph/Config.in
+Such a changelog is written after a three-dash line, like so:
+
+    title: brief explanation of the patch
+
+    Body of the commitlog, with more
+    in-depth explanations of what it
+    is doing.
+
+    Signed-off-by: Your Real Name <your-emain@address>
+
+    ---
+    Changes v3 -> v4:
+      - drop 'Image' boot option (Thomas)
+
+    Changes v2 -> v3:
+      - "some thing changed" (Someone)
+
+    and so on...
+
+This way, when a maintainer applies your patch, only what is above the
+three-dash line is kept in the git tree. Whatever is after the
+three-dash line gets removed.
+
+The changlog (after the ---) is there to help reviewers see how the
+patch has evolved, and adapt their reviews accordingly, with the first
+name of the reviewer between ().
+
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> ---
+>  board/synopsys/vdk/linux-vdk-aarch64-defconfig | 226 +++++++++++++++++++++++++
+>  configs/snps_aarch64_vdk_defconfig             |  15 ++
+>  2 files changed, 241 insertions(+)
+>  create mode 100644 board/synopsys/vdk/linux-vdk-aarch64-defconfig
+>  create mode 100644 configs/snps_aarch64_vdk_defconfig
+> 
+> diff --git a/board/synopsys/vdk/linux-vdk-aarch64-defconfig b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
 > new file mode 100644
-> index 0000000..f1c3a42
+> index 0000000..f90f2ca
 > --- /dev/null
-> +++ b/package/python-pyqtgraph/Config.in
-> @@ -0,0 +1,22 @@
-> +comment "python-pyqtgraph requires a (e)glibc toolchain w/ wchar and C++"
+> +++ b/board/synopsys/vdk/linux-vdk-aarch64-defconfig
+> @@ -0,0 +1,226 @@
+> +CONFIG_SYSVIPC=y
+> +CONFIG_POSIX_MQUEUE=y
+> +CONFIG_NO_HZ=y
+> +CONFIG_HIGH_RES_TIMERS=y
+> +CONFIG_BSD_PROCESS_ACCT=y
 
-So the comment says that you need eglibc with wchar and C++.
+This is not a minimal defconfig. I doubt BSD process acounting is
+required to have Linux run successfully on the VDK,  is it?
 
-> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Similarly, options that are not strictly required should not be enabled.
+For example, having netfilter enabled is probably not needed either.
+Same goes for a lot of the other options.
 
-But the dependencies have absolutely nothing to do with the comment.
-Can you explain?
+We are trying to get the minimalist kernel option that just makes the
+board boot, with the meaningfull driver to suport the hardware
+(ethernet, WiFi, MMC, whatever HW is present...) but not much more.
 
-What you need is:
+Having IPv4 (maybe v6) is meaningfull, but having bridge, netfilter or
+ebtables, TUN, SCSI, MD and so on is probably not. Also, if you're using
+virtio-net to do networking, then an ethernet driver is probably not
+required...
 
-comment "python-pyqtgraph requires a toolchain w/ C++, threads"
-	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
-	depends on BR2_USE_MMU
-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Similarly, if the rootfs is ext2, then you don;t need the other
+filesystems. Maybe you can disable ext2 and ext3 support, enable ext4
+and use it for ext2/3 (CONFIG_EXT4_USE_FOR_EXT2).
 
-> +
-> +config BR2_PACKAGE_PYTHON_PYQTGRAPH
-> +	bool "python-pyqtgraph"
-> +	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_DEPENDS
-> +	depends on BR2_USE_MMU # pyqt -> qt
-> +	depends on BR2_INSTALL_LIBSTDCPP # pyqt -> qt
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pyqt -> qt
-> +	select BR2_PACKAGE_PYTHON_PYQT
-> +	select BR2_PACKAGE_PYTHON_NUMPY # runtime dependency
-> +	select BR2_PACKAGE_PYTHON_PYEXPAT # runtime dependency
+9p and 9p-virtio are probably not required either, but having them for
+virtio-mounting from the host kinda makes sense...
 
-python-pyqt supports both Python 2 and Python 3. By doing this select
-here, you break things if Python 3 is used. So you have two options:
+I know you've already done a few rounds on that patch, but could you
+'cleanup' that defconfig as I explained above?
 
- * If python-pyqtgraph only works with Python 2, add a "depends on
-   BR2_PACKAGE_PYTHON"
-
- * If python-pyqtgraph works with both Python 2 and Python 3, you
-   should:
-
-	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-
-(and of course do a build + run test with Python 3)
-
-> +	select BR2_PACKAGE_QT_SVG # runtime dependency
-> +	select BR2_PACKAGE_QT_GUI_MODULE
-> +	help
-> +	  Pyqtgraph is a pure Python graphics and GUI library built on PyQt4, 
-> +	  PySide and Numpy. 
-> +	  
-> +	  Official website:
-> +	  http://www.pyqtgraph.org/
-> diff --git a/package/python-pyqtgraph/python-pyqtgraph.hash b/package/python-pyqtgraph/python-pyqtgraph.hash
+[--SNIP--]
+> diff --git a/configs/snps_aarch64_vdk_defconfig b/configs/snps_aarch64_vdk_defconfig
 > new file mode 100644
-> index 0000000..c20eea2
+> index 0000000..a79b1d2
 > --- /dev/null
-> +++ b/package/python-pyqtgraph/python-pyqtgraph.hash
-> @@ -0,0 +1,5 @@
-> +# From http://www.pyqtgraph.org/downloads
-> +md5 6e2efa185b6b9227dfe16fefd921a8ec  pyqtgraph-0.9.10.tar.gz
-> +
-> +# Locally calculated:
-> +sha256 4c0589774e3c8b0c374931397cf6356b9cc99a790215d1917bb7f015c6f0729a  pyqtgraph-0.9.10.tar.gz
-> diff --git a/package/python-pyqtgraph/python-pyqtgraph.mk b/package/python-pyqtgraph/python-pyqtgraph.mk
-> new file mode 100644
-> index 0000000..dbc3598
-> --- /dev/null
-> +++ b/package/python-pyqtgraph/python-pyqtgraph.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-pyqtgraph
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYQTGRAPH_VERSION = 0.9.10
-> +PYTHON_PYQTGRAPH_SOURCE = pyqtgraph-$(PYTHON_PYQTGRAPH_VERSION).tar.gz
-> +PYTHON_PYQTGRAPH_SITE = http://www.pyqtgraph.org/downloads
-> +PYTHON_PYQTGRAPH_LICENSE = MIT
-> +PYTHON_PYQTGRAPH_LICENSE_FILES = COPYING
+> +++ b/configs/snps_aarch64_vdk_defconfig
+> @@ -0,0 +1,14 @@
+> +BR2_aarch64=y
+> +BR2_KERNEL_HEADERS_3_18=y
+> +BR2_TARGET_GENERIC_HOSTNAME="vdk-buildroot"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS VDK by Buildroot"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/kernel/linux-linaro-tracking.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-3.18-2014.12"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/synopsys/vdk/linux-vdk-aarch64-defconfig"
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
 
-There is no file named COPYING in the source. It's named LICENSE.txt.
+Otherwise, this defconfig looks OK! :-)
 
-Could you fix those issues and post an updated version?
+Regards,
+Yann E. MORIN.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
