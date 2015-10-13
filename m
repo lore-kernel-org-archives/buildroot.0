@@ -1,75 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Oct 2015 22:59:37 +0200
-Subject: [Buildroot] [PATCH] mplayer: needs zlib
-In-Reply-To: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151013205937.GC4161@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Oct 2015 22:59:25 +0200
+Subject: [Buildroot] [git commit] package/rng-tools: add SysV init script
+Message-ID: <20151013205950.7133281E96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vicente, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=f54df529dad900ca6a6ec992005b428853d2569a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2015-10-13 10:58 +0100, Vicente Olivert Riera spake thusly:
-> Otherwise it will fail to compile with an error message like this one:
-> 
-> libavcodec/pngdec.c:35:18: fatal error: zlib.h: No such file or
-> directory
->  #include <zlib.h>
->                   ^
-> compilation terminated.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+[Thomas: minor adjustments to make the script look more like our
+standard init scripts.]
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rng-tools/S21rngd      |   48 ++++++++++++++++++++++++++++++++++++++++
+ package/rng-tools/rng-tools.mk |    5 ++++
+ 2 files changed, 53 insertions(+), 0 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mplayer/Config.in  |    1 +
->  package/mplayer/mplayer.mk |    2 +-
->  2 files changed, 2 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-> index 7a8b03f..80ad7f1 100644
-> --- a/package/mplayer/Config.in
-> +++ b/package/mplayer/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
->  		|| BR2_microblaze || BR2_nios2)
->  	# Broken support for <ARMv5
->  	depends on !BR2_ARM_CPU_ARMV4
-> +	select BR2_PACKAGE_ZLIB
->  
->  config BR2_PACKAGE_MPLAYER
->  	bool "mplayer"
-> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-> index d896b35..0f5ced5 100644
-> --- a/package/mplayer/mplayer.mk
-> +++ b/package/mplayer/mplayer.mk
-> @@ -7,7 +7,7 @@
->  MPLAYER_VERSION = 1.2
->  MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
->  MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
-> -MPLAYER_DEPENDENCIES = host-pkgconf
-> +MPLAYER_DEPENDENCIES = host-pkgconf zlib
->  MPLAYER_LICENSE = GPLv2
->  MPLAYER_LICENSE_FILES = LICENSE Copyright
->  MPLAYER_CFLAGS = $(TARGET_CFLAGS)
-> -- 
-> 1.7.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rng-tools/S21rngd b/package/rng-tools/S21rngd
+new file mode 100755
+index 0000000..b38be5a
+--- /dev/null
++++ b/package/rng-tools/S21rngd
+@@ -0,0 +1,48 @@
++#!/bin/sh
++
++NAME="rngd"
++DAEMON="/usr/sbin/${NAME}"
++DAEMON_ARGS=""
++CFG_FILE="/etc/default/${NAME}"
++PID_FILE="/var/run/${NAME}.pid"
++
++# Read configuration variable file if it is present
++[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
++
++start()
++{
++	printf "Starting ${NAME}: "
++	start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS}
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++
++stop()
++{
++	printf "Stopping ${NAME}: "
++	# This daemon does not exit properly with the default TERM signal unless
++	# it's forced to work by something reading /dev/random. Killing it and
++	# removing its PID file is more straightforward.
++	if start-stop-daemon -K -q -s KILL -p "${PID_FILE}" -n "${NAME}"; then
++		rm -f "${PID_FILE}"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart|reload)
++		stop
++		start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}" >&2
++		exit 1
++		;;
++esac
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index 7e975e0..cc07bdf 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -22,6 +22,11 @@ else
+ RNG_TOOLS_CONF_OPTS += --without-libgcrypt
+ endif
+ 
++define RNG_TOOLS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
++		$(TARGET_DIR)/etc/init.d/S21rngd
++endef
++
+ define RNG_TOOLS_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/rng-tools/rngd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/rngd.service
