@@ -1,77 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Oct 2015 22:53:13 +0200
-Subject: [Buildroot] [PATCH v2 2/2] axfs: add new filesystem type
-In-Reply-To: <5612C712.6020209@mind.be>
-References: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1444064102-13575-3-git-send-email-ariel@vanguardiasur.com.ar>
- <5612C712.6020209@mind.be>
-Message-ID: <20151013205313.GB4161@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Oct 2015 22:57:08 +0200
+Subject: [Buildroot] [PATCH] mplayer: needs zlib
+In-Reply-To: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20151013225708.3aa5e0aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Ariel, All,
+Dear Vicente Olivert Riera,
 
-On 2015-10-05 19:53 +0100, Arnout Vandecappelle spake thusly:
-> On 05-10-15 17:55, Ariel D'Alessandro wrote:
-> > The Advanced XIP File System is a Linux kernel filesystem driver that enables
-> > files to be executed directly from flash or ROM memory rather than being copied
-> > into RAM.
-[--SNIP--]
->  It would be nice to add the axfs kernel side as a kernel extension as well. But
-> that looks heavily non-trivial.
+I'm adding Bernd in Cc, since he has done numerous contributions to the
+mplayer package. Also adding Gustavo, who did some mplayer packaging IIRC.
 
-I had a quick and cursory look at the axfs sources, and I think this
-could be quite easily achievable. Non-trivial, granted, but not too
-complex either.
+On Tue, 13 Oct 2015 10:58:33 +0100, Vicente Olivert Riera wrote:
+> Otherwise it will fail to compile with an error message like this one:
+> 
+> libavcodec/pngdec.c:35:18: fatal error: zlib.h: No such file or
+> directory
+>  #include <zlib.h>
+>                   ^
+> compilation terminated.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/mplayer/Config.in  |    1 +
+>  package/mplayer/mplayer.mk |    2 +-
+>  2 files changed, 2 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+> index 7a8b03f..80ad7f1 100644
+> --- a/package/mplayer/Config.in
+> +++ b/package/mplayer/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+>  		|| BR2_microblaze || BR2_nios2)
+>  	# Broken support for <ARMv5
+>  	depends on !BR2_ARM_CPU_ARMV4
+> +	select BR2_PACKAGE_ZLIB
+>  
+>  config BR2_PACKAGE_MPLAYER
+>  	bool "mplayer"
+> diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+> index d896b35..0f5ced5 100644
+> --- a/package/mplayer/mplayer.mk
+> +++ b/package/mplayer/mplayer.mk
+> @@ -7,7 +7,7 @@
+>  MPLAYER_VERSION = 1.2
+>  MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
+>  MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+> -MPLAYER_DEPENDENCIES = host-pkgconf
+> +MPLAYER_DEPENDENCIES = host-pkgconf zlib
+>  MPLAYER_LICENSE = GPLv2
+>  MPLAYER_LICENSE_FILES = LICENSE Copyright
+>  MPLAYER_CFLAGS = $(TARGET_CFLAGS)
 
-Ariel, are you interested in adding this as a kernel extension?
-(Hint: it would be really great! ;-) )
+While this solution is simple, I am not sure if this is the right one.
+It is in fact perfectly possible to build mplayer without zlib, by
+doing:
 
-Kernel extensions are a way to "modify" the kernel source tree with
-patches provided by another package:
-    http://buildroot.org/downloads/manual/manual.html#linux-kernel-ext
++MPLAYER_CONF_OPTS += --disable-decoder=apng --disable-encoder=apng --disable-decoder=tdsc
 
-Basically, here's what you'd have to do in the axfs extension:
+So in fact, zlib is only needed for two decoders/encoders in the ffmpeg
+code. However, it is not really clear to me how to handle this
+properly: there is one configure script at the top-level directory, and
+then another one in the ffmpeg/ directory. And it is really the ffmpeg
+encoders/decoders that have this zlib requirement (and probably
+others?).
 
-  - get the 'raw' version of the kernel with (but see notes below):
-        AXFSUTILS_KVER = $(MAKE) -C $(LINUX_DIR) kernelversion
+So, simple solution is to make zlib mandatory (which is reasonable:
+zlib is small, and probably already part of most systems). However, I
+wonder if there are not some other dependencies for certain
+encoders/decoders.
 
-  - check that there is a patch directory for that kernel version:
-        kernel/patches/v$(AXFSUTILS_KVER)/
-    => if not, bail out
-    => if yes, continue
+Bernd, Gustavo, do you have some suggestions ?
 
-  - copy $(@D)/kernel/fs/axfs to $(LINUX_DIR)/fs/axfs
+Thanks,
 
-  - copy $(@D)/include/linux/* to $(LINUX_DIR)/include/linux/
-
-  - modify $(LINUX_DIR)/fs/Kconfig with (before last line):
-        source "fs/axfs/Kconfig"
-
-  - modify $(LINUX_DIR)/fs/Makefile with (as last line):
-        obj-$(CONFIG_AXFS) += axfs
-
-Obviously, entirely untested; adapt to Real Life (TM). ;-)
-
-Notes: ideally, the kernel 'raw' version should be provided by
-linux/linux.mk but we currently do not have it yet; we only have
-'kernelrelease', not 'kernelversion'. It would be interesting if you
-provided an initial patch that adds this.
-
-Currently, 'kernelrelease' is in $(LINUX_VERSION_PROBED), so maybe you
-could introduce LINUX_VERSION_RAW filled with the output of
-'kernelversion' (see how it's done for 'kernelrelease').
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
