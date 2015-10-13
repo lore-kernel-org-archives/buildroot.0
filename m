@@ -1,47 +1,34 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 13 Oct 2015 17:43:16 +0100
-Subject: [Buildroot] I want add alsaplayer to buildroot packages.
-In-Reply-To: <b9c114516af6ac8d5ed38e63a28758f9@cweb16.nm.nhnsystem.com>
-References: <b9c114516af6ac8d5ed38e63a28758f9@cweb16.nm.nhnsystem.com>
-Message-ID: <561D34A4.9030802@imgtec.com>
+Date: Tue, 13 Oct 2015 17:46:43 +0100
+Subject: [Buildroot] [PATCH] icu: bump to version 56.1
+In-Reply-To: <1444740300-11451-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1444740300-11451-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <561D3573.6010208@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jay,
+Dear Gustavo Zacarias,
 
-On 10/13/2015 04:39 PM, Jay wrote:
-> Hi, 
+On 10/13/2015 01:45 PM, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
-> ?I want to build a small linux box for cdplayer by buildroot.
-> 
-> ?The source is this. http://alsaplayer.sourceforge.net/
-> 
-> ?How I could properly write alsaplayer.mk and Config.in?
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-that question is very generic. Start from here:
+Build test for MIPS architecture:
 
-http://buildroot.org/manual.html#adding-packages
+$ grep ^ICU_VERSION package/icu/icu.mk
+ICU_VERSION = 56.1
 
-and then ask if you have doubts.
+$ file output/target/usr/lib/libicudata.so.56.1
+output/target/usr/lib/libicudata.so.56.1: ELF 32-bit MSB shared object,
+MIPS, MIPS32 rel2 version 1 (SYSV), dynamically linked, with unknown
+capability 0x41000000 = 0xf676e75, with unknown capability 0x10000 =
+0x70401, stripped
 
 Regards,
 
 Vincent.
-
-> 
->  
-> 
-> ?Best,
-> 
-> ?Jay 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
