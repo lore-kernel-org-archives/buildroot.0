@@ -1,85 +1,46 @@
-From: Jordan Yelloz <jordan@yelloz.me>
-Date: Mon, 12 Oct 2015 20:58:35 -0700
-Subject: [Buildroot] [PATCH 1/1] systemd: imported fix for journald SIGABRTs.
-Message-ID: <1444708715-4696-1-git-send-email-jordan@yelloz.me>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Tue, 13 Oct 2015 08:14:59 +0300
+Subject: [Buildroot] [PATCH v2] qt: fix build for arm with
+	BR2_STATIC_LIBS
+In-Reply-To: <87io6baklj.fsf@dell.be.48ers.dk>
+References: <1444128975-17943-1-git-send-email-alexander.lukichev@gmail.com>
+ <1444201366-354-1-git-send-email-alexander.lukichev@gmail.com>
+ <87io6baklj.fsf@dell.be.48ers.dk>
+Message-ID: <CAAHaz6HzXQ+nVp7yg56r=8w7HQcv6BAMtzfxrZ-SNuLM4C0==A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prior to applying this patch, assertion errors would reliably be displayed on the
-console. These failed assertions led to crashes in systemd-journald on startup.
+Hi Peter,
 
-This patch fixes systemd bug #512:
-<https://github.com/systemd/systemd/issues/512>
+On 10/12/2015 11:38 PM, Peter Korsgaard wrote:
+>>>>>> "Alexander" == Alexander Lukichev <alexander.lukichev@gmail.com> writes:
+>
+>  > Some Buildroot-generated static toolchains for ARM do not have
+>  > dlfcn.h header, which breaks builds of qt-4.8.7 because its
+>  > QtCore's plugin loader expects this header to be present (and
+>  > dynamic libraries to be supported). For certain platforms without
+>  > dynamic libraries, there is a QT_NO_DYNAMIC_LIBRARY constant
+>  > defined in plugin loader's source. This patch puts that constant
+>  > into Qt's build environment if Buildroot is configured without
+>  > shared library support.
+[...]
+>  > +ifeq ($(BR2_STATIC_LIBS),y)
+>  > +QT_CONFIGURE_OPTS += -D QT_NO_DYNAMIC_LIBRARY
+>
+> Hmm, shouldn't this be checking BR2_PACKAGE_QT_STATIC instead?
 
-Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
----
- .../0004-sd-device-never-return-NULL-0.patch       | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/systemd/0004-sd-device-never-return-NULL-0.patch
+I think, no. If BR2_PACKAGE_QT_STATIC means to compile only Qt
+statically. The problem is when the whole platform is built with
+static libraries (BR2_STATIC_LIBS). Then loading plugins dynamically
+is not possible in principle. When the Buildroot build is not static,
+some dynamic libraries (e.g., compiled later) may be put onto the
+target system and be loaded by Qt, even if it itself is statically
+built. Correct me if I'm wrong but I have not been able to confirm
+that static Qt cannot load / work with dynamic libraries.
 
-diff --git a/package/systemd/0004-sd-device-never-return-NULL-0.patch b/package/systemd/0004-sd-device-never-return-NULL-0.patch
-new file mode 100644
-index 0000000..a0aa543
---- /dev/null
-+++ b/package/systemd/0004-sd-device-never-return-NULL-0.patch
-@@ -0,0 +1,55 @@
-+From aad85277b519c700c33a39f2e6558384d2d4aa9f Mon Sep 17 00:00:00 2001
-+From: David Herrmann <dh.herrmann@gmail.com>
-+Date: Wed, 15 Jul 2015 12:30:08 +0200
-+Subject: [PATCH 1/1] sd-device: never return NULL+0
-+
-+It is highly confusing if a getter function returns 0, but the value is
-+set to NULL. This, right now, triggers assertions as code relies on the
-+returned values to be non-NULL.
-+
-+Like with sd-bus-creds and friends, return 0 only if a value is actually
-+available.
-+
-+Discussed with Tom, and actually fixes real bugs as in #512.
-+
-+Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
-+---
-+ src/libsystemd/sd-device/sd-device.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/src/libsystemd/sd-device/sd-device.c b/src/libsystemd/sd-device/sd-device.c
-+index b274f71..7cea5a0 100644
-+--- a/src/libsystemd/sd-device/sd-device.c
-++++ b/src/libsystemd/sd-device/sd-device.c
-+@@ -791,6 +791,9 @@ _public_ int sd_device_get_subsystem(sd_device *device, const char **ret) {
-+                 device->subsystem_set = true;
-+         }
-+ 
-++        if (!device->subsystem)
-++                return -ENOENT;
-++
-+         *ret = device->subsystem;
-+ 
-+         return 0;
-+@@ -908,6 +911,9 @@ _public_ int sd_device_get_driver(sd_device *device, const char **ret) {
-+                         return log_debug_errno(r, "sd-device: could not set driver for %s: %m", device->devpath);
-+         }
-+ 
-++        if (!device->driver)
-++                return -ENOENT;
-++
-+         *ret = device->driver;
-+ 
-+         return 0;
-+@@ -1002,6 +1008,8 @@ _public_ int sd_device_get_sysname(sd_device *device, const char **ret) {
-+                         return r;
-+         }
-+ 
-++        assert_return(device->sysname, -ENOENT);
-++
-+         *ret = device->sysname;
-+ 
-+         return 0;
-+-- 
-+2.6.1
-+
--- 
-2.6.1
+--
+Best regards,
+  Alexander Lukichev
