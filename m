@@ -1,93 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 22:59:25 +0200
-Subject: [Buildroot] [git commit] package/rng-tools: add SysV init script
-Message-ID: <20151013205950.7133281E96@busybox.osuosl.org>
+Date: Tue, 13 Oct 2015 23:04:55 +0200
+Subject: [Buildroot] [PATCH v3] libv4l: bump version to 1.8.0
+In-Reply-To: <20151013212534.16949f70@gmx.net>
+References: <1444678106-24045-1-git-send-email-ps.report@gmx.net>
+ <20151012213955.6bca036c@free-electrons.com>
+ <20151013212534.16949f70@gmx.net>
+Message-ID: <20151013230455.54951631@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f54df529dad900ca6a6ec992005b428853d2569a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-[Thomas: minor adjustments to make the script look more like our
-standard init scripts.]
+On Tue, 13 Oct 2015 21:25:34 +0200, Peter Seiderer wrote:
 
-Signed-off-by: Beno??t Th??baudeau <benoit@wsystem.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rng-tools/S21rngd      |   48 ++++++++++++++++++++++++++++++++++++++++
- package/rng-tools/rng-tools.mk |    5 ++++
- 2 files changed, 53 insertions(+), 0 deletions(-)
+> If 'ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)'
+> is enough this line could be shorten to 'else ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)' or
+> is it better/clearer to add '$(BR2_PACKAGE_QT5)' to the first one ( I think both
+> options will work)?
 
-diff --git a/package/rng-tools/S21rngd b/package/rng-tools/S21rngd
-new file mode 100755
-index 0000000..b38be5a
---- /dev/null
-+++ b/package/rng-tools/S21rngd
-@@ -0,0 +1,48 @@
-+#!/bin/sh
-+
-+NAME="rngd"
-+DAEMON="/usr/sbin/${NAME}"
-+DAEMON_ARGS=""
-+CFG_FILE="/etc/default/${NAME}"
-+PID_FILE="/var/run/${NAME}.pid"
-+
-+# Read configuration variable file if it is present
-+[ -r "${CFG_FILE}" ] && . "${CFG_FILE}"
-+
-+start()
-+{
-+	printf "Starting ${NAME}: "
-+	start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS}
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+stop()
-+{
-+	printf "Stopping ${NAME}: "
-+	# This daemon does not exit properly with the default TERM signal unless
-+	# it's forced to work by something reading /dev/random. Killing it and
-+	# removing its PID file is more straightforward.
-+	if start-stop-daemon -K -q -s KILL -p "${PID_FILE}" -n "${NAME}"; then
-+		rm -f "${PID_FILE}"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	stop)
-+		stop
-+		;;
-+	restart|reload)
-+		stop
-+		start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}" >&2
-+		exit 1
-+		;;
-+esac
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 7e975e0..cc07bdf 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -22,6 +22,11 @@ else
- RNG_TOOLS_CONF_OPTS += --without-libgcrypt
- endif
- 
-+define RNG_TOOLS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/rng-tools/S21rngd \
-+		$(TARGET_DIR)/etc/init.d/S21rngd
-+endef
-+
- define RNG_TOOLS_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/rng-tools/rngd.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/rngd.service
+Yeah, indeed the Qt4 test can be limited to BR2_PACKAGE_QT_GUI_MODULE,
+since if this symbol is enabled, surely BR2_PACKAGE_QT is as well.
+Though I found it more explicit to also indicate BR2_PACKAGE_QT, even
+if not strictly necessary.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
