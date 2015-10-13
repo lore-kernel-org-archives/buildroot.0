@@ -1,23 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 21:15:53 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: Add option to build OSMesa
-In-Reply-To: <56100EB3.2000300@dawncrow.de>
-References: <56100EB3.2000300@dawncrow.de>
-Message-ID: <20151013211553.5fea0bd5@free-electrons.com>
+Date: Tue, 13 Oct 2015 21:18:11 +0200
+Subject: [Buildroot] [PATCH] icu: bump to version 56.1
+In-Reply-To: <1444740300-11451-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1444740300-11451-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <20151013211811.5820f09d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Andr? Hentschel,
+Dear gustavo.zacarias at free-electrons.com,
 
-On Sat, 3 Oct 2015 19:21:55 +0200, Andr? Hentschel wrote:
-> Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+On Tue, 13 Oct 2015 09:45:00 -0300, gustavo.zacarias at free-electrons.com
+wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > ---
->  package/mesa3d/Config.in | 7 +++++++
->  package/mesa3d/mesa3d.mk | 6 ++++++
->  2 files changed, 13 insertions(+)
+>  package/icu/icu.hash | 6 ++++--
+>  package/icu/icu.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
