@@ -1,21 +1,18 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 22:57:08 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 13 Oct 2015 22:59:37 +0200
 Subject: [Buildroot] [PATCH] mplayer: needs zlib
 In-Reply-To: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
 References: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151013225708.3aa5e0aa@free-electrons.com>
+Message-ID: <20151013205937.GC4161@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Vicente, All,
 
-I'm adding Bernd in Cc, since he has done numerous contributions to the
-mplayer package. Also adding Gustavo, who did some mplayer packaging IIRC.
-
-On Tue, 13 Oct 2015 10:58:33 +0100, Vicente Olivert Riera wrote:
+On 2015-10-13 10:58 +0100, Vicente Olivert Riera spake thusly:
 > Otherwise it will fail to compile with an error message like this one:
 > 
 > libavcodec/pngdec.c:35:18: fatal error: zlib.h: No such file or
@@ -25,6 +22,12 @@ On Tue, 13 Oct 2015 10:58:33 +0100, Vicente Olivert Riera wrote:
 > compilation terminated.
 > 
 > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
 >  package/mplayer/Config.in  |    1 +
 >  package/mplayer/mplayer.mk |    2 +-
@@ -55,31 +58,18 @@ On Tue, 13 Oct 2015 10:58:33 +0100, Vicente Olivert Riera wrote:
 >  MPLAYER_LICENSE = GPLv2
 >  MPLAYER_LICENSE_FILES = LICENSE Copyright
 >  MPLAYER_CFLAGS = $(TARGET_CFLAGS)
+> -- 
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-While this solution is simple, I am not sure if this is the right one.
-It is in fact perfectly possible to build mplayer without zlib, by
-doing:
-
-+MPLAYER_CONF_OPTS += --disable-decoder=apng --disable-encoder=apng --disable-decoder=tdsc
-
-So in fact, zlib is only needed for two decoders/encoders in the ffmpeg
-code. However, it is not really clear to me how to handle this
-properly: there is one configure script at the top-level directory, and
-then another one in the ffmpeg/ directory. And it is really the ffmpeg
-encoders/decoders that have this zlib requirement (and probably
-others?).
-
-So, simple solution is to make zlib mandatory (which is reasonable:
-zlib is small, and probably already part of most systems). However, I
-wonder if there are not some other dependencies for certain
-encoders/decoders.
-
-Bernd, Gustavo, do you have some suggestions ?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
