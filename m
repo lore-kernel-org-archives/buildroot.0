@@ -1,31 +1,54 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 13 Oct 2015 14:19:12 +0200
-Subject: [Buildroot] [PATCH v2 2/2] ejabberd: add a .hash file
-Message-ID: <1444738752-24399-1-git-send-email-johan.oudinet@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Oct 2015 14:44:18 +0200
+Subject: [Buildroot] Why does host-boost contain only a minimal
+ selection?
+In-Reply-To: <561CD1A0.8070006@gmail.com>
+References: <561CD1A0.8070006@gmail.com>
+Message-ID: <20151013144418.6192d5e9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
-Changes v1 -> v2:
-  - Add md5 from upstream.
----
- package/ejabberd/ejabberd.hash | 4 ++++
- 1 file changed, 4 insertions(+)
- create mode 100644 package/ejabberd/ejabberd.hash
+Hello Anders,
 
-diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
-new file mode 100644
-index 0000000..c6344a3
---- /dev/null
-+++ b/package/ejabberd/ejabberd.hash
-@@ -0,0 +1,4 @@
-+# md5 from: https://www.process-one.net/downloads/ejabberd/15.09/ejabberd-15.09.tgz.md5,
-+# sha256 locally computed:
-+md5 616a2fa06064e53ef0130260116dbb68 ejabberd-15.09.tgz
-+sha256 6b6bc3dba5de946927b25cf1f85b44650f9ded4923a782f21a1c9010bb58884d ejabberd-15.09.tgz
+On Tue, 13 Oct 2015 11:40:48 +0200, Anders Norman wrote:
+
+> I have a system set up where I build both natively (for running unit
+> tests) and cross. My application uses libboost (package/boost) and fails
+> to build natively because the linker can't find libboost-filesystem.so.
+> I investigated the issue and find the following in package/boost/boost.mk:
+> 
+> # keep host variant as minimal as possible
+> HOST_BOOST_FLAGS = --without-icu --without-libraries=$(subst
+> $(space),$(comma),atomic chrono context coroutine date_time exception
+> filesystem graph graph_parallel iostreams locale log math mpi
+> program_options python random regex serialization signals system test
+> thread timer wave)
+> 
+> I guess this is why my host-boost does not contain the filesystem part.
+> What is the reason for removing almost all parts of host-boost when the
+> individual selection flags are already present and used correctly for
+> the cross build?
+
+The point of most host-* packages is simply to allow building tools
+that are needed to build things for the target. So if a minimal
+configuration of Boost is sufficient to build the Boost things on the
+host that are needed to build the things for the target, then we prefer
+to have such a minimal configuration that is faster to build.
+
+We do not intend to have the configuration of all host packages match
+the one of the target packages.
+
+If you want to run your unit tests natively, then you should have a
+separate Buildroot configuration targetting x86/x86-64, and therefore
+use the target Boost.
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
