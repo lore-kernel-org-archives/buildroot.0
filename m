@@ -1,51 +1,28 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 13 Oct 2015 10:58:33 +0100
-Subject: [Buildroot] [PATCH] mplayer: needs zlib
-Message-ID: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Tue, 13 Oct 2015 12:04:37 +0200
+Subject: [Buildroot] [PATCH 2/2] ejabberd: add a .hash file
+In-Reply-To: <1444730677-21730-1-git-send-email-johan.oudinet@gmail.com>
+References: <1444730677-21730-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <1444730677-21730-2-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise it will fail to compile with an error message like this one:
-
-libavcodec/pngdec.c:35:18: fatal error: zlib.h: No such file or
-directory
- #include <zlib.h>
-                  ^
-compilation terminated.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/mplayer/Config.in  |    1 +
- package/mplayer/mplayer.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/ejabberd/ejabberd.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/ejabberd/ejabberd.hash
 
-diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
-index 7a8b03f..80ad7f1 100644
---- a/package/mplayer/Config.in
-+++ b/package/mplayer/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
- 		|| BR2_microblaze || BR2_nios2)
- 	# Broken support for <ARMv5
- 	depends on !BR2_ARM_CPU_ARMV4
-+	select BR2_PACKAGE_ZLIB
- 
- config BR2_PACKAGE_MPLAYER
- 	bool "mplayer"
-diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
-index d896b35..0f5ced5 100644
---- a/package/mplayer/mplayer.mk
-+++ b/package/mplayer/mplayer.mk
-@@ -7,7 +7,7 @@
- MPLAYER_VERSION = 1.2
- MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
- MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
--MPLAYER_DEPENDENCIES = host-pkgconf
-+MPLAYER_DEPENDENCIES = host-pkgconf zlib
- MPLAYER_LICENSE = GPLv2
- MPLAYER_LICENSE_FILES = LICENSE Copyright
- MPLAYER_CFLAGS = $(TARGET_CFLAGS)
+diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
+new file mode 100644
+index 0000000..a9e0093
+--- /dev/null
++++ b/package/ejabberd/ejabberd.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 6b6bc3dba5de946927b25cf1f85b44650f9ded4923a782f21a1c9010bb58884d ejabberd-15.09.tgz
 -- 
-1.7.1
+2.1.4
