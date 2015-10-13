@@ -1,98 +1,88 @@
-From: Sanchayan Maity <maitysanchayan@gmail.com>
-Date: Tue, 13 Oct 2015 19:04:53 +0530
-Subject: [Buildroot] [RFC PATCH] configs: Add support for Toradex Colibri
-	Vybrid modules
-Message-ID: <3d9749d36f928b2e22bf75ff9091b871b3d1c689.1444739401.git.maitysanchayan@gmail.com>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Tue, 13 Oct 2015 09:50:02 -0400
+Subject: [Buildroot] [PATCH v4] systemd: Bump version and change hosting
+In-Reply-To: <1443864014-29055-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1443864014-29055-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CANPyyuOSU0R-_LqdS7c98y0kfuXJRVM2UKesJDEpWJUnL2R_XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a minimal default configuration for Colibri Vybrid modules
-tested on Colibri Vybrid VF50 and VF61.
+Tested-by: Mike Williams <mike@mikebwilliams.com>
 
-Vybrid is well supported in mainline kernel by Toradex however we
-use the custom git branches maintained by Toradex. The configuration
-only builds a minimal root filesystem and u-boot plus flash scripts
-support is not added at the moment.
+Also, I bumped the version to 227 and tested it too, it also works fine.
 
-Signed-off-by: Sanchayan Maity <maitysanchayan@gmail.com>
----
- board/toradex/colibri-vf/readme.txt | 21 +++++++++++++++++++++
- configs/colibri_vf_defconfig        | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 57 insertions(+)
- create mode 100644 board/toradex/colibri-vf/readme.txt
- create mode 100644 configs/colibri_vf_defconfig
+On Sat, Oct 3, 2015 at 5:20 AM, Maxime Hadjinlian <
+maxime.hadjinlian@gmail.com> wrote:
 
-diff --git a/board/toradex/colibri-vf/readme.txt b/board/toradex/colibri-vf/readme.txt
-new file mode 100644
-index 0000000..f0b90c7
---- /dev/null
-+++ b/board/toradex/colibri-vf/readme.txt
-@@ -0,0 +1,21 @@
-+Build instructions
-+------------------
-+
-+As a regular user configure and then build:
-+
-+$ make colibri_vf_defconfig
-+$ make
-+
-+This configuration will use a linux kernel from the git trees
-+maintained by Toradex and build a minimal root file system.
-+
-+Flashing the board
-+------------------
-+
-+Details can be found at:
-+http://developer.toradex.com/knowledge-base/flashing-linux-on-vybrid-modules
-+
-+The above configuration would result in building of rootfs.ubifs image. After
-+preparing the SD card as per the instructions on the above article, replace the
-+ubifs.img file in the SD card with rootfs.ubifs image file, renaming it to
-+ubifs.img and follow the updation procedure on the above article.
-diff --git a/configs/colibri_vf_defconfig b/configs/colibri_vf_defconfig
-new file mode 100644
-index 0000000..d7c82fc
---- /dev/null
-+++ b/configs/colibri_vf_defconfig
-@@ -0,0 +1,36 @@
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_PACKAGE_HOST_GDB=y
-+BR2_PACKAGE_HOST_GDB_PYTHON=y
-+BR2_GDB_VERSION_7_8=y
-+BR2_ENABLE_LOCALE_PURGE=y
-+BR2_TARGET_OPTIMIZATION="-pipe"
-+BR2_TARGET_GENERIC_HOSTNAME="colibri-vf"
-+BR2_TARGET_GENERIC_ISSUE="Colibri VF 20151007"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.toradex.com/linux-toradex.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="db509ca6ce2a4c04fe0d2a2e0611bb917ebe4aa8"
-+BR2_LINUX_KERNEL_DEFCONFIG="colibri_vf"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="vf610-colibri-eval-v3 vf500-colibri-eval-v3"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-+BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x800
-+BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=8112
-+BR2_TARGET_ROOTFS_UBIFS_RT_LZO=y
-+BR2_TARGET_ROOTFS_UBIFS_NONE=y
-+BR2_TARGET_ROOTFS_UBIFS_OPTS="--space-fixup"
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x20000
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
-+BR2_TARGET_ROOTFS_UBI_OPTS=""
--- 
-2.6.1
+> systemd seems to do its release using their github repository up from
+> the 221 version.
+>
+> Since they use the auto generated release, we can't have a hash file.
+>
+> They don't provide the Makefile.in file in the 'po' directory.
+> We need to run intltoolize so it's created for us.
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+> v3 -> v4:
+>     - Don't use autogen.sh (run some tests that applies on the host
+>       machine), instead call intltoolize alone.
+> ---
+>  package/systemd/systemd.hash |  2 --
+>  package/systemd/systemd.mk   | 10 +++++++---
+>  2 files changed, 7 insertions(+), 5 deletions(-)
+>  delete mode 100644 package/systemd/systemd.hash
+>
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> deleted file mode 100644
+> index f746051..0000000
+> --- a/package/systemd/systemd.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally calculated
+> -sha256  085e088650afbfc688ccb13459aedb1fbc7c8810358605b076301f472d51cc4f
+> systemd-221.tar.xz
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index b62fc08..6b9ce3f 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -4,9 +4,8 @@
+>  #
+>
+>  ################################################################################
+>
+> -SYSTEMD_VERSION = 221
+> -SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
+> -SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
+> +SYSTEMD_VERSION = 226
+> +SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source
+> files, see README)
+>  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
+>  SYSTEMD_INSTALL_STAGING = YES
+> @@ -51,6 +50,11 @@ SYSTEMD_CONF_ENV = \
+>         CFLAGS="$(SYSTEMD_CFLAGS)" \
+>         ac_cv_path_KMOD=/usr/bin/kmod
+>
+> +define SYSTEMD_RUN_INTLTOOLIZE
+> +       cd $(@D) && $(HOST_DIR)/usr/bin/intltoolize --force --automake
+> +endef
+> +SYSTEMD_PRE_CONFIGURE_HOOKS += SYSTEMD_RUN_INTLTOOLIZE
+> +
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+>  SYSTEMD_CONF_OPTS += --enable-compat-libs
+>  else
+> --
+> 2.5.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151013/99793b1b/attachment.html>
