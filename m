@@ -1,36 +1,85 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Tue, 13 Oct 2015 01:17:37 +0200
-Subject: [Buildroot] [PATCH 1/4] configs/raspberrypi: use EABIhf
-In-Reply-To: <20151012235935.6a195741@free-electrons.com>
-References: <20150820143005.GA6441@ketchup.mtl.sfl>
- <1440273688-92868-1-git-send-email-benoit@wsystem.com>
- <20151012235935.6a195741@free-electrons.com>
-Message-ID: <CA+sos78PFnHQLQknch1N22C=q_Qv=NaE1qvmUHi7ffnf6t=UeQ@mail.gmail.com>
+From: Jordan Yelloz <jordan@yelloz.me>
+Date: Mon, 12 Oct 2015 20:58:35 -0700
+Subject: [Buildroot] [PATCH 1/1] systemd: imported fix for journald SIGABRTs.
+Message-ID: <1444708715-4696-1-git-send-email-jordan@yelloz.me>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Prior to applying this patch, assertion errors would reliably be displayed on the
+console. These failed assertions led to crashes in systemd-journald on startup.
 
-On Mon, Oct 12, 2015 at 11:59 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Applied, thanks. I actually believe we should be doing the same for all
-> ARMv6/ARMv7 platforms, except if there is a specific issue with using
-> EABIhf (such as existing pre-built binaries that are EABI only).
+This patch fixes systemd bug #512:
+<https://github.com/systemd/systemd/issues/512>
 
-Yes, there is such an issue because some hardware vendors provide
-closed libraries that use soft-FP. It was the case e.g. for i.MX6
-(audio/video CODEC and GPU libraries), but they now provide hard-float
-binaries IIRC. So such a change should be checked on a per-platform
-basis.
+Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+---
+ .../0004-sd-device-never-return-NULL-0.patch       | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/systemd/0004-sd-device-never-return-NULL-0.patch
 
-> Maybe we should even use EABIhf by default on ARMv6+.
-
-Yes, I think that it would be a sane default, and it would still be
-possible to set EABI for a specific platform for which EABIhf would
-not apply.
-
-Best regards,
-Beno?t
+diff --git a/package/systemd/0004-sd-device-never-return-NULL-0.patch b/package/systemd/0004-sd-device-never-return-NULL-0.patch
+new file mode 100644
+index 0000000..a0aa543
+--- /dev/null
++++ b/package/systemd/0004-sd-device-never-return-NULL-0.patch
+@@ -0,0 +1,55 @@
++From aad85277b519c700c33a39f2e6558384d2d4aa9f Mon Sep 17 00:00:00 2001
++From: David Herrmann <dh.herrmann@gmail.com>
++Date: Wed, 15 Jul 2015 12:30:08 +0200
++Subject: [PATCH 1/1] sd-device: never return NULL+0
++
++It is highly confusing if a getter function returns 0, but the value is
++set to NULL. This, right now, triggers assertions as code relies on the
++returned values to be non-NULL.
++
++Like with sd-bus-creds and friends, return 0 only if a value is actually
++available.
++
++Discussed with Tom, and actually fixes real bugs as in #512.
++
++Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
++---
++ src/libsystemd/sd-device/sd-device.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/src/libsystemd/sd-device/sd-device.c b/src/libsystemd/sd-device/sd-device.c
++index b274f71..7cea5a0 100644
++--- a/src/libsystemd/sd-device/sd-device.c
+++++ b/src/libsystemd/sd-device/sd-device.c
++@@ -791,6 +791,9 @@ _public_ int sd_device_get_subsystem(sd_device *device, const char **ret) {
++                 device->subsystem_set = true;
++         }
++ 
+++        if (!device->subsystem)
+++                return -ENOENT;
+++
++         *ret = device->subsystem;
++ 
++         return 0;
++@@ -908,6 +911,9 @@ _public_ int sd_device_get_driver(sd_device *device, const char **ret) {
++                         return log_debug_errno(r, "sd-device: could not set driver for %s: %m", device->devpath);
++         }
++ 
+++        if (!device->driver)
+++                return -ENOENT;
+++
++         *ret = device->driver;
++ 
++         return 0;
++@@ -1002,6 +1008,8 @@ _public_ int sd_device_get_sysname(sd_device *device, const char **ret) {
++                         return r;
++         }
++ 
+++        assert_return(device->sysname, -ENOENT);
+++
++         *ret = device->sysname;
++ 
++         return 0;
++-- 
++2.6.1
++
+-- 
+2.6.1
