@@ -1,64 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 23:42:00 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/mesa3d: Fix dri checks
-In-Reply-To: <1443263563-13588-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1443263563-13588-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151013234200.54681284@free-electrons.com>
+Date: Tue, 13 Oct 2015 23:53:28 +0200
+Subject: [Buildroot] [git commit] eventlog: new package
+Message-ID: <20151013215344.59D7F81D8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=4a2ba9941d3df2e49f18bffcfa105fc704aa5e50
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 26 Sep 2015 12:32:43 +0200, Bernd Kuhls wrote:
-> "MESA3D_EGL_PLATFORMS = drm" is only needed when dri drivers are
-> enabled:
-> http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n1653
-> 
-> Unconditionally enable dri support, also for gallium drivers, quoting
-> http://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=10.6#n1382
-> 
->  # Strictly speaking libgbm does not require --enable-dri, although
->  # both of its backends do. Thus one can build libgbm without any
->  # backends if --disable-dri is set.
->  # To avoid unnecessary complexity of checking if at least one backend
->  # is available when building, just mandate --enable-dri.
->    AC_MSG_ERROR([gbm requires --enable-dri])
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/799/799f505594f668154af38cb2c2a1ed8a90337e9f/
-> http://autobuild.buildroot.net/results/d00/d00fe349e8710a1ad557507cf04b006216806868/
-> http://autobuild.buildroot.net/results/c7b/c7ba08c8cf54b2e7cf28c5e3454e92a408e724db/
-> http://autobuild.buildroot.net/results/cd7/cd717c9a3a1b0080192e7e765d990cce55513005/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: Shortened too long lines in commit message (Vicente)
+eventlog is a library for creating structured events from
+applications, and is the workhorse behind syslog-ng's own messages.
 
-I've applied your patch. However, I really would like to see more
-comments/explanations in mesa3d.mk to explain what's going on, because
-it's really tricky to understand all the possible combinations.
+[Thomas:
+ - fix alphabetic ordering in package/Config.in, as noticed by
+   Vicente.
+ - rewrap Config.in help text and add some URL as a reference (though
+   the eventlog project doesn't seem to have a real web page)
+ - remove useless slash at the end of EVENTLOG_SITE
+ - make the license info more specific: it's a BSD-3c license
+ - add a hash file.]
 
-Also, could you address the comment made by Paul Cercueil on your
-patch? He said:
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in              |    1 +
+ package/eventlog/Config.in     |    8 ++++++++
+ package/eventlog/eventlog.hash |    2 ++
+ package/eventlog/eventlog.mk   |   14 ++++++++++++++
+ 4 files changed, 25 insertions(+), 0 deletions(-)
 
-"""
-From what I can read from the link you pasted, your assumption is
-wrong. the DRM backend of EGL can be enabled without any DRI drivers. 
-
-Besides, there is actually a usecase for using the DRM backend of EGL
-without DRI drivers: when your target platform has a DRM driver
-(instead of fbdev) and does not use X11.
-"""
-
-Please send a follow-up patch to address this if applicable.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index f686f13..8e3c64a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -943,6 +943,7 @@ menu "JSON/XML"
+ endmenu
+ 
+ menu "Logging"
++	source "package/eventlog/Config.in"
+ 	source "package/glog/Config.in"
+ 	source "package/liblog4c-localtime/Config.in"
+ 	source "package/liblogging/Config.in"
+diff --git a/package/eventlog/Config.in b/package/eventlog/Config.in
+new file mode 100644
+index 0000000..f9442f6
+--- /dev/null
++++ b/package/eventlog/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_EVENTLOG
++	bool "eventlog"
++	help
++	  eventlog is a library for creating structured events from
++	  applications, and is the workhorse behind syslog-ng's own
++	  messages.
++
++	  https://my.balabit.com/downloads/eventlog/
+diff --git a/package/eventlog/eventlog.hash b/package/eventlog/eventlog.hash
+new file mode 100644
+index 0000000..b8f2ec6
+--- /dev/null
++++ b/package/eventlog/eventlog.hash
+@@ -0,0 +1,2 @@
++# From https://my.balabit.com/downloads/eventlog/0.2/eventlog_0.2.12.dsc
++sha256 494dac8e01dc5ce323df2ad554d94874938dab51aa025987677b2bc6906a9c66 eventlog_0.2.12.tar.gz
+diff --git a/package/eventlog/eventlog.mk b/package/eventlog/eventlog.mk
+new file mode 100644
+index 0000000..c4e5fd9
+--- /dev/null
++++ b/package/eventlog/eventlog.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# eventlog
++#
++################################################################################
++
++EVENTLOG_VERSION = 0.2.12
++EVENTLOG_SOURCE = eventlog_$(EVENTLOG_VERSION).tar.gz
++EVENTLOG_SITE = https://my.balabit.com/downloads/eventlog/0.2
++EVENTLOG_LICENSE = BSD-3c
++EVENTLOG_LICENSE_FILES = COPYING
++EVENTLOG_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
