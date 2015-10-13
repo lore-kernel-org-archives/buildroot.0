@@ -1,62 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 23:14:28 +0200
-Subject: [Buildroot] [PATCH v2 0/2] Add support for AXFS filesystem type
-In-Reply-To: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Oct 2015 23:14:19 +0200
+Subject: [Buildroot] [PATCH v2 2/2] axfs: add new filesystem type
+In-Reply-To: <20151013202408.GA4161@free.fr>
 References: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <20151013231428.2e611e06@free-electrons.com>
+ <1444064102-13575-3-git-send-email-ariel@vanguardiasur.com.ar>
+ <5612C712.6020209@mind.be> <561CF52D.3090609@vanguardiasur.com.ar>
+ <20151013202408.GA4161@free.fr>
+Message-ID: <561D742B.4050800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ariel D'Alessandro,
 
-On Mon,  5 Oct 2015 13:55:00 -0300, Ariel D'Alessandro wrote:
-> This patch series adds support for using the AXFS filesystem type.
+
+On 13-10-15 22:24, Yann E. MORIN wrote:
+> Ariel, All,
 > 
-> The Advanced XIP File System is a Linux kernel filesystem driver that enables
-> files to be executed directly from flash or ROM memory rather than being copied
-> into RAM.
+> On 2015-10-13 09:12 -0300, Ariel D'Alessandro spake thusly:
+>> El 05/10/15 a las 15:53, Arnout Vandecappelle escribi?:
+> [--SNIP--]
+>>>> +define ROOTFS_AXFS_CMD
+>>>> +	$(HOST_DIR)/usr/bin/mkfs.axfs -s -a $(TARGET_DIR) $@
+>>>
+>>>  I'm not sure if we really want to give the -s option. Is it very verbose?
+>>> Generally I like a bit of feedback about how the filesystem is built, and we do
+>>> get it for e.g. squashfs.
+>>
+>> Yeah, I think it's very verbose. But on the other hand, with the -s
+>> option it's too quiet.
+>> I don't know what is the main criteria. Maybe you can tell me, here's
+>> the output of two mkfs.axfs executions with and without -s option:
+>>
+>> --
+>> $ ./mkfs.axfs -s -a target/ output/
+>> number of files:                   585
+>> number of 4KB nodes:               1752
+>>
+>> Total image size:                       5111906
+>> --
+>>
+>> --
+>> $ ./mkfs.axfs -a target/ output/
+> [--SNIP--]
+>> Total image size:                       5111906
 > 
-> More info can be found here: http://elinux.org/AXFS
+> IMHO, the non-silent version is way too verbose. I'd prefer that the -s
+> flag be used.
 > 
-> Changes from v1:
-> * Removed unnecessary call to $(generic-package) in axfsutils.mk.
-> 
-> Ariel
-> 
-> Ariel D'Alessandro (2):
->   axfsutils: add new package
->   axfs: add new filesystem type
+> Arnout, OK for you?
 
-You received some feedback on both patches. Could you address this
-feedback, and submit a new version of the patches?
+ I believe mksquashfs is equally verbose. But it's OK for me either way.
 
-Note that adding the axfs patches as a kernel extension, as suggested
-by Yann E. Morin, is optional and can perfectly be done as a set of
-follow-up patches: it is not mandatory to have this part of the current
-series.
+ Regards,
+ Arnout
 
-However, one thing that I remember about AXFS is that you could decide
-when creating the root filesystem, which parts of which files would be
-stored uncompressed (so that they can be XIP-ed) and which parts of
-which files would be stored compressed (to save space). This allowed to
-combine the nice aspects of a XIP-capable filesystem, with the nice
-aspects of a compressed filesystem. I remember there was even a tool to
-run on the target to "measure" the filesystem accesses, and give some
-hints on which pages of data should be stored uncompressed vs. which
-pages should be stored compressed. Is this actually implemented in
-AXFS ? If so, do you plan to add support for such functionality ?
-
-In any case, I'll mark your patches as "Changes Requested" in
-patchwork, so please resubmit a new version when you have time,
-otherwise we'll forget about your contribution.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
