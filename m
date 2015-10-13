@@ -1,40 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 23:29:08 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-good: update configure options
-Message-ID: <20151013212925.DA0BB81E09@busybox.osuosl.org>
+Date: Tue, 13 Oct 2015 23:29:31 +0200
+Subject: [Buildroot] [PATCH v1 2/2] gst1-plugins-good: update configure
+ options
+In-Reply-To: <1444770754-15352-2-git-send-email-ps.report@gmx.net>
+References: <1444770754-15352-1-git-send-email-ps.report@gmx.net>
+ <1444770754-15352-2-git-send-email-ps.report@gmx.net>
+Message-ID: <20151013232931.60d5fb15@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10755be5fcbc557e5a0eddec9bcdb1c3edfe309f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-- remove legacy '--enable-xshm/--disable-xshm' option
+On Tue, 13 Oct 2015 23:12:34 +0200, Peter Seiderer wrote:
+> - remove legacy '--enabel-xshm/--disable-xshm' option
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../gst1-plugins-good/gst1-plugins-good.mk         |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+Applied, thanks.
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index dd19594..fbc338a 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -320,13 +320,11 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
- GST1_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
- GST1_PLUGINS_GOOD_CONF_OPTS += \
- 	--enable-x \
--	--enable-xshm \
- 	$(if $(BR2_PACKAGE_XLIB_LIBXFIXES),xlib_libXfixes) \
- 	$(if $(BR2_PACKAGE_XLIB_LIBXDAMAGE),xlib_libXdamage)
- else
- GST1_PLUGINS_GOOD_CONF_OPTS += \
--	--disable-x \
--	--disable-xshm
-+	--disable-x
- endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
