@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 23:30:37 +0200
-Subject: [Buildroot] [PATCH 7/7] configs: remove old/broken Atmel
- configurations
-In-Reply-To: <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1443901457-7914-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1443901457-7914-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20151013233037.15947691@free-electrons.com>
+Date: Tue, 13 Oct 2015 23:30:56 +0200
+Subject: [Buildroot] [git commit] atk: bump to version 2.18
+Message-ID: <20151013213100.E555081955@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=feb77573021ab476010c3b46c17c50a07df9ec75
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Oct 2015 20:44:17 +0100, Thomas Petazzoni wrote:
-> The at91rm9200df_defconfig configuration is really old: it builds a
-> 2.6.38 kernel with the old days kernel patches and a 2010.06
-> U-Boot. It hasn't been updated since a long time, so let's get rid of
-> it.
-> 
-> The at91sam9260dfc_defconfig, at91sam9261ek_defconfig and
-> at91sam9263ek_defconfig refer to kernel defconfigs that no longer
-> exists, so they fail to build.
-> 
-> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  configs/at91rm9200df_defconfig   | 30 ------------------------------
->  configs/at91sam9260dfc_defconfig | 19 -------------------
->  configs/at91sam9261ek_defconfig  | 19 -------------------
->  configs/at91sam9263ek_defconfig  | 19 -------------------
->  4 files changed, 87 deletions(-)
->  delete mode 100644 configs/at91rm9200df_defconfig
->  delete mode 100644 configs/at91sam9260dfc_defconfig
->  delete mode 100644 configs/at91sam9261ek_defconfig
->  delete mode 100644 configs/at91sam9263ek_defconfig
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/atk/atk.hash |    4 ++--
+ package/atk/atk.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've applied this patch. Alex, when you have some time, don't hesitate
-to resubmit new defconfig for those boards.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
+index 4f905f2..986497c 100644
+--- a/package/atk/atk.hash
++++ b/package/atk/atk.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atk/2.16/atk-2.16.0.sha256sum
+-sha256 095f986060a6a0b22eb15eef84ae9f14a1cf8082488faa6886d94c37438ae562 atk-2.16.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/atk/2.18/atk-2.18.0.sha256sum
++sha256 ce6c48d77bf951083029d5a396dd552d836fff3c1715d3a7022e917e46d0c92b atk-2.18.0.tar.xz
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 53365e0..579e330 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATK_VERSION_MAJOR = 2.16
++ATK_VERSION_MAJOR = 2.18
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
