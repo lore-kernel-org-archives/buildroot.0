@@ -1,105 +1,79 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 13 Oct 2015 09:38:59 +0200
-Subject: [Buildroot] [PATCH 1/1 v3] package/unscd: new package
-In-Reply-To: <20151012163456.GA3735@free.fr>
-References: <1444399839-10680-1-git-send-email-rdkehn@yahoo.com>
- <20151010145055.GC3640@free.fr>
- <CAGduivzbZ7254DV3ya++mSQ1wj1QT93xViq7urj2WP2SS7z9Tw@mail.gmail.com>
- <20151012163456.GA3735@free.fr>
-Message-ID: <CAGduivxeFKpvCKzme0tK0H7XxBVm7miTHBm17hv1FLONZH9mZw@mail.gmail.com>
+Date: Tue, 13 Oct 2015 09:47:20 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: imported fix for journald
+	SIGABRTs.
+In-Reply-To: <1444708715-4696-1-git-send-email-jordan@yelloz.me>
+References: <1444708715-4696-1-git-send-email-jordan@yelloz.me>
+Message-ID: <CAGduivwRwmxVZeKK0Jx+QM8us8yzrSWzG_dT8RD4zS7W5UfCFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 12, 2015 at 6:34 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+Hello all,
 
-> Maxime, All,
->
-> On 2015-10-12 10:34 +0200, Maxime Hadjinlian spake thusly:
-> > On Sat, Oct 10, 2015 at 4:50 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-> > wrote:
-> > > On 2015-10-09 09:10 -0500, Doug Kehn spake thusly:
-> > > > A daemon which handles passwd, group and host lookups for running
-> > > programs and
-> > > > caches the results for the next query. You only need this package if
-> you
-> > > are
-> > > > using slow Name Services like LDAP, NIS or NIS+.
-> > > >
-> > > > This particular NSCD is a complete rewrite of the GNU glibc nscd
-> which
-> > > is a
-> > > > single threaded server process which offloads all NSS lookups to
-> worker
-> > > > children; cache hits are handled by the parent, and only cache misses
-> > > start
-> > > > worker children, making the parent immune to resource leaks, hangs,
-> and
-> > > crashes
-> > > > in NSS libraries.
-> > > >
-> > > > It should mostly be a drop-in replacement for existing installs using
-> > > nscd.
+On Tue, Oct 13, 2015 at 5:58 AM, Jordan Yelloz <jordan@yelloz.me> wrote:
 
- [--SNIP--]
-
-> > nscd is a part of glibc, and looking at the code of glibc 2.22, the
-> startup
-> > script and systemd init file are included in the source. So I have a few
-> > questions:
-> >
-> > Why is this not a part of the glibc package as an option ?
+> Prior to applying this patch, assertion errors would reliably be displayed
+> on the
+> console. These failed assertions led to crashes in systemd-journald on
+> startup.
 >
-> From what I understood, this unscd is a complete *rewrite* of glibc's
-> nscd.
+> This patch fixes systemd bug #512:
+> <https://github.com/systemd/systemd/issues/512>
 >
-> Where unscd shines is that it can resolve queries in parallel as it
-> spawns a thread for each query that it has not yet cached, whereas
-> glibc's nscd is single-threaded, thus serialising uncached queries.
->
-> Thus, unscd should be overall "faster" at resolving queries than glibc's
-> nscd would be.
->
-> So, no, unscd is not part of glibc. nscd is, and we could indeed add an
-> option to install it, of course. But that does not prevent unscd to also
-> be oferred as a replacement.
->
-Indeed, I misread the name of the package (and with it the intent of the
-patch), and so I agree with you, that was a bad idea.
-
-> >
-> > nscd.service and nscd.tmpfiles which will create the /run/nscd directory
-> > with the correct ACL, which doesn't seem to be done by your init script
-> but
-> > it's done by the shipped init script
->
-> So, if I udnerstand you correctly, the systemd units are fine, but the
-> startup script is missign some pieces, right?
->
-No, both are missing pieces, that's why I think we should use upstream
-files since they should know what they are doing :).
+NAK on this one. There's already a patch in the queue to bump systemd to
+v226 (and it should be trumped with a patch to update to v227 but it
+requires some others patches so it'll take more time) that includes this
+patch.
+https://patchwork.ozlabs.org/patch/525867/
 
 >
-> Regards,
-> Yann E. MORIN.
+> Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+> ---
+>  .../0004-sd-device-never-return-NULL-0.patch       | 55
+> ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644
+> package/systemd/0004-sd-device-never-return-NULL-0.patch
 >
+> diff --git a/package/systemd/0004-sd-device-never-return-NULL-0.patch
+> b/package/systemd/0004-sd-device-never-return-NULL-0.patch
+> new file mode 100644
+> index 0000000..a0aa543
+> --- /dev/null
+> +++ b/package/systemd/0004-sd-device-never-return-NULL-0.patch
+> @@ -0,0 +1,55 @@
+> +From aad85277b519c700c33a39f2e6558384d2d4aa9f Mon Sep 17 00:00:00 2001
+> +From: David Herrmann <dh.herrmann@gmail.com>
+> +Date: Wed, 15 Jul 2015 12:30:08 +0200
+> +Subject: [PATCH 1/1] sd-device: never return NULL+0
+> +
+> +It is highly confusing if a getter function returns 0, but the value is
+> +set to NULL. This, right now, triggers assertions as code relies on the
+> +returned values to be non-NULL.
+> +
+> +Like with sd-bus-creds and friends, return 0 only if a value is actually
+> +available.
+> +
+> +Discussed with Tom, and actually fixes real bugs as in #512.
+> +
+> +Signed-off-by: Jordan Yelloz <jordan@yelloz.me>
+> +---
+> + src/libsystemd/sd-device/sd-device.c | 8 ++++++++
+> + 1 file changed, 8 insertions(+)
+> +
+> [-SNIP-]
+> +
 > --
+> 2.6.1
 >
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151013/50d5391a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151013/692ade26/attachment.html>
