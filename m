@@ -1,58 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Oct 2015 09:06:41 +0200
-Subject: [Buildroot] [PATCH 1/4] configs/raspberrypi: use EABIhf
-In-Reply-To: <CA+sos78PFnHQLQknch1N22C=q_Qv=NaE1qvmUHi7ffnf6t=UeQ@mail.gmail.com>
-References: <20150820143005.GA6441@ketchup.mtl.sfl>
- <1440273688-92868-1-git-send-email-benoit@wsystem.com>
- <20151012235935.6a195741@free-electrons.com>
- <CA+sos78PFnHQLQknch1N22C=q_Qv=NaE1qvmUHi7ffnf6t=UeQ@mail.gmail.com>
-Message-ID: <561CAD81.1010204@mind.be>
+Date: Tue, 13 Oct 2015 09:03:33 +0200
+Subject: [Buildroot] [PATCH v3] package/iqvlinux: new package
+In-Reply-To: <20151012232441.3322b2fa@free-electrons.com>
+References: <1444397162-5431-1-git-send-email-romain.naour@openwide.fr>
+ <20151010150457.GD3640@free.fr> <20151012224411.472a9d10@free-electrons.com>
+ <20151012211618.GG3735@free.fr> <20151012232441.3322b2fa@free-electrons.com>
+Message-ID: <561CACC5.5020600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13-10-15 01:17, Beno?t Th?baudeau wrote:
-> Dear Thomas Petazzoni,
+On 12-10-15 23:24, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 > 
-> On Mon, Oct 12, 2015 at 11:59 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Applied, thanks. I actually believe we should be doing the same for all
->> ARMv6/ARMv7 platforms, except if there is a specific issue with using
->> EABIhf (such as existing pre-built binaries that are EABI only).
+> On Mon, 12 Oct 2015 23:16:18 +0200, Yann E. MORIN wrote:
 > 
-> Yes, there is such an issue because some hardware vendors provide
-> closed libraries that use soft-FP. It was the case e.g. for i.MX6
-> (audio/video CODEC and GPU libraries), but they now provide hard-float
-> binaries IIRC. So such a change should be checked on a per-platform
-> basis.
+>>> > > I agree on the principle, but I think we should rather handle that like
+>>> > > we do for other options: enable automatically the needed option.
+>> > 
+>> > Except for PCI it does not really makes sense, see Arnout's explanations:
+>> >     http://lists.busybox.net/pipermail/buildroot/2015-October/141178.html
+> Except that I disagree with Arnout :)
+> 
+> Arnout is not making the difference between being able to *build* and
+> being able to *run*.
+> 
+> CONFIG_PCI is needed for the build to proceed, so it is normal that we
+> enable it automatically. The PCI root complex drivers are only needed
+> for the PCI support to actually work on the target, not for iqvlinux to
+> build.
+> 
+> And the story is the same for xtable-addons: the additions in linux.mk
+> were made because those kernel options were needed for xtable-addons to
+> simply *build*.
 
- Actually, I think at the BR developer meeting we decided that even if there are
-binary-only packages that require softfloat, our defconfig should still use
-hardfloat if possible (since the defconfig doesn't enable that package). Anyway
-the point is moot since those binary packages will in my experience also depend
-on glibc, so the defconfig will not work for them anyway. Also, I can't find
-this back in the report :-(
+
+ And of course I disagree with Thomas :-)
+
+ I think we should follow the principle of least surprise. We should avoid
+situations where a package builds and we know for sure it will not work at
+runtime. In many cases, this cannot be avoided, but if we can avoid it, we should.
+
+ With xtables it's slightly different since if we enable those kernel config
+options, it will actually work at runtime (at least as far as we can tell).
+Similar for the systemd options - which BTW are really runtime-only, systemd
+doesn't check for them at all at build time.
+
+ Fortunately, what you've committed amounts to a build-time check: the iqvlinux
+build will error out if CONFIG_PCI isn't enabled. The error message will be
+cryptic and will not tell the user how to fix it, but at least it is less
+cryptic than when the user enables the package and it simply doesn't do anything
+without any error message at all.
+
+ So basically, the check added by Romain is just making the build error message
+less cryptic, so it is really optional.
 
 
  Regards,
  Arnout
-
-> 
->> Maybe we should even use EABIhf by default on ARMv6+.
-> 
-> Yes, I think that it would be a sane default, and it would still be
-> possible to set EABI for a specific platform for which EABIhf would
-> not apply.
-> 
-> Best regards,
-> Beno?t
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 
 -- 
