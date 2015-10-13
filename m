@@ -1,49 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 23:27:13 +0200
-Subject: [Buildroot] [PATCH] connman: add missing dbus system bus
- configuration
-In-Reply-To: <1444747538-2996-2-git-send-email-mike@mikebwilliams.com>
-References: <1444747538-2996-1-git-send-email-mike@mikebwilliams.com>
- <1444747538-2996-2-git-send-email-mike@mikebwilliams.com>
-Message-ID: <20151013232713.465c1f48@free-electrons.com>
+Date: Tue, 13 Oct 2015 23:28:50 +0200
+Subject: [Buildroot] [PATCH v1 1/2] gst1-plugins-base: update configure
+ options
+In-Reply-To: <1444770754-15352-1-git-send-email-ps.report@gmx.net>
+References: <1444770754-15352-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20151013232850.34cda8d4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mike Williams,
+Dear Peter Seiderer,
 
-On Tue, 13 Oct 2015 10:45:38 -0400, Mike Williams wrote:
-> Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+On Tue, 13 Oct 2015 23:12:33 +0200, Peter Seiderer wrote:
+> - add '--disable-gio_unix_2_0' to options which require currently
+>   unpackaged libraries
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/connman/connman.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> index 08ebe03..53748ec 100644
+> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -28,6 +28,7 @@ GST1_PLUGINS_BASE_CONF_OPTS = \
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_BASE_CONF_OPTS += \
+>  	--disable-cdparanoia \
+> +	--disable-gio_unix_2_0 \
 
-Thanks for the patch. However, I believe it's not the proper way of
-solving the problem. Can you try the below patch instead:
-
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 87d81ce..3b14a80 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -12,6 +12,7 @@ CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPLv2
- CONNMAN_LICENSE_FILES = COPYING
- CONNMAN_CONF_OPTS += \
-+       --with-dbusconfdir=/etc \
-        $(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)               \
-        $(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)      \
-        $(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)                  \
-
-This will make Connman automatically install its D-Bus configuration
-file in /etc/dbus-1/system.d/.
-
-If it works for you, can you send a new version of the patch? For this
-new version, please include the explanation *inside* the commit log,
-and not in the cover letter.
-
-Thanks a lot!
+Instead gio a glib thingy, provided by our libglib2 package ?
 
 Thomas
 -- 
