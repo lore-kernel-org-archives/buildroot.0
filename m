@@ -1,46 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Oct 2015 23:56:43 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] eventlog: New package
-In-Reply-To: <1443266743-20775-2-git-send-email-judge.packham@gmail.com>
-References: <1443266743-20775-1-git-send-email-judge.packham@gmail.com>
- <1443266743-20775-2-git-send-email-judge.packham@gmail.com>
-Message-ID: <20151013235643.556323a0@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 14 Oct 2015 00:06:27 +0200
+Subject: [Buildroot] [PATCH v2] gst1-plugins-base: update configure options
+Message-ID: <1444773987-19382-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Packham,
+- add new gio_unix_2_0 option
 
-On Sat, 26 Sep 2015 23:25:42 +1200, Chris Packham wrote:
-> eventlog is a library for creating structured events from applications,
-> and is the workhorse behind syslog-ng's own messages.
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->  package/Config.in            |  1 +
->  package/eventlog/Config.in   |  5 +++++
->  package/eventlog/eventlog.mk | 14 ++++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/eventlog/Config.in
->  create mode 100644 package/eventlog/eventlog.mk
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - change gio_unix_2_0 from disabled to option (needed library
+    already provided by libglib2 package) (suggested by Thomas Petazzoni)
+---
+ package/gstreamer1/gst1-plugins-base/Config.in            | 5 +++++
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-Applied with a number of changes:
-
-    [Thomas:
-     - fix alphabetic ordering in package/Config.in, as noticed by
-       Vicente.
-     - rewrap Config.in help text and add some URL as a reference (though
-       the eventlog project doesn't seem to have a real web page)
-     - remove useless slash at the end of EVENTLOG_SITE
-     - make the license info more specific: it's a BSD-3c license
-     - add a hash file.]
-    
-Thanks for your contribution!
-
-Thomas
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index 44367eb..d91f56e 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -150,4 +150,9 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VORBIS
+ 	help
+ 	  Vorbis plugin library
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO_UNIX_2_0
++	bool "gio-unix-2.0"
++	help
++	  glib GIO unix plugin
++
+ endif
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 08ebe03..f391530 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -202,4 +202,10 @@ else
+ GST1_PLUGINS_BASE_CONF_OPTS += --disable-vorbis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO_UNIX_2_0),y)
++GST1_PLUGINS_BASE_CONF_OPTS += --enable-gio_unix_2_0
++else
++GST1_PLUGINS_BASE_CONF_OPTS += --disable-gio_unix_2_0
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.1.4
