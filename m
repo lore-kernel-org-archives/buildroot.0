@@ -1,87 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:28:14 +0200
-Subject: [Buildroot] [git commit] pango: bump to version 1.38.1
-Message-ID: <20151014202845.C49B481EB0@busybox.osuosl.org>
+Date: Wed, 14 Oct 2015 22:28:05 +0200
+Subject: [Buildroot] [git commit] glib-networking: bump to version 2.46.1
+Message-ID: <20151014202845.B82AC818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34d78970e0444c3c42297b34b0b5618f2c4b858d
+commit: http://git.buildroot.net/buildroot/commit/?id=fd87117a5c672373a4baea3a10b6b06959f3d5dd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pango/0001-no-tests.patch |   21 ++++++++++++---------
- package/pango/pango.hash          |    4 ++--
- package/pango/pango.mk            |    4 ++--
- 3 files changed, 16 insertions(+), 13 deletions(-)
+ package/glib-networking/glib-networking.hash |    4 ++--
+ package/glib-networking/glib-networking.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pango/0001-no-tests.patch b/package/pango/0001-no-tests.patch
-index e6777f6..734409d 100644
---- a/package/pango/0001-no-tests.patch
-+++ b/package/pango/0001-no-tests.patch
-@@ -3,25 +3,28 @@ Prevent Pango to build tests.
- Updated to Pango 1.36.3 by Hadrien Boutteville.
- 
- Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-+[Gustavo: update for 1.38.1]
- 
----- a/Makefile.am
--+++ b/Makefile.am
-+diff -Nura pango-1.38.1.orig/Makefile.am pango-1.38.1/Makefile.am
-+--- pango-1.38.1.orig/Makefile.am	2015-10-14 15:41:27.620016974 +0000
-++++ pango-1.38.1/Makefile.am	2015-10-14 15:41:54.431240793 +0000
- @@ -1,6 +1,6 @@
-  ## Process this file with automake to create Makefile.in.
-  
---SUBDIRS= pango modules pango-view examples docs tools tests build
--+SUBDIRS= pango modules pango-view examples docs tools build
-+-SUBDIRS= pango pango-view examples docs tools tests build
-++SUBDIRS= pango pango-view examples docs tools build
-  
-  EXTRA_DIST = 			\
-  	autogen.sh		\
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -418,7 +418,7 @@ target_alias = @target_alias@
-+diff -Nura pango-1.38.1.orig/Makefile.in pango-1.38.1/Makefile.in
-+--- pango-1.38.1.orig/Makefile.in	2015-10-14 15:41:27.630016685 +0000
-++++ pango-1.38.1/Makefile.in	2015-10-14 15:41:58.753115676 +0000
-+@@ -417,7 +417,7 @@
-  top_build_prefix = @top_build_prefix@
-  top_builddir = @top_builddir@
-  top_srcdir = @top_srcdir@
---SUBDIRS = pango modules pango-view examples docs tools tests build
--+SUBDIRS = pango modules pango-view examples docs tools build
-+-SUBDIRS = pango pango-view examples docs tools tests build
-++SUBDIRS = pango pango-view examples docs tools build
-  EXTRA_DIST = \
-  	autogen.sh		\
-  	pango.pc.in		\
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 3486001..792ac05 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
+index 6ebe625..22518ce 100644
+--- a/package/glib-networking/glib-networking.hash
++++ b/package/glib-networking/glib-networking.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.36.8.sha256sum
--sha256	18dbb51b8ae12bae0ab7a958e7cf3317c9acfc8a1e1103ec2f147164a0fc2d07	pango-1.36.8.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.38.1.sha256sum
-+sha256	1320569f6c6d75d6b66172b2d28e59c56ee864ee9df202b76799c4506a214eb7	pango-1.38.1.tar.xz
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 75e2d1b..19d6509 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -4,8 +4,8 @@
- #
+-# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.46/glib-networking-2.46.0.sha256sum
+-sha256	3655526d6dbfc697c22cd9b279e14599f8449f5802b12d84485bdc52d96482f0	glib-networking-2.46.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.46/glib-networking-2.46.1.sha256sum
++sha256	d5034214217f705891b6c9e719cc2c583c870bfcfdc454ebbb5e5e8940ac90b1	glib-networking-2.46.1.tar.xz
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index 67a9203..b7b92c6 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PANGO_VERSION_MAJOR = 1.36
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).8
-+PANGO_VERSION_MAJOR = 1.38
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+ GLIB_NETWORKING_VERSION_MAJOR = 2.46
+-GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
+ GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
+ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
+ GLIB_NETWORKING_INSTALL_STAGING = YES
