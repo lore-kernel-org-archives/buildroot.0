@@ -1,84 +1,162 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Oct 2015 23:10:56 +0200
-Subject: [Buildroot] [PATCH 1/2] board/freescale: refresh
- create-boot-sd.sh
-In-Reply-To: <561E7D11.7040207@lucaceresoli.net>
-References: <1444831418-13483-1-git-send-email-vincent.stehle@freescale.com>
- <1444831418-13483-2-git-send-email-vincent.stehle@freescale.com>
- <561E7D11.7040207@lucaceresoli.net>
-Message-ID: <561EC4E0.9050202@mind.be>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 14 Oct 2015 23:12:17 +0200
+Subject: [Buildroot] [PATCH v2 1/1] luvi: new package
+In-Reply-To: <1444854939-6557-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1444763952-29583-1-git-send-email-joerg.krause@embedded.rocks>
+ <1444854939-6557-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <561EC531.6080009@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14-10-15 18:04, Luca Ceresoli wrote:
-> Dear Vincent,
-> 
-> Vincent Stehl? wrote:
->> Starting with version 2.26, sfdisk defaults to a unit of 512 B sectors.
->> With those recent versions of sfdisk, the create-boot-sd.sh script ends
->> up creating a boot partition of 240 KB, which is too small to contain a
->> Linux kernel.
-> 
-> Ouch!
-> 
->>
->> Version 2.25 of sfdisk and older defaulted to cylinders; a
->> media-dependant unit, typically much larger than 512 B. With those
->> versions the create-boot-sd.sh creates paritions, large enough to hold a
-> 
-> paritions -> partitions, and remove the ',' after it.
-> 
->> kernel.
->>
->> We update the create-boot-sd.sh script to use the more readable and more
->> stable named-fields sfdisk format for the partitioning command, and set
->> the boot partition size to 64 MB, which should be enough for everyone.
->>
->> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
->> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
->> ---
->>   board/freescale/create-boot-sd.sh | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/board/freescale/create-boot-sd.sh
->> b/board/freescale/create-boot-sd.sh
->> index af45115..cfb1101 100755
->> --- a/board/freescale/create-boot-sd.sh
->> +++ b/board/freescale/create-boot-sd.sh
->> @@ -60,8 +60,8 @@ sync
->>   # - FAT partition starting at 1MB offset, containing uImage and *.dtb
->>   # - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
->>   sfdisk ${DEV} <<EOF
->> -32,480,b
->> -512,,L
->> +start=1MiB, size=64MiB, type=b
-> 
-> Is the "MiB" suffix supported on older sfdisk releases? Ubuntu 14.04
-> ships sfdisk 2.20.1, and its manpage does not contain "MiB".
-> 
-> If that is not supported, then I guess "--unit M" should work. It's in
-> the manpage, but I haven't tested it yet.
-> 
-> I strongly think we should support the latest Ubuntu LTS, AFAIK it's
-> widely used by embedded Linux developers.
+Hi J?rg,
 
- We should also still support Ubuntu 12.02 IMHO and even older RHEL.
+> Add package luvi version 2.3.4.
+>
+> luvi extends LuaJIT with asynchronous I/O and several optional modules to run
+> Lua applications and build self-contained binaries.
+>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+> Changes v1 -> v2:
+>   - replace too generic TARGET_ARCH variable into LUVI_TARGET_ARCH (Baruch Siach)
+> ---
+>   package/Config.in      |  1 +
+>   package/luvi/Config.in | 30 +++++++++++++++++++++++++++
+>   package/luvi/luvi.hash |  3 +++
+>   package/luvi/luvi.mk   | 55 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 89 insertions(+)
+>   create mode 100644 package/luvi/Config.in
+>   create mode 100644 package/luvi/luvi.hash
+>   create mode 100644 package/luvi/luvi.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 5158371..3eed94f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -503,6 +503,7 @@ menu "Lua libraries/modules"
+>   	source "package/luasql-sqlite3/Config.in"
+>   	source "package/lunit/Config.in"
+>   	source "package/luv/Config.in"
+> +	source "package/luvi/Config.in"
+>   	source "package/lzlib/Config.in"
+>   	source "package/orbit/Config.in"
+>   	source "package/rings/Config.in"
+> diff --git a/package/luvi/Config.in b/package/luvi/Config.in
+> new file mode 100644
+> index 0000000..2f01f5c
+> --- /dev/null
+> +++ b/package/luvi/Config.in
+> @@ -0,0 +1,30 @@
+> +config BR2_PACKAGE_LUVI
+> +	bool "luvi"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libuv
+> +	depends on BR2_USE_MMU # libuv
+> +	depends on !BR2_STATIC_LIBS # libuv
+> +	depends on BR2_PACKAGE_LUAJIT
+> +	select BR2_PACKAGE_LIBUV
+> +	select BR2_PACKAGE_LUV
+> +	help
+> +	  A project in-between luv and luvit. The goal of this is to make
+> +	  building luvit and derivatives much easier.
+> +
+> +	  luvi extends LuaJIT with asynchronous I/O and several optional
+> +	  modules to run Lua applications and build self-contained binaries
+> +	  on systems that don't have a compiler.
+> +
+> +	  The luvi core can be extended with several Lua modules by adding its
+> +	  bundled Lua binding libraries. To get the Lua module...
+> +	    * 'rex' select PCRE (BR2_PACKAGE_PCRE)
+> +	    * 'ssl' select OpenSSL (BR2_PACKAGE_OPENSSL)
+> +	    * 'zlib' select zlib (BR2_PACKAGE_ZLIB)
+> +
+> +	  https://github.com/luvit/luvi
+> +
+> +comment "luvi needs a toolchain w/ threads, dynamic library"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +	depends on BR2_USE_MMU
+> +
+> +comment "luvi needs LuaJIT"
+> +	depends on !BR2_PACKAGE_LUAJIT
+> diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+> new file mode 100644
+> index 0000000..99cf60e
+> --- /dev/null
+> +++ b/package/luvi/luvi.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  7a99add9e2afdeeb833f8d948b5078c326b492debf50716ca47c7669c1dc9d8b  luvi-src-v2.3.4.tar.gz
+> +sha256  4f84ec56d9bb92fd02380c12e73b0cfdb05fcd8100104e82349e488f249e85ad  0be7acc82ddffd8012e458dbb1d09a50e151116d.patch
+> diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+> new file mode 100644
+> index 0000000..77b3a03
+> --- /dev/null
+> +++ b/package/luvi/luvi.mk
+> @@ -0,0 +1,55 @@
+> +################################################################################
+> +#
+> +# luvi
+> +#
+> +################################################################################
+> +
+> +LUVI_VERSION = 2.3.4
+> +LUVI_SOURCE = luvi-src-v$(LUVI_VERSION).tar.gz
+> +LUVI_SITE = https://github.com/luvit/luvi/releases/download/v$(LUVI_VERSION)
 
- So to avoid this kind of issue, it would be better to use genimage. But that's
-a much bigger change, of course.
+The tag version is   v2.3.4   , so this should be rather
 
+LUVI_VERSION = v2.3.4
+LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
 
- Regards,
- Arnout
+Regards,
+Jerzy
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> +LUVI_LICENSE = Apache-2.0
+> +LUVI_LICENSE_FILES = LICENSE.txt
+> +LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+> +LUVI_PATCH = https://github.com/luvit/luvi/commit/0be7acc82ddffd8012e458dbb1d09a50e151116d.patch
+> +
+> +# Dispatch all architectures of LuaJIT
+> +ifeq ($(BR2_i386),y)
+> +LUVI_TARGET_ARCH = x86
+> +else ifeq ($(BR2_x86_64),y)
+> +LUVI_TARGET_ARCH = x64
+> +else ifeq ($(BR2_powerpc),y)
+> +LUVI_TARGET_ARCH = ppc
+> +else ifeq ($(BR2_arm)$(BR2_armeb),y)
+> +LUVI_TARGET_ARCH = arm
+> +else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+> +LUVI_TARGET_ARCH = mips
+> +else
+> +LUVI_TARGET_ARCH = $(BR2_ARCH)
+> +endif
+> +
+> +# Bundled lua bindings have to be linked statically into the luvi executable
+> +LUVI_CONF_OPTS = \
+> +	-DBUILD_SHARED_LIBS=OFF \
+> +	-DWithSharedLibluv=ON \
+> +	-DTARGET_ARCH=$(LUVI_TARGET_ARCH) \
+> +	-DLUA_PATH=$(HOST_DIR)/usr/share/luajit-2.0.4/?.lua
+> +
+> +# Add "rex" module (PCRE via bundled lrexlib)
+> +ifeq ($(BR2_PACKAGE_PCRE),y)
+> +LUVI_DEPENDENCIES += pcre
+> +LUVI_CONF_OPTS += -DWithPCRE=ON -DWithSharedPCRE=ON
+> +endif
+> +
+> +# Add "ssl" module (via bundled lua-openssl)
+> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> +LUVI_DEPENDENCIES += openssl
+> +LUVI_CONF_OPTS += -DWithOpenSSL=ON -DWithOpenSSLASM=ON -DWithSharedOpenSSL=ON
+> +endif
+> +
+> +# Add "zlib" module (via bundled lua-zlib)
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +LUVI_DEPENDENCIES += zlib
+> +LUVI_CONF_OPTS += -DWithZLIB=ON -DWithSharedZLIB=ON
+> +endif
+> +
+> +$(eval $(cmake-package))
