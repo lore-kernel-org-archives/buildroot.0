@@ -1,88 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:47:30 +0200
-Subject: [Buildroot] [git commit] axfs: add new filesystem type
-Message-ID: <20151014214751.023DE81663@busybox.osuosl.org>
+Date: Wed, 14 Oct 2015 23:46:27 +0200
+Subject: [Buildroot] [git commit] axfsutils: add new package
+Message-ID: <20151014214750.EBDCA81663@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a6f916430f553efa71dd7092073f5dec32861ba3
+commit: http://git.buildroot.net/buildroot/commit/?id=653cc68e9fde29baec5017f41c5bfc4f2e210fa4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Tools for building AXFS Filesystem.
 
 The Advanced XIP File System is a Linux kernel filesystem driver that
 enables files to be executed directly from flash or ROM memory rather
 than being copied into RAM. It has the ability to store individual
 *pages* in a file uncompressed/XIP or compressed/Demand Paged.
 
-This commit only adds support for 'XIP all' mode, so all the files that
-have the execute attribute set will be XIP'ed.
+Source:
+	https://github.com/jaredeh/axfs
 
-At the moment, the FS is not supported in Linux mainline (v4.3-rc5), so
-the kernel has to be built with the axfs patches to be able to read it.
-Patches can be found here: https://github.com/jaredeh/axfs
-
-[Thomas: rewrap Config.in help text.]
+[Thomas:
+ - add hash file.
+ - use $(INSTALL) -D -m 0755 instead of cp for installing mkfs.axfs.]
 
 Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/Config.in      |    1 +
- fs/axfs/Config.in |   17 +++++++++++++++++
- fs/axfs/axfs.mk   |   13 +++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+ package/axfsutils/axfsutils.hash |    2 ++
+ package/axfsutils/axfsutils.mk   |   24 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 5853113..51ccf28 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -1,5 +1,6 @@
- menu "Filesystem images"
- 
-+source "fs/axfs/Config.in"
- source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
- source "fs/cramfs/Config.in"
-diff --git a/fs/axfs/Config.in b/fs/axfs/Config.in
+diff --git a/package/axfsutils/axfsutils.hash b/package/axfsutils/axfsutils.hash
 new file mode 100644
-index 0000000..eaaf7db
+index 0000000..4a3b3fb
 --- /dev/null
-+++ b/fs/axfs/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_TARGET_ROOTFS_AXFS
-+	bool "axfs root filesystem"
-+	help
-+	  The Advanced XIP File System is a Linux kernel filesystem
-+	  driver that enables files to be executed directly from flash
-+	  or ROM memory rather than being copied into RAM. It has the
-+	  ability to store individual *pages* in a file
-+	  uncompressed/XIP or compressed/Demand Paged.
-+
-+	  So far, the only supported mode is 'XIP all', so all the
-+	  files that have the execute attribute set will be XIP'ed.
-+
-+	  At the moment, the FS is not supported in Linux mainline
-+	  (v4.3-rc5), so the kernel has to be built with the axfs
-+	  patches to be able to read it. Patches can be found at:
-+
-+	    https://github.com/jaredeh/axfs
-diff --git a/fs/axfs/axfs.mk b/fs/axfs/axfs.mk
++++ b/package/axfsutils/axfsutils.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 9c041393131bdfebefa89cfaba7788b514b56ffc51bda8f130fd49b39fe89dc0 axfsutils-f26ae785e33df76f658b71ef2cfbc7f511ff875d.tar.gz
+diff --git a/package/axfsutils/axfsutils.mk b/package/axfsutils/axfsutils.mk
 new file mode 100644
-index 0000000..05d6e5d
+index 0000000..3e6ea52
 --- /dev/null
-+++ b/fs/axfs/axfs.mk
-@@ -0,0 +1,13 @@
++++ b/package/axfsutils/axfsutils.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# Build the axfs root filesystem image
++# axfsutils
 +#
 +################################################################################
 +
-+ROOTFS_AXFS_DEPENDENCIES = host-axfsutils
++AXFSUTILS_VERSION = f26ae785e33df76f658b71ef2cfbc7f511ff875d
++AXFSUTILS_SITE = $(call github,jaredeh,axfs,$(AXFSUTILS_VERSION))
++AXFSUTILS_LICENSE = GPLv2
++AXFSUTILS_LICENSE_FILES = mkfs.axfs-legacy/COPYING
++AXFSUTILS_DEPENDENCIES = host-zlib
 +
-+define ROOTFS_AXFS_CMD
-+	$(HOST_DIR)/usr/bin/mkfs.axfs -s -a $(TARGET_DIR) $@
++# The 'new' mkfs.axfs version requires GNUstep which is not a buildroot
++# prerequisite. The 'legacy' one works just as well without that requirement.
++define HOST_AXFSUTILS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/mkfs.axfs-legacy
 +endef
 +
-+$(eval $(call ROOTFS_TARGET,axfs))
++define HOST_AXFSUTILS_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/mkfs.axfs-legacy/mkfs.axfs \
++		$(HOST_DIR)/usr/bin/mkfs.axfs
++endef
++
++$(eval $(host-generic-package))
