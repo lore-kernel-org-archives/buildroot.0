@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:27:39 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
-Message-ID: <20151014202743.B048C81EAE@busybox.osuosl.org>
+Date: Wed, 14 Oct 2015 22:27:50 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+In-Reply-To: <1444831865-16552-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444831865-16552-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151014222750.4a572d1f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5b065abe51885cb002a70478f555b27722c0c5f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed, 14 Oct 2015 11:11:05 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/linux-headers/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index adcf616..7001466 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -191,7 +191,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.71"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.72"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.109"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.90"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.49"	if BR2_KERNEL_HEADERS_3_12
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
