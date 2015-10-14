@@ -1,27 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:27:50 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
-In-Reply-To: <1444831865-16552-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1444831865-16552-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20151014222750.4a572d1f@free-electrons.com>
+Date: Wed, 14 Oct 2015 22:28:14 +0200
+Subject: [Buildroot] [git commit] pango: bump to version 1.38.1
+Message-ID: <20151014202845.C49B481EB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=34d78970e0444c3c42297b34b0b5618f2c4b858d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 11:11:05 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pango/0001-no-tests.patch |   21 ++++++++++++---------
+ package/pango/pango.hash          |    4 ++--
+ package/pango/pango.mk            |    4 ++--
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pango/0001-no-tests.patch b/package/pango/0001-no-tests.patch
+index e6777f6..734409d 100644
+--- a/package/pango/0001-no-tests.patch
++++ b/package/pango/0001-no-tests.patch
+@@ -3,25 +3,28 @@ Prevent Pango to build tests.
+ Updated to Pango 1.36.3 by Hadrien Boutteville.
+ 
+ Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
++[Gustavo: update for 1.38.1]
+ 
+---- a/Makefile.am
+-+++ b/Makefile.am
++diff -Nura pango-1.38.1.orig/Makefile.am pango-1.38.1/Makefile.am
++--- pango-1.38.1.orig/Makefile.am	2015-10-14 15:41:27.620016974 +0000
+++++ pango-1.38.1/Makefile.am	2015-10-14 15:41:54.431240793 +0000
+ @@ -1,6 +1,6 @@
+  ## Process this file with automake to create Makefile.in.
+  
+--SUBDIRS= pango modules pango-view examples docs tools tests build
+-+SUBDIRS= pango modules pango-view examples docs tools build
++-SUBDIRS= pango pango-view examples docs tools tests build
+++SUBDIRS= pango pango-view examples docs tools build
+  
+  EXTRA_DIST = 			\
+  	autogen.sh		\
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -418,7 +418,7 @@ target_alias = @target_alias@
++diff -Nura pango-1.38.1.orig/Makefile.in pango-1.38.1/Makefile.in
++--- pango-1.38.1.orig/Makefile.in	2015-10-14 15:41:27.630016685 +0000
+++++ pango-1.38.1/Makefile.in	2015-10-14 15:41:58.753115676 +0000
++@@ -417,7 +417,7 @@
+  top_build_prefix = @top_build_prefix@
+  top_builddir = @top_builddir@
+  top_srcdir = @top_srcdir@
+--SUBDIRS = pango modules pango-view examples docs tools tests build
+-+SUBDIRS = pango modules pango-view examples docs tools build
++-SUBDIRS = pango pango-view examples docs tools tests build
+++SUBDIRS = pango pango-view examples docs tools build
+  EXTRA_DIST = \
+  	autogen.sh		\
+  	pango.pc.in		\
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 3486001..792ac05 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.36.8.sha256sum
+-sha256	18dbb51b8ae12bae0ab7a958e7cf3317c9acfc8a1e1103ec2f147164a0fc2d07	pango-1.36.8.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.38.1.sha256sum
++sha256	1320569f6c6d75d6b66172b2d28e59c56ee864ee9df202b76799c4506a214eb7	pango-1.38.1.tar.xz
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 75e2d1b..19d6509 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PANGO_VERSION_MAJOR = 1.36
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).8
++PANGO_VERSION_MAJOR = 1.38
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
