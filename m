@@ -1,50 +1,17 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 14 Oct 2015 20:58:20 +0300
-Subject: [Buildroot] [PATCH 1/2] package/apache: bump version to 2.4.17
-In-Reply-To: <1444844399-12782-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1444844399-12782-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20151014175820.GN2451@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 14 Oct 2015 20:12:21 +0200
+Subject: [Buildroot] [PATCH] apache: bump to version 2.4.17
+References: <1444818035-17242-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <5hi2fcxkds.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Am Wed, 14 Oct 2015 11:20:35 +0100 schrieb Vicente Olivert Riera:
 
-On Wed, Oct 14, 2015 at 07:39:58PM +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/apache/apache.hash | 4 ++--
->  package/apache/apache.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-> index 9dffe12..051019d 100644
-> --- a/package/apache/apache.hash
-> +++ b/package/apache/apache.hash
-> @@ -1,2 +1,2 @@
-> -# From http://www.apache.org/dist/httpd/httpd-2.4.16.tar.bz2.sha1
-> -sha1	9963e7482700dd50c53e47abfe2d1c5068875a9c	httpd-2.4.16.tar.bz2
-> +# From http://www.apache.org/dist/httpd/httpd-2.4.17.tar.bz2.sha1
-> +sha1	3a1b0db8b6c71b9c9ac507ba8723b95a8d3da1df	httpd-2.4.17.tar.bz2
-> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> index acd242d..daf8fe2 100644
-> --- a/package/apache/apache.mk
-> +++ b/package/apache/apache.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
 > -APACHE_VERSION = 2.4.16
 > +APACHE_VERSION = 2.4.17
 
-Vincent posted a patch for that earlier today 
-(http://patchwork.ozlabs.org/patch/530103/).
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
