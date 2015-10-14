@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:31:18 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: disable MIPS DSP options by default
-In-Reply-To: <1444838302-13785-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1444838302-13785-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151014223118.281525fc@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Oct 2015 20:34:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 8401] New: gpsd 3.15 NMEA support
+Message-ID: <bug-8401-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+https://bugs.busybox.net/show_bug.cgi?id=8401
 
-On Wed, 14 Oct 2015 16:58:22 +0100, Vicente Olivert Riera wrote:
-> DSP support depends on the core implementation, not on the ISA, so
-> enabling it for mips64r2 is not correct since you can build a mips64r2
-> core without DSP support.
-> 
-> Disable mipsdspr1 and mipsdspr2 options by default and let the user
-> enable them via the BR2_PACKAGE_FFMPEG_EXTRACONF kconfig option, which
-> will take preference and override the default values.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/ffmpeg/ffmpeg.mk |   12 ++----------
->  1 files changed, 2 insertions(+), 10 deletions(-)
+           Summary: gpsd 3.15 NMEA support
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: kevin.alden2 at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Applied, thanks. As Gustavo suggested, it might be worth adding a
-Config.in option in arch/Config.in.mips to allow the usage of the DSP
-instructions (of course, if such instructions are in practice used by
-ffmpeg, and available on a useful selection of MIPS SoCs).
 
-Thanks!
+There is a bug with gpsd 3.15 where is is impossible to compile in NMEA 0183
+support.  It has been reported and resolved
+(http://savannah.nongnu.org/bugs/?46082), but there has not yet been a release
+for buildroot to pull in.
 
-Thomas
+The following patch resolves the issue:
+
+
+--- a/SConstruct    2015-06-03 10:09:31.000000000 -0400
++++ b/SConstruct    2015-09-30 13:41:54.372157623 -0400
+@@ -95,7 +95,7 @@ imloads = True
+
+ boolopts = (
+     # GPS protocols
+-    ("nmea0183",      True,  "NMEA0183 support"),
++    ("nmea",          True,  "NMEA0183 support"),
+     ("ashtech",       True,  "Ashtech support"),
+     ("earthmate",     True,  "DeLorme EarthMate Zodiac support"),
+     ("evermore",      True,  "EverMore binary support"),
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
