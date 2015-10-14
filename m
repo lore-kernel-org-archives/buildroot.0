@@ -1,27 +1,50 @@
-From: Alan Ott <alan@softiron.co.uk>
-Date: Wed, 14 Oct 2015 18:02:54 -0400
-Subject: [Buildroot] [PATCH 0/5] Move download links away from Google
- Code
-In-Reply-To: <20151014235606.095399a1@free-electrons.com>
-References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
- <20151014235606.095399a1@free-electrons.com>
-Message-ID: <561ED10E.5070405@softiron.co.uk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Oct 2015 19:36:45 -0300
+Subject: [Buildroot] [PATCH] busybox: enable fully featured hush shell for
+	nommu
+Message-ID: <1444862205-23935-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/14/2015 05:56 PM, Thomas Petazzoni wrote:
-> On Wed, 14 Oct 2015 17:51:18 -0400, Alan Ott wrote:
->
->> Alan Ott (5):
->>    dsp-tools: Move download link away from Google Code
->>    gst-dsp: Move download link away from Google Code
->>    gst-omapfb: Move download link away from Google Code
-> These three look good, but can you also add the hash files while you're
-> at it?
+As pointed by Rich Fekler on IRC the basic hush shell is pretty much
+useless since it doesn't support if conditionals, loops, functions, case
+or even interactive mode.
+So enable the full feature-set.
+Size delta: +10184 bytes uncompressed for blackfin fdpic.
 
-Yes, will add.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/busybox/busybox.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Alan.
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 3494456..d3a6fd8 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -89,6 +89,21 @@ define BUSYBOX_SET_MMU
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_SWAPONOFF,$(BUSYBOX_BUILD_CONFIG))
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_ASH,$(BUSYBOX_BUILD_CONFIG))
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BASH_COMPAT,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_BRACE_EXPANSION,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_HELP,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_INTERACTIVE,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_SAVEHISTORY,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_JOB,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_TICK,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_IF,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOOPS,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_CASE,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_FUNCTIONS,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_LOCAL,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_RANDOM_SUPPORT,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_EXPORT_N,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_HUSH_MODE_X,$(BUSYBOX_BUILD_CONFIG))
+ endef
+ endif
+ 
+-- 
+2.4.9
