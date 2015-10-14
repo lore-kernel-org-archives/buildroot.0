@@ -1,67 +1,97 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 14 Oct 2015 18:04:33 +0200
-Subject: [Buildroot] [PATCH 1/2] board/freescale: refresh
-	create-boot-sd.sh
-In-Reply-To: <1444831418-13483-2-git-send-email-vincent.stehle@freescale.com>
-References: <1444831418-13483-1-git-send-email-vincent.stehle@freescale.com>
- <1444831418-13483-2-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <561E7D11.7040207@lucaceresoli.net>
+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Date: Wed, 14 Oct 2015 13:05:46 -0300
+Subject: [Buildroot] [PATCH v2 0/2] Add support for AXFS filesystem type
+In-Reply-To: <20151013231428.2e611e06@free-electrons.com>
+References: <1444064102-13575-1-git-send-email-ariel@vanguardiasur.com.ar>
+ <20151013231428.2e611e06@free-electrons.com>
+Message-ID: <561E7D5A.1010600@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent,
+Thomas,
 
-Vincent Stehl? wrote:
-> Starting with version 2.26, sfdisk defaults to a unit of 512 B sectors.
-> With those recent versions of sfdisk, the create-boot-sd.sh script ends
-> up creating a boot partition of 240 KB, which is too small to contain a
-> Linux kernel.
+El 13/10/15 a las 18:14, Thomas Petazzoni escribi?:
+> Dear Ariel D'Alessandro,
+> 
+> On Mon,  5 Oct 2015 13:55:00 -0300, Ariel D'Alessandro wrote:
+>> This patch series adds support for using the AXFS filesystem type.
+>>
+>> The Advanced XIP File System is a Linux kernel filesystem driver that enables
+>> files to be executed directly from flash or ROM memory rather than being copied
+>> into RAM.
+>>
+>> More info can be found here: http://elinux.org/AXFS
+>>
+>> Changes from v1:
+>> * Removed unnecessary call to $(generic-package) in axfsutils.mk.
+>>
+>> Ariel
+>>
+>> Ariel D'Alessandro (2):
+>>   axfsutils: add new package
+>>   axfs: add new filesystem type
+> 
+> You received some feedback on both patches. Could you address this
+> feedback, and submit a new version of the patches?
 
-Ouch!
+Yes, right away.
 
->
-> Version 2.25 of sfdisk and older defaulted to cylinders; a
-> media-dependant unit, typically much larger than 512 B. With those
-> versions the create-boot-sd.sh creates paritions, large enough to hold a
+> 
+> Note that adding the axfs patches as a kernel extension, as suggested
+> by Yann E. Morin, is optional and can perfectly be done as a set of
+> follow-up patches: it is not mandatory to have this part of the current
+> series.
 
-paritions -> partitions, and remove the ',' after it.
+Understood.
 
-> kernel.
->
-> We update the create-boot-sd.sh script to use the more readable and more
-> stable named-fields sfdisk format for the partitioning command, and set
-> the boot partition size to 64 MB, which should be enough for everyone.
->
-> Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
->   board/freescale/create-boot-sd.sh | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/board/freescale/create-boot-sd.sh b/board/freescale/create-boot-sd.sh
-> index af45115..cfb1101 100755
-> --- a/board/freescale/create-boot-sd.sh
-> +++ b/board/freescale/create-boot-sd.sh
-> @@ -60,8 +60,8 @@ sync
->   # - FAT partition starting at 1MB offset, containing uImage and *.dtb
->   # - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
->   sfdisk ${DEV} <<EOF
-> -32,480,b
-> -512,,L
-> +start=1MiB, size=64MiB, type=b
+> 
+> However, one thing that I remember about AXFS is that you could decide
+> when creating the root filesystem, which parts of which files would be
+> stored uncompressed (so that they can be XIP-ed) and which parts of
+> which files would be stored compressed (to save space). This allowed to
+> combine the nice aspects of a XIP-capable filesystem, with the nice
+> aspects of a compressed filesystem. 
 
-Is the "MiB" suffix supported on older sfdisk releases? Ubuntu 14.04
-ships sfdisk 2.20.1, and its manpage does not contain "MiB".
+Yes, indeed. One of the keys of AXFS is that it "has the ability to
+store individual *pages* in a file uncompressed/XIP or compressed/Demand
+Paged." [0]
 
-If that is not supported, then I guess "--unit M" should work. It's in
-the manpage, but I haven't tested it yet.
+Moreover, "mkfs.axfs tool can receive an additional argument using the
+-i flag which points to a user-created file in the XML format; it
+indicates which pages the user desires to have marked for XIP within the
+file system image." [1]
 
-I strongly think we should support the latest Ubuntu LTS, AFAIK it's
-widely used by embedded Linux developers.
+> I remember there was even a tool to
+> run on the target to "measure" the filesystem accesses, and give some
+> hints on which pages of data should be stored uncompressed vs. which
+> pages should be stored compressed. Is this actually implemented in
+> AXFS ? 
+
+Yes. The CONFIG_AXFS_PROFILING option is added in order to enable the
+profiling tool. Then simply running on the target platform, the AXFS
+profiler will collect data and write the information it could gather to
+/proc/axfs/volume0. See [1] for more information.
+
+> If so, do you plan to add support for such functionality ?
+
+Yes, it would be nice to add support for this functionality in order to
+explode the entire AXFS capability. I'll do this as a set of follow-up
+patches if that's OK, and let the -a flag (XIP all) for now.
+
+Thanks,
+
+
+Links:
+
+[0]
+http://www.academypublisher.com/ojs/index.php/jcp/article/viewFile/03017989/370
+
+[1]
+http://docslide.us/documents/application-execute-in-place-xip-with-linux-and-axfs.html
 
 -- 
-Luca
+Ariel D'Alessandro, VanguardiaSur
+www.vanguardiasur.com.ar
