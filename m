@@ -1,35 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 09:38:13 +0200
-Subject: [Buildroot] [git commit] squeezelite: alsa-lib mixer support is
-	mandatory
-Message-ID: <20151014073842.77D55805F2@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 14 Oct 2015 09:40:30 +0200
+Subject: [Buildroot] [PATCH 1/1] squeezelite: fix license typo
+Message-ID: <1444808430-11567-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae84f99cbc239cf95f145e7433fbdbcd57c35013
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/4f5/4f53ed80c7f135c33341919be4d5256409a2b23a/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/squeezelite/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/squeezelite/squeezelite.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/squeezelite/Config.in b/package/squeezelite/Config.in
-index 1241085..be8f11a 100644
---- a/package/squeezelite/Config.in
-+++ b/package/squeezelite/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_SQUEEZELITE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	depends on BR2_USE_MMU # mpg123
- 	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_ALSA_LIB_MIXER
- 	select BR2_PACKAGE_FLAC
- 	select BR2_PACKAGE_LIBMAD
- 	select BR2_PACKAGE_LIBVORBIS
+diff --git a/package/squeezelite/squeezelite.mk b/package/squeezelite/squeezelite.mk
+index b9dfa7f..7a82f4a 100644
+--- a/package/squeezelite/squeezelite.mk
++++ b/package/squeezelite/squeezelite.mk
+@@ -7,7 +7,7 @@
+ SQUEEZELITE_VERSION = v1.8
+ SQUEEZELITE_SITE = $(call github,robadenshi,squeezelite,$(SQUEEZELITE_VERSION))
+ SQUEEZELITE_LICENSE = GPLv3
+-SQUEEZELITE_LICENSE_FILE = LICENSE.txt
++SQUEEZELITE_LICENSE_FILES = LICENSE.txt
+ SQUEEZELITE_DEPENDENCIES = alsa-lib flac libmad libvorbis faad2 mpg123
+ SQUEEZELITE_MAKE_OPTS = -DLINKALL
+ 
+-- 
+1.9.1
