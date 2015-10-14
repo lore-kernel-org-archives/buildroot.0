@@ -1,29 +1,35 @@
-From: Charles Duffy <charles@dyfis.net>
-Date: Wed, 14 Oct 2015 22:23:12 +0000
-Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
-	BR2_SHARED_LIBS
-In-Reply-To: <20151014233507.23a93657@free-electrons.com>
-References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
- <20151014233507.23a93657@free-electrons.com>
-Message-ID: <CAEHm_shswg6pPrMgif+OY2w3qqW15d1Amkf4avUPum_OpF-MEA@mail.gmail.com>
+From: Alan Ott <alan@softiron.co.uk>
+Date: Wed, 14 Oct 2015 18:00:44 -0400
+Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
+In-Reply-To: <20151014235522.774491e2@free-electrons.com>
+References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>	<1444859483-2268-5-git-send-email-alan@softiron.co.uk>
+ <20151014235522.774491e2@free-electrons.com>
+Message-ID: <561ED08C.5010301@softiron.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 14, 2015 at 4:35 PM Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+On 10/14/2015 05:55 PM, Thomas Petazzoni wrote:
+> On Wed, 14 Oct 2015 17:51:22 -0400, Alan Ott wrote:
+>
+>> +# The above revision must remain the same as the gmock package
+>> +GTEST_SITE = $(call github,google,googletest,$(GTEST_VERSION))
+>>   GTEST_INSTALL_STAGING = YES
+>>   GTEST_INSTALL_TARGET = NO
+>>   GTEST_LICENSE = BSD-3c
+>>   GTEST_LICENSE_FILES = LICENSE
+>> +GTEST_SUBDIR = googletest
+> So gtest and gmock are in fact now part of the same repository/upstream
+> project ? If that's the case, then I think we should simply get rid of
+> the gtest and gmock packages, and have a single package named
+> "googletest".
 
-> Could you instead try the following change:
->
-> -                       --disable-gcc-wrapper)
-> +                       --disable-gcc-wrapper \
-> +                       $(SHARED_STATIC_LIBS_OPTS))
->
->
-Works perfectly. Should I bother resubmitting, or are you inclined to make
-the change directly?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151014/c6a2d855/attachment.html>
+Yes, that would probably be better. gmock depends on gtest, and gtest 
+can be standalone. Maybe we have one package with a submenu option to 
+build each target (and a dependency so gmock selects gtest).
+
+Is that ok by you?
+
+Alan.
