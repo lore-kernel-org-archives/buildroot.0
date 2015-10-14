@@ -1,40 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 14 Oct 2015 11:20:35 +0100
-Subject: [Buildroot] [PATCH] apache: bump to version 2.4.17
-Message-ID: <1444818035-17242-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 14 Oct 2015 12:34:22 +0200
+Subject: [Buildroot] [PATCH 1/1] ffmpeg: change tarball compression to xz
+Message-ID: <1444818862-1530-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/apache/apache.hash |    4 ++--
- package/apache/apache.mk   |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 9dffe12..e99253a 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 9e44f2e..eb23f58 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
 @@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.16.tar.bz2.sha1
--sha1	9963e7482700dd50c53e47abfe2d1c5068875a9c	httpd-2.4.16.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.17.tar.bz2.sha1
-+sha1 3a1b0db8b6c71b9c9ac507ba8723b95a8d3da1df  httpd-2.4.17.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index acd242d..daf8fe2 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally calculated
+-sha256 9565236404d3515aab754283c687c0a001019003148bf7f708e643608c0690b8  ffmpeg-2.8.tar.bz2
++sha256 993ca7216aa0eac899a85fe1119dac12ef0655d67f932de6a32acc00188f8182  ffmpeg-2.8.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index f817471..afa43f6 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--APACHE_VERSION = 2.4.16
-+APACHE_VERSION = 2.4.17
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ FFMPEG_VERSION = 2.8
+-FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
++FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+ 
 -- 
-1.7.1
+1.9.1
