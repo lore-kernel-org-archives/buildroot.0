@@ -1,57 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:30:19 +0200
-Subject: [Buildroot] [git commit] ffmpeg: disable MIPS DSP options by default
-Message-ID: <20151014203024.CBF8681EB9@busybox.osuosl.org>
+Date: Wed, 14 Oct 2015 22:29:44 +0200
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2015.10.13
+In-Reply-To: <1444830259-17307-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1444830259-17307-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20151014222944.6a670319@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b090dcbf90900b971d59017c789ce4e6cd61ae95
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-DSP support depends on the core implementation, not on the ISA, so
-enabling it for mips64r2 is not correct since you can build a mips64r2
-core without DSP support.
+On Wed, 14 Oct 2015 10:44:19 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/wireless-regdb/wireless-regdb.hash | 2 +-
+>  package/wireless-regdb/wireless-regdb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Disable mipsdspr1 and mipsdspr2 options by default and let the user
-enable them via the BR2_PACKAGE_FFMPEG_EXTRACONF kconfig option, which
-will take preference and override the default values.
+Applied, thanks.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ffmpeg/ffmpeg.mk |   12 ++----------
- 1 files changed, 2 insertions(+), 10 deletions(-)
-
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 4f4c52c..fd953d6 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -41,6 +41,8 @@ FFMPEG_CONF_OPTS = \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
- 	--disable-memalign-hack \
-+	--disable-mipsdspr1 \
-+	--disable-mipsdspr2 \
- 	--disable-msa \
- 	--enable-hwaccels \
- 	--disable-avisynth \
-@@ -355,16 +357,6 @@ FFMPEG_CONF_OPTS += \
- 	--disable-mips32r2
- endif
- 
--ifeq ($(BR2_mips_64r2),y)
--FFMPEG_CONF_OPTS += \
--	--enable-mipsdspr1 \
--	--enable-mipsdspr2
--else
--FFMPEG_CONF_OPTS += \
--	--disable-mipsdspr1 \
--	--disable-mipsdspr2
--endif
--
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPTS += --enable-altivec
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
