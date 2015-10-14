@@ -1,140 +1,60 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@freescale.com>
-Date: Wed, 14 Oct 2015 16:03:38 +0200
-Subject: [Buildroot] [PATCH 2/2] imx6sabre: use zImage format for kernel
-In-Reply-To: <1444831418-13483-1-git-send-email-vincent.stehle@freescale.com>
-References: <1444831418-13483-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <1444831418-13483-3-git-send-email-vincent.stehle@freescale.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 14 Oct 2015 15:07:15 +0100
+Subject: [Buildroot] [PATCH] mplayer: needs zlib
+In-Reply-To: <561E5F04.9020607@zacarias.com.ar>
+References: <1444730313-34190-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20151013225708.3aa5e0aa@free-electrons.com>
+ <561E5F04.9020607@zacarias.com.ar>
+Message-ID: <561E6193.1030208@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting with u-boot rel_imx_3.10.53_1.1.0_ga, the default is to boot a
-zImage instead of an uImage. Update the i.MX6 defconfigs accordingly.
-This repairs the boot from SD card.
+Hello all,
 
-While at it, align freescale_imx6sololiteevk_defconfig a bit more on the
-other i.MX6 defconfigs, update documentation and SD card creation script
-comments to reflect the change to zImage.
+On 10/14/2015 02:56 PM, Gustavo Zacarias wrote:
+> On 13/10/15 17:57, Thomas Petazzoni wrote:
+> 
+>> While this solution is simple, I am not sure if this is the right one.
+>> It is in fact perfectly possible to build mplayer without zlib, by
+>> doing:
+>>
+>> +MPLAYER_CONF_OPTS += --disable-decoder=apng --disable-encoder=apng
+>> --disable-decoder=tdsc
+>>
+>> So in fact, zlib is only needed for two decoders/encoders in the ffmpeg
+>> code. However, it is not really clear to me how to handle this
+>> properly: there is one configure script at the top-level directory, and
+>> then another one in the ffmpeg/ directory. And it is really the ffmpeg
+>> encoders/decoders that have this zlib requirement (and probably
+>> others?).
+>>
+>> So, simple solution is to make zlib mandatory (which is reasonable:
+>> zlib is small, and probably already part of most systems). However, I
+>> wonder if there are not some other dependencies for certain
+>> encoders/decoders.
+>>
+>> Bernd, Gustavo, do you have some suggestions ?
+> 
+> Hi Bernd, Thomas, Vicente.
+> Both apng and tdsc are on the same family of codecs, they're basically
+> animated-image formats, apng being animated png, and tdsc being a form
+> of animated jpeg.
+> Since in general we don't require any special deps for mplayer (and it
+> doesn't require them most of the time) i'd say being able to build
+> without zlib would be desirable, specially since these formats are
+> unlikely to normally be used via mplayer (they probably weren't an
+> available feature with 1.1.x)
+> So using an autodep on zlib seems better IMO.
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@freescale.com>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
----
- board/freescale/create-boot-sd.sh           |  2 +-
- board/freescale/imx6sabre/readme.txt        |  2 +-
- configs/freescale_imx6dlsabreauto_defconfig |  2 +-
- configs/freescale_imx6dlsabresd_defconfig   |  2 +-
- configs/freescale_imx6qsabreauto_defconfig  |  2 +-
- configs/freescale_imx6qsabresd_defconfig    |  2 +-
- configs/freescale_imx6sololiteevk_defconfig | 10 +++++++++-
- 7 files changed, 15 insertions(+), 7 deletions(-)
+and why not disable apng and tdsc unconditionally? As you said, "these
+formats are unlikely to normally be used via mplayer", so if someone
+needs support for them, a future patch could do the work.
 
-diff --git a/board/freescale/create-boot-sd.sh b/board/freescale/create-boot-sd.sh
-index cfb1101..e75d107 100755
---- a/board/freescale/create-boot-sd.sh
-+++ b/board/freescale/create-boot-sd.sh
-@@ -57,7 +57,7 @@ sync
- # Partition the card.
- # SD layout for i.MX6 boot:
- # - Bootloader at offset 1024
--# - FAT partition starting at 1MB offset, containing uImage and *.dtb
-+# - FAT partition starting at 1MB offset, containing uImage or zImage, and *.dtb
- # - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
- sfdisk ${DEV} <<EOF
- start=1MiB, size=64MiB, type=b
-diff --git a/board/freescale/imx6sabre/readme.txt b/board/freescale/imx6sabre/readme.txt
-index 6850885..6958d92 100644
---- a/board/freescale/imx6sabre/readme.txt
-+++ b/board/freescale/imx6sabre/readme.txt
-@@ -43,7 +43,7 @@ You will find in ./output/images/ the following files:
-   - rootfs.ext2
-   - rootfs.tar
-   - u-boot.imx
--  - uImage
-+  - zImage
- 
- Create a bootable SD card
- =========================
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index 0de8eea..c175530 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabreauto"
- 
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index 3010d7d..25bd6ce 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-sabresd"
- 
-diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-index 70367a7..b5ecc0e 100644
---- a/configs/freescale_imx6qsabreauto_defconfig
-+++ b/configs/freescale_imx6qsabreauto_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto"
- 
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 3fad77a..6dea756 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -19,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
- 
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 5d98e9a..18ed588 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -2,6 +2,14 @@
- BR2_arm=y
- BR2_cortex_a9=y
- 
-+# patches
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
-+
-+# toolchain
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.28"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- 
-@@ -11,7 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
--BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
-+BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
- 
--- 
-2.5.3
+Regards,
+
+Vincent.
+
+> Regards.
