@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 23:48:19 +0200
-Subject: [Buildroot] [git commit] slang: forcibly disable oniguruma support
-Message-ID: <20151014214910.B4C1A81EBA@busybox.osuosl.org>
+From: Alan Ott <alan@softiron.co.uk>
+Date: Wed, 14 Oct 2015 17:51:18 -0400
+Subject: [Buildroot] [PATCH 0/5] Move download links away from Google Code
+Message-ID: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3cd1a9febe6a051db98d737a3bb78c8f461a3af3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+With Google Code going away early next year. Remove download links from
+Google Code and find the new official repos for those projects.
 
-If the host has oniguruma installed then slang can detect it and try to
-(wrongly) link against it resulting in build failure. Fixes:
-http://autobuild.buildroot.net/results/51f/51ff079ebbd363e0445d226ec80bc28e524fd88c/
+These patches came from Buildroot Dev Days in Dublin. There will be more
+to come to clean up the other projects using Google Code.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/slang/slang.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Alan Ott (5):
+  dsp-tools: Move download link away from Google Code
+  gst-dsp: Move download link away from Google Code
+  gst-omapfb: Move download link away from Google Code
+  gtest: Upgrade to GitHub HEAD
+  gmock: Upgrade to GitHub HEAD
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 59ef993..1a7576a 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -9,6 +9,7 @@ SLANG_SITE = http://www.jedsoft.org/releases/slang
- SLANG_LICENSE = GPLv2+
- SLANG_LICENSE_FILES = COPYING
- SLANG_INSTALL_STAGING = YES
-+SLANG_CONF_OPTS = --with-onig=no
- SLANG_MAKE = $(MAKE1)
- 
- # Racy and we don't have/do libtermcap
+ package/dsp-tools/dsp-tools.mk             |  4 ++--
+ package/gmock/0001-force-use-python2.patch |  8 ++++----
+ package/gmock/gmock.hash                   |  4 ++--
+ package/gmock/gmock.mk                     | 31 ++++++++++--------------------
+ package/gstreamer/gst-dsp/gst-dsp.mk       |  4 ++--
+ package/gstreamer/gst-omapfb/gst-omapfb.mk |  4 ++--
+ package/gtest/gtest.hash                   |  4 ++--
+ package/gtest/gtest.mk                     | 19 ++++++++----------
+ 8 files changed, 32 insertions(+), 46 deletions(-)
+
+-- 
+2.1.4
