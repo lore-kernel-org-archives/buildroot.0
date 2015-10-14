@@ -1,57 +1,29 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 15 Oct 2015 00:19:10 +0200
-Subject: [Buildroot] [PATCH] package/Makefile.in: remove
-	BR2_TARGET_OPTIMIZATION from TARGET_CFLAGS
-Message-ID: <1444861150-4972-1-git-send-email-arnout@mind.be>
+From: Charles Duffy <charles@dyfis.net>
+Date: Wed, 14 Oct 2015 22:23:12 +0000
+Subject: [Buildroot] [PATCH 1/1] musl: Honor BR2_STATIC_LIBS /
+	BR2_SHARED_LIBS
+In-Reply-To: <20151014233507.23a93657@free-electrons.com>
+References: <1444796977-23004-1-git-send-email-chaduffy@cisco.com>
+ <20151014233507.23a93657@free-electrons.com>
+Message-ID: <CAEHm_shswg6pPrMgif+OY2w3qqW15d1Amkf4avUPum_OpF-MEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the toolchain is always wrapped and the wrapper already passes
-BR2_TARGET_OPTIMIZATION (through BR_ADDITIONAL_CFLAGS), there is no longer
-any need to pass it in TARGET_CFLAGS as well.
+On Wed, Oct 14, 2015 at 4:35 PM Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Tested with BR2_DEBUG_WRAPPER that BR2_TARGET_OPTIMIZATION and
-BR2_OPTIMIZE_* are still called correctly.
----
- package/Makefile.in | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 8a592d4..ca34660 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -110,22 +110,20 @@ endif
- STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
- STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
- 
--TARGET_OPTIMIZATION := $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
--
- ifeq ($(BR2_OPTIMIZE_0),y)
--TARGET_OPTIMIZATION += -O0
-+TARGET_OPTIMIZATION = -O0
- endif
- ifeq ($(BR2_OPTIMIZE_1),y)
--TARGET_OPTIMIZATION += -O1
-+TARGET_OPTIMIZATION = -O1
- endif
- ifeq ($(BR2_OPTIMIZE_2),y)
--TARGET_OPTIMIZATION += -O2
-+TARGET_OPTIMIZATION = -O2
- endif
- ifeq ($(BR2_OPTIMIZE_3),y)
--TARGET_OPTIMIZATION += -O3
-+TARGET_OPTIMIZATION = -O3
- endif
- ifeq ($(BR2_OPTIMIZE_S),y)
--TARGET_OPTIMIZATION += -Os
-+TARGET_OPTIMIZATION = -Os
- endif
- ifeq ($(BR2_DEBUG_1),y)
- TARGET_DEBUGGING = -g1
--- 
-2.6.1
+> Could you instead try the following change:
+>
+> -                       --disable-gcc-wrapper)
+> +                       --disable-gcc-wrapper \
+> +                       $(SHARED_STATIC_LIBS_OPTS))
+>
+>
+Works perfectly. Should I bother resubmitting, or are you inclined to make
+the change directly?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20151014/c6a2d855/attachment.html>
