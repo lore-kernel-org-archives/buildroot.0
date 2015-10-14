@@ -1,28 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Oct 2015 22:29:23 +0200
-Subject: [Buildroot] [PATCH] apache: bump to version 2.4.17
-In-Reply-To: <1444818035-17242-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1444818035-17242-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20151014222923.42014325@free-electrons.com>
+Date: Wed, 14 Oct 2015 22:30:19 +0200
+Subject: [Buildroot] [git commit] ffmpeg: disable MIPS DSP options by default
+Message-ID: <20151014203024.CBF8681EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=b090dcbf90900b971d59017c789ce4e6cd61ae95
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2015 11:20:35 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/apache/apache.hash |    4 ++--
->  package/apache/apache.mk   |    2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+DSP support depends on the core implementation, not on the ISA, so
+enabling it for mips64r2 is not correct since you can build a mips64r2
+core without DSP support.
 
-Applied, thanks.
+Disable mipsdspr1 and mipsdspr2 options by default and let the user
+enable them via the BR2_PACKAGE_FFMPEG_EXTRACONF kconfig option, which
+will take preference and override the default values.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk |   12 ++----------
+ 1 files changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 4f4c52c..fd953d6 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,6 +41,8 @@ FFMPEG_CONF_OPTS = \
+ 	--enable-runtime-cpudetect \
+ 	--disable-hardcoded-tables \
+ 	--disable-memalign-hack \
++	--disable-mipsdspr1 \
++	--disable-mipsdspr2 \
+ 	--disable-msa \
+ 	--enable-hwaccels \
+ 	--disable-avisynth \
+@@ -355,16 +357,6 @@ FFMPEG_CONF_OPTS += \
+ 	--disable-mips32r2
+ endif
+ 
+-ifeq ($(BR2_mips_64r2),y)
+-FFMPEG_CONF_OPTS += \
+-	--enable-mipsdspr1 \
+-	--enable-mipsdspr2
+-else
+-FFMPEG_CONF_OPTS += \
+-	--disable-mipsdspr1 \
+-	--disable-mipsdspr2
+-endif
+-
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+ FFMPEG_CONF_OPTS += --enable-altivec
+ else
